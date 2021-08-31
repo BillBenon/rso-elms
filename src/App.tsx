@@ -5,7 +5,7 @@ import ILabel from './components/Atoms/Texts/ILabel';
 const App = () => {
   return (
     <div>
-      <ILabel color="primary" title="First names" weight="bold" size="xs" />
+      <ILabel color="warning" title="First names" weight="bold" size="2xl" />
     </div>
   );
 };
