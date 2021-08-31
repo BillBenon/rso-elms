@@ -11,9 +11,11 @@ module.exports = {
       },
     },
     colors: {
-      primary: '#2337CC',
-      'primary-active': '#1C2CA3',
-      'primary-hover': '#4F5FD6',
+      primary: {
+        400: '#4F5FD6',
+        500: '#2337CC',
+        600: '#1C2CA3',
+      },
       secondary: '#FAFBFC',
       main: '#FFFFFF',
       error: {
