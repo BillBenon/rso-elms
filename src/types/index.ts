@@ -17,3 +17,12 @@ export interface Link {
   title: string;
   to: string;
 }
+export type fontWeightStyleType = {
+  // eslint-disable-next-line no-unused-vars
+  [index in fontWeight]: string;
+};
+
+export type fontSizeStyleType = {
+  // eslint-disable-next-line no-unused-vars
+  [index in fontSize]: string;
+};
