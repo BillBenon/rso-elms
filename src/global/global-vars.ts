@@ -1,3 +1,5 @@
+import { omit } from 'lodash';
+
 import { colorStyleType, fontSizeStyleType, fontWeightStyleType } from '../types';
 
 export const fontWeightStyle: fontWeightStyleType = {
@@ -15,7 +17,7 @@ export const fontSizeStyle: fontSizeStyleType = {
 };
 
 export const bgStyle: colorStyleType = {
-  primary: 'bg-primary-500 active:bg-primary-600 hover:bg-primary-400',
+  primary: 'bg-primary-500',
   secondary: 'bg-secondary',
   main: 'bg-main',
   error: 'bg-error',
@@ -25,8 +27,13 @@ export const bgStyle: colorStyleType = {
   'txt-secondary': 'bg-txt-primary',
 };
 
+export const bgStyleButton: colorStyleType = {
+  primary: 'bg-primary-500 active:bg-primary-600 hover:bg-primary-400',
+  ...omit(bgStyle, 'primary'),
+};
+
 export const colorStyle: colorStyleType = {
-  primary: 'text-primary-500 active:text-primary-600 hover:text-primary-400',
+  primary: 'text-primary-500',
   secondary: 'text-secondary',
   main: 'text-main',
   error: 'text-error',
@@ -34,4 +41,9 @@ export const colorStyle: colorStyleType = {
   success: 'text-succes',
   'txt-primary': 'text-txt-primary',
   'txt-secondary': 'text-txt-primary',
+};
+
+export const colorStyleButton: colorStyleType = {
+  primary: 'text-primary-500 active:text-primary-600 hover:text-primary-400',
+  ...omit(colorStyle, 'primary'),
 };
