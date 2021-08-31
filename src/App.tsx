@@ -1,27 +1,12 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import Nav from './components/Nav';
-import About from './views/About';
-import Home from './views/Home';
-import NotFound from './views/NotFound';
+import ILabel from './components/Atoms/Texts/ILabel';
 
 const App = () => {
   return (
-    <Router>
-      <Nav />
-      <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route path="/about">
-          <About />
-        </Route>
-        <Route>
-          <NotFound />
-        </Route>
-      </Switch>
-    </Router>
+    <div>
+      <ILabel color="primary" title="First names" weight="bold" size="xs" />
+    </div>
   );
 };
 

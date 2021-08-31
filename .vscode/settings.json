@@ -2,16 +2,5 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "eslint.validate": ["javascript"],
-  "recommendations": [
-    "bradlc.vscode-tailwindcss",
-    "naumovs.color-highlight",
-    "dsznajder.es7-react-js-snippets",
-    "dbaeumer.vscode-eslint",
-    "esbenp.prettier-vscode",
-    "formulahendry.auto-rename-tag",
-    "github.vscode-pull-request-github",
-    "coenraads.bracket-pair-colorizer-2",
-    "oderwat.indent-rainbow"
-  ]
+  "eslint.validate": ["javascript"]
 }
