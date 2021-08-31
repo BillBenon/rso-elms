@@ -7,7 +7,7 @@ const About = () => {
     <>
       <Header title="About" />
       <main>
-        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto  py-6 sm:px-6 lg:px-8">
           <div className="px-4 py-6 sm:px-0">
             <div className="mt-10 mx-auto max-w-screen-xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
               <div className="sm:text-center lg:text-left">
@@ -36,7 +36,7 @@ const About = () => {
                     <a
                       href="https://github.com/sorxrob/vite-react-tailwind-starter"
                       className="w-full flex items-center justify-center px-8 py-3 border border-transparent text-base leading-6 font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:ring transition duration-150 ease-in-out md:py-4 md:text-lg md:px-10">
-                      Get started 
+                      Get started
                     </a>
                   </div>
                   <div className="mt-3 sm:mt-0 sm:ml-3">
