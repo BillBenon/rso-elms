@@ -13,7 +13,7 @@ module.exports = {
     colors: {
       primary: '#2337CC',
       'primary-active': '#1C2CA3',
-      'primary-hoover': '#4F5FD6',
+      'primary-hover': '#4F5FD6',
       secondary: '#FAFBFC',
       main: '#FFFFFF',
       error: {
@@ -24,7 +24,7 @@ module.exports = {
         400: '#FEF5D3',
         500: '#FACD23',
       },
-      succes: {
+      success: {
         400: '#E9F6F2',
         500: '#3CD278',
       },
