@@ -9,11 +9,11 @@ export const fontWeightStyle: fontWeightStyleType = {
 };
 
 export const fontSizeStyle: fontSizeStyleType = {
-  xs: 'text-xs',
-  sm: 'text-sm',
-  tiny: 'text-tiny',
-  lg: 'text-lg',
-  '2xl': 'text-2xl',
+  xs: 'xs',
+  sm: 'sm',
+  tiny: 'tiny',
+  lg: 'lg',
+  '2xl': '2xl',
 };
 
 export const bgStyle: colorStyleType = {
@@ -33,17 +33,17 @@ export const bgStyleButton: colorStyleType = {
 };
 
 export const colorStyle: colorStyleType = {
-  primary: 'text-primary-500',
-  secondary: 'text-secondary',
-  main: 'text-main',
-  error: 'text-error-500',
-  warning: 'text-warning-500',
-  success: 'text-success-500',
-  'txt-primary': 'text-txt-primary',
-  'txt-secondary': 'text-txt-primary',
+  primary: 'primary-500',
+  secondary: 'secondary',
+  main: 'main',
+  error: 'error-500',
+  warning: 'warning-500',
+  success: 'success-500',
+  'txt-primary': 'txt-primary',
+  'txt-secondary': 'txt-primary',
 };
 
 export const colorStyleButton: colorStyleType = {
-  primary: 'text-primary-500 active:text-primary-600 hover:text-primary-400',
+  primary: 'primary-500 active:primary-600 hover:primary-400',
   ...omit(colorStyle, 'primary'),
 };

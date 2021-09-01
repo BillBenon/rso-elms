@@ -11,7 +11,6 @@ interface ILabelProps {
 }
 
 export default function ILabel({ title, weight, size, color }: ILabelProps) {
-  console.log(weight);
   return (
     <label
       htmlFor={title}
