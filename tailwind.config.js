@@ -18,6 +18,7 @@ module.exports = {
       },
       secondary: '#FAFBFC',
       main: '#FFFFFF',
+      bcolor: '#F0F1F1',
       error: {
         400: '#FDECEC',
         500: '#EE4040',

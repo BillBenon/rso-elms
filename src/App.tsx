@@ -1,27 +1,22 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import React, { useState } from 'react';
 
-import Nav from './components/Nav';
-import About from './views/About';
-import Home from './views/Home';
-import NotFound from './views/NotFound';
+import Input from './components/Atoms/Inputs/Input';
+import ILabel from './components/Atoms/Texts/ILabel';
 
 const App = () => {
+  const [name, setName] = useState('');
+
   return (
-    <Router>
-      <Nav />
-      <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route path="/about">
-          <About />
-        </Route>
-        <Route>
-          <NotFound />
-        </Route>
-      </Switch>
-    </Router>
+    <div className="p-8">
+      {/* <ILabel color="warning" title="First names" weight="bold" size="xs" /> */}
+      <Input
+        placeholder="First"
+        fcolor="error"
+        type="text"
+        value={name}
+        handleChange={(e) => setName(e.target.value)}
+      />
+    </div>
   );
 };
 
