@@ -14,7 +14,7 @@ export default function ILabel({ title, weight, size, color }: ILabelProps) {
   return (
     <label
       htmlFor={title}
-      className={`${fontWeightStyle[weight]} ${fontSizeStyle[size]}  ${colorStyle[color]}`}>
+      className={`${fontWeightStyle[weight]} ${fontSizeStyle[size]}  text-${colorStyle[color]}`}>
       {title}
     </label>
   );

@@ -41,5 +41,6 @@ module.exports = {
         aspects: ['invalidHref', 'preferButton'],
       },
     ],
+    'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
   },
 };

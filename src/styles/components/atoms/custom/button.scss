@@ -1,0 +1,7 @@
+button{
+    box-sizing: content-box;
+    
+    &.with-width{
+        min-width:6.25rem;
+    }
+}
