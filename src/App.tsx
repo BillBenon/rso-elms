@@ -9,7 +9,7 @@ const App = () => {
 
   return (
     <div className="p-8 flex flex-col gap-3">
-      <ILabel color="warning" title="First names" weight="bold" size="2xl" />
+      <ILabel color="error" title="First name" weight="bold" size="xs" />
       <Input
         placeholder="First"
         fcolor="error"
