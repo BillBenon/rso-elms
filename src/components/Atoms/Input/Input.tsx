@@ -7,7 +7,7 @@ type IProps = {
   placeholder: string;
   type: string;
   readonly?: boolean;
-  handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (_e: ChangeEvent<HTMLInputElement>) => void;
   value: string;
   full?: boolean;
   fcolor?: Color;
@@ -22,7 +22,6 @@ export default function Input({
   fcolor = 'primary',
   handleChange,
 }: IProps) {
-  console.log(value);
   return (
     <input
       placeholder={placeholder}

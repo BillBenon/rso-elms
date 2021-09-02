@@ -9,11 +9,11 @@ export const fontWeightStyle: fontWeightStyleType = {
 };
 
 export const fontSizeStyle: fontSizeStyleType = {
-  xs: 'xs',
-  sm: 'sm',
-  tiny: 'tiny',
-  lg: 'lg',
-  '2xl': '2xl',
+  xs: 'text-xs',
+  sm: 'text-sm',
+  tiny: 'text-tiny',
+  lg: 'text-lg',
+  '2xl': 'text-2xl',
 };
 
 export const bgStyle: colorStyleType = {

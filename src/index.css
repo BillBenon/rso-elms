@@ -7,3 +7,7 @@
 body{
     background-color: #FAFBFC;
 }
+.wrapper-class-name{
+    fill: aquamarine;
+    width: 50px;
+}
