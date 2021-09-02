@@ -1,4 +1,4 @@
-import '../../../styles/components/atoms/custom/switch.scss';
+import '../../../styles/components/atoms/input/switch.scss';
 
 import React, { MouseEvent, useState } from 'react';
 
