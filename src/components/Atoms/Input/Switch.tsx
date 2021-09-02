@@ -6,6 +6,9 @@ type PropType = {
   handleChange: (_active: boolean, _event: MouseEvent<HTMLButtonElement>) => void;
 };
 
+/**
+ * Switch component will emit `true` when it is `on`, `false` when it is `off`
+ */
 export default function Switch({ handleChange }: PropType) {
   const [active, setActive] = useState(false);
 
