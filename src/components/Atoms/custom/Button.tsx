@@ -17,18 +17,14 @@ interface PropTypes {
   color?: Color;
 }
 
-// button type
-// color type
-// width type
-
 export default function Button({
   children,
   type = 'fill',
   color = 'primary',
 }: PropTypes) {
   const buttonStyle: ButtonStyleType = {
-    fill: ` border-2 border-solid border-${colorStyle[color]} ${bgStyleButton[color]} text-main`,
-    outline: `border-2 border-solid border-${colorStyle[color]} text-${colorStyle[color]}`,
+    fill: `with-width  border-2 border-solid border-${colorStyle[color]} ${bgStyleButton[color]} text-main`,
+    outline: `with-width border-2 border-solid border-${colorStyle[color]} text-${colorStyle[color]}`,
     text: `text-${colorStyle[color]} hover:underline`,
   };
   return (
