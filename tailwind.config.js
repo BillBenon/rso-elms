@@ -9,6 +9,9 @@ module.exports = {
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },
+      borderWidth: {
+        6: '6px',
+      },
     },
     colors: {
       primary: {
