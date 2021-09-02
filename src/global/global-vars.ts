@@ -1,6 +1,11 @@
 import { omit } from 'lodash';
 
-import { colorStyleType, fontSizeStyleType, fontWeightStyleType } from '../types';
+import {
+  bgStyleType,
+  colorStyleType,
+  fontSizeStyleType,
+  fontWeightStyleType,
+} from '../types';
 
 export const fontWeightStyle: fontWeightStyleType = {
   normal: 'font-normal',
@@ -16,7 +21,7 @@ export const fontSizeStyle: fontSizeStyleType = {
   '2xl': 'text-2xl',
 };
 
-export const bgStyle: colorStyleType = {
+export const bgStyle: bgStyleType = {
   primary: 'bg-primary-500',
   secondary: 'bg-secondary',
   main: 'bg-main',

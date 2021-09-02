@@ -18,7 +18,7 @@ const App = () => {
         handleChange={(e) => setName(e.target.value)}
       />
 
-      {/* <Icon name="notification" /> */}
+      <Icon name="notification" color="error" bgColor="error" size={16} />
     </div>
   );
 };
