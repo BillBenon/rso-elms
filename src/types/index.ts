@@ -32,3 +32,8 @@ export interface Link {
   title: string;
   to: string;
 }
+
+export interface SelectData {
+  value: string;
+  label: string;
+}
