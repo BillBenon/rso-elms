@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import Avatar from './components/Atoms/custom/Avatar';
 import Icon from './components/Atoms/custom/Icon';
 import Input from './components/Atoms/Inputs/Input';
 import ILabel from './components/Atoms/Texts/ILabel';
@@ -29,6 +30,11 @@ const App = () => {
       />
 
       <Icon name="notification" color="error" bgColor="error" size={16} />
+      <Avatar
+        image="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+        size={16}
+        alt="profile image"
+      />
     </div>
   );
 };
