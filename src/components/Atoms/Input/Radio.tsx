@@ -10,7 +10,7 @@ import { SelectData } from '../../../types';
 type PropType = {
   list: SelectData[];
   type?: 'inline' | 'block';
-  value: string;
+  value?: string;
   handleChange: (
     _value: string,
     _event: MouseEventHandler<HTMLDivElement> | KeyboardEventHandler<HTMLDivElement>,

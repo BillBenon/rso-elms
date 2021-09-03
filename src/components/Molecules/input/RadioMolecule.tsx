@@ -7,6 +7,8 @@ import ILabel from '../../Atoms/Text/ILabel';
 
 type PropType = {
   children: ReactNode;
+  type: 'inline' | 'block';
+  value: string;
   error?: string;
   handleChange: (
     _value: string,
@@ -17,7 +19,13 @@ type PropType = {
 /**
  * Radio molecule  component that has error output
  */
-export default function RadioMolecule({ children, handleChange, error }: PropType) {
+export default function RadioMolecule({
+  value = '',
+  type = 'inline',
+  children,
+  handleChange,
+  error,
+}: PropType) {
   const list: SelectData[] = [
     { label: 'Male', value: 'Male' },
     { label: 'Female', value: 'Female' },
@@ -25,7 +33,7 @@ export default function RadioMolecule({ children, handleChange, error }: PropTyp
   return (
     <div>
       <ILabel>{children}</ILabel>
-      <Radio list={list} handleChange={handleChange}></Radio>
+      <Radio value={value} type={type} list={list} handleChange={handleChange}></Radio>
       {error && <Error>{error}</Error>}
     </div>
   );

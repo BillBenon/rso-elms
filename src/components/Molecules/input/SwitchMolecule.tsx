@@ -6,6 +6,7 @@ import ILabel from '../../Atoms/Text/ILabel';
 
 type PropType = {
   children: ReactNode;
+  value: boolean;
   error?: string;
   handleChange: (_active: boolean, _event: MouseEvent<HTMLButtonElement>) => void;
 };
@@ -13,11 +14,16 @@ type PropType = {
 /**
  * Switch molecule  component that has error output
  */
-export default function SwitchMolecule({ children, handleChange, error }: PropType) {
+export default function SwitchMolecule({
+  value = false,
+  children,
+  handleChange,
+  error,
+}: PropType) {
   return (
     <div>
       <ILabel>{children}</ILabel>
-      <Switch handleChange={handleChange}></Switch>
+      <Switch value={value} handleChange={handleChange}></Switch>
       {error && <Error>{error}</Error>}
     </div>
   );
