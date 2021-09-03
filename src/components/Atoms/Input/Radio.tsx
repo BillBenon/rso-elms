@@ -1,10 +1,16 @@
-import React, { KeyboardEventHandler, MouseEventHandler, useState } from 'react';
+import React, {
+  KeyboardEventHandler,
+  MouseEventHandler,
+  useEffect,
+  useState,
+} from 'react';
 
 import { SelectData } from '../../../types';
 
 type PropType = {
   list: SelectData[];
   type?: 'inline' | 'block';
+  value: string;
   handleChange: (
     _value: string,
     _event: MouseEventHandler<HTMLDivElement> | KeyboardEventHandler<HTMLDivElement>,
@@ -16,8 +22,16 @@ type PropType = {
  * list should contain array of object that has {label:'',value:''}, the value will be used as unique identifier
  * while lable will be displayed on the UI
  */
-export default function Radio({ list, type = 'inline', handleChange }: PropType) {
+export default function Radio({
+  value = '',
+  list,
+  type = 'inline',
+  handleChange,
+  ...attrs
+}: PropType) {
   const [active, setActive] = useState('');
+
+  useEffect(() => setActive(value), []);
 
   function handleClick(value: string, event: MouseEventHandler<HTMLDivElement>) {
     setActive(value);
@@ -30,7 +44,10 @@ export default function Radio({ list, type = 'inline', handleChange }: PropType)
   }
 
   return (
-    <div className={`flex ${type === 'block' && 'flex-col'}`} role="radiogroup">
+    <div
+      {...attrs}
+      className={`flex ${type === 'block' && 'flex-col'}`}
+      role="radiogroup">
       {list.map(({ label, value }) => (
         <div
           role="radio"
