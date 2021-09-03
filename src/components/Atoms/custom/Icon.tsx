@@ -4,7 +4,6 @@ import styled, { css } from 'styled-components';
 
 import { bgStyle } from '../../../global/global-vars';
 import { Color, colorStyleType } from '../../../types';
-import notification from './icons/notification.svg';
 
 type IProps = {
   name: string;
