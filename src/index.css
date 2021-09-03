@@ -5,8 +5,13 @@
 @import 'tailwindcss/utilities';
 
 body{
-    background-color: #FAFBFC;
+    background-color: black;
 }
+
+.max-w-48{
+    max-width: 12rem;
+}
+
 .wrapper-class-name{
     fill: aquamarine;
     width: 50px;
