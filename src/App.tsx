@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Avatar from './components/Atoms/custom/Avatar';
 import Icon from './components/Atoms/custom/Icon';
 import Input from './components/Atoms/Inputs/Input';
+import Textarea from './components/Atoms/Inputs/Textarea';
 import ILabel from './components/Atoms/Texts/ILabel';
 import AcademyCardMolecule from './components/Molecules/AcademyCardMolecule';
 
@@ -13,13 +14,14 @@ const App = () => {
   return (
     <div className="p-8 flex flex-col gap-3">
       <ILabel color="error" title="First name" weight="bold" size="xs" />
-      <Input
+      <Textarea
         placeholder="This is a text area"
         fcolor="warning"
         type="text"
-        category="text_area"
         value={names}
-        handleChange={(e: any) => setNames(e.target.value)}
+        handleChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+          setNames(e.target.value)
+        }
       />
 
       <Input
@@ -36,9 +38,7 @@ const App = () => {
         size="16"
         alt="profile image"
       />
-      <AcademyCardMolecule>
-        <ILabel color="txt-primary" title="Academy name" weight="medium" size="xs" />
-      </AcademyCardMolecule>
+      <AcademyCardMolecule>Academy name</AcademyCardMolecule>
     </div>
   );
 };

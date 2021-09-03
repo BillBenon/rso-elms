@@ -4,7 +4,7 @@ import { colorStyle, fontSizeStyle, fontWeightStyle } from '../../../global/glob
 import { Color, fontSize, fontWeight } from '../../../types';
 
 interface ILabelProps {
-  title: string;
+  title: React.ReactNode;
   weight: fontWeight;
   size: fontSize;
   color: Color;
