@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Avatar from '../Atoms/custom/Avatar';
-import ILabel from '../Atoms/Texts/ILabel';
+import ILabel from '../Atoms/Text/ILabel';
 
 type ICard = { children: React.ReactNode };
 
@@ -14,7 +14,7 @@ export default function AcademyCart({ children }: ICard) {
         size="10"
         alt="academy logo"
       />
-      <ILabel color="txt-primary" title={children} weight="medium" size="xs" />
+      <ILabel>Academy name</ILabel>
     </div>
   );
 }

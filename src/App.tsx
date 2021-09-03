@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 
 import Avatar from './components/Atoms/custom/Avatar';
 import Icon from './components/Atoms/custom/Icon';
-import Input from './components/Atoms/Inputs/Input';
-import Textarea from './components/Atoms/Inputs/Textarea';
-import ILabel from './components/Atoms/Texts/ILabel';
+import Input from './components/Atoms/Input/Input';
+import Textarea from './components/Atoms/Input/Textarea';
+import ILabel from './components/Atoms/Text/ILabel';
 import AcademyCardMolecule from './components/Molecules/AcademyCardMolecule';
 
 const App = () => {
@@ -13,7 +13,7 @@ const App = () => {
 
   return (
     <div className="p-8 flex flex-col gap-3">
-      <ILabel color="error" title="First name" weight="bold" size="xs" />
+      <ILabel>First name</ILabel>
       <Textarea
         placeholder="This is a text area"
         fcolor="warning"
@@ -38,7 +38,9 @@ const App = () => {
         size="16"
         alt="profile image"
       />
-      <AcademyCardMolecule>Academy name</AcademyCardMolecule>
+      <AcademyCardMolecule>
+        <strong>Academy</strong> name
+      </AcademyCardMolecule>
     </div>
   );
 };
