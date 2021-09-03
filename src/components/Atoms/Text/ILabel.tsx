@@ -1,21 +1,21 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import { colorStyle, fontSizeStyle, fontWeightStyle } from '../../../global/global-vars';
 import { Color, fontSize, fontWeight } from '../../../types';
 
 interface ILabelProps {
-  title: string;
+  children: ReactNode;
   weight: fontWeight;
   size: fontSize;
   color: Color;
 }
 
-export default function ILabel({ title, weight, size, color }: ILabelProps) {
+export default function ILabel({ children, weight, size, color, ...rest }: ILabelProps) {
   return (
     <label
-      htmlFor={title}
+      {...rest}
       className={`${fontWeightStyle[weight]} ${fontSizeStyle[size]}  text-${colorStyle[color]}`}>
-      {title}
+      {children}
     </label>
   );
 }
