@@ -13,7 +13,7 @@ type PropType = {
 /**
  * Switch molecule  component that has error output
  */
-export default function RadioSwitch({ children, handleChange, error }: PropType) {
+export default function SwitchMolecule({ children, handleChange, error }: PropType) {
   return (
     <div>
       <ILabel>{children}</ILabel>
