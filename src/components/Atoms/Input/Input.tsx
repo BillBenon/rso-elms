@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ChangeEventHandler } from 'react';
+import React from 'react';
 
 import { colorStyle } from '../../../global/global-vars';
 import { Color } from '../../../types';
@@ -7,7 +7,7 @@ export interface IProps {
   placeholder: string;
   type: string;
   readonly?: boolean;
-  handleChange: (e: any) => void;
+  handleChange: (_e: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
   full?: boolean;
   fcolor?: Color;
