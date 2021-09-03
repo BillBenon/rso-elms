@@ -7,6 +7,7 @@ import ILabel from '../../Atoms/Text/ILabel';
 type PropType = {
   children: ReactNode;
   value: boolean;
+  loading: boolean;
   error?: string;
   handleChange: (_active: boolean, _event: MouseEvent<HTMLButtonElement>) => void;
 };
@@ -17,14 +18,21 @@ type PropType = {
 export default function SwitchMolecule({
   value = false,
   children,
+  loading = false,
   handleChange,
   error,
 }: PropType) {
   return (
     <div>
-      <ILabel>{children}</ILabel>
-      <Switch value={value} handleChange={handleChange}></Switch>
-      {error && <Error>{error}</Error>}
+      {loading ? (
+        <div className="animate-pulse w-24 h-4 bg-secondary rounded"></div>
+      ) : (
+        <>
+          <ILabel>{children}</ILabel>
+          <Switch value={value} handleChange={handleChange}></Switch>
+          {error && <Error>{error}</Error>}
+        </>
+      )}
     </div>
   );
 }

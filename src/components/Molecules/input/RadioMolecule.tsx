@@ -7,9 +7,11 @@ import ILabel from '../../Atoms/Text/ILabel';
 
 type PropType = {
   children: ReactNode;
-  type: 'inline' | 'block';
-  value: string;
+  type?: 'inline' | 'block';
+  value?: string;
   error?: string;
+  loading?: boolean;
+  list: SelectData[];
   handleChange: (
     _value: string,
     _event: MouseEventHandler<HTMLDivElement> | KeyboardEventHandler<HTMLDivElement>,
@@ -25,16 +27,24 @@ export default function RadioMolecule({
   children,
   handleChange,
   error,
+  loading = false,
+  list,
 }: PropType) {
-  const list: SelectData[] = [
-    { label: 'Male', value: 'Male' },
-    { label: 'Female', value: 'Female' },
-  ];
   return (
     <div>
-      <ILabel>{children}</ILabel>
-      <Radio value={value} type={type} list={list} handleChange={handleChange}></Radio>
-      {error && <Error>{error}</Error>}
+      {loading ? (
+        <div className="animate-pulse w-24 h-4 bg-secondary rounded"></div>
+      ) : (
+        <>
+          <ILabel>{children}</ILabel>
+          <Radio
+            value={value}
+            type={type}
+            list={list}
+            handleChange={handleChange}></Radio>
+          {error && <Error>{error}</Error>}
+        </>
+      )}
     </div>
   );
 }
