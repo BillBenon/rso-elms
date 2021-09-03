@@ -9,7 +9,7 @@ type HeadingProps = {
 };
 
 const Heading = ({ fontSize, fontWeight, title }: HeadingProps) => {
-  return <p className={`mt-5 text-${fontSize} font-${fontWeight}`}>{title}</p>;
+  return <h2 className={`mt-5 text-${fontSize} font-${fontWeight}`}>{title}</h2>;
 };
 
 export default Heading;
