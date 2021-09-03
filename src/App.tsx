@@ -1,7 +1,9 @@
 import React from 'react';
 
+import ErrorMolecule from './components/Molecules/ErrorMolecule';
+
 const App = () => {
-  return <div className="p-8 flex flex-col gap-3"></div>;
+  return <ErrorMolecule>I have an error</ErrorMolecule>;
 };
 
 export default App;
