@@ -5,12 +5,18 @@ import { Color, fontSize, fontWeight } from '../../../types';
 
 interface ILabelProps {
   children: ReactNode;
-  weight: fontWeight;
-  size: fontSize;
-  color: Color;
+  weight?: fontWeight;
+  size?: fontSize;
+  color?: Color;
 }
 
-export default function ILabel({ children, weight, size, color, ...rest }: ILabelProps) {
+export default function ILabel({
+  children,
+  weight = 'normal',
+  size = 'sm',
+  color = 'txt-primary',
+  ...rest
+}: ILabelProps) {
   return (
     <label
       {...rest}
