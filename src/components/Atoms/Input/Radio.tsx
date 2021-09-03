@@ -4,7 +4,7 @@ import { SelectData } from '../../../types';
 
 type PropType = {
   list: SelectData[];
-  type: 'inline' | 'block';
+  type?: 'inline' | 'block';
   handleChange: (
     _value: string,
     _event: MouseEventHandler<HTMLDivElement> | KeyboardEventHandler<HTMLDivElement>,
@@ -16,7 +16,7 @@ type PropType = {
  * list should contain array of object that has {label:'',value:''}, the value will be used as unique identifier
  * while lable will be displayed on the UI
  */
-export default function Radio({ list, type = 'block', handleChange }: PropType) {
+export default function Radio({ list, type = 'inline', handleChange }: PropType) {
   const [active, setActive] = useState('');
 
   function handleClick(value: string, event: MouseEventHandler<HTMLDivElement>) {
