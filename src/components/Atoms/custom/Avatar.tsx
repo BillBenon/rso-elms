@@ -9,7 +9,12 @@ type IAvatar = {
 export default function Avatar({ src, alt, size = '14' }: IAvatar) {
   return (
     <div>
-      <img src={src} alt={alt} className={`h-${size} w-${size} rounded-full`} />
+      <img
+        src={src}
+        alt={alt}
+        className="rounded-full"
+        style={{ height: size, width: size }}
+      />
     </div>
   );
 }
