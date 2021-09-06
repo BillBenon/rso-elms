@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, ChangeEventHandler } from 'react';
 
 import { colorStyle } from '../../../global/global-vars';
 import { Color } from '../../../types';
@@ -6,8 +6,9 @@ import { Color } from '../../../types';
 type IProps = {
   placeholder: string;
   type: string;
+  category?: string;
   readonly?: boolean;
-  handleChange: (_e: ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (e: any) => void;
   value: string;
   full?: boolean;
   fcolor?: Color;
@@ -16,13 +17,24 @@ type IProps = {
 export default function Input({
   placeholder,
   type,
+  category,
   readonly = false,
   value,
   full,
   fcolor = 'primary',
   handleChange,
 }: IProps) {
-  return (
+  return category === 'text_area' ? (
+    <textarea
+      className={`py-2 px-5 rounded-md ${
+        full ? 'w-full' : 'w-80'
+      } focus:outline-none border-bcolor focus:border-${colorStyle[fcolor]} border-2`}
+      placeholder={placeholder}
+      value={value}
+      defaultValue={value}
+      onChange={handleChange}
+    />
+  ) : (
     <input
       placeholder={placeholder}
       name={value}
