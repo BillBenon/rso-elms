@@ -21,9 +21,11 @@ export default function Input({
   full,
   fcolor = 'primary',
   handleChange,
+  ...attrs
 }: IProps) {
   return (
     <input
+      {...attrs}
       placeholder={placeholder}
       name={value}
       type={type}
