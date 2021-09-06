@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
 
+// import Avatar from './components/Atoms/custom/Avatar';
+// import Icon from './components/atoms/custom/Icon';
+// import Input from './components/atoms/Input/Input';
+// import Textarea from './components/atoms/Input/Textarea';
+// import ILabel from './components/atoms/Text/ILabel';
+import AcademyProfileCard from './components/Molecules/AcademyProfileCard';
 import Stepper from './components/Molecules/Stepper/Stepper';
 
 const App = () => {
@@ -104,7 +110,33 @@ const App = () => {
   };
 
   return (
-    <div className="container">
+    <div className="p-8 flex flex-col gap-3">
+      {/* <ILabel>First name</ILabel>
+      <Textarea
+        placeholder="This is a text area"
+        fcolor="warning"
+        type="text"
+        value={names}
+        handleChange={(e: React.ChangeEvent<HTMLTextAreaElement>) =>
+          setNames(e.target.value)
+        }
+      />
+
+      <Input
+        placeholder="First"
+        fcolor="error"
+        type="text"
+        value={name}
+        handleChange={(e: any) => setName(e.target.value)}
+      />
+
+      <Icon name="notification" color="error" bgColor="error" size={16} />
+      <Avatar
+        image="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+        size="16"
+        alt="profile image"
+      /> */}
+      <AcademyProfileCard>Academy name</AcademyProfileCard>
       <h2>Default stepper</h2>
       <Stepper
         stepperContent={stepperContent}

@@ -14,7 +14,12 @@ export type fontWeight = 'normal' | 'medium' | 'bold';
 
 export type colorStyleType = {
   // eslint-disable-next-line no-unused-vars
-  [index in Color]: string;
+  [index in Color]?: string;
+};
+
+export type bgStyleType = {
+  // eslint-disable-next-line no-unused-vars
+  [index in Color]?: string;
 };
 
 export type fontWeightStyleType = {
@@ -31,4 +36,9 @@ export interface Link {
   icon?: string;
   title: string;
   to: string;
+}
+
+export interface SelectData {
+  value: string;
+  label: string;
 }
