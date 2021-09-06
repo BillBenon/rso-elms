@@ -6,7 +6,7 @@ import ILabel from '../Atoms/Text/ILabel';
 
 type IError = { children: React.ReactNode; error?: string };
 
-export default function InputErrorMolecule({ children, error }: IError) {
+export default function InputMolecule({ children, error }: IError) {
   const [name, setName] = useState('');
 
   return (

@@ -1,9 +1,9 @@
 import React from 'react';
 
-import InputErrorMolecule from './components/Molecules/InputInputErrorMolecule';
+import InputMolecule from './components/Molecules/InputMolecule';
 
 const App = () => {
-  return <InputErrorMolecule error="There we go">label </InputErrorMolecule>;
+  return <InputMolecule error="There we go">label </InputMolecule>;
 };
 
 export default App;
