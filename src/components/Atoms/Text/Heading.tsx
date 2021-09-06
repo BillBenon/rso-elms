@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 import { fontSize, fontWeight } from '../../../types';
 
 type HeadingProps = {
-  fontSize: fontSize;
-  fontWeight: fontWeight;
-  title: string;
+  fontSize?: fontSize;
+  fontWeight?: fontWeight;
+  children: ReactNode;
 };
 
-const Heading = ({ fontSize, fontWeight, title }: HeadingProps) => {
-  return <h2 className={`mt-5 text-${fontSize} font-${fontWeight}`}>{title}</h2>;
+const Heading = ({ fontSize = 'lg', fontWeight = 'medium', children }: HeadingProps) => {
+  return <h2 className={`mt-5 text-${fontSize} font-${fontWeight}`}>{children}</h2>;
 };
 
 export default Heading;
