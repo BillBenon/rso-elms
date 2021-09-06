@@ -5,8 +5,7 @@ import ILabel from '../Atoms/Text/ILabel';
 
 type ICard = { children: React.ReactNode };
 
-export default function AcademyCart({ children }: ICard) {
-  console.log(children);
+export default function AcademyProfileCard({ children }: ICard) {
   return (
     <div
       className="flex items-center gap-4 bg-secondary h-16 rounded-md w-full p-4"
@@ -16,7 +15,7 @@ export default function AcademyCart({ children }: ICard) {
         size="10"
         alt="academy logo"
       />
-      <ILabel>Academy name</ILabel>
+      <ILabel>{children}</ILabel>
     </div>
   );
 }

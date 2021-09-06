@@ -5,7 +5,7 @@ import Icon from './components/Atoms/custom/Icon';
 import Input from './components/Atoms/Input/Input';
 import Textarea from './components/Atoms/Input/Textarea';
 import ILabel from './components/Atoms/Text/ILabel';
-import AcademyCardMolecule from './components/Molecules/AcademyCardMolecule';
+import AcademyProfileCard from './components/Molecules/AcademyProfileCard';
 
 const App = () => {
   const [name, setName] = useState('');
@@ -38,9 +38,7 @@ const App = () => {
         size="16"
         alt="profile image"
       />
-      <AcademyCardMolecule>
-        <strong>Academy</strong> name
-      </AcademyCardMolecule>
+      <AcademyProfileCard>Academy name</AcademyProfileCard>
     </div>
   );
 };
