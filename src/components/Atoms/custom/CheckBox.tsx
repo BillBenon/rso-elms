@@ -28,9 +28,9 @@ export default function Checkbox({
         checked={checked}
         value={value}
         onChange={() => onChange()}
-        className={'checkbox ' + className}
+        className={'inline checkbox ' + className}
       />
-      <ILabel>{label}</ILabel>
+      <label className="checkbox-label">{label}</label>
     </>
   );
 }

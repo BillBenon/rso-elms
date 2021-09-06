@@ -5,6 +5,7 @@ interface Props {
   name: string;
   placeholder?: string;
   disabled?: boolean;
+  isMulti?: boolean;
   onChange: Function;
   getOptionLabel?: Function;
   options: object[];
@@ -20,6 +21,7 @@ export default function DropDown({
   getOptionLabel,
   options = [],
   className = '',
+  isMulti = false,
   noOptionsMessage = `no ${name} available`,
 }: Props) {
   return (
@@ -29,28 +31,11 @@ export default function DropDown({
         name={name}
         options={options}
         placeholder={placeholder}
-        // getOptionLabel={getOptionLabel}
         onChange={() => onChange()}
         className={`select ${className}`}
         noOptionsMessage={noOptionsMessage}
+        isMulti={isMulti}
       />
     </>
   );
 }
-
-/*
- <Select
-name="vehicles"
-options={companies}
-placeholder={"Select vehicle"}
-styles={selectCustomStyles("0.9em", "0.85em")}
-
-getOptionLabel={option => `${option.name}`}
-onChange={handleModelChange("vehicle")}
-classNamePrefix="select"
-isLoading={isLoading.vehicle}
-noOptionsMessage={() => !isLoading.vehicle && companies.length < 1 ? 'Vehicle Not Found' : "Loading ... "}
-
-/>
-
-*/

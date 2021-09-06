@@ -19,7 +19,7 @@ const App = () => {
     },
   ];
   return (
-    <div className="p-8 flex flex-col gap-3">
+    <div className="p-8 w-1/2 mx-auto">
       <Checkbox
         value="en"
         checked={checked}
@@ -29,7 +29,8 @@ const App = () => {
       <DropDown
         options={options}
         name="intakes"
-        onChange={() => console.log('chnaged')}
+        onChange={() => console.log('changed')}
+        isMulti={false}
         // getOptionLabel={(Option: object) => Option.value}
       />
     </div>
