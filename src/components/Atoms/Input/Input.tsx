@@ -1,4 +1,4 @@
-import React, { ChangeEvent, ChangeEventHandler } from 'react';
+import React from 'react';
 
 import { colorStyle } from '../../../global/global-vars';
 import { Color } from '../../../types';
