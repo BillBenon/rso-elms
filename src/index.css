@@ -1,4 +1,10 @@
-@import 'tailwindcss/base';
+@import url('https://fonts.googleapis.com/css2?family=Inter&display=swap');
+
+*{
+    font-family: 'Inter', sans-serif;
+}
+
+/* @import 'tailwindcss/base';
 
 @import 'tailwindcss/components';
 
@@ -15,4 +21,4 @@ body{
 .wrapper-class-name{
     fill: aquamarine;
     width: 50px;
-}
+} */
