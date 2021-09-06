@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 
 import Indicator from '../../atoms/custom/Indicator';
@@ -43,29 +44,13 @@ const Step = ({
           isCircular={true}
           hasError={isError}
           isComplete={isComplete}
-          isActive={false}
+          isActive={isActive}
           clicked={() => navigateToStepHandler(index)}>
           {indicator}
         </Indicator>
-        {/* <button
-          className={`stepper-indicator-info
-		  ${isActive ? 'bg-primary-600 border-primary-600 text-main' : ''}
-		  ${isError ? 'bg-error-500 border-error-500' : ''} 
-		  ${isComplete ? 'bg-success-500 border-success-500' : ''}`}
-          onClick={isComplete || isError ? () => navigateToStepHandler(index) : null}> */}
-        {/* {isComplete ? (
-            <svg
-              className="stepper-tick"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 490 490">
-              <path d="M452.253 28.326L197.831 394.674 29.044 256.875 0 292.469l207.253 169.205L490 54.528z" />
-            </svg>
-          ) : ( */}
-        {/* {indicator} */}
-        {/* )} */}
-        {/* </button> */}
       </div>
-      <button
+      <div
+        onKeyDown={() => navigateToStepHandler(index)}
         className={`stepper-label text-gray cursor-pointer
 		    ${isActive ? 'text-primary-600' : ''} 
 		    ${isError ? 'text-error-500' : ''} 
@@ -73,7 +58,7 @@ const Step = ({
         `}
         onClick={() => navigateToStepHandler(index)}>
         {label}
-      </button>
+      </div>
     </div>
   );
 };

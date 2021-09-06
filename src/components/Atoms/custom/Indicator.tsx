@@ -25,7 +25,7 @@ const Indicator = ({
          ${
            isActive || isComplete
              ? 'text-main bg-primary-600 border-primary-600'
-             : 'text-gray bg-txt-secondary border-txt-secondary'
+             : 'text-txt-secondary bg-gray border-gray'
          }
          ${hasError ? 'bg-error-500 border-error-500' : ''}
          ${isCircular ? 'rounded-full' : 'rounded-lg'}`}
