@@ -3,7 +3,7 @@ import React from 'react';
 type IAvatar = {
   src: string;
   alt: string;
-  size: string;
+  size?: string;
 };
 
 export default function Avatar({ src, alt, size = '14' }: IAvatar) {
