@@ -3,6 +3,7 @@
   $error-500: #EE4040;
   $main: #FFFFFF;
   $gray: #FAFBFC;
+  $txt-secondary: '#97A0A8';
 
 //stepper styles
 .stepper-wrapper {
@@ -187,7 +188,6 @@
         position: relative;
         display: block;
         margin: 0.5rem 0;
-        color: $gray;
         z-index: 2;
       }
     }

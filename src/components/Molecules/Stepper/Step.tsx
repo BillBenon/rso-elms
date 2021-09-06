@@ -51,7 +51,7 @@ const Step = ({
       </div>
       <div
         onKeyDown={() => navigateToStepHandler(index)}
-        className={`stepper-label text-gray cursor-pointer
+        className={`stepper-label text-txt-secondary cursor-pointer
 		    ${isActive ? 'text-primary-600' : ''} 
 		    ${isError ? 'text-error-500' : ''} 
 		    ${isComplete ? 'text-success-500' : ''}
