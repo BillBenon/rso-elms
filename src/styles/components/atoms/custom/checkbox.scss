@@ -1,0 +1,11 @@
+.checkbox{
+    width: 1rem;
+    height: 1rem;
+    border: 0.1em solid #97A0A8;
+    border-radius: 0.25em;
+    display: inline-block;
+}
+
+.checkbox:checked{
+    border: 2px solid #2337CC;
+}
