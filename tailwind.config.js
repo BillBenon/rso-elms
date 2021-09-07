@@ -35,7 +35,10 @@ module.exports = {
         },
         'txt-primary': '#050825',
         'txt-secondary': '#97A0A8',
-        gray: '#FAFBFC',
+        silver: {
+          400: '#FAFBFC',
+          500: '#DAE0E5',
+        },
       },
     },
   },
