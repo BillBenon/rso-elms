@@ -29,25 +29,25 @@ const Table = ({ data, hasAction }: TableProps) => {
         {hasAction ? (
           <td className="flex space-x-6">
             <span onClick={() => console.log('editing')}>
+              {/* <Icon name="edit" /> */}
               <svg
-                id="Layer_1"
-                data-name="Layer 1"
                 xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 50 50"
-                width="14"
+                width="24"
                 height="24"
-                xmlnsXlink="http://www.w3.org/1999/xlink">
-                <path
-                  className="fill-current text-txt-secondary"
-                  d="M46,18.23V45.79H4V10H25.65V7H2.5A1.5,1.5,0,0,0,1,8.52V47.29a1.5,1.5,0,0,0,1.5,1.5h45a1.5,1.5,0,0,0,1.5-1.5V18.23Z"></path>
-                <path
-                  className="fill-current text-txt-secondary"
-                  d="M16.51,27.38l-2,7.68A1.48,1.48,0,0,0,15,36.5a1.5,1.5,0,0,0,1.05.43,1.39,1.39,0,0,0,.4-.06L24,34.76a1.5,1.5,0,0,0,.82-.59L47.58,10.39a1.52,1.52,0,0,0,0-2.08L42,2.52a1.55,1.55,0,0,0-2.17,0l-22.95,24A1.48,1.48,0,0,0,16.51,27.38Zm2.88.85L40.94,5.72l3.48,3.63L22.73,32l-4.63,1.3Z"></path>
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="feather feather-edit text-txt-secondary w-3/4 my-1 cursor-pointer">
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
               </svg>
             </span>
             <span onClick={() => console.log('more')}>
               <svg
-                className="my-3"
+                className="my-3 cursor-pointer"
                 width="14"
                 height="4"
                 viewBox="0 0 14 4"
