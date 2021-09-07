@@ -1,9 +1,10 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
-import React from 'react';
+import React, { useState } from 'react';
 
 import Row from '../atoms/custom/Row';
+import Pagination from './Pagination';
 
 type TableProps = {
   data: {}[];
@@ -11,7 +12,18 @@ type TableProps = {
 };
 
 const Table = ({ data, hasAction }: TableProps) => {
-  const getKeys = () => Object.keys(data[0]);
+  const [rowsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+
+  //Get current rows
+  const indexOfLastPost = currentPage * rowsPerPage;
+  const indexOfFirstPost = indexOfLastPost - rowsPerPage;
+  const currentRows = data.slice(indexOfFirstPost, indexOfLastPost);
+
+  // Change page
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  const getKeys = () => Object.keys(currentRows[0]);
   const getHeader = () => {
     let keys = getKeys();
     return keys.map((key) => (
@@ -23,7 +35,7 @@ const Table = ({ data, hasAction }: TableProps) => {
 
   const getRowsData = () => {
     let keys = getKeys();
-    return data.map((row, index) => (
+    return currentRows.map((row, index) => (
       <tr className="hover:bg-silver-400 py-4" key={index}>
         <Row key={index} data={row} keys={keys} />
         {hasAction ? (
@@ -94,6 +106,13 @@ const Table = ({ data, hasAction }: TableProps) => {
           </tbody>
         </table>
       </div>
+
+      <Pagination
+        rowsPerPage={rowsPerPage}
+        totalRows={data.length}
+        paginate={paginate}
+        currentPage={currentPage}
+      />
 
       {/* <Paginator
         itemsCount={totalCount}
