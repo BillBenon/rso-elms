@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 type BadgeProps = {
   badgecolor: string;
-  badgelabel: string;
+  children: ReactNode;
 };
 
-const Badge = ({ badgecolor, badgelabel }: BadgeProps) => {
+const Badge = ({ badgecolor, children }: BadgeProps) => {
   const bg_colors: any = {
     error: 'bg-error-400',
     success: 'bg-success-400',
@@ -24,7 +24,7 @@ const Badge = ({ badgecolor, badgelabel }: BadgeProps) => {
         className={`mx-2 px-4 py-2 font-semibold rounded-full 
         ${txt_colors[`${badgecolor}`]} 
         ${bg_colors[`${badgecolor}`]}`}>
-        {badgelabel}
+        {children}
       </span>
     </>
   );
