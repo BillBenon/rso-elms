@@ -4,6 +4,7 @@ type IndicatorProps = {
   isCircular: boolean;
   isActive: boolean;
   hasError: boolean;
+  hasBoldBg: boolean;
   isComplete: boolean;
   clicked: () => void;
   children: ReactNode;
@@ -13,6 +14,7 @@ const Indicator = ({
   isCircular,
   isActive,
   hasError,
+  hasBoldBg,
   isComplete,
   clicked,
   children,
@@ -25,7 +27,11 @@ const Indicator = ({
          ${
            isActive || isComplete
              ? 'text-main bg-primary-600 border-primary-600'
-             : 'text-txt-secondary bg-silver-400 border-silver-400'
+             : `text-txt-secondary ${
+                 hasBoldBg
+                   ? 'bg-silver-500 border-silver-500 font-semibold'
+                   : 'bg-silver-400 border-silver-400'
+               }`
          }
          ${hasError ? 'bg-error-500 border-error-500' : ''}
          ${isCircular ? 'rounded-full' : 'rounded-lg'}`}
