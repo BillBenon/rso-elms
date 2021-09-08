@@ -36,30 +36,15 @@ const Table = ({ data, hasAction }: TableProps) => {
   const getRowsData = () => {
     let keys = getKeys();
     return currentRows.map((row, index) => (
-      <tr className="hover:bg-silver-400 py-4" key={index}>
-        <Row key={index} data={row} keys={keys} />
+      <tr className="hover:bg-silver-400" key={index}>
+        <Row key={index} data={row} keys={keys} isEven={index % 2 === 0} />
         {hasAction ? (
-          <td className="flex space-x-6">
-            <span onClick={() => console.log('editing')}>
-              {/* <Icon name="edit" /> */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="feather feather-edit text-txt-secondary w-3/4 my-1 cursor-pointer">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-              </svg>
-            </span>
+          <td
+            className="flex space-x-6 py-4"
+            style={{ backgroundColor: `${index % 2 === 0 ? '#FBFAFB' : ''}` }}>
             <span onClick={() => console.log('more')}>
               <svg
-                className="my-3 cursor-pointer"
+                className="justify-center m-4 cursor-pointer"
                 width="14"
                 height="4"
                 viewBox="0 0 14 4"
