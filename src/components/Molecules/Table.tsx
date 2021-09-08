@@ -3,7 +3,8 @@
 
 import React, { useState } from 'react';
 
-import Row from '../atoms/custom/Row';
+import Icon from '../Atoms/custom/Icon';
+import Row from '../Atoms/custom/Row';
 import Pagination from './Pagination';
 
 type TableProps = {
@@ -41,37 +42,9 @@ const Table = ({ data, hasAction }: TableProps) => {
         {hasAction ? (
           <td className="flex space-x-6">
             <span onClick={() => console.log('editing')}>
-              {/* <Icon name="edit" /> */}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="feather feather-edit text-txt-secondary w-3/4 my-1 cursor-pointer">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-              </svg>
+              <Icon name="edit" stroke="primary" />
             </span>
-            <span onClick={() => console.log('more')}>
-              <svg
-                className="my-3 cursor-pointer"
-                width="14"
-                height="4"
-                viewBox="0 0 14 4"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg">
-                <g opacity="0.4">
-                  <circle cx="2.19796" cy="1.80139" r="1.38611" fill="#222222" />
-                  <circle cx="11.9013" cy="1.80115" r="1.38611" fill="#222222" />
-                  <circle cx="7.04991" cy="1.80115" r="1.38611" fill="#222222" />
-                </g>
-              </svg>
-            </span>
+            <span onClick={() => console.log('more')}></span>
           </td>
         ) : (
           ''
