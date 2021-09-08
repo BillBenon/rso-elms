@@ -9,6 +9,7 @@ interface TabProps {
 }
 
 export const Tab = ({ label, disabled = false, className = '', children }: TabProps) => {
+  console.log(label + disabled);
   return <div className={`tab ${className}`}>{children}</div>;
 };
 

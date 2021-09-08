@@ -1,6 +1,6 @@
-import React from 'react';
 import '../../../styles/components/atoms/custom/checkbox.scss';
-import ILabel from '../Text/ILabel';
+
+import React from 'react';
 
 interface Props {
   label: string;
@@ -28,7 +28,7 @@ export default function Checkbox({
         checked={checked}
         value={value}
         onChange={() => onChange()}
-        className={'inline checkbox ' + className}
+        className={'checkbox ' + className}
       />
       <label className="checkbox-label">{label}</label>
     </>

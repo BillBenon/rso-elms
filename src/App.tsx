@@ -29,6 +29,14 @@ const App = () => {
           label="English"
           onChange={() => setChecked(!checked)}
         />
+        <div className="py-3">
+          <Checkbox
+            value="en"
+            checked={checked}
+            label="French"
+            onChange={() => setChecked(!checked)}
+          />
+        </div>
         <DropDown
           options={options}
           name="intakes"
