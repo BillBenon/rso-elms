@@ -3,36 +3,37 @@ import React from 'react';
 import { colorStyle } from '../../../global/global-vars';
 import { Color } from '../../../types';
 
-export interface IProps {
+export interface ITextarea {
   placeholder: string;
   type: string;
   readonly?: boolean;
-  handleChange: (_e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (_e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   value: string;
   full?: boolean;
   fcolor?: Color;
 }
 
-export default function Input({
+function Textarea({
   placeholder,
-  type,
   readonly = false,
-  value,
+  value = '',
   full,
   fcolor = 'primary',
   handleChange,
-}: IProps) {
+  ...attrs
+}: ITextarea) {
   return (
-    <input
+    <textarea
+      {...attrs}
+      className={`py-2 px-5 rounded-md ${
+        full ? 'w-full' : 'w-80'
+      } focus:outline-none border-bcolor focus:border-${colorStyle[fcolor]} border-2`}
       placeholder={placeholder}
-      name={value}
-      type={type}
       value={value}
       readOnly={readonly}
-      className={`py-2 px-5 rounded-md ${
-        full ? 'w-full' : 'w-72'
-      } focus:outline-none border-bcolor focus:border-${colorStyle[fcolor]} border-2`}
       onChange={handleChange}
     />
   );
 }
+
+export default Textarea;
