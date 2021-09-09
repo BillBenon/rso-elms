@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import Navigation from './components/Molecules/navigation/Navigation';
 import Stepper from './components/Molecules/Stepper/Stepper';
 // import Avatar from './components/Atoms/custom/Avatar';
 // import Icon from './components/atoms/custom/Icon';
@@ -216,6 +217,7 @@ const App = () => {
         isInline={false}
       />
       <Table data={data} hasAction={true} />
+      <Navigation />
     </div>
   );
 };
