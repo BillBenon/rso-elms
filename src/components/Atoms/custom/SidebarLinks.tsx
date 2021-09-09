@@ -4,42 +4,48 @@ import { Link } from 'react-router-dom';
 import { colorStyle, fontSizeStyle } from '../../../global/global-vars';
 import Icon from './Icon';
 
-interface LinkProps {
-  label: string;
-  to: string;
-  icon: string;
-  active: boolean;
-}
+let linkProps = {
+  label: '',
+  to: '',
+  icon: '',
+  active: false,
+};
 
-export const SidebarLink = ({ label, to, icon, active }: LinkProps) => {
+export const SidebarLink = ({ label, to, icon, active }: typeof linkProps) => {
   return (
-    <p className="cursor-pointer py-4">
-      <Link to={to}>
+    <p className="cursor-pointer py-0">
+      <a href={to} className="flex items-center">
         <Icon name={icon} size={21} color={active ? 'primary' : 'gray'} />
         <span
           className={`text-${colorStyle[active ? 'primary' : 'gray']} ${
             fontSizeStyle['sm']
-          } px-2`}>
+          } px-1 font-bold`}>
           {label}
         </span>
-      </Link>
+      </a>
     </p>
   );
 };
 
-export type linksArray = LinkProps[];
+type linksArray = typeof linkProps[];
+export type sidebarLinksProps = {
+  links: linksArray;
+  activeIndex?: number;
+};
 
-export default function SidebarLinks(links: linksArray, activeIndex?: number = 0) {
+export default function SidebarLinks({ links, activeIndex = 0 }: sidebarLinksProps) {
+  console.log('sidebar links', links);
   return (
-    <div>
-      {links.map((link, i) => {
+    <div className="py-16">
+      {links.map((link, i) => (
         <SidebarLink
+          key={i}
           label={link.label}
           to={link.to}
           icon={link.icon}
           active={activeIndex === i}
-        />;
-      })}
+        />
+      ))}
     </div>
   );
 }

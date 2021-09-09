@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import Checkbox from './components/Atoms/custom/CheckBox';
+import Sidebar from './components/Molecules/sidebar/Sidebar';
 import { Tab, Tabs } from './components/Molecules/tabs/tabs';
 import DropDown from './styles/components/atoms/custom/Dropdown';
 
@@ -20,9 +21,15 @@ const App = () => {
       value: 'kiny',
     },
   ];
+
+  const links = [
+    { label: 'Users', to: '/users', icon: 'notification', active: false },
+    { label: 'Notifications', to: '/users', icon: 'notification', active: true },
+  ];
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-4">
+        <Sidebar links={links} activeIndex={1} />
         <div className="p-8 w-full col-span-3 mx-auto">
           <Checkbox
             value="en"
@@ -47,6 +54,7 @@ const App = () => {
           />
 
           <Tabs className="my-10" activeIndex={1}>
+            <div></div>
             <Tab label="Students">
               <h1 className="text-3xl text-primary-500">Students</h1>
             </Tab>

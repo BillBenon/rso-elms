@@ -31,12 +31,12 @@ export function Tabs({ activeIndex = 0, className = '', children }: TabsProps) {
         {children.map((tab, i) => (
           <button
             key={i}
-            className={`pl-3 pr-8 py-4 ${
+            className={`pl-2 pr-5 py-4 ${
               activeTabIndex === i ? 'border-b-3' : 'border-b-2'
             } m-0 rounded-none
             ${fontSizeStyle['sm']} ${fontWeightStyle['bold']} text-${
               colorStyle[activeTabIndex == i ? 'primary' : 'gray']
-            } border-${colorStyle[activeTabIndex == i ? 'primary' : 'lightgray']}`}
+            } border-${colorStyle[activeTabIndex == i ? 'primary' : 'gray']}`}
             onClick={() => setActivetabIndex(i)}
             disabled={activeTabIndex === i || tab.props.disabled}>
             {tab.props.label}
