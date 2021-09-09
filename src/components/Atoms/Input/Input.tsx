@@ -11,6 +11,8 @@ export interface IProps {
   value: string;
   full?: boolean;
   fcolor?: Color;
+  bcolor?: Color;
+  width?: string;
 }
 
 export default function Input({
@@ -20,6 +22,8 @@ export default function Input({
   value,
   full,
   fcolor = 'primary',
+  bcolor = 'bcolor',
+  width = '80',
   handleChange,
 }: IProps) {
   return (
@@ -29,9 +33,9 @@ export default function Input({
       type={type}
       value={value}
       readOnly={readonly}
-      className={`py-2 px-5 rounded-md ${
-        full ? 'w-full' : 'w-72'
-      } focus:outline-none border-bcolor focus:border-${colorStyle[fcolor]} border-2`}
+      className={`bg-transparent h-12 px-5 rounded-md ${
+        full ? 'w-full' : `w-${width}`
+      } focus:outline-none border-${bcolor} focus:border-${colorStyle[fcolor]} border-2`}
       onChange={handleChange}
     />
   );

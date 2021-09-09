@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import Input from './components/Atoms/Input/Input';
 import Stepper from './components/Molecules/Stepper/Stepper';
 // import Avatar from './components/Atoms/custom/Avatar';
 // import Icon from './components/atoms/custom/Icon';
@@ -216,6 +217,13 @@ const App = () => {
         isInline={false}
       />
       <Table data={data} hasAction={true} />
+      <Input
+        placeholder="First"
+        fcolor="error"
+        type="text"
+        value={'Name'}
+        handleChange={(e: any) => console.log(e.target.value)}
+      />
     </div>
   );
 };
