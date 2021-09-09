@@ -21,7 +21,7 @@ const Badge = ({ badgecolor, children }: BadgeProps) => {
   return (
     <>
       <span
-        className={`mx-2 px-4 py-2 font-semibold rounded-full 
+        className={`px-4 py-2 font-semibold rounded-full 
         ${txt_colors[`${badgecolor}`]} 
         ${bg_colors[`${badgecolor}`]}`}>
         {children}
