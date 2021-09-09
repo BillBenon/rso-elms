@@ -32,11 +32,11 @@ export function Tabs({ activeIndex = 0, className = '', children }: TabsProps) {
           <button
             key={i}
             className={`pl-2 pr-5 py-4 ${
-              activeTabIndex === i ? 'border-b-4' : 'border-b-2'
+              activeTabIndex === i ? 'border-b-3' : 'border-b-2'
             } m-0 rounded-none
             ${fontSizeStyle['sm']} ${fontWeightStyle['bold']} text-${
               colorStyle[activeTabIndex == i ? 'primary' : 'gray']
-            } border-${colorStyle[activeTabIndex == i ? 'primary' : 'gray']}`}
+            } border-${colorStyle[activeTabIndex == i ? 'primary' : 'lightgray']}`}
             onClick={() => setActivetabIndex(i)}
             disabled={activeTabIndex === i || tab.props.disabled}>
             {tab.props.label}

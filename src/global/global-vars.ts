@@ -45,6 +45,7 @@ export const colorStyle: colorStyleType = {
   warning: 'warning-500',
   success: 'success-500',
   gray: 'gray-500',
+  lightgray: 'gray-200',
   'txt-primary': 'txt-primary',
   'txt-secondary': 'txt-primary',
 };

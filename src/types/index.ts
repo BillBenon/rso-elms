@@ -7,7 +7,8 @@ export type Color =
   | 'success'
   | 'txt-primary'
   | 'txt-secondary'
-  | 'gray';
+  | 'gray'
+  | 'lightgray';
 
 export type fontSize = 'xs' | 'sm' | 'tiny' | 'lg' | '2xl';
 export type width = 'default' | 'full';
