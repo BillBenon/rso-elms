@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 
+import Input from './components/Atoms/Input/Input';
+import SearchMolecule from './components/Molecules/input/SearchMolecule';
 import Navigation from './components/Molecules/navigation/Navigation';
 import Stepper from './components/Molecules/Stepper/Stepper';
 // import Avatar from './components/Atoms/custom/Avatar';
@@ -218,6 +220,14 @@ const App = () => {
       />
       <Table data={data} hasAction={true} />
       <Navigation />
+      <Input
+        placeholder="First"
+        fcolor="error"
+        type="text"
+        value={'Name'}
+        handleChange={(e: any) => console.log(e.target.value)}
+      />
+      <SearchMolecule />
     </div>
   );
 };

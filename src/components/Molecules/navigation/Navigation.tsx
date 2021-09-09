@@ -2,7 +2,9 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
+import Avatar from '../../Atoms/custom/Avatar';
 import Icon from '../../Atoms/custom/Icon';
+import SearchMolecule from '../input/SearchMolecule';
 
 export default function Navigation() {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -21,14 +23,10 @@ export default function Navigation() {
   return (
     <nav className="bg-main">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
+        <div className="flex items-center justify-between h-24">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <img
-                className="h-8 w-8"
-                src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
-                alt="Workflow logo"
-              />
+              <SearchMolecule />
             </div>
           </div>
           <div className="hidden md:block">
@@ -54,10 +52,9 @@ export default function Navigation() {
                     aria-haspopup="true"
                     onClick={() => setShowProfileMenu(!showProfileMenu)}>
                     <span className="sr-only">Open user menu</span>
-                    <img
-                      className="h-8 w-8 rounded-full"
+                    <Avatar
                       src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                      alt=""
+                      alt="profile"
                     />
                   </button>
                 </div>

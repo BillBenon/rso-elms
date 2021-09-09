@@ -6,7 +6,9 @@ export type Color =
   | 'warning'
   | 'success'
   | 'txt-primary'
-  | 'txt-secondary';
+  | 'txt-secondary'
+  | 'bcolor'
+  | 'none';
 
 export type fontSize = 'xs' | 'sm' | 'tiny' | 'lg' | '2xl';
 export type width = 'default' | 'full';

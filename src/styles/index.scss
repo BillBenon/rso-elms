@@ -6,10 +6,10 @@
 
 @import 'tailwindcss/utilities';
 
-*{
-    font-family: 'Inter', sans-serif;
-    @apply to-txt-primary;
+* {
+  font-family: 'Inter', sans-serif;
+  @apply to-txt-primary;
 }
-// body,html{
-//     @apply bg-secondary;
+// body {
+//   background-color: #fafbfc;
 // }
