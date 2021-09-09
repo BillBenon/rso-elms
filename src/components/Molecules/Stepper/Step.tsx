@@ -7,8 +7,7 @@ type StepProps = {
   // eslint-disable-next-line no-undef
   indicator: JSX.Element | number;
   label: string;
-  // eslint-disable-next-line no-unused-vars
-  navigateToStepHandler: (index: number) => void;
+  navigateToStepHandler: (_index: number) => void;
   index: number;
   isActive: boolean;
   isComplete: boolean;
@@ -19,7 +18,6 @@ const Step = ({
   indicator,
   label,
   navigateToStepHandler,
-  // eslint-disable-next-line no-unused-vars
   index,
   isActive,
   isComplete,
