@@ -6,6 +6,7 @@ import { Color } from '../../../types';
 export interface IProps {
   placeholder: string;
   type: string;
+  name: string;
   readonly?: boolean;
   handleChange: (_e: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
@@ -16,6 +17,7 @@ export interface IProps {
 export default function Input({
   placeholder,
   type,
+  name,
   readonly = false,
   value,
   full,
@@ -25,7 +27,7 @@ export default function Input({
   return (
     <input
       placeholder={placeholder}
-      name={value}
+      name={name}
       type={type}
       value={value}
       readOnly={readonly}
