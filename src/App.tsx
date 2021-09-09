@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import Input from './components/Atoms/Input/Input';
+import SearchMolecule from './components/Molecules/input/SearchMolecule';
 import Stepper from './components/Molecules/Stepper/Stepper';
 // import Avatar from './components/Atoms/custom/Avatar';
 // import Icon from './components/atoms/custom/Icon';
@@ -224,6 +225,7 @@ const App = () => {
         value={'Name'}
         handleChange={(e: any) => console.log(e.target.value)}
       />
+      <SearchMolecule />
     </div>
   );
 };

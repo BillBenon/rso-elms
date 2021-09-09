@@ -17,13 +17,13 @@ export interface IProps {
 
 export default function Input({
   placeholder,
-  type,
+  type = 'text',
   readonly = false,
   value,
   full,
   fcolor = 'primary',
   bcolor = 'bcolor',
-  width = '80',
+  width = '72',
   handleChange,
 }: IProps) {
   return (
@@ -33,7 +33,7 @@ export default function Input({
       type={type}
       value={value}
       readOnly={readonly}
-      className={`bg-transparent h-12 px-5 rounded-md ${
+      className={`bg-transparent h-12 px-3 placeholder-red-500 rounded-md ${
         full ? 'w-full' : `w-${width}`
       } focus:outline-none border-${bcolor} focus:border-${colorStyle[fcolor]} border-2`}
       onChange={handleChange}
