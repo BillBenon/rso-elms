@@ -1,3 +1,5 @@
+import { EventHandler, SyntheticEvent } from 'react';
+
 export type Color =
   | 'primary'
   | 'secondary'
@@ -41,4 +43,13 @@ export interface Link {
 export interface SelectData {
   value: string;
   label: string;
+}
+
+/**
+ * handleChange function params type
+ */
+export interface ValueType {
+  name: string;
+  value: string | number | boolean | undefined;
+  event: Event;
 }

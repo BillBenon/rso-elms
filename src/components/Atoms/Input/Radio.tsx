@@ -1,20 +1,13 @@
-import React, {
-  KeyboardEventHandler,
-  MouseEventHandler,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { SelectData } from '../../../types';
+import { SelectData, ValueType } from '../../../types';
 
 type PropType = {
   list: SelectData[];
   type?: 'inline' | 'block';
   value?: string;
-  handleChange: (
-    _value: string,
-    _event: MouseEventHandler<HTMLDivElement> | KeyboardEventHandler<HTMLDivElement>,
-  ) => void;
+  name: string;
+  handleChange: (_e: ValueType) => void;
 };
 
 /**
@@ -26,6 +19,7 @@ export default function Radio({
   value = '',
   list,
   type = 'inline',
+  name,
   handleChange,
   ...attrs
 }: PropType) {
@@ -33,14 +27,14 @@ export default function Radio({
 
   useEffect(() => setActive(value), []);
 
-  function handleClick(value: string, event: MouseEventHandler<HTMLDivElement>) {
+  function handleClick(e: ValueType) {
     setActive(value);
-    handleChange(value, event);
+    handleChange(e);
   }
 
-  function handleKeyPress(value: string, event: KeyboardEventHandler<HTMLDivElement>) {
+  function handleKeyPress(e: ValueType) {
     setActive(value);
-    handleChange(value, event);
+    handleChange(e);
   }
 
   return (
@@ -59,9 +53,9 @@ export default function Radio({
             type === 'block' ? 'w-48 bg-main rounded-lg py-4 px-2 my-1' : 'mr-4'
           }`}
           // @ts-ignore
-          onClick={(e) => handleClick(value, e)}
+          onClick={(event) => handleClick({ value, name, event })}
           // @ts-ignore
-          onKeyPress={(e) => handleKeyPress(value, e)}>
+          onKeyPress={(event) => handleKeyPress({ value, name, event })}>
           <span
             className={`mx-2 w-5 h-5 rounded-full border-solid 
             ${
