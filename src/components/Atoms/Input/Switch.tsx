@@ -23,9 +23,9 @@ export default function Switch({
 
   useEffect(() => setActive(value), []);
 
-  function handleClick(e: ValueType) {
+  function handleClick(e: any) {
     setActive(!active);
-    handleChange(e);
+    handleChange({ value: active, name, event: e });
   }
   return (
     <div className="my-switch" {...attrs}>
@@ -33,7 +33,7 @@ export default function Switch({
         <button
           className={`switch-holder ${active && 'active'} outline-none`}
           // @ts-ignore
-          onClick={(event) => handleClick({ value, name, event })}>
+          onClick={handleClick}>
           <div className={`circle ${active ? 'right' : 'left'}`}></div>
         </button>
       </div>
