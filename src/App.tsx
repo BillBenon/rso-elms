@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Checkbox from './components/Atoms/custom/CheckBox';
 import Sidebar from './components/Molecules/sidebar/Sidebar';
@@ -92,8 +93,9 @@ const App = () => {
     { label: 'Academies', to: '/academies', icon: 'academy', active: false },
     { label: 'Notifications', to: '/users', icon: 'notification', active: true },
   ];
-  return (
-    <div className="flex flex-col gap-3">
+
+  const Homepage = () => {
+    return (
       <div className="grid grid-cols-1 md:grid-cols-4 border-b-2 border-blue-500 pb-24 mb-24">
         <Sidebar links={links} activeIndex={1} />
         <div className="p-8 w-full col-span-3 mx-auto px-10 ">
@@ -136,31 +138,37 @@ const App = () => {
           </Tabs>
         </div>
       </div>
-      {/* <h2>Default stepper</h2>
-      <Stepper
-        stepperContent={stepperContent}
-        submitStepper={submitStepper}
-        isInline={false}
-        isVertical={false}
-      />
-      <hr />
-      <h2>Inline stepper</h2>
-      <Stepper
-        stepperContent={stepperContent}
-        submitStepper={submitStepper}
-        isInline
-        isVertical={false}
-      />
-      <hr />
-      <h2>Vertical stepper</h2>
-      <Stepper
-        stepperContent={stepperContent}
-        submitStepper={submitStepper}
-        isVertical
-        isInline={false}
-      /> */}
-      <Table data={data} hasAction={true} />
-      <SignUpForm />
+    );
+  };
+
+  const ErrorPage = () => {
+    return (
+      <div className="w-full md:w-10/12 lg:w-7/12 xl:w-1/2 mx-auto py-24 px-20">
+        <h1 className="text-primary-500 font-bold text-9xl text-center">404</h1>
+        <h4 className="font-bold text-gray-500 text-4xl text-center">Page not found</h4>
+      </div>
+    );
+  };
+
+  const TablePage = () => {
+    return <Table data={data} hasAction={true} />;
+  };
+
+  const SignUpPage = () => {
+    return <SignUpForm />;
+  };
+
+  return (
+    <div>
+      <Router>
+        <Switch>
+          <Route exact path="/" component={Homepage} />
+          <Route exact path="/table" component={TablePage} />
+
+          <Route exact path="/register" component={SignUpPage} />
+          <Route exact path="*" component={ErrorPage} />
+        </Switch>
+      </Router>
     </div>
   );
 };
