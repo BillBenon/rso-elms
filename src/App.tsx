@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Checkbox from './components/Atoms/custom/CheckBox';
-import Sidebar from './components/Molecules/sidebar/Sidebar';
-import Table from './components/Molecules/Table';
+import Dashboard from './components/Molecules/Dashboard';
 import { Tab, Tabs } from './components/Molecules/tabs/tabs';
 import SignUpForm from './components/Organisms/signup/SignUpForm';
 import DropDown from './styles/components/atoms/custom/Dropdown';
@@ -79,18 +78,10 @@ const App = () => {
     },
   ];
 
-  const links = [
-    { label: 'Users', to: '/users', icon: 'user', active: false },
-    { label: 'Roles', to: '/roles', icon: 'role', active: false },
-    { label: 'Academies', to: '/academies', icon: 'academy', active: false },
-    { label: 'Notifications', to: '/users', icon: 'notification', active: true },
-  ];
-
   const Homepage = () => {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-4 border-b-2 border-blue-500 pb-24 mb-24">
-        <Sidebar links={links} activeIndex={1} />
-        <div className="p-8 w-full col-span-3 mx-auto px-10 ">
+      <Dashboard>
+        <div className="p-8">
           <h2 className="font-bold text-primary-500 text-2xl py-10">
             Created by Sandberg.
           </h2>
@@ -129,7 +120,7 @@ const App = () => {
             </Tab>
           </Tabs>
         </div>
-      </div>
+      </Dashboard>
     );
   };
 
@@ -142,26 +133,17 @@ const App = () => {
     );
   };
 
-  const TablePage = () => {
-    return <Table data={data} hasAction={true} />;
-  };
-
-  const SignUpPage = () => {
-    return <SignUpForm />;
-  };
-
   return (
-    <div>
+    <>
       <Router>
         <Switch>
           <Route exact path="/" component={Homepage} />
-          <Route exact path="/table" component={TablePage} />
 
-          <Route exact path="/register" component={SignUpPage} />
+          <Route exact path="/register" component={SignUpForm} />
           <Route exact path="*" component={ErrorPage} />
         </Switch>
       </Router>
-    </div>
+    </>
   );
 };
 
