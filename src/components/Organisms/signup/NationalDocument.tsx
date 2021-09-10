@@ -3,18 +3,19 @@ import React from 'react';
 import DropDown from '../../../styles/components/atoms/custom/Dropdown';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 
-const NationalDocuments = ({ details, setDetails, validate }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newVal = details;
-    newVal[e.target.name] = e.target.value;
-    setDetails(newVal);
-    console.log(details);
-  };
+const NationalDocuments = ({ details, setDetails, validate, handleChange }) => {
+  // const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   let newVal = details;
+  //   newVal[e.target.name] = e.target.value;
+  //   setDetails(newVal);
+  //   console.log(details);
+  // };
+  // console.log(details.nationality);
 
   return (
     <>
       <DropDown
-        name={details.nationality[0]}
+        name={details.nationality}
         className="w-72"
         onChange={() => console.log('chANGED')}
         options={[
@@ -28,8 +29,8 @@ const NationalDocuments = ({ details, setDetails, validate }) => {
       />
       <InputMolecule
         name="national_id"
-        value={details.national_id[0]}
-        handleChange={(e) => handleChange(e)}
+        value={details.national_id}
+        handleChange={handleChange}
         error={validate.national_id(details.national_id)}>
         National Identitification Number
       </InputMolecule>

@@ -33,7 +33,7 @@ export default function InputMolecule({
         type={type}
         value={value}
         /* @ts-ignore */
-        handleChange={(event) => handleChange({ name, value, event })}
+        handleChange={handleChange}
       />
       <Error>{error && error}</Error>
     </div>

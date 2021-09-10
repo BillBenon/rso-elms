@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 
+import { ValueType } from '../../../types';
 import { validation } from '../../../utils/validations';
 import Stepper from '../../Molecules/Stepper/Stepper';
 import EducationDetails from './EducationDetails';
@@ -102,6 +103,21 @@ const SignUpForm = () => {
       validation.nameValidation('The disease description', name),
   };
 
+  function handleChange(e: ValueType) {
+    setNationalDocument((nationalDocument) => ({
+      ...nationalDocument,
+      [e.name]: e.value,
+    }));
+
+    //  setNationalDocument(nationalDocument =>{ ...nationalDocument, [e.name]: e.value})
+    // console.log(nationalDocument);
+
+    setNationalDocument((nationalDocument) => ({
+      ...nationalDocument,
+      [e.name]: e.value,
+    }));
+  }
+
   const stepperContent = [
     {
       label: 'Personal Details',
@@ -123,6 +139,7 @@ const SignUpForm = () => {
           details={nationalDocument}
           setDetails={setNationalDocument}
           validate={documentValidate}
+          handleChange={handleChange}
         />
       ),
       clicked: () => {},
