@@ -217,13 +217,13 @@ const App = () => {
         isInline={false}
       />
       <Table data={data} hasAction={true} />
-      <Input
+      {/* <Input
         placeholder="First"
         fcolor="error"
         type="text"
         value={'Name'}
         handleChange={(e: any) => console.log(e.target.value)}
-      />
+      /> */}
     </div>
   );
 };
