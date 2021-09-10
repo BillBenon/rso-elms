@@ -31,7 +31,7 @@ export default function Input({
   return (
     <input
       placeholder={placeholder}
-      name={value}
+      name={name}
       type={type}
       value={value}
       readOnly={readonly}
