@@ -7,7 +7,9 @@ type IDashboard = { children: React.ReactNode };
 
 export default function Dashboard({ children }: IDashboard) {
   const links = [
-    { label: 'Users', to: '/users', icon: 'notification', active: false },
+    { label: 'Users', to: '/users', icon: 'user', active: false },
+    { label: 'Roles', to: '/roles', icon: 'role', active: false },
+    { label: 'Academies', to: '/academies', icon: 'academy', active: false },
     { label: 'Notifications', to: '/users', icon: 'notification', active: true },
   ];
 

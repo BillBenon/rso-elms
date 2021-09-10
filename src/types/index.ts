@@ -1,5 +1,3 @@
-import { EventHandler, SyntheticEvent } from 'react';
-
 export type Color =
   | 'primary'
   | 'secondary'
@@ -10,7 +8,9 @@ export type Color =
   | 'txt-primary'
   | 'txt-secondary'
   | 'bcolor'
-  | 'none';
+  | 'none'
+  | 'gray'
+  | 'lightgray';
 
 export type fontSize = 'xs' | 'sm' | 'tiny' | 'lg' | '2xl';
 export type width = 'default' | 'full';
