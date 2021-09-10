@@ -6,13 +6,14 @@
 
 @import 'tailwindcss/utilities';
 
-*{
-    font-family: 'Inter', sans-serif;
-    @apply to-txt-primary;
+* {
+  font-family: 'Inter', sans-serif;
+  @apply to-txt-primary;
 }
-body,html{
-    @apply bg-secondary;
-}
-.border-b-3{
-    border-bottom-width:3px ;
+// body,html{
+//     @apply bg-secondary;
+// }
+
+.border-b-3 {
+  border-bottom-width: 3px;
 }
