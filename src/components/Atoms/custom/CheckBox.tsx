@@ -2,8 +2,6 @@ import '../../../styles/components/atoms/custom/checkbox.scss';
 
 import React from 'react';
 
-import Error from '../Text/Error';
-
 interface Props {
   label: string;
   name: string;
@@ -19,7 +17,6 @@ interface Props {
 export default function Checkbox({
   label,
   name,
-  error,
   value,
   onChange,
   checked = false,
@@ -38,7 +35,6 @@ export default function Checkbox({
         className={'checkbox ' + className}
       />
       <label className="checkbox-label">{label}</label>
-      <Error>{error && error}</Error>
     </>
   );
 }

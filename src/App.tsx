@@ -1,5 +1,6 @@
 import React from 'react';
 
+// import Table from './components/Molecules/Table';
 import SignUpForm from './components/Organisms/signup/SignUpForm';
 
 const App = () => {

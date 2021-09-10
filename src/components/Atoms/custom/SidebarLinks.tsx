@@ -14,7 +14,7 @@ export const SidebarLink = ({ label, to, icon, active }: typeof linkProps) => {
   return (
     <p className="cursor-pointer py-0">
       <a href={to} className="flex items-center">
-        <Icon name={icon} size={21} color={active ? 'primary' : 'gray'} />
+        <Icon name={icon} size={21} fill={active ? 'primary' : 'txt-secondary'} />
         <span
           className={`text-${colorStyle[active ? 'primary' : 'gray']} ${
             fontSizeStyle['sm']
