@@ -2,10 +2,15 @@ import '../../../styles/components/atoms/custom/checkbox.scss';
 
 import React from 'react';
 
+import Error from '../Text/Error';
+
 interface Props {
   label: string;
+  name: string;
+  error: string | null;
   disabled?: boolean;
-  onChange: Function;
+  // eslint-disable-next-line no-unused-vars
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   checked?: boolean;
   value: string;
   className?: string;
@@ -13,6 +18,8 @@ interface Props {
 
 export default function Checkbox({
   label,
+  name,
+  error,
   value,
   onChange,
   checked = false,
@@ -23,14 +30,15 @@ export default function Checkbox({
     <>
       <input
         type="checkbox"
-        name="checkbox"
+        name={name}
         disabled={disabled}
         checked={checked}
         value={value}
-        onChange={() => onChange()}
+        onChange={() => onChange}
         className={'checkbox ' + className}
       />
       <label className="checkbox-label">{label}</label>
+      <Error>{error && error}</Error>
     </>
   );
 }
