@@ -16,12 +16,12 @@ export default function Dashboard({ children }: IDashboard) {
   return (
     <div className="bg-gray-50 h-screen">
       {/* inner block */}
-      <div className="lg:flex gap-5 lg:p-5 h-5/6">
+      <div className="lg:flex gap-0 h-5/6">
         <div className="lg:w-64 h-full top-0 lg:sticky">
           <Sidebar links={links} activeIndex={1} />
         </div>
         {/* navbar and body */}
-        <div className="block lg:w-4/5">
+        <div className="block w-full">
           <div className="hidden lg:block">
             <Navigation />
           </div>
