@@ -27,9 +27,11 @@ export default function Input({
   bcolor = 'bcolor',
   width = '72',
   handleChange,
+  ...attrs
 }: IProps) {
   return (
     <input
+      {...attrs}
       placeholder={placeholder}
       name={name}
       type={type}
