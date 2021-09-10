@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Avatar from '../Atoms/custom/Avatar';
-import ILabel from '../Atoms/Text/ILabel';
+import Avatar from '../atoms/custom/Avatar';
+import ILabel from '../atoms/Text/ILabel';
 
 type ICard = { children: React.ReactNode };
 
