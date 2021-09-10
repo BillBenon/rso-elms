@@ -21,7 +21,7 @@ const iconStyle: colorStyleType = {
 
 const StyledSVGIcon = styled(ReactSVG)`
   svg {
-    fill: black;
+    fill: 'none';
     ${({ size }: IProps) =>
       size &&
       css`

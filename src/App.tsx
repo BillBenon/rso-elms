@@ -186,11 +186,13 @@ const App = () => {
   ];
 
   const links = [
-    { label: 'Users', to: '/users', icon: 'notification', active: false },
+    { label: 'Users', to: '/users', icon: 'user', active: false },
+    { label: 'Roles', to: '/roles', icon: 'role', active: false },
+    { label: 'Academies', to: '/academies', icon: 'academy', active: false },
     { label: 'Notifications', to: '/users', icon: 'notification', active: true },
   ];
   return (
-    <div className="p-8 flex flex-col gap-3">
+    <div className="flex flex-col gap-3">
       {/* <ILabel>First name</ILabel>
       <Textarea
         placeholder="This is a text area"
@@ -218,7 +220,7 @@ const App = () => {
       /> */}
       {/* <AcademyProfileCard>Academy name</AcademyProfileCard> */}
       <div className="grid grid-cols-1 md:grid-cols-4 border-b-2 border-blue-500 pb-24 mb-24">
-        <Sidebar links={links} />
+        <Sidebar links={links} activeIndex={1} />
         <div className="p-8 w-full col-span-3 mx-auto px-10 ">
           <h2 className="font-bold text-primary-500 text-2xl py-10">
             Created by Sandberg.
