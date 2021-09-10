@@ -101,6 +101,7 @@ const App = () => {
             Created by Sandberg.
           </h2>
           <Checkbox
+            name="language"
             value="en"
             checked={checked}
             label="English"
@@ -108,6 +109,7 @@ const App = () => {
           />
           <div className="py-3">
             <Checkbox
+              name="language"
               value="en"
               checked={checked}
               label="French"
@@ -134,7 +136,7 @@ const App = () => {
           </Tabs>
         </div>
       </div>
-      <h2>Default stepper</h2>
+      {/* <h2>Default stepper</h2>
       <Stepper
         stepperContent={stepperContent}
         submitStepper={submitStepper}
@@ -156,7 +158,7 @@ const App = () => {
         submitStepper={submitStepper}
         isVertical
         isInline={false}
-      />
+      /> */}
       <Table data={data} hasAction={true} />
       <SignUpForm />
     </div>
