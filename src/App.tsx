@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import Input from './components/Atoms/Input/Input';
+import Dashboard from './components/Molecules/Dashboard';
 import SearchMolecule from './components/Molecules/input/SearchMolecule';
 import Navigation from './components/Molecules/navigation/Navigation';
 import Stepper from './components/Molecules/Stepper/Stepper';
@@ -228,6 +229,7 @@ const App = () => {
         handleChange={(e: any) => console.log(e.target.value)}
       />
       <SearchMolecule />
+      <Dashboard>This is the dashboard</Dashboard>
     </div>
   );
 };
