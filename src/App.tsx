@@ -80,7 +80,7 @@ const App = () => {
 
   const Homepage = () => {
     return (
-      <Dashboard>
+      <Dashboard activeIndex={2}>
         <div className="p-8">
           <h2 className="font-bold text-primary-500 text-2xl py-10">
             Created by Sandberg.
