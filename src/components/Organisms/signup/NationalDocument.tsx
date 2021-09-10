@@ -13,7 +13,7 @@ const NationalDocuments = ({ details, setDetails, validate }) => {
   return (
     <>
       <DropDown
-        name={details.nationality[0]}
+        name={details.nationality}
         className="w-72"
         onChange={() => console.log('chANGED')}
         options={[
@@ -27,8 +27,8 @@ const NationalDocuments = ({ details, setDetails, validate }) => {
       />
       <InputMolecule
         name="national_id"
-        value={details.national_id[0]}
-        handleChange={(e) => handleChange(e)}
+        value={details.national_id}
+        handleChange={handleChange}
         error={validate.national_id(details.national_id)}>
         National Identitification Number
       </InputMolecule>

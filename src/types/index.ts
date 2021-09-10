@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { EventHandler, SyntheticEvent } from 'react';
+import React from 'react';
 
 export type Color =
   | 'primary'
@@ -10,6 +10,8 @@ export type Color =
   | 'success'
   | 'txt-primary'
   | 'txt-secondary'
+  | 'bcolor'
+  | 'none'
   | 'gray'
   | 'lightgray';
 
@@ -27,23 +29,23 @@ export type Status =
   | 'cancelled';
 
 export type statusStyleType = {
-  [index in Status]?: string;
+  [_index in Status]?: string;
 };
 
 export type colorStyleType = {
-  [index in Color]?: string;
+  [_index in Color]?: string;
 };
 
 export type bgStyleType = {
-  [index in Color]?: string;
+  [_index in Color]?: string;
 };
 
 export type fontWeightStyleType = {
-  [index in fontWeight]: string;
+  [_index in fontWeight]: string;
 };
 
 export type fontSizeStyleType = {
-  [index in fontSize]: string;
+  [_index in fontSize]: string;
 };
 
 export interface Link {

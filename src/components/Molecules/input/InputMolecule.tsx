@@ -1,13 +1,14 @@
 import React from 'react';
 
-import Input from '../../atoms/Input/Input';
-import Error from '../../atoms/Text/Error';
-import ILabel from '../../atoms/Text/ILabel';
+import { ValueType } from '../../../types';
+import Input from '../../Atoms/Input/Input';
+import Error from '../../Atoms/Text/Error';
+import ILabel from '../../Atoms/Text/ILabel';
 
 type IError = {
   name: string;
   value: string;
-  handleChange: (_e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (_e: ValueType) => void;
   children: React.ReactNode;
   error: string | null;
   placeholder?: string;
@@ -31,6 +32,7 @@ export default function InputMolecule({
         fcolor={error ? 'error' : undefined}
         type={type}
         value={value}
+        /* @ts-ignore */
         handleChange={handleChange}
       />
       <Error>{error && error}</Error>
