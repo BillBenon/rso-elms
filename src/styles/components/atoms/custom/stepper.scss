@@ -2,7 +2,7 @@
   $warning-500: #FACD23;
   $error-500: #EE4040;
   $main: #FFFFFF;
-  $gray: #FAFBFC;
+  $silver-500: #DAE0E5;
   $txt-secondary: '#97A0A8';
 
 //stepper styles
@@ -55,11 +55,11 @@
           position: absolute;
           left: 1.5rem;
           right: auto;
-          top: 2rem;
-          bottom: -0.5rem;
+          top: 3rem;
+          bottom: -2.5rem;
           width: 0;
           height: auto;
-          border-left: 0.125rem solid $gray;
+          border-left: 0.125rem solid $silver-500;
         }
         &.is-complete {
           &:after {
@@ -147,7 +147,7 @@
           top: 1.5rem;
           width: 100%;
           height: 0.125rem;
-          background-color: $gray;
+          background-color: $silver-500;
           z-index: 1;
         }
 
@@ -168,9 +168,9 @@
           align-items: center;
           width: 2rem;
           height: 2rem;
-          border: 1px solid $gray;
+          border: 1px solid $silver-500;
           border-radius: 50%;
-          background-color: $gray;
+          background-color: $silver-500;
           font-size: 1rem;
           line-height: 2.5rem;
           text-align: center;

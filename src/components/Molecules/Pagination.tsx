@@ -31,7 +31,6 @@ export default function Pagination({
                 isCircular={false}
                 isActive={currentPage === number}
                 hasError={false}
-                hasBoldBg={true}
                 isComplete={false}
                 clicked={() => paginate(number)}>
                 {number}

@@ -41,7 +41,6 @@ const Step = ({
         <Indicator
           isCircular={true}
           hasError={isError}
-          hasBoldBg={false}
           isComplete={isComplete}
           isActive={isActive}
           clicked={() => navigateToStepHandler(index)}>
