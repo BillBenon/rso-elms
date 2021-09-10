@@ -4,7 +4,6 @@ import styled, { css } from 'styled-components';
 
 import { bgStyle } from '../../../global/global-vars';
 import { Color, colorStyleType } from '../../../types';
-
 type IProps = {
   name: string;
   size?: number;
@@ -12,7 +11,6 @@ type IProps = {
   stroke?: Color;
   bgColor?: Color;
 };
-
 const iconStyle: colorStyleType = {
   primary: '#2337CC',
   error: '#EF4444',
@@ -20,7 +18,6 @@ const iconStyle: colorStyleType = {
   success: '#3CD278',
   'txt-secondary': '#949ca5',
 };
-
 const StyledSVGIcon = styled(ReactSVG)`
   svg {
     ${({ size }: IProps) =>
