@@ -7,34 +7,25 @@ interface Props {
   disabled?: boolean;
   isMulti?: boolean;
   onChange: Function;
-  getOptionLabel?: Function;
+  getOptionLabel?: any;
+  getOptionValue?: any;
   options: object[];
   className?: string;
   noOptionsMessage?: string;
 }
 
-export default function DropDown({
-  name,
-  placeholder,
-  disabled = false,
-  onChange,
-  getOptionLabel,
-  options = [],
-  className = '',
-  isMulti = false,
-  noOptionsMessage = `no ${name} available`,
-}: Props) {
+export default function DropDown(props: Props) {
   return (
     <>
       <Select
-        disabled={disabled}
-        name={name}
-        options={options}
-        placeholder={placeholder}
-        onChange={() => onChange()}
-        className={`select ${className}`}
-        noOptionsMessage={noOptionsMessage}
-        isMulti={isMulti}
+        disabled={props.disabled || false}
+        name={props.name}
+        options={props.options}
+        placeholder={props.placeholder || `Select ${props.name}`}
+        onChange={(e: object) => props.onChange({ ...e, name: props.name })}
+        className={`w-full md:w-72 select ${props.className || ''}`}
+        noOptionsMessage={props.noOptionsMessage || `no ${props.name} available`}
+        isMulti={props.isMulti}
       />
     </>
   );
