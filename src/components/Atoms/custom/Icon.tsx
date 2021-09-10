@@ -16,7 +16,7 @@ const iconStyle: colorStyleType = {
   error: '#EF4444',
   warning: '#FACD23',
   success: '#3CD278',
-  'txt-secondary': '#949CA5',
+  'txt-secondary': '#949ca5',
 };
 const StyledSVGIcon = styled(ReactSVG)`
   svg {
@@ -35,11 +35,12 @@ const StyledSVGIcon = styled(ReactSVG)`
       ${({ fill }: IProps) =>
         fill &&
         css`
-          fill: ${iconStyle[fill]};
+          color: ${iconStyle[fill]};
         `}
     }
   }
 `;
+
 export default function Icon({
   name,
   fill,
