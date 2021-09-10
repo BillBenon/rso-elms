@@ -4,47 +4,56 @@ import styled, { css } from 'styled-components';
 
 import { bgStyle } from '../../../global/global-vars';
 import { Color, colorStyleType } from '../../../types';
-
 type IProps = {
   name: string;
   size?: number;
-  color?: Color;
+  fill?: Color;
+  stroke?: Color;
   bgColor?: Color;
 };
-
 const iconStyle: colorStyleType = {
   primary: '#2337CC',
   error: '#EF4444',
-  warning: 'FACD23',
+  warning: '#FACD23',
   success: '#3CD278',
+  'txt-secondary': '#949ca5',
 };
-
 const StyledSVGIcon = styled(ReactSVG)`
   svg {
-    fill: black;
     ${({ size }: IProps) =>
       size &&
       css`
         width: ${size}px;
         height: ${size}px;
       `}
+    ${({ stroke }: IProps) =>
+      stroke &&
+      css`
+        stroke: ${iconStyle[stroke]};
+      `}
     path {
-      ${({ color }: IProps) =>
-        color &&
+      ${({ fill }: IProps) =>
+        fill &&
         css`
-          fill: ${iconStyle[color]};
+          color: ${iconStyle[fill]};
         `}
     }
   }
 `;
 
-export default function Icon({ name, color, size = 24, bgColor }: IProps) {
+export default function Icon({
+  name,
+  fill,
+  stroke = 'txt-secondary',
+  size = 24,
+  bgColor,
+}: IProps) {
   return (
     <div
       className={`${bgColor && bgStyle[bgColor]}  ${
         size > 16 ? 'w-12 h-12' : 'w-8 h-8'
       }  p-4 flex items-center justify-center rounded-lg`}>
-      <StyledSVGIcon src={`/icons/${name}.svg`} color={color} size={size} />
+      <StyledSVGIcon src={`/icons/${name}.svg`} stroke={stroke} fill={fill} size={size} />
     </div>
   );
 }

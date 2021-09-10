@@ -11,8 +11,7 @@ type StepperHeadProp = {
     isComplete: boolean;
     clicked: () => void;
   }[];
-  // eslint-disable-next-line no-unused-vars
-  navigateToStepHandler: (index: number) => void;
+  navigateToStepHandler: (_index: number) => void;
   currentTabIndex: number;
   isInline: boolean;
   isVertical: boolean;
