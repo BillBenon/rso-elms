@@ -5,9 +5,8 @@ import InputMolecule from '../../Molecules/input/InputMolecule';
 
 const NationalDocuments = ({ details, setDetails, validate }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newVal = details;
-    newVal[e.target.name] = e.target.value;
-    setDetails(newVal);
+    details[e.target.name] = e.target.value;
+    setDetails(details);
     console.log(details);
   };
 
