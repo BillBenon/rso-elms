@@ -13,7 +13,14 @@ export default function Popup() {
     <Dashboard>
       <section>
         <Button onClick={openModel}> show it</Button>
-        <PopupMolecule open={open} onClose={closeModel}></PopupMolecule>
+        <PopupMolecule open={open} onClose={closeModel}>
+          <div className="w-60">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae magni omnis
+            delectus nemo, maxime molestiae dolorem numquam mollitia, voluptate ea,
+            accusamus excepturi deleniti ratione sapiente! Laudantium, aperiam doloribus.
+            Odit, aut.
+          </div>
+        </PopupMolecule>
       </section>
     </Dashboard>
   );

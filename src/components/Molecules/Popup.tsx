@@ -1,23 +1,26 @@
-import React from 'react';
+import '../../styles/components/molecules/popup.scss';
+
+import React, { ReactNode } from 'react';
 import Popup from 'reactjs-popup';
 
 import Icon from '../Atoms/custom/Icon';
 
 type PropType = {
   open: boolean;
+  children: ReactNode;
   onClose: () => void;
 };
 
-export default function PopupMolecule({ open, onClose }: PropType) {
+export default function PopupMolecule({ open, onClose, children }: PropType) {
   return (
     <Popup open={open} closeOnDocumentClick onClose={onClose} modal>
-      <div className="modal">
-        <button className="close" onClick={onClose}>
-          <Icon name="close" />
-        </button>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae magni omnis
-        delectus nemo, maxime molestiae dolorem numquam mollitia, voluptate ea, accusamus
-        excepturi deleniti ratione sapiente! Laudantium, aperiam doloribus. Odit, aut.
+      <div className="modal block p-2">
+        <div className="flex justify-end">
+          <button className="close" onClick={onClose}>
+            <Icon size={12} bgColor="txt-secondary" name="close" />
+          </button>
+        </div>
+        {children}
       </div>
     </Popup>
   );
