@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Indicator from '../atoms/custom/Indicator';
+import Indicator from '../Atoms/custom/Indicator';
 
 type PaginationProps = {
   rowsPerPage: number;

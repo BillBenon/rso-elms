@@ -11,6 +11,7 @@ export default function Dashboard({ children }: IDashboard) {
     { label: 'Roles', to: '/roles', icon: 'role', active: false },
     { label: 'Academies', to: '/academies', icon: 'academy', active: false },
     { label: 'Notifications', to: '/users', icon: 'notification', active: true },
+    { label: 'Popup test', to: '/popup', icon: 'notification', active: false },
   ];
 
   return (
@@ -22,7 +23,7 @@ export default function Dashboard({ children }: IDashboard) {
         </div>
         {/* navbar and body */}
         <div className="block lg:w-4/5">
-          <div className="hidden lg:block">
+          <div className="">
             <Navigation />
           </div>
           <div className="block w-full h-full py-5">{children}</div>
