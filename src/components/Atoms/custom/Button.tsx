@@ -15,7 +15,7 @@ interface PropTypes {
   children: ReactNode;
   type?: ButtonType;
   color?: Color;
-  onClick: () => any;
+  onClick?: () => any;
 }
 
 export default function Button({
