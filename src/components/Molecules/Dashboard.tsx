@@ -1,17 +1,19 @@
 import React from 'react';
 
+import { Link } from '../../types';
 import Navigation from './navigation/Navigation';
 import Sidebar from './sidebar/Sidebar';
 
 type IDashboard = { children: React.ReactNode };
 
 export default function Dashboard({ children }: IDashboard) {
-  const links = [
-    { label: 'Users', to: '/users', icon: 'user', active: false },
-    { label: 'Roles', to: '/roles', icon: 'role', active: false },
-    { label: 'Academies', to: '/academies', icon: 'academy', active: false },
-    { label: 'Notifications', to: '/users', icon: 'notification', active: true },
-    { label: 'Popup test', to: '/popup', icon: 'notification', active: false },
+  const links: Link[] = [
+    { title: 'Users', to: '/users', icon: 'user', active: false },
+    { title: 'Roles', to: '/roles', icon: 'role', active: false },
+    { title: 'Academies', to: '/academies', icon: 'academy', active: false },
+    { title: 'Notifications', to: '/users', icon: 'notification', active: true },
+    { title: 'Popup test', to: '/popup', icon: 'notification', active: false },
+    { title: 'Modules', to: '/modules', icon: 'notification', active: false },
   ];
 
   return (
