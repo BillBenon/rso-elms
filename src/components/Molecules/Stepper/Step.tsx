@@ -10,8 +10,8 @@ type StepProps = {
   navigateToStepHandler: (_index: number) => void;
   index: number;
   isActive: boolean;
-  isComplete: boolean;
-  isError: boolean;
+  isComplete?: boolean;
+  isError?: boolean;
 };
 
 const Step = ({

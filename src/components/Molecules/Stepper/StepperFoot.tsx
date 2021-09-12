@@ -11,8 +11,8 @@ type StepperFootProp = {
     label: string;
     // eslint-disable-next-line no-undef
     content: JSX.Element;
-    isError: boolean;
-    isComplete: boolean;
+    isError?: boolean;
+    isComplete?: boolean;
     clicked: () => void;
   }[];
 };
@@ -32,15 +32,19 @@ const StepperFoot = ({
 
   return (
     <div
-      className="stepper-footer"
-      style={{ justifyContent: isPrevBtn ? 'space-between' : 'flex-end' }}>
+      className="flex items-center pt-3"
+      // style={{ justifyContent: isPrevBtn ? 'space-between' : 'flex-end' }}
+    >
       {isPrevBtn && (
-        <button className="stepper-footer-btn" onClick={previousStepHandler}>
-          Back to {stepperContent[currentTabIndex - 1].label}
+        <button
+          className="px-4 py-1 cursor-pointer font-medium rounded-lg border-none outline-none transition-all text-txt-secondary"
+          onClick={previousStepHandler}>
+          Back
         </button>
+        // <Button type="text">Back</Button>
       )}
       <button
-        className={`stepper-footer-btn primary`}
+        className={`px-4 py-1 cursor-pointer font-medium rounded-lg border-none outline-none transition-all bg-primary-600 text-main items-end ml-40`}
         onClick={
           isLastStep
             ? submitHandler
@@ -53,9 +57,7 @@ const StepperFoot = ({
             ? stepperContent.some((el) => !el.isComplete)
             : !stepperContent[currentTabIndex].isComplete
         }>
-        {isLastStep
-          ? 'Submit'
-          : `Continue to ${stepperContent[currentTabIndex + 1].label}`}
+        {isLastStep ? 'Complete' : `Next`}
       </button>
     </div>
   );
