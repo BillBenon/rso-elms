@@ -2,15 +2,17 @@ import React, { ReactNode } from 'react';
 
 type IndicatorProps = {
   isCircular: boolean;
-  isActive: boolean;
-  hasError: boolean;
-  isComplete: boolean;
+  className?: string;
+  isActive?: boolean;
+  hasError?: boolean;
+  isComplete?: boolean;
   clicked: () => void;
   children: ReactNode;
 };
 
 const Indicator = ({
   isCircular,
+  className = '',
   isActive,
   hasError,
   isComplete,
@@ -22,6 +24,7 @@ const Indicator = ({
       <button
         className={`relative inline-flex justify-center items-center w-8 h-8 
         border text-sm text-center z-2
+        ${className}
          ${
            isActive || isComplete
              ? 'text-main bg-primary-600 border-primary-600'
