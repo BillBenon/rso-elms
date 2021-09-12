@@ -1,9 +1,9 @@
 import React, { KeyboardEventHandler, MouseEventHandler, ReactNode } from 'react';
 
 import { SelectData } from '../../../types';
-import Radio from '../../Atoms/Input/Radio';
-import Error from '../../Atoms/Text/Error';
-import ILabel from '../../Atoms/Text/ILabel';
+import Radio from '../../atoms/Input/Radio';
+import Error from '../../atoms/Text/Error';
+import ILabel from '../../atoms/Text/ILabel';
 
 type PropType = {
   children: ReactNode;
