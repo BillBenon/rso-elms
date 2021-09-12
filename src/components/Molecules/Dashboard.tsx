@@ -5,9 +5,12 @@ import Navigation from './navigation/Navigation';
 import Sidebar from './sidebar/Sidebar';
 
 type IDashboard = { children: React.ReactNode };
+interface ILinks extends Omit<Link, 'icon'> {
+  icon: string;
+}
 
 export default function Dashboard({ children }: IDashboard) {
-  const links: Link[] = [
+  const links: ILinks[] = [
     { title: 'Users', to: '/users', icon: 'user', active: false },
     { title: 'Roles', to: '/roles', icon: 'role', active: false },
     { title: 'Academies', to: '/academies', icon: 'academy', active: false },
