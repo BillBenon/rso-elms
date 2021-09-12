@@ -59,7 +59,7 @@ const Table = ({ data, hasAction, statusColumn }: TableProps) => {
     <div className="overflow-x-auto rounded-lg text-sm">
       <table className="table-auto border-collapse font-semibold bg-main w-full m-auto">
         <thead>
-          <tr className="text-left text-txt-secondary border-b border-silver-500">
+          <tr className="text-left text-txt-secondary border-b border-silver">
             {getHeader()}
             {hasAction ? <th className="px-4 py-2 ">Actions</th> : ''}
           </tr>
