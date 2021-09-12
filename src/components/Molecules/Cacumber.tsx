@@ -9,7 +9,7 @@ type PropType = {
 export default function Cacumber({ list }: PropType) {
   return (
     <div>
-      <div className="flex pl-4">
+      <div className="flex ">
         {list.map((link, i) => (
           <a href={link.to} className=" flex items-center" key={i}>
             <div className="text-txt-secondary">{link.title}</div>
