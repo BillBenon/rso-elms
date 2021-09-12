@@ -1,19 +1,20 @@
 import React from 'react';
 
+import { Link } from '../../types';
 import Icon from '../Atoms/custom/Icon';
 
 type PropType = {
-  list: string[];
+  list: Link[];
 };
 export default function Cacumber({ list }: PropType) {
   return (
     <div>
       <div className="flex pl-4">
-        {list.map((cuc, i) => (
-          <div className=" flex items-center" key={i}>
-            <div className="text-txt-secondary">{cuc}</div>
+        {list.map((link, i) => (
+          <a href={link.to} className=" flex items-center" key={i}>
+            <div className="text-txt-secondary">{link.title}</div>
             {i !== list.length - 1 && <Icon size={10} name="chevron-right" />}
-          </div>
+          </a>
         ))}
       </div>
     </div>

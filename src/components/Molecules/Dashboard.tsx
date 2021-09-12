@@ -5,6 +5,7 @@ import Navigation from './navigation/Navigation';
 import Sidebar from './sidebar/Sidebar';
 
 type IDashboard = { children: React.ReactNode };
+
 interface ILinks extends Omit<Link, 'icon'> {
   icon: string;
 }

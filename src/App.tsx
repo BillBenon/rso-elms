@@ -6,6 +6,7 @@ import Dashboard from './components/Molecules/Dashboard';
 import { Tab, Tabs } from './components/Molecules/tabs/tabs';
 import SignUpForm from './components/Organisms/signup/SignUpForm';
 import DropDown from './styles/components/atoms/custom/Dropdown';
+import Modules from './views/modules';
 import Popup from './views/Popup';
 
 const App = () => {
@@ -142,6 +143,7 @@ const App = () => {
 
           <Route exact path="/register" component={SignUpForm} />
           <Route exact path="/popup" component={Popup} />
+          <Route exact path="/modules" component={Modules} />
           <Route exact path="*" component={ErrorPage} />
         </Switch>
       </Router>
