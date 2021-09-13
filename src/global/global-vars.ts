@@ -29,7 +29,7 @@ export const bgStyle: bgStyleType = {
   warning: 'bg-warning-400',
   success: 'bg-succes-400',
   'txt-primary': 'bg-txt-primary',
-  'txt-secondary': 'bg-txt-primary',
+  'txt-secondary': 'bg-txt-secondary',
 };
 
 export const bgStyleButton: colorStyleType = {

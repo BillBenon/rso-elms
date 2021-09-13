@@ -5,8 +5,8 @@ import '../../styles/components/molecules/table/table.scss';
 
 import React, { useState } from 'react';
 
-import Icon from '../atoms/custom/Icon';
-import Row from '../atoms/custom/Row';
+import Icon from '../Atoms/custom/Icon';
+import Row from '../Atoms/custom/Row';
 import Pagination from './Pagination';
 
 type TableProps = {
@@ -43,10 +43,11 @@ const Table = ({ data, hasAction, statusColumn }: TableProps) => {
       <tr key={index}>
         <Row key={index} data={row} keys={keys} statusColumn={statusColumn} />
         {hasAction ? (
-          <td className="flex space-x-6 py-4">
-            <span onClick={() => console.log('more')}>
-              <Icon name="more" stroke="txt-secondary" fill="primary" />
+          <td className="flex space-x-6">
+            <span onClick={() => console.log('editing')}>
+              <Icon name="edit" stroke="primary" />
             </span>
+            <span onClick={() => console.log('more')}></span>
           </td>
         ) : (
           ''

@@ -27,14 +27,14 @@ export default function Radio({
 
   useEffect(() => setActive(value), []);
 
-  function handleClick(e: ValueType) {
+  function handleClick(value: string, e: any) {
     setActive(value);
-    handleChange(e);
+    handleChange({ value, name, event: e });
   }
 
-  function handleKeyPress(e: ValueType) {
+  function handleKeyPress(value: string, e: any) {
     setActive(value);
-    handleChange(e);
+    handleChange({ value, name, event: e });
   }
 
   return (
@@ -53,9 +53,9 @@ export default function Radio({
             type === 'block' ? 'w-48 bg-main rounded-lg py-4 px-2 my-1' : 'mr-4'
           }`}
           // @ts-ignore
-          onClick={(event) => handleClick({ value, name, event })}
+          onClick={(e) => handleClick(value, e)}
           // @ts-ignore
-          onKeyPress={(event) => handleKeyPress({ value, name, event })}>
+          onKeyPress={(e) => handleKeyPress(value, e)}>
           <span
             className={`mx-2 w-5 h-5 rounded-full border-solid 
             ${

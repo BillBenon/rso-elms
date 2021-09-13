@@ -52,6 +52,7 @@ export interface Link {
   icon?: string;
   title: string;
   to: string;
+  active?: boolean;
 }
 
 export interface SelectData {

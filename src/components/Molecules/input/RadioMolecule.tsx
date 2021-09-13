@@ -1,6 +1,6 @@
-import React, { KeyboardEventHandler, MouseEventHandler, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
-import { SelectData } from '../../../types';
+import { SelectData, ValueType } from '../../../types';
 import Radio from '../../atoms/Input/Radio';
 import Error from '../../atoms/Text/Error';
 import ILabel from '../../atoms/Text/ILabel';
@@ -9,13 +9,11 @@ type PropType = {
   children: ReactNode;
   type?: 'inline' | 'block';
   value?: string;
+  name: string;
   error?: string;
   loading?: boolean;
   list: SelectData[];
-  handleChange: (
-    _value: string,
-    _event: MouseEventHandler<HTMLDivElement> | KeyboardEventHandler<HTMLDivElement>,
-  ) => void;
+  handleChange: (_e: ValueType) => void;
 };
 
 /**
@@ -23,6 +21,7 @@ type PropType = {
  */
 export default function RadioMolecule({
   value = '',
+  name,
   type = 'inline',
   children,
   handleChange,
@@ -38,6 +37,7 @@ export default function RadioMolecule({
         <>
           <ILabel>{children}</ILabel>
           <Radio
+            name={name}
             value={value}
             type={type}
             list={list}

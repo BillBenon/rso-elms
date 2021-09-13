@@ -1,5 +1,6 @@
-import React, { MouseEvent, ReactNode } from 'react';
+import React, { ReactNode } from 'react';
 
+import { ValueType } from '../../../types';
 import Switch from '../../atoms/Input/Switch';
 import Error from '../../atoms/Text/Error';
 import ILabel from '../../atoms/Text/ILabel';
@@ -7,9 +8,10 @@ import ILabel from '../../atoms/Text/ILabel';
 type PropType = {
   children: ReactNode;
   value: boolean;
+  name: string;
   loading: boolean;
   error?: string;
-  handleChange: (_active: boolean, _event: MouseEvent<HTMLButtonElement>) => void;
+  handleChange: (_e: ValueType) => void;
 };
 
 /**
@@ -18,6 +20,7 @@ type PropType = {
 export default function SwitchMolecule({
   value = false,
   children,
+  name,
   loading = false,
   handleChange,
   error,
@@ -29,7 +32,7 @@ export default function SwitchMolecule({
       ) : (
         <>
           <ILabel>{children}</ILabel>
-          <Switch value={value} handleChange={handleChange}></Switch>
+          <Switch name={name} value={value} handleChange={handleChange}></Switch>
           {error && <Error>{error}</Error>}
         </>
       )}
