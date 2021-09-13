@@ -48,7 +48,7 @@ export const colorStyle: colorStyleType = {
   gray: 'gray-500',
   lightgray: 'gray-200',
   'txt-primary': 'txt-primary',
-  'txt-secondary': 'txt-primary',
+  'txt-secondary': 'txt-secondary',
 };
 
 export const colorStyleButton: colorStyleType = {
