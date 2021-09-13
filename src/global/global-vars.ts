@@ -11,6 +11,7 @@ export const fontWeightStyle: fontWeightStyleType = {
   normal: 'font-normal',
   medium: 'font-medium',
   bold: 'font-bold',
+  semibold: 'font-semibold',
 };
 
 export const fontSizeStyle: fontSizeStyleType = {
