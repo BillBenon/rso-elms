@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { ValueType } from '../../../types';
-import { validation } from '../../../utils/validations';
+import Button from '../../Atoms/custom/Button';
 import DropDown from '../../Atoms/Input/Dropdown';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 
@@ -14,16 +14,14 @@ const NationalDocuments = () => {
     language: '',
   });
 
-  const validate = {
-    touched: false,
-    completed: false,
-    nationality: (name: string) => validation.nameValidation('Nationality', name),
-    national_id: (name: string) =>
-      validation.nameValidation('National Identitification Number', name),
-    passport: (name: string) => validation.nameValidation('Passport Number', name),
-    passport_expiry_date: validation.dateValidation,
-    language: (name: string) => validation.nameValidation('Language', name),
+  const movePrev = () => {
+    window.alert('movePrev');
   };
+
+  const moveNext = () => {
+    window.alert('moveNext');
+  };
+
   const handleChange = (e: ValueType) => {
     setDetails((details) => ({
       ...details,
@@ -33,11 +31,11 @@ const NationalDocuments = () => {
   };
 
   return (
-    <>
+    <div>
       <DropDown
         name={details.nationality}
         className="w-72"
-        onChange={() => console.log('chANGED')}
+        onChange={handleChange}
         options={[
           { value: 'rw', label: 'Rwanda' },
           { value: 'ug', label: 'Uganda' },
@@ -50,18 +48,24 @@ const NationalDocuments = () => {
       <InputMolecule
         name="national_id"
         value={details.national_id}
-        handleChange={handleChange}
-        error={validate.national_id(details.national_id)}>
+        placeholder="----------------"
+        handleChange={handleChange}>
         National Identitification Number
       </InputMolecule>
       <InputMolecule
         name="passport"
-        value={details.passport[0]}
-        handleChange={handleChange}
-        error={validate.passport(details.passport)}>
+        value={details.passport}
+        placeholder="----------------"
+        handleChange={handleChange}>
         Passport Number(Optional)
       </InputMolecule>
-    </>
+      <div className="flex gap-3">
+        <Button type="text" color="txt-secondary" onClick={movePrev}>
+          Back
+        </Button>
+        <Button onClick={moveNext}>Next</Button>
+      </div>
+    </div>
   );
 };
 

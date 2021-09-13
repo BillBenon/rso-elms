@@ -4,9 +4,9 @@ import Stepper from '../../Molecules/Stepper/Stepper';
 import EducationDetails from './EducationDetails';
 import EmploymentDetails from './EmploymentDetails';
 import NationalDocuments from './NationalDocument';
-import NavSign from './NavSign';
 import OtherDetails from './OtherDetails';
 import PersonalDetails from './PersonalDetails';
+import SignupHeader from './SignupHeader';
 
 const SignUpForm = () => {
   const stepperContent = [
@@ -52,15 +52,15 @@ const SignUpForm = () => {
   };
 
   return (
-    <>
-      <NavSign />
+    <div className="m-10">
+      <SignupHeader />
       <Stepper
         stepperContent={stepperContent}
         submitStepper={submitStepper}
         isVertical
         isInline={false}
       />
-    </>
+    </div>
   );
 };
 

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import { ValueType } from '../../../types';
-import { validation } from '../../../utils/validations';
+import Button from '../../Atoms/custom/Button';
 import DropDown from '../../Atoms/Input/Dropdown';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 
@@ -13,14 +13,12 @@ const EmploymentDetails = () => {
     EmpNo: '',
   });
 
-  const validate = {
-    touched: false,
-    completed: false,
-    currentRank: (name: string) => validation.nameValidation('The current rank', name),
-    otherRank: (name: string) => validation.nameValidation('The other rank', name),
-    RankDepart: (name: string) =>
-      validation.nameValidation('Current rank department', name),
-    EmpNo: (name: string) => validation.nameValidation('Employment number', name),
+  const movePrev = () => {
+    window.alert('movePrev');
+  };
+
+  const moveNext = () => {
+    window.alert('moveNext');
   };
 
   const handleChange = (e: ValueType) => {
@@ -34,9 +32,9 @@ const EmploymentDetails = () => {
   return (
     <>
       <DropDown
-        name="nationality"
+        name="currentRank"
         className="w-72"
-        onChange={() => console.log('chANGED')}
+        onChange={handleChange}
         options={[
           { value: 'rw', label: 'Rwanda' },
           { value: 'ug', label: 'Uganda' },
@@ -47,33 +45,32 @@ const EmploymentDetails = () => {
         ]}
       />
       <InputMolecule
-        name="currentRank"
-        value={details.currentRank}
-        handleChange={handleChange}
-        error={validate.currentRank(details.currentRank)}>
-        Current rank
-      </InputMolecule>
-      <InputMolecule
         name="otherRank"
+        placeholder="other ranks u might hold"
         value={details.otherRank}
-        handleChange={handleChange}
-        error={validate.otherRank(details.otherRank)}>
+        handleChange={handleChange}>
         Other rank
       </InputMolecule>
       <InputMolecule
         name="RankDepart"
+        placeholder="eg: Rwanda"
         value={details.RankDepart}
-        handleChange={handleChange}
-        error={validate.RankDepart(details.RankDepart)}>
+        handleChange={handleChange}>
         Current rank department
       </InputMolecule>
       <InputMolecule
-        name="RankDepart"
+        name="EmpNo"
+        placeholder="Employment number"
         value={details.EmpNo}
-        handleChange={handleChange}
-        error={validate.RankDepart(details.EmpNo)}>
+        handleChange={handleChange}>
         Employment number
       </InputMolecule>
+      <div className="flex gap-3">
+        <Button type="text" color="txt-secondary" onClick={movePrev}>
+          Back
+        </Button>
+        <Button onClick={moveNext}>Next</Button>
+      </div>
     </>
   );
 };
