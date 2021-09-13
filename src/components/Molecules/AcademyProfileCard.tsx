@@ -15,7 +15,9 @@ export default function AcademyProfileCard({ children }: ICard) {
         size="32"
         alt="academy logo"
       />
-      <ILabel>{children}</ILabel>
+      <ILabel size="xs" weight="medium">
+        {children}
+      </ILabel>
     </div>
   );
 }

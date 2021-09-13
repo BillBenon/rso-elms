@@ -11,6 +11,7 @@ export const fontWeightStyle: fontWeightStyleType = {
   normal: 'font-normal',
   medium: 'font-medium',
   bold: 'font-bold',
+  semibold: 'font-semibold',
 };
 
 export const fontSizeStyle: fontSizeStyleType = {
@@ -24,6 +25,7 @@ export const fontSizeStyle: fontSizeStyleType = {
 export const bgStyle: bgStyleType = {
   primary: 'bg-primary-500',
   secondary: 'bg-secondary',
+  tertiary: 'bg-tertiary',
   main: 'bg-main',
   error: 'bg-error-400',
   warning: 'bg-warning-400',
@@ -47,7 +49,7 @@ export const colorStyle: colorStyleType = {
   gray: 'gray-500',
   lightgray: 'gray-200',
   'txt-primary': 'txt-primary',
-  'txt-secondary': 'txt-primary',
+  'txt-secondary': 'txt-secondary',
 };
 
 export const colorStyleButton: colorStyleType = {

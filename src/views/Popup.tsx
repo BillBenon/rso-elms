@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 
 import Button from '../components/Atoms/custom/Button';
-import Dashboard from '../components/Molecules/Dashboard';
 import PopupMolecule from '../components/Molecules/Popup';
+import Dashboard from '../layout/Dashboard';
 
 export default function Popup() {
   const [open, setOpen] = useState(false); // state to controll the popup

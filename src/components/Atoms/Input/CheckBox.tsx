@@ -1,4 +1,4 @@
-import '../../../styles/components/atoms/custom/checkbox.scss';
+import '../../../styles/components/Atoms/input/checkbox.scss';
 
 import React from 'react';
 
@@ -38,7 +38,6 @@ export default function Checkbox({
         className={'checkbox ' + className}
       />
       <label className="checkbox-label">{label}</label>
-      <Error>{error && error}</Error>
     </>
   );
 }

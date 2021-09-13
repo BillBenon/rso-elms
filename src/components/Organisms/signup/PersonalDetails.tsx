@@ -4,25 +4,16 @@ import InputMolecule from '../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../Molecules/input/RadioMolecule';
 
 const PersonalDetails = ({ details, setDetails, validate }) => {
-  const handleChange2 = (
-    _value: string,
-    e: KeyboardEventHandler<HTMLDivElement> | MouseEventHandler<HTMLDivElement>,
-  ) => {
-    let inputs = details;
-    inputs[e.target.name] = _value;
-    setDetails(inputs);
-  };
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let inputs = details;
-    inputs[e.target.name] = e.target.value;
-    setDetails(inputs);
+    details[e.target.name] = e.target.value;
+    setDetails(details);
+    console.log(details);
   };
 
   return (
     <>
       <InputMolecule
-        name={details.firstname[0]}
+        name="firstname"
         value={details.firstname}
         handleChange={(e) => handleChange(e)}
         error={validate.firstName(details.firstname)}>
@@ -36,7 +27,7 @@ const PersonalDetails = ({ details, setDetails, validate }) => {
         Last Name
       </InputMolecule>
       <InputMolecule
-        name={details.email[0]}
+        name="email"
         value={details.email}
         type="email"
         placeholder="username@example.com"
@@ -45,19 +36,19 @@ const PersonalDetails = ({ details, setDetails, validate }) => {
         Email
       </InputMolecule>
       <InputMolecule
-        name={details.phone[0]}
+        name="phone"
         value={details.phone}
         placeholder="+250 ---------"
         handleChange={(e) => handleChange(e)}
         error={validate.phone(details.phone)}>
         Phone number
       </InputMolecule>
-      <RadioMolecule
+      {/* <RadioMolecule
         list={[
           { value: 'male', label: 'Male' },
           { value: 'female', label: 'Female' },
         ]}
-        handleChange={handleChange2}>
+        handleChange={(e) => handleChange(e)}>
         Gender
       </RadioMolecule>
       <RadioMolecule
@@ -65,9 +56,9 @@ const PersonalDetails = ({ details, setDetails, validate }) => {
           { value: 'married', label: 'Married' },
           { value: 'single', label: 'Single' },
         ]}
-        handleChange={handleChange2}>
+        handleChange={(e) => handleChange(e)}>
         Martial Status
-      </RadioMolecule>
+      </RadioMolecule> */}
     </>
   );
 };

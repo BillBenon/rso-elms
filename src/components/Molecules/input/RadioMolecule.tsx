@@ -13,6 +13,7 @@ type PropType = {
   error?: string;
   loading?: boolean;
   list: SelectData[];
+  className?: string;
   handleChange: (_e: ValueType) => void;
 };
 
@@ -26,22 +27,26 @@ export default function RadioMolecule({
   children,
   handleChange,
   error,
+  className,
   loading = false,
   list,
+  ...attrs
 }: PropType) {
   return (
-    <div>
+    <div {...attrs} className={className}>
       {loading ? (
         <div className="animate-pulse w-24 h-4 bg-secondary rounded"></div>
       ) : (
         <>
           <ILabel>{children}</ILabel>
-          <Radio
-            name={name}
-            value={value}
-            type={type}
-            list={list}
-            handleChange={handleChange}></Radio>
+          <div className="mt-2">
+            <Radio
+              name={name}
+              value={value}
+              type={type}
+              list={list}
+              handleChange={handleChange}></Radio>
+          </div>
           {error && <Error>{error}</Error>}
         </>
       )}

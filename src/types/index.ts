@@ -4,6 +4,7 @@ import React from 'react';
 export type Color =
   | 'primary'
   | 'secondary'
+  | 'tertiary'
   | 'main'
   | 'error'
   | 'warning'
@@ -17,7 +18,7 @@ export type Color =
 
 export type fontSize = 'xs' | 'sm' | 'tiny' | 'lg' | '2xl';
 export type width = 'default' | 'full';
-export type fontWeight = 'normal' | 'medium' | 'bold';
+export type fontWeight = 'normal' | 'medium' | 'semibold' | 'bold';
 
 export type Status =
   | 'pending'
@@ -67,4 +68,13 @@ export interface ValueType {
   name: string;
   value: string | number | boolean | undefined;
   event: Event;
+}
+
+export interface CourseModelDataType {
+  id?: string | number;
+  status?: { type: 'success' | 'warning' | 'error'; text: string };
+  title: string;
+  code: string;
+  subTitle?: string;
+  description: string;
 }

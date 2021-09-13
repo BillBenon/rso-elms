@@ -10,7 +10,7 @@ type IError = {
   value: string;
   handleChange: (_e: ValueType) => void;
   children: React.ReactNode;
-  error: string | null;
+  error?: string;
   placeholder?: string;
   type?: string;
 };
@@ -19,13 +19,13 @@ export default function InputMolecule({
   value,
   handleChange,
   children,
-  error,
+  error = '',
   placeholder = '',
   type = 'text',
 }: IError) {
   return (
     <div className="flex flex-col gap-3">
-      <ILabel>{children}</ILabel>
+      <ILabel weight="bold">{children}</ILabel>
       <Input
         name={name}
         placeholder={placeholder}

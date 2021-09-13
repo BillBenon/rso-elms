@@ -1,4 +1,4 @@
-import '../../../styles/components/molecules/cards/AcademyMolecule.scss';
+import '../../../styles/components/Molecules/cards/AcademyMolecule.scss';
 
 import React from 'react';
 

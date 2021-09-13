@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
-import '../../styles/components/molecules/table/table.scss';
+import '../../styles/components/Molecules/table/table.scss';
 
 import React, { useState } from 'react';
 
@@ -13,15 +13,16 @@ type TableProps = {
   data: {}[];
   hasAction: boolean;
   statusColumn?: string;
+  rowsPerPage?: number;
 };
 
-const Table = ({ data, hasAction, statusColumn }: TableProps) => {
-  const [rowsPerPage] = useState(5);
+const Table = ({ data, hasAction, statusColumn, rowsPerPage = 10 }: TableProps) => {
+  const [rowsOnPage] = useState(rowsPerPage);
   const [currentPage, setCurrentPage] = useState(1);
 
   //Get current rows
-  const indexOfLastPost = currentPage * rowsPerPage;
-  const indexOfFirstPost = indexOfLastPost - rowsPerPage;
+  const indexOfLastPost = currentPage * rowsOnPage;
+  const indexOfFirstPost = indexOfLastPost - rowsOnPage;
   const currentRows = data.slice(indexOfFirstPost, indexOfLastPost);
 
   // Change page
@@ -60,7 +61,7 @@ const Table = ({ data, hasAction, statusColumn }: TableProps) => {
     <div className="overflow-x-auto rounded-lg text-sm">
       <table className="table-auto border-collapse font-semibold bg-main w-full m-auto">
         <thead>
-          <tr className="text-left text-txt-secondary border-b border-silver-500">
+          <tr className="text-left text-txt-secondary border-b border-silver">
             {getHeader()}
             {hasAction ? <th className="px-4 py-2 ">Actions</th> : ''}
           </tr>
@@ -68,7 +69,7 @@ const Table = ({ data, hasAction, statusColumn }: TableProps) => {
         <tbody>{getRowsData()}</tbody>
       </table>
       <Pagination
-        rowsPerPage={rowsPerPage}
+        rowsPerPage={rowsOnPage}
         totalRows={data.length}
         paginate={paginate}
         currentPage={currentPage}

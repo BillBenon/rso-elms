@@ -7,8 +7,8 @@ type StepperHeadProp = {
     label: string;
     // eslint-disable-next-line no-undef
     content: JSX.Element;
-    isError: boolean;
-    isComplete: boolean;
+    isError?: boolean;
+    isComplete?: boolean;
     clicked: () => void;
   }[];
   navigateToStepHandler: (_index: number) => void;

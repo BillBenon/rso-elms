@@ -19,6 +19,7 @@ module.exports = {
           600: '#1C2CA3',
         },
         secondary: '#FAFBFC',
+        tertiary: '#F0F1F1',
         main: '#FFFFFF',
         bcolor: '#F0F1F1',
         error: {
@@ -35,10 +36,7 @@ module.exports = {
         },
         'txt-primary': '#050825',
         'txt-secondary': '#97A0A8',
-        silver: {
-          400: '#FAFBFC',
-          500: '#DAE0E5',
-        },
+        silver: '#DAE0E5',
       },
     },
   },
