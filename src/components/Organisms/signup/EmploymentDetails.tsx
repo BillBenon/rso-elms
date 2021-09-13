@@ -1,15 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import DropDown from '../../../styles/components/atoms/custom/Dropdown';
+import { ValueType } from '../../../types';
+import { validation } from '../../../utils/validations';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 
-const EmploymentDetails = ({ details, setDetails, validate }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newVal = details;
-    newVal[e.target.name] = e.target.value;
-    setDetails(newVal);
+const EmploymentDetails = () => {
+  const [details, setDetails] = useState({
+    currentRank: '',
+    otherRank: '',
+    RankDepart: 'Rwanda',
+    EmpNo: '',
+  });
+
+  const validate = {
+    touched: false,
+    completed: false,
+    currentRank: (name: string) => validation.nameValidation('The current rank', name),
+    otherRank: (name: string) => validation.nameValidation('The other rank', name),
+    RankDepart: (name: string) =>
+      validation.nameValidation('Current rank department', name),
+    EmpNo: (name: string) => validation.nameValidation('Employment number', name),
+  };
+
+  const handleChange = (e: ValueType) => {
+    setDetails((details) => ({
+      ...details,
+      [e.name]: e.value,
+    }));
     console.log(details);
   };
+
   return (
     <>
       <DropDown
@@ -28,28 +49,28 @@ const EmploymentDetails = ({ details, setDetails, validate }) => {
       <InputMolecule
         name="currentRank"
         value={details.currentRank}
-        handleChange={(e) => handleChange(e)}
+        handleChange={handleChange}
         error={validate.currentRank(details.currentRank)}>
         Current rank
       </InputMolecule>
       <InputMolecule
         name="otherRank"
         value={details.otherRank}
-        handleChange={(e) => handleChange(e)}
+        handleChange={handleChange}
         error={validate.otherRank(details.otherRank)}>
         Other rank
       </InputMolecule>
       <InputMolecule
         name="RankDepart"
         value={details.RankDepart}
-        handleChange={(e) => handleChange(e)}
+        handleChange={handleChange}
         error={validate.RankDepart(details.RankDepart)}>
         Current rank department
       </InputMolecule>
       <InputMolecule
         name="RankDepart"
         value={details.EmpNo}
-        handleChange={(e) => handleChange(e)}
+        handleChange={handleChange}
         error={validate.RankDepart(details.EmpNo)}>
         Employment number
       </InputMolecule>

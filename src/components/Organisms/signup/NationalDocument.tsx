@@ -1,12 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import DropDown from '../../../styles/components/atoms/custom/Dropdown';
+import { ValueType } from '../../../types';
+import { validation } from '../../../utils/validations';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 
-const NationalDocuments = ({ details, setDetails, validate }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    details[e.target.name] = e.target.value;
-    setDetails(details);
+const NationalDocuments = () => {
+  const [details, setDetails] = useState({
+    nationality: '',
+    national_id: '',
+    passport: '',
+    passport_expiry_date: '',
+    language: '',
+  });
+
+  const validate = {
+    touched: false,
+    completed: false,
+    nationality: (name: string) => validation.nameValidation('Nationality', name),
+    national_id: (name: string) =>
+      validation.nameValidation('National Identitification Number', name),
+    passport: (name: string) => validation.nameValidation('Passport Number', name),
+    passport_expiry_date: validation.dateValidation,
+    language: (name: string) => validation.nameValidation('Language', name),
+  };
+  const handleChange = (e: ValueType) => {
+    setDetails((details) => ({
+      ...details,
+      [e.name]: e.value,
+    }));
     console.log(details);
   };
 
@@ -35,7 +57,7 @@ const NationalDocuments = ({ details, setDetails, validate }) => {
       <InputMolecule
         name="passport"
         value={details.passport[0]}
-        handleChange={(e) => handleChange(e)}
+        handleChange={handleChange}
         error={validate.passport(details.passport)}>
         Passport Number(Optional)
       </InputMolecule>
