@@ -13,6 +13,7 @@ export interface IProps {
   full?: boolean;
   fcolor?: Color;
   bcolor?: Color;
+  pcolor?: Color;
   width?: string;
 }
 
@@ -25,6 +26,7 @@ export default function Input({
   full,
   fcolor = 'primary',
   bcolor = 'bcolor',
+  pcolor = 'txt-secondary',
   width = '72',
   handleChange,
   ...attrs
@@ -43,7 +45,7 @@ export default function Input({
       type={type}
       value={_value}
       readOnly={readonly}
-      className={`bg-transparent h-12 px-3 placeholder-red-500 rounded-md ${
+      className={`bg-transparent h-12 px-3 placeholder-${pcolor} rounded-md ${
         full ? 'w-full' : `w-${width}`
       } focus:outline-none border-${bcolor} focus:border-${colorStyle[fcolor]} border-2`}
       /* @ts-ignore */
