@@ -6,7 +6,7 @@ import Heading from '../../Atoms/Text/Heading';
 
 const SignupHeader = () => {
   return (
-    <div className="flex justify-between mb-10">
+    <div className="flex justify-between mb-5">
       <div>
         <Heading fontSize="2xl" fontWeight="semibold">
           Complete Profile
@@ -16,9 +16,13 @@ const SignupHeader = () => {
         </p>
       </div>
       <div>
-        <Badge badgecolor="secondary" badgetxtcolor="primary" className="flex">
-          <Avatar src={''} alt={''} />
-          Rwanda National Police
+        <Badge
+          badgecolor="secondary"
+          badgetxtcolor="primary"
+          className="flex"
+          roundWidth="lg">
+          <Avatar src="public\icons\police-logo.svg" alt="academy logo" size="39" />
+          <span>Rwanda National Police</span>
         </Badge>
       </div>
     </div>
