@@ -17,7 +17,7 @@ export type Color =
 
 export type fontSize = 'xs' | 'sm' | 'tiny' | 'lg' | '2xl';
 export type width = 'default' | 'full';
-export type fontWeight = 'normal' | 'medium' | 'bold';
+export type fontWeight = 'normal' | 'medium' | 'semibold' | 'bold';
 
 export type Status =
   | 'pending'
