@@ -89,7 +89,7 @@ const SignUpForm = () => {
   };
 
   const [otherDetails, setOtherDetails] = useState({
-    hobbies: [],
+    hobbies: '',
     chronicDiseases: '',
     diseaseDescription: '',
   });
