@@ -17,7 +17,7 @@ const Heading = ({
   children,
 }: HeadingProps) => {
   return (
-    <h2 className={`mt-5 text-${fontSize} font-${fontWeight} ${colorStyle[color]}`}>
+    <h2 className={`mt-5 text-${fontSize} font-${fontWeight} text-${colorStyle[color]}`}>
       {children}
     </h2>
   );
