@@ -12,7 +12,7 @@ let linkProps = {
 
 export const SidebarLink = ({ label, to, icon, active }: typeof linkProps) => {
   return (
-    <p
+    <div
       className={`px-8 cursor-pointer py-0 border-l-4 ${
         active ? 'border-primary-500' : 'border-transparent'
       }`}>
@@ -21,11 +21,11 @@ export const SidebarLink = ({ label, to, icon, active }: typeof linkProps) => {
         <span
           className={`text-${colorStyle[active ? 'primary' : 'gray']} ${
             fontSizeStyle['sm']
-          } px-1 font-bold`}>
+          } px-1 font-medium`}>
           {label}
         </span>
       </a>
-    </p>
+    </div>
   );
 };
 
@@ -36,7 +36,6 @@ export type sidebarLinksProps = {
 };
 
 export default function SidebarLinks({ links, activeIndex = 0 }: sidebarLinksProps) {
-  console.log('sidebar links', links);
   return (
     <div className="py-16">
       {links.map((link, i) => (

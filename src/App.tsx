@@ -5,6 +5,7 @@ import Checkbox from './components/Atoms/custom/CheckBox';
 import Dashboard from './components/Molecules/Dashboard';
 import { Tab, Tabs } from './components/Molecules/tabs/tabs';
 import SignUpForm from './components/Organisms/signup/SignUpForm';
+import Students from './components/Organisms/user/Students';
 import DropDown from './styles/components/atoms/custom/Dropdown';
 
 const App = () => {
@@ -140,6 +141,7 @@ const App = () => {
           <Route exact path="/" component={Homepage} />
 
           <Route exact path="/register" component={SignUpForm} />
+          <Route exact path="/users" component={Students} />
           <Route exact path="*" component={ErrorPage} />
         </Switch>
       </Router>

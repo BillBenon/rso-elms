@@ -28,7 +28,7 @@ export default function Dashboard({
           <div className="hidden lg:block">
             <Navigation />
           </div>
-          <div className="block w-full h-full py-5">{children}</div>
+          <div className="block w-full h-full py-5 px-8">{children}</div>
         </div>
       </div>
     </div>
