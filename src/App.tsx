@@ -8,7 +8,8 @@ import SignUpForm from './components/Organisms/signup/SignUpForm';
 import Dashboard from './layout/Dashboard';
 import NotFound from './views/NotFound';
 import Popup from './views/Popup';
-import UsersView from './views/Users';
+import NewStudentsView from './views/users/NewStudent';
+import UsersView from './views/users/Users';
 
 const App = () => {
   const data = [
@@ -136,6 +137,7 @@ const App = () => {
           <Route exact path="/register" component={SignUpForm} />
           <Route exact path="/users" component={UsersView} />
           <Route exact path="/popup" component={Popup} />
+          <Route exact path="/users/students/new" component={NewStudentsView} />
           <Route exact path="*" component={NotFound} />
         </Switch>
       </Router>
