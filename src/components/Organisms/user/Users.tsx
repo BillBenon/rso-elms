@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
-import ILabel from '../../atoms/Text/ILabel';
+import ILabel from '../../Atoms/Text/ILabel';
 import SearchMolecule from '../../Molecules/input/SearchMolecule';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/Table';

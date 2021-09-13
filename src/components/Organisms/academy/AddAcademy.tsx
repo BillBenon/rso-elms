@@ -7,7 +7,7 @@ import Dashboard from '../../../layout/Dashboard';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import Heading from '../../Atoms/Text/Heading';
-import ILabel from '../../atoms/Text/ILabel';
+import ILabel from '../../Atoms/Text/ILabel';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
 

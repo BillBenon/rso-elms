@@ -1,4 +1,4 @@
-import '../../../styles/components/atoms/input/switch.scss';
+import '../../../styles/components/Atoms/input/switch.scss';
 
 import React, { useEffect, useState } from 'react';
 

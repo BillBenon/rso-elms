@@ -1,4 +1,4 @@
-import '../../../styles/components/molecules/cards/CourseCardMolecule.scss';
+import '../../../styles/components/Molecules/cards/CourseCardMolecule.scss';
 
 import React from 'react';
 import { useHistory } from 'react-router';

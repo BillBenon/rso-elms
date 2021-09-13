@@ -1,4 +1,4 @@
-import '../../../styles/components/atoms/custom/button.scss';
+import '../../../styles/components/Atoms/custom/button.scss';
 
 import React, { ReactNode } from 'react';
 

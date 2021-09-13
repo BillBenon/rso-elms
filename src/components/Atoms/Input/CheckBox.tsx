@@ -1,4 +1,4 @@
-import '../../../styles/components/atoms/input/checkbox.scss';
+import '../../../styles/components/Atoms/input/checkbox.scss';
 
 import React from 'react';
 

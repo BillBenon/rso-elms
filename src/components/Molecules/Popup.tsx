@@ -1,4 +1,4 @@
-import '../../styles/components/molecules/popup.scss';
+import '../../styles/components/Molecules/popup.scss';
 
 import React, { ReactNode } from 'react';
 import Popup from 'reactjs-popup';
