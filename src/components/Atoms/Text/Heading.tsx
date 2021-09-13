@@ -7,6 +7,7 @@ type HeadingProps = {
   fontSize?: fontSize;
   fontWeight?: fontWeight;
   color?: Color;
+  className?: string;
   children: ReactNode;
 };
 
@@ -14,10 +15,14 @@ const Heading = ({
   fontSize = 'lg',
   fontWeight = 'medium',
   color = 'txt-primary',
+  className,
   children,
 }: HeadingProps) => {
   return (
-    <h2 className={`mt-5 text-${fontSize} font-${fontWeight} text-${colorStyle[color]}`}>
+    <h2
+      className={`text-${fontSize} font-${fontWeight} text-${colorStyle[color]} ${
+        className && className
+      }`}>
       {children}
     </h2>
   );
