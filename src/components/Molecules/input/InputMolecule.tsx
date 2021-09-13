@@ -3,14 +3,14 @@ import React from 'react';
 import { ValueType } from '../../../types';
 import Input from '../../Atoms/Input/Input';
 import Error from '../../Atoms/Text/Error';
-import ILabel from '../../Atoms/Text/ILabel';
+import ILabel from '../../atoms/Text/ILabel';
 
 type IError = {
   name: string;
   value: string;
   handleChange: (_e: ValueType) => void;
   children: React.ReactNode;
-  error: string | null;
+  error?: string;
   placeholder?: string;
   type?: string;
 };
@@ -19,7 +19,7 @@ export default function InputMolecule({
   value,
   handleChange,
   children,
-  error,
+  error = '',
   placeholder = '',
   type = 'text',
 }: IError) {

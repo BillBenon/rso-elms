@@ -1,10 +1,12 @@
+import './input.scss';
+
 import React, { useState } from 'react';
 
 import { colorStyle } from '../../../global/global-vars';
 import { Color, ValueType } from '../../../types';
 
 export interface IProps {
-  placeholder: string;
+  placeholder?: string;
   type?: string;
   readonly?: boolean;
   handleChange: (_e: ValueType) => void;
@@ -18,7 +20,7 @@ export interface IProps {
 }
 
 export default function Input({
-  placeholder,
+  placeholder = '',
   type = 'text',
   readonly = false,
   value,
@@ -27,7 +29,7 @@ export default function Input({
   fcolor = 'primary',
   bcolor = 'bcolor',
   pcolor = 'txt-secondary',
-  width = '72',
+  width = '80',
   handleChange,
   ...attrs
 }: IProps) {
