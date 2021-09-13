@@ -15,12 +15,15 @@ interface PropTypes {
   children: ReactNode;
   type?: ButtonType;
   color?: Color;
+  onClick: () => any;
 }
 
 export default function Button({
   children,
   type = 'fill',
   color = 'primary',
+  onClick,
+  ...attrs
 }: PropTypes) {
   const buttonStyle: ButtonStyleType = {
     fill: `with-width  border-2 border-solid border-${colorStyle[color]} ${bgStyleButton[color]} text-main`,
@@ -28,7 +31,10 @@ export default function Button({
     text: `text-${colorStyle[color]} hover:underline`,
   };
   return (
-    <button className={`${buttonStyle[type]} py-3 px-6 rounded-lg outline-none`}>
+    <button
+      {...attrs}
+      onClick={onClick}
+      className={`${buttonStyle[type]} py-3 px-6 rounded-lg outline-none`}>
       {' '}
       {children}{' '}
     </button>

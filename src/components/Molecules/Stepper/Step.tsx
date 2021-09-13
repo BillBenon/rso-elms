@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React from 'react';
 
-import Indicator from '../../atoms/custom/Indicator';
+import Indicator from '../../Atoms/custom/Indicator';
 
 type StepProps = {
   // eslint-disable-next-line no-undef

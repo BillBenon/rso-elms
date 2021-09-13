@@ -15,6 +15,7 @@
     "react-router-dom": "^5.2.0",
     "react-select": "^4.3.1",
     "react-svg": "^14.0.10",
+    "reactjs-popup": "^2.0.5",
     "sass": "^1.39.0",
     "styled-components": "^5.3.1"
   },

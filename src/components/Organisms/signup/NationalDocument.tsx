@@ -1,6 +1,6 @@
 import React from 'react';
 
-import DropDown from '../../../styles/components/atoms/custom/Dropdown';
+import DropDown from '../../Atoms/Input/Dropdown';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 
 const NationalDocuments = ({ details, setDetails, validate, handleChange }) => {

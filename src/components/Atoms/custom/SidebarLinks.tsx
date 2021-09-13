@@ -4,13 +4,13 @@ import { colorStyle, fontSizeStyle } from '../../../global/global-vars';
 import Icon from './Icon';
 
 let linkProps = {
-  label: '',
+  title: '',
   to: '',
   icon: '',
   active: false,
 };
 
-export const SidebarLink = ({ label, to, icon, active }: typeof linkProps) => {
+export const SidebarLink = ({ title, to, icon, active }: typeof linkProps) => {
   return (
     <div
       className={`px-8 cursor-pointer py-0 border-l-4 ${
@@ -22,7 +22,7 @@ export const SidebarLink = ({ label, to, icon, active }: typeof linkProps) => {
           className={`text-${colorStyle[active ? 'primary' : 'gray']} ${
             fontSizeStyle['sm']
           } px-1 font-medium`}>
-          {label}
+          {title}
         </span>
       </a>
     </div>
@@ -41,7 +41,7 @@ export default function SidebarLinks({ links, activeIndex = 0 }: sidebarLinksPro
       {links.map((link, i) => (
         <SidebarLink
           key={i}
-          label={link.label}
+          title={link.title}
           to={link.to}
           icon={link.icon}
           active={activeIndex === i}

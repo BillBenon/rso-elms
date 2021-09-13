@@ -1,15 +1,20 @@
 import React from 'react';
 
-import Navigation from './navigation/Navigation';
-import Sidebar from './sidebar/Sidebar';
+import Navigation from '../components/Molecules/navigation/Navigation';
+import Sidebar from '../components/Molecules/sidebar/Sidebar';
+import { Link } from '../types';
 
 type IDashboard = { children: React.ReactNode; links?: any; activeIndex?: number };
+interface ILinks extends Omit<Link, 'icon'> {
+  icon: string;
+}
 
-const defaultLinks = [
-  { label: 'Users', to: '/users', icon: 'user', active: false },
-  { label: 'Roles', to: '/roles', icon: 'role', active: false },
-  { label: 'Academies', to: '/academies', icon: 'academy', active: false },
-  { label: 'Notifications', to: '/users', icon: 'notification', active: true },
+const defaultLinks: ILinks[] = [
+  { title: 'Users', to: '/users', icon: 'user' },
+  { title: 'Roles', to: '/roles', icon: 'role' },
+  { title: 'Academies', to: '/academies', icon: 'academy' },
+  { title: 'Notifications', to: '/users', icon: 'notification' },
+  { title: 'Popup test', to: '/popup', icon: 'notification' },
 ];
 export default function Dashboard({
   children,
@@ -25,7 +30,7 @@ export default function Dashboard({
         </div>
         {/* navbar and body */}
         <div className="block w-full">
-          <div className="hidden lg:block">
+          <div className="">
             <Navigation />
           </div>
           <div className="block w-full h-full py-5 px-8">{children}</div>

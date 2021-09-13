@@ -1,10 +1,10 @@
 // import { Label } from "@headlessui/react/dist/components/label/label";
 import React from 'react';
 
+import Dashboard from '../../../layout/Dashboard';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import ILabel from '../../atoms/Text/ILabel';
-import Dashboard from '../../Molecules/Dashboard';
 import SearchMolecule from '../../Molecules/input/SearchMolecule';
 import Table from '../../Molecules/Table';
 import { Tab, Tabs } from '../../Molecules/tabs/tabs';
@@ -253,9 +253,11 @@ export default function Students() {
             </button>
           </div>
           <div>
-            <Button type="outline">Import users</Button>
+            <Button onClick={() => console.log(e)} type="outline">
+              Import users
+            </Button>
             <span className="px-2"></span>
-            <Button>New student</Button>
+            <Button onClick={() => console.log(e)}>New student</Button>
           </div>
         </div>
       </div>
@@ -263,10 +265,10 @@ export default function Students() {
         <Tab label="Students" className="pt-4">
           <Table statusColumn="status" data={data} hasAction={true} />
         </Tab>
-        <Tab label="Instructors">
+        <Tab label="Instructors" className="pt-4">
           <Table statusColumn="status" data={instractors} hasAction={true} />
         </Tab>
-        <Tab label="Admins">
+        <Tab label="Admins" className="pt-4">
           <Table statusColumn="status" data={admins} hasAction={true} />
         </Tab>
       </Tabs>
