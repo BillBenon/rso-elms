@@ -39,10 +39,14 @@ export default function CourseCardMolecule({ active = false, to, data }: PropTyp
         <Heading fontWeight="semibold">{data.code}</Heading>
         {data.status && <Badge badgecolor={data.status.type}>{data.status.text}</Badge>}
       </div>
-      <div>
+      <div className="mt-6">
         <Heading fontWeight="semibold">{data.title}</Heading>
-        {data.subTitle && <Heading color="txt-secondary">Short Course</Heading>}
-        <p id="course-card-description" className="text-txt-secondary mt-4">
+        {data.subTitle && (
+          <Heading fontSize="sm" className="pt-2" color="txt-secondary">
+            Short Course
+          </Heading>
+        )}
+        <p id="course-card-description" className="text-txt-secondary text-sm mt-4">
           {data.description}
         </p>
       </div>
