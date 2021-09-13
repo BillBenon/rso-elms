@@ -1,6 +1,5 @@
 import React from 'react';
 
-import DropDown from '../../Atoms/Input/Dropdown';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 
 const OtherDetails = ({ details, setDetails, validate }) => {
@@ -23,14 +22,14 @@ const OtherDetails = ({ details, setDetails, validate }) => {
         name="chronicDiseases"
         value={details.chronicDiseases}
         handleChange={(e) => handleChange(e)}
-        error={validate.otherRank(details.otherRank)}>
+        error={validate.chronicDiseases(details.chronicDiseases)}>
         Chronic diseases
       </InputMolecule>
       <InputMolecule
         name="diseaseDescription"
         value={details.diseaseDescription}
         handleChange={(e) => handleChange(e)}
-        error={validate.description(details.diseaseDescription)}>
+        error={validate.diseaseDescription(details.diseaseDescription)}>
         Chronic disease description
       </InputMolecule>
     </>

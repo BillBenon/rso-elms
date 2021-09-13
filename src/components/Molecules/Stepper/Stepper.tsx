@@ -12,8 +12,8 @@ type StepperProps = {
     // eslint-disable-next-line no-undef
     content: JSX.Element;
     clicked: () => void;
-    isError: boolean;
-    isComplete: boolean;
+    isError?: boolean;
+    isComplete?: boolean;
   }[];
   submitStepper: () => void;
   isInline: boolean;
@@ -65,17 +65,17 @@ const Stepper = ({
           {stepperContent.map((el, i) => (
             <Fragment key={i}>{i === currentTabIndex && el.content}</Fragment>
           ))}
+          <StepperFoot
+            isPrevBtn={isPrevBtn}
+            previousStepHandler={previousStepHandler}
+            isLastStep={isLastStep}
+            nextStepHandler={nextStepHandler}
+            submitHandler={submitHandler}
+            stepperContent={stepperContent}
+            currentTabIndex={currentTabIndex}
+          />
         </div>
       </div>
-      <StepperFoot
-        isPrevBtn={isPrevBtn}
-        previousStepHandler={previousStepHandler}
-        isLastStep={isLastStep}
-        nextStepHandler={nextStepHandler}
-        submitHandler={submitHandler}
-        stepperContent={stepperContent}
-        currentTabIndex={currentTabIndex}
-      />
     </div>
   );
 };

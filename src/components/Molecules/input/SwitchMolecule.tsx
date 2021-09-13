@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react';
 
 import { ValueType } from '../../../types';
-import Switch from '../../Atoms/Input/Switch';
-import Error from '../../Atoms/Text/Error';
-import ILabel from '../../Atoms/Text/ILabel';
+import Switch from '../../atoms/Input/Switch';
+import Error from '../../atoms/Text/Error';
+import ILabel from '../../atoms/Text/ILabel';
 
 type PropType = {
   children: ReactNode;
