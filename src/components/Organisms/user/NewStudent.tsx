@@ -2,11 +2,9 @@ import React from 'react';
 
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
-import Input from '../../Atoms/Input/Input';
 import Heading from '../../Atoms/Text/Heading';
 import ILabel from '../../Atoms/Text/ILabel';
 import InputMolecule from '../../Molecules/input/InputMolecule';
-import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
 
 export default function NewStudent() {
   const handleChange = (e: any) => {
@@ -93,7 +91,7 @@ export default function NewStudent() {
           handleChange={(e) => handleChange(e)}>
           Passport (optional)
         </InputMolecule>
-        <Button width="full" onClick={handleSubmit}>
+        <Button full onClick={handleSubmit}>
           Create
         </Button>
       </div>

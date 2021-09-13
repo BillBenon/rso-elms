@@ -5,11 +5,11 @@ import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import Cacumber from '../../components/Molecules/Cacumber';
 import CourseCardMolecule from '../../components/Molecules/cards/CourseCardMolecule';
-import Dashboard from '../../components/Molecules/Dashboard';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
+import Dashboard from '../../layout/Dashboard';
 import { CourseModelDataType, Link, ValueType } from '../../types';
 
 export default function Modules() {

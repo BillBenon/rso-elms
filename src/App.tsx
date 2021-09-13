@@ -8,6 +8,7 @@ import Academies from './components/Organisms/academy/Academy';
 import AddAcademy from './components/Organisms/academy/AddAcademy';
 import SignUpForm from './components/Organisms/signup/SignUpForm';
 import Dashboard from './layout/Dashboard';
+import Modules from './views/modules';
 import NotFound from './views/NotFound';
 import Popup from './views/Popup';
 import NewStudentsView from './views/users/NewStudent';
@@ -90,6 +91,7 @@ const App = () => {
           <Route exact path="/academies/add" component={AddAcademy} />
           <Route exact path="/users" component={UsersView} />
           <Route exact path="/popup" component={Popup} />
+          <Route exact path="/modules" component={Modules} />
           <Route exact path="/users/students/new" component={NewStudentsView} />
           <Route exact path="*" component={NotFound} />
         </Switch>
