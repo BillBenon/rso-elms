@@ -68,3 +68,12 @@ export interface ValueType {
   value: string | number | boolean | undefined;
   event: Event;
 }
+
+export interface CourseModelDataType {
+  id?: string | number;
+  status?: { type: 'success' | 'warning' | 'error'; text: string };
+  title: string;
+  code: string;
+  subTitle?: string;
+  description: string;
+}
