@@ -20,10 +20,26 @@ interface TabsProps {
   activeIndex?: number;
   className?: string;
   children: TabChildrenType;
+  onTabChange?: (event: object) => any;
 }
 
-export function Tabs({ activeIndex = 0, className = '', children }: TabsProps) {
+export function Tabs({
+  activeIndex = 0,
+  className = '',
+  children,
+  onTabChange,
+}: TabsProps) {
   const [activeTabIndex, setActivetabIndex] = useState(activeIndex);
+
+  const slideTo = (index: number) => {
+    if (onTabChange)
+      onTabChange({
+        activeTabIndex: index,
+        activeTabLabel: children[index].props.label,
+        previousTabIndex: activeTabIndex,
+      });
+    setActivetabIndex(index);
+  };
 
   const TabHeadings = () => {
     return (
@@ -37,7 +53,7 @@ export function Tabs({ activeIndex = 0, className = '', children }: TabsProps) {
             ${fontSizeStyle['sm']} ${fontWeightStyle['bold']} text-${
               colorStyle[activeTabIndex == i ? 'primary' : 'gray']
             } border-${colorStyle[activeTabIndex == i ? 'primary' : 'lightgray']}`}
-            onClick={() => setActivetabIndex(i)}
+            onClick={() => slideTo(i)}
             disabled={activeTabIndex === i || tab.props.disabled}>
             {tab.props.label}
           </button>

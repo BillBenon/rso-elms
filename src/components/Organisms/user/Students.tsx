@@ -261,7 +261,7 @@ export default function Students() {
           </div>
         </div>
       </div>
-      <Tabs>
+      <Tabs onTabChange={(e) => console.log(e)}>
         <Tab label="Students" className="pt-4">
           <Table statusColumn="status" data={data} hasAction={true} />
         </Tab>
