@@ -77,7 +77,9 @@ const PersonalDetails = () => {
         name="maritalStatus">
         Martial Status
       </RadioMolecule>
-      <Button onClick={moveNext}>Next</Button>
+      <div className="float-right">
+        <Button onClick={moveNext}>Next</Button>
+      </div>
     </>
   );
 };

@@ -43,7 +43,7 @@ const OtherDetails = () => {
         handleChange={handleChange}>
         Chronic diseases
       </InputMolecule>
-      <div className="flex gap-3">
+      <div className="flex justify-between">
         <Button type="text" color="txt-secondary" onClick={movePrev}>
           Back
         </Button>

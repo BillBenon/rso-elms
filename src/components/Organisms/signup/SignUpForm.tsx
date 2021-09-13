@@ -52,7 +52,7 @@ const SignUpForm = () => {
   };
 
   return (
-    <div className="m-10">
+    <div className="m-5">
       <SignupHeader />
       <Stepper
         stepperContent={stepperContent}

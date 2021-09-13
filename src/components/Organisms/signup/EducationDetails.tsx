@@ -53,7 +53,7 @@ const EducationDetails = () => {
         Education section/ combination
       </InputMolecule>
       {/* start date || end date ||Attachment */}
-      <div className="flex gap-3">
+      <div className="flex justify-between">
         <Button type="text" color="txt-secondary" onClick={movePrev}>
           Back
         </Button>
