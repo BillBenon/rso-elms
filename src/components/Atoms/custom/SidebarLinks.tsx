@@ -17,11 +17,11 @@ export const SidebarLink = ({ title, to, icon, active }: typeof linkProps) => {
         active ? 'border-primary-500' : 'border-transparent'
       }`}>
       <a href={to} className="flex items-center">
-        <Icon name={icon} size={21} fill={active ? 'primary' : 'txt-secondary'} />
+        <Icon name={icon} size={21} />
         <span
           className={`text-${colorStyle[active ? 'primary' : 'gray']} ${
             fontSizeStyle['sm']
-          } px-1 font-medium`}>
+          } px-1 font-bold`}>
           {title}
         </span>
       </a>

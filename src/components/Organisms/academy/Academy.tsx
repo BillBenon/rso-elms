@@ -1,25 +1,19 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+// import { Label } from "@headlessui/react/dist/components/label/label";
+import './academy.scss';
 
+import React from 'react';
+import { useHistory } from 'react-router';
+
+import Dashboard from '../../../layout/Dashboard';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
-import ILabel from '../../Atoms/Text/ILabel';
+import Heading from '../../Atoms/Text/Heading';
+import ILabel from '../../atoms/Text/ILabel';
 import SearchMolecule from '../../Molecules/input/SearchMolecule';
-import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/Table';
-import { Tab, Tabs } from '../../Molecules/tabs/tabs';
-import NewStudent from './NewStudent';
 
-export default function Users() {
-  const [userType, setUserType] = useState('Students');
-  const [modalOpen, setModalOpen] = useState(false);
+export default function Academies() {
   const history = useHistory();
-
-  const handleCreateNewUserClick = () => {
-    if (userType === 'Students') history.push('/users/students/new');
-    else if (userType === 'Instructors') history.push('/users/instructors/new');
-    else history.push('/users/admins/new');
-  };
 
   const data = [
     {
@@ -234,10 +228,8 @@ export default function Users() {
     },
   ];
 
-  let instractors = data.slice(6, 13);
-  let admins = data.slice(24, 28);
   return (
-    <>
+    <Dashboard activeIndex={2}>
       <div className="flex flex-wrap justify-start items-center">
         <ILabel size="sm" color="gray" weight="medium">
           Institution Admin
@@ -245,18 +237,18 @@ export default function Users() {
         <Icon name="chevron-right" />
 
         <ILabel size="sm" color="gray" weight="medium">
-          Users
+          Academies
         </ILabel>
         <Icon name="chevron-right" fill="gray" />
         <ILabel size="sm" color="primary" weight="medium">
-          {userType}
+          Academy
         </ILabel>
       </div>
       <div className="py-4">
         <div className="flex flex-wrap justify-between items-center">
-          <ILabel size="2xl" weight="bold">
-            Users
-          </ILabel>
+          <Heading color="primary" className="capitalize" size="2xl" weight="bold">
+            Academy
+          </Heading>
           <div className="flex flex-wrap justify-start items-center">
             <SearchMolecule />
             <button className="border p-0 rounded-md mx-2">
@@ -264,29 +256,12 @@ export default function Users() {
             </button>
           </div>
           <div className="flex gap-3">
-            <Button onClick={() => console.log(e)} type="outline">
-              Import users
-            </Button>
-            <Button onClick={() => handleCreateNewUserClick()}>New {userType}</Button>
+            <Button onClick={() => history.push('/academies/add')}>New academy</Button>
           </div>
         </div>
       </div>
-      <Tabs onTabChange={(e) => setUserType(e.activeTabLabel)}>
-        <Tab label="Students" className="pt-4">
-          <Table statusColumn="status" data={data} hasAction={true} />
-        </Tab>
-        <Tab label="Instructors" className="pt-4">
-          <Table statusColumn="status" data={instractors} hasAction={true} />
-        </Tab>
-        <Tab label="Admins" className="pt-4">
-          <Table statusColumn="status" data={admins} hasAction={true} />
-        </Tab>
-      </Tabs>
-      <PopupMolecule
-        open={modalOpen && userType === 'Students'}
-        onClose={() => setModalOpen(false)}>
-        <NewStudent />
-      </PopupMolecule>
-    </>
+
+      <Table statusColumn="status" data={data} hasAction={true} />
+    </Dashboard>
   );
 }

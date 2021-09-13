@@ -1,39 +1,55 @@
-import React from 'react';
+import './input.scss';
+
+import React, { useState } from 'react';
 
 import { colorStyle } from '../../../global/global-vars';
-import { Color } from '../../../types';
+import { Color, ValueType } from '../../../types';
 
-export interface ITextarea {
-  placeholder: string;
-  type: string;
+export interface IProps {
+  placeholder?: string;
+  type?: string;
   readonly?: boolean;
-  handleChange: (_e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  handleChange: (_e: ValueType) => void;
   value: string;
+  name: string;
   full?: boolean;
   fcolor?: Color;
+  bcolor?: Color;
+  pcolor?: Color;
+  width?: string;
 }
 
-function Textarea({
-  placeholder,
+export default function Textarea({
+  placeholder = '',
   readonly = false,
-  value = '',
+  value,
+  name,
   full,
   fcolor = 'primary',
+  bcolor = 'bcolor',
+  pcolor = 'txt-secondary',
+  width = '80',
   handleChange,
   ...attrs
-}: ITextarea) {
+}: IProps) {
+  const [_value, _setValue] = useState(value);
+
+  function handleOnChange(e: any) {
+    _setValue(e.target.value);
+    handleChange({ name, value: e.target.value, event: e });
+  }
   return (
     <textarea
       {...attrs}
-      className={`py-2 px-5 rounded-md ${
-        full ? 'w-full' : 'w-80'
-      } focus:outline-none border-bcolor focus:border-${colorStyle[fcolor]} border-2`}
       placeholder={placeholder}
-      value={value}
+      name={name}
+      value={_value}
       readOnly={readonly}
-      onChange={handleChange}
+      className={`bg-transparent h-12 px-3 py-2 placeholder-${pcolor} rounded-md ${
+        full ? 'w-full' : `w-${width}`
+      } focus:outline-none border-${bcolor} focus:border-${colorStyle[fcolor]} border-2`}
+      /* @ts-ignore */
+      onChange={handleOnChange}
     />
   );
 }
-
-export default Textarea;

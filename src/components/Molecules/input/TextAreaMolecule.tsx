@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { ValueType } from '../../../types';
-import Input from '../../Atoms/Input/Input';
+import Textarea from '../../Atoms/Input/Textarea';
 import Error from '../../Atoms/Text/Error';
 import ILabel from '../../atoms/Text/ILabel';
 
@@ -14,7 +14,7 @@ type IError = {
   placeholder?: string;
   type?: string;
 };
-export default function InputMolecule({
+export default function TextAreaMolecule({
   name,
   value,
   handleChange,
@@ -26,7 +26,7 @@ export default function InputMolecule({
   return (
     <div className="flex flex-col gap-3">
       <ILabel weight="bold">{children}</ILabel>
-      <Input
+      <Textarea
         name={name}
         placeholder={placeholder}
         fcolor={error ? 'error' : undefined}

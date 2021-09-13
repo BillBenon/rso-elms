@@ -5,24 +5,18 @@ import Input from '../../Atoms/Input/Input';
 
 export default function SearchMolecule() {
   return (
-    <div className="rounded-lg border-2 border-bcolor pl-3 w-72 flex items-center">
-      {/* <input
-        type={'search'}
-        name={'search'}
-        id={'search'}
-        placeholder={'Search here...'}
-        className="bg-transparent text-sm font-medium py-3 px-1 outline-none"
-        required={true}
-      /> */}
+    <div className="rounded-lg border-2 border-bcolor w-72 flex items-center">
       <Icon name="search" />
-
       <Input
+        name="search"
         placeholder="Search here"
         fcolor="error"
         bcolor="none"
-        width="auto md:w-60"
-        value={'Name'}
+        width="auto md:w-52"
+        padding="0"
+        value={''}
         handleChange={(e: any) => console.log(e.target.value)}
+        className="-ml-1"
       />
     </div>
   );

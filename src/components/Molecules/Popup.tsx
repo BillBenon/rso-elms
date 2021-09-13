@@ -16,7 +16,7 @@ export default function PopupMolecule({ open, onClose, children }: PropType) {
     <Popup open={open} closeOnDocumentClick onClose={onClose} modal>
       <div className="modal block p-2">
         {/* close button  */}
-        <div className="flex justify-end">
+        <div className="flex justify-end p-4">
           <button className="close" onClick={onClose}>
             <Icon size={12} bgColor="txt-secondary" name="close" />
           </button>
