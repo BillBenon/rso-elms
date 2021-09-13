@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import Checkbox from './components/atoms/custom/CheckBox';
-import Dashboard from './components/Molecules/Dashboard';
-// import Popup from './components/Molecules/Popup';
+import Checkbox from './components/Atoms/Input/CheckBox';
+import DropDown from './components/Atoms/Input/Dropdown';
 import { Tab, Tabs } from './components/Molecules/tabs/tabs';
+import Academies from './components/Organisms/academy/Academy';
+import AddAcademy from './components/Organisms/academy/AddAcademy';
 import SignUpForm from './components/Organisms/signup/SignUpForm';
-import DropDown from './styles/components/atoms/custom/Dropdown';
+import Dashboard from './layout/Dashboard';
 import Modules from './views/modules';
+import NotFound from './views/NotFound';
 import Popup from './views/Popup';
+import NewStudentsView from './views/users/NewStudent';
+import UsersView from './views/users/Users';
 
 const App = () => {
   const [checked, setChecked] = useState(false);
@@ -30,7 +34,7 @@ const App = () => {
 
   const Homepage = () => {
     return (
-      <Dashboard>
+      <Dashboard activeIndex={2}>
         <div className="p-8">
           <h2 className="font-bold text-primary-500 text-2xl py-10">
             Created by Sandberg.
@@ -76,15 +80,6 @@ const App = () => {
     );
   };
 
-  const ErrorPage = () => {
-    return (
-      <div className="w-full md:w-10/12 lg:w-7/12 xl:w-1/2 mx-auto py-24 px-20">
-        <h1 className="text-primary-500 font-bold text-9xl text-center">404</h1>
-        <h4 className="font-bold text-gray-500 text-4xl text-center">Page not found</h4>
-      </div>
-    );
-  };
-
   return (
     <>
       <Router>
@@ -92,9 +87,13 @@ const App = () => {
           <Route exact path="/" component={Homepage} />
 
           <Route exact path="/register" component={SignUpForm} />
+          <Route exact path="/academies" component={Academies} />
+          <Route exact path="/academies/add" component={AddAcademy} />
+          <Route exact path="/users" component={UsersView} />
           <Route exact path="/popup" component={Popup} />
           <Route exact path="/modules" component={Modules} />
-          <Route exact path="*" component={ErrorPage} />
+          <Route exact path="/users/students/new" component={NewStudentsView} />
+          <Route exact path="*" component={NotFound} />
         </Switch>
       </Router>
     </>

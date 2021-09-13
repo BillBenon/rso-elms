@@ -43,7 +43,7 @@ const Badge = ({ badgecolor, badgetxtcolor, className = '', children }: BadgePro
   return (
     <>
       <span
-        className={`px-4 py-2 font-semibold rounded-full 
+        className={`px-4 py-2 h-9 text-xs font-semibold rounded-full flex items-center 
         ${className}
         ${badgetxtcolor && txt_colors[`${badgetxtcolor}`]} 
         ${badgecolor && bg_colors[`${badgecolor}`]}`}>

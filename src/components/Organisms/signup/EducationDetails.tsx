@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 
-import DropDown from '../../../styles/components/atoms/custom/Dropdown';
 import { ValueType } from '../../../types';
 import { validation } from '../../../utils/validations';
 import InputMolecule from '../../Molecules/input/InputMolecule';

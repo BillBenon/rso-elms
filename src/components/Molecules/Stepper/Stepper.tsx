@@ -1,4 +1,4 @@
-import '../../../styles/components/atoms/custom/stepper.scss';
+import '../../../styles/components/Atoms/custom/stepper.scss';
 
 import React from 'react';
 import { Fragment, useState } from 'react';

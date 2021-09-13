@@ -12,7 +12,7 @@ interface ILabelProps {
 
 export default function ILabel({
   children,
-  weight = 'normal',
+  weight = 'medium',
   size = 'sm',
   color = 'txt-primary',
   ...rest
@@ -20,7 +20,7 @@ export default function ILabel({
   return (
     <label
       {...rest}
-      className={`${fontWeightStyle[weight]} ${fontSizeStyle[size]}  text-${colorStyle[color]}`}>
+      className={`capitalize ${fontWeightStyle[weight]} ${fontSizeStyle[size]} text-${colorStyle[color]}`}>
       {children}
     </label>
   );

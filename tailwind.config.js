@@ -19,6 +19,7 @@ module.exports = {
           600: '#1C2CA3',
         },
         secondary: '#FAFBFC',
+        tertiary: '#F0F1F1',
         main: '#FFFFFF',
         bcolor: '#F0F1F1',
         error: {
