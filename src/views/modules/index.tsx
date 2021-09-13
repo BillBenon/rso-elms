@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -6,9 +6,14 @@ import Cacumber from '../../components/Molecules/Cacumber';
 import CourseCardMolecule from '../../components/Molecules/cards/CourseCardMolecule';
 import Dashboard from '../../components/Molecules/Dashboard';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
+import PopupMolecule from '../../components/Molecules/Popup';
 import { CourseModelDataType, Link } from '../../types';
 
 export default function Modules() {
+  const [open, setOpen] = useState(false); // state to controll the popup
+  const closeModel = () => setOpen(false); // when this is fired the popup will be closed
+  const openModel = () => setOpen(true); // when this is fired the popup will be oponed
+
   const list: Link[] = [
     { to: 'home', title: 'home' },
     { to: 'modules', title: 'modules' },
@@ -61,7 +66,7 @@ export default function Modules() {
             Modules
           </Heading>
           <SearchMolecule></SearchMolecule>
-          <Button>Add Module</Button>
+          <Button onClick={openModel}>Add Module</Button>
         </section>
         <section className="flex flex-wrap justify-between mt-2">
           {data.map((course) => (
@@ -73,6 +78,16 @@ export default function Modules() {
             </div>
           ))}
         </section>
+
+        {/* add module popup */}
+        <PopupMolecule title="New Module" open={open} onClose={closeModel}>
+          <div className="w-60">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae magni omnis
+            delectus nemo, maxime molestiae dolorem numquam mollitia, voluptate ea,
+            accusamus excepturi deleniti ratione sapiente! Laudantium, aperiam doloribus.
+            Odit, aut.
+          </div>
+        </PopupMolecule>
       </main>
     </Dashboard>
   );
