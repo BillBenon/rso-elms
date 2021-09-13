@@ -15,6 +15,7 @@ interface PropTypes {
   children: ReactNode;
   type?: ButtonType;
   color?: Color;
+  className?: string;
   onClick?: () => any;
 }
 
@@ -22,6 +23,7 @@ export default function Button({
   children,
   type = 'fill',
   color = 'primary',
+  className = '',
   onClick,
   ...attrs
 }: PropTypes) {
@@ -34,7 +36,7 @@ export default function Button({
     <button
       {...attrs}
       onClick={onClick}
-      className={`${buttonStyle[type]} py-3 px-6 rounded-lg outline-none`}>
+      className={`${buttonStyle[type]} py-3 px-6 rounded-lg outline-none ${className}`}>
       {' '}
       {children}{' '}
     </button>

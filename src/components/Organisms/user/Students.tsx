@@ -1,10 +1,10 @@
 // import { Label } from "@headlessui/react/dist/components/label/label";
 import React from 'react';
 
+import Dashboard from '../../../layout/Dashboard';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import ILabel from '../../atoms/Text/ILabel';
-import Dashboard from '../../Molecules/Dashboard';
 import SearchMolecule from '../../Molecules/input/SearchMolecule';
 import Table from '../../Molecules/Table';
 import { Tab, Tabs } from '../../Molecules/tabs/tabs';
@@ -231,7 +231,7 @@ export default function Students() {
         <ILabel size="sm" color="gray" weight="medium">
           Institution Admin
         </ILabel>
-        <Icon name="chevron-right" fill="gray" />
+        <Icon name="chevron-right" />
 
         <ILabel size="sm" color="gray" weight="medium">
           Users
@@ -252,9 +252,8 @@ export default function Students() {
               <Icon name="filter" />
             </button>
           </div>
-          <div>
+          <div className="flex gap-3">
             <Button type="outline">Import users</Button>
-            <span className="px-2"></span>
             <Button>New student</Button>
           </div>
         </div>
@@ -263,10 +262,10 @@ export default function Students() {
         <Tab label="Students" className="pt-4">
           <Table statusColumn="status" data={data} hasAction={true} />
         </Tab>
-        <Tab label="Instructors">
+        <Tab label="Instructors" className="pt-4">
           <Table statusColumn="status" data={instractors} hasAction={true} />
         </Tab>
-        <Tab label="Admins">
+        <Tab label="Admins" className="pt-4">
           <Table statusColumn="status" data={admins} hasAction={true} />
         </Tab>
       </Tabs>

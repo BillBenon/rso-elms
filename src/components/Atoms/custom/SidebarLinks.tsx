@@ -1,14 +1,16 @@
 import React from 'react';
 
 import { colorStyle, fontSizeStyle } from '../../../global/global-vars';
-import { Link } from '../../../types';
 import Icon from './Icon';
 
-interface SideBarLink extends Omit<Link, 'icon'> {
-  icon: string;
-}
+let linkProps = {
+  title: '',
+  to: '',
+  icon: '',
+  active: false,
+};
 
-export const SidebarLink = ({ title, to, icon, active }: SideBarLink) => {
+export const SidebarLink = ({ title, to, icon, active }: typeof linkProps) => {
   return (
     <div
       className={`px-8 cursor-pointer py-0 border-l-4 ${
@@ -19,20 +21,15 @@ export const SidebarLink = ({ title, to, icon, active }: SideBarLink) => {
         <span
           className={`text-${colorStyle[active ? 'primary' : 'gray']} ${
             fontSizeStyle['sm']
-<<<<<<< HEAD
           } px-1 font-bold`}>
           {title}
-=======
-          } px-1 font-medium`}>
-          {label}
->>>>>>> 789205f4b23e896871244f08ff55a0c9c1bfbdb0
         </span>
       </a>
     </div>
   );
 };
 
-type linksArray = SideBarLink[];
+type linksArray = typeof linkProps[];
 export type sidebarLinksProps = {
   links: linksArray;
   activeIndex?: number;
