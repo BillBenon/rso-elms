@@ -38,16 +38,20 @@ export default function Button({
     } text-${colorStyle[color]}`,
     text: `text-${colorStyle[color]} hover:underline`,
   };
+  console.log(full, !full && 'py-3 px-6', children);
+
+  // determine padding based on the style type of button
+  const padding = icon ? '' : full ? 'py-3' : 'py-3 px-6';
+
   return (
     <button
       {...attrs}
       onClick={onClick}
       className={`${buttonStyle[type]} rounded-lg text-sm outline-none 
       ${full && 'w-full'}
-      ${!icon && 'py-3 px-6'} 
+      ${padding}
       `}>
-      {' '}
-      {children}{' '}
+      {children}
     </button>
   );
 }
