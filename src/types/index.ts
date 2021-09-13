@@ -4,6 +4,7 @@ import React from 'react';
 export type Color =
   | 'primary'
   | 'secondary'
+  | 'tertiary'
   | 'main'
   | 'error'
   | 'warning'

@@ -25,6 +25,7 @@ export const fontSizeStyle: fontSizeStyleType = {
 export const bgStyle: bgStyleType = {
   primary: 'bg-primary-500',
   secondary: 'bg-secondary',
+  tertiary: 'bg-tertiary',
   main: 'bg-main',
   error: 'bg-error-400',
   warning: 'bg-warning-400',

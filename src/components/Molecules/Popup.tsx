@@ -26,7 +26,7 @@ export default function PopupMolecule({ open, title, onClose, children }: PropTy
           )}
 
           <button className="close" onClick={onClose}>
-            <Icon size={12} bgColor="txt-secondary" name="close" />
+            <Icon size={12} bgColor="tertiary" name="close" />
           </button>
         </div>
         {/* content to be renderd in the popup */}
