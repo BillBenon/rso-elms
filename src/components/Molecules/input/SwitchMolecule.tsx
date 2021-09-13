@@ -29,13 +29,15 @@ export default function SwitchMolecule({
   ...attrs
 }: PropType) {
   return (
-    <div {...attrs}>
+    <div {...attrs} className={className}>
       {loading ? (
-        <div className={`animate-pulse w-24 h-4 bg-secondary rounded ${className}`}></div>
+        <div className="animate-pulse w-24 h-4 bg-secondary rounded"></div>
       ) : (
         <>
           <ILabel>{children}</ILabel>
-          <Switch name={name} value={value} handleChange={handleChange}></Switch>
+          <div className="mt-2">
+            <Switch name={name} value={value} handleChange={handleChange}></Switch>
+          </div>
           {error && <Error>{error}</Error>}
         </>
       )}

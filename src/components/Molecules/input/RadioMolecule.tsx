@@ -33,18 +33,20 @@ export default function RadioMolecule({
   ...attrs
 }: PropType) {
   return (
-    <div {...attrs}>
+    <div {...attrs} className={className}>
       {loading ? (
-        <div className={`animate-pulse w-24 h-4 bg-secondary rounded ${className}`}></div>
+        <div className="animate-pulse w-24 h-4 bg-secondary rounded"></div>
       ) : (
         <>
           <ILabel>{children}</ILabel>
-          <Radio
-            name={name}
-            value={value}
-            type={type}
-            list={list}
-            handleChange={handleChange}></Radio>
+          <div className="mt-2">
+            <Radio
+              name={name}
+              value={value}
+              type={type}
+              list={list}
+              handleChange={handleChange}></Radio>
+          </div>
           {error && <Error>{error}</Error>}
         </>
       )}
