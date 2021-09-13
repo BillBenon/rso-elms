@@ -11,6 +11,7 @@ type PropType = {
   name: string;
   loading: boolean;
   error?: string;
+  className?: string;
   handleChange: (_e: ValueType) => void;
 };
 
@@ -23,12 +24,14 @@ export default function SwitchMolecule({
   name,
   loading = false,
   handleChange,
+  className,
   error,
+  ...attrs
 }: PropType) {
   return (
-    <div>
+    <div {...attrs}>
       {loading ? (
-        <div className="animate-pulse w-24 h-4 bg-secondary rounded"></div>
+        <div className={`animate-pulse w-24 h-4 bg-secondary rounded ${className}`}></div>
       ) : (
         <>
           <ILabel>{children}</ILabel>
