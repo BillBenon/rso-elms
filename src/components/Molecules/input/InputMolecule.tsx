@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { ValueType } from '../../../types';
-import Input from '../../Atoms/Input/Input';
-import Error from '../../Atoms/Text/Error';
-import ILabel from '../../Atoms/Text/ILabel';
+import Input from '../../atoms/Input/Input';
+import Error from '../../atoms/Text/Error';
+import ILabel from '../../atoms/Text/ILabel';
 
 type IError = {
   name: string;

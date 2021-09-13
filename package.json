@@ -17,7 +17,8 @@
     "react-svg": "^14.0.10",
     "reactjs-popup": "^2.0.5",
     "sass": "^1.39.0",
-    "styled-components": "^5.3.1"
+    "styled-components": "^5.3.1",
+    "yup": "^0.32.9"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",

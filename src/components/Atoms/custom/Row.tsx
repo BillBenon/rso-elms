@@ -29,7 +29,9 @@ const Row = ({ keys, data, statusColumn }: RowProps) => {
             className={`px-4 py-2 ${key.toLowerCase() === statusColumn ? 'text-xs' : ''}`}
             key={key}>
             {key.toLowerCase() === statusColumn ? (
-              <Badge badgecolor={statusColors[val.toLowerCase() as Status] || ''}>
+              <Badge
+                badgecolor={statusColors[val.toLowerCase() as Status]}
+                badgetxtcolor={statusColors[val.toLowerCase() as Status]}>
                 {val}
               </Badge>
             ) : (

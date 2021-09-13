@@ -2,8 +2,8 @@ import '../../../styles/components/molecules/cards/AcademyMolecule.scss';
 
 import React from 'react';
 
-import Avatar from '../../Atoms/custom/Avatar';
-import Heading from '../../Atoms/Text/Heading';
+import Avatar from '../../atoms/custom/Avatar';
+import Heading from '../../atoms/Text/Heading';
 
 type PropType = {
   active?: boolean;

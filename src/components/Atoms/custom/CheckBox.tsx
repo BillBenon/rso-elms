@@ -38,7 +38,6 @@ export default function Checkbox({
         className={'checkbox ' + className}
       />
       <label className="checkbox-label">{label}</label>
-      <Error>{error && error}</Error>
     </>
   );
 }
