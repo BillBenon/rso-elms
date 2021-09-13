@@ -1,15 +1,19 @@
 // import { Label } from "@headlessui/react/dist/components/label/label";
-import React from 'react';
+import React, { useState } from 'react';
 
-import Dashboard from '../../../layout/Dashboard';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import ILabel from '../../atoms/Text/ILabel';
 import SearchMolecule from '../../Molecules/input/SearchMolecule';
+import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/Table';
 import { Tab, Tabs } from '../../Molecules/tabs/tabs';
+import NewStudent from './NewStudent';
 
-export default function Students() {
+export default function Users() {
+  const [userType, setUserType] = useState('Students');
+  const [modalOpen, setModalOpen] = useState(false);
+
   const data = [
     {
       'full name': 'Col Florin Sandberg',
@@ -226,7 +230,7 @@ export default function Students() {
   let instractors = data.slice(6, 13);
   let admins = data.slice(24, 28);
   return (
-    <Dashboard>
+    <>
       <div className="flex flex-wrap justify-start items-center">
         <ILabel size="sm" color="gray" weight="medium">
           Institution Admin
@@ -238,7 +242,7 @@ export default function Students() {
         </ILabel>
         <Icon name="chevron-right" fill="gray" />
         <ILabel size="sm" color="primary" weight="medium">
-          Students
+          {userType}
         </ILabel>
       </div>
       <div className="py-4">
@@ -252,16 +256,15 @@ export default function Students() {
               <Icon name="filter" />
             </button>
           </div>
-          <div>
+          <div className="flex gap-3">
             <Button onClick={() => console.log(e)} type="outline">
               Import users
             </Button>
-            <span className="px-2"></span>
-            <Button onClick={() => console.log(e)}>New student</Button>
+            <Button onClick={() => setModalOpen(true)}>New {userType}</Button>
           </div>
         </div>
       </div>
-      <Tabs onTabChange={(e) => console.log(e)}>
+      <Tabs onTabChange={(e) => setUserType(e.activeTabLabel)}>
         <Tab label="Students" className="pt-4">
           <Table statusColumn="status" data={data} hasAction={true} />
         </Tab>
@@ -272,6 +275,11 @@ export default function Students() {
           <Table statusColumn="status" data={admins} hasAction={true} />
         </Tab>
       </Tabs>
-    </Dashboard>
+      <PopupMolecule
+        open={modalOpen && userType === 'Students'}
+        onClose={() => setModalOpen(false)}>
+        <NewStudent />
+      </PopupMolecule>
+    </>
   );
 }

@@ -5,10 +5,10 @@ import Checkbox from './components/Atoms/Input/CheckBox';
 import DropDown from './components/Atoms/Input/Dropdown';
 import { Tab, Tabs } from './components/Molecules/tabs/tabs';
 import SignUpForm from './components/Organisms/signup/SignUpForm';
-import Students from './components/Organisms/user/Students';
 import Dashboard from './layout/Dashboard';
 import NotFound from './views/NotFound';
 import Popup from './views/Popup';
+import UsersView from './views/Users';
 
 const App = () => {
   const data = [
@@ -134,7 +134,7 @@ const App = () => {
           <Route exact path="/" component={Homepage} />
 
           <Route exact path="/register" component={SignUpForm} />
-          <Route exact path="/users" component={Students} />
+          <Route exact path="/users" component={UsersView} />
           <Route exact path="/popup" component={Popup} />
           <Route exact path="*" component={NotFound} />
         </Switch>
