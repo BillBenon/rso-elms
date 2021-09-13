@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Checkbox from './components/Atoms/custom/CheckBox';
 import Dashboard from './components/Molecules/Dashboard';
+import Popup from './components/Molecules/Popup';
 import { Tab, Tabs } from './components/Molecules/tabs/tabs';
 import SignUpForm from './components/Organisms/signup/SignUpForm';
 import DropDown from './styles/components/atoms/custom/Dropdown';
@@ -92,6 +93,7 @@ const App = () => {
             checked={checked}
             label="English"
             onChange={() => setChecked(!checked)}
+            error={null}
           />
           <div className="py-3">
             <Checkbox
@@ -100,6 +102,7 @@ const App = () => {
               checked={checked}
               label="French"
               onChange={() => setChecked(!checked)}
+              error={null}
             />
           </div>
           <DropDown
