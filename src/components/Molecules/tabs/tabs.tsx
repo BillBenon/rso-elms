@@ -20,9 +20,14 @@ interface TabsProps {
   activeIndex?: number;
   className?: string;
   children: TabChildrenType;
-  onTabChange?: (_event: Object) => any;
+  onTabChange?: (_event: tabEventTypes) => any;
 }
-type Tablabel = { label: string };
+
+type tabEventTypes = {
+  activeTabIndex: number;
+  activeTabLabel: string;
+  previousTabIndex: number;
+};
 
 export function Tabs({
   activeIndex = 0,
@@ -33,11 +38,11 @@ export function Tabs({
   const [activeTabIndex, setActivetabIndex] = useState(activeIndex);
 
   const slideTo = (index: number) => {
-    const ilabel: any = children[index].props;
+    const tProps: any = children[index].props;
     if (onTabChange)
       onTabChange({
         activeTabIndex: index,
-        activeTabLabel: ilabel.label,
+        activeTabLabel: tProps.label,
         previousTabIndex: activeTabIndex,
       });
     setActivetabIndex(index);
