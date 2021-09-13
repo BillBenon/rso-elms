@@ -13,6 +13,8 @@ type ButtonStyleType = {
 
 interface PropTypes {
   children: ReactNode;
+  full?: boolean;
+  icon?: boolean;
   type?: ButtonType;
   color?: Color;
   onClick?: () => any;
@@ -22,19 +24,28 @@ export default function Button({
   children,
   type = 'fill',
   color = 'primary',
+  full,
+  icon,
   onClick,
   ...attrs
 }: PropTypes) {
   const buttonStyle: ButtonStyleType = {
-    fill: `with-width  border-2 border-solid border-${colorStyle[color]} ${bgStyleButton[color]} text-main`,
-    outline: `with-width border-2 border-solid border-${colorStyle[color]} text-${colorStyle[color]}`,
+    fill: ` ${!icon && 'with-width'}   border-2 border-solid border-${
+      colorStyle[color]
+    } ${bgStyleButton[color]} text-main`,
+    outline: ` ${!icon && 'with-width'}  border-2 border-solid border-${
+      colorStyle[color]
+    } text-${colorStyle[color]}`,
     text: `text-${colorStyle[color]} hover:underline`,
   };
   return (
     <button
       {...attrs}
       onClick={onClick}
-      className={`${buttonStyle[type]} py-3 px-6 rounded-lg outline-none`}>
+      className={`${buttonStyle[type]} rounded-lg text-sm outline-none 
+      ${full && 'w-full'}
+      ${!icon && 'py-3 px-6'} 
+      `}>
       {' '}
       {children}{' '}
     </button>
