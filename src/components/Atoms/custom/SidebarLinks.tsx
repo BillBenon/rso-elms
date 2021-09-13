@@ -1,16 +1,18 @@
 import React from 'react';
 
 import { colorStyle, fontSizeStyle } from '../../../global/global-vars';
-import { Link } from '../../../types';
 import Icon from './Icon';
 
-interface SideBarLink extends Omit<Link, 'icon'> {
-  icon: string;
-}
+let linkProps = {
+  title: '',
+  to: '',
+  icon: '',
+  active: false,
+};
 
-export const SidebarLink = ({ title, to, icon, active }: SideBarLink) => {
+export const SidebarLink = ({ title, to, icon, active }: typeof linkProps) => {
   return (
-    <p
+    <div
       className={`px-8 cursor-pointer py-0 border-l-4 ${
         active ? 'border-primary-500' : 'border-transparent'
       }`}>
@@ -23,18 +25,17 @@ export const SidebarLink = ({ title, to, icon, active }: SideBarLink) => {
           {title}
         </span>
       </a>
-    </p>
+    </div>
   );
 };
 
-type linksArray = SideBarLink[];
+type linksArray = typeof linkProps[];
 export type sidebarLinksProps = {
   links: linksArray;
   activeIndex?: number;
 };
 
 export default function SidebarLinks({ links, activeIndex = 0 }: sidebarLinksProps) {
-  console.log('sidebar links', links);
   return (
     <div className="py-16">
       {links.map((link, i) => (

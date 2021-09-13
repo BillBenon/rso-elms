@@ -1,7 +1,35 @@
 import React from 'react';
 
+import Button from '../components/Atoms/custom/Button';
+
 const NotFound = () => {
-  return <main>Not found</main>;
+  return (
+    <div className="w-full h-screen flex items-center">
+      <div className="w-full md:w-10/12 lg:w-7/12 mx-auto px-6">
+        <div className="flex flex-wrap">
+          <h1 className="text-center xl:text-left text-primary-500 font-bold text-5xl xl:text-7xl px-5">
+            404
+          </h1>
+          <div>
+            <div className="md:border-l-2 px-5">
+              <h4 className="font-black text-3xl md:text-4xl lg:text-5xl xl:text-6xl">
+                Page not found
+              </h4>
+              <p className="text-sm lg:text-base text-gray-400 font-medium text-center py-3">
+                Please check the URL in the address bar and try again.
+              </p>
+            </div>
+            <div className="py-10 px-5 flex flex-wrap gap-3">
+              <Button onClick={() => window.history.back()}>Go back home</Button>
+              <Button type="outline" onClick={() => (window.location.href = '/support')}>
+                Contact support
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default NotFound;
