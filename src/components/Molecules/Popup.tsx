@@ -19,7 +19,11 @@ export default function PopupMolecule({ open, title, onClose, children }: PropTy
       <div className="modal block p-2">
         {/* close button  */}
         <div className={`flex mb-4 ${title ? 'justify-between' : 'justify-end'}`}>
-          {title && <Heading color="primary">{title}</Heading>}
+          {title && (
+            <Heading fontWeight="semibold" color="primary">
+              {title}
+            </Heading>
+          )}
 
           <button className="close" onClick={onClose}>
             <Icon size={12} bgColor="txt-secondary" name="close" />
