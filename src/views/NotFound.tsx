@@ -11,7 +11,7 @@ const NotFound = () => {
           <div>
             <div className="border-l-2 px-5">
               <h4 className="font-black text-6xl">Page not found</h4>
-              <p className="text-base text-gray-400 font-bold text-center py-3">
+              <p className="text-base text-gray-400 font-medium text-center py-3">
                 Please check the URL in the address bar and try again.
               </p>
             </div>
