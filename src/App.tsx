@@ -7,6 +7,7 @@ import { Tab, Tabs } from './components/Molecules/tabs/tabs';
 import SignUpForm from './components/Organisms/signup/SignUpForm';
 import Students from './components/Organisms/user/Students';
 import Dashboard from './layout/Dashboard';
+import NotFound from './views/NotFound';
 import Popup from './views/Popup';
 
 const App = () => {
@@ -126,15 +127,6 @@ const App = () => {
     );
   };
 
-  const ErrorPage = () => {
-    return (
-      <div className="w-full md:w-10/12 lg:w-7/12 xl:w-1/2 mx-auto py-24 px-20">
-        <h1 className="text-primary-500 font-bold text-9xl text-center">404</h1>
-        <h4 className="font-bold text-gray-500 text-4xl text-center">Page not found</h4>
-      </div>
-    );
-  };
-
   return (
     <>
       <Router>
@@ -144,7 +136,7 @@ const App = () => {
           <Route exact path="/register" component={SignUpForm} />
           <Route exact path="/users" component={Students} />
           <Route exact path="/popup" component={Popup} />
-          <Route exact path="*" component={ErrorPage} />
+          <Route exact path="*" component={NotFound} />
         </Switch>
       </Router>
     </>
