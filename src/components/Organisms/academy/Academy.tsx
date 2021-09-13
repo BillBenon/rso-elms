@@ -9,6 +9,7 @@ import Icon from '../../Atoms/custom/Icon';
 import ILabel from '../../atoms/Text/ILabel';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 import SearchMolecule from '../../Molecules/input/SearchMolecule';
+import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/Table';
 
@@ -260,7 +261,6 @@ export default function Academies() {
             </button>
           </div>
           <div className="flex gap-3">
-            <Button type="outline">Import academy</Button>
             <Button onClick={() => setOpen(true)}>New academy</Button>
           </div>
         </div>
@@ -299,6 +299,13 @@ export default function Academies() {
             handleChange={(e) => handleChange(e)}>
             academy website
           </InputMolecule>
+          <TextAreaMolecule
+            name="website"
+            value={''}
+            placeholder="Type website url"
+            handleChange={(e) => handleChange(e)}>
+            academy website
+          </TextAreaMolecule>
         </div>
       </PopupMolecule>
     </Dashboard>
