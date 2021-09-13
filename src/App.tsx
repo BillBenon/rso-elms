@@ -5,6 +5,7 @@ import Checkbox from './components/Atoms/Input/CheckBox';
 import DropDown from './components/Atoms/Input/Dropdown';
 import { Tab, Tabs } from './components/Molecules/tabs/tabs';
 import Academies from './components/Organisms/academy/Academy';
+import AddAcademy from './components/Organisms/academy/AddAcademy';
 import SignUpForm from './components/Organisms/signup/SignUpForm';
 import Dashboard from './layout/Dashboard';
 import NotFound from './views/NotFound';
@@ -85,6 +86,7 @@ const App = () => {
 
           <Route exact path="/register" component={SignUpForm} />
           <Route exact path="/academies" component={Academies} />
+          <Route exact path="/academies/add" component={AddAcademy} />
           <Route exact path="/users" component={UsersView} />
           <Route exact path="/popup" component={Popup} />
           <Route exact path="*" component={NotFound} />

@@ -12,7 +12,7 @@ interface ILabelProps {
 
 export default function ILabel({
   children,
-  weight = 'normal',
+  weight = 'medium',
   size = 'sm',
   color = 'txt-primary',
   ...rest

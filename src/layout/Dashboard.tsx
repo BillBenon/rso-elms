@@ -22,19 +22,14 @@ export default function Dashboard({
   activeIndex = 0,
 }: IDashboard) {
   return (
-    <div className="bg-gray-50 h-screen">
-      {/* inner block */}
-      <div className="lg:flex gap-0 h-5/6">
-        <div className="lg:w-64 h-full top-0 lg:sticky">
-          <Sidebar links={links} activeIndex={activeIndex} />
-        </div>
-        {/* navbar and body */}
-        <div className="block w-full">
-          <div className="">
-            <Navigation />
-          </div>
-          <div className="block w-full h-full py-5 px-8">{children}</div>
-        </div>
+    <div className="grid grid-cols-12 bg-gray-50">
+      <div className="hidden md:block md:col-span-3 xl:col-span-2 h-screen top-0 lg:sticky ">
+        <Sidebar links={links} activeIndex={activeIndex} />
+      </div>
+      {/* navbar and body */}
+      <div className="w-full md:col-span-9 xl:col-span-10 col-span-10 block">
+        <Navigation />
+        <div className="block w-full h-auto py-5 px-8">{children}</div>
       </div>
     </div>
   );

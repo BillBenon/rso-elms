@@ -4,7 +4,9 @@ import './academy.scss';
 import React from 'react';
 
 import Dashboard from '../../../layout/Dashboard';
+import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
+import Heading from '../../Atoms/Text/Heading';
 import ILabel from '../../atoms/Text/ILabel';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
@@ -32,10 +34,11 @@ export default function AddAcademy() {
       </div>
 
       <div className="p-4 pl-6 popup-width flex flex-col gap-3">
+        <Heading>new academy</Heading>
         <InputMolecule
           name="acname"
           placeholder="Type academy name"
-          value={'='}
+          value={''}
           handleChange={(e) => handleChange(e)}>
           academy name
         </InputMolecule>
@@ -67,8 +70,11 @@ export default function AddAcademy() {
           value={''}
           placeholder="Type website url"
           handleChange={(e) => handleChange(e)}>
-          academy website
+          academy description
         </TextAreaMolecule>
+        <ILabel weight="bold">academy logo</ILabel>
+        <Button type="outline">upload logo</Button>
+        <Button>Save</Button>
       </div>
     </Dashboard>
   );

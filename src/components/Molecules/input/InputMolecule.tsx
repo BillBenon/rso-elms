@@ -25,7 +25,7 @@ export default function InputMolecule({
 }: IError) {
   return (
     <div className="flex flex-col gap-3">
-      <ILabel>{children}</ILabel>
+      <ILabel weight="bold">{children}</ILabel>
       <Input
         name={name}
         placeholder={placeholder}

@@ -45,7 +45,7 @@ export default function Textarea({
       name={name}
       value={_value}
       readOnly={readonly}
-      className={`bg-transparent h-12 px-3 placeholder-${pcolor} rounded-md ${
+      className={`bg-transparent h-12 px-3 py-2 placeholder-${pcolor} rounded-md ${
         full ? 'w-full' : `w-${width}`
       } focus:outline-none border-${bcolor} focus:border-${colorStyle[fcolor]} border-2`}
       /* @ts-ignore */

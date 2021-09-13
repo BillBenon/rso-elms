@@ -1,20 +1,18 @@
 // import { Label } from "@headlessui/react/dist/components/label/label";
 import './academy.scss';
 
-import React, { useState } from 'react';
+import React from 'react';
+import { useHistory } from 'react-router';
 
 import Dashboard from '../../../layout/Dashboard';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import ILabel from '../../atoms/Text/ILabel';
-import InputMolecule from '../../Molecules/input/InputMolecule';
 import SearchMolecule from '../../Molecules/input/SearchMolecule';
-import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
-import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/Table';
 
 export default function Academies() {
-  const [open, setOpen] = useState(false);
+  const history = useHistory();
 
   const data = [
     {
@@ -229,10 +227,6 @@ export default function Academies() {
     },
   ];
 
-  function handleChange(event) {
-    console.log('here');
-  }
-
   return (
     <Dashboard activeIndex={2}>
       <div className="flex flex-wrap justify-start items-center">
@@ -261,53 +255,12 @@ export default function Academies() {
             </button>
           </div>
           <div className="flex gap-3">
-            <Button onClick={() => setOpen(true)}>New academy</Button>
+            <Button onClick={() => history.push('/academies/add')}>New academy</Button>
           </div>
         </div>
       </div>
 
       <Table statusColumn="status" data={data} hasAction={true} />
-      <PopupMolecule open={open} onClose={() => setOpen(false)}>
-        <div className="p-4 pl-6 popup-width flex flex-col gap-3">
-          <InputMolecule
-            name="acname"
-            placeholder="Type academy name"
-            value={'='}
-            handleChange={(e) => handleChange(e)}>
-            academy name
-          </InputMolecule>
-          <InputMolecule
-            name="email"
-            type="email"
-            value={''}
-            placeholder="example@gmail.com"
-            handleChange={(e) => handleChange(e)}>
-            academy email
-          </InputMolecule>
-          <InputMolecule
-            name="phone"
-            type="tel"
-            value={''}
-            placeholder="Type academy phone number"
-            handleChange={(e) => handleChange(e)}>
-            academy phone number
-          </InputMolecule>
-          <InputMolecule
-            name="website"
-            value={''}
-            placeholder="Type website url"
-            handleChange={(e) => handleChange(e)}>
-            academy website
-          </InputMolecule>
-          <TextAreaMolecule
-            name="website"
-            value={''}
-            placeholder="Type website url"
-            handleChange={(e) => handleChange(e)}>
-            academy website
-          </TextAreaMolecule>
-        </div>
-      </PopupMolecule>
     </Dashboard>
   );
 }
