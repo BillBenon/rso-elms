@@ -7,6 +7,7 @@ import { useHistory } from 'react-router';
 import Dashboard from '../../../layout/Dashboard';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
+import Heading from '../../Atoms/Text/Heading';
 import ILabel from '../../atoms/Text/ILabel';
 import SearchMolecule from '../../Molecules/input/SearchMolecule';
 import Table from '../../Molecules/Table';
@@ -245,9 +246,9 @@ export default function Academies() {
       </div>
       <div className="py-4">
         <div className="flex flex-wrap justify-between items-center">
-          <ILabel size="2xl" weight="bold">
+          <Heading color="primary" className="capitalize" size="2xl" weight="bold">
             Academy
-          </ILabel>
+          </Heading>
           <div className="flex flex-wrap justify-start items-center">
             <SearchMolecule />
             <button className="border p-0 rounded-md mx-2">

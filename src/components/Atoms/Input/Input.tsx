@@ -13,14 +13,17 @@ export interface IProps {
   value: string;
   name: string;
   full?: boolean;
+  padding?: string;
   fcolor?: Color;
   bcolor?: Color;
   pcolor?: Color;
   width?: string;
+  className?: string;
 }
 
 export default function Input({
   placeholder = '',
+  padding = 'px-3',
   type = 'text',
   readonly = false,
   value,
@@ -31,6 +34,7 @@ export default function Input({
   pcolor = 'txt-secondary',
   width = '80',
   handleChange,
+  className = '',
   ...attrs
 }: IProps) {
   const [_value, _setValue] = useState(value);
@@ -47,9 +51,11 @@ export default function Input({
       type={type}
       value={_value}
       readOnly={readonly}
-      className={`bg-transparent h-12 px-3 placeholder-${pcolor} rounded-md ${
+      className={`bg-transparent h-12 ${padding} placeholder-${pcolor} rounded-md ${
         full ? 'w-full' : `w-${width}`
-      } focus:outline-none border-${bcolor} focus:border-${colorStyle[fcolor]} border-2`}
+      } focus:outline-none border-${bcolor} focus:border-${
+        colorStyle[fcolor]
+      } border-2 ${className}`}
       /* @ts-ignore */
       onChange={handleOnChange}
     />
