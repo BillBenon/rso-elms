@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react';
 
 import { ValueType } from '../../../types';
-import Switch from '../../atoms/Input/Switch';
-import Error from '../../atoms/Text/Error';
-import ILabel from '../../atoms/Text/ILabel';
+import Switch from '../../Atoms/Input/Switch';
+import Error from '../../Atoms/Text/Error';
+import ILabel from '../../Atoms/Text/ILabel';
 
 type PropType = {
   children: ReactNode;
@@ -11,6 +11,7 @@ type PropType = {
   name: string;
   loading: boolean;
   error?: string;
+  className?: string;
   handleChange: (_e: ValueType) => void;
 };
 
@@ -23,16 +24,20 @@ export default function SwitchMolecule({
   name,
   loading = false,
   handleChange,
+  className,
   error,
+  ...attrs
 }: PropType) {
   return (
-    <div>
+    <div {...attrs} className={className}>
       {loading ? (
         <div className="animate-pulse w-24 h-4 bg-secondary rounded"></div>
       ) : (
         <>
           <ILabel>{children}</ILabel>
-          <Switch name={name} value={value} handleChange={handleChange}></Switch>
+          <div className="mt-2">
+            <Switch name={name} value={value} handleChange={handleChange}></Switch>
+          </div>
           {error && <Error>{error}</Error>}
         </>
       )}

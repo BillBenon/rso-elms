@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
-import '../../styles/components/molecules/table/table.scss';
+import '../../styles/components/Molecules/table/table.scss';
 
 import React, { useState } from 'react';
 

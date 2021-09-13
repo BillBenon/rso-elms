@@ -1,9 +1,9 @@
-// import { Label } from "@headlessui/react/dist/components/label/label";
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
-import ILabel from '../../atoms/Text/ILabel';
+import ILabel from '../../Atoms/Text/ILabel';
 import SearchMolecule from '../../Molecules/input/SearchMolecule';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/Table';
@@ -13,6 +13,13 @@ import NewStudent from './NewStudent';
 export default function Users() {
   const [userType, setUserType] = useState('Students');
   const [modalOpen, setModalOpen] = useState(false);
+  const history = useHistory();
+
+  const handleCreateNewUserClick = () => {
+    if (userType === 'Students') history.push('/users/students/new');
+    else if (userType === 'Instructors') history.push('/users/instructors/new');
+    else history.push('/users/admins/new');
+  };
 
   const data = [
     {
@@ -260,7 +267,7 @@ export default function Users() {
             <Button onClick={() => console.log(e)} type="outline">
               Import users
             </Button>
-            <Button onClick={() => setModalOpen(true)}>New {userType}</Button>
+            <Button onClick={() => handleCreateNewUserClick()}>New {userType}</Button>
           </div>
         </div>
       </div>
