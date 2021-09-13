@@ -31,7 +31,7 @@ export function Tabs({ activeIndex = 0, className = '', children }: TabsProps) {
         {children.map((tab, i) => (
           <button
             key={i}
-            className={`pr-8 py-4 ${
+            className={`pr-5 pl-3 py-4 ${
               activeTabIndex === i ? 'border-b-3' : 'border-b-2'
             } m-0 rounded-none
             ${fontSizeStyle['sm']} ${fontWeightStyle['bold']} text-${

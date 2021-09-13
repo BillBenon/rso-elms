@@ -4,7 +4,6 @@ import SidebarLinks, { sidebarLinksProps } from '../../Atoms/custom/SidebarLinks
 import AcademyProfileCard from '../AcademyProfileCard';
 
 export default function Sidebar({ links, activeIndex }: sidebarLinksProps) {
-  console.log(links);
   return (
     <div className="bg-white md:h-screen">
       <div className="px-8 py-4">

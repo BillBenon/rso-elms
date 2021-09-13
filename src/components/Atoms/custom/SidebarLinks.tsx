@@ -10,7 +10,7 @@ interface SideBarLink extends Omit<Link, 'icon'> {
 
 export const SidebarLink = ({ title, to, icon, active }: SideBarLink) => {
   return (
-    <p
+    <div
       className={`px-8 cursor-pointer py-0 border-l-4 ${
         active ? 'border-primary-500' : 'border-transparent'
       }`}>
@@ -19,11 +19,16 @@ export const SidebarLink = ({ title, to, icon, active }: SideBarLink) => {
         <span
           className={`text-${colorStyle[active ? 'primary' : 'gray']} ${
             fontSizeStyle['sm']
+<<<<<<< HEAD
           } px-1 font-bold`}>
           {title}
+=======
+          } px-1 font-medium`}>
+          {label}
+>>>>>>> 789205f4b23e896871244f08ff55a0c9c1bfbdb0
         </span>
       </a>
-    </p>
+    </div>
   );
 };
 
@@ -34,7 +39,6 @@ export type sidebarLinksProps = {
 };
 
 export default function SidebarLinks({ links, activeIndex = 0 }: sidebarLinksProps) {
-  console.log('sidebar links', links);
   return (
     <div className="py-16">
       {links.map((link, i) => (

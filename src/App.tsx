@@ -5,9 +5,8 @@ import Checkbox from './components/Atoms/custom/CheckBox';
 import Dashboard from './components/Molecules/Dashboard';
 import { Tab, Tabs } from './components/Molecules/tabs/tabs';
 import SignUpForm from './components/Organisms/signup/SignUpForm';
+import Students from './components/Organisms/user/Students';
 import DropDown from './styles/components/atoms/custom/Dropdown';
-import Modules from './views/modules';
-import Popup from './views/Popup';
 
 const App = () => {
   const [checked, setChecked] = useState(false);
@@ -29,7 +28,7 @@ const App = () => {
 
   const Homepage = () => {
     return (
-      <Dashboard>
+      <Dashboard activeIndex={2}>
         <div className="p-8">
           <h2 className="font-bold text-primary-500 text-2xl py-10">
             Created by Sandberg.
@@ -91,8 +90,7 @@ const App = () => {
           <Route exact path="/" component={Homepage} />
 
           <Route exact path="/register" component={SignUpForm} />
-          <Route exact path="/popup" component={Popup} />
-          <Route exact path="/modules" component={Modules} />
+          <Route exact path="/users" component={Students} />
           <Route exact path="*" component={ErrorPage} />
         </Switch>
       </Router>
