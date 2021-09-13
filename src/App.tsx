@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Checkbox from './components/Atoms/custom/CheckBox';
 import DropDown from './components/Atoms/Input/Dropdown';
 import { Tab, Tabs } from './components/Molecules/tabs/tabs';
+import Academies from './components/Organisms/academy/Academy';
 import SignUpForm from './components/Organisms/signup/SignUpForm';
 import Students from './components/Organisms/user/Students';
 import Dashboard from './layout/Dashboard';
@@ -92,6 +93,7 @@ const App = () => {
 
           <Route exact path="/register" component={SignUpForm} />
           <Route exact path="/users" component={Students} />
+          <Route exact path="/academies" component={Academies} />
           <Route exact path="/popup" component={Popup} />
           <Route exact path="*" component={ErrorPage} />
         </Switch>
