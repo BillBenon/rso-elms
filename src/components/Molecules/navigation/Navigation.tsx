@@ -37,7 +37,7 @@ export default function Navigation() {
                 <div className="relative">
                   <Icon name="notification" />
                   <div className="bg-main rounded-full h-3 w-3 absolute top-3 right-4 flex items-center justify-center">
-                    <span className="absolute  w-2 h-2  bg-red-600 z-50 self-center rounded-full"></span>
+                    <span className="absolute  w-2 h-2  bg-red-600 self-center rounded-full"></span>
                   </div>
                 </div>
               </button>

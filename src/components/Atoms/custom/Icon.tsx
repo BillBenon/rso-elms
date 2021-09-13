@@ -35,7 +35,7 @@ const StyledSVGIcon = styled(ReactSVG)`
       ${({ fill }: IProps) =>
         fill &&
         css`
-          color: ${iconStyle[fill]};
+          fill: ${iconStyle[fill]};
         `}
     }
   }
@@ -43,8 +43,8 @@ const StyledSVGIcon = styled(ReactSVG)`
 
 export default function Icon({
   name,
-  fill,
-  stroke = 'txt-secondary',
+  fill = 'transparent',
+  stroke = 'none',
   size = 24,
   bgColor,
 }: IProps) {
