@@ -51,20 +51,23 @@ export function Tabs({
   const TabHeadings = () => {
     return (
       <div className="flex flex-wrap justify-start">
-        {children.map((tab, i) => (
-          <button
-            key={i}
-            className={`pr-5 pl-3 py-4 ${
-              activeTabIndex === i ? 'border-b-3' : 'border-b-2'
-            } m-0 rounded-none
+        {children.map((tab, i) => {
+          const tProps: any = tab.props;
+          return (
+            <button
+              key={i}
+              className={`pr-5 pl-3 py-4 ${
+                activeTabIndex === i ? 'border-b-3' : 'border-b-2'
+              } m-0 rounded-none
             ${fontSizeStyle['sm']} ${fontWeightStyle['bold']} text-${
-              colorStyle[activeTabIndex == i ? 'primary' : 'gray']
-            } border-${colorStyle[activeTabIndex == i ? 'primary' : 'lightgray']}`}
-            onClick={() => slideTo(i)}
-            disabled={activeTabIndex === i || tab.props.disabled}>
-            {tab.props.label}
-          </button>
-        ))}
+                colorStyle[activeTabIndex == i ? 'primary' : 'gray']
+              } border-${colorStyle[activeTabIndex == i ? 'primary' : 'lightgray']}`}
+              onClick={() => slideTo(i)}
+              disabled={activeTabIndex === i || tProps.disabled}>
+              {tProps.label}
+            </button>
+          );
+        })}
       </div>
     );
   };
