@@ -17,9 +17,10 @@ export default function CourseCardMolecule() {
           The basics of Biomedics (Long course name this is it. Whoever was asking it
         </Heading>
         <Heading color="txt-secondary">Short Course</Heading>
-        <p className="text-txt-secondary mt-4">
+        <p id="course-card-description" className="text-txt-secondary mt-4">
           This is a course description. It states briefy what this course is all about.
-          Read More
+          Read MoreThis is a course description. It states briefy what this course is all
+          about. Read More
         </p>
       </div>
     </div>
