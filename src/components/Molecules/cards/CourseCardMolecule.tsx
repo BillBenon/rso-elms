@@ -7,7 +7,9 @@ import Heading from '../../Atoms/Text/Heading';
 
 export default function CourseCardMolecule() {
   return (
-    <div id="course-card-molecule" className="bg-main p-6 rounded-lg">
+    <div
+      id="course-card-molecule"
+      className="bg-main p-6 rounded-lg border-4 border-primary-500 border-solid">
       <div className="flex justify-between items-center">
         <Heading fontWeight="semibold">Ra01-430st</Heading>
         <Badge badgecolor="success">Active</Badge>
