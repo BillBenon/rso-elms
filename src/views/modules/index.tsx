@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
 
 import Button from '../../components/Atoms/custom/Button';
+import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import Cacumber from '../../components/Molecules/Cacumber';
 import CourseCardMolecule from '../../components/Molecules/cards/CourseCardMolecule';
 import Dashboard from '../../components/Molecules/Dashboard';
+import InputMolecule from '../../components/Molecules/input/InputMolecule';
+import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
-import { CourseModelDataType, Link } from '../../types';
+import { CourseModelDataType, Link, ValueType } from '../../types';
 
 export default function Modules() {
   const [open, setOpen] = useState(false); // state to controll the popup
@@ -55,6 +58,10 @@ export default function Modules() {
     },
   ];
 
+  function handleChange(e: ValueType) {
+    console.log(e);
+  }
+
   return (
     <Dashboard>
       <main className="px-4">
@@ -66,6 +73,9 @@ export default function Modules() {
             Modules
           </Heading>
           <SearchMolecule></SearchMolecule>
+          <Button icon type="outline" color="none" onClick={openModel}>
+            <Icon name="chevron-right" />
+          </Button>
           <Button onClick={openModel}>Add Module</Button>
         </section>
         <section className="flex flex-wrap justify-between mt-2">
@@ -81,12 +91,56 @@ export default function Modules() {
 
         {/* add module popup */}
         <PopupMolecule title="New Module" open={open} onClose={closeModel}>
-          <div className="w-60">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae magni omnis
-            delectus nemo, maxime molestiae dolorem numquam mollitia, voluptate ea,
-            accusamus excepturi deleniti ratione sapiente! Laudantium, aperiam doloribus.
-            Odit, aut.
-          </div>
+          <form>
+            {/* model name */}
+            <InputMolecule
+              value=""
+              error=""
+              handleChange={handleChange}
+              name="model-name">
+              Module name
+            </InputMolecule>
+
+            {/* model code
+            <InputMolecule
+              value=""
+              error=""
+              handleChange={handleChange}
+              name="model-name">
+              Module code
+            </InputMolecule> */}
+
+            {/* model initial status */}
+            <RadioMolecule
+              className="mt-4"
+              value="ACTIVE"
+              name="status"
+              list={[
+                { label: 'Active', value: 'ACTIVE' },
+                { label: 'Inactive', value: 'INACTIVE' },
+              ]}
+              handleChange={handleChange}>
+              Status
+            </RadioMolecule>
+
+            {/* model has prerequesit */}
+            <RadioMolecule
+              className="mt-4"
+              name="prerequsites"
+              list={[
+                { label: 'Yes', value: 'YES' },
+                { label: 'No', value: 'NO' },
+              ]}
+              handleChange={handleChange}>
+              Has Prerequesites
+            </RadioMolecule>
+
+            {/* save button */}
+
+            <div className="mt-5">
+              <Button full>Save</Button>
+            </div>
+          </form>
         </PopupMolecule>
       </main>
     </Dashboard>

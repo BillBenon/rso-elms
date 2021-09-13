@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import Checkbox from './components/atoms/custom/CheckBox';
+import Checkbox from './components/Atoms/custom/CheckBox';
 import Dashboard from './components/Molecules/Dashboard';
 import { Tab, Tabs } from './components/Molecules/tabs/tabs';
 import SignUpForm from './components/Organisms/signup/SignUpForm';
