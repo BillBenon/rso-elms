@@ -1,12 +1,38 @@
-import React, { KeyboardEventHandler, MouseEventHandler } from 'react';
+import React, { useState } from 'react';
 
+import { ValueType } from '../../../types';
+import { validation } from '../../../utils/validations';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../Molecules/input/RadioMolecule';
 
-const PersonalDetails = ({ details, setDetails, validate }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    details[e.target.name] = e.target.value;
-    setDetails(details);
+const PersonalDetails = () => {
+  const [details, setDetails] = useState({
+    firstname: '',
+    lastname: '',
+    email: '',
+    phone: '',
+    gender: 'male',
+    dob: '',
+    maritalStatus: 'married',
+  });
+
+  const validate = {
+    touched: false,
+    completed: false,
+    firstName: (name: string) => validation.nameValidation('First Name', name),
+    lastName: (name: string) => validation.nameValidation('Last Name', name),
+    email: validation.emailValidation,
+    age: validation.dateValidation,
+    phone: validation.phoneValidation,
+    gender: 'male',
+    dob: '',
+    maritalStatus: 'married',
+  };
+  const handleChange = (e: ValueType) => {
+    setDetails((details) => ({
+      ...details,
+      [e.name]: e.value,
+    }));
     console.log(details);
   };
 
@@ -15,14 +41,14 @@ const PersonalDetails = ({ details, setDetails, validate }) => {
       <InputMolecule
         name="firstname"
         value={details.firstname}
-        handleChange={(e) => handleChange(e)}
+        handleChange={handleChange}
         error={validate.firstName(details.firstname)}>
         First Name
       </InputMolecule>
       <InputMolecule
-        name={details.lastname[0]}
+        name="lastname"
         value={details.lastname}
-        handleChange={(e) => handleChange(e)}
+        handleChange={handleChange}
         error={validate.lastName(details.lastname)}>
         Last Name
       </InputMolecule>
@@ -31,7 +57,7 @@ const PersonalDetails = ({ details, setDetails, validate }) => {
         value={details.email}
         type="email"
         placeholder="username@example.com"
-        handleChange={(e) => handleChange(e)}
+        handleChange={handleChange}
         error={validate.email(details.email)}>
         Email
       </InputMolecule>
@@ -39,16 +65,17 @@ const PersonalDetails = ({ details, setDetails, validate }) => {
         name="phone"
         value={details.phone}
         placeholder="+250 ---------"
-        handleChange={(e) => handleChange(e)}
+        handleChange={handleChange}
         error={validate.phone(details.phone)}>
         Phone number
       </InputMolecule>
-      {/* <RadioMolecule
+      <RadioMolecule
         list={[
           { value: 'male', label: 'Male' },
           { value: 'female', label: 'Female' },
         ]}
-        handleChange={(e) => handleChange(e)}>
+        handleChange={handleChange}
+        name="Gender">
         Gender
       </RadioMolecule>
       <RadioMolecule
@@ -56,9 +83,10 @@ const PersonalDetails = ({ details, setDetails, validate }) => {
           { value: 'married', label: 'Married' },
           { value: 'single', label: 'Single' },
         ]}
-        handleChange={(e) => handleChange(e)}>
+        handleChange={handleChange}
+        name="maritalStatus">
         Martial Status
-      </RadioMolecule> */}
+      </RadioMolecule>
     </>
   );
 };

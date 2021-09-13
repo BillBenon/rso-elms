@@ -46,7 +46,7 @@ const Table = ({ data, hasAction, statusColumn, rowsPerPage = 10 }: TableProps) 
         {hasAction ? (
           <td className="flex space-x-6">
             <span onClick={() => console.log('editing')}>
-              <Icon name="more" fill={'txt-secondary'} />
+              <Icon name="more" stroke={'txt-secondary'} fill={'txt-secondary'} />
             </span>
             <span onClick={() => console.log('more')}></span>
           </td>

@@ -1,4 +1,4 @@
-# Text atom components
+# Text Atom components
 - label
 - headings
 - etc
