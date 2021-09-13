@@ -4,7 +4,7 @@ import Avatar from '../../Atoms/custom/Avatar';
 import Badge from '../../Atoms/custom/Badge';
 import Heading from '../../Atoms/Text/Heading';
 
-const NavSign = () => {
+const SignupHeader = () => {
   return (
     <div className="flex justify-between mb-10">
       <div>
@@ -25,4 +25,4 @@ const NavSign = () => {
   );
 };
 
-export default NavSign;
+export default SignupHeader;
