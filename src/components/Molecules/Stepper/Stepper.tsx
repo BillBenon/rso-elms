@@ -3,7 +3,6 @@ import '../../../styles/components/Atoms/custom/stepper.scss';
 import React from 'react';
 import { Fragment, useState } from 'react';
 
-import StepperFoot from './StepperFoot';
 import StepperHead from './StepperHead';
 
 type StepperProps = {
@@ -19,12 +18,7 @@ type StepperProps = {
   isInline: boolean;
   isVertical: boolean;
 };
-const Stepper = ({
-  isVertical,
-  isInline,
-  stepperContent,
-  submitStepper,
-}: StepperProps) => {
+const Stepper = ({ isVertical, isInline, stepperContent }: StepperProps) => {
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
   // isLastStep = currentTabIndex === stepperContent.length - 1,
   // isPrevBtn = currentTabIndex !== 0;
