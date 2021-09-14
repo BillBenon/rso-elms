@@ -15,15 +15,9 @@ const SignupHeader = () => {
         </p>
       </div>
       <div>
-        <AcademyProfileCard>Rwanda National Police</AcademyProfileCard>
-        {/* <Badge
-          badgecolor="secondary"
-          badgetxtcolor="primary"
-          className="flex"
-          roundWidth="lg">
-          <Avatar src="public\icons\police-logo.svg" alt="academy logo" size="39" />
-          <span>Rwanda National Police</span>
-        </Badge> */}
+        <AcademyProfileCard src="public\icons\police-logo.svg" alt="academy logo">
+          Rwanda National Police
+        </AcademyProfileCard>
       </div>
     </div>
   );
