@@ -6,8 +6,8 @@ import Heading from '../../Atoms/Text/Heading';
 
 export default function CheckboxMolecule(props: commonInputProps) {
   return (
-    <div className="py-1">
-      <Heading fontSize="base" fontWeight="bold" className="py-1">
+    <div className="py-2">
+      <Heading fontSize="sm" fontWeight="bold" className="py-2">
         {props.placeholder}
       </Heading>
       {props.options.map((op: any, i) => (

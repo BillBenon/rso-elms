@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Checkbox from '../Atoms/Input/CheckBox';
 import DropDown from '../Atoms/Input/Dropdown';
 import CheckboxMolecule from '../Molecules/input/CheckboxMolecule';
+import DropdownMolecule from '../Molecules/input/DropdownMolecule';
 import { Tab, Tabs } from '../Molecules/tabs/tabs';
 
 export default function CreatedBySandberg() {
@@ -50,10 +51,9 @@ export default function CreatedBySandberg() {
           options={options}
           name="intakes"
           onChange={(e: object) => console.log(e)}
-          isMulti={false}
-          className="w-1/2"
+          defaultValue={options[1]}
         />
-        <Tabs className="my-10" activeIndex={1}>
+        <Tabs className="my-4" activeIndex={1}>
           <Tab label="Students">
             <h1 className="text-3xl text-primary-500">Students</h1>
           </Tab>
@@ -64,14 +64,19 @@ export default function CreatedBySandberg() {
             <h2 className="text-3xl text-yellow-300 font-bold">Admins here</h2>
           </Tab>
         </Tabs>
-        <div className="py-2">
-          <CheckboxMolecule
-            options={options}
-            name="language"
-            placeholder="Checkbox Molecule"
-            onChange={() => console.log('changed')}
-          />
-        </div>
+        <CheckboxMolecule
+          options={options}
+          name="language"
+          placeholder="Checkbox Molecule"
+          onChange={() => console.log('changed')}
+        />
+        <DropdownMolecule
+          label="Select academy"
+          options={options}
+          name="academy"
+          onChange={(e: object) => console.log(e)}
+          error="Please select academy"
+        />
       </div>
     </>
   );
