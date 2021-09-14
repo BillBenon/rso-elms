@@ -5,12 +5,11 @@ import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import Cacumber from '../../components/Molecules/Cacumber';
 import CourseCardMolecule from '../../components/Molecules/cards/CourseCardMolecule';
-import InputMolecule from '../../components/Molecules/input/InputMolecule';
-import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
+import NewModuleForm from '../../components/Organisms/forms/NewModuleForm';
 import Dashboard from '../../layout/Dashboard';
-import { CourseModelDataType, Link, ValueType } from '../../types';
+import { CourseModelDataType, Link } from '../../types';
 
 export default function Modules() {
   const [open, setOpen] = useState(false); // state to controll the popup
@@ -58,10 +57,6 @@ export default function Modules() {
     },
   ];
 
-  function handleChange(e: ValueType) {
-    console.log(e);
-  }
-
   return (
     <Dashboard>
       <main className="px-4">
@@ -91,56 +86,7 @@ export default function Modules() {
 
         {/* add module popup */}
         <PopupMolecule title="New Module" open={open} onClose={closeModel}>
-          <form>
-            {/* model name */}
-            <InputMolecule
-              value=""
-              error=""
-              handleChange={handleChange}
-              name="model-name">
-              Module name
-            </InputMolecule>
-
-            {/* model code
-            <InputMolecule
-              value=""
-              error=""
-              handleChange={handleChange}
-              name="model-name">
-              Module code
-            </InputMolecule> */}
-
-            {/* model initial status */}
-            <RadioMolecule
-              className="mt-4"
-              value="ACTIVE"
-              name="status"
-              list={[
-                { label: 'Active', value: 'ACTIVE' },
-                { label: 'Inactive', value: 'INACTIVE' },
-              ]}
-              handleChange={handleChange}>
-              Status
-            </RadioMolecule>
-
-            {/* model has prerequesit */}
-            <RadioMolecule
-              className="mt-4"
-              name="prerequsites"
-              list={[
-                { label: 'Yes', value: 'YES' },
-                { label: 'No', value: 'NO' },
-              ]}
-              handleChange={handleChange}>
-              Has Prerequesites
-            </RadioMolecule>
-
-            {/* save button */}
-
-            <div className="mt-5">
-              <Button full>Save</Button>
-            </div>
-          </form>
+          <NewModuleForm />
         </PopupMolecule>
       </main>
     </Dashboard>
