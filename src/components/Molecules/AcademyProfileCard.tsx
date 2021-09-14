@@ -10,7 +10,9 @@ interface ICard extends IAvatar {
 
 export default function AcademyProfileCard({ children, src, alt }: ICard) {
   return (
-    <Badge roundWidth="md" className="flex gap-4 bg-secondary h-16 w-full p-4">
+    <Badge
+      roundWidth="md"
+      className="flex gap-2 bg-secondary h-16 w-full p-4 items-center">
       <Avatar src={src} alt={alt} size="32" />
       <ILabel size="xs" weight="medium">
         {children}
