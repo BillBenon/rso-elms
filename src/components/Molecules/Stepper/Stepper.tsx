@@ -3,7 +3,6 @@ import '../../../styles/components/Atoms/custom/stepper.scss';
 import React from 'react';
 import { Fragment, useState } from 'react';
 
-import StepperFoot from './StepperFoot';
 import StepperHead from './StepperHead';
 
 type StepperProps = {
@@ -19,15 +18,10 @@ type StepperProps = {
   isInline: boolean;
   isVertical: boolean;
 };
-const Stepper = ({
-  isVertical,
-  isInline,
-  stepperContent,
-  submitStepper,
-}: StepperProps) => {
-  const [currentTabIndex, setCurrentTabIndex] = useState(0),
-    isLastStep = currentTabIndex === stepperContent.length - 1,
-    isPrevBtn = currentTabIndex !== 0;
+const Stepper = ({ isVertical, isInline, stepperContent }: StepperProps) => {
+  const [currentTabIndex, setCurrentTabIndex] = useState(0);
+  // isLastStep = currentTabIndex === stepperContent.length - 1,
+  // isPrevBtn = currentTabIndex !== 0;
 
   const navigateToStepHandler = (index: number) => {
     if (index !== currentTabIndex) {
@@ -35,21 +29,21 @@ const Stepper = ({
     }
   };
 
-  const nextStepHandler = () => {
-    setCurrentTabIndex((prev: any) => {
-      if (prev !== stepperContent.length - 1) {
-        return prev + 1;
-      }
-    });
-  };
+  // const nextStepHandler = () => {
+  //   setCurrentTabIndex((prev: any) => {
+  //     if (prev !== stepperContent.length - 1) {
+  //       return prev + 1;
+  //     }
+  //   });
+  // };
 
-  const previousStepHandler = () => {
-    setCurrentTabIndex((prev) => prev - 1);
-  };
+  // const previousStepHandler = () => {
+  //   setCurrentTabIndex((prev) => prev - 1);
+  // };
 
-  const submitHandler = () => {
-    submitStepper();
-  };
+  // const submitHandler = () => {
+  //   submitStepper();
+  // };
 
   return (
     <div className="stepper-wrapper">
@@ -65,7 +59,7 @@ const Stepper = ({
           {stepperContent.map((el, i) => (
             <Fragment key={i}>{i === currentTabIndex && el.content}</Fragment>
           ))}
-          <StepperFoot
+          {/* <StepperFoot
             isPrevBtn={isPrevBtn}
             previousStepHandler={previousStepHandler}
             isLastStep={isLastStep}
@@ -73,7 +67,7 @@ const Stepper = ({
             submitHandler={submitHandler}
             stepperContent={stepperContent}
             currentTabIndex={currentTabIndex}
-          />
+          /> */}
         </div>
       </div>
     </div>

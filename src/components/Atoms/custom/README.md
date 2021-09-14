@@ -1,4 +1,4 @@
-# Custom atom components
+# Custom Atom components
 - badge
 - buttons
 - etc

@@ -1,59 +1,82 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import DropDown from '../../Atoms/Input/Dropdown';
+import { ValueType } from '../../../types';
+import Button from '../../Atoms/custom/Button';
+import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 
-const EmploymentDetails = ({ details, setDetails, validate }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newVal = details;
-    newVal[e.target.name] = e.target.value;
-    setDetails(newVal);
+const EmploymentDetails = () => {
+  const [details, setDetails] = useState({
+    currentRank: '',
+    otherRank: '',
+    RankDepart: 'Rwanda',
+    EmpNo: '',
+  });
+
+  const movePrev = () => {
+    window.alert('movePrev');
+  };
+
+  const moveNext = () => {
+    window.alert('moveNext');
+  };
+
+  const handleChange = (e: ValueType) => {
+    setDetails((details) => ({
+      ...details,
+      [e.name]: e.value,
+    }));
     console.log(details);
   };
+
   return (
-    <>
-      <DropDown
-        name="nationality"
-        className="w-72"
-        onChange={() => console.log('chANGED')}
-        options={[
-          { value: 'rw', label: 'Rwanda' },
-          { value: 'ug', label: 'Uganda' },
-          { value: 'tz', label: 'Tanzania' },
-          { value: 'brd', label: 'Burundi' },
-          { value: 'can', label: 'Canada' },
-          { value: 'us', label: 'USA' },
-        ]}
-      />
-      <InputMolecule
-        name="currentRank"
-        value={details.currentRank}
-        handleChange={(e) => handleChange(e)}
-        error={validate.currentRank(details.currentRank)}>
-        Current rank
-      </InputMolecule>
-      <InputMolecule
-        name="otherRank"
-        value={details.otherRank}
-        handleChange={(e) => handleChange(e)}
-        error={validate.otherRank(details.otherRank)}>
-        Other rank
-      </InputMolecule>
-      <InputMolecule
-        name="RankDepart"
-        value={details.RankDepart}
-        handleChange={(e) => handleChange(e)}
-        error={validate.RankDepart(details.RankDepart)}>
-        Current rank department
-      </InputMolecule>
-      <InputMolecule
-        name="RankDepart"
-        value={details.EmpNo}
-        handleChange={(e) => handleChange(e)}
-        error={validate.RankDepart(details.EmpNo)}>
-        Employment number
-      </InputMolecule>
-    </>
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4">
+        <DropdownMolecule
+          label="Current Rank"
+          name="currentRank"
+          className="w-72"
+          onChange={handleChange}
+          options={[
+            { value: 'rw', label: 'Rwanda' },
+            { value: 'ug', label: 'Uganda' },
+            { value: 'tz', label: 'Tanzania' },
+            { value: 'brd', label: 'Burundi' },
+            { value: 'can', label: 'Canada' },
+            { value: 'us', label: 'USA' },
+          ]}
+        />
+        <InputMolecule
+          name="otherRank"
+          placeholder="other ranks u might hold"
+          value={details.otherRank}
+          handleChange={handleChange}>
+          Other rank
+        </InputMolecule>
+      </div>
+      <div className="flex flex-col gap-4">
+        <InputMolecule
+          name="RankDepart"
+          placeholder="eg: Rwanda"
+          value={details.RankDepart}
+          handleChange={handleChange}>
+          Current rank department
+        </InputMolecule>
+        <InputMolecule
+          name="EmpNo"
+          placeholder="Employment number"
+          value={details.EmpNo}
+          handleChange={handleChange}>
+          Employment number
+        </InputMolecule>
+      </div>
+      <div className="flex justify-between">
+        <Button type="text" color="txt-secondary" onClick={movePrev}>
+          Back
+        </Button>
+        <Button onClick={moveNext}>Next</Button>
+      </div>
+    </div>
   );
 };
 

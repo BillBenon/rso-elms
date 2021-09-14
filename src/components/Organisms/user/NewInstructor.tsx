@@ -6,7 +6,7 @@ import Heading from '../../Atoms/Text/Heading';
 import ILabel from '../../Atoms/Text/ILabel';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 
-export default function NewStudent() {
+export default function NewInstructor() {
   const handleChange = (e: any) => {
     console.log(e);
   };
@@ -26,17 +26,17 @@ export default function NewStudent() {
         </ILabel>
         <Icon name="chevron-right" fill="gray" />
         <ILabel size="sm" color="gray" weight="medium">
-          Students
+          Instructors
         </ILabel>
         <Icon name="chevron-right" fill="gray" />
         <ILabel size="sm" color="primary" weight="medium">
-          New Student
+          New Instructor
         </ILabel>
       </div>
 
       <div className="popup-width">
         <Heading color="primary" fontSize="lg" fontWeight="semibold">
-          New student
+          New instructor
         </Heading>
         <div className="mb-7"></div>
         <InputMolecule

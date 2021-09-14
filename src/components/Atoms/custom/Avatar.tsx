@@ -1,12 +1,12 @@
 import React from 'react';
 
-type IAvatar = {
+export interface IAvatar {
   src: string;
   alt: string;
   size?: string;
-};
+}
 
-export default function Avatar({ src, alt, size = '56' }: IAvatar) {
+export default function Avatar({ src = '', alt, size = '56' }: IAvatar) {
   return (
     <div>
       <img
