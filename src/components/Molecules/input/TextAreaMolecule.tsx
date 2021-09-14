@@ -5,7 +5,7 @@ import Textarea from '../../Atoms/Input/Textarea';
 import Error from '../../Atoms/Text/Error';
 import ILabel from '../../Atoms/Text/ILabel';
 
-type IError = {
+type ITextareaMolecule = {
   name: string;
   value: string;
   handleChange: (_e: ValueType) => void;
@@ -22,7 +22,7 @@ export default function TextAreaMolecule({
   error = '',
   placeholder = '',
   type = 'text',
-}: IError) {
+}: ITextareaMolecule) {
   return (
     <div className="flex flex-col gap-3">
       <ILabel weight="bold">{children}</ILabel>
