@@ -1,4 +1,6 @@
 import React from 'react';
+import { useLocation } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import { colorStyle, fontSizeStyle } from '../../../global/global-vars';
 import Icon from './Icon';
@@ -16,7 +18,7 @@ export const SidebarLink = ({ title, to, icon, active }: typeof linkProps) => {
       className={`px-8 cursor-pointer py-0 border-l-4 ${
         active ? 'border-primary-500' : 'border-transparent'
       }`}>
-      <a href={to} className="flex items-center">
+      <Link to={to} className="flex items-center">
         <Icon name={icon} size={21} stroke={active ? 'primary' : 'none'} />
         <span
           className={`text-${colorStyle[active ? 'primary' : 'gray']} ${
@@ -24,7 +26,7 @@ export const SidebarLink = ({ title, to, icon, active }: typeof linkProps) => {
           } px-1 font-medium`}>
           {title}
         </span>
-      </a>
+      </Link>
     </div>
   );
 };
@@ -32,10 +34,11 @@ export const SidebarLink = ({ title, to, icon, active }: typeof linkProps) => {
 type linksArray = typeof linkProps[];
 export type sidebarLinksProps = {
   links: linksArray;
-  activeIndex?: number;
 };
 
-export default function SidebarLinks({ links, activeIndex = 0 }: sidebarLinksProps) {
+export default function SidebarLinks({ links }: sidebarLinksProps) {
+  const location = useLocation();
+  let activeIndexAuto = links.findIndex((link) => location.pathname.startsWith(link.to));
   return (
     <div className="py-16">
       {links.map((link, i) => (
@@ -44,7 +47,7 @@ export default function SidebarLinks({ links, activeIndex = 0 }: sidebarLinksPro
           title={link.title}
           to={link.to}
           icon={link.icon}
-          active={activeIndex === i}
+          active={activeIndexAuto === i}
         />
       ))}
     </div>

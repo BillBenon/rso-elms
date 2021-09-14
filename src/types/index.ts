@@ -85,4 +85,15 @@ export interface commonInputProps {
   options: object[];
   className?: string;
   placeholder?: string;
+  disabled?: boolean;
+}
+
+export interface DropdownProps extends commonInputProps {
+  isMulti?: boolean;
+  getOptionLabel?: (_option: Object) => string;
+  getOptionValue?: (_option: Object) => string;
+  noOptionsMessage?: string;
+  width?: string;
+  searchable?: boolean;
+  defaultValue?: Object;
 }

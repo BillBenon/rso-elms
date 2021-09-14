@@ -51,10 +51,9 @@ export default function CreatedBySandberg() {
           options={options}
           name="intakes"
           onChange={(e: object) => console.log(e)}
-          isMulti={false}
-          className="w-1/2"
+          defaultValue={options[1]}
         />
-        <Tabs className="my-10" activeIndex={1}>
+        <Tabs className="my-4" activeIndex={1}>
           <Tab label="Students">
             <h1 className="text-3xl text-primary-500">Students</h1>
           </Tab>
@@ -76,8 +75,6 @@ export default function CreatedBySandberg() {
           options={options}
           name="academy"
           onChange={(e: object) => console.log(e)}
-          isMulti={false}
-          // width="32"
           error="Please select academy"
         />
       </div>

@@ -11,6 +11,7 @@ import Dashboard from './layout/Dashboard';
 import Modules from './views/modules';
 import NotFound from './views/NotFound';
 import Popup from './views/Popup';
+import NewInstructorView from './views/users/NewInstructor';
 import NewStudentsView from './views/users/NewStudent';
 import UsersView from './views/users/Users';
 
@@ -93,6 +94,7 @@ const App = () => {
           <Route exact path="/popup" component={Popup} />
           <Route exact path="/modules" component={Modules} />
           <Route exact path="/users/students/new" component={NewStudentsView} />
+          <Route exact path="/users/instructors/new" component={NewInstructorView} />
           <Route exact path="*" component={NotFound} />
         </Switch>
       </Router>
