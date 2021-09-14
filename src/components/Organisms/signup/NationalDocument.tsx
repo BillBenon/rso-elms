@@ -1,21 +1,41 @@
-import React from 'react';
+import React, { useState } from 'react';
 
+import { ValueType } from '../../../types';
+import Button from '../../Atoms/custom/Button';
 import DropDown from '../../Atoms/Input/Dropdown';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 
-const NationalDocuments = ({ details, setDetails, validate }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    details[e.target.name] = e.target.value;
-    setDetails(details);
+const NationalDocuments = () => {
+  const [details, setDetails] = useState({
+    nationality: '',
+    national_id: '',
+    passport: '',
+    passport_expiry_date: '',
+    language: '',
+  });
+
+  const movePrev = () => {
+    window.alert('movePrev');
+  };
+
+  const moveNext = () => {
+    window.alert('moveNext');
+  };
+
+  const handleChange = (e: ValueType) => {
+    setDetails((details) => ({
+      ...details,
+      [e.name]: e.value,
+    }));
     console.log(details);
   };
 
   return (
-    <>
+    <div>
       <DropDown
         name={details.nationality}
         className="w-72"
-        onChange={() => console.log('chANGED')}
+        onChange={handleChange}
         options={[
           { value: 'rw', label: 'Rwanda' },
           { value: 'ug', label: 'Uganda' },
@@ -28,18 +48,24 @@ const NationalDocuments = ({ details, setDetails, validate }) => {
       <InputMolecule
         name="national_id"
         value={details.national_id}
-        handleChange={handleChange}
-        error={validate.national_id(details.national_id)}>
+        placeholder="----------------"
+        handleChange={handleChange}>
         National Identitification Number
       </InputMolecule>
       <InputMolecule
         name="passport"
-        value={details.passport[0]}
-        handleChange={(e) => handleChange(e)}
-        error={validate.passport(details.passport)}>
+        value={details.passport}
+        placeholder="----------------"
+        handleChange={handleChange}>
         Passport Number(Optional)
       </InputMolecule>
-    </>
+      <div className="flex justify-between">
+        <Button type="text" color="txt-secondary" onClick={movePrev}>
+          Back
+        </Button>
+        <Button onClick={moveNext}>Next</Button>
+      </div>
+    </div>
   );
 };
 

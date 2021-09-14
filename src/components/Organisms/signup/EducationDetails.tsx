@@ -1,52 +1,64 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import DropDown from '../../Atoms/Input/Dropdown';
+import { ValueType } from '../../../types';
+import Button from '../../Atoms/custom/Button';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 
-const EducationDetails = ({ details, setDetails, validate }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let newVal = details;
-    newVal[e.target.name] = e.target.value;
-    setDetails(newVal);
+const EducationDetails = () => {
+  const [details, setDetails] = useState({
+    school: '',
+    level: '',
+    section: '',
+    start_date: '',
+    end_date: '',
+  });
+
+  const movePrev = () => {
+    window.alert('movePrev');
+  };
+
+  const moveNext = () => {
+    window.alert('moveNext');
+  };
+
+  const handleChange = (e: ValueType) => {
+    setDetails((details) => ({
+      ...details,
+      [e.name]: e.value,
+    }));
     console.log(details);
   };
 
   return (
     <>
-      <DropDown
-        name="nationality"
-        className="w-72"
-        onChange={() => console.log('chANGED')}
-        options={[
-          { value: 'rw', label: 'Rwanda' },
-          { value: 'ug', label: 'Uganda' },
-          { value: 'tz', label: 'Tanzania' },
-          { value: 'brd', label: 'Burundi' },
-          { value: 'can', label: 'Canada' },
-          { value: 'us', label: 'USA' },
-        ]}
-      />
       <InputMolecule
+        placeholder="school"
         name="school"
         value={details.school}
-        handleChange={(e) => handleChange(e)}
-        error={validate.school(details.school)}>
+        handleChange={handleChange}>
         School Name
       </InputMolecule>
       <InputMolecule
+        placeholder="level"
         name="level"
         value={details.level}
-        handleChange={(e) => handleChange(e)}
-        error={validate.level(details.level)}>
+        handleChange={handleChange}>
         Education Level
       </InputMolecule>
       <InputMolecule
         name="section"
+        placeholder="section"
         value={details.section}
-        handleChange={(e) => handleChange(e)}
-        error={validate.section(details.section)}>
+        handleChange={handleChange}>
         Education section/ combination
       </InputMolecule>
+      {/* start date || end date ||Attachment */}
+      <div className="flex justify-between">
+        <Button type="text" color="txt-secondary" onClick={movePrev}>
+          Back
+        </Button>
+        <Button onClick={moveNext}>Next</Button>
+      </div>
     </>
   );
 };
