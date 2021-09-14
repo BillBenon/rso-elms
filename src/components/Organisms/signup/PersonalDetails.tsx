@@ -1,65 +1,98 @@
-import React, { KeyboardEventHandler, MouseEventHandler } from 'react';
+import React, { useState } from 'react';
 
+import { ValueType } from '../../../types';
+import Button from '../../Atoms/custom/Button';
+import DateMolecule from '../../Molecules/input/DateMolecule';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../Molecules/input/RadioMolecule';
 
-const PersonalDetails = ({ details, setDetails, validate }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    details[e.target.name] = e.target.value;
-    setDetails(details);
+const PersonalDetails = () => {
+  const [details, setDetails] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    gender: 'male',
+    dob: '',
+    maritalStatus: 'married',
+  });
+
+  const moveNext = () => {
+    window.alert('moveNext');
+  };
+
+  const handleChange = (e: ValueType) => {
+    setDetails((details) => ({
+      ...details,
+      [e.name]: e.value,
+    }));
     console.log(details);
   };
 
   return (
-    <>
-      <InputMolecule
-        name="firstname"
-        value={details.firstname}
-        handleChange={(e) => handleChange(e)}
-        error={validate.firstName(details.firstname)}>
-        First Name
-      </InputMolecule>
-      <InputMolecule
-        name={details.lastname[0]}
-        value={details.lastname}
-        handleChange={(e) => handleChange(e)}
-        error={validate.lastName(details.lastname)}>
-        Last Name
-      </InputMolecule>
-      <InputMolecule
-        name="email"
-        value={details.email}
-        type="email"
-        placeholder="username@example.com"
-        handleChange={(e) => handleChange(e)}
-        error={validate.email(details.email)}>
-        Email
-      </InputMolecule>
-      <InputMolecule
-        name="phone"
-        value={details.phone}
-        placeholder="+250 ---------"
-        handleChange={(e) => handleChange(e)}
-        error={validate.phone(details.phone)}>
-        Phone number
-      </InputMolecule>
-      {/* <RadioMolecule
-        list={[
-          { value: 'male', label: 'Male' },
-          { value: 'female', label: 'Female' },
-        ]}
-        handleChange={(e) => handleChange(e)}>
-        Gender
-      </RadioMolecule>
-      <RadioMolecule
-        list={[
-          { value: 'married', label: 'Married' },
-          { value: 'single', label: 'Single' },
-        ]}
-        handleChange={(e) => handleChange(e)}>
-        Martial Status
-      </RadioMolecule> */}
-    </>
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4">
+        <InputMolecule
+          name="firstName"
+          placeholder="eg: John"
+          value={details.firstName}
+          handleChange={handleChange}>
+          First Name
+        </InputMolecule>
+        <InputMolecule
+          name="lastName"
+          placeholder="eg: Doe"
+          value={details.lastName}
+          handleChange={handleChange}>
+          Last Name
+        </InputMolecule>
+      </div>
+      <div className="flex flex-col gap-4">
+        <InputMolecule
+          name="email"
+          value={details.email}
+          type="email"
+          placeholder="username@example.com"
+          handleChange={handleChange}>
+          Email
+        </InputMolecule>
+        <InputMolecule
+          name="phone"
+          value={details.phone}
+          placeholder="+250 ---------"
+          handleChange={handleChange}>
+          Phone number
+        </InputMolecule>
+      </div>
+      <div className="flex flex-col gap-4">
+        <RadioMolecule
+          list={[
+            { value: 'male', label: 'Male' },
+            { value: 'female', label: 'Female' },
+          ]}
+          value={details.gender}
+          handleChange={handleChange}
+          name="gender">
+          Gender
+        </RadioMolecule>
+        <DateMolecule>Date of Birth</DateMolecule>
+      </div>
+      <div className="my-4">
+        <RadioMolecule
+          list={[
+            { value: 'married', label: 'Married' },
+            { value: 'single', label: 'Single' },
+          ]}
+          value={details.maritalStatus}
+          handleChange={handleChange}
+          name="maritalStatus">
+          Marital Status
+        </RadioMolecule>
+      </div>
+      <div className="flex justify-end">
+        <Button onClick={moveNext}>Next</Button>
+      </div>
+    </div>
   );
 };
 

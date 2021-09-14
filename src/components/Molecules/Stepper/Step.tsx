@@ -12,6 +12,7 @@ type StepProps = {
   isActive: boolean;
   isComplete?: boolean;
   isError?: boolean;
+  isVertical?: boolean;
 };
 
 const Step = ({
@@ -22,6 +23,7 @@ const Step = ({
   isActive,
   isComplete,
   isError,
+  isVertical = true,
 }: StepProps) => {
   const classes = [''];
 
@@ -36,7 +38,7 @@ const Step = ({
   }
 
   return (
-    <div className={`stepper-step ${classes.join(' ')}`}>
+    <div className={`stepper-step  ${isVertical && 'my-7 mt-0'} ${classes.join(' ')}`}>
       <div className="stepper-indicator">
         <Indicator
           isCircular={true}
@@ -46,6 +48,7 @@ const Step = ({
           clicked={() => navigateToStepHandler(index)}>
           {indicator}
         </Indicator>
+        {/* <div className="step-separator absolute left-6 right-auto top-12 -bottom-10 w-0 h-16 border-l-2 border-silver"></div> */}
       </div>
       <div
         onKeyDown={() => navigateToStepHandler(index)}
