@@ -33,8 +33,8 @@ const DateMolecule = ({ showDate = true, showTime = false, children }: IProp) =>
   };
 
   return (
-    <>
-      <ILabel>{children}</ILabel>
+    <div className="flex flex-col gap-3 w-80">
+      <ILabel weight="bold">{children}</ILabel>
       <div className="flex gap-2">
         {showDate && (
           <>
@@ -92,7 +92,7 @@ const DateMolecule = ({ showDate = true, showTime = false, children }: IProp) =>
           </>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

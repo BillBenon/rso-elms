@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
+import DateMolecule from '../../Molecules/input/DateMolecule';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 
 const EducationDetails = () => {
@@ -30,36 +31,44 @@ const EducationDetails = () => {
   };
 
   return (
-    <>
-      <InputMolecule
-        placeholder="school"
-        name="school"
-        value={details.school}
-        handleChange={handleChange}>
-        School Name
-      </InputMolecule>
-      <InputMolecule
-        placeholder="level"
-        name="level"
-        value={details.level}
-        handleChange={handleChange}>
-        Education Level
-      </InputMolecule>
-      <InputMolecule
-        name="section"
-        placeholder="section"
-        value={details.section}
-        handleChange={handleChange}>
-        Education section/ combination
-      </InputMolecule>
-      {/* start date || end date ||Attachment */}
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4">
+        <InputMolecule
+          placeholder="school"
+          name="school"
+          value={details.school}
+          handleChange={handleChange}>
+          School Name
+        </InputMolecule>
+        <InputMolecule
+          placeholder="level"
+          name="level"
+          value={details.level}
+          handleChange={handleChange}>
+          Education Level
+        </InputMolecule>
+      </div>
+      <div className="flex flex-col gap-4">
+        <InputMolecule
+          name="section"
+          placeholder="section"
+          value={details.section}
+          handleChange={handleChange}>
+          Education section/ combination
+        </InputMolecule>
+        <DateMolecule>Start Date</DateMolecule>
+      </div>
+      <div className="my-4">
+        <DateMolecule>End Date</DateMolecule>
+      </div>
+      <Button>Attachment</Button>
       <div className="flex justify-between">
         <Button type="text" color="txt-secondary" onClick={movePrev}>
           Back
         </Button>
         <Button onClick={moveNext}>Next</Button>
       </div>
-    </>
+    </div>
   );
 };
 

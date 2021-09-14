@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
-import DropDown from '../../Atoms/Input/Dropdown';
+import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 
 const EmploymentDetails = () => {
@@ -30,48 +30,53 @@ const EmploymentDetails = () => {
   };
 
   return (
-    <>
-      <DropDown
-        name="currentRank"
-        className="w-72"
-        onChange={handleChange}
-        options={[
-          { value: 'rw', label: 'Rwanda' },
-          { value: 'ug', label: 'Uganda' },
-          { value: 'tz', label: 'Tanzania' },
-          { value: 'brd', label: 'Burundi' },
-          { value: 'can', label: 'Canada' },
-          { value: 'us', label: 'USA' },
-        ]}
-      />
-      <InputMolecule
-        name="otherRank"
-        placeholder="other ranks u might hold"
-        value={details.otherRank}
-        handleChange={handleChange}>
-        Other rank
-      </InputMolecule>
-      <InputMolecule
-        name="RankDepart"
-        placeholder="eg: Rwanda"
-        value={details.RankDepart}
-        handleChange={handleChange}>
-        Current rank department
-      </InputMolecule>
-      <InputMolecule
-        name="EmpNo"
-        placeholder="Employment number"
-        value={details.EmpNo}
-        handleChange={handleChange}>
-        Employment number
-      </InputMolecule>
+    <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4">
+        <DropdownMolecule
+          label="Current Rank"
+          name="currentRank"
+          className="w-72"
+          onChange={handleChange}
+          options={[
+            { value: 'rw', label: 'Rwanda' },
+            { value: 'ug', label: 'Uganda' },
+            { value: 'tz', label: 'Tanzania' },
+            { value: 'brd', label: 'Burundi' },
+            { value: 'can', label: 'Canada' },
+            { value: 'us', label: 'USA' },
+          ]}
+        />
+        <InputMolecule
+          name="otherRank"
+          placeholder="other ranks u might hold"
+          value={details.otherRank}
+          handleChange={handleChange}>
+          Other rank
+        </InputMolecule>
+      </div>
+      <div className="flex flex-col gap-4">
+        <InputMolecule
+          name="RankDepart"
+          placeholder="eg: Rwanda"
+          value={details.RankDepart}
+          handleChange={handleChange}>
+          Current rank department
+        </InputMolecule>
+        <InputMolecule
+          name="EmpNo"
+          placeholder="Employment number"
+          value={details.EmpNo}
+          handleChange={handleChange}>
+          Employment number
+        </InputMolecule>
+      </div>
       <div className="flex justify-between">
         <Button type="text" color="txt-secondary" onClick={movePrev}>
           Back
         </Button>
         <Button onClick={moveNext}>Next</Button>
       </div>
-    </>
+    </div>
   );
 };
 

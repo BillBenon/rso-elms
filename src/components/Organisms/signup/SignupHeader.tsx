@@ -1,8 +1,7 @@
 import React from 'react';
 
-import Avatar from '../../Atoms/custom/Avatar';
-import Badge from '../../Atoms/custom/Badge';
 import Heading from '../../Atoms/Text/Heading';
+import AcademyProfileCard from '../../Molecules/AcademyProfileCard';
 
 const SignupHeader = () => {
   return (
@@ -16,14 +15,15 @@ const SignupHeader = () => {
         </p>
       </div>
       <div>
-        <Badge
+        <AcademyProfileCard>Rwanda National Police</AcademyProfileCard>
+        {/* <Badge
           badgecolor="secondary"
           badgetxtcolor="primary"
           className="flex"
           roundWidth="lg">
           <Avatar src="public\icons\police-logo.svg" alt="academy logo" size="39" />
           <span>Rwanda National Police</span>
-        </Badge>
+        </Badge> */}
       </div>
     </div>
   );

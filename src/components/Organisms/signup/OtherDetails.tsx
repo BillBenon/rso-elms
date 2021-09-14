@@ -29,20 +29,22 @@ const OtherDetails = () => {
 
   return (
     <>
-      <InputMolecule
-        name="hobbies"
-        placeholder="football, swimming, etc"
-        value={details.hobbies}
-        handleChange={handleChange}>
-        Hobbies
-      </InputMolecule>
-      <InputMolecule
-        name="chronicDiseases"
-        placeholder="Asthma, Ulcers, etc"
-        value={details.chronicDiseases}
-        handleChange={handleChange}>
-        Chronic diseases
-      </InputMolecule>
+      <div className="flex flex-col gap-4">
+        <InputMolecule
+          name="hobbies"
+          placeholder="football, swimming, etc"
+          value={details.hobbies}
+          handleChange={handleChange}>
+          Hobbies
+        </InputMolecule>
+        <InputMolecule
+          name="chronicDiseases"
+          placeholder="Asthma, Ulcers, etc"
+          value={details.chronicDiseases}
+          handleChange={handleChange}>
+          Chronic diseases
+        </InputMolecule>
+      </div>
       <div className="flex justify-between">
         <Button type="text" color="txt-secondary" onClick={movePrev}>
           Back
