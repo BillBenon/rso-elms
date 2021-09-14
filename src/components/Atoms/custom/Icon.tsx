@@ -26,12 +26,12 @@ const StyledSVGIcon = styled(ReactSVG)`
         width: ${size}px;
         height: ${size}px;
       `}
-    ${({ stroke }: IProps) =>
-      stroke &&
-      css`
-        stroke: ${iconStyle[stroke]};
-      `}
     path {
+      ${({ stroke }: IProps) =>
+        stroke &&
+        css`
+          stroke: ${iconStyle[stroke]};
+        `}
       ${({ fill }: IProps) =>
         fill &&
         css`
