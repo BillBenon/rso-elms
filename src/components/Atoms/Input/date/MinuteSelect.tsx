@@ -11,6 +11,8 @@ type MProp = {
   disabled?: boolean;
   id?: string;
   name: string;
+  placeholder?: string;
+  width?: string;
   className?: string;
 };
 
@@ -30,6 +32,8 @@ const MinuteSelect = (mprops: MProp) => {
   return (
     <DropDown
       name={mprops.name}
+      placeholder={mprops.placeholder}
+      width={mprops.width}
       className={mprops.className}
       options={renderMinuteOptions()}
       onChange={(e: ValueType) => mprops.onChange(e)}

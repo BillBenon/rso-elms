@@ -8,6 +8,8 @@ type DProp = {
   year: number;
   month: number;
   value: number;
+  placeholder?: string;
+  width?: string;
   onChange: Function;
   id?: string;
   name: string;
@@ -31,6 +33,8 @@ const DaySelect = (dprop: DProp) => {
   return (
     <DropDown
       name={dprop.name}
+      placeholder={dprop.placeholder}
+      width={dprop.width}
       className={dprop.className}
       options={renderDateOptions()}
       onChange={(e: ValueType) => dprop.onChange(e)}

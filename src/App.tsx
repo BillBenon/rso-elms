@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
+import Checkbox from './components/Atoms/Input/CheckBox';
+import DropDown from './components/Atoms/Input/Dropdown';
+import { Tab, Tabs } from './components/Molecules/tabs/tabs';
 import Academies from './components/Organisms/academy/Academy';
 import AddAcademy from './components/Organisms/academy/AddAcademy';
-import CreatedBySandberg from './components/Organisms/CreatedBySandberg';
 import SignUpForm from './components/Organisms/signup/SignUpForm';
 import Dashboard from './layout/Dashboard';
 import Modules from './views/modules';
@@ -13,10 +15,67 @@ import NewStudentsView from './views/users/NewStudent';
 import UsersView from './views/users/Users';
 
 const App = () => {
+  const [checked, setChecked] = useState(false);
+
+  const options = [
+    {
+      label: 'English',
+      value: 'en',
+    },
+    {
+      label: 'French',
+      value: 'fr',
+    },
+    {
+      label: 'Kinyarwanda',
+      value: 'kiny',
+    },
+  ];
+
   const Homepage = () => {
     return (
-      <Dashboard>
-        <CreatedBySandberg />
+      <Dashboard activeIndex={2}>
+        <div className="p-8">
+          <h2 className="font-bold text-primary-500 text-2xl py-10">
+            Created by Sandberg.
+          </h2>
+          <Checkbox
+            name="language"
+            value="en"
+            checked={checked}
+            label="English"
+            onChange={() => setChecked(!checked)}
+            error={null}
+          />
+          <div className="py-3">
+            <Checkbox
+              name="language"
+              value="en"
+              checked={checked}
+              label="French"
+              onChange={() => setChecked(!checked)}
+              error={null}
+            />
+          </div>
+          <DropDown
+            options={options}
+            name="intakes"
+            onChange={(e: object) => console.log(e)}
+            isMulti={false}
+            className="w-1/2"
+          />
+          <Tabs className="my-10" activeIndex={1}>
+            <Tab label="Students">
+              <h1 className="text-3xl text-primary-500">Students</h1>
+            </Tab>
+            <Tab label="Instructors">
+              <h2 className="text-3xl text-green-400">Instructors</h2>
+            </Tab>
+            <Tab label="Admins" disabled={false}>
+              <h2 className="text-3xl text-yellow-300 font-bold">Admins here</h2>
+            </Tab>
+          </Tabs>
+        </div>
       </Dashboard>
     );
   };

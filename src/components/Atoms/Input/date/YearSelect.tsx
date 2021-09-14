@@ -8,6 +8,8 @@ type YProp = {
   onChange: Function;
   id?: string;
   name: string;
+  placeholder?: string;
+  width?: string;
   defaultValue?: string;
   start?: number;
   end?: number;
@@ -53,6 +55,7 @@ const YearSelect = (props: YProp) => {
   return (
     <DropDown
       name={props.name}
+      placeholder={props.placeholder}
       className={props.className}
       options={renderYearOptions({
         start: props.start,
@@ -60,6 +63,7 @@ const YearSelect = (props: YProp) => {
         reverse: false,
         defaultValue: props.defaultValue,
       })}
+      width={props.width}
       onChange={(e: ValueType) => props.onChange(e)}
     />
   );

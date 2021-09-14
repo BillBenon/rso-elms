@@ -11,6 +11,8 @@ type IProp = {
   disabled?: boolean;
   id?: string;
   name: string;
+  placeholder?: string;
+  width?: string;
   className?: string;
 };
 
@@ -30,6 +32,8 @@ const SecondSelect = (sprops: IProp) => {
   return (
     <DropDown
       name={sprops.name}
+      placeholder={sprops.placeholder}
+      width={sprops.width}
       className={sprops.className}
       options={renderSecondOptions()}
       onChange={(e: ValueType) => sprops.onChange(e)}

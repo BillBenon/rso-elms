@@ -16,6 +16,8 @@ type MProp = {
   disabled?: boolean;
   id?: string;
   name: string;
+  placeholder?: string;
+  width?: string;
   className?: string;
 };
 
@@ -52,7 +54,9 @@ const MonthSelect = (mprops: MProp) => {
   return (
     <DropDown
       name={mprops.name}
+      placeholder={mprops.placeholder}
       className={mprops.className}
+      width={mprops.width}
       options={renderMonthOptions()}
       onChange={(e: ValueType) => mprops.onChange(e)}
     />

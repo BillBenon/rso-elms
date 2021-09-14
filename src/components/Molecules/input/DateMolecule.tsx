@@ -15,7 +15,7 @@ type IProp = {
   children: ReactNode;
 };
 
-const DateMolecule = ({ showDate = true, showTime = true, children }: IProp) => {
+const DateMolecule = ({ showDate = true, showTime = false, children }: IProp) => {
   const [dateState, setDateState] = useState({
     Day: new Date().getDate(),
     Month: new Date().getMonth(),
@@ -43,6 +43,7 @@ const DateMolecule = ({ showDate = true, showTime = true, children }: IProp) => 
               value={dateState.Year}
               onChange={handleChange}
               name="Year"
+              placeholder="Year"
               width="28"
             />
             <MonthSelect
@@ -51,6 +52,7 @@ const DateMolecule = ({ showDate = true, showTime = true, children }: IProp) => 
               onChange={handleChange}
               short
               name="Month"
+              placeholder="Month"
               width="28"
             />
             <DaySelect
@@ -59,6 +61,7 @@ const DateMolecule = ({ showDate = true, showTime = true, children }: IProp) => 
               value={dateState.Day}
               onChange={handleChange}
               name="Day"
+              placeholder="Day"
               width="28"
             />
           </>
@@ -69,18 +72,21 @@ const DateMolecule = ({ showDate = true, showTime = true, children }: IProp) => 
               value={dateState.Hours}
               onChange={handleChange}
               name="Hours"
+              placeholder="Hours"
               width="28"
             />
             <MinuteSelect
               value={dateState.Minutes}
               onChange={handleChange}
               name="Minutes"
+              placeholder="Minutes"
               width="28"
             />
             <SecondSelect
               value={dateState.Seconds}
               onChange={handleChange}
               name="Seconds"
+              placeholder="Seconds"
               width="28"
             />
           </>
