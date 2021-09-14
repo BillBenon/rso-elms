@@ -1,10 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import Checkbox from './components/Atoms/Input/CheckBox';
-import DropDown from './components/Atoms/Input/Dropdown';
-import CheckboxMolecule from './components/Molecules/input/CheckboxMolecule';
-import { Tab, Tabs } from './components/Molecules/tabs/tabs';
 import Academies from './components/Organisms/academy/Academy';
 import AddAcademy from './components/Organisms/academy/AddAcademy';
 import CreatedBySandberg from './components/Organisms/CreatedBySandberg';
