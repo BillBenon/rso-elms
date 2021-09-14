@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation } from 'react-router';
 
 import { colorStyle, fontSizeStyle } from '../../../global/global-vars';
 import Icon from './Icon';
@@ -32,10 +33,11 @@ export const SidebarLink = ({ title, to, icon, active }: typeof linkProps) => {
 type linksArray = typeof linkProps[];
 export type sidebarLinksProps = {
   links: linksArray;
-  activeIndex?: number;
 };
 
-export default function SidebarLinks({ links, activeIndex = 0 }: sidebarLinksProps) {
+export default function SidebarLinks({ links }: sidebarLinksProps) {
+  const location = useLocation();
+  let activeIndexAuto = links.findIndex((link) => location.pathname.startsWith(link.to));
   return (
     <div className="py-16">
       {links.map((link, i) => (
@@ -44,7 +46,7 @@ export default function SidebarLinks({ links, activeIndex = 0 }: sidebarLinksPro
           title={link.title}
           to={link.to}
           icon={link.icon}
-          active={activeIndex === i}
+          active={activeIndexAuto === i}
         />
       ))}
     </div>
