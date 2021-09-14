@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Checkbox from '../Atoms/Input/CheckBox';
 import DropDown from '../Atoms/Input/Dropdown';
 import CheckboxMolecule from '../Molecules/input/CheckboxMolecule';
+import DropdownMolecule from '../Molecules/input/DropdownMolecule';
 import { Tab, Tabs } from '../Molecules/tabs/tabs';
 
 export default function CreatedBySandberg() {
@@ -64,14 +65,21 @@ export default function CreatedBySandberg() {
             <h2 className="text-3xl text-yellow-300 font-bold">Admins here</h2>
           </Tab>
         </Tabs>
-        <div className="py-2">
-          <CheckboxMolecule
-            options={options}
-            name="language"
-            placeholder="Checkbox Molecule"
-            onChange={() => console.log('changed')}
-          />
-        </div>
+        <CheckboxMolecule
+          options={options}
+          name="language"
+          placeholder="Checkbox Molecule"
+          onChange={() => console.log('changed')}
+        />
+        <DropdownMolecule
+          label="Select academy"
+          options={options}
+          name="academy"
+          onChange={(e: object) => console.log(e)}
+          isMulti={false}
+          // width="32"
+          error="Please select academy"
+        />
       </div>
     </>
   );

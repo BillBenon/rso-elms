@@ -9,6 +9,7 @@ interface Props extends commonInputProps {
   getOptionLabel?: any;
   getOptionValue?: any;
   noOptionsMessage?: string;
+  width?: string;
 }
 
 export default function DropDown(props: Props) {
@@ -20,7 +21,7 @@ export default function DropDown(props: Props) {
         options={props.options}
         placeholder={props.placeholder || `Select ${props.name}`}
         onChange={(e: object) => props.onChange({ ...e, name: props.name })}
-        className={`w-full md:w-72 select ${props.className || ''}`}
+        className={`w-${props.width || 'full md:w-72'} select ${props.className || ''}`}
         noOptionsMessage={props.noOptionsMessage || `no ${props.name} available`}
         isMulti={props.isMulti}
       />
