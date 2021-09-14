@@ -25,9 +25,9 @@ const Stepper = ({
   stepperContent,
   submitStepper,
 }: StepperProps) => {
-  const [currentTabIndex, setCurrentTabIndex] = useState(0),
-    isLastStep = currentTabIndex === stepperContent.length - 1,
-    isPrevBtn = currentTabIndex !== 0;
+  const [currentTabIndex, setCurrentTabIndex] = useState(0);
+  // isLastStep = currentTabIndex === stepperContent.length - 1,
+  // isPrevBtn = currentTabIndex !== 0;
 
   const navigateToStepHandler = (index: number) => {
     if (index !== currentTabIndex) {
@@ -35,21 +35,21 @@ const Stepper = ({
     }
   };
 
-  const nextStepHandler = () => {
-    setCurrentTabIndex((prev: any) => {
-      if (prev !== stepperContent.length - 1) {
-        return prev + 1;
-      }
-    });
-  };
+  // const nextStepHandler = () => {
+  //   setCurrentTabIndex((prev: any) => {
+  //     if (prev !== stepperContent.length - 1) {
+  //       return prev + 1;
+  //     }
+  //   });
+  // };
 
-  const previousStepHandler = () => {
-    setCurrentTabIndex((prev) => prev - 1);
-  };
+  // const previousStepHandler = () => {
+  //   setCurrentTabIndex((prev) => prev - 1);
+  // };
 
-  const submitHandler = () => {
-    submitStepper();
-  };
+  // const submitHandler = () => {
+  //   submitStepper();
+  // };
 
   return (
     <div className="stepper-wrapper">
@@ -65,7 +65,7 @@ const Stepper = ({
           {stepperContent.map((el, i) => (
             <Fragment key={i}>{i === currentTabIndex && el.content}</Fragment>
           ))}
-          <StepperFoot
+          {/* <StepperFoot
             isPrevBtn={isPrevBtn}
             previousStepHandler={previousStepHandler}
             isLastStep={isLastStep}
@@ -73,7 +73,7 @@ const Stepper = ({
             submitHandler={submitHandler}
             stepperContent={stepperContent}
             currentTabIndex={currentTabIndex}
-          />
+          /> */}
         </div>
       </div>
     </div>

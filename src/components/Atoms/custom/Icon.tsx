@@ -26,7 +26,7 @@ const StyledSVGIcon = styled(ReactSVG)`
         width: ${size}px;
         height: ${size}px;
       `}
-    path {
+    path,circle {
       ${({ stroke }: IProps) =>
         stroke &&
         css`

@@ -35,7 +35,7 @@ export default function NewStudent() {
       </div>
 
       <div className="popup-width">
-        <Heading color="primary" fontSize="lg" fontWeight="medium">
+        <Heading color="primary" fontSize="lg" fontWeight="semibold">
           New student
         </Heading>
         <div className="mb-7"></div>
@@ -91,7 +91,7 @@ export default function NewStudent() {
           handleChange={(e) => handleChange(e)}>
           Passport (optional)
         </InputMolecule>
-        <Button full onClick={handleSubmit}>
+        <Button full={true} onClick={handleSubmit}>
           Create
         </Button>
       </div>

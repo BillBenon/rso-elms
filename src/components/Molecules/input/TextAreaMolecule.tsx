@@ -22,6 +22,7 @@ export default function TextAreaMolecule({
   error = '',
   placeholder = '',
   type = 'text',
+  ...attrs
 }: ITextareaMolecule) {
   return (
     <div className="flex flex-col gap-3">
