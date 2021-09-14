@@ -1,16 +1,13 @@
 import React from 'react';
 import Select from 'react-select';
 
-interface Props {
-  name: string;
-  placeholder?: string;
+import { commonInputProps } from '../../../types';
+
+interface Props extends commonInputProps {
   disabled?: boolean;
   isMulti?: boolean;
-  onChange: Function;
   getOptionLabel?: any;
   getOptionValue?: any;
-  options: object[];
-  className?: string;
   noOptionsMessage?: string;
 }
 

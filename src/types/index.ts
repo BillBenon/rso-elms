@@ -16,7 +16,7 @@ export type Color =
   | 'gray'
   | 'lightgray';
 
-export type fontSize = 'xs' | 'sm' | 'tiny' | 'lg' | '2xl';
+export type fontSize = 'xs' | 'sm' | 'base' | 'tiny' | 'lg' | '2xl';
 export type width = 'default' | 'full';
 export type fontWeight = 'normal' | 'medium' | 'semibold' | 'bold';
 
@@ -77,4 +77,12 @@ export interface CourseModelDataType {
   code: string;
   subTitle?: string;
   description: string;
+}
+
+export interface commonInputProps {
+  onChange: Function;
+  name: string;
+  options: object[];
+  className?: string;
+  placeholder?: string;
 }
