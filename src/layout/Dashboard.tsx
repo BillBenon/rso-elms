@@ -23,7 +23,7 @@ export default function Dashboard({
 }: IDashboard) {
   return (
     <div className="grid grid-cols-12 bg-gray-50">
-      <div className="hidden md:block md:col-span-3 xl:col-span-2 h-screen top-0 lg:sticky ">
+      <div className="hidden md:block md:col-span-3 xl:col-span-2 h-screen top-0 lg:sticky">
         <Sidebar links={links} activeIndex={activeIndex} />
       </div>
       {/* navbar and body */}

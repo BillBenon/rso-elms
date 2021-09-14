@@ -20,7 +20,7 @@ export default function PopupMolecule({ open, title, onClose, children }: PropTy
         {/* close button  */}
         <div className={`flex mb-4 ${title ? 'justify-between' : 'justify-end'}`}>
           {title && (
-            <Heading fontWeight="semibold" color="primary">
+            <Heading fontWeight="medium" color="primary">
               {title}
             </Heading>
           )}

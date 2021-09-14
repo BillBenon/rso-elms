@@ -33,8 +33,10 @@ export default function AddAcademy() {
         </ILabel>
       </div>
 
-      <div className="p-4 pl-6 popup-width flex flex-col gap-3">
-        <Heading>new academy</Heading>
+      <div className="p-4 pl-6 popup-width gap-3">
+        <div className="py-5 mb-3 capitalize">
+          <Heading color="primary">New academy</Heading>
+        </div>
         <InputMolecule
           name="acname"
           placeholder="Type academy name"
@@ -72,9 +74,15 @@ export default function AddAcademy() {
           handleChange={(e) => handleChange(e)}>
           academy description
         </TextAreaMolecule>
-        <ILabel weight="bold">academy logo</ILabel>
-        <Button type="outline">upload logo</Button>
-        <Button>Save</Button>
+        <div>
+          <div className="mb-3">
+            <ILabel weight="bold">academy logo</ILabel>
+          </div>
+          <Button type="outline">upload logo</Button>
+        </div>
+        <div className="mt-5">
+          <Button full>Save</Button>
+        </div>
       </div>
     </Dashboard>
   );

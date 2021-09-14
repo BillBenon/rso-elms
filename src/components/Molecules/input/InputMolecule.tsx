@@ -5,7 +5,7 @@ import Input from '../../Atoms/Input/Input';
 import Error from '../../Atoms/Text/Error';
 import ILabel from '../../Atoms/Text/ILabel';
 
-type IError = {
+type IInputMolecule = {
   name: string;
   value: string;
   handleChange: (_e: ValueType) => void;
@@ -22,7 +22,7 @@ export default function InputMolecule({
   error = '',
   placeholder = '',
   type = 'text',
-}: IError) {
+}: IInputMolecule) {
   return (
     <div className="flex flex-col gap-3">
       <ILabel weight="bold">{children}</ILabel>
