@@ -1,10 +1,10 @@
 import React from 'react';
 
-import DropDown from '../../../../styles/components/Atoms/custom/Dropdown';
 import { ValueType } from '../../../../types';
+import DropDown from '../Dropdown';
 
 type YProp = {
-  value?: string;
+  value: number;
   onChange: Function;
   id?: string;
   name: string;
@@ -15,7 +15,6 @@ type YProp = {
   required?: boolean;
   disabled?: boolean;
   className?: string;
-  optionClasses?: string;
 };
 
 type YOptProp = {
@@ -33,7 +32,7 @@ const YearSelect = (props: YProp) => {
   }: YOptProp) => {
     const years = [];
     if (start <= end) {
-      for (let i = start; i < end; ++i) {
+      for (let i = start; i <= end; ++i) {
         years.push(i);
       }
     } else {
@@ -44,9 +43,9 @@ const YearSelect = (props: YProp) => {
     if (reverse) {
       years.reverse();
     }
-    const yearOptions: { key: number; value: number }[] = [];
-    years.forEach((year, index) => {
-      yearOptions.push({ key: index, value: year });
+    const yearOptions: { value: number; label: number }[] = [];
+    years.forEach((year) => {
+      yearOptions.push({ value: year, label: year });
     });
     return yearOptions;
   };
@@ -57,21 +56,12 @@ const YearSelect = (props: YProp) => {
       className={props.className}
       options={renderYearOptions({
         start: props.start,
-        end: new Date().getFullYear(),
+        end: props.end,
         reverse: false,
+        defaultValue: props.defaultValue,
       })}
       onChange={(e: ValueType) => props.onChange(e)}
     />
-    // <select
-    //   id={id}
-    //   name={name}
-    //   className={classes}
-    //   required={required === true}
-    //   disabled={disabled === true}
-    //   onBlur={(e: ValueType) => onChange(e)}
-    //   value={value}>
-    //   {renderYearOptions()}
-    // </select>
   );
 };
 

@@ -1,8 +1,8 @@
 import React from 'react';
 
-import DropDown from '../../../../styles/components/Atoms/custom/Dropdown';
 import { ValueType } from '../../../../types';
 import { monthNum } from '../../../../utils/date-helper';
+import DropDown from '../Dropdown';
 
 type MProp = {
   year: number;
@@ -12,56 +12,39 @@ type MProp = {
   numeric?: boolean;
   short?: boolean;
   caps?: boolean;
-  endYearGiven?: boolean;
   required?: boolean;
   disabled?: boolean;
   id?: string;
   name: string;
-  classes?: string;
-  optionClasses?: string;
-};
-
-type MOptProp = {
-  endYearGiven?: boolean;
-  year: number;
-  numeric?: boolean;
-  caps?: boolean;
-  short?: boolean;
-  optionClasses?: string;
-  defaultValue?: string;
+  className?: string;
 };
 
 const MonthSelect = (mprops: MProp) => {
-  const renderMonthOptions = (props: MOptProp) => {
-    const today = new Date();
+  const renderMonthOptions = () => {
     let months = [];
-    let month = 11;
-    if (!props.endYearGiven) {
-      if (month && parseInt(month.toString()) === today.getFullYear())
-        month = today.getMonth();
-    }
-    if (props.numeric) {
-      for (let i = 0; i <= month; ++i) {
-        months.push((i + 1).toString());
+    let month = 12;
+    if (mprops.numeric) {
+      for (let i = 1; i <= month; ++i) {
+        months.push(i.toString());
       }
     } else {
-      for (let i = 0; i <= month; ++i) {
+      for (let i = 1; i <= month; ++i) {
         months.push(monthNum[i]);
       }
-      if (props.caps) {
+      if (mprops.caps) {
         months = months.map((month) => {
           return month.toUpperCase();
         });
       }
-      if (props.short) {
+      if (mprops.short) {
         months = months.map((month) => {
           return month.substring(0, 3);
         });
       }
     }
-    const monthOptions: { key: number; value: string }[] = [];
+    const monthOptions: { value: number; label: string }[] = [];
     months.forEach((month, index) => {
-      monthOptions.push({ key: index, value: month });
+      monthOptions.push({ value: index, label: month });
     });
     return monthOptions;
   };
@@ -69,13 +52,8 @@ const MonthSelect = (mprops: MProp) => {
   return (
     <DropDown
       name={mprops.name}
-      options={renderMonthOptions({
-        endYearGiven: mprops.endYearGiven,
-        year: mprops.year,
-        numeric: mprops.numeric,
-        caps: mprops.caps,
-        short: mprops.short,
-      })}
+      className={mprops.className}
+      options={renderMonthOptions()}
       onChange={(e: ValueType) => mprops.onChange(e)}
     />
   );

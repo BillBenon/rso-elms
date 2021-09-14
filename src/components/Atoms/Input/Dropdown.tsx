@@ -9,7 +9,7 @@ interface Props {
   onChange: Function;
   getOptionLabel?: any;
   getOptionValue?: any;
-  options: object[];
+  options: Object[];
   className?: string;
   noOptionsMessage?: string;
 }
@@ -21,8 +21,8 @@ export default function DropDown(props: Props) {
         disabled={props.disabled || false}
         name={props.name}
         options={props.options}
-        placeholder={props.placeholder || `Select ${props.name}`}
-        onChange={(e: object) => props.onChange({ ...e, name: props.name })}
+        placeholder={props.placeholder || `Select ${props.name.toLowerCase()}`}
+        onChange={(e: Object) => props.onChange({ ...e, name: props.name })}
         className={`w-full md:w-72 select ${props.className || ''}`}
         noOptionsMessage={props.noOptionsMessage || `no ${props.name} available`}
         isMulti={props.isMulti}

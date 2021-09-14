@@ -1,8 +1,8 @@
 import React from 'react';
 
-import DropDown from '../../../../styles/components/Atoms/custom/Dropdown';
 import { ValueType } from '../../../../types';
 import { getDaysInMonth } from '../../../../utils/date-helper';
+import DropDown from '../Dropdown';
 
 type DProp = {
   year: number;
@@ -12,34 +12,18 @@ type DProp = {
   id?: string;
   name: string;
   defaultValue?: string;
-  endYearGiven?: boolean;
   required?: boolean;
   disabled?: boolean;
-  classes?: string;
-  optionClasses?: string;
-};
-
-type DOptProp = {
-  month: number;
-  year: number;
-  endYearGiven?: boolean;
-  optionClasses?: string;
-  defaultValue?: string;
+  className?: string;
 };
 
 const DaySelect = (dprop: DProp) => {
-  const renderDateOptions = (props: DOptProp) => {
-    let days = props.month ? getDaysInMonth(props.year, props.month) : 31;
+  const renderDateOptions = () => {
+    let days = dprop.month ? getDaysInMonth(dprop.year, dprop.month) : 31;
 
-    const today = new Date();
-    if (!props.endYearGiven) {
-      if (props.year === today.getFullYear() && props.month === today.getMonth()) {
-        days = today.getDate();
-      }
-    }
-    const dayOptions: { key: number; value: number }[] = [];
+    const dayOptions: { value: number; label: number }[] = [];
     for (let i = 1; i <= days; ++i) {
-      dayOptions.push({ key: i, value: i });
+      dayOptions.push({ value: i, label: i });
     }
     return dayOptions;
   };
@@ -47,13 +31,8 @@ const DaySelect = (dprop: DProp) => {
   return (
     <DropDown
       name={dprop.name}
-      options={renderDateOptions({
-        month: dprop.month,
-        year: dprop.year,
-        endYearGiven: dprop.endYearGiven,
-        optionClasses: dprop.optionClasses,
-        defaultValue: dprop.defaultValue,
-      })}
+      className={dprop.className}
+      options={renderDateOptions()}
       onChange={(e: ValueType) => dprop.onChange(e)}
     />
   );
