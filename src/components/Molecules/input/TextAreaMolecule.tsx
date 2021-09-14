@@ -27,6 +27,7 @@ export default function TextAreaMolecule({
     <div className="flex flex-col gap-3">
       <ILabel weight="bold">{children}</ILabel>
       <Textarea
+        {...attrs}
         name={name}
         placeholder={placeholder}
         fcolor={error ? 'error' : undefined}
