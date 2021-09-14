@@ -17,7 +17,7 @@ export const SidebarLink = ({ title, to, icon, active }: typeof linkProps) => {
         active ? 'border-primary-500' : 'border-transparent'
       }`}>
       <a href={to} className="flex items-center">
-        <Icon name={icon} size={21} />
+        <Icon name={icon} size={21} stroke={active ? 'primary' : 'none'} />
         <span
           className={`text-${colorStyle[active ? 'primary' : 'gray']} ${
             fontSizeStyle['sm']
