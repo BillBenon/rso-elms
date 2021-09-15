@@ -52,14 +52,9 @@ const SignUpForm = () => {
   };
 
   return (
-    <div className="m-5">
+    <div className="bg-main p-8 md:px-20 md:py-14">
       <SignupHeader />
-      <Stepper
-        stepperContent={stepperContent}
-        submitStepper={submitStepper}
-        isVertical
-        isInline={false}
-      />
+      <Stepper stepperContent={stepperContent} submitStepper={submitStepper} isVertical />
     </div>
   );
 };
