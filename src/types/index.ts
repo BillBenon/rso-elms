@@ -79,21 +79,4 @@ export interface CourseModelDataType {
   description: string;
 }
 
-export interface commonInputProps {
-  onChange: Function;
-  name: string;
-  options: object[];
-  className?: string;
-  placeholder?: string;
-  disabled?: boolean;
-}
-
-export interface DropdownProps extends commonInputProps {
-  isMulti?: boolean;
-  getOptionLabel?: (_option: Object) => string;
-  getOptionValue?: (_option: Object) => string;
-  noOptionsMessage?: string;
-  width?: string;
-  searchable?: boolean;
-  defaultValue?: Object;
-}
+export * from './props';
