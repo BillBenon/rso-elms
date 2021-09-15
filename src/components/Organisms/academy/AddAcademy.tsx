@@ -78,7 +78,7 @@ export default function AddAcademy() {
           <div className="mb-3">
             <ILabel weight="bold">academy logo</ILabel>
           </div>
-          <Button type="outline">upload logo</Button>
+          <Button styleType="outline">upload logo</Button>
         </div>
         <div className="mt-5">
           <Button full>Save</Button>

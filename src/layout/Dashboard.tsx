@@ -15,7 +15,8 @@ const defaultLinks: ILinks[] = [
   { title: 'Academies', to: '/academies', icon: 'academy' },
   { title: 'Notifications', to: '/users', icon: 'notification' },
   { title: 'Popup test', to: '/popup', icon: 'notification' },
-  { title: 'modules', to: '/modules', icon: 'notification' },
+  { title: 'Modules', to: '/modules', icon: 'notification' },
+  { title: 'Registration Control', to: '/registration-controle', icon: 'reg-control' },
 ];
 export default function Dashboard({ children, links = defaultLinks }: IDashboard) {
   return (
