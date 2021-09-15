@@ -10,12 +10,13 @@ interface ILinks extends Omit<Link, 'icon'> {
 }
 
 const defaultLinks: ILinks[] = [
-  { title: 'Users', to: '/users', icon: 'user' },
-  { title: 'Roles', to: '/roles', icon: 'role' },
-  { title: 'Academies', to: '/academies', icon: 'academy' },
-  { title: 'Notifications', to: '/users', icon: 'notification' },
-  { title: 'Popup test', to: '/popup', icon: 'notification' },
+  { title: 'users', to: '/users', icon: 'user' },
+  { title: 'roles', to: '/roles', icon: 'role' },
+  { title: 'academies', to: '/academies', icon: 'academy' },
+  { title: 'notifications', to: '/users', icon: 'notification' },
+  { title: 'popup test', to: '/popup', icon: 'notification' },
   { title: 'modules', to: '/modules', icon: 'notification' },
+  { title: 'faculties', to: '/faculties', icon: 'faculty' },
 ];
 export default function Dashboard({ children, links = defaultLinks }: IDashboard) {
   return (

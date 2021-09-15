@@ -8,6 +8,7 @@ import Academies from './components/Organisms/academy/Academy';
 import AddAcademy from './components/Organisms/academy/AddAcademy';
 import SignUpForm from './components/Organisms/signup/SignUpForm';
 import Dashboard from './layout/Dashboard';
+import FacultiesView from './views/faculties/Faculties';
 import Modules from './views/modules';
 import NotFound from './views/NotFound';
 import Popup from './views/Popup';
@@ -35,7 +36,7 @@ const App = () => {
 
   const Homepage = () => {
     return (
-      <Dashboard activeIndex={2}>
+      <Dashboard>
         <div className="p-8">
           <h2 className="font-bold text-primary-500 text-2xl py-10">
             Created by Sandberg.
@@ -95,6 +96,7 @@ const App = () => {
           <Route exact path="/modules" component={Modules} />
           <Route exact path="/users/students/new" component={NewStudentsView} />
           <Route exact path="/users/instructors/new" component={NewInstructorView} />
+          <Route exact path="/faculties" component={FacultiesView} />
           <Route exact path="*" component={NotFound} />
         </Switch>
       </Router>
