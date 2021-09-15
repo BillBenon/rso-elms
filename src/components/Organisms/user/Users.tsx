@@ -264,7 +264,7 @@ export default function Users() {
             </button>
           </div>
           <div className="flex gap-3">
-            <Button onClick={() => console.log(e)} type="outline">
+            <Button onClick={() => console.log(e)} styleType="outline">
               Import users
             </Button>
             <Button onClick={() => handleCreateNewUserClick()}>New {userType}</Button>
