@@ -27,15 +27,8 @@ const Badge = ({
     error: 'bg-error-400',
     success: 'bg-success-400',
     warning: 'bg-warning-400',
-    primary: 'bg-primary-400',
-    // secondary: 'bg-secondary',
-    // main: 'bg-main',
-    // 'txt-primary': 'bg-txt-primary',
-    // 'txt-secondary': 'bg-txt-secondary',
-    // bcolor: 'bg-bcolor',
-    // none: 'bg-none',
-    // gray: 'bg-gray',
-    // lightgray: 'bg-lightgray',
+    primary: 'bg-primary-500',
+    secondary: 'bg-secondary',
   };
 
   const txt_colors: colorStyleType = {
@@ -43,14 +36,7 @@ const Badge = ({
     success: 'text-success-500',
     warning: 'text-warning-500',
     primary: 'text-primary-500',
-    // secondary: 'text-secondary',
-    // main: 'text-main',
-    // 'txt-primary': 'text-txt-primary',
-    // 'txt-secondary': 'text-txt-secondary',
-    // bcolor: 'text-bcolor',
-    // none: 'text-none',
-    // gray: 'text-gray',
-    // lightgray: 'text-lightgray',
+    secondary: 'text-secondary',
   };
 
   return (
