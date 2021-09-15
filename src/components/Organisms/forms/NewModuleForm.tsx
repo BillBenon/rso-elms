@@ -1,19 +1,26 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 
-import { ValueType } from '../../../types';
+import { CommonFormProps, ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
 // import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
 
-export default function NewModuleForm() {
+interface PropType<K> extends CommonFormProps<K> {}
+
+export default function NewModuleForm<E>({ onSubmit }: PropType<E>) {
   function handleChange(e: ValueType) {
     console.log(e);
   }
 
+  function submitForm(e: FormEvent) {
+    e.preventDefault(); // prevent page to reload:
+    if (onSubmit) onSubmit(e);
+  }
+
   return (
-    <form>
+    <form onSubmit={submitForm}>
       {/* model name */}
       <InputMolecule value="" error="" handleChange={handleChange} name="model-name">
         Module name
@@ -59,7 +66,7 @@ export default function NewModuleForm() {
       </RadioMolecule>
       {/* save button */}
       <div className="mt-5">
-        <Button type="button" full>
+        <Button type="submit" full>
           Save
         </Button>
       </div>

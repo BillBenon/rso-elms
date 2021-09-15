@@ -1,20 +1,26 @@
 import React, { useState } from 'react';
 
 import Button from '../../components/Atoms/custom/Button';
-import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import Cacumber from '../../components/Molecules/Cacumber';
 import CourseCardMolecule from '../../components/Molecules/cards/CourseCardMolecule';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
+import AddPrerequesitForm from '../../components/Organisms/forms/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/NewModuleForm';
 import Dashboard from '../../layout/Dashboard';
 import { CourseModelDataType, Link } from '../../types';
 
 export default function Modules() {
   const [open, setOpen] = useState(false); // state to controll the popup
-  const closeModel = () => setOpen(false); // when this is fired the popup will be closed
-  const openModel = () => setOpen(true); // when this is fired the popup will be oponed
+
+  const [prOpen, setPrOpen] = useState(false); // state to controll the popup
+
+  function submited() {
+    setOpen(false);
+    setPrOpen(true);
+    console.log('from submit');
+  }
 
   const list: Link[] = [
     { to: 'home', title: 'home' },
@@ -68,10 +74,8 @@ export default function Modules() {
             Modules
           </Heading>
           <SearchMolecule></SearchMolecule>
-          <Button icon type="outline" color="none" onClick={openModel}>
-            <Icon name="chevron-right" />
-          </Button>
-          <Button onClick={openModel}>Add Module</Button>
+
+          <Button onClick={() => setOpen(true)}>Add Module</Button>
         </section>
         <section className="flex flex-wrap justify-between mt-2">
           {data.map((course) => (
@@ -85,8 +89,16 @@ export default function Modules() {
         </section>
 
         {/* add module popup */}
-        <PopupMolecule title="New Module" open={open} onClose={closeModel}>
-          <NewModuleForm />
+        <PopupMolecule title="New Module" open={open} onClose={() => setOpen(false)}>
+          <NewModuleForm onSubmit={submited} />
+        </PopupMolecule>
+
+        {/* add prerequesite popup */}
+        <PopupMolecule
+          title="Add Prerequesite"
+          open={prOpen}
+          onClose={() => setPrOpen(false)}>
+          <AddPrerequesitForm />
         </PopupMolecule>
       </main>
     </Dashboard>
