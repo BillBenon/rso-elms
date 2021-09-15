@@ -6,7 +6,7 @@ import Icon from '../../Atoms/custom/Icon';
 import ILabel from '../../Atoms/Text/ILabel';
 import SearchMolecule from '../../Molecules/input/SearchMolecule';
 import PopupMolecule from '../../Molecules/Popup';
-import Table from '../../Molecules/Table';
+import Table from '../../Molecules/table/Table';
 import { Tab, Tabs } from '../../Molecules/tabs/tabs';
 import NewStudent from './NewStudent';
 

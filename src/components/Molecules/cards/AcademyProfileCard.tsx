@@ -1,8 +1,8 @@
 import React from 'react';
 
-import Avatar, { IAvatar } from '../Atoms/custom/Avatar';
-import Badge from '../Atoms/custom/Badge';
-import ILabel from '../Atoms/Text/ILabel';
+import Avatar, { IAvatar } from '../../Atoms/custom/Avatar';
+import Badge from '../../Atoms/custom/Badge';
+import ILabel from '../../Atoms/Text/ILabel';
 
 interface ICard extends IAvatar {
   children: React.ReactNode;

@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Academies from './components/Organisms/academy/Academy';
-import AddAcademy from './components/Organisms/academy/AddAcademy';
+import AddAcademy from './components/Organisms/academy/NewAcademy';
 import CreatedBySandberg from './components/Organisms/CreatedBySandberg';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import SignUpForm from './components/Organisms/signup/SignUpForm';

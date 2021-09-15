@@ -10,7 +10,7 @@ import Icon from '../../Atoms/custom/Icon';
 import Heading from '../../Atoms/Text/Heading';
 import ILabel from '../../Atoms/Text/ILabel';
 import SearchMolecule from '../../Molecules/input/SearchMolecule';
-import Table from '../../Molecules/Table';
+import Table from '../../Molecules/table/Table';
 
 export default function Academies() {
   const history = useHistory();

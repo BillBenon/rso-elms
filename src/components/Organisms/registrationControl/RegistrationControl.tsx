@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import Dashboard from '../../../layout/Dashboard';
@@ -8,10 +8,20 @@ import Icon from '../../Atoms/custom/Icon';
 import Heading from '../../Atoms/Text/Heading';
 import ILabel from '../../Atoms/Text/ILabel';
 import SearchMolecule from '../../Molecules/input/SearchMolecule';
-import Table from '../../Molecules/Table';
+import PopupMolecule from '../../Molecules/Popup';
+import Table from '../../Molecules/table/Table';
+import TableHeader from '../../Molecules/table/TableHeader';
+import NewRegistrationControl from '../forms/NewRegistrationControl';
 
 export default function RegistrationControl() {
+  const [open, setOpen] = useState(false); // state to controll the popup
+
   const history = useHistory();
+
+  function submited() {
+    setOpen(false);
+    console.log('from submit');
+  }
 
   const data = [
     {
@@ -51,37 +61,21 @@ export default function RegistrationControl() {
             Academy
           </Heading>
         </div>
-        <div className="mt-11">
-          <div className="flex flex-wrap justify-between items-center">
-            <div className="flex gap-2 items-center">
-              <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
-                Registration Control
-              </Heading>
-              <Badge
-                badgetxtcolor="main"
-                badgecolor="primary"
-                fontWeight="normal"
-                className="h-6 w-9 flex justify-center items-center">
-                3
-              </Badge>
-            </div>
-            <div className="flex flex-wrap justify-start items-center">
-              <SearchMolecule />
-              <button className="border p-0 rounded-md mx-2">
-                <Icon name="filter" />
-              </button>
-            </div>
-            <div className="flex gap-3">
-              <Button onClick={() => history.push('/registration-control/new')}>
-                Add new reg control
-              </Button>
-            </div>
-          </div>
-        </div>
+        <TableHeader title="registration control" totalUsers={3}>
+          <Button onClick={() => setOpen(true)}>Add new reg control</Button>
+        </TableHeader>
 
         <div className="mt-14">
           <Table statusColumn="status" data={data} hasAction={true} />
         </div>
+
+        {/* add module popup */}
+        <PopupMolecule
+          title="New Registration Control"
+          open={open}
+          onClose={() => setOpen(false)}>
+          <NewRegistrationControl onSubmit={submited} />
+        </PopupMolecule>
       </Dashboard>
     </div>
   );

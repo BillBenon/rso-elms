@@ -1,7 +1,7 @@
 import React from 'react';
 
 import SidebarLinks, { sidebarLinksProps } from '../../Atoms/custom/SidebarLinks';
-import AcademyProfileCard from '../AcademyProfileCard';
+import AcademyProfileCard from '../cards/AcademyProfileCard';
 
 export default function Sidebar({ links }: sidebarLinksProps) {
   return (
