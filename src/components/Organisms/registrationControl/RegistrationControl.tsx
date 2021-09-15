@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
 
 import Dashboard from '../../../layout/Dashboard';
-import Badge from '../../Atoms/custom/Badge';
+import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import Heading from '../../Atoms/Text/Heading';
 import ILabel from '../../Atoms/Text/ILabel';
-import SearchMolecule from '../../Molecules/input/SearchMolecule';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
@@ -16,7 +14,7 @@ import NewRegistrationControl from '../forms/NewRegistrationControl';
 export default function RegistrationControl() {
   const [open, setOpen] = useState(false); // state to controll the popup
 
-  const history = useHistory();
+  function handleSearch(_e: ValueType) {}
 
   function submited() {
     setOpen(false);
@@ -61,7 +59,10 @@ export default function RegistrationControl() {
             Academy
           </Heading>
         </div>
-        <TableHeader title="registration control" totalUsers={3}>
+        <TableHeader
+          title="registration control"
+          totalUsers={3}
+          handleSearch={handleSearch}>
           <Button onClick={() => setOpen(true)}>Add new reg control</Button>
         </TableHeader>
 

@@ -1,5 +1,6 @@
 import React from 'react';
 
+import { ValueType } from '../../../types';
 import Badge from '../../Atoms/custom/Badge';
 import Icon from '../../Atoms/custom/Icon';
 import Heading from '../../Atoms/Text/Heading';
@@ -9,9 +10,19 @@ type ITableHeader = {
   title: string;
   totalUsers: number;
   children: React.ReactNode;
+  handleSearch: (_e: ValueType) => void;
 };
 
-export default function TableHeader({ title, totalUsers, children }: ITableHeader) {
+export default function TableHeader({
+  title,
+  totalUsers,
+  handleSearch,
+  children,
+}: ITableHeader) {
+  const handleChange = (e: ValueType) => {
+    handleSearch(e);
+  };
+
   return (
     <div className="mt-11">
       <div className="flex flex-wrap justify-between items-center">
@@ -28,7 +39,7 @@ export default function TableHeader({ title, totalUsers, children }: ITableHeade
           </Badge>
         </div>
         <div className="flex flex-wrap justify-start items-center">
-          <SearchMolecule />
+          <SearchMolecule handleChange={handleChange} />
           <button className="border p-0 rounded-md mx-2">
             <Icon name="filter" />
           </button>

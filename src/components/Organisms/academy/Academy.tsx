@@ -5,15 +5,17 @@ import React from 'react';
 import { useHistory } from 'react-router';
 
 import Dashboard from '../../../layout/Dashboard';
+import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
-import Heading from '../../Atoms/Text/Heading';
 import ILabel from '../../Atoms/Text/ILabel';
-import SearchMolecule from '../../Molecules/input/SearchMolecule';
 import Table from '../../Molecules/table/Table';
+import TableHeader from '../../Molecules/table/TableHeader';
 
 export default function Academies() {
   const history = useHistory();
+
+  function handleSearch(_e: ValueType) {}
 
   const data = [
     {
@@ -246,27 +248,14 @@ export default function Academies() {
         </ILabel>
       </div>
       <div className="py-4">
-        <div className="flex flex-wrap justify-between items-center">
-          <Heading
-            color="primary"
-            className="capitalize"
-            fontSize="2xl"
-            fontWeight="bold">
-            Academy
-          </Heading>
-          <div className="flex flex-wrap justify-start items-center">
-            <SearchMolecule />
-            <button className="border p-0 rounded-md mx-2">
-              <Icon name="filter" />
-            </button>
-          </div>
-          <div className="flex gap-3">
-            <Button onClick={() => history.push('/academies/new')}>New academy</Button>
-          </div>
-        </div>
+        <TableHeader title="Academy" totalUsers={300} handleSearch={handleSearch}>
+          <Button onClick={() => history.push('/academies/new')}>New academy</Button>
+        </TableHeader>
       </div>
 
-      <Table statusColumn="status" data={data} hasAction={true} />
+      <div className="mt-14">
+        <Table statusColumn="status" data={data} hasAction={true} />
+      </div>
     </Dashboard>
   );
 }
