@@ -1,26 +1,22 @@
-import React, { ReactNode } from 'react';
+import React from 'react';
 
-import { SelectData, ValueType } from '../../../types';
+import { CommonInputProps, SelectData, ValueType } from '../../../types';
 import Radio from '../../Atoms/Input/Radio';
 import Error from '../../Atoms/Text/Error';
 import ILabel from '../../Atoms/Text/ILabel';
 
-type PropType = {
-  children: ReactNode;
+interface PropType<T> extends CommonInputProps<T> {
   type?: 'inline' | 'block';
-  value?: string;
-  name: string;
   error?: string;
   loading?: boolean;
-  list: SelectData[];
-  className?: string;
+  options: SelectData[];
   handleChange: (_e: ValueType) => void;
-};
+}
 
 /**
  * Radio molecule  component that has error output
  */
-export default function RadioMolecule({
+export default function RadioMolecule<T>({
   value = '',
   name,
   type = 'inline',
@@ -29,9 +25,9 @@ export default function RadioMolecule({
   error,
   className,
   loading = false,
-  list,
+  options,
   ...attrs
-}: PropType) {
+}: PropType<T>) {
   return (
     <div {...attrs} className={className}>
       {loading ? (
@@ -44,7 +40,7 @@ export default function RadioMolecule({
               name={name}
               value={value}
               type={type}
-              list={list}
+              options={options}
               handleChange={handleChange}></Radio>
           </div>
           {error && <Error>{error}</Error>}

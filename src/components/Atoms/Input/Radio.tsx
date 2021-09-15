@@ -1,28 +1,24 @@
 import React, { useEffect, useState } from 'react';
 
-import { SelectData, ValueType } from '../../../types';
+import { CommonInputProps } from '../../../types';
 
-type PropType = {
-  list: SelectData[];
+interface PropType<T> extends CommonInputProps<T> {
   type?: 'inline' | 'block';
-  value?: string;
-  name: string;
-  handleChange: (_e: ValueType) => void;
-};
+}
 
 /**
  * Radio button that will be taking list of options to be used
  * list should contain array of object that has {label:'',value:''}, the value will be used as unique identifier
  * while lable will be displayed on the UI
  */
-export default function Radio({
+export default function Radio<T>({
   value = '',
-  list,
+  options,
   type = 'inline',
   name,
   handleChange,
   ...attrs
-}: PropType) {
+}: PropType<T>) {
   const [active, setActive] = useState('');
 
   useEffect(() => setActive(value), []);
@@ -39,10 +35,11 @@ export default function Radio({
 
   return (
     <div
-      {...attrs}
       className={`flex ${type === 'block' && 'flex-col'}`}
-      role="radiogroup">
-      {list.map(({ label, value }) => (
+      role="radiogroup"
+      {...attrs}>
+      {/* options */}
+      {options.map(({ label, value }) => (
         <div
           role="radio"
           tabIndex={0}
@@ -56,6 +53,7 @@ export default function Radio({
           onClick={(e) => handleClick(value, e)}
           // @ts-ignore
           onKeyPress={(e) => handleKeyPress(value, e)}>
+          {/* span */}
           <span
             className={`mx-2 w-5 h-5 rounded-full border-solid 
             ${
