@@ -15,7 +15,7 @@ const SignupHeader = () => {
         </p>
       </div>
       <div>
-        <AcademyProfileCard src="public\icons\police-logo.svg" alt="academy logo">
+        <AcademyProfileCard src="/icons/police-logo.svg" alt="academy logo" size="39">
           Rwanda National Police
         </AcademyProfileCard>
       </div>
