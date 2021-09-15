@@ -1,4 +1,4 @@
-import { AllHTMLAttributes, DOMAttributes } from 'react';
+import { AllHTMLAttributes, DOMAttributes, FormEvent } from 'react';
 
 import { SelectData, ValueType } from '.';
 
@@ -14,6 +14,7 @@ export interface CommonInputProps<T> extends CommonProps<T> {
   options: SelectData[];
 }
 
+//common input props that will be used on all reusable input components
 export interface commonInputProps {
   onChange: Function;
   name: string;
@@ -31,4 +32,9 @@ export interface DropdownProps extends commonInputProps {
   width?: string;
   searchable?: boolean;
   defaultValue?: Object;
+}
+
+//common form props that will be used on all reusable form components
+export interface CommonFormProps<T> extends Omit<CommonProps<T>, 'onSubmit'> {
+  onSubmit?: <K = Element>(_e: FormEvent<K>, _data?: any) => void;
 }
