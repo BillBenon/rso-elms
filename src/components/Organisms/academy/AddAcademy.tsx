@@ -12,12 +12,12 @@ import InputMolecule from '../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
 
 export default function AddAcademy() {
-  function handleChange(event) {
+  function handleChange(_event: any) {
     console.log('here');
   }
 
   return (
-    <Dashboard activeIndex={2}>
+    <Dashboard>
       <div className="flex flex-wrap justify-start items-center">
         <ILabel size="sm" color="gray" weight="medium">
           Institution Admin

@@ -230,7 +230,7 @@ export default function Academies() {
   ];
 
   return (
-    <Dashboard activeIndex={2}>
+    <Dashboard>
       <div className="flex flex-wrap justify-start items-center">
         <ILabel size="sm" color="gray" weight="medium">
           Institution Admin
@@ -247,7 +247,11 @@ export default function Academies() {
       </div>
       <div className="py-4">
         <div className="flex flex-wrap justify-between items-center">
-          <Heading color="primary" className="capitalize" size="2xl" weight="bold">
+          <Heading
+            color="primary"
+            className="capitalize"
+            fontSize="2xl"
+            fontWeight="bold">
             Academy
           </Heading>
           <div className="flex flex-wrap justify-start items-center">
@@ -257,7 +261,7 @@ export default function Academies() {
             </button>
           </div>
           <div className="flex gap-3">
-            <Button onClick={() => history.push('/academies/add')}>New academy</Button>
+            <Button onClick={() => history.push('/academies/new')}>New academy</Button>
           </div>
         </div>
       </div>

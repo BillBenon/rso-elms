@@ -6,6 +6,7 @@ import DropDown from './components/Atoms/Input/Dropdown';
 import { Tab, Tabs } from './components/Molecules/tabs/tabs';
 import Academies from './components/Organisms/academy/Academy';
 import AddAcademy from './components/Organisms/academy/AddAcademy';
+import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import SignUpForm from './components/Organisms/signup/SignUpForm';
 import Dashboard from './layout/Dashboard';
 import Modules from './views/modules';
@@ -35,7 +36,7 @@ const App = () => {
 
   const Homepage = () => {
     return (
-      <Dashboard activeIndex={2}>
+      <Dashboard>
         <div className="p-8">
           <h2 className="font-bold text-primary-500 text-2xl py-10">
             Created by Sandberg.
@@ -89,10 +90,11 @@ const App = () => {
 
           <Route exact path="/register" component={SignUpForm} />
           <Route exact path="/academies" component={Academies} />
-          <Route exact path="/academies/add" component={AddAcademy} />
+          <Route exact path="/academies/new" component={AddAcademy} />
           <Route exact path="/users" component={UsersView} />
           <Route exact path="/popup" component={Popup} />
           <Route exact path="/modules" component={Modules} />
+          <Route exact path="/registration-control" component={RegistrationControl} />
           <Route exact path="/users/students/new" component={NewStudentsView} />
           <Route exact path="/users/instructors/new" component={NewInstructorView} />
           <Route exact path="*" component={NotFound} />
