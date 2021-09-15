@@ -1,6 +1,6 @@
 import '../../../styles/components/Atoms/custom/button.scss';
 
-import React, { ReactNode } from 'react';
+import React, { ButtonHTMLAttributes, DOMAttributes, ReactNode } from 'react';
 
 import { bgStyleButton, colorStyle } from '../../../global/global-vars';
 import { Color } from '../../../types';
@@ -11,24 +11,24 @@ type ButtonStyleType = {
   [index in ButtonType]: string;
 };
 
-interface PropTypes {
+interface PropTypes<T> extends ButtonHTMLAttributes<DOMAttributes<T>> {
   children: ReactNode;
   full?: boolean;
   icon?: boolean;
-  type?: ButtonType;
+  styleType?: ButtonType;
   color?: Color;
   onClick?: () => any;
 }
 
-export default function Button({
+export default function Button<T>({
   children,
-  type = 'fill',
+  styleType = 'fill',
   color = 'primary',
   full,
   icon,
   onClick,
   ...attrs
-}: PropTypes) {
+}: PropTypes<T>) {
   const buttonStyle: ButtonStyleType = {
     fill: ` ${!icon && 'with-width'}   border-2 border-solid border-${
       colorStyle[color]
@@ -46,7 +46,7 @@ export default function Button({
     <button
       {...attrs}
       onClick={onClick}
-      className={`${buttonStyle[type]} rounded-lg text-sm outline-none 
+      className={`${buttonStyle[styleType]} rounded-lg text-sm outline-none 
       ${full && 'w-full'}
       ${padding}
       `}>
