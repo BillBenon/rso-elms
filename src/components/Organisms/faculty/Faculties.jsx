@@ -4,13 +4,15 @@ import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import ILabel from '../../Atoms/Text/ILabel';
 import SearchMolecule from '../../Molecules/input/SearchMolecule';
+import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/Table';
+import NewFaculty from './NewFaculty';
 
 export default function FacutiesOrg() {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCreateNewUserClick = () => {
-    setModalOpen(!modalOpen);
+    setIsModalOpen(!isModalOpen);
   };
 
   const data = [
@@ -97,6 +99,12 @@ export default function FacutiesOrg() {
         </div>
       </div>
       <Table statusColumn="status" data={data} hasAction={true} />
+      <PopupMolecule
+        title="New Faculty"
+        open={isModalOpen}
+        onClose={() => setIsModalOpen(false)}>
+        <NewFaculty />
+      </PopupMolecule>
     </>
   );
 }
