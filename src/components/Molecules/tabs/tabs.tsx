@@ -8,8 +8,7 @@ interface TabProps {
   children: ReactChild;
 }
 
-export const Tab = ({ label, disabled = false, className = '', children }: TabProps) => {
-  console.log(label + disabled);
+export const Tab = ({ className = '', children }: TabProps) => {
   return <div className={`tab ${className}`}>{children}</div>;
 };
 

@@ -3,23 +3,30 @@ import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { colorStyle, fontSizeStyle } from '../../../global/global-vars';
+import { Color } from '../../../types';
 import Icon from './Icon';
 
-let linkProps = {
-  title: '',
-  to: '',
-  icon: '',
-  active: false,
+export type linkProps = {
+  title: string;
+  to: string;
+  icon: string;
+  fill?: boolean;
+  active?: boolean;
 };
 
-export const SidebarLink = ({ title, to, icon, active }: typeof linkProps) => {
+export const SidebarLink = ({ title, to, icon, active, fill = true }: linkProps) => {
   return (
     <div
       className={`px-8 cursor-pointer py-0 border-l-4 ${
         active ? 'border-primary-500' : 'border-transparent'
       }`}>
       <Link to={to} className="flex items-center">
-        <Icon name={icon} size={21} stroke={active ? 'primary' : 'none'} />
+        <Icon
+          name={icon}
+          size={21}
+          stroke={!fill && active ? 'primary' : 'none'}
+          fill={fill && active ? 'primary' : 'none'}
+        />
         <span
           className={`text-${colorStyle[active ? 'primary' : 'gray']} ${
             fontSizeStyle['sm']
@@ -31,9 +38,8 @@ export const SidebarLink = ({ title, to, icon, active }: typeof linkProps) => {
   );
 };
 
-type linksArray = typeof linkProps[];
 export type sidebarLinksProps = {
-  links: linksArray;
+  links: linkProps[];
 };
 
 export default function SidebarLinks({ links }: sidebarLinksProps) {
@@ -48,6 +54,7 @@ export default function SidebarLinks({ links }: sidebarLinksProps) {
           to={link.to}
           icon={link.icon}
           active={activeIndexAuto === i}
+          fill={link.fill}
         />
       ))}
     </div>
