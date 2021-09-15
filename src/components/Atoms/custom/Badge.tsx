@@ -6,6 +6,7 @@ type BadgeProps = {
   badgecolor: Color;
   badgetxtcolor?: Color;
   roundWidth?: string;
+  fontWeight?: string;
   className?: string;
   children: ReactNode;
 };
@@ -18,6 +19,7 @@ const Badge = ({
   badgecolor,
   badgetxtcolor,
   roundWidth = 'full',
+  fontWeight = 'semibold',
   className = '',
   children,
 }: BadgeProps) => {
@@ -54,7 +56,7 @@ const Badge = ({
   return (
     <>
       <span
-        className={`px-4 py-2 text-xs font-semibold rounded-${roundWidth} inline-block ${className} ${
+        className={`px-4 py-2 text-xs font-${fontWeight} rounded-${roundWidth} inline-block ${className} ${
           (badgetxtcolor || badgecolor) && txt_colors[badgetxtcolor || badgecolor]
         } 
         ${badgecolor && bg_colors[badgecolor]}`}>
