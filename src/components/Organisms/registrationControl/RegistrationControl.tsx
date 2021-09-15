@@ -61,7 +61,7 @@ export default function RegistrationControl() {
         </div>
         <TableHeader
           title="registration control"
-          totalUsers={3}
+          totalItems={3}
           handleSearch={handleSearch}>
           <Button onClick={() => setOpen(true)}>Add new reg control</Button>
         </TableHeader>

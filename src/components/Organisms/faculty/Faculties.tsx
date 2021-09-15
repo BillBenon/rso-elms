@@ -4,9 +4,9 @@ import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import ILabel from '../../Atoms/Text/ILabel';
-import SearchMolecule from '../../Molecules/input/SearchMolecule';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
+import TableHeader from '../../Molecules/table/TableHeader';
 import NewFaculty from './NewFaculty';
 
 export default function FacutiesOrg() {
@@ -87,22 +87,11 @@ export default function FacutiesOrg() {
           Faculty
         </ILabel>
       </div>
-      <div className="py-6">
-        <div className="flex flex-wrap justify-between items-center">
-          <ILabel size="2xl" weight="bold">
-            Faculties
-          </ILabel>
-          <div className="flex flex-wrap justify-start items-center">
-            <SearchMolecule handleChange={(e: ValueType) => handleSearch(e)} />
-            <button className="border p-0 rounded-md mx-2">
-              <Icon name="filter" />
-            </button>
-          </div>
-          <div className="flex gap-3">
-            <Button onClick={() => handleCreateNewUserClick()}>New Faculty</Button>
-          </div>
-        </div>
-      </div>
+
+      <TableHeader title="Faculties" totalItems={54} handleSearch={handleSearch}>
+        <Button onClick={() => handleCreateNewUserClick()}>New Faculty</Button>
+      </TableHeader>
+
       <Table statusColumn="status" data={data} hasAction={true} />
       <PopupMolecule
         title="New Faculty"

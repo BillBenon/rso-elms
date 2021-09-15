@@ -20,7 +20,7 @@ export default function NewFaculty() {
       <div className="py-3">
         <TextAreaMolecule
           value=""
-          className="resize-none h-64"
+          // className="resize-none h-64"
           error="welcome here"
           name="description"
           handleChange={handleChange}>

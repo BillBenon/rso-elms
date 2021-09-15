@@ -35,7 +35,9 @@ export default function AddAcademy() {
 
       <div className="p-4 pl-6 popup-width gap-3">
         <div className="py-5 mb-3 capitalize">
-          <Heading color="primary">New academy</Heading>
+          <Heading color="primary" fontWeight="bold">
+            New academy
+          </Heading>
         </div>
         <InputMolecule
           name="acname"

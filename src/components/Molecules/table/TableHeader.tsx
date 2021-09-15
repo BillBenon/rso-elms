@@ -8,14 +8,14 @@ import SearchMolecule from '../input/SearchMolecule';
 
 type ITableHeader = {
   title: string;
-  totalUsers: number;
+  totalItems: number;
   children: React.ReactNode;
   handleSearch: (_e: ValueType) => void;
 };
 
 export default function TableHeader({
   title,
-  totalUsers,
+  totalItems,
   handleSearch,
   children,
 }: ITableHeader) {
@@ -24,7 +24,7 @@ export default function TableHeader({
   };
 
   return (
-    <div className="mt-11">
+    <div className="mt-11 pb-6">
       <div className="flex flex-wrap justify-between items-center">
         <div className="flex gap-2 items-center">
           <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
@@ -35,7 +35,7 @@ export default function TableHeader({
             badgecolor="primary"
             fontWeight="normal"
             className="h-6 w-9 flex justify-center items-center">
-            {totalUsers}
+            {totalItems}
           </Badge>
         </div>
         <div className="flex flex-wrap justify-start items-center">
