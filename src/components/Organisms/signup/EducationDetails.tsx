@@ -63,7 +63,7 @@ const EducationDetails = () => {
       </div>
       <Button>Attachment</Button>
       <div className="flex justify-between">
-        <Button type="text" color="txt-secondary" onClick={movePrev}>
+        <Button styleType="text" color="txt-secondary" onClick={movePrev}>
           Back
         </Button>
         <Button onClick={moveNext}>Next</Button>
