@@ -16,6 +16,7 @@ type PropType = {
 export default function CourseCardMolecule({ active = false, to, data }: PropType) {
   const history = useHistory();
 
+  // handle action that especially click on this card
   function handleAction() {
     if (to) history.push(to.to);
   }
