@@ -4,7 +4,6 @@ import './academy.scss';
 import React from 'react';
 import { useHistory } from 'react-router';
 
-import Dashboard from '../../../layout/Dashboard';
 import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
@@ -12,7 +11,7 @@ import ILabel from '../../Atoms/Text/ILabel';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
 
-export default function Academies() {
+export default function Academy() {
   const history = useHistory();
 
   function handleSearch(_e: ValueType) {}
@@ -232,7 +231,7 @@ export default function Academies() {
   ];
 
   return (
-    <Dashboard>
+    <>
       <div className="flex flex-wrap justify-start items-center">
         <ILabel size="sm" color="gray" weight="medium">
           Institution Admin
@@ -256,6 +255,6 @@ export default function Academies() {
       <div className="mt-14">
         <Table statusColumn="status" data={data} hasAction={true} />
       </div>
-    </Dashboard>
+    </>
   );
 }
