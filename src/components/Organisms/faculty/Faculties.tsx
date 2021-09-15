@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 
+import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import ILabel from '../../Atoms/Text/ILabel';
 import SearchMolecule from '../../Molecules/input/SearchMolecule';
 import PopupMolecule from '../../Molecules/Popup';
-import Table from '../../Molecules/Table';
+import Table from '../../Molecules/table/Table';
 import NewFaculty from './NewFaculty';
 
 export default function FacutiesOrg() {
@@ -66,6 +67,10 @@ export default function FacutiesOrg() {
       Programs: 3,
     },
   ];
+
+  const handleSearch = (e: ValueType) => {
+    console.log(e);
+  };
   return (
     <>
       <div className="flex flex-wrap justify-start items-center pt-2">
@@ -88,7 +93,7 @@ export default function FacutiesOrg() {
             Faculties
           </ILabel>
           <div className="flex flex-wrap justify-start items-center">
-            <SearchMolecule />
+            <SearchMolecule handleChange={(e: ValueType) => handleSearch(e)} />
             <button className="border p-0 rounded-md mx-2">
               <Icon name="filter" />
             </button>
