@@ -43,7 +43,7 @@ const StyledSVGIcon = styled(ReactSVG)`
 
 export default function Icon({
   name,
-  fill = 'transparent',
+  fill = 'none',
   stroke = 'none',
   size = 24,
   bgColor,

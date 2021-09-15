@@ -66,7 +66,7 @@ const PersonalDetails = () => {
       </div>
       <div className="flex flex-col gap-4">
         <RadioMolecule
-          list={[
+          options={[
             { value: 'male', label: 'Male' },
             { value: 'female', label: 'Female' },
           ]}
@@ -79,7 +79,7 @@ const PersonalDetails = () => {
       </div>
       <div className="my-4">
         <RadioMolecule
-          list={[
+          options={[
             { value: 'married', label: 'Married' },
             { value: 'single', label: 'Single' },
           ]}
