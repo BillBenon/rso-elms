@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react';
 
-import { Color } from '../../../types';
+import { Color, colorStyleType } from '../../../types';
 
 type BadgeProps = {
-  badgecolor?: Color | string;
-  badgetxtcolor?: Color | string;
+  badgecolor: Color;
+  badgetxtcolor?: Color;
   roundWidth?: string;
   className?: string;
   children: ReactNode;
@@ -17,7 +17,7 @@ const Badge = ({
   className = '',
   children,
 }: BadgeProps) => {
-  const bg_colors: any = {
+  const bg_colors: colorStyleType = {
     error: 'bg-error-400',
     success: 'bg-success-400',
     warning: 'bg-warning-400',
@@ -32,7 +32,7 @@ const Badge = ({
     lightgray: 'bg-lightgray',
   };
 
-  const txt_colors: any = {
+  const txt_colors: colorStyleType = {
     error: 'text-error-500',
     success: 'text-success-500',
     warning: 'text-warning-500',
@@ -51,9 +51,9 @@ const Badge = ({
     <>
       <span
         className={`px-4 py-2 text-xs font-semibold rounded-${roundWidth} inline-block ${className} ${
-          badgetxtcolor && txt_colors[`${badgetxtcolor}`]
+          (badgetxtcolor || badgecolor) && txt_colors[badgetxtcolor || badgecolor]
         } 
-        ${badgecolor && bg_colors[`${badgecolor}`]}`}>
+        ${badgecolor && bg_colors[badgecolor]}`}>
         {children}
       </span>
     </>
