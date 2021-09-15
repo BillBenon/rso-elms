@@ -238,7 +238,7 @@ export default function Users() {
   let admins = data.slice(24, 28);
   return (
     <>
-      <div className="flex flex-wrap justify-start items-center">
+      <div className="flex flex-wrap justify-start items-center pt-2">
         <ILabel size="sm" color="gray" weight="medium">
           Institution Admin
         </ILabel>
@@ -252,7 +252,7 @@ export default function Users() {
           {userType}
         </ILabel>
       </div>
-      <div className="py-4">
+      <div className="py-6">
         <div className="flex flex-wrap justify-between items-center">
           <ILabel size="2xl" weight="bold">
             Users
@@ -272,13 +272,13 @@ export default function Users() {
         </div>
       </div>
       <Tabs onTabChange={(e) => setUserType(e.activeTabLabel)}>
-        <Tab label="Students" className="pt-4">
+        <Tab label="Students" className="pt-8">
           <Table statusColumn="status" data={data} hasAction={true} />
         </Tab>
-        <Tab label="Instructors" className="pt-4">
+        <Tab label="Instructors" className="pt-8">
           <Table statusColumn="status" data={instractors} hasAction={true} />
         </Tab>
-        <Tab label="Admins" className="pt-4">
+        <Tab label="Admins" className="pt-8">
           <Table statusColumn="status" data={admins} hasAction={true} />
         </Tab>
       </Tabs>
