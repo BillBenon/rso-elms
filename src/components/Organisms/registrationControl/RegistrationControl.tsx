@@ -55,7 +55,7 @@ export default function RegistrationControl() {
           <div className="flex flex-wrap justify-between items-center">
             <div className="flex gap-2 items-center">
               <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
-                Registration Control{' '}
+                Registration Control
               </Heading>
               <Badge
                 badgetxtcolor="main"
