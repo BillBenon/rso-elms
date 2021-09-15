@@ -37,6 +37,7 @@ const Badge = ({
     warning: 'text-warning-500',
     primary: 'text-primary-500',
     secondary: 'text-secondary',
+    main: 'text-main',
   };
 
   return (
