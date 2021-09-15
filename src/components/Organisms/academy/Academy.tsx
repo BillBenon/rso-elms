@@ -151,6 +151,7 @@ export default function Academies() {
     },
     {
       'full name': 'Prof Gen Sandberg dotMe',
+      email: '',
       role: 'Student / Sr',
       'phone number': 7869046728,
       status: 'Cancelled',
