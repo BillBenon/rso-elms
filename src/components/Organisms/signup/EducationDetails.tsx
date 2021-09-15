@@ -56,10 +56,10 @@ const EducationDetails = () => {
           handleChange={handleChange}>
           Education section/ combination
         </InputMolecule>
-        <DateMolecule>Start Date</DateMolecule>
+        <DateMolecule width="60 md:w-80">Start Date</DateMolecule>
       </div>
       <div className="my-4">
-        <DateMolecule>End Date</DateMolecule>
+        <DateMolecule width="60 md:w-80">End Date</DateMolecule>
       </div>
       <Button>Attachment</Button>
       <div className="flex justify-between">

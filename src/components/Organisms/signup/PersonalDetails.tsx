@@ -75,7 +75,7 @@ const PersonalDetails = () => {
           name="gender">
           Gender
         </RadioMolecule>
-        <DateMolecule>Date of Birth</DateMolecule>
+        <DateMolecule width="60 md:w-80">Date of Birth</DateMolecule>
       </div>
       <div className="my-4">
         <RadioMolecule

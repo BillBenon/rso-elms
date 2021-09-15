@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
-import InputMolecule from '../../Molecules/input/InputMolecule';
+import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 
 const OtherDetails = () => {
   const [details, setDetails] = useState({
@@ -30,20 +30,34 @@ const OtherDetails = () => {
   return (
     <>
       <div className="flex flex-col gap-4">
-        <InputMolecule
+        <DropdownMolecule
+          label="Hobbies"
           name="hobbies"
-          placeholder="football, swimming, etc"
-          value={details.hobbies}
-          handleChange={handleChange}>
-          Hobbies
-        </InputMolecule>
-        <InputMolecule
+          defaultValue={details.hobbies}
+          onChange={handleChange}
+          options={[
+            { value: 'football', label: 'football' },
+            { value: 'swimming', label: 'swimming' },
+            { value: 'volleyball', label: 'volleyball' },
+            { value: 'basketball', label: 'basketball' },
+            { value: 'singing', label: 'singing' },
+            { value: 'dancing', label: 'dancing' },
+            { value: 'readingbooks', label: 'reading books' },
+          ]}
+        />
+        <DropdownMolecule
+          label="Chronic diseases"
+          placeholder="chronic diseases"
           name="chronicDiseases"
-          placeholder="Asthma, Ulcers, etc"
-          value={details.chronicDiseases}
-          handleChange={handleChange}>
-          Chronic diseases
-        </InputMolecule>
+          defaultValue={details.chronicDiseases}
+          onChange={handleChange}
+          options={[
+            { value: 'asthma', label: 'Asthma' },
+            { value: 'ulcers', label: 'Ulcers' },
+            { value: 'diabetes', label: 'Diabetes' },
+            { value: 'sinusitus', label: 'Sinusitus' },
+          ]}
+        />
       </div>
       <div className="flex justify-between">
         <Button styleType="text" color="txt-secondary" onClick={movePrev}>

@@ -36,9 +36,10 @@ const NationalDocuments = () => {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4">
         <DropdownMolecule
+          width="60 md:w-80"
           label="Nationality"
           name="nationality"
-          // value={details.nationality}
+          defaultValue={details.nationality}
           onChange={handleChange}
           options={[
             { value: 'rw', label: 'Rwanda' },
@@ -67,7 +68,7 @@ const NationalDocuments = () => {
         </InputMolecule>
       </div>
       <div className="flex flex-col gap-4">
-        <DateMolecule>Passport expiry date</DateMolecule>
+        <DateMolecule width="60 md:w-80">Passport expiry date</DateMolecule>
         <CheckboxMolecule
           placeholder="Languages"
           onChange={handleChange}

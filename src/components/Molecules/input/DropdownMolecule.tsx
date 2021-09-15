@@ -11,8 +11,8 @@ interface Props extends DropdownProps {
 }
 export default function DropdownMolecule(props: Props) {
   return (
-    <div className="py-2">
-      <Heading fontSize="sm" fontWeight="semibold" className="py-2">
+    <div className="">
+      <Heading fontSize="sm" fontWeight="semibold" className="pb-3">
         {props.label}
       </Heading>
       <Select

@@ -5,12 +5,12 @@ import AcademyProfileCard from '../../Molecules/AcademyProfileCard';
 
 const SignupHeader = () => {
   return (
-    <div className="flex justify-between mb-5">
+    <div className="flex justify-between mb-14">
       <div>
-        <Heading fontSize="2xl" fontWeight="semibold">
+        <Heading fontSize="lg" className="md:2xl" fontWeight="semibold">
           Complete Profile
         </Heading>
-        <p className="text-txt-secondary text-base">
+        <p className="text-txt-secondary text-sm md:text-base pt-2">
           Fill in the form credentials to complete your profile
         </p>
       </div>
