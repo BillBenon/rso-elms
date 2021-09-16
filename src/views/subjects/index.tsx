@@ -5,12 +5,10 @@ import Cacumber from '../../components/Molecules/Cacumber';
 import CourseCardMolecule from '../../components/Molecules/cards/CourseCardMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import AddPrerequesitForm from '../../components/Organisms/forms/AddPrerequisiteForm';
-import NewModuleForm from '../../components/Organisms/forms/NewModuleForm';
 import Dashboard from '../../layout/Dashboard';
 import { CourseModelDataType, Link } from '../../types';
 
-export default function Modules() {
+export default function Subjects() {
   const [open, setOpen] = useState(false); // state to controll the popup
 
   const [prOpen, setPrOpen] = useState(false); // state to controll the popup
@@ -18,7 +16,6 @@ export default function Modules() {
   function submited() {
     setOpen(false);
     setPrOpen(true);
-    console.log('from submit');
   }
 
   function handleSearch() {}
@@ -32,35 +29,31 @@ export default function Modules() {
   const data: CourseModelDataType[] = [
     {
       status: { type: 'success', text: 'On going' },
-      code: 'HR450-TC',
-      title: 'Here we go',
-      subTitle: 'ON Air',
+      code: 'Ra01-430st',
+      title: 'The basics of Biomedics (This is the case of a course with a long name',
       description:
-        'We have all kind of courses in this card, we can support everything wabyanga wabyemera',
+        'This is a course description. It states briefy what this course is all about.',
     },
     {
       status: { type: 'success', text: 'On going' },
-      code: 'HR450-TC',
-      title: 'Here we go',
-      subTitle: 'ON Air',
+      code: 'Ra01-430st',
+      title: 'The basics of Biomedics (This is the case of a course with a long name',
       description:
-        'We have all kind of courses in this card, we can support everything wabyanga wabyemera',
+        'This is a course description. It states briefy what this course is all about.',
     },
     {
       status: { type: 'warning', text: 'On Hold' },
-      code: 'HR450-TC',
-      title: 'Here we go',
-      subTitle: 'ON Air',
+      code: 'Ra01-430st',
+      title: 'The basics of Biomedics (This is the case of a course with a long name',
       description:
-        'We have all kind of courses in this card, we can support everything wabyanga wabyemera',
+        'This is a course description. It states briefy what this course is all about.',
     },
     {
       status: { type: 'error', text: 'Completed' },
-      code: 'HR450-TC',
-      title: 'Here we go',
-      subTitle: 'ON Air',
+      code: 'Ra01-430st',
+      title: 'The basics of Biomedics (This is the case of a course with a long name',
       description:
-        'We have all kind of courses in this card, we can support everything wabyanga wabyemera',
+        'This is a course description. It states briefy what this course is all about.',
     },
   ];
 
@@ -71,8 +64,8 @@ export default function Modules() {
           <Cacumber list={list}></Cacumber>
         </section>
         <section className="">
-          <TableHeader totalItems={34} title="Modules" handleSearch={handleSearch}>
-            <Button onClick={() => setOpen(true)}>Add Module</Button>
+          <TableHeader totalItems={4} title="Subjects" handleSearch={handleSearch}>
+            <Button onClick={() => setOpen(true)}>Add Subject</Button>
           </TableHeader>
         </section>
         <section className="flex flex-wrap justify-between mt-2">
@@ -87,7 +80,7 @@ export default function Modules() {
         </section>
 
         {/* add module popup */}
-        <PopupMolecule title="New Module" open={open} onClose={() => setOpen(false)}>
+        <PopupMolecule title="New Subject" open={open} onClose={() => setOpen(false)}>
           <NewModuleForm onSubmit={submited} />
         </PopupMolecule>
 
