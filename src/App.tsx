@@ -11,6 +11,7 @@ import FacultiesView from './views/faculties/Faculties';
 import Modules from './views/modules';
 import NotFound from './views/NotFound';
 import Popup from './views/Popup';
+import Subjects from './views/subjects';
 import NewInstructorView from './views/users/NewInstructor';
 import NewStudentsView from './views/users/NewStudent';
 import UsersView from './views/users/Users';
@@ -36,6 +37,7 @@ const App = () => {
           <Route exact path="/users" component={UsersView} />
           <Route exact path="/popup" component={Popup} />
           <Route exact path="/modules" component={Modules} />
+          <Route exact path="/subjects" component={Subjects} />
           <Route exact path="/registration-control" component={RegistrationControl} />
           <Route exact path="/users/students/new" component={NewStudentsView} />
           <Route exact path="/users/instructors/new" component={NewInstructorView} />
