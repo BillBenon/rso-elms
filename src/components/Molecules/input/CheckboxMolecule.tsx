@@ -2,14 +2,14 @@ import React from 'react';
 
 import { commonInputProps } from '../../../types';
 import Checkbox from '../../Atoms/Input/CheckBox';
-import Heading from '../../Atoms/Text/Heading';
+import ILabel from '../../Atoms/Text/ILabel';
 
 export default function CheckboxMolecule(props: commonInputProps) {
   return (
     <div className="py-2">
-      <Heading fontSize="sm" fontWeight="bold" className="py-2">
+      <ILabel size="sm" weight="bold">
         {props.placeholder}
-      </Heading>
+      </ILabel>
       {props.options.map((op: any, i) => (
         <div className="py-1" key={i}>
           <Checkbox
