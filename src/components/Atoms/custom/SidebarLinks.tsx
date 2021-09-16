@@ -30,7 +30,7 @@ export const SidebarLink = ({ title, to, icon, active, fill = true }: linkProps)
         <span
           className={`text-${colorStyle[active ? 'primary' : 'gray']} ${
             fontSizeStyle['sm']
-          } px-1 font-medium`}>
+          } px-1 font-medium capitalize`}>
           {title}
         </span>
       </Link>

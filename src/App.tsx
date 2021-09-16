@@ -7,6 +7,7 @@ import SignUpForm from './components/Organisms/signup/SignUpForm';
 import Dashboard from './layout/Dashboard';
 import Academies from './views/academies/Academies';
 import NewAcademy from './views/academies/NewAcademy';
+import FacultiesView from './views/faculties/Faculties';
 import Modules from './views/modules';
 import NotFound from './views/NotFound';
 import Popup from './views/Popup';
@@ -38,6 +39,7 @@ const App = () => {
           <Route exact path="/registration-control" component={RegistrationControl} />
           <Route exact path="/users/students/new" component={NewStudentsView} />
           <Route exact path="/users/instructors/new" component={NewInstructorView} />
+          <Route exact path="/faculties" component={FacultiesView} />
           <Route exact path="*" component={NotFound} />
         </Switch>
       </Router>

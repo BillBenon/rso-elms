@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import ILabel from '../../Atoms/Text/ILabel';
-import SearchMolecule from '../../Molecules/input/SearchMolecule';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
+import TableHeader from '../../Molecules/table/TableHeader';
 import { Tab, Tabs } from '../../Molecules/tabs/tabs';
 import NewStudent from './NewStudent';
 
@@ -14,6 +15,8 @@ export default function Users() {
   const [userType, setUserType] = useState('Students');
   const [modalOpen, setModalOpen] = useState(false);
   const history = useHistory();
+
+  function handleSearch(_e: ValueType) {}
 
   const handleCreateNewUserClick = () => {
     if (userType === 'Students') history.push('/users/students/new');
@@ -238,7 +241,7 @@ export default function Users() {
   let admins = data.slice(24, 28);
   return (
     <>
-      <div className="flex flex-wrap justify-start items-center">
+      <div className="flex flex-wrap justify-start items-center pt-2">
         <ILabel size="sm" color="gray" weight="medium">
           Institution Admin
         </ILabel>
@@ -252,33 +255,21 @@ export default function Users() {
           {userType}
         </ILabel>
       </div>
-      <div className="py-4">
-        <div className="flex flex-wrap justify-between items-center">
-          <ILabel size="2xl" weight="bold">
-            Users
-          </ILabel>
-          <div className="flex flex-wrap justify-start items-center">
-            <SearchMolecule />
-            <button className="border p-0 rounded-md mx-2">
-              <Icon name="filter" />
-            </button>
-          </div>
-          <div className="flex gap-3">
-            <Button onClick={() => console.log(e)} type="outline">
-              Import users
-            </Button>
-            <Button onClick={() => handleCreateNewUserClick()}>New {userType}</Button>
-          </div>
+
+      <TableHeader title="Users" totalItems={30} handleSearch={handleSearch}>
+        <div className="flex gap-3">
+          <Button styleType="outline">Import users</Button>
+          <Button onClick={() => handleCreateNewUserClick()}>New {userType}</Button>
         </div>
-      </div>
+      </TableHeader>
       <Tabs onTabChange={(e) => setUserType(e.activeTabLabel)}>
-        <Tab label="Students" className="pt-4">
+        <Tab label="Students" className="pt-8">
           <Table statusColumn="status" data={data} hasAction={true} />
         </Tab>
-        <Tab label="Instructors" className="pt-4">
+        <Tab label="Instructors" className="pt-8">
           <Table statusColumn="status" data={instractors} hasAction={true} />
         </Tab>
-        <Tab label="Admins" className="pt-4">
+        <Tab label="Admins" className="pt-8">
           <Table statusColumn="status" data={admins} hasAction={true} />
         </Tab>
       </Tabs>
