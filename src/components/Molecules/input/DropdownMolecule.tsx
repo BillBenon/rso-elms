@@ -1,20 +1,19 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import Select from 'react-select';
 
 import { DropdownProps } from '../../../types';
 import Error from '../../Atoms/Text/Error';
-import Heading from '../../Atoms/Text/Heading';
 import ILabel from '../../Atoms/Text/ILabel';
 
 interface Props extends DropdownProps {
-  label?: string;
+  children?: ReactNode | string;
   error?: string;
 }
 export default function DropdownMolecule(props: Props) {
   return (
     <div className="py-2">
-      <ILabel size="sm" weight="semibold" className="py-2">
-        {props.label}
+      <ILabel size="sm" weight="semibold">
+        {props.children}
       </ILabel>
       <Select
         isDisabled={props.disabled || false}
