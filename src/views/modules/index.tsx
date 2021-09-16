@@ -6,6 +6,7 @@ import Cacumber from '../../components/Molecules/Cacumber';
 import CourseCardMolecule from '../../components/Molecules/cards/CourseCardMolecule';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
+import TableHeader from '../../components/Molecules/table/TableHeader';
 import AddPrerequesitForm from '../../components/Organisms/forms/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/NewModuleForm';
 import Dashboard from '../../layout/Dashboard';
@@ -21,6 +22,8 @@ export default function Modules() {
     setPrOpen(true);
     console.log('from submit');
   }
+
+  function handleSearch() {}
 
   const list: Link[] = [
     { to: 'home', title: 'home' },
@@ -69,13 +72,10 @@ export default function Modules() {
         <section>
           <Cacumber list={list}></Cacumber>
         </section>
-        <section className="flex justify-between items-center">
-          <Heading fontSize="2xl" fontWeight="bold">
-            Modules
-          </Heading>
-          <SearchMolecule></SearchMolecule>
-
-          <Button onClick={() => setOpen(true)}>Add Module</Button>
+        <section className="">
+          <TableHeader totalItems={34} title="Modules" handleSearch={handleSearch}>
+            <Button onClick={() => setOpen(true)}>Add Module</Button>
+          </TableHeader>
         </section>
         <section className="flex flex-wrap justify-between mt-2">
           {data.map((course) => (
