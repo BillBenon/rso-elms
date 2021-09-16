@@ -1,16 +1,17 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import Academies from './components/Organisms/academy/Academy';
-import AddAcademy from './components/Organisms/academy/NewAcademy';
 import CreatedBySandberg from './components/Organisms/CreatedBySandberg';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import SignUpForm from './components/Organisms/signup/SignUpForm';
 import Dashboard from './layout/Dashboard';
+import Academies from './views/academies/Academies';
+import NewAcademy from './views/academies/NewAcademy';
 import FacultiesView from './views/faculties/Faculties';
 import Modules from './views/modules';
 import NotFound from './views/NotFound';
 import Popup from './views/Popup';
+import Subjects from './views/subjects';
 import NewInstructorView from './views/users/NewInstructor';
 import NewStudentsView from './views/users/NewStudent';
 import UsersView from './views/users/Users';
@@ -32,10 +33,11 @@ const App = () => {
 
           <Route exact path="/register" component={SignUpForm} />
           <Route exact path="/academies" component={Academies} />
-          <Route exact path="/academies/new" component={AddAcademy} />
+          <Route exact path="/academies/new" component={NewAcademy} />
           <Route exact path="/users" component={UsersView} />
           <Route exact path="/popup" component={Popup} />
           <Route exact path="/modules" component={Modules} />
+          <Route exact path="/subjects" component={Subjects} />
           <Route exact path="/registration-control" component={RegistrationControl} />
           <Route exact path="/users/students/new" component={NewStudentsView} />
           <Route exact path="/users/instructors/new" component={NewInstructorView} />

@@ -13,7 +13,6 @@ export const Tab = ({ className = '', children }: TabProps) => {
 };
 
 type TabChildrenType = ReactElement<JSXElementConstructor<typeof Tab>>[];
-// | ReactElement<JSXElementConstructor<typeof Tab>>;
 
 interface TabsProps {
   activeIndex?: number;

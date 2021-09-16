@@ -1,11 +1,10 @@
 import React, { FormEvent } from 'react';
 
-import { CommonFormProps, ValueType } from '../../../types';
-import Button from '../../Atoms/custom/Button';
-// import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
-import InputMolecule from '../../Molecules/input/InputMolecule';
-import RadioMolecule from '../../Molecules/input/RadioMolecule';
-import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
+import { CommonFormProps, ValueType } from '../../../../types';
+import Button from '../../../Atoms/custom/Button';
+import InputMolecule from '../../../Molecules/input/InputMolecule';
+import RadioMolecule from '../../../Molecules/input/RadioMolecule';
+import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 interface PropType<K> extends CommonFormProps<K> {}
 

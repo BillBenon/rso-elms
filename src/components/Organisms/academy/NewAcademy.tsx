@@ -3,7 +3,6 @@ import './academy.scss';
 
 import React from 'react';
 
-import Dashboard from '../../../layout/Dashboard';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import Heading from '../../Atoms/Text/Heading';
@@ -17,7 +16,7 @@ export default function AddAcademy() {
   }
 
   return (
-    <Dashboard>
+    <>
       <div className="flex flex-wrap justify-start items-center">
         <ILabel size="sm" color="gray" weight="medium">
           Institution Admin
@@ -86,6 +85,6 @@ export default function AddAcademy() {
           <Button full>Save</Button>
         </div>
       </div>
-    </Dashboard>
+    </>
   );
 }

@@ -3,7 +3,6 @@ import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { colorStyle, fontSizeStyle } from '../../../global/global-vars';
-import { Color } from '../../../types';
 import Icon from './Icon';
 
 export type linkProps = {
