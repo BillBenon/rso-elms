@@ -4,6 +4,7 @@ import Select from 'react-select';
 import { DropdownProps } from '../../../types';
 import Error from '../../Atoms/Text/Error';
 import Heading from '../../Atoms/Text/Heading';
+import ILabel from '../../Atoms/Text/ILabel';
 
 interface Props extends DropdownProps {
   label?: string;
@@ -12,9 +13,9 @@ interface Props extends DropdownProps {
 export default function DropdownMolecule(props: Props) {
   return (
     <div className="py-2">
-      <Heading fontSize="sm" fontWeight="semibold" className="py-2">
+      <ILabel size="sm" weight="semibold" className="py-2">
         {props.label}
-      </Heading>
+      </ILabel>
       <Select
         isDisabled={props.disabled || false}
         name={props.name}
