@@ -5,6 +5,8 @@ import Cacumber from '../../components/Molecules/Cacumber';
 import CourseCardMolecule from '../../components/Molecules/cards/CourseCardMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
+import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
 import Dashboard from '../../layout/Dashboard';
 import { CourseModelDataType, Link } from '../../types';
 
@@ -81,7 +83,7 @@ export default function Subjects() {
 
         {/* add module popup */}
         <PopupMolecule title="New Subject" open={open} onClose={() => setOpen(false)}>
-          <NewModuleForm onSubmit={submited} />
+          <NewSubjectForm onSubmit={submited} />
         </PopupMolecule>
 
         {/* add prerequesite popup */}
@@ -89,7 +91,7 @@ export default function Subjects() {
           title="Add Prerequesite"
           open={prOpen}
           onClose={() => setPrOpen(false)}>
-          <AddPrerequesitForm />
+          <NewLessonForm />
         </PopupMolecule>
       </main>
     </Dashboard>

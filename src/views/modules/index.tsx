@@ -5,8 +5,8 @@ import Cacumber from '../../components/Molecules/Cacumber';
 import CourseCardMolecule from '../../components/Molecules/cards/CourseCardMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import AddPrerequesitForm from '../../components/Organisms/forms/AddPrerequisiteForm';
-import NewModuleForm from '../../components/Organisms/forms/NewModuleForm';
+import AddPrerequesitForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
+import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
 import Dashboard from '../../layout/Dashboard';
 import { CourseModelDataType, Link } from '../../types';
 
