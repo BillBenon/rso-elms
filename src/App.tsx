@@ -9,6 +9,7 @@ import Dashboard from './layout/Dashboard';
 import Modules from './views/modules';
 import NotFound from './views/NotFound';
 import Popup from './views/Popup';
+import Signin from './views/signin/Signin';
 import NewInstructorView from './views/users/NewInstructor';
 import NewStudentsView from './views/users/NewStudent';
 import UsersView from './views/users/Users';
@@ -29,6 +30,8 @@ const App = () => {
           <Route exact path="/" component={Homepage} />
 
           <Route exact path="/register" component={SignUpForm} />
+          <Route path="/login" component={Signin} />
+
           <Route exact path="/academies" component={Academies} />
           <Route exact path="/academies/add" component={AddAcademy} />
           <Route exact path="/users" component={UsersView} />
