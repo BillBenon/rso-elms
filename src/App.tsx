@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
-import CreatedBySandberg from './components/Organisms/CreatedBySandberg';
+import ComponentsUseCase from './components/Organisms/ComponentsUseCase';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import SignUpForm from './components/Organisms/signup/SignUpForm';
 import Dashboard from './layout/Dashboard';
@@ -21,7 +21,7 @@ const App = () => {
   const Homepage = () => {
     return (
       <Dashboard>
-        <CreatedBySandberg />
+        <ComponentsUseCase />
       </Dashboard>
     );
   };

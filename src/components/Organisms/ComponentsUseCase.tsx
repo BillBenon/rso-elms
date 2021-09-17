@@ -71,13 +71,13 @@ export default function CreatedBySandberg() {
           onChange={() => console.log('changed')}
         />
         <DropdownMolecule
-          label="Select academy"
           options={options}
           name="academy"
           onChange={(e: object) => console.log(e)}
           error="Please select academy"
-          isMulti
-        />
+          isMulti>
+          Select academy
+        </DropdownMolecule>
       </div>
     </>
   );
