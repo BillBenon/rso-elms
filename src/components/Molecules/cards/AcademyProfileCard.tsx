@@ -1,9 +1,9 @@
 import React from 'react';
 
-import { Color, fontSize, fontWeight } from '../../types';
-import Avatar, { IAvatar } from '../Atoms/custom/Avatar';
-import Badge from '../Atoms/custom/Badge';
-import ILabel from '../Atoms/Text/ILabel';
+import { Color, fontSize, fontWeight } from '../../../types';
+import Avatar, { IAvatar } from '../../Atoms/custom/Avatar';
+import Badge from '../../Atoms/custom/Badge';
+import ILabel from '../../Atoms/Text/ILabel';
 
 interface ICard extends IAvatar {
   children: React.ReactNode;
@@ -11,6 +11,10 @@ interface ICard extends IAvatar {
   fontWeight?: fontWeight;
   color?: Color;
   subtitle?: string;
+  alt: string;
+  size?: string;
+  src: string;
+  bgColor?: Color;
 }
 
 export default function AcademyProfileCard({
