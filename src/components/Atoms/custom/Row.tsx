@@ -30,8 +30,8 @@ const Row = ({ keys, data, statusColumn }: RowProps) => {
             key={key}>
             {key.toLowerCase() === statusColumn ? (
               <Badge
-                badgecolor={statusColors[val.toLowerCase() as Status]}
-                badgetxtcolor={statusColors[val.toLowerCase() as Status]}>
+                badgecolor={val && statusColors[val.toLowerCase() as Status]}
+                badgetxtcolor={val && statusColors[val.toLowerCase() as Status]}>
                 {val}
               </Badge>
             ) : (
