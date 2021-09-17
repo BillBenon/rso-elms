@@ -1,14 +1,14 @@
 // import { Label } from "@headlessui/react/dist/components/label/label";
-import './academy.scss';
+import '../../academy/academy.scss';
 
 import React from 'react';
 
-import Button from '../../Atoms/custom/Button';
-import Icon from '../../Atoms/custom/Icon';
-import Heading from '../../Atoms/Text/Heading';
-import ILabel from '../../Atoms/Text/ILabel';
-import InputMolecule from '../../Molecules/input/InputMolecule';
-import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
+import Button from '../../../Atoms/custom/Button';
+import Icon from '../../../Atoms/custom/Icon';
+import Heading from '../../../Atoms/Text/Heading';
+import ILabel from '../../../Atoms/Text/ILabel';
+import InputMolecule from '../../../Molecules/input/InputMolecule';
+import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function AddAcademy() {
   function handleChange(_event: any) {
