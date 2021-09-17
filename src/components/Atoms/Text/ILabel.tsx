@@ -7,10 +7,16 @@ interface ILabelProps {
   children: ReactNode;
   weight: fontWeight;
   size: fontSize;
-  color: Color;
+  color?: Color;
 }
 
-export default function ILabel({ children, weight, size, color, ...rest }: ILabelProps) {
+export default function ILabel({
+  children,
+  weight,
+  size,
+  color = 'txt-primary',
+  ...rest
+}: ILabelProps) {
   return (
     <label
       {...rest}
