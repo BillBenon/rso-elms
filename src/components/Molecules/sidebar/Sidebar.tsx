@@ -1,9 +1,25 @@
 import React from 'react';
 
-import SidebarLinks, { sidebarLinksProps } from '../../Atoms/custom/SidebarLinks';
-import AcademyProfileCard from '../AcademyProfileCard';
+import SidebarLinks, { linkProps } from '../../Atoms/custom/SidebarLinks';
+import AcademyProfileCard from '../cards/AcademyProfileCard';
 
-export default function Sidebar({ links }: sidebarLinksProps) {
+const defaultLinks: linkProps[] = [
+  { title: 'Users', to: '/users', icon: 'user' },
+  { title: 'Roles', to: '/roles', icon: 'role' },
+  { title: 'Academies', to: '/academies', icon: 'academy', fill: false },
+  { title: 'Faculties', to: '/faculties', icon: 'faculty' },
+  { title: 'Popup test', to: '/popup', icon: 'notification' },
+  { title: 'Modules', to: '/modules', icon: 'module' },
+  { title: 'Subjects', to: '/subjects', icon: 'module' },
+  {
+    title: 'Registration Control',
+    to: '/registration-control',
+    icon: 'reg-control',
+    fill: true,
+  },
+];
+
+export default function Sidebar() {
   return (
     <div className="bg-white md:h-screen">
       <div className="px-4 py-4">
@@ -13,7 +29,7 @@ export default function Sidebar({ links }: sidebarLinksProps) {
           University of Rwanda
         </AcademyProfileCard>
       </div>
-      <SidebarLinks links={links} />
+      <SidebarLinks links={defaultLinks} />
     </div>
   );
 }

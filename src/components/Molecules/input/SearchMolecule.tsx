@@ -1,9 +1,12 @@
 import React from 'react';
 
+import { ValueType } from '../../../types';
 import Icon from '../../Atoms/custom/Icon';
 import Input from '../../Atoms/Input/Input';
 
-export default function SearchMolecule() {
+type ISearchMolecule = { handleChange: (_e: ValueType) => void };
+
+export default function SearchMolecule({ handleChange }: ISearchMolecule) {
   return (
     <div className="rounded-lg border-2 border-bcolor w-72 flex items-center">
       <Icon name="search" />
@@ -15,7 +18,7 @@ export default function SearchMolecule() {
         width="auto md:w-52"
         padding="0"
         value={''}
-        handleChange={(e: any) => console.log(e.target.value)}
+        handleChange={handleChange}
         className="-ml-1"
       />
     </div>

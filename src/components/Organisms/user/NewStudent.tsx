@@ -16,7 +16,7 @@ export default function NewStudent() {
   };
   return (
     <>
-      <div className="flex flex-wrap justify-start items-center">
+      <div className="flex flex-wrap justify-start items-center pt-2">
         <ILabel size="sm" color="gray" weight="medium">
           Institution Admin
         </ILabel>
@@ -34,7 +34,7 @@ export default function NewStudent() {
         </ILabel>
       </div>
 
-      <div className="popup-width">
+      <div className="popup-width py-3">
         <Heading color="primary" fontSize="lg" fontWeight="semibold">
           New student
         </Heading>

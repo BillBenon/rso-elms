@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { ValueType } from '../../../types';
-import Button from '../../Atoms/custom/Button';
-// import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
-import RadioMolecule from '../../Molecules/input/RadioMolecule';
+import { ValueType } from '../../../../types';
+import Button from '../../../Atoms/custom/Button';
+import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 
 export default function AddPrerequesitForm() {
   function handleChange(e: ValueType) {

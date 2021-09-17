@@ -3,7 +3,6 @@ import './academy.scss';
 
 import React from 'react';
 
-import Dashboard from '../../../layout/Dashboard';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import Heading from '../../Atoms/Text/Heading';
@@ -12,12 +11,12 @@ import InputMolecule from '../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
 
 export default function AddAcademy() {
-  function handleChange(event) {
+  function handleChange(_event: any) {
     console.log('here');
   }
 
   return (
-    <Dashboard activeIndex={2}>
+    <>
       <div className="flex flex-wrap justify-start items-center">
         <ILabel size="sm" color="gray" weight="medium">
           Institution Admin
@@ -35,7 +34,9 @@ export default function AddAcademy() {
 
       <div className="p-4 pl-6 popup-width gap-3">
         <div className="py-5 mb-3 capitalize">
-          <Heading color="primary">New academy</Heading>
+          <Heading color="primary" fontWeight="bold">
+            New academy
+          </Heading>
         </div>
         <InputMolecule
           name="acname"
@@ -78,12 +79,12 @@ export default function AddAcademy() {
           <div className="mb-3">
             <ILabel weight="bold">academy logo</ILabel>
           </div>
-          <Button type="outline">upload logo</Button>
+          <Button styleType="outline">upload logo</Button>
         </div>
         <div className="mt-5">
           <Button full>Save</Button>
         </div>
       </div>
-    </Dashboard>
+    </>
   );
 }
