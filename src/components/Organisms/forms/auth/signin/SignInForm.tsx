@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-import { ValueType } from '../../../types';
-import Button from '../../Atoms/custom/Button';
-import Heading from '../../Atoms/Text/Heading';
-import InputMolecule from '../../Molecules/input/InputMolecule';
+import { ValueType } from '../../../../../types';
+import Button from '../../../../Atoms/custom/Button';
+import Heading from '../../../../Atoms/Text/Heading';
+import InputMolecule from '../../../../Molecules/input/InputMolecule';
 
 const SignInForm = () => {
   const history = useHistory();

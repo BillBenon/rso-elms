@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-import { ValueType } from '../../../types';
-import Button from '../../Atoms/custom/Button';
-import Heading from '../../Atoms/Text/Heading';
-import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
-import InputMolecule from '../../Molecules/input/InputMolecule';
+import { ValueType } from '../../../../../types';
+import Button from '../../../../Atoms/custom/Button';
+import Heading from '../../../../Atoms/Text/Heading';
+import DropdownMolecule from '../../../../Molecules/input/DropdownMolecule';
+import InputMolecule from '../../../../Molecules/input/InputMolecule';
 
 function SignInWithSearch() {
   const [details, setDetails] = useState({
@@ -33,8 +33,11 @@ function SignInWithSearch() {
         </p>
       </div>
 
-      <div className="flex flex-col gap-4">
+      <div className="flex gap-2 items-center">
+        {/** ASK LIBERISTE TO MAKE COURSE CARD DYNAMIC */}
         <DropdownMolecule
+          width="28"
+          placeholder="Search"
           onChange={handleChange}
           name="searchBy"
           defaultValue={details.searchBy}
@@ -46,9 +49,8 @@ function SignInWithSearch() {
             { value: 'instructors', label: 'Instructors' },
             { value: 'administrators', label: 'Administrators' },
             { value: 'Programmes', label: 'Programmes' },
-          ]}>
-          Search By
-        </DropdownMolecule>
+          ]}
+        />
         <InputMolecule
           name="searchResult"
           value={details.searchResult}
@@ -62,7 +64,7 @@ function SignInWithSearch() {
         <p className="text-base text-txt-secondary">
           Already have an account?
           <span className="text-primary-500 px-2">
-            <Link to="/register">Sign in</Link>
+            <Link to="/login">Sign in</Link>
           </span>
         </p>
       </div>

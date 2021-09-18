@@ -2,8 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import ComponentsUseCase from './components/Organisms/ComponentsUseCase';
+import SignUpForm from './components/Organisms/forms/auth/signup/SignUpForm';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
-import SignUpForm from './components/Organisms/signup/SignUpForm';
 import Dashboard from './layout/Dashboard';
 import Academies from './views/academies/Academies';
 import NewAcademy from './views/academies/NewAcademy';
