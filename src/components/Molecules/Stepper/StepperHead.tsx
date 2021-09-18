@@ -4,19 +4,22 @@ import React from 'react';
 
 import Step from './Step';
 
+type StepperContent = {
+  label: string;
+  // eslint-disable-next-line no-undef
+  content: JSX.Element;
+  isError?: boolean;
+  isComplete?: boolean;
+  clicked: () => void;
+};
+
 type StepperHeadProp = {
-  stepperContent: {
-    label: string;
-    // eslint-disable-next-line no-undef
-    content: JSX.Element;
-    isError?: boolean;
-    isComplete?: boolean;
-    clicked: () => void;
-  }[];
+  stepperContent: StepperContent[];
   navigateToStepHandler: (_index: number) => void;
   currentTabIndex: number;
   isInline?: boolean;
   isVertical?: boolean;
+  isFirstStep: StepperContent;
 };
 
 const StepperHead = ({
@@ -25,14 +28,17 @@ const StepperHead = ({
   isInline,
   isVertical,
   currentTabIndex,
+  isFirstStep,
 }: StepperHeadProp) => (
   <div className={`hidden ${isVertical ? 'md:block' : 'md:flex'}`}>
     {stepperContent.map((el, i) => (
       <div key={el.label}>
-        <div
-          className={`separator_ ${
-            isVertical ? 'h-16 border-l-2' : 'w-16 border-b-2'
-          } border-silver`}></div>
+        {i !== 0 && (
+          <div
+            className={`separator_ ${
+              isVertical ? 'h-16 border-l-2' : 'w-16 border-b-2'
+            } ${el == isFirstStep ? 'h-0 border-none' : ''} border-silver`}></div>
+        )}
 
         <Step
           key={el.label}

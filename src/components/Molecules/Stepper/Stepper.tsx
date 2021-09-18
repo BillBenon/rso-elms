@@ -52,6 +52,7 @@ const Stepper = ({ isVertical, isInline, stepperContent }: StepperProps) => {
           isVertical={isVertical}
           isInline={isInline}
           currentTabIndex={currentTabIndex}
+          isFirstStep={stepperContent[0]}
         />
         <div className="pl-0 md:pl-11">
           {stepperContent.map((el, i) => (
