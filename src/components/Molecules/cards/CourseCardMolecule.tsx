@@ -11,9 +11,15 @@ type PropType = {
   active?: boolean;
   to?: Link;
   data: CourseModelDataType;
+  className?: string;
 };
 
-export default function CourseCardMolecule({ active = false, to, data }: PropType) {
+export default function CourseCardMolecule({
+  active = false,
+  to,
+  data,
+  className = '',
+}: PropType) {
   const history = useHistory();
 
   // handle action that especially click on this card
@@ -31,6 +37,7 @@ export default function CourseCardMolecule({ active = false, to, data }: PropTyp
       className={`bg-main p-6 rounded-lg 
       ${active && 'border-4 border-primary-500 border-solid'}
       ${to && 'cursor-pointer'}
+      ${className}
       `}
       role="presentation"
       onClick={handleAction}
