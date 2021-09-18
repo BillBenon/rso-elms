@@ -42,8 +42,11 @@ const SignIn = () => {
             subtitle="Service . Protection . Integrity">
             Rwanda National Police
           </AcademyProfileCard>
-          {showSearch ? <SignInWithSearch /> : <SignInForm />}
-
+          {showSearch ? (
+            <SignInWithSearch handleClick={() => setShowSearch(false)} />
+          ) : (
+            <SignInForm />
+          )}
           <PopupMolecule open={modalOpen} onClose={closeModel}>
             <ProgramList onSubmit={submitted} />
           </PopupMolecule>

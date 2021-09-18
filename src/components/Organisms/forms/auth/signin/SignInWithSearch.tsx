@@ -1,5 +1,5 @@
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import { ValueType } from '../../../../../types';
 import Button from '../../../../Atoms/custom/Button';
@@ -7,7 +7,11 @@ import Heading from '../../../../Atoms/Text/Heading';
 import DropdownMolecule from '../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../Molecules/input/InputMolecule';
 
-function SignInWithSearch() {
+type PropType = {
+  handleClick: () => void;
+};
+
+function SignInWithSearch({ handleClick }: PropType) {
   const [details, setDetails] = useState({
     searchBy: '',
     searchResult: '',
@@ -63,9 +67,12 @@ function SignInWithSearch() {
       <div className="text-txt-secondary py-2">
         <p className="text-base text-txt-secondary">
           Already have an account?
-          <span className="text-primary-500 px-2">
-            <Link to="/login">Sign in</Link>
-          </span>
+          <Button
+            styleType="text"
+            className="text-primary-500 px-2"
+            onClick={handleClick}>
+            Sign in
+          </Button>
         </p>
       </div>
     </>
