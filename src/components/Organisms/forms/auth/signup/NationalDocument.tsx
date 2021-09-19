@@ -13,6 +13,7 @@ const NationalDocuments = () => {
     national_id: '',
     passport: '',
     passport_expiry_date: '',
+    place_of_birth: '',
     language: '',
   });
 
@@ -53,7 +54,7 @@ const NationalDocuments = () => {
         <InputMolecule
           name="national_id"
           value={details.national_id}
-          placeholder="----------------"
+          placeholder="Enter 16 digit NID number"
           handleChange={handleChange}>
           National Identitification Number
         </InputMolecule>
@@ -66,9 +67,16 @@ const NationalDocuments = () => {
           handleChange={handleChange}>
           Passport Number(Optional)
         </InputMolecule>
-      </div>
-      <div className="flex flex-col gap-4">
         <DateMolecule width="60 md:w-80">Passport expiry date</DateMolecule>
+      </div>
+      <div className="flex flex-col">
+        <InputMolecule
+          name="place_of_birth"
+          value={details.place_of_birth}
+          placeholder="Enter place you got birth from"
+          handleChange={handleChange}>
+          Place of Birth
+        </InputMolecule>
         <CheckboxMolecule
           placeholder="Languages"
           onChange={handleChange}

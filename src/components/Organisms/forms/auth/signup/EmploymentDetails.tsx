@@ -33,6 +33,7 @@ const EmploymentDetails = () => {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4">
         <DropdownMolecule
+          placeholder="Select current rank"
           name="currentRank"
           className="w-72"
           onChange={handleChange}

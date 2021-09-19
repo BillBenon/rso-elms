@@ -38,7 +38,6 @@ function SignInWithSearch({ handleClick }: PropType) {
       </div>
 
       <div className="flex gap-2 items-center">
-        {/** ASK LIBERISTE TO MAKE COURSE CARD DYNAMIC */}
         <DropdownMolecule
           width="28"
           placeholder="Search"
