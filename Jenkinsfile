@@ -2,7 +2,7 @@ pipeline {
      agent {
         docker {
             image 'node:14'
-            args '-p 3010:3000'
+            args '-p 3010:5000'
         }
     }
     environment {
@@ -10,14 +10,19 @@ pipeline {
         CI = 'true' 
     }
     stages {
-        stage('Build') { 
+        stage('Install') { 
             steps {
                 sh 'npm install' 
             }
         }
+        stage('Build') { 
+            steps {
+                sh 'npm build' 
+            }
+        }
         stage('Deploy') { 
             steps {
-                sh 'npm start' 
+                sh 'npm serve' 
             }
         }
     }
