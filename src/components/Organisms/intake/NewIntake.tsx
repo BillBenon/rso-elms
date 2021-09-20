@@ -5,6 +5,7 @@ import DateMolecule from '../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 import Stepper from '../../Molecules/Stepper/Stepper';
+import AddProgramToIntake from './AddProgramToIntake';
 
 export default function NewIntake() {
   const IntakeInfo = () => {
@@ -98,13 +99,18 @@ export default function NewIntake() {
       content: <IntakeStatus />,
       clicked: () => {},
     },
+    {
+      label: '',
+      content: <AddProgramToIntake />,
+      clicked: () => {},
+    },
   ];
   const handleChange = (e: any) => {
     console.log(e);
   };
 
   return (
-    <div>
+    <div className="w-full">
       <Stepper
         isVertical={false}
         isInline={false}

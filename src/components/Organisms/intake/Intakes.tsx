@@ -64,6 +64,7 @@ export default function Intakes() {
         ))}
       </section>
       <PopupMolecule
+        closeOnClickOutSide={false}
         title="New intake"
         open={modalOpen}
         onClose={() => setmodalOpen(false)}>
