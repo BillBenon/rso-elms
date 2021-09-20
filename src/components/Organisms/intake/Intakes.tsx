@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { CourseModelDataType, Link, ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
@@ -6,6 +6,7 @@ import Cacumber from '../../Molecules/Cacumber';
 import CourseCardMolecule from '../../Molecules/cards/CourseCardMolecule';
 import PopupMolecule from '../../Molecules/Popup';
 import TableHeader from '../../Molecules/table/TableHeader';
+import NewIntakeStepOne from './NewIntakeStep1';
 
 const list: Link[] = [
   { to: 'home', title: 'Institution Admin' },
@@ -42,6 +43,9 @@ const data: CourseModelDataType[] = [
 ];
 
 export default function Intakes() {
+  const [modalOpen, setmodalOpen] = useState(true);
+  const [step, setStep] = useState(0);
+
   function handleSearch(_e: ValueType) {}
   return (
     <div>
@@ -61,6 +65,12 @@ export default function Intakes() {
           </div>
         ))}
       </section>
+      <PopupMolecule
+        title="New intake"
+        open={modalOpen && step === 0}
+        onClose={() => setmodalOpen(false)}>
+        <NewIntakeStepOne />
+      </PopupMolecule>
     </div>
   );
 }

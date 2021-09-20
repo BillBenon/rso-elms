@@ -25,7 +25,7 @@ export default function PopupMolecule({ open, title, onClose, children }: PropTy
             </Heading>
           )}
 
-          <button className="close" onClick={onClose}>
+          <button className="close outline-none" onClick={onClose}>
             <Icon size={12} bgColor="tertiary" name="close" />
           </button>
         </div>
