@@ -8,6 +8,7 @@ const defaultLinks: linkProps[] = [
   { title: 'Roles', to: '/roles', icon: 'role' },
   { title: 'Academies', to: '/academies', icon: 'academy', fill: false },
   { title: 'Faculties', to: '/faculties', icon: 'faculty' },
+  { title: 'Levels', to: '/levels', icon: 'level' },
   { title: 'Popup test', to: '/popup', icon: 'notification' },
   { title: 'Modules', to: '/modules', icon: 'module' },
   { title: 'Subjects', to: '/subjects', icon: 'module' },
