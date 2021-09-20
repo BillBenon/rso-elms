@@ -17,12 +17,12 @@ pipeline {
         }
         stage('Build') { 
             steps {
-                sh 'npm build' 
+                sh 'npm run build' 
             }
         }
         stage('Deploy') { 
             steps {
-                sh 'npm serve' 
+                sh 'npm run serve' 
             }
         }
     }
