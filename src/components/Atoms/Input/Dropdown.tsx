@@ -24,7 +24,14 @@ export default function DropDown(props: DropdownProps) {
         styles={{
           control: (base: any, _state: any) => ({
             ...base,
-            borderColor: '#F0F1F1',
+            borderColor: props.hasError ? 'rgb(238,64,64)' : 'rgb(240, 241, 241)',
+            minHeight: 48,
+            borderWidth: 2,
+            borderRadius: 8,
+            cursor: 'pointer',
+          }),
+          clearIndicator: (_base: any, _state: any) => ({
+            display: 'none',
           }),
         }}
       />

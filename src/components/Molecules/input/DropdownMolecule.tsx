@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
-import Select from 'react-select';
 
 import { DropdownProps } from '../../../types';
+import DropDown from '../../Atoms/Input/Dropdown';
 import Error from '../../Atoms/Text/Error';
 import ILabel from '../../Atoms/Text/ILabel';
 
@@ -11,27 +11,25 @@ interface Props extends DropdownProps {
 }
 export default function DropdownMolecule(props: Props) {
   return (
-    <div className="">
+    <div className="py-2">
       <ILabel size="sm" weight="semibold">
         {props.children}
       </ILabel>
-      <Select
-        isDisabled={props.disabled || false}
+      <DropDown
+        disabled={props.disabled}
         name={props.name}
         options={props.options}
-        placeholder={props.placeholder || `Select ${props.name}`}
-        onChange={(e: any) => props.onChange({ ...e, name: props.name })}
-        className={`pt-2 w-${props.width || 'full md:w-80'} select ${
+        placeholder={props.placeholder}
+        onChange={(e: {}) => props.onChange({ ...e, name: props.name })}
+        className={`pt-2 w-${props.width || 'full md:w-80'} h-12 select ${
           props.className || ''
         }`}
         isMulti={props.isMulti}
-        isSearchable={props.searchable}
-        defaultValue={props.defaultValue || null}
+        searchable={props.searchable}
+        defaultValue={props.defaultValue}
         getOptionLabel={props.getOptionLabel}
         getOptionValue={props.getOptionValue}
-        noOptionsMessage={(_query: any) =>
-          `No ${props.name} matched "${_query.inputValue}"`
-        }
+        hasError={props.error ? true : false}
         styles={{
           control: (base: any, _state: any) => ({
             ...base,
@@ -39,7 +37,7 @@ export default function DropdownMolecule(props: Props) {
           }),
         }}
       />
-      {props.error ? <Error>{props.error}</Error> : <></>}
+      <p className="pt-2">{props.error ? <Error>{props.error}</Error> : <></>}</p>
     </div>
   );
 }
