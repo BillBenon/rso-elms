@@ -12,6 +12,7 @@ type PropType = {
   to?: Link;
   data: CourseModelDataType;
   className?: string;
+  handleClick?: (_e: Event) => void;
 };
 
 export default function CourseCardMolecule({
@@ -19,16 +20,19 @@ export default function CourseCardMolecule({
   to,
   data,
   className = '',
+  handleClick,
 }: PropType) {
   const history = useHistory();
 
   // handle action that especially click on this card
-  function handleAction() {
+  function handleAction(e: Event) {
     if (to) history.push(to.to);
+
+    if (handleClick) handleClick(e);
   }
 
   function handlePress(e: KeyboardEvent) {
-    if (e.key === 'Enter') handleAction();
+    if (e.key === 'Enter') handleAction(e);
   }
 
   return (
@@ -40,6 +44,7 @@ export default function CourseCardMolecule({
       ${className}
       `}
       role="presentation"
+      // @ts-ignore
       onClick={handleAction}
       //   @ts-ignore
       onKeyPress={handlePress}>
