@@ -1,5 +1,3 @@
-import '../../../styles/components/Atoms/custom/stepper.scss';
-
 import React from 'react';
 import { Fragment, useState } from 'react';
 
@@ -15,8 +13,8 @@ type StepperProps = {
     isComplete?: boolean;
   }[];
   submitStepper: () => void;
-  isInline: boolean;
-  isVertical: boolean;
+  isInline?: boolean;
+  isVertical?: boolean;
 };
 
 const Stepper = ({ isVertical, isInline, stepperContent }: StepperProps) => {
@@ -48,17 +46,18 @@ const Stepper = ({ isVertical, isInline, stepperContent }: StepperProps) => {
 
   return (
     <div className="stepper-wrapper">
-      <div style={{ display: isVertical ? 'flex' : 'block' }}>
+      <div className={`${isVertical ? 'flex' : 'block'}`}>
         <StepperHead
           stepperContent={stepperContent}
           navigateToStepHandler={navigateToStepHandler}
           isVertical={isVertical}
           isInline={isInline}
           currentTabIndex={currentTabIndex}
+          isFirstStep={stepperContent[0]}
         />
-        <div className="stepper-body">
+        <div className="pl-0 md:pl-11">
           {stepperContent.map((el, i) => (
-            <Fragment key={i}>{i === currentTabIndex && el.content}</Fragment>
+            <Fragment key={el.label}>{i === currentTabIndex && el.content}</Fragment>
           ))}
           {/* <StepperFoot
             isPrevBtn={isPrevBtn}

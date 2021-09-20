@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import { ValueType } from '../../../types';
-import Button from '../../Atoms/custom/Button';
-import DateMolecule from '../../Molecules/input/DateMolecule';
-import InputMolecule from '../../Molecules/input/InputMolecule';
-import RadioMolecule from '../../Molecules/input/RadioMolecule';
+import { ValueType } from '../../../../../types';
+import Button from '../../../../Atoms/custom/Button';
+import DateMolecule from '../../../../Molecules/input/DateMolecule';
+import InputMolecule from '../../../../Molecules/input/InputMolecule';
+import RadioMolecule from '../../../../Molecules/input/RadioMolecule';
 
 const PersonalDetails = () => {
   const [details, setDetails] = useState({
@@ -75,7 +75,7 @@ const PersonalDetails = () => {
           name="gender">
           Gender
         </RadioMolecule>
-        <DateMolecule>Date of Birth</DateMolecule>
+        <DateMolecule width="60 md:w-80">Date of Birth</DateMolecule>
       </div>
       <div className="my-4">
         <RadioMolecule

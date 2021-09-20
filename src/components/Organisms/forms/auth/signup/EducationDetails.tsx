@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-import { ValueType } from '../../../types';
-import Button from '../../Atoms/custom/Button';
-import DateMolecule from '../../Molecules/input/DateMolecule';
-import InputMolecule from '../../Molecules/input/InputMolecule';
+import { ValueType } from '../../../../../types';
+import Button from '../../../../Atoms/custom/Button';
+import DateMolecule from '../../../../Molecules/input/DateMolecule';
+import InputMolecule from '../../../../Molecules/input/InputMolecule';
 
 const EducationDetails = () => {
   const [details, setDetails] = useState({
@@ -56,10 +56,10 @@ const EducationDetails = () => {
           handleChange={handleChange}>
           Education section/ combination
         </InputMolecule>
-        <DateMolecule>Start Date</DateMolecule>
+        <DateMolecule width="60 md:w-80">Start Date</DateMolecule>
       </div>
       <div className="my-4">
-        <DateMolecule>End Date</DateMolecule>
+        <DateMolecule width="60 md:w-80">End Date</DateMolecule>
       </div>
       <Button>Attachment</Button>
       <div className="flex justify-between">
