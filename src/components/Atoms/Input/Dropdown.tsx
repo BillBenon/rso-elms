@@ -21,17 +21,22 @@ export default function DropDown(props: DropdownProps) {
         noOptionsMessage={(_query: any) =>
           `No ${props.name} matched "${_query.inputValue}"`
         }
+        closeMenuOnSelect={!props.isMulti}
         styles={{
           control: (base: any, _state: any) => ({
             ...base,
+            backgroundColor: 'transparent',
             borderColor: props.hasError ? 'rgb(238,64,64)' : 'rgb(240, 241, 241)',
-            minHeight: 48,
             borderWidth: 2,
             borderRadius: 8,
             cursor: 'pointer',
+            minHeight: 48,
           }),
           clearIndicator: (_base: any, _state: any) => ({
             display: 'none',
+          }),
+          container: (base: any, _state: any) => ({
+            ...base,
           }),
         }}
       />
