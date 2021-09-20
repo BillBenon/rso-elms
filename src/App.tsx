@@ -9,6 +9,7 @@ import NewAcademy from './views/academies/NewAcademy';
 import Signin from './views/auth/Signin';
 import Signup from './views/auth/Signup';
 import FacultiesView from './views/faculties/Faculties';
+import IntakesView from './views/intakes/Intakes';
 import LevelsView from './views/levels/Levels';
 import Modules from './views/modules';
 import NotFound from './views/NotFound';
@@ -47,6 +48,7 @@ const App = () => {
           <Route exact path="/users/instructors/new" component={NewInstructorView} />
           <Route exact path="/faculties" component={FacultiesView} />
           <Route exact path="/levels" component={LevelsView} />
+          <Route exact path="/intakes" component={IntakesView} />
           <Route exact path="*" component={NotFound} />
         </Switch>
       </Router>

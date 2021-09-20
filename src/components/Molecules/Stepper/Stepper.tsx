@@ -16,6 +16,7 @@ type StepperProps = {
   isInline?: boolean;
   isVertical?: boolean;
 };
+
 const Stepper = ({ isVertical, isInline, stepperContent }: StepperProps) => {
   const [currentTabIndex, setCurrentTabIndex] = useState(0);
   // isLastStep = currentTabIndex === stepperContent.length - 1,

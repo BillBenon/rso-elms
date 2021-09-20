@@ -12,6 +12,7 @@ const defaultLinks: linkProps[] = [
   { title: 'Popup test', to: '/popup', icon: 'notification' },
   { title: 'Modules', to: '/modules', icon: 'module' },
   { title: 'Subjects', to: '/subjects', icon: 'module' },
+  { title: 'Intakes', to: '/intakes', icon: 'academy', fill: false },
   {
     title: 'Registration Control',
     to: '/registration-control',

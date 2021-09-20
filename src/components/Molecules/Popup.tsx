@@ -7,15 +7,22 @@ import Icon from '../Atoms/custom/Icon';
 import Heading from '../Atoms/Text/Heading';
 
 type PropType = {
+  closeOnClickOutSide?: boolean;
   open: boolean;
   title?: string;
   children: ReactNode;
   onClose: () => void;
 };
 
-export default function PopupMolecule({ open, title, onClose, children }: PropType) {
+export default function PopupMolecule({
+  closeOnClickOutSide = true,
+  open,
+  title,
+  onClose,
+  children,
+}: PropType) {
   return (
-    <Popup open={open} closeOnDocumentClick onClose={onClose} modal>
+    <Popup open={open} closeOnDocumentClick={closeOnClickOutSide} onClose={onClose} modal>
       <div className="modal block p-2">
         {/* close button  */}
         <div className={`flex mb-4 ${title ? 'justify-between' : 'justify-end'}`}>
@@ -25,7 +32,7 @@ export default function PopupMolecule({ open, title, onClose, children }: PropTy
             </Heading>
           )}
 
-          <button className="close" onClick={onClose}>
+          <button className="close outline-none" onClick={onClose}>
             <Icon size={12} bgColor="tertiary" name="close" />
           </button>
         </div>
