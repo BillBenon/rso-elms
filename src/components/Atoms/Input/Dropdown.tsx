@@ -4,8 +4,10 @@ import Select from 'react-select';
 import { DropdownProps } from '../../../types';
 
 export default function DropDown(props: DropdownProps) {
+  // @tsc-ignore
   return (
     <>
+      {/*@tsc-ignore*/}
       <Select
         isDisabled={props.disabled || false}
         name={props.name}
