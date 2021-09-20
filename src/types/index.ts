@@ -59,6 +59,7 @@ export interface Link {
 export interface SelectData {
   value: string;
   label: string;
+  subLabel?: string;
 }
 
 /**

@@ -39,7 +39,7 @@ export default function Radio<T>({
       role="radiogroup"
       {...attrs}>
       {/* options */}
-      {options.map(({ label, value }) => (
+      {options.map(({ label, value, subLabel }) => (
         <div
           role="radio"
           tabIndex={0}
@@ -47,7 +47,7 @@ export default function Radio<T>({
           aria-checked={active === value}
           aria-labelledby={label}
           className={`flex cursor-pointer items-center ${
-            type === 'block' ? 'w-48 bg-main rounded-lg py-4 px-2 my-1' : 'mr-4'
+            type === 'block' ? 'w-48 bg-main rounded-lg py-2 px-2 my-1' : 'mr-4'
           }`}
           // @ts-ignore
           onClick={(e) => handleClick(value, e)}
@@ -59,7 +59,14 @@ export default function Radio<T>({
             ${
               active === value ? 'border-6 border-primary-500' : 'border-4 border-bcolor'
             }`}></span>
-          <span>{label}</span>
+          {!subLabel ? (
+            <span>{label}</span>
+          ) : (
+            <span className="block">
+              <span className="font-semibold inline-block"> {label} </span>
+              <span className="text-txt-secondary text-sm inline-block">{subLabel}</span>
+            </span>
+          )}
         </div>
       ))}
     </div>
