@@ -6,7 +6,7 @@ import Cacumber from '../../Molecules/Cacumber';
 import CourseCardMolecule from '../../Molecules/cards/CourseCardMolecule';
 import PopupMolecule from '../../Molecules/Popup';
 import TableHeader from '../../Molecules/table/TableHeader';
-import NewIntakeStepOne from './NewIntakeStep1';
+import NewIntake from './NewIntake';
 
 const list: Link[] = [
   { to: 'home', title: 'Institution Admin' },
@@ -44,15 +44,13 @@ const data: CourseModelDataType[] = [
 
 export default function Intakes() {
   const [modalOpen, setmodalOpen] = useState(true);
-  const [step, setStep] = useState(0);
-
   function handleSearch(_e: ValueType) {}
   return (
     <div>
       <Cacumber list={list} />
       <TableHeader title="Intakes" totalItems={7} handleSearch={handleSearch}>
         <div className="flex gap-3">
-          <Button>Add intake</Button>
+          <Button onClick={() => setmodalOpen(true)}>Add intake</Button>
         </div>
       </TableHeader>{' '}
       <section className="flex flex-wrap justify-between mt-2">
@@ -67,9 +65,9 @@ export default function Intakes() {
       </section>
       <PopupMolecule
         title="New intake"
-        open={modalOpen && step === 0}
+        open={modalOpen}
         onClose={() => setmodalOpen(false)}>
-        <NewIntakeStepOne />
+        <NewIntake />
       </PopupMolecule>
     </div>
   );
