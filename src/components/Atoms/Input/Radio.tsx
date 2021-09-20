@@ -39,7 +39,7 @@ export default function Radio<T>({
       role="radiogroup"
       {...attrs}>
       {/* options */}
-      {options.map(({ label, value }) => (
+      {options.map(({ label, value, subLabel }) => (
         <div
           role="radio"
           tabIndex={0}
@@ -59,13 +59,14 @@ export default function Radio<T>({
             ${
               active === value ? 'border-6 border-primary-500' : 'border-4 border-bcolor'
             }`}></span>
-          {/* <span>{label}</span> */}
-          <span className="block">
-            <span className="font-semibold inline-block">Cadette </span>
-            <span className="text-txt-secondary text-sm inline-block">
-              Short training
+          {!subLabel ? (
+            <span>{label}</span>
+          ) : (
+            <span className="block">
+              <span className="font-semibold inline-block"> {label} </span>
+              <span className="text-txt-secondary text-sm inline-block">{subLabel}</span>
             </span>
-          </span>
+          )}
         </div>
       ))}
     </div>
