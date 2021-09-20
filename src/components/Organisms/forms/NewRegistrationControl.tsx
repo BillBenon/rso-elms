@@ -22,12 +22,11 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
 
   return (
     <form onSubmit={submitForm}>
-      {/* model name */}
       <InputMolecule value="" error="" handleChange={handleChange} name="model-name">
         Registration control description
       </InputMolecule>
       <DateMolecule>Start Date</DateMolecule>
-      {/* module description */}
+
       <TextAreaMolecule value="" name="description" handleChange={handleChange}>
         Descripiton
       </TextAreaMolecule>
@@ -43,7 +42,7 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
         handleChange={handleChange}>
         Status
       </RadioMolecule>
-      {/* model has prerequesit */}
+
       <RadioMolecule
         className="mt-4"
         name="prerequsites"
@@ -54,7 +53,7 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
         handleChange={handleChange}>
         Has Prerequesites
       </RadioMolecule>
-      {/* save button */}
+
       <div className="mt-5">
         <Button type="submit" full>
           Save

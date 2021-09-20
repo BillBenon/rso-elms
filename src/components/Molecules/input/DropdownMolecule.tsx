@@ -11,7 +11,7 @@ interface Props extends DropdownProps {
 }
 export default function DropdownMolecule(props: Props) {
   return (
-    <div className="py-2">
+    <div className="">
       <ILabel size="sm" weight="semibold">
         {props.children}
       </ILabel>
@@ -20,8 +20,10 @@ export default function DropdownMolecule(props: Props) {
         name={props.name}
         options={props.options}
         placeholder={props.placeholder || `Select ${props.name}`}
-        onChange={(e: object) => props.onChange({ ...e, name: props.name })}
-        className={`w-${props.width || 'full md:w-80'} select ${props.className || ''}`}
+        onChange={(e: any) => props.onChange({ ...e, name: props.name })}
+        className={`pt-2 w-${props.width || 'full md:w-80'} select ${
+          props.className || ''
+        }`}
         isMulti={props.isMulti}
         isSearchable={props.searchable}
         defaultValue={props.defaultValue || null}

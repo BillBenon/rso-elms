@@ -11,9 +11,7 @@ import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function AddAcademy() {
-  function handleChange(_event: any) {
-    console.log('here');
-  }
+  function handleChange(_event: any) {}
 
   return (
     <>
