@@ -6,14 +6,14 @@ import { Color, fontSize, fontWeight } from '../../../types';
 interface ILabelProps {
   children: ReactNode;
   weight: fontWeight;
-  size: fontSize;
+  size?: fontSize;
   color?: Color;
 }
 
 export default function ILabel({
   children,
   weight,
-  size,
+  size = 'base',
   color = 'txt-primary',
   ...rest
 }: ILabelProps) {
