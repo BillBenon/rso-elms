@@ -21,9 +21,9 @@ const Table = ({ data, hasAction, statusColumn, rowsPerPage = 10 }: TableProps) 
   const [currentPage, setCurrentPage] = useState(1);
 
   //Get current rows
-  const indexOfLastPost = currentPage * rowsOnPage;
-  const indexOfFirstPost = indexOfLastPost - rowsOnPage;
-  const currentRows = data.slice(indexOfFirstPost, indexOfLastPost);
+  const indexOfLastRow = currentPage * rowsOnPage;
+  const indexOfFirstRow = indexOfLastRow - rowsOnPage;
+  const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
 
   // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
@@ -40,6 +40,7 @@ const Table = ({ data, hasAction, statusColumn, rowsPerPage = 10 }: TableProps) 
 
   const getRowsData = () => {
     let keys = getKeys();
+
     return currentRows.map((row, index) => (
       <tr key={index}>
         <Row key={index} data={row} keys={keys} statusColumn={statusColumn} />

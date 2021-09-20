@@ -30,13 +30,13 @@ function Levels() {
   const data = [
     {
       program: 'Cadette Program',
-      level_name: ['year 1', 'year 2', 'year 3', 'year 4'],
-      level_code: ['yr1', 'yr2', 'yr3', 'yr4'],
+      'level name': ['year 1', 'year 2', 'year 3', 'year 4'],
+      'level code': ['yr1', 'yr2', 'yr3', 'yr4'],
     },
     {
       program: 'Masters',
-      level_name: ['year 1', 'year 2', 'year 3', 'year 4'],
-      level_code: ['yr1', 'yr2', 'yr3', 'yr4'],
+      'level name': ['year 1', 'year 2', 'year 3', 'year 4'],
+      'level code': ['yr1', 'yr2', 'yr3', 'yr4'],
     },
   ];
 
