@@ -20,7 +20,7 @@ export default function DropdownMolecule(props: Props) {
         name={props.name}
         options={props.options}
         placeholder={props.placeholder || `Select ${props.name}`}
-        onChange={(e: object) => props.onChange({ ...e, name: props.name })}
+        onChange={(e: any) => props.onChange({ ...e, name: props.name })}
         className={`w-${props.width || 'full md:w-80'} select ${props.className || ''}`}
         isMulti={props.isMulti}
         isSearchable={props.searchable}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ValueType } from '../../../../types';
+import { SelectData, ValueType } from '../../../../types';
 import DropDown from '../Dropdown';
 
 type YProp = {
@@ -45,9 +45,9 @@ const YearSelect = (props: YProp) => {
     if (reverse) {
       years.reverse();
     }
-    const yearOptions: { value: number; label: number }[] = [];
+    const yearOptions: SelectData[] = [];
     years.forEach((year) => {
-      yearOptions.push({ value: year, label: year });
+      yearOptions.push({ value: year + '', label: year + '' });
     });
     return yearOptions;
   };

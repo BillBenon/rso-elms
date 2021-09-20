@@ -17,6 +17,7 @@ interface Props {
 export default function DropDown(props: Props) {
   return (
     <>
+      {/* @ts-ignore */}
       <Select
         disabled={props.disabled || false}
         name={props.name}
