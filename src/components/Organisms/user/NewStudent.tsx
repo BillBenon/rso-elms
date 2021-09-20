@@ -16,7 +16,7 @@ export default function NewStudent() {
   };
   return (
     <>
-      <div className="flex flex-wrap justify-start items-center">
+      <div className="flex flex-wrap justify-start items-center pt-2">
         <ILabel size="sm" color="gray" weight="medium">
           Institution Admin
         </ILabel>
@@ -34,8 +34,8 @@ export default function NewStudent() {
         </ILabel>
       </div>
 
-      <div className="popup-width">
-        <Heading color="primary" fontSize="lg" fontWeight="medium">
+      <div className="popup-width py-3">
+        <Heading color="primary" fontSize="lg" fontWeight="semibold">
           New student
         </Heading>
         <div className="mb-7"></div>
@@ -91,9 +91,7 @@ export default function NewStudent() {
           handleChange={(e) => handleChange(e)}>
           Passport (optional)
         </InputMolecule>
-        <Button full onClick={handleSubmit}>
-          Create
-        </Button>
+        <Button onClick={handleSubmit}>Create</Button>
       </div>
     </>
   );

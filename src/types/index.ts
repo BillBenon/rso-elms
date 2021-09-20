@@ -16,7 +16,7 @@ export type Color =
   | 'gray'
   | 'lightgray';
 
-export type fontSize = 'xs' | 'sm' | 'tiny' | 'lg' | '2xl';
+export type fontSize = 'xs' | 'sm' | 'base' | 'tiny' | 'lg' | '2xl';
 export type width = 'default' | 'full';
 export type fontWeight = 'normal' | 'medium' | 'semibold' | 'bold';
 
@@ -59,6 +59,7 @@ export interface Link {
 export interface SelectData {
   value: string;
   label: string;
+  subLabel?: string;
 }
 
 /**
@@ -78,3 +79,5 @@ export interface CourseModelDataType {
   subTitle?: string;
   description: string;
 }
+
+export * from './props';

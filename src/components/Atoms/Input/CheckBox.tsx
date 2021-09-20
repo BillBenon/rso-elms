@@ -19,7 +19,6 @@ interface Props {
 export default function Checkbox({
   label,
   name,
-  error,
   value,
   onChange,
   checked = false,

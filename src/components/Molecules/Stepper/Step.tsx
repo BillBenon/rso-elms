@@ -9,9 +9,11 @@ type StepProps = {
   label: string;
   navigateToStepHandler: (_index: number) => void;
   index: number;
+  isInline?: boolean;
   isActive: boolean;
   isComplete?: boolean;
   isError?: boolean;
+  isVertical?: boolean;
 };
 
 const Step = ({
@@ -23,37 +25,28 @@ const Step = ({
   isComplete,
   isError,
 }: StepProps) => {
-  const classes = [''];
-
-  if (isActive) {
-    classes.push('is-active');
-  }
-  if (isComplete) {
-    classes.push('is-complete');
-  }
-  if (isError) {
-    classes.push('is-error');
-  }
-
   return (
-    <div className={`stepper-step ${classes.join(' ')}`}>
-      <div className="stepper-indicator">
-        <Indicator
-          isCircular={true}
-          hasError={isError}
-          isComplete={isComplete}
-          isActive={isActive}
-          clicked={() => navigateToStepHandler(index)}>
-          {indicator}
-        </Indicator>
-      </div>
+    <div className="flex gap-14">
+      <Indicator
+        isCircular={true}
+        hasError={isError}
+        isComplete={isComplete}
+        isActive={isActive}
+        clicked={() => navigateToStepHandler(index)}>
+        {indicator}
+      </Indicator>
       <div
         onKeyDown={() => navigateToStepHandler(index)}
-        className={`stepper-label text-txt-secondary cursor-pointer
-		    ${isActive ? 'text-primary-600' : ''} 
-		    ${isError ? 'text-error-500' : ''} 
-		    ${isComplete ? 'text-success-500' : ''}
-        `}
+        className={`cursor-pointer
+        ${
+          isActive
+            ? 'text-primary-600'
+            : isError
+            ? 'text-error-500'
+            : isComplete
+            ? 'text-success-500'
+            : 'text-txt-secondary'
+        }`}
         onClick={() => navigateToStepHandler(index)}>
         {label}
       </div>

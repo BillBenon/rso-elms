@@ -13,7 +13,7 @@ export default function Cacumber({ list }: PropType) {
         {list.map((link, i) => (
           <a href={link.to} className=" flex items-center" key={i}>
             <div className="text-txt-secondary">{link.title}</div>
-            {i !== list.length - 1 && <Icon size={10} name="chevron-right" />}
+            {i !== list.length - 1 && <Icon size={20} name="chevron-right" />}
           </a>
         ))}
       </div>

@@ -11,17 +11,28 @@ type PropType = {
   active?: boolean;
   to?: Link;
   data: CourseModelDataType;
+  className?: string;
+  handleClick?: (_e: Event) => void;
 };
 
-export default function CourseCardMolecule({ active = false, to, data }: PropType) {
+export default function CourseCardMolecule({
+  active = false,
+  to,
+  data,
+  className = '',
+  handleClick,
+}: PropType) {
   const history = useHistory();
 
-  function handleAction() {
+  // handle action that especially click on this card
+  function handleAction(e: Event) {
     if (to) history.push(to.to);
+
+    if (handleClick) handleClick(e);
   }
 
   function handlePress(e: KeyboardEvent) {
-    if (e.key === 'Enter') handleAction();
+    if (e.key === 'Enter') handleAction(e);
   }
 
   return (
@@ -30,8 +41,10 @@ export default function CourseCardMolecule({ active = false, to, data }: PropTyp
       className={`bg-main p-6 rounded-lg 
       ${active && 'border-4 border-primary-500 border-solid'}
       ${to && 'cursor-pointer'}
+      ${className}
       `}
       role="presentation"
+      // @ts-ignore
       onClick={handleAction}
       //   @ts-ignore
       onKeyPress={handlePress}>

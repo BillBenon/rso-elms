@@ -1,28 +1,24 @@
 import React, { useEffect, useState } from 'react';
 
-import { SelectData, ValueType } from '../../../types';
+import { CommonInputProps } from '../../../types';
 
-type PropType = {
-  list: SelectData[];
+interface PropType<T> extends CommonInputProps<T> {
   type?: 'inline' | 'block';
-  value?: string;
-  name: string;
-  handleChange: (_e: ValueType) => void;
-};
+}
 
 /**
  * Radio button that will be taking list of options to be used
  * list should contain array of object that has {label:'',value:''}, the value will be used as unique identifier
  * while lable will be displayed on the UI
  */
-export default function Radio({
+export default function Radio<T>({
   value = '',
-  list,
+  options,
   type = 'inline',
   name,
   handleChange,
   ...attrs
-}: PropType) {
+}: PropType<T>) {
   const [active, setActive] = useState('');
 
   useEffect(() => setActive(value), []);
@@ -39,10 +35,11 @@ export default function Radio({
 
   return (
     <div
-      {...attrs}
       className={`flex ${type === 'block' && 'flex-col'}`}
-      role="radiogroup">
-      {list.map(({ label, value }) => (
+      role="radiogroup"
+      {...attrs}>
+      {/* options */}
+      {options.map(({ label, value, subLabel }) => (
         <div
           role="radio"
           tabIndex={0}
@@ -50,18 +47,26 @@ export default function Radio({
           aria-checked={active === value}
           aria-labelledby={label}
           className={`flex cursor-pointer items-center ${
-            type === 'block' ? 'w-48 bg-main rounded-lg py-4 px-2 my-1' : 'mr-4'
+            type === 'block' ? 'w-48 bg-main rounded-lg py-2 px-2 my-1' : 'mr-4'
           }`}
           // @ts-ignore
           onClick={(e) => handleClick(value, e)}
           // @ts-ignore
           onKeyPress={(e) => handleKeyPress(value, e)}>
+          {/* span */}
           <span
             className={`mx-2 w-5 h-5 rounded-full border-solid 
             ${
               active === value ? 'border-6 border-primary-500' : 'border-4 border-bcolor'
             }`}></span>
-          <span>{label}</span>
+          {!subLabel ? (
+            <span>{label}</span>
+          ) : (
+            <span className="block">
+              <span className="font-semibold inline-block"> {label} </span>
+              <span className="text-txt-secondary text-sm inline-block">{subLabel}</span>
+            </span>
+          )}
         </div>
       ))}
     </div>

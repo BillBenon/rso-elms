@@ -4,16 +4,17 @@ import './academy.scss';
 import React from 'react';
 import { useHistory } from 'react-router';
 
-import Dashboard from '../../../layout/Dashboard';
+import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
-import Heading from '../../Atoms/Text/Heading';
 import ILabel from '../../Atoms/Text/ILabel';
-import SearchMolecule from '../../Molecules/input/SearchMolecule';
-import Table from '../../Molecules/Table';
+import Table from '../../Molecules/table/Table';
+import TableHeader from '../../Molecules/table/TableHeader';
 
-export default function Academies() {
+export default function Academy() {
   const history = useHistory();
+
+  function handleSearch(_e: ValueType) {}
 
   const data = [
     {
@@ -151,6 +152,7 @@ export default function Academies() {
     },
     {
       'full name': 'Prof Gen Sandberg dotMe',
+      email: '',
       role: 'Student / Sr',
       'phone number': 7869046728,
       status: 'Cancelled',
@@ -229,7 +231,7 @@ export default function Academies() {
   ];
 
   return (
-    <Dashboard activeIndex={2}>
+    <>
       <div className="flex flex-wrap justify-start items-center">
         <ILabel size="sm" color="gray" weight="medium">
           Institution Admin
@@ -245,23 +247,14 @@ export default function Academies() {
         </ILabel>
       </div>
       <div className="py-4">
-        <div className="flex flex-wrap justify-between items-center">
-          <Heading color="primary" className="capitalize" size="2xl" weight="bold">
-            Academy
-          </Heading>
-          <div className="flex flex-wrap justify-start items-center">
-            <SearchMolecule />
-            <button className="border p-0 rounded-md mx-2">
-              <Icon name="filter" />
-            </button>
-          </div>
-          <div className="flex gap-3">
-            <Button onClick={() => history.push('/academies/add')}>New academy</Button>
-          </div>
-        </div>
+        <TableHeader title="Academy" totalItems={300} handleSearch={handleSearch}>
+          <Button onClick={() => history.push('/academies/new')}>New academy</Button>
+        </TableHeader>
       </div>
 
-      <Table statusColumn="status" data={data} hasAction={true} />
-    </Dashboard>
+      <div className="mt-14">
+        <Table statusColumn="status" data={data} hasAction={true} />
+      </div>
+    </>
   );
 }

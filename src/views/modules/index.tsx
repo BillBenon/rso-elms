@@ -1,21 +1,27 @@
 import React, { useState } from 'react';
 
 import Button from '../../components/Atoms/custom/Button';
-import Icon from '../../components/Atoms/custom/Icon';
-import Heading from '../../components/Atoms/Text/Heading';
 import Cacumber from '../../components/Molecules/Cacumber';
 import CourseCardMolecule from '../../components/Molecules/cards/CourseCardMolecule';
-import InputMolecule from '../../components/Molecules/input/InputMolecule';
-import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
-import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
+import TableHeader from '../../components/Molecules/table/TableHeader';
+import AddPrerequesitForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
+import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
 import Dashboard from '../../layout/Dashboard';
-import { CourseModelDataType, Link, ValueType } from '../../types';
+import { CourseModelDataType, Link } from '../../types';
 
 export default function Modules() {
   const [open, setOpen] = useState(false); // state to controll the popup
-  const closeModel = () => setOpen(false); // when this is fired the popup will be closed
-  const openModel = () => setOpen(true); // when this is fired the popup will be oponed
+
+  const [prOpen, setPrOpen] = useState(false); // state to controll the popup
+
+  function submited() {
+    setOpen(false);
+    setPrOpen(true);
+    console.log('from submit');
+  }
+
+  function handleSearch() {}
 
   const list: Link[] = [
     { to: 'home', title: 'home' },
@@ -58,25 +64,16 @@ export default function Modules() {
     },
   ];
 
-  function handleChange(e: ValueType) {
-    console.log(e);
-  }
-
   return (
     <Dashboard>
       <main className="px-4">
         <section>
           <Cacumber list={list}></Cacumber>
         </section>
-        <section className="flex justify-between items-center">
-          <Heading fontSize="2xl" fontWeight="bold">
-            Modules
-          </Heading>
-          <SearchMolecule></SearchMolecule>
-          <Button icon type="outline" color="none" onClick={openModel}>
-            <Icon name="chevron-right" />
-          </Button>
-          <Button onClick={openModel}>Add Module</Button>
+        <section className="">
+          <TableHeader totalItems={34} title="Modules" handleSearch={handleSearch}>
+            <Button onClick={() => setOpen(true)}>Add Module</Button>
+          </TableHeader>
         </section>
         <section className="flex flex-wrap justify-between mt-2">
           {data.map((course) => (
@@ -90,57 +87,16 @@ export default function Modules() {
         </section>
 
         {/* add module popup */}
-        <PopupMolecule title="New Module" open={open} onClose={closeModel}>
-          <form>
-            {/* model name */}
-            <InputMolecule
-              value=""
-              error=""
-              handleChange={handleChange}
-              name="model-name">
-              Module name
-            </InputMolecule>
+        <PopupMolecule title="New Module" open={open} onClose={() => setOpen(false)}>
+          <NewModuleForm onSubmit={submited} />
+        </PopupMolecule>
 
-            {/* model code
-            <InputMolecule
-              value=""
-              error=""
-              handleChange={handleChange}
-              name="model-name">
-              Module code
-            </InputMolecule> */}
-
-            {/* model initial status */}
-            <RadioMolecule
-              className="mt-4"
-              value="ACTIVE"
-              name="status"
-              list={[
-                { label: 'Active', value: 'ACTIVE' },
-                { label: 'Inactive', value: 'INACTIVE' },
-              ]}
-              handleChange={handleChange}>
-              Status
-            </RadioMolecule>
-
-            {/* model has prerequesit */}
-            <RadioMolecule
-              className="mt-4"
-              name="prerequsites"
-              list={[
-                { label: 'Yes', value: 'YES' },
-                { label: 'No', value: 'NO' },
-              ]}
-              handleChange={handleChange}>
-              Has Prerequesites
-            </RadioMolecule>
-
-            {/* save button */}
-
-            <div className="mt-5">
-              <Button full>Save</Button>
-            </div>
-          </form>
+        {/* add prerequesite popup */}
+        <PopupMolecule
+          title="Add Prerequesite"
+          open={prOpen}
+          onClose={() => setPrOpen(false)}>
+          <AddPrerequesitForm />
         </PopupMolecule>
       </main>
     </Dashboard>
