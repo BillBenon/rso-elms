@@ -43,7 +43,7 @@ const data: CourseModelDataType[] = [
 ];
 
 export default function Intakes() {
-  const [modalOpen, setmodalOpen] = useState(true);
+  const [modalOpen, setmodalOpen] = useState(false);
   function handleSearch(_e: ValueType) {}
   return (
     <div>
