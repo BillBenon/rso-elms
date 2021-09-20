@@ -11,7 +11,7 @@ export interface CommonInputProps<T> extends CommonProps<T> {
   handleChange: (_e: ValueType) => void;
   name: string;
   value?: string;
-  options: SelectData[];
+  options?: SelectData[];
 }
 
 //common input props that will be used on all reusable input components

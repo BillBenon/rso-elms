@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ValueType } from '../../../../types';
+import { SelectData, ValueType } from '../../../../types';
 import { monthNum } from '../../../../utils/date-helper';
 import DropDown from '../Dropdown';
 
@@ -44,9 +44,9 @@ const MonthSelect = (mprops: MProp) => {
         });
       }
     }
-    const monthOptions: { value: number; label: string }[] = [];
+    const monthOptions: SelectData[] = [];
     months.forEach((month, index) => {
-      monthOptions.push({ value: index, label: month });
+      monthOptions.push({ value: index + '', label: month });
     });
     return monthOptions;
   };

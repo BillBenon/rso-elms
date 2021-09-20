@@ -29,7 +29,7 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-24">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <SearchMolecule handleSearch={handleSearch} />
+              <SearchMolecule handleChange={handleSearch} />
             </div>
           </div>
           <div className="hidden md:block">

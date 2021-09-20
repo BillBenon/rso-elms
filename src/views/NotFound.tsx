@@ -27,7 +27,7 @@ const NotFound = () => {
             </div>
             <div className="py-10 px-5 flex flex-wrap gap-3">
               <Button onClick={() => redirectTo('/')}>Go back home</Button>
-              <Button type="outline" onClick={() => redirectTo('/support')}>
+              <Button styleType="outline" onClick={() => redirectTo('/support')}>
                 Contact support
               </Button>
             </div>
