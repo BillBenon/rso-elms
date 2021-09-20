@@ -39,7 +39,7 @@ export default function NewIntake() {
           Total number of students
         </InputMolecule>
         <div className="pt-3">
-          <Button>Next</Button>
+          <Button type="submit">Next</Button>
         </div>
       </form>
     );
@@ -81,7 +81,7 @@ export default function NewIntake() {
         </DropdownMolecule>
 
         <div className="pt-3">
-          <Button>Create</Button>
+          <Button type="submit">Create</Button>
         </div>
       </form>
     );
@@ -101,10 +101,6 @@ export default function NewIntake() {
   ];
   const handleChange = (e: any) => {
     console.log(e);
-  };
-
-  const handleSubmit = () => {
-    window.alert('submitted');
   };
 
   return (
