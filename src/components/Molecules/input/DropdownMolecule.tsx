@@ -11,8 +11,8 @@ interface Props extends DropdownProps {
 }
 export default function DropdownMolecule(props: Props) {
   return (
-    <div className="py-2">
-      <Heading fontSize="sm" fontWeight="semibold" className="py-2">
+    <div className="flex flex-col gap-2">
+      <Heading fontSize="sm" fontWeight="semibold">
         {props.label}
       </Heading>
       <Select
@@ -33,7 +33,7 @@ export default function DropdownMolecule(props: Props) {
         styles={{
           control: (base: any, _state: any) => ({
             ...base,
-            borderColor: props.error ? 'rgb(238,64,64)' : base.borderColor,
+            borderColor: props.error ? 'rgb(238,64,64)' : '#F0F1F1',
           }),
         }}
       />

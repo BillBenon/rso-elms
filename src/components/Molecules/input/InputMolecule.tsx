@@ -24,7 +24,7 @@ export default function InputMolecule({
   type = 'text',
 }: IInputMolecule) {
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-2">
       <ILabel weight="bold">{children}</ILabel>
       <Input
         name={name}

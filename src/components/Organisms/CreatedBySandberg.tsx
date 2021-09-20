@@ -76,7 +76,6 @@ export default function CreatedBySandberg() {
           name="academy"
           onChange={(e: object) => console.log(e)}
           error="Please select academy"
-          isMulti
         />
       </div>
     </>

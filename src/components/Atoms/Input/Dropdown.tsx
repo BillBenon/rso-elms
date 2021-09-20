@@ -21,6 +21,12 @@ export default function DropDown(props: DropdownProps) {
         noOptionsMessage={(_query: any) =>
           `No ${props.name} matched "${_query.inputValue}"`
         }
+        styles={{
+          control: (base: any, _state: any) => ({
+            ...base,
+            borderColor: '#F0F1F1',
+          }),
+        }}
       />
     </>
   );
