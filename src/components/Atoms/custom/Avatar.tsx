@@ -1,12 +1,15 @@
 import React from 'react';
 
+import { Color } from '../../../types';
+
 export interface IAvatar {
   src: string;
   alt: string;
   size?: string;
+  bgColor?: Color;
 }
 
-export default function Avatar({ src = '', alt, size = '56' }: IAvatar) {
+export default function Avatar({ src, alt, size = '56' }: IAvatar) {
   return (
     <div>
       <img

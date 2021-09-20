@@ -18,7 +18,7 @@ export interface CommonInputProps<T> extends CommonProps<T> {
 export interface commonInputProps {
   onChange: Function;
   name: string;
-  options: object[];
+  options: SelectData[];
   className?: string;
   placeholder?: string;
   disabled?: boolean;

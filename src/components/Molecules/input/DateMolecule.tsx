@@ -12,10 +12,11 @@ import ILabel from '../../Atoms/Text/ILabel';
 type IProp = {
   showDate?: boolean;
   showTime?: boolean;
+  width?: string;
   children: ReactNode;
 };
 
-const DateMolecule = ({ showDate = true, showTime = false, children }: IProp) => {
+const DateMolecule = ({ showDate = true, showTime = false, width, children }: IProp) => {
   const [dateState, setDateState] = useState({
     Day: new Date().getDate(),
     Month: new Date().getMonth(),
@@ -33,7 +34,7 @@ const DateMolecule = ({ showDate = true, showTime = false, children }: IProp) =>
   };
 
   return (
-    <div className="flex flex-col gap-3 w-80">
+    <div className={`flex flex-col gap-3 w-${width || 'full md:w-80'}`}>
       <ILabel weight="bold">{children}</ILabel>
       <div className="flex gap-2">
         {showDate && (

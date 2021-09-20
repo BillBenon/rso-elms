@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-import { ValueType } from '../../../types';
-import Button from '../../Atoms/custom/Button';
-import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
-import InputMolecule from '../../Molecules/input/InputMolecule';
+import { ValueType } from '../../../../../types';
+import Button from '../../../../Atoms/custom/Button';
+import DropdownMolecule from '../../../../Molecules/input/DropdownMolecule';
+import InputMolecule from '../../../../Molecules/input/InputMolecule';
 
 const EmploymentDetails = () => {
   const [details, setDetails] = useState({
@@ -33,7 +33,6 @@ const EmploymentDetails = () => {
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4">
         <DropdownMolecule
-          label="Current Rank"
           name="currentRank"
           className="w-72"
           onChange={handleChange}
@@ -44,8 +43,9 @@ const EmploymentDetails = () => {
             { value: 'brd', label: 'Burundi' },
             { value: 'can', label: 'Canada' },
             { value: 'us', label: 'USA' },
-          ]}
-        />
+          ]}>
+          Current Rank
+        </DropdownMolecule>
         <InputMolecule
           name="otherRank"
           placeholder="other ranks u might hold"

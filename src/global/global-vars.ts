@@ -20,6 +20,7 @@ export const fontSizeStyle: fontSizeStyleType = {
   tiny: 'text-tiny',
   lg: 'text-lg',
   '2xl': 'text-2xl',
+  base: 'text-base',
 };
 
 export const bgStyle: bgStyleType = {
