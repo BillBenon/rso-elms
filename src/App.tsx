@@ -8,6 +8,7 @@ import Dashboard from './layout/Dashboard';
 import Academies from './views/academies/Academies';
 import NewAcademy from './views/academies/NewAcademy';
 import FacultiesView from './views/faculties/Faculties';
+import IntakeModulesView from './views/intakes/IntakeModules';
 import IntakesView from './views/intakes/Intakes';
 import Modules from './views/modules';
 import NotFound from './views/NotFound';
@@ -47,6 +48,7 @@ const App = () => {
           <Route exact path="/users/instructors/new" component={NewInstructorView} />
           <Route exact path="/faculties" component={FacultiesView} />
           <Route exact path="/intakes" component={IntakesView} />
+          <Route exact path="/intakes/:id" component={IntakeModulesView} />
           <Route exact path="*" component={NotFound} />
         </Switch>
       </Router>
