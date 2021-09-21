@@ -21,7 +21,7 @@ pipeline {
         }
         stage('Deploy') { 
             steps {
-                sh 'npm run serve' 
+                sh 'npm run pm2 start pm2.json' 
             }
         }
     }
