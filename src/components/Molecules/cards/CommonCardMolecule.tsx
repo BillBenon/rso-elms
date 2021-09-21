@@ -1,4 +1,4 @@
-import '../../../styles/components/Molecules/cards/CourseCardMolecule.scss';
+import '../../../styles/components/Molecules/cards/CommonCardMolecule.scss';
 
 import React from 'react';
 import { useHistory } from 'react-router';
@@ -15,7 +15,7 @@ type PropType = {
   handleClick?: (_e: Event) => void;
 };
 
-export default function CourseCardMolecule({
+export default function CommonCardMolecule({
   active = false,
   to,
   data,

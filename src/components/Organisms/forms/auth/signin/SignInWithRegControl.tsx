@@ -4,7 +4,7 @@ import React from 'react';
 
 import { CourseModelDataType } from '../../../../../types';
 import Heading from '../../../../Atoms/Text/Heading';
-import CourseCardMolecule from '../../../../Molecules/cards/CourseCardMolecule';
+import CommonCardMolecule from '../../../../Molecules/cards/CommonCardMolecule';
 
 type IProps = {
   handleClick: () => void;
@@ -43,7 +43,7 @@ function SignInWithRegControl({ handleClick }: IProps) {
         </Heading>
         {data.map((course) => (
           <div key={course.code} className="py-4" onClick={handleClick}>
-            <CourseCardMolecule
+            <CommonCardMolecule
               className="border-4 border-transparent hover:border-primary-500 "
               data={course}
               to={{ title: 'login', to: 'login' }}
