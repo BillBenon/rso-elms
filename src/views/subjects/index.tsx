@@ -8,7 +8,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
 import Dashboard from '../../layout/Dashboard';
-import { CourseModelDataType, Link } from '../../types';
+import { CommonCardDataType, Link } from '../../types';
 
 export default function Subjects() {
   const [open, setOpen] = useState(false); // state to controll the popup
@@ -28,7 +28,7 @@ export default function Subjects() {
     { to: 'subjects', title: 'subjects' },
   ];
 
-  const data: CourseModelDataType[] = [
+  const data: CommonCardDataType[] = [
     {
       status: { type: 'success', text: 'On going' },
       code: 'Ra01-430st',

@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 
-import { CourseModelDataType } from '../../../../../types';
+import { CommonCardDataType } from '../../../../../types';
 import Heading from '../../../../Atoms/Text/Heading';
 import CommonCardMolecule from '../../../../Molecules/cards/CommonCardMolecule';
 
@@ -11,7 +11,7 @@ type IProps = {
 };
 
 function SignInWithRegControl({ handleClick }: IProps) {
-  const data: CourseModelDataType[] = [
+  const data: CommonCardDataType[] = [
     {
       status: { type: 'success', text: 'Active' },
       code: 'RMA Gako',

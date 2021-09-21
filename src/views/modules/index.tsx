@@ -8,7 +8,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import AddPrerequesitForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
 import Dashboard from '../../layout/Dashboard';
-import { CourseModelDataType, Link } from '../../types';
+import { CommonCardDataType, Link } from '../../types';
 
 export default function Modules() {
   const [open, setOpen] = useState(false); // state to controll the popup
@@ -29,7 +29,7 @@ export default function Modules() {
     { to: 'subjects', title: 'subjects' },
   ];
 
-  const data: CourseModelDataType[] = [
+  const data: CommonCardDataType[] = [
     {
       status: { type: 'success', text: 'On going' },
       code: 'HR450-TC',
