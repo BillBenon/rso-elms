@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 export type Color =
   | 'primary'
@@ -71,13 +71,14 @@ export interface ValueType {
   event: Event;
 }
 
-export interface CourseModelDataType {
+export interface CommonCardDataType {
   id?: string | number;
   status?: { type: 'success' | 'warning' | 'error'; text: string };
   title: string;
   code: string;
   subTitle?: string;
   description: string;
+  footerTitle?: string | ReactNode;
 }
 
 export * from './props';

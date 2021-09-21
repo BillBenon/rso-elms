@@ -1,21 +1,21 @@
-import '../../../styles/components/Molecules/cards/CourseCardMolecule.scss';
+import '../../../styles/components/Molecules/cards/CommonCardMolecule.scss';
 
 import React from 'react';
 import { useHistory } from 'react-router';
 
-import { CourseModelDataType, Link } from '../../../types';
+import { CommonCardDataType, Link } from '../../../types';
 import Badge from '../../Atoms/custom/Badge';
 import Heading from '../../Atoms/Text/Heading';
 
 type PropType = {
   active?: boolean;
   to?: Link;
-  data: CourseModelDataType;
+  data: CommonCardDataType;
   className?: string;
   handleClick?: (_e: Event) => void;
 };
 
-export default function CourseCardMolecule({
+export default function CommonCardMolecule({
   active = false,
   to,
   data,
@@ -56,12 +56,17 @@ export default function CourseCardMolecule({
         <Heading fontWeight="semibold">{data.title}</Heading>
         {data.subTitle && (
           <Heading fontSize="sm" className="pt-2" color="txt-secondary">
-            Short Course
+            {data.subTitle}
           </Heading>
         )}
         <p id="course-card-description" className="text-txt-secondary text-sm mt-4">
           {data.description}
         </p>
+        {data.footerTitle && (
+          <Heading fontSize="sm" className="pt-2" color="txt-secondary">
+            {data.footerTitle}
+          </Heading>
+        )}
       </div>
     </div>
   );
