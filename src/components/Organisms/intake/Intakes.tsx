@@ -52,7 +52,7 @@ export default function Intakes() {
         <div className="flex gap-3">
           <Button onClick={() => setmodalOpen(true)}>Add intake</Button>
         </div>
-      </TableHeader>{' '}
+      </TableHeader>
       <section className="flex flex-wrap justify-between mt-2">
         {data.map((course) => (
           <div key={course.code} className="p-1 mt-3">

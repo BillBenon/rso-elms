@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { FormEvent, useState } from 'react';
 
 import { CommonFormProps, ValueType } from '../../../../types';
@@ -10,6 +12,7 @@ import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 import PopupMolecule from '../../../Molecules/Popup';
+import NewLevel from '../level/NewLevel';
 
 interface INewAcademyProgram<K> extends CommonFormProps<K> {}
 
@@ -30,8 +33,19 @@ const options = [
 
 export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E>) {
   const [open, setOpen] = useState(false); // state to controll the popup
+  const [lopen, setLopen] = useState(false);
 
   function handleChange(_e: ValueType) {}
+
+  function handlePopupClose() {
+    setLopen(false);
+    setOpen(true);
+  }
+
+  function handleProgramPopup() {
+    setOpen(false);
+    setLopen(true);
+  }
 
   function submitForm(e: FormEvent) {
     e.preventDefault(); // prevent page to reload:
@@ -96,7 +110,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
         title="Add a level to this program"
         open={open}
         onClose={() => setOpen(false)}>
-        <div className="w-82 h-40">
+        <div className="w-82 h-48">
           <DropdownMolecule
             placeholder="Select Level"
             options={options}
@@ -105,9 +119,9 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
             error="">
             Choose Level
           </DropdownMolecule>
-          <div className="flex gap-2 items-center mt-3z">
+          <div className="flex items-center" onClick={handleProgramPopup}>
             <Icon name="add" size={15} />
-            <ILabel size="sm" weight="medium" color="primary">
+            <ILabel size="sm" weight="medium" className="cursor-pointer" color="primary">
               Add level
             </ILabel>
           </div>
@@ -117,6 +131,9 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
             </Button>
           </div>
         </div>
+      </PopupMolecule>
+      <PopupMolecule title="New Level" open={lopen} onClose={handlePopupClose}>
+        <NewLevel />
       </PopupMolecule>
     </form>
   );

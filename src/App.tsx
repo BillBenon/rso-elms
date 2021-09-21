@@ -9,6 +9,7 @@ import NewAcademy from './views/academies/NewAcademy';
 import Signin from './views/auth/Signin';
 import Signup from './views/auth/Signup';
 import FacultiesView from './views/faculties/Faculties';
+import IntakeModulesView from './views/intakes/IntakeModules';
 import IntakesView from './views/intakes/Intakes';
 import LevelsView from './views/levels/Levels';
 import Modules from './views/modules';
@@ -53,6 +54,7 @@ const App = () => {
           <Route exact path="/programs/new" component={NewAcademicProgram} />
           <Route exact path="/levels" component={LevelsView} />
           <Route exact path="/intakes" component={IntakesView} />
+          <Route exact path="/intakes/:id" component={IntakeModulesView} />
           <Route exact path="*" component={NotFound} />
         </Switch>
       </Router>
