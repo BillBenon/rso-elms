@@ -13,7 +13,10 @@ export default function Popup() {
   return (
     <Dashboard>
       <section className="block">
-        <Button onClick={openModel}> Click for popup</Button>
+        <Button onClick={openModel} type="button" className="button">
+          {' '}
+          Click for popup
+        </Button>
 
         <div className="mt-4">
           <Tooltip trigger={<Button> Hover for Tooltip</Button>} open>
