@@ -15,7 +15,7 @@ type PropType = {
 
 export default function PopupMolecule({ open, title, onClose, children }: PropType) {
   return (
-    <Popup open={open} closeOnDocumentClick onClose={onClose} modal>
+    <Popup className="mu" open={open} closeOnDocumentClick onClose={onClose} modal>
       <div className="modal block p-2">
         {/* close button  */}
         <div className={`flex mb-4 ${title ? 'justify-between' : 'justify-end'}`}>
