@@ -10,7 +10,7 @@ export default function CheckboxMolecule(props: commonInputProps) {
       <ILabel size="sm" weight="bold">
         {props.placeholder}
       </ILabel>
-      {props.options.map((op: any, i) => (
+      {props.options?.map((op: any, i) => (
         <div className="py-1" key={i}>
           <Checkbox
             name={props.name}
