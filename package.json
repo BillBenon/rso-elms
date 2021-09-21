@@ -12,6 +12,7 @@
     "lodash": "^4.17.21",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
+    "react-query": "^3.24.3",
     "react-router-dom": "^5.2.0",
     "react-select": "^4.3.1",
     "react-svg": "^14.0.10",
