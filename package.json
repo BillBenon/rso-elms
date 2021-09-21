@@ -5,11 +5,13 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "serve": "vite preview",
-    "lint": "eslint --fix ."
+    "lint": "eslint --fix .",
+    "pm2": "pm2"
   },
   "dependencies": {
     "@types/lodash": "^4.14.172",
     "lodash": "^4.17.21",
+    "pm2": "^5.1.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-query": "^3.24.3",
