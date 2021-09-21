@@ -1,24 +1,29 @@
+import './input.scss';
+
 import React, { useState } from 'react';
 
 import { colorStyle } from '../../../global/global-vars';
 import { Color, ValueType } from '../../../types';
 
 export interface IProps {
-  placeholder: string;
+  placeholder?: string;
   type?: string;
   readonly?: boolean;
   handleChange: (_e: ValueType) => void;
   value: string;
   name: string;
   full?: boolean;
+  padding?: string;
   fcolor?: Color;
   bcolor?: Color;
   pcolor?: Color;
   width?: string;
+  className?: string;
 }
 
 export default function Input({
-  placeholder,
+  placeholder = '',
+  padding = 'px-3',
   type = 'text',
   readonly = false,
   value,
@@ -27,8 +32,9 @@ export default function Input({
   fcolor = 'primary',
   bcolor = 'bcolor',
   pcolor = 'txt-secondary',
-  width = '72',
+  width = '80',
   handleChange,
+  className = '',
   ...attrs
 }: IProps) {
   const [_value, _setValue] = useState(value);
@@ -45,9 +51,11 @@ export default function Input({
       type={type}
       value={_value}
       readOnly={readonly}
-      className={`bg-transparent h-12 px-3 placeholder-${pcolor} rounded-md ${
-        full ? 'w-full' : `w-${width}`
-      } focus:outline-none border-${bcolor} focus:border-${colorStyle[fcolor]} border-2`}
+      className={`bg-transparent h-12 ${padding} placeholder-${pcolor} rounded-md ${
+        full ? 'w-full' : `w-60 md:w-${width}`
+      } focus:outline-none border-${bcolor} focus:border-${
+        colorStyle[fcolor]
+      } border-2 ${className}`}
       /* @ts-ignore */
       onChange={handleOnChange}
     />

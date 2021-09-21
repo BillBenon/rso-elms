@@ -2,12 +2,10 @@ import '../../../styles/components/atoms/custom/checkbox.scss';
 
 import React from 'react';
 
-import Error from '../Text/Error';
-
 interface Props {
   label: string;
   name: string;
-  error?: string | null;
+  error: string | null;
   disabled?: boolean;
   // eslint-disable-next-line no-unused-vars
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -19,7 +17,6 @@ interface Props {
 export default function Checkbox({
   label,
   name,
-  error,
   value,
   onChange,
   checked = false,

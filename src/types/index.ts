@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 export type Color =
   | 'primary'
@@ -16,7 +16,7 @@ export type Color =
   | 'gray'
   | 'lightgray';
 
-export type fontSize = 'xs' | 'sm' | 'tiny' | 'lg' | '2xl';
+export type fontSize = 'xs' | 'sm' | 'base' | 'tiny' | 'lg' | '2xl';
 export type width = 'default' | 'full';
 export type fontWeight = 'normal' | 'medium' | 'semibold' | 'bold';
 
@@ -59,6 +59,7 @@ export interface Link {
 export interface SelectData {
   value: string;
   label: string;
+  subLabel?: string;
 }
 
 /**
@@ -70,11 +71,14 @@ export interface ValueType {
   event: Event;
 }
 
-export interface CourseModelDataType {
+export interface CommonCardDataType {
   id?: string | number;
   status?: { type: 'success' | 'warning' | 'error'; text: string };
   title: string;
   code: string;
   subTitle?: string;
   description: string;
+  footerTitle?: string | ReactNode;
 }
+
+export * from './props';

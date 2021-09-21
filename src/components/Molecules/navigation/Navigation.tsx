@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
+import { ValueType } from '../../../types';
 import Avatar from '../../Atoms/custom/Avatar';
 import Icon from '../../Atoms/custom/Icon';
 import SearchMolecule from '../input/SearchMolecule';
@@ -9,8 +10,10 @@ import SearchMolecule from '../input/SearchMolecule';
 export default function Navigation() {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  console.log(useLocation());
+
   const location = useLocation();
+
+  function handleSearch(_e: ValueType) {}
 
   const links = [
     { text: 'Home', to: '/' },
@@ -26,7 +29,7 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-24">
           <div className="flex items-center">
             <div className="flex-shrink-0">
-              <SearchMolecule />
+              <SearchMolecule handleChange={handleSearch} />
             </div>
           </div>
           <div className="hidden md:block">

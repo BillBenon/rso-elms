@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Icon from '../atoms/custom/Icon';
-import Indicator from '../atoms/custom/Indicator';
+import Icon from '../Atoms/custom/Icon';
+import Indicator from '../Atoms/custom/Indicator';
 
 type PaginationProps = {
   rowsPerPage: number;
