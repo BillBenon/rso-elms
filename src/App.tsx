@@ -2,19 +2,20 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import ComponentsUseCase from './components/Organisms/ComponentsUseCase';
-import SignUpForm from './components/Organisms/forms/auth/signup/SignUpForm';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import Dashboard from './layout/Dashboard';
 import Academies from './views/academies/Academies';
 import NewAcademy from './views/academies/NewAcademy';
+import Signin from './views/auth/Signin';
+import Signup from './views/auth/Signup';
 import FacultiesView from './views/faculties/Faculties';
 import IntakesView from './views/intakes/Intakes';
+import LevelsView from './views/levels/Levels';
 import Modules from './views/modules';
 import NotFound from './views/NotFound';
 import Popup from './views/Popup';
 import AcademicPrograms from './views/programs/AcademicPrograms';
 import NewAcademicProgram from './views/programs/NewAcademicProgram';
-import Signin from './views/signin/Signin';
 import Subjects from './views/subjects';
 import NewInstructorView from './views/users/NewInstructor';
 import NewStudentsView from './views/users/NewStudent';
@@ -35,7 +36,7 @@ const App = () => {
         <Switch>
           <Route exact path="/" component={Homepage} />
 
-          <Route exact path="/register" component={SignUpForm} />
+          <Route exact path="/register" component={Signup} />
           <Route path="/login" component={Signin} />
 
           <Route exact path="/academies" component={Academies} />
@@ -50,6 +51,7 @@ const App = () => {
           <Route exact path="/faculties" component={FacultiesView} />
           <Route exact path="/programs" component={AcademicPrograms} />
           <Route exact path="/programs/new" component={NewAcademicProgram} />
+          <Route exact path="/levels" component={LevelsView} />
           <Route exact path="/intakes" component={IntakesView} />
           <Route exact path="*" component={NotFound} />
         </Switch>

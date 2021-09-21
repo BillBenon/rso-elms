@@ -105,7 +105,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
             error="">
             Choose Level
           </DropdownMolecule>
-          <div className="flex gap-2 items-center mt-3">
+          <div className="flex gap-2 items-center mt-3z">
             <Icon name="add" size={15} />
             <ILabel size="sm" weight="medium" color="primary">
               Add level

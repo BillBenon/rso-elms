@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { ValueType } from '../../../../../types';
 import Button from '../../../../Atoms/custom/Button';
 import DropdownMolecule from '../../../../Molecules/input/DropdownMolecule';
+import TextAreaMolecule from '../../../../Molecules/input/TextAreaMolecule';
 
 const OtherDetails = () => {
   const [details, setDetails] = useState({
@@ -31,6 +32,7 @@ const OtherDetails = () => {
     <>
       <div className="flex flex-col gap-4">
         <DropdownMolecule
+          isMulti
           name="hobbies"
           defaultValue={details.hobbies}
           onChange={handleChange}
@@ -46,7 +48,8 @@ const OtherDetails = () => {
           Hobbies
         </DropdownMolecule>
         <DropdownMolecule
-          placeholder="chronic diseases"
+          isMulti
+          placeholder="Select chronic diseases u have"
           name="chronicDiseases"
           defaultValue={details.chronicDiseases}
           onChange={handleChange}
@@ -58,6 +61,12 @@ const OtherDetails = () => {
           ]}>
           Chronic diseases
         </DropdownMolecule>
+        <TextAreaMolecule
+          name="diseaseDescription"
+          value={details.diseaseDescription}
+          handleChange={handleChange}>
+          Chronic disease description
+        </TextAreaMolecule>
       </div>
       <div className="flex justify-between">
         <Button styleType="text" color="txt-secondary" onClick={movePrev}>
