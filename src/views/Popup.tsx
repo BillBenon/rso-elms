@@ -21,7 +21,14 @@ export default function Popup() {
         <div className="mt-4">
           <Tooltip trigger={<Button> Hover for Tooltip</Button>} open>
             {' '}
-            hahah we got this mother fucker
+            <div className="w-64">
+              nhahah we got this mother fuckernhahah we got this mother fuckernhahah we
+              got this mother fuckernhahah we got this mother fuckernhahah we got this
+              mother fuckernhahah we got this mother fuckernhahah we got this mother
+              fuckernhahah we got this mother fuckernhahah we got this mother fuckernhahah
+              we got this mother fuckernhahah we got this mother fuckernhahah we got this
+              mother fuckernhahah we got this mother fucker
+            </div>
           </Tooltip>
         </div>
 
