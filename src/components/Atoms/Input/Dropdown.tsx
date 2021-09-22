@@ -11,7 +11,7 @@ export default function DropDown(props: DropdownProps) {
         name={props.name}
         options={props.options}
         placeholder={props.placeholder || `Select ${props.name}`}
-        onChange={(e: object) => props.onChange({ ...e, name: props.name })}
+        onChange={(e: Object) => props.onChange({ ...e, name: props.name })}
         className={`w-${props.width || 'full md:w-80'} select ${props.className || ''}`}
         isMulti={props.isMulti}
         isSearchable={props.searchable}

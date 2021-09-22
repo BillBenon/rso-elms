@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { ValueType } from '../../../../types';
+import { SelectData, ValueType } from '../../../../types';
 import { getDaysInMonth } from '../../../../utils/date-helper';
 import DropDown from '../Dropdown';
 
@@ -23,9 +23,9 @@ const DaySelect = (dprop: DProp) => {
   const renderDateOptions = () => {
     let days = dprop.month ? getDaysInMonth(dprop.year, dprop.month) : 31;
 
-    const dayOptions: { value: number; label: number }[] = [];
+    const dayOptions: SelectData[] = [];
     for (let i = 1; i <= days; ++i) {
-      dayOptions.push({ value: i, label: i });
+      dayOptions.push({ value: i.toString(), label: i.toString() });
     }
     return dayOptions;
   };

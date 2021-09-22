@@ -1,11 +1,10 @@
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 import { ValueType } from '../../../types';
 import DaySelect from '../../Atoms/Input/date/DaySelect';
 import HourSelect from '../../Atoms/Input/date/HourSelect';
 import MinuteSelect from '../../Atoms/Input/date/MinuteSelect';
 import MonthSelect from '../../Atoms/Input/date/MonthSelect';
-import SecondSelect from '../../Atoms/Input/date/SecondSelect';
 import YearSelect from '../../Atoms/Input/date/YearSelect';
 import ILabel from '../../Atoms/Text/ILabel';
 
@@ -13,24 +12,38 @@ type IProp = {
   showDate?: boolean;
   showTime?: boolean;
   width?: string;
+  handleDate: (_value: ValueType) => void;
+  name: string;
   children: ReactNode;
 };
 
-const DateMolecule = ({ showDate = true, showTime = false, width, children }: IProp) => {
+function DateMolecule({
+  showDate = true,
+  showTime = false,
+  width,
+  children,
+  handleDate,
+  name,
+}: IProp) {
   const [dateState, setDateState] = useState({
     Day: new Date().getDate(),
-    Month: new Date().getMonth(),
+    Month: new Date().getMonth() + 1,
     Year: new Date().getFullYear(),
     Hours: new Date().getHours(),
-    Minutes: new Date().getMinutes(),
-    Seconds: new Date().getSeconds(),
+    Minutes: 0,
   });
 
+  const dateFormat = () => {
+    let selectedDate: string = `${dateState.Month}/${dateState.Day}/${dateState.Year} ${dateState.Hours}:${dateState.Minutes}`;
+    handleDate({ name: name, value: selectedDate });
+  };
+
+  useEffect(() => {
+    dateFormat();
+  }, [dateState]);
+
   const handleChange = (e: ValueType) => {
-    setDateState({
-      ...dateState,
-      [e.name]: e.value,
-    });
+    setDateState({ ...dateState, [e.name]: e.value });
   };
 
   return (
@@ -43,6 +56,7 @@ const DateMolecule = ({ showDate = true, showTime = false, width, children }: IP
           <>
             <YearSelect
               reverse
+              defaultValue={dateState.Year.toString()}
               value={dateState.Year}
               onChange={handleChange}
               name="Year"
@@ -51,6 +65,7 @@ const DateMolecule = ({ showDate = true, showTime = false, width, children }: IP
             />
             <MonthSelect
               year={dateState.Year}
+              defaultValue={dateState.Month.toString()}
               value={dateState.Month}
               onChange={handleChange}
               short
@@ -61,6 +76,7 @@ const DateMolecule = ({ showDate = true, showTime = false, width, children }: IP
             <DaySelect
               year={dateState.Year}
               month={dateState.Month}
+              defaultValue={dateState.Day.toString()}
               value={dateState.Day}
               onChange={handleChange}
               name="Day"
@@ -72,6 +88,7 @@ const DateMolecule = ({ showDate = true, showTime = false, width, children }: IP
         {showTime && (
           <>
             <HourSelect
+              defaultValue={dateState.Hours.toString()}
               value={dateState.Hours}
               onChange={handleChange}
               name="Hours"
@@ -79,17 +96,11 @@ const DateMolecule = ({ showDate = true, showTime = false, width, children }: IP
               width="28"
             />
             <MinuteSelect
+              defaultValue={dateState.Minutes.toString()}
               value={dateState.Minutes}
               onChange={handleChange}
               name="Minutes"
               placeholder="Minutes"
-              width="28"
-            />
-            <SecondSelect
-              value={dateState.Seconds}
-              onChange={handleChange}
-              name="Seconds"
-              placeholder="Seconds"
               width="28"
             />
           </>
@@ -97,6 +108,6 @@ const DateMolecule = ({ showDate = true, showTime = false, width, children }: IP
       </div>
     </div>
   );
-};
+}
 
 export default DateMolecule;
