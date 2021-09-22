@@ -19,6 +19,18 @@ const defaultLinks: linkProps[] = [
     icon: 'reg-control',
     fill: true,
   },
+  {
+    title: 'Login',
+    to: '/login',
+    icon: '',
+    fill: false,
+  },
+  {
+    title: 'Register',
+    to: '/register',
+    icon: '',
+    fill: false,
+  },
 ];
 
 export default function Sidebar() {

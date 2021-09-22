@@ -25,7 +25,6 @@ const OtherDetails = () => {
       ...details,
       [e.name]: e.value,
     }));
-    console.log(details);
   };
 
   return (

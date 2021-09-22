@@ -49,9 +49,7 @@ const SignUpForm = () => {
     },
   ];
 
-  const submitStepper = () => {
-    console.log('submitted');
-  };
+  const submitStepper = () => {};
 
   return (
     <div className="bg-main p-8 md:px-20 md:py-14">

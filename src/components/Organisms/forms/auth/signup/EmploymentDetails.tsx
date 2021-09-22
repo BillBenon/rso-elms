@@ -26,7 +26,6 @@ const EmploymentDetails = () => {
       ...details,
       [e.name]: e.value,
     }));
-    console.log(details);
   };
 
   return (

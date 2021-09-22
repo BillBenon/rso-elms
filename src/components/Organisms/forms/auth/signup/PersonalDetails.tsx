@@ -26,7 +26,6 @@ const PersonalDetails = () => {
       ...details,
       [e.name]: e.value,
     }));
-    console.log(details);
   };
 
   return (
@@ -75,7 +74,9 @@ const PersonalDetails = () => {
           name="gender">
           Gender
         </RadioMolecule>
-        <DateMolecule width="60 md:w-80">Date of Birth</DateMolecule>
+        <DateMolecule handleDate={handleChange} name="dob" width="60 md:w-80">
+          Date of Birth
+        </DateMolecule>
       </div>
       <div className="my-4">
         <RadioMolecule

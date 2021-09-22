@@ -68,7 +68,7 @@ export interface SelectData {
 export interface ValueType {
   name: string;
   value: string | number | boolean | undefined;
-  event: Event;
+  event?: Event;
 }
 
 export interface CourseModelDataType {

@@ -35,7 +35,5 @@ export const unit = {
 };
 
 export const getDaysInMonth = (year: number, month: number): number => {
-  year = +year;
-  month = +month + 1;
   return new Date(year, month, 0).getDate();
 };

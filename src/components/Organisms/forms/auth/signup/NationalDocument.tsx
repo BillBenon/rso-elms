@@ -30,7 +30,6 @@ const NationalDocuments = () => {
       ...details,
       [e.name]: e.value,
     }));
-    console.log(details);
   };
 
   return (
@@ -67,7 +66,12 @@ const NationalDocuments = () => {
           handleChange={handleChange}>
           Passport Number(Optional)
         </InputMolecule>
-        <DateMolecule width="60 md:w-80">Passport expiry date</DateMolecule>
+        <DateMolecule
+          handleDate={handleChange}
+          name="passport_expiry_date"
+          width="60 md:w-80">
+          Passport expiry date
+        </DateMolecule>
       </div>
       <div className="flex flex-col">
         <InputMolecule
