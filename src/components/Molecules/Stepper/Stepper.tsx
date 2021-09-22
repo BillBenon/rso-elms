@@ -55,7 +55,7 @@ const Stepper = ({ isVertical, isInline, stepperContent }: StepperProps) => {
           currentTabIndex={currentTabIndex}
           isFirstStep={stepperContent[0]}
         />
-        <div className="pl-0 md:pl-11">
+        <div className="pl-0 md:pl-11 w-full">
           {stepperContent.map((el, i) => (
             <Fragment key={el.label}>{i === currentTabIndex && el.content}</Fragment>
           ))}
