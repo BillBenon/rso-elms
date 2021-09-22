@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { CourseModelDataType, Link } from '../../../types';
+import { CommonCardDataType, Link } from '../../../types';
 import Button from '../../Atoms/custom/Button';
 import Cacumber from '../../Molecules/Cacumber';
-import CourseCardMolecule from '../../Molecules/cards/CourseCardMolecule';
+import CommonCardMolecule from '../../Molecules/cards/CommonCardMolecule';
 import PopupMolecule from '../../Molecules/Popup';
 import TableHeader from '../../Molecules/table/TableHeader';
 import NewAcademicProgram from '../forms/programs/NewAcademicProgram';
 
-interface IProgramData extends CourseModelDataType {}
+interface IProgramData extends CommonCardDataType {}
 
 export default function AcademicProgram() {
   const history = useHistory();
@@ -17,6 +17,7 @@ export default function AcademicProgram() {
 
   const [prOpen, setPrOpen] = useState(false); // state to controll the popup
 
+  //eslint-disable-next-line
   function submited() {
     setOpen(false);
     setPrOpen(true);
@@ -35,7 +36,7 @@ export default function AcademicProgram() {
       title: 'Here we go',
       subTitle: 'ON Air',
       description:
-        'We have all kind of courses in this card, we can support everything wabyanga wabyemera',
+        'We have all kind of Commons in this card, we can support everything wabyanga wabyemera',
     },
     {
       status: { type: 'success', text: 'On going' },
@@ -43,7 +44,7 @@ export default function AcademicProgram() {
       title: 'Here we go',
       subTitle: 'ON Air',
       description:
-        'We have all kind of courses in this card, we can support everything wabyanga wabyemera',
+        'We have all kind of Commons in this card, we can support everything wabyanga wabyemera',
     },
     {
       status: { type: 'warning', text: 'On Hold' },
@@ -51,7 +52,7 @@ export default function AcademicProgram() {
       title: 'Here we go',
       subTitle: 'ON Air',
       description:
-        'We have all kind of courses in this card, we can support everything wabyanga wabyemera',
+        'We have all kind of Commons in this card, we can support everything wabyanga wabyemera',
     },
   ];
 
@@ -67,11 +68,11 @@ export default function AcademicProgram() {
           </TableHeader>
         </section>
         <section className="flex flex-wrap justify-between mt-2">
-          {data.map((course) => (
-            <div key={course.code} className="p-1 mt-3">
-              <CourseCardMolecule
-                data={course}
-                to={{ title: 'program', to: 'programs/id' }}
+          {data.map((Common) => (
+            <div key={Common.code} className="p-1 mt-3">
+              <CommonCardMolecule
+                data={Common}
+                to={{ title: 'module', to: 'modules/id' }}
               />
             </div>
           ))}

@@ -38,6 +38,9 @@ module.exports = {
         'txt-secondary': '#97A0A8',
         silver: '#DAE0E5',
       },
+      boxShadow: {
+        DEFAULT: '0px 28px 44px rgba(0, 0, 0, 0.05)',
+      },
     },
   },
   variants: {},

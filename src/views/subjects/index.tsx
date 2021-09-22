@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 
 import Button from '../../components/Atoms/custom/Button';
 import Cacumber from '../../components/Molecules/Cacumber';
-import CourseCardMolecule from '../../components/Molecules/cards/CourseCardMolecule';
+import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
 import Dashboard from '../../layout/Dashboard';
-import { CourseModelDataType, Link } from '../../types';
+import { CommonCardDataType, Link } from '../../types';
 
 export default function Subjects() {
   const [open, setOpen] = useState(false); // state to controll the popup
@@ -28,7 +28,7 @@ export default function Subjects() {
     { to: 'subjects', title: 'subjects' },
   ];
 
-  const data: CourseModelDataType[] = [
+  const data: CommonCardDataType[] = [
     {
       status: { type: 'success', text: 'On going' },
       code: 'Ra01-430st',
@@ -73,7 +73,7 @@ export default function Subjects() {
         <section className="flex flex-wrap justify-between mt-2">
           {data.map((course) => (
             <div key={course.code} className="p-1 mt-3">
-              <CourseCardMolecule
+              <CommonCardMolecule
                 data={course}
                 to={{ title: 'module', to: 'modules/id' }}
               />
