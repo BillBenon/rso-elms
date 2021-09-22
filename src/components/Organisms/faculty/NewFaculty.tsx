@@ -9,7 +9,7 @@ export default function NewFaculty() {
     console.log('when also');
   };
   return (
-    <div className="p-5">
+    <div>
       <InputMolecule
         value=""
         error="imboga mbi"

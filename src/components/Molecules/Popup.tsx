@@ -23,11 +23,11 @@ export default function PopupMolecule({
 }: PropType) {
   return (
     <Popup open={open} closeOnDocumentClick={closeOnClickOutSide} onClose={onClose} modal>
-      <div className="modal block p-2">
+      <div className="modal block pt-9 px-8 py-16">
         {/* close button  */}
-        <div className={`flex mb-4 ${title ? 'justify-between' : 'justify-end'}`}>
+        <div className={`flex pb-8 ${title ? 'justify-between' : 'justify-end'}`}>
           {title && (
-            <Heading fontWeight="medium" color="primary">
+            <Heading fontWeight="semibold" color="primary">
               {title}
             </Heading>
           )}

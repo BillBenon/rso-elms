@@ -20,9 +20,9 @@ body,html{
 .css-1rhbuit-multiValue{
   background: #FFFFFF !important;
   border-radius: 25px !important;
-  border:0.2px solid #c2c7cc;
-  padding-right: 4px !important;
-  padding-left: 3px !important;
+  padding: 5px 15px !important;
+  // padding-right: 4px !important;
+  // padding-left: 3px !important;
   align-items: center !important;
 }
 
@@ -36,6 +36,11 @@ body,html{
   border-radius: 30% !important;
   background-color: #97A0A8 !important;
   border-radius: 50% !important;
+  cursor: pointer;
+}
+
+.css-xb97g8:hover{
+  background-color: #646a6e !important;
 }
 
 .css-xb97g8 svg{

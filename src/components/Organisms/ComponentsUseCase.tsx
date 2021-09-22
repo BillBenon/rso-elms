@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import Checkbox from '../Atoms/Input/CheckBox';
 import DropDown from '../Atoms/Input/Dropdown';
+import Input from '../Atoms/Input/Input';
 import CheckboxMolecule from '../Molecules/input/CheckboxMolecule';
 import DropdownMolecule from '../Molecules/input/DropdownMolecule';
 import { Tab, Tabs } from '../Molecules/tabs/tabs';
@@ -47,12 +48,6 @@ export default function CreatedBySandberg() {
             error={null}
           />
         </div>
-        <DropDown
-          options={options}
-          name="intakes"
-          onChange={(e: object) => console.log(e)}
-          defaultValue={options[1]}
-        />
         <Tabs className="my-4" activeIndex={1}>
           <Tab label="Students">
             <h1 className="text-3xl text-primary-500">Students</h1>
@@ -70,6 +65,13 @@ export default function CreatedBySandberg() {
           placeholder="Checkbox Molecule"
           onChange={() => console.log('changed')}
         />
+        <DropDown
+          options={options}
+          name="intakes"
+          onChange={(e: object) => console.log(e)}
+          defaultValue={options[1]}
+        />
+        <Input name="email" value="" handleChange={(e) => console.log(e)} />
         <DropdownMolecule
           options={options}
           name="academy"

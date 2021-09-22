@@ -10,7 +10,7 @@ import AddProgramToIntake from './AddProgramToIntake';
 export default function NewIntake() {
   const IntakeInfo = () => {
     return (
-      <form onSubmit={(e) => e.preventDefault()} className="px-5 pb-5">
+      <form onSubmit={(e) => e.preventDefault()}>
         <InputMolecule
           name="code"
           placeholder="Intake code"
@@ -62,7 +62,7 @@ export default function NewIntake() {
       },
     ];
     return (
-      <form onSubmit={(e) => e.preventDefault()} className="px-5 pb-5">
+      <form onSubmit={(e) => e.preventDefault()}>
         <DateMolecule showTime={false}>Expected Start Date</DateMolecule>
         <div className="pt-4">
           <DateMolecule showTime={false}>Expected End Date</DateMolecule>
