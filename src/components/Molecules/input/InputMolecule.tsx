@@ -24,8 +24,10 @@ export default function InputMolecule({
   type = 'text',
 }: IInputMolecule) {
   return (
-    <div className="flex flex-col gap-3">
-      <ILabel weight="bold">{children}</ILabel>
+    <div className="flex flex-col gap-2 py-2">
+      <ILabel className="capitalize" size="sm" weight="bold">
+        {children}
+      </ILabel>
       <Input
         name={name}
         placeholder={placeholder}

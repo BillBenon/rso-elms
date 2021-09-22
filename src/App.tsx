@@ -9,11 +9,15 @@ import NewAcademy from './views/academies/NewAcademy';
 import Signin from './views/auth/Signin';
 import Signup from './views/auth/Signup';
 import FacultiesView from './views/faculties/Faculties';
+import IntakeModulesView from './views/intakes/IntakeModules';
 import IntakesView from './views/intakes/Intakes';
 import LevelsView from './views/levels/Levels';
 import Modules from './views/modules';
 import NotFound from './views/NotFound';
 import Popup from './views/Popup';
+import AcademicPrograms from './views/programs/AcademicPrograms';
+import NewAcademicProgram from './views/programs/NewAcademicProgram';
+import ProgramDetails from './views/programs/ProgramDetails';
 import Subjects from './views/subjects';
 import NewInstructorView from './views/users/NewInstructor';
 import NewStudentsView from './views/users/NewStudent';
@@ -47,8 +51,12 @@ const App = () => {
           <Route exact path="/users/students/new" component={NewStudentsView} />
           <Route exact path="/users/instructors/new" component={NewInstructorView} />
           <Route exact path="/faculties" component={FacultiesView} />
+          <Route exact path="/programs" component={AcademicPrograms} />
+          <Route exact path="/programs/:id" component={ProgramDetails} />
+          <Route exact path="/programs/new" component={NewAcademicProgram} />
           <Route exact path="/levels" component={LevelsView} />
           <Route exact path="/intakes" component={IntakesView} />
+          <Route exact path="/intakes/:id" component={IntakeModulesView} />
           <Route exact path="*" component={NotFound} />
         </Switch>
       </Router>

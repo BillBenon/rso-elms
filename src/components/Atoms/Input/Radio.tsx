@@ -39,7 +39,7 @@ export default function Radio<T>({
       role="radiogroup"
       {...attrs}>
       {/* options */}
-      {options.map(({ label, value, subLabel }) => (
+      {options?.map(({ label, value, subLabel }) => (
         <div
           role="radio"
           tabIndex={0}

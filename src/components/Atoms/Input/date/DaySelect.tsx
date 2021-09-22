@@ -25,7 +25,7 @@ const DaySelect = (dprop: DProp) => {
 
     const dayOptions: SelectData[] = [];
     for (let i = 1; i <= days; ++i) {
-      dayOptions.push({ value: i.toString(), label: i.toString() });
+      dayOptions.push({ value: i + '', label: i + '' });
     }
     return dayOptions;
   };

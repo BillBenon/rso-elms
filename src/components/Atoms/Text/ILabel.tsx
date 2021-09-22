@@ -5,22 +5,24 @@ import { Color, fontSize, fontWeight } from '../../../types';
 
 interface ILabelProps {
   children: ReactNode;
-  weight: fontWeight;
+  weight?: fontWeight;
   size?: fontSize;
   color?: Color;
+  className?: string;
 }
 
 export default function ILabel({
   children,
-  weight,
+  weight = 'normal',
   size = 'base',
   color = 'txt-primary',
+  className = '',
   ...rest
 }: ILabelProps) {
   return (
     <label
       {...rest}
-      className={`capitalize ${fontWeightStyle[weight]} ${fontSizeStyle[size]} text-${colorStyle[color]}`}>
+      className={`capitalize ${fontWeightStyle[weight]} ${fontSizeStyle[size]} text-${colorStyle[color]} ${className}`}>
       {children}
     </label>
   );

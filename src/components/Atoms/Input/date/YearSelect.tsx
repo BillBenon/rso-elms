@@ -45,7 +45,7 @@ const YearSelect = (props: YProp) => {
     }
     const yearOptions: SelectData[] = [];
     years.forEach((year) => {
-      yearOptions.push({ value: year.toString(), label: year.toString() });
+      yearOptions.push({ value: year + '', label: year + '' });
     });
     return yearOptions;
   };

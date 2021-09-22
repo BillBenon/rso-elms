@@ -20,7 +20,7 @@ export default function AddProgramToIntake() {
     },
   ];
   return (
-    <div className="px-5 -mt-5 pb-5">
+    <div className="-mt-2">
       <Heading fontSize="lg" fontWeight="semibold" className="pb-5">
         Add a program to this intake
       </Heading>

@@ -11,7 +11,7 @@ export interface CommonInputProps<T> extends CommonProps<T> {
   handleChange: (_e: ValueType) => void;
   name: string;
   value?: string;
-  options: SelectData[];
+  options?: SelectData[];
 }
 
 //common input props that will be used on all reusable input components
@@ -32,6 +32,8 @@ export interface DropdownProps extends commonInputProps {
   width?: string;
   searchable?: boolean;
   defaultValue?: Object;
+  styles?: Object;
+  hasError?: boolean;
 }
 
 //common form props that will be used on all reusable form components

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 
-import { CourseModelDataType, Link, ValueType } from '../../../types';
+import { CommonCardDataType, Link, ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
 import Cacumber from '../../Molecules/Cacumber';
-import CourseCardMolecule from '../../Molecules/cards/CourseCardMolecule';
+import CommonCardMolecule from '../../Molecules/cards/CommonCardMolecule';
 import PopupMolecule from '../../Molecules/Popup';
 import TableHeader from '../../Molecules/table/TableHeader';
 import NewIntake from './NewIntake';
@@ -15,7 +15,7 @@ const list: Link[] = [
   { to: 'intakes', title: 'Intakes' },
 ];
 
-const data: CourseModelDataType[] = [
+const data: CommonCardDataType[] = [
   {
     status: { type: 'error', text: 'Inactive' },
     code: 'Intake-2020',
@@ -52,11 +52,11 @@ export default function Intakes() {
         <div className="flex gap-3">
           <Button onClick={() => setmodalOpen(true)}>Add intake</Button>
         </div>
-      </TableHeader>{' '}
+      </TableHeader>
       <section className="flex flex-wrap justify-between mt-2">
         {data.map((course) => (
           <div key={course.code} className="p-1 mt-3">
-            <CourseCardMolecule
+            <CommonCardMolecule
               data={course}
               to={{ title: 'module', to: 'modules/id' }}
             />
