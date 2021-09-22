@@ -35,7 +35,9 @@ const DateMolecule = ({ showDate = true, showTime = false, width, children }: IP
 
   return (
     <div className={`flex flex-col gap-3 w-${width || 'full md:w-80'}`}>
-      <ILabel weight="bold">{children}</ILabel>
+      <ILabel size="sm" weight="bold">
+        {children}
+      </ILabel>
       <div className="flex gap-2">
         {showDate && (
           <>

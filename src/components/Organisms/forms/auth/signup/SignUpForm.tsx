@@ -26,19 +26,20 @@ const SignUpForm = () => {
       // isComplete: documentValidate.completed,
     },
     {
-      label: 'Education Details',
-      content: <EducationDetails />,
-      clicked: () => {},
-      // isError: educationValidate.touched,
-      // isComplete: educationValidate.completed,
-    },
-    {
       label: 'Employment Details',
       content: <EmploymentDetails />,
       clicked: () => {},
       // isError: employmentValidate.touched,
       // isComplete: employmentValidate.completed,
     },
+    {
+      label: 'Education Details',
+      content: <EducationDetails />,
+      clicked: () => {},
+      // isError: educationValidate.touched,
+      // isComplete: educationValidate.completed,
+    },
+
     {
       label: 'Other Details',
       content: <OtherDetails />,
