@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import { Link, useHistory } from 'react-router-dom';
 
 import { authenticator } from '../../../../../services/authenticator';
@@ -23,6 +24,7 @@ const SignInForm = () => {
   };
 
   function login() {
+    toast.success('You are trying to login');
     authenticator.login(details);
   }
 
