@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { ReactQueryDevtools } from 'react-query/devtools';
 
 import ToasterMolecule from '../components/Molecules/ToasterMolecule';
 
@@ -14,6 +15,7 @@ export function MainLayout({ children }: PropType) {
     <>
       <QueryClientProvider client={queryClient}>
         <ToasterMolecule />
+        <ReactQueryDevtools initialIsOpen={false} />
         {children}
       </QueryClientProvider>
     </>
