@@ -71,7 +71,7 @@ export default function AcademicProgram() {
             <div key={course.code} className="p-1 mt-3">
               <CourseCardMolecule
                 data={course}
-                to={{ title: 'module', to: 'modules/id' }}
+                to={{ title: 'program', to: 'programs/id' }}
               />
             </div>
           ))}

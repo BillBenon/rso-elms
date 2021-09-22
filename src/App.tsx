@@ -17,6 +17,7 @@ import NotFound from './views/NotFound';
 import Popup from './views/Popup';
 import AcademicPrograms from './views/programs/AcademicPrograms';
 import NewAcademicProgram from './views/programs/NewAcademicProgram';
+import ProgramDetails from './views/programs/ProgramDetails';
 import Subjects from './views/subjects';
 import NewInstructorView from './views/users/NewInstructor';
 import NewStudentsView from './views/users/NewStudent';
@@ -51,6 +52,7 @@ const App = () => {
           <Route exact path="/users/instructors/new" component={NewInstructorView} />
           <Route exact path="/faculties" component={FacultiesView} />
           <Route exact path="/programs" component={AcademicPrograms} />
+          <Route exact path="/programs/:id" component={ProgramDetails} />
           <Route exact path="/programs/new" component={NewAcademicProgram} />
           <Route exact path="/levels" component={LevelsView} />
           <Route exact path="/intakes" component={IntakesView} />
