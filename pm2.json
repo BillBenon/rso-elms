@@ -1,0 +1,9 @@
+{
+    "apps": [
+        {
+            "name": "elms-frontend",
+            "script": "npm",
+            "args" : "run serve"
+        }
+    ]
+}

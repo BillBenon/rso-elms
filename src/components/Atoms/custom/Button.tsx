@@ -17,6 +17,7 @@ interface PropTypes<T> extends ButtonHTMLAttributes<DOMAttributes<T>> {
   icon?: boolean;
   styleType?: ButtonType;
   color?: Color;
+  className?: string;
   onClick?: () => any;
 }
 
@@ -26,6 +27,7 @@ export default function Button<T>({
   color = 'primary',
   full,
   icon,
+  className = '',
   onClick,
   ...attrs
 }: PropTypes<T>) {
@@ -48,7 +50,7 @@ export default function Button<T>({
       onClick={onClick}
       className={`${buttonStyle[styleType]} rounded-lg text-sm outline-none 
       ${full && 'w-full'}
-      ${padding}
+      ${padding} ${className}
       `}>
       {children}
     </button>

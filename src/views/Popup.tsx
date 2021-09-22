@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import Button from '../components/Atoms/custom/Button';
 import PopupMolecule from '../components/Molecules/Popup';
+import Tooltip from '../components/Molecules/Tooltip';
 import Dashboard from '../layout/Dashboard';
 
 export default function Popup() {
@@ -11,8 +12,25 @@ export default function Popup() {
 
   return (
     <Dashboard>
-      <section>
-        <Button onClick={openModel}> show it</Button>
+      <section className="block">
+        <Button onClick={openModel} type="button" className="button">
+          {' '}
+          Click for popup
+        </Button>
+
+        <div className="mt-4">
+          <Tooltip trigger={<Button> Hover for Tooltip</Button>} open>
+            {' '}
+            <div className="w-64">
+              nhahah we got this mother fuckernhahah we got this mother fuckernhahah we
+              got this mother fuckernhahah we got this mother fuckernhahah we got this
+              mother fuckernhahah we got this mother fuckernhahah we got this mother
+              fuckernhahah we got this mother fuckernhahah we got this mother fuckernhahah
+              we got this mother fuckernhahah we got this mother fuckernhahah we got this
+              mother fuckernhahah we got this mother fucker
+            </div>
+          </Tooltip>
+        </div>
 
         {/* start of popup, anything you enter inside will be visible as long us open === true, 
         no need to add close button it is automatically handled inside this molecule */}
