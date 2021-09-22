@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { CourseModelDataType, Link } from '../../../types';
+import { CommonCardDataType, Link } from '../../../types';
 import Badge from '../../Atoms/custom/Badge';
 import Button from '../../Atoms/custom/Button';
 import Heading from '../../Atoms/Text/Heading';
 import Cacumber from '../../Molecules/Cacumber';
 import AcademyProfileCard from '../../Molecules/cards/AcademyProfileCard';
-import CourseCardMolecule from '../../Molecules/cards/CourseCardMolecule';
+import CourseCardMolecule from '../../Molecules/cards/CommonCardMolecule';
 import PopupMolecule from '../../Molecules/Popup';
 import TableHeader from '../../Molecules/table/TableHeader';
 import { Tab, Tabs } from '../../Molecules/tabs/tabs';
 import NewAcademicProgram from '../forms/programs/NewAcademicProgram';
 
-interface IProgramData extends CourseModelDataType {}
+interface IProgramData extends CommonCardDataType {}
 
 export default function ProgramDetailsMolecule() {
   const history = useHistory();
