@@ -9,6 +9,7 @@ type IProps = {
   size?: number;
   fill?: Color;
   stroke?: Color;
+  transform?: string;
   bgColor?: Color;
 };
 const iconStyle: colorStyleType = {
@@ -25,6 +26,11 @@ const StyledSVGIcon = styled(ReactSVG)`
       css`
         width: ${size}px;
         height: ${size}px;
+      `}
+    ${({ transform }: IProps) =>
+      transform &&
+      css`
+        transform: ${transform};
       `}
     path,circle {
       ${({ stroke }: IProps) =>
@@ -45,6 +51,7 @@ export default function Icon({
   name,
   fill = 'none',
   stroke = 'none',
+  transform = '',
   size = 24,
   bgColor,
 }: IProps) {
@@ -53,7 +60,13 @@ export default function Icon({
       className={`${bgColor && bgStyle[bgColor]}  ${
         size > 16 ? 'w-12 h-12' : 'w-8 h-8'
       }  p-4 flex items-center justify-center rounded-lg`}>
-      <StyledSVGIcon src={`/icons/${name}.svg`} stroke={stroke} fill={fill} size={size} />
+      <StyledSVGIcon
+        src={`/icons/${name}.svg`}
+        stroke={stroke}
+        transform={transform}
+        fill={fill}
+        size={size}
+      />
     </div>
   );
 }
