@@ -11,6 +11,7 @@ type IProps = {
   stroke?: Color;
   transform?: string;
   bgColor?: Color;
+  useHeightAndPadding?: boolean;
 };
 const iconStyle: colorStyleType = {
   primary: '#2337CC',
@@ -54,18 +55,20 @@ export default function Icon({
   transform = '',
   size = 24,
   bgColor,
+  useHeightAndPadding = true,
 }: IProps) {
   return (
     <div
       className={`${bgColor && bgStyle[bgColor]}  ${
-        size > 16 ? 'w-12 h-12' : 'w-8 h-8'
-      }  p-4 flex items-center justify-center rounded-lg`}>
+        size > 16 && useHeightAndPadding ? 'w-12 h-12 p-4' : 'w-8 h-8 p-4'
+      } flex items-center justify-center rounded-lg`}>
       <StyledSVGIcon
         src={`/icons/${name}.svg`}
         stroke={stroke}
         transform={transform}
         fill={fill}
         size={size}
+        useHeightAndPadding={useHeightAndPadding}
       />
     </div>
   );
