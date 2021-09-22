@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
+import ToasterMolecule from './components/Molecules/ToasterMolecule';
 import ComponentsUseCase from './components/Organisms/ComponentsUseCase';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import Dashboard from './layout/Dashboard';
@@ -26,9 +27,12 @@ import UsersView from './views/users/Users';
 const App = () => {
   const Homepage = () => {
     return (
-      <Dashboard>
-        <ComponentsUseCase />
-      </Dashboard>
+      <>
+        <ToasterMolecule />
+        <Dashboard>
+          <ComponentsUseCase />
+        </Dashboard>
+      </>
     );
   };
 

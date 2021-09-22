@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
+import { authenticator } from '../../../../../services/authenticator';
 import { ValueType } from '../../../../../types';
+import { LoginInfo } from '../../../../../types/dataTypes';
 import Button from '../../../../Atoms/custom/Button';
 import Heading from '../../../../Atoms/Text/Heading';
 import InputMolecule from '../../../../Molecules/input/InputMolecule';
 
 const SignInForm = () => {
   const history = useHistory();
-  const [details, setDetails] = useState({
+  const [details, setDetails] = useState<LoginInfo>({
     username: '',
     password: '',
   });
@@ -19,6 +21,10 @@ const SignInForm = () => {
       [e.name]: e.value,
     }));
   };
+
+  function login() {
+    authenticator.login(details);
+  }
 
   return (
     <>
@@ -53,7 +59,7 @@ const SignInForm = () => {
         </Link>
       </div>
 
-      <Button onClick={() => history.push('/signin')}>Sign In</Button>
+      <Button onClick={() => login()}>Sign In</Button>
 
       <div className="text-txt-secondary py-2">
         <p className="text-base text-txt-secondary">
