@@ -24,6 +24,13 @@ export interface commonInputProps {
   disabled?: boolean;
 }
 
+export interface CommonStepProps {
+  details: any;
+  handleChange: (_e: ValueType) => void;
+  prevStep?: () => void;
+  nextStep: () => void;
+}
+
 export interface DropdownProps extends commonInputProps {
   isMulti?: boolean;
   getOptionLabel?: (_option: Object) => string;

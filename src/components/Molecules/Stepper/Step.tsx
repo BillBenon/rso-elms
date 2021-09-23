@@ -14,6 +14,7 @@ type StepProps = {
   isComplete?: boolean;
   isError?: boolean;
   isVertical?: boolean;
+  isLastStep: boolean;
 };
 
 const Step = ({
@@ -23,18 +24,12 @@ const Step = ({
   index,
   isActive,
   isComplete,
+  isVertical,
+  isLastStep,
   isError,
 }: StepProps) => {
   return (
     <div className="flex gap-14">
-      <Indicator
-        isCircular={true}
-        hasError={isError}
-        isComplete={isComplete}
-        isActive={isActive}
-        clicked={() => navigateToStepHandler(index)}>
-        {indicator}
-      </Indicator>
       <div
         onKeyDown={() => navigateToStepHandler(index)}
         className={`cursor-pointer
@@ -49,6 +44,20 @@ const Step = ({
         }`}
         onClick={() => navigateToStepHandler(index)}>
         {label}
+      </div>
+      <div>
+        <Indicator
+          isCircular={true}
+          hasError={isError}
+          isComplete={isComplete}
+          isActive={isActive}
+          clicked={() => navigateToStepHandler(index)}>
+          {indicator}
+        </Indicator>
+        <div
+          className={`separator_ border-silver 
+          ${isVertical ? 'h-16 border-l-2' : 'w-16 border-b-2'} 
+          ${isLastStep ? 'h-0 border-none' : ''}`}></div>
       </div>
     </div>
   );
