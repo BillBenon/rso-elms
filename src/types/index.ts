@@ -29,6 +29,17 @@ export type Status =
   | 'suspended'
   | 'cancelled';
 
+export type Page =
+  | 'personalDetails'
+  | 'familyDetails'
+  | 'nationalDocuments'
+  | 'employmentDetails'
+  | 'otherDetails'
+  | 'educationDetails'
+  | 'experienceDetails'
+  | 'nextOfKinDetails'
+  | 'accountDetails';
+
 export type statusStyleType = {
   [_index in Status]?: string;
 };

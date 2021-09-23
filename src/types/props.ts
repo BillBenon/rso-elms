@@ -1,6 +1,6 @@
 import { AllHTMLAttributes, DOMAttributes, FormEvent } from 'react';
 
-import { SelectData, ValueType } from '.';
+import { Page, SelectData, ValueType } from '.';
 
 export interface CommonProps<T> extends AllHTMLAttributes<DOMAttributes<T>> {}
 
@@ -26,7 +26,7 @@ export interface commonInputProps {
 
 export interface CommonStepProps {
   details: any;
-  handleChange: (_e: ValueType) => void;
+  handleChange: (_e: ValueType, _page: Page) => void;
   prevStep?: () => void;
   nextStep: (_isComplete?: boolean) => void;
 }

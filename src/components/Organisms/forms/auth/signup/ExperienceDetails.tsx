@@ -62,12 +62,12 @@ function ExperienceDetails({
             handleChange={handleChange}>
             Description
           </TextAreaMolecule>
-          <DateMolecule handleDate={handleChange} name="startDate" width="60 md:w-80">
+          <DateMolecule handleChange={handleChange} name="startDate" width="60 md:w-80">
             Start Date
           </DateMolecule>
         </div>
         <div className="my-4">
-          <DateMolecule handleDate={handleChange} name="endDate" width="60 md:w-80">
+          <DateMolecule handleChange={handleChange} name="endDate" width="60 md:w-80">
             End Date
           </DateMolecule>
         </div>

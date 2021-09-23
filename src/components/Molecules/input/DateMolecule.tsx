@@ -12,7 +12,7 @@ type IProp = {
   showDate?: boolean;
   showTime?: boolean;
   width?: string;
-  handleDate: (_value: ValueType) => void;
+  handleChange: (_value: ValueType) => void;
   name: string;
   children: ReactNode;
 };
@@ -22,7 +22,7 @@ function DateMolecule({
   showTime = false,
   width,
   children,
-  handleDate,
+  handleChange,
   name,
 }: IProp) {
   const [dateState, setDateState] = useState({
@@ -35,14 +35,14 @@ function DateMolecule({
 
   const dateFormat = () => {
     let selectedDate: string = `${dateState.Month}/${dateState.Day}/${dateState.Year} ${dateState.Hours}:${dateState.Minutes}`;
-    handleDate({ name: name, value: selectedDate });
+    handleChange({ name: name, value: selectedDate });
   };
 
   useEffect(() => {
     dateFormat();
   }, [dateState]);
 
-  const handleChange = (e: ValueType) => {
+  const handleDate = (e: ValueType) => {
     setDateState({ ...dateState, [e.name]: e.value });
   };
 
@@ -58,7 +58,7 @@ function DateMolecule({
               reverse
               defaultValue={dateState.Year.toString()}
               value={dateState.Year}
-              onChange={handleChange}
+              onChange={handleDate}
               name="Year"
               placeholder="Year"
               width="28"
@@ -67,7 +67,7 @@ function DateMolecule({
               year={dateState.Year}
               defaultValue={dateState.Month.toString()}
               value={dateState.Month}
-              onChange={handleChange}
+              onChange={handleDate}
               short
               name="Month"
               placeholder="Month"
@@ -78,7 +78,7 @@ function DateMolecule({
               month={dateState.Month}
               defaultValue={dateState.Day.toString()}
               value={dateState.Day}
-              onChange={handleChange}
+              onChange={handleDate}
               name="Day"
               placeholder="Day"
               width="28"
@@ -90,7 +90,7 @@ function DateMolecule({
             <HourSelect
               defaultValue={dateState.Hours.toString()}
               value={dateState.Hours}
-              onChange={handleChange}
+              onChange={handleDate}
               name="Hours"
               placeholder="Hours"
               width="28"
@@ -98,7 +98,7 @@ function DateMolecule({
             <MinuteSelect
               defaultValue={dateState.Minutes.toString()}
               value={dateState.Minutes}
-              onChange={handleChange}
+              onChange={handleDate}
               name="Minutes"
               placeholder="Minutes"
               width="28"

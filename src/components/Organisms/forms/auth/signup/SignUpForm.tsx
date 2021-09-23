@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { ValueType } from '../../../../../types';
+import { Page, ValueType } from '../../../../../types';
 import Heading from '../../../../Atoms/Text/Heading';
 import AcademyProfileCard from '../../../../Molecules/cards/AcademyProfileCard';
 import Stepper, { StepperProp } from '../../../../Molecules/Stepper/Stepper';
@@ -92,6 +92,7 @@ function SignUpForm() {
       confirmPassword: '',
     },
   });
+
   const [currentStep, setCurrentStep] = useState(0);
   const [completeStep, setCompleteStep] = useState(0);
   // const [isComplete, setComplete] = useState(false);
@@ -128,18 +129,10 @@ function SignUpForm() {
   const prevStep = () => {
     setCurrentStep((currentStep) => currentStep - 1);
   };
-  const handleChange = (e: ValueType) => {
+  const handleChange = (e: ValueType, page: Page) => {
     setDetails((details) => ({
       ...details,
-      personalDetails: { ...details.personalDetails, [e.name]: e.value },
-      familyDetails: { ...details.familyDetails, [e.name]: e.value },
-      nationalDocuments: { ...details.nationalDocuments, [e.name]: e.value },
-      employmentDetails: { ...details.employmentDetails, [e.name]: e.value },
-      otherDetails: { ...details.otherDetails, [e.name]: e.value },
-      educationDetails: { ...details.educationDetails, [e.name]: e.value },
-      experienceDetails: { ...details.experienceDetails, [e.name]: e.value },
-      nextOfKinDetails: { ...details.nextOfKinDetails, [e.name]: e.value },
-      accountDetails: { ...details.accountDetails, [e.name]: e.value },
+      [page]: { ...details[page], [e.name]: e.value },
     }));
   };
 

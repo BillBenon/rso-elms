@@ -60,13 +60,13 @@ function EmploymentDetails({
       </div>
       <div className="flex flex-col gap-4">
         <DateMolecule
-          handleDate={handleChange}
+          handleChange={handleChange}
           name="dateOfCommission"
           width="60 md:w-80">
           Date of commission
         </DateMolecule>
         <DateMolecule
-          handleDate={handleChange}
+          handleChange={handleChange}
           name="dateOfLastPromotion"
           width="60 md:w-80">
           Date of last promotion

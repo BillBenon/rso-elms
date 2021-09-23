@@ -20,14 +20,14 @@ function PersonalDetails({ details, handleChange, nextStep }: CommonStepProps) {
           name="firstName"
           placeholder="eg: John"
           value={details.firstName}
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'personalDetails')}>
           First Name
         </InputMolecule>
         <InputMolecule
           name="lastName"
           placeholder="eg: Doe"
           value={details.lastName}
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'personalDetails')}>
           Last Name
         </InputMolecule>
       </div>
@@ -37,14 +37,14 @@ function PersonalDetails({ details, handleChange, nextStep }: CommonStepProps) {
           value={details.email}
           type="email"
           placeholder="username@example.com"
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'personalDetails')}>
           Email
         </InputMolecule>
         <InputMolecule
           name="phone"
           value={details.phone}
           placeholder="+250 ---------"
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'personalDetails')}>
           Phone number
         </InputMolecule>
       </div>
@@ -55,7 +55,7 @@ function PersonalDetails({ details, handleChange, nextStep }: CommonStepProps) {
             { value: 'female', label: 'Female' },
           ]}
           value={details.gender}
-          handleChange={handleChange}
+          handleChange={(e) => handleChange(e, 'personalDetails')}
           name="gender">
           Gender
         </RadioMolecule>
@@ -80,10 +80,13 @@ function PersonalDetails({ details, handleChange, nextStep }: CommonStepProps) {
         <TextAreaMolecule
           name="placeOfBirthDescription"
           value={details.placeOfBirthDescription}
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'personalDetails')}>
           Place of birth description
         </TextAreaMolecule>
-        <DateMolecule handleDate={handleChange} name="dob" width="60 md:w-80">
+        <DateMolecule
+          handleChange={(e) => handleChange(e, 'personalDetails')}
+          name="dob"
+          width="60 md:w-80">
           Date of Birth
         </DateMolecule>
       </div>
@@ -92,7 +95,7 @@ function PersonalDetails({ details, handleChange, nextStep }: CommonStepProps) {
           width="60 md:w-80"
           name="religion"
           defaultValue={details.religion}
-          onChange={handleChange}
+          onChange={(e) => handleChange(e, 'personalDetails')}
           options={[
             { value: 'rw', label: 'Rwanda' },
             { value: 'ug', label: 'Uganda' },
