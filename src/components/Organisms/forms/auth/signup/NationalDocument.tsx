@@ -32,8 +32,8 @@ function NationalDocuments({
           Nationality
         </DropdownMolecule>
         <InputMolecule
-          name="national_id"
-          value={details.national_id}
+          name="nationalId"
+          value={details.nationalId}
           placeholder="Enter 16 digit NID number"
           handleChange={handleChange}>
           National Identitification Number
@@ -49,15 +49,15 @@ function NationalDocuments({
         </InputMolecule>
         <DateMolecule
           handleDate={handleChange}
-          name="passport_expiry_date"
+          name="passportExpiryDate"
           width="60 md:w-80">
           Passport expiry date
         </DateMolecule>
       </div>
       <div className="flex flex-col">
         <InputMolecule
-          name="place_of_birth"
-          value={details.place_of_birth}
+          name="placeOfBirth"
+          value={details.placeOfBirth}
           placeholder="Enter place you got birth from"
           handleChange={handleChange}>
           Place of Birth

@@ -13,8 +13,8 @@ interface EducationDataType {
   level: string;
   section: string;
   certificate: string;
-  start_date: string;
-  end_date: string;
+  startDate: string;
+  endDate: string;
 }
 
 function EducationDetails({
@@ -58,12 +58,12 @@ function EducationDetails({
             Education section/ combination
             <span className="text-txt-secondary"> (Write in full abbreviation)</span>
           </InputMolecule>
-          <DateMolecule handleDate={handleChange} name="start_date" width="60 md:w-80">
+          <DateMolecule handleDate={handleChange} name="startDate" width="60 md:w-80">
             Start Date
           </DateMolecule>
         </div>
         <div className="my-4">
-          <DateMolecule handleDate={handleChange} name="end_date" width="60 md:w-80">
+          <DateMolecule handleDate={handleChange} name="endDate" width="60 md:w-80">
             End Date
           </DateMolecule>
         </div>
@@ -100,8 +100,8 @@ function EducationDetails({
             return (
               <Panel key={educ.school} title={educ.school} subtitle={educ.level}>
                 <div className="font-semibold">{educ.section}</div>
-                <div>Start Date: {educ.start_date}</div>
-                <div>End Date: {educ.end_date}</div>
+                <div>Start Date: {educ.startDate}</div>
+                <div>End Date: {educ.endDate}</div>
                 <div className="flex items-center">
                   <Icon name="attach" fill="primary" />
                   <span className="border-txt-primary border-b font-medium">

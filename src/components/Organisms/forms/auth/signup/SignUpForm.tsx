@@ -6,6 +6,7 @@ import AcademyProfileCard from '../../../../Molecules/cards/AcademyProfileCard';
 import Stepper, { StepperContentProp } from '../../../../Molecules/Stepper/Stepper';
 import EducationDetails from './EducationDetails';
 import EmploymentDetails from './EmploymentDetails';
+import FamilyDetails from './FamilyDetails';
 import NationalDocuments from './NationalDocument';
 import OtherDetails from './OtherDetails';
 import PersonalDetails from './PersonalDetails';
@@ -18,15 +19,27 @@ function SignUpForm() {
       email: '',
       phone: '',
       gender: 'male',
+      placeOfBirth: '',
+      placeOfBirthDescription: '',
       dob: '',
+      religion: '',
+      bloodGroup: '',
+    },
+    familyDetails: {
+      fatherName: '',
+      motherName: '',
       maritalStatus: 'married',
+      spouseName: '',
+      country: '',
+      location: '',
+      otherLocation: '',
     },
     nationalDocuments: {
       nationality: '',
-      national_id: '',
+      nationalId: '',
       passport: '',
-      passport_expiry_date: '',
-      place_of_birth: '',
+      passportExpiryDate: '',
+      placeOfBirth: '',
       language: '',
     },
     educationDetails: {
@@ -34,8 +47,8 @@ function SignUpForm() {
       level: '',
       section: '',
       certificate: '',
-      start_date: '',
-      end_date: '',
+      startDate: '',
+      endDate: '',
     },
     employmentDetails: {
       currentRank: '',
@@ -62,6 +75,7 @@ function SignUpForm() {
     setDetails((details) => ({
       ...details,
       personalDetails: { ...details.personalDetails, [e.name]: e.value },
+      familyDetails: { ...details.familyDetails, [e.name]: e.value },
       nationalDocuments: { ...details.nationalDocuments, [e.name]: e.value },
       educationDetails: { ...details.educationDetails, [e.name]: e.value },
       employmentDetails: { ...details.employmentDetails, [e.name]: e.value },
@@ -82,6 +96,16 @@ function SignUpForm() {
       content: (
         <PersonalDetails
           details={details.personalDetails}
+          handleChange={handleChange}
+          nextStep={nextStep}
+        />
+      ),
+    },
+    {
+      label: 'Family Details',
+      content: (
+        <FamilyDetails
+          details={details.familyDetails}
           handleChange={handleChange}
           nextStep={nextStep}
         />
