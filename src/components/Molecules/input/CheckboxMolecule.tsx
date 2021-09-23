@@ -7,7 +7,7 @@ import ILabel from '../../Atoms/Text/ILabel';
 export default function CheckboxMolecule(props: commonInputProps) {
   return (
     <div className="py-2">
-      <ILabel size="sm" weight="bold">
+      <ILabel size="sm" weight="medium">
         {props.placeholder}
       </ILabel>
       {props.options?.map((op: any, i) => (
