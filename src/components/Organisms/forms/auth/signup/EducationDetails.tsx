@@ -4,6 +4,7 @@ import { CommonStepProps } from '../../../../../types';
 import Button from '../../../../Atoms/custom/Button';
 import Icon from '../../../../Atoms/custom/Icon';
 import Panel from '../../../../Atoms/custom/Panel';
+import Heading from '../../../../Atoms/Text/Heading';
 import ILabel from '../../../../Atoms/Text/ILabel';
 import Accordion from '../../../../Molecules/Accordion';
 import DateMolecule from '../../../../Molecules/input/DateMolecule';
@@ -33,6 +34,9 @@ function EducationDetails({
   return (
     <div className="flex justify-between">
       <div className="flex flex-col gap-4">
+        <Heading fontSize="base" fontWeight="semibold">
+          Education Background
+        </Heading>
         <div className="flex flex-col gap-4">
           <InputMolecule
             placeholder="school"

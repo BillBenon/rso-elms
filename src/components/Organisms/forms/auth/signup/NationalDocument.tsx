@@ -41,27 +41,39 @@ function NationalDocuments({
       </div>
       <div className="flex flex-col gap-4">
         <InputMolecule
+          name="nidPlaceOfIssue"
+          value={details.nidPlaceOfIssue}
+          placeholder="Enter place you got NID from"
+          handleChange={handleChange}>
+          Place of issue
+        </InputMolecule>
+        <DateMolecule handleDate={handleChange} name="dateOfIssue" width="60 md:w-80">
+          Date of issue
+        </DateMolecule>
+      </div>
+      <div className="flex flex-col gap-4">
+        <InputMolecule
           name="passport"
           value={details.passport}
           placeholder="----------------"
           handleChange={handleChange}>
           Passport Number(Optional)
         </InputMolecule>
+        <InputMolecule
+          name="passPlaceOfIssue"
+          value={details.passPlaceOfIssue}
+          placeholder="Enter place you got passport from"
+          handleChange={handleChange}>
+          Place of issue
+        </InputMolecule>
+      </div>
+      <div className="flex flex-col gap-4">
         <DateMolecule
           handleDate={handleChange}
           name="passportExpiryDate"
           width="60 md:w-80">
           Passport expiry date
         </DateMolecule>
-      </div>
-      <div className="flex flex-col">
-        <InputMolecule
-          name="placeOfBirth"
-          value={details.placeOfBirth}
-          placeholder="Enter place you got birth from"
-          handleChange={handleChange}>
-          Place of Birth
-        </InputMolecule>
         <CheckboxMolecule
           placeholder="Languages"
           onChange={handleChange}

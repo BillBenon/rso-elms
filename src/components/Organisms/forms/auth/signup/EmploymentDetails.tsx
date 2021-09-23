@@ -2,6 +2,7 @@ import React from 'react';
 
 import { CommonStepProps } from '../../../../../types';
 import Button from '../../../../Atoms/custom/Button';
+import DateMolecule from '../../../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../Molecules/input/InputMolecule';
 
@@ -50,8 +51,22 @@ function EmploymentDetails({
           placeholder="Employment number"
           value={details.EmpNo}
           handleChange={handleChange}>
-          Employment number
+          Service / Employment number
         </InputMolecule>
+      </div>
+      <div className="flex flex-col gap-4">
+        <DateMolecule
+          handleDate={handleChange}
+          name="dateOfCommission"
+          width="60 md:w-80">
+          Date of commission
+        </DateMolecule>
+        <DateMolecule
+          handleDate={handleChange}
+          name="dateOfLastPromotion"
+          width="60 md:w-80">
+          Date of last promotion
+        </DateMolecule>
       </div>
       <div className="flex w-80 justify-between">
         {prevStep && (

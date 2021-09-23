@@ -4,10 +4,13 @@ import { ValueType } from '../../../../../types';
 import Heading from '../../../../Atoms/Text/Heading';
 import AcademyProfileCard from '../../../../Molecules/cards/AcademyProfileCard';
 import Stepper, { StepperContentProp } from '../../../../Molecules/Stepper/Stepper';
+import AccountDetails from './AccountDetails';
 import EducationDetails from './EducationDetails';
 import EmploymentDetails from './EmploymentDetails';
+import ExperienceDetails from './ExperienceDetails';
 import FamilyDetails from './FamilyDetails';
 import NationalDocuments from './NationalDocument';
+import NextOfKinDetails from './NextOfKinDetails';
 import OtherDetails from './OtherDetails';
 import PersonalDetails from './PersonalDetails';
 
@@ -35,12 +38,27 @@ function SignUpForm() {
       otherLocation: '',
     },
     nationalDocuments: {
-      nationality: '',
+      nationality: 'rw',
       nationalId: '',
+      nidPlaceOfIssue: '',
+      dateOfIssue: '',
+      passPlaceOfIssue: '',
       passport: '',
       passportExpiryDate: '',
-      placeOfBirth: '',
       language: '',
+    },
+    employmentDetails: {
+      currentRank: '',
+      otherRank: '',
+      RankDepart: 'Rwanda',
+      EmpNo: '',
+      dateOfCommission: '',
+      dateOfLastPromotion: '',
+    },
+    otherDetails: {
+      hobbies: '',
+      chronicDiseases: '',
+      diseaseDescription: '',
     },
     educationDetails: {
       school: '',
@@ -50,16 +68,28 @@ function SignUpForm() {
       startDate: '',
       endDate: '',
     },
-    employmentDetails: {
-      currentRank: '',
-      otherRank: '',
-      RankDepart: 'Rwanda',
-      EmpNo: '',
+    experienceDetails: {
+      type: 'Appointment',
+      name: '',
+      description: '',
+      startDate: '',
+      endDate: '',
     },
-    otherDetails: {
-      hobbies: '',
-      chronicDiseases: '',
-      diseaseDescription: '',
+    nextOfKinDetails: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      gender: 'male',
+      relationShip: '',
+      country: '',
+      location: '',
+      otherLocation: '',
+    },
+    accountDetails: {
+      username: '',
+      password: '',
+      confirmPassword: '',
     },
   });
   const [activeStep, setActiveStep] = useState(0);
@@ -77,9 +107,12 @@ function SignUpForm() {
       personalDetails: { ...details.personalDetails, [e.name]: e.value },
       familyDetails: { ...details.familyDetails, [e.name]: e.value },
       nationalDocuments: { ...details.nationalDocuments, [e.name]: e.value },
-      educationDetails: { ...details.educationDetails, [e.name]: e.value },
       employmentDetails: { ...details.employmentDetails, [e.name]: e.value },
       otherDetails: { ...details.otherDetails, [e.name]: e.value },
+      educationDetails: { ...details.educationDetails, [e.name]: e.value },
+      experienceDetails: { ...details.experienceDetails, [e.name]: e.value },
+      nextOfKinDetails: { ...details.nextOfKinDetails, [e.name]: e.value },
+      accountDetails: { ...details.accountDetails, [e.name]: e.value },
     }));
     console.log(details);
   };
@@ -92,7 +125,7 @@ function SignUpForm() {
 
   const stepperContent: StepperContentProp[] = [
     {
-      label: 'Personal Details',
+      label: 'Personal details',
       content: (
         <PersonalDetails
           details={details.personalDetails}
@@ -102,7 +135,7 @@ function SignUpForm() {
       ),
     },
     {
-      label: 'Family Details',
+      label: 'Family details',
       content: (
         <FamilyDetails
           details={details.familyDetails}
@@ -112,7 +145,7 @@ function SignUpForm() {
       ),
     },
     {
-      label: 'National Documents',
+      label: 'National documents',
       content: (
         <NationalDocuments
           details={details.nationalDocuments}
@@ -123,7 +156,7 @@ function SignUpForm() {
       ),
     },
     {
-      label: 'Employment Details',
+      label: 'Employment details',
       content: (
         <EmploymentDetails
           details={details.employmentDetails}
@@ -134,7 +167,18 @@ function SignUpForm() {
       ),
     },
     {
-      label: 'Education Details',
+      label: 'Other details',
+      content: (
+        <OtherDetails
+          details={details.otherDetails}
+          handleChange={handleChange}
+          prevStep={prevStep}
+          nextStep={nextStep}
+        />
+      ),
+    },
+    {
+      label: 'Education details',
       content: (
         <EducationDetails
           details={details.educationDetails}
@@ -144,12 +188,33 @@ function SignUpForm() {
         />
       ),
     },
-
     {
-      label: 'Other Details',
+      label: 'Experience details',
       content: (
-        <OtherDetails
-          details={details.otherDetails}
+        <ExperienceDetails
+          details={details.experienceDetails}
+          handleChange={handleChange}
+          prevStep={prevStep}
+          nextStep={nextStep}
+        />
+      ),
+    },
+    {
+      label: 'Next of kin details',
+      content: (
+        <NextOfKinDetails
+          details={details.nextOfKinDetails}
+          handleChange={handleChange}
+          prevStep={prevStep}
+          nextStep={nextStep}
+        />
+      ),
+    },
+    {
+      label: 'Account details',
+      content: (
+        <AccountDetails
+          details={details.experienceDetails}
           handleChange={handleChange}
           prevStep={prevStep}
           nextStep={nextStep}

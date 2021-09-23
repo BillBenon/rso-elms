@@ -42,7 +42,8 @@ function OtherDetails({ details, handleChange, prevStep, nextStep }: CommonStepP
         <TextAreaMolecule
           name="diseaseDescription"
           value={details.diseaseDescription}
-          handleChange={handleChange}>
+          handleChange={handleChange}
+          placeholder="Describe your chronic disease">
           Chronic disease description
         </TextAreaMolecule>
         <div className="flex w-80 justify-between">
