@@ -2,18 +2,16 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { CommonCardDataType, Link } from '../../../types';
-import Badge from '../../Atoms/custom/Badge';
+import Avatar from '../../Atoms/custom/Avatar';
 import Button from '../../Atoms/custom/Button';
 import Heading from '../../Atoms/Text/Heading';
 import Cacumber from '../../Molecules/Cacumber';
-import AcademyProfileCard from '../../Molecules/cards/AcademyProfileCard';
 import CommonCardMolecule from '../../Molecules/cards/CommonCardMolecule';
+import UsersPreview from '../../Molecules/cards/UsersPreview';
 import PopupMolecule from '../../Molecules/Popup';
 import TableHeader from '../../Molecules/table/TableHeader';
 import { Tab, Tabs } from '../../Molecules/tabs/tabs';
 import NewAcademicProgram from '../forms/programs/NewAcademicProgram';
-
-interface IProgramData extends CommonCardDataType {}
 
 export default function ProgramDetailsMolecule() {
   const history = useHistory();
@@ -32,7 +30,7 @@ export default function ProgramDetailsMolecule() {
     { to: 'subjects', title: 'subjects' },
   ];
 
-  const data: IProgramData[] = [
+  const data: CommonCardDataType[] = [
     {
       status: { type: 'success', text: 'On going' },
       code: 'HR450-TC',
@@ -81,45 +79,38 @@ export default function ProgramDetailsMolecule() {
         </section>
         <Tabs activeIndex={0}>
           <Tab label="Program Info" className="pt-7">
-            <div className="bg-main w-full h-72 px-11 py-6 flex flex-col justify-start">
-              {/* program info */}
-              <div className="flex justify-between items-center">
-                <div className="flex flex-col gap-4">
-                  <Heading fontWeight="semibold">{programData.code}</Heading>
-                  <Heading fontWeight="semibold" color="primary">
-                    Ra01-430st
+            <div className="flex">
+              <div className="mr-24">
+                <CommonCardMolecule data={programData}>
+                  <div className="flex flex-col mt-8 gap-7 pb-2">
+                    <Heading fontSize="base">Faculty name</Heading>
+
+                    <div className="flex items-center gap-2">
+                      <Avatar
+                        alt="program oic"
+                        size="32"
+                        src="https://cdn.britannica.com/w:400,h:300,c:crop/26/157026-050-08ED6418/Sylvester-Stallone-1998.jpg"
+                      />
+                      <Heading fontSize="sm">Captail Liberi</Heading>
+                    </div>
+                  </div>
+                </CommonCardMolecule>
+              </div>
+
+              <div className="flex flex-col gap-8">
+                <div className="flex gap-8">
+                  <UsersPreview title="Students" totalUsers={100} />
+                  <UsersPreview title="Students" totalUsers={8} />
+                </div>
+                <div className="flex flex-col gap-7 bg-main w-60 p-6">
+                  <Heading color="txt-secondary" fontSize="base">
+                    Intakes
                   </Heading>
+                  <div className="flex flex-col gap-8">
+                    <Heading fontSize="base">Active Intakes</Heading>
+                    <Heading fontSize="base">Active Intakes</Heading>
+                  </div>
                 </div>
-
-                {programData.status && (
-                  <Badge badgecolor={programData.status.type}>
-                    {programData.status.text}
-                  </Badge>
-                )}
-              </div>
-
-              {/* program details */}
-              <div className="flex gap-12">
-                <div className="w-80">
-                  This program was put in for anyone who will complete it will have the
-                  captain rank.{' '}
-                </div>
-                <div>Program Type</div>
-                <div>Faculty</div>
-              </div>
-
-              {/* other elements */}
-
-              <div className="flex justify-between mt-14">
-                <div>
-                  <AcademyProfileCard
-                    color="txt-primary"
-                    alt="profile image"
-                    src="https://cdn.britannica.com/w:400,h:300,c:crop/26/157026-050-08ED6418/Sylvester-Stallone-1998.jpg">
-                    Captain Liberi
-                  </AcademyProfileCard>
-                </div>
-                <Button>Edit</Button>
               </div>
             </div>
           </Tab>
