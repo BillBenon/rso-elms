@@ -38,7 +38,7 @@ function EmploymentDetails({
           name="otherRank"
           placeholder="other ranks u might hold"
           value={details.otherRank}
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'employmentDetails')}>
           Other rank
         </InputMolecule>
       </div>
@@ -47,26 +47,26 @@ function EmploymentDetails({
           name="RankDepart"
           placeholder="eg: Rwanda"
           value={details.RankDepart}
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'employmentDetails')}>
           Current rank department
         </InputMolecule>
         <InputMolecule
           name="EmpNo"
           placeholder="Employment number"
           value={details.EmpNo}
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'employmentDetails')}>
           Service / Employment number
         </InputMolecule>
       </div>
       <div className="flex flex-col gap-4">
         <DateMolecule
-          handleChange={handleChange}
+          handleChange={(e) => handleChange(e, 'employmentDetails')}
           name="dateOfCommission"
           width="60 md:w-80">
           Date of commission
         </DateMolecule>
         <DateMolecule
-          handleChange={handleChange}
+          handleChange={(e) => handleChange(e, 'employmentDetails')}
           name="dateOfLastPromotion"
           width="60 md:w-80">
           Date of last promotion

@@ -17,7 +17,7 @@ function OtherDetails({ details, handleChange, prevStep, nextStep }: CommonStepP
           isMulti
           name="hobbies"
           defaultValue={details.hobbies}
-          onChange={handleChange}
+          onChange={(e) => handleChange(e, 'otherDetails')}
           options={[
             { value: 'football', label: 'football' },
             { value: 'swimming', label: 'swimming' },
@@ -34,7 +34,7 @@ function OtherDetails({ details, handleChange, prevStep, nextStep }: CommonStepP
           placeholder="Select chronic diseases u have"
           name="chronicDiseases"
           defaultValue={details.chronicDiseases}
-          onChange={handleChange}
+          onChange={(e) => handleChange(e, 'otherDetails')}
           options={[
             { value: 'asthma', label: 'Asthma' },
             { value: 'ulcers', label: 'Ulcers' },
@@ -46,7 +46,7 @@ function OtherDetails({ details, handleChange, prevStep, nextStep }: CommonStepP
         <TextAreaMolecule
           name="diseaseDescription"
           value={details.diseaseDescription}
-          handleChange={handleChange}
+          handleChange={(e) => handleChange(e, 'otherDetails')}
           placeholder="Describe your chronic disease">
           Chronic disease description
         </TextAreaMolecule>

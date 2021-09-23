@@ -45,14 +45,14 @@ function EducationDetails({
             placeholder="school"
             name="school"
             value={details.school}
-            handleChange={handleChange}>
+            handleChange={(e) => handleChange(e, 'educationDetails')}>
             School Name
           </InputMolecule>
           <InputMolecule
             placeholder="level"
             name="level"
             value={details.level}
-            handleChange={handleChange}>
+            handleChange={(e) => handleChange(e, 'educationDetails')}>
             Education Level
           </InputMolecule>
         </div>
@@ -61,16 +61,22 @@ function EducationDetails({
             name="section"
             placeholder="section"
             value={details.section}
-            handleChange={handleChange}>
+            handleChange={(e) => handleChange(e, 'educationDetails')}>
             Education section/ combination
             <span className="text-txt-secondary"> (Write in full abbreviation)</span>
           </InputMolecule>
-          <DateMolecule handleChange={handleChange} name="startDate" width="60 md:w-80">
+          <DateMolecule
+            handleChange={(e) => handleChange(e, 'educationDetails')}
+            name="startDate"
+            width="60 md:w-80">
             Start Date
           </DateMolecule>
         </div>
         <div className="my-4">
-          <DateMolecule handleChange={handleChange} name="endDate" width="60 md:w-80">
+          <DateMolecule
+            handleChange={(e) => handleChange(e, 'educationDetails')}
+            name="endDate"
+            width="60 md:w-80">
             End Date
           </DateMolecule>
         </div>

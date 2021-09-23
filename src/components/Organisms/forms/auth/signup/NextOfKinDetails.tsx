@@ -24,14 +24,14 @@ function NextOfKinDetails({
           name="firstName"
           placeholder="eg: John"
           value={details.firstName}
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}>
           First Name
         </InputMolecule>
         <InputMolecule
           name="lastName"
           placeholder="eg: Doe"
           value={details.lastName}
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}>
           Last Name
         </InputMolecule>
       </div>
@@ -41,14 +41,14 @@ function NextOfKinDetails({
           value={details.email}
           type="email"
           placeholder="username@example.com"
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}>
           Email
         </InputMolecule>
         <InputMolecule
           name="phone"
           value={details.phone}
           placeholder="+250 ---------"
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}>
           Phone number
         </InputMolecule>
       </div>
@@ -59,14 +59,14 @@ function NextOfKinDetails({
             { value: 'female', label: 'Female' },
           ]}
           value={details.gender}
-          handleChange={handleChange}
+          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}
           name="gender">
           Gender
         </RadioMolecule>
         <InputMolecule
           name="relationShip"
           value={details.relationShip}
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}>
           RelationShip
         </InputMolecule>
       </div>
@@ -109,7 +109,7 @@ function NextOfKinDetails({
         <InputMolecule
           name="otherLocation"
           value={details.otherLocation}
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}>
           Other Location
           <span className="text-txt-secondary"> (State / Region)</span>
         </InputMolecule>

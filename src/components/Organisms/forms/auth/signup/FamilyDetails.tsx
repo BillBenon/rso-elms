@@ -21,14 +21,14 @@ function FamilyDetails({ details, handleChange, nextStep, prevStep }: CommonStep
           name="fatherName"
           placeholder="eg: John"
           value={details.fatherName}
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'familyDetails')}>
           Father&apos;s name
         </InputMolecule>
         <InputMolecule
           name="motherName"
           placeholder="eg: Doe"
           value={details.motherName}
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'familyDetails')}>
           Mother&apos;s name
         </InputMolecule>
       </div>
@@ -39,14 +39,14 @@ function FamilyDetails({ details, handleChange, nextStep, prevStep }: CommonStep
             { value: 'single', label: 'Single' },
           ]}
           value={details.maritalStatus}
-          handleChange={handleChange}
+          handleChange={(e) => handleChange(e, 'familyDetails')}
           name="maritalStatus">
           Marital Status
         </RadioMolecule>
         <InputMolecule
           name="spouseName"
           value={details.spouseName}
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'familyDetails')}>
           Spouse Name
         </InputMolecule>
       </div>
@@ -89,7 +89,7 @@ function FamilyDetails({ details, handleChange, nextStep, prevStep }: CommonStep
         <InputMolecule
           name="otherLocation"
           value={details.otherLocation}
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'familyDetails')}>
           Other Location
           <span className="text-txt-secondary"> (State / Region)</span>
         </InputMolecule>

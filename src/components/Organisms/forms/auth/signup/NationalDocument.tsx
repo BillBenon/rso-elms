@@ -39,7 +39,7 @@ function NationalDocuments({
           name="nationalId"
           value={details.nationalId}
           placeholder="Enter 16 digit NID number"
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'nationalDocuments')}>
           National Identitification Number
         </InputMolecule>
       </div>
@@ -48,10 +48,13 @@ function NationalDocuments({
           name="nidPlaceOfIssue"
           value={details.nidPlaceOfIssue}
           placeholder="Enter place you got NID from"
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'nationalDocuments')}>
           Place of issue
         </InputMolecule>
-        <DateMolecule handleChange={handleChange} name="dateOfIssue" width="60 md:w-80">
+        <DateMolecule
+          handleChange={(e) => handleChange(e, 'nationalDocuments')}
+          name="dateOfIssue"
+          width="60 md:w-80">
           Date of issue
         </DateMolecule>
       </div>
@@ -60,20 +63,20 @@ function NationalDocuments({
           name="passport"
           value={details.passport}
           placeholder="----------------"
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'nationalDocuments')}>
           Passport Number(Optional)
         </InputMolecule>
         <InputMolecule
           name="passPlaceOfIssue"
           value={details.passPlaceOfIssue}
           placeholder="Enter place you got passport from"
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'nationalDocuments')}>
           Place of issue
         </InputMolecule>
       </div>
       <div className="flex flex-col gap-4">
         <DateMolecule
-          handleChange={handleChange}
+          handleChange={(e) => handleChange(e, 'nationalDocuments')}
           name="passportExpiryDate"
           width="60 md:w-80">
           Passport expiry date

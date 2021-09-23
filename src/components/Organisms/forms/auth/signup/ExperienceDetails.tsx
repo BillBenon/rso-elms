@@ -51,7 +51,7 @@ function ExperienceDetails({
             placeholder={`Enter ${details.type}`}
             name="name"
             value={details.name}
-            handleChange={handleChange}>
+            handleChange={(e) => handleChange(e, 'experienceDetails')}>
             {details.type}
           </InputMolecule>
         </div>
@@ -59,15 +59,21 @@ function ExperienceDetails({
           <TextAreaMolecule
             name="diseaseDescription"
             value={details.description}
-            handleChange={handleChange}>
+            handleChange={(e) => handleChange(e, 'experienceDetails')}>
             Description
           </TextAreaMolecule>
-          <DateMolecule handleChange={handleChange} name="startDate" width="60 md:w-80">
+          <DateMolecule
+            handleChange={(e) => handleChange(e, 'experienceDetails')}
+            name="startDate"
+            width="60 md:w-80">
             Start Date
           </DateMolecule>
         </div>
         <div className="my-4">
-          <DateMolecule handleChange={handleChange} name="endDate" width="60 md:w-80">
+          <DateMolecule
+            handleChange={(e) => handleChange(e, 'experienceDetails')}
+            name="endDate"
+            width="60 md:w-80">
             End Date
           </DateMolecule>
         </div>

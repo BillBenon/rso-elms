@@ -14,7 +14,7 @@ function AccountDetails({ details, handleChange, prevStep, nextStep }: CommonSte
           name="username"
           placeholder="username"
           value={details.username}
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'accountDetails')}>
           Username
         </InputMolecule>
         <InputMolecule
@@ -22,7 +22,7 @@ function AccountDetails({ details, handleChange, prevStep, nextStep }: CommonSte
           placeholder="password"
           type="password"
           value={details.password}
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'accountDetails')}>
           Password
         </InputMolecule>
         <InputMolecule
@@ -30,7 +30,7 @@ function AccountDetails({ details, handleChange, prevStep, nextStep }: CommonSte
           placeholder="confirm password"
           type="password"
           value={details.confirmPassword}
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e, 'accountDetails')}>
           Confirm Password
         </InputMolecule>
       </div>
