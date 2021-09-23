@@ -1,37 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { ValueType } from '../../../../../types';
+import { CommonStepProps } from '../../../../../types';
 import Button from '../../../../Atoms/custom/Button';
 import CheckboxMolecule from '../../../../Molecules/input/CheckboxMolecule';
 import DateMolecule from '../../../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../Molecules/input/InputMolecule';
 
-const NationalDocuments = () => {
-  const [details, setDetails] = useState({
-    nationality: '',
-    national_id: '',
-    passport: '',
-    passport_expiry_date: '',
-    place_of_birth: '',
-    language: '',
-  });
-
-  const movePrev = () => {
-    window.alert('movePrev');
-  };
-
-  const moveNext = () => {
-    window.alert('moveNext');
-  };
-
-  const handleChange = (e: ValueType) => {
-    setDetails((details) => ({
-      ...details,
-      [e.name]: e.value,
-    }));
-  };
-
+function NationalDocuments({
+  details,
+  handleChange,
+  prevStep,
+  nextStep,
+}: CommonStepProps) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4">
@@ -93,14 +74,16 @@ const NationalDocuments = () => {
           ]}
         />
       </div>
-      <div className="flex justify-between">
-        <Button styleType="text" color="txt-secondary" onClick={movePrev}>
-          Back
-        </Button>
-        <Button onClick={moveNext}>Next</Button>
+      <div className="flex w-80 justify-between">
+        {prevStep && (
+          <Button styleType="text" color="txt-secondary" onClick={() => prevStep()}>
+            Back
+          </Button>
+        )}
+        <Button onClick={() => nextStep()}>Next</Button>
       </div>
     </div>
   );
-};
+}
 
 export default NationalDocuments;

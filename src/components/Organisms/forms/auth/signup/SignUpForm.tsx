@@ -1,55 +1,138 @@
-import React from 'react';
+import React, { useState } from 'react';
 
+import { ValueType } from '../../../../../types';
 import Heading from '../../../../Atoms/Text/Heading';
 import AcademyProfileCard from '../../../../Molecules/cards/AcademyProfileCard';
-import Stepper from '../../../../Molecules/Stepper/Stepper';
+import Stepper, { StepperContentProp } from '../../../../Molecules/Stepper/Stepper';
 import EducationDetails from './EducationDetails';
 import EmploymentDetails from './EmploymentDetails';
 import NationalDocuments from './NationalDocument';
 import OtherDetails from './OtherDetails';
 import PersonalDetails from './PersonalDetails';
 
-const SignUpForm = () => {
-  const stepperContent = [
+function SignUpForm() {
+  const [details, setDetails] = useState({
+    personalDetails: {
+      firstName: '',
+      lastName: '',
+      email: '',
+      phone: '',
+      gender: 'male',
+      dob: '',
+      maritalStatus: 'married',
+    },
+    nationalDocuments: {
+      nationality: '',
+      national_id: '',
+      passport: '',
+      passport_expiry_date: '',
+      place_of_birth: '',
+      language: '',
+    },
+    educationDetails: {
+      school: '',
+      level: '',
+      section: '',
+      certificate: '',
+      start_date: '',
+      end_date: '',
+    },
+    employmentDetails: {
+      currentRank: '',
+      otherRank: '',
+      RankDepart: 'Rwanda',
+      EmpNo: '',
+    },
+    otherDetails: {
+      hobbies: '',
+      chronicDiseases: '',
+      diseaseDescription: '',
+    },
+  });
+  const [activeStep, setActiveStep] = useState(0);
+
+  const nextStep = () => {
+    setActiveStep(activeStep + 1);
+  };
+
+  const prevStep = () => {
+    setActiveStep(activeStep - 1);
+  };
+  const handleChange = (e: ValueType) => {
+    setDetails((details) => ({
+      ...details,
+      personalDetails: { ...details.personalDetails, [e.name]: e.value },
+      nationalDocuments: { ...details.nationalDocuments, [e.name]: e.value },
+      educationDetails: { ...details.educationDetails, [e.name]: e.value },
+      employmentDetails: { ...details.employmentDetails, [e.name]: e.value },
+      otherDetails: { ...details.otherDetails, [e.name]: e.value },
+    }));
+    console.log(details);
+  };
+
+  const navigateToStepHandler = (index: number) => {
+    if (index !== activeStep) {
+      setActiveStep(index);
+    }
+  };
+
+  const stepperContent: StepperContentProp[] = [
     {
       label: 'Personal Details',
-      content: <PersonalDetails />,
-      clicked: () => {},
-      // isError: personalValidate.touched,
-      // isComplete: personalValidate.completed,
+      content: (
+        <PersonalDetails
+          details={details.personalDetails}
+          handleChange={handleChange}
+          nextStep={nextStep}
+        />
+      ),
     },
     {
       label: 'National Documents',
-      content: <NationalDocuments />,
-      clicked: () => {},
-      // isError: documentValidate.touched,
-      // isComplete: documentValidate.completed,
+      content: (
+        <NationalDocuments
+          details={details.nationalDocuments}
+          handleChange={handleChange}
+          prevStep={prevStep}
+          nextStep={nextStep}
+        />
+      ),
     },
     {
       label: 'Employment Details',
-      content: <EmploymentDetails />,
-      clicked: () => {},
-      // isError: employmentValidate.touched,
-      // isComplete: employmentValidate.completed,
+      content: (
+        <EmploymentDetails
+          details={details.employmentDetails}
+          handleChange={handleChange}
+          prevStep={prevStep}
+          nextStep={nextStep}
+        />
+      ),
     },
     {
       label: 'Education Details',
-      content: <EducationDetails />,
-      clicked: () => {},
-      // isError: educationValidate.touched,
-      // isComplete: educationValidate.completed,
+      content: (
+        <EducationDetails
+          details={details.educationDetails}
+          handleChange={handleChange}
+          prevStep={prevStep}
+          nextStep={nextStep}
+        />
+      ),
     },
 
     {
       label: 'Other Details',
-      content: <OtherDetails />,
-      clicked: () => {},
-      // isError: othersValidate.touched,
-      // isComplete: othersValidate.completed,
+      content: (
+        <OtherDetails
+          details={details.otherDetails}
+          handleChange={handleChange}
+          prevStep={prevStep}
+          nextStep={nextStep}
+        />
+      ),
     },
   ];
-
-  const submitStepper = () => {};
 
   return (
     <div className="bg-main p-8 md:px-20 md:py-14">
@@ -68,9 +151,14 @@ const SignUpForm = () => {
           </AcademyProfileCard>
         </div>
       </div>
-      <Stepper stepperContent={stepperContent} submitStepper={submitStepper} isVertical />
+      <Stepper
+        activeStep={activeStep}
+        stepperContent={stepperContent}
+        isVertical
+        navigateToStepHandler={navigateToStepHandler}
+      />
     </div>
   );
-};
+}
 
 export default SignUpForm;

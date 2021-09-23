@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { ValueType } from '../../../../../types';
+import { CommonStepProps } from '../../../../../types';
 import Button from '../../../../Atoms/custom/Button';
 import Icon from '../../../../Atoms/custom/Icon';
 import Panel from '../../../../Atoms/custom/Panel';
@@ -17,35 +17,17 @@ interface EducationDataType {
   end_date: string;
 }
 
-const EducationDetails = () => {
-  const [details, setDetails] = useState<EducationDataType>({
-    school: '',
-    level: '',
-    section: '',
-    certificate: '',
-    start_date: '',
-    end_date: '',
-  });
-
+function EducationDetails({
+  details,
+  handleChange,
+  prevStep,
+  nextStep,
+}: CommonStepProps) {
   const [educationData, setEducationData] = useState<EducationDataType[]>([]);
-
-  const movePrev = () => {
-    window.alert('movePrev');
-  };
-
-  const moveNext = () => {
-    window.alert('moveNext');
-  };
-
-  const handleChange = (e: ValueType) => {
-    setDetails((details) => ({
-      ...details,
-      [e.name]: e.value,
-    }));
-  };
 
   const handleMore = () => {
     setEducationData([...educationData, details]);
+    console.log('details', details, 'education', educationData);
   };
 
   return (
@@ -102,11 +84,13 @@ const EducationDetails = () => {
         <div>
           <Button onClick={handleMore}>Add more</Button>
         </div>
-        <div className="flex justify-between">
-          <Button styleType="text" color="txt-secondary" onClick={movePrev}>
-            Back
-          </Button>
-          <Button onClick={moveNext}>Next</Button>
+        <div className="flex w-80 justify-between">
+          {prevStep && (
+            <Button styleType="text" color="txt-secondary" onClick={() => prevStep()}>
+              Back
+            </Button>
+          )}
+          <Button onClick={() => nextStep()}>Next</Button>
         </div>
       </div>
 
@@ -131,6 +115,6 @@ const EducationDetails = () => {
       </div>
     </div>
   );
-};
+}
 
 export default EducationDetails;

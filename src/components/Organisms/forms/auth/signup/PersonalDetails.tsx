@@ -1,33 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { ValueType } from '../../../../../types';
+import { CommonStepProps } from '../../../../../types';
 import Button from '../../../../Atoms/custom/Button';
 import DateMolecule from '../../../../Molecules/input/DateMolecule';
 import InputMolecule from '../../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../../Molecules/input/RadioMolecule';
 
-const PersonalDetails = () => {
-  const [details, setDetails] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: '',
-    gender: 'male',
-    dob: '',
-    maritalStatus: 'married',
-  });
-
-  const moveNext = () => {
-    window.alert('moveNext');
-  };
-
-  const handleChange = (e: ValueType) => {
-    setDetails((details) => ({
-      ...details,
-      [e.name]: e.value,
-    }));
-  };
-
+function PersonalDetails({ details, handleChange, nextStep }: CommonStepProps) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4">
@@ -90,11 +69,11 @@ const PersonalDetails = () => {
           Marital Status
         </RadioMolecule>
       </div>
-      <div className="flex justify-end">
-        <Button onClick={moveNext}>Next</Button>
+      <div>
+        <Button onClick={() => nextStep()}>Next</Button>
       </div>
     </div>
   );
-};
+}
 
 export default PersonalDetails;
