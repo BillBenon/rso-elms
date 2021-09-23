@@ -23,7 +23,9 @@ function ExperienceDetails({
   nextStep,
 }: CommonStepProps) {
   const [experienceData, setExperienceData] = useState<ExperienceDataType[]>([]);
-
+  const moveBack = () => {
+    prevStep && prevStep();
+  };
   const handleMore = () => {
     setExperienceData([...experienceData, details]);
     console.log('details', details, 'education', experienceData);
@@ -76,11 +78,11 @@ function ExperienceDetails({
         </div>
         <div className="flex w-80 justify-between">
           {prevStep && (
-            <Button styleType="text" color="txt-secondary" onClick={() => prevStep()}>
+            <Button styleType="text" color="txt-secondary" onClick={() => moveBack()}>
               Back
             </Button>
           )}
-          <Button onClick={() => nextStep()}>Next</Button>
+          <Button onClick={() => nextStep(true)}>Next</Button>
         </div>
       </div>
 

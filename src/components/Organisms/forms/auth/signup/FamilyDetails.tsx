@@ -7,7 +7,13 @@ import DropdownMolecule from '../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../../Molecules/input/RadioMolecule';
 
-function FamilyDetails({ details, handleChange, nextStep }: CommonStepProps) {
+function FamilyDetails({ details, handleChange, nextStep, prevStep }: CommonStepProps) {
+  const moveBack = () => {
+    prevStep && prevStep();
+  };
+  const moveForward = () => {
+    nextStep(true);
+  };
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4">
@@ -88,8 +94,13 @@ function FamilyDetails({ details, handleChange, nextStep }: CommonStepProps) {
           <span className="text-txt-secondary"> (State / Region)</span>
         </InputMolecule>
       </div>
-      <div>
-        <Button onClick={() => nextStep()}>Next</Button>
+      <div className="flex justify-between w-80">
+        {prevStep && (
+          <Button styleType="text" color="txt-secondary" onClick={() => moveBack()}>
+            Back
+          </Button>
+        )}
+        <Button onClick={() => moveForward()}>Next</Button>
       </div>
     </div>
   );

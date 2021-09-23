@@ -25,6 +25,9 @@ function EducationDetails({
   nextStep,
 }: CommonStepProps) {
   const [educationData, setEducationData] = useState<EducationDataType[]>([]);
+  const moveBack = () => {
+    prevStep && prevStep();
+  };
 
   const handleMore = () => {
     setEducationData([...educationData, details]);
@@ -88,13 +91,13 @@ function EducationDetails({
         <div>
           <Button onClick={handleMore}>Add more</Button>
         </div>
-        <div className="flex w-80 justify-between">
+        <div className="flex justify-between w-80">
           {prevStep && (
-            <Button styleType="text" color="txt-secondary" onClick={() => prevStep()}>
+            <Button styleType="text" color="txt-secondary" onClick={() => moveBack()}>
               Back
             </Button>
           )}
-          <Button onClick={() => nextStep()}>Next</Button>
+          <Button onClick={() => nextStep(true)}>Complete</Button>
         </div>
       </div>
 

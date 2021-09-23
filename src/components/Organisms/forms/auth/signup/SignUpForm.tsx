@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { ValueType } from '../../../../../types';
 import Heading from '../../../../Atoms/Text/Heading';
 import AcademyProfileCard from '../../../../Molecules/cards/AcademyProfileCard';
-import Stepper, { StepperContentProp } from '../../../../Molecules/Stepper/Stepper';
+import Stepper, { StepperProp } from '../../../../Molecules/Stepper/Stepper';
 import AccountDetails from './AccountDetails';
 import EducationDetails from './EducationDetails';
 import EmploymentDetails from './EmploymentDetails';
@@ -92,14 +92,41 @@ function SignUpForm() {
       confirmPassword: '',
     },
   });
-  const [activeStep, setActiveStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [completeStep, setCompleteStep] = useState(0);
+  // const [isComplete, setComplete] = useState(false);
 
-  const nextStep = () => {
-    setActiveStep(activeStep + 1);
+  useEffect(() => {
+    // let newSteps = [...stepperContent];
+    // let completedStep: StepperContentProp = newSteps[currentStep];
+    // completedStep.isComplete = true;
+    // newSteps[currentStep] = completedStep;
+    let newStepper = {
+      ...stepperContent,
+      currentStep: currentStep,
+    };
+
+    setStepperContent(newStepper);
+  }, [currentStep]);
+
+  useEffect(() => {
+    let newStepper = {
+      ...stepperContent,
+      currentStep: completeStep,
+      completeStep: completeStep,
+    };
+
+    setStepperContent(newStepper);
+  }, [completeStep]);
+
+  const nextStep = (isComplete?: boolean) => {
+    console.log('nexting', isComplete);
+    setCurrentStep((currentStep) => currentStep + 1);
+    if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
   };
 
   const prevStep = () => {
-    setActiveStep(activeStep - 1);
+    setCurrentStep((currentStep) => currentStep - 1);
   };
   const handleChange = (e: ValueType) => {
     setDetails((details) => ({
@@ -114,114 +141,119 @@ function SignUpForm() {
       nextOfKinDetails: { ...details.nextOfKinDetails, [e.name]: e.value },
       accountDetails: { ...details.accountDetails, [e.name]: e.value },
     }));
-    console.log(details);
   };
 
   const navigateToStepHandler = (index: number) => {
-    if (index !== activeStep) {
-      setActiveStep(index);
+    if (index !== currentStep) {
+      setCurrentStep(index);
     }
   };
 
-  const stepperContent: StepperContentProp[] = [
-    {
-      label: 'Personal details',
-      content: (
-        <PersonalDetails
-          details={details.personalDetails}
-          handleChange={handleChange}
-          nextStep={nextStep}
-        />
-      ),
-    },
-    {
-      label: 'Family details',
-      content: (
-        <FamilyDetails
-          details={details.familyDetails}
-          handleChange={handleChange}
-          nextStep={nextStep}
-        />
-      ),
-    },
-    {
-      label: 'National documents',
-      content: (
-        <NationalDocuments
-          details={details.nationalDocuments}
-          handleChange={handleChange}
-          prevStep={prevStep}
-          nextStep={nextStep}
-        />
-      ),
-    },
-    {
-      label: 'Employment details',
-      content: (
-        <EmploymentDetails
-          details={details.employmentDetails}
-          handleChange={handleChange}
-          prevStep={prevStep}
-          nextStep={nextStep}
-        />
-      ),
-    },
-    {
-      label: 'Other details',
-      content: (
-        <OtherDetails
-          details={details.otherDetails}
-          handleChange={handleChange}
-          prevStep={prevStep}
-          nextStep={nextStep}
-        />
-      ),
-    },
-    {
-      label: 'Education details',
-      content: (
-        <EducationDetails
-          details={details.educationDetails}
-          handleChange={handleChange}
-          prevStep={prevStep}
-          nextStep={nextStep}
-        />
-      ),
-    },
-    {
-      label: 'Experience details',
-      content: (
-        <ExperienceDetails
-          details={details.experienceDetails}
-          handleChange={handleChange}
-          prevStep={prevStep}
-          nextStep={nextStep}
-        />
-      ),
-    },
-    {
-      label: 'Next of kin details',
-      content: (
-        <NextOfKinDetails
-          details={details.nextOfKinDetails}
-          handleChange={handleChange}
-          prevStep={prevStep}
-          nextStep={nextStep}
-        />
-      ),
-    },
-    {
-      label: 'Account details',
-      content: (
-        <AccountDetails
-          details={details.experienceDetails}
-          handleChange={handleChange}
-          prevStep={prevStep}
-          nextStep={nextStep}
-        />
-      ),
-    },
-  ];
+  const initialData: StepperProp = {
+    currentStep: 0,
+    completeStep: 0,
+    content: [
+      {
+        label: 'Personal details',
+        content: (
+          <PersonalDetails
+            details={details.personalDetails}
+            handleChange={handleChange}
+            nextStep={nextStep}
+          />
+        ),
+      },
+      {
+        label: 'Family details',
+        content: (
+          <FamilyDetails
+            details={details.familyDetails}
+            handleChange={handleChange}
+            prevStep={prevStep}
+            nextStep={nextStep}
+          />
+        ),
+      },
+      {
+        label: 'National documents',
+        content: (
+          <NationalDocuments
+            details={details.nationalDocuments}
+            handleChange={handleChange}
+            prevStep={prevStep}
+            nextStep={nextStep}
+          />
+        ),
+      },
+      {
+        label: 'Employment details',
+        content: (
+          <EmploymentDetails
+            details={details.employmentDetails}
+            handleChange={handleChange}
+            prevStep={prevStep}
+            nextStep={nextStep}
+          />
+        ),
+      },
+      {
+        label: 'Other details',
+        content: (
+          <OtherDetails
+            details={details.otherDetails}
+            handleChange={handleChange}
+            prevStep={prevStep}
+            nextStep={nextStep}
+          />
+        ),
+      },
+      {
+        label: 'Education details',
+        content: (
+          <EducationDetails
+            details={details.educationDetails}
+            handleChange={handleChange}
+            prevStep={prevStep}
+            nextStep={nextStep}
+          />
+        ),
+      },
+      {
+        label: 'Experience details',
+        content: (
+          <ExperienceDetails
+            details={details.experienceDetails}
+            handleChange={handleChange}
+            prevStep={prevStep}
+            nextStep={nextStep}
+          />
+        ),
+      },
+      {
+        label: 'Next of kin details',
+        content: (
+          <NextOfKinDetails
+            details={details.nextOfKinDetails}
+            handleChange={handleChange}
+            prevStep={prevStep}
+            nextStep={nextStep}
+          />
+        ),
+      },
+      {
+        label: 'Account details',
+        content: (
+          <AccountDetails
+            details={details.experienceDetails}
+            handleChange={handleChange}
+            prevStep={prevStep}
+            nextStep={nextStep}
+          />
+        ),
+      },
+    ],
+  };
+  const [stepperContent, setStepperContent] = useState<StepperProp>(initialData);
 
   return (
     <div className="bg-main p-8 md:px-20 md:py-14">
@@ -241,7 +273,6 @@ function SignUpForm() {
         </div>
       </div>
       <Stepper
-        activeStep={activeStep}
         stepperContent={stepperContent}
         isVertical
         navigateToStepHandler={navigateToStepHandler}

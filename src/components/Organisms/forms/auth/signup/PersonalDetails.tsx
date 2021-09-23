@@ -9,6 +9,10 @@ import RadioMolecule from '../../../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../../../Molecules/input/TextAreaMolecule';
 
 function PersonalDetails({ details, handleChange, nextStep }: CommonStepProps) {
+  const moveForward = () => {
+    nextStep(true);
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4">
@@ -117,7 +121,7 @@ function PersonalDetails({ details, handleChange, nextStep }: CommonStepProps) {
         </DropdownMolecule>
       </div>
       <div>
-        <Button onClick={() => nextStep()}>Next</Button>
+        <Button onClick={() => moveForward()}>Next</Button>
       </div>
     </div>
   );

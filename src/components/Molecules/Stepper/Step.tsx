@@ -14,7 +14,7 @@ type StepProps = {
   isComplete?: boolean;
   isError?: boolean;
   isVertical?: boolean;
-  isLastStep: boolean;
+  isFirstStep: boolean;
 };
 
 const Step = ({
@@ -25,38 +25,46 @@ const Step = ({
   isActive,
   isComplete,
   isVertical,
-  isLastStep,
+  isFirstStep,
   isError,
 }: StepProps) => {
   return (
-    <div className="flex gap-14">
+    <div className="flex justify-between">
+      {/* label */}
       <div
         onKeyDown={() => navigateToStepHandler(index)}
-        className={`cursor-pointer
+        className={`cursor-pointer flex items-end w-max
         ${
           isActive
             ? 'text-primary-600'
             : isError
             ? 'text-error-500'
             : isComplete
-            ? 'text-success-500'
+            ? 'text-primary-400'
             : 'text-txt-secondary'
         }`}
         onClick={() => navigateToStepHandler(index)}>
-        {label}
+        <div>{label}</div>
       </div>
-      <div>
+
+      <div className={`pl-7  ${isFirstStep && 'flex items-end'} `}>
+        {/* step line(separator) */}
+        {!isFirstStep && (
+          <div
+            className={`separator_ ${isComplete ? 'border-primary-400' : 'border-silver'}
+          ${isVertical ? 'h-16 border-l-2' : 'w-16 border-b-2'} 
+          ${isFirstStep ? 'h-0 border-none' : ''}`}></div>
+        )}
+
+        {/* step (in numbers) indicator */}
         <Indicator
           isCircular={true}
           hasError={isError}
           isActive={isActive}
+          isComplete={isComplete}
           clicked={() => navigateToStepHandler(index)}>
           {indicator}
         </Indicator>
-        <div
-          className={`separator_ ${isActive ? 'border-primary-600' : 'border-silver'}
-          ${isVertical ? 'h-16 border-l-2' : 'w-16 border-b-2'} 
-          ${isLastStep ? 'h-0 border-none' : ''}`}></div>
       </div>
     </div>
   );

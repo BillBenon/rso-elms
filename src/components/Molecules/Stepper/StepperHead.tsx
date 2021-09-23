@@ -3,12 +3,11 @@ import '../../../styles/components/Atoms/custom/stepper.scss';
 import React from 'react';
 
 import Step from './Step';
-import { StepperContentProp } from './Stepper';
+import { StepperProp } from './Stepper';
 
 type StepperHeadProp = {
-  stepperContent: StepperContentProp[];
+  stepperContent: StepperProp;
   navigateToStepHandler: (_index: number) => void;
-  currentStepIndex: number;
   isInline?: boolean;
   isVertical?: boolean;
 };
@@ -18,19 +17,19 @@ const StepperHead = ({
   navigateToStepHandler,
   isInline,
   isVertical,
-  currentStepIndex: currentTabIndex,
 }: StepperHeadProp) => (
-  <div className={`hidden w-52 ${isVertical ? 'md:block' : 'md:flex'}`}>
-    {stepperContent.map((el, i) => (
+  <div className={`hidden w-max  ${isVertical ? 'md:block' : 'md:flex'}`}>
+    {stepperContent.content.map((el, i) => (
       <div key={el.label}>
         <Step
-          isLastStep={i == stepperContent.length - 1}
+          isFirstStep={i == 0}
           isVertical={isVertical}
           key={el.label}
           index={i}
           navigateToStepHandler={navigateToStepHandler}
           isInline={isInline}
-          isActive={i === currentTabIndex}
+          isActive={i === stepperContent.currentStep}
+          isComplete={stepperContent.completeStep >= i}
           indicator={i + 1}
           label={el.label}
         />

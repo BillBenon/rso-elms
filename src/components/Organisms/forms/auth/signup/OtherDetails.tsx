@@ -6,6 +6,10 @@ import DropdownMolecule from '../../../../Molecules/input/DropdownMolecule';
 import TextAreaMolecule from '../../../../Molecules/input/TextAreaMolecule';
 
 function OtherDetails({ details, handleChange, prevStep, nextStep }: CommonStepProps) {
+  const moveBack = () => {
+    prevStep && prevStep();
+  };
+
   return (
     <>
       <div className="flex flex-col gap-4">
@@ -48,7 +52,7 @@ function OtherDetails({ details, handleChange, prevStep, nextStep }: CommonStepP
         </TextAreaMolecule>
         <div className="flex w-80 justify-between">
           {prevStep && (
-            <Button styleType="text" color="txt-secondary" onClick={() => prevStep()}>
+            <Button styleType="text" color="txt-secondary" onClick={() => moveBack()}>
               Back
             </Button>
           )}

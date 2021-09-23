@@ -3,7 +3,10 @@ import React from 'react';
 import { CommonStepProps } from '../../../../../types';
 import Button from '../../../../Atoms/custom/Button';
 import InputMolecule from '../../../../Molecules/input/InputMolecule';
-function AccountDetails({ details, handleChange, nextStep }: CommonStepProps) {
+function AccountDetails({ details, handleChange, prevStep, nextStep }: CommonStepProps) {
+  const moveBack = () => {
+    prevStep && prevStep();
+  };
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4">
@@ -31,8 +34,13 @@ function AccountDetails({ details, handleChange, nextStep }: CommonStepProps) {
           Confirm Password
         </InputMolecule>
       </div>
-      <div className="pt-12">
-        <Button onClick={() => nextStep()}>Complete</Button>
+      <div className="flex justify-between w-80">
+        {prevStep && (
+          <Button styleType="text" color="txt-secondary" onClick={() => moveBack()}>
+            Back
+          </Button>
+        )}
+        <Button onClick={() => nextStep(true)}>Complete</Button>
       </div>
     </div>
   );

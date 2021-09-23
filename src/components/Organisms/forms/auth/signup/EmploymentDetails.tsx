@@ -12,6 +12,10 @@ function EmploymentDetails({
   prevStep,
   nextStep,
 }: CommonStepProps) {
+  const moveBack = () => {
+    prevStep && prevStep();
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4">
@@ -70,11 +74,11 @@ function EmploymentDetails({
       </div>
       <div className="flex w-80 justify-between">
         {prevStep && (
-          <Button styleType="text" color="txt-secondary" onClick={() => prevStep()}>
+          <Button styleType="text" color="txt-secondary" onClick={() => moveBack()}>
             Back
           </Button>
         )}
-        <Button onClick={() => nextStep()}>Next</Button>
+        <Button onClick={() => nextStep(true)}>Next</Button>
       </div>
     </div>
   );

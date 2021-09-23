@@ -26,8 +26,10 @@ const Indicator = ({
         border text-sm text-center z-2
         ${className}
          ${
-           isActive || isComplete
+           isActive
              ? 'text-main bg-primary-600 border-primary-600'
+             : isComplete
+             ? 'text-main bg-primary-400 border-primary-400'
              : 'text-txt-secondary bg-silver border-silver font-semibold'
          }
          ${hasError ? 'bg-error-500 border-error-500' : ''}

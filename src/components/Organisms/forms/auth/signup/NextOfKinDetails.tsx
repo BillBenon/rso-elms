@@ -7,7 +7,16 @@ import DropdownMolecule from '../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../../Molecules/input/RadioMolecule';
 
-function NextOfKinDetails({ details, handleChange, nextStep }: CommonStepProps) {
+function NextOfKinDetails({
+  details,
+  handleChange,
+  prevStep,
+  nextStep,
+}: CommonStepProps) {
+  const moveBack = () => {
+    prevStep && prevStep();
+  };
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-4">
@@ -105,8 +114,13 @@ function NextOfKinDetails({ details, handleChange, nextStep }: CommonStepProps) 
           <span className="text-txt-secondary"> (State / Region)</span>
         </InputMolecule>
       </div>
-      <div>
-        <Button onClick={() => nextStep()}>Next</Button>
+      <div className="flex justify-between w-80">
+        {prevStep && (
+          <Button styleType="text" color="txt-secondary" onClick={() => moveBack()}>
+            Back
+          </Button>
+        )}
+        <Button onClick={() => nextStep(true)}>Complete</Button>
       </div>
     </div>
   );
