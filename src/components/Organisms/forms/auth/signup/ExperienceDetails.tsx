@@ -85,13 +85,13 @@ function ExperienceDetails({
       </div>
 
       <div className=" w-80">
-        <p>{details.type}</p>
+        {experienceData.length > 0 && <p>{details.type}</p>}
         <Accordion>
-          {experienceData.map((educ) => {
+          {experienceData.map((ex) => {
             return (
-              <Panel key={educ.type} title={educ.type} subtitle={educ.description}>
-                <div>Start Date: {educ.startDate}</div>
-                <div>End Date: {educ.endDate}</div>
+              <Panel key={ex.type} title={ex.name} subtitle={ex.description}>
+                <div>Start Date: {ex.startDate}</div>
+                <div>End Date: {ex.endDate}</div>
               </Panel>
             );
           })}

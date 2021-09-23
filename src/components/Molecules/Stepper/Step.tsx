@@ -49,13 +49,12 @@ const Step = ({
         <Indicator
           isCircular={true}
           hasError={isError}
-          isComplete={isComplete}
           isActive={isActive}
           clicked={() => navigateToStepHandler(index)}>
           {indicator}
         </Indicator>
         <div
-          className={`separator_ border-silver 
+          className={`separator_ ${isActive ? 'border-primary-600' : 'border-silver'}
           ${isVertical ? 'h-16 border-l-2' : 'w-16 border-b-2'} 
           ${isLastStep ? 'h-0 border-none' : ''}`}></div>
       </div>
