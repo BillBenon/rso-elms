@@ -13,7 +13,10 @@ const administrationModuleConfig: AxiosRequestConfig = {
 const adminstrationAxios = axios.create(administrationModuleConfig);
 
 const interceptAdminReq = (config: AxiosRequestConfig) => {
-  console.log(cookie.getCookie('jwt_token'));
+  const jwtInfo: { username: string; token: string } = JSON.parse(
+    cookie.getCookie('jwt_info') || '',
+  );
+  if (jwtInfo.token) config.headers.Authorization = `Bearer ${jwtInfo.token}`;
   return config;
 };
 
