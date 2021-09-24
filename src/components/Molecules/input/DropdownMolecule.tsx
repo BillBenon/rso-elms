@@ -17,6 +17,7 @@ export default function DropdownMolecule(props: Props) {
       </ILabel>
       <div className="mt-2 flex flex-col">
         <DropDown
+          width={props.width}
           disabled={props.disabled}
           name={props.name}
           options={props.options}

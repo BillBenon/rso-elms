@@ -5,7 +5,7 @@ import Indicator from '../../Atoms/custom/Indicator';
 
 type StepProps = {
   // eslint-disable-next-line no-undef
-  indicator: JSX.Element | number;
+  indicator: JSX.Element | number | boolean;
   label: string;
   navigateToStepHandler: (_index: number) => void;
   index: number;
@@ -46,7 +46,6 @@ const Step = ({
         onClick={() => navigateToStepHandler(index)}>
         <div>{label}</div>
       </div>
-
       <div className={`pl-7  ${isFirstStep && 'flex items-end'} `}>
         {/* step line(separator) */}
         {!isFirstStep && (

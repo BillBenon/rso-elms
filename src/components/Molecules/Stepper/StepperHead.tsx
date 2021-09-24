@@ -17,24 +17,26 @@ const StepperHead = ({
   navigateToStepHandler,
   isInline,
   isVertical,
-}: StepperHeadProp) => (
-  <div className={`hidden w-max  ${isVertical ? 'md:block' : 'md:flex'}`}>
-    {stepperContent.content.map((el, i) => (
-      <div key={el.label}>
-        <Step
-          isFirstStep={i == 0}
-          isVertical={isVertical}
-          key={el.label}
-          index={i}
-          navigateToStepHandler={navigateToStepHandler}
-          isInline={isInline}
-          isActive={i === stepperContent.currentStep}
-          isComplete={stepperContent.completeStep >= i}
-          indicator={i + 1}
-          label={el.label}
-        />
-      </div>
-    ))}
-  </div>
-);
+}: StepperHeadProp) => {
+  return (
+    <div className={`hidden w-max  ${isVertical ? 'md:block' : 'md:flex'}`}>
+      {stepperContent.content.map((el, i) => (
+        <div key={el.label}>
+          <Step
+            isFirstStep={i == 0}
+            isVertical={isVertical}
+            key={el.label}
+            index={i}
+            navigateToStepHandler={navigateToStepHandler}
+            isInline={isInline}
+            isActive={i === stepperContent.currentStep}
+            isComplete={stepperContent.completeStep >= i}
+            indicator={i + 1}
+            label={el.label}
+          />
+        </div>
+      ))}
+    </div>
+  );
+};
 export default StepperHead;
