@@ -1,7 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
+import { authenticator } from '../../../services/authenticator';
 import { ValueType } from '../../../types';
 import Avatar from '../../Atoms/custom/Avatar';
 import Icon from '../../Atoms/custom/Icon';
@@ -10,8 +11,16 @@ import SearchMolecule from '../input/SearchMolecule';
 export default function Navigation() {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
+  const [authUser, setAuthUser] = useState(null);
 
   const location = useLocation();
+
+  useEffect(() => {
+    (async () => {
+      const res = await authenticator.authUser();
+      console.log(res);
+    })();
+  }, []);
 
   function handleSearch(_e: ValueType) {}
 
