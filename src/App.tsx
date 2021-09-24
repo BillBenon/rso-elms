@@ -39,11 +39,11 @@ const App = () => {
       <MainLayout>
         <Router>
           <Switch>
-            <Route exact path="/" component={Homepage} />
+            <Route exact path="/" component={Signin} />
 
             <Route exact path="/register" component={Signup} />
             <Route exact path="/register/more" component={MoreInfo} />
-            <Route path="/login" component={Signin} />
+            <Route exact path="/usecase" component={Homepage} />
 
             <Route exact path="/academies" component={Academies} />
             <Route exact path="/academies/new" component={NewAcademy} />
