@@ -34,7 +34,7 @@ export default function RadioMolecule<T>({
         <div className="animate-pulse w-24 h-4 bg-secondary rounded"></div>
       ) : (
         <>
-          <ILabel weight="bold" size="sm">
+          <ILabel weight="medium" size="sm">
             {children}
           </ILabel>
           <div className="mt-2">

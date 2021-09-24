@@ -1,11 +1,11 @@
 import React from 'react';
 
-import SignUpForm from '../../components/Organisms/forms/auth/signup/SignUpForm';
+import PersonalInfo from '../../components/Organisms/forms/auth/signup/personal/PersonalInfo';
 
 function Signup() {
   return (
     <div>
-      <SignUpForm />
+      <PersonalInfo />
     </div>
   );
 }
