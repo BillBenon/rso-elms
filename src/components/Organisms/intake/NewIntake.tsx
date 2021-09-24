@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Button from '../../Atoms/custom/Button';
 import DateMolecule from '../../Molecules/input/DateMolecule';
@@ -8,6 +8,12 @@ import Stepper from '../../Molecules/Stepper/Stepper';
 import AddProgramToIntake from './AddProgramToIntake';
 
 export default function NewIntake() {
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const handleNext = () => {
+    if (currentStep < 3) setCurrentStep(currentStep + 1);
+  };
+
   const IntakeInfo = () => {
     return (
       <form onSubmit={(e) => e.preventDefault()}>
@@ -40,7 +46,9 @@ export default function NewIntake() {
           Total number of students
         </InputMolecule>
         <div className="pt-3">
-          <Button type="submit">Next</Button>
+          <Button type="submit" onClick={handleNext}>
+            Next
+          </Button>
         </div>
       </form>
     );
@@ -63,9 +71,13 @@ export default function NewIntake() {
     ];
     return (
       <form onSubmit={(e) => e.preventDefault()}>
-        <DateMolecule showTime={false}>Expected Start Date</DateMolecule>
+        <DateMolecule showTime={false} handleChange={handleChange} name={'startDate'}>
+          Expected Start Date
+        </DateMolecule>
         <div className="pt-4">
-          <DateMolecule showTime={false}>Expected End Date</DateMolecule>
+          <DateMolecule showTime={false} handleChange={handleChange} name={'endDate'}>
+            Expected End Date
+          </DateMolecule>
         </div>
         <DropdownMolecule
           name="periodType"
@@ -82,15 +94,17 @@ export default function NewIntake() {
         </DropdownMolecule>
 
         <div className="pt-3">
-          <Button type="submit">Create</Button>
+          <Button type="submit" onClick={handleNext}>
+            Create
+          </Button>
         </div>
       </form>
     );
   };
 
   const stepperContent = {
-    currentStep: 1,
-    completeStep: 1,
+    currentStep: currentStep,
+    completeStep: currentStep,
     content: [
       {
         label: '',
