@@ -57,6 +57,7 @@ const SignInForm = () => {
             Username
           </InputMolecule>
           <InputMolecule
+            type="password"
             name="password"
             placeholder="Enter your password"
             value={details.password}

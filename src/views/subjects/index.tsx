@@ -87,10 +87,7 @@ export default function Subjects() {
         </PopupMolecule>
 
         {/* add prerequesite popup */}
-        <PopupMolecule
-          title="Add Prerequesite"
-          open={prOpen}
-          onClose={() => setPrOpen(false)}>
+        <PopupMolecule title="Add lesson" open={prOpen} onClose={() => setPrOpen(false)}>
           <NewLessonForm />
         </PopupMolecule>
       </main>

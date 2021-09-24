@@ -18,15 +18,15 @@ interface INewAcademyProgram<K> extends CommonFormProps<K> {}
 
 const options = [
   {
-    label: 'English',
+    label: 'Year 1',
     value: 'en',
   },
   {
-    label: 'French',
+    label: 'Year 2',
     value: 'fr',
   },
   {
-    label: 'Kinyarwanda',
+    label: 'Year 3',
     value: 'kiny',
   },
 ];

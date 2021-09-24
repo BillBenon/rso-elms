@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { ValueType } from '../../../../types';
+import { SelectData, ValueType } from '../../../../types';
 import Button from '../../../Atoms/custom/Button';
+import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 
 export default function AddPrerequesitForm() {
@@ -9,12 +10,17 @@ export default function AddPrerequesitForm() {
     console.log(e);
   }
 
+  const prere: SelectData[] = [
+    { value: 'Math', label: 'Mathematics' },
+    { value: 'Physics', label: 'Physics' },
+    { value: 'English', label: 'English' },
+  ];
+
   return (
     <form>
-      {/* program
-      <DropdownMolecule name="radio" handleChange={handleChange}>
-        Program
-      </DropdownMolecule> */}
+      <DropdownMolecule options={prere} name="prerequesiteCourse" onChange={handleChange}>
+        Prerequsite Modules
+      </DropdownMolecule>
       {/* model initial status */}
       <RadioMolecule
         className="mt-4"
