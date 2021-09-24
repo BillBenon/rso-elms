@@ -1,10 +1,10 @@
-import { useMutation, UseMutationOptions } from 'react-query';
+import { useMutation } from 'react-query';
 
 import { authenticatorService } from '../services/authenticator.service';
 
 class AuthenticatorStore {
-  login(options?: UseMutationOptions) {
-    return useMutation(authenticatorService.login, options);
+  login() {
+    return useMutation(authenticatorService.login);
   }
 }
 

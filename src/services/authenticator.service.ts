@@ -1,8 +1,10 @@
+import { AxiosResponse } from 'axios';
+
 import { adminstrationAxios } from '../plugins/axios';
-import { LoginInfo } from '../types/dataTypes';
+import { LoginInfo, LoginRes, Response } from '../types';
 
 class AuthenticatorService {
-  public async login(loginInfo: LoginInfo) {
+  public async login(loginInfo: LoginInfo): Promise<AxiosResponse<Response<LoginRes>>> {
     return await adminstrationAxios.post('/authentication/signin', loginInfo);
   }
 
