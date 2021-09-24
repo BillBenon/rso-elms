@@ -88,23 +88,27 @@ export default function NewIntake() {
     );
   };
 
-  const stepperContent = [
-    {
-      label: '',
-      content: <IntakeInfo />,
-      clicked: () => {},
-    },
-    {
-      label: '',
-      content: <IntakeStatus />,
-      clicked: () => {},
-    },
-    {
-      label: '',
-      content: <AddProgramToIntake />,
-      clicked: () => {},
-    },
-  ];
+  const stepperContent = {
+    currentStep: 1,
+    completeStep: 1,
+    content: [
+      {
+        label: '',
+        content: <IntakeInfo />,
+        clicked: () => {},
+      },
+      {
+        label: '',
+        content: <IntakeStatus />,
+        clicked: () => {},
+      },
+      {
+        label: '',
+        content: <AddProgramToIntake />,
+        clicked: () => {},
+      },
+    ],
+  };
   const handleChange = (e: any) => {
     console.log(e);
   };
@@ -115,7 +119,7 @@ export default function NewIntake() {
         isVertical={false}
         isInline={false}
         stepperContent={stepperContent}
-        submitStepper={() => console.log('submitted')}
+        navigateToStepHandler={() => console.log('submitted')}
       />
     </div>
   );

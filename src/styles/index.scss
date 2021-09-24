@@ -48,3 +48,28 @@ body,html{
 }.css-xb97g8:hover svg{
   fill: #FFFFFF !important;
 }
+
+// scrollbar
+
+::-webkit-scrollbar {
+  width: 6px;
+  max-height: 30px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent; 
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius:3px;
+}
+
+::-webkit-scrollbar-track-piece{
+  max-height: 20px;
+}
+
+::-webkit-scrollbar-button {
+  width: 100px; //for horizontal scrollbar
+  height: 100px; //for vertical scrollbar
+}
