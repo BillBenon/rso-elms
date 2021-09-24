@@ -22,7 +22,7 @@ const Indicator = ({
   return (
     <>
       <button
-        className={`relative inline-flex justify-center items-center w-8 h-8 
+        className={`relative justify-center items-center w-8 h-8 
         border text-sm text-center z-2
         ${className}
          ${

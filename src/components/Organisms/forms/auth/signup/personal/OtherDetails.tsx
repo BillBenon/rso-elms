@@ -1,18 +1,26 @@
 import React from 'react';
 
-import { CommonStepProps } from '../../../../../types';
-import Button from '../../../../Atoms/custom/Button';
-import DropdownMolecule from '../../../../Molecules/input/DropdownMolecule';
-import TextAreaMolecule from '../../../../Molecules/input/TextAreaMolecule';
+import { CommonStepProps } from '../../../../../../types';
+import Button from '../../../../../Atoms/custom/Button';
+import Heading from '../../../../../Atoms/Text/Heading';
+import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
+import TextAreaMolecule from '../../../../../Molecules/input/TextAreaMolecule';
 
-function OtherDetails({ details, handleChange, prevStep, nextStep }: CommonStepProps) {
+function OtherDetails({
+  details,
+  handleChange,
+  prevStep,
+  nextStep,
+  isVertical,
+}: CommonStepProps) {
   const moveBack = () => {
     prevStep && prevStep();
   };
 
   return (
     <>
-      <div className="flex flex-col gap-4">
+      <div className={`flex flex-col gap-4 ${isVertical && 'pt-8'}`}>
+        {isVertical && <Heading fontWeight="semibold">Other Details</Heading>}
         <DropdownMolecule
           isMulti
           name="hobbies"
@@ -50,6 +58,37 @@ function OtherDetails({ details, handleChange, prevStep, nextStep }: CommonStepP
           placeholder="Describe your chronic disease">
           Chronic disease description
         </TextAreaMolecule>
+        <DropdownMolecule
+          // width="28"
+          placeholder="Select blood group"
+          name="bloodGroup"
+          defaultValue={details.bloodGroup}
+          onChange={handleChange}
+          options={[
+            { value: 'rw', label: 'Rwanda' },
+            { value: 'ug', label: 'Uganda' },
+            { value: 'tz', label: 'Tanzania' },
+            { value: 'brd', label: 'Burundi' },
+            { value: 'can', label: 'Canada' },
+            { value: 'us', label: 'USA' },
+          ]}>
+          Blood Group
+        </DropdownMolecule>
+        <DropdownMolecule
+          width="60 md:w-80"
+          name="religion"
+          defaultValue={details.religion}
+          onChange={(e) => handleChange(e, 'personalDetails')}
+          options={[
+            { value: 'rw', label: 'Rwanda' },
+            { value: 'ug', label: 'Uganda' },
+            { value: 'tz', label: 'Tanzania' },
+            { value: 'brd', label: 'Burundi' },
+            { value: 'can', label: 'Canada' },
+            { value: 'us', label: 'USA' },
+          ]}>
+          Religion
+        </DropdownMolecule>
         <div className="flex w-80 justify-between">
           {prevStep && (
             <Button styleType="text" color="txt-secondary" onClick={() => moveBack()}>

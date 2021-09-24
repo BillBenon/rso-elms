@@ -1,23 +1,26 @@
 import React from 'react';
 
-import { CommonStepProps } from '../../../../../types';
-import Button from '../../../../Atoms/custom/Button';
-import DateMolecule from '../../../../Molecules/input/DateMolecule';
-import DropdownMolecule from '../../../../Molecules/input/DropdownMolecule';
-import InputMolecule from '../../../../Molecules/input/InputMolecule';
+import { CommonStepProps } from '../../../../../../types';
+import Button from '../../../../../Atoms/custom/Button';
+import Heading from '../../../../../Atoms/Text/Heading';
+import DateMolecule from '../../../../../Molecules/input/DateMolecule';
+import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
+import InputMolecule from '../../../../../Molecules/input/InputMolecule';
 
 function EmploymentDetails({
   details,
   handleChange,
   prevStep,
   nextStep,
+  isVertical,
 }: CommonStepProps) {
   const moveBack = () => {
     prevStep && prevStep();
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className={`flex flex-col gap-4 ${isVertical && 'pt-8'}`}>
+      {isVertical && <Heading fontWeight="semibold">Employment details</Heading>}
       <div className="flex flex-col gap-4">
         <DropdownMolecule
           placeholder="Select current rank"

@@ -1,14 +1,27 @@
 import React from 'react';
 
-import { CommonStepProps } from '../../../../../types';
-import Button from '../../../../Atoms/custom/Button';
-import InputMolecule from '../../../../Molecules/input/InputMolecule';
-function AccountDetails({ details, handleChange, prevStep, nextStep }: CommonStepProps) {
+import { CommonStepProps } from '../../../../../../types';
+import Button from '../../../../../Atoms/custom/Button';
+import Heading from '../../../../../Atoms/Text/Heading';
+import InputMolecule from '../../../../../Molecules/input/InputMolecule';
+function AccountDetails({
+  details,
+  handleChange,
+  prevStep,
+  isVertical,
+  nextStep,
+}: CommonStepProps) {
   const moveBack = () => {
     prevStep && prevStep();
   };
   return (
     <div className="flex flex-col gap-4">
+      {isVertical && (
+        <Heading fontSize="base" fontWeight="semibold">
+          Account Details
+        </Heading>
+      )}
+
       <div className="flex flex-col gap-4">
         <InputMolecule
           name="username"

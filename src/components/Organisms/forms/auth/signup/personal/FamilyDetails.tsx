@@ -1,77 +1,64 @@
 import React from 'react';
 
-import { CommonStepProps } from '../../../../../types';
-import Button from '../../../../Atoms/custom/Button';
-import Heading from '../../../../Atoms/Text/Heading';
-import DropdownMolecule from '../../../../Molecules/input/DropdownMolecule';
-import InputMolecule from '../../../../Molecules/input/InputMolecule';
-import RadioMolecule from '../../../../Molecules/input/RadioMolecule';
+import { CommonStepProps } from '../../../../../../types';
+import Button from '../../../../../Atoms/custom/Button';
+import Heading from '../../../../../Atoms/Text/Heading';
+import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
+import InputMolecule from '../../../../../Molecules/input/InputMolecule';
+import RadioMolecule from '../../../../../Molecules/input/RadioMolecule';
 
-function NextOfKinDetails({
+function FamilyDetails({
   details,
   handleChange,
-  prevStep,
   nextStep,
+  prevStep,
+  isVertical,
 }: CommonStepProps) {
   const moveBack = () => {
     prevStep && prevStep();
   };
-
+  const moveForward = () => {
+    nextStep(true);
+  };
   return (
-    <div className="flex flex-col gap-4">
+    <div className={`flex flex-col gap-4 ${isVertical && 'pt-8'}`}>
+      {isVertical && <Heading fontWeight="semibold">Family details</Heading>}
       <div className="flex flex-col gap-4">
         <InputMolecule
-          name="firstName"
+          name="fatherName"
           placeholder="eg: John"
-          value={details.firstName}
-          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}>
-          First Name
+          value={details.fatherName}
+          handleChange={(e) => handleChange(e, 'familyDetails')}>
+          Father&apos;s name
         </InputMolecule>
         <InputMolecule
-          name="lastName"
+          name="motherName"
           placeholder="eg: Doe"
-          value={details.lastName}
-          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}>
-          Last Name
-        </InputMolecule>
-      </div>
-      <div className="flex flex-col gap-4">
-        <InputMolecule
-          name="email"
-          value={details.email}
-          type="email"
-          placeholder="username@example.com"
-          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}>
-          Email
-        </InputMolecule>
-        <InputMolecule
-          name="phone"
-          value={details.phone}
-          placeholder="+250 ---------"
-          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}>
-          Phone number
+          value={details.motherName}
+          handleChange={(e) => handleChange(e, 'familyDetails')}>
+          Mother&apos;s name
         </InputMolecule>
       </div>
       <div className="flex flex-col gap-4">
         <RadioMolecule
           options={[
-            { value: 'male', label: 'Male' },
-            { value: 'female', label: 'Female' },
+            { value: 'married', label: 'Married' },
+            { value: 'single', label: 'Single' },
           ]}
-          value={details.gender}
-          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}
-          name="gender">
-          Gender
+          value={details.maritalStatus}
+          handleChange={(e) => handleChange(e, 'familyDetails')}
+          name="maritalStatus">
+          Marital Status
         </RadioMolecule>
         <InputMolecule
-          name="relationShip"
-          value={details.relationShip}
-          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}>
-          RelationShip
+          name="spouseName"
+          value={details.spouseName}
+          handleChange={(e) => handleChange(e, 'familyDetails')}>
+          Spouse Name
         </InputMolecule>
       </div>
       <Heading fontSize="sm" fontWeight="semibold">
-        Address
+        Family address
       </Heading>
       <div className="flex flex-col gap-4">
         <DropdownMolecule
@@ -109,7 +96,7 @@ function NextOfKinDetails({
         <InputMolecule
           name="otherLocation"
           value={details.otherLocation}
-          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}>
+          handleChange={(e) => handleChange(e, 'familyDetails')}>
           Other Location
           <span className="text-txt-secondary"> (State / Region)</span>
         </InputMolecule>
@@ -120,10 +107,10 @@ function NextOfKinDetails({
             Back
           </Button>
         )}
-        <Button onClick={() => nextStep(true)}>Complete</Button>
+        <Button onClick={() => moveForward()}>Next</Button>
       </div>
     </div>
   );
 }
 
-export default NextOfKinDetails;
+export default FamilyDetails;

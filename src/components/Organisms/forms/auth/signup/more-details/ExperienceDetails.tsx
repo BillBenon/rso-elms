@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 
-import { CommonStepProps } from '../../../../../types';
-import Button from '../../../../Atoms/custom/Button';
-import Panel from '../../../../Atoms/custom/Panel';
-import Accordion from '../../../../Molecules/Accordion';
-import DateMolecule from '../../../../Molecules/input/DateMolecule';
-import DropdownMolecule from '../../../../Molecules/input/DropdownMolecule';
-import InputMolecule from '../../../../Molecules/input/InputMolecule';
-import TextAreaMolecule from '../../../../Molecules/input/TextAreaMolecule';
+import { CommonStepProps } from '../../../../../../types';
+import Button from '../../../../../Atoms/custom/Button';
+import Panel from '../../../../../Atoms/custom/Panel';
+import Heading from '../../../../../Atoms/Text/Heading';
+import Accordion from '../../../../../Molecules/Accordion';
+import DateMolecule from '../../../../../Molecules/input/DateMolecule';
+import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
+import InputMolecule from '../../../../../Molecules/input/InputMolecule';
+import TextAreaMolecule from '../../../../../Molecules/input/TextAreaMolecule';
+
 interface ExperienceDataType {
   type: string;
   name: string;
@@ -21,6 +23,7 @@ function ExperienceDetails({
   handleChange,
   prevStep,
   nextStep,
+  isVertical,
 }: CommonStepProps) {
   const [experienceData, setExperienceData] = useState<ExperienceDataType[]>([]);
   const moveBack = () => {
@@ -32,8 +35,14 @@ function ExperienceDetails({
   };
 
   return (
-    <div className="flex justify-between">
+    <div className={`flex justify-between ${isVertical && 'pt-8'}`}>
       <div className="flex flex-col gap-4">
+        {isVertical && (
+          <Heading fontSize="base" fontWeight="semibold">
+            Experience Details
+          </Heading>
+        )}
+
         <div className="flex flex-col gap-4">
           <DropdownMolecule
             name="type"

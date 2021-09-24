@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import ComponentsUseCase from './components/Organisms/ComponentsUseCase';
+import MoreInfo from './components/Organisms/forms/auth/signup/more-details/MoreInfo';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import Dashboard from './layout/Dashboard';
 import Academies from './views/academies/Academies';
@@ -39,6 +40,7 @@ const App = () => {
           <Route exact path="/" component={Homepage} />
 
           <Route exact path="/register" component={Signup} />
+          <Route exact path="/register/more" component={MoreInfo} />
           <Route path="/login" component={Signin} />
 
           <Route exact path="/academies" component={Academies} />

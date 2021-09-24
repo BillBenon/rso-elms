@@ -53,7 +53,7 @@ const SignInForm = () => {
         </Link>
       </div>
 
-      <Button onClick={() => history.push('/signin')}>Sign In</Button>
+      <Button onClick={() => history.push('/')}>Sign In</Button>
 
       <div className="text-txt-secondary py-2">
         <p className="text-base text-txt-secondary">

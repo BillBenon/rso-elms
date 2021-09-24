@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 
-import { CommonStepProps } from '../../../../../types';
-import Button from '../../../../Atoms/custom/Button';
-import Icon from '../../../../Atoms/custom/Icon';
-import Panel from '../../../../Atoms/custom/Panel';
-import Heading from '../../../../Atoms/Text/Heading';
-import ILabel from '../../../../Atoms/Text/ILabel';
-import Accordion from '../../../../Molecules/Accordion';
-import DateMolecule from '../../../../Molecules/input/DateMolecule';
-import InputMolecule from '../../../../Molecules/input/InputMolecule';
+import { CommonStepProps } from '../../../../../../types';
+import Button from '../../../../../Atoms/custom/Button';
+import Icon from '../../../../../Atoms/custom/Icon';
+import Panel from '../../../../../Atoms/custom/Panel';
+import Heading from '../../../../../Atoms/Text/Heading';
+import ILabel from '../../../../../Atoms/Text/ILabel';
+import Accordion from '../../../../../Molecules/Accordion';
+import DateMolecule from '../../../../../Molecules/input/DateMolecule';
+import InputMolecule from '../../../../../Molecules/input/InputMolecule';
+
 interface EducationDataType {
   school: string;
   level: string;
@@ -21,13 +22,10 @@ interface EducationDataType {
 function EducationDetails({
   details,
   handleChange,
-  prevStep,
   nextStep,
+  isVertical,
 }: CommonStepProps) {
   const [educationData, setEducationData] = useState<EducationDataType[]>([]);
-  const moveBack = () => {
-    prevStep && prevStep();
-  };
 
   const handleMore = () => {
     setEducationData([...educationData, details]);
@@ -35,11 +33,13 @@ function EducationDetails({
   };
 
   return (
-    <div className="flex justify-between">
+    <div className={`flex justify-between ${isVertical && 'pt-8'}`}>
       <div className="flex flex-col gap-4">
-        <Heading fontSize="base" fontWeight="semibold">
-          Education Background
-        </Heading>
+        {isVertical && (
+          <Heading fontSize="base" fontWeight="semibold">
+            Education Background
+          </Heading>
+        )}
         <div className="flex flex-col gap-4">
           <InputMolecule
             placeholder="school"
@@ -97,13 +97,8 @@ function EducationDetails({
         <div>
           <Button onClick={handleMore}>Add more</Button>
         </div>
-        <div className="flex justify-between w-80">
-          {prevStep && (
-            <Button styleType="text" color="txt-secondary" onClick={() => moveBack()}>
-              Back
-            </Button>
-          )}
-          <Button onClick={() => nextStep(true)}>Complete</Button>
+        <div className="flex justify-end w-80">
+          <Button onClick={() => nextStep(true)}>Next</Button>
         </div>
       </div>
 

@@ -29,6 +29,7 @@ export interface CommonStepProps {
   handleChange: (_e: ValueType, _page: Page) => void;
   prevStep?: () => void;
   nextStep: (_isComplete?: boolean) => void;
+  isVertical?: boolean;
 }
 
 export interface DropdownProps extends commonInputProps {

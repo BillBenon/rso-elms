@@ -1,20 +1,16 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router';
 
-import { Page, ValueType } from '../../../../../types';
-import Heading from '../../../../Atoms/Text/Heading';
-import AcademyProfileCard from '../../../../Molecules/cards/AcademyProfileCard';
-import Stepper, { StepperProp } from '../../../../Molecules/Stepper/Stepper';
-import AccountDetails from './AccountDetails';
-import EducationDetails from './EducationDetails';
+import { Page, ValueType } from '../../../../../../types';
+import SignupHeader from '../../../../../Molecules/SignupHeader';
+import Stepper, { StepperProp } from '../../../../../Molecules/Stepper/Stepper';
 import EmploymentDetails from './EmploymentDetails';
-import ExperienceDetails from './ExperienceDetails';
 import FamilyDetails from './FamilyDetails';
 import NationalDocuments from './NationalDocument';
-import NextOfKinDetails from './NextOfKinDetails';
 import OtherDetails from './OtherDetails';
 import PersonalDetails from './PersonalDetails';
 
-function SignUpForm() {
+function PersonalInfo() {
   const [details, setDetails] = useState({
     personalDetails: {
       firstName: '',
@@ -60,48 +56,13 @@ function SignUpForm() {
       chronicDiseases: '',
       diseaseDescription: '',
     },
-    educationDetails: {
-      school: '',
-      level: '',
-      section: '',
-      certificate: '',
-      startDate: '',
-      endDate: '',
-    },
-    experienceDetails: {
-      type: 'Appointment',
-      name: '',
-      description: '',
-      startDate: '',
-      endDate: '',
-    },
-    nextOfKinDetails: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      gender: 'male',
-      relationShip: '',
-      country: '',
-      location: '',
-      otherLocation: '',
-    },
-    accountDetails: {
-      username: '',
-      password: '',
-      confirmPassword: '',
-    },
   });
 
   const [currentStep, setCurrentStep] = useState(0);
   const [completeStep, setCompleteStep] = useState(0);
-  // const [isComplete, setComplete] = useState(false);
+  const history = useHistory();
 
   useEffect(() => {
-    // let newSteps = [...stepperContent];
-    // let completedStep: StepperContentProp = newSteps[currentStep];
-    // completedStep.isComplete = true;
-    // newSteps[currentStep] = completedStep;
     let newStepper = {
       ...stepperContent,
       currentStep: currentStep,
@@ -121,9 +82,14 @@ function SignUpForm() {
   }, [completeStep]);
 
   const nextStep = (isComplete?: boolean) => {
-    console.log('nexting', isComplete);
     setCurrentStep((currentStep) => currentStep + 1);
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
+  };
+
+  const saveInfo = (isComplete?: boolean) => {
+    if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
+    // save contact info
+    history.push('/register/more');
   };
 
   const prevStep = () => {
@@ -196,51 +162,7 @@ function SignUpForm() {
             details={details.otherDetails}
             handleChange={handleChange}
             prevStep={prevStep}
-            nextStep={nextStep}
-          />
-        ),
-      },
-      {
-        label: 'Education details',
-        content: (
-          <EducationDetails
-            details={details.educationDetails}
-            handleChange={handleChange}
-            prevStep={prevStep}
-            nextStep={nextStep}
-          />
-        ),
-      },
-      {
-        label: 'Experience details',
-        content: (
-          <ExperienceDetails
-            details={details.experienceDetails}
-            handleChange={handleChange}
-            prevStep={prevStep}
-            nextStep={nextStep}
-          />
-        ),
-      },
-      {
-        label: 'Next of kin details',
-        content: (
-          <NextOfKinDetails
-            details={details.nextOfKinDetails}
-            handleChange={handleChange}
-            prevStep={prevStep}
-            nextStep={nextStep}
-          />
-        ),
-      },
-      {
-        label: 'Account details',
-        content: (
-          <AccountDetails
-            details={details.experienceDetails}
-            handleChange={handleChange}
-            prevStep={prevStep}
-            nextStep={nextStep}
+            nextStep={saveInfo}
           />
         ),
       },
@@ -250,21 +172,7 @@ function SignUpForm() {
 
   return (
     <div className="bg-main p-8 md:px-20 md:py-14">
-      <div className="flex justify-between mb-14">
-        <div>
-          <Heading fontSize="lg" className="md:2xl" fontWeight="semibold">
-            Complete Profile
-          </Heading>
-          <p className="text-txt-secondary text-sm md:text-base pt-2">
-            Fill in the form credentials to complete your profile
-          </p>
-        </div>
-        <div>
-          <AcademyProfileCard src="/icons/police-logo.svg" alt="academy logo" size="39">
-            Rwanda National Police
-          </AcademyProfileCard>
-        </div>
-      </div>
+      <SignupHeader />
       <Stepper
         stepperContent={stepperContent}
         isVertical
@@ -274,4 +182,4 @@ function SignUpForm() {
   );
 }
 
-export default SignUpForm;
+export default PersonalInfo;

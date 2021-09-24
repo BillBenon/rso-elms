@@ -31,9 +31,10 @@ const Step = ({
   return (
     <div className="flex justify-between">
       {/* label */}
-      <div
-        onKeyDown={() => navigateToStepHandler(index)}
-        className={`cursor-pointer flex items-end w-max
+      {isVertical && (
+        <div
+          onKeyDown={() => navigateToStepHandler(index)}
+          className={`cursor-pointer flex items-end w-max
         ${
           isActive
             ? 'text-primary-600'
@@ -43,18 +44,21 @@ const Step = ({
             ? 'text-primary-400'
             : 'text-txt-secondary'
         }`}
-        onClick={() => navigateToStepHandler(index)}>
-        <div>{label}</div>
-      </div>
-      <div className={`pl-7  ${isFirstStep && 'flex items-end'} `}>
+          onClick={() => navigateToStepHandler(index)}>
+          <div>{label}</div>
+        </div>
+      )}
+      <div
+        className={`${
+          isVertical ? `pl-7  ${isFirstStep && 'items-end'}` : 'flex items-center'
+        }`}>
         {/* step line(separator) */}
         {!isFirstStep && (
           <div
-            className={`separator_ ${isComplete ? 'border-primary-400' : 'border-silver'}
-          ${isVertical ? 'h-16 border-l-2' : 'w-16 border-b-2'} 
+            className={`${isComplete ? 'border-primary-400' : 'border-silver'}
+          ${isVertical ? 'separator_ h-16 border-l-2' : 'w-60 border-b-2'} 
           ${isFirstStep ? 'h-0 border-none' : ''}`}></div>
         )}
-
         {/* step (in numbers) indicator */}
         <Indicator
           isCircular={true}

@@ -19,7 +19,7 @@ const StepperHead = ({
   isVertical,
 }: StepperHeadProp) => {
   return (
-    <div className={`hidden w-max  ${isVertical ? 'md:block' : 'md:flex'}`}>
+    <div className={`hidden w-max ${isVertical ? 'md:block' : 'md:flex'}`}>
       {stepperContent.content.map((el, i) => (
         <div key={el.label}>
           <Step
