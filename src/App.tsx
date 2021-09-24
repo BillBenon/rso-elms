@@ -20,6 +20,7 @@ import Popup from './views/Popup';
 import AcademicPrograms from './views/programs/AcademicPrograms';
 import NewAcademicProgram from './views/programs/NewAcademicProgram';
 import ProgramDetails from './views/programs/ProgramDetails';
+import Roles from './views/roles/Roles';
 import Subjects from './views/subjects';
 import NewInstructorView from './views/users/NewInstructor';
 import NewStudentsView from './views/users/NewStudent';
@@ -48,6 +49,7 @@ const App = () => {
             <Route exact path="/academies" component={Academies} />
             <Route exact path="/academies/new" component={NewAcademy} />
             <Route exact path="/users" component={UsersView} />
+            <Route exact path="/roles" component={Roles} />
             <Route exact path="/popup" component={Popup} />
             <Route exact path="/modules" component={Modules} />
             <Route exact path="/subjects" component={Subjects} />
