@@ -10,7 +10,7 @@ const defaultLinks: linkProps[] = [
   { title: 'Faculties', to: '/faculties', icon: 'faculty' },
   { title: 'Programs', to: '/programs', icon: 'faculty' },
   { title: 'Levels', to: '/levels', icon: 'level' },
-  { title: 'Popup test', to: '/popup', icon: 'notification' },
+  // { title: 'Popup test', to: '/popup', icon: 'notification' },
   { title: 'Modules', to: '/modules', icon: 'module' },
   { title: 'Subjects', to: '/subjects', icon: 'module' },
   { title: 'Intakes', to: '/intakes', icon: 'academy', fill: false },
@@ -20,18 +20,18 @@ const defaultLinks: linkProps[] = [
     icon: 'reg-control',
     fill: true,
   },
-  {
-    title: 'Login',
-    to: '/login',
-    icon: '',
-    fill: false,
-  },
-  {
-    title: 'Register',
-    to: '/register',
-    icon: '',
-    fill: false,
-  },
+  // {
+  //   title: 'Login',
+  //   to: '/login',
+  //   icon: '',
+  //   fill: false,
+  // },
+  // {
+  //   title: 'Register',
+  //   to: '/register',
+  //   icon: '',
+  //   fill: false,
+  // },
 ];
 
 export default function Sidebar() {
