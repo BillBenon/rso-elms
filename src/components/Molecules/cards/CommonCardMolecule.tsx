@@ -61,7 +61,7 @@ export default function CommonCardMolecule({
             {data.subTitle}
           </Heading>
         )}
-        <p id="course-card-description" className="text-txt-secondary text-sm mt-4">
+        <p id="course-card-description" className="py-4 text-txt-secondary text-sm mt-4">
           {data.description}
         </p>
 

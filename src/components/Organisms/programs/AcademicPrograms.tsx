@@ -33,26 +33,23 @@ export default function AcademicProgram() {
     {
       status: { type: 'success', text: 'On going' },
       code: 'HR450-TC',
-      title: 'Here we go',
-      subTitle: 'ON Air',
-      description:
-        'We have all kind of Commons in this card, we can support everything wabyanga wabyemera',
+      title: 'Caddette Program',
+      subTitle: 'Short Course',
+      description: 'Program description, that briefly provides details on pa program',
     },
     {
       status: { type: 'success', text: 'On going' },
-      code: 'HR450-TC',
-      title: 'Here we go',
-      subTitle: 'ON Air',
-      description:
-        'We have all kind of Commons in this card, we can support everything wabyanga wabyemera',
+      code: 'CD450-TD',
+      title: 'Caddete program',
+      subTitle: 'short course',
+      description: 'Program description, that briefly provides details on pa program',
     },
     {
       status: { type: 'warning', text: 'On Hold' },
-      code: 'HR450-TC',
-      title: 'Here we go',
-      subTitle: 'ON Air',
-      description:
-        'We have all kind of Commons in this card, we can support everything wabyanga wabyemera',
+      code: 'PR480-TC',
+      title: 'Caddette program',
+      subTitle: 'short course',
+      description: 'Program description, that briefly provides details on pa program',
     },
   ];
 
@@ -72,7 +69,7 @@ export default function AcademicProgram() {
             <div key={Common.code} className="p-1 mt-3">
               <CommonCardMolecule
                 data={Common}
-                to={{ title: 'module', to: 'programs/id' }}
+                to={{ title: 'module', to: 'programs/3' }}
               />
             </div>
           ))}

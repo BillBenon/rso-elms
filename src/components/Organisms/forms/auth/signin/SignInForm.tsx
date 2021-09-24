@@ -1,5 +1,5 @@
 import React, { FormEvent, useState } from 'react';
-import toast from 'react-hot-toast';
+// import toast from 'react-hot-toast';
 import { Link, useHistory } from 'react-router-dom';
 
 import { authenticator } from '../../../../../services/authenticator';
@@ -32,7 +32,7 @@ const SignInForm = () => {
       cookie.setCookie('jwt_info', userData);
       history.push('/');
     } catch (e) {
-      console.log('heeee', e);
+      console.log(e);
     }
   }
 
