@@ -12,7 +12,7 @@ export default function NewFaculty() {
     <div>
       <InputMolecule
         value=""
-        error="imboga mbi"
+        error="Name is required"
         handleChange={handleChange}
         name="facultyName">
         Faculty name
@@ -21,7 +21,7 @@ export default function NewFaculty() {
         <TextAreaMolecule
           value=""
           // className="resize-none h-64"
-          error="welcome here"
+          error="Description is required"
           name="description"
           handleChange={handleChange}>
           Department description

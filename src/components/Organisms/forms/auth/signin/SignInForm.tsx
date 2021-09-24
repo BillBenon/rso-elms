@@ -30,7 +30,7 @@ const SignInForm = () => {
       const res = await authenticator.login(details);
       const userData = JSON.stringify(res.data.data);
       cookie.setCookie('jwt_info', userData);
-      history.push('/');
+      history.push('/users');
     } catch (e) {
       console.log(e);
     }
@@ -57,6 +57,7 @@ const SignInForm = () => {
             Username
           </InputMolecule>
           <InputMolecule
+            type="password"
             name="password"
             placeholder="Enter your password"
             value={details.password}

@@ -36,7 +36,7 @@ const Stepper = ({
           isVertical={isVertical}
           isInline={isInline}
         />
-        <div className="pl-0 md:pl-11 w-full">
+        <div className={isVertical ? 'md:pl-11 w-full' : 'py-6 w-full'}>
           {stepperContent.content[stepperContent.currentStep].content}
         </div>
       </div>
