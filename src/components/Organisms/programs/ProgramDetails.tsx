@@ -120,26 +120,13 @@ export default function ProgramDetailsMolecule() {
                 <div key={course.code}>
                   <CommonCardMolecule
                     data={course}
-                    to={{ title: 'program list', to: 'programs/id' }}
+                    to={{ title: 'program list', to: 'programs/3' }}
                   />
                 </div>
               ))}
             </section>
           </Tab>
         </Tabs>
-
-        {/* add academic program popup */}
-        <PopupMolecule title="New Program" open={open} onClose={() => setOpen(false)}>
-          <NewAcademicProgram />
-        </PopupMolecule>
-
-        {/* add prerequesite popup */}
-        <PopupMolecule
-          title="Add Prerequesite"
-          open={prOpen}
-          onClose={() => setPrOpen(false)}>
-          another form here
-        </PopupMolecule>
       </main>
     </>
   );
