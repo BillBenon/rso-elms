@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Button from '../../components/Atoms/custom/Button';
 import Cacumber from '../../components/Molecules/Cacumber';
+import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import NewRole from '../../components/Organisms/forms/roles/NewRole';
 import Dashboard from '../../layout/Dashboard';
 
 export default function Roles() {
-  function handleSearch() {}
+  const [open, setOpen] = useState(false); // state to controll the popup
 
   const roles = [
     {
@@ -35,6 +37,12 @@ export default function Roles() {
       status: 'ACTIVE',
     },
   ];
+
+  function submited() {
+    setOpen(false);
+  }
+  function handleSearch() {}
+
   return (
     <Dashboard>
       <main>
@@ -43,12 +51,16 @@ export default function Roles() {
         </section>
         <section>
           <TableHeader title="Academy" totalItems={4} handleSearch={handleSearch}>
-            <Button onClick={() => console.log('add role')}>Add Role</Button>
+            <Button onClick={() => setOpen(true)}>Add Role</Button>
           </TableHeader>
         </section>
         <section>
           <Table statusColumn="status" data={roles} hasAction={true} />
         </section>
+        {/* add module popup */}
+        <PopupMolecule title="New Role" open={open} onClose={() => setOpen(false)}>
+          <NewRole onSubmit={submited} />
+        </PopupMolecule>
       </main>
     </Dashboard>
   );
