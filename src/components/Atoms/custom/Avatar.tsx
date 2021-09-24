@@ -7,15 +7,16 @@ export interface IAvatar {
   alt: string;
   size?: string;
   bgColor?: Color;
+  className?: string;
 }
 
-export default function Avatar({ src, alt, size = '56' }: IAvatar) {
+export default function Avatar({ src, alt, size = '56', className }: IAvatar) {
   return (
     <div>
       <img
         src={src}
         alt={alt}
-        className="rounded-full object-cover"
+        className={`rounded-full box-content object-cover ${className}`}
         style={{ height: size + 'px', width: size + 'px' }}
       />
     </div>

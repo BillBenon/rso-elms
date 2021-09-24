@@ -9,11 +9,12 @@
     "pm2": "pm2"
   },
   "dependencies": {
-    "@types/lodash": "^4.14.172",
+    "axios": "^0.21.4",
     "lodash": "^4.17.21",
     "pm2": "^5.1.1",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
+    "react-hot-toast": "^2.1.1",
     "react-query": "^3.24.3",
     "react-router-dom": "^5.2.0",
     "react-select": "^4.3.1",
@@ -26,6 +27,8 @@
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
     "@commitlint/config-conventional": "^13.1.0",
+    "@types/axios": "^0.14.0",
+    "@types/lodash": "^4.14.173",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
     "@types/react-router-dom": "^5.1.7",
