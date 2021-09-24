@@ -1,7 +1,7 @@
 import { adminstrationAxios } from '../plugins/axios';
 import { LoginInfo } from '../types/dataTypes';
 
-class Authenticator {
+class AuthenticatorService {
   public async login(loginInfo: LoginInfo) {
     return await adminstrationAxios.post('/authentication/signin', loginInfo);
   }
@@ -11,4 +11,4 @@ class Authenticator {
   }
 }
 
-export const authenticator = new Authenticator();
+export const authenticatorService = new AuthenticatorService();
