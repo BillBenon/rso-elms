@@ -25,7 +25,7 @@ export default function InputMolecule({
 }: IInputMolecule) {
   return (
     <div className="flex flex-col gap-2 py-2">
-      <ILabel className="capitalize" size="sm" weight="bold">
+      <ILabel className="capitalize" size="sm" weight="medium">
         {children}
       </ILabel>
       <Input

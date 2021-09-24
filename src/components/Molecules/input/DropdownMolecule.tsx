@@ -12,11 +12,12 @@ interface Props extends DropdownProps {
 export default function DropdownMolecule(props: Props) {
   return (
     <div className="py-2">
-      <ILabel size="sm" weight="semibold">
+      <ILabel size="sm" weight="medium">
         {props.children}
       </ILabel>
       <div className="mt-2 flex flex-col">
         <DropDown
+          width={props.width}
           disabled={props.disabled}
           name={props.name}
           options={props.options}

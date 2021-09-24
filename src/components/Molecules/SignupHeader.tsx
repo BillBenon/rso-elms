@@ -1,7 +1,7 @@
 import React from 'react';
 
-import Heading from '../../../../Atoms/Text/Heading';
-import AcademyProfileCard from '../../../../Molecules/cards/AcademyProfileCard';
+import Heading from '../Atoms/Text/Heading';
+import AcademyProfileCard from './cards/AcademyProfileCard';
 
 const SignupHeader = () => {
   return (
