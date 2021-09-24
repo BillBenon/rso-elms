@@ -17,28 +17,25 @@ const list: Link[] = [
 
 const data: CommonCardDataType[] = [
   {
-    status: { type: 'error', text: 'Inactive' },
-    code: 'Intake-2020',
-    title: 'Cadette Program',
-    subTitle: 'Short course',
+    status: { type: 'error', text: 'Completed' },
+    code: 'INTK/21BDC',
+    title: 'Software Engineering',
     description:
-      'Start Date:   17 Aug 2021 - 10 Sep 2021 Expected End Date:  17 Aug 2021 - 10 Sep 2021 View More',
+      'Start Date:   17 Aug 2021 - 10 Sep 2021 Expected End Date:  17 Aug 2021 - 10 Sep 2021 ',
   },
   {
     status: { type: 'success', text: 'On going' },
-    code: 'Intake-2020',
-    title: 'Cadette Program',
-    subTitle: 'Short course',
+    code: 'INTK/21BDC',
+    title: 'Computer science',
     description:
-      'Start Date:   17 Aug 2021 - 10 Sep 2021 Expected End Date:  17 Aug 2021 - 10 Sep 2021 View More',
+      'Start Date:   17 Aug 2021 - 10 Sep 2021 Expected End Date:  17 Aug 2021 - 10 Sep 2021 ',
   },
   {
     status: { type: 'success', text: 'On going' },
-    code: 'Intake-2020',
+    code: 'INTK/21BDC',
     title: 'Cadette Program',
-    subTitle: 'Short course',
     description:
-      'Start Date:   17 Aug 2021 - 10 Sep 2021 Expected End Date:  17 Aug 2021 - 10 Sep 2021 View More',
+      'Start Date:   17 Aug 2021 - 10 Sep 2021 Expected End Date:  17 Aug 2021 - 10 Sep 2021 ',
   },
 ];
 
