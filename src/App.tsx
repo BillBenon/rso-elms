@@ -23,6 +23,7 @@ import ProgramDetails from './views/programs/ProgramDetails';
 import Subjects from './views/subjects';
 import NewInstructorView from './views/users/NewInstructor';
 import NewStudentsView from './views/users/NewStudent';
+import StudentDetailsView from './views/users/StudentDetails';
 import UsersView from './views/users/Users';
 
 const App = () => {
@@ -53,6 +54,7 @@ const App = () => {
             <Route exact path="/subjects" component={Subjects} />
             <Route exact path="/registration-control" component={RegistrationControl} />
             <Route exact path="/users/students/new" component={NewStudentsView} />
+            <Route exact path="/users/students/:id" component={StudentDetailsView} />
             <Route exact path="/users/instructors/new" component={NewInstructorView} />
             <Route exact path="/faculties" component={FacultiesView} />
             <Route exact path="/programs" component={AcademicPrograms} />
