@@ -56,7 +56,7 @@ export default function RegistrationControl() {
           </ILabel>
           <Icon name="chevron-right" fill="gray" />
           <Heading fontSize="sm" color="primary" fontWeight="medium">
-            Academy
+            Registration control
           </Heading>
         </div>
         <TableHeader

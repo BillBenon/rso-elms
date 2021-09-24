@@ -25,7 +25,9 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
       <InputMolecule value="" error="" handleChange={handleChange} name="model-name">
         Registration control description
       </InputMolecule>
-      <DateMolecule>Start Date</DateMolecule>
+      <DateMolecule handleChange={handleChange} name={'date'}>
+        Start Date
+      </DateMolecule>
 
       <TextAreaMolecule value="" name="description" handleChange={handleChange}>
         Descripiton
