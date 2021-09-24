@@ -58,8 +58,8 @@ const App = () => {
             <Route exact path="/users/instructors/new" component={NewInstructorView} />
             <Route exact path="/faculties" component={FacultiesView} />
             <Route exact path="/programs" component={AcademicPrograms} />
-            <Route exact path="/programs/:id" component={ProgramDetails} />
             <Route exact path="/programs/new" component={NewAcademicProgram} />
+            <Route exact path="/programs/:id" component={ProgramDetails} />
             <Route exact path="/levels" component={LevelsView} />
             <Route exact path="/intakes" component={IntakesView} />
             <Route exact path="/intakes/:id" component={IntakeModulesView} />

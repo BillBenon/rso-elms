@@ -69,7 +69,7 @@ export default function AcademicProgram() {
             <div key={Common.code} className="p-1 mt-3">
               <CommonCardMolecule
                 data={Common}
-                to={{ title: 'module', to: 'programs/id' }}
+                to={{ title: 'module', to: 'programs/3' }}
               />
             </div>
           ))}

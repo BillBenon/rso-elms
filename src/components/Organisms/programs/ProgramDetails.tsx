@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { CommonCardDataType, Link } from '../../../types';
@@ -8,21 +8,11 @@ import Heading from '../../Atoms/Text/Heading';
 import Cacumber from '../../Molecules/Cacumber';
 import CommonCardMolecule from '../../Molecules/cards/CommonCardMolecule';
 import UsersPreview from '../../Molecules/cards/UsersPreview';
-import PopupMolecule from '../../Molecules/Popup';
 import TableHeader from '../../Molecules/table/TableHeader';
 import { Tab, Tabs } from '../../Molecules/tabs/tabs';
-import NewAcademicProgram from '../forms/programs/NewAcademicProgram';
 
 export default function ProgramDetailsMolecule() {
   const history = useHistory();
-  const [open, setOpen] = useState(false); // state to controll the popup
-
-  const [prOpen, setPrOpen] = useState(false); // state to controll the popup
-
-  function submited() {
-    setOpen(false);
-    setPrOpen(true);
-  }
 
   const list: Link[] = [
     { to: 'home', title: 'home' },
@@ -120,26 +110,13 @@ export default function ProgramDetailsMolecule() {
                 <div key={course.code}>
                   <CommonCardMolecule
                     data={course}
-                    to={{ title: 'program list', to: 'programs/id' }}
+                    to={{ title: 'program list', to: 'programs/3' }}
                   />
                 </div>
               ))}
             </section>
           </Tab>
         </Tabs>
-
-        {/* add academic program popup */}
-        <PopupMolecule title="New Program" open={open} onClose={() => setOpen(false)}>
-          <NewAcademicProgram />
-        </PopupMolecule>
-
-        {/* add prerequesite popup */}
-        <PopupMolecule
-          title="Add Prerequesite"
-          open={prOpen}
-          onClose={() => setPrOpen(false)}>
-          another form here
-        </PopupMolecule>
       </main>
     </>
   );
