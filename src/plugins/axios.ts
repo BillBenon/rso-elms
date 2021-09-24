@@ -1,7 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import toast from 'react-hot-toast';
 
-import cookie from './cookie';
+import cookie from '../utils/cookie';
 
 const commonConfig: AxiosRequestConfig = {};
 

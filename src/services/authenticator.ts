@@ -1,5 +1,5 @@
+import { adminstrationAxios } from '../plugins/axios';
 import { LoginInfo } from '../types/dataTypes';
-import { adminstrationAxios } from '../utils/axios';
 
 class Authenticator {
   public async login(loginInfo: LoginInfo) {
