@@ -101,6 +101,10 @@ export interface CommonCardDataType {
   footerTitle?: string | ReactNode;
 }
 
+export interface SigninPropTypes extends CommonCardDataType {
+  programs: SelectData[];
+}
+
 export * from './props';
 export * from './services/autheticator.types';
 export * from './services/common.types';
