@@ -30,26 +30,28 @@ function SignInWithRegControl({ handleClick }: IProps) {
       title: 'A short desctiption of a registration control',
       description: '17 Aug 2021 - 10 Sep 2021',
     },
+    {
+      status: { type: 'error', text: 'Inactive' },
+      code: 'CTC Gabiro',
+      title: 'A short desctiption of a registration control',
+      description: '17 Aug 2021 - 10 Sep 2021',
+    },
   ];
   return (
-    <div className="h-screen overflow-auto flex flex-col justify-center items-center">
-      <div className="lg:pt-36">
-        <Heading
-          color="primary"
-          fontSize="2xl"
-          className=" self-start"
-          fontWeight="semibold">
+    <div className="py-20 flex flex-col justify-center items-center">
+      <div>
+        <Heading color="primary" fontSize="2xl" fontWeight="semibold">
           Open registrations
         </Heading>
-        {data.map((course) => (
-          <div key={course.code} className="py-4" onClick={handleClick}>
-            <CommonCardMolecule
-              className="border-4 border-transparent hover:border-primary-500 "
-              data={course}
-            />
-          </div>
-        ))}
       </div>
+      {data.map((course) => (
+        <div key={course.code} className="py-4" onClick={handleClick}>
+          <CommonCardMolecule
+            className="border-4 border-transparent transition-all hover:border-primary-500 "
+            data={course}
+          />
+        </div>
+      ))}
     </div>
   );
 }

@@ -22,7 +22,7 @@ const SignIn = () => {
     <>
       <div className="grid lg:grid-cols-2 h-screen grid-cols-1 bg-main">
         {openRegistration.length ? (
-          <div className="hidden lg:block bg-secondary">
+          <div className="hidden lg:block bg-secondary h-screen overflow-auto">
             <SignInWithRegControl handleClick={() => setModalOpen(true)} />
           </div>
         ) : (
@@ -30,7 +30,7 @@ const SignIn = () => {
             <img className="block w-3/4" src={'/icons/login.svg'} alt="img" />
           </div>
         )}
-        <div className="px-5 py-8 md:rounded-md mx-auto lg:py-20 h-auto">
+        <div className="px-5 py-8 md:rounded-md mx-auto lg:py-20 h-screen">
           <AcademyProfileCard
             src="/icons/police-logo.svg"
             alt="academy logo"
