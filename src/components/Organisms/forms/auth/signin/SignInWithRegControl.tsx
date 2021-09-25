@@ -46,7 +46,6 @@ function SignInWithRegControl({ handleClick }: IProps) {
             <CommonCardMolecule
               className="border-4 border-transparent hover:border-primary-500 "
               data={course}
-              to={{ title: 'login', to: 'login' }}
             />
           </div>
         ))}
