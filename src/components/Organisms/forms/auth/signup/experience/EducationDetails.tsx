@@ -29,13 +29,15 @@ function EducationDetails({
 
   const handleMore = () => {
     setEducationData([...educationData, details]);
-    console.log('details', details, 'education', educationData);
   };
 
+  const moveForward = () => {
+    nextStep(true);
+  };
   return (
-    <div className={`flex justify-between ${isVertical && 'pt-8'}`}>
+    <div className={`flex justify-between ${!isVertical && 'pt-8'}`}>
       <div className="flex flex-col gap-4">
-        {isVertical && (
+        {!isVertical && (
           <Heading fontSize="base" fontWeight="semibold">
             Education Background
           </Heading>
@@ -98,7 +100,7 @@ function EducationDetails({
           <Button onClick={handleMore}>Add more</Button>
         </div>
         <div className="flex justify-end w-80">
-          <Button onClick={() => nextStep(true)}>Next</Button>
+          <Button onClick={() => moveForward()}>Next</Button>
         </div>
       </div>
 

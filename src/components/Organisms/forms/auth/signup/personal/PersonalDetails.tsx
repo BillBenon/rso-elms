@@ -20,8 +20,8 @@ function PersonalDetails({
   };
 
   return (
-    <div className={`flex flex-col gap-4 ${isVertical && 'pt-8'}`}>
-      {isVertical && <Heading fontWeight="semibold">Personal details</Heading>}
+    <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
+      {!isVertical && <Heading fontWeight="semibold">Personal details</Heading>}
       <div className="flex flex-col gap-4">
         <InputMolecule
           name="firstName"

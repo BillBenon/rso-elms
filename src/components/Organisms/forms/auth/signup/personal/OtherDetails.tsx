@@ -17,10 +17,14 @@ function OtherDetails({
     prevStep && prevStep();
   };
 
+  const moveForward = () => {
+    nextStep(true);
+  };
+
   return (
     <>
-      <div className={`flex flex-col gap-4 ${isVertical && 'pt-8'}`}>
-        {isVertical && <Heading fontWeight="semibold">Other Details</Heading>}
+      <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
+        {!isVertical && <Heading fontWeight="semibold">Other Details</Heading>}
         <DropdownMolecule
           isMulti
           name="hobbies"
@@ -99,7 +103,7 @@ function OtherDetails({
               Back
             </Button>
           )}
-          <Button onClick={() => nextStep()}>Next</Button>
+          <Button onClick={() => moveForward()}>Next</Button>
         </div>
       </div>
     </>

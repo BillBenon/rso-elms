@@ -14,9 +14,12 @@ function AccountDetails({
   const moveBack = () => {
     prevStep && prevStep();
   };
+  const moveForward = () => {
+    nextStep(true);
+  };
   return (
     <div className="flex flex-col gap-4">
-      {isVertical && (
+      {!isVertical && (
         <Heading fontSize="base" fontWeight="semibold">
           Account Details
         </Heading>
@@ -57,7 +60,7 @@ function AccountDetails({
             Back
           </Button>
         )}
-        <Button onClick={() => nextStep(true)}>Complete</Button>
+        <Button onClick={() => moveForward()}>Complete</Button>
       </div>
     </div>
   );

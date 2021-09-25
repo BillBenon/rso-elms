@@ -19,8 +19,8 @@ function EmploymentDetails({
   };
 
   return (
-    <div className={`flex flex-col gap-4 ${isVertical && 'pt-8'}`}>
-      {isVertical && <Heading fontWeight="semibold">Employment details</Heading>}
+    <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
+      {!isVertical && <Heading fontWeight="semibold">Employment details</Heading>}
       <div className="flex flex-col gap-4">
         <DropdownMolecule
           placeholder="Select current rank"

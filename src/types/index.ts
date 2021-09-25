@@ -41,6 +41,12 @@ export type Page =
   | 'nextOfKinDetails'
   | 'accountDetails';
 
+export type ExperienceType =
+  | 'appointmentHeld'
+  | 'internationalMission'
+  | 'courseCarrier'
+  | 'decorations';
+
 export type statusStyleType = {
   [_index in Status]?: string;
 };

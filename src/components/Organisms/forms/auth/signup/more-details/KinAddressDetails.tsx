@@ -5,13 +5,12 @@ import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../../Molecules/input/InputMolecule';
-import RadioMolecule from '../../../../../Molecules/input/RadioMolecule';
 
-function FamilyDetails({
+function KinAddressDetails({
   details,
   handleChange,
-  nextStep,
   prevStep,
+  nextStep,
   isVertical,
 }: CommonStepProps) {
   const moveBack = () => {
@@ -20,46 +19,14 @@ function FamilyDetails({
   const moveForward = () => {
     nextStep(true);
   };
+
   return (
-    <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
-      {!isVertical && <Heading fontWeight="semibold">Family details</Heading>}
-      <div className="flex flex-col gap-4">
-        <InputMolecule
-          name="fatherName"
-          placeholder="eg: John"
-          value={details.fatherName}
-          handleChange={(e) => handleChange(e, 'familyDetails')}>
-          Father&apos;s name
-        </InputMolecule>
-        <InputMolecule
-          name="motherName"
-          placeholder="eg: Doe"
-          value={details.motherName}
-          handleChange={(e) => handleChange(e, 'familyDetails')}>
-          Mother&apos;s name
-        </InputMolecule>
-      </div>
-      <div className="flex flex-col gap-4">
-        <RadioMolecule
-          options={[
-            { value: 'married', label: 'Married' },
-            { value: 'single', label: 'Single' },
-          ]}
-          value={details.maritalStatus}
-          handleChange={(e) => handleChange(e, 'familyDetails')}
-          name="maritalStatus">
-          Marital Status
-        </RadioMolecule>
-        <InputMolecule
-          name="spouseName"
-          value={details.spouseName}
-          handleChange={(e) => handleChange(e, 'familyDetails')}>
-          Spouse Name
-        </InputMolecule>
-      </div>
-      <Heading fontSize="sm" fontWeight="semibold">
-        Family address
-      </Heading>
+    <div className="flex flex-col gap-4">
+      {!isVertical && (
+        <Heading fontSize="base" fontWeight="semibold">
+          Next Of Kin Address Details
+        </Heading>
+      )}
       <div className="flex flex-col gap-4">
         <DropdownMolecule
           width="60 md:w-80"
@@ -96,7 +63,7 @@ function FamilyDetails({
         <InputMolecule
           name="otherLocation"
           value={details.otherLocation}
-          handleChange={(e) => handleChange(e, 'familyDetails')}>
+          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}>
           Other Location
           <span className="text-txt-secondary"> (State / Region)</span>
         </InputMolecule>
@@ -117,4 +84,4 @@ function FamilyDetails({
   );
 }
 
-export default FamilyDetails;
+export default KinAddressDetails;
