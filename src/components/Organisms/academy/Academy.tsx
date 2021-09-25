@@ -43,6 +43,12 @@ export default function Academy() {
     },
   ];
 
+  const academyActions = [
+    { name: 'Add academy', handleAction: () => {} },
+    { name: 'Edit admin', handleAction: () => {} },
+    { name: 'View', handleAction: () => {} },
+  ];
+
   return (
     <>
       <div className="flex flex-wrap justify-start items-center">
@@ -66,7 +72,7 @@ export default function Academy() {
       </div>
 
       <div className="mt-14">
-        <Table statusColumn="status" data={data} hasAction={true} />
+        <Table statusColumn="status" data={data} actions={academyActions} />
       </div>
     </>
   );

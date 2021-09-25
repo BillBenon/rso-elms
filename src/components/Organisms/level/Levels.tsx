@@ -40,6 +40,12 @@ function Levels() {
     },
   ];
 
+  const levelActions = [
+    { name: 'Add Role', handleAction: () => {} },
+    { name: 'Edit admin', handleAction: () => {} },
+    { name: 'View', handleAction: () => {} },
+  ];
+
   const handleSearch = (e: ValueType) => {
     console.log(e);
   };
@@ -54,7 +60,7 @@ function Levels() {
         </TableHeader>
       </section>
 
-      <Table statusColumn="status" data={data} hasAction />
+      <Table statusColumn="status" data={data} actions={levelActions} />
 
       {/* add new level popup */}
       <PopupMolecule

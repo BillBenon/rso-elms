@@ -46,6 +46,12 @@ export default function IntakeModules() {
     },
   ];
 
+  const intakeActions = [
+    { name: 'Add intake', handleAction: () => {} },
+    { name: 'Edit intake', handleAction: () => {} },
+    { name: 'View', handleAction: () => {} },
+  ];
+
   const handleChange = (e: any) => {
     console.log(e);
   };
@@ -74,7 +80,7 @@ export default function IntakeModules() {
           Program
         </InputMolecule>
       </div>
-      <Table statusColumn="status" data={data} hasAction />
+      <Table statusColumn="status" data={data} actions={intakeActions} />
     </div>
   );
 }

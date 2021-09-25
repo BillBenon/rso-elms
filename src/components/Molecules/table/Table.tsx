@@ -5,18 +5,21 @@ import '../../../styles/components/Molecules/table/table.scss';
 
 import React, { useState } from 'react';
 
+import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import Row from '../../Atoms/custom/Row';
 import Pagination from '../Pagination';
+import Tooltip from '../Tooltip';
 
 type TableProps = {
   data: {}[];
-  hasAction: boolean;
+  actions?: { name: string; handleAction: () => void }[];
+  handleClick?: () => void;
   statusColumn?: string;
   rowsPerPage?: number;
 };
 
-const Table = ({ data, hasAction, statusColumn, rowsPerPage = 10 }: TableProps) => {
+const Table = ({ data, actions, statusColumn, rowsPerPage = 10 }: TableProps) => {
   const [rowsOnPage] = useState(rowsPerPage);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -44,11 +47,30 @@ const Table = ({ data, hasAction, statusColumn, rowsPerPage = 10 }: TableProps) 
     return currentRows.map((row, index) => (
       <tr key={index}>
         <Row key={index} data={row} keys={keys} statusColumn={statusColumn} />
-        {hasAction ? (
-          <td className="flex space-x-6">
-            <span onClick={() => {}}>
-              <Icon name="more" stroke={'txt-secondary'} fill={'txt-secondary'} />
-            </span>
+        {actions && actions.length > 0 ? (
+          <td className="flex space-x-6 cursor-pointer">
+            <Tooltip
+              on="click"
+              trigger={
+                <span onClick={() => {}}>
+                  <Icon name="more" stroke={'txt-secondary'} fill={'txt-secondary'} />
+                </span>
+              }
+              open>
+              <ul>
+                {actions.map((action) => (
+                  <li className="hover:bg-secondary" key={action.name}>
+                    <Button
+                      styleType="text"
+                      hoverStyle="no-underline"
+                      color="txt-primary"
+                      onClick={action.handleAction}>
+                      {action.name}
+                    </Button>
+                  </li>
+                ))}
+              </ul>
+            </Tooltip>
           </td>
         ) : (
           ''
@@ -56,14 +78,13 @@ const Table = ({ data, hasAction, statusColumn, rowsPerPage = 10 }: TableProps) 
       </tr>
     ));
   };
-
   return (
     <div className="overflow-x-auto rounded-lg text-sm">
       <table className="table-auto border-collapse font-semibold bg-main w-full m-auto">
         <thead>
           <tr className="text-left text-txt-secondary border-b border-silver">
             {getHeader()}
-            {hasAction ? <th className="px-4 py-2 ">Actions</th> : ''}
+            {actions && actions.length > 0 ? <th className="px-4 py-2 ">Actions</th> : ''}
           </tr>
         </thead>
         <tbody>{getRowsData()}</tbody>

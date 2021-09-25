@@ -38,6 +38,12 @@ export default function Roles() {
     },
   ];
 
+  const roleActions = [
+    { name: 'Add Role', handleAction: () => {} },
+    { name: 'Edit role', handleAction: () => {} },
+    { name: 'View', handleAction: () => {} },
+  ];
+
   function submited() {
     setOpen(false);
   }
@@ -55,7 +61,7 @@ export default function Roles() {
           </TableHeader>
         </section>
         <section>
-          <Table statusColumn="status" data={roles} hasAction={true} />
+          <Table statusColumn="status" data={roles} actions={roleActions} />
         </section>
         {/* add module popup */}
         <PopupMolecule title="New Role" open={open} onClose={() => setOpen(false)}>

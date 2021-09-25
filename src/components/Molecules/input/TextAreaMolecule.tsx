@@ -26,7 +26,9 @@ export default function TextAreaMolecule({
 }: ITextareaMolecule) {
   return (
     <div className="flex flex-col gap-3">
-      <ILabel weight="medium">{children}</ILabel>
+      <ILabel size="sm" weight="medium">
+        {children}
+      </ILabel>
       <Textarea
         {...attrs}
         name={name}
