@@ -96,7 +96,7 @@ function PersonalInfo() {
     setCurrentStep((currentStep) => currentStep - 1);
   };
   const handleChange = (e: ValueType, page: Page) => {
-    setDetails((details) => ({
+    setDetails((details: any) => ({
       ...details,
       [page]: { ...details[page], [e.name]: e.value },
     }));

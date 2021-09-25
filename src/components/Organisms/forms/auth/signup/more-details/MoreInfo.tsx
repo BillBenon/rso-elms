@@ -75,14 +75,14 @@ function MoreInfo() {
   const saveInfo = (isComplete?: boolean) => {
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
     // save contact info
-    history.push('/login');
+    history.push('/');
   };
 
   const prevStep = () => {
     setCurrentStep((currentStep) => currentStep - 1);
   };
   const handleChange = (e: ValueType, page: Page) => {
-    setDetails((details) => ({
+    setDetails((details: any) => ({
       ...details,
       [page]: { ...details[page], [e.name]: e.value },
     }));
