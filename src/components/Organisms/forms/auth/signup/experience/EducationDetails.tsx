@@ -84,7 +84,7 @@ function EducationDetails({
         </div>
         <div>
           <div className="mb-3">
-            <ILabel weight="bold" size="sm">
+            <ILabel textTransform="normal-case" weight="bold" size="sm">
               Upload
               <span className="text-txt-secondary"> (certificate)</span>
             </ILabel>
@@ -115,7 +115,7 @@ function EducationDetails({
                 <div className="flex items-center">
                   <Icon name="attach" fill="primary" />
                   <span className="border-txt-primary border-b font-medium">
-                    Certificate / File name{' '}
+                    Certificate / File name
                   </span>
                 </div>
               </Panel>

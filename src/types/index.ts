@@ -17,6 +17,7 @@ export type Color =
   | 'lightgray';
 
 export type fontSize = 'xs' | 'sm' | 'base' | 'tiny' | 'lg' | '2xl';
+export type textTransform = 'uppercase' | 'lowerCase' | 'capitalize' | 'normal-case';
 export type width = 'default' | 'full';
 export type fontWeight = 'normal' | 'medium' | 'semibold' | 'bold';
 export type TextDecoration = 'no-underline' | 'underline';

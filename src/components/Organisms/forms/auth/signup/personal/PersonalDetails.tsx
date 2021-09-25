@@ -66,6 +66,14 @@ function PersonalDetails({
           name="gender">
           Gender
         </RadioMolecule>
+        <DateMolecule
+          handleChange={(e) => handleChange(e, 'personalDetails')}
+          name="dob"
+          width="60 md:w-80">
+          Date of Birth
+        </DateMolecule>
+      </div>
+      <div className="flex flex-col gap-4">
         <DropdownMolecule
           placeholder="Select place of birth"
           width="60 md:w-80"
@@ -82,20 +90,12 @@ function PersonalDetails({
           ]}>
           Place of birth
         </DropdownMolecule>
-      </div>
-      <div className="flex flex-col gap-4">
         <TextAreaMolecule
           name="placeOfBirthDescription"
           value={details.placeOfBirthDescription}
           handleChange={(e) => handleChange(e, 'personalDetails')}>
           Place of birth description
         </TextAreaMolecule>
-        <DateMolecule
-          handleChange={(e) => handleChange(e, 'personalDetails')}
-          name="dob"
-          width="60 md:w-80">
-          Date of Birth
-        </DateMolecule>
       </div>
       <div className="flex justify-end w-80">
         <Button onClick={() => moveForward()}>Next</Button>
