@@ -103,7 +103,11 @@ function FamilyDetails({
       </div>
       <div className="flex justify-between w-80">
         {prevStep && (
-          <Button styleType="text" color="txt-secondary" onClick={() => moveBack()}>
+          <Button
+            styleType="text"
+            hoverStyle="no-underline"
+            color="txt-secondary"
+            onClick={() => moveBack()}>
             Back
           </Button>
         )}

@@ -19,6 +19,7 @@ export type Color =
 export type fontSize = 'xs' | 'sm' | 'base' | 'tiny' | 'lg' | '2xl';
 export type width = 'default' | 'full';
 export type fontWeight = 'normal' | 'medium' | 'semibold' | 'bold';
+export type TextDecoration = 'no-underline' | 'underline';
 
 export type Status =
   | 'pending'

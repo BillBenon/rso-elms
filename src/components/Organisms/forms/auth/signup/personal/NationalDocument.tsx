@@ -98,7 +98,11 @@ function NationalDocuments({
       </div>
       <div className="flex w-80 justify-between">
         {prevStep && (
-          <Button styleType="text" color="txt-secondary" onClick={() => moveBack()}>
+          <Button
+            styleType="text"
+            hoverStyle="no-underline"
+            color="txt-secondary"
+            onClick={() => moveBack()}>
             Back
           </Button>
         )}
