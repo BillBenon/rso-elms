@@ -47,14 +47,14 @@ function EducationDetails({
             placeholder="school"
             name="school"
             value={details.school}
-            handleChange={(e) => handleChange(e, 'educationDetails')}>
+            handleChange={(e) => handleChange(e, 'educationBackground')}>
             School Name
           </InputMolecule>
           <InputMolecule
             placeholder="level"
             name="level"
             value={details.level}
-            handleChange={(e) => handleChange(e, 'educationDetails')}>
+            handleChange={(e) => handleChange(e, 'educationBackground')}>
             Education Level
           </InputMolecule>
         </div>
@@ -63,12 +63,12 @@ function EducationDetails({
             name="section"
             placeholder="section"
             value={details.section}
-            handleChange={(e) => handleChange(e, 'educationDetails')}>
+            handleChange={(e) => handleChange(e, 'educationBackground')}>
             Education section/ combination
             <span className="text-txt-secondary"> (Write in full abbreviation)</span>
           </InputMolecule>
           <DateMolecule
-            handleChange={(e) => handleChange(e, 'educationDetails')}
+            handleChange={(e) => handleChange(e, 'educationBackground')}
             name="startDate"
             width="60 md:w-80">
             Start Date
@@ -76,7 +76,7 @@ function EducationDetails({
         </div>
         <div className="my-4">
           <DateMolecule
-            handleChange={(e) => handleChange(e, 'educationDetails')}
+            handleChange={(e) => handleChange(e, 'educationBackground')}
             name="endDate"
             width="60 md:w-80">
             End Date

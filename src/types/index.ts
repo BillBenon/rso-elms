@@ -36,9 +36,10 @@ export type Page =
   | 'nationalDocuments'
   | 'employmentDetails'
   | 'otherDetails'
-  | 'educationDetails'
-  | 'experienceDetails'
+  | 'educationBackground'
+  | ExperienceType
   | 'nextOfKinDetails'
+  | 'kinAddressDetails'
   | 'accountDetails';
 
 export type ExperienceType =

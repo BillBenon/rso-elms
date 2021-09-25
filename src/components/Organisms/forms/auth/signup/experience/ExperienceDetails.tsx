@@ -64,7 +64,7 @@ function ExperienceDetails({
             placeholder={`Enter ${details.experienceType.label.toLowerCase()}`}
             name="name"
             value={details.name}
-            handleChange={(e) => handleChange(e, 'experienceDetails')}>
+            handleChange={(e) => handleChange(e, details.experienceType.type)}>
             {details.experienceType.label}
           </InputMolecule>
         </div>
@@ -72,11 +72,11 @@ function ExperienceDetails({
           <TextAreaMolecule
             name="diseaseDescription"
             value={details.description}
-            handleChange={(e) => handleChange(e, 'experienceDetails')}>
+            handleChange={(e) => handleChange(e, details.experience.type)}>
             Description
           </TextAreaMolecule>
           <DateMolecule
-            handleChange={(e) => handleChange(e, 'experienceDetails')}
+            handleChange={(e) => handleChange(e, details.experience.type)}
             name="startDate"
             width="60 md:w-80">
             Start Date
@@ -84,7 +84,7 @@ function ExperienceDetails({
         </div>
         <div className="my-4">
           <DateMolecule
-            handleChange={(e) => handleChange(e, 'experienceDetails')}
+            handleChange={(e) => handleChange(e, details.experience.type)}
             name="endDate"
             width="60 md:w-80">
             End Date
