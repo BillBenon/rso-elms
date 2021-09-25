@@ -1,7 +1,8 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import toast from 'react-hot-toast';
 
-import cookie from './cookie';
+import { LoginRes } from '../types';
+import cookie from '../utils/cookie';
 
 const commonConfig: AxiosRequestConfig = {};
 
@@ -13,17 +14,20 @@ const administrationModuleConfig: AxiosRequestConfig = {
 const adminstrationAxios = axios.create(administrationModuleConfig);
 
 const interceptAdminReq = (config: AxiosRequestConfig) => {
-  const jwtInfo: { username: string; token: string } = JSON.parse(
-    cookie.getCookie('jwt_info') || '',
-  );
-  if (jwtInfo.token) config.headers.Authorization = `Bearer ${jwtInfo.token}`;
+  const token = cookie.getCookie('jwt_info');
+  if (token) {
+    const jwtInfo: LoginRes = JSON.parse(token);
+    config.headers.Authorization = `Bearer ${jwtInfo.token}`;
+  }
+
   return config;
 };
 
 const interceptAdminResError = (error: any) => {
   const { data } = error.response;
-  toast.error(data.message);
-  // return Promise.reject(error);
+  toast.error(data.message || data.error);
+
+  return error.response;
 };
 
 adminstrationAxios.interceptors.request.use(interceptAdminReq);

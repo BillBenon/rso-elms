@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-import { authenticator } from '../../../services/authenticator';
+import { authenticatorService } from '../../../services/authenticator.service';
 import { ValueType } from '../../../types';
 import Avatar from '../../Atoms/custom/Avatar';
 import Icon from '../../Atoms/custom/Icon';
@@ -11,13 +11,13 @@ import SearchMolecule from '../input/SearchMolecule';
 export default function Navigation() {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const [authUser, setAuthUser] = useState(null);
+  // const [authUser, setAuthUser] = useState(null);
 
   const location = useLocation();
 
   useEffect(() => {
     (async () => {
-      const res = await authenticator.authUser();
+      const res = await authenticatorService.authUser();
       console.log(res);
     })();
   }, []);
