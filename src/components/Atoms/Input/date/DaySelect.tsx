@@ -32,6 +32,7 @@ const DaySelect = (dprop: DProp) => {
 
   return (
     <DropDown
+      disabled={dprop.disabled}
       name={dprop.name}
       placeholder={dprop.placeholder}
       width={dprop.width}
