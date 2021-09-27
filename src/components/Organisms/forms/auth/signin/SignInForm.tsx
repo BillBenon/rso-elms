@@ -2,9 +2,9 @@ import React, { FormEvent, useState } from 'react';
 // import toast from 'react-hot-toast';
 import { Link, useHistory } from 'react-router-dom';
 
-import { authenticator } from '../../../../../services/authenticator';
+import authenticatorStore from '../../../../../store/authenticator.store';
 import { ValueType } from '../../../../../types';
-import { LoginInfo } from '../../../../../types/dataTypes';
+import { LoginInfo } from '../../../../../types';
 import cookie from '../../../../../utils/cookie';
 import Button from '../../../../Atoms/custom/Button';
 import Heading from '../../../../Atoms/Text/Heading';
@@ -12,6 +12,7 @@ import InputMolecule from '../../../../Molecules/input/InputMolecule';
 
 const SignInForm = () => {
   const history = useHistory();
+  const { mutateAsync } = authenticatorStore.login();
   const [details, setDetails] = useState<LoginInfo>({
     username: '',
     password: '',
@@ -26,14 +27,13 @@ const SignInForm = () => {
 
   async function login<T>(e: FormEvent<T>) {
     e.preventDefault();
-    try {
-      const res = await authenticator.login(details);
-      const userData = JSON.stringify(res.data.data);
-      cookie.setCookie('jwt_info', userData);
-      history.push('/users');
-    } catch (e) {
-      console.log(e);
-    }
+
+    await mutateAsync(details, {
+      onSuccess(data) {
+        history.push('/users');
+        cookie.setCookie('jwt_info', JSON.stringify(data?.data));
+      },
+    });
   }
 
   return (
