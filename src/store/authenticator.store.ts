@@ -8,7 +8,7 @@ class AuthenticatorStore {
   }
 }
 
-export default new AuthenticatorStore();
+export const authenticatorStore = new AuthenticatorStore();
 
 // const {
 //     data,

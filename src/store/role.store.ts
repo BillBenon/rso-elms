@@ -2,7 +2,7 @@ import { useMutation } from 'react-query';
 
 import { roleService } from '../services';
 
-class AuthenticatorStore {
+class RoleStore {
   addRole() {
     return useMutation(roleService.addRole);
   }
@@ -11,4 +11,4 @@ class AuthenticatorStore {
   }
 }
 
-export default new AuthenticatorStore();
+export const roleStore = new RoleStore();
