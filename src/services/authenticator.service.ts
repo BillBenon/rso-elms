@@ -9,7 +9,7 @@ class AuthenticatorService {
   }
 
   public async authUser() {
-    return await adminstrationAxios.post('/authentication/current');
+    return await adminstrationAxios.get('/authentication/current');
   }
 }
 
