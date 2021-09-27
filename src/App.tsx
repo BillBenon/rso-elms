@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import ComponentsUseCase from './components/Organisms/ComponentsUseCase';
+import ExperienceInfo from './components/Organisms/forms/auth/signup/experience/ExperienceInfo';
 import MoreInfo from './components/Organisms/forms/auth/signup/more-details/MoreInfo';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import Dashboard from './layout/Dashboard';
@@ -44,6 +45,7 @@ const App = () => {
             <Route exact path="/" component={Signin} />
 
             <Route exact path="/register" component={Signup} />
+            <Route exact path="/register/experience" component={ExperienceInfo} />
             <Route exact path="/register/more" component={MoreInfo} />
             <Route exact path="/usecase" component={Homepage} />
 

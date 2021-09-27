@@ -1,13 +1,14 @@
 import React, { ReactNode } from 'react';
 
 import { colorStyle, fontSizeStyle, fontWeightStyle } from '../../../global/global-vars';
-import { Color, fontSize, fontWeight } from '../../../types';
+import { Color, fontSize, fontWeight, textTransform } from '../../../types';
 
 interface ILabelProps {
   children: ReactNode;
   weight?: fontWeight;
   size?: fontSize;
   color?: Color;
+  textTransform?: textTransform;
   className?: string;
 }
 
@@ -16,13 +17,14 @@ export default function ILabel({
   weight = 'normal',
   size = 'base',
   color = 'txt-primary',
+  textTransform = 'capitalize',
   className = '',
   ...rest
 }: ILabelProps) {
   return (
     <label
       {...rest}
-      className={`capitalize ${fontWeightStyle[weight]} ${fontSizeStyle[size]} text-${colorStyle[color]} ${className}`}>
+      className={`${textTransform} ${fontWeightStyle[weight]} ${fontSizeStyle[size]} text-${colorStyle[color]} ${className}`}>
       {children}
     </label>
   );

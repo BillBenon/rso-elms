@@ -17,8 +17,10 @@ export type Color =
   | 'lightgray';
 
 export type fontSize = 'xs' | 'sm' | 'base' | 'tiny' | 'lg' | '2xl';
+export type textTransform = 'uppercase' | 'lowerCase' | 'capitalize' | 'normal-case';
 export type width = 'default' | 'full';
 export type fontWeight = 'normal' | 'medium' | 'semibold' | 'bold';
+export type TextDecoration = 'no-underline' | 'underline';
 
 export type Status =
   | 'pending'
@@ -35,10 +37,17 @@ export type Page =
   | 'nationalDocuments'
   | 'employmentDetails'
   | 'otherDetails'
-  | 'educationDetails'
-  | 'experienceDetails'
+  | 'educationBackground'
+  | ExperienceType
   | 'nextOfKinDetails'
+  | 'kinAddressDetails'
   | 'accountDetails';
+
+export type ExperienceType =
+  | 'appointmentHeld'
+  | 'internationalMission'
+  | 'courseCarrier'
+  | 'decorations';
 
 export type statusStyleType = {
   [_index in Status]?: string;
@@ -90,6 +99,10 @@ export interface CommonCardDataType {
   subTitle?: string;
   description: string;
   footerTitle?: string | ReactNode;
+}
+
+export interface SigninPropTypes extends CommonCardDataType {
+  programs: SelectData[];
 }
 
 export * from './props';

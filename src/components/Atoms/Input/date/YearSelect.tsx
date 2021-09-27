@@ -52,6 +52,7 @@ const YearSelect = (props: YProp) => {
 
   return (
     <DropDown
+      disabled={props.disabled}
       name={props.name}
       placeholder={props.placeholder}
       className={props.className}

@@ -29,13 +29,15 @@ function EducationDetails({
 
   const handleMore = () => {
     setEducationData([...educationData, details]);
-    console.log('details', details, 'education', educationData);
   };
 
+  const moveForward = () => {
+    nextStep(true);
+  };
   return (
-    <div className={`flex justify-between ${isVertical && 'pt-8'}`}>
+    <div className={`flex justify-between ${!isVertical && 'pt-8'}`}>
       <div className="flex flex-col gap-4">
-        {isVertical && (
+        {!isVertical && (
           <Heading fontSize="base" fontWeight="semibold">
             Education Background
           </Heading>
@@ -45,14 +47,14 @@ function EducationDetails({
             placeholder="school"
             name="school"
             value={details.school}
-            handleChange={(e) => handleChange(e, 'educationDetails')}>
+            handleChange={(e) => handleChange(e, 'educationBackground')}>
             School Name
           </InputMolecule>
           <InputMolecule
             placeholder="level"
             name="level"
             value={details.level}
-            handleChange={(e) => handleChange(e, 'educationDetails')}>
+            handleChange={(e) => handleChange(e, 'educationBackground')}>
             Education Level
           </InputMolecule>
         </div>
@@ -61,12 +63,12 @@ function EducationDetails({
             name="section"
             placeholder="section"
             value={details.section}
-            handleChange={(e) => handleChange(e, 'educationDetails')}>
+            handleChange={(e) => handleChange(e, 'educationBackground')}>
             Education section/ combination
             <span className="text-txt-secondary"> (Write in full abbreviation)</span>
           </InputMolecule>
           <DateMolecule
-            handleChange={(e) => handleChange(e, 'educationDetails')}
+            handleChange={(e) => handleChange(e, 'educationBackground')}
             name="startDate"
             width="60 md:w-80">
             Start Date
@@ -74,7 +76,7 @@ function EducationDetails({
         </div>
         <div className="my-4">
           <DateMolecule
-            handleChange={(e) => handleChange(e, 'educationDetails')}
+            handleChange={(e) => handleChange(e, 'educationBackground')}
             name="endDate"
             width="60 md:w-80">
             End Date
@@ -82,7 +84,7 @@ function EducationDetails({
         </div>
         <div>
           <div className="mb-3">
-            <ILabel weight="bold" size="sm">
+            <ILabel textTransform="normal-case" weight="bold" size="sm">
               Upload
               <span className="text-txt-secondary"> (certificate)</span>
             </ILabel>
@@ -98,7 +100,7 @@ function EducationDetails({
           <Button onClick={handleMore}>Add more</Button>
         </div>
         <div className="flex justify-end w-80">
-          <Button onClick={() => nextStep(true)}>Next</Button>
+          <Button onClick={() => moveForward()}>Next</Button>
         </div>
       </div>
 
@@ -113,7 +115,7 @@ function EducationDetails({
                 <div className="flex items-center">
                   <Icon name="attach" fill="primary" />
                   <span className="border-txt-primary border-b font-medium">
-                    Certificate / File name{' '}
+                    Certificate / File name
                   </span>
                 </div>
               </Panel>

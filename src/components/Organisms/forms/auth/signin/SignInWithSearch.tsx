@@ -66,10 +66,7 @@ function SignInWithSearch({ handleClick }: PropType) {
       <div className="text-txt-secondary py-2">
         <p className="text-base text-txt-secondary">
           Already have an account?
-          <Button
-            styleType="text"
-            className="text-primary-500 px-2"
-            onClick={handleClick}>
+          <Button styleType="text" className="text-primary-500" onClick={handleClick}>
             Sign in
           </Button>
         </p>

@@ -4,29 +4,58 @@ import { useHistory } from 'react-router';
 import { Page, ValueType } from '../../../../../../types';
 import SignupHeader from '../../../../../Molecules/SignupHeader';
 import Stepper, { StepperProp } from '../../../../../Molecules/Stepper/Stepper';
-import AccountDetails from './AccountDetails';
-import KinAddressDetails from './KinAddressDetails';
-import NextOfKinDetails from './NextOfKinDetails';
+import EducationDetails from './EducationDetails';
+import ExperienceDetails from './ExperienceDetails';
 
-function MoreInfo() {
+function ExperienceInfo() {
   const [details, setDetails] = useState({
-    nextOfKinDetails: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      gender: 'male',
-      relationShip: '',
+    educationDetails: {
+      school: '',
+      level: '',
+      section: '',
+      certificate: '',
+      startDate: '',
+      endDate: '',
     },
-    kinAddressDetails: {
-      country: '',
-      location: '',
-      otherLocation: '',
+    appointmentHeld: {
+      experienceType: {
+        type: 'appointmentHeld',
+        label: 'Appointment Held',
+      },
+      name: '',
+      description: '',
+      startDate: '',
+      endDate: '',
     },
-    accountDetails: {
-      username: '',
-      password: '',
-      confirmPassword: '',
+    internationalMission: {
+      experienceType: {
+        type: 'internationalMission',
+        label: 'International mission',
+      },
+      name: '',
+      description: '',
+      startDate: '',
+      endDate: '',
+    },
+    courseCarrier: {
+      experienceType: {
+        type: 'courseCarrier',
+        label: 'Course carrier',
+      },
+      name: '',
+      description: '',
+      startDate: '',
+      endDate: '',
+    },
+    decorations: {
+      experienceType: {
+        type: 'decorations',
+        label: 'Decorations',
+      },
+      name: '',
+      description: '',
+      startDate: '',
+      endDate: '',
     },
   });
 
@@ -61,7 +90,7 @@ function MoreInfo() {
   const saveInfo = (isComplete?: boolean) => {
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
     // save contact info
-    history.push('/');
+    history.push('/register/more');
   };
 
   const prevStep = () => {
@@ -85,22 +114,22 @@ function MoreInfo() {
     completeStep: 0,
     content: [
       {
-        label: 'Next of kin details',
+        label: 'Education Background',
         content: (
-          <NextOfKinDetails
+          <EducationDetails
             isVertical
-            details={details.nextOfKinDetails}
+            details={details.educationDetails}
             handleChange={handleChange}
             nextStep={nextStep}
           />
         ),
       },
       {
-        label: 'Next of kin address details',
+        label: details.appointmentHeld.experienceType.label,
         content: (
-          <KinAddressDetails
+          <ExperienceDetails
             isVertical
-            details={details.kinAddressDetails}
+            details={details.appointmentHeld}
             handleChange={handleChange}
             prevStep={prevStep}
             nextStep={nextStep}
@@ -108,11 +137,35 @@ function MoreInfo() {
         ),
       },
       {
-        label: 'Account details',
+        label: details.internationalMission.experienceType.label,
         content: (
-          <AccountDetails
+          <ExperienceDetails
             isVertical
-            details={details.accountDetails}
+            details={details.internationalMission}
+            handleChange={handleChange}
+            prevStep={prevStep}
+            nextStep={nextStep}
+          />
+        ),
+      },
+      {
+        label: details.courseCarrier.experienceType.label,
+        content: (
+          <ExperienceDetails
+            isVertical
+            details={details.courseCarrier}
+            handleChange={handleChange}
+            prevStep={prevStep}
+            nextStep={nextStep}
+          />
+        ),
+      },
+      {
+        label: details.decorations.experienceType.label,
+        content: (
+          <ExperienceDetails
+            isVertical
+            details={details.decorations}
             handleChange={handleChange}
             prevStep={prevStep}
             nextStep={saveInfo}
@@ -135,4 +188,4 @@ function MoreInfo() {
   );
 }
 
-export default MoreInfo;
+export default ExperienceInfo;

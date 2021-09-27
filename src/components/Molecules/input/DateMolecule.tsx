@@ -15,6 +15,28 @@ type IProp = {
   handleChange: (_value: ValueType) => void;
   name: string;
   children: ReactNode;
+  startYear?: number;
+  endYear?: number;
+  yearClassName?: string;
+  yearDisabled?: boolean;
+  monthNumeric?: boolean;
+  monthShort?: boolean;
+  monthCapital?: boolean;
+  monthDisabled?: boolean;
+  monthClassName?: string;
+  yearPlaceholder?: string;
+  monthPlaceholder?: string;
+  dayPlaceholder?: string;
+  hourPlaceholder?: string;
+  dayDisabled?: boolean;
+  dayClassName?: string;
+  yearWidth?: string;
+  monthWidth?: string;
+  dayWidth?: string;
+  hourWidth?: string;
+  minuteWidth?: string;
+  hourDisabled?: boolean;
+  minuteDisabled?: boolean;
 };
 
 function DateMolecule({
@@ -24,6 +46,28 @@ function DateMolecule({
   children,
   handleChange,
   name,
+  startYear,
+  endYear,
+  yearClassName,
+  yearDisabled = false,
+  monthNumeric = false,
+  monthShort = true,
+  monthCapital = false,
+  monthDisabled = false,
+  monthClassName,
+  yearPlaceholder = 'Year',
+  monthPlaceholder = 'Month',
+  dayPlaceholder = 'Day',
+  hourPlaceholder = 'Hours',
+  dayDisabled = false,
+  dayClassName,
+  yearWidth = '28',
+  monthWidth = '28',
+  dayWidth = '28',
+  hourWidth = '28',
+  minuteWidth = '28',
+  hourDisabled = false,
+  minuteDisabled = false,
 }: IProp) {
   const [dateState, setDateState] = useState({
     Day: new Date().getDate(),
@@ -34,7 +78,9 @@ function DateMolecule({
   });
 
   const dateFormat = () => {
-    let selectedDate: string = `${dateState.Month}/${dateState.Day}/${dateState.Year} ${dateState.Hours}:${dateState.Minutes}`;
+    const minutes =
+      dateState.Minutes < 10 ? '0' + dateState.Minutes : '' + dateState.Minutes;
+    let selectedDate: string = `${dateState.Month}/${dateState.Day}/${dateState.Year} ${dateState.Hours}:${minutes}`;
     handleChange({ name: name, value: selectedDate });
   };
 
@@ -60,18 +106,26 @@ function DateMolecule({
               value={dateState.Year}
               onChange={handleDate}
               name="Year"
-              placeholder="Year"
-              width="28"
+              width={yearWidth}
+              start={startYear}
+              end={endYear}
+              className={yearClassName}
+              disabled={yearDisabled}
+              placeholder={yearPlaceholder}
             />
             <MonthSelect
               year={dateState.Year}
               defaultValue={dateState.Month.toString()}
               value={dateState.Month}
               onChange={handleDate}
-              short
+              short={monthShort}
+              caps={monthCapital}
               name="Month"
-              placeholder="Month"
-              width="28"
+              width={monthWidth}
+              numeric={monthNumeric}
+              className={monthClassName}
+              disabled={monthDisabled}
+              placeholder={monthPlaceholder}
             />
             <DaySelect
               year={dateState.Year}
@@ -80,8 +134,10 @@ function DateMolecule({
               value={dateState.Day}
               onChange={handleDate}
               name="Day"
-              placeholder="Day"
-              width="28"
+              className={dayClassName}
+              placeholder={dayPlaceholder}
+              width={dayWidth}
+              disabled={dayDisabled}
             />
           </>
         )}
@@ -92,8 +148,9 @@ function DateMolecule({
               value={dateState.Hours}
               onChange={handleDate}
               name="Hours"
-              placeholder="Hours"
-              width="28"
+              placeholder={hourPlaceholder}
+              width={hourWidth}
+              disabled={hourDisabled}
             />
             <MinuteSelect
               defaultValue={dateState.Minutes.toString()}
@@ -101,7 +158,8 @@ function DateMolecule({
               onChange={handleDate}
               name="Minutes"
               placeholder="Minutes"
-              width="28"
+              width={minuteWidth}
+              disabled={minuteDisabled}
             />
           </>
         )}

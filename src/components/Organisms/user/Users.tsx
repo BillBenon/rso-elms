@@ -237,8 +237,27 @@ export default function Users() {
     },
   ];
 
+  const studentActions = [
+    { name: 'Add Role', handleAction: () => {} },
+    { name: 'Edit student', handleAction: () => {} },
+    { name: 'View', handleAction: () => {} },
+  ];
+
+  const instructorActions = [
+    { name: 'Add Role', handleAction: () => {} },
+    { name: 'Edit instructor', handleAction: () => {} },
+    { name: 'View', handleAction: () => {} },
+  ];
+
+  const adminActions = [
+    { name: 'Add Role', handleAction: () => {} },
+    { name: 'Edit admin', handleAction: () => {} },
+    { name: 'View', handleAction: () => {} },
+  ];
+
   let instractors = data.slice(6, 13);
   let admins = data.slice(24, 28);
+
   return (
     <>
       <div className="flex flex-wrap justify-start items-center pt-2">
@@ -264,13 +283,13 @@ export default function Users() {
       </TableHeader>
       <Tabs onTabChange={(e) => setUserType(e.activeTabLabel)}>
         <Tab label="Students" className="pt-8">
-          <Table statusColumn="status" data={data} hasAction={true} />
+          <Table statusColumn="status" data={data} actions={studentActions} />
         </Tab>
         <Tab label="Instructors" className="pt-8">
-          <Table statusColumn="status" data={instractors} hasAction={true} />
+          <Table statusColumn="status" data={instractors} actions={instructorActions} />
         </Tab>
         <Tab label="Admins" className="pt-8">
-          <Table statusColumn="status" data={admins} hasAction={true} />
+          <Table statusColumn="status" data={admins} actions={adminActions} />
         </Tab>
       </Tabs>
       <PopupMolecule

@@ -28,7 +28,7 @@ export interface CommonStepProps {
   details: any;
   handleChange: (_e: ValueType, _page: Page) => void;
   prevStep?: () => void;
-  nextStep: (_isComplete?: boolean) => void;
+  nextStep: (_isComplete: boolean) => void;
   isVertical?: boolean;
 }
 

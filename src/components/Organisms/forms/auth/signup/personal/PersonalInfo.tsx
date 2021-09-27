@@ -81,22 +81,22 @@ function PersonalInfo() {
     setStepperContent(newStepper);
   }, [completeStep]);
 
-  const nextStep = (isComplete?: boolean) => {
+  const nextStep = (isComplete: boolean) => {
     setCurrentStep((currentStep) => currentStep + 1);
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
   };
 
-  const saveInfo = (isComplete?: boolean) => {
+  const saveInfo = (isComplete: boolean) => {
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
     // save contact info
-    history.push('/register/more');
+    history.push('/register/experience');
   };
 
   const prevStep = () => {
     setCurrentStep((currentStep) => currentStep - 1);
   };
   const handleChange = (e: ValueType, page: Page) => {
-    setDetails((details) => ({
+    setDetails((details: any) => ({
       ...details,
       [page]: { ...details[page], [e.name]: e.value },
     }));
@@ -116,6 +116,7 @@ function PersonalInfo() {
         label: 'Personal details',
         content: (
           <PersonalDetails
+            isVertical
             details={details.personalDetails}
             handleChange={handleChange}
             nextStep={nextStep}
@@ -126,6 +127,7 @@ function PersonalInfo() {
         label: 'Family details',
         content: (
           <FamilyDetails
+            isVertical
             details={details.familyDetails}
             handleChange={handleChange}
             prevStep={prevStep}
@@ -137,6 +139,7 @@ function PersonalInfo() {
         label: 'National documents',
         content: (
           <NationalDocuments
+            isVertical
             details={details.nationalDocuments}
             handleChange={handleChange}
             prevStep={prevStep}
@@ -148,6 +151,7 @@ function PersonalInfo() {
         label: 'Employment details',
         content: (
           <EmploymentDetails
+            isVertical
             details={details.employmentDetails}
             handleChange={handleChange}
             prevStep={prevStep}
@@ -159,6 +163,7 @@ function PersonalInfo() {
         label: 'Other details',
         content: (
           <OtherDetails
+            isVertical
             details={details.otherDetails}
             handleChange={handleChange}
             prevStep={prevStep}

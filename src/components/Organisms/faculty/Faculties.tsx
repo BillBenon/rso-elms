@@ -61,6 +61,12 @@ export default function FacutiesOrg() {
     },
   ];
 
+  const facultyActions = [
+    { name: 'Add faculty', handleAction: () => {} },
+    { name: 'Edit faculty', handleAction: () => {} },
+    { name: 'View', handleAction: () => {} },
+  ];
+
   const handleSearch = (e: ValueType) => {
     console.log(e);
   };
@@ -85,7 +91,7 @@ export default function FacutiesOrg() {
         <Button onClick={() => handleCreateNewUserClick()}>New Faculty</Button>
       </TableHeader>
 
-      <Table statusColumn="status" data={data} hasAction={true} />
+      <Table statusColumn="status" data={data} actions={facultyActions} />
       <PopupMolecule
         title="New Faculty"
         open={isModalOpen}

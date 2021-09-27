@@ -42,6 +42,12 @@ export default function RegistrationControl() {
     },
   ];
 
+  const controlActions = [
+    { name: 'Add control', handleAction: () => {} },
+    { name: 'Edit control', handleAction: () => {} },
+    { name: 'View', handleAction: () => {} },
+  ];
+
   return (
     <div>
       <Dashboard>
@@ -67,7 +73,7 @@ export default function RegistrationControl() {
         </TableHeader>
 
         <div className="mt-14">
-          <Table statusColumn="status" data={data} hasAction={true} />
+          <Table statusColumn="status" data={data} actions={controlActions} />
         </div>
 
         {/* add module popup */}

@@ -19,8 +19,8 @@ function EmploymentDetails({
   };
 
   return (
-    <div className={`flex flex-col gap-4 ${isVertical && 'pt-8'}`}>
-      {isVertical && <Heading fontWeight="semibold">Employment details</Heading>}
+    <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
+      {!isVertical && <Heading fontWeight="semibold">Employment details</Heading>}
       <div className="flex flex-col gap-4">
         <DropdownMolecule
           placeholder="Select current rank"
@@ -77,7 +77,11 @@ function EmploymentDetails({
       </div>
       <div className="flex w-80 justify-between">
         {prevStep && (
-          <Button styleType="text" color="txt-secondary" onClick={() => moveBack()}>
+          <Button
+            styleType="text"
+            hoverStyle="no-underline"
+            color="txt-secondary"
+            onClick={() => moveBack()}>
             Back
           </Button>
         )}

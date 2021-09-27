@@ -31,6 +31,7 @@ const HourSelect = (mprops: MProp) => {
 
   return (
     <DropDown
+      disabled={mprops.disabled}
       name={mprops.name}
       placeholder={mprops.placeholder}
       width={mprops.width}
