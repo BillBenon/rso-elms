@@ -3,7 +3,7 @@ import { AxiosResponse } from 'axios';
 import { adminstrationAxios } from '../../plugins/axios';
 import { CreateRoleReq, Response, RoleRes } from '../../types';
 
-class AuthenticatorService {
+class RoleService {
   public async addRole(role: CreateRoleReq): Promise<AxiosResponse<Response<RoleRes>>> {
     return await adminstrationAxios.post('/roles/add', role);
   }
@@ -13,4 +13,4 @@ class AuthenticatorService {
   }
 }
 
-export const authenticatorService = new AuthenticatorService();
+export const roleService = new RoleService();
