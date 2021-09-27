@@ -17,8 +17,6 @@ const adminstrationAxios = axios.create(administrationModuleConfig);
 
 const interceptAdminReq = (config: AxiosRequestConfig) => {
   const token = cookie.getCookie('jwt_info');
-  console.log(token);
-
   // when request is open no need to add bearer token
   if (!openRequests.find((link) => link === config.url)) {
     if (token) {
@@ -26,11 +24,11 @@ const interceptAdminReq = (config: AxiosRequestConfig) => {
       config.headers['Authorization'] = `Bearer ${jwtInfo.token}`;
     }
   }
-  console.log(config);
   return config;
 };
 
 const interceptAdminResError = (error: any) => {
+  console.log(error);
   const { data } = error.response;
   toast.error(data.message || data.error);
 
