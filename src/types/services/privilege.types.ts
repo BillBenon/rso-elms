@@ -12,11 +12,10 @@ export enum PrivilegeFeatureType {
 
 export interface PrivilegeUpdate {
   id: string;
+  name: string;
   status: PrivilegeStatus;
   description: string;
   featureType: PrivilegeFeatureType;
 }
 
-export interface PrivilegeRes extends PrivilegeUpdate {
-  name: string;
-}
+export interface PrivilegeRes extends PrivilegeUpdate {}
