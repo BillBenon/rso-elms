@@ -19,8 +19,8 @@ export default function Users() {
   function handleSearch(_e: ValueType) {}
 
   const handleCreateNewUserClick = () => {
-    if (userType === 'Students') history.push('/users/students/new');
-    else if (userType === 'Instructors') history.push('/users/instructors/new');
+    if (userType === 'Students') history.push('/dashboard/users/students/new');
+    else if (userType === 'Instructors') history.push('/dashboard/users/instructors/new');
     else history.push('/users/admins/new');
   };
 
@@ -259,18 +259,22 @@ export default function Users() {
       <TableHeader title="Users" totalItems={30} handleSearch={handleSearch}>
         <div className="flex gap-3">
           <Button styleType="outline">Import users</Button>
-          <Button onClick={() => handleCreateNewUserClick()}>New {userType}</Button>
+          {userType !== 'Admins' ? (
+            <Button onClick={() => handleCreateNewUserClick()}>New {userType}</Button>
+          ) : (
+            <></>
+          )}
         </div>
       </TableHeader>
       <Tabs onTabChange={(e) => setUserType(e.activeTabLabel)}>
         <Tab label="Students" className="pt-8">
-          <Table statusColumn="status" data={data} hasAction={true} />
+          <Table statusColumn="status" data={data} />
         </Tab>
         <Tab label="Instructors" className="pt-8">
-          <Table statusColumn="status" data={instractors} hasAction={true} />
+          <Table statusColumn="status" data={instractors} />
         </Tab>
         <Tab label="Admins" className="pt-8">
-          <Table statusColumn="status" data={admins} hasAction={true} />
+          <Table statusColumn="status" data={admins} />
         </Tab>
       </Tabs>
       <PopupMolecule

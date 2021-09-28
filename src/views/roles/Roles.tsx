@@ -24,36 +24,34 @@ export default function Roles() {
   function handleSearch() {}
 
   return (
-    <Dashboard>
-      <main>
-        <section>
-          <Cacumber list={[{ title: 'Roles', to: 'roles' }]} />
-        </section>
-        <section>
-          <TableHeader title="Roles" totalItems={4} handleSearch={handleSearch}>
-            <Link to={`${url}/add`}>
-              <Button>Add Role</Button>
-            </Link>
-          </TableHeader>
-        </section>
-        <section>
-          {/* <Table statusColumn="status" data={roles} hasAction={true} /> */}
-        </section>
+    <main>
+      <section>
+        <Cacumber list={[{ title: 'Roles', to: 'roles' }]} />
+      </section>
+      <section>
+        <TableHeader title="Roles" totalItems={4} handleSearch={handleSearch}>
+          <Link to={`${url}/add`}>
+            <Button>Add Role</Button>
+          </Link>
+        </TableHeader>
+      </section>
+      <section>
+        {/* <Table statusColumn="status" data={roles} hasAction={true} /> */}
+      </section>
 
-        <Switch>
-          <Route
-            exact
-            path={`${path}/add`}
-            render={() => {
-              return (
-                <PopupMolecule title="New Role" open={true} onClose={history.goBack}>
-                  <NewRole onSubmit={submited} />
-                </PopupMolecule>
-              );
-            }}
-          />
-        </Switch>
-      </main>
-    </Dashboard>
+      <Switch>
+        <Route
+          exact
+          path={`${path}/add`}
+          render={() => {
+            return (
+              <PopupMolecule title="New Role" open={true} onClose={history.goBack}>
+                <NewRole onSubmit={submited} />
+              </PopupMolecule>
+            );
+          }}
+        />
+      </Switch>
+    </main>
   );
 }

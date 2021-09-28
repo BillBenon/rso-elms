@@ -63,7 +63,7 @@ export default function Modules() {
   ];
 
   return (
-    <Dashboard>
+    <>
       <main className="px-4">
         <section>
           <Cacumber list={list}></Cacumber>
@@ -100,6 +100,6 @@ export default function Modules() {
           <AddPrerequesitForm />
         </PopupMolecule>
       </main>
-    </Dashboard>
+    </>
   );
 }

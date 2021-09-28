@@ -130,6 +130,7 @@ export default function NewIntake() {
   return (
     <div className="w-full">
       <Stepper
+        width="w-36"
         isVertical={false}
         isInline={false}
         stepperContent={stepperContent}
