@@ -3,9 +3,9 @@ import './input.scss';
 import React, { useState } from 'react';
 
 import { colorStyle } from '../../../global/global-vars';
-import { Color, ValueType } from '../../../types';
+import { Color, CommonInputProps, ValueType } from '../../../types';
 
-export interface IProps {
+export interface IProps<T> extends CommonInputProps<T> {
   placeholder?: string;
   type?: string;
   readonly?: boolean;
@@ -16,10 +16,10 @@ export interface IProps {
   fcolor?: Color;
   bcolor?: Color;
   pcolor?: Color;
-  width?: string;
+  width?: string | number;
 }
 
-export default function Textarea({
+export default function Textarea<T>({
   placeholder = '',
   readonly = false,
   value,
@@ -31,7 +31,7 @@ export default function Textarea({
   width = '80',
   handleChange,
   ...attrs
-}: IProps) {
+}: IProps<T>) {
   const [_value, _setValue] = useState(value);
 
   function handleOnChange(e: any) {

@@ -1,20 +1,20 @@
 import React from 'react';
 
-import { Page, ValueType } from '../../../types';
+import { CommonInputProps, ValueType } from '../../../types';
 import Textarea from '../../Atoms/Input/Textarea';
 import Error from '../../Atoms/Text/Error';
 import ILabel from '../../Atoms/Text/ILabel';
 
-type ITextareaMolecule = {
+interface ITextareaMolecule<T> extends CommonInputProps<T> {
   name: string;
   value: string;
-  handleChange: (_e: ValueType, _page: Page) => void;
+  handleChange: (_e: ValueType) => void;
   children: React.ReactNode;
   error?: string;
   placeholder?: string;
   type?: string;
-};
-export default function TextAreaMolecule({
+}
+export default function TextAreaMolecule<T>({
   name,
   value,
   handleChange,
@@ -23,7 +23,7 @@ export default function TextAreaMolecule({
   placeholder = '',
   type = 'text',
   ...attrs
-}: ITextareaMolecule) {
+}: ITextareaMolecule<T>) {
   return (
     <div className="flex flex-col gap-3">
       <ILabel weight="medium">{children}</ILabel>
