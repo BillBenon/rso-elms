@@ -7,7 +7,6 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import AddPrerequesitForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
-import Dashboard from '../../layout/Dashboard';
 import { CommonCardDataType, Link } from '../../types';
 
 export default function Modules() {
