@@ -108,4 +108,5 @@ export interface SigninPropTypes extends CommonCardDataType {
 export * from './props';
 export * from './services/autheticator.types';
 export * from './services/common.types';
+export * from './services/privilege.types';
 export * from './services/role.types';

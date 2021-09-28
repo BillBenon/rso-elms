@@ -37,7 +37,6 @@ export default function Input<T>({
   className = '',
   ...attrs
 }: IProps<T>) {
-  console.log(value, 'in input');
   const [_value, setValue] = useState('');
 
   useEffect(() => setValue(value || ''), [value]);
