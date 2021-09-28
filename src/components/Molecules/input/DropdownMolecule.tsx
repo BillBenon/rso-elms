@@ -22,7 +22,7 @@ export default function DropdownMolecule(props: Props) {
           name={props.name}
           options={props.options}
           placeholder={props.placeholder}
-          onChange={(e: object) => props.onChange({ ...e, name: props.name })}
+          handleChange={(e: object) => props.handleChange({ ...e, name: props.name })}
           className={`w-${props.width || 'full md:w-80'} h-12 select ${
             props.className || ''
           }`}
