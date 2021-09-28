@@ -16,17 +16,17 @@ export default function PrivilegesView() {
   const [privileges, setPrivileges] = useState<PrivilegeRes[]>([]);
   const history = useHistory();
 
-  const { data, isSuccess, isLoading, refetch } = privilegeStore.getPrivileges();
+  const { data, isSuccess, isLoading, refetch } = privilegeStore.getPrivileges(); // get privileges
 
   useEffect(() => {
     data?.data?.data && setPrivileges(data?.data?.data);
   }, [data]);
 
+  // refetch data whenever user comes back on the page
   useEffect(() => {
     if (location.pathname === path) {
       refetch();
     }
-    console.log(location, 'changed', path);
   }, [location]);
 
   function submited() {}
@@ -36,12 +36,12 @@ export default function PrivilegesView() {
     {
       name: 'Edit Privillege',
       handleAction: (id: string | undefined) => {
-        history.push(`${path}/${id}/edit`);
+        history.push(`${path}/${id}/edit`); // go to edit page
       },
     },
     {
       name: 'Disable/Enable',
-      handleAction: (id: string | undefined) => {
+      handleAction: (_id: string | undefined) => {
         // history.push(`/${id}/edit`);
       },
     },
@@ -75,6 +75,7 @@ export default function PrivilegesView() {
       </section>
 
       <Switch>
+        {/* edit page */}
         <Route
           exact
           path={`${path}/:id/edit`}

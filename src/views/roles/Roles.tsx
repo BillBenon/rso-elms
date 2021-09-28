@@ -11,24 +11,32 @@ import NewRole from '../../components/Organisms/forms/roles/NewRole';
 import { roleStore } from '../../store';
 import { RoleRes } from '../../types';
 
-interface FilteredRoles extends Pick<RoleRes, 'name' | 'description' | 'status'> {}
+interface FilteredRoles extends Pick<RoleRes, 'id' | 'name' | 'description' | 'status'> {}
 
 export default function Roles() {
   const { url, path } = useRouteMatch();
   const [roles, setRoles] = useState<FilteredRoles[]>();
   const history = useHistory();
 
-  const { data, isSuccess, isLoading } = roleStore.getRoles();
+  const { data, isSuccess, isLoading, refetch } = roleStore.getRoles(); // fetch data
 
   useEffect(() => {
-    console.log('hee');
+    // filter data to display
     const filterdData = data?.data.data.map((role) =>
-      _.pick(role, ['name', 'description', 'status']),
+      _.pick(role, ['id', 'name', 'description', 'status']),
     );
 
     data?.data.data && setRoles(filterdData);
   }, [data]);
 
+  // re fetch data whenever user come back on this page
+  useEffect(() => {
+    if (location.pathname === path) {
+      refetch();
+    }
+  }, [location]);
+
+  //actions to be displayed in table
   const actions = [
     { name: 'Add Role', handleAction: () => {} },
     { name: 'Edit role', handleAction: () => {} },

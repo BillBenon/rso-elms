@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useHistory } from 'react-router-dom';
 
 import { roleStore } from '../../../../store';
 import { CreateRoleReq, ValueType } from '../../../../types';
@@ -14,6 +15,7 @@ interface PropType {
 export default function NewRole({ onSubmit }: PropType) {
   const [form, setForm] = useState<CreateRoleReq>({ name: '', description: '' });
   const { mutateAsync } = roleStore.addRole();
+  const history = useHistory();
 
   function handleChange({ name, value }: ValueType) {
     setForm((old) => ({ ...old, [name]: value }));
@@ -23,6 +25,7 @@ export default function NewRole({ onSubmit }: PropType) {
     mutateAsync(form, {
       onSuccess: () => {
         toast.success('Role created', { duration: 3 });
+        history.goBack();
       },
       onError: () => {
         toast.error('something wrong happened while creating role', { duration: 3 });
