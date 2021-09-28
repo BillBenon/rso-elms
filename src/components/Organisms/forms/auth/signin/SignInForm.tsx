@@ -2,7 +2,7 @@ import React, { FormEvent, useState } from 'react';
 // import toast from 'react-hot-toast';
 import { Link, useHistory } from 'react-router-dom';
 
-import authenticatorStore from '../../../../../store/authenticator.store';
+import { authenticatorStore } from '../../../../../store/authenticator.store';
 import { ValueType } from '../../../../../types';
 import { LoginInfo } from '../../../../../types';
 import cookie from '../../../../../utils/cookie';

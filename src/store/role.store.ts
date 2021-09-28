@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 
 import { roleService } from '../services';
 
@@ -7,7 +7,7 @@ class RoleStore {
     return useMutation(roleService.addRole);
   }
   getRoles() {
-    return useMutation(roleService.getRoles);
+    return useQuery('roles', roleService.getRoles);
   }
 }
 

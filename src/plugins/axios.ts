@@ -28,7 +28,6 @@ const interceptAdminReq = (config: AxiosRequestConfig) => {
 };
 
 const interceptAdminResError = (error: any) => {
-  console.log(error);
   const { data } = error.response;
   toast.error(data.message || data.error);
 
