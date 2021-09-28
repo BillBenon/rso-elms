@@ -21,13 +21,15 @@ export default function InputMolecule<T>({
   error = '',
   placeholder = '',
   type = 'text',
+  ...attrs
 }: IInputMolecule<T>) {
   return (
-    <div className="flex flex-col gap-2 py-2">
+    <div className="flex flex-col gap-2 py-2" {...attrs}>
       <ILabel className="capitalize" size="sm" weight="medium">
         {children}
       </ILabel>
       <Input
+        {...attrs}
         name={name}
         placeholder={placeholder}
         fcolor={error ? 'error' : undefined}

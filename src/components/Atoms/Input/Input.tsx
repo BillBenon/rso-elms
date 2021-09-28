@@ -3,9 +3,9 @@ import './input.scss';
 import React, { useState } from 'react';
 
 import { colorStyle } from '../../../global/global-vars';
-import { Color, ValueType } from '../../../types';
+import { Color, CommonInputProps, ValueType } from '../../../types';
 
-export interface IProps {
+export interface IProps<T> extends CommonInputProps<T> {
   placeholder?: string;
   type?: string;
   readonly?: boolean;
@@ -17,11 +17,11 @@ export interface IProps {
   fcolor?: Color;
   bcolor?: Color;
   pcolor?: Color;
-  width?: string;
+  width?: string | number;
   className?: string;
 }
 
-export default function Input({
+export default function Input<T>({
   placeholder = '',
   padding = 'px-3',
   type = 'text',
@@ -36,7 +36,7 @@ export default function Input({
   handleChange,
   className = '',
   ...attrs
-}: IProps) {
+}: IProps<T>) {
   const [_value, _setValue] = useState(value);
 
   function handleOnChange(e: any) {
