@@ -20,7 +20,7 @@ interface TableProps<T> {
   rowsPerPage?: number;
 }
 
-export function Table<T>({
+export default function Table<T>({
   uniqueCol,
   data,
   actions,
@@ -105,5 +105,3 @@ export function Table<T>({
     </div>
   );
 }
-
-export default Table;

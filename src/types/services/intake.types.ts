@@ -12,6 +12,10 @@ export interface IntakeInfo {
   total_num_students: number;
 }
 
+export interface TableId {
+  id: string;
+}
+
 export enum IntakeStatus {
   INACTIVE,
   ONHOLD,
