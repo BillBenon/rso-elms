@@ -40,28 +40,28 @@ const App = () => {
         <Router>
           <Switch>
             <Route exact path="/" component={Signin} />
-
             <Route exact path="/register" component={Signup} />
             <Route exact path="/register/more" component={MoreInfo} />
             <Route exact path="/usecase" component={Homepage} />
-
-            <Route exact path="/academies" component={Academies} />
-            <Route exact path="/academies/new" component={NewAcademy} />
-            <Route exact path="/users" component={UsersView} />
-            <Route path="/roles" component={Roles} />
-            <Route exact path="/popup" component={Popup} />
-            <Route exact path="/modules" component={Modules} />
-            <Route exact path="/subjects" component={Subjects} />
-            <Route exact path="/registration-control" component={RegistrationControl} />
-            <Route exact path="/users/students/new" component={NewStudentsView} />
-            <Route exact path="/users/instructors/new" component={NewInstructorView} />
-            <Route exact path="/faculties" component={FacultiesView} />
-            <Route exact path="/programs" component={AcademicPrograms} />
-            <Route exact path="/programs/new" component={NewAcademicProgram} />
-            <Route exact path="/programs/:id" component={ProgramDetails} />
-            <Route exact path="/levels" component={LevelsView} />
-            <Route exact path="/intakes" component={IntakesView} />
-            <Route exact path="/intakes/:id" component={IntakeModulesView} />
+            <Dashboard>
+              <Route exact path="/academies" component={Academies} />
+              <Route exact path="/academies/new" component={NewAcademy} />
+              <Route exact path="/users" component={UsersView} />
+              <Route path="/roles" component={Roles} />
+              <Route exact path="/popup" component={Popup} />
+              <Route exact path="/modules" component={Modules} />
+              <Route exact path="/subjects" component={Subjects} />
+              <Route exact path="/registration-control" component={RegistrationControl} />
+              <Route exact path="/users/students/new" component={NewStudentsView} />
+              <Route exact path="/users/instructors/new" component={NewInstructorView} />
+              <Route exact path="/faculties" component={FacultiesView} />
+              <Route exact path="/programs" component={AcademicPrograms} />
+              <Route exact path="/programs/new" component={NewAcademicProgram} />
+              <Route exact path="/programs/:id" component={ProgramDetails} />
+              <Route exact path="/levels" component={LevelsView} />
+              <Route exact path="/intakes" component={IntakesView} />
+              <Route exact path="/intakes/:id" component={IntakeModulesView} />
+            </Dashboard>
             {/* <Route exact path="*" component={NotFound} /> */}
           </Switch>
         </Router>

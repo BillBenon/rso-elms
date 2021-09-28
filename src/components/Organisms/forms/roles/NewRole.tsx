@@ -1,4 +1,5 @@
 import React, { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import { roleStore } from '../../../../store';
 import { CreateRoleReq, ValueType } from '../../../../types';
@@ -19,13 +20,25 @@ export default function NewRole({ onSubmit }: PropType) {
   }
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
-    mutateAsync(form);
+    mutateAsync(form, {
+      onSuccess: () => {
+        toast.success('Role created', { duration: 3 });
+      },
+      onError: () => {
+        toast.error('something wrong happened while creating role', { duration: 3 });
+      },
+    });
     onSubmit(e);
   }
   return (
     <form onSubmit={submitForm}>
       {/* model name */}
-      <InputMolecule value={form.name} error="" handleChange={handleChange} name="name">
+      <InputMolecule
+        required
+        value={form.name}
+        error=""
+        handleChange={handleChange}
+        name="name">
         Role name
       </InputMolecule>
       {/* model code
@@ -33,6 +46,7 @@ export default function NewRole({ onSubmit }: PropType) {
       <TextAreaMolecule
         value={form.description}
         name="description"
+        required
         handleChange={handleChange}>
         Descripiton
       </TextAreaMolecule>
