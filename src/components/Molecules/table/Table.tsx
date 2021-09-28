@@ -11,15 +11,15 @@ import Row from '../../Atoms/custom/Row';
 import Pagination from '../Pagination';
 import Tooltip from '../Tooltip';
 
-type TableProps = {
-  data: {}[];
+interface TableProps<T> {
+  data: T[];
   actions?: { name: string; handleAction: () => void }[];
   handleClick?: () => void;
   statusColumn?: string;
   rowsPerPage?: number;
-};
+}
 
-const Table = ({ data, actions, statusColumn, rowsPerPage = 10 }: TableProps) => {
+function Table<T>({ data, actions, statusColumn, rowsPerPage = 10 }: TableProps<T>) {
   const [rowsOnPage] = useState(rowsPerPage);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -97,6 +97,5 @@ const Table = ({ data, actions, statusColumn, rowsPerPage = 10 }: TableProps) =>
       />
     </div>
   );
-};
-
+}
 export default Table;
