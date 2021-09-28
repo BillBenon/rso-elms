@@ -1,8 +1,8 @@
 import { Table } from './common.types';
 
 export interface CreateRoleReq {
-  description: string;
-  name: string;
+  description?: string;
+  name?: string;
 }
 
 export enum GenericStatus {
