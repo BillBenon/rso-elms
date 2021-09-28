@@ -1,17 +1,19 @@
 import React, { useState } from 'react';
 
-import { CommonStepProps } from '../../../../../../types';
+import { CommonStepProps, ExperienceType } from '../../../../../../types';
 import Button from '../../../../../Atoms/custom/Button';
 import Panel from '../../../../../Atoms/custom/Panel';
 import Heading from '../../../../../Atoms/Text/Heading';
 import Accordion from '../../../../../Molecules/Accordion';
 import DateMolecule from '../../../../../Molecules/input/DateMolecule';
-import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../../../Molecules/input/TextAreaMolecule';
 
 interface ExperienceDataType {
-  type: string;
+  experienceType: {
+    type: ExperienceType;
+    label: string;
+  };
   name: string;
   description: string;
   startDate: string;
@@ -29,22 +31,24 @@ function ExperienceDetails({
   const moveBack = () => {
     prevStep && prevStep();
   };
+  const moveForward = () => {
+    nextStep(true);
+  };
   const handleMore = () => {
     setExperienceData([...experienceData, details]);
-    console.log('details', details, 'education', experienceData);
   };
 
   return (
-    <div className={`flex justify-between ${isVertical && 'pt-8'}`}>
+    <div className={`flex justify-between ${!isVertical && 'pt-8'}`}>
       <div className="flex flex-col gap-4">
-        {isVertical && (
+        {!isVertical && (
           <Heading fontSize="base" fontWeight="semibold">
-            Experience Details
+            {details.experienceType.label}
           </Heading>
         )}
 
         <div className="flex flex-col gap-4">
-          <DropdownMolecule
+          {/* <DropdownMolecule
             name="type"
             defaultValue={details.type}
             onChange={handleChange}
@@ -55,24 +59,24 @@ function ExperienceDetails({
               { value: 'decorations', label: 'Decorations' },
             ]}>
             Experience type
-          </DropdownMolecule>
+          </DropdownMolecule> */}
           <InputMolecule
-            placeholder={`Enter ${details.type}`}
+            placeholder={`Enter ${details.experienceType.label.toLowerCase()}`}
             name="name"
             value={details.name}
-            handleChange={(e) => handleChange(e, 'experienceDetails')}>
-            {details.type}
+            handleChange={(e) => handleChange(e, details.experienceType.type)}>
+            {details.experienceType.label}
           </InputMolecule>
         </div>
         <div className="flex flex-col gap-4">
           <TextAreaMolecule
             name="diseaseDescription"
             value={details.description}
-            handleChange={(e) => handleChange(e, 'experienceDetails')}>
+            handleChange={(e) => handleChange(e, details.experienceType.type)}>
             Description
           </TextAreaMolecule>
           <DateMolecule
-            handleChange={(e) => handleChange(e, 'experienceDetails')}
+            handleChange={(e) => handleChange(e, details.experienceType.type)}
             name="startDate"
             width="60 md:w-80">
             Start Date
@@ -80,7 +84,7 @@ function ExperienceDetails({
         </div>
         <div className="my-4">
           <DateMolecule
-            handleChange={(e) => handleChange(e, 'experienceDetails')}
+            handleChange={(e) => handleChange(e, details.experienceType.type)}
             name="endDate"
             width="60 md:w-80">
             End Date
@@ -93,11 +97,15 @@ function ExperienceDetails({
         </div>
         <div className="flex w-80 justify-between">
           {prevStep && (
-            <Button styleType="text" color="txt-secondary" onClick={() => moveBack()}>
+            <Button
+              styleType="text"
+              hoverStyle="no-underline"
+              color="txt-secondary"
+              onClick={() => moveBack()}>
               Back
             </Button>
           )}
-          <Button onClick={() => nextStep(true)}>Next</Button>
+          <Button onClick={() => moveForward()}>Next</Button>
         </div>
       </div>
 
@@ -106,7 +114,10 @@ function ExperienceDetails({
         <Accordion>
           {experienceData.map((ex) => {
             return (
-              <Panel key={ex.type} title={ex.name} subtitle={ex.description}>
+              <Panel
+                key={ex.experienceType.type}
+                title={ex.name}
+                subtitle={ex.description}>
                 <div>Start Date: {ex.startDate}</div>
                 <div>End Date: {ex.endDate}</div>
               </Panel>

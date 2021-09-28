@@ -19,9 +19,13 @@ function NationalDocuments({
     prevStep && prevStep();
   };
 
+  const moveForward = () => {
+    nextStep(true);
+  };
+
   return (
-    <div className={`flex flex-col gap-4 ${isVertical && 'pt-8'}`}>
-      {isVertical && <Heading fontWeight="semibold">National Documents</Heading>}
+    <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
+      {!isVertical && <Heading fontWeight="semibold">National Documents</Heading>}
       <div className="flex flex-col gap-4">
         <DropdownMolecule
           width="60 md:w-80"
@@ -98,11 +102,15 @@ function NationalDocuments({
       </div>
       <div className="flex w-80 justify-between">
         {prevStep && (
-          <Button styleType="text" color="txt-secondary" onClick={() => moveBack()}>
+          <Button
+            styleType="text"
+            hoverStyle="no-underline"
+            color="txt-secondary"
+            onClick={() => moveBack()}>
             Back
           </Button>
         )}
-        <Button onClick={() => nextStep()}>Next</Button>
+        <Button onClick={() => moveForward()}>Next</Button>
       </div>
     </div>
   );

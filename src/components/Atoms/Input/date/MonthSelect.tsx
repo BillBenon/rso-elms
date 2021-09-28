@@ -54,6 +54,7 @@ const MonthSelect = (mprops: MProp) => {
 
   return (
     <DropDown
+      disabled={mprops.disabled}
       name={mprops.name}
       placeholder={mprops.placeholder}
       className={mprops.className}

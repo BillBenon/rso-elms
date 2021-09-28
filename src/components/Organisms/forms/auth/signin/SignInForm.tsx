@@ -40,7 +40,11 @@ const SignInForm = () => {
   return (
     <>
       <div className="py-11">
-        <Heading fontSize="lg" className="md:2xl" fontWeight="semibold">
+        <Heading
+          fontSize="lg"
+          className="md:text-2xl"
+          fontWeight="semibold"
+          color="primary">
           Sign In
         </Heading>
         <p className="text-txt-secondary text-sm md:text-base pt-2">
@@ -67,7 +71,7 @@ const SignInForm = () => {
           </InputMolecule>
         </div>
         <div className="flex justify-end w-80">
-          <Link to="/login">
+          <Link to="/">
             <span className="text-sm text-primary-500">Forgot password?</span>
           </Link>
         </div>

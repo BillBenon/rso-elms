@@ -17,6 +17,12 @@ export default function Roles() {
 
   console.log(roles);
 
+  const roleActions = [
+    { name: 'Add Role', handleAction: () => {} },
+    { name: 'Edit role', handleAction: () => {} },
+    { name: 'View', handleAction: () => {} },
+  ];
+
   function submited() {
     // setOpen(false);
   }
