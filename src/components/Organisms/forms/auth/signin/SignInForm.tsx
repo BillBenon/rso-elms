@@ -31,7 +31,7 @@ const SignInForm = () => {
     await mutateAsync(details, {
       onSuccess(data) {
         history.push('/users');
-        cookie.setCookie('jwt_info', JSON.stringify(data?.data));
+        cookie.setCookie('jwt_info', JSON.stringify(data?.data.data));
       },
     });
   }

@@ -53,5 +53,8 @@
     "typescript": "4.3.2",
     "vite": "2.4.3"
   },
+  "proxy": {
+    "*":{ "target" : "http://197.243.110.147:8080"}
+ } ,
   "pre-commit": "lint"
 }

@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Cacumber from '../../components/Molecules/Cacumber';
@@ -9,7 +10,8 @@ import NewRole from '../../components/Organisms/forms/roles/NewRole';
 import Dashboard from '../../layout/Dashboard';
 
 export default function Roles() {
-  const [open, setOpen] = useState(false); // state to controll the popup
+  const { url, path } = useRouteMatch();
+  const history = useHistory();
 
   const roles = [
     {
@@ -43,9 +45,10 @@ export default function Roles() {
     { name: 'Edit role', handleAction: () => {} },
     { name: 'View', handleAction: () => {} },
   ];
+  console.log(url, 'UR');
 
   function submited() {
-    setOpen(false);
+    // setOpen(false);
   }
   function handleSearch() {}
 
@@ -57,16 +60,28 @@ export default function Roles() {
         </section>
         <section>
           <TableHeader title="Academy" totalItems={4} handleSearch={handleSearch}>
-            <Button onClick={() => setOpen(true)}>Add Role</Button>
+            <Link to={`${url}/add`}>
+              <Button>Add Role</Button>
+            </Link>
           </TableHeader>
         </section>
         <section>
           <Table statusColumn="status" data={roles} actions={roleActions} />
         </section>
-        {/* add module popup */}
-        <PopupMolecule title="New Role" open={open} onClose={() => setOpen(false)}>
-          <NewRole onSubmit={submited} />
-        </PopupMolecule>
+
+        <Switch>
+          <Route
+            exact
+            path={`${path}/add`}
+            render={() => {
+              return (
+                <PopupMolecule title="New Role" open={true} onClose={history.goBack}>
+                  <NewRole onSubmit={submited} />
+                </PopupMolecule>
+              );
+            }}
+          />
+        </Switch>
       </main>
     </Dashboard>
   );
