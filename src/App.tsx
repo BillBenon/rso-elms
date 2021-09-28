@@ -16,7 +16,6 @@ import IntakeModulesView from './views/intakes/IntakeModules';
 import IntakesView from './views/intakes/Intakes';
 import LevelsView from './views/levels/Levels';
 import Modules from './views/modules';
-import NotFound from './views/NotFound';
 import Popup from './views/Popup';
 import AcademicPrograms from './views/programs/AcademicPrograms';
 import NewAcademicProgram from './views/programs/NewAcademicProgram';
@@ -52,7 +51,7 @@ const App = () => {
             <Route exact path="/academies" component={Academies} />
             <Route exact path="/academies/new" component={NewAcademy} />
             <Route exact path="/users" component={UsersView} />
-            <Route exact path="/roles" component={Roles} />
+            <Route path="/roles" component={Roles} />
             <Route exact path="/popup" component={Popup} />
             <Route exact path="/modules" component={Modules} />
             <Route exact path="/subjects" component={Subjects} />
@@ -67,7 +66,7 @@ const App = () => {
             <Route exact path="/levels" component={LevelsView} />
             <Route exact path="/intakes" component={IntakesView} />
             <Route exact path="/intakes/:id" component={IntakeModulesView} />
-            <Route exact path="*" component={NotFound} />
+            {/* <Route exact path="*" component={NotFound} /> */}
           </Switch>
         </Router>
       </MainLayout>

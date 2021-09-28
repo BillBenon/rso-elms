@@ -30,8 +30,9 @@ const SignInForm = () => {
 
     await mutateAsync(details, {
       onSuccess(data) {
+        cookie.setCookie('jwt_info', JSON.stringify(data?.data.data));
         history.push('/users');
-        cookie.setCookie('jwt_info', JSON.stringify(data?.data));
+        console.log('success data');
       },
     });
   }

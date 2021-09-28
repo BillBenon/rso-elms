@@ -1,6 +1,6 @@
 import { useMutation } from 'react-query';
 
-import { authenticatorService } from '../services/authenticator.service';
+import { authenticatorService } from '../services/administration/authenticator.service';
 
 class AuthenticatorStore {
   login() {
@@ -8,7 +8,7 @@ class AuthenticatorStore {
   }
 }
 
-export default new AuthenticatorStore();
+export const authenticatorStore = new AuthenticatorStore();
 
 // const {
 //     data,

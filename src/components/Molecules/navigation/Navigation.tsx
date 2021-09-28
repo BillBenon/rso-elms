@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-import { authenticatorService } from '../../../services/authenticator.service';
+import { authenticatorService } from '../../../services/administration/authenticator.service';
 import { ValueType } from '../../../types';
 import Avatar from '../../Atoms/custom/Avatar';
 import Icon from '../../Atoms/custom/Icon';
