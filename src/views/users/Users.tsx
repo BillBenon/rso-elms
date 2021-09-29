@@ -8,13 +8,47 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
-import { ValueType } from '../../types';
+import usersStore from '../../store/users.store';
+import { GenericStatus, ValueType } from '../../types';
+import { UserType } from '../../types/services/user.types';
 import NewStudent from './NewStudent';
+
+type UserTypes = {
+  'full name': string;
+  NID: string;
+  academy: string;
+  status: GenericStatus;
+  userType: UserType;
+};
 
 export default function Users() {
   const [userType, setUserType] = useState('Students');
   const [modalOpen, setModalOpen] = useState(false);
   const history = useHistory();
+
+  const { data } = usersStore.fetchUsers();
+  const userInfo = data?.data.data;
+
+  console.log(userInfo);
+
+  let users: UserTypes[] = [];
+  userInfo?.map((obj) => {
+    let { firstName, lastName, nid, academy, status, userType } = obj;
+
+    let user: UserTypes = {
+      'full name': firstName + ' ' + lastName,
+      NID: nid,
+      academy: academy.name,
+      status: status,
+      userType: userType,
+    };
+
+    users.push(user);
+  });
+
+  let students = users.filter((user) => user.userType == UserType.STUDENT);
+  let instructors = users.filter((user) => user.userType == UserType.INSTRUCTOR);
+  let admins = users.filter((user) => user.userType == UserType.ADMIN);
 
   function handleSearch(_e: ValueType) {}
 
@@ -23,219 +57,6 @@ export default function Users() {
     else if (userType === 'Instructors') history.push('/dashboard/users/instructors/new');
     else history.push('/users/admins/new');
   };
-
-  const data = [
-    {
-      'full name': 'Col Florin Sandberg',
-      role: 'Student / Sr',
-      'phone number': 7869046715,
-      status: 'Complete',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Kamili Abdulkhalim',
-      role: 'Student / Sr',
-      'phone number': 7869046743,
-      status: 'Active',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Safari George',
-      role: 'Student / Sr',
-      'phone number': 7869046730,
-      status: 'Suspended',
-      NID: '120080010981917987',
-    },
-    {
-      'full name': 'Dr. Lt  Col Kanama Nzeri',
-      role: 'Student / Sr',
-      'phone number': 7869046787,
-      status: 'Pending',
-      NID: '119788001098191798',
-    },
-    {
-      'full name': 'Prof Gen Sandberg dotMe',
-      role: 'Student / Sr',
-      'phone number': 7869046728,
-      status: 'Cancelled',
-      NID: '195426611717168989',
-    },
-    {
-      'full name': 'Col Florin Sandberg',
-      role: 'Student / Sr',
-      'phone number': 7869046715,
-      status: 'Complete',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Kamili Abdulkhalim',
-      role: 'Student / Sr',
-      'phone number': 7869046743,
-      status: 'Active',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Safari George',
-      role: 'Student / Sr',
-      'phone number': 7869046730,
-      status: 'Suspended',
-      NID: '120080010981917987',
-    },
-    {
-      'full name': 'Dr. Lt  Col Kanama Nzeri',
-      role: 'Student / Sr',
-      'phone number': 7869046787,
-      status: 'Pending',
-      NID: '119788001098191798',
-    },
-    {
-      'full name': 'Prof Gen Sandberg dotMe',
-      role: 'Student / Sr',
-      'phone number': 7869046728,
-      status: 'Cancelled',
-      NID: '195426611717168989',
-    },
-    {
-      'full name': 'Col Florin Sandberg',
-      role: 'Student / Sr',
-      'phone number': 7869046715,
-      status: 'Complete',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Kamili Abdulkhalim',
-      role: 'Student / Sr',
-      'phone number': 7869046743,
-      status: 'Active',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Safari George',
-      role: 'Student / Sr',
-      'phone number': 7869046730,
-      status: 'Suspended',
-      NID: '120080010981917987',
-    },
-    {
-      'full name': 'Dr. Lt  Col Kanama Nzeri',
-      role: 'Student / Sr',
-      'phone number': 7869046787,
-      status: 'Pending',
-      NID: '119788001098191798',
-    },
-    {
-      'full name': 'Prof Gen Sandberg dotMe',
-      role: 'Student / Sr',
-      'phone number': 7869046728,
-      status: 'Cancelled',
-      NID: '195426611717168989',
-    },
-    {
-      'full name': 'Col Florin Sandberg',
-      role: 'Student / Sr',
-      'phone number': 7869046715,
-      status: 'Complete',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Kamili Abdulkhalim',
-      role: 'Student / Sr',
-      'phone number': 7869046743,
-      status: 'Active',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Safari George',
-      role: 'Student / Sr',
-      'phone number': 7869046730,
-      status: 'Suspended',
-      NID: '120080010981917987',
-    },
-    {
-      'full name': 'Dr. Lt  Col Kanama Nzeri',
-      role: 'Student / Sr',
-      'phone number': 7869046787,
-      status: 'Pending',
-      NID: '119788001098191798',
-    },
-    {
-      'full name': 'Prof Gen Sandberg dotMe',
-      role: 'Student / Sr',
-      'phone number': 7869046728,
-      status: 'Cancelled',
-      NID: '195426611717168989',
-    },
-    {
-      'full name': 'Col Florin Sandberg',
-      role: 'Student / Sr',
-      'phone number': 7869046715,
-      status: 'Complete',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Kamili Abdulkhalim',
-      role: 'Student / Sr',
-      'phone number': 7869046743,
-      status: 'Active',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Safari George',
-      role: 'Student / Sr',
-      'phone number': 7869046730,
-      status: 'Suspended',
-      NID: '120080010981917987',
-    },
-    {
-      'full name': 'Dr. Lt  Col Kanama Nzeri',
-      role: 'Student / Sr',
-      'phone number': 7869046787,
-      status: 'Pending',
-      NID: '119788001098191798',
-    },
-    {
-      'full name': 'Prof Gen Sandberg dotMe',
-      role: 'Student / Sr',
-      'phone number': 7869046728,
-      status: 'Cancelled',
-      NID: '195426611717168989',
-    },
-    {
-      'full name': 'Col Florin Sandberg',
-      role: 'Student / Sr',
-      'phone number': 7869046715,
-      status: 'Complete',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Kamili Abdulkhalim',
-      role: 'Student / Sr',
-      'phone number': 7869046743,
-      status: 'Active',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Safari George',
-      role: 'Student / Sr',
-      'phone number': 7869046730,
-      status: 'Suspended',
-      NID: '120080010981917987',
-    },
-    {
-      'full name': 'Dr. Lt  Col Kanama Nzeri',
-      role: 'Student / Sr',
-      'phone number': 7869046787,
-      status: 'Pending',
-      NID: '119788001098191798',
-    },
-    {
-      'full name': 'Prof Gen Sandberg dotMe',
-      role: 'Student / Sr',
-      'phone number': 7869046728,
-      status: 'Cancelled',
-      NID: '195426611717168989',
-    },
-  ];
 
   const studentActions = [
     { name: 'Add Role', handleAction: () => {} },
@@ -255,8 +76,6 @@ export default function Users() {
     { name: 'View', handleAction: () => {} },
   ];
 
-  let instractors = data.slice(6, 13);
-  let admins = data.slice(24, 28);
   return (
     <>
       <div className="flex flex-wrap justify-start items-center pt-2">
@@ -286,10 +105,16 @@ export default function Users() {
       </TableHeader>
       <Tabs onTabChange={(e) => setUserType(e.activeTabLabel)}>
         <Tab label="Students" className="pt-8">
-          <Table statusColumn="status" data={data} actions={studentActions} />
+          {students && (
+            <Table<UserTypes>
+              statusColumn="status"
+              data={students}
+              actions={studentActions}
+            />
+          )}
         </Tab>
         <Tab label="Instructors" className="pt-8">
-          <Table statusColumn="status" data={instractors} actions={instructorActions} />
+          <Table statusColumn="status" data={instructors} actions={instructorActions} />
         </Tab>
         <Tab label="Admins" className="pt-8">
           <Table statusColumn="status" data={admins} actions={adminActions} />

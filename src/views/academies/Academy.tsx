@@ -10,13 +10,13 @@ import ILabel from '../../components/Atoms/Text/ILabel';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import academyStore from '../../store/academy.store';
-import { ValueType } from '../../types';
+import { GenericStatus, ValueType } from '../../types';
 
 type AcademyTypes = {
-  'Academy name': string;
-  'Academy Admin': string;
+  'academy name': string;
+  'academy Admin': string;
   'phone number': string;
-  status: string;
+  status: GenericStatus;
 };
 
 export default function Academy() {
@@ -28,14 +28,14 @@ export default function Academy() {
   academyInfo?.map((obj) => {
     let { name, created_by_username, phone_number, generic_status } = obj;
 
-    let ac: AcademyTypes = {
-      'Academy Admin': created_by_username,
-      'Academy name': name,
+    let academy: AcademyTypes = {
+      'academy Admin': created_by_username,
+      'academy name': name,
       'phone number': phone_number,
       status: generic_status,
     };
 
-    academies.push(ac);
+    academies.push(academy);
   });
 
   function handleSearch(_e: ValueType) {}
