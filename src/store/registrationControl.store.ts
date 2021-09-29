@@ -6,9 +6,9 @@ class RegistrationControlStore {
   createRegControl() {
     return useMutation(registrationControlService.addNew);
   }
-  //   fetchRegControl() {
-  //     return useQuery('regControl', academyService.fetchAcademies);
-  //   }
+  fetchRegControl() {
+    return useQuery('regControl', registrationControlService.getAll);
+  }
 }
 
 export default new RegistrationControlStore();

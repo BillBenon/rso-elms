@@ -17,9 +17,9 @@ class RegistrationControlService {
     );
   }
 
-  //   public async getRegistrationControlById() {
-  //     return await adminstrationAxios.get('/regControls/getRegistrationControlById/id');
-  //   }
+  public async getAll(): Promise<AxiosResponse<Response<IRegistrationControlInfo[]>>> {
+    return await adminstrationAxios.get('/regControls/getRegistrationControls');
+  }
 }
 
 export const registrationControlService = new RegistrationControlService();

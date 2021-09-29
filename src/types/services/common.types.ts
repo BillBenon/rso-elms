@@ -14,3 +14,9 @@ export interface Table {
   updated_by_username: string;
   updated_on: string;
 }
+
+export enum GenericStatus {
+  ACTIVE,
+  INACTIVE,
+  RESET,
+}

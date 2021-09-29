@@ -37,6 +37,7 @@ export default function Table<T>({
 
   // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  // console.log(data);
 
   const getKeys = () => Object.keys(currentRows[0]);
   const getHeader = () => {
