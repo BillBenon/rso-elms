@@ -60,7 +60,7 @@ export default function Subjects() {
   ];
 
   return (
-    <Dashboard>
+    <>
       <main className="px-4">
         <section>
           <Cacumber list={list}></Cacumber>
@@ -91,6 +91,6 @@ export default function Subjects() {
           <NewLessonForm />
         </PopupMolecule>
       </main>
-    </Dashboard>
+    </>
   );
 }

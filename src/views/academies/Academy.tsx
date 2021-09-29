@@ -64,7 +64,9 @@ export default function Academy() {
       </div>
       <div className="py-4">
         <TableHeader title="Academy" totalItems={300} handleSearch={handleSearch}>
-          <Button onClick={() => history.push('/academies/new')}>New academy</Button>
+          <Button onClick={() => history.push('/dashboard/academies/new')}>
+            New academy
+          </Button>
         </TableHeader>
       </div>
 
