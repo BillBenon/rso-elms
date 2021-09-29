@@ -3,6 +3,7 @@
 
 import '../../../styles/components/Molecules/table/table.scss';
 
+import _ from 'lodash';
 import React, { useState } from 'react';
 
 import { ValueType } from '../../../types';
@@ -49,6 +50,16 @@ export function Table<T>({
   let selected = new Set('');
 
   // handle select
+  function _handleSelectAll() {
+    if (selected.size === currentRows.length) {
+      selected.clear();
+      if (handleSelect) handleSelect([]);
+    } else {
+      _.map(currentRows, 'id').forEach((val) => selected.add(val));
+      if (handleSelect) handleSelect(Array.from(selected));
+    }
+  }
+
   function _handleSelect(e: ValueType<HTMLInputElement>) {
     const val = e.value?.toString(); //stringfy value
 
@@ -70,7 +81,7 @@ export function Table<T>({
       <th className="checkbox-tb">
         {uniqueCol && (
           <Checkbox
-            handleChange={console.log}
+            handleChange={() => _handleSelectAll()}
             name={uniqueCol + ''}
             value={'all'}></Checkbox>
         )}
