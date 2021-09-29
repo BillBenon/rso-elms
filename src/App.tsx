@@ -7,7 +7,7 @@ import MoreInfo from './components/Organisms/forms/auth/signup/more-details/More
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import Dashboard from './layout/Dashboard';
 import { MainLayout } from './layout/MainLayout';
-import Academies from './views/academies/Academies';
+import Academies from './views/academies/Academy';
 import NewAcademy from './views/academies/NewAcademy';
 import Signin from './views/auth/Signin';
 import Signup from './views/auth/Signup';
