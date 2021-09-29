@@ -32,7 +32,10 @@ export default function Checkbox({
         checked={checked}
         value={value}
         onChange={() => onChange}
-        className={'checkbox ' + className}
+        className={
+          'checkbox text-primary-500 mr-2 focus:ring-primary-400 focus:ring-opacity-25 border border-gray-300 rounded' +
+          className
+        }
       />
       <label className="checkbox-label">{label}</label>
     </>
