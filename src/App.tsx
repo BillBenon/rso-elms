@@ -7,7 +7,7 @@ import MoreInfo from './components/Organisms/forms/auth/signup/more-details/More
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import Dashboard from './layout/Dashboard';
 import { MainLayout } from './layout/MainLayout';
-import Academies from './views/academies/Academies';
+import Academies from './views/academies/Academy';
 import NewAcademy from './views/academies/NewAcademy';
 import Signin from './views/auth/Signin';
 import Signup from './views/auth/Signup';
@@ -24,7 +24,6 @@ import ProgramDetails from './views/programs/ProgramDetails';
 import Roles from './views/roles/Roles';
 import Subjects from './views/subjects';
 import Users from './views/users/Users';
-import UsersView from './views/users/Users';
 
 const App = () => {
   return (
@@ -41,7 +40,6 @@ const App = () => {
             <Dashboard>
               <Route exact path="/dashboard/academies" component={Academies} />
               <Route exact path="/dashboard/academies/new" component={NewAcademy} />
-              <Route exact path="/dashboard/dashboard/users" component={UsersView} />
               <Route path="/dashboard/roles" component={Roles} />
               <Route exact path="/dashboard/popup" component={Popup} />
               <Route exact path="/dashboard/modules" component={Modules} />

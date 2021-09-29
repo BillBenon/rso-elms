@@ -9,38 +9,41 @@ import Icon from '../../components/Atoms/custom/Icon';
 import ILabel from '../../components/Atoms/Text/ILabel';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import academyStore from '../../store/academy.store';
 import { ValueType } from '../../types';
+
+type AcademyTypes = {
+  'Academy name': string;
+  'Academy Admin': string;
+  'phone number': string;
+  status: string;
+};
 
 export default function Academy() {
   const history = useHistory();
 
+  const { data } = academyStore.fetchAcademies();
+  const academyInfo = data?.data.data;
+  let academies: AcademyTypes[] = [];
+  academyInfo?.map((obj) => {
+    let { name, created_by_username, phone_number, generic_status } = obj;
+
+    let ac: AcademyTypes = {
+      'Academy Admin': created_by_username,
+      'Academy name': name,
+      'phone number': phone_number,
+      status: generic_status,
+    };
+
+    academies.push(ac);
+  });
+
   function handleSearch(_e: ValueType) {}
 
-  const data = [
-    {
-      'Academy name': 'Nyakinama Senior Staff College',
-      'Academy Admin': 'Nsengimana Jean',
-      'phone number': 7869046715,
-      status: 'ACTIVE',
-    },
-    {
-      'Academy name': 'Gako Military Academy',
-      'Academy Admin': 'Ntwari Dan',
-      'phone number': 7869670015,
-      status: 'ACTIVE',
-    },
-    {
-      'Academy name': 'Nyakinama Senior Staff College',
-      'Academy Admin': 'Nsengimana Jean',
-      'phone number': 7869046715,
-      status: 'INACTIVE',
-    },
-    {
-      'Academy name': 'Gabiro',
-      'Academy Admin': 'Munyuza John',
-      'phone number': 7869046715,
-      status: 'ACTIVE',
-    },
+  const academyActions = [
+    { name: 'Add academy', handleAction: () => {} },
+    { name: 'Edit admin', handleAction: () => {} },
+    { name: 'View', handleAction: () => {} },
   ];
 
   return (
@@ -68,7 +71,13 @@ export default function Academy() {
       </div>
 
       <div className="mt-14">
-        <Table statusColumn="status" data={data} />
+        {academyInfo && (
+          <Table<AcademyTypes>
+            statusColumn="status"
+            data={academies}
+            actions={academyActions}
+          />
+        )}
       </div>
     </>
   );
