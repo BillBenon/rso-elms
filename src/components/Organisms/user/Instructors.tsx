@@ -11,6 +11,11 @@ export default function Instructors({ instructors }: { instructors: Object[] }) 
   const [modalOpen, setModalOpen] = useState(false);
 
   function handleSearch(_e: ValueType) {}
+  const instructorActions = [
+    { name: 'Add Role', handleAction: () => {} },
+    { name: 'Edit instructor', handleAction: () => {} },
+    { name: 'View', handleAction: () => {} },
+  ];
   return (
     <>
       <TableHeader

@@ -13,6 +13,11 @@ export default function Students({ students }: { students: Object[] }) {
   const [importStudentModalOpen, setImportStudentModalOpen] = useState(false);
 
   function handleSearch(_e: ValueType) {}
+  const studentActions = [
+    { name: 'Add Role', handleAction: () => {} },
+    { name: 'Edit student', handleAction: () => {} },
+    { name: 'View', handleAction: () => {} },
+  ];
   return (
     <>
       <TableHeader

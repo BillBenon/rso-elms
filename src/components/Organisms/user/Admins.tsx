@@ -7,6 +7,11 @@ import TableHeader from '../../Molecules/table/TableHeader';
 
 export default function Admins({ admins }: { admins: Object[] }) {
   function handleSearch(_e: ValueType) {}
+  const adminActions = [
+    { name: 'Add Role', handleAction: () => {} },
+    { name: 'Edit admin', handleAction: () => {} },
+    { name: 'View', handleAction: () => {} },
+  ];
   return (
     <>
       <TableHeader title="Admins" totalItems={admins.length} handleSearch={handleSearch}>
