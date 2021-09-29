@@ -78,9 +78,10 @@ function DateMolecule({
   });
 
   const dateFormat = () => {
+    const months = dateState.Month < 10 ? '0' + dateState.Month : '' + dateState.Month;
     const minutes =
       dateState.Minutes < 10 ? '0' + dateState.Minutes : '' + dateState.Minutes;
-    let selectedDate: string = `${dateState.Month}/${dateState.Day}/${dateState.Year} ${dateState.Hours}:${minutes}`;
+    let selectedDate: string = `${dateState.Year}-${months}-${dateState.Day} ${dateState.Hours}:${minutes}:00`;
     handleChange({ name: name, value: selectedDate });
   };
 
@@ -93,7 +94,7 @@ function DateMolecule({
   };
 
   return (
-    <div className={`flex flex-col gap-3 w-${width || 'full md:w-80'}`}>
+    <div className={`flex flex-col gap-2 py-2 w-${width || 'full md:w-80'}`}>
       <ILabel size="sm" weight="medium">
         {children}
       </ILabel>
