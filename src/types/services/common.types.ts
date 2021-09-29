@@ -6,7 +6,7 @@ export interface Response<T = unknown> {
 }
 
 export interface Table {
-  id: number;
+  id: number | string;
   createdById: string;
   createdByUsername: string;
   createdOn: string;

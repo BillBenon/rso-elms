@@ -4,6 +4,7 @@ import '../../../styles/components/Organisms/academy/academy.scss';
 import React from 'react';
 import { useHistory } from 'react-router';
 
+import academyStore from '../../../store/academy.store';
 import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
@@ -11,37 +12,33 @@ import ILabel from '../../Atoms/Text/ILabel';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
 
+type AcademyTypes = {
+  'Academy name': string;
+  'Academy Admin': string;
+  'phone number': string;
+  status: string;
+};
+
 export default function Academy() {
   const history = useHistory();
 
-  function handleSearch(_e: ValueType) {}
+  const { data } = academyStore.fetchAcademies();
+  const academyInfo = data?.data.data;
+  let academies: AcademyTypes[] = [];
+  academyInfo?.map((obj) => {
+    let { name, created_by_username, phone_number, generic_status } = obj;
 
-  const data = [
-    {
-      'Academy name': 'Nyakinama Senior Staff College',
-      'Academy Admin': 'Nsengimana Jean',
-      'phone number': 7869046715,
-      status: 'ACTIVE',
-    },
-    {
-      'Academy name': 'Gako Military Academy',
-      'Academy Admin': 'Ntwari Dan',
-      'phone number': 7869670015,
-      status: 'ACTIVE',
-    },
-    {
-      'Academy name': 'Nyakinama Senior Staff College',
-      'Academy Admin': 'Nsengimana Jean',
-      'phone number': 7869046715,
-      status: 'INACTIVE',
-    },
-    {
-      'Academy name': 'Gabiro',
-      'Academy Admin': 'Munyuza John',
-      'phone number': 7869046715,
-      status: 'ACTIVE',
-    },
-  ];
+    let ac: AcademyTypes = {
+      'Academy Admin': created_by_username,
+      'Academy name': name,
+      'phone number': phone_number,
+      status: generic_status,
+    };
+
+    academies.push(ac);
+  });
+
+  function handleSearch(_e: ValueType) {}
 
   const academyActions = [
     { name: 'Add academy', handleAction: () => {} },
@@ -72,7 +69,13 @@ export default function Academy() {
       </div>
 
       <div className="mt-14">
-        <Table statusColumn="status" data={data} actions={academyActions} />
+        {academyInfo && (
+          <Table<AcademyTypes>
+            statusColumn="status"
+            data={academies}
+            actions={academyActions}
+          />
+        )}
       </div>
     </>
   );
