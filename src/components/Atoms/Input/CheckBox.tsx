@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 
 import { ValueType } from '../../../types';
 
@@ -6,7 +6,7 @@ interface Props {
   label: string;
   name: string;
   disabled?: boolean;
-  handleChange: (_e: ValueType) => any;
+  handleChange: (_e: ValueType<HTMLInputElement>) => any;
   checked?: boolean;
   value: string;
   className?: string;
@@ -15,9 +15,9 @@ interface Props {
 export default function Checkbox(props: Props) {
   const [checked, setChecked] = useState(props.checked || false);
 
-  const handleCheck = () => {
+  const handleCheck = (e: FormEvent<HTMLInputElement>) => {
     setChecked(!checked);
-    props.handleChange({ name: props.name, value: props.value });
+    props.handleChange({ name: props.name, value: props.value, event: e });
   };
   return (
     <>
