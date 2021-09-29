@@ -13,13 +13,20 @@ import Tooltip from '../Tooltip';
 
 interface TableProps<T> {
   data: T[];
-  actions?: { name: string; handleAction: () => void }[];
+  uniqueCol?: keyof T;
+  actions?: { name: string; handleAction: (_data?: T[keyof T]) => void }[];
   handleClick?: () => void;
   statusColumn?: string;
   rowsPerPage?: number;
 }
 
-function Table<T>({ data, actions, statusColumn, rowsPerPage = 10 }: TableProps<T>) {
+export function Table<T>({
+  uniqueCol,
+  data,
+  actions,
+  statusColumn,
+  rowsPerPage = 10,
+}: TableProps<T>) {
   const [rowsOnPage] = useState(rowsPerPage);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -98,4 +105,5 @@ function Table<T>({ data, actions, statusColumn, rowsPerPage = 10 }: TableProps<
     </div>
   );
 }
+
 export default Table;
