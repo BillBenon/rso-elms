@@ -7,6 +7,7 @@ import MoreInfo from './components/Organisms/forms/auth/signup/more-details/More
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import Dashboard from './layout/Dashboard';
 import { MainLayout } from './layout/MainLayout';
+import NewStudentsView from './styles/components/Organisms/users/NewStudent';
 import Academies from './views/academies/Academies';
 import NewAcademy from './views/academies/NewAcademy';
 import Signin from './views/auth/Signin';
@@ -24,8 +25,6 @@ import NewAcademicProgram from './views/programs/NewAcademicProgram';
 import ProgramDetails from './views/programs/ProgramDetails';
 import Roles from './views/roles/Roles';
 import Subjects from './views/subjects';
-import NewInstructorView from './views/users/NewInstructor';
-import NewStudentsView from './views/users/NewStudent';
 import Users from './views/users/Users';
 import UsersView from './views/users/Users';
 
@@ -54,17 +53,7 @@ const App = () => {
                 path="/dashboard/registration-control"
                 component={RegistrationControl}
               />
-              <Route exact path="/dashboard/users" component={Users} />
-              <Route
-                exact
-                path="/dashboard/users/students/new"
-                component={NewStudentsView}
-              />
-              <Route
-                exact
-                path="/dashboard/users/instructors/new"
-                component={NewInstructorView}
-              />
+              <Route path="/dashboard/users" component={Users} />
               <Route exact path="/dashboard/faculties" component={FacultiesView} />
               <Route exact path="/dashboard/programs" component={AcademicPrograms} />
               <Route

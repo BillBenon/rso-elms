@@ -1,11 +1,9 @@
 import React from 'react';
 
 import Button from '../../components/Atoms/custom/Button';
-import Icon from '../../components/Atoms/custom/Icon';
-import Heading from '../../components/Atoms/Text/Heading';
-import ILabel from '../../components/Atoms/Text/ILabel';
+import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
-import { ValueType } from '../../types';
+import { SelectData, ValueType } from '../../types';
 
 export default function NewInstructor() {
   const handleChange = (e: ValueType) => {
@@ -15,31 +13,23 @@ export default function NewInstructor() {
   const handleSubmit = () => {
     window.alert('submitted');
   };
+  const academies: SelectData[] = [
+    {
+      value: 'Gako MA',
+      label: 'M.A GAKO',
+    },
+    {
+      value: 'Nasho',
+      label: 'Nasho',
+    },
+    {
+      value: 'Nyakinama',
+      label: 'Nyakinama high staff',
+    },
+  ];
   return (
     <>
-      <div className="flex flex-wrap justify-start items-center">
-        <ILabel size="sm" color="gray" weight="medium">
-          Institution Admin
-        </ILabel>
-        <Icon name="chevron-right" />
-        <ILabel size="sm" color="gray" weight="medium">
-          Users
-        </ILabel>
-        <Icon name="chevron-right" fill="gray" />
-        <ILabel size="sm" color="gray" weight="medium">
-          Instructors
-        </ILabel>
-        <Icon name="chevron-right" fill="gray" />
-        <ILabel size="sm" color="primary" weight="medium">
-          New Instructor
-        </ILabel>
-      </div>
-
-      <div className="popup-width">
-        <Heading color="primary" fontSize="lg" fontWeight="semibold">
-          New instructor
-        </Heading>
-        <div className="mb-7"></div>
+      <div>
         <InputMolecule
           name="firstName"
           placeholder="eg: Kabera"
@@ -62,22 +52,6 @@ export default function NewInstructor() {
           Employment number
         </InputMolecule>
         <InputMolecule
-          name="phoneNumber"
-          placeholder="Phone number"
-          type={'tel'}
-          value={''}
-          handleChange={(e) => handleChange(e)}>
-          Phone number
-        </InputMolecule>
-        <InputMolecule
-          name="email"
-          type="email"
-          value={''}
-          placeholder="example@gmail.com"
-          handleChange={(e) => handleChange(e)}>
-          email
-        </InputMolecule>
-        <InputMolecule
           name="nid"
           type="text"
           value={''}
@@ -92,6 +66,13 @@ export default function NewInstructor() {
           handleChange={(e) => handleChange(e)}>
           Passport (optional)
         </InputMolecule>
+        <DropdownMolecule
+          options={academies}
+          name="academy"
+          placeholder={'Academy to be deployed to'}
+          handleChange={(e) => {}}>
+          Academy
+        </DropdownMolecule>
         <Button onClick={handleSubmit}>Create</Button>
       </div>
     </>

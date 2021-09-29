@@ -11,7 +11,7 @@ interface Props extends DropdownProps {
 }
 export default function DropdownMolecule(props: Props) {
   return (
-    <div className="py-2">
+    <div className="pb-2">
       <ILabel size="sm" weight="medium">
         {props.children}
       </ILabel>

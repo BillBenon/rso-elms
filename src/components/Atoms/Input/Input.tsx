@@ -23,7 +23,7 @@ export interface IProps<T> extends CommonInputProps<T> {
 
 export default function Input<T>({
   placeholder = '',
-  padding = 'px-3',
+  padding = 'px-4',
   type = 'text',
   readonly = false,
   value,

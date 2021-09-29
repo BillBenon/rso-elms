@@ -32,7 +32,10 @@ export default function DropDown(props: DropdownProps) {
             borderWidth: 2,
             borderRadius: 8,
             cursor: 'pointer',
+            fontSize: 14,
             minHeight: 48,
+            paddingRight: 8,
+            paddingLeft: 8,
           }),
           clearIndicator: (_base: any, _state: any) => ({
             display: 'none',

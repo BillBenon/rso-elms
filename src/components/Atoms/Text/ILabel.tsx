@@ -14,7 +14,7 @@ interface ILabelProps {
 
 export default function ILabel({
   children,
-  weight = 'normal',
+  weight = 'medium',
   size = 'base',
   color = 'txt-primary',
   textTransform = 'capitalize',
