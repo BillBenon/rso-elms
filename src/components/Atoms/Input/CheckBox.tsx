@@ -3,7 +3,7 @@ import React, { FormEvent, useState } from 'react';
 import { ValueType } from '../../../types';
 
 interface Props {
-  label: string;
+  label?: string;
   name: string;
   disabled?: boolean;
   handleChange: (_e: ValueType<HTMLInputElement>) => any;
@@ -31,7 +31,9 @@ export default function Checkbox(props: Props) {
           value={props.value}
           onChange={handleCheck}
         />
-        <span className="text-sm px-2 text-gray-700 capitalize">{props.label}</span>
+        {props.label && (
+          <span className="text-sm px-2 text-gray-700 capitalize">{props.label}</span>
+        )}
       </label>
     </>
   );
