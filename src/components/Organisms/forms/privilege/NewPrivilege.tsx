@@ -28,7 +28,7 @@ export default function NewPrivilege({ onSubmit }: PropType) {
   const [form, setForm] = useState<PrivilegeUpdate>({
     description: '',
     name: 's',
-    featureType: PrivilegeFeatureType.ADMIN,
+    feature_type: PrivilegeFeatureType.ADMIN,
     id: '',
     status: PrivilegeStatus.ACTIVE,
   });
@@ -80,8 +80,8 @@ export default function NewPrivilege({ onSubmit }: PropType) {
       </InputMolecule>
       <DropdownMolecule
         handleChange={handleChange}
-        defaultValue={form.featureType}
-        name="featureType"
+        defaultValue={form.feature_type}
+        name="feature_type"
         options={featureType}>
         Role type
       </DropdownMolecule>

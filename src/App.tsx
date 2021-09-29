@@ -18,6 +18,7 @@ import LevelsView from './views/levels/Levels';
 import Modules from './views/modules';
 import NotFound from './views/NotFound';
 import Popup from './views/Popup';
+import PrivilegesView from './views/privileges/Privileges';
 import AcademicPrograms from './views/programs/AcademicPrograms';
 import NewAcademicProgram from './views/programs/NewAcademicProgram';
 import ProgramDetails from './views/programs/ProgramDetails';
@@ -61,6 +62,7 @@ const App = () => {
               <Route exact path="/dashboard/levels" component={LevelsView} />
               <Route exact path="/dashboard/intakes" component={IntakesView} />
               <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} />
+              <Route exact path="/dashboard/privileges" component={PrivilegesView} />
             </Dashboard>
             <Route path="*" component={NotFound} />
           </Switch>

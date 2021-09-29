@@ -40,13 +40,7 @@ export default function Roles() {
 
   // re fetch data whenever user come back on this page
   useEffect(() => {
-    console.log(
-      location.pathname,
-      path,
-      location.pathname === path || location.pathname === `${path}/`,
-    );
     if (location.pathname === path || location.pathname === `${path}/`) {
-      console.log('made it');
       refetch();
     }
   }, [location]);
