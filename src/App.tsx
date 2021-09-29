@@ -12,6 +12,7 @@ import NewAcademy from './views/academies/NewAcademy';
 import Signin from './views/auth/Signin';
 import Signup from './views/auth/Signup';
 import FacultiesView from './views/faculties/Faculties';
+import NewInstitution from './views/insitution/NewInsitution';
 import IntakeModulesView from './views/intakes/IntakeModules';
 import IntakesView from './views/intakes/Intakes';
 import LevelsView from './views/levels/Levels';
@@ -32,6 +33,7 @@ const App = () => {
         <Router>
           <Switch>
             <Route exact path="/" component={Signin} />
+            <Route exact path="/institution" component={NewInstitution} />
             <Route exact path="/register" component={Signup} />
             <Route exact path="/register/experience" component={ExperienceInfo} />
             <Route exact path="/register/more" component={MoreInfo} />
