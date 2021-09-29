@@ -20,7 +20,7 @@ export default function AddProgramToIntake() {
     },
   ];
   return (
-    <div className="-mt-2">
+    <form>
       <Heading fontSize="lg" fontWeight="semibold" className="pb-5">
         Add a program to this intake
       </Heading>
@@ -47,6 +47,6 @@ export default function AddProgramToIntake() {
       <div className="pt-3">
         <Button type="submit">Save</Button>
       </div>
-    </div>
+    </form>
   );
 }

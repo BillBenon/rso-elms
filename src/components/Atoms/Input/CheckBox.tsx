@@ -2,8 +2,6 @@ import '../../../styles/components/Atoms/input/checkbox.scss';
 
 import React from 'react';
 
-import Error from '../Text/Error';
-
 interface Props {
   label: string;
   name: string;

@@ -8,20 +8,15 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewRole from '../../components/Organisms/forms/roles/NewRole';
 import { roleStore } from '../../store';
+import { RoleRes } from '../../types';
 
 export default function Roles() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
 
-  const { data: roles } = roleStore.getRoles();
+  const { data } = roleStore.getRoles();
 
-  const roleActions = [
-    { name: 'Add Role', handleAction: () => {} },
-    { name: 'Edit role', handleAction: () => {} },
-    { name: 'View', handleAction: () => {} },
-  ];
-  console.log(roles);
-
+  const roles = data?.data.data;
   function submited() {
     // setOpen(false);
   }
@@ -39,9 +34,7 @@ export default function Roles() {
           </Link>
         </TableHeader>
       </section>
-      <section>
-        <Table statusColumn="status" data={roles} hasAction={true} />
-      </section>
+      <section>{roles && <Table<RoleRes> statusColumn="status" data={roles} />}</section>
 
       <Switch>
         <Route

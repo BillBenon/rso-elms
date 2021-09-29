@@ -40,12 +40,6 @@ export default function Academy() {
 
   function handleSearch(_e: ValueType) {}
 
-  const academyActions = [
-    { name: 'Add academy', handleAction: () => {} },
-    { name: 'Edit admin', handleAction: () => {} },
-    { name: 'View', handleAction: () => {} },
-  ];
-
   return (
     <>
       <div className="flex flex-wrap justify-start items-center">
@@ -64,18 +58,14 @@ export default function Academy() {
       </div>
       <div className="py-4">
         <TableHeader title="Academy" totalItems={300} handleSearch={handleSearch}>
-          <Button onClick={() => history.push('/academies/new')}>New academy</Button>
+          <Button onClick={() => history.push('/dashboard/academies/new')}>
+            New academy
+          </Button>
         </TableHeader>
       </div>
 
       <div className="mt-14">
-        {academyInfo && (
-          <Table<AcademyTypes>
-            statusColumn="status"
-            data={academies}
-            actions={academyActions}
-          />
-        )}
+        <Table statusColumn="status" data={data} />
       </div>
     </>
   );

@@ -7,7 +7,6 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
-import Dashboard from '../../layout/Dashboard';
 import { CommonCardDataType, Link } from '../../types';
 
 export default function Subjects() {
@@ -60,7 +59,7 @@ export default function Subjects() {
   ];
 
   return (
-    <Dashboard>
+    <>
       <main className="px-4">
         <section>
           <Cacumber list={list}></Cacumber>
@@ -91,6 +90,6 @@ export default function Subjects() {
           <NewLessonForm />
         </PopupMolecule>
       </main>
-    </Dashboard>
+    </>
   );
 }
