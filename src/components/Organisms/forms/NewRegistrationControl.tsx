@@ -11,6 +11,8 @@ import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
 interface PropType<K> extends CommonFormProps<K> {}
 
 export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
+  const [regControl, setRegControl] = useState({});
+  6;
   function handleChange(e: ValueType) {
     console.log(e);
   }
@@ -22,16 +24,16 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
 
   return (
     <form onSubmit={submitForm}>
-      <InputMolecule value="" error="" handleChange={handleChange} name="model-name">
+      <TextAreaMolecule value="" name="description" handleChange={handleChange}>
         Registration control description
-      </InputMolecule>
-      <DateMolecule handleChange={handleChange} name={'date'}>
+      </TextAreaMolecule>
+      <DateMolecule handleChange={handleChange} name={'startDate'}>
         Start Date
       </DateMolecule>
 
-      <TextAreaMolecule value="" name="description" handleChange={handleChange}>
-        Descripiton
-      </TextAreaMolecule>
+      <DateMolecule handleChange={handleChange} name={'endDate'}>
+        End Date
+      </DateMolecule>
 
       <RadioMolecule
         className="mt-4"
@@ -43,17 +45,6 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
         ]}
         handleChange={handleChange}>
         Status
-      </RadioMolecule>
-
-      <RadioMolecule
-        className="mt-4"
-        name="prerequsites"
-        options={[
-          { label: 'Yes', value: 'YES' },
-          { label: 'No', value: 'NO' },
-        ]}
-        handleChange={handleChange}>
-        Has Prerequesites
       </RadioMolecule>
 
       <div className="mt-5">
