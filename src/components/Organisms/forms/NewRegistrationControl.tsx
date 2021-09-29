@@ -5,8 +5,6 @@ import registrationControlStore from '../../../store/registrationControl.store';
 import { CommonFormProps, ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
 import DateMolecule from '../../Molecules/input/DateMolecule';
-// import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
-import InputMolecule from '../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
 
@@ -16,13 +14,15 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
   const { mutateAsync } = registrationControlStore.createRegControl();
 
   const [regControl, setRegControl] = useState({
+    academy_id: '48d3fec8-bfed-40f7-aa70-58ccfe4238d8',
     description: '',
     actual_start_date: '',
     actual_end_date: '',
     expected_start_date: '',
     expected_end_date: '',
+    id: '',
   });
-  6;
+
   function handleChange(e: ValueType) {
     console.log(e);
     setRegControl((regControl) => ({ ...regControl, [e.name]: e.value }));
@@ -32,7 +32,7 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
     e.preventDefault();
     mutateAsync(regControl, {
       onSuccess: () => {
-        toast.success('Role created', { duration: 3 });
+        toast.success('Registration control created', { duration: 8 });
       },
       onError: () => {
         toast.error('something wrong happened while creating role', { duration: 3 });
@@ -50,12 +50,12 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
         handleChange={handleChange}>
         Registration control description
       </TextAreaMolecule>
-      <DateMolecule handleChange={handleChange} name={'actual_start_date'}>
-        Start Date
+      <DateMolecule handleChange={handleChange} name={'expected_start_date'}>
+        Expected Start Date
       </DateMolecule>
 
-      <DateMolecule handleChange={handleChange} name={'actual_end_date'}>
-        End Date
+      <DateMolecule handleChange={handleChange} name={'expected_end_date'}>
+        Expected End Date
       </DateMolecule>
 
       <RadioMolecule
