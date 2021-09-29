@@ -28,7 +28,7 @@ const data: CommonCardDataType[] = [
     code: 'INTK/21BDC',
     title: 'Computer science',
     description:
-      'Start Date:   17 Aug 2021 - 10 Sep 2021 Expected End Date:  17 Aug 2021 - 10 Sep 2021 ',
+      'Start Date:   17 Aug 2021 - 10 Sep 2021 Expected End Date:  17 Aug =l2021 - 10 Sep 2021 ',
   },
   {
     status: { type: 'success', text: 'On going' },

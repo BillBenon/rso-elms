@@ -9,7 +9,7 @@ import SearchMolecule from '../input/SearchMolecule';
 type ITableHeader = {
   title: string;
   totalItems: number;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   showSearch?: boolean;
   handleSearch?: (_e: ValueType) => void;
 };

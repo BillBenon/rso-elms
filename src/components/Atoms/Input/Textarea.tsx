@@ -1,6 +1,6 @@
 import './input.scss';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { colorStyle } from '../../../global/global-vars';
 import { Color, CommonInputProps, ValueType } from '../../../types';
@@ -10,7 +10,7 @@ export interface IProps<T> extends CommonInputProps<T> {
   type?: string;
   readonly?: boolean;
   handleChange: (_e: ValueType) => void;
-  value: string;
+  value: string | undefined;
   name: string;
   full?: boolean;
   fcolor?: Color;
@@ -32,10 +32,14 @@ export default function Textarea<T>({
   handleChange,
   ...attrs
 }: IProps<T>) {
-  const [_value, _setValue] = useState(value);
+  const [_value, setValue] = useState('');
+
+  useEffect(() => {
+    setValue(value || '');
+  }, [value]);
 
   function handleOnChange(e: any) {
-    _setValue(e.target.value);
+    setValue(e.target.value);
     handleChange({ name, value: e.target.value, event: e });
   }
   return (

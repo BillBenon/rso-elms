@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
-import Button from '../../components/Atoms/custom/Button';
+import Badge from '../../components/Atoms/custom/Badge';
 import Icon from '../../components/Atoms/custom/Icon';
+import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
-import PopupMolecule from '../../components/Molecules/Popup';
-import Table from '../../components/Molecules/table/Table';
-import TableHeader from '../../components/Molecules/table/TableHeader';
-import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
+import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import Admins from '../../components/Organisms/user/Admins';
+import Instructors from '../../components/Organisms/user/Instructors';
+import Students from '../../components/Organisms/user/Students';
 import usersStore from '../../store/users.store';
-import { GenericStatus, ValueType } from '../../types';
+import { GenericStatus } from '../../types';
 import { UserType } from '../../types/services/user.types';
-import NewStudent from './NewStudent';
 
 type UserTypes = {
   'full name': string;
@@ -22,9 +22,8 @@ type UserTypes = {
 };
 
 export default function Users() {
+  const { path } = useRouteMatch();
   const [userType, setUserType] = useState('Students');
-  const [modalOpen, setModalOpen] = useState(false);
-  const history = useHistory();
 
   const { data } = usersStore.fetchUsers();
   const userInfo = data?.data.data;
@@ -50,35 +49,24 @@ export default function Users() {
   let instructors = users.filter((user) => user.userType == UserType.INSTRUCTOR);
   let admins = users.filter((user) => user.userType == UserType.ADMIN);
 
-  function handleSearch(_e: ValueType) {}
-
-  const handleCreateNewUserClick = () => {
-    if (userType === 'Students') history.push('/dashboard/users/students/new');
-    else if (userType === 'Instructors') history.push('/dashboard/users/instructors/new');
-    else history.push('/users/admins/new');
-  };
-
-  const studentActions = [
-    { name: 'Add Role', handleAction: () => {} },
-    { name: 'Edit student', handleAction: () => {} },
-    { name: 'View', handleAction: () => {} },
-  ];
-
-  const instructorActions = [
-    { name: 'Add Role', handleAction: () => {} },
-    { name: 'Edit instructor', handleAction: () => {} },
-    { name: 'View', handleAction: () => {} },
-  ];
-
-  const adminActions = [
-    { name: 'Add Role', handleAction: () => {} },
-    { name: 'Edit admin', handleAction: () => {} },
-    { name: 'View', handleAction: () => {} },
+  const tabs = [
+    {
+      label: 'Students',
+      href: '/dashboard/users',
+    },
+    {
+      label: 'Instructors',
+      href: '/dashboard/users/instructors',
+    },
+    {
+      label: 'Admins',
+      href: '/dashboard/users/admins',
+    },
   ];
 
   return (
-    <>
-      <div className="flex flex-wrap justify-start items-center pt-2">
+    <div>
+      <div className="flex flex-wrap justify-start items-center pt-1">
         <ILabel size="sm" color="gray" weight="medium">
           Institution Admin
         </ILabel>
@@ -92,39 +80,46 @@ export default function Users() {
           {userType}
         </ILabel>
       </div>
+      <div className="flex gap-2 items-center py-3">
+        <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
+          users
+        </Heading>
+        <Badge
+          badgetxtcolor="main"
+          badgecolor="primary"
+          fontWeight="normal"
+          className="h-6 w-9 flex justify-center items-center">
+          {users.length}
+        </Badge>
+      </div>
 
-      <TableHeader title="Users" totalItems={30} handleSearch={handleSearch}>
-        <div className="flex gap-3">
-          <Button styleType="outline">Import users</Button>
-          {userType !== 'Admins' ? (
-            <Button onClick={() => handleCreateNewUserClick()}>New {userType}</Button>
-          ) : (
-            <></>
-          )}
-        </div>
-      </TableHeader>
-      <Tabs onTabChange={(e) => setUserType(e.activeTabLabel)}>
-        <Tab label="Students" className="pt-8">
-          {students && (
-            <Table<UserTypes>
-              statusColumn="status"
-              data={students}
-              actions={studentActions}
-            />
-          )}
-        </Tab>
-        <Tab label="Instructors" className="pt-8">
-          <Table statusColumn="status" data={instructors} actions={instructorActions} />
-        </Tab>
-        <Tab label="Admins" className="pt-8">
-          <Table statusColumn="status" data={admins} actions={adminActions} />
-        </Tab>
-      </Tabs>
-      <PopupMolecule
-        open={modalOpen && userType === 'Students'}
-        onClose={() => setModalOpen(false)}>
-        <NewStudent />
-      </PopupMolecule>
-    </>
+      <TabNavigation
+        tabs={tabs}
+        onTabChange={(event) => setUserType(event.activeTabLabel)}>
+        <Switch>
+          <Route
+            exact
+            path={`${path}`}
+            render={() => {
+              return <Students students={students} />;
+            }}
+          />
+          <Route
+            exact
+            path={`${path}/instructors`}
+            render={() => {
+              return <Instructors instructors={instructors} />;
+            }}
+          />
+          <Route
+            exact
+            path={`${path}/admins`}
+            render={() => {
+              return <Admins admins={admins} />;
+            }}
+          />
+        </Switch>
+      </TabNavigation>
+    </div>
   );
 }

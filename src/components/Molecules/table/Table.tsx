@@ -58,14 +58,14 @@ function Table<T>({ data, actions, statusColumn, rowsPerPage = 10 }: TableProps<
               }
               open>
               <ul>
-                {actions.map((action) => (
-                  <li className="hover:bg-secondary" key={action.name}>
+                {actions.map(({ name, handleAction }) => (
+                  <li className="hover:bg-secondary" key={name}>
                     <Button
                       styleType="text"
                       hoverStyle="no-underline"
                       color="txt-primary"
-                      onClick={action.handleAction}>
-                      {action.name}
+                      onClick={() => handleAction(uniqueCol && row[uniqueCol])}>
+                      {name}
                     </Button>
                   </li>
                 ))}

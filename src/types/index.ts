@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 export type Color =
   | 'primary'
@@ -108,4 +108,5 @@ export interface SigninPropTypes extends CommonCardDataType {
 export * from './props';
 export * from './services/autheticator.types';
 export * from './services/common.types';
+export * from './services/privilege.types';
 export * from './services/role.types';

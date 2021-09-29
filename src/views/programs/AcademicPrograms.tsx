@@ -170,7 +170,9 @@ export default function AcademicProgram() {
                   </Heading>
                 </div>
                 <div className="mt-4">
-                  <Button onClick={() => history.push('/programs/3')}>View More</Button>
+                  <Button onClick={() => history.push('/dashboard/programs/3')}>
+                    View More
+                  </Button>
                 </div>
               </div>
             </Tooltip>

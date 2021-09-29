@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 
 import Button from '../../components/Atoms/custom/Button';
-import Icon from '../../components/Atoms/custom/Icon';
-import ILabel from '../../components/Atoms/Text/ILabel';
+import Cacumber from '../../components/Molecules/Cacumber';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewFaculty from '../../components/Organisms/faculty/NewFaculty';
-import { ValueType } from '../../types';
+import { Link, ValueType } from '../../types';
 
 export default function FacutiesOrg() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -67,25 +66,18 @@ export default function FacutiesOrg() {
     { name: 'View', handleAction: () => {} },
   ];
 
+  const list: Link[] = [
+    { to: 'home', title: 'Institution Admin' },
+    { to: 'faculty', title: 'Academy' },
+    { to: 'programs', title: 'Faculty' },
+  ];
+
   const handleSearch = (e: ValueType) => {
     console.log(e);
   };
   return (
     <>
-      <div className="flex flex-wrap justify-start items-center pt-2">
-        <ILabel size="sm" color="gray" weight="medium">
-          Institution Admin
-        </ILabel>
-        <Icon name="chevron-right" />
-
-        <ILabel size="sm" color="gray" weight="medium">
-          Academy
-        </ILabel>
-        <Icon name="chevron-right" fill="gray" />
-        <ILabel size="sm" color="primary" weight="medium">
-          Faculty
-        </ILabel>
-      </div>
+      <Cacumber list={list} />
 
       <TableHeader title="Faculties" totalItems={54} handleSearch={handleSearch}>
         <Button onClick={() => handleCreateNewUserClick()}>New Faculty</Button>

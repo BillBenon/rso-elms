@@ -23,8 +23,6 @@ import NewAcademicProgram from './views/programs/NewAcademicProgram';
 import ProgramDetails from './views/programs/ProgramDetails';
 import Roles from './views/roles/Roles';
 import Subjects from './views/subjects';
-import NewInstructorView from './views/users/NewInstructor';
-import NewStudentsView from './views/users/NewStudent';
 import Users from './views/users/Users';
 
 const App = () => {
@@ -51,21 +49,15 @@ const App = () => {
                 path="/dashboard/registration-control"
                 component={RegistrationControl}
               />
-              <Route exact path="/dashboard/users" component={Users} />
-              <Route
-                exact
-                path="/dashboard/users/students/new"
-                component={NewStudentsView}
-              />
-              <Route
-                exact
-                path="/dashboard/users/instructors/new"
-                component={NewInstructorView}
-              />
+              <Route path="/dashboard/users" component={Users} />
               <Route exact path="/dashboard/faculties" component={FacultiesView} />
-              <Route exact path="/dashboard/program/new" component={NewAcademicProgram} />
               <Route exact path="/dashboard/programs" component={AcademicPrograms} />
-              <Route exact path="/dashboard/programs/:id" component={ProgramDetails} />
+              <Route
+                exact
+                path="/dashboard/programs/new"
+                component={NewAcademicProgram}
+              />
+              <Route path="/dashboard/programs/:id" component={ProgramDetails} />
               <Route exact path="/dashboard/levels" component={LevelsView} />
               <Route exact path="/dashboard/intakes" component={IntakesView} />
               <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} />

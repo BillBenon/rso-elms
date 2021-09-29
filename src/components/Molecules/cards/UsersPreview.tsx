@@ -2,7 +2,6 @@ import React from 'react';
 
 import Avatar from '../../Atoms/custom/Avatar';
 import Icon from '../../Atoms/custom/Icon';
-import img from '../../Atoms/custom/img';
 import Heading from '../../Atoms/Text/Heading';
 
 type IUserPreview = {

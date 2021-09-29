@@ -1,6 +1,6 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { roleStore } from '../../../../store';
 import { CreateRoleReq, ValueType } from '../../../../types';
@@ -12,19 +12,32 @@ interface PropType {
   onSubmit: <E>(_e: FormEvent<E>) => void;
 }
 
-export default function NewRole({ onSubmit }: PropType) {
+interface ParamType {
+  id: string;
+}
+
+export default function UpdateRole({ onSubmit }: PropType) {
   const [form, setForm] = useState<CreateRoleReq>({ name: '', description: '' });
-  const { mutateAsync } = roleStore.addRole();
+  const { mutateAsync } = roleStore.modifyRole();
   const history = useHistory();
+
+  const { id } = useParams<ParamType>();
+
+  const { data } = roleStore.getRole(id);
+
+  useEffect(() => {
+    data?.data.data && setForm({ ...data?.data.data });
+  }, [data]);
 
   function handleChange({ name, value }: ValueType) {
     setForm((old) => ({ ...old, [name]: value }));
   }
+
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
     mutateAsync(form, {
       onSuccess: () => {
-        toast.success('Role created', { duration: 3 });
+        toast.success('Role updated', { duration: 3 });
         history.goBack();
       },
       onError: () => {

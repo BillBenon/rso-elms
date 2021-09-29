@@ -7,7 +7,7 @@ import ILabel from '../../Atoms/Text/ILabel';
 
 interface ITextareaMolecule<T> extends CommonInputProps<T> {
   name: string;
-  value: string;
+  value: string | undefined;
   handleChange: (_e: ValueType) => void;
   children: React.ReactNode;
   error?: string;
