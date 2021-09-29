@@ -2,7 +2,6 @@ import { Table } from '..';
 
 export interface AcademyInfo extends AcademyCreateInfo, Table {
   generic_status: string;
-  created_by_username: string;
 }
 
 export interface AcademyCreateInfo {
