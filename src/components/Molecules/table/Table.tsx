@@ -5,6 +5,7 @@ import '../../../styles/components/Molecules/table/table.scss';
 
 import React, { useState } from 'react';
 
+import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import Row from '../../Atoms/custom/Row';
@@ -23,6 +24,7 @@ interface TableProps<T> {
   handleClick?: () => void;
   statusColumn?: string;
   rowsPerPage?: number;
+  handleSelect?: (_selected: string[] | null) => void;
 }
 
 export function Table<T>({
@@ -31,6 +33,7 @@ export function Table<T>({
   actions,
   statusColumn,
   rowsPerPage = 10,
+  handleSelect,
 }: TableProps<T>) {
   const [rowsOnPage] = useState(rowsPerPage);
   const [currentPage, setCurrentPage] = useState(1);
@@ -42,6 +45,10 @@ export function Table<T>({
 
   // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  function _handleSelect(e: ValueType<HTMLInputElement>) {
+    if (handleSelect) handleSelect(e.value ? [e.value + ''] : null);
+  }
 
   const getKeys = () => Object.keys(currentRows[0]);
   const getHeader = () => {
@@ -80,7 +87,7 @@ export function Table<T>({
           {uniqueCol && (
             <Checkbox
               checked={row.selected}
-              handleChange={console.log}
+              handleChange={_handleSelect}
               name={uniqueCol + ''}
               value={row[uniqueCol] + ''}></Checkbox>
           )}
@@ -118,6 +125,7 @@ export function Table<T>({
       </tr>
     ));
   };
+
   return (
     <div className="overflow-x-auto rounded-lg text-sm">
       <table className="table-auto border-collapse font-semibold bg-main w-full m-auto">
