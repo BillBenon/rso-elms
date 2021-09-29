@@ -9,6 +9,14 @@ class RoleStore {
   getRoles() {
     return useQuery('roles', roleService.getRoles);
   }
+
+  getRole(id: string) {
+    return useQuery(['roles/id', id], () => roleService.getRole(id));
+  }
+
+  modifyRole() {
+    return useMutation(roleService.modifyRole);
+  }
 }
 
 export const roleStore = new RoleStore();

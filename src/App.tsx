@@ -18,6 +18,7 @@ import LevelsView from './views/levels/Levels';
 import Modules from './views/modules';
 import NotFound from './views/NotFound';
 import Popup from './views/Popup';
+import PrivilegesView from './views/privileges/Privileges';
 import AcademicPrograms from './views/programs/AcademicPrograms';
 import NewAcademicProgram from './views/programs/NewAcademicProgram';
 import ProgramDetails from './views/programs/ProgramDetails';

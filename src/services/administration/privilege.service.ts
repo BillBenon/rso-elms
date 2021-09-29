@@ -4,7 +4,7 @@ import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import { PrivilegeRes, PrivilegeUpdate } from '../../types/services/privilege.types';
 
-class AuthenticatorService {
+class PrivilegeService {
   public async getAllPrivileges(): Promise<AxiosResponse<Response<PrivilegeRes[]>>> {
     return await adminstrationAxios.get('/privileges/getPrivileges');
   }
@@ -20,4 +20,4 @@ class AuthenticatorService {
   }
 }
 
-export const authenticatorService = new AuthenticatorService();
+export const privilegeService = new PrivilegeService();
