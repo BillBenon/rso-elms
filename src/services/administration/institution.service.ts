@@ -28,4 +28,4 @@ class InstitutionService {
   }
 }
 
-export const intakeService = new InstitutionService();
+export const institutionService = new InstitutionService();
