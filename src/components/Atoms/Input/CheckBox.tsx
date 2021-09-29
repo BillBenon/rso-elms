@@ -25,7 +25,7 @@ export default function Checkbox(props: Props) {
         <input
           name={props.name}
           type="checkbox"
-          className={`form-checkbox h-4 w-4 text-primary-500 mr-2 focus:ring-primary-400 focus:ring-opacity-25 border border-gray-300 rounded ${props.className}`}
+          className={`form-checkbox border-2 border-gray-100 h-4 w-4 text-primary-500 mr-2 focus:ring-primary-400 focus:ring-opacity-25  rounded ${props.className}`}
           checked={checked}
           disabled={props.disabled}
           value={props.value}
