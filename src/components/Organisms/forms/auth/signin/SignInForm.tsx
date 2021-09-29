@@ -2,7 +2,7 @@ import React, { FormEvent, useState } from 'react';
 // import toast from 'react-hot-toast';
 import { Link, useHistory } from 'react-router-dom';
 
-import { authenticatorStore } from '../../../../../store/authenticator.store';
+import { authenticatorStore } from '../../../../../store';
 import { ValueType } from '../../../../../types';
 import { LoginInfo } from '../../../../../types';
 import cookie from '../../../../../utils/cookie';
@@ -31,8 +31,7 @@ const SignInForm = () => {
     await mutateAsync(details, {
       onSuccess(data) {
         cookie.setCookie('jwt_info', JSON.stringify(data?.data.data));
-        history.push('/users');
-        console.log('success data');
+        history.push('/dashboard/users');
       },
     });
   }

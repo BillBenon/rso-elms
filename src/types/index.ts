@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 export type Color =
   | 'primary'

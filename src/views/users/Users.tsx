@@ -1,30 +1,35 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
-import Button from '../../components/Atoms/custom/Button';
+import Badge from '../../components/Atoms/custom/Badge';
 import Icon from '../../components/Atoms/custom/Icon';
+import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
-import PopupMolecule from '../../components/Molecules/Popup';
-import Table from '../../components/Molecules/table/Table';
-import TableHeader from '../../components/Molecules/table/TableHeader';
-import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
-import { ValueType } from '../../types';
-import NewStudent from './NewStudent';
+import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import Admins from '../../components/Organisms/user/Admins';
+import Instructors from '../../components/Organisms/user/Instructors';
+import Students from '../../components/Organisms/user/Students';
 
 export default function Users() {
+  const { path } = useRouteMatch();
   const [userType, setUserType] = useState('Students');
-  const [modalOpen, setModalOpen] = useState(false);
-  const history = useHistory();
 
-  function handleSearch(_e: ValueType) {}
+  const tabs = [
+    {
+      label: 'Students',
+      href: '/dashboard/users',
+    },
+    {
+      label: 'Instructors',
+      href: '/dashboard/users/instructors',
+    },
+    {
+      label: 'Admins',
+      href: '/dashboard/users/admins',
+    },
+  ];
 
-  const handleCreateNewUserClick = () => {
-    if (userType === 'Students') history.push('/users/students/new');
-    else if (userType === 'Instructors') history.push('/users/instructors/new');
-    else history.push('/users/admins/new');
-  };
-
-  const data = [
+  const users = [
     {
       'full name': 'Col Florin Sandberg',
       role: 'Student / Sr',
@@ -237,11 +242,9 @@ export default function Users() {
     },
   ];
 
-  let instractors = data.slice(6, 13);
-  let admins = data.slice(24, 28);
   return (
-    <>
-      <div className="flex flex-wrap justify-start items-center pt-2">
+    <div>
+      <div className="flex flex-wrap justify-start items-center pt-1">
         <ILabel size="sm" color="gray" weight="medium">
           Institution Admin
         </ILabel>
@@ -255,29 +258,46 @@ export default function Users() {
           {userType}
         </ILabel>
       </div>
+      <div className="flex gap-2 items-center py-3">
+        <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
+          users
+        </Heading>
+        <Badge
+          badgetxtcolor="main"
+          badgecolor="primary"
+          fontWeight="normal"
+          className="h-6 w-9 flex justify-center items-center">
+          {users.length}
+        </Badge>
+      </div>
 
-      <TableHeader title="Users" totalItems={30} handleSearch={handleSearch}>
-        <div className="flex gap-3">
-          <Button styleType="outline">Import users</Button>
-          <Button onClick={() => handleCreateNewUserClick()}>New {userType}</Button>
-        </div>
-      </TableHeader>
-      <Tabs onTabChange={(e) => setUserType(e.activeTabLabel)}>
-        <Tab label="Students" className="pt-8">
-          <Table statusColumn="status" data={data} hasAction={true} />
-        </Tab>
-        <Tab label="Instructors" className="pt-8">
-          <Table statusColumn="status" data={instractors} hasAction={true} />
-        </Tab>
-        <Tab label="Admins" className="pt-8">
-          <Table statusColumn="status" data={admins} hasAction={true} />
-        </Tab>
-      </Tabs>
-      <PopupMolecule
-        open={modalOpen && userType === 'Students'}
-        onClose={() => setModalOpen(false)}>
-        <NewStudent />
-      </PopupMolecule>
-    </>
+      <TabNavigation
+        tabs={tabs}
+        onTabChange={(event) => setUserType(event.activeTabLabel)}>
+        <Switch>
+          <Route
+            exact
+            path={`${path}`}
+            render={() => {
+              return <Students students={users} />;
+            }}
+          />
+          <Route
+            exact
+            path={`${path}/instructors`}
+            render={() => {
+              return <Instructors instructors={users.slice(10, 18)} />;
+            }}
+          />
+          <Route
+            exact
+            path={`${path}/admins`}
+            render={() => {
+              return <Admins admins={users.slice(0, 5)} />;
+            }}
+          />
+        </Switch>
+      </TabNavigation>
+    </div>
   );
 }

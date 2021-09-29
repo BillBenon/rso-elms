@@ -19,6 +19,7 @@ type StepperProps = {
   isInline?: boolean;
   isVertical?: boolean;
   navigateToStepHandler: (_index: number) => void;
+  width?: string;
 };
 
 const Stepper = ({
@@ -26,6 +27,7 @@ const Stepper = ({
   isInline,
   navigateToStepHandler,
   stepperContent,
+  width,
 }: StepperProps) => {
   return (
     <div className="stepper-wrapper">
@@ -35,6 +37,7 @@ const Stepper = ({
           navigateToStepHandler={navigateToStepHandler}
           isVertical={isVertical}
           isInline={isInline}
+          width={width}
         />
         <div className={isVertical ? 'md:pl-11 w-full' : 'py-6 w-full'}>
           {stepperContent.content[stepperContent.currentStep].content}
