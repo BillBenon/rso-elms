@@ -5,7 +5,7 @@ import PopupMolecule from '../../../../components/Molecules/Popup';
 import Table from '../../../../components/Molecules/table/Table';
 import TableHeader from '../../../../components/Molecules/table/TableHeader';
 import { ValueType } from '../../../../types';
-import NewInstructor from '../../../../views/users/NewInstructor';
+import NewInstructor from './NewInstructor';
 
 export default function Instructors({ instructors }: { instructors: Object[] }) {
   const [modalOpen, setModalOpen] = useState(false);

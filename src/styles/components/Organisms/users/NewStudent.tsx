@@ -69,7 +69,7 @@ export default function NewStudent() {
         options={academies}
         name="academy"
         placeholder={'Academy to be enrolled'}
-        handleChange={(e) => {}}>
+        handleChange={(_e: any) => {}}>
         Academy
       </DropdownMolecule>
       <Button onClick={handleSubmit}>Create</Button>

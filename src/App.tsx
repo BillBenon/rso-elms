@@ -7,7 +7,6 @@ import MoreInfo from './components/Organisms/forms/auth/signup/more-details/More
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import Dashboard from './layout/Dashboard';
 import { MainLayout } from './layout/MainLayout';
-import NewStudentsView from './styles/components/Organisms/users/NewStudent';
 import Academies from './views/academies/Academies';
 import NewAcademy from './views/academies/NewAcademy';
 import Signin from './views/auth/Signin';
@@ -19,7 +18,6 @@ import LevelsView from './views/levels/Levels';
 import Modules from './views/modules';
 import NotFound from './views/NotFound';
 import Popup from './views/Popup';
-import PrivilegesView from './views/privileges/Privileges';
 import AcademicPrograms from './views/programs/AcademicPrograms';
 import NewAcademicProgram from './views/programs/NewAcademicProgram';
 import ProgramDetails from './views/programs/ProgramDetails';

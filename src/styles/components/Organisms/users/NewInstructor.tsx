@@ -1,9 +1,9 @@
 import React from 'react';
 
-import Button from '../../components/Atoms/custom/Button';
-import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
-import InputMolecule from '../../components/Molecules/input/InputMolecule';
-import { SelectData, ValueType } from '../../types';
+import Button from '../../../../components/Atoms/custom/Button';
+import DropdownMolecule from '../../../../components/Molecules/input/DropdownMolecule';
+import InputMolecule from '../../../../components/Molecules/input/InputMolecule';
+import { SelectData, ValueType } from '../../../../types';
 
 export default function NewInstructor() {
   const handleChange = (e: ValueType) => {
@@ -70,7 +70,7 @@ export default function NewInstructor() {
           options={academies}
           name="academy"
           placeholder={'Academy to be deployed to'}
-          handleChange={(e) => {}}>
+          handleChange={(_e: any) => {}}>
           Academy
         </DropdownMolecule>
         <Button onClick={handleSubmit}>Create</Button>
