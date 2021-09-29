@@ -46,8 +46,18 @@ export function Table<T>({
   // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
+  let selected = new Set('');
+
+  // handle select
   function _handleSelect(e: ValueType<HTMLInputElement>) {
-    if (handleSelect) handleSelect(e.value ? [e.value + ''] : null);
+    const val = e.value?.toString(); //stringfy value
+
+    // if value exist we chop it
+    if (val && selected.has(val)) selected.delete(val);
+    // else we add it
+    else if (val) selected.add(val);
+
+    if (handleSelect) handleSelect(Array.from(selected));
   }
 
   const getKeys = () => Object.keys(currentRows[0]);
