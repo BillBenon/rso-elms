@@ -10,10 +10,10 @@ import ILabel from '../../components/Atoms/Text/ILabel';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import { authenticatorService } from '../../services';
 import academyStore from '../../store/academy.store';
-import { ValueType } from '../../types';
+import { CommonFormProps, ValueType } from '../../types';
 import { AcademyCreateInfo } from '../../types/services/academy.types';
 
-export default function AddAcademy() {
+export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
 
   useEffect(() => {
@@ -54,6 +54,9 @@ export default function AddAcademy() {
 
   async function createAcademy<T>(e: FormEvent<T>) {
     e.preventDefault();
+
+    if (onSubmit) onSubmit(e);
+
     await mutateAsync(details, {
       onSuccess() {
         history.push('/academies');

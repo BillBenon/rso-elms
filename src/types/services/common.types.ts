@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 export interface Response<T = unknown> {
   data: T;
   message: string;
@@ -13,4 +14,10 @@ export interface Table {
   updated_by_id: string;
   updated_by_username: string;
   updated_on: string;
+}
+
+export enum GenericStatus {
+  ACTIVE,
+  INACTIVE,
+  RESET,
 }

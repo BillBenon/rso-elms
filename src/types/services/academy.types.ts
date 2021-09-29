@@ -1,8 +1,9 @@
-import { Status, Table } from '..';
+import { Table } from '..';
+import { GenericStatus } from './common.types';
 import { InstitutionInfo } from './institution.types';
 
 export interface AcademyInfo extends AcademyCreateInfo, Table {
-  generic_status: Status;
+  generic_status: GenericStatus;
   last_status_change_reason: string;
   institution: InstitutionInfo;
 }
