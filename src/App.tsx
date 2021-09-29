@@ -12,7 +12,7 @@ import NewAcademy from './views/academies/NewAcademy';
 import Signin from './views/auth/Signin';
 import Signup from './views/auth/Signup';
 import FacultiesView from './views/faculties/Faculties';
-import NewInstitution from './views/insitution/NewInsitution';
+import NewInstitution from './views/insitution/NewInstitution';
 import IntakeModulesView from './views/intakes/IntakeModules';
 import IntakesView from './views/intakes/Intakes';
 import LevelsView from './views/levels/Levels';
