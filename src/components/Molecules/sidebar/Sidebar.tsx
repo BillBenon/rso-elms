@@ -6,6 +6,7 @@ import AcademyProfileCard from '../cards/AcademyProfileCard';
 const defaultLinks: linkProps[] = [
   { title: 'Users', to: '/users', icon: 'user' },
   { title: 'Roles', to: '/roles', icon: 'role' },
+  { title: 'Privileges', to: '/privileges', icon: 'module' },
   { title: 'Academies', to: '/academies', icon: 'academy', fill: false },
   { title: 'Faculties', to: '/faculties', icon: 'faculty' },
   { title: 'Programs', to: '/programs', icon: 'faculty' },
