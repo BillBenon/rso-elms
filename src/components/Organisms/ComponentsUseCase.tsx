@@ -5,6 +5,7 @@ import DropDown from '../Atoms/Input/Dropdown';
 import Input from '../Atoms/Input/Input';
 import CheckboxMolecule from '../Molecules/input/CheckboxMolecule';
 import DropdownMolecule from '../Molecules/input/DropdownMolecule';
+import { Tab, Tabs } from '../Molecules/tabs/tabs';
 
 export default function CreatedBySandberg() {
   const [checked, setChecked] = useState(false);
@@ -34,8 +35,7 @@ export default function CreatedBySandberg() {
           value="en"
           checked={checked}
           label="English"
-          onChange={() => setChecked(!checked)}
-          error={null}
+          handleChange={() => setChecked(!checked)}
         />
         <div className="py-3">
           <Checkbox
@@ -43,8 +43,7 @@ export default function CreatedBySandberg() {
             value="en"
             checked={checked}
             label="French"
-            onChange={() => setChecked(!checked)}
-            error={null}
+            handleChange={() => setChecked(!checked)}
           />
         </div>
         <Tabs className="my-4" activeIndex={1}>
@@ -61,7 +60,7 @@ export default function CreatedBySandberg() {
         <CheckboxMolecule
           options={options}
           name="language"
-          placeholder="Checkbox Molecule"
+          placeholder="Language"
           handleChange={() => console.log('changed')}
         />
         <DropDown
