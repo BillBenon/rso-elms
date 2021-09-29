@@ -1,9 +1,9 @@
 import React from 'react';
 
-import Button from '../../../../components/Atoms/custom/Button';
-import DropdownMolecule from '../../../../components/Molecules/input/DropdownMolecule';
-import InputMolecule from '../../../../components/Molecules/input/InputMolecule';
-import { SelectData } from '../../../../types';
+import { SelectData } from '../../../types';
+import Button from '../../Atoms/custom/Button';
+import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
+import InputMolecule from '../../Molecules/input/InputMolecule';
 
 export default function NewStudent() {
   const handleChange = (e: any) => {

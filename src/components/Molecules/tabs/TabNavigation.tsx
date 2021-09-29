@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 import { ReactNode } from 'react-router/node_modules/@types/react';
 
 import { colorStyle, fontSizeStyle, fontWeightStyle } from '../../../global/global-vars';
@@ -7,7 +7,6 @@ import { colorStyle, fontSizeStyle, fontWeightStyle } from '../../../global/glob
 export interface TabType {
   label: string;
   href: string;
-  active?: boolean;
 }
 
 type tabEventTypes = {
@@ -42,8 +41,10 @@ export default function TabNavigation({
 }
 
 function TabHeadings({ tabs, onTabChange }: TabsImportantProps) {
-  let activeTabIndex = tabs.findIndex((tab) => tab.active);
   const history = useHistory();
+  const location = useLocation();
+
+  let activeTabIndex = tabs.findIndex((tab) => tab.href === location.pathname) || 0;
 
   const slideTo = (index: number, href: string, label: string) => {
     if (onTabChange)

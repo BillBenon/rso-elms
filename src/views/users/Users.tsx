@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
-import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import Badge from '../../components/Atoms/custom/Badge';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
-import Admins from '../../styles/components/Organisms/users/Admins';
-import Instructors from '../../styles/components/Organisms/users/Instructors';
-import Students from '../../styles/components/Organisms/users/Students';
+import Admins from '../../components/Organisms/user/Admins';
+import Instructors from '../../components/Organisms/user/Instructors';
+import Students from '../../components/Organisms/user/Students';
 
 export default function Users() {
   const { path } = useRouteMatch();
@@ -18,17 +18,14 @@ export default function Users() {
     {
       label: 'Students',
       href: '/dashboard/users',
-      active: userType === 'Students',
     },
     {
       label: 'Instructors',
       href: '/dashboard/users/instructors',
-      active: userType === 'Instructors',
     },
     {
       label: 'Admins',
       href: '/dashboard/users/admins',
-      active: userType === 'Admins',
     },
   ];
 

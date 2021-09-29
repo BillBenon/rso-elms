@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 
-import Button from '../../../../components/Atoms/custom/Button';
-import PopupMolecule from '../../../../components/Molecules/Popup';
-import Table from '../../../../components/Molecules/table/Table';
-import TableHeader from '../../../../components/Molecules/table/TableHeader';
-import { ValueType } from '../../../../types';
+import { ValueType } from '../../../types';
+import Button from '../../Atoms/custom/Button';
+import PopupMolecule from '../../Molecules/Popup';
+import Table from '../../Molecules/table/Table';
+import TableHeader from '../../Molecules/table/TableHeader';
 import NewInstructor from './NewInstructor';
 
 export default function Instructors({ instructors }: { instructors: Object[] }) {

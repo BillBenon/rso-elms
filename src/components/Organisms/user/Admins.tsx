@@ -1,9 +1,9 @@
 import React from 'react';
 
-import Button from '../../../../components/Atoms/custom/Button';
-import Table from '../../../../components/Molecules/table/Table';
-import TableHeader from '../../../../components/Molecules/table/TableHeader';
-import { ValueType } from '../../../../types';
+import { ValueType } from '../../../types';
+import Button from '../../Atoms/custom/Button';
+import Table from '../../Molecules/table/Table';
+import TableHeader from '../../Molecules/table/TableHeader';
 
 export default function Admins({ admins }: { admins: Object[] }) {
   function handleSearch(_e: ValueType) {}
