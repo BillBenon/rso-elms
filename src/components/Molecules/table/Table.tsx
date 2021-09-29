@@ -8,11 +8,16 @@ import React, { useState } from 'react';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import Row from '../../Atoms/custom/Row';
+import Checkbox from '../../Atoms/Input/CheckBox';
 import Pagination from '../Pagination';
 import Tooltip from '../Tooltip';
 
+interface Selected {
+  selected?: boolean;
+}
+
 interface TableProps<T> {
-  data: T[];
+  data: (Selected & T)[];
   uniqueCol?: keyof T;
   actions?: { name: string; handleAction: (_data?: T[keyof T]) => void }[];
   handleClick?: () => void;
@@ -41,11 +46,29 @@ export function Table<T>({
   const getKeys = () => Object.keys(currentRows[0]);
   const getHeader = () => {
     let keys = getKeys();
-    return keys.map((key) => (
+    // eslint-disable-next-line no-undef
+    let header: JSX.Element[] = [];
+
+    header.push(
+      <th className="checkbox-tb">
+        {uniqueCol && (
+          <Checkbox
+            handleChange={console.log}
+            name={uniqueCol + ''}
+            value={'all'}></Checkbox>
+        )}
+      </th>,
+    );
+
+    const dynamicHeaders = keys.map((key) => (
       <th className="px-4 py-5 capitalize" key={key}>
         {key}
       </th>
     ));
+
+    header.push(...dynamicHeaders);
+
+    return header;
   };
 
   const getRowsData = () => {
@@ -53,6 +76,16 @@ export function Table<T>({
 
     return currentRows.map((row, index) => (
       <tr key={index}>
+        <td className="checkbox-tb">
+          {uniqueCol && (
+            <Checkbox
+              checked={row.selected}
+              handleChange={console.log}
+              name={uniqueCol + ''}
+              value={row[uniqueCol] + ''}></Checkbox>
+          )}
+        </td>
+
         <Row key={index} data={row} keys={keys} statusColumn={statusColumn} />
         {actions && actions.length > 0 ? (
           <td className="flex space-x-6 cursor-pointer">
