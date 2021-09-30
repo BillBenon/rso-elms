@@ -21,6 +21,7 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
     actual_end_date: '',
     expected_start_date: '',
     expected_end_date: '',
+    id: '',
   });
 
   function handleChange(e: ValueType) {

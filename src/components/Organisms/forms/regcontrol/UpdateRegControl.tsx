@@ -62,7 +62,10 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
         handleChange={handleChange}>
         Registration control description
       </TextAreaMolecule>
-      <DateMolecule handleChange={handleChange} name={'expected_start_date'}>
+      <DateMolecule
+        defaultValue={regControl.expected_start_date}
+        handleChange={handleChange}
+        name={'expected_start_date'}>
         Expected Start Date
       </DateMolecule>
 

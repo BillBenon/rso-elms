@@ -8,7 +8,7 @@ export interface IRegistrationControlCreateInfo {
   description: string;
   expected_end_date: string;
   expected_start_date: string;
-  id: string;
+  id: string | number;
 }
 
 export interface IRegistrationControlInfo
