@@ -29,6 +29,9 @@ export default function ViewRole() {
   // const rolesPrivileges = roleStore.getPrivilegesByRole(id);
   const role = data?.data.data;
 
+  // TODO: display priviles
+  // Todo: add privileges on role
+
   function submited() {}
   return (
     <main>
