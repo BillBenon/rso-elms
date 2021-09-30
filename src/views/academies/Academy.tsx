@@ -2,17 +2,21 @@
 import '../../styles/components/Organisms/academy/academy.scss';
 
 import React from 'react';
-import { useHistory } from 'react-router';
+import { Route, useHistory, useRouteMatch } from 'react-router';
+import { Link, Switch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import ILabel from '../../components/Atoms/Text/ILabel';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import NewAcademy from '../../components/Organisms/forms/academy/NewAcademy';
 import academyStore from '../../store/academy.store';
 import { GenericStatus, ValueType } from '../../types';
+import UpdateAcademy from './UpdateAcademy';
 
 type AcademyTypes = {
+  id: number | string;
   'academy name': string;
   'academy Admin': string;
   'phone number': string;
@@ -20,15 +24,17 @@ type AcademyTypes = {
 };
 
 export default function Academy() {
+  const { url, path } = useRouteMatch();
   const history = useHistory();
 
   const { data } = academyStore.fetchAcademies();
   const academyInfo = data?.data.data;
   let academies: AcademyTypes[] = [];
   academyInfo?.map((obj) => {
-    let { name, created_by_username, phone_number, generic_status } = obj;
+    let { id, name, created_by_username, phone_number, generic_status } = obj;
 
     let academy: AcademyTypes = {
+      id: id,
       'academy Admin': created_by_username,
       'academy name': name,
       'phone number': phone_number,
@@ -41,8 +47,12 @@ export default function Academy() {
   function handleSearch(_e: ValueType) {}
 
   const academyActions = [
-    { name: 'Add academy', handleAction: () => {} },
-    { name: 'Edit admin', handleAction: () => {} },
+    {
+      name: 'Edit academy',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`${path}/${id}/edit`); // go to edit role
+      },
+    },
     { name: 'View', handleAction: () => {} },
   ];
 
@@ -64,9 +74,9 @@ export default function Academy() {
       </div>
       <div className="py-4">
         <TableHeader title="Academy" totalItems={300} handleSearch={handleSearch}>
-          <Button onClick={() => history.push('/dashboard/academies/new')}>
-            New academy
-          </Button>
+          <Link to={`${url}/add`}>
+            <Button>New academy</Button>
+          </Link>
         </TableHeader>
       </div>
 
@@ -76,9 +86,30 @@ export default function Academy() {
             statusColumn="status"
             data={academies}
             actions={academyActions}
+            uniqueCol="id"
           />
         )}
       </div>
+
+      <Switch>
+        {/* create academy */}
+        <Route
+          exact
+          path={`${path}/add`}
+          render={() => {
+            return <NewAcademy />;
+          }}
+        />
+
+        {/* modify academy */}
+        <Route
+          exact
+          path={`${path}/:id/edit`}
+          render={() => {
+            return <UpdateAcademy />;
+          }}
+        />
+      </Switch>
     </>
   );
 }

@@ -1,33 +1,24 @@
 // import { Label } from "@headlessui/react/dist/components/label/label";
-import '../../../../styles/components/Organisms/academy/academy.scss';
+import '../../styles/components/Organisms/academy/academy.scss';
 
 import React, { FormEvent, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 
-import { authenticatorService } from '../../../../services';
-import academyStore from '../../../../store/academy.store';
-import { CommonFormProps, ValueType } from '../../../../types';
-import { AcademyCreateInfo } from '../../../../types/services/academy.types';
-import Button from '../../../Atoms/custom/Button';
-import Icon from '../../../Atoms/custom/Icon';
-import Heading from '../../../Atoms/Text/Heading';
-import ILabel from '../../../Atoms/Text/ILabel';
-import InputMolecule from '../../../Molecules/input/InputMolecule';
+import Button from '../../components/Atoms/custom/Button';
+import Icon from '../../components/Atoms/custom/Icon';
+import Heading from '../../components/Atoms/Text/Heading';
+import ILabel from '../../components/Atoms/Text/ILabel';
+import InputMolecule from '../../components/Molecules/input/InputMolecule';
+import academyStore from '../../store/academy.store';
+import { CommonFormProps, ValueType } from '../../types';
+import { AcademyCreateInfo } from '../../types/services/academy.types';
 
-export default function NewAcademy<E>({ onSubmit }: CommonFormProps<E>) {
+interface ParamType {
+  id: string;
+}
+
+export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
-
-  useEffect(() => {
-    const getUser = async () => {
-      const user = await authenticatorService.authUser();
-      setDetails((details) => ({
-        ...details,
-        current_admin_id: user.data.data.id,
-      }));
-    };
-
-    getUser();
-  }, []);
 
   const [details, setDetails] = useState<AcademyCreateInfo>({
     current_admin_id: '',
@@ -35,7 +26,7 @@ export default function NewAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     fax_number: '',
     full_address: '',
     head_office_location_id: 17445,
-    institution_id: 'b832407f-fb77-4a75-8679-73bf7794f207',
+    institution_id: '',
     mission: '',
     moto: '',
     name: '',
@@ -44,7 +35,15 @@ export default function NewAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     short_name: '',
     website_link: '',
   });
-  const { mutateAsync } = academyStore.createAcademy();
+  const { mutateAsync } = academyStore.modifyAcademy();
+
+  const { id } = useParams<ParamType>();
+
+  const { data } = academyStore.getAcademyById(id);
+
+  useEffect(() => {
+    data?.data.data && setDetails({ ...data?.data.data });
+  }, [data]);
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
@@ -53,14 +52,14 @@ export default function NewAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     }));
   }
 
-  async function createAcademy<T>(e: FormEvent<T>) {
+  function createAcademy<T>(e: FormEvent<T>) {
     e.preventDefault();
-    if (onSubmit) onSubmit(e);
-    await mutateAsync(details, {
+    mutateAsync(details, {
       onSuccess() {
-        history.push('/academies');
+        history.push('/dashboard/academies');
       },
     });
+    if (onSubmit) onSubmit(e);
   }
 
   return (
@@ -83,7 +82,7 @@ export default function NewAcademy<E>({ onSubmit }: CommonFormProps<E>) {
       <div className="p-4 pl-6 popup-width gap-3">
         <div className="py-5 mb-3 capitalize">
           <Heading color="primary" fontWeight="bold">
-            New academy
+            Edit academy
           </Heading>
         </div>
         <form onSubmit={createAcademy}>
