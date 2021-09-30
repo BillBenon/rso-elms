@@ -1,20 +1,19 @@
 import React from 'react';
 
-import { ValueType } from '../../../types';
+import { CommonInputProps, ValueType } from '../../../types';
 import Input from '../../Atoms/Input/Input';
 import Error from '../../Atoms/Text/Error';
 import ILabel from '../../Atoms/Text/ILabel';
 
-type IInputMolecule = {
-  name: string;
-  value: string;
+interface IInputMolecule<T> extends CommonInputProps<T> {
+  value: string | undefined;
   handleChange: (_e: ValueType) => void;
   children: React.ReactNode;
   error?: string;
   placeholder?: string;
   type?: string;
-};
-export default function InputMolecule({
+}
+export default function InputMolecule<T>({
   name,
   value,
   handleChange,
@@ -22,11 +21,15 @@ export default function InputMolecule({
   error = '',
   placeholder = '',
   type = 'text',
-}: IInputMolecule) {
+  ...attrs
+}: IInputMolecule<T>) {
   return (
-    <div className="flex flex-col gap-3">
-      <ILabel weight="bold">{children}</ILabel>
+    <div className="flex flex-col gap-2 pb-2" {...attrs}>
+      <ILabel className="capitalize" size="sm" weight="medium">
+        {children}
+      </ILabel>
       <Input
+        {...attrs}
         name={name}
         placeholder={placeholder}
         fcolor={error ? 'error' : undefined}

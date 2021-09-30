@@ -5,7 +5,7 @@ import Indicator from '../../Atoms/custom/Indicator';
 
 type StepProps = {
   // eslint-disable-next-line no-undef
-  indicator: JSX.Element | number;
+  indicator: JSX.Element | number | boolean;
   label: string;
   navigateToStepHandler: (_index: number) => void;
   index: number;
@@ -14,6 +14,8 @@ type StepProps = {
   isComplete?: boolean;
   isError?: boolean;
   isVertical?: boolean;
+  isFirstStep: boolean;
+  width?: string;
 };
 
 const Step = ({
@@ -23,32 +25,51 @@ const Step = ({
   index,
   isActive,
   isComplete,
+  isVertical,
+  isFirstStep,
   isError,
+  width = 'w-60',
 }: StepProps) => {
   return (
-    <div className="flex gap-14">
-      <Indicator
-        isCircular={true}
-        hasError={isError}
-        isComplete={isComplete}
-        isActive={isActive}
-        clicked={() => navigateToStepHandler(index)}>
-        {indicator}
-      </Indicator>
-      <div
-        onKeyDown={() => navigateToStepHandler(index)}
-        className={`cursor-pointer
+    <div className="flex justify-between">
+      {/* label */}
+      {isVertical && (
+        <div
+          onKeyDown={() => navigateToStepHandler(index)}
+          className={`cursor-pointer flex items-end w-max
         ${
           isActive
             ? 'text-primary-600'
             : isError
             ? 'text-error-500'
             : isComplete
-            ? 'text-success-500'
+            ? 'text-primary-400'
             : 'text-txt-secondary'
         }`}
-        onClick={() => navigateToStepHandler(index)}>
-        {label}
+          onClick={() => navigateToStepHandler(index)}>
+          <div>{label}</div>
+        </div>
+      )}
+      <div
+        className={`${
+          isVertical ? `pl-7  ${isFirstStep && 'items-end'}` : 'flex items-center'
+        }`}>
+        {/* step line(separator) */}
+        {!isFirstStep && (
+          <div
+            className={`${isComplete ? 'border-primary-400' : 'border-silver'}
+          ${isVertical ? 'separator_ h-16 border-l-2' : `${width} border-b-2`} 
+          ${isFirstStep ? 'h-0 border-none' : ''}`}></div>
+        )}
+        {/* step (in numbers) indicator */}
+        <Indicator
+          isCircular={true}
+          hasError={isError}
+          isActive={isActive}
+          isComplete={isComplete}
+          clicked={() => navigateToStepHandler(index)}>
+          {indicator}
+        </Indicator>
       </div>
     </div>
   );

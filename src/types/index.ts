@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { ReactNode } from 'react';
+import { FormEvent, ReactNode } from 'react';
 
 export type Color =
   | 'primary'
@@ -16,9 +16,11 @@ export type Color =
   | 'gray'
   | 'lightgray';
 
-export type fontSize = 'xs' | 'sm' | 'base' | 'tiny' | 'lg' | '2xl';
+export type fontSize = 'xs' | 'sm' | 'base' | 'tiny' | 'lg' | '2xl' | '3xl';
+export type textTransform = 'uppercase' | 'lowerCase' | 'capitalize' | 'normal-case';
 export type width = 'default' | 'full';
 export type fontWeight = 'normal' | 'medium' | 'semibold' | 'bold';
+export type TextDecoration = 'no-underline' | 'underline';
 
 export type Status =
   | 'pending'
@@ -28,6 +30,24 @@ export type Status =
   | 'inactive'
   | 'suspended'
   | 'cancelled';
+
+export type Page =
+  | 'personalDetails'
+  | 'familyDetails'
+  | 'nationalDocuments'
+  | 'employmentDetails'
+  | 'otherDetails'
+  | 'educationBackground'
+  | ExperienceType
+  | 'nextOfKinDetails'
+  | 'kinAddressDetails'
+  | 'accountDetails';
+
+export type ExperienceType =
+  | 'appointmentHeld'
+  | 'internationalMission'
+  | 'courseCarrier'
+  | 'decorations';
 
 export type statusStyleType = {
   [_index in Status]?: string;
@@ -65,10 +85,10 @@ export interface SelectData {
 /**
  * handleChange function params type
  */
-export interface ValueType {
+export interface ValueType<T = Event> {
   name: string;
   value: string | number | boolean | undefined;
-  event: Event;
+  event?: FormEvent<T>;
 }
 
 export interface CommonCardDataType {
@@ -81,4 +101,16 @@ export interface CommonCardDataType {
   footerTitle?: string | ReactNode;
 }
 
+export interface SigninPropTypes extends CommonCardDataType {
+  programs: SelectData[];
+}
+
+export interface FormPropType {
+  onSubmit?: <E>(_e: FormEvent<E>) => void;
+}
+
 export * from './props';
+export * from './services/autheticator.types';
+export * from './services/common.types';
+export * from './services/privilege.types';
+export * from './services/role.types';

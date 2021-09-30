@@ -3,7 +3,7 @@ import '../../../styles/components/Atoms/custom/button.scss';
 import React, { ButtonHTMLAttributes, DOMAttributes, ReactNode } from 'react';
 
 import { bgStyleButton, colorStyle } from '../../../global/global-vars';
-import { Color } from '../../../types';
+import { Color, TextDecoration } from '../../../types';
 
 type ButtonType = 'fill' | 'outline' | 'text';
 type ButtonStyleType = {
@@ -17,6 +17,7 @@ interface PropTypes<T> extends ButtonHTMLAttributes<DOMAttributes<T>> {
   icon?: boolean;
   styleType?: ButtonType;
   color?: Color;
+  hoverStyle?: TextDecoration;
   className?: string;
   onClick?: () => any;
 }
@@ -28,6 +29,7 @@ export default function Button<T>({
   full,
   icon,
   className = '',
+  hoverStyle = 'underline',
   onClick,
   ...attrs
 }: PropTypes<T>) {
@@ -38,7 +40,7 @@ export default function Button<T>({
     outline: ` ${!icon && 'with-width'}  border-2 border-solid border-${
       colorStyle[color]
     } text-${colorStyle[color]}`,
-    text: `text-${colorStyle[color]} hover:underline`,
+    text: `text-${colorStyle[color]} hover:${hoverStyle}`,
   };
 
   // determine padding based on the style type of button
@@ -48,7 +50,7 @@ export default function Button<T>({
     <button
       {...attrs}
       onClick={onClick}
-      className={`${buttonStyle[styleType]} rounded-lg text-sm outline-none 
+      className={`${buttonStyle[styleType]} rounded-lg font-semibold text-sm outline-none 
       ${full && 'w-full'}
       ${padding} ${className}
       `}>

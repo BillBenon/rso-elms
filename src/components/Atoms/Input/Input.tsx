@@ -1,29 +1,29 @@
 import './input.scss';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { colorStyle } from '../../../global/global-vars';
-import { Color, ValueType } from '../../../types';
+import { Color, CommonInputProps, ValueType } from '../../../types';
 
-export interface IProps {
+export interface IProps<T> extends CommonInputProps<T> {
   placeholder?: string;
   type?: string;
   readonly?: boolean;
   handleChange: (_e: ValueType) => void;
-  value: string;
+  value: string | undefined;
   name: string;
   full?: boolean;
   padding?: string;
   fcolor?: Color;
   bcolor?: Color;
   pcolor?: Color;
-  width?: string;
+  width?: string | number;
   className?: string;
 }
 
-export default function Input({
+export default function Input<T>({
   placeholder = '',
-  padding = 'px-3',
+  padding = 'px-4',
   type = 'text',
   readonly = false,
   value,
@@ -36,11 +36,13 @@ export default function Input({
   handleChange,
   className = '',
   ...attrs
-}: IProps) {
-  const [_value, _setValue] = useState(value);
+}: IProps<T>) {
+  const [_value, setValue] = useState('');
+
+  useEffect(() => setValue(value || ''), [value]);
 
   function handleOnChange(e: any) {
-    _setValue(e.target.value);
+    setValue(e.target.value);
     handleChange({ name, value: e.target.value, event: e });
   }
   return (
@@ -52,7 +54,7 @@ export default function Input({
       value={_value}
       readOnly={readonly}
       className={`bg-transparent h-12 ${padding} placeholder-${pcolor} rounded-md ${
-        full ? 'w-full' : `w-60 md:w-${width}`
+        full ? 'w-full' : `w-full md:w-${width}`
       } focus:outline-none border-${bcolor} focus:border-${
         colorStyle[fcolor]
       } border-2 ${className}`}

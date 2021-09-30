@@ -7,7 +7,6 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
-import Dashboard from '../../layout/Dashboard';
 import { CommonCardDataType, Link } from '../../types';
 
 export default function Subjects() {
@@ -32,35 +31,35 @@ export default function Subjects() {
     {
       status: { type: 'success', text: 'On going' },
       code: 'Ra01-430st',
-      title: 'The basics of Biomedics (This is the case of a course with a long name',
+      title: 'The basics of Biomedics',
       description:
-        'This is a course description. It states briefy what this course is all about.',
+        'This is a subject description. It states briefy what this subject is all about.',
     },
     {
       status: { type: 'success', text: 'On going' },
       code: 'Ra01-430st',
-      title: 'The basics of Biomedics (This is the case of a course with a long name',
+      title: 'The basics of Biomedics',
       description:
-        'This is a course description. It states briefy what this course is all about.',
+        'This is a subject description. It states briefy what this subject is all about.',
     },
     {
       status: { type: 'warning', text: 'On Hold' },
       code: 'Ra01-430st',
-      title: 'The basics of Biomedics (This is the case of a course with a long name',
+      title: 'The basics of Biomedics',
       description:
-        'This is a course description. It states briefy what this course is all about.',
+        'This is a subject description. It states briefy what this subject is all about.',
     },
     {
       status: { type: 'error', text: 'Completed' },
       code: 'Ra01-430st',
-      title: 'The basics of Biomedics (This is the case of a course with a long name',
+      title: 'The basics of Biomedics',
       description:
-        'This is a course description. It states briefy what this course is all about.',
+        'This is a subject description. It states briefy what this subject is all about.',
     },
   ];
 
   return (
-    <Dashboard>
+    <>
       <main className="px-4">
         <section>
           <Cacumber list={list}></Cacumber>
@@ -71,10 +70,10 @@ export default function Subjects() {
           </TableHeader>
         </section>
         <section className="flex flex-wrap justify-between mt-2">
-          {data.map((course) => (
-            <div key={course.code} className="p-1 mt-3">
+          {data.map((subject) => (
+            <div key={subject.code} className="p-1 mt-3">
               <CommonCardMolecule
-                data={course}
+                data={subject}
                 to={{ title: 'module', to: 'modules/id' }}
               />
             </div>
@@ -87,13 +86,10 @@ export default function Subjects() {
         </PopupMolecule>
 
         {/* add prerequesite popup */}
-        <PopupMolecule
-          title="Add Prerequesite"
-          open={prOpen}
-          onClose={() => setPrOpen(false)}>
+        <PopupMolecule title="Add lesson" open={prOpen} onClose={() => setPrOpen(false)}>
           <NewLessonForm />
         </PopupMolecule>
       </main>
-    </Dashboard>
+    </>
   );
 }

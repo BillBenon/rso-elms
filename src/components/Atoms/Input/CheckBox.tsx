@@ -1,42 +1,43 @@
-import '../../../styles/components/Atoms/input/checkbox.scss';
+import React, { FormEvent, useEffect, useState } from 'react';
 
-import React from 'react';
-
-import Error from '../Text/Error';
+import { ValueType } from '../../../types';
 
 interface Props {
-  label: string;
+  label?: string;
   name: string;
-  error?: string | null;
   disabled?: boolean;
-  // eslint-disable-next-line no-unused-vars
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (_e: ValueType<HTMLInputElement>) => any;
   checked?: boolean;
   value: string;
   className?: string;
 }
 
-export default function Checkbox({
-  label,
-  name,
-  value,
-  onChange,
-  checked = false,
-  disabled = false,
-  className = '',
-}: Props) {
+export default function Checkbox(props: Props) {
+  const [checked, setChecked] = useState(false);
+
+  const handleCheck = (e: FormEvent<HTMLInputElement>) => {
+    setChecked(!checked);
+    props.handleChange({ name: props.name, value: props.value, event: e });
+  };
+
+  useEffect(() => setChecked(!!props.checked), [props.checked]);
+
   return (
     <>
-      <input
-        type="checkbox"
-        name={name}
-        disabled={disabled}
-        checked={checked}
-        value={value}
-        onChange={() => onChange}
-        className={'checkbox ' + className}
-      />
-      <label className="checkbox-label">{label}</label>
+      <label className="inline-flex items-center">
+        <input
+          name={props.name}
+          type="checkbox"
+          className={`form-checkbox border-2 border-gray-100 h-4 w-4 text-primary-500 mr-2 focus:ring-primary-400 focus:ring-opacity-25  rounded ${props.className}`}
+          checked={checked}
+          disabled={props.disabled}
+          value={props.value}
+          onChange={handleCheck}
+        />
+        {props.label && (
+          <span className="text-sm px-2 text-gray-700 capitalize">{props.label}</span>
+        )}
+      </label>
     </>
   );
 }

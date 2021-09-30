@@ -2,54 +2,74 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import ComponentsUseCase from './components/Organisms/ComponentsUseCase';
-import SignUpForm from './components/Organisms/forms/auth/signup/SignUpForm';
+import ExperienceInfo from './components/Organisms/forms/auth/signup/experience/ExperienceInfo';
+import MoreInfo from './components/Organisms/forms/auth/signup/more-details/MoreInfo';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
+import NewInstructor from './components/Organisms/user/NewInstructor';
+import NewStudent from './components/Organisms/user/NewStudent';
 import Dashboard from './layout/Dashboard';
-import Academies from './views/academies/Academies';
-import NewAcademy from './views/academies/NewAcademy';
+import { MainLayout } from './layout/MainLayout';
+import Academies from './views/academies/Academy';
+import Signin from './views/auth/Signin';
+import Signup from './views/auth/Signup';
 import FacultiesView from './views/faculties/Faculties';
+import NewInstitution from './views/insitution/NewInstitution';
+import IntakeModulesView from './views/intakes/IntakeModules';
 import IntakesView from './views/intakes/Intakes';
+import LevelsView from './views/levels/Levels';
 import Modules from './views/modules';
 import NotFound from './views/NotFound';
-import Popup from './views/Popup';
-import Signin from './views/signin/Signin';
+import PrivilegesView from './views/privileges/Privileges';
+import AcademicPrograms from './views/programs/AcademicPrograms';
+import Roles from './views/roles/Roles';
+import ViewRole from './views/roles/ViewRole';
 import Subjects from './views/subjects';
-import NewInstructorView from './views/users/NewInstructor';
-import NewStudentsView from './views/users/NewStudent';
-import UsersView from './views/users/Users';
+import Users from './views/users/Users';
 
 const App = () => {
-  const Homepage = () => {
-    return (
-      <Dashboard>
-        <ComponentsUseCase />
-      </Dashboard>
-    );
-  };
-
   return (
     <>
-      <Router>
-        <Switch>
-          <Route exact path="/" component={Homepage} />
+      <MainLayout>
+        <Router>
+          <Switch>
+            <Route exact path="/" component={Signin} />
+            <Route exact path="/institution" component={NewInstitution} />
+            <Route exact path="/register" component={Signup} />
+            <Route exact path="/register/experience" component={ExperienceInfo} />
+            <Route exact path="/register/more" component={MoreInfo} />
+            <Route exact path="/usecase" component={ComponentsUseCase} />
 
-          <Route exact path="/register" component={SignUpForm} />
-          <Route path="/login" component={Signin} />
+            <Dashboard>
+              <Route path="/dashboard/academies" />
+              <Route exact path="/dashboard/academies" component={Academies} />
+              {/* <Route exact path="/dashboard/academies/new" component={NewAcademy} /> */}
+              <Route exact path="/dashboard/role/:id/view" component={ViewRole} />
+              <Route path="/dashboard/roles" component={Roles} />
+              <Route exact path="/dashboard/modules" component={Modules} />
+              <Route exact path="/dashboard/subjects" component={Subjects} />
+              <Route
+                path="/dashboard/registration-control"
+                component={RegistrationControl}
+              />
 
-          <Route exact path="/academies" component={Academies} />
-          <Route exact path="/academies/new" component={NewAcademy} />
-          <Route exact path="/users" component={UsersView} />
-          <Route exact path="/popup" component={Popup} />
-          <Route exact path="/modules" component={Modules} />
-          <Route exact path="/subjects" component={Subjects} />
-          <Route exact path="/registration-control" component={RegistrationControl} />
-          <Route exact path="/users/students/new" component={NewStudentsView} />
-          <Route exact path="/users/instructors/new" component={NewInstructorView} />
-          <Route exact path="/faculties" component={FacultiesView} />
-          <Route exact path="/intakes" component={IntakesView} />
-          <Route exact path="*" component={NotFound} />
-        </Switch>
-      </Router>
+              <Route exact path="/dashboard/user/student/new" component={NewStudent} />
+              <Route
+                exact
+                path="/dashboard/users/instructor/new"
+                component={NewInstructor}
+              />
+              <Route path="/dashboard/users" component={Users} />
+              <Route exact path="/dashboard/faculties" component={FacultiesView} />
+              <Route path="/dashboard/programs" component={AcademicPrograms} />
+              <Route exact path="/dashboard/levels" component={LevelsView} />
+              <Route exact path="/dashboard/intakes" component={IntakesView} />
+              <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} />
+              <Route path="/dashboard/privileges" component={PrivilegesView} />
+            </Dashboard>
+            <Route path="*" component={NotFound} />
+          </Switch>
+        </Router>
+      </MainLayout>
     </>
   );
 };

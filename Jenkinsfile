@@ -19,10 +19,5 @@ pipeline {
                 sh 'npm run build' 
             }
         }
-        stage('Deploy') { 
-            steps {
-                sh 'npm run pm2 start pm2.json' 
-            }
-        }
     }
 }

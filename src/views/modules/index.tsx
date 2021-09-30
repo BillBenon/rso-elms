@@ -7,7 +7,6 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import AddPrerequesitForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
-import Dashboard from '../../layout/Dashboard';
 import { CommonCardDataType, Link } from '../../types';
 
 export default function Modules() {
@@ -32,40 +31,38 @@ export default function Modules() {
   const data: CommonCardDataType[] = [
     {
       status: { type: 'success', text: 'On going' },
-      code: 'HR450-TC',
-      title: 'Here we go',
-      subTitle: 'ON Air',
-      description:
-        'We have all kind of courses in this card, we can support everything wabyanga wabyemera',
+      code: 'MOD-23D',
+      title: 'Math',
+      description: 'Module brief description that shows user , what module consist',
     },
     {
       status: { type: 'success', text: 'On going' },
-      code: 'HR450-TC',
-      title: 'Here we go',
-      subTitle: 'ON Air',
-      description:
-        'We have all kind of courses in this card, we can support everything wabyanga wabyemera',
+      code: 'MOD-23D',
+      title: 'Physics',
+      description: 'Module brief description that shows user , what module consist',
     },
     {
       status: { type: 'warning', text: 'On Hold' },
-      code: 'HR450-TC',
-      title: 'Here we go',
-      subTitle: 'ON Air',
-      description:
-        'We have all kind of courses in this card, we can support everything wabyanga wabyemera',
+      code: 'MOD-26Y',
+      title: 'Biology',
+      description: 'Module brief description that shows user , what module consist',
     },
     {
       status: { type: 'error', text: 'Completed' },
-      code: 'HR450-TC',
-      title: 'Here we go',
-      subTitle: 'ON Air',
-      description:
-        'We have all kind of courses in this card, we can support everything wabyanga wabyemera',
+      code: 'MOD-6YA',
+      title: 'English',
+      description: 'Module brief description that shows user , what module consist',
+    },
+    {
+      status: { type: 'error', text: 'Completed' },
+      code: 'MOD-6YA',
+      title: 'English',
+      description: 'Module brief description that shows user , what module consist',
     },
   ];
 
   return (
-    <Dashboard>
+    <>
       <main className="px-4">
         <section>
           <Cacumber list={list}></Cacumber>
@@ -80,8 +77,11 @@ export default function Modules() {
             <div key={course.code} className="p-1 mt-3">
               <CommonCardMolecule
                 data={course}
-                to={{ title: 'module', to: 'modules/id' }}
-              />
+                to={{ title: 'module', to: 'modules/id' }}>
+                <p>
+                  Prerequesites: <span className="text-primary-500">3</span>
+                </p>
+              </CommonCardMolecule>
             </div>
           ))}
         </section>
@@ -99,6 +99,6 @@ export default function Modules() {
           <AddPrerequesitForm />
         </PopupMolecule>
       </main>
-    </Dashboard>
+    </>
   );
 }

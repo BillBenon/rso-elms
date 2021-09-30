@@ -1,49 +1,34 @@
 import React from 'react';
-import { Fragment, useState } from 'react';
 
 import StepperHead from './StepperHead';
 
-type StepperProps = {
-  stepperContent: {
-    label: string;
-    // eslint-disable-next-line no-undef
-    content: JSX.Element;
-    clicked: () => void;
-    isError?: boolean;
-    isComplete?: boolean;
-  }[];
-  submitStepper: () => void;
-  isInline?: boolean;
-  isVertical?: boolean;
+export type StepperContentProp = {
+  label: string;
+  // eslint-disable-next-line no-undef
+  content: JSX.Element;
 };
 
-const Stepper = ({ isVertical, isInline, stepperContent }: StepperProps) => {
-  const [currentTabIndex, setCurrentTabIndex] = useState(0);
-  // isLastStep = currentTabIndex === stepperContent.length - 1,
-  // isPrevBtn = currentTabIndex !== 0;
+export type StepperProp = {
+  currentStep: number;
+  completeStep: number;
+  content: StepperContentProp[];
+};
 
-  const navigateToStepHandler = (index: number) => {
-    if (index !== currentTabIndex) {
-      setCurrentTabIndex(index);
-    }
-  };
+type StepperProps = {
+  stepperContent: StepperProp;
+  isInline?: boolean;
+  isVertical?: boolean;
+  navigateToStepHandler: (_index: number) => void;
+  width?: string;
+};
 
-  // const nextStepHandler = () => {
-  //   setCurrentTabIndex((prev: any) => {
-  //     if (prev !== stepperContent.length - 1) {
-  //       return prev + 1;
-  //     }
-  //   });
-  // };
-
-  // const previousStepHandler = () => {
-  //   setCurrentTabIndex((prev) => prev - 1);
-  // };
-
-  // const submitHandler = () => {
-  //   submitStepper();
-  // };
-
+const Stepper = ({
+  isVertical,
+  isInline,
+  navigateToStepHandler,
+  stepperContent,
+  width,
+}: StepperProps) => {
   return (
     <div className="stepper-wrapper">
       <div className={`${isVertical ? 'flex' : 'block'}`}>
@@ -52,22 +37,10 @@ const Stepper = ({ isVertical, isInline, stepperContent }: StepperProps) => {
           navigateToStepHandler={navigateToStepHandler}
           isVertical={isVertical}
           isInline={isInline}
-          currentTabIndex={currentTabIndex}
-          isFirstStep={stepperContent[0]}
+          width={width}
         />
-        <div className="pl-0 md:pl-11">
-          {stepperContent.map((el, i) => (
-            <Fragment key={el.label}>{i === currentTabIndex && el.content}</Fragment>
-          ))}
-          {/* <StepperFoot
-            isPrevBtn={isPrevBtn}
-            previousStepHandler={previousStepHandler}
-            isLastStep={isLastStep}
-            nextStepHandler={nextStepHandler}
-            submitHandler={submitHandler}
-            stepperContent={stepperContent}
-            currentTabIndex={currentTabIndex}
-          /> */}
+        <div className={isVertical ? 'md:pl-11 w-full' : 'py-6 w-full'}>
+          {stepperContent.content[stepperContent.currentStep].content}
         </div>
       </div>
     </div>

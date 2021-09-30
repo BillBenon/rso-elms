@@ -20,33 +20,33 @@ export default function AddProgramToIntake() {
     },
   ];
   return (
-    <div className="px-5 -mt-5 pb-5">
+    <form>
       <Heading fontSize="lg" fontWeight="semibold" className="pb-5">
         Add a program to this intake
       </Heading>
 
       <DropdownMolecule
         name="program"
-        onChange={(e: any) => console.log(e)}
+        handleChange={(e: any) => console.log(e)}
         options={options}
         placeholder="Select period type">
         Choose Program
       </DropdownMolecule>
       <DropdownMolecule
         name="academicYear"
-        onChange={(e: any) => console.log(e)}
+        handleChange={(e: any) => console.log(e)}
         options={options}>
         Choose Academic Year
       </DropdownMolecule>
       <DropdownMolecule
         name="oic"
-        onChange={(e: any) => console.log(e)}
+        handleChange={(e: any) => console.log(e)}
         options={options}>
         Choose Instructor Incharge
       </DropdownMolecule>
       <div className="pt-3">
         <Button type="submit">Save</Button>
       </div>
-    </div>
+    </form>
   );
 }

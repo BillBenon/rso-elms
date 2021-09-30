@@ -1,7 +1,7 @@
 import '../../../styles/components/Molecules/cards/CommonCardMolecule.scss';
 
-import React from 'react';
-import { useHistory } from 'react-router';
+import React, { ReactNode } from 'react';
+import { useHistory } from 'react-router-dom';
 
 import { CommonCardDataType, Link } from '../../../types';
 import Badge from '../../Atoms/custom/Badge';
@@ -12,6 +12,7 @@ type PropType = {
   to?: Link;
   data: CommonCardDataType;
   className?: string;
+  children?: ReactNode;
   handleClick?: (_e: Event) => void;
 };
 
@@ -20,6 +21,7 @@ export default function CommonCardMolecule({
   to,
   data,
   className = '',
+  children,
   handleClick,
 }: PropType) {
   const history = useHistory();
@@ -59,14 +61,12 @@ export default function CommonCardMolecule({
             {data.subTitle}
           </Heading>
         )}
-        <p id="course-card-description" className="text-txt-secondary text-sm mt-4">
+        <p id="course-card-description" className="py-4 text-txt-secondary text-sm mt-4">
           {data.description}
         </p>
-        {data.footerTitle && (
-          <Heading fontSize="sm" className="pt-2" color="txt-secondary">
-            {data.footerTitle}
-          </Heading>
-        )}
+
+        {/* footer */}
+        <div>{children}</div>
       </div>
     </div>
   );

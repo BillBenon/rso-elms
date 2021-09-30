@@ -38,11 +38,10 @@ function SignInWithSearch({ handleClick }: PropType) {
       </div>
 
       <div className="flex gap-2 items-center">
-        {/** ASK LIBERISTE TO MAKE COURSE CARD DYNAMIC */}
         <DropdownMolecule
           width="28"
           placeholder="Search"
-          onChange={handleChange}
+          handleChange={handleChange}
           name="searchBy"
           defaultValue={details.searchBy}
           options={[
@@ -67,10 +66,7 @@ function SignInWithSearch({ handleClick }: PropType) {
       <div className="text-txt-secondary py-2">
         <p className="text-base text-txt-secondary">
           Already have an account?
-          <Button
-            styleType="text"
-            className="text-primary-500 px-2"
-            onClick={handleClick}>
+          <Button styleType="text" className="text-primary-500" onClick={handleClick}>
             Sign in
           </Button>
         </p>

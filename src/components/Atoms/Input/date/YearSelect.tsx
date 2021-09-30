@@ -22,7 +22,6 @@ type YProp = {
 type YOptProp = {
   start?: number;
   end?: number;
-  reverse?: boolean;
   defaultValue?: string;
 };
 
@@ -30,9 +29,8 @@ const YearSelect = (props: YProp) => {
   const renderYearOptions = ({
     start = 1910,
     end = new Date().getFullYear(),
-    reverse = false,
   }: YOptProp) => {
-    const years = [];
+    let years = [];
     if (start <= end) {
       for (let i = start; i <= end; ++i) {
         years.push(i);
@@ -42,7 +40,7 @@ const YearSelect = (props: YProp) => {
         years.push(i);
       }
     }
-    if (reverse) {
+    if (props.reverse) {
       years.reverse();
     }
     const yearOptions: SelectData[] = [];
@@ -54,13 +52,13 @@ const YearSelect = (props: YProp) => {
 
   return (
     <DropDown
+      disabled={props.disabled}
       name={props.name}
       placeholder={props.placeholder}
       className={props.className}
       options={renderYearOptions({
         start: props.start,
         end: props.end,
-        reverse: false,
         defaultValue: props.defaultValue,
       })}
       width={props.width}
