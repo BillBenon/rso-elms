@@ -40,7 +40,7 @@ const App = () => {
             <Route exact path="/usecase" component={ComponentsUseCase} />
 
             <Dashboard>
-              <Route path="/dashboard/academies" component={Academies} />
+              <Route path="/dashboard/academies" />
               <Route exact path="/dashboard/academies" component={Academies} />
               {/* <Route exact path="/dashboard/academies/new" component={NewAcademy} /> */}
               <Route exact path="/dashboard/role/:id/view" component={ViewRole} />

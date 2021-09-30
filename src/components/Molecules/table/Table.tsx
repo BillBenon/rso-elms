@@ -4,7 +4,7 @@
 import '../../../styles/components/Molecules/table/table.scss';
 
 import _ from 'lodash';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
@@ -46,6 +46,10 @@ export function Table<T>({
   const [currentRows, setCurrentRows] = useState(
     data.slice(indexOfFirstRow, indexOfLastRow),
   );
+
+  useEffect(() => {
+    setCurrentRows(data.slice(indexOfFirstRow, indexOfLastRow));
+  }, [currentPage]);
 
   // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
