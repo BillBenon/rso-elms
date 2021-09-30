@@ -81,14 +81,14 @@ export default function NewIntake() {
         </div>
         <DropdownMolecule
           name="periodType"
-          onChange={(e: any) => console.log(e)}
+          handleChange={(e: any) => console.log(e)}
           options={options}
           placeholder="Select Period type">
           Period type
         </DropdownMolecule>
         <DropdownMolecule
           name="status"
-          onChange={(e: any) => console.log(e)}
+          handleChange={(e: any) => console.log(e)}
           options={options}>
           Intake status
         </DropdownMolecule>

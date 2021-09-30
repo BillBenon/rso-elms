@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { FormEvent, useState } from 'react';
+import { useHistory } from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
@@ -12,7 +13,9 @@ import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import NewLevel from '../../components/Organisms/forms/level/NewLevel';
+import programStore from '../../store/program.store';
 import { CommonFormProps, ValueType } from '../../types';
+import { CreateProgramInfo, ProgramType } from '../../types/services/program.types';
 
 interface INewAcademyProgram<K> extends CommonFormProps<K> {}
 
@@ -35,7 +38,32 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
   const [open, setOpen] = useState(false); // state to controll the popup
   const [lopen, setLopen] = useState(false);
 
-  function handleChange(_e: ValueType) {}
+  const [details, setDetails] = useState<CreateProgramInfo>({
+    code: '',
+    department_id: '',
+    description: '',
+    name: '',
+    type: ProgramType.SHORT_COURSE,
+  });
+  const { mutateAsync } = programStore.createProgram();
+  const history = useHistory();
+
+  function handleChange(e: ValueType) {
+    setDetails((details) => ({
+      ...details,
+      [e.name]: e.value,
+    }));
+  }
+
+  async function createProgram<T>(e: FormEvent<T>) {
+    e.preventDefault();
+    if (onSubmit) onSubmit(e);
+    await mutateAsync(details, {
+      onSuccess() {
+        history.push('/dashboard/academies');
+      },
+    });
+  }
 
   function handlePopupClose() {
     setLopen(false);
@@ -46,46 +74,61 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
     setOpen(false);
     setLopen(true);
   }
-
-  function submitForm(e: FormEvent) {
-    e.preventDefault(); // prevent page to reload:
-    if (onSubmit) onSubmit(e);
-  }
-
   return (
-    <form onSubmit={submitForm}>
+    <form onSubmit={createProgram}>
       <div className="p-4 pl-8 popup-width">
         <div className="py-5 mb-3 capitalize">
           <Heading color="primary" fontWeight="bold">
             New Program
           </Heading>
         </div>
-        <InputMolecule value="" error="" handleChange={handleChange} name="model-name">
+        <InputMolecule
+          value={details.name}
+          error=""
+          handleChange={handleChange}
+          name="name">
           program name
-        </InputMolecule>{' '}
-        <InputMolecule value="" error="" handleChange={handleChange} name="model-name">
+        </InputMolecule>
+        <InputMolecule
+          value={details.code}
+          error=""
+          handleChange={handleChange}
+          name="code">
           Program code
         </InputMolecule>
+        <DropdownMolecule
+          width="64"
+          placeholder="Select user"
+          options={options}
+          name="academy"
+          handleChange={handleChange}>
+          Program-in-charge
+        </DropdownMolecule>
         <DropdownMolecule
           width="64"
           placeholder="Select faculty"
           options={options}
           name="academy"
-          onChange={(_e: object) => {}}
-          error="Please select faculty">
+          handleChange={handleChange}>
           Faculty
         </DropdownMolecule>
         <DropdownMolecule
           width="64"
           placeholder="select program levels"
-          options={options}
-          name="academy"
-          onChange={(_e: object) => {}}
+          options={[
+            { label: 'SHORT COURSE', value: ProgramType.SHORT_COURSE.toString() },
+            { label: 'ACADEMIC', value: ProgramType.ACADEMIC.toString() },
+          ]}
+          name={details.type.toString()}
+          handleChange={handleChange}
           error="">
           Program Type
         </DropdownMolecule>
-        <TextAreaMolecule value="" name="description" handleChange={handleChange}>
-          Descripiton
+        <TextAreaMolecule
+          value={details.description}
+          name="description"
+          handleChange={handleChange}>
+          Description
         </TextAreaMolecule>
         <RadioMolecule
           value="ACTIVE"
@@ -115,7 +158,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
             placeholder="Select Level"
             options={options}
             name="academy"
-            onChange={(_e: object) => {}}
+            handleChange={handleChange}
             error="">
             Choose Level
           </DropdownMolecule>

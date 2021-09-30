@@ -10,7 +10,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
 import programStore from '../../store/program.store';
-import { CommonCardDataType, Link } from '../../types';
+import { CommonCardDataType, GenericStatus, Link } from '../../types';
 import { DivisionInfo } from '../../types/services/division.types';
 import NewAcademicProgram from './NewAcademicProgram';
 
@@ -37,8 +37,8 @@ export default function AcademicProgram() {
     { to: 'program', title: 'Programs' },
   ];
 
-  const typeChecker = (status: string) =>
-    status.toLowerCase() === 'inactive' ? 'error' : 'success';
+  const typeChecker = (status: GenericStatus) =>
+    status.toString().toLowerCase() === 'inactive' ? 'error' : 'success';
 
   const { data } = programStore.fetchPrograms();
   const programInfo = data?.data.data;
@@ -48,7 +48,7 @@ export default function AcademicProgram() {
     let { code, name, description, generic_status, department } = obj;
 
     let prog: IProgramData = {
-      status: { type: typeChecker(generic_status), text: generic_status },
+      status: { type: typeChecker(generic_status), text: generic_status.toString() },
       code: code,
       title: name,
       subTitle: 'Short Course',
@@ -67,7 +67,7 @@ export default function AcademicProgram() {
         </section>
         <section>
           <TableHeader totalItems={3} title="Programs" showSearch={false}>
-            <Button onClick={() => history.push('/dashboard/programs/new')}>
+            <Button onClick={() => history.push('/dashboard/program/new')}>
               Add Program
             </Button>
           </TableHeader>

@@ -18,7 +18,10 @@ export default function AddPrerequesitForm() {
 
   return (
     <form>
-      <DropdownMolecule options={prere} name="prerequesiteCourse" onChange={handleChange}>
+      <DropdownMolecule
+        options={prere}
+        name="prerequesiteCourse"
+        handleChange={handleChange}>
         Prerequsite Modules
       </DropdownMolecule>
       {/* model initial status */}

@@ -9,10 +9,51 @@ import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import Admins from '../../components/Organisms/user/Admins';
 import Instructors from '../../components/Organisms/user/Instructors';
 import Students from '../../components/Organisms/user/Students';
+import usersStore from '../../store/users.store';
+import { GenericStatus } from '../../types';
+import { UserType } from '../../types/services/user.types';
+
+type UserTypes = {
+  'full name': string;
+  NID: string;
+  academy: string;
+  status: GenericStatus;
+  user_type: UserType;
+};
 
 export default function Users() {
   const { path } = useRouteMatch();
   const [userType, setUserType] = useState('Students');
+
+  const { data, isSuccess } = usersStore.fetchUsers();
+
+  const userInfo = data?.data.data;
+
+  let users: UserTypes[] = [];
+
+  if (isSuccess && userInfo) {
+    userInfo?.map((obj) => {
+      let { first_name, last_name, nid, academy, status, user_type } = obj;
+
+      let user: UserTypes = {
+        'full name': first_name + ' ' + last_name,
+        NID: nid,
+        academy: academy && academy.name,
+        status: status,
+        user_type: user_type,
+      };
+
+      users.push(user);
+    });
+  }
+
+  let students: UserTypes[], instructors: UserTypes[], admins: UserTypes[];
+
+  if (isSuccess && users) {
+    students = users.filter((user) => user.user_type == UserType.STUDENT);
+    instructors = users.filter((user) => user.user_type == UserType.INSTRUCTOR);
+    admins = users.filter((user) => user.user_type == UserType.ADMIN);
+  }
 
   const tabs = [
     {
@@ -26,219 +67,6 @@ export default function Users() {
     {
       label: 'Admins',
       href: '/dashboard/users/admins',
-    },
-  ];
-
-  const users = [
-    {
-      'full name': 'Col Florin Sandberg',
-      role: 'Student / Sr',
-      'phone number': 7869046715,
-      status: 'Complete',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Kamili Abdulkhalim',
-      role: 'Student / Sr',
-      'phone number': 7869046743,
-      status: 'Active',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Safari George',
-      role: 'Student / Sr',
-      'phone number': 7869046730,
-      status: 'Suspended',
-      NID: '120080010981917987',
-    },
-    {
-      'full name': 'Dr. Lt  Col Kanama Nzeri',
-      role: 'Student / Sr',
-      'phone number': 7869046787,
-      status: 'Pending',
-      NID: '119788001098191798',
-    },
-    {
-      'full name': 'Prof Gen Sandberg dotMe',
-      role: 'Student / Sr',
-      'phone number': 7869046728,
-      status: 'Cancelled',
-      NID: '195426611717168989',
-    },
-    {
-      'full name': 'Col Florin Sandberg',
-      role: 'Student / Sr',
-      'phone number': 7869046715,
-      status: 'Complete',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Kamili Abdulkhalim',
-      role: 'Student / Sr',
-      'phone number': 7869046743,
-      status: 'Active',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Safari George',
-      role: 'Student / Sr',
-      'phone number': 7869046730,
-      status: 'Suspended',
-      NID: '120080010981917987',
-    },
-    {
-      'full name': 'Dr. Lt  Col Kanama Nzeri',
-      role: 'Student / Sr',
-      'phone number': 7869046787,
-      status: 'Pending',
-      NID: '119788001098191798',
-    },
-    {
-      'full name': 'Prof Gen Sandberg dotMe',
-      role: 'Student / Sr',
-      'phone number': 7869046728,
-      status: 'Cancelled',
-      NID: '195426611717168989',
-    },
-    {
-      'full name': 'Col Florin Sandberg',
-      role: 'Student / Sr',
-      'phone number': 7869046715,
-      status: 'Complete',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Kamili Abdulkhalim',
-      role: 'Student / Sr',
-      'phone number': 7869046743,
-      status: 'Active',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Safari George',
-      role: 'Student / Sr',
-      'phone number': 7869046730,
-      status: 'Suspended',
-      NID: '120080010981917987',
-    },
-    {
-      'full name': 'Dr. Lt  Col Kanama Nzeri',
-      role: 'Student / Sr',
-      'phone number': 7869046787,
-      status: 'Pending',
-      NID: '119788001098191798',
-    },
-    {
-      'full name': 'Prof Gen Sandberg dotMe',
-      role: 'Student / Sr',
-      'phone number': 7869046728,
-      status: 'Cancelled',
-      NID: '195426611717168989',
-    },
-    {
-      'full name': 'Col Florin Sandberg',
-      role: 'Student / Sr',
-      'phone number': 7869046715,
-      status: 'Complete',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Kamili Abdulkhalim',
-      role: 'Student / Sr',
-      'phone number': 7869046743,
-      status: 'Active',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Safari George',
-      role: 'Student / Sr',
-      'phone number': 7869046730,
-      status: 'Suspended',
-      NID: '120080010981917987',
-    },
-    {
-      'full name': 'Dr. Lt  Col Kanama Nzeri',
-      role: 'Student / Sr',
-      'phone number': 7869046787,
-      status: 'Pending',
-      NID: '119788001098191798',
-    },
-    {
-      'full name': 'Prof Gen Sandberg dotMe',
-      role: 'Student / Sr',
-      'phone number': 7869046728,
-      status: 'Cancelled',
-      NID: '195426611717168989',
-    },
-    {
-      'full name': 'Col Florin Sandberg',
-      role: 'Student / Sr',
-      'phone number': 7869046715,
-      status: 'Complete',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Kamili Abdulkhalim',
-      role: 'Student / Sr',
-      'phone number': 7869046743,
-      status: 'Active',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Safari George',
-      role: 'Student / Sr',
-      'phone number': 7869046730,
-      status: 'Suspended',
-      NID: '120080010981917987',
-    },
-    {
-      'full name': 'Dr. Lt  Col Kanama Nzeri',
-      role: 'Student / Sr',
-      'phone number': 7869046787,
-      status: 'Pending',
-      NID: '119788001098191798',
-    },
-    {
-      'full name': 'Prof Gen Sandberg dotMe',
-      role: 'Student / Sr',
-      'phone number': 7869046728,
-      status: 'Cancelled',
-      NID: '195426611717168989',
-    },
-    {
-      'full name': 'Col Florin Sandberg',
-      role: 'Student / Sr',
-      'phone number': 7869046715,
-      status: 'Complete',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Kamili Abdulkhalim',
-      role: 'Student / Sr',
-      'phone number': 7869046743,
-      status: 'Active',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Safari George',
-      role: 'Student / Sr',
-      'phone number': 7869046730,
-      status: 'Suspended',
-      NID: '120080010981917987',
-    },
-    {
-      'full name': 'Dr. Lt  Col Kanama Nzeri',
-      role: 'Student / Sr',
-      'phone number': 7869046787,
-      status: 'Pending',
-      NID: '119788001098191798',
-    },
-    {
-      'full name': 'Prof Gen Sandberg dotMe',
-      role: 'Student / Sr',
-      'phone number': 7869046728,
-      status: 'Cancelled',
-      NID: '195426611717168989',
     },
   ];
 
@@ -275,26 +103,16 @@ export default function Users() {
         tabs={tabs}
         onTabChange={(event) => setUserType(event.activeTabLabel)}>
         <Switch>
-          <Route
-            exact
-            path={`${path}`}
-            render={() => {
-              return <Students students={users} />;
-            }}
-          />
+          <Route exact path={`${path}`} render={() => <Students students={students} />} />
           <Route
             exact
             path={`${path}/instructors`}
-            render={() => {
-              return <Instructors instructors={users.slice(10, 18)} />;
-            }}
+            render={() => <Instructors instructors={instructors} />}
           />
           <Route
             exact
             path={`${path}/admins`}
-            render={() => {
-              return <Admins admins={users.slice(0, 5)} />;
-            }}
+            render={() => <Admins admins={admins} />}
           />
         </Switch>
       </TabNavigation>
