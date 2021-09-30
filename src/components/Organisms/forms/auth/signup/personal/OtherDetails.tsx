@@ -29,7 +29,7 @@ function OtherDetails({
           isMulti
           name="hobbies"
           defaultValue={details.hobbies}
-          onChange={(e) => handleChange(e, 'otherDetails')}
+          handleChange={(e) => handleChange(e, 'otherDetails')}
           options={[
             { value: 'football', label: 'football' },
             { value: 'swimming', label: 'swimming' },
@@ -46,7 +46,7 @@ function OtherDetails({
           placeholder="Select chronic diseases u have"
           name="chronicDiseases"
           defaultValue={details.chronicDiseases}
-          onChange={(e) => handleChange(e, 'otherDetails')}
+          handleChange={(e) => handleChange(e, 'otherDetails')}
           options={[
             { value: 'asthma', label: 'Asthma' },
             { value: 'ulcers', label: 'Ulcers' },
@@ -67,7 +67,7 @@ function OtherDetails({
           placeholder="Select blood group"
           name="bloodGroup"
           defaultValue={details.bloodGroup}
-          onChange={handleChange}
+          handleChange={handleChange}
           options={[
             { value: 'rw', label: 'Rwanda' },
             { value: 'ug', label: 'Uganda' },
@@ -82,7 +82,7 @@ function OtherDetails({
           width="60 md:w-80"
           name="religion"
           defaultValue={details.religion}
-          onChange={(e) => handleChange(e, 'personalDetails')}
+          handleChange={(e) => handleChange(e, 'personalDetails')}
           options={[
             { value: 'rw', label: 'Rwanda' },
             { value: 'ug', label: 'Uganda' },

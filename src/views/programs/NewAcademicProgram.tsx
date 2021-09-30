@@ -101,7 +101,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
           placeholder="Select user"
           options={options}
           name="academy"
-          onChange={handleChange}>
+          handleChange={handleChange}>
           Program-in-charge
         </DropdownMolecule>
         <DropdownMolecule
@@ -109,7 +109,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
           placeholder="Select faculty"
           options={options}
           name="academy"
-          onChange={handleChange}>
+          handleChange={handleChange}>
           Faculty
         </DropdownMolecule>
         <DropdownMolecule
@@ -120,7 +120,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
             { label: 'ACADEMIC', value: ProgramType.ACADEMIC.toString() },
           ]}
           name={details.type.toString()}
-          onChange={handleChange}
+          handleChange={handleChange}
           error="">
           Program Type
         </DropdownMolecule>
@@ -158,7 +158,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
             placeholder="Select Level"
             options={options}
             name="academy"
-            onChange={handleChange}
+            handleChange={handleChange}
             error="">
             Choose Level
           </DropdownMolecule>

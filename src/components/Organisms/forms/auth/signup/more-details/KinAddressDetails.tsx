@@ -32,7 +32,7 @@ function KinAddressDetails({
           width="60 md:w-80"
           name="country"
           defaultValue={details.country}
-          onChange={handleChange}
+          handleChange={handleChange}
           options={[
             { value: 'rw', label: 'Rwanda' },
             { value: 'ug', label: 'Uganda' },
@@ -47,7 +47,7 @@ function KinAddressDetails({
           width="60 md:w-80"
           name="country"
           defaultValue={details.country}
-          onChange={handleChange}
+          handleChange={handleChange}
           options={[
             { value: 'rw', label: 'Rwanda' },
             { value: 'ug', label: 'Uganda' },
