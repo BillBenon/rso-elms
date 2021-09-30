@@ -58,57 +58,52 @@ export default function Academy() {
 
   return (
     <>
-      <div className="flex flex-wrap justify-start items-center">
-        <ILabel size="sm" color="gray" weight="medium">
-          Institution Admin
-        </ILabel>
-        <Icon name="chevron-right" />
-
-        <ILabel size="sm" color="gray" weight="medium">
-          Academies
-        </ILabel>
-        <Icon name="chevron-right" fill="gray" />
-        <ILabel size="sm" color="primary" weight="medium">
-          Academy
-        </ILabel>
-      </div>
-      <div className="py-4">
-        <TableHeader title="Academy" totalItems={300} handleSearch={handleSearch}>
-          <Link to={`${url}/add`}>
-            <Button>New academy</Button>
-          </Link>
-        </TableHeader>
-      </div>
-
-      <div className="mt-14">
-        {academyInfo && (
-          <Table<AcademyTypes>
-            statusColumn="status"
-            data={academies}
-            actions={academyActions}
-            uniqueCol="id"
-          />
-        )}
-      </div>
-
       <Switch>
-        {/* create academy */}
         <Route
           exact
-          path={`${path}/add`}
-          render={() => {
-            return <NewAcademy />;
-          }}
+          path={`${path}`}
+          render={() => (
+            <>
+              <div className="flex flex-wrap justify-start items-center">
+                <ILabel size="sm" color="gray" weight="medium">
+                  Institution Admin
+                </ILabel>
+                <Icon name="chevron-right" />
+
+                <ILabel size="sm" color="gray" weight="medium">
+                  Academies
+                </ILabel>
+                <Icon name="chevron-right" fill="gray" />
+                <ILabel size="sm" color="primary" weight="medium">
+                  Academy
+                </ILabel>
+              </div>
+              <div className="py-4">
+                <TableHeader title="Academy" totalItems={300} handleSearch={handleSearch}>
+                  <Link to={`${url}/add`}>
+                    <Button>New academy</Button>
+                  </Link>
+                </TableHeader>
+              </div>
+
+              <div className="mt-14">
+                {academyInfo && (
+                  <Table<AcademyTypes>
+                    statusColumn="status"
+                    data={academies}
+                    actions={academyActions}
+                    uniqueCol="id"
+                  />
+                )}
+              </div>
+            </>
+          )}
         />
+        {/* create academy */}
+        <Route exact path={`${path}/add`} render={() => <NewAcademy />} />
 
         {/* modify academy */}
-        <Route
-          exact
-          path={`${path}/:id/edit`}
-          render={() => {
-            return <UpdateAcademy />;
-          }}
-        />
+        <Route exact path={`${path}/:id/edit`} render={() => <UpdateAcademy />} />
       </Switch>
     </>
   );

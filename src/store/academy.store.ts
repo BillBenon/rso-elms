@@ -10,7 +10,7 @@ class AcademyStore {
     return useQuery('academies', academyService.fetchAcademies);
   }
   getAcademyById(id: string) {
-    return useQuery(['roles/id', id], () => academyService.getAcademyById(id));
+    return useQuery(['academies/id', id], () => academyService.getAcademyById(id));
   }
 
   modifyAcademy() {

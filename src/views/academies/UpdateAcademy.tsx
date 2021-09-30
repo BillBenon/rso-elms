@@ -20,6 +20,12 @@ interface ParamType {
 export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
 
+  const { mutateAsync } = academyStore.modifyAcademy();
+
+  const { id } = useParams<ParamType>();
+
+  const { data } = academyStore.getAcademyById(id);
+
   const [details, setDetails] = useState<AcademyCreateInfo>({
     current_admin_id: '',
     email: '',
@@ -35,14 +41,14 @@ export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     short_name: '',
     website_link: '',
   });
-  const { mutateAsync } = academyStore.modifyAcademy();
-
-  const { id } = useParams<ParamType>();
-
-  const { data } = academyStore.getAcademyById(id);
 
   useEffect(() => {
-    data?.data.data && setDetails({ ...data?.data.data });
+    data?.data.data &&
+      setDetails({
+        ...data?.data.data,
+        institution_id: data?.data.data.institution.id.toString(),
+        head_office_location_id: data?.data.data.head_office_location_id || 17445,
+      });
   }, [data]);
 
   function handleChange(e: ValueType) {
@@ -52,11 +58,11 @@ export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     }));
   }
 
-  function createAcademy<T>(e: FormEvent<T>) {
+  function updateAcademy<T>(e: FormEvent<T>) {
     e.preventDefault();
     mutateAsync(details, {
       onSuccess() {
-        history.push('/dashboard/academies');
+        history.goBack();
       },
     });
     if (onSubmit) onSubmit(e);
@@ -85,7 +91,7 @@ export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
             Edit academy
           </Heading>
         </div>
-        <form onSubmit={createAcademy}>
+        <form onSubmit={updateAcademy}>
           <InputMolecule
             name="name"
             placeholder="Type academy name"

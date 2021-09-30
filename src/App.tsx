@@ -10,7 +10,6 @@ import NewStudent from './components/Organisms/user/NewStudent';
 import Dashboard from './layout/Dashboard';
 import { MainLayout } from './layout/MainLayout';
 import Academies from './views/academies/Academy';
-import NewAcademy from './views/academies/NewAcademy';
 import Signin from './views/auth/Signin';
 import Signup from './views/auth/Signup';
 import FacultiesView from './views/faculties/Faculties';
@@ -40,8 +39,7 @@ const App = () => {
             <Route exact path="/usecase" component={ComponentsUseCase} />
 
             <Dashboard>
-              <Route exact path="/dashboard/academies" component={Academies} />
-              <Route exact path="/dashboard/academies/new" component={NewAcademy} />
+              <Route path="/dashboard/academies" component={Academies} />
               <Route path="/dashboard/roles" component={Roles} />
               <Route exact path="/dashboard/popup" component={Popup} />
               <Route exact path="/dashboard/modules" component={Modules} />
