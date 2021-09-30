@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "serve": "vite preview",
+    "serve":  "HOST=$(grep HOST .env.production | cut -d '=' -f2) npm run start-prod",
+    "start-prod": "vite preview  --host $HOST",
     "lint": "eslint --fix .",
     "pm2": "pm2"
   },
