@@ -13,7 +13,7 @@ interface Props {
 }
 
 export default function Checkbox(props: Props) {
-  const [checked, setChecked] = useState(props.checked || false);
+  const [checked, setChecked] = useState(false);
 
   const handleCheck = (e: FormEvent<HTMLInputElement>) => {
     setChecked(!checked);
@@ -26,7 +26,7 @@ export default function Checkbox(props: Props) {
           name={props.name}
           type="checkbox"
           className={`form-checkbox border-2 border-gray-100 h-4 w-4 text-primary-500 mr-2 focus:ring-primary-400 focus:ring-opacity-25  rounded ${props.className}`}
-          checked={checked}
+          checked={props.checked || checked}
           disabled={props.disabled}
           value={props.value}
           onChange={handleCheck}
