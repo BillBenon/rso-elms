@@ -14,6 +14,7 @@ import Tooltip from '../Tooltip';
 interface TableProps<T> {
   data: T[];
   uniqueCol?: keyof T;
+  isUniqueColVisible?: boolean;
   actions?: { name: string; handleAction: (_data?: T[keyof T]) => void }[];
   handleClick?: () => void;
   statusColumn?: string;
@@ -41,11 +42,15 @@ export function Table<T>({
   const getKeys = () => Object.keys(currentRows[0]);
   const getHeader = () => {
     let keys = getKeys();
-    return keys.map((key) => (
-      <th className="px-4 py-5 capitalize" key={key}>
-        {key}
-      </th>
-    ));
+
+    return keys.map(
+      (key) =>
+        key !== uniqueCol && (
+          <th className="px-4 py-5 capitalize" key={key}>
+            {key}
+          </th>
+        ),
+    );
   };
 
   const getRowsData = () => {
@@ -53,7 +58,13 @@ export function Table<T>({
 
     return currentRows.map((row, index) => (
       <tr key={index}>
-        <Row key={index} data={row} keys={keys} statusColumn={statusColumn} />
+        <Row
+          key={index}
+          data={row}
+          keys={keys}
+          statusColumn={statusColumn}
+          uniqueCol={uniqueCol}
+        />
         {actions && actions.length > 0 ? (
           <td className="flex space-x-6 cursor-pointer">
             <Tooltip
