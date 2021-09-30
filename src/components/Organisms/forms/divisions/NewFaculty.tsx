@@ -2,23 +2,32 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
-import { roleStore } from '../../../../store';
-import { CreateRoleReq, FormPropType, ValueType } from '../../../../types';
+import { divisionStore } from '../../../../store/divisions.store';
+import { FormPropType, ValueType } from '../../../../types';
+import { DivisionCreateInfo } from '../../../../types/services/division.types';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-export default function NewRole({ onSubmit }: FormPropType) {
-  const [form, setForm] = useState<CreateRoleReq>({ name: '', description: '' });
-  const { mutateAsync } = roleStore.addRole();
+export default function NewFaculty({ onSubmit }: FormPropType) {
+  const [division, setDivision] = useState<DivisionCreateInfo>({
+    academy_id: '48d3fec8-bfed-40f7-aa70-58ccfe4238d8',
+    code: '',
+    description: '',
+    division_type: 'FACULTY',
+    id: '',
+    name: '',
+    parent_id: '',
+  });
+  const { mutateAsync } = divisionStore.createDivision();
   const history = useHistory();
 
   function handleChange({ name, value }: ValueType) {
-    setForm((old) => ({ ...old, [name]: value }));
+    setDivision((old) => ({ ...old, [name]: value }));
   }
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
-    mutateAsync(form, {
+    mutateAsync(division, {
       onSuccess: () => {
         toast.success('Role created', { duration: 3 });
         history.goBack();
@@ -34,16 +43,16 @@ export default function NewRole({ onSubmit }: FormPropType) {
       {/* model name */}
       <InputMolecule
         required
-        value={form.name}
+        value={division.name}
         error=""
         handleChange={handleChange}
         name="name">
-        Role name
+        Faculty name
       </InputMolecule>
       {/* model code
     {/* module description */}
       <TextAreaMolecule
-        value={form.description}
+        value={division.description}
         name="description"
         required
         handleChange={handleChange}>

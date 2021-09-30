@@ -5,7 +5,6 @@ import Cacumber from '../../components/Molecules/Cacumber';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import NewFaculty from '../../components/Organisms/faculty/NewFaculty';
 import { Link, ValueType } from '../../types';
 
 export default function FacutiesOrg() {
@@ -84,12 +83,6 @@ export default function FacutiesOrg() {
       </TableHeader>
 
       <Table statusColumn="status" data={data} actions={facultyActions} />
-      <PopupMolecule
-        title="New Faculty"
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}>
-        <NewFaculty />
-      </PopupMolecule>
     </>
   );
 }

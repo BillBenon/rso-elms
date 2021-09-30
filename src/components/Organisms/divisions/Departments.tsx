@@ -13,11 +13,11 @@ import TableHeader from '../../Molecules/table/TableHeader';
 interface FilteredData
   extends Pick<DivisionInfo, 'id' | 'name' | 'description' | 'generic_status'> {}
 
-interface IFaculties {
+interface IDepartment {
   fetchType: string;
 }
 
-export default function Faculties({ fetchType }: IFaculties) {
+export default function Departments({ fetchType }: IDepartment) {
   const { url, path } = useRouteMatch();
   const history = useHistory();
   const [faculties, setFaculties] = useState<FilteredData[]>();
@@ -27,6 +27,7 @@ export default function Faculties({ fetchType }: IFaculties) {
 
   useEffect(() => {
     // extract faculty data to display
+
     const filteredInfo = data?.data.data.map((faculty: DivisionInfo) =>
       _.pick(faculty, ['id', 'name', 'description', 'generic_status']),
     );
@@ -40,7 +41,7 @@ export default function Faculties({ fetchType }: IFaculties) {
 
   const actions = [
     {
-      name: 'Edit Faculty',
+      name: 'Edit Department',
       handleAction: (id: string | number | undefined) => {
         history.push(`${path}/${id}/edit`); // go to edit role
       },
@@ -53,7 +54,7 @@ export default function Faculties({ fetchType }: IFaculties) {
       <section>
         <TableHeader title="Faculty" totalItems={4} handleSearch={() => {}}>
           <Link to={`${url}/add`}>
-            <Button>Add Faculty</Button>
+            <Button>Add Department</Button>
           </Link>
         </TableHeader>
       </section>
@@ -78,7 +79,7 @@ export default function Faculties({ fetchType }: IFaculties) {
           path={`${path}/:id/edit`}
           render={() => {
             return (
-              <PopupMolecule title="Update Role" open={true} onClose={handleClose}>
+              <PopupMolecule title="Update Department" open={true} onClose={handleClose}>
                 {/* update division here */}
               </PopupMolecule>
             );

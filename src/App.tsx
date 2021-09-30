@@ -12,6 +12,7 @@ import { MainLayout } from './layout/MainLayout';
 import Academies from './views/academies/Academy';
 import Signin from './views/auth/Signin';
 import Signup from './views/auth/Signup';
+import Divisions from './views/divisions/Divisions';
 import FacultiesView from './views/faculties/Faculties';
 import NewInstitution from './views/insitution/NewInstitution';
 import IntakeModulesView from './views/intakes/IntakeModules';
@@ -53,6 +54,8 @@ const App = () => {
               />
               <Route path="/dashboard/users" component={Users} />
               <Route exact path="/dashboard/user/new" component={NewStudent} />
+
+              <Route path="/dashboard/divisions" component={Divisions} />
               <Route
                 exact
                 path="/dashboard/user/instructor/new"
