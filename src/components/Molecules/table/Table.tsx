@@ -49,6 +49,7 @@ export function Table<T>({
 
   // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  // console.log(data);
 
   const [selected, setSelected] = useState(new Set(''));
 

@@ -34,6 +34,7 @@ type IProp = {
   minuteWidth?: string;
   hourDisabled?: boolean;
   minuteDisabled?: boolean;
+  defaultValue?: string;
 };
 
 function DateMolecule({
@@ -62,6 +63,7 @@ function DateMolecule({
   minuteWidth = '28',
   hourDisabled = false,
   minuteDisabled = false,
+  defaultValue,
 }: IProp) {
   const [dateState, setDateState] = useState({
     Day: new Date().getDate(),
@@ -78,6 +80,24 @@ function DateMolecule({
     let selectedDate: string = `${dateState.Year}-${months}-${dateState.Day} ${dateState.Hours}:${minutes}:00`;
     handleChange({ name: name, value: selectedDate });
   };
+
+  useEffect(() => {
+    console.log('default', defaultValue);
+    defaultValue && setDate();
+  }, []);
+
+  function setDate() {
+    const dV = new Date(defaultValue || '');
+    console.log('he');
+    setDateState((old) => ({
+      ...old,
+      Year: dV.getFullYear(),
+      Month: dV.getMonth() + 1,
+      Day: dV.getDay(),
+      Hours: dV.getHours(),
+      Minutes: dV.getMinutes(),
+    }));
+  }
 
   useEffect(() => {
     dateFormat();

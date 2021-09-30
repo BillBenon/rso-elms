@@ -11,7 +11,7 @@ type PropType = {
   open: boolean;
   title?: string;
   children: ReactNode;
-  onClose: () => void;
+  onClose?: () => void;
 };
 
 export default function PopupMolecule({
