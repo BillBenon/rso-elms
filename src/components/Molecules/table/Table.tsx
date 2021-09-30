@@ -3,7 +3,7 @@
 
 import '../../../styles/components/Molecules/table/table.scss';
 
-import _ from 'lodash';
+import _, { add } from 'lodash';
 import React, { useState } from 'react';
 
 import { ValueType } from '../../../types';
@@ -19,7 +19,7 @@ interface Selected {
 }
 
 interface TableProps<T> {
-  data: (Selected & T)[];
+  data: (T & Selected)[];
   uniqueCol?: keyof T;
   actions?: { name: string; handleAction: (_data?: T[keyof T]) => void }[];
   handleClick?: () => void;
@@ -42,20 +42,34 @@ export function Table<T>({
   //Get current rows
   const indexOfLastRow = currentPage * rowsOnPage;
   const indexOfFirstRow = indexOfLastRow - rowsOnPage;
-  const currentRows = data.slice(indexOfFirstRow, indexOfLastRow);
+  const [currentRows, setCurrentRows] = useState(
+    data.slice(indexOfFirstRow, indexOfLastRow),
+  );
 
   // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
-  let selected = new Set('');
+  const [selected, setSelected] = useState(new Set(''));
 
-  // handle select
+  // handle select all
   function _handleSelectAll() {
+    // when set is full we uncheck
     if (selected.size === currentRows.length) {
-      selected.clear();
+      setSelected(new Set(''));
+      _.map(currentRows, 'id').forEach((val) => {
+        changeSelect(val, false);
+      });
       if (handleSelect) handleSelect([]);
     } else {
-      _.map(currentRows, 'id').forEach((val) => selected.add(val));
+      const newSelRow = new Set('');
+      // else when set is not full we add  all ids
+      _.map(currentRows, 'id').forEach((val) => {
+        changeSelect(val, true);
+        newSelRow.add(val);
+      });
+
+      setSelected(new Set([...newSelRow]));
+
       if (handleSelect) handleSelect(Array.from(selected));
     }
   }
@@ -64,11 +78,30 @@ export function Table<T>({
     const val = e.value?.toString(); //stringfy value
 
     // if value exist we chop it
-    if (val && selected.has(val)) selected.delete(val);
+    if (val && selected.has(val)) {
+      setSelected((prev) => {
+        prev.delete(val);
+        return prev;
+      });
+      changeSelect(val, false);
+    }
     // else we add it
-    else if (val) selected.add(val);
+    else if (val) {
+      setSelected((prev) => prev.add(val));
+      changeSelect(val, true);
+    }
 
     if (handleSelect) handleSelect(Array.from(selected));
+  }
+
+  function changeSelect(id: string, status: boolean) {
+    const cr = currentRows.map((row) => {
+      if (uniqueCol) {
+        if (row[uniqueCol] == id) row.selected = status;
+      }
+      return row;
+    });
+    setCurrentRows(cr);
   }
 
   const getKeys = () => Object.keys(currentRows[0]);
