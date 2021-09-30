@@ -18,10 +18,9 @@ export function getDropDownOptions(inputs: any): SelectData[] {
 export function getDropDownStatusOptions(status: any): SelectData[] {
   let selectData: SelectData[] = [];
   if (status) {
-    let stats = Object.keys(status).filter((key) => !isNaN(Number(status[key])));
-
+    let stats = Object.keys(status).filter((key) => status[key]);
     stats.map((val) => {
-      let label = val.toString().replace('_', ' ');
+      let label = val.toString().replaceAll('_', ' ');
       let input = {
         label: label,
         value: val.toString(),
