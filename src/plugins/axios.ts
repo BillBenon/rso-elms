@@ -31,7 +31,7 @@ const interceptAdminResError = (error: any) => {
   const { data } = error.response;
   toast.error(data.message || data.error);
 
-  return error.response;
+  throw new Error(error);
 };
 
 adminstrationAxios.interceptors.request.use(interceptAdminReq);

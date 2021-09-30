@@ -2,12 +2,15 @@ import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
-import { InstitutionInfo } from '../../types/services/institution.types';
+import {
+  BasicInstitutionInfo,
+  InstitutionInfo,
+} from '../../types/services/institution.types';
 import { TableId } from '../../types/services/intake.types';
 
 class InstitutionService {
   public async create(
-    institution: InstitutionInfo,
+    institution: BasicInstitutionInfo,
   ): Promise<AxiosResponse<Response<InstitutionInfo>>> {
     return await adminstrationAxios.post('institutions/addInstitution', institution);
   }

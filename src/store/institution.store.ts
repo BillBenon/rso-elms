@@ -4,7 +4,7 @@ import { institutionService } from '../services/administration/institution.servi
 
 class InstitutionStore {
   create() {
-    return useMutation(institutionService.create);
+    return useMutation('insitution', institutionService.create);
   }
   getAll() {
     return useMutation('institutions', institutionService.fetchAll);
