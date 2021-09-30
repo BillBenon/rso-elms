@@ -16,6 +16,12 @@ class RoleService {
     return await adminstrationAxios.get(`/roles/getRoleById/${id}`);
   }
 
+  public async getPrivilegesByRole(
+    roleId: string,
+  ): Promise<AxiosResponse<Response<RoleRes>>> {
+    return await adminstrationAxios.get(`/roles/getAssignedPrivileges/${roleId}`);
+  }
+
   public async modifyRole(
     role: CreateRoleReq,
   ): Promise<AxiosResponse<Response<RoleRes>>> {

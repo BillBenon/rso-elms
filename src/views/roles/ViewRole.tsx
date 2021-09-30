@@ -15,8 +15,10 @@ interface ParamType {
 export default function ViewRole() {
   const { id } = useParams<ParamType>();
   const { data, isLoading, isSuccess, isError, error } = roleStore.getRole(id);
+  const rolesPrivileges = roleStore.getPrivilegesByRole(id);
   const role = data?.data.data;
   console.log(role, isSuccess, isLoading);
+  console.log(rolesPrivileges);
 
   return (
     <main>
@@ -60,19 +62,9 @@ export default function ViewRole() {
               <div>
                 <ul>
                   <li>
-                    <ActionableList>CAN_CREATE_USER</ActionableList>
-                  </li>
-                  <li>
-                    <ActionableList>CAN_CREATE_USER</ActionableList>
-                  </li>
-                  <li>
-                    <ActionableList>CAN_CREATE_USER</ActionableList>
-                  </li>
-                  <li>
-                    <ActionableList>CAN_CREATE_USER</ActionableList>
-                  </li>
-                  <li>
-                    <ActionableList>CAN_CREATE_USER</ActionableList>
+                    <ActionableList handleClick={() => alert('handle remove')}>
+                      CAN_CREATE_USER
+                    </ActionableList>
                   </li>
                 </ul>
               </div>

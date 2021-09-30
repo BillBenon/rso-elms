@@ -18,6 +18,13 @@ class RoleStore {
     );
   }
 
+  getPrivilegesByRole(roleId: string) {
+    return useQuery<AxiosResponse<Response<RoleRes>>, Response>(
+      ['roles/id', roleId],
+      () => roleService.getRole(roleId),
+    );
+  }
+
   modifyRole() {
     return useMutation(roleService.modifyRole);
   }

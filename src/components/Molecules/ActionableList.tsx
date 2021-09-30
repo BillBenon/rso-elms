@@ -8,13 +8,20 @@ import Icon from '../Atoms/custom/Icon';
 interface PropType {
   name?: IconType;
   children: ReactNode;
+  handleClick?: () => void;
 }
 
-export default function ActionableList({ children, name = 'close' }: PropType) {
+export default function ActionableList({
+  children,
+  name = 'close',
+  handleClick,
+}: PropType) {
   return (
     <div className="flex items-center width28 bg-main justify-between py-4 px-6">
       <p>{children}</p>
-      <Icon size={15} name={name}></Icon>
+      <button type="button" onClick={() => handleClick && handleClick()}>
+        <Icon size={15} name={name}></Icon>
+      </button>
     </div>
   );
 }
