@@ -15,7 +15,7 @@ export interface PrivilegeUpdate {
   name: string;
   status: PrivilegeStatus;
   description: string;
-  featureType: PrivilegeFeatureType;
+  feature_type: PrivilegeFeatureType;
 }
 
 export interface PrivilegeRes extends PrivilegeUpdate {}

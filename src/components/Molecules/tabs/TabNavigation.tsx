@@ -1,6 +1,6 @@
 import React from 'react';
-import { useHistory, useLocation } from 'react-router';
-import { ReactNode } from 'react-router/node_modules/@types/react';
+import { useHistory, useLocation } from 'react-router-dom';
+import { ReactNode } from 'react-router-dom/node_modules/@types/react';
 
 import { colorStyle, fontSizeStyle, fontWeightStyle } from '../../../global/global-vars';
 

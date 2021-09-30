@@ -53,13 +53,22 @@ export default function Roles() {
         history.push(`${path}/${id}/edit`); // go to edit role
       },
     },
-    { name: 'View', handleAction: () => {} },
+    {
+      name: 'View',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`${path.replace(/roles/i, 'role')}/${id}/view`); // go to view role
+      },
+    },
   ];
 
   function submited() {
     // setOpen(false);
   }
   function handleSearch() {}
+
+  function handleSelect(selected: string[] | null) {
+    console.log(selected);
+  }
 
   return (
     <main>
@@ -78,6 +87,7 @@ export default function Roles() {
         {isSuccess ? roles?.length === 0 : 'No Roles found, try to add one'}
         {roles && (
           <Table<FilteredRoles>
+            handleSelect={handleSelect}
             statusColumn="status"
             data={roles}
             uniqueCol={'id'}
@@ -106,7 +116,7 @@ export default function Roles() {
           path={`${path}/:id/edit`}
           render={() => {
             return (
-              <PopupMolecule title="Update Role" open={true} onClose={history.goBack}>
+              <PopupMolecule title="Update Role" open onClose={history.goBack}>
                 <UpdateRole onSubmit={submited} />
               </PopupMolecule>
             );
