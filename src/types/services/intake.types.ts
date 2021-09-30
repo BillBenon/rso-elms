@@ -1,6 +1,7 @@
 import { GenericStatus, Table } from '..';
 
 export interface IntakeInfo {
+  title: string;
   actual_end_date: Date;
   actual_start_date: Date;
   code: string;

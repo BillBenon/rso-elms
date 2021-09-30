@@ -44,16 +44,19 @@ const intakes: CommonCardDataType[] = [
 export default function Intakes() {
   const [modalOpen, setmodalOpen] = useState(false);
   const [intakes, setIntakes] = useState<CommonCardDataType[]>([]);
+  console.log('intakes', intakes);
 
-  const { isSuccess, isError, isLoading, data } = intakeStore.getAll();
+  const { isSuccess, isError, data } = intakeStore.getAll();
 
   useEffect(() => {
-    if (isSuccess && data?.data.data) {
+    if (isSuccess && data?.data) {
+      console.log('here we go');
       let loadedIntakes: CommonCardDataType[] = [];
       data?.data.data.forEach((intake) => {
         let cardData: CommonCardDataType = {
-          ...intake,
-          title: intake.expected_start_date.toString(),
+          code: intake.code.toUpperCase(),
+          description: intake.description,
+          title: intake.title || `Intake ${intake.expected_start_date}`,
           status: {
             type: 'success',
             text: intake.intake_status.toString(),
@@ -66,6 +69,8 @@ export default function Intakes() {
     } else if (isError) toast.error('error occurred when loading intakes');
     else console.log('intakes loading');
   }, [data]);
+
+  // refetch();
 
   function handleSearch(_e: ValueType) {}
   return (

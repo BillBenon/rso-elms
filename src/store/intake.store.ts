@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 
 import { intakeService } from '../services/administration/intake.service';
 
@@ -7,14 +7,18 @@ class IntakeStore {
     return useMutation(intakeService.create);
   }
   getAll() {
-    return useMutation(intakeService.fetchAll);
+    console.log('in store');
+    return useQuery('intakes', intakeService.fetchAll);
   }
-  getIntakeById() {
-    return useMutation(intakeService.getIntakeById);
+  getIntakeById(id: string) {
+    return useQuery(['intakes/id', id], () => intakeService.getIntakeById);
   }
 
-  getIntakesByAcademy() {
-    return useMutation(intakeService.getIntakesByAcademy);
+  getIntakesByAcademy(academyId: string) {
+    return useQuery(
+      ['intakes/academy', academyId],
+      () => intakeService.getIntakesByAcademy,
+    );
   }
 }
 
