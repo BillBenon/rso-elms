@@ -21,6 +21,7 @@ interface Selected {
 interface TableProps<T> {
   data: (T & Selected)[];
   uniqueCol?: keyof T;
+  isUniqueColVisible?: boolean;
   actions?: { name: string; handleAction: (_data?: T[keyof T]) => void }[];
   handleClick?: () => void;
   statusColumn?: string;
@@ -125,11 +126,15 @@ export function Table<T>({
       </th>,
     );
 
-    const dynamicHeaders = keys.map((key) => (
-      <th className="px-4 py-5 capitalize" key={key}>
-        {key}
-      </th>
-    ));
+    const dynamicHeaders = keys.map((key) =>
+      key !== uniqueCol ? (
+        <th className="px-4 py-5 capitalize" key={key}>
+          {key}
+        </th>
+      ) : (
+        <></>
+      ),
+    );
 
     header.push(...dynamicHeaders);
 
@@ -151,7 +156,13 @@ export function Table<T>({
           )}
         </td>
 
-        <Row key={index} data={row} keys={keys} statusColumn={statusColumn} />
+        <Row
+          key={index}
+          data={row}
+          keys={keys}
+          statusColumn={statusColumn}
+          uniqueCol={uniqueCol}
+        />
         {actions && actions.length > 0 ? (
           <td className="flex space-x-6 cursor-pointer">
             <Tooltip

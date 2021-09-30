@@ -2,9 +2,11 @@ import React, { FormEvent, useState } from 'react';
 import { useHistory } from 'react-router';
 
 import academyStore from '../../../store/academy.store';
+import programStore from '../../../store/program.store';
 import usersStore from '../../../store/users.store';
 import { CommonFormProps, ValueType } from '../../../types';
 import { AcademyInfo } from '../../../types/services/academy.types';
+import { ProgramInfo } from '../../../types/services/program.types';
 import {
   CreateUserInfo,
   DocType,
@@ -73,6 +75,9 @@ export default function NewStudent<E>({ onSubmit }: CommonFormProps<E>) {
   const academies: AcademyInfo[] | undefined =
     academyStore.fetchAcademies().data?.data.data;
 
+  const programs: ProgramInfo[] | undefined =
+    programStore.fetchPrograms().data?.data.data;
+
   return (
     <>
       <div className="py-5 mb-3 capitalize">
@@ -89,7 +94,7 @@ export default function NewStudent<E>({ onSubmit }: CommonFormProps<E>) {
           First name
         </InputMolecule>
         <InputMolecule
-          name="lastName"
+          name="last_name"
           placeholder="eg: Claude"
           value={details.last_name}
           handleChange={handleChange}>
@@ -102,7 +107,7 @@ export default function NewStudent<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Email
         </InputMolecule>
-        <DateMolecule handleChange={handleChange} name="dob" width="60 md:w-80">
+        <DateMolecule handleChange={handleChange} name="birth_date" width="60 md:w-80">
           Date of Birth
         </DateMolecule>
         <InputMolecule
@@ -113,10 +118,11 @@ export default function NewStudent<E>({ onSubmit }: CommonFormProps<E>) {
           Phone number
         </InputMolecule>
         <RadioMolecule
+          type="block"
           className="pb-2"
           defaultValue={details.sex}
           options={getDropDownStatusOptions(GenderStatus)}
-          value={details.sex.toString()}
+          value={details.sex}
           handleChange={handleChange}
           name="sex">
           Gender
@@ -129,10 +135,11 @@ export default function NewStudent<E>({ onSubmit }: CommonFormProps<E>) {
           Employment number
         </InputMolecule>
         <RadioMolecule
+          type="block"
           className="pb-2"
           defaultValue={details.marital_status}
           options={getDropDownStatusOptions(MaritalStatus)}
-          value={details.marital_status.toString()}
+          value={details.marital_status}
           handleChange={handleChange}
           name="marital_status">
           Marital Status
@@ -153,10 +160,11 @@ export default function NewStudent<E>({ onSubmit }: CommonFormProps<E>) {
           Passport (optional)
         </InputMolecule>
         <RadioMolecule
+          type="block"
           className="pb-2"
           options={getDropDownStatusOptions(EducationLevel)}
           name="education_level"
-          value={details.education_level.toString()}
+          value={details.education_level}
           handleChange={handleChange}>
           Education level
         </RadioMolecule>
@@ -168,7 +176,7 @@ export default function NewStudent<E>({ onSubmit }: CommonFormProps<E>) {
           Academy
         </DropdownMolecule>
         <DropdownMolecule
-          options={getDropDownOptions(academies)}
+          options={getDropDownOptions(programs)}
           name="programs"
           placeholder={'Program to be enrolled in'}
           handleChange={handleChange}>
