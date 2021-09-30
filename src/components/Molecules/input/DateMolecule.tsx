@@ -24,9 +24,6 @@ type IProp = {
   monthCapital?: boolean;
   monthDisabled?: boolean;
   monthClassName?: string;
-  yearPlaceholder?: string;
-  monthPlaceholder?: string;
-  dayPlaceholder?: string;
   hourPlaceholder?: string;
   dayDisabled?: boolean;
   dayClassName?: string;
@@ -55,9 +52,6 @@ function DateMolecule({
   monthCapital = false,
   monthDisabled = false,
   monthClassName,
-  yearPlaceholder = 'Year',
-  monthPlaceholder = 'Month',
-  dayPlaceholder = 'Day',
   hourPlaceholder = 'Hours',
   dayDisabled = false,
   dayClassName,
@@ -94,7 +88,7 @@ function DateMolecule({
   };
 
   return (
-    <div className={`flex flex-col gap-2 py-2 w-${width || 'full md:w-80'}`}>
+    <div className={`flex flex-col gap-2 pb-2 w-${width || 'full md:w-80'}`}>
       <ILabel size="sm" weight="medium">
         {children}
       </ILabel>
@@ -112,7 +106,7 @@ function DateMolecule({
               end={endYear}
               className={yearClassName}
               disabled={yearDisabled}
-              placeholder={yearPlaceholder}
+              placeholder={dateState.Year.toString()}
             />
             <MonthSelect
               year={dateState.Year}
@@ -126,7 +120,7 @@ function DateMolecule({
               numeric={monthNumeric}
               className={monthClassName}
               disabled={monthDisabled}
-              placeholder={monthPlaceholder}
+              placeholder={dateState.Month.toString()}
             />
             <DaySelect
               year={dateState.Year}
@@ -136,7 +130,7 @@ function DateMolecule({
               onChange={handleDate}
               name="Day"
               className={dayClassName}
-              placeholder={dayPlaceholder}
+              placeholder={dateState.Day.toString()}
               width={dayWidth}
               disabled={dayDisabled}
             />

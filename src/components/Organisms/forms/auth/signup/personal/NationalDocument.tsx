@@ -31,7 +31,7 @@ function NationalDocuments({
           width="60 md:w-80"
           name="nationality"
           defaultValue={details.nationality}
-          onChange={handleChange}
+          handleChange={handleChange}
           options={[
             { value: 'rw', label: 'Rwanda' },
             { value: 'ug', label: 'Uganda' },
@@ -90,7 +90,7 @@ function NationalDocuments({
         </DateMolecule>
         <CheckboxMolecule
           placeholder="Languages"
-          onChange={handleChange}
+          handleChange={handleChange}
           name="languages"
           options={[
             { value: 'kiny', label: 'Kinyarwanda' },

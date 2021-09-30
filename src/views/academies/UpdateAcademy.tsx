@@ -1,32 +1,30 @@
+// import { Label } from "@headlessui/react/dist/components/label/label";
 import '../../styles/components/Organisms/academy/academy.scss';
 
 import React, { FormEvent, useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
-import { authenticatorService } from '../../services';
 import academyStore from '../../store/academy.store';
 import { CommonFormProps, ValueType } from '../../types';
 import { AcademyCreateInfo } from '../../types/services/academy.types';
 
-export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
+interface ParamType {
+  id: string;
+}
+
+export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
 
-  useEffect(() => {
-    const getUser = async () => {
-      const user = await authenticatorService.authUser();
-      setDetails((details) => ({
-        ...details,
-        current_admin_id: user.data.data.id,
-      }));
-    };
+  const { mutateAsync } = academyStore.modifyAcademy();
 
-    getUser();
-  }, []);
+  const { id } = useParams<ParamType>();
+
+  const { data } = academyStore.getAcademyById(id);
 
   const [details, setDetails] = useState<AcademyCreateInfo>({
     current_admin_id: '',
@@ -34,7 +32,7 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     fax_number: '',
     full_address: '',
     head_office_location_id: 17445,
-    institution_id: 'b832407f-fb77-4a75-8679-73bf7794f207',
+    institution_id: '',
     mission: '',
     moto: '',
     name: '',
@@ -43,7 +41,15 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     short_name: '',
     website_link: '',
   });
-  const { mutateAsync } = academyStore.createAcademy();
+
+  useEffect(() => {
+    data?.data.data &&
+      setDetails({
+        ...data?.data.data,
+        institution_id: data?.data.data.institution.id.toString(),
+        head_office_location_id: data?.data.data.head_office_location_id || 17445,
+      });
+  }, [data]);
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
@@ -52,16 +58,14 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     }));
   }
 
-  async function createAcademy<T>(e: FormEvent<T>) {
+  function updateAcademy<T>(e: FormEvent<T>) {
     e.preventDefault();
-
-    if (onSubmit) onSubmit(e);
-
-    await mutateAsync(details, {
+    mutateAsync(details, {
       onSuccess() {
-        history.push('/dashboard/academies');
+        history.goBack();
       },
     });
+    if (onSubmit) onSubmit(e);
   }
 
   return (
@@ -84,10 +88,10 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
       <div className="p-4 pl-6 popup-width gap-3">
         <div className="py-5 mb-3 capitalize">
           <Heading color="primary" fontWeight="bold">
-            New academy
+            Edit academy
           </Heading>
         </div>
-        <form onSubmit={createAcademy}>
+        <form onSubmit={updateAcademy}>
           <InputMolecule
             name="name"
             placeholder="Type academy name"

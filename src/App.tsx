@@ -5,10 +5,11 @@ import ComponentsUseCase from './components/Organisms/ComponentsUseCase';
 import ExperienceInfo from './components/Organisms/forms/auth/signup/experience/ExperienceInfo';
 import MoreInfo from './components/Organisms/forms/auth/signup/more-details/MoreInfo';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
+import NewInstructor from './components/Organisms/user/NewInstructor';
+import NewStudent from './components/Organisms/user/NewStudent';
 import Dashboard from './layout/Dashboard';
 import { MainLayout } from './layout/MainLayout';
 import Academies from './views/academies/Academy';
-import NewAcademy from './views/academies/NewAcademy';
 import Signin from './views/auth/Signin';
 import Signup from './views/auth/Signup';
 import FacultiesView from './views/faculties/Faculties';
@@ -41,8 +42,7 @@ const App = () => {
             <Route exact path="/usecase" component={ComponentsUseCase} />
 
             <Dashboard>
-              <Route exact path="/dashboard/academies" component={Academies} />
-              <Route exact path="/dashboard/academies/new" component={NewAcademy} />
+              <Route path="/dashboard/academies" component={Academies} />
               <Route path="/dashboard/roles" component={Roles} />
               <Route exact path="/dashboard/popup" component={Popup} />
               <Route exact path="/dashboard/modules" component={Modules} />
@@ -52,6 +52,12 @@ const App = () => {
                 component={RegistrationControl}
               />
               <Route path="/dashboard/users" component={Users} />
+              <Route exact path="/dashboard/user/new" component={NewStudent} />
+              <Route
+                exact
+                path="/dashboard/user/instructor/new"
+                component={NewInstructor}
+              />
               <Route exact path="/dashboard/faculties" component={FacultiesView} />
               <Route exact path="/dashboard/programs" component={AcademicPrograms} />
               <Route
