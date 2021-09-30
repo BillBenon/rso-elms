@@ -105,6 +105,32 @@ export interface SigninPropTypes extends CommonCardDataType {
   programs: SelectData[];
 }
 
+export type IconType =
+  | 'academy'
+  | 'add'
+  | 'alert'
+  | 'attach'
+  | 'chevron-right'
+  | 'close'
+  | 'download'
+  | 'edit'
+  | 'faculty'
+  | 'filter'
+  | 'left-arrow'
+  | 'level'
+  | 'login'
+  | 'module'
+  | 'more'
+  | 'notification'
+  | 'police-logo'
+  | 'reg-control'
+  | 'right-arrow'
+  | 'role'
+  | 'search'
+  | 'settings'
+  | 'switch'
+  | 'user';
+
 export * from './props';
 export * from './services/autheticator.types';
 export * from './services/common.types';
