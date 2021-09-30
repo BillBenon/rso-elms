@@ -3,7 +3,7 @@
 
 import '../../../styles/components/Molecules/table/table.scss';
 
-import _, { add } from 'lodash';
+import _ from 'lodash';
 import React, { useState } from 'react';
 
 import { ValueType } from '../../../types';
@@ -55,25 +55,27 @@ export function Table<T>({
   function _handleSelectAll() {
     // when set is full we uncheck
     if (selected.size === currentRows.length) {
-      setSelected(new Set(''));
+      setSelected(new Set('')); // set set to empty, since we unselected each and everything
+
       _.map(currentRows, 'id').forEach((val) => {
-        changeSelect(val, false);
+        changeSelect(val, false); // unmark all current rows in table as selected
       });
+
       if (handleSelect) handleSelect([]);
     } else {
       const newSelRow = new Set('');
+
       // else when set is not full we add  all ids
       _.map(currentRows, 'id').forEach((val) => {
-        changeSelect(val, true);
-        newSelRow.add(val);
+        changeSelect(val, true); // mark current rows in table as selected
+        newSelRow.add(val + '');
       });
-
-      setSelected(new Set([...newSelRow]));
-
-      if (handleSelect) handleSelect(Array.from(selected));
+      setSelected(new Set([...newSelRow])); // add new selected list in selected state
+      if (handleSelect) handleSelect(Array.from(newSelRow));
     }
   }
 
+  //handle single select
   function _handleSelect(e: ValueType<HTMLInputElement>) {
     const val = e.value?.toString(); //stringfy value
 
@@ -97,6 +99,7 @@ export function Table<T>({
   function changeSelect(id: string, status: boolean) {
     const cr = currentRows.map((row) => {
       if (uniqueCol) {
+        // @ts-ignore
         if (row[uniqueCol] == id) row.selected = status;
       }
       return row;
@@ -114,6 +117,7 @@ export function Table<T>({
       <th className="checkbox-tb">
         {uniqueCol && (
           <Checkbox
+            checked={selected.size === currentRows.length}
             handleChange={() => _handleSelectAll()}
             name={uniqueCol + ''}
             value={'all'}></Checkbox>

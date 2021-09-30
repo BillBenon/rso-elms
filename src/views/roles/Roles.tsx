@@ -61,6 +61,10 @@ export default function Roles() {
   }
   function handleSearch() {}
 
+  function handleSelect(selected: string[] | null) {
+    console.log(selected);
+  }
+
   return (
     <main>
       <section>
@@ -78,6 +82,7 @@ export default function Roles() {
         {isSuccess ? roles?.length === 0 : 'No Roles found, try to add one'}
         {roles && (
           <Table<FilteredRoles>
+            handleSelect={handleSelect}
             statusColumn="status"
             data={roles}
             uniqueCol={'id'}

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { ReactNode } from 'react';
+import { FormEvent, ReactNode } from 'react';
 
 export type Color =
   | 'primary'
@@ -85,10 +85,10 @@ export interface SelectData {
 /**
  * handleChange function params type
  */
-export interface ValueType {
+export interface ValueType<T = Event> {
   name: string;
   value: string | number | boolean | undefined;
-  event?: Event;
+  event?: FormEvent<T>;
 }
 
 export interface CommonCardDataType {
