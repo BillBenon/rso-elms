@@ -1,42 +1,48 @@
-import React from 'react';
-import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 
 import Cacumber from '../../components/Molecules/Cacumber';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import NewRole from '../../components/Organisms/forms/roles/NewRole';
+import NewPrivilege from '../../components/Organisms/forms/privilege/NewPrivilege';
 import { privilegeStore } from '../../store';
 import { PrivilegeRes } from '../../types';
 
 export default function PrivilegesView() {
   const { path } = useRouteMatch();
-  let privileges: PrivilegeRes[] | undefined = [];
+  const location = useLocation();
+
+  const [privileges, setPrivileges] = useState<PrivilegeRes[]>([]);
   const history = useHistory();
 
-  const { data, isSuccess, isLoading } = privilegeStore.getPrivileges();
+  const { data, isSuccess, isLoading, refetch } = privilegeStore.getPrivileges(); // get privileges
 
-  if (isSuccess) {
-    console.log('success');
-    privileges = data?.data?.data;
-  }
+  useEffect(() => {
+    data?.data?.data && setPrivileges(data?.data?.data);
+  }, [data]);
 
-  function submited() {
-    // setOpen(false);
-  }
+  // refetch data whenever user comes back on the page
+  useEffect(() => {
+    if (location.pathname === path) {
+      refetch();
+    }
+  }, [location]);
+
+  function submited() {}
   function handleSearch() {}
 
   const actions = [
     {
       name: 'Edit Privillege',
-      handleAction: (data: string | undefined) => {
-        console.log(data, 'edited');
+      handleAction: (id: string | undefined) => {
+        history.push(`${path}/${id}/edit`); // go to edit page
       },
     },
     {
       name: 'Disable/Enable',
-      handleAction: (data: string | undefined) => {
-        console.log(data, 'status');
+      handleAction: (_id: string | undefined) => {
+        // history.push(`/${id}/edit`);
       },
     },
   ];
@@ -54,24 +60,29 @@ export default function PrivilegesView() {
       </section>
       <section>
         {isLoading && 'loading...'}
-        {isSuccess && privileges && (
-          <Table<PrivilegeRes>
-            uniqueCol="id"
-            statusColumn="status"
-            data={privileges}
-            actions={actions}
-          />
-        )}
+        {isSuccess &&
+          privileges &&
+          (privileges.length == 0 ? (
+            'No data.'
+          ) : (
+            <Table<PrivilegeRes>
+              uniqueCol="id"
+              statusColumn="status"
+              data={privileges}
+              actions={actions}
+            />
+          ))}
       </section>
 
       <Switch>
+        {/* edit page */}
         <Route
           exact
           path={`${path}/:id/edit`}
           render={() => {
             return (
               <PopupMolecule title="Edit Privilege" open={true} onClose={history.goBack}>
-                <NewRole onSubmit={submited} />
+                <NewPrivilege onSubmit={submited} />
               </PopupMolecule>
             );
           }}

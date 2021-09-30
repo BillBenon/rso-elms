@@ -65,7 +65,13 @@ export default function Academy() {
       </div>
 
       <div className="mt-14">
-        <Table statusColumn="status" data={data} />
+        {academyInfo && (
+          <Table<AcademyTypes>
+            statusColumn="status"
+            data={academies}
+            actions={academyActions}
+          />
+        )}
       </div>
     </>
   );

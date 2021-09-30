@@ -35,8 +35,7 @@ export default function CreatedBySandberg() {
           value="en"
           checked={checked}
           label="English"
-          onChange={() => setChecked(!checked)}
-          error={null}
+          handleChange={() => setChecked(!checked)}
         />
         <div className="py-3">
           <Checkbox
@@ -44,8 +43,7 @@ export default function CreatedBySandberg() {
             value="en"
             checked={checked}
             label="French"
-            onChange={() => setChecked(!checked)}
-            error={null}
+            handleChange={() => setChecked(!checked)}
           />
         </div>
         <Tabs className="my-4" activeIndex={1}>
@@ -62,20 +60,20 @@ export default function CreatedBySandberg() {
         <CheckboxMolecule
           options={options}
           name="language"
-          placeholder="Checkbox Molecule"
-          onChange={() => console.log('changed')}
+          placeholder="Language"
+          handleChange={() => console.log('changed')}
         />
         <DropDown
           options={options}
           name="intakes"
-          onChange={(e: object) => console.log(e)}
+          handleChange={(e: object) => console.log(e)}
           defaultValue={options[1]}
         />
         <Input name="email" value="" handleChange={(e) => console.log(e)} />
         <DropdownMolecule
           options={options}
           name="academy"
-          onChange={(e: object) => console.log(e)}
+          handleChange={(e: object) => console.log(e)}
           error="Please select academy"
           isMulti>
           Select academy

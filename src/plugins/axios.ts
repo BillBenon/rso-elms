@@ -28,8 +28,11 @@ const interceptAdminReq = (config: AxiosRequestConfig) => {
 };
 
 const interceptAdminResError = (error: any) => {
-  const { data } = error.response;
+  const { data, status } = error.response;
   toast.error(data.message || data.error);
+
+  // unauthorized
+  if (status === 401) window.location.href = '/';
 
   return error.response;
 };

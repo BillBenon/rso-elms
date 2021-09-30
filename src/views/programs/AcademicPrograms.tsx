@@ -9,10 +9,14 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
+import programStore from '../../store/program.store';
 import { CommonCardDataType, Link } from '../../types';
+import { DivisionInfo } from '../../types/services/division.types';
 import NewAcademicProgram from './NewAcademicProgram';
 
-interface IProgramData extends CommonCardDataType {}
+interface IProgramData extends CommonCardDataType {
+  department: DivisionInfo;
+}
 
 export default function AcademicProgram() {
   const history = useHistory();
@@ -28,33 +32,32 @@ export default function AcademicProgram() {
 
   const list: Link[] = [
     { to: 'home', title: 'home' },
-    { to: 'modules', title: 'modules' },
-    { to: 'subjects', title: 'subjects' },
+    { to: 'users', title: 'users' },
+    { to: 'faculty', title: 'Faculty' },
+    { to: 'program', title: 'Programs' },
   ];
 
-  const data: IProgramData[] = [
-    {
-      status: { type: 'success', text: 'On going' },
-      code: 'HR450-TC',
-      title: 'Caddette Program',
+  const typeChecker = (status: string) =>
+    status.toLowerCase() === 'inactive' ? 'error' : 'success';
+
+  const { data } = programStore.fetchPrograms();
+  const programInfo = data?.data.data;
+
+  let programs: IProgramData[] = [];
+  programInfo?.map((obj) => {
+    let { code, name, description, generic_status, department } = obj;
+
+    let prog: IProgramData = {
+      status: { type: typeChecker(generic_status), text: generic_status },
+      code: code,
+      title: name,
       subTitle: 'Short Course',
-      description: 'Program description, that briefly provides details on pa program',
-    },
-    {
-      status: { type: 'success', text: 'On going' },
-      code: 'CD450-TD',
-      title: 'Caddete program',
-      subTitle: 'short course',
-      description: 'Program description, that briefly provides details on pa program',
-    },
-    {
-      status: { type: 'warning', text: 'On Hold' },
-      code: 'PR480-TC',
-      title: 'Caddette program',
-      subTitle: 'short course',
-      description: 'Program description, that briefly provides details on pa program',
-    },
-  ];
+      description: description,
+      department: department,
+    };
+
+    programs.push(prog);
+  });
 
   return (
     <>
@@ -70,7 +73,7 @@ export default function AcademicProgram() {
           </TableHeader>
         </section>
         <section className="flex flex-wrap justify-between mt-2">
-          {data.map((Common) => (
+          {programs.map((Common) => (
             <Tooltip
               key={Common.code}
               trigger={
@@ -85,7 +88,7 @@ export default function AcademicProgram() {
               {' '}
               <div className="w-96">
                 <Heading fontSize="sm" fontWeight="semibold" className="mb-4">
-                  Cadette Program
+                  {Common.code}
                 </Heading>
 
                 <div className="flex gap-24">
@@ -94,10 +97,10 @@ export default function AcademicProgram() {
                   <div className="flex flex-col gap-6">
                     <div className="flex flex-col gap-2">
                       <Heading color="txt-secondary" fontSize="sm">
-                        Faculty
+                        {Common.department.division_type}
                       </Heading>
                       <Heading fontSize="sm" fontWeight="semibold">
-                        Military Department
+                        {Common.department.name}
                       </Heading>
                     </div>
                     <div className="flex flex-col gap-2">
@@ -167,7 +170,9 @@ export default function AcademicProgram() {
                   </Heading>
                 </div>
                 <div className="mt-4">
-                  <Button onClick={() => history.push('/programs/3')}>View More</Button>
+                  <Button onClick={() => history.push('/dashboard/programs/3')}>
+                    View More
+                  </Button>
                 </div>
               </div>
             </Tooltip>

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { ReactNode } from 'react';
+import { FormEvent, ReactNode } from 'react';
 
 export type Color =
   | 'primary'
@@ -16,7 +16,7 @@ export type Color =
   | 'gray'
   | 'lightgray';
 
-export type fontSize = 'xs' | 'sm' | 'base' | 'tiny' | 'lg' | '2xl';
+export type fontSize = 'xs' | 'sm' | 'base' | 'tiny' | 'lg' | '2xl' | '3xl';
 export type textTransform = 'uppercase' | 'lowerCase' | 'capitalize' | 'normal-case';
 export type width = 'default' | 'full';
 export type fontWeight = 'normal' | 'medium' | 'semibold' | 'bold';
@@ -85,10 +85,10 @@ export interface SelectData {
 /**
  * handleChange function params type
  */
-export interface ValueType {
+export interface ValueType<T = Event> {
   name: string;
   value: string | number | boolean | undefined;
-  event?: Event;
+  event?: FormEvent<T>;
 }
 
 export interface CommonCardDataType {
@@ -108,4 +108,5 @@ export interface SigninPropTypes extends CommonCardDataType {
 export * from './props';
 export * from './services/autheticator.types';
 export * from './services/common.types';
+export * from './services/privilege.types';
 export * from './services/role.types';

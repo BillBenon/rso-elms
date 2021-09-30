@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 export interface Response<T = unknown> {
   data: T;
   message: string;
