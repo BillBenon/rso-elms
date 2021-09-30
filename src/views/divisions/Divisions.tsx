@@ -7,7 +7,6 @@ import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
-import Departments from '../../components/Organisms/divisions/Departments';
 import Faculties from '../../components/Organisms/divisions/Faculties';
 import NewFaculty from '../../components/Organisms/forms/divisions/NewFaculty';
 
