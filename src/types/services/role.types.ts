@@ -14,3 +14,8 @@ export interface RoleRes extends Table {
   status: GenericStatus;
   users: any[];
 }
+
+export interface AddPrivilegeRoleType {
+  roleId: string;
+  privileges: string;
+}
