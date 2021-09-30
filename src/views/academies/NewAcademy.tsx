@@ -59,7 +59,7 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
 
     await mutateAsync(details, {
       onSuccess() {
-        history.push('/academies');
+        history.push('/dashboard/academies');
       },
     });
   }

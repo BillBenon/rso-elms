@@ -18,36 +18,42 @@ type UserTypes = {
   NID: string;
   academy: string;
   status: GenericStatus;
-  userType: UserType;
+  user_type: UserType;
 };
 
 export default function Users() {
   const { path } = useRouteMatch();
   const [userType, setUserType] = useState('Students');
 
-  const { data } = usersStore.fetchUsers();
+  const { data, isSuccess } = usersStore.fetchUsers();
+
   const userInfo = data?.data.data;
 
-  console.log(userInfo);
-
   let users: UserTypes[] = [];
-  userInfo?.map((obj) => {
-    let { firstName, lastName, nid, academy, status, userType } = obj;
 
-    let user: UserTypes = {
-      'full name': firstName + ' ' + lastName,
-      NID: nid,
-      academy: academy.name,
-      status: status,
-      userType: userType,
-    };
+  if (isSuccess && userInfo) {
+    userInfo?.map((obj) => {
+      let { first_name, last_name, nid, academy, status, user_type } = obj;
 
-    users.push(user);
-  });
+      let user: UserTypes = {
+        'full name': first_name + ' ' + last_name,
+        NID: nid,
+        academy: academy && academy.name,
+        status: status,
+        user_type: user_type,
+      };
 
-  let students = users.filter((user) => user.userType == UserType.STUDENT);
-  let instructors = users.filter((user) => user.userType == UserType.INSTRUCTOR);
-  let admins = users.filter((user) => user.userType == UserType.ADMIN);
+      users.push(user);
+    });
+  }
+
+  let students: UserTypes[], instructors: UserTypes[], admins: UserTypes[];
+
+  if (isSuccess && users) {
+    students = users.filter((user) => user.user_type == UserType.STUDENT);
+    instructors = users.filter((user) => user.user_type == UserType.INSTRUCTOR);
+    admins = users.filter((user) => user.user_type == UserType.ADMIN);
+  }
 
   const tabs = [
     {
@@ -97,26 +103,16 @@ export default function Users() {
         tabs={tabs}
         onTabChange={(event) => setUserType(event.activeTabLabel)}>
         <Switch>
-          <Route
-            exact
-            path={`${path}`}
-            render={() => {
-              return <Students students={students} />;
-            }}
-          />
+          <Route exact path={`${path}`} render={() => <Students students={students} />} />
           <Route
             exact
             path={`${path}/instructors`}
-            render={() => {
-              return <Instructors instructors={instructors} />;
-            }}
+            render={() => <Instructors instructors={instructors} />}
           />
           <Route
             exact
             path={`${path}/admins`}
-            render={() => {
-              return <Admins admins={admins} />;
-            }}
+            render={() => <Admins admins={admins} />}
           />
         </Switch>
       </TabNavigation>

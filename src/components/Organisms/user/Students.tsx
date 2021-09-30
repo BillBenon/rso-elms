@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router';
 
 import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
-import ImportStudents from './ImportStudents';
+import ImportUsers from './ImportUsers';
 import NewStudent from './NewStudent';
 
 export default function Students({ students }: { students: Object[] }) {
   const [newStudentModalOpen, setNewStudentModalOpen] = useState(false);
   const [importStudentModalOpen, setImportStudentModalOpen] = useState(false);
+  const history = useHistory();
 
   function handleSearch(_e: ValueType) {}
   const studentActions = [
@@ -22,18 +24,20 @@ export default function Students({ students }: { students: Object[] }) {
     <>
       <TableHeader
         title="Students"
-        totalItems={students.length}
+        totalItems={students && students.length > 0 ? students.length : 0}
         handleSearch={handleSearch}>
         <div className="flex gap-3">
           <Button onClick={() => setImportStudentModalOpen(true)} styleType="outline">
             Import users
           </Button>
-          <Button onClick={() => setNewStudentModalOpen(true)}>New Student</Button>
+          <Button onClick={() => history.push('/dashboard/user/new')}>New Student</Button>
         </div>
       </TableHeader>
-      <div className="pt-8">
-        <Table statusColumn="status" data={students} />
-      </div>
+      {students && students.length > 0 && (
+        <div className="pt-8">
+          <Table statusColumn="status" data={students} actions={studentActions} />
+        </div>
+      )}
       <PopupMolecule
         title="New student"
         open={newStudentModalOpen}
@@ -44,7 +48,7 @@ export default function Students({ students }: { students: Object[] }) {
         title="Import students"
         open={importStudentModalOpen}
         onClose={() => setImportStudentModalOpen(false)}>
-        <ImportStudents />
+        <ImportUsers userType="students" />
       </PopupMolecule>
     </>
   );

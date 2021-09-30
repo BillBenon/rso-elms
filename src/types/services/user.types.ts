@@ -5,26 +5,23 @@ import { GenericStatus } from './common.types';
 import { InstitutionInfo } from './institution.types';
 
 export interface UserInfo extends CreateUserInfo, Table {
-  genericStatus: GenericStatus;
-  lastStatusChangeReason: string;
-  firstName: string;
-  lastName: string;
+  generic_status: GenericStatus;
+  last_status_change_reason: string;
   pin: string;
-  ageRange: string;
+  age_range: string;
   token: string;
   //   person: PersonInfo;
   academy: AcademyInfo;
-  institutionId: InstitutionInfo;
-  userType: UserType;
+  institution_id: InstitutionInfo;
   activated: boolean;
-  activeSession: boolean;
-  imageUrl: string;
-  passwordResetPeriodInDays: number;
-  resetDate: string;
-  preferredLanguage: string;
+  active_session: boolean;
+  image_url: string;
+  password_reset_period_in_days: number;
+  reset_date: string;
+  preferred_language: string;
   level: string;
   status: GenericStatus;
-  loginTry: number;
+  login_try: number;
   enabled: boolean;
   authorities: [];
 }
@@ -57,12 +54,12 @@ export interface CreateUserInfo {
   username: string;
 }
 
-enum GenderStatus {
+export enum GenderStatus {
   MALE,
   FEMALE,
 }
 
-enum MaritalStatus {
+export enum MaritalStatus {
   MARRIED,
   SINGLE,
   DIVORCED,
@@ -70,7 +67,7 @@ enum MaritalStatus {
   OTHER,
 }
 
-enum EducationLevel {
+export enum EducationLevel {
   NONE,
   PRIMARY,
   SECONDARY,
@@ -80,7 +77,7 @@ enum EducationLevel {
   NOT_KNOWING_WRITE_NOR_READ,
 }
 
-enum DocType {
+export enum DocType {
   NID,
   PASSPORT,
   ARM_CARD,
