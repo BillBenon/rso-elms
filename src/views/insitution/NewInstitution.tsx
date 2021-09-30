@@ -100,16 +100,16 @@ export default function NewInstitution() {
               Institution mission
             </TextAreaMolecule>
           </div>
+          <div className="py-4 col-span-2">
+            <ILabel className="block pb-1">Institution logo</ILabel>
+            <Button styleType="outline">Upload logo</Button>
+          </div>
+          <div className="py-4 col-span-2">
+            <Button onClick={handleSubmit} type="submit">
+              Save
+            </Button>
+          </div>
         </form>
-        <div className="py-4">
-          <ILabel className="block pb-1">Institution logo</ILabel>
-          <Button styleType="outline">Upload logo</Button>
-        </div>
-        <div className="py-4">
-          <Button onClick={handleSubmit} type="submit">
-            Save
-          </Button>
-        </div>
       </div>
     </div>
   );
