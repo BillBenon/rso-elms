@@ -60,7 +60,7 @@ const MonthSelect = (mprops: MProp) => {
       className={mprops.className}
       width={mprops.width}
       options={renderMonthOptions()}
-      onChange={(e: ValueType) => mprops.onChange(e)}
+      handleChange={(e: ValueType) => mprops.onChange(e)}
     />
   );
 };

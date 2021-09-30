@@ -47,17 +47,20 @@ export default function NewInstitution() {
     getUser();
   }, []);
 
-  async function handleSubmit<T>(e: FormEvent<T>) {
-    e.preventDefault();
-    await mutateAsync(values, {
-      onSuccess(data) {
-        toast.success(data.data.message);
-        history.push('/dashboard/users');
-      },
-      onError(error) {
-        toast.error(error?.message || 'error occurred');
-      },
-    });
+  function handleSubmit<T>(e: FormEvent<T>) {
+    send(e);
+    async function send(e: FormEvent<T>) {
+      e.preventDefault();
+      await mutateAsync(values, {
+        onSuccess(data) {
+          toast.success(data.data.message);
+          history.push('/dashboard/users');
+        },
+        onError() {
+          // toast.error(error?.message || 'error occurred');
+        },
+      });
+    }
   }
 
   return (
@@ -136,6 +139,7 @@ export default function NewInstitution() {
             <Button styleType="outline">Upload logo</Button>
           </div>
           <div className="py-4 col-span-2">
+            {/* @ts-ignore */}
             <Button onClick={handleSubmit} type="submit">
               Save
             </Button>
