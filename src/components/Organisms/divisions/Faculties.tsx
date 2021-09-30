@@ -18,7 +18,7 @@ export default function Faculties() {
       <section>
         <TableHeader title="Roles" totalItems={4} handleSearch={() => {}}>
           <Link to={`${url}/add`}>
-            <Button>Add Role</Button>
+            <Button>Add Division</Button>
           </Link>
         </TableHeader>
       </section>
