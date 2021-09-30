@@ -29,12 +29,12 @@ const interceptAdminReq = (config: AxiosRequestConfig) => {
 
 const interceptAdminResError = (error: Error | AxiosError<AxiosResponse<Response>>) => {
   if (axios.isAxiosError(error)) {
-    toast.error(
-      (error.response?.data.data.message || error.response?.data?.data?.error) + '',
-    );
+    const e = error?.response;
+    if (e?.status === 401) window.location.href = '/';
+    if (e?.status === 400) toast.error(`Bad Request on, ${e.config.url}`);
+    else toast.error((e?.data.data.message || e?.data?.data?.error) + '');
 
     // unauthorized
-    if (error?.response?.status === 401) window.location.href = '/';
     throw error;
   } else {
     return error;
