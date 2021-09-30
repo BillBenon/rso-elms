@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 
 import { ValueType } from '../../../types';
 
@@ -19,6 +19,9 @@ export default function Checkbox(props: Props) {
     setChecked(!checked);
     props.handleChange({ name: props.name, value: props.value, event: e });
   };
+
+  useEffect(() => setChecked(!!props.checked), [props.checked]);
+
   return (
     <>
       <label className="inline-flex items-center">
@@ -26,7 +29,7 @@ export default function Checkbox(props: Props) {
           name={props.name}
           type="checkbox"
           className={`form-checkbox border-2 border-gray-100 h-4 w-4 text-primary-500 mr-2 focus:ring-primary-400 focus:ring-opacity-25  rounded ${props.className}`}
-          checked={props.checked || checked}
+          checked={checked}
           disabled={props.disabled}
           value={props.value}
           onChange={handleCheck}
