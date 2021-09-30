@@ -48,7 +48,6 @@ const App = () => {
               <Route exact path="/dashboard/modules" component={Modules} />
               <Route exact path="/dashboard/subjects" component={Subjects} />
               <Route
-                exact
                 path="/dashboard/registration-control"
                 component={RegistrationControl}
               />
