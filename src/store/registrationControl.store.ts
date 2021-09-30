@@ -9,6 +9,14 @@ class RegistrationControlStore {
   fetchRegControl() {
     return useQuery('regControl', registrationControlService.getAll);
   }
+
+  fetchRegControlById(id: string) {
+    return useQuery(['regControl/id', id], () => registrationControlService.getById(id));
+  }
+
+  updateRegControl() {
+    return useMutation(registrationControlService.update);
+  }
 }
 
 export default new RegistrationControlStore();

@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 
 import registrationControlStore from '../../../store/registrationControl.store';
 import { CommonFormProps, ValueType } from '../../../types';
+import { IRegistrationControlCreateInfo } from '../../../types/services/registrationControl.types';
 import Button from '../../Atoms/custom/Button';
 import DateMolecule from '../../Molecules/input/DateMolecule';
 import RadioMolecule from '../../Molecules/input/RadioMolecule';
@@ -13,14 +14,13 @@ interface PropType<K> extends CommonFormProps<K> {}
 export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
   const { mutateAsync } = registrationControlStore.createRegControl();
 
-  const [regControl, setRegControl] = useState({
+  const [regControl, setRegControl] = useState<IRegistrationControlCreateInfo>({
     academy_id: '48d3fec8-bfed-40f7-aa70-58ccfe4238d8',
     description: '',
     actual_start_date: '',
     actual_end_date: '',
     expected_start_date: '',
     expected_end_date: '',
-    id: '',
   });
 
   function handleChange(e: ValueType) {

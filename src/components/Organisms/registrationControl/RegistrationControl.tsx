@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import registrationControlStore from '../../../store/registrationControl.store';
 import { GenericStatus, ValueType } from '../../../types';
+import { IRegistrationControlInfo } from '../../../types/services/registrationControl.types';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import Heading from '../../Atoms/Text/Heading';
@@ -10,13 +12,12 @@ import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
 import NewRegistrationControl from '../forms/NewRegistrationControl';
+import UpdateRegControl from '../forms/regcontrol/UpdateRegControl';
 
 export default function RegistrationControl() {
-  const { data, isLoading, isSuccess, refetch } =
-    registrationControlStore.fetchRegControl();
-
-  // refetch();
-  const [open, setOpen] = useState(false); // state to controll the popup
+  const { url, path } = useRouteMatch();
+  const history = useHistory();
+  const { data, isLoading, isSuccess } = registrationControlStore.fetchRegControl();
 
   function handleSearch(_e: ValueType) {}
 
@@ -25,28 +26,35 @@ export default function RegistrationControl() {
     'end date': string;
     description: string;
     status: GenericStatus;
+    id: string | number;
   }
 
   let RegistrationControls: IRegistrationInfo[] = [];
   let RegInfo = data?.data.data;
 
-  RegInfo?.map((obj: any) => {
-    let { expected_start_date, expected_end_date, description, generic_status } = obj;
-    let academy: IRegistrationInfo = {
+  RegInfo?.map((obj: IRegistrationControlInfo) => {
+    let { expected_start_date, expected_end_date, description, generic_status, id } = obj;
+    let registrationcontrol: IRegistrationInfo = {
       'start date': expected_start_date,
       'end date': expected_end_date,
       description,
       status: generic_status,
+      id: id,
     };
-    RegistrationControls.push(academy);
+    RegistrationControls.push(registrationcontrol);
   });
 
-  function submited() {
-    setOpen(false);
+  function handleClose() {
+    history.goBack();
   }
+
   const controlActions = [
-    { name: 'Add control', handleAction: () => {} },
-    { name: 'Edit control', handleAction: () => {} },
+    {
+      name: 'Edit control',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`${path}/${id}/edit`); // go to edit reg control
+      },
+    },
     { name: 'View', handleAction: () => {} },
   ];
 
@@ -70,7 +78,9 @@ export default function RegistrationControl() {
         title="registration control"
         totalItems={3}
         handleSearch={handleSearch}>
-        <Button onClick={() => setOpen(true)}>Add new reg control</Button>
+        <Link to={`${url}/add`}>
+          <Button>Add new reg control</Button>
+        </Link>
       </TableHeader>
 
       <div className="mt-14">
@@ -80,6 +90,7 @@ export default function RegistrationControl() {
             statusColumn="status"
             data={RegistrationControls}
             actions={controlActions}
+            uniqueCol={'id'}
           />
         ) : (
           ''
@@ -88,13 +99,33 @@ export default function RegistrationControl() {
         {RegistrationControls.length < 1 && <span>No data found</span>}
       </div>
 
-      {/* add module popup */}
-      <PopupMolecule
-        title="New Registration Control"
-        open={open}
-        onClose={() => setOpen(false)}>
-        <NewRegistrationControl onSubmit={submited} />
-      </PopupMolecule>
+      {/* add reg control popup */}
+      <Switch>
+        <Route
+          exact
+          path={`${path}/add`}
+          render={() => {
+            return (
+              <PopupMolecule title="New Registration Control" open onClose={handleClose}>
+                <NewRegistrationControl />
+              </PopupMolecule>
+            );
+          }}
+        />
+
+        {/* modify reg control */}
+        <Route
+          exact
+          path={`${path}/:id/edit`}
+          render={() => {
+            return (
+              <PopupMolecule title="Update Role" open onClose={handleClose}>
+                <UpdateRegControl />
+              </PopupMolecule>
+            );
+          }}
+        />
+      </Switch>
     </div>
   );
 }
