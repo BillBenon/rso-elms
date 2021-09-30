@@ -1,7 +1,7 @@
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import toast from 'react-hot-toast';
 
-import { LoginRes } from '../types';
+import { LoginRes, Response } from '../types';
 import cookie from '../utils/cookie';
 
 const openRequests: string[] = ['/authentication/signin'];
@@ -27,14 +27,18 @@ const interceptAdminReq = (config: AxiosRequestConfig) => {
   return config;
 };
 
-const interceptAdminResError = (error: any) => {
-  const { data, status } = error.response;
-  toast.error(data.message || data.error);
+const interceptAdminResError = (error: Error | AxiosError<AxiosResponse<Response>>) => {
+  if (axios.isAxiosError(error)) {
+    toast.error(
+      (error.response?.data.data.message || error.response?.data?.data?.error) + '',
+    );
 
-  // unauthorized
-  if (status === 401) window.location.href = '/';
-
-  return error.response;
+    // unauthorized
+    if (error?.response?.status === 401) window.location.href = '/';
+    throw error;
+  } else {
+    return error;
+  }
 };
 
 adminstrationAxios.interceptors.request.use(interceptAdminReq);
