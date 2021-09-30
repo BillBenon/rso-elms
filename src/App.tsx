@@ -52,7 +52,7 @@ const App = () => {
                 component={RegistrationControl}
               />
 
-              <Route exact path="/dashboard/users/student/new" component={NewStudent} />
+              <Route exact path="/dashboard/user/student/new" component={NewStudent} />
               <Route
                 exact
                 path="/dashboard/users/instructor/new"
