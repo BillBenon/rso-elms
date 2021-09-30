@@ -11,8 +11,6 @@ class UserService {
     return await adminstrationAxios.post('/users/registerNewUser', userInfo);
   }
   public async fetchUsers(): Promise<AxiosResponse<Response<UserInfo[]>>> {
-    console.log('het');
-
     return await adminstrationAxios.get('/users/getUsers');
   }
 }
