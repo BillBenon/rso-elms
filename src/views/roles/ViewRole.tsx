@@ -13,6 +13,7 @@ export default function ViewRole() {
   const { id } = useParams<ParamType>();
   const { data, isLoading, isSuccess, isError, error } = roleStore.getRole(id);
   const role = data?.data.data;
+  console.log(role, isSuccess, isLoading);
 
   return (
     <main>

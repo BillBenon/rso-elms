@@ -56,7 +56,7 @@ export default function Roles() {
     {
       name: 'View',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${path.replace(/roles/i, 'role')}/${id}/edit`); // go to view role
+        history.push(`${path.replace(/roles/i, 'role')}/${id}/view`); // go to view role
       },
     },
   ];
