@@ -24,6 +24,7 @@ import AcademicPrograms from './views/programs/AcademicPrograms';
 import NewAcademicProgram from './views/programs/NewAcademicProgram';
 import ProgramDetails from './views/programs/ProgramDetails';
 import Roles from './views/roles/Roles';
+import ViewRole from './views/roles/ViewRole';
 import Subjects from './views/subjects';
 import Users from './views/users/Users';
 
@@ -43,6 +44,7 @@ const App = () => {
             <Dashboard>
               <Route exact path="/dashboard/academies" component={Academies} />
               <Route exact path="/dashboard/academies/new" component={NewAcademy} />
+              <Route exact path="/dashboard/role/:id/view" component={ViewRole} />
               <Route path="/dashboard/roles" component={Roles} />
               <Route exact path="/dashboard/popup" component={Popup} />
               <Route exact path="/dashboard/modules" component={Modules} />

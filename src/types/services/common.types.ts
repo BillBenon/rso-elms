@@ -4,6 +4,7 @@ export interface Response<T = unknown> {
   message: string;
   status: string;
   timestamp: string;
+  error?: string;
 }
 
 export interface Table {

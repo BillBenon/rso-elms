@@ -53,7 +53,12 @@ export default function Roles() {
         history.push(`${path}/${id}/edit`); // go to edit role
       },
     },
-    { name: 'View', handleAction: () => {} },
+    {
+      name: 'View',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`${path.replace(/roles/i, 'role')}/${id}/edit`); // go to view role
+      },
+    },
   ];
 
   function submited() {
@@ -111,7 +116,7 @@ export default function Roles() {
           path={`${path}/:id/edit`}
           render={() => {
             return (
-              <PopupMolecule title="Update Role" open={true} onClose={history.goBack}>
+              <PopupMolecule title="Update Role" open onClose={history.goBack}>
                 <UpdateRole onSubmit={submited} />
               </PopupMolecule>
             );
