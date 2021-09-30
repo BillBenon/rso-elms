@@ -73,7 +73,7 @@ const App = () => {
               <Route exact path="/dashboard/levels" component={LevelsView} />
               <Route exact path="/dashboard/intakes" component={IntakesView} />
               <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} />
-              <Route exact path="/dashboard/privileges" component={PrivilegesView} />
+              <Route path="/dashboard/privileges" component={PrivilegesView} />
             </Dashboard>
             <Route path="*" component={NotFound} />
           </Switch>
