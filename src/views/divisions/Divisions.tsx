@@ -51,8 +51,7 @@ export default function Divisions() {
           badgecolor="primary"
           fontWeight="normal"
           className="h-6 w-9 flex justify-center items-center">
-              3
-          {/* {divisions.length} */}
+          3{/* {divisions.length} */}
         </Badge>
       </div>
 
@@ -60,13 +59,12 @@ export default function Divisions() {
         tabs={tabs}
         onTabChange={(event) => setUserType(event.activeTabLabel)}>
         <Switch>
-          <Route exact path={`${path}`} render={() =>} />
+          {/* <Route exact path={`${path}`} render={() => another one here} /> */}
           <Route
             exact
             path={`${path}/instructors`}
-            render={() => <Instructors instructors={instructors} />}
+            // render={() => another component here}
           />
-
         </Switch>
       </TabNavigation>
     </div>
