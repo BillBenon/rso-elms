@@ -1,13 +1,14 @@
 import { GenericStatus, Table } from '..';
 
 export interface IntakeInfo {
+  id: string | number;
   title: string;
-  actual_end_date: Date;
-  actual_start_date: Date;
+  actual_end_date: Date | string;
+  actual_start_date: Date | string;
   code: string;
   description: string;
-  expected_end_date: Date;
-  expected_start_date: Date;
+  expected_end_date: Date | string;
+  expected_start_date: Date | string;
   intake_status: IntakeStatus;
   period_type: PeriodType;
   registration_control_id: string;
@@ -22,8 +23,10 @@ export interface ExtendedIntakeInfo extends Table, IntakeInfo {
 }
 
 export enum IntakeStatus {
-  INACTIVE = 'INACTIVE',
-  ONHOLD = 'ONHOLD',
+  STARTED = 'STARTED',
+  SUSPENDED = 'SUSPENDED',
+  VOIDED = 'VOIDED',
+  CLOSED = 'CLOSED',
   ONGOING = 'ONGOING',
   COMPLETED = 'COMPLETED',
   OPENED = 'OPENED',

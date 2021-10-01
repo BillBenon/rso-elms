@@ -23,10 +23,10 @@ export default function Intakes() {
   console.log('intakes', intakes);
 
   const { isSuccess, isError, data } = intakeStore.getAll();
+  console.log('intakes', data?.data.data);
 
   useEffect(() => {
     if (isSuccess && data?.data) {
-      console.log('here we go');
       let loadedIntakes: CommonCardDataType[] = [];
       data?.data.data.forEach((intake) => {
         let cardData: CommonCardDataType = {

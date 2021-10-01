@@ -37,3 +37,17 @@ export const unit = {
 export const getDaysInMonth = (year: number, month: number): number => {
   return new Date(year, month, 0).getDate();
 };
+
+export function formatDateToYyMmDd(date: string) {
+  let formatedDate = new Date(date);
+
+  return `${formatedDate.getFullYear()}/${
+    formatedDate.getMonth() + 1
+  }/${formatedDate.getDate()}`;
+}
+
+export function formatDateToIso(date: string | Date): string {
+  let formatedDate = new Date(date).toISOString().split('T').join(' ');
+
+  return formatedDate.substring(0, formatedDate.length - 5);
+}
