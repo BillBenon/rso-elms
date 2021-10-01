@@ -117,9 +117,10 @@ export function Table<T>({
   }
 
   const getKeys = () => {
-    const keys = Object.keys(currentRows[0]);
-    return keys.filter((item) => item in rowsToHide);
+    const keys = Object.keys(currentRows[0]) as (keyof (T & Selected))[];
+    return keys.filter((item) => !rowsToHide.includes(item));
   };
+
   const getHeader = () => {
     let keys = getKeys();
     // eslint-disable-next-line no-undef
@@ -138,7 +139,7 @@ export function Table<T>({
     );
 
     const dynamicHeaders = keys.map((key) =>
-      key in rowsToHide ? (
+      !rowsToHide.includes(key) ? (
         <th className="px-4 py-5 capitalize" key={key}>
           {key}
         </th>
@@ -167,13 +168,7 @@ export function Table<T>({
           )}
         </td>
 
-        <Row
-          key={index}
-          data={row}
-          keys={keys}
-          statusColumn={statusColumn}
-          uniqueCol={uniqueCol}
-        />
+        <Row key={index} data={row} keys={keys} statusColumn={statusColumn} />
         {actions && actions.length > 0 ? (
           <td className="flex space-x-6 cursor-pointer">
             <Tooltip
