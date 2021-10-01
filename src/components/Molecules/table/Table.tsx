@@ -36,6 +36,7 @@ export function Table<T>({
   statusColumn,
   rowsPerPage = 10,
   handleSelect,
+  isUniqueColVisible,
 }: TableProps<T>) {
   const [rowsOnPage] = useState(rowsPerPage);
   const [currentPage, setCurrentPage] = useState(1);
@@ -167,6 +168,7 @@ export function Table<T>({
           keys={keys}
           statusColumn={statusColumn}
           uniqueCol={uniqueCol}
+          isUniqueColVisible={isUniqueColVisible}
         />
         {actions && actions.length > 0 ? (
           <td className="flex space-x-6 cursor-pointer">
