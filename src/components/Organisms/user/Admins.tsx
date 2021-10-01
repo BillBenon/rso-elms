@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
+import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
+import ImportUsers from './ImportUsers';
 
 export default function Admins({ admins }: { admins: Object[] }) {
+  const [importAdminModalOpen, setImportAdminModalOpen] = useState(false);
   function handleSearch(_e: ValueType) {}
   const adminActions = [
     { name: 'Add Role', handleAction: () => {} },
@@ -14,14 +17,28 @@ export default function Admins({ admins }: { admins: Object[] }) {
   ];
   return (
     <>
-      <TableHeader title="Admins" totalItems={admins.length} handleSearch={handleSearch}>
+      <TableHeader
+        title="Admins"
+        totalItems={admins && admins.length > 0 ? admins.length : 0}
+        handleSearch={handleSearch}>
         <div className="flex gap-3">
-          <Button styleType="outline">Import users</Button>
+          <Button onClick={() => setImportAdminModalOpen(true)} styleType="outline">
+            Import users
+          </Button>
         </div>
       </TableHeader>
-      <div className="pt-8">
-        <Table statusColumn="status" data={admins} />
-      </div>
+      {admins && admins.length > 0 && (
+        <div className="pt-8">
+          <Table statusColumn="status" data={admins} actions={adminActions} />
+        </div>
+      )}
+
+      <PopupMolecule
+        title="Import admins"
+        open={importAdminModalOpen}
+        onClose={() => setImportAdminModalOpen(false)}>
+        <ImportUsers userType="admins" />
+      </PopupMolecule>
     </>
   );
 }

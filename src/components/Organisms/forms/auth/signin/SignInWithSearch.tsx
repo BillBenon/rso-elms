@@ -41,7 +41,7 @@ function SignInWithSearch({ handleClick }: PropType) {
         <DropdownMolecule
           width="28"
           placeholder="Search"
-          onChange={handleChange}
+          handleChange={handleChange}
           name="searchBy"
           defaultValue={details.searchBy}
           options={[

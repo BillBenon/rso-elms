@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 
 import { authenticatorService } from '../../../../services';
 import academyStore from '../../../../store/academy.store';
-import { ValueType } from '../../../../types';
+import { CommonFormProps, ValueType } from '../../../../types';
 import { AcademyCreateInfo } from '../../../../types/services/academy.types';
 import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
@@ -14,7 +14,7 @@ import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 
-export default function AddAcademy() {
+export default function NewAcademy<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
 
   useEffect(() => {
@@ -55,6 +55,7 @@ export default function AddAcademy() {
 
   async function createAcademy<T>(e: FormEvent<T>) {
     e.preventDefault();
+    if (onSubmit) onSubmit(e);
     await mutateAsync(details, {
       onSuccess() {
         history.push('/academies');

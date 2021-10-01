@@ -26,7 +26,7 @@ function EmploymentDetails({
           placeholder="Select current rank"
           name="currentRank"
           className="w-72"
-          onChange={handleChange}
+          handleChange={handleChange}
           options={[
             { value: 'rw', label: 'Rwanda' },
             { value: 'ug', label: 'Uganda' },

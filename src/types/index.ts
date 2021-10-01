@@ -131,6 +131,10 @@ export type IconType =
   | 'switch'
   | 'user';
 
+export interface FormPropType {
+  onSubmit?: <E>(_e: FormEvent<E>) => void;
+}
+
 export * from './props';
 export * from './services/autheticator.types';
 export * from './services/common.types';

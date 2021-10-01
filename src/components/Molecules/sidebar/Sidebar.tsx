@@ -5,10 +5,10 @@ import AcademyProfileCard from '../cards/AcademyProfileCard';
 
 const defaultLinks: linkProps[] = [
   { title: 'Users', to: '/dashboard/users', icon: 'user' },
+  { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
   { title: 'Roles', to: '/dashboard/roles', icon: 'role' },
   { title: 'Privileges', to: '/dashboard/privileges', icon: 'module' },
   { title: 'Academies', to: '/dashboard/academies', icon: 'academy', fill: false },
-  { title: 'Faculties', to: '/dashboard/faculties', icon: 'faculty' },
   { title: 'Programs', to: '/dashboard/programs', icon: 'faculty' },
   { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
   { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
