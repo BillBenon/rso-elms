@@ -1,11 +1,12 @@
 import React from 'react';
 
+import { IconType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 
 interface IProps {
   title: string;
-  icon?: string;
+  icon?: IconType;
   description: string;
   buttonLabel?: string;
   handleClick?: () => any;
