@@ -51,7 +51,6 @@ const App = () => {
                 path="/dashboard/registration-control"
                 component={RegistrationControl}
               />
-              <Route path="/dashboard/users" component={Users} />
               <Route exact path="/dashboard/user/new" component={NewStudent} />
 
               <Route path="/dashboard/divisions" component={Divisions} />

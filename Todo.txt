@@ -1,3 +1,0 @@
-- change status on table @loraine
-- registration control @blessing
-- hightlight disabled input @blessing
