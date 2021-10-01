@@ -72,7 +72,7 @@ const App = () => {
                 component={NewAcademicProgram}
               />
               <Route path="/dashboard/programs/:id" component={ProgramDetailsMolecule} />
-              <Route exact path="/dashboard/levels" component={LevelsView} />
+              <Route path="/dashboard/levels" component={LevelsView} />
               <Route exact path="/dashboard/intakes" component={IntakesView} />
               <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} />
               <Route path="/dashboard/privileges" component={PrivilegesView} />
