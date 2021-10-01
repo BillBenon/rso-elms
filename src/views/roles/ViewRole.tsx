@@ -26,8 +26,11 @@ export default function ViewRole() {
   const history = useHistory();
   const { id } = useParams<ParamType>();
   const { data, isLoading, isSuccess, isError, error } = roleStore.getRole(id);
-  // const rolesPrivileges = roleStore.getPrivilegesByRole(id);
+  const rolesPrivileges = roleStore.getPrivilegesByRole(id);
   const role = data?.data.data;
+  const privilegesByRoles = rolesPrivileges.data?.data.data;
+
+  console.log(rolesPrivileges, 'amazing');
 
   // TODO: display priviles
   // Todo: add privileges on role
@@ -75,13 +78,25 @@ export default function ViewRole() {
                 </Link>
               </div>
               <div>
-                <ul>
-                  <li>
-                    <ActionableList handleClick={() => alert('handle remove')}>
-                      CAN_CREATE_USER
-                    </ActionableList>
-                  </li>
-                </ul>
+                {rolesPrivileges.isError && rolesPrivileges.error.message}
+                {rolesPrivileges.isSuccess &&
+                  privilegesByRoles &&
+                  privilegesByRoles?.length <= 0 &&
+                  'This role has no privileges try adding one'}
+                {rolesPrivileges.isSuccess && (
+                  <ul>
+                    {privilegesByRoles?.map((rolePrivileg) => (
+                      <li key={rolePrivileg.id}>
+                        <ActionableList
+                          handleClick={() =>
+                            alert('handle remove privilege' + rolePrivileg.privilege.id)
+                          }>
+                          {rolePrivileg.privilege.name}
+                        </ActionableList>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
           </>
