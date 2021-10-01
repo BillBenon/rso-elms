@@ -3,7 +3,6 @@ import toast from 'react-hot-toast';
 
 import Cacumber from '../../components/Molecules/Cacumber';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
-import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import { intakeStore } from '../../store/intake.store';
 import { CommonCardDataType, Link, ValueType } from '../../types';
@@ -17,10 +16,8 @@ const list: Link[] = [
 
 export default function Intakes() {
   const [intakes, setIntakes] = useState<CommonCardDataType[]>([]);
-  console.log('intakes', intakes);
 
   const { isSuccess, isError, data } = intakeStore.getAll();
-  console.log('intakes', data?.data.data);
 
   useEffect(() => {
     if (isSuccess && data?.data) {
@@ -40,7 +37,6 @@ export default function Intakes() {
 
       setIntakes(loadedIntakes);
     } else if (isError) toast.error('error occurred when loading intakes');
-    else console.log('intakes loading');
   }, [data]);
 
   function handleSearch(_e: ValueType) {}
@@ -53,13 +49,7 @@ export default function Intakes() {
         handleSearch={handleSearch}
       />
 
-      <NoDataAvailable
-        title="Add subjects to module"
-        description="There are no subjects added to this module.Click the button below to add subjects to this module."
-        buttonLabel="Add subjects"
-      />
-
-      {/* <section className="flex flex-wrap justify-between mt-2">
+      <section className="flex flex-wrap justify-between mt-2">
         {intakes.map((course) => (
           <div key={course.code} className="p-1 mt-3">
             <CommonCardMolecule
@@ -68,7 +58,7 @@ export default function Intakes() {
             />
           </div>
         ))}
-      </section> */}
+      </section>
     </div>
   );
 }
