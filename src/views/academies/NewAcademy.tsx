@@ -1,5 +1,3 @@
-import '../../styles/components/Organisms/academy/academy.scss';
-
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 

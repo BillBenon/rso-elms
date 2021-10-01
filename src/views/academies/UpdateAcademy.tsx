@@ -1,5 +1,4 @@
 // import { Label } from "@headlessui/react/dist/components/label/label";
-import '../../styles/components/Organisms/academy/academy.scss';
 
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router';
@@ -81,13 +80,12 @@ export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
         </ILabel>
         <Icon name="chevron-right" fill="gray" />
         <ILabel size="sm" color="primary" weight="medium">
-          Academy
+          Update Academy
         </ILabel>
       </div>
-
-      <div className="p-4 pl-6 popup-width gap-3">
+      <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
         <div className="py-5 mb-3 capitalize">
-          <Heading color="primary" fontWeight="bold">
+          <Heading color="txt-primary" fontWeight="bold">
             Edit academy
           </Heading>
         </div>
@@ -167,9 +165,7 @@ export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
             <Button styleType="outline">upload logo</Button>
           </div>
           <div className="mt-5">
-            <Button full type="submit">
-              Save
-            </Button>
+            <Button type="submit">Save</Button>
           </div>
         </form>
       </div>
