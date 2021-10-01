@@ -61,7 +61,7 @@ export default function ImportUsers<K>({ onSubmit, userType = 'students' }: IUse
       <div className="pt-2 w-80">
         <div className="flex gap-2 items-center">
           <Icon name="alert" />
-          <Heading fontSize="sm">
+          <Heading fontSize="sm" color="txt-secondary">
             Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
             Velit officia
           </Heading>

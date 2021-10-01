@@ -18,7 +18,7 @@ export interface Table {
 }
 
 export enum GenericStatus {
-  ACTIVE,
-  INACTIVE,
-  RESET,
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  RESET = 'RESET',
 }

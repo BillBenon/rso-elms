@@ -7,6 +7,7 @@ import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import Departments from '../../components/Organisms/divisions/Departments';
 import Faculties from '../../components/Organisms/divisions/Faculties';
 import NewFaculty from '../../components/Organisms/forms/divisions/NewFaculty';
 
@@ -14,6 +15,7 @@ export default function Divisions() {
   const { path } = useRouteMatch();
   const history = useHistory();
   const [fetchType, setFetchType] = useState('Faculty');
+  const [doRefetch, setRefetch] = useState<boolean>(false);
 
   const tabs = [
     {
@@ -63,7 +65,15 @@ export default function Divisions() {
             exact
             path={`${path}`}
             render={() => {
-              return <Faculties fetchType={fetchType} />;
+              return <Faculties fetchType={fetchType} doRefetch={doRefetch} />;
+            }}
+          />
+
+          <Route
+            exact
+            path={`${path}/departments`}
+            render={() => {
+              return <Departments fetchType={fetchType} />;
             }}
           />
 
@@ -73,7 +83,7 @@ export default function Divisions() {
             render={() => {
               return (
                 <PopupMolecule title="New Faculty" open onClose={() => history.goBack()}>
-                  <NewFaculty />
+                  <NewFaculty handleAfterCreate={() => setRefetch(true)} />
                 </PopupMolecule>
               );
             }}

@@ -15,13 +15,14 @@ interface FilteredData
 
 interface IFaculties {
   fetchType: string;
+  doRefetch: boolean;
 }
 
-export default function Faculties({ fetchType }: IFaculties) {
+export default function Faculties({ fetchType, doRefetch }: IFaculties) {
   const { url, path } = useRouteMatch();
   const history = useHistory();
   const [faculties, setFaculties] = useState<FilteredData[]>();
-  const { data, isSuccess, isLoading } = divisionStore.getDivisionByType(
+  const { data, isSuccess, isLoading, refetch } = divisionStore.getDivisionByType(
     fetchType.toUpperCase(),
   );
 
@@ -31,8 +32,12 @@ export default function Faculties({ fetchType }: IFaculties) {
       _.pick(faculty, ['id', 'name', 'description', 'generic_status']),
     );
 
+    doRefetch && refetch();
+
+    console.log('i did a refetch', doRefetch);
+
     data?.data.data && setFaculties(filteredInfo);
-  }, [data]);
+  }, [data, doRefetch]);
 
   function handleClose() {
     history.goBack();

@@ -9,7 +9,11 @@ import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-export default function NewFaculty({ onSubmit }: FormPropType) {
+interface INewFaculty extends FormPropType {
+  handleAfterCreate: () => void;
+}
+
+export default function NewFaculty({ onSubmit, handleAfterCreate }: INewFaculty) {
   const [division, setDivision] = useState<DivisionCreateInfo>({
     academy_id: '48d3fec8-bfed-40f7-aa70-58ccfe4238d8',
     code: '',
@@ -30,6 +34,7 @@ export default function NewFaculty({ onSubmit }: FormPropType) {
     mutateAsync(division, {
       onSuccess: () => {
         toast.success('Role created', { duration: 3 });
+        handleAfterCreate();
         history.goBack();
       },
       onError: () => {
