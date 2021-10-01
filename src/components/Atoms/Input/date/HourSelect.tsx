@@ -37,7 +37,7 @@ const HourSelect = (mprops: MProp) => {
       width={mprops.width}
       className={mprops.className}
       options={renderHourOptions()}
-      onChange={(e: ValueType) => mprops.onChange(e)}
+      handleChange={(e: ValueType) => mprops.onChange(e)}
     />
   );
 };
