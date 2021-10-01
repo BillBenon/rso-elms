@@ -35,9 +35,11 @@ type IProp = {
   hourDisabled?: boolean;
   minuteDisabled?: boolean;
   defaultValue?: string;
+  reverse?: boolean;
 };
 
 function DateMolecule({
+  reverse = true,
   showDate = true,
   showTime = false,
   width,
@@ -116,7 +118,7 @@ function DateMolecule({
         {showDate && (
           <>
             <YearSelect
-              reverse
+              reverse={reverse}
               defaultValue={dateState.Year.toString()}
               value={dateState.Year}
               onChange={handleDate}

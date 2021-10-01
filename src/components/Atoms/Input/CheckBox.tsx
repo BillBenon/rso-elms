@@ -1,3 +1,5 @@
+import '../../../styles/components/Atoms/input/checkbox.css';
+
 import React, { FormEvent, useEffect, useState } from 'react';
 
 import { ValueType } from '../../../types';
@@ -28,14 +30,16 @@ export default function Checkbox(props: Props) {
         <input
           name={props.name}
           type="checkbox"
-          className={`form-checkbox border-2 border-gray-100 h-4 w-4 text-primary-500 mr-2 focus:ring-primary-400 focus:ring-opacity-25  rounded ${props.className}`}
+          className={`check-box h-5 w-5 text-primary-500 focus:ring-primary-400 focus:ring-opacity-25  ${props.className}`}
           checked={checked}
           disabled={props.disabled}
           value={props.value}
           onChange={handleCheck}
         />
         {props.label && (
-          <span className="text-sm px-2 text-gray-700 capitalize">{props.label}</span>
+          <span className="text-sm px-2 text-black font-medium capitalize">
+            {props.label}
+          </span>
         )}
       </label>
     </>

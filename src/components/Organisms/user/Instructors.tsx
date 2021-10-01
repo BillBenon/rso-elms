@@ -30,7 +30,7 @@ export default function Instructors({ instructors }: { instructors: Object[] }) 
           <Button onClick={() => setImportInstructorModalOpen(true)} styleType="outline">
             Import users
           </Button>
-          <Button onClick={() => history.push('/dashboard/user/instructor/new')}>
+          <Button onClick={() => history.push('/dashboard/users/instructor/new')}>
             New Instructor
           </Button>
         </div>
