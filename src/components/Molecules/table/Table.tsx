@@ -26,7 +26,6 @@ interface TableProps<T> {
   actions?: { name: string; handleAction: (_data?: T[keyof T]) => void }[];
   handleClick?: () => void;
   statusColumn?: string;
-  rowsPerPage?: number;
   handleSelect?: (_selected: string[] | null) => void;
 }
 
@@ -36,16 +35,15 @@ export function Table<T>({
   data,
   actions,
   statusColumn,
-  rowsPerPage = 10,
   handleSelect,
 }: TableProps<T>) {
-  const [rowsOnPage] = useState(rowsPerPage);
-  const [currentPage, setCurrentPage] = useState(1);
   const countsToDisplay = [
     { label: '25', value: '25' },
     { label: '50', value: '50' },
-    { label: '50', value: '50' },
+    { label: '100', value: '100' },
   ];
+  const [rowsOnPage, setRowsOnPage] = useState(+countsToDisplay[0].value);
+  const [currentPage, setCurrentPage] = useState(1);
 
   //Get current rows
   const indexOfLastRow = currentPage * rowsOnPage;
@@ -123,7 +121,7 @@ export function Table<T>({
   }
 
   function handleCountSelect(e: ValueType) {
-    console.log(e);
+    e.value && setRowsOnPage(+e.value);
   }
 
   const getKeys = () => {
