@@ -34,18 +34,19 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
 
   useEffect(() => {
     data?.data.data && setRegControl({ ...data?.data.data });
-    console.log(regControl.expected_end_date, 'we go');
+    // console.log(regControl.expected_end_date, 'we go');
   }, [data]);
 
   function handleChange({ name, value }: ValueType) {
     setRegControl((old) => ({ ...old, [name]: value }));
   }
 
+  // console.log('end date', regControl.expected_end_date);
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
     mutateAsync(regControl, {
       onSuccess: () => {
-        toast.success('Role updated', { duration: 3 });
+        toast.success('Control updated', { duration: 3 });
         history.goBack();
       },
       onError: () => {
@@ -63,13 +64,16 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
         Registration control description
       </TextAreaMolecule>
       <DateMolecule
-        defaultValue={regControl.expected_start_date}
+        defaultValue={'2021-09-19 07:11:17'}
         handleChange={handleChange}
         name={'expected_start_date'}>
         Expected Start Date
       </DateMolecule>
 
-      <DateMolecule handleChange={handleChange} name={'expected_end_date'}>
+      <DateMolecule
+        handleChange={handleChange}
+        defaultValue={'2021-09-29 07:11:17'}
+        name={'expected_end_date'}>
         Expected End Date
       </DateMolecule>
 

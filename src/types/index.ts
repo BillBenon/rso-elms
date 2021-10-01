@@ -109,6 +109,10 @@ export interface FormPropType {
   onSubmit?: <E>(_e: FormEvent<E>) => void;
 }
 
+export interface ParamType {
+  id: string;
+}
+
 export * from './props';
 export * from './services/autheticator.types';
 export * from './services/common.types';

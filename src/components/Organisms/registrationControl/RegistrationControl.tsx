@@ -119,7 +119,7 @@ export default function RegistrationControl() {
           path={`${path}/:id/edit`}
           render={() => {
             return (
-              <PopupMolecule title="Update Role" open onClose={handleClose}>
+              <PopupMolecule title="Update Control" open onClose={handleClose}>
                 <UpdateRegControl />
               </PopupMolecule>
             );
