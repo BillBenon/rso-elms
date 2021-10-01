@@ -8,7 +8,6 @@ export interface IntakeInfo {
   description: string;
   expected_end_date: Date;
   expected_start_date: Date;
-  id: string | number;
   intake_status: IntakeStatus;
   period_type: PeriodType;
   registration_control_id: string;
@@ -23,15 +22,16 @@ export interface ExtendedIntakeInfo extends Table, IntakeInfo {
 }
 
 export enum IntakeStatus {
-  INACTIVE,
-  ONHOLD,
-  ONGOING,
-  COMPLETED,
-  OPENED,
+  INACTIVE = 'INACTIVE',
+  ONHOLD = 'ONHOLD',
+  ONGOING = 'ONGOING',
+  COMPLETED = 'COMPLETED',
+  OPENED = 'OPENED',
 }
+
 export enum PeriodType {
-  TERM,
-  SEMESTER,
-  SHORT_COURSE,
-  PHASE,
+  TERM = 'TERM',
+  SEMESTER = 'SEMESTER',
+  SHORT_COURSE = 'SHORT_COURSE',
+  PHASE = 'PHASE',
 }

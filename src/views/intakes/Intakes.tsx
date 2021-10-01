@@ -17,30 +17,6 @@ const list: Link[] = [
   { to: 'intakes', title: 'Intakes' },
 ];
 
-const intakes: CommonCardDataType[] = [
-  {
-    status: { type: 'error', text: 'Completed' },
-    code: 'INTK/21BDC',
-    title: 'Software Engineering',
-    description:
-      'Start Date:   17 Aug 2021 - 10 Sep 2021 Expected End Date:  17 Aug 2021 - 10 Sep 2021 ',
-  },
-  {
-    status: { type: 'success', text: 'On going' },
-    code: 'INTK/21BDC',
-    title: 'Computer science',
-    description:
-      'Start Date:   17 Aug 2021 - 10 Sep 2021 Expected End Date:  17 Aug =l2021 - 10 Sep 2021 ',
-  },
-  {
-    status: { type: 'success', text: 'On going' },
-    code: 'INTK/21BDC',
-    title: 'Cadette Program',
-    description:
-      'Start Date:   17 Aug 2021 - 10 Sep 2021 Expected End Date:  17 Aug 2021 - 10 Sep 2021 ',
-  },
-];
-
 export default function Intakes() {
   const [modalOpen, setmodalOpen] = useState(false);
   const [intakes, setIntakes] = useState<CommonCardDataType[]>([]);
@@ -69,8 +45,6 @@ export default function Intakes() {
     } else if (isError) toast.error('error occurred when loading intakes');
     else console.log('intakes loading');
   }, [data]);
-
-  // refetch();
 
   function handleSearch(_e: ValueType) {}
   return (

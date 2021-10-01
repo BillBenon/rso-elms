@@ -202,7 +202,7 @@ export function Table<T>({
 
   return (
     <div className="overflow-x-auto rounded-lg text-sm">
-      <table className="table-auto border-collapse font-semibold bg-main w-full m-auto">
+      <table className="table-auto border-collapse font-medium bg-main w-full m-auto">
         <thead>
           <tr className="text-left text-txt-secondary border-b border-silver">
             {getHeader()}
