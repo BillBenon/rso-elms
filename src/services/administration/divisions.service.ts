@@ -21,10 +21,10 @@ class DivisionService {
     return await adminstrationAxios.get(`/divisions/getDivisionById/${id}`);
   }
 
-  public async modifyRole(
+  public async modifyDivision(
     division: DivisionCreateInfo,
   ): Promise<AxiosResponse<Response<DivisionInfo>>> {
-    return await adminstrationAxios.put('/roles/modifyRole', { ...division });
+    return await adminstrationAxios.put('/divisions/modifyDivision', { ...division });
   }
 }
 

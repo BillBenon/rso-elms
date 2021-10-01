@@ -18,7 +18,7 @@ interface INewFaculty extends FormPropType {
 
 export default function UpdateFaculty({ onSubmit, handleAfterCreate }: INewFaculty) {
   // const [form, setForm] = useState<DivisionInfo>({ name: '', description: '' });
-  // const { mutateAsync } = roleStore.modifyRole();
+  const { mutateAsync } = divisionStore.updateDivision();
   const history = useHistory();
 
   const { id } = useParams<ParamType>();
@@ -35,8 +35,18 @@ export default function UpdateFaculty({ onSubmit, handleAfterCreate }: INewFacul
     parent_id: '',
   });
 
+  const updateDivisionInfo: any = {
+    academy_id: division.academy?.id,
+    code: '',
+    description: division.description,
+    division_type: 'FACULTY',
+    id: id,
+    name: division.name,
+    parent_id: 'e18abdba-0004-46bb-ae82-c4a96981ee8d',
+  };
+
   useEffect(() => {
-    data?.data.data && setDivision({ ...data?.data.data });
+    data?.data && setDivision(data?.data.data);
   }, [data]);
 
   function handleChange({ name, value }: ValueType) {
@@ -44,14 +54,14 @@ export default function UpdateFaculty({ onSubmit, handleAfterCreate }: INewFacul
   }
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
-    mutateAsync(division, {
+    mutateAsync(updateDivisionInfo, {
       onSuccess: () => {
-        toast.success('Role created', { duration: 3 });
+        toast.success('Faculty updated', { duration: 3 });
         handleAfterCreate();
         history.goBack();
       },
       onError: () => {
-        toast.error('something wrong happened while creating role', { duration: 3 });
+        toast.error('something wrong happened while updaing faculty', { duration: 3 });
       },
     });
     if (onSubmit) onSubmit(e);
