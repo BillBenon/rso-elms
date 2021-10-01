@@ -3,9 +3,9 @@ import { ReactSVG } from 'react-svg';
 import styled, { css } from 'styled-components';
 
 import { bgStyle } from '../../../global/global-vars';
-import { Color, colorStyleType } from '../../../types';
+import { Color, colorStyleType, IconType } from '../../../types';
 type IProps = {
-  name: string;
+  name: IconType;
   size?: number;
   fill?: Color;
   stroke?: Color;

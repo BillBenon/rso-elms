@@ -34,12 +34,12 @@ const Pagination = ({
 
   return totalRows > rowsPerPage ? (
     <div className="py-2">
-      <nav className="my-2 block">
+      <nav className="my-2 flex justify-end">
         <ul className="flex pl-0 rounded list-none flex-wrap justify-center">
-          <button onClick={onPrev} disabled={currentPage === 1}>
+          <button className="mr-3" onClick={onPrev} disabled={currentPage === 1}>
             <Icon name="left-arrow" size={12} stroke="none" />
           </button>
-          <li className="space-x-4">
+          <li className="space-x-2">
             {pageNumbers.map((number) => (
               <Indicator
                 key={number}
@@ -52,7 +52,7 @@ const Pagination = ({
               </Indicator>
             ))}
           </li>
-          <button onClick={onNext} disabled={currentPage === lastPage}>
+          <button className="ml-3" onClick={onNext} disabled={currentPage === lastPage}>
             <Icon name="right-arrow" size={12} stroke="none" />
           </button>
         </ul>

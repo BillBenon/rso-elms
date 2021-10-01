@@ -42,10 +42,8 @@ const App = () => {
             <Route exact path="/usecase" component={ComponentsUseCase} />
 
             <Dashboard>
-              <Route path="/dashboard/academies" />
-              <Route exact path="/dashboard/academies" component={Academies} />
-              {/* <Route exact path="/dashboard/academies/new" component={NewAcademy} /> */}
-              <Route exact path="/dashboard/role/:id/view" component={ViewRole} />
+              <Route path="/dashboard/role/:id/view" component={ViewRole} />
+              <Route path="/dashboard/academies" component={Academies} />
               <Route path="/dashboard/roles" component={Roles} />
               <Route exact path="/dashboard/modules" component={Modules} />
               <Route exact path="/dashboard/subjects" component={Subjects} />
@@ -55,7 +53,6 @@ const App = () => {
               />
               <Route path="/dashboard/users" component={Users} />
               <Route exact path="/dashboard/user/new" component={NewStudent} />
-
               <Route path="/dashboard/divisions" component={Divisions} />
 
               <Route exact path="/dashboard/users/student/new" component={NewStudent} />

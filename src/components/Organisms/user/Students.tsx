@@ -30,7 +30,7 @@ export default function Students({ students }: { students: Object[] }) {
           <Button onClick={() => setImportStudentModalOpen(true)} styleType="outline">
             Import users
           </Button>
-          <Button onClick={() => history.push('/dashboard/users/student/new')}>
+          <Button onClick={() => history.push('/dashboard/user/student/new')}>
             New Student
           </Button>
         </div>

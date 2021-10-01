@@ -10,7 +10,6 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewLevel from '../../components/Organisms/forms/level/NewLevel';
 import UpdateLevel from '../../components/Organisms/forms/level/UpdateLevel';
 import { levelStore } from '../../store/level.store';
-import { ValueType } from '../../types';
 import { ILevel } from '../../types/services/levels.types';
 
 interface FilteredLevels
