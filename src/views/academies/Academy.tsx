@@ -50,7 +50,7 @@ export default function Academy() {
     {
       name: 'Edit academy',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit role
+        history.push(`${path}/${id}/edit`); // go to edit academy
       },
     },
     { name: 'View', handleAction: () => {} },
