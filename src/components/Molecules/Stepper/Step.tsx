@@ -15,6 +15,7 @@ type StepProps = {
   isError?: boolean;
   isVertical?: boolean;
   isFirstStep: boolean;
+  width?: string;
 };
 
 const Step = ({
@@ -27,6 +28,7 @@ const Step = ({
   isVertical,
   isFirstStep,
   isError,
+  width = 'w-60',
 }: StepProps) => {
   return (
     <div className="flex justify-between">
@@ -56,7 +58,7 @@ const Step = ({
         {!isFirstStep && (
           <div
             className={`${isComplete ? 'border-primary-400' : 'border-silver'}
-          ${isVertical ? 'separator_ h-16 border-l-2' : 'w-60 border-b-2'} 
+          ${isVertical ? 'separator_ h-16 border-l-2' : `${width} border-b-2`} 
           ${isFirstStep ? 'h-0 border-none' : ''}`}></div>
         )}
         {/* step (in numbers) indicator */}

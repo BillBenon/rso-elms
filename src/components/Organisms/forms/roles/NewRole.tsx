@@ -3,16 +3,12 @@ import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
 import { roleStore } from '../../../../store';
-import { CreateRoleReq, ValueType } from '../../../../types';
+import { CreateRoleReq, FormPropType, ValueType } from '../../../../types';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-interface PropType {
-  onSubmit: <E>(_e: FormEvent<E>) => void;
-}
-
-export default function NewRole({ onSubmit }: PropType) {
+export default function NewRole({ onSubmit }: FormPropType) {
   const [form, setForm] = useState<CreateRoleReq>({ name: '', description: '' });
   const { mutateAsync } = roleStore.addRole();
   const history = useHistory();
@@ -31,7 +27,7 @@ export default function NewRole({ onSubmit }: PropType) {
         toast.error('something wrong happened while creating role', { duration: 3 });
       },
     });
-    onSubmit(e);
+    if (onSubmit) onSubmit(e);
   }
   return (
     <form onSubmit={submitForm}>

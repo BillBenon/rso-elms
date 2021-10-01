@@ -1,5 +1,5 @@
 import React from 'react';
-import { useLocation } from 'react-router';
+import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 import { colorStyle, fontSizeStyle } from '../../../global/global-vars';

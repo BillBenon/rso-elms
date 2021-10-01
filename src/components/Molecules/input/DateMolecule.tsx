@@ -24,9 +24,6 @@ type IProp = {
   monthCapital?: boolean;
   monthDisabled?: boolean;
   monthClassName?: string;
-  yearPlaceholder?: string;
-  monthPlaceholder?: string;
-  dayPlaceholder?: string;
   hourPlaceholder?: string;
   dayDisabled?: boolean;
   dayClassName?: string;
@@ -37,9 +34,12 @@ type IProp = {
   minuteWidth?: string;
   hourDisabled?: boolean;
   minuteDisabled?: boolean;
+  defaultValue?: string;
+  reverse?: boolean;
 };
 
 function DateMolecule({
+  reverse = true,
   showDate = true,
   showTime = false,
   width,
@@ -55,9 +55,6 @@ function DateMolecule({
   monthCapital = false,
   monthDisabled = false,
   monthClassName,
-  yearPlaceholder = 'Year',
-  monthPlaceholder = 'Month',
-  dayPlaceholder = 'Day',
   hourPlaceholder = 'Hours',
   dayDisabled = false,
   dayClassName,
@@ -68,6 +65,7 @@ function DateMolecule({
   minuteWidth = '28',
   hourDisabled = false,
   minuteDisabled = false,
+  defaultValue,
 }: IProp) {
   const [dateState, setDateState] = useState({
     Day: new Date().getDate(),
@@ -78,11 +76,30 @@ function DateMolecule({
   });
 
   const dateFormat = () => {
+    const months = dateState.Month < 10 ? '0' + dateState.Month : '' + dateState.Month;
     const minutes =
       dateState.Minutes < 10 ? '0' + dateState.Minutes : '' + dateState.Minutes;
-    let selectedDate: string = `${dateState.Month}/${dateState.Day}/${dateState.Year} ${dateState.Hours}:${minutes}`;
+    let selectedDate: string = `${dateState.Year}-${months}-${dateState.Day} ${dateState.Hours}:${minutes}:00`;
     handleChange({ name: name, value: selectedDate });
   };
+
+  useEffect(() => {
+    console.log('default', defaultValue);
+    defaultValue && setDate();
+  }, []);
+
+  function setDate() {
+    const dV = new Date(defaultValue || '');
+    console.log('he');
+    setDateState((old) => ({
+      ...old,
+      Year: dV.getFullYear(),
+      Month: dV.getMonth() + 1,
+      Day: dV.getDay(),
+      Hours: dV.getHours(),
+      Minutes: dV.getMinutes(),
+    }));
+  }
 
   useEffect(() => {
     dateFormat();
@@ -93,7 +110,7 @@ function DateMolecule({
   };
 
   return (
-    <div className={`flex flex-col gap-3 w-${width || 'full md:w-80'}`}>
+    <div className={`flex flex-col gap-2 pb-2 w-${width || 'full md:w-80'}`}>
       <ILabel size="sm" weight="medium">
         {children}
       </ILabel>
@@ -101,7 +118,7 @@ function DateMolecule({
         {showDate && (
           <>
             <YearSelect
-              reverse
+              reverse={reverse}
               defaultValue={dateState.Year.toString()}
               value={dateState.Year}
               onChange={handleDate}
@@ -111,7 +128,7 @@ function DateMolecule({
               end={endYear}
               className={yearClassName}
               disabled={yearDisabled}
-              placeholder={yearPlaceholder}
+              placeholder={dateState.Year.toString()}
             />
             <MonthSelect
               year={dateState.Year}
@@ -125,7 +142,7 @@ function DateMolecule({
               numeric={monthNumeric}
               className={monthClassName}
               disabled={monthDisabled}
-              placeholder={monthPlaceholder}
+              placeholder={dateState.Month.toString()}
             />
             <DaySelect
               year={dateState.Year}
@@ -135,7 +152,7 @@ function DateMolecule({
               onChange={handleDate}
               name="Day"
               className={dayClassName}
-              placeholder={dayPlaceholder}
+              placeholder={dateState.Day.toString()}
               width={dayWidth}
               disabled={dayDisabled}
             />

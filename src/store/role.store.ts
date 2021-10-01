@@ -1,6 +1,8 @@
+import { AxiosResponse } from 'axios';
 import { useMutation, useQuery } from 'react-query';
 
 import { roleService } from '../services';
+import { Response, RoleRes } from '../types';
 
 class RoleStore {
   addRole() {
@@ -11,11 +13,24 @@ class RoleStore {
   }
 
   getRole(id: string) {
-    return useQuery(['roles/id', id], () => roleService.getRole(id));
+    return useQuery<AxiosResponse<Response<RoleRes>>, Response>(['roles/id', id], () =>
+      roleService.getRole(id),
+    );
+  }
+
+  getPrivilegesByRole(roleId: string) {
+    return useQuery<AxiosResponse<Response<RoleRes>>, Response>(
+      ['roles/id', roleId],
+      () => roleService.getRole(roleId),
+    );
   }
 
   modifyRole() {
     return useMutation(roleService.modifyRole);
+  }
+
+  addPrivilegesOnRole() {
+    return useMutation(roleService.addPrivilegesOnRole);
   }
 }
 

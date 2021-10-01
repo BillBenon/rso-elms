@@ -43,7 +43,7 @@ export default function NewModuleForm<E>({ onSubmit }: PropType<E>) {
         Descripiton
       </TextAreaMolecule>
 
-      <DropdownMolecule name="radio" onChange={handleChange} options={programs}>
+      <DropdownMolecule name="radio" handleChange={handleChange} options={programs}>
         Program
       </DropdownMolecule>
       {/* model initial status

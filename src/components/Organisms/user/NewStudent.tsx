@@ -1,98 +1,189 @@
-import React from 'react';
+import React, { FormEvent, useState } from 'react';
+import { useHistory } from 'react-router';
 
+import academyStore from '../../../store/academy.store';
+import programStore from '../../../store/program.store';
+import usersStore from '../../../store/users.store';
+import { CommonFormProps, ValueType } from '../../../types';
+import { AcademyInfo } from '../../../types/services/academy.types';
+import { ProgramInfo } from '../../../types/services/program.types';
+import {
+  CreateUserInfo,
+  DocType,
+  EducationLevel,
+  GenderStatus,
+  MaritalStatus,
+  UserType,
+} from '../../../types/services/user.types';
+import { getDropDownOptions, getDropDownStatusOptions } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';
-import Icon from '../../Atoms/custom/Icon';
 import Heading from '../../Atoms/Text/Heading';
-import ILabel from '../../Atoms/Text/ILabel';
+import DateMolecule from '../../Molecules/input/DateMolecule';
+import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../Molecules/input/InputMolecule';
+import RadioMolecule from '../../Molecules/input/RadioMolecule';
 
-export default function NewStudent() {
-  const handleChange = (e: any) => {
-    console.log(e);
-  };
+export default function NewStudent<E>({ onSubmit }: CommonFormProps<E>) {
+  const history = useHistory();
+  const [details, setDetails] = useState<CreateUserInfo>({
+    activation_key: '',
+    birth_date: '',
+    doc_type: DocType.NID,
+    education_level: EducationLevel.NONE,
+    email: '',
+    father_names: '',
+    first_name: '',
+    intake_id: '',
+    last_name: '',
+    marital_status: MaritalStatus.SINGLE,
+    mother_names: '',
+    next_of_keen_proculation_reason: '',
+    nid: '',
+    password: '',
+    password_reset_period_in_days: 0,
+    person_id: '',
+    phone: '',
+    place_of_birth: '',
+    place_of_residence: '',
+    relationship_with_next_of_ken: '',
+    reset_date: '',
+    residence_location_id: 0,
+    sex: GenderStatus.MALE,
+    user_type: UserType.STUDENT,
+    username: '',
+  });
 
-  const handleSubmit = () => {
-    window.alert('submitted');
-  };
+  function handleChange(e: ValueType) {
+    setDetails((details) => ({
+      ...details,
+      [e.name]: e.value,
+    }));
+  }
+
+  const { mutateAsync } = usersStore.createUser();
+  async function addStudent<T>(e: FormEvent<T>) {
+    e.preventDefault();
+
+    if (onSubmit) onSubmit(e);
+
+    await mutateAsync(details, {
+      onSuccess() {
+        history.push('/dashboard/users');
+      },
+    });
+  }
+  const academies: AcademyInfo[] | undefined =
+    academyStore.fetchAcademies().data?.data.data;
+
+  const programs: ProgramInfo[] | undefined =
+    programStore.fetchPrograms().data?.data.data;
+
   return (
     <>
-      <div className="flex flex-wrap justify-start items-center pt-2">
-        <ILabel size="sm" color="gray" weight="medium">
-          Institution Admin
-        </ILabel>
-        <Icon name="chevron-right" />
-        <ILabel size="sm" color="gray" weight="medium">
-          Users
-        </ILabel>
-        <Icon name="chevron-right" fill="gray" />
-        <ILabel size="sm" color="gray" weight="medium">
-          Students
-        </ILabel>
-        <Icon name="chevron-right" fill="gray" />
-        <ILabel size="sm" color="primary" weight="medium">
+      <div className="py-5 mb-3 capitalize">
+        <Heading color="primary" fontWeight="bold">
           New Student
-        </ILabel>
-      </div>
-
-      <div className="popup-width py-3">
-        <Heading color="primary" fontSize="lg" fontWeight="semibold">
-          New student
         </Heading>
-        <div className="mb-7"></div>
+      </div>
+      <form onSubmit={addStudent}>
         <InputMolecule
-          name="firstName"
+          name="first_name"
           placeholder="eg: Kabera"
-          value={''}
-          handleChange={(e) => handleChange(e)}>
+          value={details.first_name}
+          handleChange={handleChange}>
           First name
         </InputMolecule>
         <InputMolecule
-          name="lastName"
+          name="last_name"
           placeholder="eg: Claude"
-          value={''}
-          handleChange={(e) => handleChange(e)}>
+          value={details.last_name}
+          handleChange={handleChange}>
           Last name
         </InputMolecule>
+        <InputMolecule
+          name="email"
+          placeholder="Enter email"
+          value={details.email}
+          handleChange={handleChange}>
+          Email
+        </InputMolecule>
+        <DateMolecule handleChange={handleChange} name="birth_date" width="60 md:w-80">
+          Date of Birth
+        </DateMolecule>
+        <InputMolecule
+          name="phone"
+          placeholder="Enter phone number"
+          value={details.phone}
+          handleChange={handleChange}>
+          Phone number
+        </InputMolecule>
+        <RadioMolecule
+          type="block"
+          className="pb-2"
+          defaultValue={details.sex}
+          options={getDropDownStatusOptions(GenderStatus)}
+          value={details.sex}
+          handleChange={handleChange}
+          name="sex">
+          Gender
+        </RadioMolecule>
         <InputMolecule
           name="employmentNumber"
           placeholder="Army or Police number"
           value={''}
-          handleChange={(e) => handleChange(e)}>
+          handleChange={handleChange}>
           Employment number
         </InputMolecule>
-        <InputMolecule
-          name="phoneNumber"
-          placeholder="Phone number"
-          type={'tel'}
-          value={''}
-          handleChange={(e) => handleChange(e)}>
-          Phone number
-        </InputMolecule>
-        <InputMolecule
-          name="email"
-          type="email"
-          value={''}
-          placeholder="example@gmail.com"
-          handleChange={(e) => handleChange(e)}>
-          email
-        </InputMolecule>
+        <RadioMolecule
+          type="block"
+          className="pb-2"
+          defaultValue={details.marital_status}
+          options={getDropDownStatusOptions(MaritalStatus)}
+          value={details.marital_status}
+          handleChange={handleChange}
+          name="marital_status">
+          Marital Status
+        </RadioMolecule>
         <InputMolecule
           name="nid"
           type="text"
-          value={''}
+          value={details.nid}
           placeholder="NID number"
-          handleChange={(e) => handleChange(e)}>
+          handleChange={handleChange}>
           NID
         </InputMolecule>
         <InputMolecule
           name="passport"
           value={''}
           placeholder="Enter passport number(if any)"
-          handleChange={(e) => handleChange(e)}>
+          handleChange={handleChange}>
           Passport (optional)
         </InputMolecule>
-        <Button onClick={handleSubmit}>Create</Button>
-      </div>
+        <RadioMolecule
+          type="block"
+          className="pb-2"
+          options={getDropDownStatusOptions(EducationLevel)}
+          name="education_level"
+          value={details.education_level}
+          handleChange={handleChange}>
+          Education level
+        </RadioMolecule>
+        <DropdownMolecule
+          options={getDropDownOptions(academies)}
+          name="academy"
+          placeholder={'Academy to be enrolled in'}
+          handleChange={handleChange}>
+          Academy
+        </DropdownMolecule>
+        <DropdownMolecule
+          options={getDropDownOptions(programs)}
+          name="programs"
+          placeholder={'Program to be enrolled in'}
+          handleChange={handleChange}>
+          Programs
+        </DropdownMolecule>
+        <Button type="submit">Create</Button>
+      </form>
     </>
   );
 }

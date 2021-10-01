@@ -1,247 +1,78 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
-import Button from '../../components/Atoms/custom/Button';
+import Badge from '../../components/Atoms/custom/Badge';
 import Icon from '../../components/Atoms/custom/Icon';
+import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
-import PopupMolecule from '../../components/Molecules/Popup';
-import Table from '../../components/Molecules/table/Table';
-import TableHeader from '../../components/Molecules/table/TableHeader';
-import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
-import { ValueType } from '../../types';
-import NewStudent from './NewStudent';
+import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import Admins from '../../components/Organisms/user/Admins';
+import Instructors from '../../components/Organisms/user/Instructors';
+import Students from '../../components/Organisms/user/Students';
+import usersStore from '../../store/users.store';
+import { GenericStatus } from '../../types';
+import { UserType } from '../../types/services/user.types';
+
+type UserTypes = {
+  'full name': string;
+  NID: string;
+  academy: string;
+  status: GenericStatus;
+  user_type: UserType;
+};
 
 export default function Users() {
+  const { path } = useRouteMatch();
   const [userType, setUserType] = useState('Students');
-  const [modalOpen, setModalOpen] = useState(false);
-  const history = useHistory();
 
-  function handleSearch(_e: ValueType) {}
+  const { data, isSuccess } = usersStore.fetchUsers();
 
-  const handleCreateNewUserClick = () => {
-    if (userType === 'Students') history.push('/users/students/new');
-    else if (userType === 'Instructors') history.push('/users/instructors/new');
-    else history.push('/users/admins/new');
-  };
+  const userInfo = data?.data.data;
 
-  const data = [
+  let users: UserTypes[] = [];
+
+  if (isSuccess && userInfo) {
+    userInfo?.map((obj) => {
+      let { first_name, last_name, nid, academy, status, user_type } = obj;
+
+      let user: UserTypes = {
+        'full name': first_name + ' ' + last_name,
+        NID: nid,
+        academy: academy && academy.name,
+        status: status,
+        user_type: user_type,
+      };
+
+      users.push(user);
+    });
+  }
+
+  let students: UserTypes[], instructors: UserTypes[], admins: UserTypes[];
+
+  if (isSuccess && users) {
+    students = users.filter((user) => user.user_type == UserType.STUDENT);
+    instructors = users.filter((user) => user.user_type == UserType.INSTRUCTOR);
+    admins = users.filter((user) => user.user_type == UserType.ADMIN);
+  }
+
+  const tabs = [
     {
-      'full name': 'Col Florin Sandberg',
-      role: 'Student / Sr',
-      'phone number': 7869046715,
-      status: 'Complete',
-      NID: '195426611717168904',
+      label: 'Students',
+      href: '/dashboard/users',
     },
     {
-      'full name': 'Kamili Abdulkhalim',
-      role: 'Student / Sr',
-      'phone number': 7869046743,
-      status: 'Active',
-      NID: '195426611717168904',
+      label: 'Instructors',
+      href: '/dashboard/users/instructors',
     },
     {
-      'full name': 'Safari George',
-      role: 'Student / Sr',
-      'phone number': 7869046730,
-      status: 'Suspended',
-      NID: '120080010981917987',
-    },
-    {
-      'full name': 'Dr. Lt  Col Kanama Nzeri',
-      role: 'Student / Sr',
-      'phone number': 7869046787,
-      status: 'Pending',
-      NID: '119788001098191798',
-    },
-    {
-      'full name': 'Prof Gen Sandberg dotMe',
-      role: 'Student / Sr',
-      'phone number': 7869046728,
-      status: 'Cancelled',
-      NID: '195426611717168989',
-    },
-    {
-      'full name': 'Col Florin Sandberg',
-      role: 'Student / Sr',
-      'phone number': 7869046715,
-      status: 'Complete',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Kamili Abdulkhalim',
-      role: 'Student / Sr',
-      'phone number': 7869046743,
-      status: 'Active',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Safari George',
-      role: 'Student / Sr',
-      'phone number': 7869046730,
-      status: 'Suspended',
-      NID: '120080010981917987',
-    },
-    {
-      'full name': 'Dr. Lt  Col Kanama Nzeri',
-      role: 'Student / Sr',
-      'phone number': 7869046787,
-      status: 'Pending',
-      NID: '119788001098191798',
-    },
-    {
-      'full name': 'Prof Gen Sandberg dotMe',
-      role: 'Student / Sr',
-      'phone number': 7869046728,
-      status: 'Cancelled',
-      NID: '195426611717168989',
-    },
-    {
-      'full name': 'Col Florin Sandberg',
-      role: 'Student / Sr',
-      'phone number': 7869046715,
-      status: 'Complete',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Kamili Abdulkhalim',
-      role: 'Student / Sr',
-      'phone number': 7869046743,
-      status: 'Active',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Safari George',
-      role: 'Student / Sr',
-      'phone number': 7869046730,
-      status: 'Suspended',
-      NID: '120080010981917987',
-    },
-    {
-      'full name': 'Dr. Lt  Col Kanama Nzeri',
-      role: 'Student / Sr',
-      'phone number': 7869046787,
-      status: 'Pending',
-      NID: '119788001098191798',
-    },
-    {
-      'full name': 'Prof Gen Sandberg dotMe',
-      role: 'Student / Sr',
-      'phone number': 7869046728,
-      status: 'Cancelled',
-      NID: '195426611717168989',
-    },
-    {
-      'full name': 'Col Florin Sandberg',
-      role: 'Student / Sr',
-      'phone number': 7869046715,
-      status: 'Complete',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Kamili Abdulkhalim',
-      role: 'Student / Sr',
-      'phone number': 7869046743,
-      status: 'Active',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Safari George',
-      role: 'Student / Sr',
-      'phone number': 7869046730,
-      status: 'Suspended',
-      NID: '120080010981917987',
-    },
-    {
-      'full name': 'Dr. Lt  Col Kanama Nzeri',
-      role: 'Student / Sr',
-      'phone number': 7869046787,
-      status: 'Pending',
-      NID: '119788001098191798',
-    },
-    {
-      'full name': 'Prof Gen Sandberg dotMe',
-      role: 'Student / Sr',
-      'phone number': 7869046728,
-      status: 'Cancelled',
-      NID: '195426611717168989',
-    },
-    {
-      'full name': 'Col Florin Sandberg',
-      role: 'Student / Sr',
-      'phone number': 7869046715,
-      status: 'Complete',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Kamili Abdulkhalim',
-      role: 'Student / Sr',
-      'phone number': 7869046743,
-      status: 'Active',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Safari George',
-      role: 'Student / Sr',
-      'phone number': 7869046730,
-      status: 'Suspended',
-      NID: '120080010981917987',
-    },
-    {
-      'full name': 'Dr. Lt  Col Kanama Nzeri',
-      role: 'Student / Sr',
-      'phone number': 7869046787,
-      status: 'Pending',
-      NID: '119788001098191798',
-    },
-    {
-      'full name': 'Prof Gen Sandberg dotMe',
-      role: 'Student / Sr',
-      'phone number': 7869046728,
-      status: 'Cancelled',
-      NID: '195426611717168989',
-    },
-    {
-      'full name': 'Col Florin Sandberg',
-      role: 'Student / Sr',
-      'phone number': 7869046715,
-      status: 'Complete',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Kamili Abdulkhalim',
-      role: 'Student / Sr',
-      'phone number': 7869046743,
-      status: 'Active',
-      NID: '195426611717168904',
-    },
-    {
-      'full name': 'Safari George',
-      role: 'Student / Sr',
-      'phone number': 7869046730,
-      status: 'Suspended',
-      NID: '120080010981917987',
-    },
-    {
-      'full name': 'Dr. Lt  Col Kanama Nzeri',
-      role: 'Student / Sr',
-      'phone number': 7869046787,
-      status: 'Pending',
-      NID: '119788001098191798',
-    },
-    {
-      'full name': 'Prof Gen Sandberg dotMe',
-      role: 'Student / Sr',
-      'phone number': 7869046728,
-      status: 'Cancelled',
-      NID: '195426611717168989',
+      label: 'Admins',
+      href: '/dashboard/users/admins',
     },
   ];
 
-  let instractors = data.slice(6, 13);
-  let admins = data.slice(24, 28);
   return (
-    <>
-      <div className="flex flex-wrap justify-start items-center pt-2">
+    <div>
+      <div className="flex flex-wrap justify-start items-center pt-1">
         <ILabel size="sm" color="gray" weight="medium">
           Institution Admin
         </ILabel>
@@ -255,29 +86,36 @@ export default function Users() {
           {userType}
         </ILabel>
       </div>
+      <div className="flex gap-2 items-center py-3">
+        <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
+          users
+        </Heading>
+        <Badge
+          badgetxtcolor="main"
+          badgecolor="primary"
+          fontWeight="normal"
+          className="h-6 w-9 flex justify-center items-center">
+          {users.length}
+        </Badge>
+      </div>
 
-      <TableHeader title="Users" totalItems={30} handleSearch={handleSearch}>
-        <div className="flex gap-3">
-          <Button styleType="outline">Import users</Button>
-          <Button onClick={() => handleCreateNewUserClick()}>New {userType}</Button>
-        </div>
-      </TableHeader>
-      <Tabs onTabChange={(e) => setUserType(e.activeTabLabel)}>
-        <Tab label="Students" className="pt-8">
-          <Table statusColumn="status" data={data} hasAction={true} />
-        </Tab>
-        <Tab label="Instructors" className="pt-8">
-          <Table statusColumn="status" data={instractors} hasAction={true} />
-        </Tab>
-        <Tab label="Admins" className="pt-8">
-          <Table statusColumn="status" data={admins} hasAction={true} />
-        </Tab>
-      </Tabs>
-      <PopupMolecule
-        open={modalOpen && userType === 'Students'}
-        onClose={() => setModalOpen(false)}>
-        <NewStudent />
-      </PopupMolecule>
-    </>
+      <TabNavigation
+        tabs={tabs}
+        onTabChange={(event) => setUserType(event.activeTabLabel)}>
+        <Switch>
+          <Route exact path={`${path}`} render={() => <Students students={students} />} />
+          <Route
+            exact
+            path={`${path}/instructors`}
+            render={() => <Instructors instructors={instructors} />}
+          />
+          <Route
+            exact
+            path={`${path}/admins`}
+            render={() => <Admins admins={admins} />}
+          />
+        </Switch>
+      </TabNavigation>
+    </div>
   );
 }

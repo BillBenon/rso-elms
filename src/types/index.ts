@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import React, { ReactNode } from 'react';
+import { FormEvent, ReactNode } from 'react';
 
 export type Color =
   | 'primary'
@@ -16,7 +16,7 @@ export type Color =
   | 'gray'
   | 'lightgray';
 
-export type fontSize = 'xs' | 'sm' | 'base' | 'tiny' | 'lg' | '2xl';
+export type fontSize = 'xs' | 'sm' | 'base' | 'tiny' | 'lg' | '2xl' | '3xl';
 export type textTransform = 'uppercase' | 'lowerCase' | 'capitalize' | 'normal-case';
 export type width = 'default' | 'full';
 export type fontWeight = 'normal' | 'medium' | 'semibold' | 'bold';
@@ -85,10 +85,10 @@ export interface SelectData {
 /**
  * handleChange function params type
  */
-export interface ValueType {
+export interface ValueType<T = Event> {
   name: string;
   value: string | number | boolean | undefined;
-  event?: Event;
+  event?: FormEvent<T>;
 }
 
 export interface CommonCardDataType {
@@ -103,6 +103,36 @@ export interface CommonCardDataType {
 
 export interface SigninPropTypes extends CommonCardDataType {
   programs: SelectData[];
+}
+
+export type IconType =
+  | 'academy'
+  | 'add'
+  | 'alert'
+  | 'attach'
+  | 'chevron-right'
+  | 'close'
+  | 'download'
+  | 'edit'
+  | 'faculty'
+  | 'filter'
+  | 'left-arrow'
+  | 'level'
+  | 'login'
+  | 'module'
+  | 'more'
+  | 'notification'
+  | 'police-logo'
+  | 'reg-control'
+  | 'right-arrow'
+  | 'role'
+  | 'search'
+  | 'settings'
+  | 'switch'
+  | 'user';
+
+export interface FormPropType {
+  onSubmit?: <E>(_e: FormEvent<E>) => void;
 }
 
 export * from './props';

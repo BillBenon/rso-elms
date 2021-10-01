@@ -1,7 +1,7 @@
 import '../../../styles/components/Molecules/cards/CommonCardMolecule.scss';
 
 import React, { ReactNode } from 'react';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 
 import { CommonCardDataType, Link } from '../../../types';
 import Badge from '../../Atoms/custom/Badge';

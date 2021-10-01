@@ -1,14 +1,33 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 
+import { ValueType } from '../../../types';
+import {
+  IntakeInfo,
+  IntakeStatus,
+  PeriodType,
+} from '../../../types/services/intake.types';
 import Button from '../../Atoms/custom/Button';
 import DateMolecule from '../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 import Stepper from '../../Molecules/Stepper/Stepper';
-import AddProgramToIntake from './AddProgramToIntake';
 
 export default function NewIntake() {
   const [currentStep, setCurrentStep] = useState(0);
+
+  const [values, setValues] = useState<IntakeInfo>({
+    title: '',
+    actual_end_date: new Date(),
+    actual_start_date: new Date(),
+    code: '',
+    description: '',
+    expected_end_date: new Date(),
+    expected_start_date: new Date(),
+    intake_status: IntakeStatus.OPENED,
+    period_type: PeriodType.SEMESTER,
+    registration_control_id: '',
+    total_num_students: 1,
+  });
 
   const handleNext = () => {
     if (currentStep < 3) setCurrentStep(currentStep + 1);
@@ -16,35 +35,38 @@ export default function NewIntake() {
 
   const IntakeInfo = () => {
     return (
-      <form onSubmit={(e) => e.preventDefault()}>
+      <form onSubmit={handleNext}>
         <InputMolecule
-          name="code"
-          placeholder="Intake code"
-          value={''}
-          handleChange={(e) => handleChange(e)}>
-          Intake code
+          name="title"
+          placeholder="Intake title"
+          value={values.title}
+          handleChange={handleChange}>
+          Intake title
         </InputMolecule>
-        <InputMolecule
-          name="program"
-          placeholder="Program"
-          value={''}
-          handleChange={(e) => handleChange(e)}>
-          Program
-        </InputMolecule>
-        <InputMolecule
-          name="regControl"
+        <DropdownMolecule
+          name="registration_control_id"
           placeholder="Registration Control"
-          value={''}
-          handleChange={(e) => handleChange(e)}>
+          isMulti
+          handleChange={handleChange}
+          options={[]}>
           Registration Control
-        </InputMolecule>
+        </DropdownMolecule>
         <InputMolecule
-          name="numStudents"
+          min={1}
+          name="total_num_students"
           placeholder="Number"
-          value={''}
-          handleChange={(e) => handleChange(e)}>
+          value={values.total_num_students.toString()}
+          type="number"
+          handleChange={handleChange}>
           Total number of students
         </InputMolecule>
+        <DropdownMolecule
+          name="programs"
+          placeholder="Program"
+          handleChange={handleChange}
+          options={[]}>
+          Programs in this intake
+        </DropdownMolecule>
         <div className="pt-3">
           <Button type="submit" onClick={handleNext}>
             Next
@@ -54,7 +76,7 @@ export default function NewIntake() {
     );
   };
 
-  const IntakeStatus = () => {
+  const IntakeStatusInfo = () => {
     let options = [
       {
         label: 'English',
@@ -70,26 +92,29 @@ export default function NewIntake() {
       },
     ];
     return (
-      <form onSubmit={(e) => e.preventDefault()}>
-        <DateMolecule showTime={false} handleChange={handleChange} name={'startDate'}>
+      <form onSubmit={handleSubmit}>
+        <DateMolecule
+          showTime={false}
+          handleChange={handleChange}
+          name={'expected_start_date'}>
           Expected Start Date
         </DateMolecule>
         <div className="pt-4">
-          <DateMolecule showTime={false} handleChange={handleChange} name={'endDate'}>
+          <DateMolecule
+            showTime={false}
+            handleChange={handleChange}
+            name={'expected_end_date'}>
             Expected End Date
           </DateMolecule>
         </div>
         <DropdownMolecule
           name="periodType"
-          onChange={(e: any) => console.log(e)}
+          handleChange={handleChange}
           options={options}
           placeholder="Select Period type">
           Period type
         </DropdownMolecule>
-        <DropdownMolecule
-          name="status"
-          onChange={(e: any) => console.log(e)}
-          options={options}>
+        <DropdownMolecule name="status" handleChange={handleChange} options={options}>
           Intake status
         </DropdownMolecule>
 
@@ -113,23 +138,31 @@ export default function NewIntake() {
       },
       {
         label: '',
-        content: <IntakeStatus />,
-        clicked: () => {},
-      },
-      {
-        label: '',
-        content: <AddProgramToIntake />,
+        content: <IntakeStatusInfo />,
         clicked: () => {},
       },
     ],
   };
-  const handleChange = (e: any) => {
+
+  const handleChange = (e: ValueType) => {
+    setValues({ ...values, [e.name]: e.value });
+  };
+  const handleProgramsChange = (e: any) => {
     console.log(e);
   };
+  ``;
+
+  function handleSubmit<T>(e: FormEvent<T>) {
+    e.preventDefault();
+    let code = values.title.trim().split(' ').join(',');
+
+    console.log({ ...values, code });
+  }
 
   return (
     <div className="w-full">
       <Stepper
+        width="w-64"
         isVertical={false}
         isInline={false}
         stepperContent={stepperContent}

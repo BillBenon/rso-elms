@@ -10,6 +10,7 @@ type StepperHeadProp = {
   navigateToStepHandler: (_index: number) => void;
   isInline?: boolean;
   isVertical?: boolean;
+  width?: string;
 };
 
 const StepperHead = ({
@@ -17,6 +18,7 @@ const StepperHead = ({
   navigateToStepHandler,
   isInline,
   isVertical,
+  width,
 }: StepperHeadProp) => {
   return (
     <div className={`hidden w-max ${isVertical ? 'md:block' : 'md:flex'}`}>
@@ -33,6 +35,7 @@ const StepperHead = ({
             isComplete={stepperContent.completeStep >= i}
             indicator={i + 1}
             label={el.label}
+            width={width}
           />
         </div>
       ))}

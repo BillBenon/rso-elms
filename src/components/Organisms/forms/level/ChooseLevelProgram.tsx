@@ -14,7 +14,7 @@ function ChooseLevelProgram() {
       <DropdownMolecule
         placeholder="Select Program"
         name="program"
-        onChange={handleChange}
+        handleChange={handleChange}
         options={[
           { value: 'cadetteprogram', label: 'Cadette Program' },
           { value: 'program', label: 'Program' },

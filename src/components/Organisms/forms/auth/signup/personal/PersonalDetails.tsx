@@ -79,7 +79,7 @@ function PersonalDetails({
           width="60 md:w-80"
           name="placeOfBirth"
           defaultValue={details.placeOfBirth}
-          onChange={handleChange}
+          handleChange={handleChange}
           options={[
             { value: 'rw', label: 'Rwanda' },
             { value: 'ug', label: 'Uganda' },
