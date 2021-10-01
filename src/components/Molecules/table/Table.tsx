@@ -11,6 +11,7 @@ import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import Row from '../../Atoms/custom/Row';
 import Checkbox from '../../Atoms/Input/CheckBox';
+import DropDown from '../../Atoms/Input/Dropdown';
 import Pagination from '../Pagination';
 import Tooltip from '../Tooltip';
 
@@ -40,6 +41,11 @@ export function Table<T>({
 }: TableProps<T>) {
   const [rowsOnPage] = useState(rowsPerPage);
   const [currentPage, setCurrentPage] = useState(1);
+  const countsToDisplay = [
+    { label: '25', value: '25' },
+    { label: '50', value: '50' },
+    { label: '50', value: '50' },
+  ];
 
   //Get current rows
   const indexOfLastRow = currentPage * rowsOnPage;
@@ -114,6 +120,10 @@ export function Table<T>({
       return row;
     });
     setCurrentRows(cr);
+  }
+
+  function handleCountSelect(e: ValueType) {
+    console.log(e);
   }
 
   const getKeys = () => {
@@ -222,12 +232,25 @@ export function Table<T>({
         </thead>
         <tbody>{getRowsData()}</tbody>
       </table>
-      <Pagination
-        rowsPerPage={rowsOnPage}
-        totalRows={data.length}
-        paginate={paginate}
-        currentPage={currentPage}
-      />
+      <div className="flex justify-between mt-4 mb-5">
+        <div className="flex items-center py-2">
+          <span>Show</span>
+          <DropDown
+            className="px-3"
+            width="30"
+            defaultValue={countsToDisplay[0]}
+            handleChange={handleCountSelect}
+            name="rowstoDisplay"
+            options={countsToDisplay}></DropDown>
+          <span>Entries</span>
+        </div>
+        <Pagination
+          rowsPerPage={rowsOnPage}
+          totalRows={data.length}
+          paginate={paginate}
+          currentPage={currentPage}
+        />
+      </div>
     </div>
   );
 }
