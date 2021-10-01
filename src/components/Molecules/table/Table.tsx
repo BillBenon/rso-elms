@@ -24,6 +24,7 @@ interface TableProps<T> {
   uniqueCol?: keyof T;
   hide?: (keyof T)[];
   actions?: { name: string; handleAction: (_data?: T[keyof T]) => void }[];
+  manyActions?: { name: string; handleAction: (_data?: T[keyof T]) => void }[];
   handleClick?: () => void;
   statusColumn?: string;
   handleSelect?: (_selected: string[] | null) => void;
@@ -34,6 +35,7 @@ export function Table<T>({
   hide = [],
   data,
   actions,
+  manyActions,
   statusColumn,
   handleSelect,
 }: TableProps<T>) {
@@ -214,13 +216,26 @@ export function Table<T>({
 
   return (
     <div className="overflow-x-auto rounded-lg text-sm">
-      <div className="h-8">
-        {selected.size > 0 && (
-          <p className="py-2">
-            <strong>{selected.size}</strong> rows selected
-          </p>
-        )}
-      </div>
+      {selected.size > 0 && (
+        <div className="rounded mb-3 py-2 bg-main flex justify-between">
+          <div>
+            <p className=" px-4 py-2">
+              <strong>{selected.size}</strong> rows selected
+            </p>
+          </div>
+          <div className="px-4">
+            {manyActions?.map((action) => (
+              <Button
+                key={action.name + Math.random()}
+                styleType="outline"
+                onClick={action.handleAction}>
+                {action.name}
+              </Button>
+            ))}
+          </div>
+        </div>
+      )}
+
       <table className="table-auto border-collapse font-medium bg-main w-full m-auto">
         <thead>
           <tr className="text-left text-txt-secondary border-b border-silver">
