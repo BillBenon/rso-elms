@@ -31,6 +31,7 @@ interface TableProps<T> {
 
 export function Table<T>({
   uniqueCol,
+  isUniqueColVisible = false,
   data,
   actions,
   statusColumn,
@@ -46,6 +47,10 @@ export function Table<T>({
   const [currentRows, setCurrentRows] = useState(
     data.slice(indexOfFirstRow, indexOfLastRow),
   );
+  const [selected, setSelected] = useState(new Set(''));
+
+  const rowsToHide: (keyof (T & Selected))[] = ['selected'];
+  !isUniqueColVisible && uniqueCol && rowsToHide.push(uniqueCol); // add unique col to elements that gonna be hidden
 
   useEffect(() => {
     setCurrentRows(data.slice(indexOfFirstRow, indexOfLastRow));
@@ -54,8 +59,6 @@ export function Table<T>({
   // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   // console.log(data);
-
-  const [selected, setSelected] = useState(new Set(''));
 
   // handle select all
   function _handleSelectAll() {
@@ -113,7 +116,10 @@ export function Table<T>({
     setCurrentRows(cr);
   }
 
-  const getKeys = () => Object.keys(currentRows[0]);
+  const getKeys = () => {
+    const keys = Object.keys(currentRows[0]);
+    return keys.filter((item) => item in rowsToHide);
+  };
   const getHeader = () => {
     let keys = getKeys();
     // eslint-disable-next-line no-undef
@@ -132,7 +138,7 @@ export function Table<T>({
     );
 
     const dynamicHeaders = keys.map((key) =>
-      key !== uniqueCol ? (
+      key in rowsToHide ? (
         <th className="px-4 py-5 capitalize" key={key}>
           {key}
         </th>
