@@ -15,6 +15,8 @@ export interface Table {
   updated_by_id: string;
   updated_by_username: string;
   updated_on: string;
+  generic_status: string;
+  last_status_change_reason: string;
 }
 
 export enum GenericStatus {

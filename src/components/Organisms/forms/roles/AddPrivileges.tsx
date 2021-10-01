@@ -1,9 +1,9 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
-import { roleStore } from '../../../../store';
-import { AddPrivilegeRoleType, ValueType } from '../../../../types';
+import { privilegeStore, roleStore } from '../../../../store';
+import { AddPrivilegeRoleType, SelectData, ValueType } from '../../../../types';
 import Button from '../../../Atoms/custom/Button';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
@@ -21,9 +21,10 @@ export default function AddPrivileges({ onSubmit, roleName, roleId }: PropType) 
   });
   const { mutateAsync } = roleStore.addPrivilegesOnRole();
   const history = useHistory();
-
+  const { data } = privilegeStore.getPrivileges();
+  const [privileges, setPrivileges] = useState<SelectData[]>([{ label: '', value: '' }]);
   function handleChange({ name, value }: ValueType) {
-    setForm((old) => ({ ...old, [name]: value }));
+    setForm((old) => ({ ...old, [name]: value?.join(',') }));
   }
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
@@ -40,6 +41,17 @@ export default function AddPrivileges({ onSubmit, roleName, roleId }: PropType) 
     });
     onSubmit(e);
   }
+
+  useEffect(() => {
+    if (data) {
+      const privileges = data.data.data.map((priv) => ({
+        label: priv.name,
+        value: priv.id,
+      }));
+      setPrivileges(privileges);
+    }
+  }, [data?.data.data]);
+
   return (
     <form onSubmit={submitForm}>
       {/* model name */}
@@ -55,11 +67,7 @@ export default function AddPrivileges({ onSubmit, roleName, roleId }: PropType) 
     {/* module description */}
       <DropdownMolecule
         handleChange={handleChange}
-        options={[
-          { label: '1', value: '1' },
-          { label: '2', value: '2' },
-          { label: '2', value: '2' },
-        ]}
+        options={privileges}
         isMulti
         name="privileges">
         Select privilege
