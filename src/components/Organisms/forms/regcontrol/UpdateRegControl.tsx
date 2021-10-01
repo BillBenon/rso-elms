@@ -4,7 +4,10 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import registrationControlStore from '../../../../store/registrationControl.store';
 import { FormPropType, ValueType } from '../../../../types';
-import { IRegistrationControlCreateInfo } from '../../../../types/services/registrationControl.types';
+import {
+  IRegistrationControlCreateInfo,
+  IRegistrationControlInfo,
+} from '../../../../types/services/registrationControl.types';
 import Button from '../../../Atoms/custom/Button';
 import DateMolecule from '../../../Molecules/input/DateMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
@@ -27,6 +30,16 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
     id: id,
   });
 
+  const regControlUpdateInfo: any = {
+    academy_id: regControl.academy?.id,
+    description: regControl.description,
+    actual_start_date: regControl.actual_start_date,
+    actual_end_date: regControl.actual_end_date,
+    expected_start_date: regControl.expected_start_date,
+    expected_end_date: regControl.expected_end_date,
+    id: id,
+  };
+
   const { mutateAsync } = registrationControlStore.updateRegControl();
   const history = useHistory();
 
@@ -34,17 +47,15 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
 
   useEffect(() => {
     data?.data.data && setRegControl({ ...data?.data.data });
-    // console.log(regControl.expected_end_date, 'we go');
   }, [data]);
 
   function handleChange({ name, value }: ValueType) {
     setRegControl((old) => ({ ...old, [name]: value }));
   }
 
-  // console.log('end date', regControl.expected_end_date);
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
-    mutateAsync(regControl, {
+    mutateAsync(regControlUpdateInfo, {
       onSuccess: () => {
         toast.success('Control updated', { duration: 3 });
         history.goBack();
@@ -64,7 +75,7 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
         Registration control description
       </TextAreaMolecule>
       <DateMolecule
-        defaultValue={'2021-09-19 07:11:17'}
+        defaultValue={regControl.expected_start_date}
         handleChange={handleChange}
         name={'expected_start_date'}>
         Expected Start Date
@@ -72,7 +83,7 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
 
       <DateMolecule
         handleChange={handleChange}
-        defaultValue={'2021-09-29 07:11:17'}
+        defaultValue={regControl.expected_end_date}
         name={'expected_end_date'}>
         Expected End Date
       </DateMolecule>
