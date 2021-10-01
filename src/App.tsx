@@ -5,8 +5,6 @@ import ComponentsUseCase from './components/Organisms/ComponentsUseCase';
 import ExperienceInfo from './components/Organisms/forms/auth/signup/experience/ExperienceInfo';
 import MoreInfo from './components/Organisms/forms/auth/signup/more-details/MoreInfo';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
-import NewInstructor from './components/Organisms/user/NewInstructor';
-import NewStudent from './components/Organisms/user/NewStudent';
 import Dashboard from './layout/Dashboard';
 import { MainLayout } from './layout/MainLayout';
 import Academies from './views/academies/Academy';
@@ -41,7 +39,7 @@ const App = () => {
 
             <Dashboard>
               <Route path="/dashboard/academies" />
-              <Route exact path="/dashboard/academies" component={Academies} />
+              <Route path="/dashboard/academies" component={Academies} />
               {/* <Route exact path="/dashboard/academies/new" component={NewAcademy} /> */}
               <Route exact path="/dashboard/role/:id/view" component={ViewRole} />
               <Route path="/dashboard/roles" component={Roles} />
@@ -50,13 +48,6 @@ const App = () => {
               <Route
                 path="/dashboard/registration-control"
                 component={RegistrationControl}
-              />
-
-              <Route exact path="/dashboard/users/student/new" component={NewStudent} />
-              <Route
-                exact
-                path="/dashboard/users/instructor/new"
-                component={NewInstructor}
               />
               <Route path="/dashboard/users" component={Users} />
               <Route exact path="/dashboard/faculties" component={FacultiesView} />

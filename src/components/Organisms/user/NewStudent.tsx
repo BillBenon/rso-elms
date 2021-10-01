@@ -2,10 +2,12 @@ import React, { FormEvent, useState } from 'react';
 import { useHistory } from 'react-router';
 
 import academyStore from '../../../store/academy.store';
+import { intakeStore } from '../../../store/intake.store';
 import programStore from '../../../store/program.store';
 import usersStore from '../../../store/users.store';
 import { CommonFormProps, ValueType } from '../../../types';
 import { AcademyInfo } from '../../../types/services/academy.types';
+import { IntakeInfo } from '../../../types/services/intake.types';
 import { ProgramInfo } from '../../../types/services/program.types';
 import {
   CreateUserInfo,
@@ -33,7 +35,7 @@ export default function NewStudent<E>({ onSubmit }: CommonFormProps<E>) {
     email: '',
     father_names: '',
     first_name: '',
-    intake_id: '',
+    intake_program_id: '',
     last_name: '',
     marital_status: MaritalStatus.SINGLE,
     mother_names: '',
@@ -78,10 +80,12 @@ export default function NewStudent<E>({ onSubmit }: CommonFormProps<E>) {
   const programs: ProgramInfo[] | undefined =
     programStore.fetchPrograms().data?.data.data;
 
+  const intakes: IntakeInfo[] | undefined = intakeStore.getAll().data?.data.data;
+
   return (
-    <>
+    <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
       <div className="py-5 mb-3 capitalize">
-        <Heading color="primary" fontWeight="bold">
+        <Heading color="txt-primary" fontWeight="bold">
           New Student
         </Heading>
       </div>
@@ -127,13 +131,6 @@ export default function NewStudent<E>({ onSubmit }: CommonFormProps<E>) {
           name="sex">
           Gender
         </RadioMolecule>
-        <InputMolecule
-          name="employmentNumber"
-          placeholder="Army or Police number"
-          value={''}
-          handleChange={handleChange}>
-          Employment number
-        </InputMolecule>
         <RadioMolecule
           type="block"
           className="pb-2"
@@ -182,8 +179,15 @@ export default function NewStudent<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Programs
         </DropdownMolecule>
+        <DropdownMolecule
+          options={getDropDownOptions(intakes, 'code')}
+          name="intake"
+          placeholder={'intake to be enrolled in'}
+          handleChange={handleChange}>
+          Intake
+        </DropdownMolecule>
         <Button type="submit">Create</Button>
       </form>
-    </>
+    </div>
   );
 }

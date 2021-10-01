@@ -75,9 +75,9 @@ export default function NewInstructor<E>({ onSubmit }: CommonFormProps<E>) {
     academyStore.fetchAcademies().data?.data.data;
 
   return (
-    <>
+    <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
       <div className="py-5 mb-3 capitalize">
-        <Heading color="primary" fontWeight="bold">
+        <Heading color="txt-primary" fontWeight="bold">
           New Instructor
         </Heading>
       </div>
@@ -114,10 +114,11 @@ export default function NewInstructor<E>({ onSubmit }: CommonFormProps<E>) {
           Phone number
         </InputMolecule>
         <RadioMolecule
+          type="block"
           className="pb-2"
           defaultValue={details.sex}
           options={getDropDownStatusOptions(GenderStatus)}
-          value={details.sex.toString()}
+          value={details.sex}
           handleChange={handleChange}
           name="sex">
           Gender
@@ -130,10 +131,11 @@ export default function NewInstructor<E>({ onSubmit }: CommonFormProps<E>) {
           Employment number
         </InputMolecule>
         <RadioMolecule
+          type="block"
           className="pb-2"
           defaultValue={details.marital_status}
           options={getDropDownStatusOptions(MaritalStatus)}
-          value={details.marital_status.toString()}
+          value={details.marital_status}
           handleChange={handleChange}
           name="marital_status">
           Marital Status
@@ -154,10 +156,11 @@ export default function NewInstructor<E>({ onSubmit }: CommonFormProps<E>) {
           Passport (optional)
         </InputMolecule>
         <RadioMolecule
+          type="block"
           className="pb-2"
           options={getDropDownStatusOptions(EducationLevel)}
           name="education_level"
-          value={details.education_level.toString()}
+          value={details.education_level}
           handleChange={handleChange}>
           Education level
         </RadioMolecule>
@@ -177,6 +180,6 @@ export default function NewInstructor<E>({ onSubmit }: CommonFormProps<E>) {
         </DropdownMolecule>
         <Button type="submit">Create</Button>
       </form>
-    </>
+    </div>
   );
 }

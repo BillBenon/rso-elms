@@ -34,7 +34,7 @@ export interface CreateUserInfo {
   email: string;
   father_names: string;
   first_name: string;
-  intake_id: string;
+  intake_program_id: string;
   last_name: string;
   marital_status: MaritalStatus;
   mother_names: string;
