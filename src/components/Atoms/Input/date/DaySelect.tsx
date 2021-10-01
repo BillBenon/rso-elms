@@ -30,14 +30,18 @@ const DaySelect = (dprop: DProp) => {
     return dayOptions;
   };
 
+  let days = renderDateOptions();
+  let newDefaultValue = days.find((month) => month.value === dprop.defaultValue);
+
   return (
     <DropDown
+      defaultValue={newDefaultValue}
       disabled={dprop.disabled}
       name={dprop.name}
       placeholder={dprop.placeholder}
       width={dprop.width}
       className={dprop.className}
-      options={renderDateOptions()}
+      options={days}
       handleChange={(e: ValueType) => dprop.onChange(e)}
     />
   );

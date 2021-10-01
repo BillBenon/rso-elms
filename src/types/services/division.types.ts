@@ -19,6 +19,7 @@ export interface DivisionCreateInfo {
   division_type: string;
   name: string;
   parent_id: string;
+  academy?: AcademyInfo;
 }
 
 export enum Status {

@@ -1,15 +1,11 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
-import academyStore from '../../../../store/academy.store';
 import { divisionStore } from '../../../../store/divisions.store';
-import { FormPropType, ValueType } from '../../../../types';
-import { AcademyInfo } from '../../../../types/services/academy.types';
+import { FormPropType, ParamType, ValueType } from '../../../../types';
 import { DivisionCreateInfo } from '../../../../types/services/division.types';
-import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
-import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
@@ -17,36 +13,52 @@ interface INewFaculty extends FormPropType {
   handleAfterCreate: () => void;
 }
 
-export default function NewFaculty({ onSubmit, handleAfterCreate }: INewFaculty) {
+export default function UpdateFaculty({ onSubmit, handleAfterCreate }: INewFaculty) {
+  // const [form, setForm] = useState<DivisionInfo>({ name: '', description: '' });
+  const { mutateAsync } = divisionStore.updateDivision();
+  const history = useHistory();
+
+  const { id } = useParams<ParamType>();
+
+  const { data } = divisionStore.getDivision(id);
+
   const [division, setDivision] = useState<DivisionCreateInfo>({
-    academy_id: '48d3fec8-bfed-40f7-aa70-58ccfe4238d8',
+    academy_id: '',
     code: '',
     description: '',
     division_type: 'FACULTY',
     id: '',
     name: '',
-    parent_id: 'e18abdba-0004-46bb-ae82-c4a96981ee8d',
+    parent_id: '',
   });
-  const { mutateAsync } = divisionStore.createDivision();
-  const history = useHistory();
+
+  const updateDivisionInfo: any = {
+    academy_id: division.academy?.id,
+    code: '',
+    description: division.description,
+    division_type: 'FACULTY',
+    id: id,
+    name: division.name,
+    parent_id: 'e18abdba-0004-46bb-ae82-c4a96981ee8d',
+  };
+
+  useEffect(() => {
+    data?.data && setDivision(data?.data.data);
+  }, [data]);
 
   function handleChange({ name, value }: ValueType) {
     setDivision((old) => ({ ...old, [name]: value }));
   }
-
-  const academies: AcademyInfo[] | undefined =
-    academyStore.fetchAcademies().data?.data.data;
-
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
-    mutateAsync(division, {
+    mutateAsync(updateDivisionInfo, {
       onSuccess: () => {
-        toast.success('Role created', { duration: 3 });
+        toast.success('Faculty updated', { duration: 3 });
         handleAfterCreate();
         history.goBack();
       },
       onError: () => {
-        toast.error('something wrong happened while creating role', { duration: 3 });
+        toast.error('something wrong happened while updaing faculty', { duration: 3 });
       },
     });
     if (onSubmit) onSubmit(e);
@@ -71,15 +83,6 @@ export default function NewFaculty({ onSubmit, handleAfterCreate }: INewFaculty)
         handleChange={handleChange}>
         Descripiton
       </TextAreaMolecule>
-
-      <DropdownMolecule
-        defaultValue={division.academy_id}
-        options={getDropDownOptions(academies)}
-        name="academy_id"
-        placeholder={'Academy to be enrolled'}
-        handleChange={handleChange}>
-        Academy
-      </DropdownMolecule>
 
       {/* save button */}
       <div className="mt-5">

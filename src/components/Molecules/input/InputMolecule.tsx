@@ -12,6 +12,7 @@ interface IInputMolecule<T> extends CommonInputProps<T> {
   error?: string;
   placeholder?: string;
   type?: string;
+  // readonly: boolean;
 }
 export default function InputMolecule<T>({
   name,
@@ -21,6 +22,7 @@ export default function InputMolecule<T>({
   error = '',
   placeholder = '',
   type = 'text',
+  readOnly = false,
   ...attrs
 }: IInputMolecule<T>) {
   return (
@@ -30,6 +32,7 @@ export default function InputMolecule<T>({
       </ILabel>
       <Input
         {...attrs}
+        readOnly={readOnly}
         name={name}
         placeholder={placeholder}
         fcolor={error ? 'error' : undefined}

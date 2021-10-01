@@ -12,19 +12,18 @@ import Faculties from '../../components/Organisms/divisions/Faculties';
 import NewFaculty from '../../components/Organisms/forms/divisions/NewFaculty';
 
 export default function Divisions() {
-  const { path } = useRouteMatch();
-  const history = useHistory();
+  const { url, path } = useRouteMatch();
   const [fetchType, setFetchType] = useState('Faculty');
   const [doRefetch, setRefetch] = useState<boolean>(false);
 
   const tabs = [
     {
       label: 'Faculty',
-      href: '/dashboard/divisions',
+      href: `${url}`,
     },
     {
       label: 'Department',
-      href: '/dashboard/divisions/departments',
+      href: `${url}/departments`,
     },
   ];
 
@@ -63,29 +62,15 @@ export default function Divisions() {
         <Switch>
           <Route
             exact
-            path={`${path}`}
-            render={() => {
-              return <Faculties fetchType={fetchType} doRefetch={doRefetch} />;
-            }}
-          />
-
-          <Route
-            exact
             path={`${path}/departments`}
             render={() => {
               return <Departments fetchType={fetchType} />;
             }}
           />
-
           <Route
-            exact
-            path={`${path}/add`}
+            path={`${path}`}
             render={() => {
-              return (
-                <PopupMolecule title="New Faculty" open onClose={() => history.goBack()}>
-                  <NewFaculty handleAfterCreate={() => setRefetch(true)} />
-                </PopupMolecule>
-              );
+              return <Faculties fetchType={fetchType} doRefetch={doRefetch} />;
             }}
           />
         </Switch>

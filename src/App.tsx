@@ -22,7 +22,7 @@ import NotFound from './views/NotFound';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicPrograms from './views/programs/AcademicPrograms';
 import NewAcademicProgram from './views/programs/NewAcademicProgram';
-import ProgramDetails from './views/programs/ProgramDetails';
+import ProgramDetailsMolecule from './views/programs/ProgramDetails';
 import Roles from './views/roles/Roles';
 import ViewRole from './views/roles/ViewRole';
 import Subjects from './views/subjects';
@@ -51,8 +51,10 @@ const App = () => {
                 path="/dashboard/registration-control"
                 component={RegistrationControl}
               />
+              <Route path="/dashboard/users" component={Users} />
               <Route exact path="/dashboard/user/new" component={NewStudent} />
               <Route path="/dashboard/divisions" component={Divisions} />
+
               <Route
                 exact
                 path="/dashboard/users/instructor/new"
@@ -65,10 +67,8 @@ const App = () => {
                 path="/dashboard/programs/new"
                 component={NewAcademicProgram}
               />
-              <Route path="/dashboard/programs/:id" component={ProgramDetails} />
-              <Route path="/dashboard/users" component={Users} />
-              <Route path="/dashboard/programs" component={AcademicPrograms} />
-              <Route exact path="/dashboard/levels" component={LevelsView} />
+              <Route path="/dashboard/programs/:id" component={ProgramDetailsMolecule} />
+              <Route path="/dashboard/levels" component={LevelsView} />
               <Route exact path="/dashboard/intakes" component={IntakesView} />
               <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} />
               <Route path="/dashboard/privileges" component={PrivilegesView} />

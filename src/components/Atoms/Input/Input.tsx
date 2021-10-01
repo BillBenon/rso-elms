@@ -53,7 +53,9 @@ export default function Input<T>({
       type={type}
       value={_value}
       readOnly={readonly}
-      className={`bg-transparent h-12 ${padding} placeholder-${pcolor} rounded-md ${
+      className={`${
+        readonly ? 'bg-bcolor' : 'bg-transparent'
+      } h-12 ${padding} placeholder-${pcolor} rounded-md ${
         full ? 'w-full' : `w-full md:w-${width}`
       } focus:outline-none border-${bcolor} focus:border-${
         colorStyle[fcolor]
