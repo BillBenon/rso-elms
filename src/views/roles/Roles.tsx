@@ -87,6 +87,7 @@ export default function Roles() {
         {isSuccess ? roles?.length === 0 : 'No Roles found, try to add one'}
         {roles && (
           <Table<FilteredRoles>
+            hide={['id', 'name']}
             handleSelect={handleSelect}
             statusColumn="status"
             data={roles}

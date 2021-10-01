@@ -21,7 +21,7 @@ interface Selected {
 interface TableProps<T> {
   data: (T & Selected)[];
   uniqueCol?: keyof T;
-  isUniqueColVisible?: boolean;
+  hide?: (keyof T)[];
   actions?: { name: string; handleAction: (_data?: T[keyof T]) => void }[];
   handleClick?: () => void;
   statusColumn?: string;
@@ -31,7 +31,7 @@ interface TableProps<T> {
 
 export function Table<T>({
   uniqueCol,
-  isUniqueColVisible = false,
+  hide = [],
   data,
   actions,
   statusColumn,
@@ -50,7 +50,7 @@ export function Table<T>({
   const [selected, setSelected] = useState(new Set(''));
 
   const rowsToHide: (keyof (T & Selected))[] = ['selected'];
-  !isUniqueColVisible && uniqueCol && rowsToHide.push(uniqueCol); // add unique col to elements that gonna be hidden
+  hide.length > 0 && rowsToHide.push(...hide); // add unique col to elements that gonna be hidden
 
   useEffect(() => {
     setCurrentRows(data.slice(indexOfFirstRow, indexOfLastRow));
