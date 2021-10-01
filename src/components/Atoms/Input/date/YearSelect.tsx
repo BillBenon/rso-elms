@@ -62,7 +62,7 @@ const YearSelect = (props: YProp) => {
         defaultValue: props.defaultValue,
       })}
       width={props.width}
-      onChange={(e: ValueType) => props.onChange(e)}
+      handleChange={(e: ValueType) => props.onChange(e)}
     />
   );
 };

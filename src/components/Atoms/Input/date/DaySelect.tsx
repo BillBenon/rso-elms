@@ -38,7 +38,7 @@ const DaySelect = (dprop: DProp) => {
       width={dprop.width}
       className={dprop.className}
       options={renderDateOptions()}
-      onChange={(e: ValueType) => dprop.onChange(e)}
+      handleChange={(e: ValueType) => dprop.onChange(e)}
     />
   );
 };

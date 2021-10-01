@@ -36,7 +36,7 @@ const MinuteSelect = (mprops: MProp) => {
       width={mprops.width}
       className={mprops.className}
       options={renderMinuteOptions()}
-      onChange={(e: ValueType) => mprops.onChange(e)}
+      handleChange={(e: ValueType) => mprops.onChange(e)}
     />
   );
 };
