@@ -4,9 +4,11 @@ import { useParams } from 'react-router-dom';
 
 import { intakeStore } from '../../../store/intake.store';
 import programStore from '../../../store/program.store';
-import { ValueType } from '../../../types';
+import { GenericStatus, ValueType } from '../../../types';
 import {
   IntakeInfo,
+  IntakeProgram,
+  IntakePrograms,
   IntakeStatus,
   PeriodType,
 } from '../../../types/services/intake.types';
@@ -64,6 +66,7 @@ export default function NewIntake(props: CProps) {
   }
 
   const { mutateAsync } = intakeStore.create();
+  const addProgram = intakeStore.addPrograms();
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
@@ -82,9 +85,9 @@ export default function NewIntake(props: CProps) {
       console.log('request', data);
 
       await mutateAsync(data, {
-        onSuccess(data) {
+        async onSuccess(data) {
           toast.success(data.data.message);
-
+          await addProgramsToIntake(data.data.data.id.toString());
           props.handleSuccess();
         },
         onError() {
@@ -94,7 +97,36 @@ export default function NewIntake(props: CProps) {
     }
   }
 
-  async function addProgramsToIntake({ id }: { id: string }) {}
+  async function addProgramsToIntake(id: string) {
+    console.log(id);
+    let intakePrograms: IntakePrograms = {
+      description: '',
+      intak_id: id,
+      programs: [],
+    };
+
+    for (let i = 0; i < selectedPrograms.length; i++) {
+      const element: IntakeProgram = {
+        description: '',
+        intake_id: id,
+        intake_program_id: '',
+        program_id: selectedPrograms[i],
+        status: GenericStatus.ACTIVE,
+      };
+      intakePrograms.programs.push(element);
+    }
+
+    await addProgram.mutateAsync(intakePrograms, {
+      onSuccess(data) {
+        toast.success(data.data.message);
+        props.handleSuccess();
+      },
+      onError() {
+        toast.error('error occurred when adding programs');
+        props.handleSuccess();
+      },
+    });
+  }
 
   const stepperContent = {
     currentStep: currentStep,
@@ -155,7 +187,7 @@ function IntakeInfoComponent({
 
   return (
     <form onSubmit={handleNext}>
-      {/* <InputMolecule
+      <InputMolecule
         name="title"
         placeholder="Intake title"
         value={values.title}
@@ -176,7 +208,7 @@ function IntakeInfoComponent({
         type="number"
         handleChange={handleChange}>
         Total number of students
-      </InputMolecule> */}
+      </InputMolecule>
       <DropdownMolecule
         name="programs"
         placeholder="Program"
@@ -235,4 +267,17 @@ function IntakeStatusComponent({ handleChange, handleNext }: IProps) {
       </div>
     </form>
   );
+}
+function data(
+  data: any,
+  arg1: {
+    onSuccess(
+      data: import('axios').AxiosResponse<
+        import('../../../types').Response<IntakePrograms>
+      >,
+    ): void;
+    onError(): void;
+  },
+) {
+  throw new Error('Function not implemented.');
 }
