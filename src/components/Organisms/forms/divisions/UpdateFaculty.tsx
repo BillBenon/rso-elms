@@ -4,10 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import { divisionStore } from '../../../../store/divisions.store';
 import { FormPropType, ParamType, ValueType } from '../../../../types';
-import {
-  DivisionCreateInfo,
-  DivisionInfo,
-} from '../../../../types/services/division.types';
+import { DivisionCreateInfo } from '../../../../types/services/division.types';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';

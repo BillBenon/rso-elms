@@ -68,7 +68,6 @@ function DateMolecule({
   defaultValue,
 }: IProp) {
   let defaultValueDate = defaultValue ? new Date(defaultValue) : new Date();
-  console.log('default', defaultValueDate);
 
   const [dateState, setDateState] = useState({
     Day: new Date().getDate(),
@@ -85,23 +84,6 @@ function DateMolecule({
     let selectedDate: string = `${dateState.Year}-${months}-${dateState.Day} ${dateState.Hours}:${minutes}:00`;
     handleChange({ name: name, value: selectedDate });
   };
-
-  // useEffect(() => {
-  //   defaultValue && setDate();
-  // }, []);
-
-  // function setDate() {
-  //   const dV = new Date(defaultValue || '');
-  //   console.log('he', dV);
-  //   setDateState((old) => ({
-  //     ...old,
-  //     Year: dV.getFullYear(),
-  //     Month: dV.getMonth() + 1,
-  //     Day: dV.getDay(),
-  //     Hours: dV.getHours(),
-  //     Minutes: dV.getMinutes(),
-  //   }));
-  // }
 
   useEffect(() => {
     console.log('inside the state', dateState);
@@ -155,7 +137,6 @@ function DateMolecule({
               onChange={handleDate}
               name="Day"
               className={dayClassName}
-              // placeholder={dateState.Day.toString()}
               width={dayWidth}
               disabled={dayDisabled}
             />

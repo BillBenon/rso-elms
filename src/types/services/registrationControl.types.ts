@@ -1,5 +1,5 @@
 import { GenericStatus, Table } from '..';
-import { AcademyCreateInfo } from './academy.types';
+import { AcademyCreateInfo, AcademyInfo } from './academy.types';
 
 export interface IRegistrationControlCreateInfo {
   academy_id: string;
@@ -9,12 +9,13 @@ export interface IRegistrationControlCreateInfo {
   expected_end_date: string;
   expected_start_date: string;
   id: string | number;
+  academy?: AcademyInfo;
 }
 
 export interface IRegistrationControlInfo
   extends IRegistrationControlCreateInfo,
     Table,
     AcademyCreateInfo {
-  academy: AcademyCreateInfo;
+  academy: AcademyInfo;
   generic_status: GenericStatus;
 }

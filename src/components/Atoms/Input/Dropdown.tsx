@@ -4,7 +4,6 @@ import Select from 'react-select';
 import { DropdownProps } from '../../../types';
 
 export default function DropDown(props: DropdownProps) {
-  console.log('dropdown ttoo', props.defaultValue);
   // @tsc-ignore
   return (
     <>
