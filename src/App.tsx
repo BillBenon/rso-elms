@@ -10,7 +10,7 @@ import { MainLayout } from './layout/MainLayout';
 import Academies from './views/academies/Academy';
 import Signin from './views/auth/Signin';
 import Signup from './views/auth/Signup';
-import FacultiesView from './views/faculties/Faculties';
+import Divisions from './views/divisions/Divisions';
 import NewInstitution from './views/insitution/NewInstitution';
 import IntakeModulesView from './views/intakes/IntakeModules';
 import IntakesView from './views/intakes/Intakes';
@@ -50,8 +50,9 @@ const App = () => {
                 component={RegistrationControl}
               />
               <Route path="/dashboard/users" component={Users} />
-              <Route exact path="/dashboard/faculties" component={FacultiesView} />
               <Route path="/dashboard/programs" component={AcademicPrograms} />
+
+              <Route path="/dashboard/divisions" component={Divisions} />
               <Route exact path="/dashboard/levels" component={LevelsView} />
               <Route exact path="/dashboard/intakes" component={IntakesView} />
               <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} />
