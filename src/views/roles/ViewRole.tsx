@@ -25,7 +25,7 @@ interface ParamType {
 }
 
 export default function ViewRole() {
-  const { path } = useRouteMatch();
+  const { url } = useRouteMatch();
   const history = useHistory();
   const { id } = useParams<ParamType>();
   const [role, setRole] = useState<RoleRes>();
@@ -34,7 +34,7 @@ export default function ViewRole() {
   const rolesPrivileges = roleStore.getPrivilegesByRole(id);
   const { mutate: deletePrivilege } = roleStore.removeProvilege();
 
-  // TODO: display priviles
+
   // Todo: add privileges on role
 
   function removePrivilege(rolePrivilege: RolePrivilege) {
@@ -92,7 +92,7 @@ export default function ViewRole() {
             <div className="width28 mt-10 bg-main py-2 rounded-lg">
               <div className="flex items-center justify-between pl-6">
                 <Heading fontWeight="semibold">Privileges</Heading>
-                <Link to={`${path}/addPrivileges`}>
+                <Link to={`${url}/addPrivileges`}>
                   <Button styleType="text">
                     <span className="flex items-center">
                       <Icon size={13} name="add" />
@@ -128,7 +128,7 @@ export default function ViewRole() {
         {/* add previleges role */}
         <Route
           exact
-          path={`${path}/addPrivileges`}
+          path={`${url}/addPrivileges`}
           render={() => {
             return (
               <PopupMolecule title="New Role" open={true} onClose={history.goBack}>
