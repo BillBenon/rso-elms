@@ -87,7 +87,7 @@ export interface SelectData {
  */
 export interface ValueType<T = Event> {
   name: string;
-  value: string | number | boolean | undefined;
+  value: string | number | boolean | string[];
   event?: FormEvent<T>;
 }
 
