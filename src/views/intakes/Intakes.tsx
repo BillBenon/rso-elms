@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 
 import Cacumber from '../../components/Molecules/Cacumber';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
+import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import { intakeStore } from '../../store/intake.store';
 import { CommonCardDataType, Link, ValueType } from '../../types';
@@ -49,12 +50,16 @@ export default function Intakes() {
       <TableHeader
         title="Intakes"
         totalItems={intakes.length}
-        handleSearch={handleSearch}>
-        {/* <div className="flex gap-3">
-          <Button onClick={() => setmodalOpen(true)}>Add intake</Button>
-        </div> */}
-      </TableHeader>
-      <section className="flex flex-wrap justify-between mt-2">
+        handleSearch={handleSearch}
+      />
+
+      <NoDataAvailable
+        title="Add subjects to module"
+        description="There are no subjects added to this module.Click the button below to add subjects to this module."
+        buttonLabel="Add subjects"
+      />
+
+      {/* <section className="flex flex-wrap justify-between mt-2">
         {intakes.map((course) => (
           <div key={course.code} className="p-1 mt-3">
             <CommonCardMolecule
@@ -63,7 +68,7 @@ export default function Intakes() {
             />
           </div>
         ))}
-      </section>
+      </section> */}
     </div>
   );
 }
