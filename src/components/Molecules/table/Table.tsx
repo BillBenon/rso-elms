@@ -206,6 +206,13 @@ export function Table<T>({
 
   return (
     <div className="overflow-x-auto rounded-lg text-sm">
+      <div className="h-8">
+        {selected.size > 0 && (
+          <p className="py-2">
+            <strong>{selected.size}</strong> rows selected
+          </p>
+        )}
+      </div>
       <table className="table-auto border-collapse font-medium bg-main w-full m-auto">
         <thead>
           <tr className="text-left text-txt-secondary border-b border-silver">
