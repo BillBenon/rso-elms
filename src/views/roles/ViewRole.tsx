@@ -1,4 +1,5 @@
-import React from 'react';
+import { AxiosResponse } from 'axios';
+import React, { useEffect, useState } from 'react';
 import {
   Link,
   Route,
@@ -15,7 +16,9 @@ import ActionableList from '../../components/Molecules/ActionableList';
 import Cacumber from '../../components/Molecules/Cacumber';
 import PopupMolecule from '../../components/Molecules/Popup';
 import AddPrivileges from '../../components/Organisms/forms/roles/AddPrivileges';
+import { queryClient } from '../../plugins/react-query';
 import { roleStore } from '../../store';
+import { Response, RolePrivilege, RoleRes } from '../../types';
 
 interface ParamType {
   id: string;
@@ -25,15 +28,36 @@ export default function ViewRole() {
   const { path } = useRouteMatch();
   const history = useHistory();
   const { id } = useParams<ParamType>();
+  const [role, setRole] = useState<RoleRes>();
+  const [privilegesByRole, setPrivilegesByRole] = useState<RolePrivilege[]>();
   const { data, isLoading, isSuccess, isError, error } = roleStore.getRole(id);
   const rolesPrivileges = roleStore.getPrivilegesByRole(id);
-  const role = data?.data.data;
-  const privilegesByRoles = rolesPrivileges.data?.data.data;
-
-  console.log(rolesPrivileges, 'amazing');
+  const { mutate: deletePrivilege } = roleStore.removeProvilege();
 
   // TODO: display priviles
   // Todo: add privileges on role
+
+  function removePrivilege(rolePrivilege: RolePrivilege) {
+    deletePrivilege(rolePrivilege.id + '', {
+      onSuccess: () => {
+        queryClient.setQueryData(['privilegesByRole/id', role?.id.toString()], (old) => {
+          const oldest = old as AxiosResponse<Response<RolePrivilege[]>>;
+          oldest.data.data = oldest.data.data.filter(
+            (roleP) => roleP.id != rolePrivilege.id,
+          );
+          return oldest;
+        });
+      },
+    });
+  }
+
+  useEffect(() => {
+    setRole(data?.data.data);
+  }, [data]);
+
+  useEffect(() => {
+    setPrivilegesByRole(rolesPrivileges.data?.data.data);
+  }, [rolesPrivileges.data?.data.data]);
 
   function submited() {}
   return (
@@ -80,17 +104,14 @@ export default function ViewRole() {
               <div>
                 {rolesPrivileges.isError && rolesPrivileges.error.message}
                 {rolesPrivileges.isSuccess &&
-                  privilegesByRoles &&
-                  privilegesByRoles?.length <= 0 &&
+                  privilegesByRole &&
+                  privilegesByRole?.length <= 0 &&
                   'This role has no privileges try adding one'}
                 {rolesPrivileges.isSuccess && (
                   <ul>
-                    {privilegesByRoles?.map((rolePrivileg) => (
+                    {privilegesByRole?.map((rolePrivileg) => (
                       <li key={rolePrivileg.id}>
-                        <ActionableList
-                          handleClick={() =>
-                            alert('handle remove privilege' + rolePrivileg.privilege.id)
-                          }>
+                        <ActionableList handleClick={() => removePrivilege(rolePrivileg)}>
                           {rolePrivileg.privilege.name}
                         </ActionableList>
                       </li>

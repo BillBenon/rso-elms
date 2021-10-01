@@ -39,6 +39,10 @@ class RoleService {
   ): Promise<AxiosResponse<Response<RoleRes>>> {
     return await adminstrationAxios.put('/roles/addPrivileges', { ...role });
   }
+
+  public async removePrivilege(rolePrivilegeId: string): Promise<AxiosResponse<{}>> {
+    return await adminstrationAxios.delete(`/roles/removerPrivileges/${rolePrivilegeId}`);
+  }
 }
 
 export const roleService = new RoleService();

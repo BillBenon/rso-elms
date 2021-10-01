@@ -32,6 +32,10 @@ class RoleStore {
   addPrivilegesOnRole() {
     return useMutation(roleService.addPrivilegesOnRole);
   }
+
+  removeProvilege() {
+    return useMutation(roleService.removePrivilege);
+  }
 }
 
 export const roleStore = new RoleStore();
