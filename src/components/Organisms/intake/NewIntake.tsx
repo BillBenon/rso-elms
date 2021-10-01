@@ -81,15 +81,12 @@ export default function NewIntake() {
         </div>
         <DropdownMolecule
           name="periodType"
-          handleChange={(e: any) => console.log(e)}
+          handleChange={(_e: any) => {}}
           options={options}
           placeholder="Select Period type">
           Period type
         </DropdownMolecule>
-        <DropdownMolecule
-          name="status"
-          handleChange={(e: any) => console.log(e)}
-          options={options}>
+        <DropdownMolecule name="status" handleChange={(_e: any) => {}} options={options}>
           Intake status
         </DropdownMolecule>
 
@@ -123,9 +120,7 @@ export default function NewIntake() {
       },
     ],
   };
-  const handleChange = (e: any) => {
-    console.log(e);
-  };
+  const handleChange = (_e: any) => {};
 
   return (
     <div className="w-full">
@@ -134,7 +129,7 @@ export default function NewIntake() {
         isVertical={false}
         isInline={false}
         stepperContent={stepperContent}
-        navigateToStepHandler={() => console.log('submitted')}
+        navigateToStepHandler={() => {}}
       />
     </div>
   );

@@ -12,8 +12,6 @@ class IntakeService {
   }
 
   public async fetchAll(): Promise<AxiosResponse<Response<ExtendedIntakeInfo[]>>> {
-    console.log('in srvice');
-
     return await adminstrationAxios.get('/intakes/getIntakes');
   }
 

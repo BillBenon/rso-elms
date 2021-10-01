@@ -10,9 +10,7 @@ interface PropType<K> extends CommonFormProps<K> {
 }
 
 function ProgramList<E>({ academy, onSubmit }: PropType<E>) {
-  function handleChange(e: ValueType) {
-    console.log(e);
-  }
+  function handleChange(_e: ValueType) {}
 
   function submitForm(e: FormEvent) {
     e.preventDefault(); // prevent page to reload:

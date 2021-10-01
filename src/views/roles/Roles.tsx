@@ -66,9 +66,7 @@ export default function Roles() {
   }
   function handleSearch() {}
 
-  function handleSelect(selected: string[] | null) {
-    console.log(selected);
-  }
+  function handleSelect(_selected: string[] | null) {}
 
   return (
     <main>

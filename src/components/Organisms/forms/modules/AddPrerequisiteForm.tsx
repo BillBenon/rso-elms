@@ -6,9 +6,7 @@ import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 
 export default function AddPrerequesitForm() {
-  function handleChange(e: ValueType) {
-    console.log(e);
-  }
+  function handleChange(_e: ValueType) {}
 
   const prere: SelectData[] = [
     { value: 'Math', label: 'Mathematics' },

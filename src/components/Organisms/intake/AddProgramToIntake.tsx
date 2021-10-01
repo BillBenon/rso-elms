@@ -27,21 +27,18 @@ export default function AddProgramToIntake() {
 
       <DropdownMolecule
         name="program"
-        handleChange={(e: any) => console.log(e)}
+        handleChange={(_e: any) => {}}
         options={options}
         placeholder="Select period type">
         Choose Program
       </DropdownMolecule>
       <DropdownMolecule
         name="academicYear"
-        handleChange={(e: any) => console.log(e)}
+        handleChange={(_e: any) => {}}
         options={options}>
         Choose Academic Year
       </DropdownMolecule>
-      <DropdownMolecule
-        name="oic"
-        handleChange={(e: any) => console.log(e)}
-        options={options}>
+      <DropdownMolecule name="oic" handleChange={(_e: any) => {}} options={options}>
         Choose Instructor Incharge
       </DropdownMolecule>
       <div className="pt-3">

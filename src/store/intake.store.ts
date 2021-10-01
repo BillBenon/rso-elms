@@ -7,7 +7,6 @@ class IntakeStore {
     return useMutation(intakeService.create);
   }
   getAll() {
-    console.log('in store');
     return useQuery('intakes', intakeService.fetchAll);
   }
   getIntakeById(id: string) {

@@ -72,9 +72,7 @@ export default function FacutiesOrg() {
     { to: 'programs', title: 'Faculty' },
   ];
 
-  const handleSearch = (e: ValueType) => {
-    console.log(e);
-  };
+  const handleSearch = (_e: ValueType) => {};
   return (
     <>
       <Cacumber list={list} />

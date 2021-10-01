@@ -5,9 +5,7 @@ import Button from '../../../Atoms/custom/Button';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 
 function ChooseLevelProgram() {
-  function handleChange(e: ValueType) {
-    console.log(e);
-  }
+  function handleChange(_e: ValueType) {}
 
   return (
     <form>

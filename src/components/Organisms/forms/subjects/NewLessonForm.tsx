@@ -9,9 +9,7 @@ import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 interface PropType<K> extends CommonFormProps<K> {}
 
 export default function NewLessonForm<E>({ onSubmit }: PropType<E>) {
-  function handleChange(e: ValueType) {
-    console.log(e);
-  }
+  function handleChange(_e: ValueType) {}
 
   function submitForm(e: FormEvent) {
     e.preventDefault(); // prevent page to reload:

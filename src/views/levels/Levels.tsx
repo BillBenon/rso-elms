@@ -16,7 +16,6 @@ function Levels() {
   const submitted = () => {
     setLevelOpen(!levelOpen);
     setProgrOpen(!progrOpen);
-    console.log('from submit');
   };
 
   const list: Link[] = [
@@ -46,9 +45,7 @@ function Levels() {
     { name: 'View', handleAction: () => {} },
   ];
 
-  const handleSearch = (e: ValueType) => {
-    console.log(e);
-  };
+  const handleSearch = (_e: ValueType) => {};
   return (
     <main className="px-4">
       <section>

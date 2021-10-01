@@ -44,7 +44,6 @@ const intakes: CommonCardDataType[] = [
 export default function Intakes() {
   const [modalOpen, setmodalOpen] = useState(false);
   const [intakes, setIntakes] = useState<CommonCardDataType[]>([]);
-  console.log('intakes', intakes);
 
   const { isSuccess, isError, data } = intakeStore.getAll();
 

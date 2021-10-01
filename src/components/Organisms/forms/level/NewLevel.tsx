@@ -10,9 +10,7 @@ import InputMolecule from '../../../Molecules/input/InputMolecule';
 interface PropType<K> extends CommonFormProps<K> {}
 
 function NewLevel<E>({ onSubmit }: PropType<E>) {
-  function handleChange(e: ValueType) {
-    console.log(e);
-  }
+  function handleChange(_e: ValueType) {}
 
   function submitForm(e: FormEvent) {
     e.preventDefault(); // prevent page to reload:

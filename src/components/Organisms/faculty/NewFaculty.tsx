@@ -5,9 +5,7 @@ import InputMolecule from '../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
 
 export default function NewFaculty() {
-  const handleChange = () => {
-    console.log('when also');
-  };
+  const handleChange = () => {};
   return (
     <div>
       <InputMolecule

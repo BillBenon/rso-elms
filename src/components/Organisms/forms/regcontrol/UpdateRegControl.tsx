@@ -34,7 +34,6 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
 
   useEffect(() => {
     data?.data.data && setRegControl({ ...data?.data.data });
-    console.log(regControl.expected_end_date, 'we go');
   }, [data]);
 
   function handleChange({ name, value }: ValueType) {

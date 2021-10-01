@@ -54,7 +54,6 @@ export function Table<T>({
 
   // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
-  // console.log(data);
 
   const [selected, setSelected] = useState(new Set(''));
 
@@ -135,7 +134,7 @@ export function Table<T>({
     const dynamicHeaders = keys.map((key) =>
       key !== uniqueCol ? (
         <th className="px-4 py-5 capitalize" key={key}>
-          {key}
+          {key.replaceAll('_', ' ')}
         </th>
       ) : (
         <></>

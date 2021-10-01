@@ -84,13 +84,11 @@ function DateMolecule({
   };
 
   useEffect(() => {
-    console.log('default', defaultValue);
     defaultValue && setDate();
   }, []);
 
   function setDate() {
     const dV = new Date(defaultValue || '');
-    console.log('he');
     setDateState((old) => ({
       ...old,
       Year: dV.getFullYear(),
