@@ -19,7 +19,7 @@ interface PropTypes<T> extends ButtonHTMLAttributes<DOMAttributes<T>> {
   color?: Color;
   hoverStyle?: TextDecoration;
   className?: string;
-  onClick?: () => any;
+  onClick?: () => void;
 }
 
 export default function Button<T>({

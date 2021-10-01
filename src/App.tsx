@@ -42,10 +42,8 @@ const App = () => {
             <Route exact path="/usecase" component={ComponentsUseCase} />
 
             <Dashboard>
-              <Route path="/dashboard/academies" />
-              <Route exact path="/dashboard/academies" component={Academies} />
-              {/* <Route exact path="/dashboard/academies/new" component={NewAcademy} /> */}
-              <Route exact path="/dashboard/role/:id/view" component={ViewRole} />
+              <Route path="/dashboard/role/:id/view" component={ViewRole} />
+              <Route path="/dashboard/academies" component={Academies} />
               <Route path="/dashboard/roles" component={Roles} />
               <Route exact path="/dashboard/modules" component={Modules} />
               <Route exact path="/dashboard/subjects" component={Subjects} />
@@ -53,9 +51,7 @@ const App = () => {
                 path="/dashboard/registration-control"
                 component={RegistrationControl}
               />
-              <Route path="/dashboard/users" component={Users} />
               <Route exact path="/dashboard/user/new" component={NewStudent} />
-
               <Route path="/dashboard/divisions" component={Divisions} />
               <Route
                 exact
@@ -70,6 +66,8 @@ const App = () => {
                 component={NewAcademicProgram}
               />
               <Route path="/dashboard/programs/:id" component={ProgramDetails} />
+              <Route path="/dashboard/users" component={Users} />
+              <Route path="/dashboard/programs" component={AcademicPrograms} />
               <Route exact path="/dashboard/levels" component={LevelsView} />
               <Route exact path="/dashboard/intakes" component={IntakesView} />
               <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} />

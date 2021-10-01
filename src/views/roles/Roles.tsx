@@ -61,6 +61,15 @@ export default function Roles() {
     },
   ];
 
+  const manyActions = [
+    {
+      name: 'Disable/Enable',
+      handleAction: () => {
+        alert('handling many at once');
+      },
+    },
+  ];
+
   function submited() {
     // setOpen(false);
   }
@@ -87,6 +96,8 @@ export default function Roles() {
         {isSuccess ? roles?.length === 0 : 'No Roles found, try to add one'}
         {roles && (
           <Table<FilteredRoles>
+            manyActions={manyActions}
+            hide={['id', 'name']}
             handleSelect={handleSelect}
             statusColumn="status"
             data={roles}

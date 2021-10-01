@@ -47,17 +47,20 @@ export default function NewInstitution() {
     getUser();
   }, []);
 
-  async function handleSubmit<T>(e: FormEvent<T>) {
-    e.preventDefault();
-    await mutateAsync(values, {
-      onSuccess(data) {
-        toast.success(data.data.message);
-        history.push('/dashboard/users');
-      },
-      onError() {
-        toast.error('error occurred');
-      },
-    });
+  function handleSubmit<T>(e: FormEvent<T>) {
+    send(e);
+    async function send(e: FormEvent<T>) {
+      e.preventDefault();
+      await mutateAsync(values, {
+        onSuccess(data) {
+          toast.success(data.data.message);
+          history.push('/dashboard/users');
+        },
+        onError() {
+          toast.error('error occurred');
+        },
+      });
+    }
   }
 
   return (
