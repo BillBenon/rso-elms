@@ -54,8 +54,8 @@ export default function NewInstitution() {
         toast.success(data.data.message);
         history.push('/dashboard/users');
       },
-      onError(error) {
-        toast.error(error?.message || 'error occurred');
+      onError() {
+        toast.error('error occurred');
       },
     });
   }
@@ -136,7 +136,7 @@ export default function NewInstitution() {
             <Button styleType="outline">Upload logo</Button>
           </div>
           <div className="py-4 col-span-2">
-            <Button onClick={handleSubmit} type="submit">
+            <Button onClick={() => handleSubmit} type="submit">
               Save
             </Button>
           </div>

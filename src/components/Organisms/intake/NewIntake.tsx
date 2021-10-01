@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useParams } from 'react-router-dom';
 
 import { intakeStore } from '../../../store/intake.store';
 import programStore from '../../../store/program.store';
@@ -13,7 +14,6 @@ import { ProgramInfo } from '../../../types/services/program.types';
 import { formatDateToIso } from '../../../utils/date-helper';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';
-import Icon from '../../Atoms/custom/Icon';
 import DateMolecule from '../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../Molecules/input/InputMolecule';
@@ -25,14 +25,16 @@ interface IProps {
   handleChange: (_e: ValueType) => any;
   handleNext: <T>(_e: FormEvent<T>) => any;
 }
-
+interface ParamType {
+  id: string;
+}
 interface CProps {
-  regId: string;
   handleSuccess: () => any;
 }
 
 export default function NewIntake(props: CProps) {
   const [currentStep, setCurrentStep] = useState(0);
+  const { id } = useParams<ParamType>();
 
   const [values, setValues] = useState<IntakeInfo>({
     id: '',
@@ -45,7 +47,7 @@ export default function NewIntake(props: CProps) {
     expected_start_date: '',
     intake_status: IntakeStatus.OPENED,
     period_type: PeriodType.SEMESTER,
-    registration_control_id: props.regId,
+    registration_control_id: id,
     total_num_students: 1,
   });
 
@@ -76,8 +78,8 @@ export default function NewIntake(props: CProps) {
           toast.success(data.data.message);
           props.handleSuccess();
         },
-        onError(error) {
-          toast.error(error?.message || 'error occurred');
+        onError() {
+          toast.error('error occurred please try again');
         },
       });
     }
@@ -202,12 +204,9 @@ function IntakeStatusComponent({ handleChange, handleNext }: IProps) {
         Intake status
       </DropdownMolecule>
 
-      <div className="pt-3">
-        <Button styleType="text" color="primary">
-          <span className=" flex items-center">
-            <Icon name="arrow-left" />
-            Back
-          </span>
+      <div className="pt-3 flex justify-between">
+        <Button styleType="text" color="gray">
+          Back
         </Button>
         <Button type="submit" onClick={() => handleNext}>
           Create intake

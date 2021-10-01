@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
-import Button from '../../components/Atoms/custom/Button';
 import Cacumber from '../../components/Molecules/Cacumber';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
-import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import NewIntake from '../../components/Organisms/intake/NewIntake';
 import { intakeStore } from '../../store/intake.store';
 import { CommonCardDataType, Link, ValueType } from '../../types';
 
@@ -18,7 +15,6 @@ const list: Link[] = [
 ];
 
 export default function Intakes() {
-  const [modalOpen, setmodalOpen] = useState(false);
   const [intakes, setIntakes] = useState<CommonCardDataType[]>([]);
   console.log('intakes', intakes);
 
@@ -54,9 +50,9 @@ export default function Intakes() {
         title="Intakes"
         totalItems={intakes.length}
         handleSearch={handleSearch}>
-        <div className="flex gap-3">
+        {/* <div className="flex gap-3">
           <Button onClick={() => setmodalOpen(true)}>Add intake</Button>
-        </div>
+        </div> */}
       </TableHeader>
       <section className="flex flex-wrap justify-between mt-2">
         {intakes.map((course) => (
@@ -68,13 +64,6 @@ export default function Intakes() {
           </div>
         ))}
       </section>
-      <PopupMolecule
-        closeOnClickOutSide={false}
-        title="New intake"
-        open={modalOpen}
-        onClose={() => setmodalOpen(false)}>
-        <NewIntake />
-      </PopupMolecule>
     </div>
   );
 }

@@ -33,8 +33,7 @@ export enum IntakeStatus {
 }
 
 export enum PeriodType {
-  TERM = 'TERM',
+  TRIMESTER = 'TRIMESTER',
+  COMPLETE = 'COMPLETE',
   SEMESTER = 'SEMESTER',
-  SHORT_COURSE = 'SHORT_COURSE',
-  PHASE = 'PHASE',
 }
