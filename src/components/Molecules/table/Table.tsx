@@ -138,9 +138,12 @@ export function Table<T>({
       </th>,
     );
 
+    /**
+     * show dynamic headers, but exclude keys that are marked as to be hidden, in @link row
+     */
     const dynamicHeaders = keys.map((key) =>
       !rowsToHide.includes(key) ? (
-        <th className="px-4 py-5 capitalize" key={key}>
+        <th className="px-4 py-5 capitalize" key={key as string}>
           {key}
         </th>
       ) : (
@@ -168,7 +171,7 @@ export function Table<T>({
           )}
         </td>
 
-        <Row key={index} data={row} keys={keys} statusColumn={statusColumn} />
+        <Row key={index} data={row} keys={keys as string[]} statusColumn={statusColumn} />
         {actions && actions.length > 0 ? (
           <td className="flex space-x-6 cursor-pointer">
             <Tooltip
