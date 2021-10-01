@@ -24,6 +24,7 @@ interface IProps {
   values: IntakeInfo;
   handleChange: (_e: ValueType) => any;
   handleNext: <T>(_e: FormEvent<T>) => any;
+  handleProgramsChange?: (_e: ValueType) => any;
 }
 interface ParamType {
   id: string;
@@ -51,8 +52,15 @@ export default function NewIntake(props: CProps) {
     total_num_students: 1,
   });
 
+  const [selectedPrograms, setSelectedPrograms] = useState<string[]>([]);
+
   function handleChange(e: ValueType) {
     setValues((regControl) => ({ ...regControl, [e.name]: e.value }));
+  }
+
+  function handleProgramsChange(e: ValueType) {
+    // @ts-ignore
+    setSelectedPrograms(e.value);
   }
 
   const { mutateAsync } = intakeStore.create();
@@ -76,6 +84,7 @@ export default function NewIntake(props: CProps) {
       await mutateAsync(data, {
         onSuccess(data) {
           toast.success(data.data.message);
+
           props.handleSuccess();
         },
         onError() {
@@ -84,6 +93,8 @@ export default function NewIntake(props: CProps) {
       });
     }
   }
+
+  async function addProgramsToIntake({ id }: { id: string }) {}
 
   const stepperContent = {
     currentStep: currentStep,
@@ -96,6 +107,7 @@ export default function NewIntake(props: CProps) {
             values={values}
             handleChange={handleChange}
             handleNext={handleSubmit}
+            handleProgramsChange={handleProgramsChange}
           />
         ),
         clicked: () => {},
@@ -127,14 +139,23 @@ export default function NewIntake(props: CProps) {
   );
 }
 
-function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
+function IntakeInfoComponent({
+  values,
+  handleChange,
+  handleNext,
+  handleProgramsChange,
+}: IProps) {
   const programsInfo = programStore.fetchPrograms();
 
   let programs: ProgramInfo[] = programsInfo.data?.data.data || [];
 
+  const handlePrograms = (e: ValueType) => {
+    if (handleProgramsChange) handleProgramsChange(e);
+  };
+
   return (
     <form onSubmit={handleNext}>
-      <InputMolecule
+      {/* <InputMolecule
         name="title"
         placeholder="Intake title"
         value={values.title}
@@ -155,11 +176,11 @@ function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
         type="number"
         handleChange={handleChange}>
         Total number of students
-      </InputMolecule>
+      </InputMolecule> */}
       <DropdownMolecule
         name="programs"
         placeholder="Program"
-        handleChange={handleChange}
+        handleChange={handlePrograms}
         isMulti
         options={getDropDownOptions(programs)}>
         Programs in this intake
