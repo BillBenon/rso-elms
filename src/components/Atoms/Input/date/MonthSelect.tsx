@@ -52,15 +52,21 @@ const MonthSelect = (mprops: MProp) => {
     return monthOptions;
   };
 
+  let months = renderMonthOptions();
+  let newDefaultValue = months.find(
+    (month) => parseInt(month.value) === parseInt(mprops.defaultValue || '0') + 1,
+  );
+
   return (
     <DropDown
       disabled={mprops.disabled}
+      defaultValue={newDefaultValue}
       name={mprops.name}
       placeholder={mprops.placeholder}
       className={mprops.className}
       width={mprops.width}
-      options={renderMonthOptions()}
-      onChange={(e: ValueType) => mprops.onChange(e)}
+      options={months}
+      handleChange={(e: ValueType) => mprops.onChange(e)}
     />
   );
 };

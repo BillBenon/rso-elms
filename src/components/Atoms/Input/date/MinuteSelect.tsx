@@ -29,14 +29,18 @@ const MinuteSelect = (mprops: MProp) => {
     return minOptions;
   };
 
+  let minutes = renderMinuteOptions();
+  let newDefaultValue = minutes.find((minute) => minute.value === mprops.defaultValue);
+
   return (
     <DropDown
+      defaultValue={newDefaultValue}
       name={mprops.name}
       placeholder={mprops.placeholder}
       width={mprops.width}
       className={mprops.className}
       options={renderMinuteOptions()}
-      onChange={(e: ValueType) => mprops.onChange(e)}
+      handleChange={(e: ValueType) => mprops.onChange(e)}
     />
   );
 };

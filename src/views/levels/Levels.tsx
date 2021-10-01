@@ -6,7 +6,6 @@ import Cacumber from '../../components/Molecules/Cacumber';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import ChooseLevelProgram from '../../components/Organisms/forms/level/ChooseLevelProgram';
 import NewLevel from '../../components/Organisms/forms/level/NewLevel';
 import { ValueType } from '../../types';
 
@@ -69,15 +68,6 @@ function Levels() {
         open={levelOpen}
         onClose={() => setLevelOpen(false)}>
         <NewLevel onSubmit={submitted} />
-      </PopupMolecule>
-
-      {/* choose level programs popup */}
-      <PopupMolecule
-        title="Would you like to add a program
-          to this level?"
-        open={progrOpen}
-        onClose={() => setProgrOpen(false)}>
-        <ChooseLevelProgram />
       </PopupMolecule>
     </main>
   );

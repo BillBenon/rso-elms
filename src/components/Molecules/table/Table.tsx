@@ -4,7 +4,7 @@
 import '../../../styles/components/Molecules/table/table.scss';
 
 import _ from 'lodash';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
@@ -21,6 +21,7 @@ interface Selected {
 interface TableProps<T> {
   data: (T & Selected)[];
   uniqueCol?: keyof T;
+  isUniqueColVisible?: boolean;
   actions?: { name: string; handleAction: (_data?: T[keyof T]) => void }[];
   handleClick?: () => void;
   statusColumn?: string;
@@ -45,6 +46,10 @@ export function Table<T>({
   const [currentRows, setCurrentRows] = useState(
     data.slice(indexOfFirstRow, indexOfLastRow),
   );
+
+  useEffect(() => {
+    setCurrentRows(data.slice(indexOfFirstRow, indexOfLastRow));
+  }, [currentPage]);
 
   // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
@@ -126,11 +131,15 @@ export function Table<T>({
       </th>,
     );
 
-    const dynamicHeaders = keys.map((key) => (
-      <th className="px-4 py-5 capitalize" key={key}>
-        {key}
-      </th>
-    ));
+    const dynamicHeaders = keys.map((key) =>
+      key !== uniqueCol ? (
+        <th className="px-4 py-5 capitalize" key={key}>
+          {key}
+        </th>
+      ) : (
+        <></>
+      ),
+    );
 
     header.push(...dynamicHeaders);
 
@@ -152,7 +161,13 @@ export function Table<T>({
           )}
         </td>
 
-        <Row key={index} data={row} keys={keys} statusColumn={statusColumn} />
+        <Row
+          key={index}
+          data={row}
+          keys={keys}
+          statusColumn={statusColumn}
+          uniqueCol={uniqueCol}
+        />
         {actions && actions.length > 0 ? (
           <td className="flex space-x-6 cursor-pointer">
             <Tooltip
@@ -187,7 +202,7 @@ export function Table<T>({
 
   return (
     <div className="overflow-x-auto rounded-lg text-sm">
-      <table className="table-auto border-collapse font-semibold bg-main w-full m-auto">
+      <table className="table-auto border-collapse font-medium bg-main w-full m-auto">
         <thead>
           <tr className="text-left text-txt-secondary border-b border-silver">
             {getHeader()}

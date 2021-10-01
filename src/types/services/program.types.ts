@@ -17,6 +17,6 @@ export interface CreateProgramInfo {
 }
 
 export enum ProgramType {
-  SHORT_COURSE,
-  ACADEMIC,
+  SHORT_COURSE = 'SHORT_COURSE',
+  ACADEMIC = 'ACADEMIC',
 }

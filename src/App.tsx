@@ -19,12 +19,12 @@ import IntakesView from './views/intakes/Intakes';
 import LevelsView from './views/levels/Levels';
 import Modules from './views/modules';
 import NotFound from './views/NotFound';
-import Popup from './views/Popup';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicPrograms from './views/programs/AcademicPrograms';
 import NewAcademicProgram from './views/programs/NewAcademicProgram';
-import ProgramDetails from './views/programs/ProgramDetails';
+import ProgramDetailsMolecule from './views/programs/ProgramDetails';
 import Roles from './views/roles/Roles';
+import ViewRole from './views/roles/ViewRole';
 import Subjects from './views/subjects';
 import Users from './views/users/Users';
 
@@ -42,9 +42,11 @@ const App = () => {
             <Route exact path="/usecase" component={ComponentsUseCase} />
 
             <Dashboard>
-              <Route path="/dashboard/academies" component={Academies} />
+              <Route path="/dashboard/academies" />
+              <Route exact path="/dashboard/academies" component={Academies} />
+              {/* <Route exact path="/dashboard/academies/new" component={NewAcademy} /> */}
+              <Route exact path="/dashboard/role/:id/view" component={ViewRole} />
               <Route path="/dashboard/roles" component={Roles} />
-              <Route exact path="/dashboard/popup" component={Popup} />
               <Route exact path="/dashboard/modules" component={Modules} />
               <Route exact path="/dashboard/subjects" component={Subjects} />
               <Route
@@ -55,9 +57,11 @@ const App = () => {
               <Route exact path="/dashboard/user/new" component={NewStudent} />
 
               <Route path="/dashboard/divisions" component={Divisions} />
+
+              <Route exact path="/dashboard/users/student/new" component={NewStudent} />
               <Route
                 exact
-                path="/dashboard/user/instructor/new"
+                path="/dashboard/users/instructor/new"
                 component={NewInstructor}
               />
 
@@ -67,11 +71,11 @@ const App = () => {
                 path="/dashboard/programs/new"
                 component={NewAcademicProgram}
               />
-              <Route path="/dashboard/programs/:id" component={ProgramDetails} />
+              <Route path="/dashboard/programs/:id" component={ProgramDetailsMolecule} />
               <Route exact path="/dashboard/levels" component={LevelsView} />
               <Route exact path="/dashboard/intakes" component={IntakesView} />
               <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} />
-              <Route exact path="/dashboard/privileges" component={PrivilegesView} />
+              <Route path="/dashboard/privileges" component={PrivilegesView} />
             </Dashboard>
             <Route path="*" component={NotFound} />
           </Switch>

@@ -1,23 +1,31 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useHistory } from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
-import { ValueType } from '../../types';
+import { authenticatorService } from '../../services/administration/authenticator.service';
+import { institutionStore } from '../../store/institution.store';
+import { GenericStatus, ValueType } from '../../types';
+import { BasicInstitutionInfo } from '../../types/services/institution.types';
 
 export default function NewInstitution() {
-  const [values, setValues] = useState({
+  const history = useHistory();
+  const [values, setValues] = useState<BasicInstitutionInfo>({
+    current_admin_id: '',
+    head_office_location_id: 17445,
     email: '',
     fax_number: '',
     full_address: '',
-    head_office_location_id: 0,
+    generic_status: GenericStatus.ACTIVE.toString(),
     mission: '',
     moto: '',
     name: '',
     phone_number: '',
-    postal_code: '',
+    post_code: '',
     short_name: '',
     website_link: '',
   });
@@ -25,9 +33,32 @@ export default function NewInstitution() {
     setValues({ ...values, [e.name]: e.value });
   };
 
-  const handleSubmit = () => {
-    console.log(values);
-  };
+  const { mutateAsync } = institutionStore.create();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const user = await authenticatorService.authUser();
+      setValues({
+        ...values,
+        current_admin_id: user.data.data.id,
+      });
+    };
+
+    getUser();
+  }, []);
+
+  async function handleSubmit<T>(e: FormEvent<T>) {
+    e.preventDefault();
+    await mutateAsync(values, {
+      onSuccess(data) {
+        toast.success(data.data.message);
+        history.push('/dashboard/users');
+      },
+      onError(error) {
+        toast.error(error?.message || 'error occurred');
+      },
+    });
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2">
@@ -100,16 +131,16 @@ export default function NewInstitution() {
               Institution mission
             </TextAreaMolecule>
           </div>
+          <div className="py-4 col-span-2">
+            <ILabel className="block pb-1">Institution logo</ILabel>
+            <Button styleType="outline">Upload logo</Button>
+          </div>
+          <div className="py-4 col-span-2">
+            <Button onClick={handleSubmit} type="submit">
+              Save
+            </Button>
+          </div>
         </form>
-        <div className="py-4">
-          <ILabel className="block pb-1">Institution logo</ILabel>
-          <Button styleType="outline">Upload logo</Button>
-        </div>
-        <div className="py-4">
-          <Button onClick={handleSubmit} type="submit">
-            Save
-          </Button>
-        </div>
       </div>
     </div>
   );

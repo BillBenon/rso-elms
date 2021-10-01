@@ -4,9 +4,7 @@ import React, { FormEvent, useState } from 'react';
 import { useHistory } from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
-import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
-import ILabel from '../../components/Atoms/Text/ILabel';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
@@ -16,6 +14,7 @@ import NewLevel from '../../components/Organisms/forms/level/NewLevel';
 import programStore from '../../store/program.store';
 import { CommonFormProps, ValueType } from '../../types';
 import { CreateProgramInfo, ProgramType } from '../../types/services/program.types';
+import { getDropDownStatusOptions } from '../../utils/getOption';
 
 interface INewAcademyProgram<K> extends CommonFormProps<K> {}
 
@@ -35,18 +34,17 @@ const options = [
 ];
 
 export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E>) {
-  const [open, setOpen] = useState(false); // state to controll the popup
+  const history = useHistory();
   const [lopen, setLopen] = useState(false);
 
   const [details, setDetails] = useState<CreateProgramInfo>({
     code: '',
-    department_id: '',
+    department_id: '025e5365-74e3-4c21-885e-0dca6974dfc0',
     description: '',
     name: '',
     type: ProgramType.SHORT_COURSE,
   });
   const { mutateAsync } = programStore.createProgram();
-  const history = useHistory();
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
@@ -60,20 +58,17 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
     if (onSubmit) onSubmit(e);
     await mutateAsync(details, {
       onSuccess() {
-        history.push('/dashboard/academies');
+        setLopen(true);
       },
+      onError() {},
     });
   }
 
   function handlePopupClose() {
     setLopen(false);
-    setOpen(true);
+    history.push('/dashboard/programs');
   }
 
-  function handleProgramPopup() {
-    setOpen(false);
-    setLopen(true);
-  }
   return (
     <form onSubmit={createProgram}>
       <div className="p-4 pl-8 popup-width">
@@ -106,31 +101,27 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
         </DropdownMolecule>
         <DropdownMolecule
           width="64"
-          placeholder="Select faculty"
+          placeholder="Select department"
           options={options}
           name="academy"
           handleChange={handleChange}>
-          Faculty
+          Department
         </DropdownMolecule>
-        <DropdownMolecule
-          width="64"
-          placeholder="select program levels"
-          options={[
-            { label: 'SHORT COURSE', value: ProgramType.SHORT_COURSE.toString() },
-            { label: 'ACADEMIC', value: ProgramType.ACADEMIC.toString() },
-          ]}
-          name={details.type.toString()}
-          handleChange={handleChange}
-          error="">
+        <RadioMolecule
+          type="block"
+          value={details.type}
+          name="type"
+          options={getDropDownStatusOptions(ProgramType)}
+          handleChange={handleChange}>
           Program Type
-        </DropdownMolecule>
+        </RadioMolecule>
         <TextAreaMolecule
           value={details.description}
           name="description"
           handleChange={handleChange}>
           Description
         </TextAreaMolecule>
-        <RadioMolecule
+        {/* <RadioMolecule
           value="ACTIVE"
           name="status"
           options={[
@@ -139,43 +130,16 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
           ]}
           handleChange={handleChange}>
           Status
-        </RadioMolecule>
+        </RadioMolecule> */}
         {/* save button */}
         <div className="mt-5">
-          <Button type="submit" onClick={() => setOpen(true)}>
-            Save
-          </Button>
+          <Button type="submit">Save</Button>
         </div>
       </div>
-
-      {/* add prerequesite popup */}
       <PopupMolecule
-        title="Add a level to this program"
-        open={open}
-        onClose={() => setOpen(false)}>
-        <div className="w-82 h-48">
-          <DropdownMolecule
-            placeholder="Select Level"
-            options={options}
-            name="academy"
-            handleChange={handleChange}
-            error="">
-            Choose Level
-          </DropdownMolecule>
-          <div className="flex items-center" onClick={handleProgramPopup}>
-            <Icon name="add" size={15} />
-            <ILabel size="sm" weight="medium" className="cursor-pointer" color="primary">
-              Add level
-            </ILabel>
-          </div>
-          <div className="mt-5">
-            <Button type="submit" onClick={() => setOpen(true)}>
-              Save
-            </Button>
-          </div>
-        </div>
-      </PopupMolecule>
-      <PopupMolecule title="New Level" open={lopen} onClose={handlePopupClose}>
+        title="Create levels to this program"
+        open={lopen}
+        onClose={handlePopupClose}>
         <NewLevel />
       </PopupMolecule>
     </form>

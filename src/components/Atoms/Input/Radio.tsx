@@ -47,7 +47,7 @@ export default function Radio<T>({
           aria-checked={active === value}
           aria-labelledby={label}
           className={`flex cursor-pointer items-center ${
-            type === 'block' ? 'w-48 bg-main rounded-lg py-2 px-2 my-1' : 'mr-4'
+            type === 'block' ? 'w-48 rounded-lg py-2 px-2 my-1' : 'mr-4'
           }`}
           // @ts-ignore
           onClick={(e) => handleClick(value, e)}
