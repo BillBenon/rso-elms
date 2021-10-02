@@ -14,6 +14,7 @@ export default function Sidebar() {
   }, [data?.data.data]);
 
   const defaultLinks = (): linkProps[] => {
+    const routes: linkProps[] = [];
     const institutionAdminLinks: linkProps[] = [
       { title: 'Users', to: '/dashboard/users', icon: 'user' },
       { title: 'Academies', to: '/dashboard/academies', icon: 'academy', fill: false },
@@ -35,10 +36,12 @@ export default function Sidebar() {
       },
     ];
 
-    if (authUser?.user_type == 'SUPER_ADMIN') return institutionAdminLinks;
-    if (authUser?.user_type == 'ADMIN') return academicAdminLinks;
+    if (authUser?.user_type == 'SUPER_ADMIN' || import.meta.env.DEV)
+      routes.push(...institutionAdminLinks);
+    if (authUser?.user_type == 'ADMIN' || import.meta.env.DEV)
+      routes.push(...academicAdminLinks);
 
-    return [];
+    return routes;
   };
 
   return (

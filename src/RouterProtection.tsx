@@ -82,8 +82,10 @@ const RouterProtection = () => {
           <Route exact path="/usecase" component={ComponentsUseCase} />
 
           {/* protected routes  */}
-          {authUser?.user_type == 'SUPER_ADMIN' && InstitutionAdminRoutes()}
-          {authUser?.user_type == 'ADMIN' && AcademicAdminRoutes()}
+          {(authUser?.user_type == 'SUPER_ADMIN' || import.meta.env.DEV) &&
+            InstitutionAdminRoutes()}
+          {(authUser?.user_type == 'ADMIN' || import.meta.env.DEV) &&
+            AcademicAdminRoutes()}
           {/* end of protected routes */}
 
           <Route component={NotFound} />
