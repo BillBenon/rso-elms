@@ -34,7 +34,6 @@ export default function ViewRole() {
   const rolesPrivileges = roleStore.getPrivilegesByRole(id);
   const { mutate: deletePrivilege } = roleStore.removeProvilege();
 
-
   // Todo: add privileges on role
 
   function removePrivilege(rolePrivilege: RolePrivilege) {

@@ -24,7 +24,7 @@ export default function AddPrivileges({ onSubmit, roleName, roleId }: PropType) 
   const { data } = privilegeStore.getPrivileges();
   const [privileges, setPrivileges] = useState<SelectData[]>([{ label: '', value: '' }]);
   function handleChange({ name, value }: ValueType) {
-    setForm((old) => ({ ...old, [name]: value?.join(',') }));
+    setForm((old) => ({ ...old, [name]: (value as string[]).join(',') }));
   }
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
