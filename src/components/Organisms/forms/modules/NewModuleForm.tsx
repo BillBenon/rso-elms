@@ -15,9 +15,7 @@ export default function NewModuleForm<E>({ onSubmit }: PropType<E>) {
     { value: 'Senior Program', label: 'Senior Program' },
   ];
 
-  function handleChange(e: ValueType) {
-    console.log(e);
-  }
+  function handleChange(_e: ValueType) {}
 
   function submitForm(e: FormEvent) {
     e.preventDefault(); // prevent page to reload:

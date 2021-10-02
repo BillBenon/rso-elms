@@ -1,12 +1,13 @@
 import { SelectData } from '../types';
+import { GenericStatus } from './../types/services/common.types';
 
-export function getDropDownOptions(inputs: any): SelectData[] {
+export function getDropDownOptions(inputs: any, labelName?: string): SelectData[] {
   let selectData: SelectData[] = [];
 
   if (inputs?.length) {
     inputs.map((val: any) => {
       let input = {
-        label: val.name,
+        label: val[labelName ? labelName : 'name'],
         value: val.id.toString(),
       };
       selectData.push(input);
@@ -30,3 +31,6 @@ export function getDropDownStatusOptions(status: any): SelectData[] {
   }
   return selectData;
 }
+
+export const typeChecker = (status?: GenericStatus) =>
+  status?.toString().toLowerCase() === 'inactive' ? 'error' : 'success';

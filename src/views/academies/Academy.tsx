@@ -1,5 +1,4 @@
 // import { Label } from "@headlessui/react/dist/components/label/label";
-import '../../styles/components/Organisms/academy/academy.scss';
 
 import React from 'react';
 import { Route, useHistory, useRouteMatch } from 'react-router';

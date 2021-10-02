@@ -27,6 +27,7 @@ function NewLevel<E>({ onSubmit }: PropType<E>) {
   function handleChange(e: ValueType) {
     setLevel({ ...level, [e.name]: e.value });
   }
+  // function handleChange(_e: ValueType) {}
 
   function submitForm(e: FormEvent) {
     e.preventDefault(); // prevent page to reload:

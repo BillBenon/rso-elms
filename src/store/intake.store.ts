@@ -10,7 +10,6 @@ class IntakeStore {
     return useMutation(intakeService.addPrograms);
   }
   getAll() {
-    console.log('in store');
     return useQuery('intakes', intakeService.fetchAll);
   }
   getIntakeById(id: string) {

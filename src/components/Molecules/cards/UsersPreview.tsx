@@ -16,8 +16,8 @@ export default function UsersPreview({ title, totalUsers }: IUserPreview) {
         <Heading color="txt-secondary" fontSize="base">
           {title}
         </Heading>
-        <Heading color="txt-primary" fontSize="base" fontWeight="bold">
-          {totalUsers}
+        <Heading color="primary" fontSize="base" fontWeight="bold">
+          Total {title.toLocaleLowerCase()}: {totalUsers}
         </Heading>
         <div className="flex ">
           <div className="flex items-center">

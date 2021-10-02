@@ -17,7 +17,6 @@ export default function Modules() {
   function submited() {
     setOpen(false);
     setPrOpen(true);
-    console.log('from submit');
   }
 
   function handleSearch() {}

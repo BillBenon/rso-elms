@@ -1,123 +1,188 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import { Link, Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 
 import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
-import Cacumber from '../../components/Molecules/Cacumber';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import UsersPreview from '../../components/Molecules/cards/UsersPreview';
-import TableHeader from '../../components/Molecules/table/TableHeader';
-import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
-import { CommonCardDataType, Link } from '../../types';
+import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
+import programStore from '../../store/program.store';
+import { CommonCardDataType } from '../../types';
+import { typeChecker } from '../../utils/getOption';
+import { IProgramData } from './AcademicPrograms';
+interface ParamType {
+  id: string;
+}
 
 export default function ProgramDetailsMolecule() {
-  const history = useHistory();
+  const { id } = useParams<ParamType>();
+  const { path, url } = useRouteMatch();
+  const program = programStore.getProgramById(id).data?.data.data;
 
-  const list: Link[] = [
-    { to: 'home', title: 'home' },
-    { to: 'modules', title: 'modules' },
-    { to: 'subjects', title: 'subjects' },
-  ];
+  const modules_per_program = programStore.getModulesByProgram(id).data?.data.data;
 
-  const data: CommonCardDataType[] = [
-    {
-      status: { type: 'success', text: 'On going' },
-      code: 'HR450-TC',
-      title: 'Here we go',
-      subTitle: 'ON Air',
-      description:
-        'We have all kind of courses in this card, we can support everything wabyanga wabyemera',
-    },
-    {
-      status: { type: 'success', text: 'On going' },
-      code: 'HR450-TC',
-      title: 'Here we go',
-      subTitle: 'ON Air',
-      description:
-        'We have all kind of courses in this card, we can support everything wabyanga wabyemera',
-    },
-    {
-      status: { type: 'warning', text: 'On Hold' },
-      code: 'HR450-TC',
-      title: 'Here we go',
-      subTitle: 'ON Air',
-      description:
-        'We have all kind of courses in this card, we can support everything wabyanga wabyemera',
-    },
-  ];
+  const getProgramData = () => {
+    let programData: IProgramData | undefined;
+    if (program) {
+      programData = {
+        status: {
+          type: typeChecker(program.generic_status),
+          text: program.generic_status.toString(),
+        },
+        code: program.code,
+        title: program.name,
+        subTitle: program.type,
+        description: program.description,
+        department: program.department,
+        incharge: program.incharge && program.incharge.username,
+      };
+    }
 
-  const programData: any = {
-    status: { type: 'success', text: 'On going' },
-    code: 'HR450-TC',
-    title: 'Here we go',
-    subTitle: 'ON Air',
-    description:
-      'We have all kind of courses in this card, we can support everything wabyanga wabyemera',
+    return programData;
   };
+
+  let program_modules: CommonCardDataType[] = [];
+
+  modules_per_program?.map((module) => {
+    let mod: CommonCardDataType = {
+      id: module.id,
+      status: {
+        type: typeChecker(module.generic_status),
+        text: module.generic_status.toString(),
+      },
+      code: module.code,
+      title: module.name,
+      description: module.description,
+    };
+    program_modules.push(mod);
+  });
+
+  const programData = getProgramData();
+  const tabs: TabType[] = [
+    {
+      label: 'Program info',
+      href: `${url}`,
+    },
+    {
+      label: 'Program modules',
+      href: `${url}/modules`,
+    },
+  ];
 
   return (
     <>
-      <main className="px-4">
-        <section>
-          <Cacumber list={list}></Cacumber>
-        </section>
-        <section>
-          <TableHeader totalItems={3} title="Modules" showSearch={false}>
-            <Button onClick={() => history.push('/programs/new')}>Add Program</Button>
-          </TableHeader>
-        </section>
-        <Tabs activeIndex={0}>
-          <Tab label="Program Info" className="pt-7">
-            <div className="flex">
-              <div className="mr-24">
-                <CommonCardMolecule data={programData}>
-                  <div className="flex flex-col mt-8 gap-7 pb-2">
-                    <Heading fontSize="base">Faculty name</Heading>
+      {' '}
+      <TabNavigation tabs={tabs}>
+        <Switch>
+          <Route
+            exact
+            path={`${path}`}
+            render={() => (
+              <div className="flex">
+                <div className="mr-24">
+                  {programData && (
+                    <CommonCardMolecule data={programData}>
+                      <div className="flex flex-col mt-8 gap-7 pb-2">
+                        <Heading color="txt-secondary" fontSize="sm">
+                          Program Type
+                        </Heading>
+                        <Heading fontSize="sm">
+                          {programData.subTitle?.replaceAll('_', ' ')}
+                        </Heading>
 
-                    <div className="flex items-center gap-2">
-                      <Avatar
-                        alt="program oic"
-                        size="32"
-                        src="https://cdn.britannica.com/w:400,h:300,c:crop/26/157026-050-08ED6418/Sylvester-Stallone-1998.jpg"
-                      />
-                      <Heading fontSize="sm">Captail Liberi</Heading>
+                        <div className="flex items-center gap-2">
+                          <Avatar
+                            size="24"
+                            alt="user1 profile"
+                            className=" rounded-full  border-2 border-main transform hover:scale-125"
+                            src="https://randomuser.me/api/portraits/men/1.jpg"
+                          />
+                          <Heading fontSize="sm">{programData.incharge}</Heading>
+                        </div>
+                      </div>
+                      <div className="mt-4 flex space-x-4">
+                        <Link to={`${url}/edit`}>
+                          <Button>Edit program</Button>
+                        </Link>
+                        <Button styleType="outline">Change Status</Button>
+                      </div>
+                    </CommonCardMolecule>
+                  )}
+                </div>
+
+                <div className="flex flex-col gap-8">
+                  <div className="flex gap-8">
+                    <UsersPreview title="Students" totalUsers={100} />
+                    <UsersPreview title="Instructors" totalUsers={8} />
+                  </div>
+                  <div className="flex gap-8">
+                    {/* models */}
+                    <div className="flex flex-col gap-8">
+                      <div className="flex flex-col gap-6 w-60 py-4 px-6 h-32 bg-main">
+                        <div className="flex flex-col gap-2">
+                          <Heading color="txt-secondary" fontSize="base">
+                            Modules
+                          </Heading>
+                          <Heading color="primary" fontSize="base" fontWeight="bold">
+                            Total Modules: 10
+                          </Heading>
+                        </div>
+                      </div>
+                      {/* levels */}
+                      <div className="flex flex-col gap-7 bg-main w-60 p-6">
+                        <Heading color="txt-secondary" fontSize="base">
+                          Levels
+                        </Heading>
+                        <div className="flex flex-col gap-8">
+                          <Heading color="primary" fontSize="base" fontWeight="semibold">
+                            Level 1
+                          </Heading>
+                          <Heading color="primary" fontSize="base" fontWeight="semibold">
+                            Level 2
+                          </Heading>
+                        </div>
+                      </div>
+                    </div>
+                    {/* intakes */}
+                    <div className="flex flex-col gap-8">
+                      <div className="flex flex-col gap-7 bg-main w-60 p-6">
+                        <Heading color="txt-secondary" fontSize="base">
+                          Intakes
+                        </Heading>
+                        <div className="flex flex-col gap-8">
+                          <Heading color="primary" fontSize="base" fontWeight="semibold">
+                            Active Intakes
+                          </Heading>
+                          <Heading color="primary" fontSize="base" fontWeight="semibold">
+                            Passive Intakes
+                          </Heading>
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </CommonCardMolecule>
-              </div>
-
-              <div className="flex flex-col gap-8">
-                <div className="flex gap-8">
-                  <UsersPreview title="Students" totalUsers={100} />
-                  <UsersPreview title="Students" totalUsers={8} />
                 </div>
-                <div className="flex flex-col gap-7 bg-main w-60 p-6">
-                  <Heading color="txt-secondary" fontSize="base">
-                    Intakes
-                  </Heading>
-                  <div className="flex flex-col gap-8">
-                    <Heading fontSize="base">Active Intakes</Heading>
-                    <Heading fontSize="base">Active Intakes</Heading>
+              </div>
+            )}
+          />
+          <Route
+            exact
+            path={`${path}/modules`}
+            render={() => (
+              <section className="flex flex-wrap justify-between">
+                {program_modules?.map((prog) => (
+                  <div key={prog.code}>
+                    <CommonCardMolecule
+                      data={prog}
+                      to={{ title: 'program list', to: 'programs/3' }}
+                    />
                   </div>
-                </div>
-              </div>
-            </div>
-          </Tab>
-          <Tab label="Program Modules" className="pt-7">
-            <section className="flex flex-wrap justify-between">
-              {data.map((course) => (
-                <div key={course.code}>
-                  <CommonCardMolecule
-                    data={course}
-                    to={{ title: 'program list', to: 'programs/3' }}
-                  />
-                </div>
-              ))}
-            </section>
-          </Tab>
-        </Tabs>
-      </main>
+                ))}
+              </section>
+            )}
+          />
+        </Switch>
+      </TabNavigation>
     </>
   );
 }
