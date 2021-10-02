@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Cacumber from '../../components/Molecules/Cacumber';
@@ -12,17 +13,11 @@ import { CommonCardDataType, Link } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 
 export default function Modules() {
-  const [open, setOpen] = useState(false); // state to controll the popup
-
-  const [prOpen, setPrOpen] = useState(false); // state to controll the popup
-
-  function submited() {
-    setOpen(false);
-    setPrOpen(true);
-  }
-
   const { data } = moduleStore.getAllModules();
+
   const [modules, setModules] = useState<CommonCardDataType[]>([]);
+  const history = useHistory();
+  const { path } = useRouteMatch();
 
   useEffect(() => {
     let newModules: CommonCardDataType[] = [];
@@ -49,6 +44,10 @@ export default function Modules() {
     { to: 'subjects', title: 'subjects' },
   ];
 
+  const handleClose = () => {
+    history.goBack();
+  };
+
   return (
     <>
       <main className="px-4">
@@ -60,12 +59,12 @@ export default function Modules() {
             totalItems={modules.length}
             title="Modules"
             handleSearch={handleSearch}>
-            <Button onClick={() => setOpen(true)}>Add Module</Button>
+            <Button onClick={() => history.push(`${path}/add`)}>Add Module</Button>
           </TableHeader>
         </section>
         <section className="flex flex-wrap justify-between mt-2">
           {modules.map((course, index) => (
-            <div key={course.code} className="p-1 mt-3">
+            <div key={index} className="p-1 mt-3">
               <CommonCardMolecule
                 data={course}
                 to={{ title: 'module', to: 'modules/id' }}>
@@ -80,18 +79,33 @@ export default function Modules() {
           ))}
         </section>
 
-        {/* add module popup */}
-        <PopupMolecule title="New Module" open={open} onClose={() => setOpen(false)}>
-          <NewModuleForm onSubmit={submited} />
-        </PopupMolecule>
+        <Switch>
+          {/* add module popup */}
+          <Route
+            exact
+            path={`${path}/add`}
+            render={() => {
+              return (
+                <PopupMolecule title="New Module" open onClose={handleClose}>
+                  <NewModuleForm />
+                </PopupMolecule>
+              );
+            }}
+          />
 
-        {/* add prerequesite popup */}
-        <PopupMolecule
-          title="Add Prerequesite"
-          open={prOpen}
-          onClose={() => setPrOpen(false)}>
-          <AddPrerequesitForm />
-        </PopupMolecule>
+          {/* add prerequesite popup */}
+          <Route
+            exact
+            path={`${path}/:id/add-prereq`}
+            render={() => {
+              return (
+                <PopupMolecule title="Add Prerequesite" open onClose={handleClose}>
+                  <AddPrerequesitForm />
+                </PopupMolecule>
+              );
+            }}
+          />
+        </Switch>
       </main>
     </>
   );
