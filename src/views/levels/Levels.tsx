@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Cacumber from '../../components/Molecules/Cacumber';
@@ -7,7 +6,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewLevel from '../../components/Organisms/forms/level/NewLevel';
-import { ValueType } from '../../types';
+import { Link, ValueType } from '../../types';
 
 function Levels() {
   const [levelOpen, setLevelOpen] = useState(false);

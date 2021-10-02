@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { CommonStepProps } from '../../../../../../types';
+import { CommonStepProps, ValueType } from '../../../../../../types';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
@@ -29,7 +29,7 @@ function OtherDetails({
           isMulti
           name="hobbies"
           defaultValue={details.hobbies}
-          handleChange={(e) => handleChange(e, 'otherDetails')}
+          handleChange={(e: ValueType) => handleChange(e, 'otherDetails')}
           options={[
             { value: 'football', label: 'football' },
             { value: 'swimming', label: 'swimming' },
@@ -46,7 +46,7 @@ function OtherDetails({
           placeholder="Select chronic diseases u have"
           name="chronicDiseases"
           defaultValue={details.chronicDiseases}
-          handleChange={(e) => handleChange(e, 'otherDetails')}
+          handleChange={(e: ValueType) => handleChange(e, 'otherDetails')}
           options={[
             { value: 'asthma', label: 'Asthma' },
             { value: 'ulcers', label: 'Ulcers' },
@@ -82,7 +82,7 @@ function OtherDetails({
           width="60 md:w-80"
           name="religion"
           defaultValue={details.religion}
-          handleChange={(e) => handleChange(e, 'personalDetails')}
+          handleChange={(e: ValueType) => handleChange(e, 'personalDetails')}
           options={[
             { value: 'rw', label: 'Rwanda' },
             { value: 'ug', label: 'Uganda' },

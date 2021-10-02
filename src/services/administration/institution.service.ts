@@ -6,7 +6,6 @@ import {
   BasicInstitutionInfo,
   InstitutionInfo,
 } from '../../types/services/institution.types';
-import { TableId } from '../../types/services/intake.types';
 
 class InstitutionService {
   public async create(
@@ -21,7 +20,9 @@ class InstitutionService {
 
   public async getInstitutionById({
     id,
-  }: TableId): Promise<AxiosResponse<Response<InstitutionInfo>>> {
+  }: {
+    id: string;
+  }): Promise<AxiosResponse<Response<InstitutionInfo>>> {
     return await adminstrationAxios.get(`/institutions/getInstitutionById/${id}`);
   }
   public async update(

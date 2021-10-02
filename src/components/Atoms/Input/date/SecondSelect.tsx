@@ -36,7 +36,7 @@ const SecondSelect = (sprops: IProp) => {
       width={sprops.width}
       className={sprops.className}
       options={renderSecondOptions()}
-      onChange={(e: ValueType) => sprops.onChange(e)}
+      handleChange={(e: ValueType) => sprops.onChange(e)}
     />
   );
 };

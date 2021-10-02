@@ -87,7 +87,7 @@ export interface SelectData {
  */
 export interface ValueType<T = Event> {
   name: string;
-  value: string | number | boolean | undefined;
+  value: string | number | boolean | string[];
   event?: FormEvent<T>;
 }
 
@@ -104,6 +104,32 @@ export interface CommonCardDataType {
 export interface SigninPropTypes extends CommonCardDataType {
   programs: SelectData[];
 }
+
+export type IconType =
+  | 'academy'
+  | 'add'
+  | 'alert'
+  | 'attach'
+  | 'chevron-right'
+  | 'close'
+  | 'download'
+  | 'edit'
+  | 'faculty'
+  | 'filter'
+  | 'left-arrow'
+  | 'level'
+  | 'login'
+  | 'module'
+  | 'more'
+  | 'notification'
+  | 'police-logo'
+  | 'reg-control'
+  | 'right-arrow'
+  | 'role'
+  | 'search'
+  | 'settings'
+  | 'switch'
+  | 'user';
 
 export interface FormPropType {
   onSubmit?: <E>(_e: FormEvent<E>) => void;

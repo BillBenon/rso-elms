@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
-import Button from '../../components/Atoms/custom/Button';
 import Cacumber from '../../components/Molecules/Cacumber';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
-import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import NewIntake from '../../components/Organisms/intake/NewIntake';
 import { intakeStore } from '../../store/intake.store';
 import { CommonCardDataType, Link, ValueType } from '../../types';
 
@@ -17,39 +14,13 @@ const list: Link[] = [
   { to: 'intakes', title: 'Intakes' },
 ];
 
-const intakes: CommonCardDataType[] = [
-  {
-    status: { type: 'error', text: 'Completed' },
-    code: 'INTK/21BDC',
-    title: 'Software Engineering',
-    description:
-      'Start Date:   17 Aug 2021 - 10 Sep 2021 Expected End Date:  17 Aug 2021 - 10 Sep 2021 ',
-  },
-  {
-    status: { type: 'success', text: 'On going' },
-    code: 'INTK/21BDC',
-    title: 'Computer science',
-    description:
-      'Start Date:   17 Aug 2021 - 10 Sep 2021 Expected End Date:  17 Aug =l2021 - 10 Sep 2021 ',
-  },
-  {
-    status: { type: 'success', text: 'On going' },
-    code: 'INTK/21BDC',
-    title: 'Cadette Program',
-    description:
-      'Start Date:   17 Aug 2021 - 10 Sep 2021 Expected End Date:  17 Aug 2021 - 10 Sep 2021 ',
-  },
-];
-
 export default function Intakes() {
-  const [modalOpen, setmodalOpen] = useState(false);
   const [intakes, setIntakes] = useState<CommonCardDataType[]>([]);
 
   const { isSuccess, isError, data } = intakeStore.getAll();
 
   useEffect(() => {
     if (isSuccess && data?.data) {
-      console.log('here we go');
       let loadedIntakes: CommonCardDataType[] = [];
       data?.data.data.forEach((intake) => {
         let cardData: CommonCardDataType = {
@@ -66,10 +37,7 @@ export default function Intakes() {
 
       setIntakes(loadedIntakes);
     } else if (isError) toast.error('error occurred when loading intakes');
-    else console.log('intakes loading');
   }, [data]);
-
-  // refetch();
 
   function handleSearch(_e: ValueType) {}
   return (
@@ -78,11 +46,9 @@ export default function Intakes() {
       <TableHeader
         title="Intakes"
         totalItems={intakes.length}
-        handleSearch={handleSearch}>
-        <div className="flex gap-3">
-          <Button onClick={() => setmodalOpen(true)}>Add intake</Button>
-        </div>
-      </TableHeader>
+        handleSearch={handleSearch}
+      />
+
       <section className="flex flex-wrap justify-between mt-2">
         {intakes.map((course) => (
           <div key={course.code} className="p-1 mt-3">
@@ -93,13 +59,6 @@ export default function Intakes() {
           </div>
         ))}
       </section>
-      <PopupMolecule
-        closeOnClickOutSide={false}
-        title="New intake"
-        open={modalOpen}
-        onClose={() => setmodalOpen(false)}>
-        <NewIntake />
-      </PopupMolecule>
     </div>
   );
 }

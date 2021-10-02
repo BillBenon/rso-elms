@@ -4,6 +4,16 @@ import Select from 'react-select';
 import { DropdownProps } from '../../../types';
 
 export default function DropDown(props: DropdownProps) {
+  const handleChangeLocally = (e: any) => {
+    if (props.isMulti) {
+      let options: string[] = [];
+      for (let i = 0; i < e.length; i++) {
+        // @tsc-ignore
+        options.push(e[i].value);
+      }
+      props.handleChange({ value: options, name: props.name });
+    } else props.handleChange({ ...e, name: props.name });
+  };
   // @tsc-ignore
   return (
     <>
@@ -13,16 +23,14 @@ export default function DropDown(props: DropdownProps) {
         name={props.name}
         options={props.options}
         placeholder={props.placeholder || `Select ${props.name}`}
-        onChange={(e: any) => props.handleChange({ ...e, name: props.name })}
+        onChange={(e: any) => handleChangeLocally(e)}
         className={`w-${props.width || 'full md:w-80'} select ${props.className || ''}`}
         isMulti={props.isMulti}
         isSearchable={props.searchable}
         defaultValue={props.defaultValue || null}
         getOptionLabel={props.getOptionLabel}
         getOptionValue={props.getOptionValue}
-        noOptionsMessage={(_query: any) =>
-          `No ${props.name} matched "${_query.inputValue}"`
-        }
+        noOptionsMessage={(_query: any) => `No options avalaible`}
         closeMenuOnSelect={!props.isMulti}
         styles={{
           control: (base: any, _state: any) => ({
@@ -34,14 +42,21 @@ export default function DropDown(props: DropdownProps) {
             cursor: 'pointer',
             fontSize: 14,
             minHeight: 48,
+            height: 'auto',
             paddingRight: 8,
             paddingLeft: 8,
           }),
           clearIndicator: (_base: any, _state: any) => ({
             display: 'none',
           }),
+          valueContainer: (base: any, _state: any) => ({
+            ...base,
+            maxHeight: 150,
+            overflow: 'auto',
+          }),
           container: (base: any, _state: any) => ({
             ...base,
+            height: 'auto',
           }),
         }}
       />

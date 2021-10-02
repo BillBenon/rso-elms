@@ -13,6 +13,7 @@ import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
 import NewRegistrationControl from '../forms/NewRegistrationControl';
 import UpdateRegControl from '../forms/regcontrol/UpdateRegControl';
+import NewIntake from '../intake/NewIntake';
 
 export default function RegistrationControl() {
   const { url, path } = useRouteMatch();
@@ -56,6 +57,12 @@ export default function RegistrationControl() {
       },
     },
     { name: 'View', handleAction: () => {} },
+    {
+      name: 'Add intake',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`${path}/${id}/add-intake`); // go to add new intake to this reg control
+      },
+    },
   ];
 
   return (
@@ -121,6 +128,22 @@ export default function RegistrationControl() {
             return (
               <PopupMolecule title="Update Role" open onClose={handleClose}>
                 <UpdateRegControl />
+              </PopupMolecule>
+            );
+          }}
+        />
+        {/* add intake to reg control */}
+        <Route
+          exact
+          path={`${path}/:id/add-intake`}
+          render={() => {
+            return (
+              <PopupMolecule
+                closeOnClickOutSide={false}
+                title="New intake"
+                open
+                onClose={handleClose}>
+                <NewIntake handleSuccess={handleClose} />
               </PopupMolecule>
             );
           }}

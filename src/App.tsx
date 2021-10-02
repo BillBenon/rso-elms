@@ -38,10 +38,8 @@ const App = () => {
             <Route exact path="/usecase" component={ComponentsUseCase} />
 
             <Dashboard>
-              <Route path="/dashboard/academies" />
+              <Route path="/dashboard/role/:id/view" component={ViewRole} />
               <Route path="/dashboard/academies" component={Academies} />
-              {/* <Route exact path="/dashboard/academies/new" component={NewAcademy} /> */}
-              <Route exact path="/dashboard/role/:id/view" component={ViewRole} />
               <Route path="/dashboard/roles" component={Roles} />
               <Route exact path="/dashboard/modules" component={Modules} />
               <Route exact path="/dashboard/subjects" component={Subjects} />

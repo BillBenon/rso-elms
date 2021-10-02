@@ -6,6 +6,9 @@ class IntakeStore {
   create() {
     return useMutation(intakeService.create);
   }
+  addPrograms() {
+    return useMutation(intakeService.addPrograms);
+  }
   getAll() {
     return useQuery('intakes', intakeService.fetchAll);
   }
