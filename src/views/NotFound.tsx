@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import Button from '../components/Atoms/custom/Button';
 import { authenticatorStore } from '../store';
-import { UserInfo } from '../types/services/user.types';
 
 const NotFound = () => {
   const history = useHistory();

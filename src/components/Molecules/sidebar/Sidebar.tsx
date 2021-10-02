@@ -1,28 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
+import { authenticatorStore } from '../../../store';
+import { UserInfo } from '../../../types/services/user.types';
 import SidebarLinks, { linkProps } from '../../Atoms/custom/SidebarLinks';
 import AcademyProfileCard from '../cards/AcademyProfileCard';
 
-const defaultLinks: linkProps[] = [
-  { title: 'Users', to: '/dashboard/users', icon: 'user' },
-  { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
-  { title: 'Roles', to: '/dashboard/roles', icon: 'role' },
-  { title: 'Privileges', to: '/dashboard/privileges', icon: 'module' },
-  { title: 'Academies', to: '/dashboard/academies', icon: 'academy', fill: false },
-  { title: 'Programs', to: '/dashboard/programs', icon: 'faculty' },
-  { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
-  { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
-  { title: 'Subjects', to: '/dashboard/subjects', icon: 'module' },
-  { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
-  {
-    title: 'Registration Control',
-    to: '/dashboard/registration-control',
-    icon: 'reg-control',
-    fill: true,
-  },
-];
-
 export default function Sidebar() {
+  const [authUser, setAuthUser] = useState<UserInfo>();
+  const { data } = authenticatorStore.authUser();
+
+  useEffect(() => {
+    setAuthUser(data?.data.data);
+  }, [data?.data.data]);
+
+  const defaultLinks = (): linkProps[] => {
+    const institutionAdminLinks: linkProps[] = [
+      { title: 'Users', to: '/dashboard/users', icon: 'user' },
+      { title: 'Academies', to: '/dashboard/academies', icon: 'academy', fill: false },
+      { title: 'Roles', to: '/dashboard/roles', icon: 'role' },
+      { title: 'Privileges', to: '/dashboard/privileges', icon: 'module' },
+    ];
+    const academicAdminLinks: linkProps[] = [
+      { title: 'Programs', to: '/dashboard/programs', icon: 'faculty' },
+      { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
+      { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
+      { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
+      { title: 'Subjects', to: '/dashboard/subjects', icon: 'module' },
+      { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
+      {
+        title: 'Registration Control',
+        to: '/dashboard/registration-control',
+        icon: 'reg-control',
+        fill: true,
+      },
+    ];
+
+    if (authUser?.user_type == 'SUPER_ADMIN') return institutionAdminLinks;
+    if (authUser?.user_type == 'ADMIN') return academicAdminLinks;
+
+    return [];
+  };
+
   return (
     <div className="bg-white md:h-screen">
       <div className="px-4 py-4">
@@ -32,7 +50,7 @@ export default function Sidebar() {
           Rwanda National Police
         </AcademyProfileCard>
       </div>
-      <SidebarLinks links={defaultLinks} />
+      <SidebarLinks links={defaultLinks()} />
     </div>
   );
 }

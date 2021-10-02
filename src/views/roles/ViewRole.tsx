@@ -5,7 +5,6 @@ import {
   Route,
   Switch,
   useHistory,
-  useLocation,
   useParams,
   useRouteMatch,
 } from 'react-router-dom';
@@ -26,8 +25,7 @@ interface ParamType {
 }
 
 export default function ViewRole() {
-  const { url, path } = useRouteMatch();
-  const location = useLocation();
+  const { url } = useRouteMatch();
   const history = useHistory();
   const { id } = useParams<ParamType>();
   const [role, setRole] = useState<RoleRes>();
