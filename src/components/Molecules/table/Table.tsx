@@ -249,8 +249,8 @@ export function Table<T>({
           <span>Show</span>
           <DropDown
             className="px-3"
-            width="30"
-            height={30}
+            width="32"
+            // height={30}
             defaultValue={countsToDisplay[0]}
             handleChange={handleCountSelect}
             name="rowstoDisplay"
