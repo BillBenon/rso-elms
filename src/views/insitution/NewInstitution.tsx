@@ -20,7 +20,7 @@ export default function NewInstitution() {
     email: '',
     fax_number: '',
     full_address: '',
-    generic_status: GenericStatus.ACTIVE.toString(),
+    generic_status: GenericStatus.ACTIVE,
     mission: '',
     moto: '',
     name: '',
