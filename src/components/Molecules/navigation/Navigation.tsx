@@ -1,28 +1,28 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useHistory, useLocation } from 'react-router-dom';
 
-import { authenticatorService } from '../../../services/administration/authenticator.service';
+import { authenticatorStore } from '../../../store';
 import { ValueType } from '../../../types';
+import { UserInfo } from '../../../types/services/user.types';
+import cookie from '../../../utils/cookie';
 import Avatar from '../../Atoms/custom/Avatar';
 import Icon from '../../Atoms/custom/Icon';
 import SearchMolecule from '../input/SearchMolecule';
 
 export default function Navigation() {
+  const history = useHistory();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  // const [authUser, setAuthUser] = useState(null);
+  const [authUser, setAuthUser] = useState<UserInfo>();
+  const logoutFn = authenticatorStore.logout();
+  const { data } = authenticatorStore.authUser();
 
   const location = useLocation();
 
   useEffect(() => {
-    (async () => {
-      const res = await authenticatorService.authUser();
-      console.log(res);
-    })();
-  }, []);
-
-  function handleSearch(_e: ValueType) {}
+    setAuthUser(data?.data.data);
+  }, [data?.data.data]);
 
   const links = [
     { text: 'Home', to: '/' },
@@ -32,6 +32,14 @@ export default function Navigation() {
   const activeClass = 'text-white bg-gray-900';
   const inactiveClass = 'text-gray-300 hover:text-white hover:bg-gray-700';
 
+  function handleSearch(_e: ValueType) {}
+
+  function logout() {
+    logoutFn.refetch().then(() => {
+      cookie.eraseCookie('jwt_info');
+      history.push('/');
+    });
+  }
   return (
     <nav className="bg-main">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -93,12 +101,12 @@ export default function Navigation() {
                         role="menuitem">
                         Settings
                       </a>
-                      <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100"
+                      <button
+                        onClick={() => logout()}
+                        className="block px-4 box-border text-left py-2 text-sm text-txt-primary hover:bg-gray-100 w-full"
                         role="menuitem">
                         Sign out
-                      </a>
+                      </button>
                     </div>
                   </div>
                 )}
