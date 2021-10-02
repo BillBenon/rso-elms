@@ -37,7 +37,7 @@ export default function ViewRole() {
   // Todo: add privileges on role
 
   function removePrivilege(rolePrivilege: RolePrivilege) {
-    deletePrivilege(rolePrivilege.id + '', {
+    deletePrivilege(rolePrivilege.id.toString(), {
       onSuccess: () => {
         queryClient.setQueryData(['privilegesByRole/id', role?.id.toString()], (old) => {
           const oldest = old as AxiosResponse<Response<RolePrivilege[]>>;
