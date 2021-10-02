@@ -42,7 +42,7 @@ function DateMolecule({
   reverse = true,
   showDate = true,
   showTime = false,
-  width,
+  width = '42',
   children,
   handleChange,
   name,
