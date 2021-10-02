@@ -268,16 +268,3 @@ function IntakeStatusComponent({ handleChange, handleNext }: IProps) {
     </form>
   );
 }
-function data(
-  data: any,
-  arg1: {
-    onSuccess(
-      data: import('axios').AxiosResponse<
-        import('../../../types').Response<IntakePrograms>
-      >,
-    ): void;
-    onError(): void;
-  },
-) {
-  throw new Error('Function not implemented.');
-}

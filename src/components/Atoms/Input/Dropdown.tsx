@@ -41,7 +41,7 @@ export default function DropDown(props: DropdownProps) {
             borderRadius: 8,
             cursor: 'pointer',
             fontSize: 14,
-            minHeight: 48,
+            minHeight: props.height || 48,
             height: 'auto',
             paddingRight: 8,
             paddingLeft: 8,
