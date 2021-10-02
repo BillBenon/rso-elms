@@ -1,3 +1,4 @@
+import { PrivilegeRes } from '..';
 import { GenericStatus, Table } from './common.types';
 
 export interface CreateRoleReq {
@@ -7,12 +8,17 @@ export interface CreateRoleReq {
 
 export interface RoleRes extends Table {
   description: string;
-  genericStatus: GenericStatus;
-  lastStatusChangeReason: string;
   name: string;
-  privileges: any[];
   status: GenericStatus;
-  users: any[];
+}
+
+export interface RolePrivilege extends Table {
+  status: string;
+  assigned_on: string;
+  role_id: string;
+  privilege_id: string;
+  role: RoleRes;
+  privilege: PrivilegeRes;
 }
 
 export interface AddPrivilegeRoleType {

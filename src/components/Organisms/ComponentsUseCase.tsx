@@ -66,14 +66,14 @@ export default function CreatedBySandberg() {
         <DropDown
           options={options}
           name="intakes"
-          handleChange={(e: object) => console.log(e)}
+          handleChange={(_e: object) => {}}
           defaultValue={options[1]}
         />
-        <Input name="email" value="" handleChange={(e) => console.log(e)} />
+        <Input name="email" value="" handleChange={(_e) => {}} />
         <DropdownMolecule
           options={options}
           name="academy"
-          handleChange={(e: object) => console.log(e)}
+          handleChange={(_e: object) => {}}
           error="Please select academy"
           isMulti>
           Select academy

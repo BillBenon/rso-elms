@@ -86,7 +86,22 @@ function DateMolecule({
   };
 
   useEffect(() => {
-    console.log('inside the state', dateState);
+    defaultValue && setDate();
+  }, []);
+
+  function setDate() {
+    const dV = new Date(defaultValue || '');
+    setDateState((old) => ({
+      ...old,
+      Year: dV.getFullYear(),
+      Month: dV.getMonth() + 1,
+      Day: dV.getDay(),
+      Hours: dV.getHours(),
+      Minutes: dV.getMinutes(),
+    }));
+  }
+
+  useEffect(() => {
     dateFormat();
   }, [dateState]);
 

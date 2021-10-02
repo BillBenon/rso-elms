@@ -1,4 +1,5 @@
-import React from 'react';
+import { AxiosResponse } from 'axios';
+import React, { useEffect, useState } from 'react';
 import {
   Link,
   Route,
@@ -15,22 +16,47 @@ import ActionableList from '../../components/Molecules/ActionableList';
 import Cacumber from '../../components/Molecules/Cacumber';
 import PopupMolecule from '../../components/Molecules/Popup';
 import AddPrivileges from '../../components/Organisms/forms/roles/AddPrivileges';
+import { queryClient } from '../../plugins/react-query';
 import { roleStore } from '../../store';
+import { Response, RolePrivilege, RoleRes } from '../../types';
 
 interface ParamType {
   id: string;
 }
 
 export default function ViewRole() {
-  const { path } = useRouteMatch();
+  const { url } = useRouteMatch();
   const history = useHistory();
   const { id } = useParams<ParamType>();
+  const [role, setRole] = useState<RoleRes>();
+  const [privilegesByRole, setPrivilegesByRole] = useState<RolePrivilege[]>();
   const { data, isLoading, isSuccess, isError, error } = roleStore.getRole(id);
-  // const rolesPrivileges = roleStore.getPrivilegesByRole(id);
-  const role = data?.data.data;
+  const rolesPrivileges = roleStore.getPrivilegesByRole(id);
+  const { mutate: deletePrivilege } = roleStore.removeProvilege();
 
-  // TODO: display priviles
   // Todo: add privileges on role
+
+  function removePrivilege(rolePrivilege: RolePrivilege) {
+    deletePrivilege(rolePrivilege.id + '', {
+      onSuccess: () => {
+        queryClient.setQueryData(['privilegesByRole/id', role?.id.toString()], (old) => {
+          const oldest = old as AxiosResponse<Response<RolePrivilege[]>>;
+          oldest.data.data = oldest.data.data.filter(
+            (roleP) => roleP.id != rolePrivilege.id,
+          );
+          return oldest;
+        });
+      },
+    });
+  }
+
+  useEffect(() => {
+    setRole(data?.data.data);
+  }, [data]);
+
+  useEffect(() => {
+    setPrivilegesByRole(rolesPrivileges.data?.data.data);
+  }, [rolesPrivileges.data?.data.data]);
 
   function submited() {}
   return (
@@ -65,7 +91,7 @@ export default function ViewRole() {
             <div className="width28 mt-10 bg-main py-2 rounded-lg">
               <div className="flex items-center justify-between pl-6">
                 <Heading fontWeight="semibold">Privileges</Heading>
-                <Link to={`${path}/addPrivileges`}>
+                <Link to={`${url}/addPrivileges`}>
                   <Button styleType="text">
                     <span className="flex items-center">
                       <Icon size={13} name="add" />
@@ -75,13 +101,22 @@ export default function ViewRole() {
                 </Link>
               </div>
               <div>
-                <ul>
-                  <li>
-                    <ActionableList handleClick={() => alert('handle remove')}>
-                      CAN_CREATE_USER
-                    </ActionableList>
-                  </li>
-                </ul>
+                {rolesPrivileges.isError && rolesPrivileges.error.message}
+                {rolesPrivileges.isSuccess &&
+                  privilegesByRole &&
+                  privilegesByRole?.length <= 0 &&
+                  'This role has no privileges try adding one'}
+                {rolesPrivileges.isSuccess && (
+                  <ul>
+                    {privilegesByRole?.map((rolePrivileg) => (
+                      <li key={rolePrivileg.id}>
+                        <ActionableList handleClick={() => removePrivilege(rolePrivileg)}>
+                          {rolePrivileg.privilege.name}
+                        </ActionableList>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
             </div>
           </>
@@ -92,7 +127,7 @@ export default function ViewRole() {
         {/* add previleges role */}
         <Route
           exact
-          path={`${path}/addPrivileges`}
+          path={`${url}/addPrivileges`}
           render={() => {
             return (
               <PopupMolecule title="New Role" open={true} onClose={history.goBack}>

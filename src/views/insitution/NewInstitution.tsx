@@ -20,7 +20,7 @@ export default function NewInstitution() {
     email: '',
     fax_number: '',
     full_address: '',
-    generic_status: GenericStatus.ACTIVE.toString(),
+    generic_status: GenericStatus.ACTIVE,
     mission: '',
     moto: '',
     name: '',
@@ -57,7 +57,7 @@ export default function NewInstitution() {
           history.push('/dashboard/users');
         },
         onError() {
-          // toast.error(error?.message || 'error occurred');
+          toast.error('error occurred');
         },
       });
     }
@@ -139,8 +139,7 @@ export default function NewInstitution() {
             <Button styleType="outline">Upload logo</Button>
           </div>
           <div className="py-4 col-span-2">
-            {/* @ts-ignore */}
-            <Button onClick={handleSubmit} type="submit">
+            <Button onClick={() => handleSubmit} type="submit">
               Save
             </Button>
           </div>

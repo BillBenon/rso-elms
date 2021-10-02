@@ -29,7 +29,6 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
   });
 
   function handleChange(e: ValueType) {
-    console.log(e);
     setRegControl((regControl) => ({ ...regControl, [e.name]: e.value }));
   }
 

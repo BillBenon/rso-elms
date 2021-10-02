@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { FormEvent, useState } from 'react';
-import { useHistory } from 'react-router';
+import React, { FormEvent, useEffect, useState } from 'react';
+import { useHistory, useParams } from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -9,8 +9,6 @@ import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule'
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
-import PopupMolecule from '../../components/Molecules/Popup';
-import NewLevel from '../../components/Organisms/forms/level/NewLevel';
 import { divisionStore } from '../../store/divisions.store';
 import programStore from '../../store/program.store';
 import usersStore from '../../store/users.store';
@@ -19,16 +17,23 @@ import { CreateProgramInfo, ProgramType } from '../../types/services/program.typ
 import { UserType } from '../../types/services/user.types';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
 
-interface INewAcademyProgram<K> extends CommonFormProps<K> {}
+interface IUpdateAcademicProgram<K> extends CommonFormProps<K> {}
+interface ParamType {
+  id: string;
+}
 
-export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E>) {
+export default function UpdateAcademicProgram<E>({
+  onSubmit,
+}: IUpdateAcademicProgram<E>) {
   const history = useHistory();
-  const [lopen, setLopen] = useState(false);
+  const { id } = useParams<ParamType>();
 
-  const { data } = usersStore.fetchUsers();
-  const instructors = data?.data.data.filter(
+  const users = usersStore.fetchUsers().data;
+  const instructors = users?.data.data.filter(
     (user) => user.user_type === UserType.INSTRUCTOR || user.user_type === UserType.ADMIN,
   );
+
+  const { data } = programStore.getProgramById(id);
 
   const departments = divisionStore.getDivisionByType('DEPARTMENT').data?.data.data;
 
@@ -40,7 +45,11 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
     name: '',
     type: ProgramType.SHORT_COURSE,
   });
-  const { mutateAsync } = programStore.createProgram();
+  const { mutateAsync } = programStore.modifyProgram();
+
+  useEffect(() => {
+    data?.data.data && setDetails({ ...data?.data.data });
+  }, [data]);
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
@@ -49,41 +58,36 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
     }));
   }
 
-  async function createProgram<T>(e: FormEvent<T>) {
+  async function updateProgram<T>(e: FormEvent<T>) {
     e.preventDefault();
-    if (onSubmit) onSubmit(e);
     await mutateAsync(details, {
       onSuccess() {
-        setLopen(true);
+        history.goBack();
       },
       onError() {},
     });
-  }
-
-  function handlePopupClose() {
-    setLopen(false);
-    history.push('/dashboard/programs');
+    if (onSubmit) onSubmit(e);
   }
 
   return (
-    <form onSubmit={createProgram}>
+    <form onSubmit={updateProgram}>
       <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
         <div className="py-5 mb-3 capitalize">
           <Heading color="txt-primary" fontWeight="bold">
-            New Program
+            Edit Program
           </Heading>
         </div>
         <InputMolecule
           value={details.name}
           error=""
-          handleChange={handleChange}
+          handleChange={(e) => handleChange(e)}
           name="name">
           program name
         </InputMolecule>
         <InputMolecule
           value={details.code}
           error=""
-          handleChange={handleChange}
+          handleChange={(e) => handleChange(e)}
           name="code">
           Program code
         </InputMolecule>
@@ -92,21 +96,22 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
           value={details.type}
           name="type"
           options={getDropDownStatusOptions(ProgramType)}
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e)}>
           Program Type
         </RadioMolecule>
         <TextAreaMolecule
           value={details.description}
           name="description"
-          handleChange={handleChange}>
+          handleChange={(e) => handleChange(e)}>
           Program description
         </TextAreaMolecule>
         <DropdownMolecule
+          defaultValue={data?.data.data.incharge?.username}
           width="64"
           placeholder="Select incharge"
           options={getDropDownOptions(instructors, 'username')}
           name="current_admin_id"
-          handleChange={handleChange}>
+          handleChange={(e: ValueType) => handleChange(e)}>
           Incharge
         </DropdownMolecule>
         <DropdownMolecule
@@ -114,30 +119,13 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
           placeholder="Select department"
           options={getDropDownOptions(departments)}
           name="department_id"
-          handleChange={handleChange}>
+          handleChange={(e: ValueType) => handleChange(e)}>
           Department
         </DropdownMolecule>
-        <RadioMolecule
-          value="ACTIVE"
-          name="status"
-          options={[
-            { label: 'Active', value: 'ACTIVE' },
-            { label: 'Inactive', value: 'INACTIVE' },
-          ]}
-          handleChange={handleChange}>
-          Status
-        </RadioMolecule>
-        {/* save button */}
         <div className="mt-5">
-          <Button type="submit">Save</Button>
+          <Button type="submit">Update</Button>
         </div>
       </div>
-      <PopupMolecule
-        title="Create levels to this program"
-        open={lopen}
-        onClose={handlePopupClose}>
-        <NewLevel />
-      </PopupMolecule>
     </form>
   );
 }

@@ -5,8 +5,6 @@ import { GenericStatus } from './common.types';
 import { InstitutionInfo } from './institution.types';
 
 export interface UserInfo extends CreateUserInfo, Table {
-  generic_status: GenericStatus;
-  last_status_change_reason: string;
   pin: string;
   age_range: string;
   token: string;
@@ -34,7 +32,7 @@ export interface CreateUserInfo {
   email: string;
   father_names: string;
   first_name: string;
-  intake_id: string;
+  intake_program_id: string;
   last_name: string;
   marital_status: MaritalStatus;
   mother_names: string;

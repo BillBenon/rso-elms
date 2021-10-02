@@ -52,9 +52,7 @@ export default function IntakeModules() {
     { name: 'View', handleAction: () => {} },
   ];
 
-  const handleChange = (e: any) => {
-    console.log(e);
-  };
+  const handleChange = (_e: any) => {};
   return (
     <div>
       <Cacumber list={list} />

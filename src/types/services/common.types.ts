@@ -15,10 +15,12 @@ export interface Table {
   updated_by_id: string;
   updated_by_username: string;
   updated_on: string;
+  generic_status: GenericStatus;
+  last_status_change_reason: string;
 }
 
 export enum GenericStatus {
-  ACTIVE,
-  INACTIVE,
-  RESET,
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
+  RESET = 'RESET',
 }

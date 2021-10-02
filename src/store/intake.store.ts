@@ -6,8 +6,10 @@ class IntakeStore {
   create() {
     return useMutation(intakeService.create);
   }
+  addPrograms() {
+    return useMutation(intakeService.addPrograms);
+  }
   getAll() {
-    console.log('in store');
     return useQuery('intakes', intakeService.fetchAll);
   }
   getIntakeById(id: string) {

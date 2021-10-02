@@ -1,12 +1,13 @@
 import { Table } from '..';
 import { AcademyInfo } from './academy.types';
+import { GenericStatus } from './common.types';
 
 export interface BasicInstitutionInfo {
   current_admin_id: string;
   email: string;
   fax_number: string;
   full_address: string;
-  generic_status: string;
+  generic_status: GenericStatus;
   mission: string;
   moto: string;
   name: string;
@@ -18,6 +19,5 @@ export interface BasicInstitutionInfo {
 }
 
 export interface InstitutionInfo extends Table, BasicInstitutionInfo {
-  last_status_change_reason: string;
   academies: AcademyInfo[];
 }
