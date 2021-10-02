@@ -251,6 +251,7 @@ export function Table<T>({
           <DropDown
             className="px-3"
             width="30"
+            height={30}
             defaultValue={countsToDisplay[0]}
             handleChange={handleCountSelect}
             name="rowstoDisplay"
