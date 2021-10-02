@@ -7,7 +7,7 @@ const App = () => {
   return (
     <>
       <MainLayout>
-        <RouterProtection></RouterProtection>
+        <RouterProtection />
       </MainLayout>
     </>
   );
