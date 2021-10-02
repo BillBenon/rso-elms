@@ -151,13 +151,6 @@ export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
             handleChange={(e) => handleChange(e)}>
             academy motto
           </InputMolecule>
-          {/* <TextAreaMolecule
-            name="website"
-            value={''}
-            placeholder="Type website url"
-            handleChange={(e) => handleChange(e)}>
-            academy description
-          </TextAreaMolecule> */}
           <div>
             <div className="mb-3">
               <ILabel weight="bold">academy logo</ILabel>

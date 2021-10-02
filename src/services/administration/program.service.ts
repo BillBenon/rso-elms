@@ -13,6 +13,17 @@ class ProgramService {
   public async fetchPrograms(): Promise<AxiosResponse<Response<ProgramInfo[]>>> {
     return await adminstrationAxios.get('/programs/getPrograms');
   }
+  public async getProgramById(id: string): Promise<AxiosResponse<Response<ProgramInfo>>> {
+    return await adminstrationAxios.get(`/programs/getAcademicProgramById/${id}`);
+  }
+
+  public async modifyProgram(
+    programInfo: CreateProgramInfo,
+  ): Promise<AxiosResponse<Response<ProgramInfo>>> {
+    return await adminstrationAxios.put('/programs/modifyAcademicProgram', {
+      ...programInfo,
+    });
+  }
 }
 
 export const programService = new ProgramService();

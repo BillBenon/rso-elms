@@ -1,4 +1,5 @@
 import { SelectData } from '../types';
+import { GenericStatus } from './../types/services/common.types';
 
 export function getDropDownOptions(inputs: any, labelName?: string): SelectData[] {
   let selectData: SelectData[] = [];
@@ -30,3 +31,6 @@ export function getDropDownStatusOptions(status: any): SelectData[] {
   }
   return selectData;
 }
+
+export const typeChecker = (status?: GenericStatus) =>
+  status?.toString().toLowerCase() === 'inactive' ? 'error' : 'success';

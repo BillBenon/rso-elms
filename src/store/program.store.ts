@@ -9,6 +9,13 @@ class ProgramStore {
   fetchPrograms() {
     return useQuery('programs', programService.fetchPrograms);
   }
+  getProgramById(id: string) {
+    return useQuery(['programs/id', id], () => programService.getProgramById(id));
+  }
+
+  modifyProgram() {
+    return useMutation(programService.modifyProgram);
+  }
 }
 
 export default new ProgramStore();
