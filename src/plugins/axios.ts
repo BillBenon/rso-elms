@@ -32,8 +32,9 @@ const interceptAdminResError = (error: Error | AxiosError<AxiosResponse<Response
   if (axios.isAxiosError(error)) {
     const e = error?.response;
 
-    if (e?.status === 401 && !(window.location.pathname in authIgnore))
+    if (e?.status === 401 && !authIgnore.includes(window.location.pathname)) {
       window.location.href = '/';
+    }
 
     if (e?.status === 400) toast.error(`Bad Request on, ${e.config.url}`);
     else toast.error((e?.data.data.message || e?.data?.data?.error) + '');
