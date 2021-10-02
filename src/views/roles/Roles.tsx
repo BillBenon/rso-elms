@@ -85,7 +85,10 @@ export default function Roles() {
         <Cacumber list={[{ title: 'Roles', to: 'roles' }]} />
       </section>
       <section>
-        <TableHeader title="Roles" totalItems={4} handleSearch={handleSearch}>
+        <TableHeader
+          title="Roles"
+          totalItems={roles?.length || 0}
+          handleSearch={handleSearch}>
           <Link to={`${url}/add`}>
             <Button>Add Role</Button>
           </Link>
