@@ -38,7 +38,7 @@ export default function AcademicProgram() {
     { to: 'home', title: 'home' },
     { to: 'users', title: 'users' },
     { to: 'faculty', title: 'Faculty' },
-    { to: 'program', title: 'Programs' },
+    { to: `${url}`, title: 'Programs' },
   ];
 
   const { data, refetch } = programStore.fetchPrograms();
@@ -69,23 +69,23 @@ export default function AcademicProgram() {
   });
 
   return (
-    <Switch>
-      <Route
-        exact
-        path={`${path}`}
-        render={() => {
-          return (
-            <main className="px-4">
-              <section>
-                <Cacumber list={list}></Cacumber>
-              </section>
-              <section>
-                <TableHeader totalItems={3} title="Programs" showSearch={false}>
-                  <Link to={`${url}/add`}>
-                    <Button>Add Program</Button>
-                  </Link>
-                </TableHeader>
-              </section>
+    <main className="px-4">
+      <section>
+        <Cacumber list={list}></Cacumber>
+      </section>
+      <section>
+        <TableHeader totalItems={programs.length} title="Programs" showSearch={false}>
+          <Link to={`${url}/add`}>
+            <Button>Add Program</Button>
+          </Link>
+        </TableHeader>
+      </section>
+      <Switch>
+        <Route
+          exact
+          path={`${path}`}
+          render={() => {
+            return (
               <section className="flex flex-wrap justify-between mt-2">
                 {programs.map((Common) => (
                   <Tooltip
@@ -174,41 +174,41 @@ export default function AcademicProgram() {
                   </Tooltip>
                 ))}
               </section>
-            </main>
-          );
-        }}
-      />
+            );
+          }}
+        />
 
-      {/* create academic program */}
-      <Route
-        exact
-        path={`${path}/add`}
-        render={() => {
-          return <NewAcademicProgram />;
-        }}
-      />
+        {/* create academic program */}
+        <Route
+          exact
+          path={`${path}/add`}
+          render={() => {
+            return <NewAcademicProgram />;
+          }}
+        />
 
-      {/* show academic program details */}
+        {/* show academic program details */}
 
-      {/* modify academic program */}
-      <Route exact path={`${path}/:id/edit`} render={() => <UpdateAcademicProgram />} />
+        {/* modify academic program */}
+        <Route exact path={`${path}/:id/edit`} render={() => <UpdateAcademicProgram />} />
 
-      {/* add prerequisite popup */}
-      <Route
-        exact
-        path={`${path}/add/prerequisite`}
-        render={() => {
-          return (
-            <PopupMolecule
-              title="Add prerequisite"
-              open={prOpen}
-              onClose={history.goBack}>
-              another form here
-            </PopupMolecule>
-          );
-        }}
-      />
-      <Route path={`${path}/:id`} render={() => <ProgramDetails programs={programs} />} />
-    </Switch>
+        {/* add prerequisite popup */}
+        <Route
+          exact
+          path={`${path}/add/prerequisite`}
+          render={() => {
+            return (
+              <PopupMolecule
+                title="Add prerequisite"
+                open={prOpen}
+                onClose={history.goBack}>
+                another form here
+              </PopupMolecule>
+            );
+          }}
+        />
+        <Route path={`${path}/:id`} render={() => <ProgramDetails />} />
+      </Switch>
+    </main>
   );
 }
