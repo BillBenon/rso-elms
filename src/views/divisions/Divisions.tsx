@@ -61,7 +61,6 @@ export default function Divisions() {
         onTabChange={(event) => setFetchType(event.activeTabLabel)}>
         <Switch>
           <Route
-            exact
             path={`${path}/departments`}
             render={() => {
               return <Departments fetchType={fetchType} />;
