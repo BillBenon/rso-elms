@@ -8,6 +8,7 @@ import RegistrationControl from './components/Organisms/registrationControl/Regi
 import NewInstructor from './components/Organisms/user/NewInstructor';
 import NewStudent from './components/Organisms/user/NewStudent';
 import Dashboard from './layout/Dashboard';
+import Redirecting from './Redirecting';
 import { authenticatorStore } from './store';
 import { UserInfo } from './types/services/user.types';
 import Academies from './views/academies/Academy';
@@ -75,6 +76,7 @@ const RouterProtection = () => {
       <Router>
         <Switch>
           <Route exact path="/" component={Signin} />
+          <Route exact path="/redirecting" component={Redirecting} />
           <Route exact path="/institution" component={NewInstitution} />
           <Route exact path="/register" component={Signup} />
           <Route exact path="/register/experience" component={ExperienceInfo} />
