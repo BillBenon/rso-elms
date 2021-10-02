@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 
+import { queryClient } from '../../../plugins/react-query';
 import { authenticatorStore } from '../../../store';
 import { ValueType } from '../../../types';
 import { UserInfo } from '../../../types/services/user.types';
@@ -36,6 +37,7 @@ export default function Navigation() {
 
   function logout() {
     logoutFn.refetch().then(() => {
+      queryClient.clear();
       cookie.eraseCookie('jwt_info');
       history.push('/');
     });
