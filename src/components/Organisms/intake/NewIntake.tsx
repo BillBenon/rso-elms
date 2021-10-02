@@ -4,9 +4,11 @@ import { useParams } from 'react-router-dom';
 
 import { intakeStore } from '../../../store/intake.store';
 import programStore from '../../../store/program.store';
-import { ValueType } from '../../../types';
+import { GenericStatus, ValueType } from '../../../types';
 import {
   IntakeInfo,
+  IntakeProgram,
+  IntakePrograms,
   IntakeStatus,
   PeriodType,
 } from '../../../types/services/intake.types';
@@ -24,6 +26,7 @@ interface IProps {
   values: IntakeInfo;
   handleChange: (_e: ValueType) => any;
   handleNext: <T>(_e: FormEvent<T>) => any;
+  handleProgramsChange?: (_e: ValueType) => any;
 }
 interface ParamType {
   id: string;
@@ -51,11 +54,19 @@ export default function NewIntake(props: CProps) {
     total_num_students: 1,
   });
 
+  const [selectedPrograms, setSelectedPrograms] = useState<string[]>([]);
+
   function handleChange(e: ValueType) {
     setValues((regControl) => ({ ...regControl, [e.name]: e.value }));
   }
 
+  function handleProgramsChange(e: ValueType) {
+    // @ts-ignore
+    setSelectedPrograms(e.value);
+  }
+
   const { mutateAsync } = intakeStore.create();
+  const addProgram = intakeStore.addPrograms();
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
@@ -74,8 +85,9 @@ export default function NewIntake(props: CProps) {
       console.log('request', data);
 
       await mutateAsync(data, {
-        onSuccess(data) {
+        async onSuccess(data) {
           toast.success(data.data.message);
+          await addProgramsToIntake(data.data.data.id.toString());
           props.handleSuccess();
         },
         onError() {
@@ -83,6 +95,37 @@ export default function NewIntake(props: CProps) {
         },
       });
     }
+  }
+
+  async function addProgramsToIntake(id: string) {
+    console.log(id);
+    let intakePrograms: IntakePrograms = {
+      description: '',
+      intak_id: id,
+      programs: [],
+    };
+
+    for (let i = 0; i < selectedPrograms.length; i++) {
+      const element: IntakeProgram = {
+        description: '',
+        intake_id: id,
+        intake_program_id: '',
+        program_id: selectedPrograms[i],
+        status: GenericStatus.ACTIVE,
+      };
+      intakePrograms.programs.push(element);
+    }
+
+    await addProgram.mutateAsync(intakePrograms, {
+      onSuccess(data) {
+        toast.success(data.data.message);
+        props.handleSuccess();
+      },
+      onError() {
+        toast.error('error occurred when adding programs');
+        props.handleSuccess();
+      },
+    });
   }
 
   const stepperContent = {
@@ -96,6 +139,7 @@ export default function NewIntake(props: CProps) {
             values={values}
             handleChange={handleChange}
             handleNext={handleSubmit}
+            handleProgramsChange={handleProgramsChange}
           />
         ),
         clicked: () => {},
@@ -127,10 +171,19 @@ export default function NewIntake(props: CProps) {
   );
 }
 
-function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
+function IntakeInfoComponent({
+  values,
+  handleChange,
+  handleNext,
+  handleProgramsChange,
+}: IProps) {
   const programsInfo = programStore.fetchPrograms();
 
   let programs: ProgramInfo[] = programsInfo.data?.data.data || [];
+
+  const handlePrograms = (e: ValueType) => {
+    if (handleProgramsChange) handleProgramsChange(e);
+  };
 
   return (
     <form onSubmit={handleNext}>
@@ -159,7 +212,7 @@ function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
       <DropdownMolecule
         name="programs"
         placeholder="Program"
-        handleChange={handleChange}
+        handleChange={handlePrograms}
         isMulti
         options={getDropDownOptions(programs)}>
         Programs in this intake
@@ -214,4 +267,17 @@ function IntakeStatusComponent({ handleChange, handleNext }: IProps) {
       </div>
     </form>
   );
+}
+function data(
+  data: any,
+  arg1: {
+    onSuccess(
+      data: import('axios').AxiosResponse<
+        import('../../../types').Response<IntakePrograms>
+      >,
+    ): void;
+    onError(): void;
+  },
+) {
+  throw new Error('Function not implemented.');
 }

@@ -22,6 +22,20 @@ export interface ExtendedIntakeInfo extends Table, IntakeInfo {
   registration_control_id: string;
 }
 
+export interface IntakeProgram {
+  description: string;
+  intake_id: string;
+  intake_program_id: string;
+  program_id: string;
+  status: GenericStatus;
+}
+
+export interface IntakePrograms {
+  description: string;
+  intak_id: string;
+  programs: IntakeProgram[];
+}
+
 export enum IntakeStatus {
   STARTED = 'STARTED',
   SUSPENDED = 'SUSPENDED',
