@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Button from '../../components/Atoms/custom/Button';
 import Cacumber from '../../components/Molecules/Cacumber';
@@ -7,7 +7,9 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import AddPrerequesitForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
+import { moduleStore } from '../../store/modules.store';
 import { CommonCardDataType, Link } from '../../types';
+import { advancedTypeChecker } from '../../utils/getOption';
 
 export default function Modules() {
   const [open, setOpen] = useState(false); // state to controll the popup
@@ -19,45 +21,32 @@ export default function Modules() {
     setPrOpen(true);
   }
 
+  const { data } = moduleStore.getAllModules();
+  const [modules, setModules] = useState<CommonCardDataType[]>([]);
+
+  useEffect(() => {
+    let newModules: CommonCardDataType[] = [];
+    data?.data.data.forEach((module) => {
+      newModules.push({
+        status: {
+          type: advancedTypeChecker(module.generic_status),
+          text: module.generic_status.toString(),
+        },
+        code: module.code,
+        title: module.name,
+        description: module.description,
+      });
+    });
+
+    setModules(newModules);
+  }, [data]);
+
   function handleSearch() {}
 
   const list: Link[] = [
     { to: 'home', title: 'home' },
     { to: 'modules', title: 'modules' },
     { to: 'subjects', title: 'subjects' },
-  ];
-
-  const data: CommonCardDataType[] = [
-    {
-      status: { type: 'success', text: 'On going' },
-      code: 'MOD-23D',
-      title: 'Math',
-      description: 'Module brief description that shows user , what module consist',
-    },
-    {
-      status: { type: 'success', text: 'On going' },
-      code: 'MOD-23D',
-      title: 'Physics',
-      description: 'Module brief description that shows user , what module consist',
-    },
-    {
-      status: { type: 'warning', text: 'On Hold' },
-      code: 'MOD-26Y',
-      title: 'Biology',
-      description: 'Module brief description that shows user , what module consist',
-    },
-    {
-      status: { type: 'error', text: 'Completed' },
-      code: 'MOD-6YA',
-      title: 'English',
-      description: 'Module brief description that shows user , what module consist',
-    },
-    {
-      status: { type: 'error', text: 'Completed' },
-      code: 'MOD-6YA',
-      title: 'English',
-      description: 'Module brief description that shows user , what module consist',
-    },
   ];
 
   return (
@@ -67,18 +56,24 @@ export default function Modules() {
           <Cacumber list={list}></Cacumber>
         </section>
         <section className="">
-          <TableHeader totalItems={34} title="Modules" handleSearch={handleSearch}>
+          <TableHeader
+            totalItems={modules.length}
+            title="Modules"
+            handleSearch={handleSearch}>
             <Button onClick={() => setOpen(true)}>Add Module</Button>
           </TableHeader>
         </section>
         <section className="flex flex-wrap justify-between mt-2">
-          {data.map((course) => (
+          {modules.map((course, index) => (
             <div key={course.code} className="p-1 mt-3">
               <CommonCardMolecule
                 data={course}
                 to={{ title: 'module', to: 'modules/id' }}>
-                <p>
-                  Prerequesites: <span className="text-primary-500">3</span>
+                <p className="pt-3">
+                  Total subjects:
+                  <span className="px-1 text-primary-500">
+                    {data?.data.data[index].total_num_subjects || 'None'}
+                  </span>
                 </p>
               </CommonCardMolecule>
             </div>

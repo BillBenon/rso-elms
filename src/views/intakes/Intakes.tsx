@@ -6,6 +6,7 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import { intakeStore } from '../../store/intake.store';
 import { CommonCardDataType, Link, ValueType } from '../../types';
+import { advancedTypeChecker } from '../../utils/getOption';
 
 const list: Link[] = [
   { to: 'home', title: 'Institution Admin' },
@@ -28,7 +29,7 @@ export default function Intakes() {
           description: intake.description,
           title: intake.title || `Intake ${intake.expected_start_date}`,
           status: {
-            type: 'success',
+            type: advancedTypeChecker(intake.intake_status),
             text: intake.intake_status.toString(),
           },
         };
