@@ -4,8 +4,6 @@ import { AcademyInfo } from './academy.types';
 import { ProgramInfo } from './program.types';
 
 export interface DivisionInfo extends Table, DivisionCreateInfo {
-  generic_status: Status;
-  last_status_change_reason: null;
   academy: AcademyInfo;
   departments: [];
   programs: ProgramInfo;

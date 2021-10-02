@@ -17,18 +17,6 @@ import InputMolecule from '../../../Molecules/input/InputMolecule';
 export default function NewAcademy<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
 
-  useEffect(() => {
-    const getUser = async () => {
-      const user = await authenticatorService.authUser();
-      setDetails((details) => ({
-        ...details,
-        current_admin_id: user.data.data.id,
-      }));
-    };
-
-    getUser();
-  }, []);
-
   const [details, setDetails] = useState<AcademyCreateInfo>({
     current_admin_id: '',
     email: '',
@@ -45,6 +33,18 @@ export default function NewAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     website_link: '',
   });
   const { mutateAsync } = academyStore.createAcademy();
+
+  useEffect(() => {
+    const getUser = async () => {
+      const user = await authenticatorService.authUser();
+      setDetails((details) => ({
+        ...details,
+        current_admin_id: user.data.data.id.toString(),
+      }));
+    };
+
+    getUser();
+  }, []);
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
