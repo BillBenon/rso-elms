@@ -7,7 +7,7 @@ class DivisionStore {
     return useMutation(divisionService.addDivision);
   }
   getDivisionByType(type: string) {
-    return useQuery(['divisions/id', type], () => divisionService.getDivision(type));
+    return useQuery(['divisions/type', type], () => divisionService.getDivision(type));
   }
 
   getDivision(id: string) {
