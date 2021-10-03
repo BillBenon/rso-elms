@@ -32,6 +32,7 @@ export interface CreateUserInfo {
   email: string;
   father_names: string;
   first_name: string;
+  academic_program_level_id: string;
   intake_program_id: string;
   last_name: string;
   marital_status: MaritalStatus;
@@ -66,18 +67,18 @@ export enum MaritalStatus {
 }
 
 export enum EducationLevel {
-  NONE = 'NONE',
+  ILLITERATE = 'ILLITERATE',
   PRIMARY = 'PRIMARY',
   SECONDARY = 'SECONDARY',
   MASTERS = 'MASTERS',
   PHD = 'PHD',
-  BACHELORA = 'BACHELORA',
+  BACHELOR = 'BACHELOR',
 }
 
 export enum DocType {
   NID = 'NID',
   PASSPORT = 'PASSPORT',
-  ARM_CARD = 'ARM_CARD',
+  ARMY_CARD = 'ARMY_CARD',
   POLICE_CARD = 'POLICE_CARD',
   NISS_CARD = 'NISS_CARD',
   RCS_CARD = 'RCS_CARD',
@@ -85,16 +86,10 @@ export enum DocType {
 }
 
 export enum UserType {
-  ANONYMOUS = 'ANONYMOUS',
-  SYSTEM = 'SYSTEM',
-  SUPE_ADMIN = 'SUPE_ADMIN',
+  // ANONYMOUS = 'ANONYMOUS',
+  // SYSTEM = 'SYSTEM',
+  // SUPER_ADMIN = 'SUPER_ADMIN',
   ADMIN = 'ADMIN',
-  OIC = 'OIC',
   INSTRUCTOR = 'INSTRUCTOR',
   STUDENT = 'STUDENT',
-  DG = 'DG',
-  STUDENT_INSTRUCTOR = 'STUDENT_INSTRUCTOR',
-  ADMIN_INSTRUCTOR = 'ADMIN_INSTRUCTOR',
-  ADMIN_STUDENT = 'ADMIN_STUDENT',
-  VISITOR = 'VISITOR',
 }

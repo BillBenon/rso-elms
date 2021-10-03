@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 
 import academyStore from '../../../store/academy.store';
@@ -7,8 +7,6 @@ import programStore from '../../../store/program.store';
 import usersStore from '../../../store/users.store';
 import { CommonFormProps, ValueType } from '../../../types';
 import { AcademyInfo } from '../../../types/services/academy.types';
-import { IntakeInfo } from '../../../types/services/intake.types';
-import { ProgramInfo } from '../../../types/services/program.types';
 import {
   CreateUserInfo,
   DocType,
@@ -25,17 +23,18 @@ import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../Molecules/input/RadioMolecule';
 
-export default function NewStudent<E>({ onSubmit }: CommonFormProps<E>) {
+export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
   const [details, setDetails] = useState<CreateUserInfo>({
     activation_key: '',
     birth_date: '',
     doc_type: DocType.NID,
-    education_level: EducationLevel.NONE,
+    education_level: EducationLevel.ILLITERATE,
     email: '',
     father_names: '',
     first_name: '',
-    intake_program_id: '',
+    academic_program_level_id: '',
+    intake_program_id: '2f82970e-e5d9-4813-93e6-195465f8a786',
     last_name: '',
     marital_status: MaritalStatus.SINGLE,
     mother_names: '',
@@ -55,6 +54,13 @@ export default function NewStudent<E>({ onSubmit }: CommonFormProps<E>) {
     username: '',
   });
 
+  const [otherDetails, setOtherDetails] = useState({
+    academy: '',
+    intake: '',
+    program: '',
+    level: '',
+  });
+
   function handleChange(e: ValueType) {
     setDetails((details) => ({
       ...details,
@@ -62,8 +68,15 @@ export default function NewStudent<E>({ onSubmit }: CommonFormProps<E>) {
     }));
   }
 
+  function otherhandleChange(e: ValueType) {
+    setOtherDetails((details) => ({
+      ...details,
+      [e.name]: e.value,
+    }));
+  }
+
   const { mutateAsync } = usersStore.createUser();
-  async function addStudent<T>(e: FormEvent<T>) {
+  async function addUser<T>(e: FormEvent<T>) {
     e.preventDefault();
 
     if (onSubmit) onSubmit(e);
@@ -74,22 +87,50 @@ export default function NewStudent<E>({ onSubmit }: CommonFormProps<E>) {
       },
     });
   }
+
+  // get all academies in an institution
   const academies: AcademyInfo[] | undefined =
     academyStore.fetchAcademies().data?.data.data;
 
-  const programs: ProgramInfo[] | undefined =
-    programStore.fetchPrograms().data?.data.data;
+  // get intakes based on selected academy
+  let intakes = intakeStore.getIntakesByAcademy(otherDetails.academy);
+  useEffect(() => {
+    intakes.refetch();
+  }, [otherDetails.academy]);
 
-  const intakes: IntakeInfo[] | undefined = intakeStore.getAll().data?.data.data;
+  // get programs based on selected intake
+  // let programs = intakeStore.getProgramsByIntake(otherDetails.intake);
+  let programs = intakeStore.getProgramsByIntake('f719063b-1fef-4971-bda2-25aab8836a66')
+    .data?.data.data;
+
+  useEffect(() => {
+    intakes.refetch();
+  }, [otherDetails.intake]);
+
+  //get levels based on selected program
+  let levels = programStore.getAcademicProgramsByLevel(otherDetails.program);
+  useEffect(() => {
+    intakes.refetch();
+  }, [otherDetails.program]);
 
   return (
     <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
       <div className="py-5 mb-3 capitalize">
         <Heading color="txt-primary" fontWeight="bold">
-          New Student
+          New User
         </Heading>
       </div>
-      <form onSubmit={addStudent}>
+      <form onSubmit={addUser}>
+        <DropdownMolecule
+          defaultValue={getDropDownStatusOptions(UserType).find(
+            (type) => type.label === details.user_type,
+          )}
+          options={getDropDownStatusOptions(UserType)}
+          name="user_type"
+          placeholder={'Select user type'}
+          handleChange={handleChange}>
+          User type
+        </DropdownMolecule>
         <InputMolecule
           name="first_name"
           placeholder="eg: Kabera"
@@ -122,7 +163,6 @@ export default function NewStudent<E>({ onSubmit }: CommonFormProps<E>) {
           Phone number
         </InputMolecule>
         <RadioMolecule
-          type="block"
           className="pb-2"
           defaultValue={details.sex}
           options={getDropDownStatusOptions(GenderStatus)}
@@ -131,61 +171,77 @@ export default function NewStudent<E>({ onSubmit }: CommonFormProps<E>) {
           name="sex">
           Gender
         </RadioMolecule>
-        <RadioMolecule
-          type="block"
-          className="pb-2"
-          defaultValue={details.marital_status}
-          options={getDropDownStatusOptions(MaritalStatus)}
-          value={details.marital_status}
+
+        <DropdownMolecule
+          placeholder={'Select your reference'}
           handleChange={handleChange}
-          name="marital_status">
-          Marital Status
-        </RadioMolecule>
+          name="doc_type"
+          defaultValue={getDropDownStatusOptions(DocType).find(
+            (doc) => doc.label === details.doc_type,
+          )}
+          options={getDropDownStatusOptions(DocType)}>
+          Reference Number
+        </DropdownMolecule>
         <InputMolecule
           name="nid"
           type="text"
           value={details.nid}
-          placeholder="NID number"
+          placeholder={`Enter ${details.doc_type.replaceAll('_', ' ')} number`}
           handleChange={handleChange}>
-          NID
+          {details.doc_type.replaceAll('_', ' ')}
         </InputMolecule>
-        <InputMolecule
-          name="passport"
-          value={''}
-          placeholder="Enter passport number(if any)"
+        <DropdownMolecule
+          defaultValue={getDropDownStatusOptions(MaritalStatus).find(
+            (marital_status) => marital_status.label === details.marital_status,
+          )}
+          options={getDropDownStatusOptions(MaritalStatus)}
+          name="marital_status"
+          placeholder={'Select your marital status'}
           handleChange={handleChange}>
-          Passport (optional)
-        </InputMolecule>
-        <RadioMolecule
-          type="block"
-          className="pb-2"
+          Marital Status
+        </DropdownMolecule>
+        <DropdownMolecule
+          defaultValue={getDropDownStatusOptions(EducationLevel).find(
+            (level) => level.label === details.education_level,
+          )}
           options={getDropDownStatusOptions(EducationLevel)}
           name="education_level"
-          value={details.education_level}
+          placeholder={'Select your education level'}
           handleChange={handleChange}>
           Education level
-        </RadioMolecule>
+        </DropdownMolecule>
         <DropdownMolecule
           options={getDropDownOptions(academies)}
           name="academy"
           placeholder={'Academy to be enrolled in'}
-          handleChange={handleChange}>
+          handleChange={otherhandleChange}>
           Academy
         </DropdownMolecule>
-        <DropdownMolecule
-          options={getDropDownOptions(programs)}
-          name="programs"
-          placeholder={'Program to be enrolled in'}
-          handleChange={handleChange}>
-          Programs
-        </DropdownMolecule>
-        <DropdownMolecule
-          options={getDropDownOptions(intakes, 'code')}
-          name="intake"
-          placeholder={'intake to be enrolled in'}
-          handleChange={handleChange}>
-          Intake
-        </DropdownMolecule>
+        {details.user_type === 'STUDENT' && (
+          <>
+            <DropdownMolecule
+              options={getDropDownOptions(intakes, 'code')}
+              name="intake"
+              placeholder={'intake to be enrolled in'}
+              handleChange={otherhandleChange}>
+              Intake
+            </DropdownMolecule>
+            <DropdownMolecule
+              options={getDropDownOptions(programs)}
+              name="program"
+              placeholder={'Program to be enrolled in'}
+              handleChange={otherhandleChange}>
+              Programs
+            </DropdownMolecule>
+            <DropdownMolecule
+              options={getDropDownOptions(levels)}
+              name="level"
+              placeholder={'Program to be enrolled in'}
+              handleChange={handleChange}>
+              Levels
+            </DropdownMolecule>
+          </>
+        )}
         <Button type="submit">Create</Button>
       </form>
     </div>

@@ -18,6 +18,14 @@ class ProgramService {
     return await adminstrationAxios.get(`/programs/getAcademicProgramById/${id}`);
   }
 
+  public async getAcademicProgramsByLevel(
+    levelId: string,
+  ): Promise<AxiosResponse<Response>> {
+    return await adminstrationAxios.get(
+      `/programs/getAcademicProgramsByLevel/${levelId}`,
+    );
+  }
+
   public async getModulesByProgram(
     id: string,
   ): Promise<AxiosResponse<Response<ModuleInfo[]>>> {
