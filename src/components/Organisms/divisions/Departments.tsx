@@ -10,6 +10,7 @@ import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
 import NewDepartment from '../forms/divisions/NewDepartment';
+import UpdateDepartment from '../forms/divisions/UpdateDepartment';
 
 interface FilteredData
   extends Pick<DivisionInfo, 'id' | 'name' | 'description' | 'generic_status'> {}
@@ -36,7 +37,7 @@ export default function Departments({ fetchType }: IDepartment) {
 
     filteredInfo?.map((department: any) => {
       let filteredData: any = {
-        id: department.id.toString,
+        id: department.id.toString(),
         decription: department.description,
         name: department.name,
         status: department.generic_status,
@@ -92,7 +93,7 @@ export default function Departments({ fetchType }: IDepartment) {
           render={() => {
             return (
               <PopupMolecule title="Update Department" open={true} onClose={handleClose}>
-                {/* update division here */}
+                <UpdateDepartment />
               </PopupMolecule>
             );
           }}

@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
+import { queryClient } from '../../../../plugins/react-query';
 import academyStore from '../../../../store/academy.store';
 import { divisionStore } from '../../../../store/divisions.store';
 import { FormPropType, ValueType } from '../../../../types';
@@ -44,7 +45,7 @@ export default function NewDepartment({ onSubmit, handleAfterCreate }: INewDepar
     mutateAsync(division, {
       onSuccess: () => {
         toast.success('Role created', { duration: 3 });
-        handleAfterCreate();
+        queryClient.invalidateQueries();
         history.goBack();
       },
       onError: () => {
@@ -85,11 +86,11 @@ export default function NewDepartment({ onSubmit, handleAfterCreate }: INewDepar
 
       <DropdownMolecule
         width="82"
-        placeholder="Select department"
+        placeholder="Select faculty"
         options={getDropDownOptions(departments)}
         name="parent_id"
         handleChange={handleChange}>
-        Department
+        Faculty
       </DropdownMolecule>
 
       {/* save button */}

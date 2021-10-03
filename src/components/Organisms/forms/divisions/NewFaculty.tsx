@@ -23,9 +23,7 @@ export default function NewFaculty({ onSubmit, handleAfterCreate }: INewFaculty)
     code: '',
     description: '',
     division_type: 'FACULTY',
-    id: '',
     name: '',
-    parent_id: 'e18abdba-0004-46bb-ae82-c4a96981ee8d',
   });
   const { mutateAsync } = divisionStore.createDivision();
   const history = useHistory();
@@ -42,7 +40,7 @@ export default function NewFaculty({ onSubmit, handleAfterCreate }: INewFaculty)
     mutateAsync(division, {
       onSuccess: () => {
         toast.success('Role created', { duration: 3 });
-        handleAfterCreate();
+        // handleAfterCreate();
         history.goBack();
       },
       onError: () => {
