@@ -105,7 +105,7 @@ export default function Departments({ fetchType }: IDepartment) {
           render={() => {
             return (
               <PopupMolecule title="New Department" open onClose={() => history.goBack()}>
-                <NewDepartment handleAfterCreate={() => {}} />
+                <NewDepartment />
               </PopupMolecule>
             );
           }}

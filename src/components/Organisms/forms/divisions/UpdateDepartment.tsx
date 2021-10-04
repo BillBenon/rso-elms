@@ -15,7 +15,6 @@ import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function UpdateDepartment({ onSubmit }: FormPropType) {
-  const { mutateAsync } = divisionStore.updateDivision();
   const history = useHistory();
 
   const { id } = useParams<ParamType>();
@@ -31,6 +30,8 @@ export default function UpdateDepartment({ onSubmit }: FormPropType) {
     name: '',
     parent_id: '',
   });
+
+  const { mutateAsync } = divisionStore.updateDivision(division.division_type);
 
   const updateDivisionInfo: any = {
     academy_id: division.academy?.id,

@@ -40,7 +40,7 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
     id: id,
   };
 
-  const { mutateAsync } = registrationControlStore.updateRegControl();
+  const { mutateAsync } = registrationControlStore.updateRegControl(id);
   const history = useHistory();
 
   const { data } = registrationControlStore.fetchRegControlById(id);

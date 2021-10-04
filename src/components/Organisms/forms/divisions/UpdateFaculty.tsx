@@ -1,22 +1,16 @@
-import { AxiosResponse } from 'axios';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { queryClient } from '../../../../plugins/react-query';
 import { divisionStore } from '../../../../store/divisions.store';
-import { FormPropType, ParamType, Response, ValueType } from '../../../../types';
-import {
-  DivisionCreateInfo,
-  DivisionInfo,
-} from '../../../../types/services/division.types';
+import { FormPropType, ParamType, ValueType } from '../../../../types';
+import { DivisionCreateInfo } from '../../../../types/services/division.types';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function UpdateFaculty({ onSubmit }: FormPropType) {
   // const [form, setForm] = useState<DivisionInfo>({ name: '', description: '' });
-  const { mutateAsync } = divisionStore.updateDivision();
   const history = useHistory();
 
   const { id } = useParams<ParamType>();
@@ -31,6 +25,8 @@ export default function UpdateFaculty({ onSubmit }: FormPropType) {
     id: '',
     name: '',
   });
+
+  const { mutateAsync } = divisionStore.updateDivision(division.division_type);
 
   const updateDivisionInfo: any = {
     academy_id: division.academy?.id,
@@ -51,22 +47,8 @@ export default function UpdateFaculty({ onSubmit }: FormPropType) {
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
     mutateAsync(updateDivisionInfo, {
-      onSuccess: (newData) => {
+      onSuccess: () => {
         toast.success('Faculty updated', { duration: 3 });
-        // queryClient.invalidateQueries(['divisions/type', division.division_type]);
-        queryClient.setQueryData(['divisions/type', division?.division_type], (old) => {
-          const previousData = old as AxiosResponse<Response<DivisionInfo[]>>;
-          const newArr = previousData.data.data.map(
-            (fac: DivisionInfo, index: number) => {
-              if (fac.id === newData.data.data.id) {
-                fac[index] = newData;
-              }
-              return fac;
-            },
-          );
-          return previousData;
-        });
-
         history.goBack();
       },
       onError: () => {

@@ -8,7 +8,7 @@ export interface Response<T = unknown> {
 }
 
 export interface Table {
-  id: number | string;
+  id?: number | string;
   created_by_id: string;
   created_by_username: string;
   created_on: string;
