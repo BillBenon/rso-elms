@@ -27,7 +27,7 @@ const App = () => {
             <Route exact path="/usecase" component={ComponentsUseCase} />
             <RouterProtection />
 
-            <Route component={NotFound} />
+            <Route path="*" component={NotFound} />
           </Switch>
         </Router>
       </MainLayout>

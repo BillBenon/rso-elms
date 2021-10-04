@@ -41,7 +41,7 @@ const RouterProtection = () => {
       <Route exact path="/dashboard/users/instructor/new" component={NewInstructor} />
       <Route path="/dashboard/users" component={Users} />
       <Route path="/dashboard/privileges" component={PrivilegesView} />
-      {/* end of institution admin ProgramDetails */}
+      {/* end of institution admin page */}
     </>
   );
 
