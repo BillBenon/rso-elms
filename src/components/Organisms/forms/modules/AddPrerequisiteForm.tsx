@@ -1,28 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
-import { SelectData, ValueType } from '../../../../types';
+import { moduleStore } from '../../../../store/modules.store';
+import { ValueType } from '../../../../types';
+import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 
-export default function AddPrerequesitForm() {
-  function handleChange(_e: ValueType) {}
+interface ParamType {
+  id: string;
+}
 
-  const prere: SelectData[] = [
-    { value: 'Math', label: 'Mathematics' },
-    { value: 'Physics', label: 'Physics' },
-    { value: 'English', label: 'English' },
-  ];
+export default function AddPrerequesitForm() {
+  const { id } = useParams<ParamType>();
+  const [values, setValues] = useState<string[]>([]);
+
+  function handleChange(e: ValueType) {
+    setValues({ ...values, [e.name]: e.value });
+  }
+
+  const modules =
+    moduleStore.getAllModules().data?.data.data.filter((module) => module.id != id) || [];
+  const handleSubmit = () => {
+    window.alert('comming soon');
+  };
 
   return (
     <form>
       <DropdownMolecule
-        options={prere}
-        name="prerequesiteCourse"
+        options={getDropDownOptions(modules)}
+        name="prerequisites"
+        isMulti
         handleChange={handleChange}>
         Prerequsite Modules
       </DropdownMolecule>
-      {/* model initial status */}
       <RadioMolecule
         className="mt-4"
         value="ACTIVE"
@@ -34,9 +46,8 @@ export default function AddPrerequesitForm() {
         handleChange={handleChange}>
         Status
       </RadioMolecule>
-      {/* save button */}
       <div className="mt-5">
-        <Button type="button" full>
+        <Button type="button" onClick={() => handleSubmit} full>
           Save
         </Button>
       </div>

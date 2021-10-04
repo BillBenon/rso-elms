@@ -1,4 +1,5 @@
 import { SelectData } from '../types';
+import { IntakeStatus } from '../types/services/intake.types';
 import { GenericStatus } from './../types/services/common.types';
 
 export function getDropDownOptions(inputs: any, labelName?: string): SelectData[] {
@@ -34,3 +35,14 @@ export function getDropDownStatusOptions(status: any): SelectData[] {
 
 export const typeChecker = (status?: GenericStatus) =>
   status?.toString().toLowerCase() === 'inactive' ? 'error' : 'success';
+
+export function advancedTypeChecker(
+  status: GenericStatus | IntakeStatus,
+): 'success' | 'warning' | 'error' {
+  let successStatus = ['active', 'completed', 'opened', 'started'];
+  let errorStatus = ['inactive', 'closed', 'voided', 'suspended'];
+
+  if (successStatus.includes(status.toString().toLowerCase())) return 'success';
+  else if (errorStatus.includes(status.toString().toLowerCase())) return 'error';
+  else return 'warning';
+}
