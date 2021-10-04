@@ -24,7 +24,7 @@ interface TableProps<T> {
   uniqueCol?: keyof T;
   hide?: (keyof T)[];
   actions?: { name: string; handleAction: (_data?: T[keyof T]) => void }[];
-  manyActions?: { name: string; handleAction: (_data?: T[keyof T]) => void }[];
+  manyActions?: { name: string; handleAction: (_data?: string[]) => void }[];
   handleClick?: () => void;
   statusColumn?: string;
   handleSelect?: (_selected: string[] | null) => void;
@@ -184,7 +184,12 @@ export function Table<T>({
           )}
         </td>
 
-        <Row key={index} data={row} keys={keys as string[]} statusColumn={statusColumn} />
+        <Row
+          key={index + Math.random() * 16}
+          data={row}
+          keys={keys as string[]}
+          statusColumn={statusColumn}
+        />
         {actions && actions.length > 0 ? (
           <td className="flex space-x-6 cursor-pointer">
             <Tooltip
@@ -231,7 +236,7 @@ export function Table<T>({
               <Button
                 key={action.name + Math.random()}
                 styleType="outline"
-                onClick={action.handleAction}>
+                onClick={() => action.handleAction(Array.from(selected))}>
                 {action.name}
               </Button>
             ))}

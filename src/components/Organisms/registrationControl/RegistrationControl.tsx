@@ -93,7 +93,7 @@ export default function RegistrationControl() {
       </div>
       <TableHeader
         title="registration control"
-        totalItems={3}
+        totalItems={RegistrationControls.length}
         handleSearch={handleSearch}>
         <Link to={`${url}/add`}>
           <Button>Add new reg control</Button>

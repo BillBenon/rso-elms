@@ -32,6 +32,7 @@ export default function DropDown(props: DropdownProps) {
         getOptionValue={props.getOptionValue}
         noOptionsMessage={(_query: any) => `No options avalaible`}
         closeMenuOnSelect={!props.isMulti}
+        menuPlacement="auto"
         styles={{
           control: (base: any, _state: any) => ({
             ...base,
