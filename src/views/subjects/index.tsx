@@ -57,13 +57,16 @@ export default function Subjects() {
           <Cacumber list={list}></Cacumber>
         </section>
         <section className="">
-          <TableHeader totalItems={4} title="Subjects" handleSearch={handleSearch}>
+          <TableHeader
+            totalItems={subjects.length}
+            title="Subjects"
+            handleSearch={handleSearch}>
             <Button onClick={() => history.push(`${path}/add`)}>Add Subject</Button>
           </TableHeader>
         </section>
         <section className="flex flex-wrap justify-between mt-2">
-          {subjects.map((subject) => (
-            <div key={subject.code} className="p-1 mt-3">
+          {subjects.map((subject, i) => (
+            <div key={i} className="p-1 mt-3">
               <CommonCardMolecule
                 data={subject}
                 to={{ title: 'module', to: 'modules/id' }}
@@ -86,7 +89,7 @@ export default function Subjects() {
             }}
           />
 
-          {/* add prerequesite popup */}
+          {/* add lesson popup */}
           <Route
             exact
             path={`${path}/:id/add-lesson`}
