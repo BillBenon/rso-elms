@@ -7,6 +7,7 @@ import {
   IntakeInfo,
   IntakePrograms,
 } from '../../types/services/intake.types';
+import { IntakeProgramInfo } from '../../types/services/program.types';
 
 class IntakeService {
   public async create(intake: IntakeInfo): Promise<AxiosResponse<Response<IntakeInfo>>> {
@@ -34,7 +35,7 @@ class IntakeService {
 
   public async getProgramsByIntake(
     intakeId: string,
-  ): Promise<AxiosResponse<Response<ExtendedIntakeInfo[]>>> {
+  ): Promise<AxiosResponse<Response<IntakeProgramInfo[]>>> {
     return await adminstrationAxios.get(`/intakes/getProgramsByIntake/${intakeId}`);
   }
 }

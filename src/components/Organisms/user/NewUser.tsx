@@ -5,7 +5,7 @@ import academyStore from '../../../store/academy.store';
 import { intakeStore } from '../../../store/intake.store';
 import programStore from '../../../store/program.store';
 import usersStore from '../../../store/users.store';
-import { CommonFormProps, ValueType } from '../../../types';
+import { CommonFormProps, SelectData, ValueType } from '../../../types';
 import { AcademyInfo } from '../../../types/services/academy.types';
 import {
   CreateUserInfo,
@@ -34,7 +34,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     father_names: '',
     first_name: '',
     academic_program_level_id: '',
-    intake_program_id: '2f82970e-e5d9-4813-93e6-195465f8a786',
+    intake_program_id: '',
     last_name: '',
     marital_status: MaritalStatus.SINGLE,
     mother_names: '',
@@ -57,7 +57,6 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const [otherDetails, setOtherDetails] = useState({
     academy: '',
     intake: '',
-    program: '',
     level: '',
   });
 
@@ -87,31 +86,42 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
       },
     });
   }
-
   // get all academies in an institution
   const academies: AcademyInfo[] | undefined =
     academyStore.fetchAcademies().data?.data.data;
 
   // get intakes based on selected academy
   let intakes = intakeStore.getIntakesByAcademy(otherDetails.academy);
+
   useEffect(() => {
     intakes.refetch();
   }, [otherDetails.academy]);
 
   // get programs based on selected intake
-  // let programs = intakeStore.getProgramsByIntake(otherDetails.intake);
-  let programs = intakeStore.getProgramsByIntake('f719063b-1fef-4971-bda2-25aab8836a66')
-    .data?.data.data;
+  let programs = intakeStore.getProgramsByIntake(otherDetails.intake);
 
   useEffect(() => {
-    intakes.refetch();
+    programs.refetch();
   }, [otherDetails.intake]);
 
+  function formatPrograms(): SelectData[] {
+    let options: SelectData[] = [];
+    programs.data?.data.data.map((program) => {
+      options.push({
+        label: program.program.name,
+        value: program.id.toString(),
+      });
+    });
+    return options;
+  }
+
   //get levels based on selected program
-  let levels = programStore.getAcademicProgramsByLevel(otherDetails.program);
+  let levels = programStore.getLevelsByAcademicProgram(details.intake_program_id);
+
   useEffect(() => {
-    intakes.refetch();
-  }, [otherDetails.program]);
+    window.alert(details.intake_program_id);
+    // let program = programs.data?.data.data.find((p) => p.id == details.intake_program_id);
+  }, [details.intake_program_id]);
 
   return (
     <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
@@ -220,17 +230,17 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         {details.user_type === 'STUDENT' && (
           <>
             <DropdownMolecule
-              options={getDropDownOptions(intakes, 'code')}
+              options={getDropDownOptions(intakes.data?.data.data, 'code')}
               name="intake"
               placeholder={'intake to be enrolled in'}
               handleChange={otherhandleChange}>
               Intake
             </DropdownMolecule>
             <DropdownMolecule
-              options={getDropDownOptions(programs)}
-              name="program"
+              options={formatPrograms()}
+              name="intake_program_id"
               placeholder={'Program to be enrolled in'}
-              handleChange={otherhandleChange}>
+              handleChange={handleChange}>
               Programs
             </DropdownMolecule>
             <DropdownMolecule

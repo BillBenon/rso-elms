@@ -12,9 +12,9 @@ class ProgramStore {
   getProgramById(id: string) {
     return useQuery(['programs/id', id], () => programService.getProgramById(id));
   }
-  getAcademicProgramsByLevel(levelId: string) {
-    return useQuery(['programs/level', levelId], () =>
-      programService.getAcademicProgramsByLevel(levelId),
+  getLevelsByAcademicProgram(academicProgramId: string) {
+    return useQuery(['levels/program_id', academicProgramId], () =>
+      programService.getLevelsByAcademicProgram(academicProgramId),
     );
   }
 
