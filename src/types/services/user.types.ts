@@ -86,9 +86,6 @@ export enum DocType {
 }
 
 export enum UserType {
-  // ANONYMOUS = 'ANONYMOUS',
-  // SYSTEM = 'SYSTEM',
-  // SUPER_ADMIN = 'SUPER_ADMIN',
   ADMIN = 'ADMIN',
   INSTRUCTOR = 'INSTRUCTOR',
   STUDENT = 'STUDENT',

@@ -2,7 +2,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
-import { privilegeStore, roleStore } from '../../../../store';
+import { roleStore } from '../../../../store';
 import { AddPrivilegeRoleType, SelectData, ValueType } from '../../../../types';
 import Button from '../../../Atoms/custom/Button';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
@@ -21,7 +21,7 @@ export default function AddPrivileges({ onSubmit, roleName, roleId }: PropType) 
   });
   const { mutateAsync } = roleStore.addPrivilegesOnRole();
   const history = useHistory();
-  const { data } = privilegeStore.getPrivileges();
+  const { data } = roleStore.getUnAssignedPrivileges(roleId);
   const [privileges, setPrivileges] = useState<SelectData[]>([{ label: '', value: '' }]);
   function handleChange({ name, value }: ValueType) {
     setForm((old) => ({ ...old, [name]: (value as string[]).join(',') }));
