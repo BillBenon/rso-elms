@@ -39,7 +39,7 @@ const RouterProtection = () => {
   }, [data?.data.data]);
 
   const InstitutionAdminRoutes = () => (
-    <Dashboard>
+    <>
       {/*start of institution admin */}
       <Route path="/dashboard/role/:id/view" component={ViewRole} />
       <Route path="/dashboard/academies" component={Academies} />
@@ -49,11 +49,11 @@ const RouterProtection = () => {
       <Route path="/dashboard/users" component={Users} />
       <Route path="/dashboard/privileges" component={PrivilegesView} />
       {/* end of institution admin ProgramDetails */}
-    </Dashboard>
+    </>
   );
 
   const AcademicAdminRoutes = () => (
-    <Dashboard>
+    <>
       {/* start of academic admin pages */}
       <Route exact path="/dashboard/modules" component={Modules} />
       <Route exact path="/dashboard/subjects" component={Subjects} />
@@ -68,7 +68,7 @@ const RouterProtection = () => {
       <Route exact path="/dashboard/intakes" component={IntakesView} />
       <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} />
       {/* end of academic admin pages */}
-    </Dashboard>
+    </>
   );
 
   return (
@@ -83,11 +83,12 @@ const RouterProtection = () => {
           <Route exact path="/register/more" component={MoreInfo} />
           <Route exact path="/usecase" component={ComponentsUseCase} />
 
+          <Dashboard>
+            {(authUser?.user_type == 'SUPER_ADMIN' || true) && InstitutionAdminRoutes()}
+            {(authUser?.user_type == 'ADMIN' || true) && AcademicAdminRoutes()}
+          </Dashboard>
           {/* protected routes  */}
-          {(authUser?.user_type == 'SUPER_ADMIN' || import.meta.env.DEV) &&
-            InstitutionAdminRoutes()}
-          {(authUser?.user_type == 'ADMIN' || import.meta.env.DEV) &&
-            AcademicAdminRoutes()}
+
           {/* end of protected routes */}
 
           <Route component={NotFound} />

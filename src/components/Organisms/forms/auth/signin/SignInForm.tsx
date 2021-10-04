@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from 'react';
 // import toast from 'react-hot-toast';
 import { Link, useHistory } from 'react-router-dom';
 
+import { queryClient } from '../../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../../store';
 import { ValueType } from '../../../../../types';
 import { LoginInfo } from '../../../../../types';
@@ -31,6 +32,8 @@ const SignInForm = () => {
 
   async function login<T>(e: FormEvent<T>) {
     e.preventDefault();
+    queryClient.clear();
+    cookie.eraseCookie('jwt_info');
 
     await mutateAsync(details, {
       onSuccess(data) {
