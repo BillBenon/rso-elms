@@ -4,40 +4,47 @@ import { Route, Switch, useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { divisionStore } from '../../../store/divisions.store';
-import { DivisionInfo } from '../../../types/services/division.types';
+import { DivisionInfo, Status } from '../../../types/services/division.types';
 import Button from '../../Atoms/custom/Button';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
+import NewFaculty from '../forms/divisions/NewFaculty';
+import UpdateFaculty from '../forms/divisions/UpdateFaculty';
 
 interface FilteredData
   extends Pick<DivisionInfo, 'id' | 'name' | 'description' | 'generic_status'> {}
 
 interface IFaculties {
   fetchType: string;
-  doRefetch: boolean;
 }
 
-export default function Faculties({ fetchType, doRefetch }: IFaculties) {
+export default function Faculties({ fetchType }: IFaculties) {
   const { url, path } = useRouteMatch();
   const history = useHistory();
   const [faculties, setFaculties] = useState<FilteredData[]>();
-  const { data, isSuccess, isLoading, refetch } = divisionStore.getDivisionByType(
+  const { data, isSuccess, isLoading } = divisionStore.getDivisionByType(
     fetchType.toUpperCase(),
   );
 
   useEffect(() => {
-    // extract faculty data to display
-    const filteredInfo = data?.data.data.map((faculty: DivisionInfo) =>
+    let formattedFaculties: any = [];
+    const filteredFaculties = data?.data.data.map((faculty: DivisionInfo) =>
       _.pick(faculty, ['id', 'name', 'description', 'generic_status']),
     );
 
-    doRefetch && refetch();
+    filteredFaculties?.map((faculty: any) => {
+      let filteredInfo: any = {
+        id: faculty.id.toString(),
+        decription: faculty.description,
+        name: faculty.name,
+        status: faculty.generic_status,
+      };
+      formattedFaculties.push(filteredInfo);
+    });
 
-    console.log('i did a refetch', doRefetch);
-
-    data?.data.data && setFaculties(filteredInfo);
-  }, [data, doRefetch]);
+    data?.data.data && setFaculties(formattedFaculties);
+  }, [data, data?.data.data]);
 
   function handleClose() {
     history.goBack();
@@ -64,7 +71,7 @@ export default function Faculties({ fetchType, doRefetch }: IFaculties) {
       </section>
       <section>
         {isLoading && 'Faculty loading...'}
-        {isSuccess ? faculties?.length === 0 : 'No Roles found, try to add one'}
+        {isSuccess ? faculties?.length === 0 : 'No Faculties found, try to add one'}
         {faculties && (
           <Table<FilteredData>
             handleSelect={() => {}}
@@ -83,8 +90,20 @@ export default function Faculties({ fetchType, doRefetch }: IFaculties) {
           path={`${path}/:id/edit`}
           render={() => {
             return (
-              <PopupMolecule title="Update Role" open={true} onClose={handleClose}>
-                {/* update division here */}
+              <PopupMolecule title="Update Faculty" open={true} onClose={handleClose}>
+                <UpdateFaculty handleAfterCreate={() => {}} />
+              </PopupMolecule>
+            );
+          }}
+        />
+
+        <Route
+          exact
+          path={`${path}/add`}
+          render={() => {
+            return (
+              <PopupMolecule title="New Faculty" open onClose={() => history.goBack()}>
+                <NewFaculty handleAfterCreate={() => {}} />
               </PopupMolecule>
             );
           }}

@@ -60,7 +60,11 @@ export function Table<T>({
 
   useEffect(() => {
     setCurrentRows(data.slice(indexOfFirstRow, indexOfLastRow));
-  }, [currentPage]);
+  }, [currentPage, data]);
+
+  // useEffect(() => {
+  //   setCurrentRows(data.slice(indexOfFirstRow, indexOfLastRow));
+  // }, [data]);
 
   // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);

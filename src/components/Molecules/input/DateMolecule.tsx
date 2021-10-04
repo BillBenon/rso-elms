@@ -67,6 +67,8 @@ function DateMolecule({
   minuteDisabled = false,
   defaultValue,
 }: IProp) {
+  let defaultValueDate = defaultValue ? new Date(defaultValue) : new Date();
+
   const [dateState, setDateState] = useState({
     Day: new Date().getDate(),
     Month: new Date().getMonth() + 1,
@@ -117,7 +119,7 @@ function DateMolecule({
           <>
             <YearSelect
               reverse={reverse}
-              defaultValue={dateState.Year.toString()}
+              defaultValue={defaultValueDate?.getFullYear().toString()}
               value={dateState.Year}
               onChange={handleDate}
               name="Year"
@@ -126,11 +128,11 @@ function DateMolecule({
               end={endYear}
               className={yearClassName}
               disabled={yearDisabled}
-              placeholder={dateState.Year.toString()}
+              // placeholder={dateState.Year.toString()}
             />
             <MonthSelect
               year={dateState.Year}
-              defaultValue={dateState.Month.toString()}
+              defaultValue={defaultValueDate?.getMonth().toString()}
               value={dateState.Month}
               onChange={handleDate}
               short={monthShort}
@@ -140,17 +142,16 @@ function DateMolecule({
               numeric={monthNumeric}
               className={monthClassName}
               disabled={monthDisabled}
-              placeholder={dateState.Month.toString()}
+              // placeholder={dateState.Month.toString()}
             />
             <DaySelect
               year={dateState.Year}
               month={dateState.Month}
-              defaultValue={dateState.Day.toString()}
+              defaultValue={defaultValueDate?.getDate().toString()}
               value={dateState.Day}
               onChange={handleDate}
               name="Day"
               className={dayClassName}
-              placeholder={dateState.Day.toString()}
               width={dayWidth}
               disabled={dayDisabled}
             />

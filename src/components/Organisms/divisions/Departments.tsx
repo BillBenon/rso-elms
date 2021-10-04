@@ -9,6 +9,8 @@ import Button from '../../Atoms/custom/Button';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
+import NewDepartment from '../forms/divisions/NewDepartment';
+import UpdateDepartment from '../forms/divisions/UpdateDepartment';
 
 interface FilteredData
   extends Pick<DivisionInfo, 'id' | 'name' | 'description' | 'generic_status'> {}
@@ -20,19 +22,30 @@ interface IDepartment {
 export default function Departments({ fetchType }: IDepartment) {
   const { url, path } = useRouteMatch();
   const history = useHistory();
-  const [faculties, setFaculties] = useState<FilteredData[]>();
+  const [departments, setDepartments] = useState<FilteredData[]>();
   const { data, isSuccess, isLoading } = divisionStore.getDivisionByType(
     fetchType.toUpperCase(),
   );
 
   useEffect(() => {
-    // extract faculty data to display
+    // extract department data to display
+    let formattedDeparts: any = [];
 
-    const filteredInfo = data?.data.data.map((faculty: DivisionInfo) =>
-      _.pick(faculty, ['id', 'name', 'description', 'generic_status']),
+    const filteredInfo = data?.data.data.map((department: DivisionInfo) =>
+      _.pick(department, ['id', 'name', 'description', 'generic_status']),
     );
 
-    data?.data.data && setFaculties(filteredInfo);
+    filteredInfo?.map((department: any) => {
+      let filteredData: any = {
+        id: department.id.toString(),
+        decription: department.description,
+        name: department.name,
+        status: department.generic_status,
+      };
+      formattedDeparts.push(filteredData);
+    });
+
+    data?.data.data && setDepartments(formattedDeparts);
   }, [data]);
 
   function handleClose() {
@@ -52,20 +65,20 @@ export default function Departments({ fetchType }: IDepartment) {
   return (
     <main>
       <section>
-        <TableHeader title="Faculty" totalItems={4} handleSearch={() => {}}>
+        <TableHeader title="Department" totalItems={4} handleSearch={() => {}}>
           <Link to={`${url}/add`}>
-            <Button>Add Department</Button>
+            <Button>Add department</Button>
           </Link>
         </TableHeader>
       </section>
       <section>
-        {isLoading && 'Faculty loading...'}
-        {isSuccess ? faculties?.length === 0 : 'No Roles found, try to add one'}
-        {faculties && (
+        {isLoading && 'Department loading...'}
+        {isSuccess ? departments?.length === 0 : 'No Departments found, try to add one'}
+        {departments && (
           <Table<FilteredData>
             handleSelect={() => {}}
             statusColumn="status"
-            data={faculties}
+            data={departments}
             uniqueCol={'id'}
             actions={actions}
           />
@@ -73,14 +86,26 @@ export default function Departments({ fetchType }: IDepartment) {
       </section>
 
       <Switch>
-        {/* modify faculty */}
+        {/* modify department */}
         <Route
           exact
           path={`${path}/:id/edit`}
           render={() => {
             return (
               <PopupMolecule title="Update Department" open={true} onClose={handleClose}>
-                {/* update division here */}
+                <UpdateDepartment />
+              </PopupMolecule>
+            );
+          }}
+        />
+
+        <Route
+          exact
+          path={`${path}/add`}
+          render={() => {
+            return (
+              <PopupMolecule title="New Department" open onClose={() => history.goBack()}>
+                <NewDepartment handleAfterCreate={() => {}} />
               </PopupMolecule>
             );
           }}

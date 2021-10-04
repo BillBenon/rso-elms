@@ -14,6 +14,18 @@ class DivisionService {
   public async getDivision(id: string): Promise<AxiosResponse<Response<DivisionInfo[]>>> {
     return await adminstrationAxios.get(`/divisions/getDivisionsByType/${id}`);
   }
+
+  public async getDivisionById(
+    id: string,
+  ): Promise<AxiosResponse<Response<DivisionInfo>>> {
+    return await adminstrationAxios.get(`/divisions/getDivisionById/${id}`);
+  }
+
+  public async modifyDivision(
+    division: DivisionCreateInfo,
+  ): Promise<AxiosResponse<Response<DivisionInfo>>> {
+    return await adminstrationAxios.put('/divisions/modifyDivision', { ...division });
+  }
 }
 
 export const divisionService = new DivisionService();

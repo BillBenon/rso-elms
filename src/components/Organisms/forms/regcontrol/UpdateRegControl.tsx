@@ -4,7 +4,10 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import registrationControlStore from '../../../../store/registrationControl.store';
 import { FormPropType, ValueType } from '../../../../types';
-import { IRegistrationControlCreateInfo } from '../../../../types/services/registrationControl.types';
+import {
+  IRegistrationControlCreateInfo,
+  IRegistrationControlInfo,
+} from '../../../../types/services/registrationControl.types';
 import Button from '../../../Atoms/custom/Button';
 import DateMolecule from '../../../Molecules/input/DateMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
@@ -27,6 +30,16 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
     id: id,
   });
 
+  const regControlUpdateInfo: any = {
+    academy_id: regControl.academy?.id,
+    description: regControl.description,
+    actual_start_date: regControl.actual_start_date,
+    actual_end_date: regControl.actual_end_date,
+    expected_start_date: regControl.expected_start_date,
+    expected_end_date: regControl.expected_end_date,
+    id: id,
+  };
+
   const { mutateAsync } = registrationControlStore.updateRegControl();
   const history = useHistory();
 
@@ -42,9 +55,9 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
 
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
-    mutateAsync(regControl, {
+    mutateAsync(regControlUpdateInfo, {
       onSuccess: () => {
-        toast.success('Role updated', { duration: 3 });
+        toast.success('Control updated', { duration: 3 });
         history.goBack();
       },
       onError: () => {
@@ -68,7 +81,10 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
         Expected Start Date
       </DateMolecule>
 
-      <DateMolecule handleChange={handleChange} name={'expected_end_date'}>
+      <DateMolecule
+        handleChange={handleChange}
+        defaultValue={regControl.expected_end_date}
+        name={'expected_end_date'}>
         Expected End Date
       </DateMolecule>
 

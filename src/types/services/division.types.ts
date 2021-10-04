@@ -10,13 +10,14 @@ export interface DivisionInfo extends Table, DivisionCreateInfo {
 }
 
 export interface DivisionCreateInfo {
-  id: string | number;
+  id?: string | number;
   academy_id: string;
   code: string;
   description: string;
   division_type: string;
   name: string;
-  parent_id: string;
+  parent_id?: string;
+  academy?: AcademyInfo;
 }
 
 export enum Status {

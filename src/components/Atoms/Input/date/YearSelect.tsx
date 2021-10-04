@@ -50,17 +50,21 @@ const YearSelect = (props: YProp) => {
     return yearOptions;
   };
 
+  let years = renderYearOptions({
+    start: props.start,
+    end: props.end,
+  });
+
+  let newDefaultValue = years.find((year) => year.label === props.defaultValue);
+
   return (
     <DropDown
       disabled={props.disabled}
       name={props.name}
       placeholder={props.placeholder}
       className={props.className}
-      options={renderYearOptions({
-        start: props.start,
-        end: props.end,
-        defaultValue: props.defaultValue,
-      })}
+      options={years}
+      defaultValue={newDefaultValue}
       width={props.width}
       handleChange={(e: ValueType) => props.onChange(e)}
     />

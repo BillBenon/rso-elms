@@ -1,30 +1,35 @@
-import React, { useState } from 'react';
-import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Route, Switch, useLocation, useRouteMatch } from 'react-router-dom';
 
 import Badge from '../../components/Atoms/custom/Badge';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
-import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import Departments from '../../components/Organisms/divisions/Departments';
 import Faculties from '../../components/Organisms/divisions/Faculties';
-import NewFaculty from '../../components/Organisms/forms/divisions/NewFaculty';
 
 export default function Divisions() {
-  const { path } = useRouteMatch();
-  const history = useHistory();
-  const [fetchType, setFetchType] = useState('Faculty');
-  const [doRefetch, setRefetch] = useState<boolean>(false);
+  const { url, path } = useRouteMatch();
+  const location = useLocation();
+  const [fetchType, setFetchType] = useState<string>('');
+
+  useEffect(() => {
+    if (location.pathname === '/dashboard/divisions/departments') {
+      setFetchType('DEPARTMENT');
+    } else if (path === '/dashboard/divisions') {
+      setFetchType('FACULTY');
+    }
+  }, []);
 
   const tabs = [
     {
       label: 'Faculty',
-      href: '/dashboard/divisions',
+      href: `${url}`,
     },
     {
       label: 'Department',
-      href: '/dashboard/divisions/departments',
+      href: `${url}/departments`,
     },
   ];
 
@@ -62,30 +67,15 @@ export default function Divisions() {
         onTabChange={(event) => setFetchType(event.activeTabLabel)}>
         <Switch>
           <Route
-            exact
-            path={`${path}`}
-            render={() => {
-              return <Faculties fetchType={fetchType} doRefetch={doRefetch} />;
-            }}
-          />
-
-          <Route
-            exact
             path={`${path}/departments`}
             render={() => {
               return <Departments fetchType={fetchType} />;
             }}
           />
-
           <Route
-            exact
-            path={`${path}/add`}
+            path={`${path}`}
             render={() => {
-              return (
-                <PopupMolecule title="New Faculty" open onClose={() => history.goBack()}>
-                  <NewFaculty handleAfterCreate={() => setRefetch(true)} />
-                </PopupMolecule>
-              );
+              return <Faculties fetchType={fetchType} />;
             }}
           />
         </Switch>

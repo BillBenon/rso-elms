@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
+import { queryClient } from '../../../../plugins/react-query';
 import academyStore from '../../../../store/academy.store';
 import { divisionStore } from '../../../../store/divisions.store';
 import { FormPropType, ValueType } from '../../../../types';
@@ -13,17 +14,19 @@ import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-interface INewFaculty extends FormPropType {
+interface INewDepartment extends FormPropType {
   handleAfterCreate: () => void;
 }
 
-export default function NewFaculty({ onSubmit, handleAfterCreate }: INewFaculty) {
+export default function NewDepartment({ onSubmit, handleAfterCreate }: INewDepartment) {
   const [division, setDivision] = useState<DivisionCreateInfo>({
     academy_id: '',
     code: '',
     description: '',
-    division_type: 'FACULTY',
+    division_type: 'DEPARTMENT',
+    id: '',
     name: '',
+    parent_id: '',
   });
   const { mutateAsync } = divisionStore.createDivision();
   const history = useHistory();
@@ -35,12 +38,14 @@ export default function NewFaculty({ onSubmit, handleAfterCreate }: INewFaculty)
   const academies: AcademyInfo[] | undefined =
     academyStore.fetchAcademies().data?.data.data;
 
+  const departments = divisionStore.getDivisionByType('FACULTY').data?.data.data;
+
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
     mutateAsync(division, {
       onSuccess: () => {
         toast.success('Role created', { duration: 3 });
-        // handleAfterCreate();
+        queryClient.invalidateQueries();
         history.goBack();
       },
       onError: () => {
@@ -58,7 +63,7 @@ export default function NewFaculty({ onSubmit, handleAfterCreate }: INewFaculty)
         error=""
         handleChange={handleChange}
         name="name">
-        Faculty name
+        Department name
       </InputMolecule>
       {/* model code
     {/* module description */}
@@ -77,6 +82,15 @@ export default function NewFaculty({ onSubmit, handleAfterCreate }: INewFaculty)
         placeholder={'Academy to be enrolled'}
         handleChange={handleChange}>
         Academy
+      </DropdownMolecule>
+
+      <DropdownMolecule
+        width="82"
+        placeholder="Select faculty"
+        options={getDropDownOptions(departments)}
+        name="parent_id"
+        handleChange={handleChange}>
+        Faculty
       </DropdownMolecule>
 
       {/* save button */}
