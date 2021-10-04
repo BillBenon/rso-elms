@@ -19,6 +19,7 @@ type MProp = {
   placeholder?: string;
   width?: string;
   className?: string;
+  padding?: number;
 };
 
 const MonthSelect = (mprops: MProp) => {
@@ -66,6 +67,7 @@ const MonthSelect = (mprops: MProp) => {
       className={mprops.className}
       width={mprops.width}
       options={months}
+      padding={mprops.padding}
       handleChange={(e: ValueType) => mprops.onChange(e)}
     />
   );
