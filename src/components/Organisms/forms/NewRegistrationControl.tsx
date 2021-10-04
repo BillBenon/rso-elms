@@ -56,22 +56,22 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
       </TextAreaMolecule>
       <DateMolecule
         startYear={new Date().getFullYear()}
-        endYear={2040}
+        endYear={new Date().getFullYear() + 100}
         padding={3}
         reverse={false}
         handleChange={handleChange}
         name={'expected_start_date'}>
-        Expected Start Date
+        Start Date
       </DateMolecule>
 
       <DateMolecule
         handleChange={handleChange}
         startYear={new Date().getFullYear()}
-        endYear={2040}
+        endYear={new Date().getFullYear() + 100}
         padding={3}
         reverse={false}
         name={'expected_end_date'}>
-        Expected End Date
+        End Date
       </DateMolecule>
 
       <DropdownMolecule
