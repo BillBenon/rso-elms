@@ -1,10 +1,18 @@
 import React from 'react';
-import { Link, Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
+import {
+  Link,
+  Route,
+  Switch,
+  useHistory,
+  useParams,
+  useRouteMatch,
+} from 'react-router-dom';
 
 import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
+import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import UsersPreview from '../../components/Molecules/cards/UsersPreview';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import programStore from '../../store/program.store';
@@ -18,6 +26,7 @@ interface ParamType {
 export default function ProgramDetailsMolecule() {
   const { id } = useParams<ParamType>();
   const { path, url } = useRouteMatch();
+  const history = useHistory();
   const program = programStore.getProgramById(id).data?.data.data;
 
   const modules_per_program = programStore.getModulesByProgram(id).data?.data.data;
@@ -170,14 +179,25 @@ export default function ProgramDetailsMolecule() {
             path={`${path}/modules`}
             render={() => (
               <section className="flex flex-wrap justify-between">
-                {program_modules?.map((prog) => (
-                  <div key={prog.code}>
-                    <CommonCardMolecule
-                      data={prog}
-                      to={{ title: 'program list', to: 'programs/3' }}
-                    />
-                  </div>
-                ))}
+                {program_modules?.length <= 0 ? (
+                  <NoDataAvailable
+                    buttonLabel="Add new module"
+                    title={'No modules available'}
+                    handleClick={() => history.push(`/dashboard/modules/add`)}
+                    description={
+                      'And the web just isnt the same without you. Lets get you back online!'
+                    }
+                  />
+                ) : (
+                  program_modules?.map((prog) => (
+                    <div key={prog.code}>
+                      <CommonCardMolecule
+                        data={prog}
+                        to={{ title: 'program list', to: 'programs/3' }}
+                      />
+                    </div>
+                  ))
+                )}
               </section>
             )}
           />
