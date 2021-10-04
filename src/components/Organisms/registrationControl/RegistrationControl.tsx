@@ -3,6 +3,7 @@ import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom
 
 import registrationControlStore from '../../../store/registrationControl.store';
 import { GenericStatus, ValueType } from '../../../types';
+import { AcademyInfo } from '../../../types/services/academy.types';
 import { IRegistrationControlInfo } from '../../../types/services/registrationControl.types';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
@@ -28,19 +29,29 @@ export default function RegistrationControl() {
     description: string;
     status: GenericStatus;
     id: string | number;
+    'academy name': string;
   }
 
   let RegistrationControls: IRegistrationInfo[] = [];
   let RegInfo = data?.data.data;
 
   RegInfo?.map((obj: IRegistrationControlInfo) => {
-    let { expected_start_date, expected_end_date, description, generic_status, id } = obj;
+    let {
+      expected_start_date,
+      expected_end_date,
+      description,
+      generic_status,
+      id,
+      academy: { name }, //destructure name inside academy obj
+    } = obj;
+
     let registrationcontrol: IRegistrationInfo = {
       'start date': expected_start_date,
       'end date': expected_end_date,
       description,
       status: generic_status,
       id: id,
+      'academy name': name,
     };
     RegistrationControls.push(registrationcontrol);
   });
