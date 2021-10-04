@@ -54,8 +54,8 @@ const RouterProtection = () => {
   const AcademicAdminRoutes = () => (
     <Dashboard>
       {/* start of academic admin pages */}
-      <Route exact path="/dashboard/modules" component={Modules} />
-      <Route exact path="/dashboard/subjects" component={Subjects} />
+      <Route path="/dashboard/modules" component={Modules} />
+      <Route path="/dashboard/subjects" component={Subjects} />
       <Route path="/dashboard/registration-control" component={RegistrationControl} />
 
       <Route path="/dashboard/divisions" component={Divisions} />

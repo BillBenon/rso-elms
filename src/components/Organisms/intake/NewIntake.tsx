@@ -238,6 +238,8 @@ function IntakeStatusComponent({ handleChange, handleNext }: IProps) {
       <div className="pt-4">
         <DateMolecule
           showTime={false}
+          endYear={new Date().getFullYear() + 15}
+          defaultValue={(new Date().getFullYear() + 3).toString()}
           handleChange={handleChange}
           name={'expected_end_date'}>
           Expected End Date
