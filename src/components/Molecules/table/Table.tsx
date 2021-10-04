@@ -181,7 +181,12 @@ export function Table<T>({
           )}
         </td>
 
-        <Row key={index} data={row} keys={keys as string[]} statusColumn={statusColumn} />
+        <Row
+          key={index + Math.random() * 16}
+          data={row}
+          keys={keys as string[]}
+          statusColumn={statusColumn}
+        />
         {actions && actions.length > 0 ? (
           <td className="flex space-x-6 cursor-pointer">
             <Tooltip

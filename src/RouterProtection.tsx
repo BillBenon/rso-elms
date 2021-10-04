@@ -1,26 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
-import ComponentsUseCase from './components/Organisms/ComponentsUseCase';
-import ExperienceInfo from './components/Organisms/forms/auth/signup/experience/ExperienceInfo';
-import MoreInfo from './components/Organisms/forms/auth/signup/more-details/MoreInfo';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import NewInstructor from './components/Organisms/user/NewInstructor';
 import NewStudent from './components/Organisms/user/NewStudent';
 import Dashboard from './layout/Dashboard';
-import Redirecting from './Redirecting';
 import { authenticatorStore } from './store';
 import { UserInfo } from './types/services/user.types';
 import Academies from './views/academies/Academy';
-import Signin from './views/auth/Signin';
-import Signup from './views/auth/Signup';
 import Divisions from './views/divisions/Divisions';
-import NewInstitution from './views/insitution/NewInstitution';
 import IntakeModulesView from './views/intakes/IntakeModules';
 import IntakesView from './views/intakes/Intakes';
 import LevelsView from './views/levels/Levels';
 import Modules from './views/modules';
-import NotFound from './views/NotFound';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicPrograms from './views/programs/AcademicPrograms';
 import NewAcademicProgram from './views/programs/NewAcademicProgram';
@@ -33,9 +25,10 @@ import Users from './views/users/Users';
 const RouterProtection = () => {
   const [authUser, setAuthUser] = useState<UserInfo>();
   const { data } = authenticatorStore.authUser();
-
+  console.log(data, 'in route protected');
   useEffect(() => {
     setAuthUser(data?.data.data);
+    console.log('changed');
   }, [data?.data.data]);
 
   const InstitutionAdminRoutes = () => (
@@ -73,27 +66,14 @@ const RouterProtection = () => {
 
   return (
     <>
-      <Router>
-        <Switch>
-          <Route exact path="/" component={Signin} />
-          <Route exact path="/redirecting" component={Redirecting} />
-          <Route exact path="/institution" component={NewInstitution} />
-          <Route exact path="/register" component={Signup} />
-          <Route exact path="/register/experience" component={ExperienceInfo} />
-          <Route exact path="/register/more" component={MoreInfo} />
-          <Route exact path="/usecase" component={ComponentsUseCase} />
+      <Dashboard>
+        {(authUser?.user_type == 'SUPER_ADMIN' || import.meta.env.DEV) &&
+          InstitutionAdminRoutes()}
+        {(authUser?.user_type == 'ADMIN' || import.meta.env.DEV) && AcademicAdminRoutes()}
+      </Dashboard>
+      {/* protected routes  */}
 
-          <Dashboard>
-            {(authUser?.user_type == 'SUPER_ADMIN' || true) && InstitutionAdminRoutes()}
-            {(authUser?.user_type == 'ADMIN' || true) && AcademicAdminRoutes()}
-          </Dashboard>
-          {/* protected routes  */}
-
-          {/* end of protected routes */}
-
-          <Route component={NotFound} />
-        </Switch>
-      </Router>
+      {/* end of protected routes */}
     </>
   );
 };

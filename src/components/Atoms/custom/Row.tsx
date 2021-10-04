@@ -27,7 +27,7 @@ const Row = ({ keys, data, statusColumn }: RowProps) => {
         return (
           <td
             className={`px-4 py-2 ${key.toLowerCase() === statusColumn ? 'text-xs' : ''}`}
-            key={key}>
+            key={key + Math.random() * 16}>
             {key.toLowerCase() === statusColumn ? (
               <Badge
                 badgecolor={val && statusColors[val.toLowerCase() as Status]}
