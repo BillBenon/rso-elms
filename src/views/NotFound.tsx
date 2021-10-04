@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import Button from '../components/Atoms/custom/Button';
+import { authenticatorStore } from '../store';
 
 const NotFound = () => {
   const history = useHistory();
+  const { data } = authenticatorStore.authUser();
+
+  useEffect(() => {
+    if (data?.data.data.user_type == 'SUPER_ADMIN') redirectTo('/dashboard/users');
+    if (data?.data.data.user_type == 'ADMIN') redirectTo('/dashboard/programs');
+  }, [data?.data.data]);
 
   const redirectTo = (path: string) => {
     history.push(path);

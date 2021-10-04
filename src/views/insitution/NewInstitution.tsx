@@ -40,7 +40,7 @@ export default function NewInstitution() {
       const user = await authenticatorService.authUser();
       setValues({
         ...values,
-        current_admin_id: user.data.data.id,
+        current_admin_id: user.data.data.id.toString(),
       });
     };
 

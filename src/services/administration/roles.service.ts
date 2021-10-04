@@ -4,6 +4,7 @@ import { adminstrationAxios } from '../../plugins/axios';
 import {
   AddPrivilegeRoleType,
   CreateRoleReq,
+  PrivilegeRes,
   Response,
   RolePrivilege,
   RoleRes,
@@ -26,6 +27,12 @@ class RoleService {
     roleId: string,
   ): Promise<AxiosResponse<Response<RolePrivilege[]>>> {
     return await adminstrationAxios.get(`/roles/getAssignedPrivileges/${roleId}`);
+  }
+
+  public async getUnAssignedPrivilege(
+    roleId: string,
+  ): Promise<AxiosResponse<Response<PrivilegeRes[]>>> {
+    return await adminstrationAxios.get(`/roles/getNotAssignedPrivileges/${roleId}`);
   }
 
   public async modifyRole(
