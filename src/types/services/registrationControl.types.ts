@@ -1,4 +1,4 @@
-import { GenericStatus, Table } from '..';
+import { Table } from '..';
 import { AcademyCreateInfo, AcademyInfo } from './academy.types';
 
 export interface IRegistrationControlCreateInfo {
@@ -15,5 +15,4 @@ export interface IRegistrationControlInfo
     Table,
     AcademyCreateInfo {
   academy: AcademyInfo;
-  generic_status: GenericStatus;
 }

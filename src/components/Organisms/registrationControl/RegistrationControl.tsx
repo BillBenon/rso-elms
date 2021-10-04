@@ -27,7 +27,7 @@ export default function RegistrationControl() {
     'end date': string;
     description: string;
     status: GenericStatus;
-    id: string | number;
+    id: string | number | undefined;
     'academy name': string;
   }
 
