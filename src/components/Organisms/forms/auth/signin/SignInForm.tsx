@@ -1,11 +1,11 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 // import toast from 'react-hot-toast';
 import { Link, useHistory } from 'react-router-dom';
 
+import { queryClient } from '../../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../../store';
 import { ValueType } from '../../../../../types';
 import { LoginInfo } from '../../../../../types';
-import { UserInfo } from '../../../../../types/services/user.types';
 import cookie from '../../../../../utils/cookie';
 import Button from '../../../../Atoms/custom/Button';
 import Heading from '../../../../Atoms/Text/Heading';
@@ -13,17 +13,11 @@ import InputMolecule from '../../../../Molecules/input/InputMolecule';
 
 const SignInForm = () => {
   const history = useHistory();
-  const [authUser, setAuthUser] = useState<UserInfo>();
-  const { data } = authenticatorStore.authUser();
   const { mutateAsync } = authenticatorStore.login();
   const [details, setDetails] = useState<LoginInfo>({
     username: '',
     password: '',
   });
-
-  useEffect(() => {
-    setAuthUser(data?.data.data);
-  }, [data?.data.data]);
 
   const redirectTo = (path: string) => {
     history.push(path);
@@ -38,12 +32,13 @@ const SignInForm = () => {
 
   async function login<T>(e: FormEvent<T>) {
     e.preventDefault();
+    queryClient.clear();
+    cookie.eraseCookie('jwt_info');
 
     await mutateAsync(details, {
       onSuccess(data) {
         cookie.setCookie('jwt_info', JSON.stringify(data?.data.data));
-        if (authUser?.user_type == 'SUPER_ADMIN') redirectTo('/dashboard/users');
-        if (authUser?.user_type == 'ADMIN') redirectTo('/dashboard/programs');
+        redirectTo('/redirecting');
       },
     });
   }
