@@ -42,7 +42,7 @@ const App = () => {
               <Route path="/dashboard/academies" component={Academies} />
               <Route path="/dashboard/roles" component={Roles} />
               <Route path="/dashboard/modules" component={Modules} />
-              <Route exact path="/dashboard/subjects" component={Subjects} />
+              <Route path="/dashboard/subjects" component={Subjects} />
               <Route
                 path="/dashboard/registration-control"
                 component={RegistrationControl}

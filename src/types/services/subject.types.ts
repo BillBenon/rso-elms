@@ -1,13 +1,13 @@
 import { Table } from '..';
 import { ModuleInfo } from './modules.types';
 
-interface SubjectInfo {
+export interface SubjectInfo {
   content: string;
-  id: string;
+  id: string | number;
   module_id: string;
   title: string;
 }
 
-interface ExtendedSubjectInfo extends Table, SubjectInfo {
+export interface ExtendedSubjectInfo extends Table, SubjectInfo {
   module: ModuleInfo;
 }

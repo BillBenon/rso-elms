@@ -1,24 +1,39 @@
 import React, { FormEvent } from 'react';
+import { useParams } from 'react-router-dom';
 
-import { CommonFormProps, ValueType } from '../../../../types';
+import { subjectStore } from '../../../../store/subject.store';
+import { ValueType } from '../../../../types';
+import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
+import DropDown from '../../../Atoms/Input/Dropdown';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-interface PropType<K> extends CommonFormProps<K> {}
+interface ParamType {
+  id: string;
+}
 
-export default function NewLessonForm<E>({ onSubmit }: PropType<E>) {
+export default function NewLessonForm() {
+  const { id } = useParams<ParamType>();
+  const subject = subjectStore.getSubject(id).data?.data.data;
+
   function handleChange(_e: ValueType) {}
 
   function submitForm(e: FormEvent) {
     e.preventDefault(); // prevent page to reload:
-    if (onSubmit) onSubmit(e);
   }
 
   return (
     <form onSubmit={submitForm}>
       {/* TODO: use readonly dropdown to indicate module name */}
+      <DropDown
+        name="subject_id"
+        defaultValue={getDropDownOptions([subject])[0]}
+        options={getDropDownOptions([subject])}
+        handleChange={(_e: ValueType) => {}}
+        disabled
+      />
 
       {/* model name */}
       <InputMolecule value="" error="" handleChange={handleChange} name="lesson-name">
