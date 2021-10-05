@@ -9,8 +9,13 @@ class IntakeStore {
   addPrograms() {
     return useMutation(intakeService.addPrograms);
   }
-  getAll() {
-    return useQuery('intakes', intakeService.fetchAll);
+  getAll(registrationControlId?: string) {
+    console.log(registrationControlId, 'invoked');
+    if (registrationControlId)
+      return useQuery(['intakes/programs', registrationControlId], () =>
+        intakeService.getIntakesPyRegistrationControl(registrationControlId),
+      );
+    else return useQuery('intakes', intakeService.fetchAll);
   }
   getIntakeById(id: string) {
     return useQuery(['intakes/id', id], () => intakeService.getIntakeById);
@@ -22,9 +27,17 @@ class IntakeStore {
     );
   }
 
-  getProgramsByIntake(intakeId: string) {
-    return useQuery(['intakes/programs', intakeId], () =>
-      intakeService.getProgramsByIntake(intakeId),
+  getIntakesByProgram(programId: string) {
+    return useQuery(['intakes/programs', programId], () =>
+      intakeService.getIntakesByProgram(programId),
+    );
+  }
+
+  getIntakesByRegistrationControl(registrationControlId: string) {
+    return useQuery(
+      ['intakes/programs', registrationControlId],
+      () => intakeService.getIntakesPyRegistrationControl(registrationControlId),
+      { enabled: false },
     );
   }
 }

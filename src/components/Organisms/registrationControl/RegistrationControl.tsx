@@ -15,7 +15,6 @@ import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
 import NewRegistrationControl from '../forms/NewRegistrationControl';
 import UpdateRegControl from '../forms/regcontrol/UpdateRegControl';
-import NewIntake from '../intake/NewIntake';
 
 export default function RegistrationControl() {
   const { url, path } = useRouteMatch();
@@ -75,7 +74,7 @@ export default function RegistrationControl() {
     {
       name: 'Manage Intakes',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/add-intake`); // go to add new intake to this reg control
+        history.push(`/dashboard/intakes?regId=${id}`); // go to add new intake to this reg control
       },
     },
   ];

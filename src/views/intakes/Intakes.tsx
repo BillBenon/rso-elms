@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Link, Route, useHistory, useRouteMatch } from 'react-router-dom';
+import { Link, Route, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Cacumber from '../../components/Molecules/Cacumber';
@@ -23,8 +23,12 @@ export default function Intakes() {
   const [intakes, setIntakes] = useState<CommonCardDataType[]>([]);
   const history = useHistory();
   const { url } = useRouteMatch();
+  const { search } = useLocation();
+  const registrationControlId = new URLSearchParams(search).get('regId');
 
-  const { isSuccess, isError, data } = intakeStore.getAll();
+  const { isSuccess, isError, data } = intakeStore.getAll(
+    registrationControlId || undefined,
+  );
 
   useEffect(() => {
     if (isSuccess && data?.data) {

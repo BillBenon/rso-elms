@@ -33,10 +33,19 @@ class IntakeService {
     return await adminstrationAxios.get(`/intakes/getIntakesByAcademy/${id}`);
   }
 
-  public async getProgramsByIntake(
-    intakeId: string,
+  public async getIntakesByProgram(
+    programId: string,
   ): Promise<AxiosResponse<Response<IntakeProgramInfo[]>>> {
-    return await adminstrationAxios.get(`/intakes/getProgramsByIntake/${intakeId}`);
+    return await adminstrationAxios.get(`/intakes/getIntakesByProgram/${programId}`);
+  }
+
+  public async getIntakesPyRegistrationControl(
+    registrationControlId: string,
+  ): Promise<AxiosResponse<Response<ExtendedIntakeInfo[]>>> {
+    console.log('habana');
+    return await adminstrationAxios.get(
+      `/intakes/getIntakesByRegistrationControl/${registrationControlId}`,
+    );
   }
 }
 
