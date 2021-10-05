@@ -4,7 +4,7 @@ import { Route, Switch, useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { divisionStore } from '../../../store/divisions.store';
-import { DivisionInfo, Status } from '../../../types/services/division.types';
+import { DivisionInfo } from '../../../types/services/division.types';
 import Button from '../../Atoms/custom/Button';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
@@ -91,7 +91,7 @@ export default function Faculties({ fetchType }: IFaculties) {
           render={() => {
             return (
               <PopupMolecule title="Update Faculty" open={true} onClose={handleClose}>
-                <UpdateFaculty handleAfterCreate={() => {}} />
+                <UpdateFaculty />
               </PopupMolecule>
             );
           }}
@@ -103,7 +103,7 @@ export default function Faculties({ fetchType }: IFaculties) {
           render={() => {
             return (
               <PopupMolecule title="New Faculty" open onClose={() => history.goBack()}>
-                <NewFaculty handleAfterCreate={() => {}} />
+                <NewFaculty />
               </PopupMolecule>
             );
           }}

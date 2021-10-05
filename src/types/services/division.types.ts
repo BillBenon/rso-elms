@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { Table } from '..';
+import { GenericStatus, Table } from '..';
 import { AcademyInfo } from './academy.types';
 import { ProgramInfo } from './program.types';
 

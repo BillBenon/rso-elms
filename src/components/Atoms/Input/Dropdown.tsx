@@ -44,8 +44,8 @@ export default function DropDown(props: DropdownProps) {
             fontSize: 14,
             minHeight: props.height || 48,
             height: 'auto',
-            paddingRight: 8,
-            paddingLeft: 8,
+            paddingRight: props.padding || 8,
+            paddingLeft: props.padding || 8,
           }),
           clearIndicator: (_base: any, _state: any) => ({
             display: 'none',

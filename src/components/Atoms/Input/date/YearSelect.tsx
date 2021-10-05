@@ -3,27 +3,25 @@ import React from 'react';
 import { SelectData, ValueType } from '../../../../types';
 import DropDown from '../Dropdown';
 
-type YProp = {
+interface YProp extends YOptProp {
   value: number;
   onChange: Function;
   id?: string;
   name: string;
   placeholder?: string;
   width?: string;
-  defaultValue?: string;
-  start?: number;
-  end?: number;
   reverse?: boolean;
   required?: boolean;
   disabled?: boolean;
   className?: string;
-};
+  padding?: number;
+}
 
-type YOptProp = {
+interface YOptProp {
   start?: number;
   end?: number;
   defaultValue?: string;
-};
+}
 
 const YearSelect = (props: YProp) => {
   const renderYearOptions = ({
@@ -64,6 +62,7 @@ const YearSelect = (props: YProp) => {
       placeholder={props.placeholder}
       className={props.className}
       options={years}
+      padding={props.padding}
       defaultValue={newDefaultValue}
       width={props.width}
       handleChange={(e: ValueType) => props.onChange(e)}

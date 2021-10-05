@@ -27,20 +27,30 @@ export default function RegistrationControl() {
     'end date': string;
     description: string;
     status: GenericStatus;
-    id: string | number;
+    id: string | number | undefined;
+    'academy name': string;
   }
 
   let RegistrationControls: IRegistrationInfo[] = [];
   let RegInfo = data?.data.data;
 
   RegInfo?.map((obj: IRegistrationControlInfo) => {
-    let { expected_start_date, expected_end_date, description, generic_status, id } = obj;
+    let {
+      expected_start_date,
+      expected_end_date,
+      description,
+      generic_status,
+      id,
+      academy: { name }, //destructure name inside academy obj
+    } = obj;
+
     let registrationcontrol: IRegistrationInfo = {
       'start date': expected_start_date,
       'end date': expected_end_date,
       description,
       status: generic_status,
       id: id,
+      'academy name': name,
     };
     RegistrationControls.push(registrationcontrol);
   });
