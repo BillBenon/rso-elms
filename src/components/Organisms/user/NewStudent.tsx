@@ -53,6 +53,7 @@ export default function NewStudent<E>({ onSubmit }: CommonFormProps<E>) {
     sex: GenderStatus.MALE,
     user_type: UserType.STUDENT,
     username: '',
+    intake_id: '',
   });
 
   function handleChange(e: ValueType) {

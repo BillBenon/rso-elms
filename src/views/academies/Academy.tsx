@@ -15,7 +15,7 @@ import { GenericStatus, ValueType } from '../../types';
 import UpdateAcademy from './UpdateAcademy';
 
 type AcademyTypes = {
-  id: number | string;
+  id: number | string | undefined;
   'academy name': string;
   'academy Admin': string;
   'phone number': string;

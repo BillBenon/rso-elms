@@ -11,7 +11,9 @@ import {
 type TableId = string | number;
 
 class IntakeService {
-  public async create(intake: IntakeInfo): Promise<AxiosResponse<Response<IntakeInfo>>> {
+  public async create(
+    intake: IntakeInfo,
+  ): Promise<AxiosResponse<Response<ExtendedIntakeInfo>>> {
     return await adminstrationAxios.post('/intakes/addIntake', intake);
   }
 

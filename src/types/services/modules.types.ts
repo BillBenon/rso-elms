@@ -9,7 +9,6 @@ export interface ModuleInfo extends CreateModuleInfo, Table {
 }
 
 export interface CreateModuleInfo {
-  id: string | number;
   name: string;
   description: string;
   has_prerequisite: boolean;

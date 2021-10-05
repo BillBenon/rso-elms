@@ -45,7 +45,7 @@ export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     data?.data.data &&
       setDetails({
         ...data?.data.data,
-        institution_id: data?.data.data.institution.id.toString(),
+        institution_id: data?.data.data.institution.id + '',
         head_office_location_id: data?.data.data.head_office_location_id || 17445,
       });
   }, [data]);
