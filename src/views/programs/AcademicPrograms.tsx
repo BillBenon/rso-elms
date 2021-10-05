@@ -83,7 +83,36 @@ export default function AcademicProgram() {
           </Link>
         </TableHeader>
       </section>
+
       <Switch>
+        {/* create academic program */}
+        <Route
+          exact
+          path={`${path}/add`}
+          render={() => {
+            return <NewAcademicProgram />;
+          }}
+        />
+        {/* modify academic program */}
+        <Route exact path={`${path}/:id/edit`} render={() => <UpdateAcademicProgram />} />
+
+        {/* add prerequisite popup */}
+        <Route
+          exact
+          path={`${path}/add/prerequisite`}
+          render={() => {
+            return (
+              <PopupMolecule
+                title="Add prerequisite"
+                open={prOpen}
+                onClose={history.goBack}>
+                another form here
+              </PopupMolecule>
+            );
+          }}
+        />
+        {/* show academic program details */}
+        <Route path={`${path}/:id`} render={() => <ProgramDetails />} />
         <Route
           exact
           path={`${path}`}
@@ -168,7 +197,7 @@ export default function AcademicProgram() {
                         </Heading>
                       </div>
                       <div className="mt-4 space-x-4">
-                        <Link to={`${path}/${Common.id}/edit`}>
+                        <Link to={`${url}/${Common.id}/edit`}>
                           <Button>Edit program</Button>
                         </Link>
                         <Button styleType="outline">Change Status</Button>
@@ -180,37 +209,6 @@ export default function AcademicProgram() {
             );
           }}
         />
-
-        {/* create academic program */}
-        <Route
-          exact
-          path={`${path}/add`}
-          render={() => {
-            return <NewAcademicProgram />;
-          }}
-        />
-
-        {/* show academic program details */}
-
-        {/* modify academic program */}
-        <Route exact path={`${path}/:id/edit`} render={() => <UpdateAcademicProgram />} />
-
-        {/* add prerequisite popup */}
-        <Route
-          exact
-          path={`${path}/add/prerequisite`}
-          render={() => {
-            return (
-              <PopupMolecule
-                title="Add prerequisite"
-                open={prOpen}
-                onClose={history.goBack}>
-                another form here
-              </PopupMolecule>
-            );
-          }}
-        />
-        <Route path={`${path}/:id`} render={() => <ProgramDetails />} />
       </Switch>
     </main>
   );

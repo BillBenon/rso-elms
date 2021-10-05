@@ -22,7 +22,7 @@ export default function Sidebar() {
       { title: 'Privileges', to: '/dashboard/privileges', icon: 'module' },
     ];
     const academicAdminLinks: linkProps[] = [
-      { title: 'Programs', to: '/dashboard/programs', icon: 'faculty' },
+      { title: 'Programs', to: '/dashboard/programs', icon: 'program' },
       { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
       { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
       { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
