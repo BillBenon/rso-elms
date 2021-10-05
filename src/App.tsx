@@ -18,16 +18,15 @@ const App = () => {
       <MainLayout>
         <Router>
           <Switch>
-            <Route exact path="/" component={Signin} />
+            <Route exact path="/" component={ComponentsUseCase} />
             <Route exact path="/redirecting" component={Redirecting} />
             <Route exact path="/institution" component={NewInstitution} />
             <Route exact path="/register" component={Signup} />
             <Route exact path="/register/experience" component={ExperienceInfo} />
             <Route exact path="/register/more" component={MoreInfo} />
-            <Route exact path="/usecase" component={ComponentsUseCase} />
+            <Route path="/login" component={Signin} />
             <RouterProtection />
-
-            <Route component={NotFound} />
+            <Route path="*" component={NotFound} />
           </Switch>
         </Router>
       </MainLayout>
