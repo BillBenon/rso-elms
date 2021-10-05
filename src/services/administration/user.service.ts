@@ -13,6 +13,11 @@ class UserService {
   public async fetchUsers(): Promise<AxiosResponse<Response<UserInfo[]>>> {
     return await adminstrationAxios.get('/users/getUsers');
   }
+  public async getUserAccountByNid(
+    nid: string,
+  ): Promise<AxiosResponse<Response<UserInfo>>> {
+    return await adminstrationAxios.get(`public/getUserAccountsByNid/${nid}`);
+  }
 }
 
 export const userService = new UserService();
