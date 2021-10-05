@@ -23,18 +23,13 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
   const [regControl, setRegControl] = useState<IRegistrationControlCreateInfo>({
     academy_id: '',
     description: '',
-    actual_start_date: '',
-    actual_end_date: '',
     expected_start_date: '',
     expected_end_date: '',
-    id: id,
   });
 
   const regControlUpdateInfo: any = {
     academy_id: regControl.academy?.id,
     description: regControl.description,
-    actual_start_date: regControl.actual_start_date,
-    actual_end_date: regControl.actual_end_date,
     expected_start_date: regControl.expected_start_date,
     expected_end_date: regControl.expected_end_date,
     id: id,
@@ -66,6 +61,7 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
     });
     if (onSubmit) onSubmit(e);
   }
+
   return (
     <form onSubmit={submitForm}>
       <TextAreaMolecule
@@ -76,16 +72,19 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
       </TextAreaMolecule>
       <DateMolecule
         defaultValue={regControl.expected_start_date}
+        padding={3}
         handleChange={handleChange}
         name={'expected_start_date'}>
-        Expected Start Date
+        Start Date
       </DateMolecule>
 
       <DateMolecule
         handleChange={handleChange}
+        padding={3}
+        endYear={new Date().getFullYear() + 15}
         defaultValue={regControl.expected_end_date}
         name={'expected_end_date'}>
-        Expected End Date
+        End Date
       </DateMolecule>
 
       <RadioMolecule

@@ -35,15 +35,15 @@ const RouterProtection = () => {
       <Route path="/dashboard/roles" component={Roles} />
       <Route path="/dashboard/users" component={Users} />
       <Route path="/dashboard/privileges" component={PrivilegesView} />
-      {/* end of institution admin ProgramDetails */}
+      {/* end of institution admin page */}
     </>
   );
 
   const AcademicAdminRoutes = () => (
     <>
       {/* start of academic admin pages */}
-      <Route exact path="/dashboard/modules" component={Modules} />
-      <Route exact path="/dashboard/subjects" component={Subjects} />
+      <Route path="/dashboard/modules" component={Modules} />
+      <Route path="/dashboard/subjects" component={Subjects} />
       <Route path="/dashboard/registration-control" component={RegistrationControl} />
 
       <Route path="/dashboard/divisions" component={Divisions} />
@@ -52,6 +52,7 @@ const RouterProtection = () => {
       <Route exact path="/dashboard/levels" component={LevelsView} />
       <Route exact path="/dashboard/intakes" component={IntakesView} />
       <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} />
+
       {/* end of academic admin pages */}
     </>
   );

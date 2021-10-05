@@ -13,19 +13,16 @@ import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-interface INewFaculty extends FormPropType {
-  handleAfterCreate: () => void;
-}
-
-export default function NewFaculty({ onSubmit, handleAfterCreate }: INewFaculty) {
+export default function NewFaculty({ onSubmit }: FormPropType) {
   const [division, setDivision] = useState<DivisionCreateInfo>({
+    id: '',
     academy_id: '',
     code: '',
     description: '',
     division_type: 'FACULTY',
     name: '',
   });
-  const { mutateAsync } = divisionStore.createDivision();
+  const { mutateAsync } = divisionStore.createDivision(division.division_type);
   const history = useHistory();
 
   function handleChange({ name, value }: ValueType) {
@@ -40,7 +37,7 @@ export default function NewFaculty({ onSubmit, handleAfterCreate }: INewFaculty)
     mutateAsync(division, {
       onSuccess: () => {
         toast.success('Role created', { duration: 3 });
-        // handleAfterCreate();
+        // ();
         history.goBack();
       },
       onError: () => {

@@ -14,6 +14,7 @@ type MProp = {
   placeholder?: string;
   width?: string;
   className?: string;
+  padding?: number;
 };
 
 const MinuteSelect = (mprops: MProp) => {
@@ -37,6 +38,7 @@ const MinuteSelect = (mprops: MProp) => {
       defaultValue={newDefaultValue}
       name={mprops.name}
       placeholder={mprops.placeholder}
+      padding={mprops.padding}
       width={mprops.width}
       className={mprops.className}
       options={renderMinuteOptions()}

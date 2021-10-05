@@ -42,6 +42,7 @@ export default function NewModuleForm() {
         toast.success(data.data.message);
         if (data.data.data.has_prerequisite)
           history.push(`/dashboard/modules/${data.data.data.id}/add-prereq`);
+        else history.goBack();
       },
       onError() {
         toast.error('error occurred please try again');

@@ -64,7 +64,7 @@ export default function Roles() {
   const manyActions = [
     {
       name: 'Disable/Enable',
-      handleAction: (data: string[]) => {
+      handleAction: (data?: string[]) => {
         alert(`handling many at once ${data}`);
       },
     },

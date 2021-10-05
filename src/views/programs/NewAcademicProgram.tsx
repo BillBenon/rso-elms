@@ -67,7 +67,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
 
   return (
     <form onSubmit={createProgram}>
-      <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
+      <div className="p-6 w-5/12 pl-8 gap-3 rounded-lg bg-main mt-8">
         <div className="py-5 mb-3 capitalize">
           <Heading color="txt-primary" fontWeight="bold">
             New Program
