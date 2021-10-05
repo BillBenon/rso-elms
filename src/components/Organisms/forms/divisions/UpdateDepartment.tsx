@@ -60,15 +60,13 @@ export default function UpdateDepartment({ onSubmit }: FormPropType) {
     e.preventDefault();
     mutateAsync(updateDivisionInfo, {
       onSuccess: () => {
-        toast.success('Department updated', { duration: 3 });
+        toast.success('Department updated');
         queryClient.invalidateQueries(['divisions/type', division.division_type]);
 
         history.goBack();
       },
       onError: () => {
-        toast.error('something wrong happened while updating department', {
-          duration: 3,
-        });
+        toast.error('something wrong happened while updating department');
       },
     });
     if (onSubmit) onSubmit(e);

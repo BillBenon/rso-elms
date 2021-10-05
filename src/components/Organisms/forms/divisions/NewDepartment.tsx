@@ -1,11 +1,13 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { queryClient } from '../../../../plugins/react-query';
+import { authenticatorService } from '../../../../services';
+import { authenticatorStore } from '../../../../store';
 import academyStore from '../../../../store/academy.store';
 import { divisionStore } from '../../../../store/divisions.store';
-import { FormPropType, ValueType } from '../../../../types';
+import { FormPropType, ParamType, ValueType } from '../../../../types';
 import { AcademyInfo } from '../../../../types/services/academy.types';
 import { DivisionCreateInfo } from '../../../../types/services/division.types';
 import { getDropDownOptions } from '../../../../utils/getOption';
@@ -15,14 +17,18 @@ import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function NewDepartment({ onSubmit }: FormPropType) {
+  const { id } = useParams<ParamType>();
+
+  const { data } = authenticatorStore.authUser();
+
   const [division, setDivision] = useState<DivisionCreateInfo>({
-    academy_id: '',
+    academy_id: data.data.data.academy.id,
     code: '',
     description: '',
     division_type: 'DEPARTMENT',
     id: '',
     name: '',
-    parent_id: '',
+    parent_id: id ? id : '',
   });
   const { mutateAsync } = divisionStore.createDivision(division.division_type);
   const history = useHistory();
@@ -40,12 +46,12 @@ export default function NewDepartment({ onSubmit }: FormPropType) {
     e.preventDefault();
     mutateAsync(division, {
       onSuccess: () => {
-        toast.success('Role created', { duration: 3 });
+        toast.success('Role created');
         queryClient.invalidateQueries();
         history.goBack();
       },
       onError: () => {
-        toast.error('something wrong happened while creating role', { duration: 3 });
+        toast.error('something wrong happened while creating department');
       },
     });
     if (onSubmit) onSubmit(e);
@@ -80,14 +86,16 @@ export default function NewDepartment({ onSubmit }: FormPropType) {
         Academy
       </DropdownMolecule>
 
-      <DropdownMolecule
-        width="82"
-        placeholder="Select faculty"
-        options={getDropDownOptions(departments)}
-        name="parent_id"
-        handleChange={handleChange}>
-        Faculty
-      </DropdownMolecule>
+      {!id && (
+        <DropdownMolecule
+          width="82"
+          placeholder="Select faculty"
+          options={getDropDownOptions(departments)}
+          name="parent_id"
+          handleChange={handleChange}>
+          Faculty
+        </DropdownMolecule>
+      )}
 
       {/* save button */}
       <div className="mt-5">

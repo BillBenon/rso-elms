@@ -52,11 +52,11 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
     e.preventDefault();
     mutateAsync(regControlUpdateInfo, {
       onSuccess: () => {
-        toast.success('Control updated', { duration: 3 });
+        toast.success('Control updated');
         history.goBack();
       },
       onError: () => {
-        toast.error('something wrong happened while updating a control', { duration: 3 });
+        toast.error('something wrong happened while updating a control');
       },
     });
     if (onSubmit) onSubmit(e);

@@ -2,6 +2,7 @@ import { GenericStatus, Table } from '..';
 import { IRegistrationControlInfo } from './registrationControl.types';
 
 export interface IntakeInfo {
+  id: string | number;
   title: string;
   actual_end_date: Date | string;
   actual_start_date: Date | string;

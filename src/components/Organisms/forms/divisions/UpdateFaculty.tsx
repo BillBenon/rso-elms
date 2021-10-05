@@ -48,11 +48,11 @@ export default function UpdateFaculty({ onSubmit }: FormPropType) {
     e.preventDefault();
     mutateAsync(updateDivisionInfo, {
       onSuccess: () => {
-        toast.success('Faculty updated', { duration: 3 });
+        toast.success('Faculty updated');
         history.goBack();
       },
       onError: () => {
-        toast.error('something wrong happened while updaing faculty', { duration: 3 });
+        toast.error('something wrong happened while updaing faculty');
       },
     });
     if (onSubmit) onSubmit(e);

@@ -20,6 +20,7 @@ export default function NewFaculty({ onSubmit }: FormPropType) {
     description: '',
     division_type: 'FACULTY',
     name: '',
+    id: '',
   });
   const { mutateAsync } = divisionStore.createDivision(division.division_type);
   const history = useHistory();
@@ -35,12 +36,12 @@ export default function NewFaculty({ onSubmit }: FormPropType) {
     e.preventDefault();
     mutateAsync(division, {
       onSuccess: () => {
-        toast.success('Role created', { duration: 3 });
+        toast.success('Faculty created');
         // ();
         history.goBack();
       },
       onError: () => {
-        toast.error('something wrong happened while creating role', { duration: 3 });
+        toast.error('something wrong happened while creating faculty');
       },
     });
     if (onSubmit) onSubmit(e);

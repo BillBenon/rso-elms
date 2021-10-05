@@ -13,7 +13,10 @@ import NewDepartment from '../forms/divisions/NewDepartment';
 import UpdateDepartment from '../forms/divisions/UpdateDepartment';
 
 interface FilteredData
-  extends Pick<DivisionInfo, 'id' | 'name' | 'description' | 'generic_status'> {}
+  extends Pick<
+    DivisionInfo,
+    'id' | 'name' | 'description' | 'generic_status' | 'total_num_childreen'
+  > {}
 
 interface IDepartment {
   fetchType: string;
@@ -32,7 +35,13 @@ export default function Departments({ fetchType }: IDepartment) {
     let formattedDeparts: any = [];
 
     const filteredInfo = data?.data.data.map((department: DivisionInfo) =>
-      _.pick(department, ['id', 'name', 'description', 'generic_status']),
+      _.pick(department, [
+        'id',
+        'name',
+        'description',
+        'generic_status',
+        'total_num_childreen',
+      ]),
     );
 
     filteredInfo?.map((department: any) => {
@@ -41,6 +50,7 @@ export default function Departments({ fetchType }: IDepartment) {
         decription: department.description,
         name: department.name,
         status: department.generic_status,
+        programs: department.total_num_childreen,
       };
       formattedDeparts.push(filteredData);
     });
@@ -65,7 +75,10 @@ export default function Departments({ fetchType }: IDepartment) {
   return (
     <main>
       <section>
-        <TableHeader title="Department" totalItems={4} handleSearch={() => {}}>
+        <TableHeader
+          title="Department"
+          totalItems={departments?.length || 0}
+          handleSearch={() => {}}>
           <Link to={`${url}/add`}>
             <Button>Add department</Button>
           </Link>
@@ -80,6 +93,7 @@ export default function Departments({ fetchType }: IDepartment) {
             statusColumn="status"
             data={departments}
             uniqueCol={'id'}
+            hide={['id']}
             actions={actions}
           />
         )}

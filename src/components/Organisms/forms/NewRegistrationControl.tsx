@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useHistory } from 'react-router';
 
 import academyStore from '../../../store/academy.store';
 import registrationControlStore from '../../../store/registrationControl.store';
@@ -17,6 +18,7 @@ interface PropType<K> extends CommonFormProps<K> {}
 
 export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
   const { mutateAsync } = registrationControlStore.createRegControl();
+  const history = useHistory();
 
   const [regControl, setRegControl] = useState<IRegistrationControlCreateInfo>({
     academy_id: '',
@@ -36,10 +38,11 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
     e.preventDefault();
     mutateAsync(regControl, {
       onSuccess: () => {
-        toast.success('Registration control created', { duration: 8 });
+        toast.success('Registration control created');
+        history.goBack();
       },
       onError: () => {
-        toast.error('something wrong happened while creating role', { duration: 3 });
+        toast.error('something wrong happened while creating control');
       },
     });
 

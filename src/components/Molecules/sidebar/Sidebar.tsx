@@ -24,7 +24,6 @@ export default function Sidebar() {
     const academicAdminLinks: linkProps[] = [
       { title: 'Programs', to: '/dashboard/programs', icon: 'faculty' },
       { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
-      { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
       { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
       { title: 'Subjects', to: '/dashboard/subjects', icon: 'module' },
       { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },

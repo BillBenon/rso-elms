@@ -91,6 +91,7 @@ export default function Academy() {
                     statusColumn="status"
                     data={academies}
                     actions={academyActions}
+                    hide={['id']}
                     uniqueCol="id"
                   />
                 )}

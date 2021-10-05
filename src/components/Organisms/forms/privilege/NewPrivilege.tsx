@@ -56,12 +56,12 @@ export default function NewPrivilege({ onSubmit }: PropType) {
     e.preventDefault();
     mutate(form, {
       onSuccess: () => {
-        toast.success('Privilege updated', { duration: 3 });
+        toast.success('Privilege updated');
         history.goBack();
         // TODO: @liberi to fix this function which is not reachable
       },
       onError: () => {
-        toast.error('something wrong happened while updating privilage', { duration: 3 });
+        toast.error('something wrong happened while updating privilage');
       },
     });
     onSubmit(e);

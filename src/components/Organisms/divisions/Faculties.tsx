@@ -9,11 +9,15 @@ import Button from '../../Atoms/custom/Button';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
+import NewDepartment from '../forms/divisions/NewDepartment';
 import NewFaculty from '../forms/divisions/NewFaculty';
 import UpdateFaculty from '../forms/divisions/UpdateFaculty';
 
 interface FilteredData
-  extends Pick<DivisionInfo, 'id' | 'name' | 'description' | 'generic_status'> {}
+  extends Pick<
+    DivisionInfo,
+    'id' | 'name' | 'description' | 'generic_status' | 'total_num_childreen'
+  > {}
 
 interface IFaculties {
   fetchType: string;
@@ -30,7 +34,13 @@ export default function Faculties({ fetchType }: IFaculties) {
   useEffect(() => {
     let formattedFaculties: any = [];
     const filteredFaculties = data?.data.data.map((faculty: DivisionInfo) =>
-      _.pick(faculty, ['id', 'name', 'description', 'generic_status']),
+      _.pick(faculty, [
+        'id',
+        'name',
+        'description',
+        'generic_status',
+        'total_num_childreen',
+      ]),
     );
 
     filteredFaculties?.map((faculty: any) => {
@@ -39,12 +49,13 @@ export default function Faculties({ fetchType }: IFaculties) {
         decription: faculty.description,
         name: faculty.name,
         status: faculty.generic_status,
+        departments: faculty.total_num_childreen,
       };
       formattedFaculties.push(filteredInfo);
     });
 
     data?.data.data && setFaculties(formattedFaculties);
-  }, [data, data?.data.data]);
+  }, [data]);
 
   function handleClose() {
     history.goBack();
@@ -57,13 +68,22 @@ export default function Faculties({ fetchType }: IFaculties) {
         history.push(`${path}/${id}/edit`); // go to edit role
       },
     },
+    {
+      name: 'Add Department',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`${path}/${id}/add`);
+      },
+    },
     { name: 'View', handleAction: () => {} },
   ];
 
   return (
     <main>
       <section>
-        <TableHeader title="Faculty" totalItems={4} handleSearch={() => {}}>
+        <TableHeader
+          title="Faculty"
+          totalItems={faculties?.length || 0}
+          handleSearch={() => {}}>
           <Link to={`${url}/add`}>
             <Button>Add Faculty</Button>
           </Link>
@@ -77,6 +97,7 @@ export default function Faculties({ fetchType }: IFaculties) {
             handleSelect={() => {}}
             statusColumn="status"
             data={faculties}
+            hide={['id']}
             uniqueCol={'id'}
             actions={actions}
           />
@@ -104,6 +125,18 @@ export default function Faculties({ fetchType }: IFaculties) {
             return (
               <PopupMolecule title="New Faculty" open onClose={() => history.goBack()}>
                 <NewFaculty />
+              </PopupMolecule>
+            );
+          }}
+        />
+
+        <Route
+          exact
+          path={`${path}/:id/add`}
+          render={() => {
+            return (
+              <PopupMolecule title="New Department" open onClose={() => history.goBack()}>
+                <NewDepartment />
               </PopupMolecule>
             );
           }}

@@ -9,7 +9,6 @@ import Academies from './views/academies/Academy';
 import Divisions from './views/divisions/Divisions';
 import IntakeModulesView from './views/intakes/IntakeModules';
 import IntakesView from './views/intakes/Intakes';
-import LevelsView from './views/levels/Levels';
 import Modules from './views/modules';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicPrograms from './views/programs/AcademicPrograms';
@@ -53,7 +52,7 @@ const RouterProtection = () => {
       <Route exact path="/dashboard/programs" component={AcademicPrograms} />
       <Route exact path="/dashboard/programs/new" component={NewAcademicProgram} />
       <Route path="/dashboard/programs/:id" component={ProgramDetails} />
-      <Route exact path="/dashboard/levels" component={LevelsView} />
+
       <Route exact path="/dashboard/intakes" component={IntakesView} />
       <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} />
 
