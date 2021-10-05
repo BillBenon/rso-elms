@@ -2,6 +2,7 @@
 import { Table } from '..';
 import { GenericStatus } from './common.types';
 import { DivisionInfo } from './division.types';
+import { IntakeInfo } from './intake.types';
 import { UserInfo } from './user.types';
 
 export interface ProgramInfo extends CreateProgramInfo, Table {
@@ -21,4 +22,9 @@ export interface CreateProgramInfo {
 export enum ProgramType {
   SHORT_COURSE = 'SHORT_COURSE',
   ACADEMIC = 'ACADEMIC',
+}
+export interface IntakeProgramInfo extends Table {
+  intake: IntakeInfo;
+  program: ProgramInfo;
+  description: string;
 }

@@ -1,21 +1,20 @@
-import { AxiosResponse } from 'axios';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { queryClient } from '../../../../plugins/react-query';
+import academyStore from '../../../../store/academy.store';
 import { divisionStore } from '../../../../store/divisions.store';
-import { FormPropType, ParamType, Response, ValueType } from '../../../../types';
-import {
-  DivisionCreateInfo,
-  DivisionInfo,
-} from '../../../../types/services/division.types';
+import { FormPropType, ParamType, ValueType } from '../../../../types';
+import { AcademyInfo } from '../../../../types/services/academy.types';
+import { DivisionCreateInfo } from '../../../../types/services/division.types';
+import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
+import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-export default function UpdateFaculty({ onSubmit }: FormPropType) {
-  // const [form, setForm] = useState<DivisionInfo>({ name: '', description: '' });
+export default function UpdateDepartment({ onSubmit }: FormPropType) {
   const { mutateAsync } = divisionStore.updateDivision();
   const history = useHistory();
 
@@ -27,67 +26,62 @@ export default function UpdateFaculty({ onSubmit }: FormPropType) {
     academy_id: '',
     code: '',
     description: '',
-    division_type: 'FACULTY',
+    division_type: 'DEPARTMENT',
     id: '',
     name: '',
+    parent_id: '',
   });
 
   const updateDivisionInfo: any = {
     academy_id: division.academy?.id,
     code: '',
     description: division.description,
-    division_type: 'FACULTY',
+    division_type: 'DEPARTMENT',
     id: id,
     name: division.name,
+    parent_id: division.parent_id,
   };
 
   useEffect(() => {
     data?.data && setDivision(data?.data.data);
   }, [data]);
 
+  const academies: AcademyInfo[] | undefined =
+    academyStore.fetchAcademies().data?.data.data;
+
+  const departments = divisionStore.getDivisionByType('FACULTY').data?.data.data;
+
   function handleChange({ name, value }: ValueType) {
     setDivision((old) => ({ ...old, [name]: value }));
   }
+  console.log(data?.data.data);
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
     mutateAsync(updateDivisionInfo, {
-      onSuccess: (newData) => {
-        toast.success('Faculty updated', { duration: 3 });
-        // queryClient.invalidateQueries(['divisions/type', division.division_type]);
-        queryClient.setQueryData(['divisions/type', division?.division_type], (old) => {
-          const previousData = old as AxiosResponse<Response<DivisionInfo[]>>;
-          const newArr = previousData.data.data.map(
-            (fac: DivisionInfo, index: number) => {
-              if (fac.id === newData.data.data.id) {
-                fac[index] = newData;
-              }
-              return fac;
-            },
-          );
-          return previousData;
-        });
+      onSuccess: () => {
+        toast.success('Department updated', { duration: 3 });
+        queryClient.invalidateQueries(['divisions/type', division.division_type]);
 
         history.goBack();
       },
       onError: () => {
-        toast.error('something wrong happened while updaing faculty', { duration: 3 });
+        toast.error('something wrong happened while updating department', {
+          duration: 3,
+        });
       },
     });
     if (onSubmit) onSubmit(e);
   }
   return (
     <form onSubmit={submitForm}>
-      {/* model name */}
       <InputMolecule
         required
         value={division.name}
         error=""
         handleChange={handleChange}
         name="name">
-        Faculty name
+        Department name
       </InputMolecule>
-      {/* model code
-    {/* module description */}
       <TextAreaMolecule
         value={division.description}
         name="description"
@@ -95,8 +89,23 @@ export default function UpdateFaculty({ onSubmit }: FormPropType) {
         handleChange={handleChange}>
         Descripiton
       </TextAreaMolecule>
+      <DropdownMolecule
+        defaultValue={division.academy_id}
+        options={getDropDownOptions(academies)}
+        name="academy_id"
+        placeholder={'Academy to be enrolled'}
+        handleChange={handleChange}>
+        Academy
+      </DropdownMolecule>
 
-      {/* save button */}
+      <DropdownMolecule
+        width="82"
+        placeholder="Select faculty"
+        options={getDropDownOptions(departments)}
+        name="parent_id"
+        handleChange={handleChange}>
+        Faculty
+      </DropdownMolecule>
       <div className="mt-5">
         <Button type="submit" full>
           Add

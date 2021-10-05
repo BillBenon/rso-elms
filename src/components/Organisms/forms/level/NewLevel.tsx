@@ -27,18 +27,17 @@ function NewLevel<E>({ onSubmit }: PropType<E>) {
   function handleChange(e: ValueType) {
     setLevel({ ...level, [e.name]: e.value });
   }
-  // function handleChange(_e: ValueType) {}
 
   function submitForm(e: FormEvent) {
     e.preventDefault(); // prevent page to reload:
     e.preventDefault();
     mutateAsync(level, {
       onSuccess: () => {
-        toast.success('Role created', { duration: 3 });
+        toast.success('level created', { duration: 3 });
         history.goBack();
       },
       onError: () => {
-        toast.error('something wrong happened while creating role', { duration: 3 });
+        toast.error('something wrong happened while creating level', { duration: 3 });
       },
     });
     if (onSubmit) onSubmit(e);

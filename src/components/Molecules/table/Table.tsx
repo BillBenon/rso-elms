@@ -60,7 +60,11 @@ export function Table<T>({
 
   useEffect(() => {
     setCurrentRows(data.slice(indexOfFirstRow, indexOfLastRow));
-  }, [currentPage]);
+  }, [currentPage, data]);
+
+  // useEffect(() => {
+  //   setCurrentRows(data.slice(indexOfFirstRow, indexOfLastRow));
+  // }, [data]);
 
   // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
@@ -153,7 +157,7 @@ export function Table<T>({
     const dynamicHeaders = keys.map((key) =>
       !rowsToHide.includes(key) ? (
         <th className="px-4 py-5 capitalize" key={key as string}>
-          {key}
+          {key.toString().replaceAll('_', ' ')}
         </th>
       ) : (
         <></>

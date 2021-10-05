@@ -41,9 +41,12 @@ export const getDaysInMonth = (year: number, month: number): number => {
 export function formatDateToYyMmDd(date: string) {
   let formatedDate = new Date(date);
 
-  return `${formatedDate.getFullYear()}/${
-    formatedDate.getMonth() + 1
-  }/${formatedDate.getDate()}`;
+  const month = formatedDate.getMonth() + 1;
+  const day = formatedDate.getDate();
+
+  return `${formatedDate.getFullYear()}-${month < 10 ? '0' : ''}${month}-${
+    day < 10 ? '0' : ''
+  }${day}`;
 }
 
 export function formatDateToIso(date: string | Date): string {

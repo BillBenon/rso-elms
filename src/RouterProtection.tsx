@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Route } from 'react-router-dom';
 
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
-import NewInstructor from './components/Organisms/user/NewInstructor';
-import NewStudent from './components/Organisms/user/NewStudent';
 import Dashboard from './layout/Dashboard';
 import { authenticatorStore } from './store';
 import { UserInfo } from './types/services/user.types';
@@ -37,8 +35,6 @@ const RouterProtection = () => {
       <Route path="/dashboard/role/:id/view" component={ViewRole} />
       <Route path="/dashboard/academies" component={Academies} />
       <Route path="/dashboard/roles" component={Roles} />
-      <Route exact path="/dashboard/user/new" component={NewStudent} />
-      <Route exact path="/dashboard/users/instructor/new" component={NewInstructor} />
       <Route path="/dashboard/users" component={Users} />
       <Route path="/dashboard/privileges" component={PrivilegesView} />
       {/* end of institution admin page */}

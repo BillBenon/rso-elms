@@ -9,6 +9,8 @@ import Button from '../../Atoms/custom/Button';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
+import NewDepartment from '../forms/divisions/NewDepartment';
+import UpdateDepartment from '../forms/divisions/UpdateDepartment';
 
 interface FilteredData
   extends Pick<DivisionInfo, 'id' | 'name' | 'description' | 'generic_status'> {}
@@ -18,7 +20,7 @@ interface IDepartment {
 }
 
 export default function Departments({ fetchType }: IDepartment) {
-  const { path } = useRouteMatch();
+  const { url, path } = useRouteMatch();
   const history = useHistory();
   const [departments, setDepartments] = useState<FilteredData[]>();
   const { data, isSuccess, isLoading } = divisionStore.getDivisionByType(
@@ -35,7 +37,7 @@ export default function Departments({ fetchType }: IDepartment) {
 
     filteredInfo?.map((department: any) => {
       let filteredData: any = {
-        id: department.id.toString,
+        id: department.id.toString(),
         decription: department.description,
         name: department.name,
         status: department.generic_status,
@@ -64,8 +66,8 @@ export default function Departments({ fetchType }: IDepartment) {
     <main>
       <section>
         <TableHeader title="Department" totalItems={4} handleSearch={() => {}}>
-          <Link to={`/add`}>
-            <Button>Add depp</Button>
+          <Link to={`${url}/add`}>
+            <Button>Add department</Button>
           </Link>
         </TableHeader>
       </section>
@@ -91,7 +93,19 @@ export default function Departments({ fetchType }: IDepartment) {
           render={() => {
             return (
               <PopupMolecule title="Update Department" open={true} onClose={handleClose}>
-                {/* update division here */}
+                <UpdateDepartment />
+              </PopupMolecule>
+            );
+          }}
+        />
+
+        <Route
+          exact
+          path={`${path}/add`}
+          render={() => {
+            return (
+              <PopupMolecule title="New Department" open onClose={() => history.goBack()}>
+                <NewDepartment handleAfterCreate={() => {}} />
               </PopupMolecule>
             );
           }}

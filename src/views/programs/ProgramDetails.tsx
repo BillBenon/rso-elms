@@ -9,7 +9,7 @@ import UsersPreview from '../../components/Molecules/cards/UsersPreview';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import programStore from '../../store/program.store';
 import { CommonCardDataType } from '../../types';
-import { typeChecker } from '../../utils/getOption';
+import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from './AcademicPrograms';
 interface ParamType {
   id: string;
@@ -27,7 +27,7 @@ export default function ProgramDetailsMolecule() {
     if (program) {
       programData = {
         status: {
-          type: typeChecker(program.generic_status),
+          type: advancedTypeChecker(program.generic_status),
           text: program.generic_status.toString(),
         },
         code: program.code,
@@ -48,7 +48,7 @@ export default function ProgramDetailsMolecule() {
     let mod: CommonCardDataType = {
       id: module.id,
       status: {
-        type: typeChecker(module.generic_status),
+        type: advancedTypeChecker(module.generic_status),
         text: module.generic_status.toString(),
       },
       code: module.code,

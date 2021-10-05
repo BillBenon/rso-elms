@@ -28,6 +28,7 @@ const App = () => {
             <RouterProtection />
 
             <Route path="*" component={NotFound} />
+            <Route component={NotFound} />
           </Switch>
         </Router>
       </MainLayout>
