@@ -36,8 +36,10 @@ const interceptAdminResError = (error: Error | AxiosError<AxiosResponse<Response
       window.location.href = '/login';
     }
 
-    if (e?.status === 400) toast.error(`Bad Request on, ${e.config.url}`);
-    else toast.error((e?.data.data.message || e?.data?.data?.error) + '');
+    if (import.meta.env.DEV) {
+      if (e?.status === 400) toast.error(`Bad Request on, ${e.config.url}`);
+      else toast.error((e?.data.data.message || e?.data?.data?.error) + '');
+    }
 
     // unauthorized
     throw error;
