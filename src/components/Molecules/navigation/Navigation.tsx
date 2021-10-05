@@ -39,7 +39,7 @@ export default function Navigation() {
     logoutFn.refetch().then(() => {
       queryClient.clear();
       cookie.eraseCookie('jwt_info');
-      history.push('/');
+      history.push('/login');
     });
   }
   return (
