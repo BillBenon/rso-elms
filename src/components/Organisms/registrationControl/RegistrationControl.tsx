@@ -96,7 +96,7 @@ export default function RegistrationControl() {
         totalItems={RegistrationControls.length}
         handleSearch={handleSearch}>
         <Link to={`${url}/add`}>
-          <Button>Add new reg control</Button>
+          <Button disabled>Add new reg control</Button>
         </Link>
       </TableHeader>
 
