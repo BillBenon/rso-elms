@@ -78,7 +78,10 @@ export default function Academy() {
                 </ILabel>
               </div>
               <div className="py-4">
-                <TableHeader title="Academy" totalItems={300} handleSearch={handleSearch}>
+                <TableHeader
+                  title="Academy"
+                  totalItems={academies.length}
+                  handleSearch={handleSearch}>
                   <Link to={`${url}/add`}>
                     <Button>New academy</Button>
                   </Link>
@@ -92,6 +95,7 @@ export default function Academy() {
                     data={academies}
                     actions={academyActions}
                     uniqueCol="id"
+                    hide={['id']}
                   />
                 )}
               </div>

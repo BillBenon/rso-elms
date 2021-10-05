@@ -79,6 +79,7 @@ export default function Faculties({ fetchType }: IFaculties) {
             data={faculties}
             uniqueCol={'id'}
             actions={actions}
+            hide={['id']}
           />
         )}
       </section>
