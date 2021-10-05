@@ -15,6 +15,7 @@ import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function NewFaculty({ onSubmit }: FormPropType) {
   const [division, setDivision] = useState<DivisionCreateInfo>({
+    id: '',
     academy_id: '',
     code: '',
     description: '',

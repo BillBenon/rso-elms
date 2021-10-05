@@ -10,7 +10,7 @@ export interface DivisionInfo extends Table, DivisionCreateInfo {
 }
 
 export interface DivisionCreateInfo {
-  id?: string | number;
+  id: string | number;
   academy_id: string;
   code: string;
   description: string;
