@@ -60,9 +60,8 @@ const RouterProtection = () => {
   return (
     <>
       <Dashboard>
-        {(authUser?.user_type == 'SUPER_ADMIN' || import.meta.env.DEV) &&
-          InstitutionAdminRoutes()}
-        {(authUser?.user_type == 'ADMIN' || import.meta.env.DEV) && AcademicAdminRoutes()}
+        {authUser?.user_type == 'SUPER_ADMIN' && InstitutionAdminRoutes()}
+        {authUser?.user_type == 'ADMIN' && AcademicAdminRoutes()}
       </Dashboard>
       {/* protected routes  */}
 
