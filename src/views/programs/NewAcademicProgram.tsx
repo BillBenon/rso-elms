@@ -23,7 +23,8 @@ interface INewAcademyProgram<K> extends CommonFormProps<K> {}
 
 export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E>) {
   const history = useHistory();
-  const [lopen, setLopen] = useState(false);
+  const [lopen, setLopen] = useState<boolean>(false);
+  const [confirmation, setConfirmation] = useState<boolean>(false);
 
   const { data } = usersStore.fetchUsers();
   const instructors = data?.data.data.filter(
@@ -51,13 +52,15 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
 
   async function createProgram<T>(e: FormEvent<T>) {
     e.preventDefault();
-    if (onSubmit) onSubmit(e);
-    await mutateAsync(details, {
-      onSuccess() {
-        setLopen(true);
-      },
-      onError() {},
-    });
+    setConfirmation(true);
+    // if (onSubmit) onSubmit(e);
+    // await mutateAsync(details, {
+    //   onSuccess() {
+    //     setConfirmation(true);
+    //     setLopen(true);
+    //   },
+    //   onError() {},
+    // });
   }
 
   function handlePopupClose() {
@@ -137,6 +140,16 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
         open={lopen}
         onClose={handlePopupClose}>
         <NewLevel />
+      </PopupMolecule>
+      <PopupMolecule
+        title="Confirmation alert"
+        open={confirmation}
+        onClose={() => setConfirmation(false)}>
+        Do you want to create a level to this program ?
+        <div className="flex justify-between">
+          <Button onClick={() => setLopen(true)}>Yes</Button>
+          <Button onClick={() => history.goBack()}>No</Button>
+        </div>
       </PopupMolecule>
     </form>
   );
