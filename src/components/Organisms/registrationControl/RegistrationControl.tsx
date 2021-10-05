@@ -159,6 +159,22 @@ export default function RegistrationControl() {
             );
           }}
         />
+        {/* intakes in reg control */}
+        <Route
+          exact
+          path={`${path}/:id/intakes`}
+          render={() => {
+            return (
+              <PopupMolecule
+                closeOnClickOutSide={false}
+                title="New intake"
+                open
+                onClose={handleClose}>
+                <NewIntake handleSuccess={handleClose} />
+              </PopupMolecule>
+            );
+          }}
+        />
       </Switch>
     </div>
   );

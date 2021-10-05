@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 
@@ -25,8 +25,10 @@ import Stepper from '../../Molecules/Stepper/Stepper';
 interface IProps {
   values: IntakeInfo;
   handleChange: (_e: ValueType) => any;
-  handleNext: <T>(_e: FormEvent<T>) => any;
+  handleNext: () => void;
   handleProgramsChange?: (_e: ValueType) => any;
+  isLoading?: boolean;
+  handleGoBack: () => void;
 }
 interface ParamType {
   id: string;
@@ -65,11 +67,10 @@ export default function NewIntake(props: CProps) {
     setSelectedPrograms(e.value);
   }
 
-  const { mutateAsync } = intakeStore.create();
+  const { mutateAsync, isLoading } = intakeStore.create();
   const addProgram = intakeStore.addPrograms();
 
-  async function handleSubmit<T>(e: FormEvent<T>) {
-    e.preventDefault();
+  async function handleSubmit() {
     if (currentStep === 0) setCurrentStep(currentStep + 1);
     else {
       let title = values.title.trim().split(' ');
@@ -128,6 +129,10 @@ export default function NewIntake(props: CProps) {
     });
   }
 
+  const handleBack = () => {
+    if (currentStep >= 1) setCurrentStep(currentStep - 1);
+  };
+
   const stepperContent = {
     currentStep: currentStep,
     completeStep: currentStep,
@@ -140,6 +145,7 @@ export default function NewIntake(props: CProps) {
             handleChange={handleChange}
             handleNext={handleSubmit}
             handleProgramsChange={handleProgramsChange}
+            handleGoBack={handleBack}
           />
         ),
         clicked: () => {},
@@ -151,6 +157,8 @@ export default function NewIntake(props: CProps) {
             values={values}
             handleChange={handleChange}
             handleNext={handleSubmit}
+            isLoading={isLoading}
+            handleGoBack={handleBack}
           />
         ),
         clicked: () => {},
@@ -186,7 +194,11 @@ function IntakeInfoComponent({
   };
 
   return (
-    <form onSubmit={handleNext}>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleNext();
+      }}>
       <InputMolecule
         name="title"
         placeholder="Intake title"
@@ -218,7 +230,7 @@ function IntakeInfoComponent({
         Programs in this intake
       </DropdownMolecule>
       <div className="pt-3">
-        <Button type="submit" onClick={() => handleNext}>
+        <Button type="submit" onClick={handleNext}>
           Next
         </Button>
       </div>
@@ -226,9 +238,18 @@ function IntakeInfoComponent({
   );
 }
 
-function IntakeStatusComponent({ handleChange, handleNext }: IProps) {
+function IntakeStatusComponent({
+  handleChange,
+  handleNext,
+  isLoading,
+  handleGoBack,
+}: IProps) {
   return (
-    <form onSubmit={handleNext}>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleNext();
+      }}>
       <DateMolecule
         showTime={false}
         handleChange={handleChange}
@@ -260,10 +281,10 @@ function IntakeStatusComponent({ handleChange, handleNext }: IProps) {
       </DropdownMolecule>
 
       <div className="pt-3 flex justify-between">
-        <Button styleType="text" color="gray">
+        <Button styleType="text" color="gray" onClick={handleGoBack} disabled={isLoading}>
           Back
         </Button>
-        <Button type="submit" onClick={() => handleNext}>
+        <Button type="submit" disabled={isLoading} onClick={handleNext}>
           Create intake
         </Button>
       </div>
