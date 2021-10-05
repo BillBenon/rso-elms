@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
@@ -35,22 +36,25 @@ export default function RegistrationControl() {
   let RegInfo = data?.data.data;
 
   RegInfo?.map((obj: IRegistrationControlInfo) => {
+    obj.expected_end_date = moment(obj.expected_end_date).format('MMM D YYYY');
+    obj.expected_start_date = moment(obj.expected_start_date).format('MMM D YYYY');
+
     let {
-      expected_start_date,
-      expected_end_date,
       description,
       generic_status,
       id,
       academy: { name }, //destructure name inside academy obj
+      expected_start_date,
+      expected_end_date,
     } = obj;
 
     let registrationcontrol: IRegistrationInfo = {
       'start date': expected_start_date,
       'end date': expected_end_date,
       description,
+      'academy name': name,
       status: generic_status,
       id: id,
-      'academy name': name,
     };
     RegistrationControls.push(registrationcontrol);
   });
