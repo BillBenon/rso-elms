@@ -35,6 +35,7 @@ export interface IntakePrograms {
   programs: IntakeProgram[];
 }
 
+// intake status enum
 export enum IntakeStatus {
   STARTED = 'STARTED',
   SUSPENDED = 'SUSPENDED',
