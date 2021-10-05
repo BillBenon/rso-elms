@@ -1,4 +1,4 @@
-import { GenericStatus, Table } from '..';
+import { Table } from '..';
 
 export interface IcreateLevel {
   academy_id: string;
@@ -9,5 +9,4 @@ export interface IcreateLevel {
 
 export interface ILevel extends Table, IcreateLevel {
   lastStatusChangeReason: string;
-  generic_status: GenericStatus;
 }

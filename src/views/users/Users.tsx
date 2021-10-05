@@ -18,6 +18,7 @@ import { UserType } from '../../types/services/user.types';
 
 type UserTypes = {
   'full name': string;
+  email: string;
   NID: string;
   academy: string;
   status: GenericStatus;
@@ -37,13 +38,15 @@ export default function Users() {
 
   if (isSuccess && userInfo) {
     userInfo?.map((obj) => {
-      let { first_name, last_name, nid, academy, status, user_type } = obj;
+      let { first_name, last_name, email, person, academy, generic_status, user_type } =
+        obj;
 
       let user: UserTypes = {
         'full name': first_name + ' ' + last_name,
-        NID: nid,
+        email: email,
+        NID: person && person.nid,
         academy: academy && academy.name,
-        status: status,
+        status: generic_status,
         user_type: user_type,
       };
 

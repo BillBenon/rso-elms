@@ -1,14 +1,15 @@
+import { GenericStatus } from '..';
 /* eslint-disable no-unused-vars */
 import { Table } from '..';
 import { AcademyInfo } from './academy.types';
-import { GenericStatus } from './common.types';
 import { InstitutionInfo } from './institution.types';
+import { ILevel } from './levels.types';
 
 export interface UserInfo extends CreateUserInfo, Table {
   pin: string;
   age_range: string;
   token: string;
-  //   person: PersonInfo;
+  person: PersonInfo;
   academy: AcademyInfo;
   institution_id: InstitutionInfo;
   activated: boolean;
@@ -16,12 +17,25 @@ export interface UserInfo extends CreateUserInfo, Table {
   image_url: string;
   password_reset_period_in_days: number;
   reset_date: string;
-  preferred_language: string;
-  level: string;
+  level: ILevel;
   status: GenericStatus;
   login_try: number;
   enabled: boolean;
   authorities: [];
+}
+interface PersonInfo extends Table {
+  first_name: string;
+  father_names: string;
+  mother_names: string;
+  last_name: string;
+  phone_number: string;
+  birth_date: string;
+  doc_type: DocType;
+  marital_status: MaritalStatus;
+  sex: GenericStatus;
+  place_of_birth: string;
+  current_rank: string;
+  nid: string;
 }
 
 export interface CreateUserInfo {
@@ -86,6 +100,9 @@ export enum DocType {
 }
 
 export enum UserType {
+  // ANONYMOUS = 'ANONYMOUS',
+  // SYSTEM = 'SYSTEM',
+  SUPER_ADMIN = 'SUPER_ADMIN',
   ADMIN = 'ADMIN',
   INSTRUCTOR = 'INSTRUCTOR',
   STUDENT = 'STUDENT',

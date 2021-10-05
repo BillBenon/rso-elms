@@ -1,12 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
+import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
 
 export default function Instructors({ instructors }: { instructors: Object[] }) {
+  const history = useHistory();
   function handleSearch(_e: ValueType) {}
   const instructorActions = [
     { name: 'Add Role', handleAction: () => {} },
@@ -28,9 +30,18 @@ export default function Instructors({ instructors }: { instructors: Object[] }) 
           </Link>
         </div>
       </TableHeader>
-      {instructors && instructors.length > 0 && (
+      {instructors && (
         <div className="pt-8">
-          <Table statusColumn="status" data={instructors} actions={instructorActions} />
+          {instructors.length <= 0 ? (
+            <NoDataAvailable
+              buttonLabel="Add new instructor"
+              title={'No instructor available'}
+              handleClick={() => history.push(`/dashboard/users/add`)}
+              description="And the web just isnt the same without you. Lets get you back online!"
+            />
+          ) : (
+            <Table statusColumn="status" data={instructors} actions={instructorActions} />
+          )}
         </div>
       )}
     </>

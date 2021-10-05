@@ -13,7 +13,7 @@ import Tooltip from '../../components/Molecules/Tooltip';
 import programStore from '../../store/program.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
 import { DivisionInfo } from '../../types/services/division.types';
-import { typeChecker } from '../../utils/getOption';
+import { advancedTypeChecker } from '../../utils/getOption';
 import NewAcademicProgram from './NewAcademicProgram';
 import ProgramDetails from './ProgramDetails';
 import UpdateAcademicProgram from './UpdateAcademicProgram';
@@ -56,7 +56,10 @@ export default function AcademicProgram() {
 
     let prog: IProgramData = {
       id: id,
-      status: { type: typeChecker(generic_status), text: generic_status.toString() },
+      status: {
+        type: advancedTypeChecker(generic_status),
+        text: generic_status.toString(),
+      },
       code: code,
       title: name,
       subTitle: type.replaceAll('_', ' '),

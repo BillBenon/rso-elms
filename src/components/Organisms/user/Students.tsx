@@ -1,14 +1,16 @@
 import React from 'react';
-import { useRouteMatch } from 'react-router';
+import { useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
+import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
 
 export default function Students({ students }: { students: Object[] }) {
   const { url } = useRouteMatch();
+  const history = useHistory();
 
   function handleSearch(_e: ValueType) {}
   const studentActions = [
@@ -31,9 +33,18 @@ export default function Students({ students }: { students: Object[] }) {
           </Link>
         </div>
       </TableHeader>
-      {students && students.length > 0 && (
+      {students && (
         <div className="pt-8">
-          <Table statusColumn="status" data={students} actions={studentActions} />
+          {students.length <= 0 ? (
+            <NoDataAvailable
+              buttonLabel="Add new student"
+              title={'No students available'}
+              handleClick={() => history.push(`/dashboard/users/add`)}
+              description="And the web just isnt the same without you. Lets get you back online!"
+            />
+          ) : (
+            <Table statusColumn="status" data={students} actions={studentActions} />
+          )}
         </div>
       )}
     </>
