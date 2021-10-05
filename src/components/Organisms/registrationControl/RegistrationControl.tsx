@@ -7,6 +7,7 @@ import { GenericStatus, ValueType } from '../../../types';
 import { IRegistrationControlInfo } from '../../../types/services/registrationControl.types';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
+import Loader from '../../Atoms/custom/Loader';
 import Heading from '../../Atoms/Text/Heading';
 import ILabel from '../../Atoms/Text/ILabel';
 import PopupMolecule from '../../Molecules/Popup';
@@ -105,6 +106,7 @@ export default function RegistrationControl() {
       </TableHeader>
 
       <div className="mt-14">
+        <Loader />
         {isLoading && 'Loading..'}
         {isSuccess && RegistrationControls ? (
           <Table<IRegistrationInfo>
