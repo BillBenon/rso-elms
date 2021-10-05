@@ -23,6 +23,9 @@ class ModuleStore {
   modifyModule() {
     return useMutation(moduleService.modifyModule);
   }
+  addPrerequisites() {
+    return useMutation(moduleService.addPrerequisites);
+  }
 }
 
 export const moduleStore = new ModuleStore();

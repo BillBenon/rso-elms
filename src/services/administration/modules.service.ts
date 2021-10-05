@@ -2,7 +2,11 @@ import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
-import { CreateModuleInfo, ModuleInfo } from '../../types/services/modules.types';
+import {
+  CreateModuleInfo,
+  CreatePrerequisites,
+  ModuleInfo,
+} from '../../types/services/modules.types';
 
 type TableId = string | number;
 
@@ -28,10 +32,17 @@ class ModuleService {
       `/coursemodules/getModulesByProgram/${programId}`,
     );
   }
+
   public async modifyModule(
     updated: CreateModuleInfo,
   ): Promise<AxiosResponse<Response<ModuleInfo[]>>> {
-    return await adminstrationAxios.put(`/coursemodules/modifyModule/`, updated);
+    return await adminstrationAxios.put(`/coursemodules/modifyModule`, updated);
+  }
+
+  public async addPrerequisites(
+    prereq: CreatePrerequisites,
+  ): Promise<AxiosResponse<Response<ModuleInfo>>> {
+    return await adminstrationAxios.put(`/coursemodules/addPrerequists`, prereq);
   }
 }
 

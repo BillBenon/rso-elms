@@ -32,10 +32,10 @@ const Row = ({ keys, data, statusColumn }: RowProps) => {
               <Badge
                 badgecolor={val && statusColors[val.toLowerCase() as Status]}
                 badgetxtcolor={val && statusColors[val.toLowerCase() as Status]}>
-                {val}
+                {val || '----'}
               </Badge>
             ) : (
-              val
+              val || '----'
             )}
           </td>
         );

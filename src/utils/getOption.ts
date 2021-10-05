@@ -2,19 +2,20 @@ import { SelectData } from '../types';
 import { IntakeStatus } from '../types/services/intake.types';
 import { GenericStatus } from './../types/services/common.types';
 
-export function getDropDownOptions(inputs: any, labelName?: string): SelectData[] {
-  let selectData: SelectData[] = [];
-
-  if (inputs?.length) {
-    inputs.map((val: any) => {
-      let input = {
-        label: val[labelName ? labelName : 'name'],
-        value: val.id.toString(),
-      };
-      selectData.push(input);
+export function getDropDownOptions(
+  inputs?: any[],
+  labelName = 'name',
+  getOptionLabel?: (_option: Object) => string,
+): SelectData[] {
+  let options: SelectData[] = [];
+  inputs?.map((input) => {
+    options.push({
+      label: getOptionLabel ? getOptionLabel(input) : input[labelName],
+      value: input.id.toString(),
     });
-  }
-  return selectData;
+  });
+
+  return options;
 }
 
 export function getDropDownStatusOptions(status: any): SelectData[] {
@@ -33,9 +34,6 @@ export function getDropDownStatusOptions(status: any): SelectData[] {
   return selectData;
 }
 
-export const typeChecker = (status?: GenericStatus) =>
-  status?.toString().toLowerCase() === 'inactive' ? 'error' : 'success';
-
 export function advancedTypeChecker(
   status: GenericStatus | IntakeStatus,
 ): 'success' | 'warning' | 'error' {
@@ -45,4 +43,18 @@ export function advancedTypeChecker(
   if (successStatus.includes(status.toString().toLowerCase())) return 'success';
   else if (errorStatus.includes(status.toString().toLowerCase())) return 'error';
   else return 'warning';
+}
+
+export function getDropDownOptionsWithObject(
+  inputs: any[],
+  labelName: { name: string },
+): SelectData[] {
+  let options: SelectData[] = [];
+  inputs.map((input) => {
+    options.push({
+      label: labelName.name,
+      value: input.id.toString(),
+    });
+  });
+  return options;
 }

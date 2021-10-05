@@ -17,9 +17,14 @@ class IntakeStore {
   }
 
   getIntakesByAcademy(academyId: string) {
-    return useQuery(
-      ['intakes/academy', academyId],
-      () => intakeService.getIntakesByAcademy,
+    return useQuery(['intakes/academy', academyId], () =>
+      intakeService.getIntakesByAcademy(academyId),
+    );
+  }
+
+  getProgramsByIntake(intakeId: string) {
+    return useQuery(['intakes/programs', intakeId], () =>
+      intakeService.getProgramsByIntake(intakeId),
     );
   }
 }

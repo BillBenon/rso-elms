@@ -1,4 +1,5 @@
 import { GenericStatus, Table } from '..';
+import { IRegistrationControlInfo } from './registrationControl.types';
 
 export interface IntakeInfo {
   title: string;
@@ -15,9 +16,7 @@ export interface IntakeInfo {
 }
 
 export interface ExtendedIntakeInfo extends Table, IntakeInfo {
-  registration_control: Object;
-  generic_status: GenericStatus;
-  last_status_change_reason: string;
+  registration_control: IRegistrationControlInfo;
   registration_control_id: string;
 }
 

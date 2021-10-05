@@ -80,6 +80,7 @@ function DateMolecule({
   });
 
   const dateFormat = () => {
+    const days = dateState.Day < 10 ? '0' + dateState.Day : '' + dateState.Day;
     const months = dateState.Month < 10 ? '0' + dateState.Month : '' + dateState.Month;
     const days = dateState.Day < 10 ? '0' + dateState.Day : '' + dateState.Day;
     const minutes =
