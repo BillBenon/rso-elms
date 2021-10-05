@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -53,10 +54,13 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
     e.preventDefault();
     if (onSubmit) onSubmit(e);
     await mutateAsync(details, {
-      onSuccess() {
+      onSuccess(data) {
+        toast.success(data.data.message);
         setLopen(true);
       },
-      onError() {},
+      onError() {
+        toast.error('An error occurred please try again later');
+      },
     });
   }
 

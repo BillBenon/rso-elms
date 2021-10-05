@@ -1,4 +1,5 @@
 import React, { FormEvent, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
 
 import academyStore from '../../../store/academy.store';
@@ -87,8 +88,12 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     await mutateAsync(
       { ...details, birth_date: formatDateToYyMmDd(details.birth_date) },
       {
-        onSuccess() {
+        onSuccess(data) {
+          toast.success(data.data.message);
           history.goBack();
+        },
+        onError() {
+          toast.error('An error occurred when creating user, please try again later');
         },
       },
     );
