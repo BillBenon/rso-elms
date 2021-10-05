@@ -1,4 +1,6 @@
 import React, { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useEffect } from 'react-router/node_modules/@types/react';
 import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 
 import { queryClient } from '../../../../../plugins/react-query';
@@ -13,6 +15,7 @@ import InputMolecule from '../../../../Molecules/input/InputMolecule';
 const SignInForm = () => {
   const history = useHistory();
   const { url } = useRouteMatch();
+  const [loading, setLoading] = useState(false);
   const { mutateAsync } = authenticatorStore.login();
   const [details, setDetails] = useState<LoginInfo>({
     username: '',
@@ -31,14 +34,23 @@ const SignInForm = () => {
   };
 
   async function login<T>(e: FormEvent<T>) {
+    setLoading(true);
+    const toastId = toast.loading('Authenticating...');
     e.preventDefault();
     queryClient.clear();
     cookie.eraseCookie('jwt_info');
 
     await mutateAsync(details, {
       onSuccess(data) {
+        setLoading(false);
+        toast.success('Authenticated', { duration: 2000, id: toastId });
         cookie.setCookie('jwt_info', JSON.stringify(data?.data.data));
         redirectTo('/redirecting');
+      },
+      onError(error) {
+        setLoading(false);
+        console.log(error);
+        toast.error('Authentication failed', { duration: 3000, id: toastId });
       },
     });
   }
@@ -82,7 +94,9 @@ const SignInForm = () => {
           </Link>
         </div>
 
-        <Button type="submit">Sign In</Button>
+        <Button disabled={loading} type="submit">
+          Sign In
+        </Button>
       </form>
 
       <div className="text-txt-secondary py-2">
