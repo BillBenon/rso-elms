@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, Route, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
@@ -9,7 +10,9 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewIntake from '../../components/Organisms/intake/NewIntake';
 import { intakeStore } from '../../store/intake.store';
-import { CommonCardDataType, Link as LinkType, ValueType } from '../../types';
+import registrationControlStore from '../../store/registrationControl.store';
+import { CommonCardDataType, Link as LinkType, Response, ValueType } from '../../types';
+import { IRegistrationControlInfo } from '../../types/services/registrationControl.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 
 const list: LinkType[] = [
@@ -21,10 +24,15 @@ const list: LinkType[] = [
 
 export default function Intakes() {
   const [intakes, setIntakes] = useState<CommonCardDataType[]>([]);
+
   const history = useHistory();
   const { url } = useRouteMatch();
   const { search } = useLocation();
   const registrationControlId = new URLSearchParams(search).get('regId');
+
+  const { data: regControl } = registrationControlStore.fetchRegControlById(
+    registrationControlId + '',
+  );
 
   const { isSuccess, isError, data } = intakeStore.getAll(
     registrationControlId || undefined,
@@ -54,17 +62,24 @@ export default function Intakes() {
   function handleClose() {
     history.goBack();
   }
+
+  function regControlName() {
+    return `${moment(regControl?.data.data.expected_start_date).format(
+      'MMM D YYYY',
+    )} - ${moment(regControl?.data.data.expected_end_date).format('MMM D YYYY')}`;
+  }
   return (
     <div>
       <Cacumber list={list} />
       <TableHeader
-        title="Intakes"
-        totalItems={intakes.length}
+        title={`${registrationControlId ? regControlName() : 'Intakes'}`}
+        totalItems={registrationControlId ? `${intakes.length} intakes` : intakes.length}
         handleSearch={handleSearch}>
-        <Link to={`${url}/:id/add-intake`}>
-          {' '}
-          <Button>Add Registration Control</Button>
-        </Link>
+        {registrationControlId && (
+          <Link to={`${url}/:id/add-intake`}>
+            <Button>Add Intake</Button>
+          </Link>
+        )}
       </TableHeader>
 
       <section className="flex flex-wrap justify-between mt-2">
