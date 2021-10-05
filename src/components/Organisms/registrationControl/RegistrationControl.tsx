@@ -106,8 +106,7 @@ export default function RegistrationControl() {
       </TableHeader>
 
       <div className="mt-14">
-        <Loader />
-        {isLoading && 'Loading..'}
+        {isLoading && <Loader />}
         {isSuccess && RegistrationControls ? (
           <Table<IRegistrationInfo>
             statusColumn="status"
@@ -120,7 +119,7 @@ export default function RegistrationControl() {
           ''
         )}
 
-        {RegistrationControls.length < 1 && <span>No data found</span>}
+        {!isLoading && RegistrationControls.length < 1 && <span>No data found</span>}
       </div>
 
       {/* add reg control popup */}
