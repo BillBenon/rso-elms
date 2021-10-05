@@ -1,6 +1,5 @@
 import React, { FormEvent, useState } from 'react';
-// import toast from 'react-hot-toast';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 
 import { queryClient } from '../../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../../store';
@@ -13,6 +12,7 @@ import InputMolecule from '../../../../Molecules/input/InputMolecule';
 
 const SignInForm = () => {
   const history = useHistory();
+  const { url } = useRouteMatch();
   const { mutateAsync } = authenticatorStore.login();
   const [details, setDetails] = useState<LoginInfo>({
     username: '',
@@ -86,10 +86,10 @@ const SignInForm = () => {
       </form>
 
       <div className="text-txt-secondary py-2">
-        <p className="text-base text-txt-secondary">
-          Don&apos;t have an account?
+        <p className="text-sm text-txt-secondary">
+          Not sure you&apos;re registered?
           <span className="text-primary-500 px-2">
-            <Link to="/register">Sign up</Link>
+            <Link to={`${url}/search`}>Find out</Link>
           </span>
         </p>
       </div>
