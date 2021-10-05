@@ -19,6 +19,7 @@ import Intakes from './views/intakes/Intakes';
 import Levels from './views/levels/Levels';
 import Modules from './views/modules';
 import NotFound from './views/NotFound';
+import OpenRegistrations from './views/openreg/OpenRegistrations';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicPrograms from './views/programs/AcademicPrograms';
 import Roles from './views/roles/Roles';
@@ -32,6 +33,11 @@ const App = () => {
       <MainLayout>
         <Router>
           <Switch>
+            <Route
+              exact
+              path="/dashboard/open-registrations"
+              component={OpenRegistrations}
+            />
             <Route exact path="/" component={Signin} />
             <Route exact path="/redirecting" component={Redirecting} />
             <Route exact path="/institution" component={NewInstitution} />

@@ -60,6 +60,7 @@ const RouterProtection = () => {
       <Route exact path="/dashboard/levels" component={LevelsView} />
       <Route exact path="/dashboard/intakes" component={IntakesView} />
       <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} />
+
       {/* end of academic admin pages */}
     </>
   );
