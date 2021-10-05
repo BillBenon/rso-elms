@@ -36,13 +36,14 @@ type IProp = {
   minuteDisabled?: boolean;
   defaultValue?: string;
   reverse?: boolean;
+  padding?: number;
 };
 
 function DateMolecule({
   reverse = true,
   showDate = true,
   showTime = false,
-  width,
+  width = '42',
   children,
   handleChange,
   name,
@@ -65,8 +66,11 @@ function DateMolecule({
   minuteWidth = '28',
   hourDisabled = false,
   minuteDisabled = false,
+  padding,
   defaultValue,
 }: IProp) {
+  let defaultValueDate = defaultValue ? new Date(defaultValue) : new Date();
+
   const [dateState, setDateState] = useState({
     Day: new Date().getDate(),
     Month: new Date().getMonth() + 1,
@@ -76,21 +80,20 @@ function DateMolecule({
   });
 
   const dateFormat = () => {
+    const days = dateState.Day < 10 ? '0' + dateState.Day : '' + dateState.Day;
     const months = dateState.Month < 10 ? '0' + dateState.Month : '' + dateState.Month;
     const minutes =
       dateState.Minutes < 10 ? '0' + dateState.Minutes : '' + dateState.Minutes;
-    let selectedDate: string = `${dateState.Year}-${months}-${dateState.Day} ${dateState.Hours}:${minutes}:00`;
+    let selectedDate: string = `${dateState.Year}-${months}-${days} ${dateState.Hours}:${minutes}:00`;
     handleChange({ name: name, value: selectedDate });
   };
 
   useEffect(() => {
-    console.log('default', defaultValue);
     defaultValue && setDate();
   }, []);
 
   function setDate() {
     const dV = new Date(defaultValue || '');
-    console.log('he');
     setDateState((old) => ({
       ...old,
       Year: dV.getFullYear(),
@@ -119,7 +122,7 @@ function DateMolecule({
           <>
             <YearSelect
               reverse={reverse}
-              defaultValue={dateState.Year.toString()}
+              defaultValue={defaultValueDate.getFullYear().toString()}
               value={dateState.Year}
               onChange={handleDate}
               name="Year"
@@ -128,11 +131,12 @@ function DateMolecule({
               end={endYear}
               className={yearClassName}
               disabled={yearDisabled}
-              placeholder={dateState.Year.toString()}
+              padding={padding}
+              // placeholder={dateState.Year.toString()}
             />
             <MonthSelect
               year={dateState.Year}
-              defaultValue={dateState.Month.toString()}
+              defaultValue={defaultValueDate.getMonth().toString()}
               value={dateState.Month}
               onChange={handleDate}
               short={monthShort}
@@ -142,19 +146,20 @@ function DateMolecule({
               numeric={monthNumeric}
               className={monthClassName}
               disabled={monthDisabled}
-              placeholder={dateState.Month.toString()}
+              padding={padding}
+              // placeholder={dateState.Month.toString()}
             />
             <DaySelect
               year={dateState.Year}
               month={dateState.Month}
-              defaultValue={dateState.Day.toString()}
+              defaultValue={defaultValueDate.getDate().toString()}
               value={dateState.Day}
               onChange={handleDate}
               name="Day"
               className={dayClassName}
-              placeholder={dateState.Day.toString()}
               width={dayWidth}
               disabled={dayDisabled}
+              padding={padding}
             />
           </>
         )}
@@ -168,6 +173,7 @@ function DateMolecule({
               placeholder={hourPlaceholder}
               width={hourWidth}
               disabled={hourDisabled}
+              padding={padding}
             />
             <MinuteSelect
               defaultValue={dateState.Minutes.toString()}
@@ -177,6 +183,7 @@ function DateMolecule({
               placeholder="Minutes"
               width={minuteWidth}
               disabled={minuteDisabled}
+              padding={padding}
             />
           </>
         )}

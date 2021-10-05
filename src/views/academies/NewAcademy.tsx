@@ -1,5 +1,3 @@
-import '../../styles/components/Organisms/academy/academy.scss';
-
 import React, { FormEvent, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -21,7 +19,7 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
       const user = await authenticatorService.authUser();
       setDetails((details) => ({
         ...details,
-        current_admin_id: user.data.data.id,
+        current_admin_id: user.data.data.id.toString(),
       }));
     };
 
@@ -149,13 +147,6 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
             handleChange={(e) => handleChange(e)}>
             academy motto
           </InputMolecule>
-          {/* <TextAreaMolecule
-            name="website"
-            value={''}
-            placeholder="Type website url"
-            handleChange={(e) => handleChange(e)}>
-            academy description
-          </TextAreaMolecule> */}
           <div>
             <div className="mb-3">
               <ILabel weight="bold">academy logo</ILabel>

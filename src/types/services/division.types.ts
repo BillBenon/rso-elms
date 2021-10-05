@@ -1,19 +1,23 @@
 /* eslint-disable no-unused-vars */
-import { Table } from '..';
+import { GenericStatus, Table } from '..';
 import { AcademyInfo } from './academy.types';
 import { ProgramInfo } from './program.types';
 
-export interface DivisionInfo extends Table {
-  generic_status: Status;
-  last_status_change_reason: null;
-  name: string;
-  code: string;
-  description: string;
-  academy_id: string;
+export interface DivisionInfo extends Table, DivisionCreateInfo {
   academy: AcademyInfo;
   departments: [];
-  division_type: string;
   programs: ProgramInfo;
+}
+
+export interface DivisionCreateInfo {
+  id: string | number;
+  academy_id: string;
+  code: string;
+  description: string;
+  division_type: string;
+  name: string;
+  parent_id?: string;
+  academy?: AcademyInfo;
 }
 
 export enum Status {

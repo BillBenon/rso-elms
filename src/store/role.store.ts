@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 import { useMutation, useQuery } from 'react-query';
 
 import { roleService } from '../services';
-import { Response, RoleRes } from '../types';
+import { PrivilegeRes, Response, RolePrivilege, RoleRes } from '../types';
 
 class RoleStore {
   addRole() {
@@ -18,8 +18,30 @@ class RoleStore {
     );
   }
 
+  getPrivilegesByRole(roleId: string) {
+    return useQuery<AxiosResponse<Response<RolePrivilege[]>>, Response>(
+      ['privilegesByRole/id', roleId],
+      () => roleService.getPrivilegesByRole(roleId),
+    );
+  }
+
+  getUnAssignedPrivileges(roleId: string) {
+    return useQuery<AxiosResponse<Response<PrivilegeRes[]>>, Response>(
+      ['unAssignedPrivileges/id', roleId],
+      () => roleService.getUnAssignedPrivilege(roleId),
+    );
+  }
+
   modifyRole() {
     return useMutation(roleService.modifyRole);
+  }
+
+  addPrivilegesOnRole() {
+    return useMutation(roleService.addPrivilegesOnRole);
+  }
+
+  removeProvilege() {
+    return useMutation(roleService.removePrivilege);
   }
 }
 

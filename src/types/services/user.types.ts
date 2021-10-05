@@ -1,16 +1,15 @@
+import { GenericStatus } from '..';
 /* eslint-disable no-unused-vars */
 import { Table } from '..';
 import { AcademyInfo } from './academy.types';
-import { GenericStatus } from './common.types';
 import { InstitutionInfo } from './institution.types';
+import { ILevel } from './levels.types';
 
 export interface UserInfo extends CreateUserInfo, Table {
-  generic_status: GenericStatus;
-  last_status_change_reason: string;
   pin: string;
   age_range: string;
   token: string;
-  //   person: PersonInfo;
+  person: PersonInfo;
   academy: AcademyInfo;
   institution_id: InstitutionInfo;
   activated: boolean;
@@ -18,12 +17,25 @@ export interface UserInfo extends CreateUserInfo, Table {
   image_url: string;
   password_reset_period_in_days: number;
   reset_date: string;
-  preferred_language: string;
-  level: string;
+  level: ILevel;
   status: GenericStatus;
   login_try: number;
   enabled: boolean;
   authorities: [];
+}
+interface PersonInfo extends Table {
+  first_name: string;
+  father_names: string;
+  mother_names: string;
+  last_name: string;
+  phone_number: string;
+  birth_date: string;
+  doc_type: DocType;
+  marital_status: MaritalStatus;
+  sex: GenericStatus;
+  place_of_birth: string;
+  current_rank: string;
+  nid: string;
 }
 
 export interface CreateUserInfo {
@@ -34,7 +46,8 @@ export interface CreateUserInfo {
   email: string;
   father_names: string;
   first_name: string;
-  intake_id: string;
+  academic_program_level_id: string;
+  intake_program_id: string;
   last_name: string;
   marital_status: MaritalStatus;
   mother_names: string;
@@ -68,18 +81,18 @@ export enum MaritalStatus {
 }
 
 export enum EducationLevel {
-  NONE = 'NONE',
+  ILLITERATE = 'ILLITERATE',
   PRIMARY = 'PRIMARY',
   SECONDARY = 'SECONDARY',
   MASTERS = 'MASTERS',
   PHD = 'PHD',
-  BACHELORA = 'BACHELORA',
+  BACHELOR = 'BACHELOR',
 }
 
 export enum DocType {
   NID = 'NID',
   PASSPORT = 'PASSPORT',
-  ARM_CARD = 'ARM_CARD',
+  ARMY_CARD = 'ARMY_CARD',
   POLICE_CARD = 'POLICE_CARD',
   NISS_CARD = 'NISS_CARD',
   RCS_CARD = 'RCS_CARD',
@@ -87,16 +100,10 @@ export enum DocType {
 }
 
 export enum UserType {
-  ANONYMOUS = 'ANONYMOUS',
-  SYSTEM = 'SYSTEM',
-  SUPE_ADMIN = 'SUPE_ADMIN',
+  // ANONYMOUS = 'ANONYMOUS',
+  // SYSTEM = 'SYSTEM',
+  SUPER_ADMIN = 'SUPER_ADMIN',
   ADMIN = 'ADMIN',
-  OIC = 'OIC',
   INSTRUCTOR = 'INSTRUCTOR',
   STUDENT = 'STUDENT',
-  DG = 'DG',
-  STUDENT_INSTRUCTOR = 'STUDENT_INSTRUCTOR',
-  ADMIN_INSTRUCTOR = 'ADMIN_INSTRUCTOR',
-  ADMIN_STUDENT = 'ADMIN_STUDENT',
-  VISITOR = 'VISITOR',
 }

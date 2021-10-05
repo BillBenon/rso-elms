@@ -3,12 +3,13 @@ import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 import { colorStyle, fontSizeStyle } from '../../../global/global-vars';
+import { IconType } from '../../../types';
 import Icon from './Icon';
 
 export type linkProps = {
   title: string;
   to: string;
-  icon: string;
+  icon: IconType;
   fill?: boolean;
   active?: boolean;
 };

@@ -1,17 +1,15 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router';
+import React from 'react';
+import { useHistory, useRouteMatch } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
-import PopupMolecule from '../../Molecules/Popup';
+import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
-import ImportUsers from './ImportUsers';
-import NewStudent from './NewStudent';
 
 export default function Students({ students }: { students: Object[] }) {
-  const [newStudentModalOpen, setNewStudentModalOpen] = useState(false);
-  const [importStudentModalOpen, setImportStudentModalOpen] = useState(false);
+  const { url } = useRouteMatch();
   const history = useHistory();
 
   function handleSearch(_e: ValueType) {}
@@ -27,31 +25,28 @@ export default function Students({ students }: { students: Object[] }) {
         totalItems={students && students.length > 0 ? students.length : 0}
         handleSearch={handleSearch}>
         <div className="flex gap-3">
-          <Button onClick={() => setImportStudentModalOpen(true)} styleType="outline">
-            Import users
-          </Button>
-          <Button onClick={() => history.push('/dashboard/user/student/new')}>
-            New Student
-          </Button>
+          <Link to={`${url}/import`}>
+            <Button styleType="outline">Import users</Button>
+          </Link>
+          <Link to={`${url}/add`}>
+            <Button>New User</Button>
+          </Link>
         </div>
       </TableHeader>
-      {students && students.length > 0 && (
+      {students && (
         <div className="pt-8">
-          <Table statusColumn="status" data={students} actions={studentActions} />
+          {students.length <= 0 ? (
+            <NoDataAvailable
+              buttonLabel="Add new student"
+              title={'No students available'}
+              handleClick={() => history.push(`/dashboard/users/add`)}
+              description="And the web just isnt the same without you. Lets get you back online!"
+            />
+          ) : (
+            <Table statusColumn="status" data={students} actions={studentActions} />
+          )}
         </div>
       )}
-      <PopupMolecule
-        title="New student"
-        open={newStudentModalOpen}
-        onClose={() => setNewStudentModalOpen(false)}>
-        <NewStudent />
-      </PopupMolecule>
-      <PopupMolecule
-        title="Import students"
-        open={importStudentModalOpen}
-        onClose={() => setImportStudentModalOpen(false)}>
-        <ImportUsers userType="students" />
-      </PopupMolecule>
     </>
   );
 }

@@ -1,7 +1,7 @@
 import React, { FormEvent, useState } from 'react';
-// import toast from 'react-hot-toast';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 
+import { queryClient } from '../../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../../store';
 import { ValueType } from '../../../../../types';
 import { LoginInfo } from '../../../../../types';
@@ -12,11 +12,16 @@ import InputMolecule from '../../../../Molecules/input/InputMolecule';
 
 const SignInForm = () => {
   const history = useHistory();
+  const { url } = useRouteMatch();
   const { mutateAsync } = authenticatorStore.login();
   const [details, setDetails] = useState<LoginInfo>({
     username: '',
     password: '',
   });
+
+  const redirectTo = (path: string) => {
+    history.push(path);
+  };
 
   const handleChange = (e: ValueType) => {
     setDetails((details) => ({
@@ -27,11 +32,13 @@ const SignInForm = () => {
 
   async function login<T>(e: FormEvent<T>) {
     e.preventDefault();
+    queryClient.clear();
+    cookie.eraseCookie('jwt_info');
 
     await mutateAsync(details, {
       onSuccess(data) {
         cookie.setCookie('jwt_info', JSON.stringify(data?.data.data));
-        history.push('/dashboard/users');
+        redirectTo('/redirecting');
       },
     });
   }
@@ -79,10 +86,10 @@ const SignInForm = () => {
       </form>
 
       <div className="text-txt-secondary py-2">
-        <p className="text-base text-txt-secondary">
-          Don&apos;t have an account?
+        <p className="text-sm text-txt-secondary">
+          Not sure you&apos;re registered?
           <span className="text-primary-500 px-2">
-            <Link to="/register">Sign up</Link>
+            <Link to={`${url}/search`}>Find out</Link>
           </span>
         </p>
       </div>

@@ -11,35 +11,31 @@ import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import NewLevel from '../../components/Organisms/forms/level/NewLevel';
+import { divisionStore } from '../../store/divisions.store';
 import programStore from '../../store/program.store';
+import usersStore from '../../store/users.store';
 import { CommonFormProps, ValueType } from '../../types';
 import { CreateProgramInfo, ProgramType } from '../../types/services/program.types';
-import { getDropDownStatusOptions } from '../../utils/getOption';
+import { UserType } from '../../types/services/user.types';
+import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
 
 interface INewAcademyProgram<K> extends CommonFormProps<K> {}
-
-const options = [
-  {
-    label: 'Year 1',
-    value: 'en',
-  },
-  {
-    label: 'Year 2',
-    value: 'fr',
-  },
-  {
-    label: 'Year 3',
-    value: 'kiny',
-  },
-];
 
 export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E>) {
   const history = useHistory();
   const [lopen, setLopen] = useState(false);
 
+  const { data } = usersStore.fetchUsers();
+  const instructors = data?.data.data.filter(
+    (user) => user.user_type === UserType.INSTRUCTOR || user.user_type === UserType.ADMIN,
+  );
+
+  const departments = divisionStore.getDivisionByType('DEPARTMENT').data?.data.data;
+
   const [details, setDetails] = useState<CreateProgramInfo>({
     code: '',
-    department_id: '025e5365-74e3-4c21-885e-0dca6974dfc0',
+    current_admin_id: '',
+    department_id: '',
     description: '',
     name: '',
     type: ProgramType.SHORT_COURSE,
@@ -71,9 +67,9 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
 
   return (
     <form onSubmit={createProgram}>
-      <div className="p-4 pl-8 popup-width">
+      <div className="p-6 w-5/12 pl-8 gap-3 rounded-lg bg-main mt-8">
         <div className="py-5 mb-3 capitalize">
-          <Heading color="primary" fontWeight="bold">
+          <Heading color="txt-primary" fontWeight="bold">
             New Program
           </Heading>
         </div>
@@ -91,24 +87,8 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
           name="code">
           Program code
         </InputMolecule>
-        <DropdownMolecule
-          width="64"
-          placeholder="Select user"
-          options={options}
-          name="academy"
-          handleChange={handleChange}>
-          Program-in-charge
-        </DropdownMolecule>
-        <DropdownMolecule
-          width="64"
-          placeholder="Select department"
-          options={options}
-          name="academy"
-          handleChange={handleChange}>
-          Department
-        </DropdownMolecule>
         <RadioMolecule
-          type="block"
+          className="pb-2"
           value={details.type}
           name="type"
           options={getDropDownStatusOptions(ProgramType)}
@@ -119,9 +99,25 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
           value={details.description}
           name="description"
           handleChange={handleChange}>
-          Description
+          Program description
         </TextAreaMolecule>
-        {/* <RadioMolecule
+        <DropdownMolecule
+          width="64"
+          placeholder="Select incharge"
+          options={getDropDownOptions(instructors, 'username')}
+          name="current_admin_id"
+          handleChange={handleChange}>
+          Incharge
+        </DropdownMolecule>
+        <DropdownMolecule
+          width="64"
+          placeholder="Select department"
+          options={getDropDownOptions(departments)}
+          name="department_id"
+          handleChange={handleChange}>
+          Department
+        </DropdownMolecule>
+        <RadioMolecule
           value="ACTIVE"
           name="status"
           options={[
@@ -130,7 +126,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
           ]}
           handleChange={handleChange}>
           Status
-        </RadioMolecule> */}
+        </RadioMolecule>
         {/* save button */}
         <div className="mt-5">
           <Button type="submit">Save</Button>

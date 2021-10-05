@@ -1,42 +1,47 @@
 import React, { FormEvent } from 'react';
+import { useParams } from 'react-router-dom';
 
-import { CommonFormProps, ValueType } from '../../../../types';
+import { subjectStore } from '../../../../store/subject.store';
+import { ValueType } from '../../../../types';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-interface PropType<K> extends CommonFormProps<K> {}
+interface ParamType {
+  id: string;
+}
 
-export default function NewLessonForm<E>({ onSubmit }: PropType<E>) {
-  function handleChange(e: ValueType) {
-    console.log(e);
-  }
+export default function NewLessonForm() {
+  const { id } = useParams<ParamType>();
+  const subject = subjectStore.getSubject(id).data?.data.data;
+
+  // const [lesson, setlesson] = useState({
+
+  // })
+
+  function handleChange(_e: ValueType) {}
 
   function submitForm(e: FormEvent) {
     e.preventDefault(); // prevent page to reload:
-    if (onSubmit) onSubmit(e);
   }
 
   return (
     <form onSubmit={submitForm}>
-      {/* TODO: use readonly dropdown to indicate module name */}
-
-      {/* model name */}
+      <InputMolecule
+        name="subject_id"
+        readOnly
+        handleChange={handleChange}
+        value={subject?.title || ''}
+        disabled>
+        Subject
+      </InputMolecule>
       <InputMolecule value="" error="" handleChange={handleChange} name="lesson-name">
         Lesson name
       </InputMolecule>
-      {/* model code
-
-      {/* module description */}
       <TextAreaMolecule value="" name="description" handleChange={handleChange}>
         Lesson description
       </TextAreaMolecule>
-      {/* program
-      <DropdownMolecule name="radio" handleChange={handleChange}>
-        Program
-      </DropdownMolecule> */}
-      {/* model initial status */}
       <RadioMolecule
         className="mt-4"
         value="ACTIVE"
@@ -48,10 +53,6 @@ export default function NewLessonForm<E>({ onSubmit }: PropType<E>) {
         handleChange={handleChange}>
         Status
       </RadioMolecule>
-
-      {/* TODO: checkbox, where user could choose subject  */}
-
-      {/* save button */}
       <div className="mt-5">
         <Button type="submit" full>
           Add

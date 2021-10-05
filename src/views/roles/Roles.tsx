@@ -61,14 +61,21 @@ export default function Roles() {
     },
   ];
 
+  const manyActions = [
+    {
+      name: 'Disable/Enable',
+      handleAction: (data?: string[]) => {
+        alert(`handling many at once ${data}`);
+      },
+    },
+  ];
+
   function submited() {
     // setOpen(false);
   }
   function handleSearch() {}
 
-  function handleSelect(selected: string[] | null) {
-    console.log(selected);
-  }
+  function handleSelect(_selected: string[] | null) {}
 
   return (
     <main>
@@ -76,7 +83,10 @@ export default function Roles() {
         <Cacumber list={[{ title: 'Roles', to: 'roles' }]} />
       </section>
       <section>
-        <TableHeader title="Roles" totalItems={4} handleSearch={handleSearch}>
+        <TableHeader
+          title="Roles"
+          totalItems={roles?.length || 0}
+          handleSearch={handleSearch}>
           <Link to={`${url}/add`}>
             <Button>Add Role</Button>
           </Link>
@@ -87,6 +97,8 @@ export default function Roles() {
         {isSuccess ? roles?.length === 0 : 'No Roles found, try to add one'}
         {roles && (
           <Table<FilteredRoles>
+            selectorActions={manyActions}
+            hide={['id', 'name']}
             handleSelect={handleSelect}
             statusColumn="status"
             data={roles}

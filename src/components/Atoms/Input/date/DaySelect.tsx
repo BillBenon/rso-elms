@@ -17,6 +17,7 @@ type DProp = {
   required?: boolean;
   disabled?: boolean;
   className?: string;
+  padding?: number;
 };
 
 const DaySelect = (dprop: DProp) => {
@@ -25,19 +26,29 @@ const DaySelect = (dprop: DProp) => {
 
     const dayOptions: SelectData[] = [];
     for (let i = 1; i <= days; ++i) {
-      dayOptions.push({ value: i + '', label: i + '' });
+      dayOptions.push({
+        value: i < 10 ? '0' + i : '' + i,
+        label: i < 10 ? '0' + i : '' + i,
+      });
     }
     return dayOptions;
   };
 
+  let days = renderDateOptions();
+  let newDefaultValue = days.find(
+    (date) => parseInt(date.value) === parseInt(dprop.defaultValue + ''),
+  );
+
   return (
     <DropDown
+      defaultValue={newDefaultValue}
       disabled={dprop.disabled}
       name={dprop.name}
       placeholder={dprop.placeholder}
+      padding={dprop.padding}
       width={dprop.width}
       className={dprop.className}
-      options={renderDateOptions()}
+      options={days}
       handleChange={(e: ValueType) => dprop.onChange(e)}
     />
   );

@@ -1,21 +1,25 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+import { Link, useHistory } from 'react-router-dom';
 
+import usersStore from '../../../../../store/users.store';
 import { ValueType } from '../../../../../types';
+import { DocType } from '../../../../../types/services/user.types';
+import { getDropDownStatusOptions } from '../../../../../utils/getOption';
 import Button from '../../../../Atoms/custom/Button';
 import Heading from '../../../../Atoms/Text/Heading';
 import DropdownMolecule from '../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../Molecules/input/InputMolecule';
 
-type PropType = {
-  handleClick: () => void;
-};
-
-function SignInWithSearch({ handleClick }: PropType) {
+function SignInWithSearch() {
+  const history = useHistory();
   const [details, setDetails] = useState({
     searchBy: '',
-    searchResult: '',
+    searchInput: '',
   });
+
+  const users = usersStore.fetchUsers();
 
   const handleChange = (e: ValueType) => {
     setDetails((details) => ({
@@ -24,39 +28,48 @@ function SignInWithSearch({ handleClick }: PropType) {
     }));
   };
 
-  const filter = () => {};
+  const filter = () => {
+    let result = users.data?.data.data.find(
+      (user) =>
+        user.person &&
+        user.person.doc_type == details.searchBy &&
+        user.person.nid == details.searchInput,
+    );
+    if (result) {
+      toast.success("You're already registered!", { duration: 1200 });
+      setTimeout(() => {
+        history.push('/register');
+      }, 900);
+    } else {
+      toast.error("You're not yet registered!", { duration: 1200 });
+    }
+  };
 
   return (
-    <>
-      <div className="py-11">
-        <Heading fontSize="lg" className="md:2xl" fontWeight="semibold">
-          Sign In
-        </Heading>
-        <p className="text-txt-secondary text-sm md:text-base pt-2">
-          Enter your credentials to continue
-        </p>
-      </div>
+    <div className="py-32">
+      <Heading fontSize="lg" className="md:text-3xl" fontWeight="semibold">
+        Search
+      </Heading>
+      <Heading
+        color="txt-secondary"
+        fontSize="sm"
+        className="md:text-sm pt-2"
+        fontWeight="medium">
+        Enter your reference number to find out if you&apos;re already registered
+      </Heading>
 
-      <div className="flex gap-2 items-center">
+      <div className="flex gap-2 items-center py-6">
         <DropdownMolecule
-          width="28"
-          placeholder="Search"
+          width="36"
+          placeholder="Search by"
           handleChange={handleChange}
           name="searchBy"
           defaultValue={details.searchBy}
-          options={[
-            { value: 'academies', label: 'Academies' },
-            { value: 'classes', label: 'Class' },
-            { value: 'faculties', label: 'Faculties' },
-            { value: 'students', label: 'Students' },
-            { value: 'instructors', label: 'Instructors' },
-            { value: 'administrators', label: 'Administrators' },
-            { value: 'Programmes', label: 'Programmes' },
-          ]}
+          options={getDropDownStatusOptions(DocType)}
         />
         <InputMolecule
-          name="searchResult"
-          value={details.searchResult}
+          name="searchInput"
+          value={details.searchInput}
           handleChange={handleChange}>
           <></>
         </InputMolecule>
@@ -66,12 +79,14 @@ function SignInWithSearch({ handleClick }: PropType) {
       <div className="text-txt-secondary py-2">
         <p className="text-base text-txt-secondary">
           Already have an account?
-          <Button styleType="text" className="text-primary-500" onClick={handleClick}>
-            Sign in
-          </Button>
+          <Link to="/">
+            <Button styleType="text" className="text-primary-500">
+              Sign in
+            </Button>
+          </Link>
         </p>
       </div>
-    </>
+    </div>
   );
 }
 

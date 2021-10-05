@@ -1,7 +1,14 @@
 import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
-import { CreateRoleReq, Response, RoleRes } from '../../types';
+import {
+  AddPrivilegeRoleType,
+  CreateRoleReq,
+  PrivilegeRes,
+  Response,
+  RolePrivilege,
+  RoleRes,
+} from '../../types';
 
 class RoleService {
   public async addRole(role: CreateRoleReq): Promise<AxiosResponse<Response<RoleRes>>> {
@@ -16,10 +23,32 @@ class RoleService {
     return await adminstrationAxios.get(`/roles/getRoleById/${id}`);
   }
 
+  public async getPrivilegesByRole(
+    roleId: string,
+  ): Promise<AxiosResponse<Response<RolePrivilege[]>>> {
+    return await adminstrationAxios.get(`/roles/getAssignedPrivileges/${roleId}`);
+  }
+
+  public async getUnAssignedPrivilege(
+    roleId: string,
+  ): Promise<AxiosResponse<Response<PrivilegeRes[]>>> {
+    return await adminstrationAxios.get(`/roles/getNotAssignedPrivileges/${roleId}`);
+  }
+
   public async modifyRole(
     role: CreateRoleReq,
   ): Promise<AxiosResponse<Response<RoleRes>>> {
     return await adminstrationAxios.put('/roles/modifyRole', { ...role });
+  }
+
+  public async addPrivilegesOnRole(
+    role: AddPrivilegeRoleType,
+  ): Promise<AxiosResponse<Response<RoleRes>>> {
+    return await adminstrationAxios.put('/roles/addPrivileges', { ...role });
+  }
+
+  public async removePrivilege(rolePrivilegeId: string): Promise<AxiosResponse<{}>> {
+    return await adminstrationAxios.delete(`/roles/removerPrivileges/${rolePrivilegeId}`);
   }
 }
 

@@ -1,28 +1,35 @@
-import React, { useState } from 'react';
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Route, Switch, useLocation, useRouteMatch } from 'react-router-dom';
 
 import Badge from '../../components/Atoms/custom/Badge';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import Departments from '../../components/Organisms/divisions/Departments';
+import Faculties from '../../components/Organisms/divisions/Faculties';
 
 export default function Divisions() {
-  const { path } = useRouteMatch();
-  const [userType, setUserType] = useState('Students');
+  const { url, path } = useRouteMatch();
+  const location = useLocation();
+  const [fetchType, setFetchType] = useState<string>('');
+
+  useEffect(() => {
+    if (location.pathname === '/dashboard/divisions/departments') {
+      setFetchType('DEPARTMENT');
+    } else if (path === '/dashboard/divisions') {
+      setFetchType('FACULTY');
+    }
+  }, []);
 
   const tabs = [
     {
-      label: 'Students',
-      href: '/dashboard/users',
+      label: 'Faculty',
+      href: `${url}`,
     },
     {
-      label: 'Instructors',
-      href: '/dashboard/users/instructors',
-    },
-    {
-      label: 'Admins',
-      href: '/dashboard/users/admins',
+      label: 'Department',
+      href: `${url}/departments`,
     },
   ];
 
@@ -39,12 +46,12 @@ export default function Divisions() {
         </ILabel>
         <Icon name="chevron-right" fill="gray" />
         <ILabel size="sm" color="primary" weight="medium">
-          {userType}
+          {fetchType}
         </ILabel>
       </div>
       <div className="flex gap-2 items-center py-3">
         <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
-          users
+          divisions
         </Heading>
         <Badge
           badgetxtcolor="main"
@@ -57,13 +64,19 @@ export default function Divisions() {
 
       <TabNavigation
         tabs={tabs}
-        onTabChange={(event) => setUserType(event.activeTabLabel)}>
+        onTabChange={(event) => setFetchType(event.activeTabLabel)}>
         <Switch>
-          {/* <Route exact path={`${path}`} render={() => another one here} /> */}
           <Route
-            exact
-            path={`${path}/instructors`}
-            // render={() => another component here}
+            path={`${path}/departments`}
+            render={() => {
+              return <Departments fetchType={fetchType} />;
+            }}
+          />
+          <Route
+            path={`${path}`}
+            render={() => {
+              return <Faculties fetchType={fetchType} />;
+            }}
           />
         </Switch>
       </TabNavigation>

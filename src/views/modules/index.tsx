@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Cacumber from '../../components/Molecules/Cacumber';
@@ -7,18 +8,33 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import AddPrerequesitForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
+import { moduleStore } from '../../store/modules.store';
 import { CommonCardDataType, Link } from '../../types';
+import { advancedTypeChecker } from '../../utils/getOption';
 
 export default function Modules() {
-  const [open, setOpen] = useState(false); // state to controll the popup
+  const { data } = moduleStore.getAllModules();
 
-  const [prOpen, setPrOpen] = useState(false); // state to controll the popup
+  const [modules, setModules] = useState<CommonCardDataType[]>([]);
+  const history = useHistory();
+  const { path } = useRouteMatch();
 
-  function submited() {
-    setOpen(false);
-    setPrOpen(true);
-    console.log('from submit');
-  }
+  useEffect(() => {
+    let newModules: CommonCardDataType[] = [];
+    data?.data.data.forEach((module) => {
+      newModules.push({
+        status: {
+          type: advancedTypeChecker(module.generic_status),
+          text: module.generic_status.toString(),
+        },
+        code: module.code,
+        title: module.name,
+        description: module.description,
+      });
+    });
+
+    setModules(newModules);
+  }, [data]);
 
   function handleSearch() {}
 
@@ -28,38 +44,9 @@ export default function Modules() {
     { to: 'subjects', title: 'subjects' },
   ];
 
-  const data: CommonCardDataType[] = [
-    {
-      status: { type: 'success', text: 'On going' },
-      code: 'MOD-23D',
-      title: 'Math',
-      description: 'Module brief description that shows user , what module consist',
-    },
-    {
-      status: { type: 'success', text: 'On going' },
-      code: 'MOD-23D',
-      title: 'Physics',
-      description: 'Module brief description that shows user , what module consist',
-    },
-    {
-      status: { type: 'warning', text: 'On Hold' },
-      code: 'MOD-26Y',
-      title: 'Biology',
-      description: 'Module brief description that shows user , what module consist',
-    },
-    {
-      status: { type: 'error', text: 'Completed' },
-      code: 'MOD-6YA',
-      title: 'English',
-      description: 'Module brief description that shows user , what module consist',
-    },
-    {
-      status: { type: 'error', text: 'Completed' },
-      code: 'MOD-6YA',
-      title: 'English',
-      description: 'Module brief description that shows user , what module consist',
-    },
-  ];
+  const handleClose = () => {
+    history.goBack();
+  };
 
   return (
     <>
@@ -68,36 +55,57 @@ export default function Modules() {
           <Cacumber list={list}></Cacumber>
         </section>
         <section className="">
-          <TableHeader totalItems={34} title="Modules" handleSearch={handleSearch}>
-            <Button onClick={() => setOpen(true)}>Add Module</Button>
+          <TableHeader
+            totalItems={modules.length}
+            title="Modules"
+            handleSearch={handleSearch}>
+            <Button onClick={() => history.push(`${path}/add`)}>Add Module</Button>
           </TableHeader>
         </section>
         <section className="flex flex-wrap justify-between mt-2">
-          {data.map((course) => (
-            <div key={course.code} className="p-1 mt-3">
+          {modules.map((course, index) => (
+            <div key={index} className="p-1 mt-3">
               <CommonCardMolecule
                 data={course}
                 to={{ title: 'module', to: 'modules/id' }}>
-                <p>
-                  Prerequesites: <span className="text-primary-500">3</span>
+                <p className="pt-3">
+                  Total subjects:
+                  <span className="px-1 text-primary-500">
+                    {data?.data.data[index].total_num_subjects || 'None'}
+                  </span>
                 </p>
               </CommonCardMolecule>
             </div>
           ))}
         </section>
 
-        {/* add module popup */}
-        <PopupMolecule title="New Module" open={open} onClose={() => setOpen(false)}>
-          <NewModuleForm onSubmit={submited} />
-        </PopupMolecule>
+        <Switch>
+          {/* add module popup */}
+          <Route
+            exact
+            path={`${path}/add`}
+            render={() => {
+              return (
+                <PopupMolecule title="New Module" open onClose={handleClose}>
+                  <NewModuleForm />
+                </PopupMolecule>
+              );
+            }}
+          />
 
-        {/* add prerequesite popup */}
-        <PopupMolecule
-          title="Add Prerequesite"
-          open={prOpen}
-          onClose={() => setPrOpen(false)}>
-          <AddPrerequesitForm />
-        </PopupMolecule>
+          {/* add prerequesite popup */}
+          <Route
+            exact
+            path={`${path}/:id/add-prereq`}
+            render={() => {
+              return (
+                <PopupMolecule title="Add Prerequesite" open onClose={handleClose}>
+                  <AddPrerequesitForm />
+                </PopupMolecule>
+              );
+            }}
+          />
+        </Switch>
       </main>
     </>
   );

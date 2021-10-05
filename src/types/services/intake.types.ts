@@ -1,14 +1,15 @@
 import { GenericStatus, Table } from '..';
+import { IRegistrationControlInfo } from './registrationControl.types';
 
 export interface IntakeInfo {
+  id: string | number;
   title: string;
-  actual_end_date: Date;
-  actual_start_date: Date;
+  actual_end_date: Date | string;
+  actual_start_date: Date | string;
   code: string;
   description: string;
-  expected_end_date: Date;
-  expected_start_date: Date;
-  id: string | number;
+  expected_end_date: Date | string;
+  expected_start_date: Date | string;
   intake_status: IntakeStatus;
   period_type: PeriodType;
   registration_control_id: string;
@@ -16,22 +17,36 @@ export interface IntakeInfo {
 }
 
 export interface ExtendedIntakeInfo extends Table, IntakeInfo {
-  registration_control: Object;
-  generic_status: GenericStatus;
-  last_status_change_reason: string;
+  registration_control: IRegistrationControlInfo;
   registration_control_id: string;
 }
 
-export enum IntakeStatus {
-  INACTIVE,
-  ONHOLD,
-  ONGOING,
-  COMPLETED,
-  OPENED,
+export interface IntakeProgram {
+  description: string;
+  intake_id: string;
+  intake_program_id: string;
+  program_id: string;
+  status: GenericStatus;
 }
+
+export interface IntakePrograms {
+  description: string;
+  intak_id: string;
+  programs: IntakeProgram[];
+}
+
+export enum IntakeStatus {
+  STARTED = 'STARTED',
+  SUSPENDED = 'SUSPENDED',
+  VOIDED = 'VOIDED',
+  CLOSED = 'CLOSED',
+  ONGOING = 'ONGOING',
+  COMPLETED = 'COMPLETED',
+  OPENED = 'OPENED',
+}
+
 export enum PeriodType {
-  TERM,
-  SEMESTER,
-  SHORT_COURSE,
-  PHASE,
+  TRIMESTER = 'TRIMESTER',
+  COMPLETE = 'COMPLETE',
+  SEMESTER = 'SEMESTER',
 }

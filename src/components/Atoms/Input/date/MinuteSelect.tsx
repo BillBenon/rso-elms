@@ -14,6 +14,7 @@ type MProp = {
   placeholder?: string;
   width?: string;
   className?: string;
+  padding?: number;
 };
 
 const MinuteSelect = (mprops: MProp) => {
@@ -29,10 +30,15 @@ const MinuteSelect = (mprops: MProp) => {
     return minOptions;
   };
 
+  let minutes = renderMinuteOptions();
+  let newDefaultValue = minutes.find((minute) => minute.value === mprops.defaultValue);
+
   return (
     <DropDown
+      defaultValue={newDefaultValue}
       name={mprops.name}
       placeholder={mprops.placeholder}
+      padding={mprops.padding}
       width={mprops.width}
       className={mprops.className}
       options={renderMinuteOptions()}

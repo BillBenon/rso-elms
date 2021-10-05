@@ -6,8 +6,10 @@ class IntakeStore {
   create() {
     return useMutation(intakeService.create);
   }
+  addPrograms() {
+    return useMutation(intakeService.addPrograms);
+  }
   getAll() {
-    console.log('in store');
     return useQuery('intakes', intakeService.fetchAll);
   }
   getIntakeById(id: string) {
@@ -15,9 +17,14 @@ class IntakeStore {
   }
 
   getIntakesByAcademy(academyId: string) {
-    return useQuery(
-      ['intakes/academy', academyId],
-      () => intakeService.getIntakesByAcademy,
+    return useQuery(['intakes/academy', academyId], () =>
+      intakeService.getIntakesByAcademy(academyId),
+    );
+  }
+
+  getProgramsByIntake(intakeId: string) {
+    return useQuery(['intakes/programs', intakeId], () =>
+      intakeService.getProgramsByIntake(intakeId),
     );
   }
 }

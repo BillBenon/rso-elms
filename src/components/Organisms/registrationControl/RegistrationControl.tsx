@@ -13,6 +13,7 @@ import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
 import NewRegistrationControl from '../forms/NewRegistrationControl';
 import UpdateRegControl from '../forms/regcontrol/UpdateRegControl';
+import NewIntake from '../intake/NewIntake';
 
 export default function RegistrationControl() {
   const { url, path } = useRouteMatch();
@@ -26,20 +27,30 @@ export default function RegistrationControl() {
     'end date': string;
     description: string;
     status: GenericStatus;
-    id: string | number;
+    id: string | number | undefined;
+    'academy name': string;
   }
 
   let RegistrationControls: IRegistrationInfo[] = [];
   let RegInfo = data?.data.data;
 
   RegInfo?.map((obj: IRegistrationControlInfo) => {
-    let { expected_start_date, expected_end_date, description, generic_status, id } = obj;
+    let {
+      expected_start_date,
+      expected_end_date,
+      description,
+      generic_status,
+      id,
+      academy: { name }, //destructure name inside academy obj
+    } = obj;
+
     let registrationcontrol: IRegistrationInfo = {
       'start date': expected_start_date,
       'end date': expected_end_date,
       description,
       status: generic_status,
       id: id,
+      'academy name': name,
     };
     RegistrationControls.push(registrationcontrol);
   });
@@ -56,6 +67,12 @@ export default function RegistrationControl() {
       },
     },
     { name: 'View', handleAction: () => {} },
+    {
+      name: 'Add intake',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`${path}/${id}/add-intake`); // go to add new intake to this reg control
+      },
+    },
   ];
 
   return (
@@ -76,7 +93,7 @@ export default function RegistrationControl() {
       </div>
       <TableHeader
         title="registration control"
-        totalItems={3}
+        totalItems={RegistrationControls.length}
         handleSearch={handleSearch}>
         <Link to={`${url}/add`}>
           <Button>Add new reg control</Button>
@@ -91,6 +108,7 @@ export default function RegistrationControl() {
             data={RegistrationControls}
             actions={controlActions}
             uniqueCol={'id'}
+            hide={['id']}
           />
         ) : (
           ''
@@ -119,8 +137,24 @@ export default function RegistrationControl() {
           path={`${path}/:id/edit`}
           render={() => {
             return (
-              <PopupMolecule title="Update Role" open onClose={handleClose}>
+              <PopupMolecule title="Update Control" open onClose={handleClose}>
                 <UpdateRegControl />
+              </PopupMolecule>
+            );
+          }}
+        />
+        {/* add intake to reg control */}
+        <Route
+          exact
+          path={`${path}/:id/add-intake`}
+          render={() => {
+            return (
+              <PopupMolecule
+                closeOnClickOutSide={false}
+                title="New intake"
+                open
+                onClose={handleClose}>
+                <NewIntake handleSuccess={handleClose} />
               </PopupMolecule>
             );
           }}

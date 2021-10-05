@@ -4,7 +4,10 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import registrationControlStore from '../../../../store/registrationControl.store';
 import { FormPropType, ValueType } from '../../../../types';
-import { IRegistrationControlCreateInfo } from '../../../../types/services/registrationControl.types';
+import {
+  IRegistrationControlCreateInfo,
+  IRegistrationControlInfo,
+} from '../../../../types/services/registrationControl.types';
 import Button from '../../../Atoms/custom/Button';
 import DateMolecule from '../../../Molecules/input/DateMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
@@ -20,12 +23,17 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
   const [regControl, setRegControl] = useState<IRegistrationControlCreateInfo>({
     academy_id: '',
     description: '',
-    actual_start_date: '',
-    actual_end_date: '',
     expected_start_date: '',
     expected_end_date: '',
-    id: id,
   });
+
+  const regControlUpdateInfo: any = {
+    academy_id: regControl.academy?.id,
+    description: regControl.description,
+    expected_start_date: regControl.expected_start_date,
+    expected_end_date: regControl.expected_end_date,
+    id: id,
+  };
 
   const { mutateAsync } = registrationControlStore.updateRegControl();
   const history = useHistory();
@@ -34,7 +42,6 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
 
   useEffect(() => {
     data?.data.data && setRegControl({ ...data?.data.data });
-    console.log(regControl.expected_end_date, 'we go');
   }, [data]);
 
   function handleChange({ name, value }: ValueType) {
@@ -43,9 +50,9 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
 
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
-    mutateAsync(regControl, {
+    mutateAsync(regControlUpdateInfo, {
       onSuccess: () => {
-        toast.success('Role updated', { duration: 3 });
+        toast.success('Control updated', { duration: 3 });
         history.goBack();
       },
       onError: () => {
@@ -54,6 +61,7 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
     });
     if (onSubmit) onSubmit(e);
   }
+
   return (
     <form onSubmit={submitForm}>
       <TextAreaMolecule
@@ -64,13 +72,19 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
       </TextAreaMolecule>
       <DateMolecule
         defaultValue={regControl.expected_start_date}
+        padding={3}
         handleChange={handleChange}
         name={'expected_start_date'}>
-        Expected Start Date
+        Start Date
       </DateMolecule>
 
-      <DateMolecule handleChange={handleChange} name={'expected_end_date'}>
-        Expected End Date
+      <DateMolecule
+        handleChange={handleChange}
+        padding={3}
+        endYear={new Date().getFullYear() + 15}
+        defaultValue={regControl.expected_end_date}
+        name={'expected_end_date'}>
+        End Date
       </DateMolecule>
 
       <RadioMolecule

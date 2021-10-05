@@ -1,40 +1,74 @@
-import React, { FormEvent } from 'react';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
+import { useHistory } from 'react-router';
 
-import { CommonFormProps, ValueType } from '../../../../types';
+import { moduleStore } from '../../../../store/modules.store';
+import { subjectStore } from '../../../../store/subject.store';
+import { ValueType } from '../../../../types';
+import { ModuleInfo } from '../../../../types/services/modules.types';
+import { SubjectInfo } from '../../../../types/services/subject.types';
+import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
+import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-interface PropType<K> extends CommonFormProps<K> {}
+export default function NewSubjectForm() {
+  const { mutateAsync } = subjectStore.addSubject();
+  const history = useHistory();
+  const [subject, setsubject] = useState<SubjectInfo>({
+    content: '',
+    id: '',
+    module_id: '',
+    title: '',
+  });
 
-export default function NewSubjectForm<E>({ onSubmit }: PropType<E>) {
   function handleChange(e: ValueType) {
-    console.log(e);
+    setsubject({ ...subject, [e.name]: e.value });
   }
 
-  function submitForm(e: FormEvent) {
-    e.preventDefault(); // prevent page to reload:
-    if (onSubmit) onSubmit(e);
-  }
+  const handleSubmit = async () => {
+    await mutateAsync(subject, {
+      async onSuccess(data) {
+        console.log(data.data);
+        toast.success(data.data.message);
+        history.push(`/dashboard/subjects/${data.data.data.id}/add-lesson`);
+      },
+      onError() {
+        toast.error('error occurred please try again');
+      },
+    });
+  };
+
+  let modules: ModuleInfo[] = moduleStore.getAllModules().data?.data.data || [];
 
   return (
-    <form onSubmit={submitForm}>
-      {/* model name */}
-      <InputMolecule value="" error="" handleChange={handleChange} name="subject-name">
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit();
+      }}>
+      <DropdownMolecule
+        handleChange={handleChange}
+        name={'module_id'}
+        placeholder="Select module"
+        options={getDropDownOptions(modules)}>
+        Module
+      </DropdownMolecule>
+      <InputMolecule
+        value={subject.title}
+        error=""
+        handleChange={handleChange}
+        name="title">
         Subject name
       </InputMolecule>
-      {/* model code
-
-      {/* module description */}
-      <TextAreaMolecule value="" name="description" handleChange={handleChange}>
-        Subject remarks
+      <TextAreaMolecule
+        value={subject.content}
+        name="description"
+        handleChange={handleChange}>
+        Subject content
       </TextAreaMolecule>
-      {/* program
-      <DropdownMolecule name="radio" handleChange={handleChange}>
-        Program
-      </DropdownMolecule> */}
-      {/* model initial status */}
       <RadioMolecule
         className="mt-4"
         value="ACTIVE"
@@ -46,12 +80,8 @@ export default function NewSubjectForm<E>({ onSubmit }: PropType<E>) {
         handleChange={handleChange}>
         Status
       </RadioMolecule>
-
-      {/* TODO: dropdown, where user could select module on the subject */}
-
-      {/* save button */}
       <div className="mt-5">
-        <Button type="submit" full>
+        <Button type="submit" onClick={handleSubmit} full>
           Add
         </Button>
       </div>

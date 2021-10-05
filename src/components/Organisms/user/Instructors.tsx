@@ -1,19 +1,14 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router';
+import React from 'react';
+import { Link, useHistory } from 'react-router-dom';
 
 import { ValueType } from '../../../types';
 import Button from '../../Atoms/custom/Button';
-import PopupMolecule from '../../Molecules/Popup';
+import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
-import ImportUsers from './ImportUsers';
-import NewInstructor from './NewInstructor';
 
 export default function Instructors({ instructors }: { instructors: Object[] }) {
-  const [modalOpen, setModalOpen] = useState(false);
-  const [importInstructorModalOpen, setImportInstructorModalOpen] = useState(false);
   const history = useHistory();
-
   function handleSearch(_e: ValueType) {}
   const instructorActions = [
     { name: 'Add Role', handleAction: () => {} },
@@ -27,31 +22,28 @@ export default function Instructors({ instructors }: { instructors: Object[] }) 
         totalItems={instructors && instructors.length > 0 ? instructors.length : 0}
         handleSearch={handleSearch}>
         <div className="flex gap-3">
-          <Button onClick={() => setImportInstructorModalOpen(true)} styleType="outline">
-            Import users
-          </Button>
-          <Button onClick={() => history.push('/dashboard/users/instructor/new')}>
-            New Instructor
-          </Button>
+          <Link to={`/dashboard/users/import`}>
+            <Button styleType="outline">Import users</Button>
+          </Link>
+          <Link to={`/dashboard/users/add`}>
+            <Button>New User</Button>
+          </Link>
         </div>
       </TableHeader>
-      {instructors && instructors.length > 0 && (
+      {instructors && (
         <div className="pt-8">
-          <Table statusColumn="status" data={instructors} actions={instructorActions} />
+          {instructors.length <= 0 ? (
+            <NoDataAvailable
+              buttonLabel="Add new instructor"
+              title={'No instructor available'}
+              handleClick={() => history.push(`/dashboard/users/add`)}
+              description="And the web just isnt the same without you. Lets get you back online!"
+            />
+          ) : (
+            <Table statusColumn="status" data={instructors} actions={instructorActions} />
+          )}
         </div>
       )}
-      <PopupMolecule
-        title="New instructor"
-        open={modalOpen}
-        onClose={() => setModalOpen(false)}>
-        <NewInstructor />
-      </PopupMolecule>
-      <PopupMolecule
-        title="Import instructors"
-        open={importInstructorModalOpen}
-        onClose={() => setImportInstructorModalOpen(false)}>
-        <ImportUsers userType="instructors" />
-      </PopupMolecule>
     </>
   );
 }

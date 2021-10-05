@@ -1,5 +1,4 @@
 // import { Label } from "@headlessui/react/dist/components/label/label";
-import '../../styles/components/Organisms/academy/academy.scss';
 
 import React from 'react';
 import { Route, useHistory, useRouteMatch } from 'react-router';
@@ -50,7 +49,7 @@ export default function Academy() {
     {
       name: 'Edit academy',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit role
+        history.push(`${path}/${id}/edit`); // go to edit academy
       },
     },
     { name: 'View', handleAction: () => {} },
@@ -79,7 +78,10 @@ export default function Academy() {
                 </ILabel>
               </div>
               <div className="py-4">
-                <TableHeader title="Academy" totalItems={300} handleSearch={handleSearch}>
+                <TableHeader
+                  title="Academy"
+                  totalItems={academies.length}
+                  handleSearch={handleSearch}>
                   <Link to={`${url}/add`}>
                     <Button>New academy</Button>
                   </Link>
@@ -93,6 +95,7 @@ export default function Academy() {
                     data={academies}
                     actions={academyActions}
                     uniqueCol="id"
+                    hide={['id']}
                   />
                 )}
               </div>

@@ -14,6 +14,7 @@ const administrationModuleConfig: AxiosRequestConfig = {
 };
 
 const adminstrationAxios = axios.create(administrationModuleConfig);
+const authIgnore: string[] = ['/'];
 
 const interceptAdminReq = (config: AxiosRequestConfig) => {
   const token = cookie.getCookie('jwt_info');
@@ -30,13 +31,18 @@ const interceptAdminReq = (config: AxiosRequestConfig) => {
 const interceptAdminResError = (error: Error | AxiosError<AxiosResponse<Response>>) => {
   if (axios.isAxiosError(error)) {
     const e = error?.response;
-    if (e?.status === 401) window.location.href = '/';
+
+    if (e?.status === 401 && !authIgnore.includes(window.location.pathname)) {
+      window.location.href = '/login';
+    }
+
     if (e?.status === 400) toast.error(`Bad Request on, ${e.config.url}`);
     else toast.error((e?.data.data.message || e?.data?.data?.error) + '');
 
     // unauthorized
     throw error;
   } else {
+    console.log(error);
     return error;
   }
 };

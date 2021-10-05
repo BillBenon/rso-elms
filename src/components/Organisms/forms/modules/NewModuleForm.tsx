@@ -1,77 +1,85 @@
-import React, { FormEvent } from 'react';
+import React, { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useHistory } from 'react-router-dom';
 
-import { CommonFormProps, SelectData, ValueType } from '../../../../types';
+import { moduleStore } from '../../../../store/modules.store';
+import programStore from '../../../../store/program.store';
+import { ValueType } from '../../../../types';
+import { CreateModuleInfo } from '../../../../types/services/modules.types';
+import { ProgramInfo } from '../../../../types/services/program.types';
+import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-interface PropType<K> extends CommonFormProps<K> {}
+export default function NewModuleForm() {
+  const history = useHistory();
 
-export default function NewModuleForm<E>({ onSubmit }: PropType<E>) {
-  const programs: SelectData[] = [
-    { value: 'Caddette Program', label: 'Caddette Program' },
-    { value: 'Senior Program', label: 'Senior Program' },
-  ];
+  const programsInfo = programStore.fetchPrograms();
+  let programs: ProgramInfo[] = programsInfo.data?.data.data || [];
+
+  const { mutateAsync } = moduleStore.addModule();
+
+  const [values, setvalues] = useState<CreateModuleInfo>({
+    id: '',
+    name: '',
+    description: '',
+    has_prerequisite: false,
+    program_id: '',
+  });
 
   function handleChange(e: ValueType) {
-    console.log(e);
+    setvalues({ ...values, [e.name]: e.value });
   }
 
-  function submitForm(e: FormEvent) {
-    e.preventDefault(); // prevent page to reload:
-    if (onSubmit) onSubmit(e);
+  async function submitForm(e: FormEvent) {
+    e.preventDefault();
+
+    await mutateAsync(values, {
+      async onSuccess(data) {
+        toast.success(data.data.message);
+        if (data.data.data.has_prerequisite)
+          history.push(`/dashboard/modules/${data.data.data.id}/add-prereq`);
+        else history.goBack();
+      },
+      onError() {
+        toast.error('error occurred please try again');
+      },
+    });
   }
 
   return (
     <form onSubmit={submitForm}>
-      {/* model name */}
-      <InputMolecule value="" error="" handleChange={handleChange} name="model-name">
+      <InputMolecule value={values.name} error="" handleChange={handleChange} name="name">
         Module name
       </InputMolecule>
-      {/* model code
-    <InputMolecule
-      value=""
-      error=""
-      handleChange={handleChange}
-      name="model-name">
-      Module code
-    </InputMolecule> */}
-      {/* module description */}
-      <TextAreaMolecule value="" name="description" handleChange={handleChange}>
+      <TextAreaMolecule
+        value={values.description}
+        name="description"
+        handleChange={handleChange}>
         Descripiton
       </TextAreaMolecule>
 
-      <DropdownMolecule name="radio" handleChange={handleChange} options={programs}>
+      <DropdownMolecule
+        name="program_id"
+        handleChange={handleChange}
+        options={getDropDownOptions(programs)}>
         Program
       </DropdownMolecule>
-      {/* model initial status
       <RadioMolecule
         className="mt-4"
-        value="ACTIVE"
-        name="status"
+        name="has_prerequisite"
         options={[
-          { label: 'Active', value: 'ACTIVE' },
-          { label: 'Inactive', value: 'INACTIVE' },
-        ]}
-        handleChange={handleChange}>
-        Status
-      </RadioMolecule>
-      {/* model has prerequesit */}
-      <RadioMolecule
-        className="mt-4"
-        name="prerequsites"
-        options={[
-          { label: 'Yes', value: 'YES' },
-          { label: 'No', value: 'NO' },
+          { label: 'Yes', value: 'true' },
+          { label: 'No', value: 'false' },
         ]}
         handleChange={handleChange}>
         Has Prerequesites
       </RadioMolecule>
-      {/* save button */}
       <div className="mt-5">
-        <Button type="submit" full>
+        <Button type="submit" onClick={() => submitForm} full>
           Save
         </Button>
       </div>
