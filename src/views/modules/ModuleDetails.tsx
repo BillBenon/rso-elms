@@ -1,9 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
+import { useLocation } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Icon from '../../components/Atoms/custom/Icon';
+import Heading from '../../components/Atoms/Text/Heading';
 import Cacumber from '../../components/Molecules/Cacumber';
+import AddCard from '../../components/Molecules/cards/AddCard';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
+import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
@@ -19,9 +25,16 @@ export default function ModuleDetails() {
   const { id } = useParams<ParamType>();
   const { path, url } = useRouteMatch();
   const history = useHistory();
+  const location = useLocation();
 
   const subjectData = subjectStore.getSubjectsByModule(id);
   const moduleData = moduleStore.getModuleById(id);
+
+  useEffect(() => {
+    if (location.pathname === path) {
+      subjectData.refetch();
+    }
+  }, [location]);
 
   useEffect(() => {
     if (subjectData.data?.data) {
@@ -65,27 +78,44 @@ export default function ModuleDetails() {
         <section>
           <Cacumber list={list} />
         </section>
-        <section className="">
-          <TableHeader
-            totalItems={subjects.length}
-            title={moduleData.data?.data.data.name + ''}
-            handleSearch={handleSearch}>
-            <Button onClick={() => history.push(`${url}/add-subject`)}>
-              Add new Subject
-            </Button>
-          </TableHeader>
-        </section>
-        <section className="flex flex-wrap justify-start gap-4 mt-2">
-          {subjects.map((subject, i) => (
-            <div key={i} className="p-1 mt-3">
-              <CommonCardMolecule
-                data={subject}
-                to={{ title: 'module', to: 'modules/id' }}
-              />
+        <div className="mt-11 pb-6">
+          <div className="flex flex-wrap justify-between items-center">
+            <div className="flex gap-2 items-center">
+              <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
+                {moduleData.data?.data.data.name} module
+              </Heading>
             </div>
-          ))}
-        </section>
+            <div className="flex flex-wrap justify-start items-center">
+              <SearchMolecule handleChange={handleSearch} />
+              <button className="border p-0 rounded-md mx-2">
+                <Icon name="filter" />
+              </button>
+            </div>
 
+            <div className="flex gap-3">
+              <Button onClick={() => history.push(`${url}/add-subject`)}>
+                Add new Subject
+              </Button>
+            </div>
+          </div>
+        </div>
+        {subjects.length < 1 && subjectData.isSuccess ? (
+          <NoDataAvailable
+            title={'No subjecta registered'}
+            description={
+              'The history object is mutable. Therefore it is recommended to access the location from the render props of <Route>, not from'
+            }
+            handleClick={() => history.push(`${path}/add-subject`)}
+          />
+        ) : (
+          <section className="flex flex-wrap justify-start gap-4 mt-2">
+            {subjects.map((subject, i) => (
+              <div key={i} className="p-1 mt-3">
+                <CommonCardMolecule data={subject} />
+              </div>
+            ))}
+          </section>
+        )}
         <Switch>
           {/* add subject popup */}
           <Route

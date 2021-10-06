@@ -14,7 +14,7 @@ import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 export default function NewSubjectForm() {
   const { id } = useParams<ParamType>();
 
-  const { mutateAsync } = subjectStore.addSubject();
+  const { mutateAsync, isLoading } = subjectStore.addSubject();
   const history = useHistory();
   const module = moduleStore.getModuleById(id).data?.data.data;
 
@@ -82,7 +82,7 @@ export default function NewSubjectForm() {
         Status
       </RadioMolecule>
       <div className="mt-5">
-        <Button type="submit" onClick={handleSubmit} full>
+        <Button type="submit" disabled={isLoading} onClick={handleSubmit} full>
           Add
         </Button>
       </div>

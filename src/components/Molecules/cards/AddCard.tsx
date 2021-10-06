@@ -12,7 +12,7 @@ export default function AddCard({ title, onClick }: IProps) {
     <button
       className="block w-72 border-2 border-dashed border-gray-400 rounded-lg cursor-pointer"
       onClick={onClick}>
-      <div className="flex justify-center items-center flex-col h-60">
+      <div className="flex justify-center items-center flex-col h-48">
         <Icon
           name="add"
           size={16}

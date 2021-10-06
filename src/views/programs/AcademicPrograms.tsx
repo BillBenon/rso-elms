@@ -94,28 +94,28 @@ export default function AcademicProgram() {
   }
 
   return (
-    <main className="px-4">
-      <section>
-        <Cacumber list={list}></Cacumber>
-      </section>
-      <section>
-        <TableHeader
-          totalItems={intakeId ? `${programs.length} programs` : programs.length}
-          title={`${intakeId ? intake.data?.data.data.title : 'Programs'}`}
-          showSearch={false}>
-          {intakeId ? (
-            <Link to={`${url}/add-program-to-intake?intakeId=${intakeId}`}>
-              <Button>Add Program To Intake</Button>
-            </Link>
-          ) : (
-            <Link to={`${url}/add`}>
-              <Button>Add New Program</Button>
-            </Link>
-          )}
-        </TableHeader>
-      </section>
-
-      <Switch>
+    <Switch>
+      <Route path={`${path}/:id/details`} render={() => <ProgramDetails />} />
+      <main className="px-4">
+        <section>
+          <Cacumber list={list}></Cacumber>
+        </section>
+        <section>
+          <TableHeader
+            totalItems={intakeId ? `${programs.length} programs` : programs.length}
+            title={`${intakeId ? intake.data?.data.data.title : 'Programs'}`}
+            showSearch={false}>
+            {intakeId ? (
+              <Link to={`${url}/add-program-to-intake?intakeId=${intakeId}`}>
+                <Button>Add Program To Intake</Button>
+              </Link>
+            ) : (
+              <Link to={`${url}/add`}>
+                <Button>Add New Program</Button>
+              </Link>
+            )}
+          </TableHeader>
+        </section>
         {/* create academic program */}
         <Route
           exact
@@ -156,7 +156,6 @@ export default function AcademicProgram() {
           }}
         />
         {/* show academic program details */}
-        <Route path={`${path}/:id/details`} render={() => <ProgramDetails />} />
         <Route
           exact
           path={`${path}`}
@@ -253,7 +252,7 @@ export default function AcademicProgram() {
             );
           }}
         />
-      </Switch>
-    </main>
+      </main>
+    </Switch>
   );
 }
