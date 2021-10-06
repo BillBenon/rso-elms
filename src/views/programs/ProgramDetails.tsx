@@ -17,12 +17,9 @@ import UsersPreview from '../../components/Molecules/cards/UsersPreview';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import { moduleStore } from '../../store/modules.store';
 import programStore from '../../store/program.store';
-import { CommonCardDataType } from '../../types';
+import { CommonCardDataType, ParamType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from './AcademicPrograms';
-interface ParamType {
-  id: string;
-}
 
 export default function ProgramDetailsMolecule() {
   const { id } = useParams<ParamType>();
@@ -195,7 +192,7 @@ export default function ProgramDetailsMolecule() {
                     <div key={module.code}>
                       <CommonCardMolecule
                         data={module}
-                        to={{ title: 'View more', to: `/modules/${module.code}` }}
+                        to={{ title: 'View more', to: `/modules/:id` }}
                       />
                     </div>
                   ))

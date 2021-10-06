@@ -4,6 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import { privilegeStore } from '../../../../store';
 import {
+  ParamType,
   PrivilegeFeatureType,
   PrivilegeStatus,
   PrivilegeUpdate,
@@ -17,10 +18,6 @@ import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 interface PropType {
   onSubmit: <E>(_e: FormEvent<E>) => void;
-}
-
-interface ParamType {
-  id: string;
 }
 
 export default function NewPrivilege({ onSubmit }: PropType) {

@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import { intakeStore } from '../../../store/intake.store';
-import { CommonCardDataType, Link } from '../../../types';
+import { CommonCardDataType, Link, ParamType } from '../../../types';
 import { advancedTypeChecker } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';
 import Heading from '../../Atoms/Text/Heading';
@@ -15,10 +15,6 @@ const list: Link[] = [
   { to: 'registration-control', title: 'Registration control' },
   { to: 'intakes', title: 'Intakes' },
 ];
-
-interface ParamType {
-  id: string;
-}
 
 export default function RegControlIntakes() {
   const [intakes, setIntakes] = useState<CommonCardDataType[]>([]);

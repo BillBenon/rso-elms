@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import { intakeStore } from '../../../store/intake.store';
 import programStore from '../../../store/program.store';
-import { GenericStatus, ValueType } from '../../../types';
+import { GenericStatus, ParamType, ValueType } from '../../../types';
 import {
   IntakeInfo,
   IntakeProgram,
@@ -29,9 +29,6 @@ interface IProps {
   handleProgramsChange?: (_e: ValueType) => any;
   isLoading?: boolean;
   handleGoBack: () => void;
-}
-interface ParamType {
-  id: string;
 }
 
 export default function NewIntake() {

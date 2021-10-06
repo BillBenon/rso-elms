@@ -9,12 +9,8 @@ import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import academyStore from '../../store/academy.store';
-import { CommonFormProps, ValueType } from '../../types';
+import { CommonFormProps, ParamType, ValueType } from '../../types';
 import { AcademyCreateInfo } from '../../types/services/academy.types';
-
-interface ParamType {
-  id: string;
-}
 
 export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();

@@ -3,17 +3,13 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { moduleStore } from '../../../../store/modules.store';
-import { GenericStatus, ValueType } from '../../../../types';
+import { GenericStatus, ParamType, ValueType } from '../../../../types';
 import { CreatePrerequisites } from '../../../../types/services/modules.types';
 import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
-
-interface ParamType {
-  id: string;
-}
 
 export default function AddPrerequesitForm() {
   const { id } = useParams<ParamType>();
