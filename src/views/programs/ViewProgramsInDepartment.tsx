@@ -40,7 +40,6 @@ export default function ViewProgramsInDepartment() {
 
     programData.push(prog);
   });
-  console.log(programData);
   return (
     <div className="flex flex-wrap justify-between mt-2">
       {programData.length ? (

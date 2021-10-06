@@ -81,7 +81,7 @@ export default function Departments({ fetchType }: IDepartment) {
     {
       name: 'View Programs',
       handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/programs/${id}/view-program`); // go to edit role
+        history.push({ pathname: `/dashboard/programs/`, search: `?query=${id}` }); // go to edit role
       },
     },
   ];
@@ -120,7 +120,7 @@ export default function Departments({ fetchType }: IDepartment) {
                   statusColumn="status"
                   data={departments}
                   uniqueCol={'id'}
-                  // hide={['id']}
+                  hide={['id']}
                   actions={actions}
                 />
               )}
