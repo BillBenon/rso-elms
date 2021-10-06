@@ -60,7 +60,7 @@ export default function AddPrerequesitForm() {
   return (
     <form>
       <DropdownMolecule
-        options={getDropDownOptions(modules)}
+        options={getDropDownOptions({ inputs: modules || [] })}
         name="prerequistis"
         isMulti
         placeholder="Prerequisite"

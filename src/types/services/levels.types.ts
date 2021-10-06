@@ -11,4 +11,5 @@ export interface IcreateLevel {
 
 export interface ILevel extends Table, IcreateLevel {
   lastStatusChangeReason: string;
+  flow: number;
 }

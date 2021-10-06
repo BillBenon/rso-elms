@@ -4,7 +4,11 @@ import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import { ILevel } from '../../types/services/levels.types';
 import { ModuleInfo } from '../../types/services/modules.types';
-import { CreateProgramInfo, ProgramInfo } from '../../types/services/program.types';
+import {
+  CreateAcademicProgramLevel,
+  CreateProgramInfo,
+  ProgramInfo,
+} from '../../types/services/program.types';
 
 class ProgramService {
   public async createProgram(
@@ -32,6 +36,15 @@ class ProgramService {
   ): Promise<AxiosResponse<Response<ModuleInfo[]>>> {
     return await adminstrationAxios.get(`
     /coursemodules/getModulesByProgram/${id}`);
+  }
+
+  public async addProgramToLevel(
+    leveData: CreateAcademicProgramLevel,
+  ): Promise<AxiosResponse<Response<any>>> {
+    return await adminstrationAxios.post(
+      '/programs/addLevelsToAcademicProgram/',
+      leveData,
+    );
   }
 
   public async getProgramsByDepartment(

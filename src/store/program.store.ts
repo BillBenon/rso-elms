@@ -18,6 +18,10 @@ class ProgramStore {
       },
     });
   }
+  addProgramToLevel() {
+    return useMutation(programService.addProgramToLevel);
+  }
+
   fetchPrograms() {
     return useQuery('programs', programService.fetchPrograms);
   }
