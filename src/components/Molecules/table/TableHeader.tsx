@@ -8,7 +8,7 @@ import SearchMolecule from '../input/SearchMolecule';
 
 type ITableHeader = {
   title: string;
-  totalItems: number;
+  totalItems: number | string;
   children?: React.ReactNode;
   showSearch?: boolean;
   handleSearch?: (_e: ValueType) => void;
@@ -38,7 +38,7 @@ export default function TableHeader({
             badgetxtcolor="main"
             badgecolor="primary"
             fontWeight="normal"
-            className="h-6 w-9 flex justify-center items-center">
+            className="h-6 flex justify-center items-center">
             {totalItems}
           </Badge>
         </div>

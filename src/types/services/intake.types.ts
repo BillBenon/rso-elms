@@ -13,6 +13,7 @@ export interface IntakeInfo {
   intake_status: IntakeStatus;
   period_type: PeriodType;
   registration_control_id: string;
+  registration_control?: IRegistrationControlInfo;
   total_num_students: number;
 }
 
@@ -29,12 +30,25 @@ export interface IntakeProgram {
   status: GenericStatus;
 }
 
-export interface IntakePrograms {
+export interface IntakeProgramsRes extends Table {
+  description: string;
+  intake: ExtendedIntakeInfo[];
+  programs: IntakeProgram[];
+}
+
+export interface IntakePrograms extends Table {
+  description: string;
+  intake_id: string;
+  programs: IntakeProgram[];
+}
+
+export interface IntakeProgramsCreate {
   description: string;
   intak_id: string;
   programs: IntakeProgram[];
 }
 
+// intake status enum
 export enum IntakeStatus {
   STARTED = 'STARTED',
   SUSPENDED = 'SUSPENDED',

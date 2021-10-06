@@ -50,7 +50,7 @@ const RouterProtection = () => {
 
       <Route path="/dashboard/programs" component={AcademicPrograms} />
       <Route exact path="/dashboard/levels" component={LevelsView} />
-      <Route exact path="/dashboard/intakes" component={IntakesView} />
+      <Route path="/dashboard/intakes" component={IntakesView} />
       <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} />
 
       {/* end of academic admin pages */}
@@ -60,9 +60,8 @@ const RouterProtection = () => {
   return (
     <>
       <Dashboard>
-        {(authUser?.user_type == 'SUPER_ADMIN' || import.meta.env.DEV) &&
-          InstitutionAdminRoutes()}
-        {(authUser?.user_type == 'ADMIN' || import.meta.env.DEV) && AcademicAdminRoutes()}
+        {authUser?.user_type == 'SUPER_ADMIN' && InstitutionAdminRoutes()}
+        {authUser?.user_type == 'ADMIN' && AcademicAdminRoutes()}
       </Dashboard>
       {/* protected routes  */}
 

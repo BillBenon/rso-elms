@@ -1,7 +1,6 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 
-import ComponentsUseCase from './components/Organisms/ComponentsUseCase';
 import ExperienceInfo from './components/Organisms/forms/auth/signup/experience/ExperienceInfo';
 import MoreInfo from './components/Organisms/forms/auth/signup/more-details/MoreInfo';
 import { MainLayout } from './layout/MainLayout';
@@ -18,13 +17,13 @@ const App = () => {
       <MainLayout>
         <Router>
           <Switch>
-            <Route exact path="/" component={ComponentsUseCase} />
             <Route exact path="/redirecting" component={Redirecting} />
             <Route exact path="/institution" component={NewInstitution} />
             <Route exact path="/register" component={Signup} />
             <Route exact path="/register/experience" component={ExperienceInfo} />
             <Route exact path="/register/more" component={MoreInfo} />
             <Route path="/login" component={Signin} />
+            <Redirect exact from="/" to="/login" />
             <RouterProtection />
             <Route path="*" component={NotFound} />
           </Switch>

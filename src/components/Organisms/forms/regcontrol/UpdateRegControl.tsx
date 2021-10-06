@@ -4,10 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import registrationControlStore from '../../../../store/registrationControl.store';
 import { FormPropType, ValueType } from '../../../../types';
-import {
-  IRegistrationControlCreateInfo,
-  IRegistrationControlInfo,
-} from '../../../../types/services/registrationControl.types';
+import { IRegistrationControlCreateInfo } from '../../../../types/services/registrationControl.types';
 import Button from '../../../Atoms/custom/Button';
 import DateMolecule from '../../../Molecules/input/DateMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
@@ -49,14 +46,15 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
   }
 
   function submitForm<T>(e: FormEvent<T>) {
+    const toastId = toast.loading('updating registration control');
     e.preventDefault();
     mutateAsync(regControlUpdateInfo, {
       onSuccess: () => {
-        toast.success('Control updated', { duration: 3 });
+        toast.success('registration control updated', { id: toastId });
         history.goBack();
       },
-      onError: () => {
-        toast.error('something wrong happened while updating a control', { duration: 3 });
+      onError: (error) => {
+        toast.error(error + '', { id: toastId });
       },
     });
     if (onSubmit) onSubmit(e);

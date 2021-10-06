@@ -53,7 +53,7 @@ export default function Button<T>({
       className={`${buttonStyle[styleType]} rounded-lg font-semibold text-sm outline-none 
       ${full && 'w-full'}
       ${padding} ${className}
-      `}>
+      disabled:opacity-50`}>
       {children}
     </button>
   );
