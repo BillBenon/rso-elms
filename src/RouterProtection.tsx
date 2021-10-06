@@ -56,7 +56,7 @@ const RouterProtection = () => {
         path="/dashboard/programs/:id/view-program"
         component={ViewProgramsInDepartment}
       />
-      <Route exact path="/dashboard/levels" component={Levels} />
+      <Route path="/dashboard/levels" component={Levels} />
       <Route exact path="/dashboard/intakes" component={IntakesView} />
       <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} />
 

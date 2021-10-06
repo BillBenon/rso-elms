@@ -10,7 +10,6 @@ class DivisionStore {
   createDivision(divisionType: string) {
     return useMutation(divisionService.addDivision, {
       onSuccess(newData) {
-        console.log(divisionType);
         queryClient.setQueryData(['divisions/type', divisionType], (old) => {
           const previousData = old as AxiosResponse<Response<DivisionInfo[]>>;
           previousData.data.data.push(newData.data.data);

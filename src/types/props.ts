@@ -10,7 +10,7 @@ export interface CommonProps<T> extends AllHTMLAttributes<DOMAttributes<T>> {}
 export interface CommonInputProps<T> extends CommonProps<T> {
   handleChange: (_e: ValueType) => void;
   name: string;
-  value?: string;
+  value?: string | number;
   options?: SelectData[];
 }
 

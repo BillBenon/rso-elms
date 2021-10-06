@@ -4,21 +4,24 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
+import { queryClient } from '../../../../plugins/react-query';
 import { levelStore } from '../../../../store/level.store';
-import { CommonFormProps, ValueType } from '../../../../types';
+import { IDivisionsAcademyType, ValueType } from '../../../../types';
 import { IcreateLevel } from '../../../../types/services/levels.types';
 import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
 import ILabel from '../../../Atoms/Text/ILabel';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
-interface PropType<K> extends CommonFormProps<K> {}
+import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-function NewLevel<E>({ onSubmit }: PropType<E>) {
+function NewLevel({ onSubmit, academy_id }: IDivisionsAcademyType) {
   const [level, setLevel] = useState<IcreateLevel>({
-    academy_id: '',
+    academy_id: academy_id || '',
     code: '',
     description: '',
     name: '',
+    id: '',
+    flow: 0,
   });
 
   const history = useHistory();
@@ -30,56 +33,51 @@ function NewLevel<E>({ onSubmit }: PropType<E>) {
 
   function submitForm(e: FormEvent) {
     e.preventDefault(); // prevent page to reload:
-    e.preventDefault();
+
     mutateAsync(level, {
       onSuccess: () => {
-        toast.success('level created');
+        toast.success('Level created');
+        queryClient.invalidateQueries(['levels']);
         history.goBack();
       },
-      onError: () => {
+      onError: (error) => {
+        console.log(error);
         toast.error('something wrong happened while creating level');
       },
     });
     if (onSubmit) onSubmit(e);
   }
 
-  function addNewLevel(e: FormEvent) {
-    e.preventDefault(); // prevent page to reload:
-    submitForm(e);
-  }
-
   return (
     <form onSubmit={submitForm}>
       <InputMolecule
         value={level.name}
+        required
         handleChange={handleChange}
         placeholder="Enter level name"
-        name="level-name">
+        name="name">
         Level name
       </InputMolecule>
-      <InputMolecule
-        value={level.code}
-        error=""
-        handleChange={handleChange}
-        placeholder="Enter level code"
-        name="level-name">
-        Level code
-      </InputMolecule>
+
+      <TextAreaMolecule
+        value={level.description}
+        name="description"
+        required
+        handleChange={handleChange}>
+        Descripiton
+      </TextAreaMolecule>
 
       <InputMolecule
-        value={level.code}
-        error=""
+        value={level.flow}
+        required
+        type="number"
+        min={1}
         handleChange={handleChange}
         placeholder="Enter level flow"
-        name="level-name">
+        name="flow">
         Flow
       </InputMolecule>
-      <div className="flex items-center justify-end" onClick={addNewLevel}>
-        <Icon name="add" size={15} />
-        <ILabel size="sm" weight="medium" className="cursor-pointer" color="primary">
-          Add new level
-        </ILabel>
-      </div>
+
       <Button>Save</Button>
     </form>
   );

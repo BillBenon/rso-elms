@@ -9,6 +9,7 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewLevel from '../../components/Organisms/forms/level/NewLevel';
 import UpdateLevel from '../../components/Organisms/forms/level/UpdateLevel';
+import { authenticatorStore } from '../../store';
 import { levelStore } from '../../store/level.store';
 import { ILevel } from '../../types/services/levels.types';
 
@@ -18,6 +19,7 @@ interface FilteredLevels
 function Levels() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
+  const { data: userInfo } = authenticatorStore.authUser();
   const [levels, setLevels] = useState<FilteredLevels[]>();
 
   const { data, isSuccess, isLoading } = levelStore.getLevels(); // fetch levels
@@ -25,12 +27,11 @@ function Levels() {
   useEffect(() => {
     // filter data to display
     const filterdData = data?.data.data.map((level) =>
-      _.pick(level, ['id', 'name', 'description', 'generic_status']),
+      _.pick(level, ['id', 'name', 'description', 'generic_status', 'flow']),
     );
 
     data?.data.data && setLevels(filterdData);
-  }, [data]);
-  console.log(data);
+  }, [data, data?.data.data]);
 
   const list = [
     { to: '', title: 'Academy Admin' },
@@ -46,12 +47,6 @@ function Levels() {
       name: 'Edit level',
       handleAction: (id: string | number | undefined) => {
         history.push(`${path}/${id}/edit`); // go to edit level
-      },
-    },
-    {
-      name: 'View',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path.replace(/levels/i, 'level')}/${id}/view`); // go to view level
       },
     },
   ];
@@ -83,23 +78,31 @@ function Levels() {
 
       {/* add new level popup */}
       <Switch>
+        {/* update level popup */}
+        <Route
+          exact
+          path={`${path}/:id/edit`}
+          render={() => {
+            return (
+              <PopupMolecule title="Update Level" open onClose={history.goBack}>
+                <UpdateLevel academy_id={userInfo?.data.data.academy.id.toString()} />
+              </PopupMolecule>
+            );
+          }}
+        />
+
         <Route
           exact
           path={`${path}/add`}
           render={() => {
             return (
-              <PopupMolecule title="New Role" open onClose={history.goBack}>
-                <NewLevel />
+              <PopupMolecule title="New Level" open onClose={history.goBack}>
+                <NewLevel academy_id={userInfo?.data.data.academy.id.toString()} />
               </PopupMolecule>
             );
           }}
         />
       </Switch>
-
-      {/* update level popup */}
-      <PopupMolecule title="New Level" open>
-        <UpdateLevel />
-      </PopupMolecule>
     </main>
   );
 }
