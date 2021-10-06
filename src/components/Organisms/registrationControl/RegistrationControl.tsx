@@ -70,7 +70,7 @@ export default function RegistrationControl() {
         history.push(`${path}/${id}/edit`); // go to edit reg control
       },
     },
-    { name: 'View', handleAction: () => {} },
+    // { name: 'View', handleAction: () => {} },
     {
       name: 'Manage Intakes',
       handleAction: (id: string | number | undefined) => {

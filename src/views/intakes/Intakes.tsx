@@ -4,15 +4,17 @@ import toast from 'react-hot-toast';
 import { Link, Route, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Heading from '../../components/Atoms/Text/Heading';
 import Cacumber from '../../components/Molecules/Cacumber';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
+import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import Tooltip from '../../components/Molecules/Tooltip';
 import NewIntake from '../../components/Organisms/intake/NewIntake';
 import { intakeStore } from '../../store/intake.store';
 import registrationControlStore from '../../store/registrationControl.store';
-import { CommonCardDataType, Link as LinkType, Response, ValueType } from '../../types';
-import { IRegistrationControlInfo } from '../../types/services/registrationControl.types';
+import { CommonCardDataType, Link as LinkType, ValueType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 
 const list: LinkType[] = [
@@ -30,12 +32,15 @@ export default function Intakes() {
   const { search } = useLocation();
   const registrationControlId = new URLSearchParams(search).get('regId');
 
-  const { data: regControl } = registrationControlStore.fetchRegControlById(
-    registrationControlId + '',
+  const { data: regControl, refetch } = registrationControlStore.fetchRegControlById(
+    registrationControlId!,
+    false,
   );
 
-  const { isSuccess, isError, data } = intakeStore.getAll(
-    registrationControlId || undefined,
+  if (registrationControlId) refetch();
+
+  const { isSuccess, isError, data, isLoading } = intakeStore.getAll(
+    registrationControlId!,
   );
 
   useEffect(() => {
@@ -76,21 +81,76 @@ export default function Intakes() {
         totalItems={registrationControlId ? `${intakes.length} intakes` : intakes.length}
         handleSearch={handleSearch}>
         {registrationControlId && (
-          <Link to={`${url}/:id/add-intake`}>
+          <Link
+            to={
+              !registrationControlId
+                ? `${url}/${registrationControlId}/add-intake`
+                : `${url}/${registrationControlId}/add-intake?regId=${registrationControlId}`
+            }>
             <Button>Add Intake</Button>
           </Link>
         )}
       </TableHeader>
 
       <section className="flex flex-wrap justify-between mt-2">
-        {intakes.map((course) => (
-          <div key={course.code} className="p-1 mt-3">
-            <CommonCardMolecule
-              data={course}
-              to={{ title: 'module', to: 'modules/id' }}
-            />
+        {intakes.map((intake, index) => (
+          <div key={intake.code} className="p-1 mt-3">
+            <Tooltip
+              key={intake.code}
+              trigger={
+                <div className="p-1 mt-3">
+                  <CommonCardMolecule data={intake} />
+                </div>
+              }
+              open>
+              <div className="w-96">
+                <div className="flex flex-col gap-6">
+                  <div className="flex flex-col gap-2">
+                    <Heading color="txt-secondary" fontSize="sm">
+                      Total Students Enroled
+                    </Heading>
+                    <Heading fontSize="sm" fontWeight="semibold">
+                      {data?.data.data[index].total_num_students || 0}
+                    </Heading>
+                  </div>
+                </div>
+
+                <div>
+                  <Link
+                    className="outline-none"
+                    to={`/dashboard/programs?intake=${data?.data.data[index].id}`}>
+                    <Button styleType="text">View programs</Button>
+                  </Link>
+                </div>
+                <div className="mt-4 space-x-4">
+                  <Link to={`${url}/${data?.data.data[index].id}/edit`}>
+                    <Button>Edit Intake</Button>
+                  </Link>
+                  <Button styleType="outline">Change Status</Button>
+                </div>
+              </div>
+            </Tooltip>
           </div>
         ))}
+
+        {!isLoading && intakes.length <= 0 && (
+          <NoDataAvailable
+            buttonLabel="Add new Intake"
+            title={
+              registrationControlId
+                ? 'No intake available in this reg Control'
+                : 'No intake available'
+            }
+            handleClick={() => {
+              if (registrationControlId)
+                history.push(`${url}/${registrationControlId}/add-intake`, {
+                  search: { regId: registrationControlId },
+                });
+              else history.push(`${url}/${registrationControlId}/add-intake`);
+            }}
+            description="And the web just isn't the same without you. Lets get you back online!"
+          />
+        )}
       </section>
 
       {/* add intake to reg control */}

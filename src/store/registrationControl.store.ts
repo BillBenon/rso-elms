@@ -27,8 +27,10 @@ class RegistrationControlStore {
     return useQuery('regControl', registrationControlService.getAll);
   }
 
-  fetchRegControlById(id: string) {
-    return useQuery(['regControl/id', id], () => registrationControlService.getById(id));
+  fetchRegControlById(id: string, enabled = true) {
+    return useQuery(['regControl/id', id], () => registrationControlService.getById(id), {
+      enabled,
+    });
   }
 
   updateRegControl() {
