@@ -10,11 +10,9 @@ import Icon from '../../Atoms/custom/Icon';
 import Loader from '../../Atoms/custom/Loader';
 import Heading from '../../Atoms/Text/Heading';
 import ILabel from '../../Atoms/Text/ILabel';
-import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
-import NewRegistrationControl from '../forms/NewRegistrationControl';
-import UpdateRegControl from '../forms/regcontrol/UpdateRegControl';
+import RegControlDetails from './RegControlDetails';
 
 export default function RegistrationControl() {
   const { url, path } = useRouteMatch();
@@ -58,10 +56,6 @@ export default function RegistrationControl() {
     };
     RegistrationControls.push(registrationcontrol);
   });
-
-  function handleClose() {
-    history.goBack();
-  }
 
   const controlActions = [
     {

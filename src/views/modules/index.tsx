@@ -10,8 +10,6 @@ import { CommonCardDataType, Link } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ModuleDetails from './ModuleDetails';
 
-interface ModuleData extends CommonCardDataType {}
-
 export default function Modules() {
   const { data } = moduleStore.getAllModules();
 
