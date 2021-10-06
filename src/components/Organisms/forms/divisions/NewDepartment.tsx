@@ -3,11 +3,9 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { queryClient } from '../../../../plugins/react-query';
-import { authenticatorService } from '../../../../services';
-import { authenticatorStore } from '../../../../store';
 import academyStore from '../../../../store/academy.store';
 import { divisionStore } from '../../../../store/divisions.store';
-import { FormPropType, ParamType, ValueType } from '../../../../types';
+import { IDivisionsAcademyType, ParamType, ValueType } from '../../../../types';
 import { AcademyInfo } from '../../../../types/services/academy.types';
 import { DivisionCreateInfo } from '../../../../types/services/division.types';
 import { getDropDownOptions } from '../../../../utils/getOption';
@@ -16,13 +14,11 @@ import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-export default function NewDepartment({ onSubmit }: FormPropType) {
+export default function NewDepartment({ onSubmit, academy_id }: IDivisionsAcademyType) {
   const { id } = useParams<ParamType>();
 
-  const { data } = authenticatorStore.authUser();
-
   const [division, setDivision] = useState<DivisionCreateInfo>({
-    academy_id: data.data.data.academy.id,
+    academy_id: academy_id || '',
     code: '',
     description: '',
     division_type: 'DEPARTMENT',
@@ -46,7 +42,7 @@ export default function NewDepartment({ onSubmit }: FormPropType) {
     e.preventDefault();
     mutateAsync(division, {
       onSuccess: () => {
-        toast.success('Role created');
+        toast.success('Department created');
         queryClient.invalidateQueries();
         history.goBack();
       },
@@ -76,15 +72,6 @@ export default function NewDepartment({ onSubmit }: FormPropType) {
         handleChange={handleChange}>
         Descripiton
       </TextAreaMolecule>
-
-      <DropdownMolecule
-        defaultValue={division.academy_id}
-        options={getDropDownOptions(academies)}
-        name="academy_id"
-        placeholder={'Academy to be enrolled'}
-        handleChange={handleChange}>
-        Academy
-      </DropdownMolecule>
 
       {!id && (
         <DropdownMolecule
