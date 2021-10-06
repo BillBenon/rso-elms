@@ -10,7 +10,7 @@ export interface IProps<T> extends CommonInputProps<T> {
   type?: string;
   readonly?: boolean;
   handleChange: (_e: ValueType) => void;
-  value: string | undefined;
+  value: string | number | undefined;
   name: string;
   full?: boolean;
   padding?: string;
