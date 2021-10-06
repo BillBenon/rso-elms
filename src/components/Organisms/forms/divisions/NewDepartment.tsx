@@ -33,9 +33,6 @@ export default function NewDepartment({ onSubmit, academy_id }: IDivisionsAcadem
     setDivision((old) => ({ ...old, [name]: value }));
   }
 
-  const academies: AcademyInfo[] | undefined =
-    academyStore.fetchAcademies().data?.data.data;
-
   const departments = divisionStore.getDivisionByType('FACULTY').data?.data.data;
 
   function submitForm<T>(e: FormEvent<T>) {
@@ -43,7 +40,7 @@ export default function NewDepartment({ onSubmit, academy_id }: IDivisionsAcadem
     mutateAsync(division, {
       onSuccess: () => {
         toast.success('Department created');
-        queryClient.invalidateQueries();
+        // queryClient.invalidateQueries();
         history.goBack();
       },
       onError: () => {
