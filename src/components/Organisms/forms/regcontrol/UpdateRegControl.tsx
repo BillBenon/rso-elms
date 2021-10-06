@@ -4,10 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import registrationControlStore from '../../../../store/registrationControl.store';
 import { FormPropType, ValueType } from '../../../../types';
-import {
-  IRegistrationControlCreateInfo,
-  IRegistrationControlInfo,
-} from '../../../../types/services/registrationControl.types';
+import { IRegistrationControlCreateInfo } from '../../../../types/services/registrationControl.types';
 import Button from '../../../Atoms/custom/Button';
 import DateMolecule from '../../../Molecules/input/DateMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';

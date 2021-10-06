@@ -2,15 +2,11 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { authenticatorStore } from '../../../store';
-import academyStore from '../../../store/academy.store';
 import registrationControlStore from '../../../store/registrationControl.store';
 import { CommonFormProps, ValueType } from '../../../types';
-import { AcademyInfo } from '../../../types/services/academy.types';
 import { IRegistrationControlCreateInfo } from '../../../types/services/registrationControl.types';
-import { getDropDownOptions } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';
 import DateMolecule from '../../Molecules/input/DateMolecule';
-import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 import RadioMolecule from '../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
 
@@ -30,9 +26,6 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
   function handleChange(e: ValueType) {
     setRegControl((regControl) => ({ ...regControl, [e.name]: e.value }));
   }
-
-  const academies: AcademyInfo[] | undefined =
-    academyStore.fetchAcademies().data?.data.data;
 
   function submitForm(e: FormEvent) {
     const toastId = toast.loading('Adding Registration control');
@@ -77,15 +70,6 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
         name={'expected_end_date'}>
         End Date
       </DateMolecule>
-
-      {/* <DropdownMolecule
-        defaultValue={regControl.academy_id}
-        options={getDropDownOptions(academies)}
-        name="academy_id"
-        placeholder={'Academy to be enrolled'}
-        handleChange={handleChange}>
-        Academy
-      </DropdownMolecule> */}
 
       <RadioMolecule
         className="mt-4"
