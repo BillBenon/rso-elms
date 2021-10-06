@@ -184,7 +184,7 @@ export default function ProgramDetailsMolecule() {
                   <NoDataAvailable
                     buttonLabel="Add new modules"
                     title={'No Modules available in this program'}
-                    handleClick={() => history.push(`/dashboard/modules/add`)}
+                    handleClick={() => history.push(`${url}/add-module`)}
                     description="And the web just isnt the same without you. Lets get you back online!"
                   />
                 ) : (
