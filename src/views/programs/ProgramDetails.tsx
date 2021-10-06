@@ -41,6 +41,7 @@ export default function ProgramDetailsMolecule() {
           type: advancedTypeChecker(module.generic_status),
           text: module.generic_status.toString(),
         },
+        id: module.id,
         code: module.code,
         title: module.name,
         description: module.description,
@@ -230,7 +231,10 @@ export default function ProgramDetailsMolecule() {
                       <div key={module.code}>
                         <CommonCardMolecule
                           data={module}
-                          to={{ title: 'View more', to: `/modules/:id` }}
+                          to={{
+                            title: 'View more',
+                            to: `/dashboard/modules/${module.id}`,
+                          }}
                         />
                       </div>
                     ))}
