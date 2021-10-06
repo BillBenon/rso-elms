@@ -39,7 +39,7 @@ export default function ImportUsers<K>({ onSubmit, userType = 'students' }: IUse
     <>
       <form onSubmit={importStudents}>
         <DropdownMolecule
-          defaultValue={details.academy}
+          // defaultValue={details.academy}
           options={getDropDownOptions(academies)}
           name="academy"
           placeholder={'Academy to be enrolled'}
@@ -47,7 +47,7 @@ export default function ImportUsers<K>({ onSubmit, userType = 'students' }: IUse
           Academy
         </DropdownMolecule>
         <DropdownMolecule
-          defaultValue={details.program}
+          // defaultValue={details.program}
           options={getDropDownOptions(programs)}
           name="program"
           placeholder={'Program'}

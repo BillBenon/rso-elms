@@ -64,7 +64,7 @@ function SignInWithSearch() {
           placeholder="Search by"
           handleChange={handleChange}
           name="searchBy"
-          defaultValue={details.searchBy}
+          // defaultValue={details.searchBy}
           options={getDropDownStatusOptions(DocType)}
         />
         <InputMolecule

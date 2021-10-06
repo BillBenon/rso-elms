@@ -68,7 +68,7 @@ export default function NewFaculty({ onSubmit }: FormPropType) {
       </TextAreaMolecule>
 
       <DropdownMolecule
-        defaultValue={division.academy_id}
+        // defaultValue={division.academy_id}
         options={getDropDownOptions(academies)}
         name="academy_id"
         placeholder={'Academy to be enrolled'}

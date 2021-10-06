@@ -108,7 +108,7 @@ export default function UpdateAcademicProgram<E>({
           Program description
         </TextAreaMolecule>
         <DropdownMolecule
-          defaultValue={data?.data.data.incharge?.username}
+          // defaultValue={data?.data.data.incharge?.username}
           width="64"
           placeholder="Select incharge"
           options={getDropDownOptions(instructors, 'username')}

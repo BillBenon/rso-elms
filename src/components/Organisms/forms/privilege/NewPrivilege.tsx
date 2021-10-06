@@ -77,7 +77,7 @@ export default function NewPrivilege({ onSubmit }: PropType) {
       </InputMolecule>
       <DropdownMolecule
         handleChange={handleChange}
-        defaultValue={form.feature_type}
+        // defaultValue={form.feature_type}
         name="feature_type"
         options={featureType}>
         Role type
