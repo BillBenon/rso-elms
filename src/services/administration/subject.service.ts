@@ -24,7 +24,7 @@ class SubjectService {
   public async getSubjectsByModule(
     moduleId: string,
   ): Promise<AxiosResponse<Response<ExtendedSubjectInfo[]>>> {
-    return await adminstrationAxios.get(`/subjects/getAssignedPrivileges/${moduleId}`);
+    return await adminstrationAxios.get(`/subjects/getSubjectsByModule/${moduleId}`);
   }
 
   public async modifySubject(
