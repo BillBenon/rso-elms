@@ -39,7 +39,7 @@ export interface DropdownProps extends commonInputProps {
   noOptionsMessage?: string;
   width?: string;
   searchable?: boolean;
-  defaultValue?: Object;
+  defaultValue?: SelectData;
   styles?: Object;
   hasError?: boolean;
   height?: number;

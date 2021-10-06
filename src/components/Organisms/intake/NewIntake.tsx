@@ -81,8 +81,6 @@ export default function NewIntake() {
         expected_start_date: formatDateToIso(values.expected_start_date),
       };
 
-      console.log('request', data);
-
       await mutateAsync(data, {
         async onSuccess(data) {
           toast.success(data.data.message);
@@ -97,7 +95,6 @@ export default function NewIntake() {
   }
 
   async function addProgramsToIntake(id: string) {
-    console.log(id);
     let intakePrograms: IntakePrograms = {
       description: '',
       intak_id: id,
@@ -118,11 +115,9 @@ export default function NewIntake() {
     await addProgram.mutateAsync(intakePrograms, {
       onSuccess(data) {
         toast.success(data.data.message);
-        props.handleSuccess();
       },
       onError() {
         toast.error('error occurred when adding programs');
-        props.handleSuccess();
       },
     });
   }
