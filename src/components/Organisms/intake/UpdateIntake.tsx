@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 
@@ -9,7 +9,6 @@ import {
   IntakeStatus,
   PeriodType,
 } from '../../../types/services/intake.types';
-import { formatDateToIso } from '../../../utils/date-helper';
 import { getDropDownStatusOptions } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';
 import DateMolecule from '../../Molecules/input/DateMolecule';
@@ -19,6 +18,7 @@ import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
 import Stepper from '../../Molecules/Stepper/Stepper';
 
 interface IProps {
+  disabled?: boolean;
   values: IntakeInfo;
   handleChange: (_e: ValueType) => any;
   handleNext: <T>(_e: FormEvent<T>) => any;
@@ -31,7 +31,8 @@ interface CProps {
   handleSuccess: () => any;
 }
 
-export default function NewIntake(props: CProps) {
+export default function UpdateIntake(props: CProps) {
+  const [formLoading, setFormLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const { id } = useParams<ParamType>();
 
@@ -50,40 +51,95 @@ export default function NewIntake(props: CProps) {
     total_num_students: 1,
   });
 
+  // const [selectedPrograms, setSelectedPrograms] = useState<string[]>([]);
+
   function handleChange(e: ValueType) {
     setValues((regControl) => ({ ...regControl, [e.name]: e.value }));
   }
 
-  const { mutateAsync } = intakeStore.create();
+  // function handleProgramsChange(e: ValueType) {
+  //   // @ts-ignore
+  //   setSelectedPrograms(e.value);
+  // }
+
+  const { mutateAsync } = intakeStore.update();
+  const intake = intakeStore.getIntakeById(id);
+
+  useEffect(() => {
+    console.log('hee');
+    if (intake.data) {
+      const _intake = intake?.data.data.data;
+      setValues({
+        id: _intake.id,
+        title: _intake.title,
+        actual_end_date: _intake.actual_end_date,
+        actual_start_date: _intake.actual_start_date,
+        code: _intake.code,
+        description: _intake.description,
+        expected_end_date: _intake.expected_end_date,
+        expected_start_date: _intake.expected_start_date,
+        intake_status: _intake.intake_status,
+        period_type: _intake.period_type,
+        registration_control_id: _intake.registration_control?.id.toString() || '',
+        total_num_students: _intake.total_num_students,
+      });
+    }
+  }, [intake.isLoading]);
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
     if (currentStep === 0) setCurrentStep(currentStep + 1);
     else {
-      let title = values.title.trim().split(' ');
-      let code = `INTK-${title[1]}-${new Date(values.expected_start_date).getFullYear()}`;
+      const toastId = toast.loading('modifying intake');
+      setFormLoading(true);
 
-      let data = {
-        ...values,
-        code,
-        expected_end_date: formatDateToIso(values.expected_end_date),
-        expected_start_date: formatDateToIso(values.expected_start_date),
-      };
-
-      console.log('request', data);
-
-      await mutateAsync(data, {
-        async onSuccess(data) {
-          toast.success(data.data.message);
-          // await addProgramsToIntake(data.data.data.id.toString());
-          props.handleSuccess();
+      await mutateAsync(
+        { ...values, total_num_students: +values.total_num_students },
+        {
+          async onSuccess(data) {
+            toast.success(data.data.message, { id: toastId });
+            // await addProgramsToIntake(data.data.data.id.toString());
+            setFormLoading(false);
+            props.handleSuccess();
+          },
+          onError() {
+            toast.error('error occurred please try again', { id: toastId });
+            setFormLoading(false);
+          },
         },
-        onError() {
-          toast.error('error occurred please try again');
-        },
-      });
+      );
     }
   }
+
+  // async function addProgramsToIntake(id: string) {
+  //   let intakePrograms: IntakePrograms = {
+  //     description: '',
+  //     intak_id: id,
+  //     programs: [],
+  //   };
+
+  //   for (let i = 0; i < selectedPrograms.length; i++) {
+  //     const element: IntakeProgram = {
+  //       description: '',
+  //       intake_id: id,
+  //       intake_program_id: '',
+  //       program_id: selectedPrograms[i],
+  //       status: GenericStatus.ACTIVE,
+  //     };
+  //     intakePrograms.programs.push(element);
+  //   }
+
+  //   await addProgram.mutateAsync(intakePrograms, {
+  //     onSuccess(data) {
+  //       toast.success(data.data.message);
+  //       props.handleSuccess();
+  //     },
+  //     onError() {
+  //       toast.error('error occurred when adding programs');
+  //       props.handleSuccess();
+  //     },
+  //   });
+  // }
 
   const stepperContent = {
     currentStep: currentStep,
@@ -96,6 +152,7 @@ export default function NewIntake(props: CProps) {
             values={values}
             handleChange={handleChange}
             handleNext={handleSubmit}
+            // handleProgramsChange={handleProgramsChange}
           />
         ),
         clicked: () => {},
@@ -104,6 +161,7 @@ export default function NewIntake(props: CProps) {
         label: 'more',
         content: (
           <IntakeStatusComponent
+            disabled={formLoading}
             values={values}
             handleChange={handleChange}
             handleNext={handleSubmit}
@@ -127,7 +185,20 @@ export default function NewIntake(props: CProps) {
   );
 }
 
-function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
+function IntakeInfoComponent({
+  values,
+  handleChange,
+  handleNext,
+}: // handleProgramsChange,
+IProps) {
+  // const programsInfo = programStore.fetchPrograms();
+
+  // let programs: ProgramInfo[] = programsInfo.data?.data.data || [];
+
+  // const handlePrograms = (e: ValueType) => {
+  //   if (handleProgramsChange) handleProgramsChange(e);
+  // };
+
   return (
     <form onSubmit={handleNext}>
       <InputMolecule
@@ -172,7 +243,7 @@ function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
   );
 }
 
-function IntakeStatusComponent({ handleChange, handleNext }: IProps) {
+function IntakeStatusComponent({ handleChange, handleNext, disabled }: IProps) {
   return (
     <form onSubmit={handleNext}>
       <DateMolecule
@@ -209,8 +280,8 @@ function IntakeStatusComponent({ handleChange, handleNext }: IProps) {
         <Button styleType="text" color="gray">
           Back
         </Button>
-        <Button type="submit" onClick={() => handleNext}>
-          Create intake
+        <Button disabled={disabled} type="submit" onClick={() => handleNext}>
+          Update intake
         </Button>
       </div>
     </form>

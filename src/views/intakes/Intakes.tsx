@@ -13,6 +13,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
 import NewIntake from '../../components/Organisms/intake/NewIntake';
+import UpdateIntake from '../../components/Organisms/intake/UpdateIntake';
 import { intakeStore } from '../../store/intake.store';
 import registrationControlStore from '../../store/registrationControl.store';
 import { CommonCardDataType, Link as LinkType, ValueType } from '../../types';
@@ -184,7 +185,7 @@ export default function Intakes() {
         render={() => {
           return (
             <PopupMolecule title="Update intake" open onClose={handleClose}>
-              <NewIntake handleSuccess={handleClose} />
+              <UpdateIntake handleSuccess={handleClose} />
             </PopupMolecule>
           );
         }}

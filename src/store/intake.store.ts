@@ -6,6 +6,9 @@ class IntakeStore {
   create() {
     return useMutation(intakeService.create);
   }
+  update() {
+    return useMutation(intakeService.update);
+  }
   addPrograms() {
     return useMutation(intakeService.addPrograms);
   }
@@ -17,7 +20,7 @@ class IntakeStore {
       );
     else return useQuery('intakes', intakeService.fetchAll);
   }
-  getIntakeById(intakeId: string, enabled = false) {
+  getIntakeById(intakeId: string, enabled = true) {
     return useQuery(
       ['intakes/id', intakeId],
       () => intakeService.getIntakeById(intakeId),

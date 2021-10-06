@@ -23,6 +23,7 @@ import { CommonCardDataType, Link as LinkList } from '../../types';
 import { DivisionInfo } from '../../types/services/division.types';
 import { IntakeProgramInfo, ProgramInfo } from '../../types/services/program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
+import AddAcademicProgramToIntake from './AddAcademicProgramToIntake';
 import NewAcademicProgram from './NewAcademicProgram';
 import ProgramDetails from './ProgramDetails';
 import UpdateAcademicProgram from './UpdateAcademicProgram';
@@ -105,10 +106,12 @@ export default function AcademicProgram() {
           title={`${intakeId ? intake.data?.data.data.title : 'Programs'}`}
           showSearch={false}>
           {intakeId ? (
-            ''
+            <Link to={`${url}/add-program-to-intake?intakeId=${intakeId}`}>
+              <Button>Add Program To Intake</Button>
+            </Link>
           ) : (
             <Link to={`${url}/add`}>
-              <Button>Add Program</Button>
+              <Button>Add New Program</Button>
             </Link>
           )}
         </TableHeader>
@@ -123,6 +126,19 @@ export default function AcademicProgram() {
             return <NewAcademicProgram />;
           }}
         />
+        {/* add academic program to intake*/}
+        <Route
+          exact
+          path={`${url}/add-program-to-intake`}
+          render={() => {
+            return (
+              <PopupMolecule title="Programs" open={true} onClose={history.goBack}>
+                <AddAcademicProgramToIntake />
+              </PopupMolecule>
+            );
+          }}
+        />
+
         {/* modify academic program */}
         <Route exact path={`${path}/:id/edit`} render={() => <UpdateAcademicProgram />} />
 
@@ -142,7 +158,7 @@ export default function AcademicProgram() {
           }}
         />
         {/* show academic program details */}
-        <Route path={`${path}/:id`} render={() => <ProgramDetails />} />
+        <Route path={`${path}/:id/details`} render={() => <ProgramDetails />} />
         <Route
           exact
           path={`${path}`}
@@ -156,7 +172,7 @@ export default function AcademicProgram() {
                       <div className="p-1 mt-3">
                         <CommonCardMolecule
                           data={Common}
-                          to={{ title: 'module', to: `programs/${Common.id}` }}
+                          to={{ title: 'module', to: `programs/${Common.id}/details` }}
                         />
                       </div>
                     }
