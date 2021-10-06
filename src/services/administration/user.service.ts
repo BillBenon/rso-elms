@@ -13,10 +13,16 @@ class UserService {
   public async fetchUsers(): Promise<AxiosResponse<Response<UserInfo[]>>> {
     return await adminstrationAxios.get('/users/getUsers');
   }
+  public async getUserByid(id: string): Promise<AxiosResponse<Response<UserInfo>>> {
+    return await adminstrationAxios.get(`/public/getUserById/${id}`);
+  }
   public async getUserAccountByNid(
     nid: string,
-  ): Promise<AxiosResponse<Response<UserInfo>>> {
-    return await adminstrationAxios.get(`public/getUserAccountsByNid/${nid}`);
+  ): Promise<AxiosResponse<Response<UserInfo[]>>> {
+    return await adminstrationAxios.get(`/public/getUserAccountsByNid/${nid}`);
+  }
+  public async getLanguages() {
+    return await adminstrationAxios.get('languages/getLanguages');
   }
 }
 

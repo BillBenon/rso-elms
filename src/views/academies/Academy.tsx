@@ -9,15 +9,16 @@ import Icon from '../../components/Atoms/custom/Icon';
 import ILabel from '../../components/Atoms/Text/ILabel';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import NewAcademy from '../../components/Organisms/forms/academy/NewAcademy';
 import academyStore from '../../store/academy.store';
+import usersStore from '../../store/users.store';
 import { GenericStatus, ValueType } from '../../types';
+import AddAcademy from './Addcademy';
 import UpdateAcademy from './UpdateAcademy';
 
 type AcademyTypes = {
   id: number | string;
   'academy name': string;
-  'academy Admin': string;
+  'academy admin': string;
   'phone number': string;
   status: GenericStatus;
 };
@@ -29,12 +30,17 @@ export default function Academy() {
   const { data } = academyStore.fetchAcademies();
   const academyInfo = data?.data.data;
   let academies: AcademyTypes[] = [];
+  const users = usersStore.fetchUsers();
   academyInfo?.map((obj) => {
-    let { id, name, created_by_username, phone_number, generic_status } = obj;
+    let { id, name, current_admin_id, phone_number, generic_status } = obj;
 
     let academy: AcademyTypes = {
       id: id,
-      'academy Admin': created_by_username,
+      'academy admin':
+        users.data?.data.data.find((admin) => admin.id === current_admin_id)?.first_name +
+          ' ' +
+          users.data?.data.data.find((admin) => admin.id === current_admin_id)
+            ?.last_name || '',
       'academy name': name,
       'phone number': phone_number,
       status: generic_status,
@@ -103,7 +109,7 @@ export default function Academy() {
           )}
         />
         {/* create academy */}
-        <Route exact path={`${path}/add`} render={() => <NewAcademy />} />
+        <Route exact path={`${path}/add`} render={() => <AddAcademy />} />
 
         {/* modify academy */}
         <Route exact path={`${path}/:id/edit`} render={() => <UpdateAcademy />} />

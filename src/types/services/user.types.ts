@@ -1,6 +1,7 @@
 import { GenericStatus } from '..';
 /* eslint-disable no-unused-vars */
 import { Table } from '..';
+import { ExperienceType } from './../index';
 import { AcademyInfo } from './academy.types';
 import { InstitutionInfo } from './institution.types';
 import { ILevel } from './levels.types';
@@ -11,7 +12,7 @@ export interface UserInfo extends CreateUserInfo, Table {
   token: string;
   person: PersonInfo;
   academy: AcademyInfo;
-  institution_id: InstitutionInfo;
+  institution_id: string;
   activated: boolean;
   active_session: boolean;
   image_url: string;
@@ -23,7 +24,7 @@ export interface UserInfo extends CreateUserInfo, Table {
   enabled: boolean;
   authorities: [];
 }
-interface PersonInfo extends Table {
+export interface PersonInfo extends Table {
   first_name: string;
   father_names: string;
   mother_names: string;
@@ -32,10 +33,38 @@ interface PersonInfo extends Table {
   birth_date: string;
   doc_type: DocType;
   marital_status: MaritalStatus;
-  sex: GenericStatus;
+  sex: GenderStatus;
   place_of_birth: string;
+  ///////////////////
+  nationality: string;
+  spouse_name: string;
+  place_of_birth_description: string;
+  blood_group: string;
+  religion: string;
+  place_of_residence: string;
+  residence_location_id: number;
+  languages: string;
   current_rank: string;
+  other_rank: string;
+  rank_depart: string;
+  date_of_commission: string;
+  date_of_last_promotion: string;
+  ///////////////////
   nid: string;
+  document_expire_on: string;
+}
+
+interface ExperienceInfo {
+  attachment_id: string;
+  description: string;
+  end_date: string;
+  level: string;
+  location: string;
+  occupation: string;
+  person_id: string;
+  proof: string;
+  start_date: string;
+  type: ExperienceTypeStatus;
 }
 
 export interface CreateUserInfo {
@@ -60,9 +89,9 @@ export interface CreateUserInfo {
   phone: string;
   place_of_birth: string;
   place_of_residence: string;
+  residence_location_id: number;
   relationship_with_next_of_ken: string;
   reset_date: string;
-  residence_location_id: number;
   sex: GenderStatus;
   user_type: UserType;
   username: string;
@@ -71,6 +100,15 @@ export interface CreateUserInfo {
 export enum GenderStatus {
   MALE = 'MALE',
   FEMALE = 'FEMALE',
+}
+
+export enum ExperienceTypeStatus {
+  GENERAL_EDUCATION,
+  CURRIER_COURSE_EDUCATION,
+  EMPLOYMENT,
+  INTERNATIONAL_CERTIFICATION,
+  INTERNATIONAL_MISSION,
+  TRAINING,
 }
 
 export enum MaritalStatus {

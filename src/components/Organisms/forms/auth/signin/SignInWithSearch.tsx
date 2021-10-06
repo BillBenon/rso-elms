@@ -30,10 +30,11 @@ function SignInWithSearch() {
   let user = usersStore.getUserAccountsByNid(details.searchInput);
 
   const filter = () => {
-    if (user.data?.data.data) {
+    let foundUser = user.data?.data.data[0];
+    if (foundUser) {
       toast.success("You're already registered!", { duration: 1200 });
       setTimeout(() => {
-        history.push('/register');
+        history.push({ pathname: '/register', state: { detail: foundUser } });
       }, 900);
     } else {
       toast.error("You're not yet registered!", { duration: 1200 });
@@ -76,7 +77,7 @@ function SignInWithSearch() {
       <div className="text-txt-secondary py-2">
         <p className="text-base text-txt-secondary">
           Already have an account?
-          <Link to="/">
+          <Link to="/login">
             <Button styleType="text" className="text-primary-500">
               Sign in
             </Button>

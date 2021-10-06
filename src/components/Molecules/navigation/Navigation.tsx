@@ -5,9 +5,10 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import { queryClient } from '../../../plugins/react-query';
 import { authenticatorStore } from '../../../store';
 import { ValueType } from '../../../types';
-import { UserInfo } from '../../../types/services/user.types';
+import { UserInfo, UserType } from '../../../types/services/user.types';
 import cookie from '../../../utils/cookie';
 import Avatar from '../../Atoms/custom/Avatar';
+import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import SearchMolecule from '../input/SearchMolecule';
 
@@ -23,6 +24,9 @@ export default function Navigation() {
 
   useEffect(() => {
     setAuthUser(data?.data.data);
+    if (authUser?.user_type === UserType.SUPER_ADMIN && !authUser.institution_id) {
+      history.push('/institution/new');
+    }
   }, [data?.data.data]);
 
   const links = [
@@ -39,7 +43,7 @@ export default function Navigation() {
     logoutFn.refetch().then(() => {
       queryClient.clear();
       cookie.eraseCookie('jwt_info');
-      history.push('/login');
+      // history.push('/login');
     });
   }
   return (
@@ -53,6 +57,13 @@ export default function Navigation() {
           </div>
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
+              {authUser?.user_type === UserType.SUPER_ADMIN && (
+                <div className="px-12">
+                  <Link to={`/dashboard/institution/${authUser?.institution_id}/edit`}>
+                    <Button styleType="outline">Edit institution</Button>
+                  </Link>
+                </div>
+              )}
               <button className="bg-main p-1 rounded-full flex text-gray-400">
                 <Icon name="switch" />
                 <Icon name="settings" />
@@ -75,7 +86,7 @@ export default function Navigation() {
                     onClick={() => setShowProfileMenu(!showProfileMenu)}>
                     <span className="sr-only">Open user menu</span>
                     <Avatar
-                      src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                      src="https://static.thenounproject.com/png/2643367-200.png"
                       alt="profile"
                       size="34"
                     />
@@ -170,16 +181,16 @@ export default function Navigation() {
             <div className="flex-shrink-0">
               <img
                 className="h-10 w-10 rounded-full"
-                src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
-                alt=""
+                src="https://static.thenounproject.com/png/2643367-200.png"
+                alt="profile"
               />
             </div>
             <div className="ml-3">
               <div className="text-base font-medium leading-none text-white">
-                Tom Cook
+                {authUser?.username}
               </div>
               <div className="text-sm font-medium leading-none text-gray-400">
-                tom@example.com
+                {authUser?.email}
               </div>
             </div>
           </div>

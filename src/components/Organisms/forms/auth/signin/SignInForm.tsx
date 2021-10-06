@@ -1,4 +1,5 @@
 import React, { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
 import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 
 import { queryClient } from '../../../../../plugins/react-query';
@@ -38,7 +39,13 @@ const SignInForm = () => {
     await mutateAsync(details, {
       onSuccess(data) {
         cookie.setCookie('jwt_info', JSON.stringify(data?.data.data));
+        toast.success(data.data.message, { duration: 1200 });
         redirectTo('/redirecting');
+      },
+      onError() {
+        toast.error('Login failed! Please try again or contact the admin', {
+          duration: 1200,
+        });
       },
     });
   }

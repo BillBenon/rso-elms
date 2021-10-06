@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 
 import { institutionService } from '../services/administration/institution.service';
 
@@ -9,10 +9,11 @@ class InstitutionStore {
   getAll() {
     return useMutation('institutions', institutionService.fetchAll);
   }
-  getInstitutionById() {
-    return useMutation('insitution', institutionService.getInstitutionById);
+  getInstitutionById(id: string) {
+    return useQuery(['insitution/id', id], () =>
+      institutionService.getInstitutionById(id),
+    );
   }
-
   updateInstitution() {
     return useMutation(institutionService.update);
   }

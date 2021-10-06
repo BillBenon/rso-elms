@@ -91,7 +91,7 @@ function EducationDetails({
           </div>
           <Button styleType="outline" className="p-0">
             <span className="flex items-center">
-              <Icon name="attach" fill="primary" />
+              <Icon name="attach" useheightandpadding={false} fill="primary" />
               <span className="m-auto font-semibold">Upload</span>
             </span>
           </Button>

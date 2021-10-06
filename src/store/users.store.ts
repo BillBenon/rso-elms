@@ -20,8 +20,14 @@ class UserStore {
   fetchUsers() {
     return useQuery('users', userService.fetchUsers);
   }
+  getUserById(id: string) {
+    return useQuery(['user/id', id], () => userService.getUserByid(id));
+  }
   getUserAccountsByNid(nid: string) {
-    return useQuery(['user/id', nid], () => userService.getUserAccountByNid(nid));
+    return useQuery(['user/nid', nid], () => userService.getUserAccountByNid(nid));
+  }
+  getLanguages() {
+    return useQuery('languages', userService.getLanguages);
   }
 }
 

@@ -1,7 +1,9 @@
+import { pick } from 'lodash';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
 
+import { authenticatorStore } from '../../../store';
 import academyStore from '../../../store/academy.store';
 import { intakeStore } from '../../../store/intake.store';
 import programStore from '../../../store/program.store';
@@ -27,8 +29,9 @@ import RadioMolecule from '../../Molecules/input/RadioMolecule';
 
 export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
-  const { ADMIN, INSTRUCTOR, STUDENT } = UserType;
-  const newUserType = { ADMIN, INSTRUCTOR, STUDENT };
+  const newUserType = pick(UserType, ['ADMIN', 'INSTRUCTOR', 'STUDENT']);
+  const newUserTypeWithSuper = { ...newUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
+  const authUser = authenticatorStore.authUser();
 
   const [details, setDetails] = useState<CreateUserInfo>({
     activation_key: '',
@@ -136,10 +139,16 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
       </div>
       <form onSubmit={addUser}>
         <DropdownMolecule
-          defaultValue={getDropDownStatusOptions(newUserType).find(
-            (type) => type.label === details.user_type,
+          defaultValue={getDropDownStatusOptions(
+            authUser.data?.data.data.user_type === UserType.SUPER_ADMIN
+              ? newUserTypeWithSuper
+              : newUserType,
+          ).find((type) => type.label === details.user_type)}
+          options={getDropDownStatusOptions(
+            authUser.data?.data.data.user_type === UserType.SUPER_ADMIN
+              ? newUserTypeWithSuper
+              : newUserType,
           )}
-          options={getDropDownStatusOptions(newUserType)}
           name="user_type"
           placeholder={'Select user type'}
           handleChange={handleChange}>
@@ -224,13 +233,15 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Education level
         </DropdownMolecule>
-        <DropdownMolecule
-          options={getDropDownOptions(academies)}
-          name="academy_id"
-          placeholder={'Academy to be enrolled in'}
-          handleChange={handleChange}>
-          Academy
-        </DropdownMolecule>
+        {details.user_type != UserType.SUPER_ADMIN && (
+          <DropdownMolecule
+            options={getDropDownOptions(academies)}
+            name="academy_id"
+            placeholder={'Academy to be enrolled in'}
+            handleChange={handleChange}>
+            Academy
+          </DropdownMolecule>
+        )}
         {details.user_type === 'STUDENT' && (
           <>
             <DropdownMolecule

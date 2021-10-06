@@ -7,6 +7,8 @@ import { authenticatorStore } from './store';
 import { UserInfo } from './types/services/user.types';
 import Academies from './views/academies/Academy';
 import Divisions from './views/divisions/Divisions';
+import NewInstitution from './views/insitution/NewInstitution';
+import UpdateInstitution from './views/insitution/UpdateInstitution';
 import IntakeModulesView from './views/intakes/IntakeModules';
 import IntakesView from './views/intakes/Intakes';
 import LevelsView from './views/levels/Levels';
@@ -35,6 +37,7 @@ const RouterProtection = () => {
       <Route path="/dashboard/roles" component={Roles} />
       <Route path="/dashboard/users" component={Users} />
       <Route path="/dashboard/privileges" component={PrivilegesView} />
+      <Route exact path="/dashboard/institution/:id/edit" component={UpdateInstitution} />
       {/* end of institution admin page */}
     </>
   );
@@ -59,6 +62,9 @@ const RouterProtection = () => {
 
   return (
     <>
+      {(authUser?.user_type == 'SUPER_ADMIN' || import.meta.env.DEV) && (
+        <Route exact path="/institution/new" component={NewInstitution} />
+      )}
       <Dashboard>
         {(authUser?.user_type == 'SUPER_ADMIN' || import.meta.env.DEV) &&
           InstitutionAdminRoutes()}
