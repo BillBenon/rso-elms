@@ -17,6 +17,12 @@ export interface CreateProgramInfo {
   description: string;
   name: string;
   type: ProgramType;
+  status: ProgramStatus;
+}
+
+export enum ProgramStatus {
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
 }
 
 export enum ProgramType {

@@ -13,7 +13,11 @@ import { divisionStore } from '../../store/divisions.store';
 import programStore from '../../store/program.store';
 import usersStore from '../../store/users.store';
 import { CommonFormProps, ValueType } from '../../types';
-import { CreateProgramInfo, ProgramType } from '../../types/services/program.types';
+import {
+  CreateProgramInfo,
+  ProgramStatus,
+  ProgramType,
+} from '../../types/services/program.types';
 import { UserType } from '../../types/services/user.types';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
 
@@ -44,6 +48,7 @@ export default function UpdateAcademicProgram<E>({
     description: '',
     name: '',
     type: ProgramType.SHORT_COURSE,
+    status: ProgramStatus.ACTIVE,
   });
   const { mutateAsync } = programStore.modifyProgram();
 
@@ -122,6 +127,13 @@ export default function UpdateAcademicProgram<E>({
           handleChange={(e: ValueType) => handleChange(e)}>
           Department
         </DropdownMolecule>
+        <RadioMolecule
+          value={details.status}
+          name="status"
+          options={getDropDownStatusOptions(ProgramStatus)}
+          handleChange={handleChange}>
+          Status
+        </RadioMolecule>
         <div className="mt-5">
           <Button type="submit">Update</Button>
         </div>
