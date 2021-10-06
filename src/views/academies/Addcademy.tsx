@@ -11,9 +11,10 @@ import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import { authenticatorService } from '../../services';
 import academyStore from '../../store/academy.store';
 import usersStore from '../../store/users.store';
-import { CommonFormProps, SelectData, ValueType } from '../../types';
+import { CommonFormProps, ValueType } from '../../types';
 import { AcademyCreateInfo } from '../../types/services/academy.types';
 import { UserType } from '../../types/services/user.types';
+import { getInchargeDropdown } from '../../utils/getOption';
 
 export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
@@ -51,19 +52,6 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
   const admins = users.data?.data.data.filter(
     (user) => user.user_type === UserType.ADMIN,
   );
-
-  const getInchargeDropdown = (): SelectData[] => {
-    let options: SelectData[] = [];
-
-    admins?.map((cur) => {
-      options.push({
-        label: `${cur.first_name} ${cur.last_name}`,
-        value: cur.id.toString(),
-      });
-    });
-
-    return options;
-  };
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
@@ -176,11 +164,11 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
             academy motto
           </InputMolecule>
           <DropdownMolecule
-            defaultValue={getInchargeDropdown().find(
+            defaultValue={getInchargeDropdown(admins).find(
               (incharge) => incharge.value === details.current_admin_id,
             )}
             placeholder="Select incharge"
-            options={getInchargeDropdown()}
+            options={getInchargeDropdown(admins)}
             name="current_admin_id"
             handleChange={handleChange}>
             Admin in charge

@@ -45,6 +45,19 @@ export function advancedTypeChecker(
   else return 'warning';
 }
 
+export const getInchargeDropdown = (users?: any[]): SelectData[] => {
+  let options: SelectData[] = [];
+
+  users?.map((user) => {
+    options.push({
+      label: `${user.first_name} ${user.last_name}`,
+      value: user.id.toString(),
+    });
+  });
+
+  return options;
+};
+
 export function getDropDownOptionsWithObject(
   inputs: any[],
   labelName: { name: string },
