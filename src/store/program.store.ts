@@ -36,6 +36,12 @@ class ProgramStore {
     );
   }
 
+  getProgramsByDepartment(program_id: string) {
+    return useQuery(['modules/program_id', program_id], () =>
+      programService.getProgramsByDepartment(program_id),
+    );
+  }
+
   modifyProgram() {
     return useMutation(programService.modifyProgram, {
       onSuccess(newData) {
