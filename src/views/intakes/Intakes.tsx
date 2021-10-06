@@ -43,9 +43,13 @@ export default function Intakes() {
 
   if (registrationControlId && !regSuccess && !regLoading) refetch();
 
-  const { isSuccess, isError, data, isLoading } = intakeStore.getAll(
-    registrationControlId!,
-  );
+  const {
+    isSuccess,
+    isError,
+    data,
+    isLoading,
+    refetch: refetchIntakes,
+  } = intakeStore.getAll(registrationControlId!);
 
   useEffect(() => {
     if (isSuccess && data?.data) {
@@ -77,6 +81,12 @@ export default function Intakes() {
       'MMM D YYYY',
     )} - ${moment(regControl?.data.data.expected_end_date).format('MMM D YYYY')}`;
   }
+
+  function intakeCreated() {
+    refetchIntakes();
+    history.goBack();
+  }
+
   return (
     <div>
       <Cacumber list={list} />
@@ -155,9 +165,9 @@ export default function Intakes() {
             }
             handleClick={() => {
               if (registrationControlId)
-                history.push(`${url}/${registrationControlId}/add-intake`, {
-                  search: { regId: registrationControlId },
-                });
+                history.push(
+                  `${url}/${registrationControlId}/add-intake?regId=${registrationControlId}`,
+                );
               else history.push(`${url}/${registrationControlId}/add-intake`);
             }}
             description="And the web just isn't the same without you. Lets get you back online!"
@@ -172,7 +182,7 @@ export default function Intakes() {
         render={() => {
           return (
             <PopupMolecule title="New intake" open onClose={handleClose}>
-              <NewIntake handleSuccess={handleClose} />
+              <NewIntake handleSuccess={intakeCreated} />
             </PopupMolecule>
           );
         }}
