@@ -32,7 +32,7 @@ export default function InputMolecule<T>({
       </ILabel>
       <Input
         {...attrs}
-        readOnly={readOnly}
+        readonly={readOnly}
         name={name}
         placeholder={placeholder}
         fcolor={error ? 'error' : undefined}
