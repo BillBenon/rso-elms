@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Link,
   Route,
@@ -15,6 +15,7 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import UsersPreview from '../../components/Molecules/cards/UsersPreview';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
+import { moduleStore } from '../../store/modules.store';
 import programStore from '../../store/program.store';
 import { CommonCardDataType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
@@ -27,9 +28,29 @@ export default function ProgramDetailsMolecule() {
   const { id } = useParams<ParamType>();
   const history = useHistory();
   const { path, url } = useRouteMatch();
-  const program = programStore.getProgramById(id).data?.data.data;
 
-  const modules_per_program = programStore.getModulesByProgram(id).data?.data.data;
+  const getAllModuleStore = moduleStore.getModulesByProgram(id);
+  const [programModules, setProgramModules] = useState<CommonCardDataType[]>([]);
+
+  useEffect(() => {
+    let newModules: CommonCardDataType[] = [];
+    getAllModuleStore.data?.data.data.forEach((module) => {
+      newModules.push({
+        status: {
+          type: advancedTypeChecker(module.generic_status),
+          text: module.generic_status.toString(),
+        },
+        code: module.code,
+        title: module.name,
+        description: module.description,
+        subTitle: `total subject: ${module.total_num_subjects || 'None'}`,
+      });
+    });
+
+    setProgramModules(newModules);
+  }, [getAllModuleStore.data?.data.data]);
+
+  const program = programStore.getProgramById(id).data?.data.data;
 
   const getProgramData = () => {
     let programData: IProgramData | undefined;
@@ -50,22 +71,6 @@ export default function ProgramDetailsMolecule() {
 
     return programData;
   };
-
-  let program_modules: CommonCardDataType[] = [];
-
-  modules_per_program?.map((module) => {
-    let mod: CommonCardDataType = {
-      id: module.id,
-      status: {
-        type: advancedTypeChecker(module.generic_status),
-        text: module.generic_status.toString(),
-      },
-      code: module.code,
-      title: module.name,
-      description: module.description,
-    };
-    program_modules.push(mod);
-  });
 
   const programData = getProgramData();
   const tabs: TabType[] = [
@@ -178,7 +183,7 @@ export default function ProgramDetailsMolecule() {
             path={`${path}/modules`}
             render={() => (
               <section className="flex flex-wrap justify-between">
-                {program_modules.length <= 0 ? (
+                {programModules.length <= 0 ? (
                   <NoDataAvailable
                     buttonLabel="Add new modules"
                     title={'No Modules available in this program'}
@@ -186,11 +191,11 @@ export default function ProgramDetailsMolecule() {
                     description="And the web just isnt the same without you. Lets get you back online!"
                   />
                 ) : (
-                  program_modules?.map((prog) => (
-                    <div key={prog.code}>
+                  programModules?.map((module) => (
+                    <div key={module.code}>
                       <CommonCardMolecule
-                        data={prog}
-                        to={{ title: 'program list', to: 'programs/3' }}
+                        data={module}
+                        to={{ title: 'View more', to: `/modules/${module.code}` }}
                       />
                     </div>
                   ))
