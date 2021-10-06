@@ -19,8 +19,6 @@ function SignInWithSearch() {
     searchInput: '',
   });
 
-  const users = usersStore.fetchUsers();
-
   const handleChange = (e: ValueType) => {
     setDetails((details) => ({
       ...details,
@@ -28,14 +26,11 @@ function SignInWithSearch() {
     }));
   };
 
+  // get user by inputed reference number
+  let user = usersStore.getUserAccountsByNid(details.searchInput);
+
   const filter = () => {
-    let result = users.data?.data.data.find(
-      (user) =>
-        user.person &&
-        user.person.doc_type == details.searchBy &&
-        user.person.nid == details.searchInput,
-    );
-    if (result) {
+    if (user.data?.data.data) {
       toast.success("You're already registered!", { duration: 1200 });
       setTimeout(() => {
         history.push('/register');
@@ -64,7 +59,9 @@ function SignInWithSearch() {
           placeholder="Search by"
           handleChange={handleChange}
           name="searchBy"
-          defaultValue={details.searchBy}
+          defaultValue={getDropDownStatusOptions(DocType).find(
+            (nid) => nid.value === DocType.NID,
+          )}
           options={getDropDownStatusOptions(DocType)}
         />
         <InputMolecule
