@@ -32,7 +32,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
 
   const { data } = usersStore.fetchUsers();
   const instructors = data?.data.data.filter(
-    (user) => user.user_type === UserType.INSTRUCTOR || user.user_type === UserType.ADMIN,
+    (user) => user.user_type === UserType.INSTRUCTOR,
   );
 
   const departments = divisionStore.getDivisionByType('DEPARTMENT').data?.data.data;
