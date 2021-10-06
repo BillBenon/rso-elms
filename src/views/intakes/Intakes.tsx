@@ -118,7 +118,7 @@ export default function Intakes() {
                 <div>
                   <Link
                     className="outline-none"
-                    to={`/dashboard/programs?intake=${data?.data.data[index].id}`}>
+                    to={`/dashboard/programs?intakeId=${data?.data.data[index].id}`}>
                     <Button styleType="text">View programs</Button>
                   </Link>
                 </div>

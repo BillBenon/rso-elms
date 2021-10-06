@@ -29,9 +29,9 @@ export interface IntakeProgram {
   status: GenericStatus;
 }
 
-export interface IntakePrograms {
+export interface IntakePrograms extends Table {
   description: string;
-  intak_id: string;
+  intake: ExtendedIntakeInfo[];
   programs: IntakeProgram[];
 }
 

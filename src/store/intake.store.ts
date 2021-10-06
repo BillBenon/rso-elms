@@ -21,6 +21,12 @@ class IntakeStore {
     return useQuery(['intakes/id', id], () => intakeService.getIntakeById);
   }
 
+  getProgramsByIntake(intakeId: string) {
+    return useQuery(['intakes/id', intakeId], () =>
+      intakeService.getProgramsByIntake(intakeId),
+    );
+  }
+
   getIntakesByAcademy(academyId: string) {
     return useQuery(['intakes/academy', academyId], () =>
       intakeService.getIntakesByAcademy(academyId),

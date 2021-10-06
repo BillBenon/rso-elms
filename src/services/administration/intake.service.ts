@@ -33,6 +33,12 @@ class IntakeService {
     return await adminstrationAxios.get(`/intakes/getIntakesByAcademy/${id}`);
   }
 
+  public async getProgramsByIntake(
+    intakeId: string,
+  ): Promise<AxiosResponse<Response<IntakeProgramInfo[]>>> {
+    return await adminstrationAxios.get(`/intakes/getProgramsByIntake/${intakeId}`);
+  }
+
   public async getIntakesByProgram(
     programId: string,
   ): Promise<AxiosResponse<Response<IntakeProgramInfo[]>>> {

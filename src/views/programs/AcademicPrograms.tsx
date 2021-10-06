@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+import {
+  Link,
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+  useRouteMatch,
+} from 'react-router-dom';
 
 import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
@@ -10,9 +17,11 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
+import { intakeStore } from '../../store/intake.store';
 import programStore from '../../store/program.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
 import { DivisionInfo } from '../../types/services/division.types';
+import { IntakeProgramInfo, ProgramInfo } from '../../types/services/program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import NewAcademicProgram from './NewAcademicProgram';
 import ProgramDetails from './ProgramDetails';
@@ -26,6 +35,8 @@ export interface IProgramData extends CommonCardDataType {
 export default function AcademicProgram() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
+  const { search } = useLocation();
+  const intakeId = new URLSearchParams(search).get('intakeId');
 
   const [prOpen, setPrOpen] = useState(false); // state to controll the popup
 
@@ -41,7 +52,10 @@ export default function AcademicProgram() {
     { to: `${url}`, title: 'Programs' },
   ];
 
-  const { data, refetch } = programStore.fetchPrograms();
+  console.log(intakeId, 'intake id');
+  const { data, refetch } = intakeId
+    ? intakeStore.getProgramsByIntake(intakeId)
+    : programStore.fetchPrograms();
   const programInfo = data?.data.data;
 
   useEffect(() => {
@@ -52,6 +66,9 @@ export default function AcademicProgram() {
 
   let programs: IProgramData[] = [];
   programInfo?.map((obj) => {
+    if (intakeId) obj = (obj as IntakeProgramInfo).program;
+    else obj = obj as ProgramInfo;
+
     let { id, code, name, description, generic_status, department, incharge, type } = obj;
 
     let prog: IProgramData = {
