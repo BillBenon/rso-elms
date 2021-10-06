@@ -1,15 +1,12 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { moduleStore } from '../../../../store/modules.store';
 import programStore from '../../../../store/program.store';
-import { ValueType } from '../../../../types';
+import { ParamType, ValueType } from '../../../../types';
 import { CreateModuleInfo } from '../../../../types/services/modules.types';
-import { ProgramInfo } from '../../../../types/services/program.types';
-import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
-import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
@@ -17,8 +14,8 @@ import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 export default function NewModuleForm() {
   const history = useHistory();
 
-  const programsInfo = programStore.fetchPrograms();
-  let programs: ProgramInfo[] = programsInfo.data?.data.data || [];
+  const { id } = useParams<ParamType>();
+  const program = programStore.getProgramById(id);
 
   const { mutateAsync } = moduleStore.addModule();
 
@@ -27,7 +24,7 @@ export default function NewModuleForm() {
     name: '',
     description: '',
     has_prerequisite: false,
-    program_id: '',
+    program_id: id,
   });
 
   function handleChange(e: ValueType) {
@@ -62,12 +59,19 @@ export default function NewModuleForm() {
         Descripiton
       </TextAreaMolecule>
 
-      <DropdownMolecule
+      <InputMolecule
+        value={program.data?.data.data.name}
+        handleChange={(_e: ValueType) => {}}
+        name={'program_id'}>
+        Program
+      </InputMolecule>
+
+      {/* <DropdownMolecule
         name="program_id"
         handleChange={handleChange}
         options={getDropDownOptions(programs)}>
         Program
-      </DropdownMolecule>
+      </DropdownMolecule> */}
       <RadioMolecule
         className="mt-4"
         name="has_prerequisite"

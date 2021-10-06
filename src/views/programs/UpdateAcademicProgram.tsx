@@ -12,16 +12,12 @@ import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule'
 import { divisionStore } from '../../store/divisions.store';
 import programStore from '../../store/program.store';
 import usersStore from '../../store/users.store';
-import { CommonFormProps, ValueType } from '../../types';
+import { CommonFormProps, ParamType, ValueType } from '../../types';
 import { CreateProgramInfo, ProgramType } from '../../types/services/program.types';
 import { UserType } from '../../types/services/user.types';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
 
 interface IUpdateAcademicProgram<K> extends CommonFormProps<K> {}
-interface ParamType {
-  id: string;
-}
-
 export default function UpdateAcademicProgram<E>({
   onSubmit,
 }: IUpdateAcademicProgram<E>) {

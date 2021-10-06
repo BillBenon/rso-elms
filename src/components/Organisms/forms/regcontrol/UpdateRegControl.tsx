@@ -3,19 +3,12 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
 import registrationControlStore from '../../../../store/registrationControl.store';
-import { FormPropType, ValueType } from '../../../../types';
-import {
-  IRegistrationControlCreateInfo,
-  IRegistrationControlInfo,
-} from '../../../../types/services/registrationControl.types';
+import { FormPropType, ParamType, ValueType } from '../../../../types';
+import { IRegistrationControlCreateInfo } from '../../../../types/services/registrationControl.types';
 import Button from '../../../Atoms/custom/Button';
 import DateMolecule from '../../../Molecules/input/DateMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
-
-interface ParamType {
-  id: string;
-}
 
 export default function UpdateRegControl({ onSubmit }: FormPropType) {
   const { id } = useParams<ParamType>();

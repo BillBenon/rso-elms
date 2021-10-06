@@ -21,6 +21,11 @@ class IntakeStore {
       intakeService.getIntakesByAcademy(academyId),
     );
   }
+  getIntakesByRegControl(regControlId: string) {
+    return useQuery(['intakes/regcontrol', regControlId], () =>
+      intakeService.getIntakesByRegControl(regControlId),
+    );
+  }
 
   getProgramsByIntake(intakeId: string) {
     return useQuery(['intakes/programs', intakeId], () =>
