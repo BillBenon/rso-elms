@@ -17,12 +17,16 @@ class IntakeStore {
       );
     else return useQuery('intakes', intakeService.fetchAll);
   }
-  getIntakeById(id: string) {
-    return useQuery(['intakes/id', id], () => intakeService.getIntakeById);
+  getIntakeById(intakeId: string, enabled = false) {
+    return useQuery(
+      ['intakes/id', intakeId],
+      () => intakeService.getIntakeById(intakeId),
+      { enabled },
+    );
   }
 
   getProgramsByIntake(intakeId: string) {
-    return useQuery(['intakes/id', intakeId], () =>
+    return useQuery(['programsIntake/id', intakeId], () =>
       intakeService.getProgramsByIntake(intakeId),
     );
   }

@@ -52,11 +52,16 @@ export default function AcademicProgram() {
     { to: `${url}`, title: 'Programs' },
   ];
 
-  console.log(intakeId, 'intake id');
   const { data, refetch } = intakeId
     ? intakeStore.getProgramsByIntake(intakeId)
     : programStore.fetchPrograms();
+
   const programInfo = data?.data.data;
+
+  const intake = intakeStore.getIntakeById(intakeId!, true);
+
+  // fetch intake if id is available
+  if (intakeId && !intake.isSuccess && !intake.isLoading) intake.refetch();
 
   useEffect(() => {
     if (location.pathname === path || location.pathname === `${path}/`) {
@@ -65,6 +70,7 @@ export default function AcademicProgram() {
   }, [location]);
 
   let programs: IProgramData[] = [];
+
   programInfo?.map((obj) => {
     if (intakeId) obj = (obj as IntakeProgramInfo).program;
     else obj = obj as ProgramInfo;
@@ -94,7 +100,10 @@ export default function AcademicProgram() {
         <Cacumber list={list}></Cacumber>
       </section>
       <section>
-        <TableHeader totalItems={programs.length} title="Programs" showSearch={false}>
+        <TableHeader
+          totalItems={programs.length}
+          title={`${intakeId ? '' : 'Programs'}`}
+          showSearch={false}>
           <Link to={`${url}/add`}>
             <Button>Add Program</Button>
           </Link>

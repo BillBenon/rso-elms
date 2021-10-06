@@ -31,12 +31,14 @@ export default function Intakes() {
   const { url } = useRouteMatch();
   const { search } = useLocation();
   const registrationControlId = new URLSearchParams(search).get('regId');
+  
 
   const { data: regControl, refetch } = registrationControlStore.fetchRegControlById(
     registrationControlId!,
     false,
   );
 
+  
   if (registrationControlId) refetch();
 
   const { isSuccess, isError, data, isLoading } = intakeStore.getAll(
