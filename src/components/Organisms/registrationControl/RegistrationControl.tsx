@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
@@ -6,6 +7,7 @@ import { GenericStatus, ValueType } from '../../../types';
 import { IRegistrationControlInfo } from '../../../types/services/registrationControl.types';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
+import Loader from '../../Atoms/custom/Loader';
 import Heading from '../../Atoms/Text/Heading';
 import ILabel from '../../Atoms/Text/ILabel';
 import PopupMolecule from '../../Molecules/Popup';
@@ -13,7 +15,6 @@ import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
 import NewRegistrationControl from '../forms/NewRegistrationControl';
 import UpdateRegControl from '../forms/regcontrol/UpdateRegControl';
-import NewIntake from '../intake/NewIntake';
 
 export default function RegistrationControl() {
   const { url, path } = useRouteMatch();
@@ -35,22 +36,25 @@ export default function RegistrationControl() {
   let RegInfo = data?.data.data;
 
   RegInfo?.map((obj: IRegistrationControlInfo) => {
+    obj.expected_end_date = moment(obj.expected_end_date).format('MMM D YYYY');
+    obj.expected_start_date = moment(obj.expected_start_date).format('MMM D YYYY');
+
     let {
-      expected_start_date,
-      expected_end_date,
       description,
       generic_status,
       id,
       academy: { name }, //destructure name inside academy obj
+      expected_start_date,
+      expected_end_date,
     } = obj;
 
     let registrationcontrol: IRegistrationInfo = {
       'start date': expected_start_date,
       'end date': expected_end_date,
       description,
+      'academy name': name,
       status: generic_status,
       id: id,
-      'academy name': name,
     };
     RegistrationControls.push(registrationcontrol);
   });
@@ -66,11 +70,11 @@ export default function RegistrationControl() {
         history.push(`${path}/${id}/edit`); // go to edit reg control
       },
     },
-    { name: 'View', handleAction: () => {} },
+    // { name: 'View', handleAction: () => {} },
     {
-      name: 'Add intake',
+      name: 'Manage Intakes',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/add-intake`); // go to add new intake to this reg control
+        history.push(`/dashboard/intakes?regId=${id}`); // go to add new intake to this reg control
       },
     },
   ];
@@ -101,7 +105,7 @@ export default function RegistrationControl() {
       </TableHeader>
 
       <div className="mt-14">
-        {isLoading && 'Loading..'}
+        {isLoading && <Loader />}
         {isSuccess && RegistrationControls ? (
           <Table<IRegistrationInfo>
             statusColumn="status"
@@ -114,7 +118,7 @@ export default function RegistrationControl() {
           ''
         )}
 
-        {RegistrationControls.length < 1 && <span>No data found</span>}
+        {!isLoading && RegistrationControls.length < 1 && <span>No data found</span>}
       </div>
 
       {/* add reg control popup */}
@@ -139,22 +143,6 @@ export default function RegistrationControl() {
             return (
               <PopupMolecule title="Update Control" open onClose={handleClose}>
                 <UpdateRegControl />
-              </PopupMolecule>
-            );
-          }}
-        />
-        {/* add intake to reg control */}
-        <Route
-          exact
-          path={`${path}/:id/add-intake`}
-          render={() => {
-            return (
-              <PopupMolecule
-                closeOnClickOutSide={false}
-                title="New intake"
-                open
-                onClose={handleClose}>
-                <NewIntake handleSuccess={handleClose} />
               </PopupMolecule>
             );
           }}

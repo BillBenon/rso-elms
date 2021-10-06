@@ -6,6 +6,7 @@ import {
   ExtendedIntakeInfo,
   IntakeInfo,
   IntakePrograms,
+  IntakeProgramsCreate,
 } from '../../types/services/intake.types';
 import { IntakeProgramInfo } from '../../types/services/program.types';
 
@@ -13,9 +14,11 @@ class IntakeService {
   public async create(intake: IntakeInfo): Promise<AxiosResponse<Response<IntakeInfo>>> {
     return await adminstrationAxios.post('/intakes/addIntake', intake);
   }
-
+  public async update(intake: IntakeInfo): Promise<AxiosResponse<Response<IntakeInfo>>> {
+    return await adminstrationAxios.put('/intakes/modifyIntake', intake);
+  }
   public async addPrograms(
-    intakePrograms: IntakePrograms,
+    intakePrograms: IntakeProgramsCreate,
   ): Promise<AxiosResponse<Response<IntakePrograms>>> {
     return await adminstrationAxios.post('/intakes/addPrograms', intakePrograms);
   }
@@ -37,6 +40,20 @@ class IntakeService {
     intakeId: string,
   ): Promise<AxiosResponse<Response<IntakeProgramInfo[]>>> {
     return await adminstrationAxios.get(`/intakes/getProgramsByIntake/${intakeId}`);
+  }
+
+  public async getIntakesByProgram(
+    programId: string,
+  ): Promise<AxiosResponse<Response<IntakeProgramInfo[]>>> {
+    return await adminstrationAxios.get(`/intakes/getIntakesByProgram/${programId}`);
+  }
+
+  public async getIntakesPyRegistrationControl(
+    registrationControlId: string,
+  ): Promise<AxiosResponse<Response<ExtendedIntakeInfo[]>>> {
+    return await adminstrationAxios.get(
+      `/intakes/getIntakesByRegistrationControl/${registrationControlId}`,
+    );
   }
 }
 
