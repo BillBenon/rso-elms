@@ -20,6 +20,9 @@ class UserStore {
   fetchUsers() {
     return useQuery('users', userService.fetchUsers);
   }
+  getUserAccountsByNid(nid: string) {
+    return useQuery(['user/id', nid], () => userService.getUserAccountByNid(nid));
+  }
 }
 
 export default new UserStore();

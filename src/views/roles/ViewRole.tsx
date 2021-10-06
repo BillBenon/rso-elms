@@ -18,11 +18,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import AddPrivileges from '../../components/Organisms/forms/roles/AddPrivileges';
 import { queryClient } from '../../plugins/react-query';
 import { roleStore } from '../../store';
-import { Response, RolePrivilege, RoleRes } from '../../types';
-
-interface ParamType {
-  id: string;
-}
+import { ParamType, Response, RolePrivilege, RoleRes } from '../../types';
 
 export default function ViewRole() {
   const { url } = useRouteMatch();
@@ -37,17 +33,18 @@ export default function ViewRole() {
   // Todo: add privileges on role
 
   function removePrivilege(rolePrivilege: RolePrivilege) {
-    deletePrivilege(rolePrivilege.id.toString(), {
-      onSuccess: () => {
-        queryClient.setQueryData(['privilegesByRole/id', role?.id.toString()], (old) => {
-          const oldest = old as AxiosResponse<Response<RolePrivilege[]>>;
-          oldest.data.data = oldest.data.data.filter(
-            (roleP) => roleP.id != rolePrivilege.id,
-          );
-          return oldest;
-        });
-      },
-    });
+    deletePrivilege(rolePrivilege.id + ''),
+      {
+        onSuccess: () => {
+          queryClient.setQueryData(['privilegesByRole/id', role?.id + ''], (old) => {
+            const oldest = old as AxiosResponse<Response<RolePrivilege[]>>;
+            oldest.data.data = oldest.data.data.filter(
+              (roleP) => roleP.id != rolePrivilege.id,
+            );
+            return oldest;
+          });
+        },
+      };
   }
 
   useEffect(() => {

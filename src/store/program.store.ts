@@ -18,6 +18,10 @@ class ProgramStore {
       },
     });
   }
+  addProgramToLevel() {
+    return useMutation(programService.addProgramToLevel);
+  }
+
   fetchPrograms() {
     return useQuery('programs', programService.fetchPrograms);
   }
@@ -33,6 +37,12 @@ class ProgramStore {
   getModulesByProgram(program_id: string) {
     return useQuery(['modules/program_id', program_id], () =>
       programService.getModulesByProgram(program_id),
+    );
+  }
+
+  getProgramsByDepartment(program_id: string) {
+    return useQuery(['modules/program_id', program_id], () =>
+      programService.getProgramsByDepartment(program_id),
     );
   }
 

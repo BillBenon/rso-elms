@@ -27,6 +27,7 @@ import AddAcademicProgramToIntake from './AddAcademicProgramToIntake';
 import NewAcademicProgram from './NewAcademicProgram';
 import ProgramDetails from './ProgramDetails';
 import UpdateAcademicProgram from './UpdateAcademicProgram';
+import ViewProgramsInDepartment from './ViewProgramsInDepartment';
 
 export interface IProgramData extends CommonCardDataType {
   department: DivisionInfo;
@@ -138,7 +139,7 @@ export default function AcademicProgram() {
         />
 
         {/* modify academic program */}
-        <Route exact path={`${path}/:id/edit`} render={() => <UpdateAcademicProgram />} />
+        <Route path={`${path}/:id/edit`} render={() => <UpdateAcademicProgram />} />
 
         {/* add prerequisite popup */}
         <Route
@@ -156,7 +157,13 @@ export default function AcademicProgram() {
           }}
         />
         {/* show academic program details */}
-        <Route path={`${path}/:id/details`} render={() => <ProgramDetails />} />
+        <Route path={`${path}/:id`} render={() => <ProgramDetails />} />
+
+        {/* <Route
+          exact
+          path={`${path}/:id/view-program`}
+          render={() => <ViewProgramsInDepartment />}
+        /> */}
         <Route
           exact
           path={`${path}`}

@@ -38,7 +38,7 @@ export default function NewAcademy<E>({ onSubmit }: CommonFormProps<E>) {
       const user = await authenticatorService.authUser();
       setDetails((details) => ({
         ...details,
-        current_admin_id: user.data.data.id.toString(),
+        current_admin_id: user.data.data.id + '',
       }));
     };
 

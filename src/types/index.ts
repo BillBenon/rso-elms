@@ -16,7 +16,7 @@ export type Color =
   | 'gray'
   | 'lightgray';
 
-export type fontSize = 'xs' | 'sm' | 'base' | 'tiny' | 'lg' | '2xl' | '3xl';
+export type fontSize = 'xs' | 'sm' | 'base' | 'tiny' | 'lg' | '2xl' | '3xl' | '4xl';
 export type textTransform = 'uppercase' | 'lowerCase' | 'capitalize' | 'normal-case';
 export type width = 'default' | 'full';
 export type fontWeight = 'normal' | 'medium' | 'semibold' | 'bold';
@@ -99,6 +99,10 @@ export interface CommonCardDataType {
   subTitle?: string;
   description: string;
   footerTitle?: string | ReactNode;
+}
+
+export interface IDivisionsAcademyType extends FormPropType {
+  academy_id: string | undefined;
 }
 
 export interface SigninPropTypes extends CommonCardDataType {

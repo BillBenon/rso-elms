@@ -29,11 +29,11 @@ export default function UpdateRole({ onSubmit }: FormPropType) {
     e.preventDefault();
     mutateAsync(form, {
       onSuccess: () => {
-        toast.success('Role updated', { duration: 3 });
+        toast.success('Role updated');
         history.goBack();
       },
       onError: () => {
-        toast.error('something wrong happened while creating role', { duration: 3 });
+        toast.error('something wrong happened while creating role');
       },
     });
     if (onSubmit) onSubmit(e);

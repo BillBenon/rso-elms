@@ -4,6 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import { privilegeStore } from '../../../../store';
 import {
+  ParamType,
   PrivilegeFeatureType,
   PrivilegeStatus,
   PrivilegeUpdate,
@@ -17,10 +18,6 @@ import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 interface PropType {
   onSubmit: <E>(_e: FormEvent<E>) => void;
-}
-
-interface ParamType {
-  id: string;
 }
 
 export default function NewPrivilege({ onSubmit }: PropType) {
@@ -56,12 +53,12 @@ export default function NewPrivilege({ onSubmit }: PropType) {
     e.preventDefault();
     mutate(form, {
       onSuccess: () => {
-        toast.success('Privilege updated', { duration: 3 });
+        toast.success('Privilege updated');
         history.goBack();
         // TODO: @liberi to fix this function which is not reachable
       },
       onError: () => {
-        toast.error('something wrong happened while updating privilage', { duration: 3 });
+        toast.error('something wrong happened while updating privilage');
       },
     });
     onSubmit(e);

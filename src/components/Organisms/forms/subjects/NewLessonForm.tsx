@@ -2,15 +2,11 @@ import React, { FormEvent } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { subjectStore } from '../../../../store/subject.store';
-import { ValueType } from '../../../../types';
+import { ParamType, ValueType } from '../../../../types';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
-
-interface ParamType {
-  id: string;
-}
 
 export default function NewLessonForm() {
   const { id } = useParams<ParamType>();

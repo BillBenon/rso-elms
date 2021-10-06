@@ -9,12 +9,8 @@ import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import academyStore from '../../store/academy.store';
-import { CommonFormProps, ValueType } from '../../types';
+import { CommonFormProps, ParamType, ValueType } from '../../types';
 import { AcademyCreateInfo } from '../../types/services/academy.types';
-
-interface ParamType {
-  id: string;
-}
 
 export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
@@ -45,7 +41,7 @@ export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     data?.data.data &&
       setDetails({
         ...data?.data.data,
-        institution_id: data?.data.data.institution.id.toString(),
+        institution_id: data?.data.data.institution.id + '',
         head_office_location_id: data?.data.data.head_office_location_id || 17445,
       });
   }, [data]);

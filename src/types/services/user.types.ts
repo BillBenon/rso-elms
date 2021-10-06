@@ -40,6 +40,7 @@ interface PersonInfo extends Table {
 
 export interface CreateUserInfo {
   activation_key: string;
+  academy_id: string;
   birth_date: string;
   doc_type: DocType;
   education_level: EducationLevel;
@@ -65,6 +66,7 @@ export interface CreateUserInfo {
   sex: GenderStatus;
   user_type: UserType;
   username: string;
+  intake_id: string;
 }
 
 export enum GenderStatus {
@@ -100,8 +102,8 @@ export enum DocType {
 }
 
 export enum UserType {
-  // ANONYMOUS = 'ANONYMOUS',
-  // SYSTEM = 'SYSTEM',
+  ANONYMOUS = 'ANONYMOUS',
+  SYSTEM = 'SYSTEM',
   SUPER_ADMIN = 'SUPER_ADMIN',
   ADMIN = 'ADMIN',
   INSTRUCTOR = 'INSTRUCTOR',
