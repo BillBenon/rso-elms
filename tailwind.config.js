@@ -6,6 +6,7 @@ module.exports = {
   theme: {
     extend: {
       fontWeight: ['hover', 'focus'],
+      opacity: ['disabled'],
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
       },

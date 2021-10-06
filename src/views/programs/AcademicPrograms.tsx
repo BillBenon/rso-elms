@@ -1,5 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import {
+  Link,
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+  useRouteMatch,
+} from 'react-router-dom';
 
 import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
@@ -10,10 +17,13 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
+import { intakeStore } from '../../store/intake.store';
 import programStore from '../../store/program.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
 import { DivisionInfo } from '../../types/services/division.types';
+import { IntakeProgramInfo, ProgramInfo } from '../../types/services/program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
+import AddAcademicProgramToIntake from './AddAcademicProgramToIntake';
 import NewAcademicProgram from './NewAcademicProgram';
 import ProgramDetails from './ProgramDetails';
 import UpdateAcademicProgram from './UpdateAcademicProgram';
@@ -26,13 +36,8 @@ export interface IProgramData extends CommonCardDataType {
 export default function AcademicProgram() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
-
-  const [prOpen, setPrOpen] = useState(false); // state to controll the popup
-
-  //eslint-disable-next-line
-  function submited() {
-    setPrOpen(true);
-  }
+  const { search } = useLocation();
+  const intakeId = new URLSearchParams(search).get('intakeId');
 
   const list: LinkList[] = [
     { to: 'home', title: 'home' },
@@ -41,8 +46,16 @@ export default function AcademicProgram() {
     { to: `${url}`, title: 'Programs' },
   ];
 
-  const { data, refetch } = programStore.fetchPrograms();
+  const { data, refetch } = intakeId
+    ? intakeStore.getProgramsByIntake(intakeId)
+    : programStore.fetchPrograms();
+
   const programInfo = data?.data.data;
+
+  const intake = intakeStore.getIntakeById(intakeId!, true);
+
+  // fetch intake if id is available
+  if (intakeId && !intake.isSuccess && !intake.isLoading) intake.refetch();
 
   useEffect(() => {
     if (location.pathname === path || location.pathname === `${path}/`) {
@@ -51,7 +64,11 @@ export default function AcademicProgram() {
   }, [location]);
 
   let programs: IProgramData[] = [];
+
   programInfo?.map((obj) => {
+    if (intakeId) obj = (obj as IntakeProgramInfo).program;
+    else obj = obj as ProgramInfo;
+
     let { id, code, name, description, generic_status, department, incharge, type } = obj;
 
     let prog: IProgramData = {
@@ -71,16 +88,30 @@ export default function AcademicProgram() {
     programs.push(prog);
   });
 
+  function submited() {
+    refetch();
+    history.goBack();
+  }
+
   return (
     <main className="px-4">
       <section>
         <Cacumber list={list}></Cacumber>
       </section>
       <section>
-        <TableHeader totalItems={programs.length} title="Programs" showSearch={false}>
-          <Link to={`${url}/add`}>
-            <Button>Add Program</Button>
-          </Link>
+        <TableHeader
+          totalItems={intakeId ? `${programs.length} programs` : programs.length}
+          title={`${intakeId ? intake.data?.data.data.title : 'Programs'}`}
+          showSearch={false}>
+          {intakeId ? (
+            <Link to={`${url}/add-program-to-intake?intakeId=${intakeId}`}>
+              <Button>Add Program To Intake</Button>
+            </Link>
+          ) : (
+            <Link to={`${url}/add`}>
+              <Button>Add New Program</Button>
+            </Link>
+          )}
         </TableHeader>
       </section>
 
@@ -93,6 +124,19 @@ export default function AcademicProgram() {
             return <NewAcademicProgram />;
           }}
         />
+        {/* add academic program to intake*/}
+        <Route
+          exact
+          path={`${url}/add-program-to-intake`}
+          render={() => {
+            return (
+              <PopupMolecule title="Programs" open={true} onClose={history.goBack}>
+                <AddAcademicProgramToIntake submited={submited} />
+              </PopupMolecule>
+            );
+          }}
+        />
+
         {/* modify academic program */}
         <Route exact path={`${path}/:id/edit`} render={() => <UpdateAcademicProgram />} />
 
@@ -104,7 +148,7 @@ export default function AcademicProgram() {
             return (
               <PopupMolecule
                 title="Add prerequisite"
-                open={prOpen}
+                open={true}
                 onClose={history.goBack}>
                 another form here
               </PopupMolecule>
@@ -112,7 +156,7 @@ export default function AcademicProgram() {
           }}
         />
         {/* show academic program details */}
-        <Route path={`${path}/:id`} render={() => <ProgramDetails />} />
+        <Route path={`${path}/:id/details`} render={() => <ProgramDetails />} />
         <Route
           exact
           path={`${path}`}
@@ -126,7 +170,7 @@ export default function AcademicProgram() {
                       <div className="p-1 mt-3">
                         <CommonCardMolecule
                           data={Common}
-                          to={{ title: 'module', to: `programs/${Common.id}` }}
+                          to={{ title: 'module', to: `programs/${Common.id}/details` }}
                         />
                       </div>
                     }

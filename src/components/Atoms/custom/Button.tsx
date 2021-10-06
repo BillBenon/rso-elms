@@ -50,12 +50,10 @@ export default function Button<T>({
     <button
       {...attrs}
       onClick={onClick}
-      className={`${
-        buttonStyle[styleType]
-      } disabled:opacity-50 rounded-lg font-semibold text-sm outline-none 
+      className={`${buttonStyle[styleType]} rounded-lg font-semibold text-sm outline-none 
       ${full && 'w-full'}
       ${padding} ${className}
-      `}>
+      disabled:opacity-50`}>
       {children}
     </button>
   );

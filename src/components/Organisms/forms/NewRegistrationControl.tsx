@@ -1,15 +1,12 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 
-import academyStore from '../../../store/academy.store';
+import { authenticatorStore } from '../../../store';
 import registrationControlStore from '../../../store/registrationControl.store';
 import { CommonFormProps, ValueType } from '../../../types';
-import { AcademyInfo } from '../../../types/services/academy.types';
 import { IRegistrationControlCreateInfo } from '../../../types/services/registrationControl.types';
-import { getDropDownOptions } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';
 import DateMolecule from '../../Molecules/input/DateMolecule';
-import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 import RadioMolecule from '../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
 
@@ -17,9 +14,10 @@ interface PropType<K> extends CommonFormProps<K> {}
 
 export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
   const { mutateAsync } = registrationControlStore.createRegControl();
+  const { data } = authenticatorStore.authUser();
 
   const [regControl, setRegControl] = useState<IRegistrationControlCreateInfo>({
-    academy_id: '',
+    academy_id: data?.data.data.academy.id.toString() || '',
     description: '',
     expected_start_date: '',
     expected_end_date: '',
@@ -29,17 +27,15 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
     setRegControl((regControl) => ({ ...regControl, [e.name]: e.value }));
   }
 
-  const academies: AcademyInfo[] | undefined =
-    academyStore.fetchAcademies().data?.data.data;
-
   function submitForm(e: FormEvent) {
+    const toastId = toast.loading('Adding Registration control');
     e.preventDefault();
     mutateAsync(regControl, {
       onSuccess: () => {
-        toast.success('Registration control created', { duration: 8 });
+        toast.success('Registration control created', { id: toastId });
       },
-      onError: () => {
-        toast.error('something wrong happened while creating role', { duration: 3 });
+      onError: (error) => {
+        toast.error(error + '', { id: toastId });
       },
     });
 
@@ -49,6 +45,7 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
   return (
     <form onSubmit={submitForm}>
       <TextAreaMolecule
+        required
         value={regControl.description}
         name="description"
         handleChange={handleChange}>
@@ -73,15 +70,6 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
         name={'expected_end_date'}>
         End Date
       </DateMolecule>
-
-      <DropdownMolecule
-        defaultValue={regControl.academy_id}
-        options={getDropDownOptions(academies)}
-        name="academy_id"
-        placeholder={'Academy to be enrolled'}
-        handleChange={handleChange}>
-        Academy
-      </DropdownMolecule>
 
       <RadioMolecule
         className="mt-4"
