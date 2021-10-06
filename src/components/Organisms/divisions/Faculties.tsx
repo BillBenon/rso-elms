@@ -3,8 +3,10 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
+import { authenticatorStore } from '../../../store';
 import { divisionStore } from '../../../store/divisions.store';
 import { DivisionInfo } from '../../../types/services/division.types';
+import ViewDepartmentsInFaculty from '../../../views/divisions/ViewDepartmentsInFaculty';
 import Button from '../../Atoms/custom/Button';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
@@ -27,6 +29,8 @@ export default function Faculties({ fetchType }: IFaculties) {
   const { url, path } = useRouteMatch();
   const history = useHistory();
   const [faculties, setFaculties] = useState<FilteredData[]>();
+  const { data: userInfo } = authenticatorStore.authUser();
+
   const { data, isSuccess, isLoading } = divisionStore.getDivisionByType(
     fetchType.toUpperCase(),
   );
@@ -74,7 +78,12 @@ export default function Faculties({ fetchType }: IFaculties) {
         history.push(`${path}/${id}/add`);
       },
     },
-    { name: 'View', handleAction: () => {} },
+    {
+      name: 'View Departments',
+      handleAction: (id: string | number | undefined) => {
+        history.push({ pathname: `${path}/${id}/view-departments` });
+      },
+    },
   ];
 
   return (
@@ -91,10 +100,9 @@ export default function Faculties({ fetchType }: IFaculties) {
       </section>
       <section>
         {isLoading && 'Faculty loading...'}
-        {isSuccess ? faculties?.length === 0 : 'No Faculties found, try to add one'}
+        {!isLoading && isSuccess ? faculties?.length === 0 : 'No Faculties found,add one'}
         {faculties && (
           <Table<FilteredData>
-            handleSelect={() => {}}
             statusColumn="status"
             data={faculties}
             hide={['id']}
@@ -112,7 +120,7 @@ export default function Faculties({ fetchType }: IFaculties) {
           render={() => {
             return (
               <PopupMolecule title="Update Faculty" open={true} onClose={handleClose}>
-                <UpdateFaculty />
+                <UpdateFaculty academy_id={userInfo?.data.data.academy.id.toString()} />
               </PopupMolecule>
             );
           }}
@@ -123,8 +131,8 @@ export default function Faculties({ fetchType }: IFaculties) {
           path={`${path}/add`}
           render={() => {
             return (
-              <PopupMolecule title="New Faculty" open onClose={() => history.goBack()}>
-                <NewFaculty />
+              <PopupMolecule title="New Faculty" open onClose={handleClose}>
+                <NewFaculty academy_id={userInfo?.data.data.academy.id.toString()} />
               </PopupMolecule>
             );
           }}
@@ -135,8 +143,8 @@ export default function Faculties({ fetchType }: IFaculties) {
           path={`${path}/:id/add`}
           render={() => {
             return (
-              <PopupMolecule title="New Department" open onClose={() => history.goBack()}>
-                <NewDepartment />
+              <PopupMolecule title="New Department" open onClose={handleClose}>
+                <NewDepartment academy_id={userInfo?.data.data.academy.id.toString()} />
               </PopupMolecule>
             );
           }}

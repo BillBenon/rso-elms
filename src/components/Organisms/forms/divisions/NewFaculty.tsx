@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 
 import academyStore from '../../../../store/academy.store';
 import { divisionStore } from '../../../../store/divisions.store';
-import { FormPropType, ValueType } from '../../../../types';
+import { IDivisionsAcademyType, ValueType } from '../../../../types';
 import { AcademyInfo } from '../../../../types/services/academy.types';
 import { DivisionCreateInfo } from '../../../../types/services/division.types';
 import { getDropDownOptions } from '../../../../utils/getOption';
@@ -13,14 +13,14 @@ import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-export default function NewFaculty({ onSubmit }: FormPropType) {
+export default function NewFaculty({ onSubmit, academy_id }: IDivisionsAcademyType) {
   const [division, setDivision] = useState<DivisionCreateInfo>({
-    academy_id: '',
+    id: '',
+    academy_id: academy_id || '',
     code: '',
     description: '',
     division_type: 'FACULTY',
     name: '',
-    id: '',
   });
   const { mutateAsync } = divisionStore.createDivision(division.division_type);
   const history = useHistory();
@@ -37,7 +37,6 @@ export default function NewFaculty({ onSubmit }: FormPropType) {
     mutateAsync(division, {
       onSuccess: () => {
         toast.success('Faculty created');
-        // ();
         history.goBack();
       },
       onError: () => {
@@ -64,17 +63,8 @@ export default function NewFaculty({ onSubmit }: FormPropType) {
         name="description"
         required
         handleChange={handleChange}>
-        Descripiton
+        Description
       </TextAreaMolecule>
-
-      <DropdownMolecule
-        defaultValue={division.academy_id}
-        options={getDropDownOptions(academies)}
-        name="academy_id"
-        placeholder={'Academy to be enrolled'}
-        handleChange={handleChange}>
-        Academy
-      </DropdownMolecule>
 
       {/* save button */}
       <div className="mt-5">

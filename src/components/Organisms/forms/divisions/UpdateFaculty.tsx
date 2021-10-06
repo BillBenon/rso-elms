@@ -3,13 +3,13 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { divisionStore } from '../../../../store/divisions.store';
-import { FormPropType, ParamType, ValueType } from '../../../../types';
+import { IDivisionsAcademyType, ParamType, ValueType } from '../../../../types';
 import { DivisionCreateInfo } from '../../../../types/services/division.types';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-export default function UpdateFaculty({ onSubmit }: FormPropType) {
+export default function UpdateFaculty({ onSubmit, academy_id }: IDivisionsAcademyType) {
   // const [form, setForm] = useState<DivisionInfo>({ name: '', description: '' });
   const history = useHistory();
 
@@ -18,7 +18,7 @@ export default function UpdateFaculty({ onSubmit }: FormPropType) {
   const { data } = divisionStore.getDivision(id);
 
   const [division, setDivision] = useState<DivisionCreateInfo>({
-    academy_id: '',
+    academy_id: academy_id || '',
     code: '',
     description: '',
     division_type: 'FACULTY',
