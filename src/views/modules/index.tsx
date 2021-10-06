@@ -6,7 +6,7 @@ import Cacumber from '../../components/Molecules/Cacumber';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import AddPrerequesitForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
+import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
 import { moduleStore } from '../../store/modules.store';
 import { CommonCardDataType, Link } from '../../types';
@@ -100,7 +100,7 @@ export default function Modules() {
             render={() => {
               return (
                 <PopupMolecule title="Add Prerequesite" open onClose={handleClose}>
-                  <AddPrerequesitForm />
+                  <AddPrerequesitesForm />
                 </PopupMolecule>
               );
             }}
