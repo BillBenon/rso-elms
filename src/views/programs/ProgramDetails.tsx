@@ -11,10 +11,14 @@ import {
 import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
+import AddCard from '../../components/Molecules/cards/AddCard';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import UsersPreview from '../../components/Molecules/cards/UsersPreview';
+import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
+import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
+import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
 import { moduleStore } from '../../store/modules.store';
 import programStore from '../../store/program.store';
 import { CommonCardDataType, ParamType } from '../../types';
@@ -80,6 +84,10 @@ export default function ProgramDetailsMolecule() {
       href: `${url}/modules`,
     },
   ];
+
+  const handleClose = () => {
+    history.goBack();
+  };
 
   return (
     <>
@@ -175,27 +183,58 @@ export default function ProgramDetailsMolecule() {
               </div>
             )}
           />
+          {/* add module popup */}
           <Route
             exact
+            path={`${path}/modules/add`}
+            render={() => {
+              return (
+                <PopupMolecule title="New Module" open onClose={handleClose}>
+                  <NewModuleForm />
+                </PopupMolecule>
+              );
+            }}
+          />
+
+          {/* add prerequesite popup */}
+          <Route
+            exact
+            path={`${path}/modules/:moduleId/add-prereq`}
+            render={() => {
+              return (
+                <PopupMolecule title="Add Prerequesite" open onClose={handleClose}>
+                  <AddPrerequesitesForm />
+                </PopupMolecule>
+              );
+            }}
+          />
+
+          <Route
             path={`${path}/modules`}
             render={() => (
-              <section className="flex flex-wrap justify-between">
+              <section className="flex flex-wrap justify-start gap-4">
                 {programModules.length <= 0 ? (
                   <NoDataAvailable
                     buttonLabel="Add new modules"
                     title={'No Modules available in this program'}
-                    handleClick={() => history.push(`${url}/add-module`)}
+                    handleClick={() => history.push(`${url}/modules/add`)}
                     description="And the web just isnt the same without you. Lets get you back online!"
                   />
                 ) : (
-                  programModules?.map((module) => (
-                    <div key={module.code}>
-                      <CommonCardMolecule
-                        data={module}
-                        to={{ title: 'View more', to: `/modules/:id` }}
-                      />
-                    </div>
-                  ))
+                  <>
+                    <AddCard
+                      title={'Add new module'}
+                      onClick={() => history.push(`${url}/modules/add`)}
+                    />
+                    {programModules?.map((module) => (
+                      <div key={module.code}>
+                        <CommonCardMolecule
+                          data={module}
+                          to={{ title: 'View more', to: `/modules/:id` }}
+                        />
+                      </div>
+                    ))}
+                  </>
                 )}
               </section>
             )}

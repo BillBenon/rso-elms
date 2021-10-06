@@ -14,7 +14,7 @@ import TableHeader from '../../Molecules/table/TableHeader';
 import NewRegistrationControl from '../forms/NewRegistrationControl';
 import UpdateRegControl from '../forms/regcontrol/UpdateRegControl';
 import NewIntake from '../intake/NewIntake';
-import RegControlIntakes from './RegControlDetails';
+import RegControlDetails from './RegControlDetails';
 
 export default function RegistrationControl() {
   const { url, path } = useRouteMatch();
@@ -88,7 +88,7 @@ export default function RegistrationControl() {
           exact
           path={`${path}/:id`}
           render={() => {
-            return <RegControlIntakes />;
+            return <RegControlDetails />;
           }}
         />
         <Route

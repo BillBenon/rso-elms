@@ -17,7 +17,7 @@ export default function NewModuleForm() {
   const { id } = useParams<ParamType>();
   const program = programStore.getProgramById(id);
 
-  const { mutateAsync } = moduleStore.addModule();
+  const { mutateAsync, isLoading } = moduleStore.addModule();
 
   const [values, setvalues] = useState<CreateModuleInfo>({
     id: '',
@@ -38,7 +38,9 @@ export default function NewModuleForm() {
       async onSuccess(data) {
         toast.success(data.data.message);
         if (data.data.data.has_prerequisite)
-          history.push(`/dashboard/modules/${data.data.data.id}/add-prereq`);
+          history.push(
+            `/dashboard/programs/${id}/modules/${data.data.data.id}/add-prereq`,
+          );
         else history.goBack();
       },
       onError() {
@@ -62,16 +64,11 @@ export default function NewModuleForm() {
       <InputMolecule
         value={program.data?.data.data.name}
         handleChange={(_e: ValueType) => {}}
-        name={'program_id'}>
+        name={'program_id'}
+        readOnly
+        disabled>
         Program
       </InputMolecule>
-
-      {/* <DropdownMolecule
-        name="program_id"
-        handleChange={handleChange}
-        options={getDropDownOptions(programs)}>
-        Program
-      </DropdownMolecule> */}
       <RadioMolecule
         className="mt-4"
         name="has_prerequisite"
@@ -83,8 +80,8 @@ export default function NewModuleForm() {
         Has Prerequesites
       </RadioMolecule>
       <div className="mt-5">
-        <Button type="submit" onClick={() => submitForm} full>
-          Save
+        <Button type="submit" disabled={isLoading} onClick={() => submitForm} full>
+          {isLoading ? '....' : 'Save'}
         </Button>
       </div>
     </form>
