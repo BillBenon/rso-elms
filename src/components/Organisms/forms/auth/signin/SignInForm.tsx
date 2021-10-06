@@ -1,6 +1,5 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useEffect } from 'react-router/node_modules/@types/react';
 import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 
 import { queryClient } from '../../../../../plugins/react-query';

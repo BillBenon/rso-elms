@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import toast from 'react-hot-toast';
 
 import { LoginRes, Response } from '../types';
@@ -22,13 +22,14 @@ const interceptAdminReq = (config: AxiosRequestConfig) => {
   if (!openRequests.find((link) => link === config.url)) {
     if (token) {
       const jwtInfo: LoginRes = JSON.parse(token);
+      // @ts-ignore
       config.headers['Authorization'] = `Bearer ${jwtInfo.token}`;
     }
   }
   return config;
 };
 
-const interceptAdminResError = (error: Error | AxiosError<Response>) => {
+const interceptAdminResError = (error: Error | AxiosError<AxiosResponse<Response>>) => {
   if (axios.isAxiosError(error)) {
     const e = error?.response;
 
@@ -38,7 +39,8 @@ const interceptAdminResError = (error: Error | AxiosError<Response>) => {
 
     if (import.meta.env.DEV) {
       if (e?.status === 400) toast.error(`Bad Request on, ${e.config.url}`);
-      else toast.error((e?.data.message || e?.data?.error) + '');
+      // @ts-ignore
+      else toast.error((e?.data.message || e?.data?.data?.error) + '');
     }
 
     // unauthorized

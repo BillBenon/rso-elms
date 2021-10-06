@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   Link,
   Route,
@@ -38,13 +38,6 @@ export default function AcademicProgram() {
   const history = useHistory();
   const { search } = useLocation();
   const intakeId = new URLSearchParams(search).get('intakeId');
-
-  const [prOpen, setPrOpen] = useState(false); // state to controll the popup
-
-  //eslint-disable-next-line
-  function submited() {
-    setPrOpen(true);
-  }
 
   const list: LinkList[] = [
     { to: 'home', title: 'home' },
@@ -95,6 +88,11 @@ export default function AcademicProgram() {
     programs.push(prog);
   });
 
+  function submited() {
+    refetch();
+    history.goBack();
+  }
+
   return (
     <main className="px-4">
       <section>
@@ -133,7 +131,7 @@ export default function AcademicProgram() {
           render={() => {
             return (
               <PopupMolecule title="Programs" open={true} onClose={history.goBack}>
-                <AddAcademicProgramToIntake />
+                <AddAcademicProgramToIntake submited={submited} />
               </PopupMolecule>
             );
           }}
@@ -150,7 +148,7 @@ export default function AcademicProgram() {
             return (
               <PopupMolecule
                 title="Add prerequisite"
-                open={prOpen}
+                open={true}
                 onClose={history.goBack}>
                 another form here
               </PopupMolecule>

@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
-import { FormEvent } from 'react-router/node_modules/@types/react';
 import { useLocation } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
