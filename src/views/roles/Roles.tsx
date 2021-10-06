@@ -97,7 +97,7 @@ export default function Roles() {
         {isSuccess ? roles?.length === 0 : 'No Roles found, try to add one'}
         {roles && (
           <Table<FilteredRoles>
-            manyActions={manyActions}
+            selectorActions={manyActions}
             hide={['id', 'name']}
             handleSelect={handleSelect}
             statusColumn="status"

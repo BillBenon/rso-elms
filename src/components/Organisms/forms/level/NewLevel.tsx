@@ -65,6 +65,15 @@ function NewLevel<E>({ onSubmit }: PropType<E>) {
         name="level-name">
         Level code
       </InputMolecule>
+
+      <InputMolecule
+        value={level.code}
+        error=""
+        handleChange={handleChange}
+        placeholder="Enter level flow"
+        name="level-name">
+        Flow
+      </InputMolecule>
       <div className="flex items-center justify-end" onClick={addNewLevel}>
         <Icon name="add" size={15} />
         <ILabel size="sm" weight="medium" className="cursor-pointer" color="primary">

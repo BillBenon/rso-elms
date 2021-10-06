@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { FormEvent, useState } from 'react';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -14,7 +14,7 @@ import NewLevel from '../../components/Organisms/forms/level/NewLevel';
 import { divisionStore } from '../../store/divisions.store';
 import programStore from '../../store/program.store';
 import usersStore from '../../store/users.store';
-import { CommonFormProps, ValueType } from '../../types';
+import { CommonFormProps, ParamType, ValueType } from '../../types';
 import { CreateProgramInfo, ProgramType } from '../../types/services/program.types';
 import { UserType } from '../../types/services/user.types';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
@@ -23,6 +23,7 @@ interface INewAcademyProgram<K> extends CommonFormProps<K> {}
 
 export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E>) {
   const history = useHistory();
+  const { id } = useParams<ParamType>();
   const [lopen, setLopen] = useState<boolean>(false);
   const [confirmation, setConfirmation] = useState<boolean>(false);
 
@@ -36,7 +37,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
   const [details, setDetails] = useState<CreateProgramInfo>({
     code: '',
     current_admin_id: '',
-    department_id: '',
+    department_id: id ? id : '',
     description: '',
     name: '',
     type: ProgramType.SHORT_COURSE,
@@ -52,15 +53,15 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
 
   async function createProgram<T>(e: FormEvent<T>) {
     e.preventDefault();
-    setConfirmation(true);
-    // if (onSubmit) onSubmit(e);
-    // await mutateAsync(details, {
-    //   onSuccess() {
-    //     setConfirmation(true);
-    //     setLopen(true);
-    //   },
-    //   onError() {},
-    // });
+
+    if (onSubmit) onSubmit(e);
+    await mutateAsync(details, {
+      onSuccess() {
+        setConfirmation(true);
+        setLopen(true);
+      },
+      onError() {},
+    });
   }
 
   function handlePopupClose() {
@@ -112,14 +113,18 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
           handleChange={handleChange}>
           Incharge
         </DropdownMolecule>
-        <DropdownMolecule
-          width="64"
-          placeholder="Select department"
-          options={getDropDownOptions(departments)}
-          name="department_id"
-          handleChange={handleChange}>
-          Department
-        </DropdownMolecule>
+
+        {!id && (
+          <DropdownMolecule
+            width="64"
+            placeholder="Select department"
+            options={getDropDownOptions(departments)}
+            name="department_id"
+            handleChange={handleChange}>
+            Department
+          </DropdownMolecule>
+        )}
+
         <RadioMolecule
           value="ACTIVE"
           name="status"

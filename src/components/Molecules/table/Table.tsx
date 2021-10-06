@@ -24,7 +24,7 @@ interface TableProps<T> {
   uniqueCol?: keyof T;
   hide?: (keyof T)[];
   actions?: { name: string; handleAction: (_data?: T[keyof T]) => void }[];
-  manyActions?: { name: string; handleAction: (_data?: string[]) => void }[];
+  selectorActions?: { name: string; handleAction: (_data?: string[]) => void }[];
   handleClick?: () => void;
   statusColumn?: string;
   handleSelect?: (_selected: string[] | null) => void;
@@ -35,7 +35,7 @@ export function Table<T>({
   hide = [],
   data,
   actions,
-  manyActions,
+  selectorActions,
   statusColumn,
   handleSelect,
 }: TableProps<T>) {
@@ -232,7 +232,7 @@ export function Table<T>({
             </p>
           </div>
           <div className="px-4">
-            {manyActions?.map((action) => (
+            {selectorActions?.map((action) => (
               <Button
                 key={action.name + Math.random()}
                 styleType="outline"

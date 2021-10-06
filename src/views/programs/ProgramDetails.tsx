@@ -25,8 +25,8 @@ interface ParamType {
 
 export default function ProgramDetailsMolecule() {
   const { id } = useParams<ParamType>();
-  const { path, url } = useRouteMatch();
   const history = useHistory();
+  const { path, url } = useRouteMatch();
   const program = programStore.getProgramById(id).data?.data.data;
 
   const modules_per_program = programStore.getModulesByProgram(id).data?.data.data;
@@ -81,14 +81,13 @@ export default function ProgramDetailsMolecule() {
 
   return (
     <>
-      {' '}
       <TabNavigation tabs={tabs}>
         <Switch>
           <Route
             exact
             path={`${path}`}
             render={() => (
-              <div className="flex">
+              <div className="flex py-9">
                 <div className="mr-24">
                   {programData && (
                     <CommonCardMolecule data={programData}>
@@ -179,14 +178,12 @@ export default function ProgramDetailsMolecule() {
             path={`${path}/modules`}
             render={() => (
               <section className="flex flex-wrap justify-between">
-                {program_modules?.length <= 0 ? (
+                {program_modules.length <= 0 ? (
                   <NoDataAvailable
-                    buttonLabel="Add new module"
-                    title={'No modules available'}
+                    buttonLabel="Add new modules"
+                    title={'No Modules available in this program'}
                     handleClick={() => history.push(`/dashboard/modules/add`)}
-                    description={
-                      'And the web just isnt the same without you. Lets get you back online!'
-                    }
+                    description="And the web just isnt the same without you. Lets get you back online!"
                   />
                 ) : (
                   program_modules?.map((prog) => (

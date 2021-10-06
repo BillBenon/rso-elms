@@ -108,6 +108,7 @@ export default function RegistrationControl() {
             data={RegistrationControls}
             actions={controlActions}
             uniqueCol={'id'}
+            hide={['id']}
           />
         ) : (
           ''

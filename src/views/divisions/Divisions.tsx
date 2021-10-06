@@ -9,6 +9,8 @@ import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import Departments from '../../components/Organisms/divisions/Departments';
 import Faculties from '../../components/Organisms/divisions/Faculties';
 import NewDepartment from '../../components/Organisms/forms/divisions/NewDepartment';
+import { authenticatorStore } from '../../store';
+import ViewDepartmentsInFaculty from './ViewDepartmentsInFaculty';
 
 export default function Divisions() {
   const { url, path } = useRouteMatch();
@@ -68,6 +70,13 @@ export default function Divisions() {
         tabs={tabs}
         onTabChange={(event) => setFetchType(event.activeTabLabel)}>
         <Switch>
+          <Route
+            exact
+            path={`${path}/:id/view-departments`}
+            render={() => {
+              return <ViewDepartmentsInFaculty />;
+            }}
+          />
           <Route
             path={`${path}/departments`}
             render={() => {
