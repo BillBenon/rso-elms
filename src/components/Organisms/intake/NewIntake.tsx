@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { intakeStore } from '../../../store/intake.store';
 import programStore from '../../../store/program.store';
@@ -33,13 +33,11 @@ interface IProps {
 interface ParamType {
   id: string;
 }
-interface CProps {
-  handleSuccess: () => any;
-}
 
-export default function NewIntake(props: CProps) {
+export default function NewIntake() {
   const [currentStep, setCurrentStep] = useState(0);
   const { id } = useParams<ParamType>();
+  const history = useHistory();
 
   const [values, setValues] = useState<IntakeInfo>({
     id: '',
@@ -89,7 +87,7 @@ export default function NewIntake(props: CProps) {
         async onSuccess(data) {
           toast.success(data.data.message);
           await addProgramsToIntake(data.data.data.id.toString());
-          props.handleSuccess();
+          history.push(`/dashboard/registration-control/${id}`);
         },
         onError() {
           toast.error('error occurred please try again');
