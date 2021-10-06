@@ -1,4 +1,5 @@
 import React, { FormEvent, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -56,8 +57,12 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     if (onSubmit) onSubmit(e);
 
     await mutateAsync(details, {
-      onSuccess() {
-        history.push('/dashboard/academies');
+      onSuccess(data) {
+        toast.success(data.data.message);
+        history.goBack();
+      },
+      onError() {
+        toast.error('An error occurred please try again later');
       },
     });
   }

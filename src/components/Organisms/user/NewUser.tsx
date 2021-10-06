@@ -1,4 +1,5 @@
 import React, { FormEvent, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
 
 import academyStore from '../../../store/academy.store';
@@ -26,8 +27,12 @@ import RadioMolecule from '../../Molecules/input/RadioMolecule';
 
 export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
+  const { ADMIN, INSTRUCTOR, STUDENT } = UserType;
+  const newUserType = { ADMIN, INSTRUCTOR, STUDENT };
+
   const [details, setDetails] = useState<CreateUserInfo>({
     activation_key: '',
+    academy_id: '',
     birth_date: '',
     doc_type: DocType.NID,
     education_level: EducationLevel.ILLITERATE,
@@ -57,7 +62,6 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   });
 
   const [otherDetails, setOtherDetails] = useState({
-    academy: '',
     intake: '',
     level: '',
   });
@@ -85,8 +89,12 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     await mutateAsync(
       { ...details, birth_date: formatDateToYyMmDd(details.birth_date) },
       {
-        onSuccess() {
+        onSuccess(data) {
+          toast.success(data.data.message);
           history.goBack();
+        },
+        onError() {
+          toast.error('An error occurred when creating user, please try again later');
         },
       },
     );
@@ -96,11 +104,11 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     academyStore.fetchAcademies().data?.data.data;
 
   // get intakes based on selected academy
-  let intakes = intakeStore.getIntakesByAcademy(otherDetails.academy);
+  let intakes = intakeStore.getIntakesByAcademy(details.academy_id);
 
   useEffect(() => {
     intakes.refetch();
-  }, [otherDetails.academy]);
+  }, [details.academy_id]);
 
   // get programs based on selected intake
   let programs = intakeStore.getProgramsByIntake(otherDetails.intake);
@@ -129,10 +137,10 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
       </div>
       <form onSubmit={addUser}>
         <DropdownMolecule
-          defaultValue={getDropDownStatusOptions(UserType).find(
+          defaultValue={getDropDownStatusOptions(newUserType).find(
             (type) => type.label === details.user_type,
           )}
-          options={getDropDownStatusOptions(UserType)}
+          options={getDropDownStatusOptions(newUserType)}
           name="user_type"
           placeholder={'Select user type'}
           handleChange={handleChange}>
@@ -219,9 +227,9 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         </DropdownMolecule>
         <DropdownMolecule
           options={getDropDownOptions(academies)}
-          name="academy"
+          name="academy_id"
           placeholder={'Academy to be enrolled in'}
-          handleChange={otherhandleChange}>
+          handleChange={handleChange}>
           Academy
         </DropdownMolecule>
         {details.user_type === 'STUDENT' && (

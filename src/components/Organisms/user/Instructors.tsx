@@ -2,12 +2,13 @@ import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import { ValueType } from '../../../types';
+import { UserTypes } from '../../../views/users/Users';
 import Button from '../../Atoms/custom/Button';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
 
-export default function Instructors({ instructors }: { instructors: Object[] }) {
+export default function Instructors({ instructors }: { instructors: UserTypes[] }) {
   const history = useHistory();
   function handleSearch(_e: ValueType) {}
   const instructorActions = [
@@ -40,7 +41,12 @@ export default function Instructors({ instructors }: { instructors: Object[] }) 
               description="And the web just isnt the same without you. Lets get you back online!"
             />
           ) : (
-            <Table statusColumn="status" data={instructors} actions={instructorActions} />
+            <Table<UserTypes>
+              statusColumn="status"
+              data={instructors}
+              actions={instructorActions}
+              hide={['id', 'user_type']}
+            />
           )}
         </div>
       )}

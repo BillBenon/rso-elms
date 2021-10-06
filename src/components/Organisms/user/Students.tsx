@@ -3,12 +3,13 @@ import { useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { ValueType } from '../../../types';
+import { UserTypes } from '../../../views/users/Users';
 import Button from '../../Atoms/custom/Button';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
 
-export default function Students({ students }: { students: Object[] }) {
+export default function Students({ students }: { students: UserTypes[] }) {
   const { url } = useRouteMatch();
   const history = useHistory();
 
@@ -43,7 +44,12 @@ export default function Students({ students }: { students: Object[] }) {
               description="And the web just isnt the same without you. Lets get you back online!"
             />
           ) : (
-            <Table statusColumn="status" data={students} actions={studentActions} />
+            <Table<UserTypes>
+              statusColumn="status"
+              data={students}
+              actions={studentActions}
+              hide={['id', 'user_type']}
+            />
           )}
         </div>
       )}

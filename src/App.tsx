@@ -8,6 +8,7 @@ import Redirecting from './Redirecting';
 import RouterProtection from './RouterProtection';
 import Signin from './views/auth/Signin';
 import Signup from './views/auth/Signup';
+import Home from './views/Home';
 import NewInstitution from './views/insitution/NewInstitution';
 import NotFound from './views/NotFound';
 
@@ -17,6 +18,7 @@ const App = () => {
       <MainLayout>
         <Router>
           <Switch>
+            <Route exact path="/" component={Home} />
             <Route exact path="/redirecting" component={Redirecting} />
             <Route exact path="/institution" component={NewInstitution} />
             <Route exact path="/register" component={Signup} />
