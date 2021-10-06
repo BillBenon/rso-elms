@@ -60,13 +60,13 @@ export default function UpdateAcademicProgram<E>({
   }
 
   async function updateProgram<T>(e: FormEvent<T>) {
-    const toastId = toast.loading('Upading registration control');
+    const toastId = toast.loading('Upading program control');
 
     e.preventDefault();
     await mutateAsync(details, {
       onSuccess() {
         history.goBack();
-        toast.success('Rigistration Control updated', { id: toastId });
+        toast.success('program updated', { id: toastId });
       },
       onError(error) {
         toast.error(error + '', { id: toastId });

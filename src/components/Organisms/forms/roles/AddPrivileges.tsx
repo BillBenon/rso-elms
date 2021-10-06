@@ -27,16 +27,17 @@ export default function AddPrivileges({ onSubmit, roleName, roleId }: PropType) 
     setForm((old) => ({ ...old, [name]: (value as string[]).join(',') }));
   }
   function submitForm<T>(e: FormEvent<T>) {
+    const toastId = toast.loading('adding privileges to role');
+
     e.preventDefault();
+
     mutateAsync(form, {
       onSuccess: () => {
-        toast.success('Privileges Added', { duration: 3 });
+        toast.success('privilege added', { id: toastId });
         history.goBack();
       },
-      onError: () => {
-        toast.error('something wrong happened adding privileges on role', {
-          duration: 3,
-        });
+      onError: (error) => {
+        toast.error(error + '', { id: toastId });
       },
     });
     onSubmit(e);

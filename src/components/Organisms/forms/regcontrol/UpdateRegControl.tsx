@@ -49,14 +49,15 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
   }
 
   function submitForm<T>(e: FormEvent<T>) {
+    const toastId = toast.loading('updating registration control');
     e.preventDefault();
     mutateAsync(regControlUpdateInfo, {
       onSuccess: () => {
-        toast.success('Control updated', { duration: 3 });
+        toast.success('registration control updated', { id: toastId });
         history.goBack();
       },
-      onError: () => {
-        toast.error('something wrong happened while updating a control', { duration: 3 });
+      onError: (error) => {
+        toast.error(error + '', { id: toastId });
       },
     });
     if (onSubmit) onSubmit(e);
