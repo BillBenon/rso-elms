@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosError, AxiosRequestConfig } from 'axios';
 import toast from 'react-hot-toast';
 
 import { LoginRes, Response } from '../types';
@@ -28,7 +28,7 @@ const interceptAdminReq = (config: AxiosRequestConfig) => {
   return config;
 };
 
-const interceptAdminResError = (error: Error | AxiosError<AxiosResponse<Response>>) => {
+const interceptAdminResError = (error: Error | AxiosError<Response>) => {
   if (axios.isAxiosError(error)) {
     const e = error?.response;
 

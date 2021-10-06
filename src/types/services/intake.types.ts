@@ -29,12 +29,17 @@ export interface IntakeProgram {
   status: GenericStatus;
 }
 
-export interface IntakePrograms extends Table {
+export interface IntakeProgramsRes extends Table {
   description: string;
   intake: ExtendedIntakeInfo[];
   programs: IntakeProgram[];
 }
 
+export interface IntakePrograms extends Table {
+  description: string;
+  intake_id: string;
+  programs: IntakeProgram[];
+}
 // intake status enum
 export enum IntakeStatus {
   STARTED = 'STARTED',

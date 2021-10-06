@@ -87,7 +87,7 @@ export default function NewIntake(props: CProps) {
       await mutateAsync(data, {
         async onSuccess(data) {
           toast.success(data.data.message);
-          await addProgramsToIntake(data.data.data.id.toString());
+          // await addProgramsToIntake(data.data.data.id.toString());
           props.handleSuccess();
         },
         onError() {
@@ -97,36 +97,35 @@ export default function NewIntake(props: CProps) {
     }
   }
 
-  async function addProgramsToIntake(id: string) {
-    console.log(id);
-    let intakePrograms: IntakePrograms = {
-      description: '',
-      intak_id: id,
-      programs: [],
-    };
+  // async function addProgramsToIntake(id: string) {
+  //   let intakePrograms: IntakePrograms = {
+  //     description: '',
+  //     intak_id: id,
+  //     programs: [],
+  //   };
 
-    for (let i = 0; i < selectedPrograms.length; i++) {
-      const element: IntakeProgram = {
-        description: '',
-        intake_id: id,
-        intake_program_id: '',
-        program_id: selectedPrograms[i],
-        status: GenericStatus.ACTIVE,
-      };
-      intakePrograms.programs.push(element);
-    }
+  //   for (let i = 0; i < selectedPrograms.length; i++) {
+  //     const element: IntakeProgram = {
+  //       description: '',
+  //       intake_id: id,
+  //       intake_program_id: '',
+  //       program_id: selectedPrograms[i],
+  //       status: GenericStatus.ACTIVE,
+  //     };
+  //     intakePrograms.programs.push(element);
+  //   }
 
-    await addProgram.mutateAsync(intakePrograms, {
-      onSuccess(data) {
-        toast.success(data.data.message);
-        props.handleSuccess();
-      },
-      onError() {
-        toast.error('error occurred when adding programs');
-        props.handleSuccess();
-      },
-    });
-  }
+  //   await addProgram.mutateAsync(intakePrograms, {
+  //     onSuccess(data) {
+  //       toast.success(data.data.message);
+  //       props.handleSuccess();
+  //     },
+  //     onError() {
+  //       toast.error('error occurred when adding programs');
+  //       props.handleSuccess();
+  //     },
+  //   });
+  // }
 
   const stepperContent = {
     currentStep: currentStep,
@@ -212,14 +211,14 @@ function IntakeInfoComponent({
         handleChange={handleChange}>
         Total number of students
       </InputMolecule>
-      <DropdownMolecule
+      {/* <DropdownMolecule
         name="programs"
         placeholder="Program"
         handleChange={handlePrograms}
         isMulti
         options={getDropDownOptions(programs)}>
         Programs in this intake
-      </DropdownMolecule>
+      </DropdownMolecule> */}
       <div className="pt-3">
         <Button type="submit" onClick={() => handleNext}>
           Next
