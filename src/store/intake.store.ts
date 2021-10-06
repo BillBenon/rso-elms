@@ -12,7 +12,7 @@ class IntakeStore {
   getAll(registrationControlId?: string) {
     console.log(registrationControlId, 'invoked');
     if (registrationControlId)
-      return useQuery(['intakes/programs', registrationControlId], () =>
+      return useQuery(['intakes/registrationControl', registrationControlId], () =>
         intakeService.getIntakesPyRegistrationControl(registrationControlId),
       );
     else return useQuery('intakes', intakeService.fetchAll);

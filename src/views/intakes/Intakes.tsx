@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { Link, Route, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import Cacumber from '../../components/Molecules/Cacumber';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
@@ -31,15 +32,15 @@ export default function Intakes() {
   const { url } = useRouteMatch();
   const { search } = useLocation();
   const registrationControlId = new URLSearchParams(search).get('regId');
-  
 
-  const { data: regControl, refetch } = registrationControlStore.fetchRegControlById(
-    registrationControlId!,
-    false,
-  );
+  const {
+    data: regControl,
+    refetch,
+    isLoading: regLoading,
+    isSuccess: regSuccess,
+  } = registrationControlStore.fetchRegControlById(registrationControlId!, false);
 
-  
-  if (registrationControlId) refetch();
+  if (registrationControlId && !regSuccess && !regLoading) refetch();
 
   const { isSuccess, isError, data, isLoading } = intakeStore.getAll(
     registrationControlId!,
@@ -52,7 +53,7 @@ export default function Intakes() {
         let cardData: CommonCardDataType = {
           code: intake.code.toUpperCase(),
           description: intake.description,
-          title: intake.title || `Intake ${intake.expected_start_date}`,
+          title: intake.title || `------`,
           status: {
             type: advancedTypeChecker(intake.intake_status),
             text: intake.intake_status.toString(),
@@ -96,9 +97,10 @@ export default function Intakes() {
 
       <section className="flex flex-wrap justify-between mt-2">
         {intakes.map((intake, index) => (
-          <div key={intake.code} className="p-1 mt-3">
+          <div key={intake.code + Math.random() * 10} className="p-1 mt-3">
+            {console.log(data?.data.data)}
             <Tooltip
-              key={intake.code}
+              key={intake.code + Math.random() * 10}
               trigger={
                 <div className="p-1 mt-3">
                   <CommonCardMolecule data={intake} />
@@ -125,7 +127,12 @@ export default function Intakes() {
                   </Link>
                 </div>
                 <div className="mt-4 space-x-4">
-                  <Link to={`${url}/${data?.data.data[index].id}/edit`}>
+                  <Link
+                    to={
+                      !registrationControlId
+                        ? `${url}/${data?.data.data[index].id}/edit`
+                        : `${url}/${data?.data.data[index].id}/edit?regId=${registrationControlId}`
+                    }>
                     <Button>Edit Intake</Button>
                   </Link>
                   <Button styleType="outline">Change Status</Button>
@@ -134,6 +141,8 @@ export default function Intakes() {
             </Tooltip>
           </div>
         ))}
+
+        {isLoading && <Loader />}
 
         {!isLoading && intakes.length <= 0 && (
           <NoDataAvailable
@@ -162,6 +171,19 @@ export default function Intakes() {
         render={() => {
           return (
             <PopupMolecule title="New intake" open onClose={handleClose}>
+              <NewIntake handleSuccess={handleClose} />
+            </PopupMolecule>
+          );
+        }}
+      />
+
+      {/* edit intake to reg control */}
+      <Route
+        exact
+        path={`${url}/:id/edit`}
+        render={() => {
+          return (
+            <PopupMolecule title="Update intake" open onClose={handleClose}>
               <NewIntake handleSuccess={handleClose} />
             </PopupMolecule>
           );

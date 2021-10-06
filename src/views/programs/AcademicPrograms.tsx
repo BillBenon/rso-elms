@@ -101,12 +101,16 @@ export default function AcademicProgram() {
       </section>
       <section>
         <TableHeader
-          totalItems={programs.length}
-          title={`${intakeId ? '' : 'Programs'}`}
+          totalItems={intakeId ? `${programs.length} programs` : programs.length}
+          title={`${intakeId ? intake.data?.data.data.title : 'Programs'}`}
           showSearch={false}>
-          <Link to={`${url}/add`}>
-            <Button>Add Program</Button>
-          </Link>
+          {intakeId ? (
+            ''
+          ) : (
+            <Link to={`${url}/add`}>
+              <Button>Add Program</Button>
+            </Link>
+          )}
         </TableHeader>
       </section>
 
