@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useHistory } from 'react-router-dom';
 
 import usersStore from '../../../../../store/users.store';
-import { ValueType } from '../../../../../types';
+import { CommonFormProps, ValueType } from '../../../../../types';
 import { DocType } from '../../../../../types/services/user.types';
 import { getDropDownStatusOptions } from '../../../../../utils/getOption';
 import Button from '../../../../Atoms/custom/Button';
@@ -12,7 +12,7 @@ import Heading from '../../../../Atoms/Text/Heading';
 import DropdownMolecule from '../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../Molecules/input/InputMolecule';
 
-function SignInWithSearch() {
+function SignInWithSearch<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
   const [details, setDetails] = useState({
     searchBy: '',
@@ -29,7 +29,8 @@ function SignInWithSearch() {
   // get user by inputed reference number
   let user = usersStore.getUserAccountsByNid(details.searchInput);
 
-  const filter = () => {
+  function filter<T>(e: FormEvent<T>) {
+    e.preventDefault();
     let foundUser = user.data?.data.data[0];
     if (foundUser) {
       toast.success("You're already registered!", { duration: 1200 });
@@ -39,7 +40,8 @@ function SignInWithSearch() {
     } else {
       toast.error("You're not yet registered!", { duration: 1200 });
     }
-  };
+    if (onSubmit) onSubmit(e);
+  }
 
   return (
     <div className="py-32">
@@ -54,26 +56,27 @@ function SignInWithSearch() {
         Enter your reference number to find out if you&apos;re already registered
       </Heading>
 
-      <div className="flex gap-2 items-center py-6">
-        <DropdownMolecule
-          width="36"
-          placeholder="Search by"
-          handleChange={handleChange}
-          name="searchBy"
-          defaultValue={getDropDownStatusOptions(DocType).find(
-            (nid) => nid.value === DocType.NID,
-          )}
-          options={getDropDownStatusOptions(DocType)}
-        />
-        <InputMolecule
-          name="searchInput"
-          value={details.searchInput}
-          handleChange={handleChange}>
-          <></>
-        </InputMolecule>
-      </div>
-      <Button onClick={filter}>Search</Button>
-
+      <form onSubmit={filter}>
+        <div className="flex gap-2 items-center py-6">
+          <DropdownMolecule
+            width="36"
+            placeholder="Search by"
+            handleChange={handleChange}
+            name="searchBy"
+            defaultValue={getDropDownStatusOptions(DocType).find(
+              (nid) => nid.value === DocType.NID,
+            )}
+            options={getDropDownStatusOptions(DocType)}
+          />
+          <InputMolecule
+            name="searchInput"
+            value={details.searchInput}
+            handleChange={(e) => handleChange(e)}>
+            <></>
+          </InputMolecule>
+        </div>
+        <Button type="submit">Search</Button>
+      </form>
       <div className="text-txt-secondary py-2">
         <p className="text-base text-txt-secondary">
           Already have an account?

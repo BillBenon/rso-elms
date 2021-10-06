@@ -69,7 +69,10 @@ export default function Users() {
   if (isSuccess && users) {
     students = users.filter((user) => user.user_type == UserType.STUDENT);
     instructors = users.filter((user) => user.user_type == UserType.INSTRUCTOR);
-    admins = users.filter((user) => user.user_type == UserType.ADMIN);
+    admins = users.filter(
+      (user) =>
+        user.user_type == UserType.ADMIN || user.user_type == UserType.SUPER_ADMIN,
+    );
   }
 
   const tabs = [
