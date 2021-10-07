@@ -14,7 +14,7 @@ class UserService {
     return await adminstrationAxios.get('/users/getUsers');
   }
   public async getUserByid(id: string): Promise<AxiosResponse<Response<UserInfo>>> {
-    return await adminstrationAxios.get(`/public/getUserById/${id}`);
+    return await adminstrationAxios.get(`/users/getUserById/${id}`);
   }
   public async getUserAccountByNid(
     nid: string,
