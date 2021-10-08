@@ -69,19 +69,19 @@ export default function Departments({ fetchType }: IDepartment) {
     {
       name: 'Edit Department',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit role
+        history.push(`${path}/${id}/edit`); // go to edit dep
       },
     },
     {
       name: 'Add Program',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/add`); // go to edit role
+        history.push(`${path}/${id}/add`); // go to add prog
       },
     },
     {
       name: 'View Programs',
       handleAction: (id: string | number | undefined) => {
-        history.push({ pathname: `/dashboard/programs/`, search: `?query=${id}` }); // go to edit role
+        history.push({ pathname: `/dashboard/programs/`, search: `?query=${id}` });
       },
     },
   ];
