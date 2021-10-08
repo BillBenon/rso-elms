@@ -18,7 +18,6 @@ import {
   MaritalStatus,
   UserType,
 } from '../../../types/services/user.types';
-import { formatDateToYyMmDd } from '../../../utils/date-helper';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';
 import Heading from '../../Atoms/Text/Heading';
@@ -88,18 +87,15 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
 
     if (onSubmit) onSubmit(e);
 
-    await mutateAsync(
-      { ...details, birth_date: formatDateToYyMmDd(details.birth_date) },
-      {
-        onSuccess(data) {
-          toast.success(data.data.message);
-          history.goBack();
-        },
-        onError() {
-          toast.error('An error occurred when creating user, please try again later');
-        },
+    await mutateAsync(details, {
+      onSuccess(data) {
+        toast.success(data.data.message);
+        history.goBack();
       },
-    );
+      onError() {
+        toast.error('An error occurred when creating user, please try again later');
+      },
+    });
   }
   // get all academies in an institution
   const academies: AcademyInfo[] | undefined =

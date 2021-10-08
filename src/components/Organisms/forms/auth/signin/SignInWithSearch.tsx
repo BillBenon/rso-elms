@@ -35,7 +35,7 @@ function SignInWithSearch<E>({ onSubmit }: CommonFormProps<E>) {
     if (foundUser) {
       toast.success("You're already registered!", { duration: 1200 });
       setTimeout(() => {
-        history.push({ pathname: '/register', state: { detail: foundUser } });
+        history.push({ pathname: '/complete-profile', state: { detail: foundUser } });
       }, 900);
     } else {
       toast.error("You're not yet registered!", { duration: 1200 });
