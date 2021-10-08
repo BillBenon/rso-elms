@@ -22,6 +22,7 @@ const interceptAdminReq = (config: AxiosRequestConfig) => {
   if (!openRequests.find((link) => link === config.url)) {
     if (token) {
       const jwtInfo: LoginRes = JSON.parse(token);
+      // @ts-ignore
       config.headers['Authorization'] = `Bearer ${jwtInfo.token}`;
     }
   }
@@ -36,8 +37,11 @@ const interceptAdminResError = (error: Error | AxiosError<AxiosResponse<Response
       window.location.href = '/login';
     }
 
-    if (e?.status === 400) toast.error(`Bad Request on, ${e.config.url}`);
-    else toast.error((e?.data.data.message || e?.data?.data?.error) + '');
+    if (import.meta.env.DEV) {
+      if (e?.status === 400) toast.error(`Bad Request on, ${e.config.url}`);
+      // @ts-ignore
+      else toast.error((e?.data.message || e?.data?.data?.error) + '');
+    }
 
     // unauthorized
     throw error;

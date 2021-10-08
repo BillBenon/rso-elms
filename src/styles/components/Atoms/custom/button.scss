@@ -4,4 +4,9 @@ button{
     &.with-width{
         min-width:6.25rem;
     }
+
+    &:disabled{
+        opacity: 0.5;
+        cursor:wait;
+    }
 }

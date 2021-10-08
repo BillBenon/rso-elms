@@ -36,10 +36,8 @@ export default function Sidebar() {
       },
     ];
 
-    if (authUser?.user_type == 'SUPER_ADMIN' || import.meta.env.DEV)
-      routes.push(...institutionAdminLinks);
-    if (authUser?.user_type == 'ADMIN' || import.meta.env.DEV)
-      routes.push(...academicAdminLinks);
+    if (authUser?.user_type == 'SUPER_ADMIN') routes.push(...institutionAdminLinks);
+    if (authUser?.user_type == 'ADMIN') routes.push(...academicAdminLinks);
 
     return routes;
   };

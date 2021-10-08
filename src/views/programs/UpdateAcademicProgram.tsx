@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { FormEvent, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -64,12 +65,17 @@ export default function UpdateAcademicProgram<E>({
   }
 
   async function updateProgram<T>(e: FormEvent<T>) {
+    const toastId = toast.loading('Upading program control');
+
     e.preventDefault();
     await mutateAsync(details, {
       onSuccess() {
         history.goBack();
+        toast.success('program updated', { id: toastId });
       },
-      onError() {},
+      onError(error) {
+        toast.error(error + '', { id: toastId });
+      },
     });
     if (onSubmit) onSubmit(e);
   }
