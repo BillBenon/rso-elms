@@ -34,7 +34,7 @@ let filteredLevelFlows: FilteredLevels[];
 export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E>) {
   const history = useHistory();
   const { id } = useParams<ParamType>();
-  const [progId, setProgId] = useState<string>();
+  const [progId, setProgId] = useState<string>('');
 
   const [levels, setLevels] = useState<FilteredLevels[]>();
 
@@ -62,10 +62,15 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
     isProgramCreated: false,
   });
 
+  useEffect(() => {
+    setLevelFlows((flows) => ({ ...flows, program_id: progId }));
+  }, [progId]);
+
   const [levelFlows, setLevelFlows] = useState<CreateAcademicProgramLevel>({
     endg_flow: 0,
     id: '',
-    program_id: '12e6dcb2-776a-489b-a068-3f1f90dd9890',
+    // program_id: '12e6dcb2-776a-489b-a068-3f1f90dd9890',
+    program_id: progId,
     starting_flow: 0,
   });
 
