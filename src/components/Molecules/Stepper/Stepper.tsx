@@ -51,17 +51,8 @@ const Stepper = ({
   return (
     <div className="stepper-wrapper">
       <div className={`${isVertical ? 'flex' : 'block'}`}>
-        {/* <StepperHead
-          currentStep={currentStep}
-          navigateToStepHandler={navigateToStepHandler}
-          isVertical={isVertical}
-          isInline={isInline}
-          width={width}>
-          {children}
-        </StepperHead> */}
         <StepHeader />
         <div className={isVertical ? 'md:pl-12 w-full' : 'py-6 w-full'}>
-          {/* {stepperContent.content[stepperContent.currentStep].content} */}
           {children[currentStep]}
         </div>
       </div>

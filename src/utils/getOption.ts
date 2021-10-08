@@ -57,17 +57,3 @@ export const getInchargeDropdown = (users?: any[]): SelectData[] => {
 
   return options;
 };
-
-export function getDropDownOptionsWithObject(
-  inputs: any[],
-  labelName: { name: string },
-): SelectData[] {
-  let options: SelectData[] = [];
-  inputs.map((input) => {
-    options.push({
-      label: labelName.name,
-      value: input.id.toString(),
-    });
-  });
-  return options;
-}

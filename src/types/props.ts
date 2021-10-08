@@ -1,6 +1,6 @@
 import { AllHTMLAttributes, DOMAttributes, FormEvent } from 'react';
 
-import { Page, SelectData, ValueType } from '.';
+import { SelectData, ValueType } from '.';
 
 export interface CommonProps<T> extends AllHTMLAttributes<DOMAttributes<T>> {}
 
@@ -25,8 +25,8 @@ export interface commonInputProps {
 }
 
 export interface CommonStepProps {
-  details: any;
-  handleChange: (_e: ValueType, _page: Page) => void;
+  fetched_id: string | number;
+  display_label: string;
   prevStep?: () => void;
   nextStep: (_isComplete: boolean) => void;
   isVertical?: boolean;

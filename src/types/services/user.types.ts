@@ -35,16 +35,19 @@ export interface PersonInfo extends Table {
   marital_status: MaritalStatus;
   sex: GenderStatus;
   place_of_birth: string;
+  emp_no: string;
   ///////////////////
   nationality: string;
   spouse_name: string;
   place_of_birth_description: string;
   blood_group: string;
   religion: string;
+  place_of_issue: string;
+  date_of_issue: string;
   place_of_residence: string;
   residence_location_id: number;
   languages: string;
-  current_rank: string;
+  current_rank_id: string;
   other_rank: string;
   rank_depart: string;
   date_of_commission: string;
@@ -54,7 +57,7 @@ export interface PersonInfo extends Table {
   document_expire_on: string;
 }
 
-interface ExperienceInfo {
+export interface ExperienceInfo {
   attachment_id: string;
   description: string;
   end_date: string;
@@ -65,6 +68,50 @@ interface ExperienceInfo {
   proof: string;
   start_date: string;
   type: ExperienceTypeStatus;
+}
+
+export interface UpdateUserInfo {
+  academic_program_level_id: string,
+  academy_id: string,
+  activation_key: string,
+  birth_date: string,
+  blood_group: string,
+  current_rank_id: string,
+  date_of_commission: string,
+  date_of_issue: string,
+  date_of_last_promotion: string,
+  doc_type: DocType,
+  document_expire_on: string,
+  education_level: EducationLevel,
+  email: string,
+  emp_no: string,
+  father_names: string,
+  first_name: string,
+  id: string,
+  intake_program_id: string,
+  last_name: string,
+  marital_status: MaritalStatus,
+  mother_names: string,
+  next_of_keen_proculation_reason: string,
+  nid: string,
+  other_rank: string,
+  password: string,
+  password_reset_period_in_days: 0,
+  person_id: string,
+  phone: string,
+  place_of_birth: string,
+  place_of_birth_description: string,
+  place_of_issue: string,
+  place_of_residence: string,
+  profile_status: ProfileStatus,
+  rank_depart: string,
+  relationship_with_next_of_ken: string,
+  reset_date: string,
+  residence_location_id: 0,
+  sex: GenderStatus,
+  spouse_name: string,
+  user_type: UserType,
+  username: string
 }
 
 export interface CreateUserInfo {
@@ -97,9 +144,62 @@ export interface CreateUserInfo {
   username: string;
 }
 
+export interface PersonDetail
+  extends Pick<
+    PersonInfo,
+    | 'first_name'
+    | 'last_name'
+    | 'phone_number'
+    | 'sex'
+    | 'place_of_birth'
+    | 'place_of_birth_description'
+    | 'birth_date'
+    | 'religion'
+    | 'blood_group'
+  > {}
+
+export interface FamilyDetail
+  extends Pick<
+    PersonInfo,
+    'father_names' | 'mother_names' | 'marital_status' | 'spouse_name'
+  > {}
+
+export interface NationalDocument
+  extends Pick<
+    PersonInfo,
+    | 'nationality'
+    | 'doc_type'
+    | 'nid'
+    | 'residence_location_id'
+    | 'place_of_issue'
+    | 'date_of_issue'
+    | 'place_of_residence'
+    | 'document_expire_on'
+  > {}
+
+export interface EmploymentDetail
+  extends Pick<
+    PersonInfo,
+    | 'emp_no'
+    | 'current_rank_id'
+    | 'other_rank'
+    | 'rank_depart'
+    | 'date_of_commission'
+    | 'date_of_last_promotion'
+  > {}
+
+export interface AccountDetail
+  extends Pick<UserInfo, 'username' | 'email' | 'pin' | 'password'> {
+  confirm_password: string;
+}
+
 export enum GenderStatus {
   MALE = 'MALE',
   FEMALE = 'FEMALE',
+}
+export enum ProfileStatus {
+  COMPLETD = 'COMPLETD',
+  INCOMPLETE = 'INCOMPLETE',
 }
 
 export enum ExperienceTypeStatus {
@@ -116,7 +216,6 @@ export enum MaritalStatus {
   SINGLE = 'SINGLE',
   DIVORCED = 'DIVORCED',
   WIDOWED = 'WIDOWED',
-  OTHER = 'OTHER',
 }
 
 export enum EducationLevel {
@@ -136,6 +235,17 @@ export enum DocType {
   NISS_CARD = 'NISS_CARD',
   RCS_CARD = 'RCS_CARD',
   OTHER = 'OTHER',
+}
+
+export enum BloodGroup {
+  'A+' = 'A+',
+  'A-' = 'A-',
+  'B+' = 'B+',
+  'B-' = 'B-',
+  'AB+' = 'AB+',
+  'AB-' = 'AB-',
+  'O+' = 'O+',
+  'O-' = 'O-',
 }
 
 export enum UserType {

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Page, ValueType } from '../../../../../../types';
-import SignupHeader from '../../../../../Molecules/SignupHeader';
+import SignupHeader from '../../../../../Molecules/CompleteProfileHeader';
 import Stepper, { StepperProp } from '../../../../../Molecules/Stepper/Stepper';
 import EducationDetails from './EducationDetails';
 import ExperienceDetails from './ExperienceDetails';
@@ -90,7 +90,7 @@ function ExperienceInfo() {
   const saveInfo = (isComplete?: boolean) => {
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
     // save contact info
-    history.push('/register/more');
+    history.push('/complete-profile/more');
   };
 
   const prevStep = () => {

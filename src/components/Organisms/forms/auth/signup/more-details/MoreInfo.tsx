@@ -2,9 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { Page, ValueType } from '../../../../../../types';
-import SignupHeader from '../../../../../Molecules/SignupHeader';
+import CompleteProfileHeader from '../../../../../Molecules/CompleteProfileHeader';
 import Stepper, { StepperProp } from '../../../../../Molecules/Stepper/Stepper';
-import AccountDetails from './AccountDetails';
+import AccountDetails from '../personal/AccountDetails';
 import KinAddressDetails from './KinAddressDetails';
 import NextOfKinDetails from './NextOfKinDetails';
 
@@ -125,7 +125,7 @@ function MoreInfo() {
 
   return (
     <div className="bg-main p-8 md:px-20 md:py-14">
-      <SignupHeader />
+      <CompleteProfileHeader />
       <Stepper
         stepperContent={stepperContent}
         isVertical
