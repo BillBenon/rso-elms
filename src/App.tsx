@@ -6,8 +6,8 @@ import MoreInfo from './components/Organisms/forms/auth/signup/more-details/More
 import { MainLayout } from './layout/MainLayout';
 import Redirecting from './Redirecting';
 import RouterProtection from './RouterProtection';
+import CompleteProfile from './views/auth/CompleteProfile';
 import Signin from './views/auth/Signin';
-import Signup from './views/auth/Signup';
 import Home from './views/Home';
 import NotFound from './views/NotFound';
 
@@ -19,9 +19,9 @@ const App = () => {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/redirecting" component={Redirecting} />
-            <Route exact path="/register" component={Signup} />
-            <Route exact path="/register/experience" component={ExperienceInfo} />
-            <Route exact path="/register/more" component={MoreInfo} />
+            <Route exact path="/complete-profile" component={CompleteProfile} />
+            <Route exact path="/complete-profile/experience" component={ExperienceInfo} />
+            <Route exact path="/complete-profile/more" component={MoreInfo} />
             <Route path="/login" component={Signin} />
             <Redirect exact from="/" to="/login" />
             <RouterProtection />
