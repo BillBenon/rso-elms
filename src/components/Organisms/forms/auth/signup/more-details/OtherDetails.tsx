@@ -1,109 +1,98 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useHistory } from 'react-router';
 
-import { CommonStepProps, ValueType } from '../../../../../../types';
+import { ValueType } from '../../../../../../types';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
+import CheckboxMolecule from '../../../../../Molecules/input/CheckboxMolecule';
 import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
 import TextAreaMolecule from '../../../../../Molecules/input/TextAreaMolecule';
 
-function OtherDetails({
-  details,
-  handleChange,
-  prevStep,
-  nextStep,
-  isVertical,
-}: CommonStepProps) {
-  const moveBack = () => {
-    prevStep && prevStep();
+function OtherDetails(props: any) {
+  const history = useHistory();
+  const [otherDetails, setOtherDetails] = useState({
+    hobbies: '',
+    chronic_disease: '',
+    chronic_disease_description: '',
+    languages: '',
+  });
+  //store for hobbies, store for chronic disease
+
+  const handleChange = (e: ValueType) => {
+    setOtherDetails({ ...otherDetails, [e.name]: e.value });
   };
 
-  const moveForward = () => {
-    nextStep(true);
-  };
+  async function saveInfo() {
+    if (otherDetails) {
+      // await mutateAsync(
+      //   { ...otherDetails, profile_status: ProfileStatus.COMPLETD },
+      //   {
+      //     onSuccess() {
+      //       let personInfo = props.location.state.detail;
+      //       toast.success('profile successfully completed', {
+      //         duration: 1200,
+      //       });
+      //       setTimeout(() => {
+      //         history.push({
+      //           pathname: '/login',
+      //           state: { detail: personInfo },
+      //         });
+      //       }, 900);
+      //     },
+      //     onError() {
+      //       toast.error('An error occurred please try again later');
+      //     },
+      //   },
+      // );
+      history.push('/login');
+    }
+  }
 
   return (
     <>
-      <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
-        {!isVertical && <Heading fontWeight="semibold">Other Details</Heading>}
-        <DropdownMolecule
-          isMulti
-          name="hobbies"
-          defaultValue={details.hobbies}
-          handleChange={(e: ValueType) => handleChange(e, 'otherDetails')}
-          options={[
-            { value: 'football', label: 'football' },
-            { value: 'swimming', label: 'swimming' },
-            { value: 'volleyball', label: 'volleyball' },
-            { value: 'basketball', label: 'basketball' },
-            { value: 'singing', label: 'singing' },
-            { value: 'dancing', label: 'dancing' },
-            { value: 'readingbooks', label: 'reading books' },
-          ]}>
-          Hobbies
-        </DropdownMolecule>
-        <DropdownMolecule
-          isMulti
-          placeholder="Select chronic diseases u have"
-          name="chronicDiseases"
-          defaultValue={details.chronicDiseases}
-          handleChange={(e: ValueType) => handleChange(e, 'otherDetails')}
-          options={[
-            { value: 'asthma', label: 'Asthma' },
-            { value: 'ulcers', label: 'Ulcers' },
-            { value: 'diabetes', label: 'Diabetes' },
-            { value: 'sinusitus', label: 'Sinusitus' },
-          ]}>
-          Chronic diseases
-        </DropdownMolecule>
-        <TextAreaMolecule
-          name="diseaseDescription"
-          value={details.diseaseDescription}
-          handleChange={(e) => handleChange(e, 'otherDetails')}
-          placeholder="Describe your chronic disease">
-          Chronic disease description
-        </TextAreaMolecule>
-        <DropdownMolecule
-          // width="28"
-          placeholder="Select blood group"
-          name="bloodGroup"
-          defaultValue={details.bloodGroup}
-          handleChange={handleChange}
-          options={[
-            { value: 'rw', label: 'Rwanda' },
-            { value: 'ug', label: 'Uganda' },
-            { value: 'tz', label: 'Tanzania' },
-            { value: 'brd', label: 'Burundi' },
-            { value: 'can', label: 'Canada' },
-            { value: 'us', label: 'USA' },
-          ]}>
-          Blood Group
-        </DropdownMolecule>
-        <DropdownMolecule
-          width="60 md:w-80"
-          name="religion"
-          defaultValue={details.religion}
-          handleChange={(e: ValueType) => handleChange(e, 'personalDetails')}
-          options={[
-            { value: 'rw', label: 'Rwanda' },
-            { value: 'ug', label: 'Uganda' },
-            { value: 'tz', label: 'Tanzania' },
-            { value: 'brd', label: 'Burundi' },
-            { value: 'can', label: 'Canada' },
-            { value: 'us', label: 'USA' },
-          ]}>
-          Religion
-        </DropdownMolecule>
-        <div className="flex w-80 justify-between">
-          {prevStep && (
-            <Button
-              styleType="text"
-              hoverStyle="no-underline"
-              color="txt-secondary"
-              onClick={() => moveBack()}>
-              Back
-            </Button>
-          )}
-          <Button onClick={() => moveForward()}>Next</Button>
+      <Heading fontSize="2xl" fontWeight="semibold" className="pt-20 text-center">
+        Other Details
+      </Heading>
+      <div className="grid lg:grid-cols-2 grid-cols-1 w-full mx-auto md:px-80 py-20">
+        <div className="flex flex-col gap-4">
+          <DropdownMolecule
+            isMulti
+            name="hobbies"
+            defaultValue={otherDetails.hobbies}
+            handleChange={handleChange}
+            options={[]}>
+            Hobbies
+          </DropdownMolecule>
+          <CheckboxMolecule
+            placeholder="Languages"
+            handleChange={handleChange}
+            name="languages"
+            options={[
+              { label: 'Kinyarwanda', value: 'kiny' },
+              { label: 'English', value: 'en' },
+            ]}
+          />
+        </div>
+        <div className="md:px-5 px-3">
+          <DropdownMolecule
+            isMulti
+            placeholder="Select chronic diseases u have"
+            name="chronic_disease"
+            defaultValue={otherDetails.chronic_disease}
+            handleChange={handleChange}
+            options={[]}>
+            Chronic diseases
+          </DropdownMolecule>
+          <TextAreaMolecule
+            name="chronic_disease_description"
+            value={otherDetails.chronic_disease_description}
+            handleChange={handleChange}
+            placeholder="Describe your chronic disease">
+            Chronic disease description
+          </TextAreaMolecule>
+          <div className="flex w-80 justify-between">
+            <Button onClick={() => saveInfo()}>Complete</Button>
+          </div>
         </div>
       </div>
     </>

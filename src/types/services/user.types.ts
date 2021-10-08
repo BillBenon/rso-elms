@@ -1,9 +1,7 @@
 import { GenericStatus } from '..';
 /* eslint-disable no-unused-vars */
 import { Table } from '..';
-import { ExperienceType } from './../index';
 import { AcademyInfo } from './academy.types';
-import { InstitutionInfo } from './institution.types';
 import { ILevel } from './levels.types';
 
 export interface UserInfo extends CreateUserInfo, Table {
@@ -22,6 +20,7 @@ export interface UserInfo extends CreateUserInfo, Table {
   status: GenericStatus;
   login_try: number;
   enabled: boolean;
+  profile_status: ProfileStatus;
   authorities: [];
 }
 export interface PersonInfo extends Table {
@@ -46,7 +45,6 @@ export interface PersonInfo extends Table {
   date_of_issue: string;
   place_of_residence: string;
   residence_location_id: number;
-  languages: string;
   current_rank_id: string;
   other_rank: string;
   rank_depart: string;
@@ -55,19 +53,6 @@ export interface PersonInfo extends Table {
   ///////////////////
   nid: string;
   document_expire_on: string;
-}
-
-export interface ExperienceInfo {
-  attachment_id: string;
-  description: string;
-  end_date: string;
-  level: string;
-  location: string;
-  occupation: string;
-  person_id: string;
-  proof: string;
-  start_date: string;
-  type: ExperienceTypeStatus;
 }
 
 export interface UpdateUserInfo {
@@ -200,15 +185,6 @@ export enum GenderStatus {
 export enum ProfileStatus {
   COMPLETD = 'COMPLETD',
   INCOMPLETE = 'INCOMPLETE',
-}
-
-export enum ExperienceTypeStatus {
-  GENERAL_EDUCATION,
-  CURRIER_COURSE_EDUCATION,
-  EMPLOYMENT,
-  INTERNATIONAL_CERTIFICATION,
-  INTERNATIONAL_MISSION,
-  TRAINING,
 }
 
 export enum MaritalStatus {

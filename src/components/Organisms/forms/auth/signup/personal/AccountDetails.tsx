@@ -105,7 +105,7 @@ function AccountDetails<E>({
               Back
             </Button>
           )}
-          <Button type="submit">Complete</Button>
+          <Button type="submit">Save</Button>
         </div>
       </form>
     </div>

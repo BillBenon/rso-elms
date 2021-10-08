@@ -140,12 +140,6 @@ function NationalDocuments<E>({
             width="60 md:w-80">
             Document expiry date
           </DateMolecule>
-          {/* <CheckboxMolecule
-            placeholder="Languages"
-            handleChange={handleChange}
-            name="languages"
-            options={[]}
-          /> */}
         </div>
         <div className="flex w-80 justify-between">
           {prevStep && (

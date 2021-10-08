@@ -25,10 +25,14 @@ function CompleteProfile(props: any) {
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
     if (personalInfo) {
       await mutateAsync(personalInfo, {
-        onSuccess() {
+        onSuccess(data) {
+          let personInfo = data.data.data;
           toast.success('personal information successfully updated', { duration: 1200 });
           setTimeout(() => {
-            history.push('/complete-profile/experience');
+            history.push({
+              pathname: '/complete-profile/experience',
+              state: { detail: personInfo },
+            });
           }, 900);
         },
         onError() {

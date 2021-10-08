@@ -5,7 +5,7 @@ import { Link, useHistory } from 'react-router-dom';
 
 import usersStore from '../../../../../store/users.store';
 import { CommonFormProps, ValueType } from '../../../../../types';
-import { DocType } from '../../../../../types/services/user.types';
+import { DocType, ProfileStatus } from '../../../../../types/services/user.types';
 import { getDropDownStatusOptions } from '../../../../../utils/getOption';
 import Button from '../../../../Atoms/custom/Button';
 import Heading from '../../../../Atoms/Text/Heading';
@@ -32,11 +32,22 @@ function SignInWithSearch<E>({ onSubmit }: CommonFormProps<E>) {
   function filter<T>(e: FormEvent<T>) {
     e.preventDefault();
     let foundUser = user.data?.data.data[0];
+    let isProfileComplete = foundUser?.profile_status === ProfileStatus.COMPLETD;
     if (foundUser) {
-      toast.success("You're already registered!", { duration: 1200 });
-      setTimeout(() => {
-        history.push({ pathname: '/complete-profile', state: { detail: foundUser } });
-      }, 900);
+      if (isProfileComplete) {
+        toast.success(
+          "You've already registered and completed your profile, Please continue to login!",
+          { duration: 1200 },
+        );
+        setTimeout(() => {
+          history.push('/login');
+        }, 900);
+      } else {
+        toast.success("You're already registered!", { duration: 1200 });
+        setTimeout(() => {
+          history.push({ pathname: '/complete-profile', state: { detail: foundUser } });
+        }, 900);
+      }
     } else {
       toast.error("You're not yet registered!", { duration: 1200 });
     }
