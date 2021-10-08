@@ -53,7 +53,7 @@ export default function NewSubjectForm() {
         handleChange={handleChange}
         name={'module_id'}
         placeholder="Select module"
-        options={getDropDownOptions(modules)}>
+        options={getDropDownOptions({ inputs: modules || [] })}>
         Module
       </DropdownMolecule>
       <InputMolecule

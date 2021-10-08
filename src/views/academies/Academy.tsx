@@ -96,7 +96,6 @@ export default function Academy() {
                     actions={academyActions}
                     hide={['id']}
                     uniqueCol="id"
-                    hide={['id']}
                   />
                 )}
               </div>

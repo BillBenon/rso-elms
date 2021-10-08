@@ -226,7 +226,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           Education level
         </DropdownMolecule>
         <DropdownMolecule
-          options={getDropDownOptions(academies)}
+          options={getDropDownOptions({ inputs: academies || [] })}
           name="academy_id"
           placeholder={'Academy to be enrolled in'}
           handleChange={handleChange}>
@@ -235,31 +235,33 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         {details.user_type === 'STUDENT' && (
           <>
             <DropdownMolecule
-              options={getDropDownOptions(intakes.data?.data.data, 'code')}
+              options={getDropDownOptions({
+                inputs: intakes.data?.data.data || [],
+                labelName: 'code',
+              })}
               name="intake"
               placeholder={'intake to be enrolled in'}
               handleChange={otherhandleChange}>
               Intake
             </DropdownMolecule>
             <DropdownMolecule
-              options={getDropDownOptions(
-                programs.data?.data.data,
-                'name',
+              options={getDropDownOptions({
+                inputs: programs.data?.data.data || [],
+                labelName: 'name',
                 //@ts-ignore
-                (program) => program.program.name,
-              )}
+                getDropDownOptions: (program) => program.program.name,
+              })}
               name="intake_program_id"
               placeholder={'Program to be enrolled in'}
               handleChange={handleChange}>
               Programs
             </DropdownMolecule>
             <DropdownMolecule
-              options={getDropDownOptions(
-                levels.data?.data.data,
-                'name',
-                //@ts-ignore
-                (level) => level.level && level.level.name,
-              )}
+              options={getDropDownOptions({
+                inputs: levels.data?.data.data || [],
+                labelName: 'name', //@ts-ignore
+                getOptionLabel: (level) => level.level && level.level.name,
+              })}
               name="academic_program_level_id"
               placeholder={'Program to be enrolled in'}
               handleChange={handleChange}>

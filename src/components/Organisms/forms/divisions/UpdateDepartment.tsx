@@ -92,7 +92,7 @@ export default function UpdateDepartment({ onSubmit }: IDivisionsAcademyType) {
       <DropdownMolecule
         width="82"
         placeholder="Select faculty"
-        options={getDropDownOptions(departments)}
+        options={getDropDownOptions({ inputs: departments || [] })}
         name="parent_id"
         handleChange={handleChange}>
         Faculty

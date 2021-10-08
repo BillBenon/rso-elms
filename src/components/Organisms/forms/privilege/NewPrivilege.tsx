@@ -11,6 +11,7 @@ import {
   SelectData,
   ValueType,
 } from '../../../../types';
+import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
@@ -77,7 +78,6 @@ export default function NewPrivilege({ onSubmit }: PropType) {
       </InputMolecule>
       <DropdownMolecule
         handleChange={handleChange}
-        defaultValue={form.feature_type}
         name="feature_type"
         options={featureType}>
         Role type

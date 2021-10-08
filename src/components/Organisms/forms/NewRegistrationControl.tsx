@@ -15,6 +15,7 @@ interface PropType<K> extends CommonFormProps<K> {}
 
 export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
   const { mutateAsync } = registrationControlStore.createRegControl();
+  const { data } = authenticatorStore.authUser();
   const history = useHistory();
 
   const [regControl, setRegControl] = useState<IRegistrationControlCreateInfo>({
@@ -29,7 +30,6 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
   }
 
   function submitForm(e: FormEvent) {
-    const toastId = toast.loading('Adding Registration control');
     e.preventDefault();
     mutateAsync(regControl, {
       onSuccess: () => {

@@ -3,8 +3,7 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { intakeStore } from '../../../store/intake.store';
-import programStore from '../../../store/program.store';
-import { GenericStatus, ParamType, ValueType } from '../../../types';
+import { ParamType, ValueType } from '../../../types';
 import {
   IntakeInfo,
   IntakeStatus,
@@ -52,13 +51,7 @@ export default function NewIntake() {
     setValues((regControl) => ({ ...regControl, [e.name]: e.value }));
   }
 
-  function handleProgramsChange(e: ValueType) {
-    // @ts-ignore
-    setSelectedPrograms(e.value);
-  }
-
   const { mutateAsync, isLoading } = intakeStore.create();
-  const addProgram = intakeStore.addPrograms();
 
   async function handleSubmit() {
     if (currentStep === 0) setCurrentStep(currentStep + 1);
@@ -76,7 +69,7 @@ export default function NewIntake() {
       await mutateAsync(data, {
         async onSuccess(data) {
           toast.success(data.data.message);
-          await addProgramsToIntake(data.data.data.id.toString());
+
           history.push(`/dashboard/registration-control/${id}`);
         },
         onError() {
@@ -84,34 +77,6 @@ export default function NewIntake() {
         },
       });
     }
-  }
-
-  async function addProgramsToIntake(id: string) {
-    let intakePrograms: IntakePrograms = {
-      description: '',
-      intak_id: id,
-      programs: [],
-    };
-
-    for (let i = 0; i < selectedPrograms.length; i++) {
-      const element: IntakeProgram = {
-        description: '',
-        intake_id: id,
-        intake_program_id: '',
-        program_id: selectedPrograms[i],
-        status: GenericStatus.ACTIVE,
-      };
-      intakePrograms.programs.push(element);
-    }
-
-    await addProgram.mutateAsync(intakePrograms, {
-      onSuccess(data) {
-        toast.success(data.data.message);
-      },
-      onError() {
-        toast.error('error occurred when adding programs');
-      },
-    });
   }
 
   const handleBack = () => {
@@ -129,7 +94,6 @@ export default function NewIntake() {
             values={values}
             handleChange={handleChange}
             handleNext={handleSubmit}
-            handleProgramsChange={handleProgramsChange}
             handleGoBack={handleBack}
           />
         ),

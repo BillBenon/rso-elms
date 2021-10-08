@@ -37,9 +37,9 @@ export default function Input<T>({
   className = '',
   ...attrs
 }: IProps<T>) {
-  const [_value, setValue] = useState('');
+  const [_value, setValue] = useState<string>();
 
-  useEffect(() => setValue(value || ''), [value]);
+  useEffect(() => setValue(value?.toString()), [value]);
 
   function handleOnChange(e: any) {
     setValue(e.target.value);
