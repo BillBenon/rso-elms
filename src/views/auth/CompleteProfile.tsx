@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
@@ -41,6 +41,12 @@ function CompleteProfile(props: any) {
       });
     }
   }
+
+  //@ts-ignore
+  useEffect(() => setPersonalInfo(JSON.parse(localStorage.getItem('personalInfo'))), []);
+
+  //@ts-ignore
+  useEffect(() => localStorage.setItem('personalInfo', personalInfo), [personalInfo]);
 
   const nextStep = (isComplete: boolean) => {
     setCurrentStep((currentStep) => currentStep + 1);
