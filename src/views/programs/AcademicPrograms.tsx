@@ -26,7 +26,6 @@ import { advancedTypeChecker } from '../../utils/getOption';
 import NewAcademicProgram from './NewAcademicProgram';
 import ProgramDetails from './ProgramDetails';
 import UpdateAcademicProgram from './UpdateAcademicProgram';
-import ViewProgramsInDepartment from './ViewProgramsInDepartment';
 
 export interface IProgramData extends CommonCardDataType {
   department: DivisionInfo;
