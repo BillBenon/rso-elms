@@ -50,8 +50,7 @@ class ProgramService {
   public async getProgramsByDepartment(
     id: string,
   ): Promise<AxiosResponse<Response<ProgramInfo[]>>> {
-    return await adminstrationAxios.get(`
-    /coursemodules/getProgramsByDepartment/${id}`);
+    return await adminstrationAxios.get(`/programs/getProgramsByDepartment/${id}`);
   }
 
   public async modifyProgram(

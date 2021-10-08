@@ -87,7 +87,7 @@ export default function ViewDepartmentsInFaculty() {
             statusColumn="status"
             data={departments}
             uniqueCol={'id'}
-            // hide={['id']}
+            hide={['id']}
             actions={actions}
           />
         )}
