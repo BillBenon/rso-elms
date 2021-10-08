@@ -52,7 +52,11 @@ const Step = ({
       )}
       <div
         className={`${
-          isVertical ? `pl-7  ${isFirstStep && 'items-end'}` : 'flex items-center'
+          isVertical
+            ? `pl-7 flex flex-col justify-center items-center  ${
+                isFirstStep && 'items-end'
+              }`
+            : 'flex items-center'
         }`}>
         {/* step line(separator) */}
         {!isFirstStep && (
