@@ -16,7 +16,8 @@ import usersStore from '../../store/users.store';
 import { GenericStatus } from '../../types';
 import { UserType } from '../../types/services/user.types';
 
-type UserTypes = {
+export type UserTypes = {
+  id: string;
   'full name': string;
   email: string;
   NID: string;
@@ -38,10 +39,19 @@ export default function Users() {
 
   if (isSuccess && userInfo) {
     userInfo?.map((obj) => {
-      let { first_name, last_name, email, person, academy, generic_status, user_type } =
-        obj;
+      let {
+        id,
+        first_name,
+        last_name,
+        email,
+        person,
+        academy,
+        generic_status,
+        user_type,
+      } = obj;
 
       let user: UserTypes = {
+        id: id.toString(),
         'full name': first_name + ' ' + last_name,
         email: email,
         NID: person && person.nid,
@@ -59,7 +69,10 @@ export default function Users() {
   if (isSuccess && users) {
     students = users.filter((user) => user.user_type == UserType.STUDENT);
     instructors = users.filter((user) => user.user_type == UserType.INSTRUCTOR);
-    admins = users.filter((user) => user.user_type == UserType.ADMIN);
+    admins = users.filter(
+      (user) =>
+        user.user_type == UserType.ADMIN || user.user_type == UserType.SUPER_ADMIN,
+    );
   }
 
   const tabs = [

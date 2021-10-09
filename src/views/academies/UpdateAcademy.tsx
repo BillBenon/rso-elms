@@ -1,16 +1,21 @@
 // import { Label } from "@headlessui/react/dist/components/label/label";
 
 import React, { FormEvent, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
+import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import academyStore from '../../store/academy.store';
+import usersStore from '../../store/users.store';
 import { CommonFormProps, ParamType, ValueType } from '../../types';
 import { AcademyCreateInfo } from '../../types/services/academy.types';
+import { UserType } from '../../types/services/user.types';
+import { getInchargeDropdown } from '../../utils/getOption';
 
 export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
@@ -37,6 +42,11 @@ export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     website_link: '',
   });
 
+  const users = usersStore.fetchUsers();
+  const admins = users.data?.data.data.filter(
+    (user) => user.user_type === UserType.ADMIN,
+  );
+
   useEffect(() => {
     data?.data.data &&
       setDetails({
@@ -53,11 +63,17 @@ export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     }));
   }
 
-  function updateAcademy<T>(e: FormEvent<T>) {
+  async function updateAcademy<T>(e: FormEvent<T>) {
     e.preventDefault();
-    mutateAsync(details, {
-      onSuccess() {
-        history.goBack();
+    await mutateAsync(details, {
+      onSuccess(data) {
+        toast.success(data.data.message, { duration: 1200 });
+        setTimeout(() => {
+          history.goBack();
+        }, 900);
+      },
+      onError() {
+        toast.error('An error occurred please try again later');
       },
     });
     if (onSubmit) onSubmit(e);
@@ -147,6 +163,16 @@ export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
             handleChange={(e) => handleChange(e)}>
             academy motto
           </InputMolecule>
+          <DropdownMolecule
+            defaultValue={getInchargeDropdown(admins).find(
+              (incharge) => incharge.value === details.current_admin_id,
+            )}
+            placeholder="Select incharge"
+            options={getInchargeDropdown(admins)}
+            name="current_admin_id"
+            handleChange={handleChange}>
+            Admin in charge
+          </DropdownMolecule>
           <div>
             <div className="mb-3">
               <ILabel weight="bold">academy logo</ILabel>

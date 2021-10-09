@@ -20,6 +20,7 @@ import Stepper from '../../Molecules/Stepper/Stepper';
 interface IProps {
   disabled?: boolean;
   values: IntakeInfo;
+  display_label: string;
   handleChange: (_e: ValueType) => any;
   handleNext: <T>(_e: FormEvent<T>) => any;
   handleProgramsChange?: (_e: ValueType) => any;
@@ -141,46 +142,29 @@ export default function UpdateIntake(props: CProps) {
   //   });
   // }
 
-  const stepperContent = {
-    currentStep: currentStep,
-    completeStep: currentStep,
-    content: [
-      {
-        label: 'info',
-        content: (
-          <IntakeInfoComponent
-            values={values}
-            handleChange={handleChange}
-            handleNext={handleSubmit}
-            // handleProgramsChange={handleProgramsChange}
-          />
-        ),
-        clicked: () => {},
-      },
-      {
-        label: 'more',
-        content: (
-          <IntakeStatusComponent
-            disabled={formLoading}
-            values={values}
-            handleChange={handleChange}
-            handleNext={handleSubmit}
-          />
-        ),
-        clicked: () => {},
-      },
-    ],
-  };
-
   return (
     <div className="w-full">
       <Stepper
+        currentStep={currentStep}
+        completeStep={currentStep}
         width="w-64"
         isVertical={false}
         isInline={false}
-        stepperContent={stepperContent}
-        navigateToStepHandler={() => console.log('submitted')}
-      />
+        navigateToStepHandler={() => console.log('submitted')}>
+        <IntakeInfoComponent
+          display_label="info"
+          values={values}
+          handleChange={handleChange}
+          handleNext={handleSubmit}
+        />
+        <IntakeStatusComponent
+          display_label="more"
+          disabled={formLoading}
+          values={values}
+          handleChange={handleChange}
+          handleNext={handleSubmit}
+        />
+      </Stepper>
     </div>
   );
 }
@@ -244,6 +228,10 @@ IProps) {
 }
 
 function IntakeStatusComponent({ handleChange, handleNext, disabled }: IProps) {
+  let d = new Date();
+  let year = d.getFullYear();
+  let month = d.getMonth();
+  let day = d.getDate();
   return (
     <form onSubmit={handleNext}>
       <DateMolecule
@@ -256,7 +244,7 @@ function IntakeStatusComponent({ handleChange, handleNext, disabled }: IProps) {
         <DateMolecule
           showTime={false}
           endYear={new Date().getFullYear() + 15}
-          defaultValue={(new Date().getFullYear() + 3).toString()}
+          defaultValue={new Date(year + 3, month, day).toString()}
           handleChange={handleChange}
           name={'expected_end_date'}>
           Expected End Date

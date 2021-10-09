@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -15,7 +16,11 @@ import { divisionStore } from '../../store/divisions.store';
 import programStore from '../../store/program.store';
 import usersStore from '../../store/users.store';
 import { CommonFormProps, ValueType } from '../../types';
-import { CreateProgramInfo, ProgramType } from '../../types/services/program.types';
+import {
+  CreateProgramInfo,
+  ProgramStatus,
+  ProgramType,
+} from '../../types/services/program.types';
 import { UserType } from '../../types/services/user.types';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
 
@@ -27,7 +32,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
 
   const { data } = usersStore.fetchUsers();
   const instructors = data?.data.data.filter(
-    (user) => user.user_type === UserType.INSTRUCTOR || user.user_type === UserType.ADMIN,
+    (user) => user.user_type === UserType.INSTRUCTOR,
   );
 
   const departments = divisionStore.getDivisionByType('DEPARTMENT').data?.data.data;
@@ -39,6 +44,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
     description: '',
     name: '',
     type: ProgramType.SHORT_COURSE,
+    status: ProgramStatus.ACTIVE,
   });
   const { mutateAsync } = programStore.createProgram();
 
@@ -53,10 +59,13 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
     e.preventDefault();
     if (onSubmit) onSubmit(e);
     await mutateAsync(details, {
-      onSuccess() {
+      onSuccess(data) {
+        toast.success(data.data.message);
         setLopen(true);
       },
-      onError() {},
+      onError() {
+        toast.error('An error occurred please try again later');
+      },
     });
   }
 
@@ -118,12 +127,9 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
           Department
         </DropdownMolecule>
         <RadioMolecule
-          value="ACTIVE"
+          value={details.status}
           name="status"
-          options={[
-            { label: 'Active', value: 'ACTIVE' },
-            { label: 'Inactive', value: 'INACTIVE' },
-          ]}
+          options={getDropDownStatusOptions(ProgramStatus)}
           handleChange={handleChange}>
           Status
         </RadioMolecule>

@@ -1,6 +1,9 @@
+import { pick } from 'lodash';
 import React, { FormEvent, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
 
+import { authenticatorStore } from '../../../store';
 import academyStore from '../../../store/academy.store';
 import { intakeStore } from '../../../store/intake.store';
 import programStore from '../../../store/program.store';
@@ -15,7 +18,6 @@ import {
   MaritalStatus,
   UserType,
 } from '../../../types/services/user.types';
-import { formatDateToYyMmDd } from '../../../utils/date-helper';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';
 import Heading from '../../Atoms/Text/Heading';
@@ -26,8 +28,13 @@ import RadioMolecule from '../../Molecules/input/RadioMolecule';
 
 export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
+  const newUserType = pick(UserType, ['ADMIN', 'INSTRUCTOR', 'STUDENT']);
+  const newUserTypeWithSuper = { ...newUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
+  const authUser = authenticatorStore.authUser();
+
   const [details, setDetails] = useState<CreateUserInfo>({
     activation_key: '',
+    academy_id: '',
     birth_date: '',
     doc_type: DocType.NID,
     education_level: EducationLevel.ILLITERATE,
@@ -56,7 +63,6 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   });
 
   const [otherDetails, setOtherDetails] = useState({
-    academy: '',
     intake: '',
     level: '',
   });
@@ -81,25 +87,26 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
 
     if (onSubmit) onSubmit(e);
 
-    await mutateAsync(
-      { ...details, birth_date: formatDateToYyMmDd(details.birth_date) },
-      {
-        onSuccess() {
-          history.goBack();
-        },
+    await mutateAsync(details, {
+      onSuccess(data) {
+        toast.success(data.data.message);
+        history.goBack();
       },
-    );
+      onError() {
+        toast.error('An error occurred when creating user, please try again later');
+      },
+    });
   }
   // get all academies in an institution
   const academies: AcademyInfo[] | undefined =
     academyStore.fetchAcademies().data?.data.data;
 
   // get intakes based on selected academy
-  let intakes = intakeStore.getIntakesByAcademy(otherDetails.academy);
+  let intakes = intakeStore.getIntakesByAcademy(details.academy_id);
 
   useEffect(() => {
     intakes.refetch();
-  }, [otherDetails.academy]);
+  }, [details.academy_id]);
 
   // get programs based on selected intake
   let programs = intakeStore.getProgramsByIntake(otherDetails.intake);
@@ -128,10 +135,16 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
       </div>
       <form onSubmit={addUser}>
         <DropdownMolecule
-          defaultValue={getDropDownStatusOptions(UserType).find(
-            (type) => type.label === details.user_type,
+          defaultValue={getDropDownStatusOptions(
+            authUser.data?.data.data.user_type === UserType.SUPER_ADMIN
+              ? newUserTypeWithSuper
+              : newUserType,
+          ).find((type) => type.label === details.user_type)}
+          options={getDropDownStatusOptions(
+            authUser.data?.data.data.user_type === UserType.SUPER_ADMIN
+              ? newUserTypeWithSuper
+              : newUserType,
           )}
-          options={getDropDownStatusOptions(UserType)}
           name="user_type"
           placeholder={'Select user type'}
           handleChange={handleChange}>
@@ -216,13 +229,15 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Education level
         </DropdownMolecule>
-        <DropdownMolecule
-          options={getDropDownOptions(academies)}
-          name="academy"
-          placeholder={'Academy to be enrolled in'}
-          handleChange={otherhandleChange}>
-          Academy
-        </DropdownMolecule>
+        {![UserType.SUPER_ADMIN, UserType.ADMIN].includes(details.user_type) && (
+          <DropdownMolecule
+            options={getDropDownOptions(academies)}
+            name="academy_id"
+            placeholder={'Academy to be enrolled in'}
+            handleChange={handleChange}>
+            Academy
+          </DropdownMolecule>
+        )}
         {details.user_type === 'STUDENT' && (
           <>
             <DropdownMolecule

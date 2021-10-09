@@ -20,6 +20,7 @@ import Stepper from '../../Molecules/Stepper/Stepper';
 
 interface IProps {
   values: IntakeInfo;
+  display_label: string;
   handleChange: (_e: ValueType) => any;
   handleNext: <T>(_e: FormEvent<T>) => any;
   handleProgramsChange?: (_e: ValueType) => any;
@@ -85,44 +86,28 @@ export default function NewIntake(props: CProps) {
     }
   }
 
-  const stepperContent = {
-    currentStep: currentStep,
-    completeStep: currentStep,
-    content: [
-      {
-        label: 'info',
-        content: (
-          <IntakeInfoComponent
-            values={values}
-            handleChange={handleChange}
-            handleNext={handleSubmit}
-          />
-        ),
-        clicked: () => {},
-      },
-      {
-        label: 'more',
-        content: (
-          <IntakeStatusComponent
-            values={values}
-            handleChange={handleChange}
-            handleNext={handleSubmit}
-          />
-        ),
-        clicked: () => {},
-      },
-    ],
-  };
-
   return (
     <div className="w-full">
       <Stepper
+        currentStep={currentStep}
+        completeStep={currentStep}
         width="w-64"
         isVertical={false}
         isInline={false}
-        stepperContent={stepperContent}
-        navigateToStepHandler={() => console.log('submitted')}
-      />
+        navigateToStepHandler={() => console.log('submitted')}>
+        <IntakeInfoComponent
+          display_label="info"
+          values={values}
+          handleChange={handleChange}
+          handleNext={handleSubmit}
+        />
+        <IntakeStatusComponent
+          display_label="more"
+          values={values}
+          handleChange={handleChange}
+          handleNext={handleSubmit}
+        />
+      </Stepper>
     </div>
   );
 }

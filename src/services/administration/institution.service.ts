@@ -18,17 +18,17 @@ class InstitutionService {
     return await adminstrationAxios.get('/institutions/getInstitutions');
   }
 
-  public async getInstitutionById({
-    id,
-  }: {
-    id: string;
-  }): Promise<AxiosResponse<Response<InstitutionInfo>>> {
+  public async getInstitutionById(
+    id: string,
+  ): Promise<AxiosResponse<Response<InstitutionInfo>>> {
     return await adminstrationAxios.get(`/institutions/getInstitutionById/${id}`);
   }
   public async update(
-    institution: InstitutionInfo,
+    institution: BasicInstitutionInfo,
   ): Promise<AxiosResponse<Response<InstitutionInfo>>> {
-    return await adminstrationAxios.put(`/institutions/modifyInstitution`, institution);
+    return await adminstrationAxios.put(`/institutions/modifyInstitution`, {
+      ...institution,
+    });
   }
 }
 

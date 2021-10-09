@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
-import { CommonStepProps } from '../../../../../../types';
+import usersStore from '../../../../../../store/users.store';
+import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../types';
+import {
+  BloodGroup,
+  GenderStatus,
+  PersonDetail,
+} from '../../../../../../types/services/user.types';
+import { getDropDownStatusOptions } from '../../../../../../utils/getOption';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DateMolecule from '../../../../../Molecules/input/DateMolecule';
@@ -9,97 +16,127 @@ import InputMolecule from '../../../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../../../../Molecules/input/TextAreaMolecule';
 
-function PersonalDetails({
-  details,
-  handleChange,
+interface Personal<E> extends CommonStepProps, CommonFormProps<E> {}
+
+function PersonalDetails<E>({
+  display_label,
   isVertical,
   nextStep,
-}: CommonStepProps) {
-  const moveForward = () => {
-    nextStep(true);
+  fetched_id,
+  onSubmit,
+}: Personal<E>) {
+  const [personalDetails, setPersonalDetails] = useState<PersonDetail>({
+    first_name: '',
+    last_name: '',
+    phone_number: '',
+    sex: GenderStatus.MALE,
+    place_of_birth: '',
+    place_of_birth_description: '',
+    birth_date: '',
+    religion: '',
+    blood_group: '',
+  });
+
+  const handleChange = (e: ValueType) => {
+    setPersonalDetails({ ...personalDetails, [e.name]: e.value });
   };
+
+  const moveForward = (e: any) => {
+    e.preventDefault();
+    nextStep(true);
+    if (onSubmit) onSubmit(e, personalDetails);
+  };
+  const user = usersStore.getUserById(fetched_id.toString());
+  useEffect(() => {
+    user.data?.data.data && setPersonalDetails({ ...user.data?.data.data.person });
+  }, [user.data]);
 
   return (
     <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
-      {!isVertical && <Heading fontWeight="semibold">Personal details</Heading>}
-      <div className="flex flex-col gap-4">
-        <InputMolecule
-          name="firstName"
-          placeholder="eg: John"
-          value={details.firstName}
-          handleChange={(e) => handleChange(e, 'personalDetails')}>
-          First Name
-        </InputMolecule>
-        <InputMolecule
-          name="lastName"
-          placeholder="eg: Doe"
-          value={details.lastName}
-          handleChange={(e) => handleChange(e, 'personalDetails')}>
-          Last Name
-        </InputMolecule>
-      </div>
-      <div className="flex flex-col gap-4">
-        <InputMolecule
-          name="email"
-          value={details.email}
-          type="email"
-          placeholder="username@example.com"
-          handleChange={(e) => handleChange(e, 'personalDetails')}>
-          Email
-        </InputMolecule>
-        <InputMolecule
-          name="phone"
-          value={details.phone}
-          placeholder="+250 ---------"
-          handleChange={(e) => handleChange(e, 'personalDetails')}>
-          Phone number
-        </InputMolecule>
-      </div>
-      <div className="flex flex-col gap-4">
-        <RadioMolecule
-          options={[
-            { value: 'male', label: 'Male' },
-            { value: 'female', label: 'Female' },
-          ]}
-          value={details.gender}
-          handleChange={(e) => handleChange(e, 'personalDetails')}
-          name="gender">
-          Gender
-        </RadioMolecule>
-        <DateMolecule
-          handleChange={(e) => handleChange(e, 'personalDetails')}
-          name="dob"
-          width="60 md:w-80">
-          Date of Birth
-        </DateMolecule>
-      </div>
-      <div className="flex flex-col gap-4">
-        <DropdownMolecule
-          placeholder="Select place of birth"
-          width="60 md:w-80"
-          name="placeOfBirth"
-          defaultValue={details.placeOfBirth}
-          handleChange={handleChange}
-          options={[
-            { value: 'rw', label: 'Rwanda' },
-            { value: 'ug', label: 'Uganda' },
-            { value: 'tz', label: 'Tanzania' },
-            { value: 'brd', label: 'Burundi' },
-            { value: 'can', label: 'Canada' },
-            { value: 'us', label: 'USA' },
-          ]}>
-          Place of birth
-        </DropdownMolecule>
-        <TextAreaMolecule
-          name="placeOfBirthDescription"
-          value={details.placeOfBirthDescription}
-          handleChange={(e) => handleChange(e, 'personalDetails')}>
-          Place of birth description
-        </TextAreaMolecule>
-      </div>
-      <div className="flex justify-end w-80">
-        <Button onClick={() => moveForward()}>Next</Button>
-      </div>
+      {!isVertical && <Heading fontWeight="semibold">{display_label}</Heading>}
+      <form onSubmit={moveForward}>
+        <div className="flex flex-col gap-4">
+          <InputMolecule
+            name="first_name"
+            placeholder="eg: John"
+            value={personalDetails.first_name}
+            handleChange={handleChange}>
+            First Name
+          </InputMolecule>
+          <InputMolecule
+            name="last_name"
+            placeholder="eg: Doe"
+            value={personalDetails.last_name}
+            handleChange={handleChange}>
+            Last Name
+          </InputMolecule>
+        </div>
+        <div className="flex flex-col gap-4">
+          <InputMolecule
+            name="phone_number"
+            value={personalDetails.phone_number}
+            placeholder="+250 ---------"
+            handleChange={handleChange}>
+            Phone number
+          </InputMolecule>
+        </div>
+        <div className="flex flex-col gap-4">
+          <RadioMolecule
+            options={getDropDownStatusOptions(GenderStatus)}
+            value={personalDetails.sex}
+            handleChange={handleChange}
+            name="sex">
+            Gender
+          </RadioMolecule>
+          <DropdownMolecule
+            placeholder="Select your blood type"
+            width="60 md:w-80"
+            name="blood_group"
+            defaultValue={getDropDownStatusOptions(BloodGroup).find(
+              (grp) => grp.label === personalDetails.blood_group,
+            )}
+            handleChange={handleChange}
+            options={getDropDownStatusOptions(BloodGroup)}>
+            Blood type
+          </DropdownMolecule>
+        </div>
+        <div className="flex flex-col gap-4">
+          <DateMolecule
+            handleChange={handleChange}
+            name="birth_date"
+            width="60 md:w-80"
+            date_time_type={false}>
+            Date of Birth
+          </DateMolecule>
+          <DropdownMolecule
+            placeholder="Select place of birth"
+            width="60 md:w-80"
+            name="place_of_birth"
+            defaultValue={personalDetails.place_of_birth}
+            handleChange={handleChange}
+            options={[]}>
+            Place of birth
+          </DropdownMolecule>
+        </div>
+        <div className="flex flex-col gap-4">
+          <TextAreaMolecule
+            name="place_of_birth_description"
+            value={personalDetails.place_of_birth_description}
+            handleChange={handleChange}>
+            Place of birth description
+          </TextAreaMolecule>
+          <InputMolecule
+            name="religion"
+            value={personalDetails.religion}
+            placeholder="eg: Catholic"
+            handleChange={handleChange}>
+            Religion
+          </InputMolecule>
+        </div>
+        <div className="flex justify-end w-80">
+          <Button type="submit">Next</Button>
+        </div>
+      </form>
     </div>
   );
 }

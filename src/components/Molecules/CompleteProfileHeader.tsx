@@ -3,7 +3,7 @@ import React from 'react';
 import Heading from '../Atoms/Text/Heading';
 import AcademyProfileCard from './cards/AcademyProfileCard';
 
-const SignupHeader = () => {
+const CompleteProfileHeader = () => {
   return (
     <div className="flex justify-between mb-14">
       <div>
@@ -23,4 +23,4 @@ const SignupHeader = () => {
   );
 };
 
-export default SignupHeader;
+export default CompleteProfileHeader;
