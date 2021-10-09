@@ -1,30 +1,20 @@
 // import { Label } from "@headlessui/react/dist/components/label/label";
 
 import React, { FormEvent, useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router';
+import { useHistory } from 'react-router-dom';
 
-import Button from '../../components/Atoms/custom/Button';
-import Icon from '../../components/Atoms/custom/Icon';
-import Heading from '../../components/Atoms/Text/Heading';
-import ILabel from '../../components/Atoms/Text/ILabel';
-import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
-import InputMolecule from '../../components/Molecules/input/InputMolecule';
-import academyStore from '../../store/academy.store';
-import usersStore from '../../store/users.store';
-import { CommonFormProps, ParamType, ValueType } from '../../types';
-import { AcademyCreateInfo } from '../../types/services/academy.types';
-import { UserType } from '../../types/services/user.types';
-import { getInchargeDropdown } from '../../utils/getOption';
+import { authenticatorService } from '../../../../services';
+import academyStore from '../../../../store/academy.store';
+import { CommonFormProps, ValueType } from '../../../../types';
+import { AcademyCreateInfo } from '../../../../types/services/academy.types';
+import Button from '../../../Atoms/custom/Button';
+import Icon from '../../../Atoms/custom/Icon';
+import Heading from '../../../Atoms/Text/Heading';
+import ILabel from '../../../Atoms/Text/ILabel';
+import InputMolecule from '../../../Molecules/input/InputMolecule';
 
-export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
+export default function NewAcademy<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
-
-  const { mutateAsync } = academyStore.modifyAcademy();
-
-  const { id } = useParams<ParamType>();
-
-  const { data } = academyStore.getAcademyById(id);
 
   const [details, setDetails] = useState<AcademyCreateInfo>({
     current_admin_id: '',
@@ -32,7 +22,7 @@ export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     fax_number: '',
     full_address: '',
     head_office_location_id: 17445,
-    institution_id: '',
+    institution_id: 'b832407f-fb77-4a75-8679-73bf7794f207',
     mission: '',
     moto: '',
     name: '',
@@ -41,20 +31,19 @@ export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     short_name: '',
     website_link: '',
   });
-
-  const users = usersStore.fetchUsers();
-  const admins = users.data?.data.data.filter(
-    (user) => user.user_type === UserType.ADMIN,
-  );
+  const { mutateAsync } = academyStore.createAcademy();
 
   useEffect(() => {
-    data?.data.data &&
-      setDetails({
-        ...data?.data.data,
-        institution_id: data?.data.data.institution.id + '',
-        head_office_location_id: data?.data.data.head_office_location_id || 17445,
-      });
-  }, [data]);
+    const getUser = async () => {
+      const user = await authenticatorService.authUser();
+      setDetails((details) => ({
+        ...details,
+        current_admin_id: user.data.data.id + '',
+      }));
+    };
+
+    getUser();
+  }, []);
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
@@ -63,20 +52,14 @@ export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     }));
   }
 
-  async function updateAcademy<T>(e: FormEvent<T>) {
+  async function createAcademy<T>(e: FormEvent<T>) {
     e.preventDefault();
+    if (onSubmit) onSubmit(e);
     await mutateAsync(details, {
-      onSuccess(data) {
-        toast.success(data.data.message, { duration: 1200 });
-        setTimeout(() => {
-          history.goBack();
-        }, 900);
-      },
-      onError() {
-        toast.error('An error occurred please try again later');
+      onSuccess() {
+        history.push('/academies');
       },
     });
-    if (onSubmit) onSubmit(e);
   }
 
   return (
@@ -92,16 +75,17 @@ export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
         </ILabel>
         <Icon name="chevron-right" fill="gray" />
         <ILabel size="sm" color="primary" weight="medium">
-          Update Academy
+          New Academy
         </ILabel>
       </div>
+
       <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
         <div className="py-5 mb-3 capitalize">
           <Heading color="txt-primary" fontWeight="bold">
-            Edit academy
+            New academy
           </Heading>
         </div>
-        <form onSubmit={updateAcademy}>
+        <form onSubmit={createAcademy}>
           <InputMolecule
             name="name"
             placeholder="Type academy name"
@@ -163,16 +147,13 @@ export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
             handleChange={(e) => handleChange(e)}>
             academy motto
           </InputMolecule>
-          <DropdownMolecule
-            defaultValue={getInchargeDropdown(admins).find(
-              (incharge) => incharge.value === details.current_admin_id,
-            )}
-            placeholder="Select incharge"
-            options={getInchargeDropdown(admins)}
-            name="current_admin_id"
-            handleChange={handleChange}>
-            Admin in charge
-          </DropdownMolecule>
+          {/* <TextAreaMolecule
+            name="website"
+            value={''}
+            placeholder="Type website url"
+            handleChange={(e) => handleChange(e)}>
+            academy description
+          </TextAreaMolecule> */}
           <div>
             <div className="mb-3">
               <ILabel weight="bold">academy logo</ILabel>

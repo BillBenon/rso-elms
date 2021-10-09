@@ -21,6 +21,12 @@ class DivisionService {
     return await adminstrationAxios.get(`/divisions/getDivisionById/${id}`);
   }
 
+  public async getFacultyByDepartment(
+    id: string,
+  ): Promise<AxiosResponse<Response<DivisionInfo[]>>> {
+    return await adminstrationAxios.get(`/divisions/getDivisionsByParent/${id}`);
+  }
+
   public async modifyDivision(
     division: DivisionCreateInfo,
   ): Promise<AxiosResponse<Response<DivisionInfo>>> {

@@ -11,10 +11,11 @@ import NewInstitution from './views/insitution/NewInstitution';
 import UpdateInstitution from './views/insitution/UpdateInstitution';
 import IntakeModulesView from './views/intakes/IntakeModules';
 import IntakesView from './views/intakes/Intakes';
-import LevelsView from './views/levels/Levels';
+import Levels from './views/levels/Levels';
 import Modules from './views/modules';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicPrograms from './views/programs/AcademicPrograms';
+import NewAcademicProgram from './views/programs/NewAcademicProgram';
 import Roles from './views/roles/Roles';
 import ViewRole from './views/roles/ViewRole';
 import Subjects from './views/subjects';
@@ -23,10 +24,9 @@ import Users from './views/users/Users';
 const RouterProtection = () => {
   const [authUser, setAuthUser] = useState<UserInfo>();
   const { data } = authenticatorStore.authUser();
-  console.log(data, 'in route protected');
+
   useEffect(() => {
     setAuthUser(data?.data.data);
-    console.log('changed');
   }, [data?.data.data]);
 
   const InstitutionAdminRoutes = () => (
@@ -52,8 +52,9 @@ const RouterProtection = () => {
       <Route path="/dashboard/divisions" component={Divisions} />
 
       <Route path="/dashboard/programs" component={AcademicPrograms} />
-      <Route exact path="/dashboard/levels" component={LevelsView} />
-      <Route path="/dashboard/intakes" component={IntakesView} />
+      <Route exact path="/dashboard/programs/new" component={NewAcademicProgram} />
+      <Route exact path="/dashboard/levels" component={Levels} />
+      <Route exact path="/dashboard/intakes" component={IntakesView} />
       <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} />
 
       {/* end of academic admin pages */}

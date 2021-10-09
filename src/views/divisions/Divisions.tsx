@@ -1,17 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, useLocation, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 
-import Badge from '../../components/Atoms/custom/Badge';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
+import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import Departments from '../../components/Organisms/divisions/Departments';
 import Faculties from '../../components/Organisms/divisions/Faculties';
+import NewDepartment from '../../components/Organisms/forms/divisions/NewDepartment';
+import { authenticatorStore } from '../../store';
+import ViewDepartmentsInFaculty from './ViewDepartmentsInFaculty';
 
 export default function Divisions() {
   const { url, path } = useRouteMatch();
   const location = useLocation();
+  const history = useHistory();
   const [fetchType, setFetchType] = useState<string>('');
 
   useEffect(() => {
@@ -53,19 +57,26 @@ export default function Divisions() {
         <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
           divisions
         </Heading>
-        <Badge
+        {/* <Badge
           badgetxtcolor="main"
           badgecolor="primary"
           fontWeight="normal"
           className="h-6 w-9 flex justify-center items-center">
-          3{/* {divisions.length} */}
-        </Badge>
+          3{/* {divisions.length} 
+        </Badge> */}
       </div>
 
       <TabNavigation
         tabs={tabs}
         onTabChange={(event) => setFetchType(event.activeTabLabel)}>
         <Switch>
+          <Route
+            exact
+            path={`${path}/:id/view-departments`}
+            render={() => {
+              return <ViewDepartmentsInFaculty />;
+            }}
+          />
           <Route
             path={`${path}/departments`}
             render={() => {

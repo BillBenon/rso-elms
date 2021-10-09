@@ -16,7 +16,7 @@ import AddAcademy from './Addcademy';
 import UpdateAcademy from './UpdateAcademy';
 
 type AcademyTypes = {
-  id: number | string;
+  id: number | string | undefined;
   'academy name': string;
   'academy admin': string;
   'phone number': string;
@@ -100,8 +100,8 @@ export default function Academy() {
                     statusColumn="status"
                     data={academies}
                     actions={academyActions}
-                    uniqueCol="id"
                     hide={['id']}
+                    uniqueCol="id"
                   />
                 )}
               </div>

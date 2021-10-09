@@ -5,7 +5,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { queryClient } from '../../../../plugins/react-query';
 import academyStore from '../../../../store/academy.store';
 import { divisionStore } from '../../../../store/divisions.store';
-import { FormPropType, ParamType, ValueType } from '../../../../types';
+import { IDivisionsAcademyType, ParamType, ValueType } from '../../../../types';
 import { AcademyInfo } from '../../../../types/services/academy.types';
 import { DivisionCreateInfo } from '../../../../types/services/division.types';
 import { getDropDownOptions } from '../../../../utils/getOption';
@@ -14,7 +14,7 @@ import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-export default function UpdateDepartment({ onSubmit }: FormPropType) {
+export default function UpdateDepartment({ onSubmit }: IDivisionsAcademyType) {
   const history = useHistory();
 
   const { id } = useParams<ParamType>();
@@ -60,15 +60,13 @@ export default function UpdateDepartment({ onSubmit }: FormPropType) {
     e.preventDefault();
     mutateAsync(updateDivisionInfo, {
       onSuccess: () => {
-        toast.success('Department updated', { duration: 3 });
+        toast.success('Department updated');
         queryClient.invalidateQueries(['divisions/type', division.division_type]);
 
         history.goBack();
       },
       onError: () => {
-        toast.error('something wrong happened while updating department', {
-          duration: 3,
-        });
+        toast.error('something wrong happened while updating department');
       },
     });
     if (onSubmit) onSubmit(e);
@@ -90,19 +88,11 @@ export default function UpdateDepartment({ onSubmit }: FormPropType) {
         handleChange={handleChange}>
         Descripiton
       </TextAreaMolecule>
-      <DropdownMolecule
-        // defaultValue={division.academy_id}
-        options={getDropDownOptions(academies)}
-        name="academy_id"
-        placeholder={'Academy to be enrolled'}
-        handleChange={handleChange}>
-        Academy
-      </DropdownMolecule>
 
       <DropdownMolecule
         width="82"
         placeholder="Select faculty"
-        options={getDropDownOptions(departments)}
+        options={getDropDownOptions({ inputs: departments || [] })}
         name="parent_id"
         handleChange={handleChange}>
         Faculty

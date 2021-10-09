@@ -7,6 +7,7 @@ export interface DivisionInfo extends Table, DivisionCreateInfo {
   academy: AcademyInfo;
   departments: [];
   programs: ProgramInfo;
+  total_num_childreen: number;
 }
 
 export interface DivisionCreateInfo {

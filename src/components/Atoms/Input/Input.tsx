@@ -10,7 +10,7 @@ export interface IProps<T> extends CommonInputProps<T> {
   type?: string;
   readonly?: boolean;
   handleChange: (_e: ValueType) => void;
-  value: string | undefined;
+  value: string | number | undefined;
   name: string;
   full?: boolean;
   padding?: string;
@@ -37,9 +37,9 @@ export default function Input<T>({
   className = '',
   ...attrs
 }: IProps<T>) {
-  const [_value, setValue] = useState('');
+  const [_value, setValue] = useState<string>();
 
-  useEffect(() => setValue(value || ''), [value]);
+  useEffect(() => setValue(value?.toString()), [value]);
 
   function handleOnChange(e: any) {
     setValue(e.target.value);
@@ -54,7 +54,7 @@ export default function Input<T>({
       value={_value}
       readOnly={readonly}
       className={`${
-        readonly ? 'bg-bcolor' : 'bg-transparent'
+        readonly ? 'bg-gray-100' : 'bg-transparent'
       } h-12 ${padding} placeholder-${pcolor} rounded-md ${
         full ? 'w-full' : `w-full md:w-${width}`
       } focus:outline-none border-${bcolor} focus:border-${

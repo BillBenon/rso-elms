@@ -20,6 +20,14 @@ export interface CreateProgramInfo {
   status: ProgramStatus;
 }
 
+export interface CreateAcademicProgramLevel {
+  endg_flow: number;
+  id: string;
+  level_id?: number;
+  program_id: string;
+  starting_flow: number;
+}
+
 export enum ProgramStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',

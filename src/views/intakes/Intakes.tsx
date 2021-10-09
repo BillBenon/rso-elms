@@ -82,11 +82,6 @@ export default function Intakes() {
     )} - ${moment(regControl?.data.data.expected_end_date).format('MMM D YYYY')}`;
   }
 
-  function intakeCreated() {
-    refetchIntakes();
-    history.goBack();
-  }
-
   return (
     <div>
       <Cacumber list={list} />
@@ -182,7 +177,7 @@ export default function Intakes() {
         render={() => {
           return (
             <PopupMolecule title="New intake" open onClose={handleClose}>
-              <NewIntake handleSuccess={intakeCreated} />
+              <NewIntake />
             </PopupMolecule>
           );
         }}

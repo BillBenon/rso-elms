@@ -82,7 +82,7 @@ export default function AddAcademicProgramToIntake({ submited }: PropType) {
         placeholder="Program"
         handleChange={handlePrograms}
         isMulti
-        options={getDropDownOptions(programs)}>
+        options={getDropDownOptions({ inputs: programs || [] })}>
         Programs in this intake
       </DropdownMolecule>
       <div className="pt-3">

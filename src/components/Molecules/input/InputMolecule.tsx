@@ -6,7 +6,7 @@ import Error from '../../Atoms/Text/Error';
 import ILabel from '../../Atoms/Text/ILabel';
 
 interface IInputMolecule<T> extends CommonInputProps<T> {
-  value: string | undefined;
+  value: string | number | undefined;
   handleChange: (_e: ValueType) => void;
   children: React.ReactNode;
   error?: string;
@@ -32,7 +32,7 @@ export default function InputMolecule<T>({
       </ILabel>
       <Input
         {...attrs}
-        readOnly={readOnly}
+        readonly={readOnly}
         name={name}
         placeholder={placeholder}
         fcolor={error ? 'error' : undefined}

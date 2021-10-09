@@ -55,7 +55,7 @@ export default function NewIntake(props: CProps) {
     setValues((regControl) => ({ ...regControl, [e.name]: e.value }));
   }
 
-  const { mutateAsync } = intakeStore.create();
+  const { mutateAsync, isLoading } = intakeStore.create();
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
@@ -85,6 +85,42 @@ export default function NewIntake(props: CProps) {
       });
     }
   }
+
+  const handleBack = () => {
+    if (currentStep >= 1) setCurrentStep(currentStep - 1);
+  };
+
+  const stepperContent = {
+    currentStep: currentStep,
+    completeStep: currentStep,
+    content: [
+      {
+        label: 'info',
+        content: (
+          <IntakeInfoComponent
+            values={values}
+            handleChange={handleChange}
+            handleNext={handleSubmit}
+            handleGoBack={handleBack}
+          />
+        ),
+        clicked: () => {},
+      },
+      {
+        label: 'more',
+        content: (
+          <IntakeStatusComponent
+            values={values}
+            handleChange={handleChange}
+            handleNext={handleSubmit}
+            isLoading={isLoading}
+            handleGoBack={handleBack}
+          />
+        ),
+        clicked: () => {},
+      },
+    ],
+  };
 
   return (
     <div className="w-full">

@@ -2,16 +2,24 @@ import { SelectData } from '../types';
 import { IntakeStatus } from '../types/services/intake.types';
 import { GenericStatus } from './../types/services/common.types';
 
-export function getDropDownOptions(
-  inputs?: any[],
+interface GetDropDownOptionsProps {
+  inputs: any[];
+  labelName?: string;
+  value?: string;
+  getOptionLabel?: (_option: Object) => string;
+}
+
+export function getDropDownOptions({
+  inputs = [],
   labelName = 'name',
-  getOptionLabel?: (_option: Object) => string,
-): SelectData[] {
+  value = 'id',
+  getOptionLabel,
+}: GetDropDownOptionsProps): SelectData[] {
   let options: SelectData[] = [];
   inputs?.map((input) => {
     options.push({
       label: getOptionLabel ? getOptionLabel(input) : input[labelName],
-      value: input.id.toString(),
+      value: input[value] as string,
     });
   });
 
