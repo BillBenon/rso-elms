@@ -57,6 +57,7 @@ function NationalDocuments<E>({
           <DropdownMolecule
             width="60 md:w-80"
             name="nationality"
+            // @ts-ignore
             defaultValue={nationalDocuments.nationality}
             handleChange={handleChange}
             options={[]}>
@@ -104,6 +105,7 @@ function NationalDocuments<E>({
             width="60 md:w-80"
             placeholder="select where you currently live"
             name="residence_location_id"
+            // @ts-ignore
             defaultValue={nationalDocuments.residence_location_id}
             handleChange={handleChange}
             options={[]}>

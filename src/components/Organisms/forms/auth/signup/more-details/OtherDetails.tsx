@@ -8,7 +8,7 @@ import CheckboxMolecule from '../../../../../Molecules/input/CheckboxMolecule';
 import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
 import TextAreaMolecule from '../../../../../Molecules/input/TextAreaMolecule';
 
-function OtherDetails(props: any) {
+function OtherDetails(_props: any) {
   const history = useHistory();
   const [otherDetails, setOtherDetails] = useState({
     hobbies: '',
@@ -58,6 +58,7 @@ function OtherDetails(props: any) {
           <DropdownMolecule
             isMulti
             name="hobbies"
+            // @ts-ignore
             defaultValue={otherDetails.hobbies}
             handleChange={handleChange}
             options={[]}>
@@ -78,6 +79,7 @@ function OtherDetails(props: any) {
             isMulti
             placeholder="Select chronic diseases u have"
             name="chronic_disease"
+            // @ts-ignore
             defaultValue={otherDetails.chronic_disease}
             handleChange={handleChange}
             options={[]}>

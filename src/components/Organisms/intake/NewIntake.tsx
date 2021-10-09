@@ -55,7 +55,7 @@ export default function NewIntake(props: CProps) {
     setValues((regControl) => ({ ...regControl, [e.name]: e.value }));
   }
 
-  const { mutateAsync, isLoading } = intakeStore.create();
+  const { mutateAsync } = intakeStore.create();
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
@@ -86,10 +86,7 @@ export default function NewIntake(props: CProps) {
     }
   }
 
-  const handleBack = () => {
-    if (currentStep >= 1) setCurrentStep(currentStep - 1);
-  };
-
+  // eslint-disable-next-line no-unused-vars
   const stepperContent = {
     currentStep: currentStep,
     completeStep: currentStep,
@@ -101,7 +98,7 @@ export default function NewIntake(props: CProps) {
             values={values}
             handleChange={handleChange}
             handleNext={handleSubmit}
-            handleGoBack={handleBack}
+            display_label="Intake Info"
           />
         ),
         clicked: () => {},
@@ -113,8 +110,7 @@ export default function NewIntake(props: CProps) {
             values={values}
             handleChange={handleChange}
             handleNext={handleSubmit}
-            isLoading={isLoading}
-            handleGoBack={handleBack}
+            display_label="Intake Status"
           />
         ),
         clicked: () => {},
