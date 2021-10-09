@@ -18,7 +18,7 @@ import UpdateRegControl from '../forms/regcontrol/UpdateRegControl';
 import RegControlDetails from './RegControlDetails';
 
 export default function RegistrationControl() {
-  const { url, path } = useRouteMatch();
+  const { url } = useRouteMatch();
   const history = useHistory();
   const { data, isLoading, isSuccess } = registrationControlStore.fetchRegControl();
 
@@ -64,13 +64,13 @@ export default function RegistrationControl() {
     {
       name: 'Edit control',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit reg control
+        history.push(`${url}/${id}/edit`); // go to edit reg control
       },
     },
     {
       name: 'View',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}`); // go to add new intake to this reg control
+        history.push(`${url}/${id}`); // go to add new intake to this reg control
       },
     },
     {
@@ -80,6 +80,10 @@ export default function RegistrationControl() {
       },
     },
   ];
+
+  function handleClose() {
+    history.goBack();
+  }
 
   return (
     <div>
@@ -127,85 +131,36 @@ export default function RegistrationControl() {
       <Switch>
         <Route
           exact
-          path={`${path}/:id`}
+          path={`${url}/add`}
+          render={() => {
+            return (
+              <PopupMolecule title="New Registration Control" open onClose={handleClose}>
+                <NewRegistrationControl />
+              </PopupMolecule>
+            );
+          }}
+        />
+        <Route
+          exact
+          path={`${url}/:id`}
           render={() => {
             return <RegControlDetails />;
           }}
         />
+
+        {/* modify reg control */}
         <Route
-          path="*"
-          render={() => (
-            <>
-              <div className="flex flex-wrap justify-start items-center">
-                <ILabel size="sm" color="gray" weight="medium">
-                  Institution Admin
-                </ILabel>
-                <Icon name="chevron-right" />
-
-                <ILabel size="sm" color="gray" weight="medium">
-                  Academies
-                </ILabel>
-                <Icon name="chevron-right" fill="gray" />
-                <Heading fontSize="sm" color="primary" fontWeight="medium">
-                  Registration control
-                </Heading>
-              </div>
-              <TableHeader
-                title="registration control"
-                totalItems={RegistrationControls.length}
-                handleSearch={handleSearch}>
-                <Link to={`${url}/add`}>
-                  <Button>Add new reg control</Button>
-                </Link>
-              </TableHeader>
-
-              <div className="mt-14">
-                {isLoading && 'Loading..'}
-                {isSuccess && RegistrationControls ? (
-                  <Table<IRegistrationInfo>
-                    statusColumn="status"
-                    data={RegistrationControls}
-                    actions={controlActions}
-                    uniqueCol={'id'}
-                    hide={['id']}
-                  />
-                ) : (
-                  ''
-                )}
-
-                {RegistrationControls.length < 1 && <span>No data found</span>}
-              </div>
-
-              {/* add reg control popup */}
-
-              <Route
-                exact
-                path={`${path}/add`}
-                render={() => {
-                  return (
-                    <PopupMolecule
-                      title="New Registration Control"
-                      open
-                      onClose={handleClose}>
-                      <NewRegistrationControl />
-                    </PopupMolecule>
-                  );
-                }}
-              />
-
-              {/* modify reg control */}
-              <Route
-                exact
-                path={`${path}/:id/edit`}
-                render={() => {
-                  return (
-                    <PopupMolecule title="Update Control" open onClose={handleClose}>
-                      <UpdateRegControl />
-                    </PopupMolecule>
-                  );
-                }}
-              />
-              {/* add intake to reg control
+          exact
+          path={`${url}/:id/edit`}
+          render={() => {
+            return (
+              <PopupMolecule title="Update Control" open onClose={handleClose}>
+                <UpdateRegControl />
+              </PopupMolecule>
+            );
+          }}
+        />
+        {/* add intake to reg control
               <Route
                 exact
                 path={`${path}/:id/add-intake`}
@@ -221,9 +176,6 @@ export default function RegistrationControl() {
                   );
                 }}
               /> */}
-            </>
-          )}
-        />
       </Switch>
     </div>
   );
