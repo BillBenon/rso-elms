@@ -53,16 +53,20 @@ export default function AcademicProgram() {
 
   const { data, refetch } = programStore.fetchPrograms();
   const queryStr = queryString.parse(location.search);
-  const { data: programData } = programStore.getProgramsByDepartment(
-    queryStr.query?.toString() || '',
-  );
+
+  let programData;
+
+  if (queryStr.query) {
+    ({ data: programData } = programStore.getProgramsByDepartment(
+      queryStr.query?.toString() || '',
+    ));
+  }
   const programInfo = programData || data;
 
   useEffect(() => {
     if (location.pathname === path || location.pathname === `${path}/`) {
       refetch();
     }
-    console.log(queryString.parse(location.search).query);
   }, [location]);
 
   let programs: IProgramData[] = [];
@@ -111,7 +115,7 @@ export default function AcademicProgram() {
         {/* modify academic program */}
         <Route path={`${path}/:id/edit`} render={() => <UpdateAcademicProgram />} />
 
-        {/* add prerequisite popup */}
+        {/* call prerequisite page */}
         <Route
           exact
           path={`${path}/add/prerequisite`}
@@ -129,11 +133,6 @@ export default function AcademicProgram() {
         {/* show academic program details */}
         <Route path={`${path}/:id`} render={() => <ProgramDetails />} />
 
-        {/* <Route
-          exact
-          path={`${path}/:id/view-program`}
-          render={() => <ViewProgramsInDepartment />}
-        /> */}
         <Route
           exact
           path={`${path}`}
