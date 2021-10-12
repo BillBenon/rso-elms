@@ -1,19 +1,14 @@
 import React from 'react';
 
-import { CommonInputProps, ValueType } from '../../../types';
+import { CommonInputProps, InputProps, ValueType } from '../../../types';
 import Input from '../../Atoms/Input/Input';
 import Error from '../../Atoms/Text/Error';
 import ILabel from '../../Atoms/Text/ILabel';
 
-interface IInputMolecule<T> extends CommonInputProps<T> {
-  value: string | number | undefined;
-  handleChange: (_e: ValueType) => void;
-  children: React.ReactNode;
+interface IInputMolecule<T> extends InputProps<T> {
   error?: string;
-  placeholder?: string;
-  type?: string;
-  // readonly: boolean;
 }
+
 export default function InputMolecule<T>({
   name,
   value,
