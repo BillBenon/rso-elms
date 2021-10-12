@@ -53,6 +53,7 @@ export default function Input<T>({
       type={type}
       value={_value}
       readOnly={readonly}
+      autoComplete="off"
       className={`${
         readonly ? 'bg-gray-100' : 'bg-transparent'
       } h-12 ${padding} placeholder-${pcolor} rounded-md ${
