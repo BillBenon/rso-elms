@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Route } from 'react-router-dom';
 
+import NewEvaluation from './components/Organisms/forms/evaluation/NewEvaluation';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import Dashboard from './layout/Dashboard';
 import { authenticatorStore } from './store';
 import { UserInfo } from './types/services/user.types';
 import Academies from './views/academies/Academy';
 import Divisions from './views/divisions/Divisions';
+import ViewEvaluations from './views/evaluation/ViewEvaluations';
 import IntakeModulesView from './views/intakes/IntakeModules';
 import IntakesView from './views/intakes/Intakes';
 import Levels from './views/levels/Levels';
@@ -44,6 +46,8 @@ const RouterProtection = () => {
       {/* start of academic admin pages */}
       <Route path="/dashboard/modules" component={Modules} />
       <Route path="/dashboard/subjects" component={Subjects} />
+      <Route exact path="/dashboard/evaluations" component={ViewEvaluations} />
+      <Route exact path="/dashboard/evaluations/new" component={NewEvaluation} />
       <Route path="/dashboard/registration-control" component={RegistrationControl} />
 
       <Route path="/dashboard/divisions" component={Divisions} />
