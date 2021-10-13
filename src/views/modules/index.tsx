@@ -4,13 +4,11 @@ import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import Cacumber from '../../components/Molecules/Cacumber';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
-import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import AddPrerequesitForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
-import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
 import { moduleStore } from '../../store/modules.store';
 import { CommonCardDataType, Link } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
+import ModuleDetails from './ModuleDetails';
 
 export default function Modules() {
   const { data } = moduleStore.getAllModules();
@@ -30,6 +28,7 @@ export default function Modules() {
         code: module.code,
         title: module.name,
         description: module.description,
+        id: module.id,
       });
     });
 
@@ -44,64 +43,52 @@ export default function Modules() {
     { to: 'subjects', title: 'subjects' },
   ];
 
-  const handleClose = () => {
-    history.goBack();
-  };
-
   return (
     <>
       <main className="px-4">
-        <section>
-          <Cacumber list={list}></Cacumber>
-        </section>
-        <section className="">
-          <TableHeader
-            totalItems={modules.length}
-            title="Modules"
-            handleSearch={handleSearch}>
-            <Button onClick={() => history.push(`${path}/add`)}>Add Module</Button>
-          </TableHeader>
-        </section>
-        <section className="flex flex-wrap justify-between mt-2">
-          {modules.map((course, index) => (
-            <div key={index} className="p-1 mt-3">
-              <CommonCardMolecule
-                data={course}
-                to={{ title: 'module', to: 'modules/id' }}>
-                <p className="pt-3">
-                  Total subjects:
-                  <span className="px-1 text-primary-500">
-                    {data?.data.data[index].total_num_subjects || 'None'}
-                  </span>
-                </p>
-              </CommonCardMolecule>
-            </div>
-          ))}
-        </section>
-
         <Switch>
-          {/* add module popup */}
           <Route
-            exact
-            path={`${path}/add`}
+            path={`${path}/:id`}
             render={() => {
-              return (
-                <PopupMolecule title="New Module" open onClose={handleClose}>
-                  <NewModuleForm />
-                </PopupMolecule>
-              );
+              return <ModuleDetails />;
             }}
           />
-
-          {/* add prerequesite popup */}
           <Route
             exact
-            path={`${path}/:id/add-prereq`}
+            path={`${path}`}
             render={() => {
               return (
-                <PopupMolecule title="Add Prerequesite" open onClose={handleClose}>
-                  <AddPrerequesitForm />
-                </PopupMolecule>
+                <>
+                  <section>
+                    <Cacumber list={list}></Cacumber>
+                  </section>
+                  <section className="">
+                    <TableHeader
+                      totalItems={modules.length}
+                      title="Modules"
+                      handleSearch={handleSearch}>
+                      <Button onClick={() => history.push(`${path}/add`)}>
+                        Add Module
+                      </Button>
+                    </TableHeader>
+                  </section>
+                  <section className="flex flex-wrap justify-between mt-2">
+                    {modules.map((course, index) => (
+                      <div key={index} className="p-1 mt-3">
+                        <CommonCardMolecule
+                          data={course}
+                          to={{ title: 'module', to: `modules/${course.id}` }}>
+                          <p className="pt-3">
+                            Total subjects:
+                            <span className="px-1 text-primary-500">
+                              {data?.data.data[index].total_num_subjects || 'None'}
+                            </span>
+                          </p>
+                        </CommonCardMolecule>
+                      </div>
+                    ))}
+                  </section>
+                </>
               );
             }}
           />

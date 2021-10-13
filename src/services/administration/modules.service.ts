@@ -42,7 +42,7 @@ class ModuleService {
   public async addPrerequisites(
     prereq: CreatePrerequisites,
   ): Promise<AxiosResponse<Response<ModuleInfo>>> {
-    return await adminstrationAxios.put(`/coursemodules/addPrerequists`, prereq);
+    return await adminstrationAxios.post(`/coursemodules/addPrerequists`, prereq);
   }
 }
 

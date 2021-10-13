@@ -112,6 +112,7 @@ function PersonalDetails<E>({
             placeholder="Select place of birth"
             width="60 md:w-80"
             name="place_of_birth"
+            // @ts-ignore
             defaultValue={personalDetails.place_of_birth}
             handleChange={handleChange}
             options={[]}>

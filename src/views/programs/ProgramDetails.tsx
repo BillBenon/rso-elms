@@ -1,35 +1,54 @@
-import React from 'react';
-import {
-  Link,
-  Route,
-  Switch,
-  useHistory,
-  useParams,
-  useRouteMatch,
-} from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
+import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
+import Cacumber from '../../components/Molecules/Cacumber';
+import AddCard from '../../components/Molecules/cards/AddCard';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import UsersPreview from '../../components/Molecules/cards/UsersPreview';
+import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
+import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
+import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
+import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
+import { moduleStore } from '../../store/modules.store';
 import programStore from '../../store/program.store';
-import { CommonCardDataType } from '../../types';
+import { CommonCardDataType, Link, ParamType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from './AcademicPrograms';
-interface ParamType {
-  id: string;
-}
 
 export default function ProgramDetailsMolecule() {
   const { id } = useParams<ParamType>();
   const history = useHistory();
   const { path, url } = useRouteMatch();
-  const program = programStore.getProgramById(id).data?.data.data;
 
-  const modules_per_program = programStore.getModulesByProgram(id).data?.data.data;
+  const getAllModuleStore = moduleStore.getModulesByProgram(id);
+  const [programModules, setProgramModules] = useState<CommonCardDataType[]>([]);
+
+  useEffect(() => {
+    let newModules: CommonCardDataType[] = [];
+    getAllModuleStore.data?.data.data.forEach((module) => {
+      newModules.push({
+        status: {
+          type: advancedTypeChecker(module.generic_status),
+          text: module.generic_status.toString(),
+        },
+        id: module.id,
+        code: module.code,
+        title: module.name,
+        description: module.description,
+        subTitle: `total subject: ${module.total_num_subjects || 'None'}`,
+      });
+    });
+
+    setProgramModules(newModules);
+  }, [getAllModuleStore.data?.data.data]);
+
+  const program = programStore.getProgramById(id).data?.data.data;
 
   const getProgramData = () => {
     let programData: IProgramData | undefined;
@@ -51,22 +70,6 @@ export default function ProgramDetailsMolecule() {
     return programData;
   };
 
-  let program_modules: CommonCardDataType[] = [];
-
-  modules_per_program?.map((module) => {
-    let mod: CommonCardDataType = {
-      id: module.id,
-      status: {
-        type: advancedTypeChecker(module.generic_status),
-        text: module.generic_status.toString(),
-      },
-      code: module.code,
-      title: module.name,
-      description: module.description,
-    };
-    program_modules.push(mod);
-  });
-
   const programData = getProgramData();
   const tabs: TabType[] = [
     {
@@ -79,8 +82,43 @@ export default function ProgramDetailsMolecule() {
     },
   ];
 
+  const list: Link[] = [
+    { to: 'home', title: 'home' },
+    { to: 'subjects', title: 'Faculty' },
+    { to: 'subjects', title: 'Programs' },
+    { to: 'modules', title: 'Modules' },
+  ];
+
+  function handleSearch() {}
+  const handleClose = () => {
+    history.goBack();
+  };
+
   return (
     <>
+      <Cacumber list={list} />
+
+      <div className="mt-11 pb-6">
+        <div className="flex flex-wrap justify-between items-center">
+          <div className="flex gap-2 items-center">
+            <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
+              {program?.name} program
+            </Heading>
+          </div>
+          <div className="flex flex-wrap justify-start items-center">
+            <SearchMolecule handleChange={handleSearch} />
+            <button className="border p-0 rounded-md mx-2">
+              <Icon name="filter" />
+            </button>
+          </div>
+
+          {/* <div className="flex gap-3">
+            <Button onClick={() => history.push(`${url}/add-subject`)}>
+              Add new Subject
+            </Button>
+          </div> */}
+        </div>
+      </div>
       <TabNavigation tabs={tabs}>
         <Switch>
           <Route
@@ -110,9 +148,9 @@ export default function ProgramDetailsMolecule() {
                         </div>
                       </div>
                       <div className="mt-4 flex space-x-4">
-                        <Link to={`${url}/edit`}>
-                          <Button>Edit program</Button>
-                        </Link>
+                        <Button onClick={() => history.push(`${url}/edit`)}>
+                          Edit program
+                        </Button>
                         <Button styleType="outline">Change Status</Button>
                       </div>
                     </CommonCardMolecule>
@@ -173,27 +211,61 @@ export default function ProgramDetailsMolecule() {
               </div>
             )}
           />
+          {/* add module popup */}
           <Route
             exact
+            path={`${path}/modules/add`}
+            render={() => {
+              return (
+                <PopupMolecule title="New Module" open onClose={handleClose}>
+                  <NewModuleForm />
+                </PopupMolecule>
+              );
+            }}
+          />
+
+          {/* add prerequesite popup */}
+          <Route
+            exact
+            path={`${path}/modules/:moduleId/add-prereq`}
+            render={() => {
+              return (
+                <PopupMolecule title="Add Prerequesite" open onClose={handleClose}>
+                  <AddPrerequesitesForm />
+                </PopupMolecule>
+              );
+            }}
+          />
+
+          <Route
             path={`${path}/modules`}
             render={() => (
-              <section className="flex flex-wrap justify-between">
-                {program_modules.length <= 0 ? (
+              <section className="mt-4 flex flex-wrap justify-start gap-4">
+                {programModules.length <= 0 ? (
                   <NoDataAvailable
                     buttonLabel="Add new modules"
                     title={'No Modules available in this program'}
-                    handleClick={() => history.push(`/dashboard/modules/add`)}
+                    handleClick={() => history.push(`${url}/modules/add`)}
                     description="And the web just isnt the same without you. Lets get you back online!"
                   />
                 ) : (
-                  program_modules?.map((prog) => (
-                    <div key={prog.code}>
-                      <CommonCardMolecule
-                        data={prog}
-                        to={{ title: 'program list', to: 'programs/3' }}
-                      />
-                    </div>
-                  ))
+                  <>
+                    <AddCard
+                      title={'Add new module'}
+                      onClick={() => history.push(`${url}/modules/add`)}
+                    />
+                    {programModules?.map((module) => (
+                      <div key={module.code}>
+                        <CommonCardMolecule
+                          data={module}
+                          to={{
+                            title: 'View more',
+                            to: `/dashboard/modules/${module.id}`,
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </>
                 )}
               </section>
             )}

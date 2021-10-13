@@ -1,3 +1,4 @@
+import queryString from 'query-string';
 import React, { useEffect } from 'react';
 import {
   Link,
@@ -14,6 +15,7 @@ import Heading from '../../components/Atoms/Text/Heading';
 import Cacumber from '../../components/Molecules/Cacumber';
 import CardHeadMolecule from '../../components/Molecules/CardHeadMolecule';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
+import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
@@ -38,6 +40,7 @@ export default function AcademicProgram() {
   const history = useHistory();
   const { search } = useLocation();
   const intakeId = new URLSearchParams(search).get('intakeId');
+  const location = useLocation();
 
   const list: LinkList[] = [
     { to: 'home', title: 'home' },
@@ -46,8 +49,12 @@ export default function AcademicProgram() {
     { to: `${url}`, title: 'Programs' },
   ];
 
+  const queryStr = queryString.parse(location.search);
+
   const { data, refetch } = intakeId
     ? intakeStore.getProgramsByIntake(intakeId)
+    : queryStr
+    ? programStore.getProgramsByDepartment(queryStr.query?.toString() || '')
     : programStore.fetchPrograms();
 
   const programInfo = data?.data.data;
@@ -57,10 +64,13 @@ export default function AcademicProgram() {
   // fetch intake if id is available
   if (intakeId && !intake.isSuccess && !intake.isLoading) intake.refetch();
 
+  // const programInfo = programData || data;
+
   useEffect(() => {
     if (location.pathname === path || location.pathname === `${path}/`) {
       refetch();
     }
+    console.log(queryString.parse(location.search).query);
   }, [location]);
 
   let programs: IProgramData[] = [];
@@ -95,35 +105,133 @@ export default function AcademicProgram() {
 
   return (
     <main className="px-4">
-      <section>
-        <Cacumber list={list}></Cacumber>
-      </section>
-      <section>
-        <TableHeader
-          totalItems={intakeId ? `${programs.length} programs` : programs.length}
-          title={`${intakeId ? intake.data?.data.data.title : 'Programs'}`}
-          showSearch={false}>
-          {intakeId ? (
-            <Link to={`${url}/add-program-to-intake?intakeId=${intakeId}`}>
-              <Button>Add Program To Intake</Button>
-            </Link>
-          ) : (
-            <Link to={`${url}/add`}>
-              <Button>Add New Program</Button>
-            </Link>
-          )}
-        </TableHeader>
-      </section>
+      <Route
+        exact
+        path={`${path}`}
+        render={() => {
+          return (
+            <>
+              <section>
+                <Cacumber list={list}></Cacumber>
+              </section>
+              <section>
+                <TableHeader
+                  totalItems={intakeId ? `${programs.length} programs` : programs.length}
+                  title={`${intakeId ? intake.data?.data.data.title : 'Programs'}`}
+                  showSearch={false}>
+                  {intakeId ? (
+                    <Link to={`${url}/add-program-to-intake?intakeId=${intakeId}`}>
+                      <Button>Add Program To Intake</Button>
+                    </Link>
+                  ) : (
+                    <Link to={`${url}/add`}>
+                      <Button>Add New Program</Button>
+                    </Link>
+                  )}
+                </TableHeader>
+              </section>
+              <section className="flex flex-wrap justify-between mt-2">
+                {programs.length ? (
+                  programs.map((Common) => (
+                    <Tooltip
+                      key={Common.code}
+                      trigger={
+                        <div className="p-1 mt-3">
+                          <CommonCardMolecule
+                            data={Common}
+                            to={{ title: 'module', to: `programs/${Common.id}` }}
+                          />
+                        </div>
+                      }
+                      open>
+                      <div className="w-96">
+                        <CardHeadMolecule
+                          title={Common.title}
+                          code={Common.code}
+                          status={Common.status}
+                          description={''}
+                        />
 
+                        {/* first column */}
+
+                        <div className="flex flex-col gap-6">
+                          <div className="flex flex-col gap-2">
+                            <Heading color="txt-secondary" fontSize="sm">
+                              {Common.department.division_type}
+                            </Heading>
+                            <Heading fontSize="sm" fontWeight="semibold">
+                              {Common.department.name}
+                            </Heading>
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <Heading color="txt-secondary" fontSize="sm">
+                              Modules
+                            </Heading>
+                            <Heading fontSize="sm" fontWeight="semibold">
+                              30
+                            </Heading>
+                          </div>
+
+                          <div className="flex flex-col gap-2">
+                            <Heading color="txt-secondary" fontSize="sm">
+                              Program Type
+                            </Heading>
+                            <Heading fontSize="sm" fontWeight="semibold">
+                              {Common.subTitle}
+                            </Heading>
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <Heading color="txt-secondary" fontSize="sm">
+                              Instructor in charge
+                            </Heading>
+                            <div className="flex items-center">
+                              <div className="">
+                                <Avatar
+                                  size="24"
+                                  alt="user1 profile"
+                                  className=" rounded-full  border-2 border-main transform hover:scale-125"
+                                  src="https://randomuser.me/api/portraits/men/1.jpg"
+                                />
+                              </div>
+                              <Heading fontSize="sm" fontWeight="semibold">
+                                {Common.incharge}
+                              </Heading>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* remarks section */}
+                        <div className="flex flex-col mt-8 gap-4">
+                          <Heading fontSize="sm" fontWeight="semibold">
+                            Remarks
+                          </Heading>
+                          <Heading fontSize="sm" color="txt-secondary">
+                            {Common.description}
+                          </Heading>
+                        </div>
+                        <div className="mt-4 space-x-4">
+                          <Link to={`${url}/${Common.id}/edit`}>
+                            <Button>Edit program</Button>
+                          </Link>
+                          <Button styleType="outline">Change Status</Button>
+                        </div>
+                      </div>
+                    </Tooltip>
+                  ))
+                ) : (
+                  <NoDataAvailable
+                    buttonLabel="Add new program"
+                    title={'No program available'}
+                    handleClick={() => history.push(`/dashboard/programs/add`)}
+                    description="And the web just isnt the same without you. Lets get you back online!"
+                  />
+                )}
+              </section>
+            </>
+          );
+        }}
+      />
       <Switch>
-        {/* create academic program */}
-        <Route
-          exact
-          path={`${path}/add`}
-          render={() => {
-            return <NewAcademicProgram />;
-          }}
-        />
         {/* add academic program to intake*/}
         <Route
           exact
@@ -137,8 +245,16 @@ export default function AcademicProgram() {
           }}
         />
 
+        {/* create academic program */}
+        <Route
+          exact
+          path={`${path}/add`}
+          render={() => {
+            return <NewAcademicProgram />;
+          }}
+        />
         {/* modify academic program */}
-        <Route exact path={`${path}/:id/edit`} render={() => <UpdateAcademicProgram />} />
+        <Route path={`${path}/:id/edit`} render={() => <UpdateAcademicProgram />} />
 
         {/* add prerequisite popup */}
         <Route
@@ -156,103 +272,15 @@ export default function AcademicProgram() {
           }}
         />
         {/* show academic program details */}
-        <Route path={`${path}/:id/details`} render={() => <ProgramDetails />} />
-        <Route
+        <Route path={`${path}/:id`} render={() => <ProgramDetails />} />
+
+        {/* <Route
           exact
-          path={`${path}`}
-          render={() => {
-            return (
-              <section className="flex flex-wrap justify-between mt-2">
-                {programs.map((Common) => (
-                  <Tooltip
-                    key={Common.code}
-                    trigger={
-                      <div className="p-1 mt-3">
-                        <CommonCardMolecule
-                          data={Common}
-                          to={{ title: 'module', to: `programs/${Common.id}/details` }}
-                        />
-                      </div>
-                    }
-                    open>
-                    <div className="w-96">
-                      <CardHeadMolecule
-                        title={Common.title}
-                        code={Common.code}
-                        status={Common.status}
-                        description={''}
-                      />
+          path={`${path}/:id/view-program`}
+          render={() => <ViewProgramsInDepartment />}
+        /> */}
 
-                      {/* first column */}
-
-                      <div className="flex flex-col gap-6">
-                        <div className="flex flex-col gap-2">
-                          <Heading color="txt-secondary" fontSize="sm">
-                            {Common.department.division_type}
-                          </Heading>
-                          <Heading fontSize="sm" fontWeight="semibold">
-                            {Common.department.name}
-                          </Heading>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                          <Heading color="txt-secondary" fontSize="sm">
-                            Modules
-                          </Heading>
-                          <Heading fontSize="sm" fontWeight="semibold">
-                            30
-                          </Heading>
-                        </div>
-
-                        <div className="flex flex-col gap-2">
-                          <Heading color="txt-secondary" fontSize="sm">
-                            Program Type
-                          </Heading>
-                          <Heading fontSize="sm" fontWeight="semibold">
-                            {Common.subTitle}
-                          </Heading>
-                        </div>
-                        <div className="flex flex-col gap-2">
-                          <Heading color="txt-secondary" fontSize="sm">
-                            Instructor in charge
-                          </Heading>
-                          <div className="flex items-center">
-                            <div className="">
-                              <Avatar
-                                size="24"
-                                alt="user1 profile"
-                                className=" rounded-full  border-2 border-main transform hover:scale-125"
-                                src="https://randomuser.me/api/portraits/men/1.jpg"
-                              />
-                            </div>
-                            <Heading fontSize="sm" fontWeight="semibold">
-                              {Common.incharge}
-                            </Heading>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* remarks section */}
-                      <div className="flex flex-col mt-8 gap-4">
-                        <Heading fontSize="sm" fontWeight="semibold">
-                          Remarks
-                        </Heading>
-                        <Heading fontSize="sm" color="txt-secondary">
-                          {Common.description}
-                        </Heading>
-                      </div>
-                      <div className="mt-4 space-x-4">
-                        <Link to={`${url}/${Common.id}/edit`}>
-                          <Button>Edit program</Button>
-                        </Link>
-                        <Button styleType="outline">Change Status</Button>
-                      </div>
-                    </div>
-                  </Tooltip>
-                ))}
-              </section>
-            );
-          }}
-        />
+        <Route exact path={`${path}/:id/details`} render={() => <ProgramDetails />} />
       </Switch>
     </main>
   );

@@ -13,7 +13,7 @@ import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule'
 import { divisionStore } from '../../store/divisions.store';
 import programStore from '../../store/program.store';
 import usersStore from '../../store/users.store';
-import { CommonFormProps, ValueType } from '../../types';
+import { CommonFormProps, ParamType, ValueType } from '../../types';
 import {
   CreateProgramInfo,
   ProgramStatus,
@@ -23,10 +23,6 @@ import { UserType } from '../../types/services/user.types';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
 
 interface IUpdateAcademicProgram<K> extends CommonFormProps<K> {}
-interface ParamType {
-  id: string;
-}
-
 export default function UpdateAcademicProgram<E>({
   onSubmit,
 }: IUpdateAcademicProgram<E>) {
@@ -117,10 +113,16 @@ export default function UpdateAcademicProgram<E>({
           Program description
         </TextAreaMolecule>
         <DropdownMolecule
-          defaultValue={data?.data.data.incharge?.username}
+          defaultValue={getDropDownOptions({
+            inputs: instructors || [],
+            labelName: 'username',
+          }).find((incharge) => incharge.value === data?.data.data.incharge?.username)}
           width="64"
           placeholder="Select incharge"
-          options={getDropDownOptions(instructors, 'username')}
+          options={getDropDownOptions({
+            inputs: instructors || [],
+            labelName: 'username',
+          })}
           name="current_admin_id"
           handleChange={(e: ValueType) => handleChange(e)}>
           Incharge
@@ -128,7 +130,7 @@ export default function UpdateAcademicProgram<E>({
         <DropdownMolecule
           width="64"
           placeholder="Select department"
-          options={getDropDownOptions(departments)}
+          options={getDropDownOptions({ inputs: departments || [] })}
           name="department_id"
           handleChange={(e: ValueType) => handleChange(e)}>
           Department

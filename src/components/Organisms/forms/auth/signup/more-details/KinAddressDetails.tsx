@@ -45,6 +45,7 @@ function KinAddressDetails<E>({
           <DropdownMolecule
             width="60 md:w-80"
             name="country"
+            // @ts-ignore
             defaultValue={details.country}
             handleChange={handleChange}
             options={[]}>
@@ -53,6 +54,7 @@ function KinAddressDetails<E>({
           <DropdownMolecule
             width="60 md:w-80"
             name="location"
+            // @ts-ignore
             defaultValue={details.location}
             handleChange={handleChange}
             options={[]}>

@@ -13,7 +13,6 @@ class IntakeStore {
     return useMutation(intakeService.addPrograms);
   }
   getAll(registrationControlId?: string) {
-    console.log(registrationControlId, 'invoked');
     if (registrationControlId)
       return useQuery(['intakes/registrationControl', registrationControlId], () =>
         intakeService.getIntakesPyRegistrationControl(registrationControlId),
@@ -37,6 +36,11 @@ class IntakeStore {
   getIntakesByAcademy(academyId: string) {
     return useQuery(['intakes/academy', academyId], () =>
       intakeService.getIntakesByAcademy(academyId),
+    );
+  }
+  getIntakesByRegControl(regControlId: string) {
+    return useQuery(['intakes/regcontrol', regControlId], () =>
+      intakeService.getIntakesByRegControl(regControlId),
     );
   }
 

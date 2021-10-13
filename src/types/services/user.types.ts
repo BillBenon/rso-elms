@@ -127,6 +127,7 @@ export interface CreateUserInfo {
   sex: GenderStatus;
   user_type: UserType;
   username: string;
+  intake_id: string;
 }
 
 export interface PersonDetail

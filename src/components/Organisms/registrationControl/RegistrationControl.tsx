@@ -15,9 +15,10 @@ import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
 import NewRegistrationControl from '../forms/NewRegistrationControl';
 import UpdateRegControl from '../forms/regcontrol/UpdateRegControl';
+import RegControlDetails from './RegControlDetails';
 
 export default function RegistrationControl() {
-  const { url, path } = useRouteMatch();
+  const { url } = useRouteMatch();
   const history = useHistory();
   const { data, isLoading, isSuccess } = registrationControlStore.fetchRegControl();
 
@@ -59,18 +60,19 @@ export default function RegistrationControl() {
     RegistrationControls.push(registrationcontrol);
   });
 
-  function handleClose() {
-    history.goBack();
-  }
-
   const controlActions = [
     {
       name: 'Edit control',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit reg control
+        history.push(`${url}/${id}/edit`); // go to edit reg control
       },
     },
-    // { name: 'View', handleAction: () => {} },
+    {
+      name: 'View',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`${url}/${id}`); // go to add new intake to this reg control
+      },
+    },
     {
       name: 'Manage Intakes',
       handleAction: (id: string | number | undefined) => {
@@ -78,6 +80,10 @@ export default function RegistrationControl() {
       },
     },
   ];
+
+  function handleClose() {
+    history.goBack();
+  }
 
   return (
     <div>
@@ -125,7 +131,7 @@ export default function RegistrationControl() {
       <Switch>
         <Route
           exact
-          path={`${path}/add`}
+          path={`${url}/add`}
           render={() => {
             return (
               <PopupMolecule title="New Registration Control" open onClose={handleClose}>
@@ -134,11 +140,18 @@ export default function RegistrationControl() {
             );
           }}
         />
+        <Route
+          exact
+          path={`${url}/:id`}
+          render={() => {
+            return <RegControlDetails />;
+          }}
+        />
 
         {/* modify reg control */}
         <Route
           exact
-          path={`${path}/:id/edit`}
+          path={`${url}/:id/edit`}
           render={() => {
             return (
               <PopupMolecule title="Update Control" open onClose={handleClose}>
@@ -147,6 +160,22 @@ export default function RegistrationControl() {
             );
           }}
         />
+        {/* add intake to reg control
+              <Route
+                exact
+                path={`${path}/:id/add-intake`}
+                render={() => {
+                  return (
+                    <PopupMolecule
+                      closeOnClickOutSide={false}
+                      title="New intake"
+                      open
+                      onClose={handleClose}>
+                      <NewIntake />
+                    </PopupMolecule>
+                  );
+                }}
+              /> */}
       </Switch>
     </div>
   );

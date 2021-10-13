@@ -33,11 +33,11 @@ export default function AddPrivileges({ onSubmit, roleName, roleId }: PropType) 
 
     mutateAsync(form, {
       onSuccess: () => {
-        toast.success('privilege added', { id: toastId });
+        toast.success('Privileges Added');
         history.goBack();
       },
-      onError: (error) => {
-        toast.error(error + '', { id: toastId });
+      onError: () => {
+        toast.error('something wrong happened adding privileges on role');
       },
     });
     onSubmit(e);

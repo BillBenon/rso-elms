@@ -86,6 +86,38 @@ export default function NewIntake(props: CProps) {
     }
   }
 
+  // eslint-disable-next-line no-unused-vars
+  const stepperContent = {
+    currentStep: currentStep,
+    completeStep: currentStep,
+    content: [
+      {
+        label: 'info',
+        content: (
+          <IntakeInfoComponent
+            values={values}
+            handleChange={handleChange}
+            handleNext={handleSubmit}
+            display_label="Intake Info"
+          />
+        ),
+        clicked: () => {},
+      },
+      {
+        label: 'more',
+        content: (
+          <IntakeStatusComponent
+            values={values}
+            handleChange={handleChange}
+            handleNext={handleSubmit}
+            display_label="Intake Status"
+          />
+        ),
+        clicked: () => {},
+      },
+    ],
+  };
+
   return (
     <div className="w-full">
       <Stepper

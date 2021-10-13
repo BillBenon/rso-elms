@@ -10,12 +10,13 @@ export interface CommonProps<T> extends AllHTMLAttributes<DOMAttributes<T>> {}
 export interface CommonInputProps<T> extends CommonProps<T> {
   handleChange: (_e: ValueType) => void;
   name: string;
-  value?: string;
+  value?: string | number;
   options?: SelectData[];
 }
 
 //common input props that will be used on all reusable input components
 export interface commonInputProps {
+  required?: boolean;
   handleChange: Function;
   name: string;
   options: SelectData[];
@@ -39,7 +40,7 @@ export interface DropdownProps extends commonInputProps {
   noOptionsMessage?: string;
   width?: string;
   searchable?: boolean;
-  defaultValue?: Object;
+  defaultValue?: SelectData;
   styles?: Object;
   hasError?: boolean;
   height?: number;

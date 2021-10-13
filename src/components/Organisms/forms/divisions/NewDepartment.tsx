@@ -1,11 +1,10 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
-import { queryClient } from '../../../../plugins/react-query';
 import academyStore from '../../../../store/academy.store';
 import { divisionStore } from '../../../../store/divisions.store';
-import { FormPropType, ValueType } from '../../../../types';
+import { IDivisionsAcademyType, ParamType, ValueType } from '../../../../types';
 import { AcademyInfo } from '../../../../types/services/academy.types';
 import { DivisionCreateInfo } from '../../../../types/services/division.types';
 import { getDropDownOptions } from '../../../../utils/getOption';
@@ -14,15 +13,17 @@ import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-export default function NewDepartment({ onSubmit }: FormPropType) {
+export default function NewDepartment({ onSubmit, academy_id }: IDivisionsAcademyType) {
+  const { id } = useParams<ParamType>();
+
   const [division, setDivision] = useState<DivisionCreateInfo>({
-    academy_id: '',
+    academy_id: academy_id || '',
     code: '',
     description: '',
     division_type: 'DEPARTMENT',
     id: '',
     name: '',
-    parent_id: '',
+    parent_id: id ? id : '',
   });
   const { mutateAsync } = divisionStore.createDivision(division.division_type);
   const history = useHistory();
@@ -30,7 +31,6 @@ export default function NewDepartment({ onSubmit }: FormPropType) {
   function handleChange({ name, value }: ValueType) {
     setDivision((old) => ({ ...old, [name]: value }));
   }
-
   const academies: AcademyInfo[] | undefined =
     academyStore.fetchAcademies().data?.data.data;
 
@@ -40,12 +40,12 @@ export default function NewDepartment({ onSubmit }: FormPropType) {
     e.preventDefault();
     mutateAsync(division, {
       onSuccess: () => {
-        toast.success('Role created', { duration: 3 });
-        queryClient.invalidateQueries();
+        toast.success('Department created');
+        // queryClient.invalidateQueries();
         history.goBack();
       },
       onError: () => {
-        toast.error('something wrong happened while creating role', { duration: 3 });
+        toast.error('something wrong happened while creating department');
       },
     });
     if (onSubmit) onSubmit(e);
@@ -72,7 +72,8 @@ export default function NewDepartment({ onSubmit }: FormPropType) {
       </TextAreaMolecule>
 
       <DropdownMolecule
-        defaultValue={division.academy_id}
+        // defaultValue={division.academy_id}
+        // @ts-ignore
         options={getDropDownOptions(academies)}
         name="academy_id"
         placeholder={'Academy to be enrolled'}
@@ -83,6 +84,7 @@ export default function NewDepartment({ onSubmit }: FormPropType) {
       <DropdownMolecule
         width="82"
         placeholder="Select faculty"
+        // @ts-ignore
         options={getDropDownOptions(departments)}
         name="parent_id"
         handleChange={handleChange}>

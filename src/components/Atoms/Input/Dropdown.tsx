@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Select from 'react-select';
 
 import { DropdownProps } from '../../../types';
@@ -14,7 +14,12 @@ export default function DropDown(props: DropdownProps) {
       props.handleChange({ value: options, name: props.name });
     } else props.handleChange({ ...e, name: props.name });
   };
-  // @tsc-ignore
+
+  useEffect(() => {
+    if (props.defaultValue)
+      handleChangeLocally({ name: props.name, value: props.defaultValue.value });
+  }, []);
+
   return (
     <>
       {/*@tsc-ignore*/}

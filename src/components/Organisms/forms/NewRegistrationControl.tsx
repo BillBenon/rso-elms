@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useHistory } from 'react-router';
 
 import { authenticatorStore } from '../../../store';
 import registrationControlStore from '../../../store/registrationControl.store';
@@ -15,6 +16,7 @@ interface PropType<K> extends CommonFormProps<K> {}
 export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
   const { mutateAsync } = registrationControlStore.createRegControl();
   const { data } = authenticatorStore.authUser();
+  const history = useHistory();
 
   const [regControl, setRegControl] = useState<IRegistrationControlCreateInfo>({
     academy_id: data?.data.data.academy.id.toString() || '',
@@ -28,14 +30,14 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
   }
 
   function submitForm(e: FormEvent) {
-    const toastId = toast.loading('Adding Registration control');
     e.preventDefault();
     mutateAsync(regControl, {
       onSuccess: () => {
-        toast.success('Registration control created', { id: toastId });
+        toast.success('Registration control created');
+        history.goBack();
       },
-      onError: (error) => {
-        toast.error(error + '', { id: toastId });
+      onError: () => {
+        toast.error('something wrong happened while creating control');
       },
     });
 

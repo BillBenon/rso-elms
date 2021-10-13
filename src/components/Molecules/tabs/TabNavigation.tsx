@@ -43,7 +43,9 @@ function TabHeadings({ tabs, onTabChange }: TabsImportantProps) {
   const history = useHistory();
   const location = useLocation();
 
-  let activeTabIndex = tabs.findIndex((tab) => tab.href === location.pathname) || 0;
+  let competitotors = tabs.filter((tab) => location.pathname.startsWith(tab.href));
+  const lengths = competitotors.map((tab) => tab.href.length);
+  let activeTabIndex = lengths.indexOf(Math.max(...lengths)) || 0;
 
   const slideTo = (index: number, href: string, label: string) => {
     if (onTabChange)
@@ -66,8 +68,7 @@ function TabHeadings({ tabs, onTabChange }: TabsImportantProps) {
                 ${fontSizeStyle['sm']} ${fontWeightStyle['bold']} text-${
               colorStyle[activeTabIndex == i ? 'primary' : 'gray']
             } border-${colorStyle[activeTabIndex == i ? 'primary' : 'lightgray']}`}
-            onClick={() => slideTo(i, tab.href, tab.label)}
-            disabled={activeTabIndex === i}>
+            onClick={() => slideTo(i, tab.href, tab.label)}>
             {tab.label}
           </button>
         );

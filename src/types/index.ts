@@ -101,6 +101,10 @@ export interface CommonCardDataType {
   footerTitle?: string | ReactNode;
 }
 
+export interface IDivisionsAcademyType extends FormPropType {
+  academy_id: string | undefined;
+}
+
 export interface SigninPropTypes extends CommonCardDataType {
   programs: SelectData[];
 }

@@ -13,7 +13,7 @@ class LevelService {
     return await adminstrationAxios.get('/levels/getLevels');
   }
 
-  public async getLevel(id: string): Promise<AxiosResponse<Response<ILevel>>> {
+  public async getLevelById(id: string): Promise<AxiosResponse<Response<ILevel>>> {
     return await adminstrationAxios.get(`/levels/getLevelById/${id}`);
   }
 

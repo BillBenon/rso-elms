@@ -11,7 +11,9 @@ import {
 import { IntakeProgramInfo } from '../../types/services/program.types';
 
 class IntakeService {
-  public async create(intake: IntakeInfo): Promise<AxiosResponse<Response<IntakeInfo>>> {
+  public async create(
+    intake: IntakeInfo,
+  ): Promise<AxiosResponse<Response<ExtendedIntakeInfo>>> {
     return await adminstrationAxios.post('/intakes/addIntake', intake);
   }
   public async update(intake: IntakeInfo): Promise<AxiosResponse<Response<IntakeInfo>>> {
@@ -34,6 +36,12 @@ class IntakeService {
     id: string,
   ): Promise<AxiosResponse<Response<ExtendedIntakeInfo[]>>> {
     return await adminstrationAxios.get(`/intakes/getIntakesByAcademy/${id}`);
+  }
+
+  public async getIntakesByRegControl(
+    id: string,
+  ): Promise<AxiosResponse<Response<ExtendedIntakeInfo[]>>> {
+    return await adminstrationAxios.get(`/intakes/getIntakesByRegistrationControl/${id}`);
   }
 
   public async getProgramsByIntake(
