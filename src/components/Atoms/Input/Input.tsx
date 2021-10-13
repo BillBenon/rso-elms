@@ -10,6 +10,7 @@ export default function Input<T>({
   padding = 'px-4',
   type = 'text',
   readonly = false,
+  required = true,
   value,
   name,
   full,
@@ -37,6 +38,7 @@ export default function Input<T>({
       type={type}
       value={_value}
       readOnly={readonly}
+      required={required}
       autoComplete="off"
       className={`${
         readonly ? 'bg-gray-100' : 'bg-transparent'

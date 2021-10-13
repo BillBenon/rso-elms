@@ -1,4 +1,4 @@
-import { AllHTMLAttributes, DOMAttributes, FormEvent } from 'react';
+import React, { AllHTMLAttributes, DOMAttributes, FormEvent } from 'react';
 
 import { Color, Page, SelectData, ValueType } from '.';
 
@@ -46,6 +46,8 @@ export interface InputProps<T> extends CommonInputProps<T> {
   pcolor?: Color;
   width?: string | number;
   className?: string;
+  required?: boolean;
+  ref?: React.LegacyRef<HTMLInputElement>;
 }
 
 export interface DropdownProps extends commonInputProps {
