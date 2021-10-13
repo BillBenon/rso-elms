@@ -46,7 +46,7 @@ const RouterProtection = () => {
       {/* start of academic admin pages */}
       <Route path="/dashboard/modules" component={Modules} />
       <Route path="/dashboard/subjects" component={Subjects} />
-      <Route exact path="/dashboard/evaluations" component={ViewEvaluations} />
+      <Route path="/dashboard/evaluations" component={ViewEvaluations} />
       <Route exact path="/dashboard/evaluations/new" component={NewEvaluation} />
       <Route path="/dashboard/registration-control" component={RegistrationControl} />
 

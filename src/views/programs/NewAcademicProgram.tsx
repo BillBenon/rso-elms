@@ -16,7 +16,7 @@ import { levelStore } from '../../store/level.store';
 import programStore from '../../store/program.store';
 import usersStore from '../../store/users.store';
 import { CommonFormProps, ParamType, ValueType } from '../../types';
-import { IcreateLevel, ILevel } from '../../types/services/levels.types';
+import { ILevel } from '../../types/services/levels.types';
 import {
   CreateAcademicProgramLevel,
   CreateProgramInfo,
