@@ -23,6 +23,7 @@ import programStore from '../../store/program.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
 import { DivisionInfo } from '../../types/services/division.types';
 import { advancedTypeChecker } from '../../utils/getOption';
+import { getQueryParamasId } from '../../utils/getQueryParamasID';
 import NewAcademicProgram from './NewAcademicProgram';
 import ProgramDetails from './ProgramDetails';
 import UpdateAcademicProgram from './UpdateAcademicProgram';
@@ -52,7 +53,7 @@ export default function AcademicProgram() {
   ];
 
   const { data, refetch } = programStore.fetchPrograms();
-  const queryStr = queryString.parse(location.search);
+  const queryStr: queryString.ParsedQuery = getQueryParamasId(location.search);
 
   let programData;
 

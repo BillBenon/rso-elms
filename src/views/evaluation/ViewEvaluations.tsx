@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+import {
+  Link,
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+  useRouteMatch,
+} from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Cacumber from '../../components/Molecules/Cacumber';
@@ -9,11 +16,17 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import { Link as LinkList } from '../../types';
+import { getQueryParamasId } from '../../utils/getQueryParamasID';
+import EvaluationContent from './EvaluationContent';
 
 export default function ViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
   const history = useHistory();
+  const location = useLocation();
   const { url, path } = useRouteMatch();
+  const queryStr = getQueryParamasId(location.search);
+
+  console.log(queryStr);
 
   const list: LinkList[] = [
     { to: 'home', title: 'home' },
@@ -88,7 +101,7 @@ export default function ViewEvaluations() {
           exact
           path={`${path}/`}
           render={() => (
-            <section className="flex flex-wrap justify-between">
+            <section>
               {evaluations.length <= 0 ? (
                 <NoDataAvailable
                   buttonLabel="Add new evaluation"
@@ -96,6 +109,8 @@ export default function ViewEvaluations() {
                   handleClick={() => history.push(`${url}/new`)}
                   description="And the web just isnt the same without you. Lets get you back online!"
                 />
+              ) : queryStr ? (
+                <EvaluationContent />
               ) : (
                 evaluations?.map((info, index) => (
                   <div key={index}>
@@ -124,7 +139,7 @@ export default function ViewEvaluations() {
               data={data2}
               hide={['id']}
               uniqueCol={'id'}
-              // actions={actions}
+              // actions={actions
             />
           )}
         />
