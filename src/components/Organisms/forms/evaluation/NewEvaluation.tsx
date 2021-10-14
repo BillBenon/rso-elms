@@ -121,12 +121,27 @@ export default function NewEvaluation() {
           New evaluation
         </Heading>
         <Stepper
+          currentStep={currentStep}
+          completeStep={currentStep}
           width="w-64"
           isVertical={false}
           isInline={false}
-          stepperContent={stepperContent}
-          navigateToStepHandler={() => console.log('submitted')}
-        />
+          navigateToStepHandler={() => console.log('submitted')}>
+          <EvaluationInfoComponent
+            values={[]}
+            handleChange={handleChange}
+            handleNext={handleSubmit}
+            handleGoBack={handleBack}
+          />
+          <EvaluationQuestionComponent
+            values={questions}
+            handleChange={handleChange}
+            handleNext={handleSubmit}
+            isLoading={isLoading}
+            handleGoBack={handleBack}
+            handleAddQuestion={handleAddQuestion}
+          />
+        </Stepper>
       </div>
     </div>
   );
