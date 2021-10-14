@@ -44,7 +44,7 @@ export function Table<T>({
     { label: '50', value: '50' },
     { label: '100', value: '100' },
   ];
-  const [rowsOnPage, setRowsOnPage] = useState(+countsToDisplay[0].value);
+  const [rowsOnPage, setRowsOnPage] = useState(parseInt(countsToDisplay[0].value));
   const [currentPage, setCurrentPage] = useState(1);
 
   //Get current rows
@@ -61,10 +61,6 @@ export function Table<T>({
   useEffect(() => {
     setCurrentRows(data.slice(indexOfFirstRow, indexOfLastRow));
   }, [currentPage, data]);
-
-  // useEffect(() => {
-  //   setCurrentRows(data.slice(indexOfFirstRow, indexOfLastRow));
-  // }, [data]);
 
   // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);

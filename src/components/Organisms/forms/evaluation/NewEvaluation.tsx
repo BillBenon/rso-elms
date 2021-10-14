@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import DesktopDatePicker from '@mui/lab/DatePicker';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
@@ -301,7 +302,7 @@ function EvaluationQuestionComponent({
 }: IProps) {
   return (
     <>
-      {values.map((question, index) => (
+      {values.map((question: any, index: any) => (
         <>
           <div className="flex justify-between w-2/3 bg-main px-6 py-10 mt-8" key={index}>
             <form

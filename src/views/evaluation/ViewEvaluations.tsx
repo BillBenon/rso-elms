@@ -132,7 +132,7 @@ export default function ViewEvaluations() {
                     ) : queryStr.query ? (
                       <EvaluationContent />
                     ) : (
-                      evaluations?.map((info, index) => (
+                      evaluations?.map((info: any, index: number) => (
                         <div key={index}>
                           <CommonCardMolecule
                             className="cursor-pointer"
