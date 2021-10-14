@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Link } from '../../../types';
 import Heading from '../../Atoms/Text/Heading';
-import Cacumber from '../../Molecules/Cacumber';
+import BreadCrumb from '../../Molecules/BreadCrumb';
 import { Tab, Tabs } from '../../Molecules/tabs/tabs';
 
 const list: Link[] = [
@@ -15,7 +15,7 @@ const list: Link[] = [
 export default function StudentDetails() {
   return (
     <div>
-      <Cacumber list={list} />
+      <BreadCrumb list={list} />
       <Heading className="py-3" fontWeight="bold" fontSize="2xl">
         Student Profile
       </Heading>

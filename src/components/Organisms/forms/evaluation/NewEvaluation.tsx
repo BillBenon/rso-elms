@@ -8,7 +8,7 @@ import { Link as LinkList, ValueType } from '../../../../types';
 import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
 import Heading from '../../../Atoms/Text/Heading';
-import Cacumber from '../../../Molecules/Cacumber';
+import BreadCrumb from '../../../Molecules/BreadCrumb';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
@@ -28,7 +28,7 @@ interface IProps {
 export default function NewEvaluation() {
   const list: LinkList[] = [
     { to: 'home', title: 'home' },
-    { to: 'evaluations', title: 'evaluations' },
+    { to: '/dashboard/evaluations', title: 'evaluations' },
     { to: 'new', title: 'new evaluation' },
   ];
 
@@ -110,7 +110,7 @@ export default function NewEvaluation() {
   return (
     <div>
       <section>
-        <Cacumber list={list}></Cacumber>
+        <BreadCrumb list={list}></BreadCrumb>
       </section>
 
       {/* stepper section */}
@@ -133,10 +133,10 @@ export default function NewEvaluation() {
 
 function EvaluationInfoComponent({ values, handleChange, handleNext }: IProps) {
   return (
-    <div className="pt-9">
-      <Heading fontWeight="semibold" fontSize="2xl" color="primary">
+    <div>
+      {/* <Heading fontWeight="semibold" fontSize="2xl" color="primary">
         New evaluation
-      </Heading>
+      </Heading> */}
 
       <form
         className="pt-6"
@@ -341,6 +341,9 @@ function EvaluationQuestionComponent({
           </div>
         </>
       ))}
+      <Button styleType="text" color="gray" onClick={handleGoBack} disabled={isLoading}>
+        Back
+      </Button>
       <div className="pt-6 flex flex-col">
         <div className="pb-6">
           <Button styleType="outline" onClick={handleAddQuestion}>

@@ -12,7 +12,7 @@ import {
 import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
-import Cacumber from '../../components/Molecules/Cacumber';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CardHeadMolecule from '../../components/Molecules/CardHeadMolecule';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -94,7 +94,7 @@ export default function AcademicProgram() {
   return (
     <main className="px-4">
       <section>
-        <Cacumber list={list}></Cacumber>
+        <BreadCrumb list={list}></BreadCrumb>
       </section>
       <section>
         <TableHeader totalItems={programs.length} title="Programs" showSearch={false}>

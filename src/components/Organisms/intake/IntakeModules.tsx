@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Link } from '../../../types';
 import Heading from '../../Atoms/Text/Heading';
-import Cacumber from '../../Molecules/Cacumber';
+import BreadCrumb from '../../Molecules/BreadCrumb';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 import Table from '../../Molecules/table/Table';
 
@@ -55,7 +55,7 @@ export default function IntakeModules() {
   const handleChange = (_e: any) => {};
   return (
     <div>
-      <Cacumber list={list} />
+      <BreadCrumb list={list} />
       <Heading fontSize="lg" fontWeight="semibold">
         Add modules to an Intake
       </Heading>

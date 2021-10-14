@@ -7,7 +7,7 @@ import { CommonCardDataType, Link, ParamType } from '../../../types';
 import { advancedTypeChecker } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';
 import Heading from '../../Atoms/Text/Heading';
-import Cacumber from '../../Molecules/Cacumber';
+import BreadCrumb from '../../Molecules/BreadCrumb';
 import CommonCardMolecule from '../../Molecules/cards/CommonCardMolecule';
 
 const list: Link[] = [
@@ -46,7 +46,7 @@ export default function RegControlIntakes() {
 
   return (
     <div>
-      <Cacumber list={list} />
+      <BreadCrumb list={list} />
       <div className="flex gap-2 justify-between items-center py-3">
         <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
           Registration control details
