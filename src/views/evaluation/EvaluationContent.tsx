@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Heading from '../../components/Atoms/Text/Heading';
+import ContentSpan from './ContentSpan';
 
 export default function EvaluationContent() {
   return (
@@ -12,23 +13,11 @@ export default function EvaluationContent() {
         <div>
           {/* first column */}
           <div className="flex flex-col gap-4">
-            <div className="flex flex-col gap-4">
-              <Heading color="txt-secondary" fontSize="base">
-                Evaluation name
-              </Heading>
-              <Heading fontWeight="semibold" fontSize="base">
-                Quiz on the basics of the nervous system.
-              </Heading>
-            </div>
+            <ContentSpan title="Evaluation name">
+              Quiz on the basics of the nervous system.
+            </ContentSpan>
 
-            <div className="flex flex-col gap-4">
-              <Heading color="txt-secondary" fontSize="base">
-                Marks
-              </Heading>
-              <Heading fontWeight="semibold" fontSize="base">
-                20
-              </Heading>
-            </div>
+            <ContentSpan title="Time Limit" subTitle="2h 30 mins" />
 
             <div className="flex flex-col gap-4">
               <Heading color="txt-secondary" fontSize="base">
@@ -50,79 +39,34 @@ export default function EvaluationContent() {
         </div>
         {/* second column */}
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-4">
-            <Heading color="txt-secondary" fontSize="base">
-              Evaluation type
-            </Heading>
-            <Heading fontWeight="semibold" fontSize="base">
-              Quiz
-            </Heading>
-          </div>
+          <ContentSpan title="Evaluation type" subTitle="Quiz" />
 
           <div className="flex flex-col gap-4">
-            <Heading color="txt-secondary" fontSize="base">
-              Time Limit
-            </Heading>
-            <Heading fontWeight="semibold" fontSize="base">
-              2h 30min
-            </Heading>
+            <ContentSpan title="Time Limit" subTitle="2h 30 mins" />
           </div>
         </div>
 
         {/* tjird column */}
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-4">
-            <Heading color="txt-secondary" fontSize="base">
-              Evaluation type
-            </Heading>
-            <Heading fontWeight="semibold" fontSize="base">
-              Quiz
-            </Heading>
-          </div>
+          <ContentSpan title="Evaluation type" subTitle="Quiz" />
 
-          <div className="flex flex-col gap-4">
-            <Heading color="txt-secondary" fontSize="base">
-              Time Limit
-            </Heading>
-            <Heading fontWeight="semibold" fontSize="base">
-              2h 30min
-            </Heading>
-          </div>
+          <ContentSpan title="Time Limit" subTitle="2h 30 min" />
         </div>
 
         {/* tjird column */}
         <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-4">
-            <Heading color="txt-secondary" fontSize="base">
-              Evaluation type
-            </Heading>
-            <Heading fontWeight="semibold" fontSize="base">
-              Quiz
-            </Heading>
-          </div>
+          <ContentSpan title="Evaluation type" subTitle="Quiz" />
 
-          <div className="flex flex-col gap-4">
-            <Heading color="txt-secondary" fontSize="base">
-              Time Limit
-            </Heading>
-            <Heading fontWeight="semibold" fontSize="base">
-              2h 30min
-            </Heading>
-          </div>
+          <ContentSpan title="Time Limit" subTitle="2h 30 mins" />
         </div>
       </div>
 
       {/* questions */}
       <div className="bg-main px-16 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5">
-        <div className="  mt-7 flex justify-between ">
-          <div className="flex flex-col gap-2">
-            <Heading color="txt-secondary" fontSize="base">
-              Question 1
-            </Heading>
-            <Heading fontWeight="semibold" fontSize="base">
-              What is the nervous system?
-            </Heading>
-          </div>
+        <div className="mt-7 flex justify-between">
+          <ContentSpan title="Question 1" className="gap-3">
+            What is the nervous system?
+          </ContentSpan>
 
           <Heading fontWeight="semibold" fontSize="sm">
             5 marks
@@ -138,7 +82,7 @@ export default function EvaluationContent() {
             </div>
           </div>
           <div className="flex">
-            <div className="w-14 h-14 border-primary-500 text-primary-500 border-2 border-r-0 rounded-tl-md rounded-bl-md right-rounded-md flex items-center justify-center">
+            <div className="w-14 h-14 border-primary-500 border-2 border-r-0 rounded-tl-md rounded-bl-md right-rounded-md flex items-center justify-center">
               B
             </div>
             <div className="w-80 h-14 border-primary-500 border-2 rounded-tr-md rounded-br-md flex items-center px-4">

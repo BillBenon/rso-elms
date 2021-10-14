@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route } from 'react-router-dom';
 
-import NewEvaluation from './components/Organisms/forms/evaluation/NewEvaluation';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import Dashboard from './layout/Dashboard';
 import { authenticatorStore } from './store';
@@ -47,11 +46,8 @@ const RouterProtection = () => {
       <Route path="/dashboard/modules" component={Modules} />
       <Route path="/dashboard/subjects" component={Subjects} />
       <Route path="/dashboard/evaluations" component={ViewEvaluations} />
-      <Route exact path="/dashboard/evaluations/new" component={NewEvaluation} />
       <Route path="/dashboard/registration-control" component={RegistrationControl} />
-
       <Route path="/dashboard/divisions" component={Divisions} />
-
       <Route path="/dashboard/programs" component={AcademicPrograms} />
       <Route exact path="/dashboard/programs/new" component={NewAcademicProgram} />
       <Route exact path="/dashboard/levels" component={Levels} />

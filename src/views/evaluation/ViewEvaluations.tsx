@@ -9,12 +9,13 @@ import {
 } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
-import Cacumber from '../../components/Molecules/Cacumber';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import { Link as LinkList } from '../../types';
 import { getQueryParamasId } from '../../utils/getQueryParamasID';
 import EvaluationContent from './EvaluationContent';
@@ -29,7 +30,7 @@ export default function ViewEvaluations() {
   console.log(queryStr);
 
   const list: LinkList[] = [
-    { to: 'home', title: 'home' },
+    { to: '/', title: 'home' },
     { to: 'evaluations', title: 'evaluations' },
   ];
 
@@ -77,7 +78,7 @@ export default function ViewEvaluations() {
     },
     {
       label: 'Submissions',
-      href: `${url}/evaluations/submissions`,
+      href: `${url}/submissions`,
     },
   ];
 
@@ -86,64 +87,73 @@ export default function ViewEvaluations() {
   }, []);
 
   return (
-    <div>
-      <section>
-        <Cacumber list={list}></Cacumber>
-      </section>
-      <TableHeader title="Evaluations" showBadge={false} showSearch={false}>
-        <Link to={`${url}/new`}>
-          <Button>New Evaluation</Button>
-        </Link>
-      </TableHeader>
-
-      <TabNavigation tabs={tabs} onTabChange={(event) => {}}>
-        <Route
-          exact
-          path={`${path}/`}
-          render={() => (
+    <Switch>
+      <Route exact path={`${path}/new`} render={() => <NewEvaluation />} />
+      <Route
+        path={`${path}`}
+        render={() => (
+          <div>
             <section>
-              {evaluations.length <= 0 ? (
-                <NoDataAvailable
-                  buttonLabel="Add new evaluation"
-                  title={'No evaluations available'}
-                  handleClick={() => history.push(`${url}/new`)}
-                  description="And the web just isnt the same without you. Lets get you back online!"
-                />
-              ) : queryStr ? (
-                <EvaluationContent />
-              ) : (
-                evaluations?.map((info, index) => (
-                  <div key={index}>
-                    <CommonCardMolecule
-                      className="cursor-pointer"
-                      handleClick={() => {
-                        history.push({
-                          pathname: `${url}`,
-                          search: `?query=${info.id}`,
-                        });
-                      }}
-                      data={info}
-                    />
-                  </div>
-                ))
-              )}
+              <BreadCrumb list={list}></BreadCrumb>
             </section>
-          )}
-        />
-        <Route
-          exact
-          path={`${path}/evaluations/submissions`}
-          render={() => (
-            <Table<any>
-              statusColumn="status"
-              data={data2}
-              hide={['id']}
-              uniqueCol={'id'}
-              // actions={actions
-            />
-          )}
-        />
-      </TabNavigation>
-    </div>
+            <TableHeader title="Evaluations" showBadge={false} showSearch={false}>
+              <Link to={`${path}/new`}>
+                <Button>New Evaluation</Button>
+              </Link>
+            </TableHeader>
+
+            <TabNavigation tabs={tabs} onTabChange={(event) => {}}>
+              <Route
+                exact
+                path={`${path}/submissions`}
+                render={() => (
+                  <Table<any>
+                    statusColumn="status"
+                    data={data2}
+                    hide={['id']}
+                    uniqueCol={'id'}
+                    // actions={actions
+                  />
+                )}
+              />
+
+              <Route
+                exact
+                path={`${path}`}
+                render={() => (
+                  <section>
+                    {evaluations.length <= 0 ? (
+                      <NoDataAvailable
+                        buttonLabel="Add new evaluation"
+                        title={'No evaluations available'}
+                        handleClick={() => history.push(`${url}/new`)}
+                        description="And the web just isnt the same without you. Lets get you back online!"
+                      />
+                    ) : queryStr.query ? (
+                      <EvaluationContent />
+                    ) : (
+                      evaluations?.map((info, index) => (
+                        <div key={index}>
+                          <CommonCardMolecule
+                            className="cursor-pointer"
+                            handleClick={() => {
+                              history.push({
+                                pathname: `${url}`,
+                                search: `?query=${info.id}`,
+                              });
+                            }}
+                            data={info}
+                          />
+                        </div>
+                      ))
+                    )}
+                  </section>
+                )}
+              />
+            </TabNavigation>
+          </div>
+        )}
+      />
+    </Switch>
   );
 }
