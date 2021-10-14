@@ -68,8 +68,7 @@ function TabHeadings({ tabs, onTabChange }: TabsImportantProps) {
                 ${fontSizeStyle['sm']} ${fontWeightStyle['bold']} text-${
               colorStyle[activeTabIndex == i ? 'primary' : 'gray']
             } border-${colorStyle[activeTabIndex == i ? 'primary' : 'lightgray']}`}
-            onClick={() => slideTo(i, tab.href, tab.label)}
-            disabled={activeTabIndex === i}>
+            onClick={() => slideTo(i, tab.href, tab.label)}>
             {tab.label}
           </button>
         );

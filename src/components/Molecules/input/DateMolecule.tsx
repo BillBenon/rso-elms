@@ -1,6 +1,7 @@
 import React, { ReactNode, useEffect, useState } from 'react';
 
 import { ValueType } from '../../../types';
+import { formatDateToIso, formatDateToYyMmDd } from '../../../utils/date-helper';
 import DaySelect from '../../Atoms/Input/date/DaySelect';
 import HourSelect from '../../Atoms/Input/date/HourSelect';
 import MinuteSelect from '../../Atoms/Input/date/MinuteSelect';
@@ -37,6 +38,7 @@ type IProp = {
   defaultValue?: string;
   reverse?: boolean;
   padding?: number;
+  date_time_type?: boolean;
 };
 
 function DateMolecule({
@@ -68,6 +70,7 @@ function DateMolecule({
   minuteDisabled = false,
   padding,
   defaultValue,
+  date_time_type = true,
 }: IProp) {
   let defaultValueDate = defaultValue ? new Date(defaultValue) : new Date();
 
@@ -80,12 +83,22 @@ function DateMolecule({
   });
 
   const dateFormat = () => {
-    const days = dateState.Day < 10 ? '0' + dateState.Day : '' + dateState.Day;
-    const months = dateState.Month < 10 ? '0' + dateState.Month : '' + dateState.Month;
-    const minutes =
-      dateState.Minutes < 10 ? '0' + dateState.Minutes : '' + dateState.Minutes;
-    let selectedDate: string = `${dateState.Year}-${months}-${days} ${dateState.Hours}:${minutes}:00`;
+    let date = `${dateState.Year}-${dateState.Month}-${dateState.Day} ${dateState.Hours}:${dateState.Minutes}:00`;
+    let selectedDate: string;
+    if (date_time_type) {
+      selectedDate = formatDateToIso(date);
+    } else {
+      selectedDate = formatDateToYyMmDd(date);
+    }
     handleChange({ name: name, value: selectedDate });
+
+    // const hours = dateState.Hours < 10 ? '0' + dateState.Hours : '' + dateState.Hours;
+    // const days = dateState.Day < 10 ? '0' + dateState.Day : '' + dateState.Day;
+    // const months = dateState.Month < 10 ? '0' + dateState.Month : '' + dateState.Month;
+    // const minutes =
+    //   dateState.Minutes < 10 ? '0' + dateState.Minutes : '' + dateState.Minutes;
+    // let selectedDate: string = `${dateState.Year}-${months}-${days} ${hours}:${minutes}:00`;
+    // handleChange({ name: name, value: selectedDate });
   };
 
   useEffect(() => {

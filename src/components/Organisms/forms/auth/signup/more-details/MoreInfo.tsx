@@ -1,77 +1,61 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { Page, ValueType } from '../../../../../../types';
-import SignupHeader from '../../../../../Molecules/SignupHeader';
-import Stepper, { StepperProp } from '../../../../../Molecules/Stepper/Stepper';
-import AccountDetails from './AccountDetails';
+import CompleteProfileHeader from '../../../../../Molecules/CompleteProfileHeader';
+import Stepper from '../../../../../Molecules/Stepper/Stepper';
 import KinAddressDetails from './KinAddressDetails';
 import NextOfKinDetails from './NextOfKinDetails';
 
-function MoreInfo() {
-  const [details, setDetails] = useState({
-    nextOfKinDetails: {
-      firstName: '',
-      lastName: '',
-      email: '',
-      phone: '',
-      gender: 'male',
-      relationShip: '',
-    },
-    kinAddressDetails: {
-      country: '',
-      location: '',
-      otherLocation: '',
-    },
-    accountDetails: {
-      username: '',
-      password: '',
-      confirmPassword: '',
-    },
+function MoreInfo(props: any) {
+  const [moreInfo, setMoreInfo] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone: '',
+    gender: 'male',
+    relationship: '',
+    country: '',
+    location: '',
+    other_location: '',
   });
 
   const [currentStep, setCurrentStep] = useState(0);
   const [completeStep, setCompleteStep] = useState(0);
   const history = useHistory();
 
-  useEffect(() => {
-    let newStepper = {
-      ...stepperContent,
-      currentStep: currentStep,
-    };
-
-    setStepperContent(newStepper);
-  }, [currentStep]);
-
-  useEffect(() => {
-    let newStepper = {
-      ...stepperContent,
-      currentStep: completeStep,
-      completeStep: completeStep,
-    };
-
-    setStepperContent(newStepper);
-  }, [completeStep]);
-
   const nextStep = (isComplete?: boolean) => {
     setCurrentStep((currentStep) => currentStep + 1);
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
   };
 
-  const saveInfo = (isComplete?: boolean) => {
-    if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
-    // save contact info
-    history.push('/');
+  async function saveInfo() {
+    if (moreInfo) {
+      // await mutateAsync(moreInfo, {
+      //   onSuccess() {
+      //     let personInfo = props.location.state.detail;
+      //     toast.success('these information have been successfully updated', {
+      //       duration: 1200,
+      //     });
+      //     setTimeout(() => {
+      //       history.push({
+      //         pathname: '/complete-profile/other',
+      //         state: { detail: personInfo },
+      //       });
+      //     }, 900);
+      //   },
+      //   onError() {
+      //     toast.error('An error occurred please try again later');
+      //   },
+      // });
+      history.push('/complete-profile/other');
+    }
+  }
+  const handleSubmit = (e: any, data: any) => {
+    setMoreInfo({ ...moreInfo, ...data });
   };
 
   const prevStep = () => {
     setCurrentStep((currentStep) => currentStep - 1);
-  };
-  const handleChange = (e: ValueType, page: Page) => {
-    setDetails((details: any) => ({
-      ...details,
-      [page]: { ...details[page], [e.name]: e.value },
-    }));
   };
 
   const navigateToStepHandler = (index: number) => {
@@ -80,57 +64,27 @@ function MoreInfo() {
     }
   };
 
-  const initialData: StepperProp = {
-    currentStep: 0,
-    completeStep: 0,
-    content: [
-      {
-        label: 'Next of kin details',
-        content: (
-          <NextOfKinDetails
-            isVertical
-            details={details.nextOfKinDetails}
-            handleChange={handleChange}
-            nextStep={nextStep}
-          />
-        ),
-      },
-      {
-        label: 'Next of kin address details',
-        content: (
-          <KinAddressDetails
-            isVertical
-            details={details.kinAddressDetails}
-            handleChange={handleChange}
-            prevStep={prevStep}
-            nextStep={nextStep}
-          />
-        ),
-      },
-      {
-        label: 'Account details',
-        content: (
-          <AccountDetails
-            isVertical
-            details={details.accountDetails}
-            handleChange={handleChange}
-            prevStep={prevStep}
-            nextStep={saveInfo}
-          />
-        ),
-      },
-    ],
-  };
-  const [stepperContent, setStepperContent] = useState<StepperProp>(initialData);
-
   return (
     <div className="bg-main p-8 md:px-20 md:py-14">
-      <SignupHeader />
+      <CompleteProfileHeader />
       <Stepper
-        stepperContent={stepperContent}
-        isVertical
-        navigateToStepHandler={navigateToStepHandler}
-      />
+        currentStep={currentStep}
+        completeStep={completeStep}
+        navigateToStepHandler={navigateToStepHandler}>
+        <NextOfKinDetails
+          fetched_id={props.location.state.detail.person_id}
+          display_label="Next of kin details"
+          onSubmit={handleSubmit}
+          nextStep={nextStep}
+        />
+        <KinAddressDetails
+          fetched_id={props.location.state.detail.person_id}
+          display_label="Next of kin address details"
+          onSubmit={handleSubmit}
+          prevStep={prevStep}
+          nextStep={saveInfo}
+        />
+      </Stepper>
     </div>
   );
 }

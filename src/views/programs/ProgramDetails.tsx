@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Link,
-  Route,
-  Switch,
-  useHistory,
-  useParams,
-  useRouteMatch,
-} from 'react-router-dom';
+import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
+import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
+import Cacumber from '../../components/Molecules/Cacumber';
+import AddCard from '../../components/Molecules/cards/AddCard';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import UsersPreview from '../../components/Molecules/cards/UsersPreview';
+import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
+import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
+import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
+import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
 import { moduleStore } from '../../store/modules.store';
 import programStore from '../../store/program.store';
-import { CommonCardDataType, ParamType } from '../../types';
+import { CommonCardDataType, Link, ParamType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from './AcademicPrograms';
 
@@ -37,6 +37,7 @@ export default function ProgramDetailsMolecule() {
           type: advancedTypeChecker(module.generic_status),
           text: module.generic_status.toString(),
         },
+        id: module.id,
         code: module.code,
         title: module.name,
         description: module.description,
@@ -81,8 +82,43 @@ export default function ProgramDetailsMolecule() {
     },
   ];
 
+  const list: Link[] = [
+    { to: 'home', title: 'home' },
+    { to: 'subjects', title: 'Faculty' },
+    { to: 'subjects', title: 'Programs' },
+    { to: 'modules', title: 'Modules' },
+  ];
+
+  function handleSearch() {}
+  const handleClose = () => {
+    history.goBack();
+  };
+
   return (
     <>
+      <Cacumber list={list} />
+
+      <div className="mt-11 pb-6">
+        <div className="flex flex-wrap justify-between items-center">
+          <div className="flex gap-2 items-center">
+            <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
+              {program?.name} program
+            </Heading>
+          </div>
+          <div className="flex flex-wrap justify-start items-center">
+            <SearchMolecule handleChange={handleSearch} />
+            <button className="border p-0 rounded-md mx-2">
+              <Icon name="filter" />
+            </button>
+          </div>
+
+          {/* <div className="flex gap-3">
+            <Button onClick={() => history.push(`${url}/add-subject`)}>
+              Add new Subject
+            </Button>
+          </div> */}
+        </div>
+      </div>
       <TabNavigation tabs={tabs}>
         <Switch>
           <Route
@@ -112,9 +148,9 @@ export default function ProgramDetailsMolecule() {
                         </div>
                       </div>
                       <div className="mt-4 flex space-x-4">
-                        <Link to={`${url}/edit`}>
-                          <Button>Edit program</Button>
-                        </Link>
+                        <Button onClick={() => history.push(`${url}/edit`)}>
+                          Edit program
+                        </Button>
                         <Button styleType="outline">Change Status</Button>
                       </div>
                     </CommonCardMolecule>
@@ -175,27 +211,61 @@ export default function ProgramDetailsMolecule() {
               </div>
             )}
           />
+          {/* add module popup */}
           <Route
             exact
+            path={`${path}/modules/add`}
+            render={() => {
+              return (
+                <PopupMolecule title="New Module" open onClose={handleClose}>
+                  <NewModuleForm />
+                </PopupMolecule>
+              );
+            }}
+          />
+
+          {/* add prerequesite popup */}
+          <Route
+            exact
+            path={`${path}/modules/:moduleId/add-prereq`}
+            render={() => {
+              return (
+                <PopupMolecule title="Add Prerequesite" open onClose={handleClose}>
+                  <AddPrerequesitesForm />
+                </PopupMolecule>
+              );
+            }}
+          />
+
+          <Route
             path={`${path}/modules`}
             render={() => (
-              <section className="flex flex-wrap justify-between">
+              <section className="mt-4 flex flex-wrap justify-start gap-4">
                 {programModules.length <= 0 ? (
                   <NoDataAvailable
                     buttonLabel="Add new modules"
                     title={'No Modules available in this program'}
-                    handleClick={() => history.push(`${url}/add-module`)}
+                    handleClick={() => history.push(`${url}/modules/add`)}
                     description="And the web just isnt the same without you. Lets get you back online!"
                   />
                 ) : (
-                  programModules?.map((module) => (
-                    <div key={module.code}>
-                      <CommonCardMolecule
-                        data={module}
-                        to={{ title: 'View more', to: `/modules/:id` }}
-                      />
-                    </div>
-                  ))
+                  <>
+                    <AddCard
+                      title={'Add new module'}
+                      onClick={() => history.push(`${url}/modules/add`)}
+                    />
+                    {programModules?.map((module) => (
+                      <div key={module.code}>
+                        <CommonCardMolecule
+                          data={module}
+                          to={{
+                            title: 'View more',
+                            to: `/dashboard/modules/${module.id}`,
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </>
                 )}
               </section>
             )}

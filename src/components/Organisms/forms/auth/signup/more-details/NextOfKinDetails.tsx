@@ -1,96 +1,114 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { CommonStepProps } from '../../../../../../types';
+import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../types';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import InputMolecule from '../../../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../../../Molecules/input/RadioMolecule';
 
-function NextOfKinDetails({
-  details,
-  handleChange,
+interface NextOfKin<E> extends CommonStepProps, CommonFormProps<E> {}
+
+function NextOfKinDetails<E>({
+  display_label,
+  isVertical,
   prevStep,
   nextStep,
-  isVertical,
-}: CommonStepProps) {
+  onSubmit,
+}: NextOfKin<E>) {
+  const [details, setDetails] = useState({
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone: '',
+    gender: 'male',
+    relationship: '',
+  });
   const moveBack = () => {
     prevStep && prevStep();
   };
-  const moveForward = () => {
+  const moveForward = (e: any) => {
+    e.preventDefault();
     nextStep(true);
+    if (onSubmit) onSubmit(e, details);
+  };
+
+  const handleChange = (e: ValueType) => {
+    setDetails({ ...details, [e.name]: e.value });
   };
 
   return (
     <div className="flex flex-col gap-4">
-      <div className="flex flex-col gap-4">
-        {!isVertical && (
-          <Heading fontSize="base" fontWeight="semibold">
-            Next of Kin Details
-          </Heading>
-        )}
+      <form onSubmit={moveForward}>
+        <div className="flex flex-col gap-4">
+          {!isVertical && (
+            <Heading fontSize="base" fontWeight="semibold">
+              {display_label}
+            </Heading>
+          )}
 
-        <InputMolecule
-          name="firstName"
-          placeholder="eg: John"
-          value={details.firstName}
-          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}>
-          First Name
-        </InputMolecule>
-        <InputMolecule
-          name="lastName"
-          placeholder="eg: Doe"
-          value={details.lastName}
-          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}>
-          Last Name
-        </InputMolecule>
-      </div>
-      <div className="flex flex-col gap-4">
-        <InputMolecule
-          name="email"
-          value={details.email}
-          type="email"
-          placeholder="username@example.com"
-          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}>
-          Email
-        </InputMolecule>
-        <InputMolecule
-          name="phone"
-          value={details.phone}
-          placeholder="+250 ---------"
-          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}>
-          Phone number
-        </InputMolecule>
-      </div>
-      <div className="flex flex-col gap-4">
-        <RadioMolecule
-          options={[
-            { value: 'male', label: 'Male' },
-            { value: 'female', label: 'Female' },
-          ]}
-          value={details.gender}
-          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}
-          name="gender">
-          Gender
-        </RadioMolecule>
-        <InputMolecule
-          name="relationShip"
-          value={details.relationShip}
-          handleChange={(e) => handleChange(e, 'nextOfKinDetails')}>
-          RelationShip
-        </InputMolecule>
-      </div>
-      <div className="flex justify-between w-80">
-        {prevStep && (
-          <Button
-            styleType="text"
-            hoverStyle="no-underline"
-            color="txt-secondary"
-            onClick={() => moveBack()}>
-            Back
-          </Button>
-        )}
-        <Button onClick={() => moveForward()}>Next</Button>
-      </div>
+          <InputMolecule
+            name="first_name"
+            placeholder="eg: John"
+            value={details.first_name}
+            handleChange={handleChange}>
+            First Name
+          </InputMolecule>
+          <InputMolecule
+            name="last_name"
+            placeholder="eg: Doe"
+            value={details.last_name}
+            handleChange={handleChange}>
+            Last Name
+          </InputMolecule>
+        </div>
+        <div className="flex flex-col gap-4">
+          <InputMolecule
+            name="email"
+            value={details.email}
+            type="email"
+            placeholder="username@example.com"
+            handleChange={handleChange}>
+            Email
+          </InputMolecule>
+          <InputMolecule
+            name="phone"
+            value={details.phone}
+            placeholder="+250 ---------"
+            handleChange={handleChange}>
+            Phone number
+          </InputMolecule>
+        </div>
+        <div className="flex flex-col gap-4">
+          <RadioMolecule
+            options={[
+              { value: 'male', label: 'Male' },
+              { value: 'female', label: 'Female' },
+            ]}
+            value={details.gender}
+            handleChange={handleChange}
+            name="gender">
+            Gender
+          </RadioMolecule>
+          <InputMolecule
+            name="relationship"
+            value={details.relationship}
+            handleChange={handleChange}>
+            RelationShip
+          </InputMolecule>
+        </div>
+        <div className="flex justify-between w-80">
+          {prevStep && (
+            <Button
+              styleType="text"
+              hoverStyle="no-underline"
+              color="txt-secondary"
+              onClick={() => moveBack()}>
+              Back
+            </Button>
+          )}
+          <Button type="submit">Next</Button>
+        </div>
+      </form>
     </div>
   );
 }

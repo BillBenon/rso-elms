@@ -2,8 +2,10 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
+import academyStore from '../../../../store/academy.store';
 import { divisionStore } from '../../../../store/divisions.store';
 import { IDivisionsAcademyType, ParamType, ValueType } from '../../../../types';
+import { AcademyInfo } from '../../../../types/services/academy.types';
 import { DivisionCreateInfo } from '../../../../types/services/division.types';
 import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
@@ -29,6 +31,8 @@ export default function NewDepartment({ onSubmit, academy_id }: IDivisionsAcadem
   function handleChange({ name, value }: ValueType) {
     setDivision((old) => ({ ...old, [name]: value }));
   }
+  const academies: AcademyInfo[] | undefined =
+    academyStore.fetchAcademies().data?.data.data;
 
   const departments = divisionStore.getDivisionByType('FACULTY').data?.data.data;
 
@@ -67,16 +71,25 @@ export default function NewDepartment({ onSubmit, academy_id }: IDivisionsAcadem
         Descripiton
       </TextAreaMolecule>
 
-      {!id && (
-        <DropdownMolecule
-          width="82"
-          placeholder="Select faculty"
-          options={getDropDownOptions({ inputs: departments || [] })}
-          name="parent_id"
-          handleChange={handleChange}>
-          Faculty
-        </DropdownMolecule>
-      )}
+      <DropdownMolecule
+        // defaultValue={division.academy_id}
+        // @ts-ignore
+        options={getDropDownOptions(academies)}
+        name="academy_id"
+        placeholder={'Academy to be enrolled'}
+        handleChange={handleChange}>
+        Academy
+      </DropdownMolecule>
+
+      <DropdownMolecule
+        width="82"
+        placeholder="Select faculty"
+        // @ts-ignore
+        options={getDropDownOptions(departments)}
+        name="parent_id"
+        handleChange={handleChange}>
+        Faculty
+      </DropdownMolecule>
 
       {/* save button */}
       <div className="mt-5">

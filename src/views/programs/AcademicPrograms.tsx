@@ -1,5 +1,5 @@
 import queryString from 'query-string';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   Link,
   Route,
@@ -19,11 +19,13 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
+import { intakeStore } from '../../store/intake.store';
 import programStore from '../../store/program.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
 import { DivisionInfo } from '../../types/services/division.types';
+import { IntakeProgramInfo, ProgramInfo } from '../../types/services/program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
-import { getQueryParamasId } from '../../utils/getQueryParamasID';
+import AddAcademicProgramToIntake from './AddAcademicProgramToIntake';
 import NewAcademicProgram from './NewAcademicProgram';
 import ProgramDetails from './ProgramDetails';
 import UpdateAcademicProgram from './UpdateAcademicProgram';
@@ -36,14 +38,9 @@ export interface IProgramData extends CommonCardDataType {
 export default function AcademicProgram() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
+  const { search } = useLocation();
+  const intakeId = new URLSearchParams(search).get('intakeId');
   const location = useLocation();
-
-  const [prOpen, setPrOpen] = useState(false); // state to controll the popup
-
-  //eslint-disable-next-line
-  function submited() {
-    setPrOpen(true);
-  }
 
   const list: LinkList[] = [
     { to: 'home', title: 'home' },
@@ -52,17 +49,22 @@ export default function AcademicProgram() {
     { to: `${url}`, title: 'Programs' },
   ];
 
-  const { data, refetch } = programStore.fetchPrograms();
-  const queryStr: queryString.ParsedQuery = getQueryParamasId(location.search);
+  const queryStr = queryString.parse(location.search);
 
-  let programData;
+  const { data, refetch } = intakeId
+    ? intakeStore.getProgramsByIntake(intakeId)
+    : queryStr
+    ? programStore.getProgramsByDepartment(queryStr.query?.toString() || '')
+    : programStore.fetchPrograms();
 
-  if (queryStr.query) {
-    ({ data: programData } = programStore.getProgramsByDepartment(
-      queryStr.query?.toString() || '',
-    ));
-  }
-  const programInfo = programData || data;
+  const programInfo = data?.data.data;
+
+  const intake = intakeStore.getIntakeById(intakeId!, true);
+
+  // fetch intake if id is available
+  if (intakeId && !intake.isSuccess && !intake.isLoading) intake.refetch();
+
+  // const programInfo = programData || data;
 
   useEffect(() => {
     if (location.pathname === path || location.pathname === `${path}/`) {
@@ -71,7 +73,11 @@ export default function AcademicProgram() {
   }, [location]);
 
   let programs: IProgramData[] = [];
-  programInfo?.data.data.map((obj) => {
+
+  programInfo?.map((obj) => {
+    if (intakeId) obj = (obj as IntakeProgramInfo).program;
+    else obj = obj as ProgramInfo;
+
     let { id, code, name, description, generic_status, department, incharge, type } = obj;
 
     let prog: IProgramData = {
@@ -91,54 +97,38 @@ export default function AcademicProgram() {
     programs.push(prog);
   });
 
+  function submited() {
+    refetch();
+    history.goBack();
+  }
+
   return (
     <main className="px-4">
-      <section>
-        <BreadCrumb list={list}></BreadCrumb>
-      </section>
-      <section>
-        <TableHeader totalItems={programs.length} title="Programs" showSearch={false}>
-          <Link to={`${url}/add`}>
-            <Button>Add Program</Button>
-          </Link>
-        </TableHeader>
-      </section>
-
-      <Switch>
-        {/* create academic program */}
-        <Route
-          exact
-          path={`${path}/add`}
-          render={() => {
-            return <NewAcademicProgram />;
-          }}
-        />
-        {/* modify academic program */}
-        <Route path={`${path}/:id/edit`} render={() => <UpdateAcademicProgram />} />
-
-        {/* call prerequisite page */}
-        <Route
-          exact
-          path={`${path}/add/prerequisite`}
-          render={() => {
-            return (
-              <PopupMolecule
-                title="Add prerequisite"
-                open={prOpen}
-                onClose={history.goBack}>
-                another form here
-              </PopupMolecule>
-            );
-          }}
-        />
-        {/* show academic program details */}
-        <Route path={`${path}/:id`} render={() => <ProgramDetails />} />
-
-        <Route
-          exact
-          path={`${path}`}
-          render={() => {
-            return (
+      <Route
+        exact
+        path={`${path}`}
+        render={() => {
+          return (
+            <>
+              <section>
+                <BreadCrumb list={list}></BreadCrumb>
+              </section>
+              <section>
+                <TableHeader
+                  totalItems={intakeId ? `${programs.length} programs` : programs.length}
+                  title={`${intakeId ? intake.data?.data.data.title : 'Programs'}`}
+                  showSearch={false}>
+                  {intakeId ? (
+                    <Link to={`${url}/add-program-to-intake?intakeId=${intakeId}`}>
+                      <Button>Add Program To Intake</Button>
+                    </Link>
+                  ) : (
+                    <Link to={`${url}/add`}>
+                      <Button>Add New Program</Button>
+                    </Link>
+                  )}
+                </TableHeader>
+              </section>
               <section className="flex flex-wrap justify-between mt-2">
                 {programs.length ? (
                   programs.map((Common) => (
@@ -236,9 +226,60 @@ export default function AcademicProgram() {
                   />
                 )}
               </section>
+            </>
+          );
+        }}
+      />
+      <Switch>
+        {/* add academic program to intake*/}
+        <Route
+          exact
+          path={`${url}/add-program-to-intake`}
+          render={() => {
+            return (
+              <PopupMolecule title="Programs" open={true} onClose={history.goBack}>
+                <AddAcademicProgramToIntake submited={submited} />
+              </PopupMolecule>
             );
           }}
         />
+
+        {/* create academic program */}
+        <Route
+          exact
+          path={`${path}/add`}
+          render={() => {
+            return <NewAcademicProgram />;
+          }}
+        />
+        {/* modify academic program */}
+        <Route path={`${path}/:id/edit`} render={() => <UpdateAcademicProgram />} />
+
+        {/* add prerequisite popup */}
+        <Route
+          exact
+          path={`${path}/add/prerequisite`}
+          render={() => {
+            return (
+              <PopupMolecule
+                title="Add prerequisite"
+                open={true}
+                onClose={history.goBack}>
+                another form here
+              </PopupMolecule>
+            );
+          }}
+        />
+        {/* show academic program details */}
+        <Route path={`${path}/:id`} render={() => <ProgramDetails />} />
+
+        {/* <Route
+          exact
+          path={`${path}/:id/view-program`}
+          render={() => <ViewProgramsInDepartment />}
+        /> */}
+
+        <Route exact path={`${path}/:id/details`} render={() => <ProgramDetails />} />
       </Switch>
     </main>
   );

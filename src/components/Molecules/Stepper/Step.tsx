@@ -3,10 +3,10 @@ import React from 'react';
 
 import Indicator from '../../Atoms/custom/Indicator';
 
-type StepProps = {
+export type StepProps = {
   // eslint-disable-next-line no-undef
   indicator: JSX.Element | number | boolean;
-  label: string;
+  display_label: string;
   navigateToStepHandler: (_index: number) => void;
   index: number;
   isInline?: boolean;
@@ -20,7 +20,7 @@ type StepProps = {
 
 const Step = ({
   indicator,
-  label,
+  display_label,
   navigateToStepHandler,
   index,
   isActive,
@@ -32,7 +32,7 @@ const Step = ({
 }: StepProps) => {
   return (
     <div className="flex justify-between">
-      {/* label */}
+      {/* display_label */}
       {isVertical && (
         <div
           onKeyDown={() => navigateToStepHandler(index)}
@@ -47,12 +47,16 @@ const Step = ({
             : 'text-txt-secondary'
         }`}
           onClick={() => navigateToStepHandler(index)}>
-          <div>{label}</div>
+          <div>{display_label}</div>
         </div>
       )}
       <div
         className={`${
-          isVertical ? `pl-7  ${isFirstStep && 'items-end'}` : 'flex items-center'
+          isVertical
+            ? `pl-7 flex flex-col justify-center items-center  ${
+                isFirstStep && 'items-end'
+              }`
+            : 'flex items-center'
         }`}>
         {/* step line(separator) */}
         {!isFirstStep && (

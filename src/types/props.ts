@@ -1,6 +1,6 @@
 import React, { AllHTMLAttributes, DOMAttributes, FormEvent } from 'react';
 
-import { Color, Page, SelectData, ValueType } from '.';
+import { Color, SelectData, ValueType } from '.';
 
 export interface CommonProps<T> extends AllHTMLAttributes<DOMAttributes<T>> {}
 
@@ -16,6 +16,7 @@ export interface CommonInputProps<T> extends CommonProps<T> {
 
 //common input props that will be used on all reusable input components
 export interface commonInputProps {
+  required?: boolean;
   handleChange: Function;
   name: string;
   options: SelectData[];
@@ -25,8 +26,8 @@ export interface commonInputProps {
 }
 
 export interface CommonStepProps {
-  details: any;
-  handleChange: (_e: ValueType, _page: Page) => void;
+  fetched_id: string | number;
+  display_label: string;
   prevStep?: () => void;
   nextStep: (_isComplete: boolean) => void;
   isVertical?: boolean;

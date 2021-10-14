@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { moduleStore } from '../../../../store/modules.store';
-import { GenericStatus, ParamType, ValueType } from '../../../../types';
+import { GenericStatus, ValueType } from '../../../../types';
 import { CreatePrerequisites } from '../../../../types/services/modules.types';
 import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
@@ -11,13 +11,17 @@ import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-export default function AddPrerequesitForm() {
-  const { id } = useParams<ParamType>();
-  const { mutateAsync } = moduleStore.addPrerequisites();
+interface ParamType {
+  moduleId: string;
+}
+
+export default function AddPrerequesitesForm() {
+  const { moduleId } = useParams<ParamType>();
+  const { mutateAsync, isLoading } = moduleStore.addPrerequisites();
   const history = useHistory();
 
   const [values, setValues] = useState({
-    model_id: id,
+    module_id: moduleId,
     prerequistis: [],
     description: '',
     status: 'ACTIVE',
@@ -28,7 +32,9 @@ export default function AddPrerequesitForm() {
   }
 
   const modules =
-    moduleStore.getAllModules().data?.data.data.filter((module) => module.id != id) || [];
+    moduleStore
+      .getAllModules()
+      .data?.data.data.filter((module) => module.id != moduleId) || [];
 
   const handleSubmit = async () => {
     let data: CreatePrerequisites = {
@@ -40,7 +46,7 @@ export default function AddPrerequesitForm() {
       data.prerequistis.push({
         description: values.description,
         id: 0,
-        module_id: id,
+        module_id: moduleId,
         prerequisite_id: values.prerequistis[i],
         status: GenericStatus.ACTIVE,
       });
@@ -49,7 +55,7 @@ export default function AddPrerequesitForm() {
     await mutateAsync(data, {
       async onSuccess(res) {
         toast.success(res.data.message);
-        history.push(`/dashboard/modules/${id}`);
+        history.push(`/dashboard/modules/${moduleId}`);
       },
       onError() {
         toast.error('Error occurred please try again');
@@ -85,8 +91,8 @@ export default function AddPrerequesitForm() {
         Status
       </RadioMolecule>
       <div className="mt-5">
-        <Button type="button" onClick={() => handleSubmit()} full>
-          Save
+        <Button type="button" disabled={isLoading} onClick={() => handleSubmit()} full>
+          {isLoading ? '....' : 'Save'}
         </Button>
       </div>
     </form>

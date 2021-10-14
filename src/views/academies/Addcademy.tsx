@@ -6,11 +6,15 @@ import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
+import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import { authenticatorService } from '../../services';
 import academyStore from '../../store/academy.store';
+import usersStore from '../../store/users.store';
 import { CommonFormProps, ValueType } from '../../types';
 import { AcademyCreateInfo } from '../../types/services/academy.types';
+import { UserType } from '../../types/services/user.types';
+import { getInchargeDropdown } from '../../utils/getOption';
 
 export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
@@ -20,6 +24,8 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
       const user = await authenticatorService.authUser();
       setDetails((details) => ({
         ...details,
+        institution_id:
+          user.data.data.institution_id || 'b832407f-fb77-4a75-8679-73bf7794f207',
         current_admin_id: user.data.data.id + '',
       }));
     };
@@ -33,7 +39,7 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     fax_number: '',
     full_address: '',
     head_office_location_id: 17445,
-    institution_id: 'b832407f-fb77-4a75-8679-73bf7794f207',
+    institution_id: '',
     mission: '',
     moto: '',
     name: '',
@@ -43,6 +49,10 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     website_link: '',
   });
   const { mutateAsync } = academyStore.createAcademy();
+  const users = usersStore.fetchUsers();
+  const admins = users.data?.data.data.filter(
+    (user) => user.user_type === UserType.ADMIN,
+  );
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
@@ -58,8 +68,10 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
 
     await mutateAsync(details, {
       onSuccess(data) {
-        toast.success(data.data.message);
-        history.goBack();
+        toast.success(data.data.message, { duration: 1200 });
+        setTimeout(() => {
+          history.goBack();
+        }, 900);
       },
       onError() {
         toast.error('An error occurred please try again later');
@@ -152,6 +164,16 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
             handleChange={(e) => handleChange(e)}>
             academy motto
           </InputMolecule>
+          <DropdownMolecule
+            defaultValue={getInchargeDropdown(admins).find(
+              (incharge) => incharge.value === details.current_admin_id,
+            )}
+            placeholder="Select incharge"
+            options={getInchargeDropdown(admins)}
+            name="current_admin_id"
+            handleChange={handleChange}>
+            Admin in charge
+          </DropdownMolecule>
           <div>
             <div className="mb-3">
               <ILabel weight="bold">academy logo</ILabel>
@@ -159,9 +181,7 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
             <Button styleType="outline">upload logo</Button>
           </div>
           <div className="mt-5">
-            <Button full type="submit">
-              Save
-            </Button>
+            <Button type="submit">Save</Button>
           </div>
         </form>
       </div>

@@ -1,7 +1,14 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Link, Route, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
+import {
+  Link,
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+  useRouteMatch,
+} from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -82,6 +89,11 @@ export default function Intakes() {
     )} - ${moment(regControl?.data.data.expected_end_date).format('MMM D YYYY')}`;
   }
 
+  function intakeCreated() {
+    refetchIntakes();
+    history.goBack();
+  }
+
   return (
     <div>
       <BreadCrumb list={list} />
@@ -104,7 +116,6 @@ export default function Intakes() {
       <section className="flex flex-wrap justify-between mt-2">
         {intakes.map((intake, index) => (
           <div key={intake.code + Math.random() * 10} className="p-1 mt-3">
-            {console.log(data?.data.data)}
             <Tooltip
               key={intake.code + Math.random() * 10}
               trigger={
@@ -170,31 +181,33 @@ export default function Intakes() {
         )}
       </section>
 
-      {/* add intake to reg control */}
-      <Route
-        exact
-        path={`${url}/:id/add-intake`}
-        render={() => {
-          return (
-            <PopupMolecule title="New intake" open onClose={handleClose}>
-              <NewIntake />
-            </PopupMolecule>
-          );
-        }}
-      />
+      <Switch>
+        {/* add intake to reg control */}
+        <Route
+          exact
+          path={`${url}/:id/add-intake`}
+          render={() => {
+            return (
+              <PopupMolecule title="New intake" open onClose={handleClose}>
+                <NewIntake handleSuccess={intakeCreated} />
+              </PopupMolecule>
+            );
+          }}
+        />
 
-      {/* edit intake to reg control */}
-      <Route
-        exact
-        path={`${url}/:id/edit`}
-        render={() => {
-          return (
-            <PopupMolecule title="Update intake" open onClose={handleClose}>
-              <UpdateIntake handleSuccess={handleClose} />
-            </PopupMolecule>
-          );
-        }}
-      />
+        {/* edit intake to reg control */}
+        <Route
+          exact
+          path={`${url}/:id/edit`}
+          render={() => {
+            return (
+              <PopupMolecule title="Update intake" open onClose={handleClose}>
+                <UpdateIntake handleSuccess={handleClose} />
+              </PopupMolecule>
+            );
+          }}
+        />
+      </Switch>
     </div>
   );
 }

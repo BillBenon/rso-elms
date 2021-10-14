@@ -16,7 +16,7 @@ const list: Link[] = [
   { to: 'intakes', title: 'Intakes' },
 ];
 
-export default function RegControlIntakes() {
+export default function RegControlDetails() {
   const [intakes, setIntakes] = useState<CommonCardDataType[]>([]);
   const { id } = useParams<ParamType>();
   const { url } = useRouteMatch();

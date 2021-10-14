@@ -1,46 +1,59 @@
-import React from 'react';
+import React, { JSXElementConstructor, ReactElement } from 'react';
 
-import StepperHead from './StepperHead';
+import Step from './Step';
 
-export type StepperContentProp = {
-  label: string;
-  // eslint-disable-next-line no-undef
-  content: JSX.Element;
-};
-
-export type StepperProp = {
-  currentStep: number;
-  completeStep: number;
-  content: StepperContentProp[];
-};
+type StepChildrenType = ReactElement<JSXElementConstructor<typeof Step>>[];
 
 type StepperProps = {
-  stepperContent: StepperProp;
+  currentStep: number;
+  completeStep: number;
   isInline?: boolean;
   isVertical?: boolean;
   navigateToStepHandler: (_index: number) => void;
   width?: string;
+  children: StepChildrenType;
 };
 
 const Stepper = ({
   isVertical,
   isInline,
   navigateToStepHandler,
-  stepperContent,
+  children,
   width,
+  completeStep,
+  currentStep = 0,
 }: StepperProps) => {
+  const StepHeader = () => {
+    return (
+      <div className={`hidden w-max ${isVertical ? 'md:block' : 'md:flex'}`}>
+        {children.map((sp, i) => {
+          const stepProp: any = sp.props;
+          return (
+            <Step
+              key={i}
+              isFirstStep={i == 0}
+              isVertical={isVertical}
+              indicator={i + 1}
+              index={i}
+              display_label={stepProp.display_label}
+              isInline={isInline}
+              isActive={i === currentStep}
+              isComplete={completeStep >= i}
+              width={width}
+              navigateToStepHandler={navigateToStepHandler}
+            />
+          );
+        })}
+      </div>
+    );
+  };
+
   return (
     <div className="stepper-wrapper">
       <div className={`${isVertical ? 'flex' : 'block'}`}>
-        <StepperHead
-          stepperContent={stepperContent}
-          navigateToStepHandler={navigateToStepHandler}
-          isVertical={isVertical}
-          isInline={isInline}
-          width={width}
-        />
-        <div className={isVertical ? 'md:pl-11 w-full' : 'py-6 w-full'}>
-          {stepperContent.content[stepperContent.currentStep].content}
+        <StepHeader />
+        <div className={isVertical ? 'md:pl-12 w-full' : 'py-6 w-full'}>
+          {children[currentStep]}
         </div>
       </div>
     </div>

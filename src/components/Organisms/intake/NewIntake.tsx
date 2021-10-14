@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { intakeStore } from '../../../store/intake.store';
-import { ParamType, ValueType } from '../../../types';
+import { ValueType } from '../../../types';
 import {
   IntakeInfo,
   IntakeStatus,
@@ -20,17 +20,21 @@ import Stepper from '../../Molecules/Stepper/Stepper';
 
 interface IProps {
   values: IntakeInfo;
+  display_label: string;
   handleChange: (_e: ValueType) => any;
-  handleNext: () => void;
+  handleNext: <T>(_e: FormEvent<T>) => any;
   handleProgramsChange?: (_e: ValueType) => any;
-  isLoading?: boolean;
-  handleGoBack: () => void;
+}
+interface ParamType {
+  id: string;
+}
+interface CProps {
+  handleSuccess: () => any;
 }
 
-export default function NewIntake() {
+export default function NewIntake(props: CProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const { id } = useParams<ParamType>();
-  const history = useHistory();
 
   const [values, setValues] = useState<IntakeInfo>({
     id: '',
@@ -51,9 +55,10 @@ export default function NewIntake() {
     setValues((regControl) => ({ ...regControl, [e.name]: e.value }));
   }
 
-  const { mutateAsync, isLoading } = intakeStore.create();
+  const { mutateAsync } = intakeStore.create();
 
-  async function handleSubmit() {
+  async function handleSubmit<T>(e: FormEvent<T>) {
+    e.preventDefault();
     if (currentStep === 0) setCurrentStep(currentStep + 1);
     else {
       let title = values.title.trim().split(' ');
@@ -66,11 +71,13 @@ export default function NewIntake() {
         expected_start_date: formatDateToIso(values.expected_start_date),
       };
 
+      console.log('request', data);
+
       await mutateAsync(data, {
         async onSuccess(data) {
           toast.success(data.data.message);
-
-          history.push(`/dashboard/registration-control/${id}`);
+          // await addProgramsToIntake(data.data.data.id.toString());
+          props.handleSuccess();
         },
         onError() {
           toast.error('error occurred please try again');
@@ -79,10 +86,7 @@ export default function NewIntake() {
     }
   }
 
-  const handleBack = () => {
-    if (currentStep >= 1) setCurrentStep(currentStep - 1);
-  };
-
+  // eslint-disable-next-line no-unused-vars
   const stepperContent = {
     currentStep: currentStep,
     completeStep: currentStep,
@@ -94,7 +98,7 @@ export default function NewIntake() {
             values={values}
             handleChange={handleChange}
             handleNext={handleSubmit}
-            handleGoBack={handleBack}
+            display_label="Intake Info"
           />
         ),
         clicked: () => {},
@@ -106,8 +110,7 @@ export default function NewIntake() {
             values={values}
             handleChange={handleChange}
             handleNext={handleSubmit}
-            isLoading={isLoading}
-            handleGoBack={handleBack}
+            display_label="Intake Status"
           />
         ),
         clicked: () => {},
@@ -118,23 +121,32 @@ export default function NewIntake() {
   return (
     <div className="w-full">
       <Stepper
+        currentStep={currentStep}
+        completeStep={currentStep}
         width="w-64"
         isVertical={false}
         isInline={false}
-        stepperContent={stepperContent}
-        navigateToStepHandler={() => console.log('submitted')}
-      />
+        navigateToStepHandler={() => console.log('submitted')}>
+        <IntakeInfoComponent
+          display_label="info"
+          values={values}
+          handleChange={handleChange}
+          handleNext={handleSubmit}
+        />
+        <IntakeStatusComponent
+          display_label="more"
+          values={values}
+          handleChange={handleChange}
+          handleNext={handleSubmit}
+        />
+      </Stepper>
     </div>
   );
 }
 
 function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleNext();
-      }}>
+    <form onSubmit={handleNext}>
       <InputMolecule
         name="title"
         placeholder="Intake title"
@@ -166,7 +178,7 @@ function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
         Programs in this intake
       </DropdownMolecule> */}
       <div className="pt-3">
-        <Button type="submit" onClick={handleNext}>
+        <Button type="submit" onClick={() => handleNext}>
           Next
         </Button>
       </div>
@@ -174,18 +186,9 @@ function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
   );
 }
 
-function IntakeStatusComponent({
-  handleChange,
-  handleNext,
-  isLoading,
-  handleGoBack,
-}: IProps) {
+function IntakeStatusComponent({ handleChange, handleNext }: IProps) {
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleNext();
-      }}>
+    <form onSubmit={handleNext}>
       <DateMolecule
         showTime={false}
         handleChange={handleChange}
@@ -217,10 +220,10 @@ function IntakeStatusComponent({
       </DropdownMolecule>
 
       <div className="pt-3 flex justify-between">
-        <Button styleType="text" color="gray" onClick={handleGoBack} disabled={isLoading}>
+        <Button styleType="text" color="gray">
           Back
         </Button>
-        <Button type="submit" disabled={isLoading} onClick={handleNext}>
+        <Button type="submit" onClick={() => handleNext}>
           Create intake
         </Button>
       </div>
