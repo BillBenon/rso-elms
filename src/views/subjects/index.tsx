@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
-import Cacumber from '../../components/Molecules/Cacumber';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
@@ -54,7 +54,7 @@ export default function Subjects() {
     <>
       <main className="px-4">
         <section>
-          <Cacumber list={list}></Cacumber>
+          <BreadCrumb list={list}></BreadCrumb>
         </section>
         <section className="">
           <TableHeader

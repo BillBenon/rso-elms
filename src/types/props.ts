@@ -1,6 +1,6 @@
-import { AllHTMLAttributes, DOMAttributes, FormEvent } from 'react';
+import React, { AllHTMLAttributes, DOMAttributes, FormEvent } from 'react';
 
-import { SelectData, ValueType } from '.';
+import { Color, SelectData, ValueType } from '.';
 
 export interface CommonProps<T> extends AllHTMLAttributes<DOMAttributes<T>> {}
 
@@ -31,6 +31,24 @@ export interface CommonStepProps {
   prevStep?: () => void;
   nextStep: (_isComplete: boolean) => void;
   isVertical?: boolean;
+}
+
+export interface InputProps<T> extends CommonInputProps<T> {
+  placeholder?: string;
+  type?: string;
+  readonly?: boolean;
+  handleChange: (_e: ValueType) => void;
+  value: string | number | undefined;
+  name: string;
+  full?: boolean;
+  padding?: string;
+  fcolor?: Color;
+  bcolor?: Color;
+  pcolor?: Color;
+  width?: string | number;
+  className?: string;
+  required?: boolean;
+  ref?: React.LegacyRef<HTMLInputElement>;
 }
 
 export interface DropdownProps extends commonInputProps {

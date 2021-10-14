@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
-import Cacumber from '../../components/Molecules/Cacumber';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import { moduleStore } from '../../store/modules.store';
@@ -60,7 +60,7 @@ export default function Modules() {
               return (
                 <>
                   <section>
-                    <Cacumber list={list}></Cacumber>
+                    <BreadCrumb list={list}></BreadCrumb>
                   </section>
                   <section className="">
                     <TableHeader

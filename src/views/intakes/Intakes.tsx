@@ -13,7 +13,7 @@ import {
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
-import Cacumber from '../../components/Molecules/Cacumber';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
@@ -96,7 +96,7 @@ export default function Intakes() {
 
   return (
     <div>
-      <Cacumber list={list} />
+      <BreadCrumb list={list} />
       <TableHeader
         title={`${registrationControlId ? regControlName() : 'Intakes'}`}
         totalItems={registrationControlId ? `${intakes.length} intakes` : intakes.length}

@@ -134,7 +134,8 @@ export type IconType =
   | 'search'
   | 'settings'
   | 'switch'
-  | 'user';
+  | 'user'
+  | 'evaluation';
 
 export interface FormPropType {
   onSubmit?: <E>(_e: FormEvent<E>) => void;

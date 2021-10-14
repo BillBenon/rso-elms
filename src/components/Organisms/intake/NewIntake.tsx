@@ -148,7 +148,6 @@ function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
   return (
     <form onSubmit={handleNext}>
       <InputMolecule
-        required
         name="title"
         placeholder="Intake title"
         value={values.title}
@@ -156,14 +155,12 @@ function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
         Intake title
       </InputMolecule>
       <TextAreaMolecule
-        required
         name={'description'}
         value={values.description}
         handleChange={handleChange}>
         Description
       </TextAreaMolecule>
       <InputMolecule
-        required
         min={1}
         name="total_num_students"
         placeholder="Number"

@@ -13,7 +13,7 @@ import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import ActionableList from '../../components/Molecules/ActionableList';
-import Cacumber from '../../components/Molecules/Cacumber';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import PopupMolecule from '../../components/Molecules/Popup';
 import AddPrivileges from '../../components/Organisms/forms/roles/AddPrivileges';
 import { queryClient } from '../../plugins/react-query';
@@ -59,7 +59,7 @@ export default function ViewRole() {
   return (
     <main>
       <section>
-        <Cacumber list={[{ title: 'Roles', to: 'roles' }]} />
+        <BreadCrumb list={[{ title: 'Roles', to: 'roles' }]} />
       </section>
       <section className="py-7">
         <Heading fontWeight="semibold" fontSize="2xl">
