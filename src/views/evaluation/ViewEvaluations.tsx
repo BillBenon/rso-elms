@@ -19,6 +19,7 @@ import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvalua
 import { Link as LinkList } from '../../types';
 import { getQueryParamasId } from '../../utils/getQueryParamasID';
 import EvaluationContent from './EvaluationContent';
+import EvaluationTest from './EvaluationTest';
 
 export default function ViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
@@ -26,8 +27,6 @@ export default function ViewEvaluations() {
   const location = useLocation();
   const { url, path } = useRouteMatch();
   const queryStr = getQueryParamasId(location.search);
-
-  console.log(queryStr);
 
   const list: LinkList[] = [
     { to: '/', title: 'home' },
@@ -89,6 +88,7 @@ export default function ViewEvaluations() {
   return (
     <Switch>
       <Route exact path={`${path}/new`} render={() => <NewEvaluation />} />
+      <Route exact path={`${path}/test`} render={() => <EvaluationTest />} />
       <Route
         path={`${path}`}
         render={() => (

@@ -28,6 +28,11 @@ export default function Sidebar() {
       { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
       { title: 'Subjects', to: '/dashboard/subjects', icon: 'module' },
       { title: 'Evalutaions', to: '/dashboard/evaluations', icon: 'evaluation' },
+      {
+        title: 'Evalutaions Test',
+        to: '/dashboard/evaluations/test',
+        icon: 'evaluation',
+      },
       { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
       {
         title: 'Registration Control',
