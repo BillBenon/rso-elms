@@ -1,10 +1,8 @@
 import React from 'react';
 import Countdown from 'react-countdown';
-import { useHistory } from 'react-router-dom';
 
 import Heading from '../../components/Atoms/Text/Heading';
 import QuestionContainer from './QuestionContainer';
-import ViewEvaluations from './ViewEvaluations';
 
 export default function EvaluationTest() {
   return (
