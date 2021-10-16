@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
@@ -8,6 +9,8 @@ import { divisionStore } from '../../../store/divisions.store';
 import { DivisionInfo } from '../../../types/services/division.types';
 import NewAcademicProgram from '../../../views/programs/NewAcademicProgram';
 import Button from '../../Atoms/custom/Button';
+import Loader from '../../Atoms/custom/Loader';
+import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
@@ -29,7 +32,7 @@ export default function Departments({ fetchType }: IDepartment) {
   const history = useHistory();
   const [departments, setDepartments] = useState<FilteredData[]>();
   const { data: userInfo } = authenticatorStore.authUser();
-  const { data, isSuccess, isLoading } = divisionStore.getDivisionByType(
+  const { data, isSuccess, isLoading, isError } = divisionStore.getDivisionByType(
     fetchType.toUpperCase(),
   );
 
@@ -37,28 +40,30 @@ export default function Departments({ fetchType }: IDepartment) {
     // extract department data to display
     let formattedDeparts: any = [];
 
-    const filteredInfo = data?.data.data.map((department: DivisionInfo) =>
-      _.pick(department, [
-        'id',
-        'name',
-        'description',
-        'generic_status',
-        'total_num_childreen',
-      ]),
-    );
+    if (isSuccess && data?.data) {
+      const filteredInfo = data?.data.data.map((department: DivisionInfo) =>
+        _.pick(department, [
+          'id',
+          'name',
+          'description',
+          'generic_status',
+          'total_num_childreen',
+        ]),
+      );
 
-    filteredInfo?.map((department: any) => {
-      let filteredData: any = {
-        id: department.id.toString(),
-        decription: department.description,
-        name: department.name,
-        status: department.generic_status,
-        programs: department.total_num_childreen || 0,
-      };
-      formattedDeparts.push(filteredData);
-    });
+      filteredInfo?.map((department: any) => {
+        let filteredData: any = {
+          id: department.id.toString(),
+          decription: department.description,
+          name: department.name,
+          status: department.generic_status,
+          programs: department.total_num_childreen || 0,
+        };
+        formattedDeparts.push(filteredData);
+      });
 
-    data?.data.data && setDepartments(formattedDeparts);
+      data?.data.data && setDepartments(formattedDeparts);
+    } else if (isError) toast.error('error occurred when loading departments');
   }, [data]);
 
   function handleClose() {
@@ -110,10 +115,18 @@ export default function Departments({ fetchType }: IDepartment) {
               </TableHeader>
             </section>
             <section>
-              {isLoading && 'Department loading...'}
-              {isSuccess
-                ? departments?.length === 0
-                : 'No Departments found, try to add one'}
+              {isSuccess ? (
+                departments?.length === 0
+              ) : (
+                <NoDataAvailable
+                  buttonLabel="Add new department"
+                  title="No departments available"
+                  handleClick={() => {
+                    history.push(`${url}/add`);
+                  }}
+                  description="Try adding some departments as none have been added yet!"
+                />
+              )}
               {departments && (
                 <Table<FilteredData>
                   handleSelect={() => {}}
@@ -124,6 +137,7 @@ export default function Departments({ fetchType }: IDepartment) {
                   actions={actions}
                 />
               )}
+              {isLoading && <Loader />}
             </section>
             {/* modify department */}
             <Route

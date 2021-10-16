@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Loader from '../../components/Atoms/custom/Loader';
 import Cacumber from '../../components/Molecules/Cacumber';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
+import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import { moduleStore } from '../../store/modules.store';
 import { CommonCardDataType, Link } from '../../types';
@@ -11,28 +14,30 @@ import { advancedTypeChecker } from '../../utils/getOption';
 import ModuleDetails from './ModuleDetails';
 
 export default function Modules() {
-  const { data } = moduleStore.getAllModules();
+  const { data, isLoading, isError, isSuccess } = moduleStore.getAllModules();
 
   const [modules, setModules] = useState<CommonCardDataType[]>([]);
   const history = useHistory();
   const { path } = useRouteMatch();
 
   useEffect(() => {
-    let newModules: CommonCardDataType[] = [];
-    data?.data.data.forEach((module) => {
-      newModules.push({
-        status: {
-          type: advancedTypeChecker(module.generic_status),
-          text: module.generic_status.toString(),
-        },
-        code: module.code,
-        title: module.name,
-        description: module.description,
-        id: module.id,
+    if (isSuccess && data?.data) {
+      let newModules: CommonCardDataType[] = [];
+      data?.data.data.forEach((module) => {
+        newModules.push({
+          status: {
+            type: advancedTypeChecker(module.generic_status),
+            text: module.generic_status.toString(),
+          },
+          code: module.code,
+          title: module.name,
+          description: module.description,
+          id: module.id,
+        });
       });
-    });
 
-    setModules(newModules);
+      setModules(newModules);
+    } else if (isError) toast.error('error occurred when loading modules');
   }, [data]);
 
   function handleSearch() {}
@@ -87,6 +92,18 @@ export default function Modules() {
                         </CommonCardMolecule>
                       </div>
                     ))}
+                    {isLoading && <Loader />}
+
+                    {!isLoading && modules.length <= 0 && (
+                      <NoDataAvailable
+                        buttonLabel="Add new modules"
+                        title="No modules available"
+                        handleClick={() => {
+                          history.push(`${path}/add`);
+                        }}
+                        description="There are no modules added yet"
+                      />
+                    )}
                   </section>
                 </>
               );
