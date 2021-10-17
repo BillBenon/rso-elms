@@ -38,7 +38,7 @@ export default function AddPrerequesitesForm() {
 
   const handleSubmit = async () => {
     let data: CreatePrerequisites = {
-      model_id: '',
+      modele_id: values.module_id,
       prerequistis: [],
     };
 
@@ -46,7 +46,7 @@ export default function AddPrerequesitesForm() {
       data.prerequistis.push({
         description: values.description,
         id: 0,
-        module_id: moduleId,
+        module_id: values.module_id,
         prerequisite_id: values.prerequistis[i],
         status: GenericStatus.ACTIVE,
       });

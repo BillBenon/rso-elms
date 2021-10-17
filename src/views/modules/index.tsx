@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Link as BrowserLink, Route, Switch, useRouteMatch } from 'react-router-dom';
 
+import Button from '../../components/Atoms/custom/Button';
+import Loader from '../../components/Atoms/custom/Loader';
+import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import Tooltip from '../../components/Molecules/Tooltip';
 import { moduleStore } from '../../store/modules.store';
 import { CommonCardDataType, Link } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ModuleDetails from './ModuleDetails';
 
 export default function Modules() {
-  const { data } = moduleStore.getAllModules();
+  const { data, isLoading } = moduleStore.getAllModules();
 
   const [modules, setModules] = useState<CommonCardDataType[]>([]);
   const { path } = useRouteMatch();
@@ -71,20 +75,50 @@ export default function Modules() {
                     </TableHeader>
                   </section>
                   <section className="flex flex-wrap justify-between mt-2">
-                    {modules.map((course, index) => (
-                      <div key={index} className="p-1 mt-3">
-                        <CommonCardMolecule
-                          data={course}
-                          to={{ title: 'module', to: `modules/${course.id}` }}>
-                          <p className="pt-3">
-                            Total subjects:
-                            <span className="px-1 text-primary-500">
-                              {data?.data.data[index].total_num_subjects || 'None'}
-                            </span>
-                          </p>
-                        </CommonCardMolecule>
-                      </div>
-                    ))}
+                    {isLoading ? (
+                      <Loader />
+                    ) : (
+                      modules.map((course, index) => (
+                        <div key={index} className="p-1 mt-3">
+                          <Tooltip
+                            open
+                            trigger={
+                              <CommonCardMolecule
+                                data={course}
+                                to={{ title: 'module', to: `modules/${course.id}` }}>
+                                <p className="pt-3">
+                                  Total subjects:
+                                  <span className="px-1 text-primary-500">
+                                    {data?.data.data[index].total_num_subjects || 'None'}
+                                  </span>
+                                </p>
+                              </CommonCardMolecule>
+                            }>
+                            <div className="w-96 p-4">
+                              <Heading fontWeight="semibold">{course.title}</Heading>
+                              <p className="pt-4 pb-2 text-txt-secondary text-sm mt-4">
+                                {course.description}
+                              </p>
+                              <p>
+                                <BrowserLink
+                                  className="outline-none"
+                                  to={`/dashboard/modules/${course.id}`}>
+                                  <Button styleType="text">View details</Button>
+                                </BrowserLink>
+                              </p>
+                              <div className="py-2 flex justify-around gap-2">
+                                <BrowserLink
+                                  className="outline-none"
+                                  to={`/dashboard/modules/${course.id}/add-subject`}>
+                                  <Button>Add subject</Button>
+                                </BrowserLink>
+                                <Button styleType="outline">Edit</Button>
+                              </div>
+                            </div>
+                          </Tooltip>
+                        </div>
+                      ))
+                    )}
                   </section>
                 </>
               );
