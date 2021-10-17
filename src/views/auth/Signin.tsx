@@ -34,7 +34,7 @@ function SignIn() {
             fontWeight="semibold"
             color="primary"
             subtitle="Service . Protection . Integrity">
-            Rwanda National Police
+            National Intelligence and Security Service
           </AcademyProfileCard>
           <Switch>
             <Route exact path={`${path}`} render={() => <SignInForm />} />
