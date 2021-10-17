@@ -55,11 +55,18 @@ export default function ViewRole() {
     setPrivilegesByRole(rolesPrivileges.data?.data.data);
   }, [rolesPrivileges.data?.data.data]);
 
-  function submited() {}
+  function submited() {
+    queryClient.invalidateQueries(['privilegesByRole/id', id]);
+  }
   return (
     <main>
       <section>
-        <BreadCrumb list={[{ title: 'Roles', to: 'roles' }]} />
+        <BreadCrumb
+          list={[
+            { title: 'Roles', to: '/dashboard/roles' },
+            { title: 'View Role', to: `/dashboard/role/${id}/view` },
+          ]}
+        />
       </section>
       <section className="py-7">
         <Heading fontWeight="semibold" fontSize="2xl">
@@ -127,7 +134,7 @@ export default function ViewRole() {
           path={`${url}/addPrivileges`}
           render={() => {
             return (
-              <PopupMolecule title="New Role" open={true} onClose={history.goBack}>
+              <PopupMolecule title="Add Privilege" open={true} onClose={history.goBack}>
                 <AddPrivileges
                   roleName={role?.name || ''}
                   roleId={role?.id + '' || ''}
