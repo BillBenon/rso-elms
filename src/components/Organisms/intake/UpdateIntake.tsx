@@ -227,7 +227,7 @@ IProps) {
   );
 }
 
-function IntakeStatusComponent({ handleChange, handleNext, disabled }: IProps) {
+function IntakeStatusComponent({ values, handleChange, handleNext, disabled }: IProps) {
   let d = new Date();
   let year = d.getFullYear();
   let month = d.getMonth();
@@ -253,6 +253,9 @@ function IntakeStatusComponent({ handleChange, handleNext, disabled }: IProps) {
       <DropdownMolecule
         name="period_type"
         handleChange={handleChange}
+        defaultValue={getDropDownStatusOptions(PeriodType).find(
+          (period) => period.label === values.period_type,
+        )}
         options={getDropDownStatusOptions(PeriodType)}
         placeholder="Select Period type">
         Period type
@@ -260,6 +263,9 @@ function IntakeStatusComponent({ handleChange, handleNext, disabled }: IProps) {
       <DropdownMolecule
         name="intake_status"
         handleChange={handleChange}
+        defaultValue={getDropDownStatusOptions(IntakeStatus).find(
+          (intake) => intake.label === values.intake_status,
+        )}
         options={getDropDownStatusOptions(IntakeStatus)}>
         Intake status
       </DropdownMolecule>
