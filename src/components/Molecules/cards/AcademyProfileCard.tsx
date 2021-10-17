@@ -35,7 +35,7 @@ export default function AcademyProfileCard({
       badgecolor={bgColor}>
       <Avatar src={src} alt={alt} size={size} />
       <div className="flex flex-col items-center">
-        <ILabel size={txtSize} weight={fontWeight} color={color}>
+        <ILabel size={txtSize} weight={fontWeight} color={color} className="text-center">
           {children}
         </ILabel>
         <ILabel size="sm" weight="normal" color="primary">
