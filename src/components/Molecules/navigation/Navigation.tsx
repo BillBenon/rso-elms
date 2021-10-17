@@ -43,12 +43,12 @@ export default function Navigation() {
     logoutFn.refetch().then(() => {
       queryClient.clear();
       cookie.eraseCookie('jwt_info');
-      // history.push('/login');
+      history.push('/login');
     });
   }
   return (
     <nav className="bg-main">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className=" mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-24">
           <div className="flex items-center">
             <div className="flex-shrink-0">
@@ -77,7 +77,7 @@ export default function Navigation() {
 
               {/* Profile dropdown */}
               <div className="ml-3 relative">
-                <div>
+                <div className="flex">
                   <button
                     className="max-w-xs bg-main rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-white"
                     id="user-menu"
@@ -91,6 +91,12 @@ export default function Navigation() {
                       size="34"
                     />
                   </button>
+                  <div className="pl-2">
+                    <p>{authUser?.username}</p>
+                    <p className="text-xs pt-1 text-txt-secondary">
+                      {authUser?.user_type}
+                    </p>
+                  </div>
                 </div>
                 {/*  
                 Profile dropdown panel, show/hide based on dropdown state.
