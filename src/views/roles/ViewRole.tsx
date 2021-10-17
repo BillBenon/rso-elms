@@ -36,6 +36,7 @@ export default function ViewRole() {
     deletePrivilege(rolePrivilege.id + ''),
       {
         onSuccess: () => {
+          console.log('succeded');
           queryClient.setQueryData(['privilegesByRole/id', role?.id + ''], (old) => {
             const oldest = old as AxiosResponse<Response<RolePrivilege[]>>;
             oldest.data.data = oldest.data.data.filter(
@@ -56,6 +57,7 @@ export default function ViewRole() {
   }, [rolesPrivileges.data?.data.data]);
 
   function submited() {
+    console.log('submited');
     queryClient.invalidateQueries(['privilegesByRole/id', id]);
   }
   return (
@@ -108,8 +110,11 @@ export default function ViewRole() {
                 {rolesPrivileges.isError && rolesPrivileges.error.message}
                 {rolesPrivileges.isSuccess &&
                   privilegesByRole &&
-                  privilegesByRole?.length <= 0 &&
-                  'This role has no privileges try adding one'}
+                  privilegesByRole?.length <= 0 && (
+                    <p className="px-6 py-2 text-txt-secondary">
+                      This role has no privileges try adding one
+                    </p>
+                  )}
                 {rolesPrivileges.isSuccess && (
                   <ul>
                     {privilegesByRole?.map((rolePrivileg) => (
