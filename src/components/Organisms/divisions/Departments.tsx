@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
@@ -8,6 +9,7 @@ import { divisionStore } from '../../../store/divisions.store';
 import { DivisionInfo } from '../../../types/services/division.types';
 import NewAcademicProgram from '../../../views/programs/NewAcademicProgram';
 import Button from '../../Atoms/custom/Button';
+import Loader from '../../Atoms/custom/Loader';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
@@ -32,7 +34,7 @@ export default function Departments({ fetchType }: IDepartment) {
   const { search } = useLocation();
   const facultyId = new URLSearchParams(search).get('fac');
   const { data: userInfo } = authenticatorStore.authUser();
-  const { data, isSuccess, isLoading } = facultyId
+  const { data, isSuccess, isLoading, isError } = facultyId
     ? divisionStore.getDepartmentsInFaculty(facultyId)
     : divisionStore.getDivisionByType('DEPARTMENT');
 
@@ -42,28 +44,30 @@ export default function Departments({ fetchType }: IDepartment) {
     // extract department data to display
     let formattedDeparts: any = [];
 
-    const filteredInfo = data?.data.data.map((department: DivisionInfo) =>
-      _.pick(department, [
-        'id',
-        'name',
-        'description',
-        'generic_status',
-        'total_num_childreen',
-      ]),
-    );
+    if (isSuccess && data?.data) {
+      const filteredInfo = data?.data.data.map((department: DivisionInfo) =>
+        _.pick(department, [
+          'id',
+          'name',
+          'description',
+          'generic_status',
+          'total_num_childreen',
+        ]),
+      );
 
-    filteredInfo?.map((department: any) => {
-      let filteredData: any = {
-        id: department.id.toString(),
-        decription: department.description,
-        name: department.name,
-        status: department.generic_status,
-        programs: department.total_num_childreen || 0,
-      };
-      formattedDeparts.push(filteredData);
-    });
+      filteredInfo?.map((department: any) => {
+        let filteredData: any = {
+          id: department.id.toString(),
+          decription: department.description,
+          name: department.name,
+          status: department.generic_status,
+          programs: department.total_num_childreen || 0,
+        };
+        formattedDeparts.push(filteredData);
+      });
 
-    data?.data.data && setDepartments(formattedDeparts);
+      data?.data.data && setDepartments(formattedDeparts);
+    } else if (isError) toast.error('error occurred when loading departments');
   }, [data]);
 
   function handleClose() {
@@ -121,8 +125,6 @@ export default function Departments({ fetchType }: IDepartment) {
               </section>
             )}
             <section>
-              {isLoading && 'Department loading...'}
-
               {departments && departments?.length > 0 ? (
                 <Table<FilteredData>
                   handleSelect={() => {}}
@@ -140,6 +142,7 @@ export default function Departments({ fetchType }: IDepartment) {
                   description="And the web just isnt the same without you. Lets get you back online!"
                 />
               )}
+              {isLoading && <Loader />}
             </section>
             {/* modify department */}
             <Route

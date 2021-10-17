@@ -1,8 +1,10 @@
 import { Table } from '..';
 import { InstitutionInfo } from './institution.types';
+import { LocationInfo } from './location.types';
 
 export interface AcademyInfo extends AcademyCreateInfo, Table {
   institution: InstitutionInfo;
+  village: LocationInfo;
 }
 
 export interface AcademyCreateInfo {

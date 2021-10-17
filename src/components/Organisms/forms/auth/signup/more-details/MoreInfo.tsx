@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import CompleteProfileHeader from '../../../../../Molecules/CompleteProfileHeader';
@@ -27,6 +27,12 @@ function MoreInfo(props: any) {
     setCurrentStep((currentStep) => currentStep + 1);
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
   };
+
+  //@ts-ignore
+  useEffect(() => setMoreInfo(JSON.parse(localStorage.getItem('moreInfo'))), []);
+
+  //@ts-ignore
+  useEffect(() => localStorage.setItem('moreInfo', moreInfo), [moreInfo]);
 
   async function saveInfo() {
     if (moreInfo) {

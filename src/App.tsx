@@ -11,6 +11,7 @@ import CompleteProfile from './views/auth/CompleteProfile';
 import Signin from './views/auth/Signin';
 import Home from './views/Home';
 import NotFound from './views/NotFound';
+import StudentDetails from './views/users/UserDetails';
 
 const App = () => {
   return (
@@ -28,6 +29,7 @@ const App = () => {
             />
             <Route exact path="/complete-profile/more" component={MoreInfo} />
             <Route exact path="/complete-profile/other" component={OtherDetails} />
+            <Route exact path="/profile" component={StudentDetails} />
             <Route path="/login" component={Signin} />
             <Redirect exact from="/" to="/login" />
             <RouterProtection />

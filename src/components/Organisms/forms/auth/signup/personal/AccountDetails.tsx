@@ -15,7 +15,6 @@ function AccountDetails<E>({
   isVertical,
   nextStep,
   fetched_id,
-  onSubmit,
 }: Account<E>) {
   const [accountDetails, setAccountDetails] = useState<AccountDetail>({
     username: '',
@@ -32,20 +31,29 @@ function AccountDetails<E>({
   };
   const moveForward = (e: any) => {
     e.preventDefault();
+    let data: any = JSON.parse(localStorage.getItem('user') || '{}');
+    let newObj = Object.assign({}, data, accountDetails);
+    console.log(JSON.stringify(newObj));
+
+    Object.keys(newObj).map((val) => {
+      //@ts-ignore
+      if (!newObj[val]) newObj[val] = '';
+    });
+    localStorage.setItem('user', JSON.stringify(newObj));
     nextStep(true);
-    if (onSubmit) onSubmit(e, accountDetails);
   };
   const user = usersStore.getUserById(fetched_id.toString());
   useEffect(() => {
-    user.data?.data.data &&
+    let personInfo = user.data?.data.data;
+    personInfo &&
       setAccountDetails({
-        username: user.data.data.data.username,
-        email: user.data.data.data.email,
-        pin: user.data.data.data.pin,
-        password: user.data.data.data.password,
-        confirm_password: user.data.data.data.password,
+        username: personInfo.username,
+        email: personInfo.email,
+        pin: personInfo.pin,
+        password: personInfo.password,
+        confirm_password: personInfo.password,
       });
-  }, [user.data]);
+  }, [user.data?.data.data]);
 
   return (
     <div className="flex flex-col gap-4">

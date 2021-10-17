@@ -47,6 +47,18 @@ function ExperienceDetails(props: any) {
 
   const [totalExperience, setTotalExperience] = useState<ExperienceInfo[]>([]);
 
+  useEffect(
+    //@ts-ignore
+    () => setTotalExperience(JSON.parse(localStorage.getItem('totalExperience'))),
+    [],
+  );
+
+  useEffect(
+    //@ts-ignore
+    () => localStorage.setItem('totalExperience', totalExperience),
+    [totalExperience],
+  );
+
   const handleChange = (e: ValueType) => {
     setExperienceData({ ...experienceData, [e.name]: e.value });
   };

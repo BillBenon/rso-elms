@@ -12,7 +12,6 @@ import ViewDepartmentsInFaculty from './ViewDepartmentsInFaculty';
 export default function Divisions() {
   const { url, path } = useRouteMatch();
   const location = useLocation();
-
   const [fetchType, setFetchType] = useState<string>('');
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
@@ -10,10 +10,60 @@ import FamilyDetails from '../../components/Organisms/forms/auth/signup/personal
 import NationalDocuments from '../../components/Organisms/forms/auth/signup/personal/NationalDocument';
 import PersonalDetails from '../../components/Organisms/forms/auth/signup/personal/PersonalDetails';
 import usersStore from '../../store/users.store';
-import { UpdateUserInfo } from '../../types/services/user.types';
+import { ProfileStatus, UpdateUserInfo } from '../../types/services/user.types';
 
 function CompleteProfile(props: any) {
-  const [personalInfo, setPersonalInfo] = useState<UpdateUserInfo>();
+  const [personalInfo, setPersonalInfo] = useState({
+    academic_program_level_id: '',
+    academy_id: '',
+    activation_key: '',
+    id: '',
+    intake_program_id: '',
+    next_of_keen_proculation_reason: '',
+    password_reset_period_in_days: 0,
+    person_id: '',
+    relationship_with_next_of_ken: '',
+    reset_date: '',
+    profile_status: ProfileStatus.INCOMPLETE,
+    residence_location_id: 0,
+    user_type: '',
+  });
+
+  const user = usersStore.getUserById(props.location.state.detail.id.toString());
+  useEffect(() => {
+    const userInfo = user.data?.data.data;
+    userInfo &&
+      setPersonalInfo({
+        academic_program_level_id: userInfo.academic_program_level_id,
+        academy_id: userInfo.academy_id,
+        activation_key: userInfo.activation_key,
+        id: userInfo.id.toString(),
+        intake_program_id: userInfo.intake_program_id,
+        next_of_keen_proculation_reason: userInfo.next_of_keen_proculation_reason,
+        password_reset_period_in_days: userInfo.password_reset_period_in_days,
+        person_id: userInfo.person_id,
+        relationship_with_next_of_ken: userInfo.relationship_with_next_of_ken,
+        reset_date: userInfo.reset_date,
+        profile_status:
+          userInfo.profile_status == null
+            ? ProfileStatus.INCOMPLETE
+            : userInfo.profile_status,
+        residence_location_id: userInfo.residence_location_id,
+        user_type: userInfo.user_type,
+      });
+  }, [user.data]);
+
+  useEffect(() => {
+    let data: UpdateUserInfo = JSON.parse(localStorage.getItem('user') || '{}');
+    let person = { ...personalInfo };
+
+    Object.keys(person).map((val) => {
+      //@ts-ignore
+      if (!person[val]) person[val] = '';
+    });
+
+    localStorage.setItem('user', JSON.stringify({ ...data, ...person }));
+  }, [personalInfo]);
 
   const [currentStep, setCurrentStep] = useState(0);
   const [completeStep, setCompleteStep] = useState(0);
@@ -22,9 +72,12 @@ function CompleteProfile(props: any) {
   const { mutateAsync } = usersStore.modifyUser();
 
   async function saveInfo(isComplete: boolean) {
+    let userFromLocalStorage: UpdateUserInfo = JSON.parse(
+      localStorage.getItem('user') || '{}',
+    );
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
     if (personalInfo) {
-      await mutateAsync(personalInfo, {
+      await mutateAsync(userFromLocalStorage, {
         onSuccess(data) {
           let personInfo = data.data.data;
           toast.success('personal information successfully updated', { duration: 1200 });
@@ -41,7 +94,6 @@ function CompleteProfile(props: any) {
       });
     }
   }
-
   const nextStep = (isComplete: boolean) => {
     setCurrentStep((currentStep) => currentStep + 1);
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
@@ -49,10 +101,6 @@ function CompleteProfile(props: any) {
 
   const prevStep = () => {
     setCurrentStep((currentStep) => currentStep - 1);
-  };
-
-  const handleSubmit = (e: any, data: any) => {
-    setPersonalInfo({ ...personalInfo, ...data });
   };
 
   const navigateToStepHandler = (index: number) => {
@@ -74,7 +122,6 @@ function CompleteProfile(props: any) {
           display_label="Personal details"
           isVertical
           nextStep={nextStep}
-          onSubmit={handleSubmit}
         />
         <FamilyDetails
           fetched_id={props.location.state.detail.id}
@@ -82,7 +129,6 @@ function CompleteProfile(props: any) {
           isVertical
           prevStep={prevStep}
           nextStep={nextStep}
-          onSubmit={handleSubmit}
         />
         <NationalDocuments
           fetched_id={props.location.state.detail.id}
@@ -90,7 +136,6 @@ function CompleteProfile(props: any) {
           isVertical
           prevStep={prevStep}
           nextStep={nextStep}
-          onSubmit={handleSubmit}
         />
         <EmploymentDetails
           fetched_id={props.location.state.detail.id}
@@ -98,7 +143,6 @@ function CompleteProfile(props: any) {
           isVertical
           prevStep={prevStep}
           nextStep={nextStep}
-          onSubmit={handleSubmit}
         />
         <AccountDetails
           fetched_id={props.location.state.detail.id}
@@ -106,7 +150,6 @@ function CompleteProfile(props: any) {
           isVertical
           prevStep={prevStep}
           nextStep={saveInfo}
-          onSubmit={handleSubmit}
         />
       </Stepper>
     </div>

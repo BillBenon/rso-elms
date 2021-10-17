@@ -50,8 +50,6 @@ export function formatDateToYyMmDd(date: string) {
 }
 
 export function formatDateToIso(date: string | Date): string {
-  console.log(date);
-
   let formatedDate = new Date(date).toISOString().split('T').join(' ');
 
   return formatedDate.substring(0, formatedDate.length - 5);
