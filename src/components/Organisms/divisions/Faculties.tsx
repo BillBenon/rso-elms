@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { authenticatorStore } from '../../../store';
 import { divisionStore } from '../../../store/divisions.store';
 import { DivisionInfo } from '../../../types/services/division.types';
-import ViewDepartmentsInFaculty from '../../../views/divisions/ViewDepartmentsInFaculty';
 import Button from '../../Atoms/custom/Button';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
@@ -81,7 +80,11 @@ export default function Faculties({ fetchType }: IFaculties) {
     {
       name: 'View Departments',
       handleAction: (id: string | number | undefined) => {
-        history.push({ pathname: `${path}/${id}/view-departments` });
+        // history.push({ pathname: `${path}/${id}/view-departments` });
+        history.push({
+          pathname: `/dashboard/divisions/departments`,
+          search: `?fac=${id}`,
+        });
       },
     },
   ];
