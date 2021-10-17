@@ -29,6 +29,8 @@ const Badge = ({
     warning: 'bg-warning-400',
     primary: 'bg-primary-500',
     secondary: 'bg-secondary',
+    'txt-secondary': 'bg-txt-secondary',
+    main: 'bg-main',
   };
 
   const txt_colors: colorStyleType = {
@@ -38,6 +40,7 @@ const Badge = ({
     primary: 'text-primary-500',
     secondary: 'text-secondary',
     main: 'text-main',
+    'txt-secondary': 'text-txt-secondary',
   };
 
   return (

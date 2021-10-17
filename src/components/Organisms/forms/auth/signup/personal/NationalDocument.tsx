@@ -18,7 +18,6 @@ function NationalDocuments<E>({
   prevStep,
   nextStep,
   fetched_id,
-  onSubmit,
 }: National<E>) {
   const [nationalDocuments, setNationalDocuments] = useState<NationalDocument>({
     nationality: '',
@@ -41,13 +40,28 @@ function NationalDocuments<E>({
 
   const moveForward = (e: any) => {
     e.preventDefault();
+    let data: any = JSON.parse(localStorage.getItem('user') || '{}');
+    let newObj = Object.assign({}, data, nationalDocuments);
+    console.log(JSON.stringify(newObj));
+
+    localStorage.setItem('user', JSON.stringify(newObj));
     nextStep(true);
-    if (onSubmit) onSubmit(e, nationalDocuments);
   };
   const user = usersStore.getUserById(fetched_id.toString());
   useEffect(() => {
-    user.data?.data.data && setNationalDocuments({ ...user.data?.data.data.person });
-  }, [user.data]);
+    let personInfo = user.data?.data.data.person;
+    personInfo &&
+      setNationalDocuments({
+        nationality: personInfo.nationality,
+        doc_type: personInfo.doc_type,
+        nid: personInfo.nid,
+        residence_location_id: personInfo.residence_location_id,
+        place_of_residence: personInfo.place_of_residence,
+        place_of_issue: personInfo.place_of_issue,
+        date_of_issue: personInfo.date_of_issue,
+        document_expire_on: personInfo.document_expire_on,
+      });
+  }, [user.data?.data.data.person]);
 
   return (
     <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
@@ -94,8 +108,10 @@ function NationalDocuments<E>({
             Place of issue
           </InputMolecule>
           <DateMolecule
+            defaultValue={nationalDocuments.date_of_issue}
             handleChange={handleChange}
             name="date_of_issue"
+            date_time_type={false}
             width="60 md:w-80">
             Date of issue
           </DateMolecule>
@@ -119,26 +135,13 @@ function NationalDocuments<E>({
             Place of residence description (optional)
           </InputMolecule>
         </div>
-        {/* <div className="flex flex-col gap-4">
-        <InputMolecule
-          name="passport"
-          value={nationalDocuments.passport}
-          placeholder="----------------"
-          handleChange={handleChange}>
-          Passport Number(Optional)
-        </InputMolecule>
-        <InputMolecule
-          name="passPlaceOfIssue"
-          value={nationalDocuments.passPlaceOfIssue}
-          placeholder="Enter place you got passport from"
-          handleChange={handleChange}>
-          Place of issue
-        </InputMolecule>
-      </div> */}
         <div className="flex flex-col gap-4">
           <DateMolecule
             handleChange={handleChange}
             name="document_expire_on"
+            defaultValue={nationalDocuments.document_expire_on}
+            endYear={new Date().getFullYear() + 50}
+            startYear={new Date().getFullYear()}
             width="60 md:w-80">
             Document expiry date
           </DateMolecule>

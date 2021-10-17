@@ -17,7 +17,6 @@ function FamilyDetails<E>({
   nextStep,
   prevStep,
   fetched_id,
-  onSubmit,
 }: Family<E>) {
   const [familyDetails, setFamilyDetails] = useState<FamilyDetail>({
     father_names: '',
@@ -34,13 +33,25 @@ function FamilyDetails<E>({
 
   const moveForward = (e: any) => {
     e.preventDefault();
+    let data: any = JSON.parse(localStorage.getItem('user') || '{}');
+    let newObj = Object.assign({}, data, familyDetails);
+    console.log(JSON.stringify(newObj));
+
+    localStorage.setItem('user', JSON.stringify(newObj));
+
     nextStep(true);
-    if (onSubmit) onSubmit(e, familyDetails);
   };
   const user = usersStore.getUserById(fetched_id.toString());
   useEffect(() => {
-    user.data?.data.data && setFamilyDetails({ ...user.data?.data.data.person });
-  }, [user.data]);
+    let personInfo = user.data?.data.data.person;
+    personInfo &&
+      setFamilyDetails({
+        father_names: personInfo.father_names,
+        mother_names: personInfo.mother_names,
+        marital_status: personInfo.marital_status,
+        spouse_name: personInfo.spouse_name,
+      });
+  }, [user.data?.data.data.person]);
 
   return (
     <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
