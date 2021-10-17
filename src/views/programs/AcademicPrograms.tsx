@@ -1,4 +1,3 @@
-import queryString from 'query-string';
 import React, { useEffect } from 'react';
 import {
   Link,
@@ -50,12 +49,12 @@ export default function AcademicProgram() {
     { to: `${url}`, title: 'Programs' },
   ];
 
-  const queryStr = queryString.parse(location.search);
+  const dp = new URLSearchParams(search).get('dp');
 
   const { data, refetch, isLoading } = intakeId
     ? intakeStore.getProgramsByIntake(intakeId)
-    : queryStr.query
-    ? programStore.getProgramsByDepartment(queryStr.query?.toString() || '')
+    : dp
+    ? programStore.getProgramsByDepartment(dp?.toString() || '')
     : programStore.fetchPrograms();
 
   const programInfo = data?.data.data;
@@ -117,9 +116,7 @@ export default function AcademicProgram() {
                 </section>
                 <section>
                   <TableHeader
-                    totalItems={
-                      intakeId ? `${programs.length} programs` : programs.length
-                    }
+                    totalItems={`${programs.length} programs`}
                     title={`${intakeId ? intake?.data?.data.data.title : 'Programs'}`}
                     showSearch={false}>
                     {intakeId ? (
