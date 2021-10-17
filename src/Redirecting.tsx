@@ -18,7 +18,7 @@ export default function Redirecting() {
     if (data?.data.data.user_type == 'ADMIN') {
       console.log(data.data.data);
       if (!data.data.data.academy) setHasNoAcademy(true);
-      // redirectTo('/dashboard/programs');
+      else redirectTo('/dashboard/programs');
     }
   }, [data?.data.data]);
 
