@@ -152,7 +152,7 @@ export default function Users() {
                     render={() => <Instructors instructors={instructors} />}
                   />
                   <Route
-                    // exact
+                    exact
                     path={`${path}/admins`}
                     render={() => <Admins admins={admins} />}
                   />
