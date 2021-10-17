@@ -70,7 +70,6 @@ export default function Icon({
         transform={transform}
         fill={fill}
         size={size}
-        useheightandpadding={useheightandpadding}
       />
     </div>
   );

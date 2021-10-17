@@ -5,7 +5,7 @@ import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
-import Cacumber from '../../components/Molecules/Cacumber';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import AddCard from '../../components/Molecules/cards/AddCard';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -96,7 +96,7 @@ export default function ProgramDetailsMolecule() {
 
   return (
     <>
-      <Cacumber list={list} />
+      <BreadCrumb list={list} />
 
       <div className="mt-11 pb-6">
         <div className="flex flex-wrap justify-between items-center">

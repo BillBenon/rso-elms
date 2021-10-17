@@ -4,7 +4,7 @@ import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
-import Cacumber from '../../components/Molecules/Cacumber';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import TableHeader from '../../components/Molecules/table/TableHeader';
@@ -65,7 +65,7 @@ export default function Modules() {
               return (
                 <>
                   <section>
-                    <Cacumber list={list}></Cacumber>
+                    <BreadCrumb list={list}></BreadCrumb>
                   </section>
                   <section className="">
                     <TableHeader

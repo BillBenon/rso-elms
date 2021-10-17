@@ -3,29 +3,14 @@ import './input.scss';
 import React, { useEffect, useState } from 'react';
 
 import { colorStyle } from '../../../global/global-vars';
-import { Color, CommonInputProps, ValueType } from '../../../types';
-
-export interface IProps<T> extends CommonInputProps<T> {
-  placeholder?: string;
-  type?: string;
-  readonly?: boolean;
-  handleChange: (_e: ValueType) => void;
-  value: string | number | undefined;
-  name: string;
-  full?: boolean;
-  padding?: string;
-  fcolor?: Color;
-  bcolor?: Color;
-  pcolor?: Color;
-  width?: string | number;
-  className?: string;
-}
+import { InputProps } from '../../../types';
 
 export default function Input<T>({
   placeholder = '',
   padding = 'px-4',
   type = 'text',
   readonly = false,
+  required = true,
   value,
   name,
   full,
@@ -36,7 +21,7 @@ export default function Input<T>({
   handleChange,
   className = '',
   ...attrs
-}: IProps<T>) {
+}: InputProps<T>) {
   const [_value, setValue] = useState<string>();
 
   useEffect(() => setValue(value?.toString()), [value]);
@@ -53,6 +38,8 @@ export default function Input<T>({
       type={type}
       value={_value}
       readOnly={readonly}
+      required={required}
+      autoComplete="off"
       className={`${
         readonly ? 'bg-gray-100' : 'bg-transparent'
       } h-12 ${padding} placeholder-${pcolor} rounded-md ${

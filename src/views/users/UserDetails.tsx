@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Heading from '../../components/Atoms/Text/Heading';
-import Cacumber from '../../components/Molecules/Cacumber';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
 import { Link } from '../../types';
 import ProfileOverview from './profile/ProfileOverview';
@@ -14,7 +14,7 @@ const list: Link[] = [
 export default function UserDetails() {
   return (
     <div>
-      <Cacumber list={list} />
+      <BreadCrumb list={list} />
       <Heading className="py-3" fontWeight="bold" fontSize="2xl">
         User Profile
       </Heading>

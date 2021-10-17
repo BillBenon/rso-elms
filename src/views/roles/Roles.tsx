@@ -10,7 +10,7 @@ import {
 } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
-import Cacumber from '../../components/Molecules/Cacumber';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
@@ -80,7 +80,7 @@ export default function Roles() {
   return (
     <main>
       <section>
-        <Cacumber list={[{ title: 'Roles', to: 'roles' }]} />
+        <BreadCrumb list={[{ title: 'Roles', to: 'roles' }]} />
       </section>
       <section>
         <TableHeader

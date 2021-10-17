@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
-import Cacumber from '../../components/Molecules/Cacumber';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
@@ -53,7 +53,7 @@ function Levels() {
   return (
     <main className="px-4">
       <section>
-        <Cacumber list={list}></Cacumber>
+        <BreadCrumb list={list}></BreadCrumb>
       </section>
       <section className="">
         <TableHeader title="Levels" totalItems={3}>

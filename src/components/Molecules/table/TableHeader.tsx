@@ -8,9 +8,10 @@ import SearchMolecule from '../input/SearchMolecule';
 
 type ITableHeader = {
   title: string;
-  totalItems: number | string;
+  totalItems?: number | string;
   children?: React.ReactNode;
   showSearch?: boolean;
+  showBadge?: boolean;
   handleSearch?: (_e: ValueType) => void;
 };
 
@@ -19,6 +20,7 @@ export default function TableHeader({
   totalItems,
   handleSearch,
   children,
+  showBadge = true,
   showSearch = true,
 }: ITableHeader) {
   const handleChange = (e: ValueType) => {
@@ -34,13 +36,16 @@ export default function TableHeader({
           <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
             {title}
           </Heading>
-          <Badge
-            badgetxtcolor="main"
-            badgecolor="primary"
-            fontWeight="normal"
-            className="h-6 flex justify-center items-center">
-            {totalItems}
-          </Badge>
+
+          {showBadge && (
+            <Badge
+              badgetxtcolor="main"
+              badgecolor="primary"
+              fontWeight="normal"
+              className="h-6 flex justify-center items-center">
+              {totalItems}
+            </Badge>
+          )}
         </div>
         {showSearch && (
           <div className="flex flex-wrap justify-start items-center">

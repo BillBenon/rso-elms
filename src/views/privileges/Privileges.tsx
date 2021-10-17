@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 
-import Cacumber from '../../components/Molecules/Cacumber';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
@@ -50,7 +50,7 @@ export default function PrivilegesView() {
   return (
     <main>
       <section>
-        <Cacumber list={[{ title: 'Privileges', to: 'privilege' }]} />
+        <BreadCrumb list={[{ title: 'Privileges', to: 'privilege' }]} />
       </section>
       <section>
         <TableHeader
