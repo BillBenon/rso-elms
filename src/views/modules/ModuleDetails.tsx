@@ -131,7 +131,7 @@ export default function ModuleDetails() {
           {/* add lesson popup */}
           <Route
             exact
-            path={`${path}/subject/:subjectId/add-lesson`}
+            path={`${path}/subjects/:subjectId/add-lesson`}
             render={() => {
               return (
                 <PopupMolecule title="Add lesson" open onClose={handleClose}>

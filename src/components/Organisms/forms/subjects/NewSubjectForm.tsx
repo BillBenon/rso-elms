@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router';
 
+import { queryClient } from '../../../../plugins/react-query';
 import { moduleStore } from '../../../../store/modules.store';
 import { subjectStore } from '../../../../store/subject.store';
 import { ParamType, ValueType } from '../../../../types';
@@ -33,8 +34,10 @@ export default function NewSubjectForm() {
     await mutateAsync(subject, {
       async onSuccess(data) {
         toast.success(data.data.message);
+        queryClient.invalidateQueries(['subjects/moduleId']);
+        // history.goBack();
         history.push(
-          `/dashboard/modules/${module?.id}/subject/${data.data.data.id}/add-lesson`,
+          `/dashboard/modules/${module?.id}/subjects/${data.data.data.id}/add-lesson`,
         );
       },
       onError() {
