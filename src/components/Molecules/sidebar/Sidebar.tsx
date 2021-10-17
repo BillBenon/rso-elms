@@ -47,9 +47,7 @@ export default function Sidebar() {
   return (
     <div className="bg-white md:h-screen">
       <div className="px-4 py-4">
-        <AcademyProfileCard
-          src="https://upload.wikimedia.org/wikipedia/commons/5/54/Rwanda_National_Police.png"
-          alt="academy logo">
+        <AcademyProfileCard src="/images/nisslogo.png" alt="academy logo">
           National Intelligence and Security Service
         </AcademyProfileCard>
       </div>

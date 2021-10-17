@@ -22,7 +22,7 @@ export default function AcademyProfileCard({
   src,
   bgColor = 'secondary',
   alt,
-  size = '32',
+  size = '70',
   txtSize = 'xs',
   fontWeight = 'medium',
   color = 'txt-primary',
@@ -31,7 +31,7 @@ export default function AcademyProfileCard({
   return (
     <Badge
       roundWidth="md"
-      className="flex gap-5 h-16 w-full p-4 items-center"
+      className="flex gap-5 h-16  w-full p-4 items-center"
       badgecolor={bgColor}>
       <Avatar src={src} alt={alt} size={size} />
       <div className="flex flex-col items-center">
