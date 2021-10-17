@@ -7,6 +7,7 @@ import AcademyProfileCard from '../cards/AcademyProfileCard';
 
 export default function Sidebar() {
   const [authUser, setAuthUser] = useState<UserInfo>();
+  // const [organization, setOrganization] = useState({ name: '', photo: '' });
   const { data } = authenticatorStore.authUser();
 
   useEffect(() => {
@@ -27,6 +28,7 @@ export default function Sidebar() {
       { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
       { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
       // { title: 'Subjects', to: '/dashboard/subjects', icon: 'module' },
+      { title: 'Evalutaions', to: '/dashboard/evaluations', icon: 'evaluation' },
       { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
       {
         title: 'Registration Control',
@@ -48,7 +50,7 @@ export default function Sidebar() {
         <AcademyProfileCard
           src="https://upload.wikimedia.org/wikipedia/commons/5/54/Rwanda_National_Police.png"
           alt="academy logo">
-          Rwanda National Police
+          National Intelligence and Security Service
         </AcademyProfileCard>
       </div>
       <SidebarLinks links={defaultLinks()} />

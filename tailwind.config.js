@@ -19,6 +19,7 @@ module.exports = {
           500: '#2337CC',
           600: '#1C2CA3',
         },
+        lightblue: '#F6FAFF',
         secondary: '#FAFBFC',
         tertiary: '#F0F1F1',
         main: '#FFFFFF',

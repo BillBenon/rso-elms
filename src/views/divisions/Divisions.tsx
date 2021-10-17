@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useLocation, useRouteMatch } from 'react-router-dom';
 
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
-import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import Departments from '../../components/Organisms/divisions/Departments';
 import Faculties from '../../components/Organisms/divisions/Faculties';
-import NewDepartment from '../../components/Organisms/forms/divisions/NewDepartment';
-import { authenticatorStore } from '../../store';
 import ViewDepartmentsInFaculty from './ViewDepartmentsInFaculty';
 
 export default function Divisions() {
   const { url, path } = useRouteMatch();
   const location = useLocation();
-  const history = useHistory();
   const [fetchType, setFetchType] = useState<string>('');
 
   useEffect(() => {

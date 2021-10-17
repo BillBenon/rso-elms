@@ -7,6 +7,7 @@ import { authenticatorStore } from './store';
 import { UserInfo } from './types/services/user.types';
 import Academies from './views/academies/Academy';
 import Divisions from './views/divisions/Divisions';
+import ViewEvaluations from './views/evaluation/ViewEvaluations';
 import NewInstitution from './views/insitution/NewInstitution';
 import UpdateInstitution from './views/insitution/UpdateInstitution';
 import IntakeModulesView from './views/intakes/IntakeModules';
@@ -47,13 +48,12 @@ const RouterProtection = () => {
       {/* start of academic admin pages */}
       <Route path="/dashboard/modules" component={Modules} />
       <Route path="/dashboard/subjects" component={Subjects} />
+      <Route path="/dashboard/evaluations" component={ViewEvaluations} />
       <Route path="/dashboard/registration-control" component={RegistrationControl} />
-
       <Route path="/dashboard/divisions" component={Divisions} />
-
       <Route path="/dashboard/programs" component={AcademicPrograms} />
       <Route exact path="/dashboard/programs/new" component={NewAcademicProgram} />
-      <Route exact path="/dashboard/levels" component={Levels} />
+      <Route path="/dashboard/levels" component={Levels} />
       <Route path="/dashboard/intakes" component={IntakesView} />
       <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} />
 

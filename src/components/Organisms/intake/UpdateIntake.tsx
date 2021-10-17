@@ -2,6 +2,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 
+import { queryClient } from '../../../plugins/react-query';
 import { intakeStore } from '../../../store/intake.store';
 import { ValueType } from '../../../types';
 import {
@@ -52,22 +53,14 @@ export default function UpdateIntake(props: CProps) {
     total_num_students: 1,
   });
 
-  // const [selectedPrograms, setSelectedPrograms] = useState<string[]>([]);
-
   function handleChange(e: ValueType) {
     setValues((regControl) => ({ ...regControl, [e.name]: e.value }));
   }
-
-  // function handleProgramsChange(e: ValueType) {
-  //   // @ts-ignore
-  //   setSelectedPrograms(e.value);
-  // }
 
   const { mutateAsync } = intakeStore.update();
   const intake = intakeStore.getIntakeById(id);
 
   useEffect(() => {
-    console.log('hee');
     if (intake.data) {
       const _intake = intake?.data.data.data;
       setValues({
@@ -99,7 +92,8 @@ export default function UpdateIntake(props: CProps) {
         {
           async onSuccess(data) {
             toast.success(data.data.message, { id: toastId });
-            // await addProgramsToIntake(data.data.data.id.toString());
+            queryClient.invalidateQueries('intakes');
+            queryClient.invalidateQueries('intakes/registrationControl');
             setFormLoading(false);
             props.handleSuccess();
           },
@@ -111,36 +105,6 @@ export default function UpdateIntake(props: CProps) {
       );
     }
   }
-
-  // async function addProgramsToIntake(id: string) {
-  //   let intakePrograms: IntakePrograms = {
-  //     description: '',
-  //     intak_id: id,
-  //     programs: [],
-  //   };
-
-  //   for (let i = 0; i < selectedPrograms.length; i++) {
-  //     const element: IntakeProgram = {
-  //       description: '',
-  //       intake_id: id,
-  //       intake_program_id: '',
-  //       program_id: selectedPrograms[i],
-  //       status: GenericStatus.ACTIVE,
-  //     };
-  //     intakePrograms.programs.push(element);
-  //   }
-
-  //   await addProgram.mutateAsync(intakePrograms, {
-  //     onSuccess(data) {
-  //       toast.success(data.data.message);
-  //       props.handleSuccess();
-  //     },
-  //     onError() {
-  //       toast.error('error occurred when adding programs');
-  //       props.handleSuccess();
-  //     },
-  //   });
-  // }
 
   return (
     <div className="w-full">
@@ -169,25 +133,13 @@ export default function UpdateIntake(props: CProps) {
   );
 }
 
-function IntakeInfoComponent({
-  values,
-  handleChange,
-  handleNext,
-}: // handleProgramsChange,
-IProps) {
-  // const programsInfo = programStore.fetchPrograms();
-
-  // let programs: ProgramInfo[] = programsInfo.data?.data.data || [];
-
-  // const handlePrograms = (e: ValueType) => {
-  //   if (handleProgramsChange) handleProgramsChange(e);
-  // };
-
+function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
   return (
     <form onSubmit={handleNext}>
       <InputMolecule
         required
         name="title"
+        readOnly
         placeholder="Intake title"
         value={values.title}
         handleChange={handleChange}>
@@ -210,14 +162,6 @@ IProps) {
         handleChange={handleChange}>
         Total number of students
       </InputMolecule>
-      {/* <DropdownMolecule
-        name="programs"
-        placeholder="Program"
-        handleChange={handlePrograms}
-        isMulti
-        options={getDropDownOptions(programs)}>
-        Programs in this intake
-      </DropdownMolecule> */}
       <div className="pt-3">
         <Button type="submit" onClick={() => handleNext}>
           Next
@@ -227,15 +171,14 @@ IProps) {
   );
 }
 
-function IntakeStatusComponent({ handleChange, handleNext, disabled }: IProps) {
-  let d = new Date();
-  let year = d.getFullYear();
-  let month = d.getMonth();
-  let day = d.getDate();
+function IntakeStatusComponent({ values, handleChange, handleNext, disabled }: IProps) {
   return (
     <form onSubmit={handleNext}>
       <DateMolecule
         showTime={false}
+        defaultValue={
+          values.expected_start_date ? values.expected_start_date.toString() : ''
+        }
         handleChange={handleChange}
         name={'expected_start_date'}>
         Expected Start Date
@@ -244,7 +187,9 @@ function IntakeStatusComponent({ handleChange, handleNext, disabled }: IProps) {
         <DateMolecule
           showTime={false}
           endYear={new Date().getFullYear() + 15}
-          defaultValue={new Date(year + 3, month, day).toString()}
+          defaultValue={
+            values.expected_end_date ? values.expected_end_date.toString() : ''
+          }
           handleChange={handleChange}
           name={'expected_end_date'}>
           Expected End Date
@@ -253,6 +198,9 @@ function IntakeStatusComponent({ handleChange, handleNext, disabled }: IProps) {
       <DropdownMolecule
         name="period_type"
         handleChange={handleChange}
+        defaultValue={getDropDownStatusOptions(PeriodType).find(
+          (period) => period.label === values.period_type,
+        )}
         options={getDropDownStatusOptions(PeriodType)}
         placeholder="Select Period type">
         Period type
@@ -260,6 +208,9 @@ function IntakeStatusComponent({ handleChange, handleNext, disabled }: IProps) {
       <DropdownMolecule
         name="intake_status"
         handleChange={handleChange}
+        defaultValue={getDropDownStatusOptions(IntakeStatus).find(
+          (intake) => intake.label === values.intake_status,
+        )}
         options={getDropDownStatusOptions(IntakeStatus)}>
         Intake status
       </DropdownMolecule>

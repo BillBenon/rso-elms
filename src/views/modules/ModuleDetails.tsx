@@ -5,11 +5,12 @@ import { useLocation } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
-import Cacumber from '../../components/Molecules/Cacumber';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
+import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
 import { moduleStore } from '../../store/modules.store';
@@ -23,16 +24,32 @@ export default function ModuleDetails() {
   const { id } = useParams<ParamType>();
   const { path, url } = useRouteMatch();
   const history = useHistory();
-  const location = useLocation();
 
   const subjectData = subjectStore.getSubjectsByModule(id);
   const moduleData = moduleStore.getModuleById(id);
 
-  useEffect(() => {
-    if (location.pathname === path) {
-      subjectData.refetch();
-    }
-  }, [location]);
+  const tabs = [
+    {
+      label: 'Subject',
+      href: `${url}`,
+    },
+    {
+      label: 'Module Preriquisite',
+      href: `${url}/prereqs`,
+    },
+    {
+      label: 'Syllabus',
+      href: `${url}/syllabus`,
+    },
+    {
+      label: 'Evaluation',
+      href: `${url}/evaluation`,
+    },
+    {
+      label: 'Performance',
+      href: `${url}/performance`,
+    },
+  ];
 
   useEffect(() => {
     if (subjectData.data?.data) {
@@ -74,7 +91,7 @@ export default function ModuleDetails() {
     <>
       <main className="px-4">
         <section>
-          <Cacumber list={list} />
+          <BreadCrumb list={list} />
         </section>
         <div className="mt-11 pb-6">
           <div className="flex flex-wrap justify-between items-center">
@@ -97,23 +114,27 @@ export default function ModuleDetails() {
             </div>
           </div>
         </div>
-        {subjects.length < 1 && subjectData.isSuccess ? (
-          <NoDataAvailable
-            title={'No subjecta registered'}
-            description={
-              'The history object is mutable. Therefore it is recommended to access the location from the render props of <Route>, not from'
-            }
-            handleClick={() => history.push(`${path}/add-subject`)}
-          />
-        ) : (
-          <section className="flex flex-wrap justify-start gap-4 mt-2">
-            {subjects.map((subject, i) => (
-              <div key={i} className="p-1 mt-3">
-                <CommonCardMolecule data={subject} />
-              </div>
-            ))}
-          </section>
-        )}
+        <TabNavigation tabs={tabs}>
+          <>
+            {subjects.length < 1 && subjectData.isSuccess ? (
+              <NoDataAvailable
+                title={'No subjects registered'}
+                description={
+                  'The history object is mutable. Therefore it is recommended to access the location from the render props of <Route>, not from'
+                }
+                handleClick={() => history.push(`${url}/add-subject`)}
+              />
+            ) : (
+              <section className="flex flex-wrap justify-start gap-4 mt-2">
+                {subjects.map((subject, i) => (
+                  <div key={i} className="p-1 mt-3">
+                    <CommonCardMolecule data={subject} />
+                  </div>
+                ))}
+              </section>
+            )}
+          </>
+        </TabNavigation>
         <Switch>
           {/* add subject popup */}
           <Route
@@ -131,7 +152,7 @@ export default function ModuleDetails() {
           {/* add lesson popup */}
           <Route
             exact
-            path={`${path}/subject/:subjectId/add-lesson`}
+            path={`${path}/subjects/:subjectId/add-lesson`}
             render={() => {
               return (
                 <PopupMolecule title="Add lesson" open onClose={handleClose}>

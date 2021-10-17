@@ -43,9 +43,19 @@ function TabHeadings({ tabs, onTabChange }: TabsImportantProps) {
   const history = useHistory();
   const location = useLocation();
 
-  let competitotors = tabs.filter((tab) => location.pathname.startsWith(tab.href));
-  const lengths = competitotors.map((tab) => tab.href.length);
-  let activeTabIndex = lengths.indexOf(Math.max(...lengths)) || 0;
+  let activeTabIndex = tabs.findIndex((tab) => tab.href === location.pathname);
+  if (activeTabIndex === -1) {
+    let competitotors = tabs.filter((tab) => location.pathname.startsWith(tab.href));
+    const arrays = competitotors.map((tab) => tab.href.split('/'));
+
+    let maxIndex = 0;
+
+    for (let i = 0; i < arrays.length; i++) {
+      if (arrays[i].length) maxIndex = i;
+    }
+
+    activeTabIndex = tabs.findIndex((tab) => tab.href === arrays[maxIndex].join('/'));
+  }
 
   const slideTo = (index: number, href: string, label: string) => {
     if (onTabChange)

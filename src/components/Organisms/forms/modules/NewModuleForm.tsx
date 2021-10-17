@@ -57,6 +57,7 @@ export default function NewModuleForm() {
       <TextAreaMolecule
         value={values.description}
         name="description"
+        className="h-24"
         handleChange={handleChange}>
         Descripiton
       </TextAreaMolecule>
