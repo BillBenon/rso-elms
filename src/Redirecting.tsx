@@ -56,30 +56,19 @@ export default function Redirecting() {
           </div>
         )}
 
-        {userNotAllowed && (
-          <div className="full-height w-full grid items-center">
-            <div className="flex justify-center">
-              <div className=" ">
-                <div className="flex items-center px-6 py-1 rounded-lg bg-tertiary">
-                  <Icon name="alert" stroke="error" />
-                  <p>
-                    User type{' '}
-                    <span className="bg-error-400 px-2 rounded">
-                      {data?.data.data.user_type}
-                    </span>{' '}
-                    not yet allowed to use this system , please contact admin
-                  </p>
-                </div>
+        {/* when academic admin does not have academy assigned to him */}
+        {hasNoAcademy &&
+          ErrorCard({
+            text: 'User %% has no Academy to operate in, please contact admin',
+            value: data?.data.data.user_type,
+          })}
 
-                <div className="flex justify-center pt-5 pb-3">
-                  <Link to="/login">
-                    <Button>Go Back Home</Button>
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* when user type is not yet supported in system */}
+        {userNotAllowed &&
+          ErrorCard({
+            text: 'User type %% is not allowed to use this sytem, please contact Admin.',
+            value: data?.data.data.user_type,
+          })}
 
         {/* <p>User has no Academy, please contact admin to give you </p> */}
         {!hasNoAcademy && !userNotAllowed && (
@@ -91,5 +80,38 @@ export default function Redirecting() {
         )}
       </div>
     </>
+  );
+}
+
+interface ErrorCardProp {
+  text: string;
+  value: string | undefined;
+}
+
+function ErrorCard({ text, value }: ErrorCardProp) {
+  const spanValue = <span className="bg-error-400 px-2 rounded">{value}</span>;
+
+  const realError = text.split('%%');
+
+  return (
+    <div className="full-height w-full grid items-center">
+      <div className="flex justify-center">
+        <div className=" ">
+          <div className="flex items-center px-6 py-1 rounded-lg bg-tertiary">
+            <Icon name="alert" stroke="error" />
+            <p>
+              {' '}
+              {realError[0]} {spanValue} {realError[1]}{' '}
+            </p>
+          </div>
+
+          <div className="flex justify-center pt-5 pb-3">
+            <Link to="/login">
+              <Button>Go Back Home</Button>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
