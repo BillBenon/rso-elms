@@ -68,7 +68,7 @@ export default function Faculties({ fetchType }: IFaculties) {
     {
       name: 'Edit Faculty',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit role
+        history.push(`${path}/${id}/edit`); // go to edit faculties
       },
     },
     {
@@ -80,7 +80,6 @@ export default function Faculties({ fetchType }: IFaculties) {
     {
       name: 'View Departments',
       handleAction: (id: string | number | undefined) => {
-        // history.push({ pathname: `${path}/${id}/view-departments` });
         history.push({
           pathname: `/dashboard/divisions/departments`,
           search: `?fac=${id}`,
@@ -94,7 +93,7 @@ export default function Faculties({ fetchType }: IFaculties) {
       <section>
         <TableHeader
           title="Faculty"
-          totalItems={faculties?.length || 0}
+          totalItems={`${faculties?.length} faculties` || 0}
           handleSearch={() => {}}>
           <Link to={`${url}/add`}>
             <Button>Add Faculty</Button>
