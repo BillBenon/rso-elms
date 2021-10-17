@@ -36,9 +36,14 @@ export default function Departments({ fetchType }: IDepartment) {
   const { data: userInfo } = authenticatorStore.authUser();
   const { data, isSuccess, isLoading, isError } = facultyId
     ? divisionStore.getDepartmentsInFaculty(facultyId)
-    : divisionStore.getDivisionByType('DEPARTMENT');
+    : divisionStore.getDivisionByType(fetchType.toUpperCase());
 
-  const { data: facultyData } = divisionStore.getDivision(facultyId || '');
+  let facultyData: any;
+
+  if (facultyId) {
+    ({ data: facultyData } = divisionStore.getDivision(facultyId));
+    console.log('data', facultyData);
+  }
 
   useEffect(() => {
     // extract department data to display
@@ -113,7 +118,7 @@ export default function Departments({ fetchType }: IDepartment) {
                 <TableHeader
                   title={`${
                     facultyData?.data.data.name
-                      ? `${facultyData.data.data.name} / Department`
+                      ? `${facultyData?.data.data.name} / Department`
                       : 'department'
                   }`}
                   totalItems={`${departments?.length} departments` || 0}
