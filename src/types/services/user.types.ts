@@ -11,6 +11,7 @@ export interface UserInfo extends CreateUserInfo, Table {
   person: PersonInfo;
   academy: AcademyInfo;
   institution_id: string;
+  institution_name?:string,
   activated: boolean;
   active_session: boolean;
   image_url: string;
