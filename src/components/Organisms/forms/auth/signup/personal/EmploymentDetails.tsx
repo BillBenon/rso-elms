@@ -17,12 +17,11 @@ function EmploymentDetails<E>({
   prevStep,
   nextStep,
   fetched_id,
-  onSubmit,
 }: Employment<E>) {
   const [employmentDetails, setEmploymentDetails] = useState<EmploymentDetail>({
     current_rank_id: '',
     other_rank: '',
-    rank_depart: 'Rwanda',
+    rank_depart: '',
     emp_no: '',
     date_of_commission: '',
     date_of_last_promotion: '',
@@ -37,13 +36,30 @@ function EmploymentDetails<E>({
 
   const moveForward = (e: any) => {
     e.preventDefault();
+    let data: any = JSON.parse(localStorage.getItem('user') || '{}');
+    let newObj = Object.assign({}, data, employmentDetails);
+    console.log(JSON.stringify(newObj));
+
+    Object.keys(newObj).map((val) => {
+      //@ts-ignore
+      if (!newObj[val]) newObj[val] = '';
+    });
+    localStorage.setItem('user', JSON.stringify(newObj));
     nextStep(true);
-    if (onSubmit) onSubmit(e, employmentDetails);
   };
   const user = usersStore.getUserById(fetched_id.toString());
   useEffect(() => {
-    user.data?.data.data && setEmploymentDetails({ ...user.data?.data.data.person });
-  }, [user.data]);
+    let personInfo = user.data?.data.data.person;
+    personInfo &&
+      setEmploymentDetails({
+        current_rank_id: personInfo.current_rank_id,
+        other_rank: personInfo.other_rank,
+        rank_depart: personInfo.rank_depart,
+        emp_no: personInfo.emp_no,
+        date_of_commission: personInfo.date_of_commission,
+        date_of_last_promotion: personInfo.date_of_last_promotion,
+      });
+  }, [user.data?.data.data.person]);
 
   return (
     <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
@@ -84,14 +100,18 @@ function EmploymentDetails<E>({
         </div>
         <div className="flex flex-col gap-4">
           <DateMolecule
+            defaultValue={employmentDetails.date_of_commission}
             handleChange={handleChange}
             name="date_of_commission"
+            date_time_type={false}
             width="60 md:w-80">
             Date of commission
           </DateMolecule>
           <DateMolecule
+            defaultValue={employmentDetails.date_of_last_promotion}
             handleChange={handleChange}
             name="date_of_last_promotion"
+            date_time_type={false}
             width="60 md:w-80">
             Date of last promotion
           </DateMolecule>

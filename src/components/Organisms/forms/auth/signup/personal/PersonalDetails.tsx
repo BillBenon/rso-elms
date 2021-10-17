@@ -23,7 +23,6 @@ function PersonalDetails<E>({
   isVertical,
   nextStep,
   fetched_id,
-  onSubmit,
 }: Personal<E>) {
   const [personalDetails, setPersonalDetails] = useState<PersonDetail>({
     first_name: '',
@@ -43,13 +42,33 @@ function PersonalDetails<E>({
 
   const moveForward = (e: any) => {
     e.preventDefault();
+    let data: any = JSON.parse(localStorage.getItem('user') || '{}');
+    let newObj = Object.assign({}, data, personalDetails);
+    console.log(JSON.stringify(newObj));
+
+    Object.keys(newObj).map((val) => {
+      //@ts-ignore
+      if (!newObj[val]) newObj[val] = '';
+    });
+    localStorage.setItem('user', JSON.stringify(newObj));
     nextStep(true);
-    if (onSubmit) onSubmit(e, personalDetails);
   };
   const user = usersStore.getUserById(fetched_id.toString());
   useEffect(() => {
-    user.data?.data.data && setPersonalDetails({ ...user.data?.data.data.person });
-  }, [user.data]);
+    let personInfo = user.data?.data.data.person;
+    personInfo &&
+      setPersonalDetails({
+        first_name: personInfo.first_name,
+        last_name: personInfo.last_name,
+        phone_number: personInfo.phone_number,
+        sex: personInfo.sex,
+        place_of_birth: personInfo.place_of_birth,
+        place_of_birth_description: personInfo.place_of_birth_description,
+        birth_date: personInfo.birth_date,
+        religion: personInfo.religion,
+        blood_group: personInfo.blood_group,
+      });
+  }, [user.data?.data.data.person]);
 
   return (
     <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
@@ -102,6 +121,7 @@ function PersonalDetails<E>({
         </div>
         <div className="flex flex-col gap-4">
           <DateMolecule
+            defaultValue={personalDetails.birth_date}
             handleChange={handleChange}
             name="birth_date"
             width="60 md:w-80"

@@ -26,6 +26,6 @@ export interface Prerequisite {
 }
 
 export interface CreatePrerequisites {
-  model_id: string;
+  modele_id: string;
   prerequistis: Prerequisite[];
 }
