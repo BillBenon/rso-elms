@@ -33,7 +33,8 @@ export default function AddPrivileges({ onSubmit, roleName, roleId }: PropType) 
 
     mutateAsync(form, {
       onSuccess: () => {
-        toast.success('Privileges Added', { id: toastId });
+        onSubmit(e);
+        toast.success('Privilege(s) Added', { id: toastId });
         history.goBack();
       },
       onError: () => {
@@ -42,7 +43,6 @@ export default function AddPrivileges({ onSubmit, roleName, roleId }: PropType) 
         });
       },
     });
-    onSubmit(e);
   }
 
   useEffect(() => {
