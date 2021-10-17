@@ -2,7 +2,10 @@ import './styles/redirecting.scss';
 
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 
+import Button from './components/Atoms/custom/Button';
+import Icon from './components/Atoms/custom/Icon';
 import { authenticatorStore } from './store';
 
 export default function Redirecting() {
@@ -25,10 +28,35 @@ export default function Redirecting() {
   return (
     <>
       <div>
+        {hasNoAcademy && (
+          <div className="full-height w-full grid items-center">
+            <div className="flex justify-center">
+              <div className=" ">
+                <div className="flex items-center px-6 py-1 rounded-lg bg-tertiary">
+                  <Icon name="alert" stroke="error" />
+                  <p>
+                    User{' '}
+                    <span className="bg-error-400 px-2 rounded">
+                      {data?.data.data.username}
+                    </span>{' '}
+                    has no Academy, please contact admin
+                  </p>
+                </div>
+
+                <div className="flex justify-center pt-5 pb-3">
+                  <Link to="/login">
+                    <Button>Go Back Home</Button>
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* <p>User has no Academy, please contact admin to give you </p> */}
         {!hasNoAcademy && (
           <div className="redirecing-loader">
-            <div className="body">
+            <div className="body full-height">
               <span>
                 <span></span>
                 <span></span>

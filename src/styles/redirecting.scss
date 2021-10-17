@@ -1,9 +1,13 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans:300);
 
 .body {
+    @apply bg-primary-400;
+    overflow: hidden;
+}
+
+.full-height{
     height: 100vh;
-  @apply bg-primary-400;
-  overflow: hidden;
+
 }
 
 h1 {
