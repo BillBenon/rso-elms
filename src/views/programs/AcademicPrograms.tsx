@@ -11,6 +11,7 @@ import {
 
 import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
+import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CardHeadMolecule from '../../components/Molecules/CardHeadMolecule';
@@ -51,18 +52,18 @@ export default function AcademicProgram() {
 
   const queryStr = queryString.parse(location.search);
 
-  const { data, refetch } = intakeId
+  const { data, refetch, isLoading } = intakeId
     ? intakeStore.getProgramsByIntake(intakeId)
-    : queryStr
+    : queryStr.query
     ? programStore.getProgramsByDepartment(queryStr.query?.toString() || '')
     : programStore.fetchPrograms();
 
   const programInfo = data?.data.data;
 
-  const intake = intakeStore.getIntakeById(intakeId!, true);
+  const intake = intakeId ? intakeStore.getIntakeById(intakeId!, true) : null;
 
   // fetch intake if id is available
-  if (intakeId && !intake.isSuccess && !intake.isLoading) intake.refetch();
+  if (intakeId && !intake?.isSuccess && !intake?.isLoading) intake?.refetch();
 
   // const programInfo = programData || data;
 
@@ -116,7 +117,7 @@ export default function AcademicProgram() {
               <section>
                 <TableHeader
                   totalItems={intakeId ? `${programs.length} programs` : programs.length}
-                  title={`${intakeId ? intake.data?.data.data.title : 'Programs'}`}
+                  title={`${intakeId ? intake?.data?.data.data.title : 'Programs'}`}
                   showSearch={false}>
                   {intakeId ? (
                     <Link to={`${url}/add-program-to-intake?intakeId=${intakeId}`}>
@@ -130,7 +131,9 @@ export default function AcademicProgram() {
                 </TableHeader>
               </section>
               <section className="flex flex-wrap justify-between mt-2">
-                {programs.length ? (
+                {programs.length === 0 && isLoading ? (
+                  <Loader />
+                ) : programs.length > 0 ? (
                   programs.map((Common) => (
                     <Tooltip
                       key={Common.code}

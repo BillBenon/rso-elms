@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
-import Button from '../../components/Atoms/custom/Button';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import TableHeader from '../../components/Molecules/table/TableHeader';
@@ -14,7 +13,6 @@ export default function Modules() {
   const { data } = moduleStore.getAllModules();
 
   const [modules, setModules] = useState<CommonCardDataType[]>([]);
-  const history = useHistory();
   const { path } = useRouteMatch();
 
   useEffect(() => {
@@ -64,12 +62,12 @@ export default function Modules() {
                   </section>
                   <section className="">
                     <TableHeader
-                      totalItems={modules.length}
+                      totalItems={modules.length + ' modules'}
                       title="Modules"
                       handleSearch={handleSearch}>
-                      <Button onClick={() => history.push(`${path}/add`)}>
+                      {/* <Button onClick={() => history.push(`${path}/add`)}>
                         Add Module
-                      </Button>
+                      </Button> */}
                     </TableHeader>
                   </section>
                   <section className="flex flex-wrap justify-between mt-2">

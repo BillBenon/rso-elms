@@ -99,11 +99,11 @@ export default function ModuleDetails() {
         </div>
         {subjects.length < 1 && subjectData.isSuccess ? (
           <NoDataAvailable
-            title={'No subjecta registered'}
+            title={'No subjects registered'}
             description={
               'The history object is mutable. Therefore it is recommended to access the location from the render props of <Route>, not from'
             }
-            handleClick={() => history.push(`${path}/add-subject`)}
+            handleClick={() => history.push(`${url}/add-subject`)}
           />
         ) : (
           <section className="flex flex-wrap justify-start gap-4 mt-2">
