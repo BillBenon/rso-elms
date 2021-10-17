@@ -27,8 +27,6 @@ export default function EvaluationTest() {
 
 // Renderer callback with condition
 function Renderer({ hours, minutes, seconds, completed }: any) {
-  // const history = useHistory();
-
   if (completed) {
     window.location.href = '/dashboard/evaluations';
   } else {

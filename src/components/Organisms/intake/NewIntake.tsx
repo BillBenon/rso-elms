@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 
 import { intakeStore } from '../../../store/intake.store';
 import { ValueType } from '../../../types';
+import { IEvaluationTypeEnum } from '../../../types/services/evaluation.types';
 import {
   IntakeInfo,
   IntakeStatus,
@@ -18,13 +19,6 @@ import InputMolecule from '../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
 import Stepper from '../../Molecules/Stepper/Stepper';
 
-interface IProps {
-  values: IntakeInfo;
-  display_label: string;
-  handleChange: (_e: ValueType) => any;
-  handleNext: <T>(_e: FormEvent<T>) => any;
-  handleProgramsChange?: (_e: ValueType) => any;
-}
 interface ParamType {
   id: string;
 }
@@ -186,7 +180,7 @@ function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
   );
 }
 
-function IntakeStatusComponent({ handleChange, handleNext }: IProps) {
+function IntakeStatusComponent({ handleChange, handleNext }: IEvaluationTypeEnum) {
   return (
     <form onSubmit={handleNext}>
       <DateMolecule

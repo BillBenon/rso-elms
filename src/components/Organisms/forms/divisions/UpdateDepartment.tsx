@@ -55,7 +55,6 @@ export default function UpdateDepartment({ onSubmit }: IDivisionsAcademyType) {
   function handleChange({ name, value }: ValueType) {
     setDivision((old) => ({ ...old, [name]: value }));
   }
-  console.log(data?.data.data);
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
     mutateAsync(updateDivisionInfo, {
