@@ -28,23 +28,21 @@ export default function ViewRole() {
   const [privilegesByRole, setPrivilegesByRole] = useState<RolePrivilege[]>();
   const { data, isLoading, isSuccess, isError, error } = roleStore.getRole(id);
   const rolesPrivileges = roleStore.getPrivilegesByRole(id);
-  const { mutate: deletePrivilege } = roleStore.removeProvilege();
-
-  // Todo: add privileges on role
+  const { mutateAsync: deletePrivilege } = roleStore.removeProvilege();
 
   function removePrivilege(rolePrivilege: RolePrivilege) {
-    deletePrivilege(rolePrivilege.id + ''),
-      {
-        onSuccess: () => {
-          queryClient.setQueryData(['privilegesByRole/id', role?.id + ''], (old) => {
-            const oldest = old as AxiosResponse<Response<RolePrivilege[]>>;
-            oldest.data.data = oldest.data.data.filter(
-              (roleP) => roleP.id != rolePrivilege.id,
-            );
-            return oldest;
-          });
-        },
-      };
+    deletePrivilege(rolePrivilege.id.toString(), {
+      onSuccess: () => {
+        console.log('succeded');
+        queryClient.setQueryData(['privilegesByRole/id', role?.id + ''], (old) => {
+          const oldest = old as AxiosResponse<Response<RolePrivilege[]>>;
+          oldest.data.data = oldest.data.data.filter(
+            (roleP) => roleP.id != rolePrivilege.id,
+          );
+          return oldest;
+        });
+      },
+    });
   }
 
   useEffect(() => {
@@ -55,11 +53,19 @@ export default function ViewRole() {
     setPrivilegesByRole(rolesPrivileges.data?.data.data);
   }, [rolesPrivileges.data?.data.data]);
 
-  function submited() {}
+  function submited() {
+    console.log('submited');
+    queryClient.invalidateQueries(['privilegesByRole/id', id]);
+  }
   return (
     <main>
       <section>
-        <BreadCrumb list={[{ title: 'Roles', to: 'roles' }]} />
+        <BreadCrumb
+          list={[
+            { title: 'Roles', to: '/dashboard/roles' },
+            { title: 'View Role', to: `/dashboard/role/${id}/view` },
+          ]}
+        />
       </section>
       <section className="py-7">
         <Heading fontWeight="semibold" fontSize="2xl">
@@ -101,8 +107,11 @@ export default function ViewRole() {
                 {rolesPrivileges.isError && rolesPrivileges.error.message}
                 {rolesPrivileges.isSuccess &&
                   privilegesByRole &&
-                  privilegesByRole?.length <= 0 &&
-                  'This role has no privileges try adding one'}
+                  privilegesByRole?.length <= 0 && (
+                    <p className="px-6 py-2 text-txt-secondary">
+                      This role has no privileges try adding one
+                    </p>
+                  )}
                 {rolesPrivileges.isSuccess && (
                   <ul>
                     {privilegesByRole?.map((rolePrivileg) => (
@@ -127,7 +136,7 @@ export default function ViewRole() {
           path={`${url}/addPrivileges`}
           render={() => {
             return (
-              <PopupMolecule title="New Role" open={true} onClose={history.goBack}>
+              <PopupMolecule title="Add Privilege" open={true} onClose={history.goBack}>
                 <AddPrivileges
                   roleName={role?.name || ''}
                   roleId={role?.id + '' || ''}
