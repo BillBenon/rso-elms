@@ -43,6 +43,10 @@ function NationalDocuments<E>({
     let data: any = JSON.parse(localStorage.getItem('user') || '{}');
     let newObj = Object.assign({}, data, nationalDocuments);
     console.log(JSON.stringify(newObj));
+    Object.keys(newObj).map((val) => {
+      //@ts-ignore
+      if (!newObj[val]) newObj[val] = '';
+    });
 
     localStorage.setItem('user', JSON.stringify(newObj));
     nextStep(true);

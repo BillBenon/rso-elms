@@ -35,6 +35,10 @@ function AccountDetails<E>({
     let newObj = Object.assign({}, data, accountDetails);
     console.log(JSON.stringify(newObj));
 
+    Object.keys(newObj).map((val) => {
+      //@ts-ignore
+      if (!newObj[val]) newObj[val] = '';
+    });
     localStorage.setItem('user', JSON.stringify(newObj));
     nextStep(true);
   };

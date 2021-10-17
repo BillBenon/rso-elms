@@ -37,6 +37,10 @@ function FamilyDetails<E>({
     let newObj = Object.assign({}, data, familyDetails);
     console.log(JSON.stringify(newObj));
 
+    Object.keys(newObj).map((val) => {
+      //@ts-ignore
+      if (!newObj[val]) newObj[val] = '';
+    });
     localStorage.setItem('user', JSON.stringify(newObj));
 
     nextStep(true);

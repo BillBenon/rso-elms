@@ -46,6 +46,10 @@ function PersonalDetails<E>({
     let newObj = Object.assign({}, data, personalDetails);
     console.log(JSON.stringify(newObj));
 
+    Object.keys(newObj).map((val) => {
+      //@ts-ignore
+      if (!newObj[val]) newObj[val] = '';
+    });
     localStorage.setItem('user', JSON.stringify(newObj));
     nextStep(true);
   };
@@ -138,7 +142,6 @@ function PersonalDetails<E>({
         <div className="flex flex-col gap-4">
           <TextAreaMolecule
             name="place_of_birth_description"
-            defaultValue={personalDetails.place_of_birth_description}
             value={personalDetails.place_of_birth_description}
             handleChange={handleChange}>
             Place of birth description

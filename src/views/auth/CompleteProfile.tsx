@@ -10,6 +10,7 @@ import FamilyDetails from '../../components/Organisms/forms/auth/signup/personal
 import NationalDocuments from '../../components/Organisms/forms/auth/signup/personal/NationalDocument';
 import PersonalDetails from '../../components/Organisms/forms/auth/signup/personal/PersonalDetails';
 import usersStore from '../../store/users.store';
+import { ProfileStatus, UpdateUserInfo } from '../../types/services/user.types';
 
 function CompleteProfile(props: any) {
   const [personalInfo, setPersonalInfo] = useState({
@@ -23,6 +24,7 @@ function CompleteProfile(props: any) {
     person_id: '',
     relationship_with_next_of_ken: '',
     reset_date: '',
+    profile_status: ProfileStatus.INCOMPLETE,
     residence_location_id: 0,
     user_type: '',
   });
@@ -35,7 +37,6 @@ function CompleteProfile(props: any) {
         academic_program_level_id: userInfo.academic_program_level_id,
         academy_id: userInfo.academy_id,
         activation_key: userInfo.activation_key,
-
         id: userInfo.id.toString(),
         intake_program_id: userInfo.intake_program_id,
         next_of_keen_proculation_reason: userInfo.next_of_keen_proculation_reason,
@@ -43,14 +44,25 @@ function CompleteProfile(props: any) {
         person_id: userInfo.person_id,
         relationship_with_next_of_ken: userInfo.relationship_with_next_of_ken,
         reset_date: userInfo.reset_date,
+        profile_status:
+          userInfo.profile_status == null
+            ? ProfileStatus.INCOMPLETE
+            : userInfo.profile_status,
         residence_location_id: userInfo.residence_location_id,
         user_type: userInfo.user_type,
       });
   }, [user.data]);
 
   useEffect(() => {
-    let data: any = JSON.parse(localStorage.getItem('user') || '{}');
-    localStorage.setItem('user', JSON.stringify({ ...data, ...personalInfo }));
+    let data: UpdateUserInfo = JSON.parse(localStorage.getItem('user') || '{}');
+    let person = { ...personalInfo };
+
+    Object.keys(person).map((val) => {
+      //@ts-ignore
+      if (!person[val]) person[val] = '';
+    });
+
+    localStorage.setItem('user', JSON.stringify({ ...data, ...person }));
   }, [personalInfo]);
 
   const [currentStep, setCurrentStep] = useState(0);
@@ -60,10 +72,11 @@ function CompleteProfile(props: any) {
   const { mutateAsync } = usersStore.modifyUser();
 
   async function saveInfo(isComplete: boolean) {
-    let userFromLocalStorage: any = JSON.parse(localStorage.getItem('user') || '{}');
+    let userFromLocalStorage: UpdateUserInfo = JSON.parse(
+      localStorage.getItem('user') || '{}',
+    );
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
     if (personalInfo) {
-      console.log('we go: ', userFromLocalStorage);
       await mutateAsync(userFromLocalStorage, {
         onSuccess(data) {
           let personInfo = data.data.data;
