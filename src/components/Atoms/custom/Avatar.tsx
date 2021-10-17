@@ -16,7 +16,7 @@ export default function Avatar({ src, alt, size = '56', className }: IAvatar) {
       <img
         src={src}
         alt={alt}
-        className={`rounded-full box-content object-cover ${className}`}
+        className={`rounded-full box-content object-contain ${className}`}
         style={{ height: size + 'px', width: size + 'px' }}
       />
     </div>
