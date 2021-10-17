@@ -28,24 +28,21 @@ export default function ViewRole() {
   const [privilegesByRole, setPrivilegesByRole] = useState<RolePrivilege[]>();
   const { data, isLoading, isSuccess, isError, error } = roleStore.getRole(id);
   const rolesPrivileges = roleStore.getPrivilegesByRole(id);
-  const { mutate: deletePrivilege } = roleStore.removeProvilege();
-
-  // Todo: add privileges on role
+  const { mutateAsync: deletePrivilege } = roleStore.removeProvilege();
 
   function removePrivilege(rolePrivilege: RolePrivilege) {
-    deletePrivilege(rolePrivilege.id + ''),
-      {
-        onSuccess: () => {
-          console.log('succeded');
-          queryClient.setQueryData(['privilegesByRole/id', role?.id + ''], (old) => {
-            const oldest = old as AxiosResponse<Response<RolePrivilege[]>>;
-            oldest.data.data = oldest.data.data.filter(
-              (roleP) => roleP.id != rolePrivilege.id,
-            );
-            return oldest;
-          });
-        },
-      };
+    deletePrivilege(rolePrivilege.id.toString(), {
+      onSuccess: () => {
+        console.log('succeded');
+        queryClient.setQueryData(['privilegesByRole/id', role?.id + ''], (old) => {
+          const oldest = old as AxiosResponse<Response<RolePrivilege[]>>;
+          oldest.data.data = oldest.data.data.filter(
+            (roleP) => roleP.id != rolePrivilege.id,
+          );
+          return oldest;
+        });
+      },
+    });
   }
 
   useEffect(() => {
