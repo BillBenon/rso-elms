@@ -232,10 +232,14 @@ function IntakeStatusComponent({ values, handleChange, handleNext, disabled }: I
   let year = d.getFullYear();
   let month = d.getMonth();
   let day = d.getDate();
+
   return (
     <form onSubmit={handleNext}>
       <DateMolecule
         showTime={false}
+        defaultValue={
+          values.expected_start_date ? values.expected_start_date.toString() : ''
+        }
         handleChange={handleChange}
         name={'expected_start_date'}>
         Expected Start Date
@@ -244,7 +248,9 @@ function IntakeStatusComponent({ values, handleChange, handleNext, disabled }: I
         <DateMolecule
           showTime={false}
           endYear={new Date().getFullYear() + 15}
-          defaultValue={new Date(year + 3, month, day).toString()}
+          defaultValue={
+            values.expected_end_date ? values.expected_end_date.toString() : ''
+          }
           handleChange={handleChange}
           name={'expected_end_date'}>
           Expected End Date
