@@ -124,7 +124,7 @@ export default function AcademicProgram() {
                         <Button>Add Program To Intake</Button>
                       </Link>
                     ) : (
-                      <Link to={`${url}/add`}>
+                      <Link to={`/dashboard/programs/add`}>
                         <Button>Add New Program</Button>
                       </Link>
                     )}
@@ -220,12 +220,21 @@ export default function AcademicProgram() {
                         </div>
                       </Tooltip>
                     ))
+                  ) : intakeId ? (
+                    <NoDataAvailable
+                      buttonLabel="Add new program to intake"
+                      title={'No program available in this intake'}
+                      handleClick={() =>
+                        history.push(`${url}/add-program-to-intake?intakeId=${intakeId}`)
+                      }
+                      description="There are no programs added yet, click on the above button to add some!"
+                    />
                   ) : (
                     <NoDataAvailable
                       buttonLabel="Add new program"
                       title={'No program available'}
                       handleClick={() => history.push(`/dashboard/programs/add`)}
-                      description="And the web just isnt the same without you. Lets get you back online!"
+                      description="There are no programs added yet, click on the above button to add some!"
                     />
                   )}
                 </section>
@@ -257,21 +266,6 @@ export default function AcademicProgram() {
         {/* modify academic program */}
         <Route path={`${path}/:id/edit`} render={() => <UpdateAcademicProgram />} />
 
-        {/* add prerequisite popup */}
-        <Route
-          exact
-          path={`${path}/add/prerequisite`}
-          render={() => {
-            return (
-              <PopupMolecule
-                title="Add prerequisite"
-                open={true}
-                onClose={history.goBack}>
-                another form here
-              </PopupMolecule>
-            );
-          }}
-        />
         {/* show academic program details */}
         <Route path={`${path}/:id`} render={() => <ProgramDetails />} />
       </Switch>

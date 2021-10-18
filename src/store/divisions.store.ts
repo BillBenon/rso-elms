@@ -7,16 +7,8 @@ import { Response } from '../types';
 import { DivisionInfo } from '../types/services/division.types';
 
 class DivisionStore {
-  createDivision(divisionType: string) {
-    return useMutation(divisionService.addDivision, {
-      onSuccess(newData) {
-        queryClient.setQueryData(['divisions/type', divisionType], (old) => {
-          const previousData = old as AxiosResponse<Response<DivisionInfo[]>>;
-          previousData.data.data.push(newData.data.data);
-          return previousData;
-        });
-      },
-    });
+  createDivision() {
+    return useMutation(divisionService.addDivision);
   }
   getDivisionByType(type: string) {
     return useQuery(['divisions/type', type], () => divisionService.getDivision(type));

@@ -256,7 +256,7 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
                 academy physical address
               </InputMolecule>
               <div className="flex flex-col">
-                <DropdownMolecule
+                {/* <DropdownMolecule
                   defaultValue={getInchargeDropdown(admins).find(
                     (incharge) => incharge.value === details.current_admin_id,
                   )}
@@ -269,7 +269,7 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
                 </DropdownMolecule>
                 <div className="text-primary-500 py-2 text-right w-60 md:w-80">
                   <Link to="/dashboard/users/add">Create new admin</Link>
-                </div>
+                </div> */}
               </div>
               <div>
                 <div className="mb-3">
