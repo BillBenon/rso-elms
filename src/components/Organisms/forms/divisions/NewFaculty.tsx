@@ -19,7 +19,7 @@ export default function NewFaculty({ onSubmit, academy_id }: IDivisionsAcademyTy
     division_type: 'FACULTY',
     name: '',
   });
-  const { mutateAsync } = divisionStore.createDivision(division.division_type);
+  const { mutateAsync } = divisionStore.createDivision();
   const history = useHistory();
 
   function handleChange({ name, value }: ValueType) {

@@ -70,7 +70,7 @@ const SignInForm = () => {
       </div>
 
       <form onSubmit={login}>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           <InputMolecule
             name="username"
             placeholder="Enter your username"
