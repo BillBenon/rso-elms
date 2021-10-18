@@ -1,67 +1,136 @@
 import { pick } from 'lodash';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 
-import { authenticatorStore } from '../../../store';
-import academyStore from '../../../store/academy.store';
-import { intakeStore } from '../../../store/intake.store';
-import programStore from '../../../store/program.store';
-import usersStore from '../../../store/users.store';
-import { CommonFormProps, ValueType } from '../../../types';
-import { AcademyInfo } from '../../../types/services/academy.types';
+import { authenticatorStore } from '../../../../store';
+import academyStore from '../../../../store/academy.store';
+import { intakeStore } from '../../../../store/intake.store';
+import programStore from '../../../../store/program.store';
+import usersStore from '../../../../store/users.store';
+import { CommonFormProps, ParamType, ValueType } from '../../../../types';
+import { AcademyInfo } from '../../../../types/services/academy.types';
 import {
-  CreateUserInfo,
   DocType,
   EducationLevel,
   GenderStatus,
   MaritalStatus,
+  ProfileStatus,
+  UpdateUserInfo,
   UserType,
-} from '../../../types/services/user.types';
-import { getDropDownOptions, getDropDownStatusOptions } from '../../../utils/getOption';
-import Button from '../../Atoms/custom/Button';
-import Heading from '../../Atoms/Text/Heading';
-import DateMolecule from '../../Molecules/input/DateMolecule';
-import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
-import InputMolecule from '../../Molecules/input/InputMolecule';
-import RadioMolecule from '../../Molecules/input/RadioMolecule';
+} from '../../../../types/services/user.types';
+import {
+  getDropDownOptions,
+  getDropDownStatusOptions,
+} from '../../../../utils/getOption';
+import Button from '../../../Atoms/custom/Button';
+import Heading from '../../../Atoms/Text/Heading';
+import DateMolecule from '../../../Molecules/input/DateMolecule';
+import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
+import InputMolecule from '../../../Molecules/input/InputMolecule';
+import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 
-export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
+export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
-  const newUserType = pick(UserType, ['ADMIN', 'INSTRUCTOR', 'STUDENT']);
-  const newUserTypeWithSuper = { ...newUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
+  const updateUserType = pick(UserType, ['ADMIN', 'INSTRUCTOR', 'STUDENT']);
+  const updateUserTypeWithSuper = { ...updateUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
   const authUser = authenticatorStore.authUser();
 
-  const [details, setDetails] = useState<CreateUserInfo>({
-    activation_key: '',
+  const [details, setDetails] = useState<UpdateUserInfo>({
+    academic_program_level_id: '',
     academy_id: '',
+    activation_key: '',
     birth_date: '',
+    blood_group: '',
+    current_rank_id: '',
+    date_of_commission: '',
+    date_of_issue: '',
+    date_of_last_promotion: '',
     doc_type: DocType.NID,
+    document_expire_on: '',
     education_level: EducationLevel.ILLITERATE,
     email: '',
+    emp_no: '',
     father_names: '',
     first_name: '',
-    academic_program_level_id: '',
+    id: '',
     intake_program_id: '',
     last_name: '',
-    marital_status: MaritalStatus.SINGLE,
+    marital_status: MaritalStatus.MARRIED,
     mother_names: '',
     next_of_keen_proculation_reason: '',
     nid: '',
+    other_rank: '',
     password: '',
     password_reset_period_in_days: 0,
     person_id: '',
     phone: '',
     place_of_birth: '',
+    place_of_birth_description: '',
+    place_of_issue: '',
     place_of_residence: '',
+    profile_status: ProfileStatus.INCOMPLETE,
+    rank_depart: '',
     relationship_with_next_of_ken: '',
     reset_date: '',
     residence_location_id: 0,
     sex: GenderStatus.MALE,
+    spouse_name: '',
     user_type: UserType.STUDENT,
     username: '',
-    intake_id: '',
   });
+
+  const { id } = useParams<ParamType>();
+  const { data } = usersStore.getUserById(id);
+
+  useEffect(() => {
+    const selectedUser = data?.data.data;
+
+    selectedUser &&
+      setDetails({
+        academic_program_level_id: selectedUser.academic_program_level_id,
+        academy_id: selectedUser.academy_id,
+        activation_key: selectedUser.activation_key,
+        birth_date: selectedUser.birth_date,
+        blood_group: selectedUser.person.blood_group,
+        current_rank_id: selectedUser.person.current_rank_id,
+        date_of_commission: selectedUser.person.date_of_commission,
+        date_of_issue: selectedUser.person.date_of_issue,
+        date_of_last_promotion: selectedUser.person.date_of_last_promotion,
+        doc_type: selectedUser.person.doc_type,
+        document_expire_on: selectedUser.person.document_expire_on,
+        education_level: selectedUser.education_level,
+        email: selectedUser.email,
+        emp_no: selectedUser.person.emp_no,
+        father_names: selectedUser.father_names,
+        first_name: selectedUser.first_name,
+        id: id,
+        intake_program_id: selectedUser.intake_program_id,
+        last_name: selectedUser.last_name,
+        marital_status: selectedUser.marital_status,
+        mother_names: selectedUser.mother_names,
+        next_of_keen_proculation_reason: selectedUser.next_of_keen_proculation_reason,
+        nid: selectedUser.person.nid,
+        other_rank: selectedUser.person.other_rank,
+        password: selectedUser.password,
+        password_reset_period_in_days: selectedUser.password_reset_period_in_days,
+        person_id: selectedUser.person_id,
+        phone: selectedUser.phone,
+        place_of_birth: selectedUser.place_of_birth,
+        place_of_birth_description: selectedUser.person.place_of_birth_description,
+        place_of_issue: selectedUser.person.place_of_issue,
+        place_of_residence: selectedUser.place_of_residence,
+        profile_status: selectedUser.profile_status,
+        rank_depart: selectedUser.person.rank_depart,
+        relationship_with_next_of_ken: selectedUser.relationship_with_next_of_ken,
+        reset_date: selectedUser.reset_date,
+        residence_location_id: selectedUser.residence_location_id,
+        sex: selectedUser.sex,
+        spouse_name: selectedUser.person.spouse_name,
+        user_type: selectedUser.user_type,
+        username: selectedUser.username,
+      });
+  }, [data]);
 
   const [otherDetails, setOtherDetails] = useState({
     intake: '',
@@ -82,7 +151,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     }));
   }
 
-  const { mutateAsync } = usersStore.createUser();
+  const { mutateAsync } = usersStore.modifyUser();
   async function addUser<T>(e: FormEvent<T>) {
     e.preventDefault();
 
@@ -131,20 +200,20 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
       <div className="py-5 mb-3 capitalize">
         <Heading color="txt-primary" fontWeight="bold">
-          New User
+          Edit User
         </Heading>
       </div>
       <form onSubmit={addUser}>
         <DropdownMolecule
           defaultValue={getDropDownStatusOptions(
             authUser.data?.data.data.user_type === UserType.SUPER_ADMIN
-              ? newUserTypeWithSuper
-              : newUserType,
+              ? updateUserTypeWithSuper
+              : updateUserType,
           ).find((type) => type.label === details.user_type)}
           options={getDropDownStatusOptions(
             authUser.data?.data.data.user_type === UserType.SUPER_ADMIN
-              ? newUserTypeWithSuper
-              : newUserType,
+              ? updateUserTypeWithSuper
+              : updateUserType,
           )}
           name="user_type"
           placeholder={'Select user type'}
@@ -230,7 +299,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Education level
         </DropdownMolecule>
-        {![UserType.SUPER_ADMIN, UserType.ADMIN].includes(details.user_type) && (
+        {![UserType.SUPER_ADMIN].includes(details.user_type) && (
           <DropdownMolecule
             options={getDropDownOptions({ inputs: academies || [] })}
             name="academy_id"
@@ -244,7 +313,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
             <DropdownMolecule
               options={getDropDownOptions({
                 inputs: intakes.data?.data.data || [],
-                labelName: ['code'],
+                labelName: 'code',
               })}
               name="intake"
               placeholder={'intake to be enrolled in'}
@@ -254,7 +323,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
             <DropdownMolecule
               options={getDropDownOptions({
                 inputs: programs.data?.data.data || [],
-                labelName: ['name'],
+                labelName: 'code',
               })}
               name="intake_program_id"
               placeholder={'Program to be enrolled in'}
@@ -264,7 +333,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
             <DropdownMolecule
               options={getDropDownOptions({
                 inputs: levels.data?.data.data || [],
-                labelName: ['name'], //@ts-ignore
+                labelName: 'name', //@ts-ignore
                 getOptionLabel: (level) => level.level && level.level.name,
               })}
               name="academic_program_level_id"
