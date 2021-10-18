@@ -197,25 +197,32 @@ export default function Intakes() {
           path={`${url}/:id/add-intake`}
           render={() => {
             return (
-              <PopupMolecule title="New intake" open onClose={handleClose}>
+              <PopupMolecule
+                closeOnClickOutSide={false}
+                title="New intake"
+                open
+                onClose={handleClose}>
                 <NewIntake handleSuccess={intakeCreated} />
               </PopupMolecule>
             );
           }}
         />
-
-        {/* edit intake to reg control */}
         <Route
           exact
           path={`${url}/:id/edit`}
           render={() => {
             return (
-              <PopupMolecule title="Update intake" open onClose={handleClose}>
+              <PopupMolecule
+                closeOnClickOutSide={false}
+                title="Update intake"
+                open
+                onClose={handleClose}>
                 <UpdateIntake handleSuccess={handleClose} />
               </PopupMolecule>
             );
           }}
         />
+        ;
       </Switch>
     </div>
   );

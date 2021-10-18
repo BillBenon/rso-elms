@@ -129,6 +129,7 @@ export default function ProgramDetailsMolecule() {
             render={() => {
               return (
                 <PopupMolecule
+                  closeOnClickOutSide={false}
                   title="Add level to program"
                   open={true}
                   onClose={() => history.goBack()}>
@@ -246,7 +247,11 @@ export default function ProgramDetailsMolecule() {
             path={`${path}/modules/:moduleId/add-prereq`}
             render={() => {
               return (
-                <PopupMolecule title="Add Prerequesite" open onClose={handleClose}>
+                <PopupMolecule
+                  closeOnClickOutSide={false}
+                  title="Add Prerequesite"
+                  open
+                  onClose={handleClose}>
                   <AddPrerequesitesForm />
                 </PopupMolecule>
               );
