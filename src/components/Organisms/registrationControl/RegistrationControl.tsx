@@ -11,6 +11,7 @@ import Icon from '../../Atoms/custom/Icon';
 import Loader from '../../Atoms/custom/Loader';
 import Heading from '../../Atoms/Text/Heading';
 import ILabel from '../../Atoms/Text/ILabel';
+import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
@@ -131,7 +132,16 @@ export default function RegistrationControl() {
           ''
         )}
 
-        {!isLoading && RegistrationControls.length < 1 && <span>No data found</span>}
+        {!isLoading && RegistrationControls.length < 1 && (
+          <NoDataAvailable
+            buttonLabel="Add new Registration Control"
+            title={'No Registration Control Available'}
+            handleClick={() => {
+              history.push(`${url}/add`);
+            }}
+            description="And the web just isn't the same without you. Lets get you back online!"
+          />
+        )}
       </div>
 
       {/* add reg control popup */}
