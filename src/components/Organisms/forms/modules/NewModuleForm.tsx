@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
+import { queryClient } from '../../../../plugins/react-query';
 import { moduleStore } from '../../../../store/modules.store';
 import programStore from '../../../../store/program.store';
 import { ParamType, ValueType } from '../../../../types';
@@ -37,6 +38,7 @@ export default function NewModuleForm() {
     await mutateAsync(values, {
       async onSuccess(data) {
         toast.success(data.data.message);
+        queryClient.invalidateQueries(['modules/program/id']);
         if (data.data.data.has_prerequisite)
           history.push(
             `/dashboard/programs/${id}/modules/${data.data.data.id}/add-prereq`,

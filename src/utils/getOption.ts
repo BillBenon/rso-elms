@@ -4,24 +4,35 @@ import { GenericStatus } from './../types/services/common.types';
 
 interface GetDropDownOptionsProps {
   inputs: any[];
-  labelName?: string;
+  labelName?: string[];
   value?: string;
   getOptionLabel?: (_option: Object) => string;
 }
 
 export function getDropDownOptions({
   inputs = [],
-  labelName = 'name',
+  labelName = ['name'],
   value = 'id',
   getOptionLabel,
 }: GetDropDownOptionsProps): SelectData[] {
   let options: SelectData[] = [];
-  inputs?.map((input) => {
-    options.push({
-      label: getOptionLabel ? getOptionLabel(input) : input[labelName],
-      value: input[value] as string,
+  if (labelName.length === 1) {
+    inputs?.map((input) => {
+      options.push({
+        label: getOptionLabel ? getOptionLabel(input) : input[labelName[0]],
+        value: input[value] as string,
+      });
     });
-  });
+  } else {
+    inputs?.map((input) => {
+      options.push({
+        label: getOptionLabel
+          ? getOptionLabel(input)
+          : `${input[labelName[0]]} ${input[labelName[1]]}`,
+        value: input[value] as string,
+      });
+    });
+  }
 
   return options;
 }

@@ -8,6 +8,7 @@ import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import AddCard from '../../components/Molecules/cards/AddCard';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
+import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import UsersPreview from '../../components/Molecules/cards/UsersPreview';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
@@ -20,6 +21,7 @@ import programStore from '../../store/program.store';
 import { CommonCardDataType, Link, ParamType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from './AcademicPrograms';
+import AddLevelToProgram from './AddLevelToProgram';
 
 export default function ProgramDetailsMolecule() {
   const { id } = useParams<ParamType>();
@@ -121,6 +123,20 @@ export default function ProgramDetailsMolecule() {
       </div>
       <TabNavigation tabs={tabs}>
         <Switch>
+          <Route
+            exact
+            path={`${path}/level/add`}
+            render={() => {
+              return (
+                <PopupMolecule
+                  title="Add level to program"
+                  open={true}
+                  onClose={() => history.goBack()}>
+                  <AddLevelToProgram />
+                </PopupMolecule>
+              );
+            }}
+          />
           <Route
             exact
             path={`${path}`}
@@ -255,15 +271,7 @@ export default function ProgramDetailsMolecule() {
                       onClick={() => history.push(`${url}/modules/add`)}
                     />
                     {programModules?.map((module) => (
-                      <div key={module.code}>
-                        <CommonCardMolecule
-                          data={module}
-                          to={{
-                            title: 'View more',
-                            to: `/dashboard/modules/${module.id}`,
-                          }}
-                        />
-                      </div>
+                      <ModuleCard course={module} key={module.code} />
                     ))}
                   </>
                 )}
