@@ -35,10 +35,10 @@ export default function NewSubjectForm() {
       async onSuccess(data) {
         toast.success(data.data.message);
         queryClient.invalidateQueries(['subjects/moduleId']);
-        // history.goBack();
-        history.push(
-          `/dashboard/modules/${module?.id}/subjects/${data.data.data.id}/add-lesson`,
-        );
+        history.goBack();
+        // history.push(
+        //   `/dashboard/modules/${module?.id}/subjects/${data.data.data.id}/add-lesson`,
+        // );
       },
       onError() {
         toast.error('error occurred please try again');

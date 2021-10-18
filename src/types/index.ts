@@ -135,6 +135,7 @@ export type IconType =
   | 'settings'
   | 'switch'
   | 'user'
+  | 'back-arrow'
   | 'evaluation';
 
 export interface FormPropType {
