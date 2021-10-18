@@ -1,13 +1,15 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { authenticatorStore } from '../../../store';
 import { divisionStore } from '../../../store/divisions.store';
 import { DivisionInfo } from '../../../types/services/division.types';
-import ViewDepartmentsInFaculty from '../../../views/divisions/ViewDepartmentsInFaculty';
 import Button from '../../Atoms/custom/Button';
+import Loader from '../../Atoms/custom/Loader';
+import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
@@ -31,34 +33,36 @@ export default function Faculties({ fetchType }: IFaculties) {
   const [faculties, setFaculties] = useState<FilteredData[]>();
   const { data: userInfo } = authenticatorStore.authUser();
 
-  const { data, isSuccess, isLoading } = divisionStore.getDivisionByType(
+  const { data, isSuccess, isLoading, isError } = divisionStore.getDivisionByType(
     fetchType.toUpperCase(),
   );
 
   useEffect(() => {
     let formattedFaculties: any = [];
-    const filteredFaculties = data?.data.data.map((faculty: DivisionInfo) =>
-      _.pick(faculty, [
-        'id',
-        'name',
-        'description',
-        'generic_status',
-        'total_num_childreen',
-      ]),
-    );
+    if (isSuccess && data?.data) {
+      const filteredFaculties = data?.data.data.map((faculty: DivisionInfo) =>
+        _.pick(faculty, [
+          'id',
+          'name',
+          'description',
+          'generic_status',
+          'total_num_childreen',
+        ]),
+      );
 
-    filteredFaculties?.map((faculty: any) => {
-      let filteredInfo: any = {
-        id: faculty.id.toString(),
-        decription: faculty.description,
-        name: faculty.name,
-        status: faculty.generic_status,
-        departments: faculty.total_num_childreen || 0,
-      };
-      formattedFaculties.push(filteredInfo);
-    });
+      filteredFaculties?.map((faculty: any) => {
+        let filteredInfo: any = {
+          id: faculty.id.toString(),
+          decription: faculty.description,
+          name: faculty.name,
+          status: faculty.generic_status,
+          departments: faculty.total_num_childreen || 0,
+        };
+        formattedFaculties.push(filteredInfo);
+      });
 
-    data?.data.data && setFaculties(formattedFaculties);
+      data?.data.data && setFaculties(formattedFaculties);
+    } else if (isError) toast.error('error occurred when loading faculties');
   }, [data]);
 
   function handleClose() {
@@ -69,19 +73,22 @@ export default function Faculties({ fetchType }: IFaculties) {
     {
       name: 'Edit Faculty',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit role
+        history.push(`${path}/${id}/edit`); // go to edit faculties
       },
     },
     {
       name: 'Add Department',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/add`);
+        history.push(`${path}/${id}/new`);
       },
     },
     {
       name: 'View Departments',
       handleAction: (id: string | number | undefined) => {
-        history.push({ pathname: `${path}/${id}/view-departments` });
+        history.push({
+          pathname: `/dashboard/divisions/departments`,
+          search: `?fac=${id}`,
+        });
       },
     },
   ];
@@ -89,27 +96,48 @@ export default function Faculties({ fetchType }: IFaculties) {
   return (
     <main>
       <section>
-        <TableHeader
-          title="Faculty"
-          totalItems={faculties?.length || 0}
-          handleSearch={() => {}}>
-          <Link to={`${url}/add`}>
-            <Button>Add Faculty</Button>
-          </Link>
-        </TableHeader>
+        {faculties && faculties?.length > 0 && (
+          <TableHeader
+            title="Faculty"
+            totalItems={`${faculties?.length} faculties` || 0}
+            handleSearch={() => {}}>
+            <Link to={`${url}/new`}>
+              <Button>Add Faculty</Button>
+            </Link>
+          </TableHeader>
+        )}
       </section>
       <section>
-        {isLoading && 'Faculty loading...'}
-        {!isLoading && isSuccess ? faculties?.length === 0 : 'No Faculties found,add one'}
-        {faculties && (
+        {/* {isSuccess ? (
+          faculties?.length === 0
+        ) : (
+          <NoDataAvailable
+            buttonLabel="Add new faculty"
+            title="No faculties available"
+            handleClick={() => {
+              history.push(`${url}/add`);
+            }}
+            description="Try adding some faculties as none have been added yet!"
+          />
+        )} */}
+        {faculties && faculties?.length > 0 ? (
           <Table<FilteredData>
+            handleSelect={() => {}}
             statusColumn="status"
             data={faculties}
-            hide={['id']}
             uniqueCol={'id'}
+            hide={['id']}
             actions={actions}
           />
+        ) : (
+          <NoDataAvailable
+            buttonLabel="Add new faculty"
+            title={'No department available'}
+            handleClick={() => history.push(`/dashboard/divisions/new`)}
+            description="And the web just isnt the same without you. Lets get you back online!"
+          />
         )}
+        {isLoading && <Loader />}
       </section>
 
       <Switch>
@@ -128,7 +156,7 @@ export default function Faculties({ fetchType }: IFaculties) {
 
         <Route
           exact
-          path={`${path}/add`}
+          path={`${path}/new`}
           render={() => {
             return (
               <PopupMolecule title="New Faculty" open onClose={handleClose}>

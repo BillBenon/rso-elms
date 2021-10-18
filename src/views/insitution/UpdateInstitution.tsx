@@ -27,13 +27,32 @@ export default function UpdateInstitution() {
     moto: '',
     name: '',
     phone_number: '',
-    post_code: '',
+    postal_code: '',
     short_name: '',
     website_link: '',
+    id: '',
   });
 
   useEffect(() => {
-    data?.data.data && setValues({ ...data?.data.data });
+    const institution = data?.data.data;
+
+    institution &&
+      setValues({
+        current_admin_id: institution.current_admin_id,
+        head_office_location_id: institution.head_office_location_id,
+        email: institution.email,
+        fax_number: institution.fax_number,
+        full_address: institution.full_address,
+        generic_status: institution.generic_status,
+        mission: institution.mission,
+        moto: institution.moto,
+        name: institution.name,
+        phone_number: institution.phone_number,
+        postal_code: institution.postal_code || '',
+        short_name: institution.short_name,
+        website_link: institution.website_link,
+        id: id,
+      });
   }, [data]);
 
   const handleChange = (e: ValueType) => {
@@ -69,9 +88,18 @@ export default function UpdateInstitution() {
             name="name"
             required
             value={values.name}
-            placeholder="Rwanda National Police"
+            placeholder="institution name"
             handleChange={(e) => handleChange(e)}>
             Institution name
+          </InputMolecule>
+        </div>
+        <div className="py-4">
+          <InputMolecule
+            name="short_name"
+            value={values.short_name}
+            placeholder="institution short name"
+            handleChange={(e) => handleChange(e)}>
+            Institution short name (abbreviations)
           </InputMolecule>
         </div>
         <div className="py-4">

@@ -3,10 +3,8 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { queryClient } from '../../../../plugins/react-query';
-import academyStore from '../../../../store/academy.store';
 import { divisionStore } from '../../../../store/divisions.store';
 import { IDivisionsAcademyType, ParamType, ValueType } from '../../../../types';
-import { AcademyInfo } from '../../../../types/services/academy.types';
 import { DivisionCreateInfo } from '../../../../types/services/division.types';
 import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
@@ -31,7 +29,7 @@ export default function UpdateDepartment({ onSubmit }: IDivisionsAcademyType) {
     parent_id: '',
   });
 
-  const { mutateAsync } = divisionStore.updateDivision(division.division_type);
+  const { mutateAsync } = divisionStore.updateDivision();
 
   const updateDivisionInfo: any = {
     academy_id: division.academy?.id,
@@ -47,15 +45,11 @@ export default function UpdateDepartment({ onSubmit }: IDivisionsAcademyType) {
     data?.data && setDivision(data?.data.data);
   }, [data]);
 
-  const academies: AcademyInfo[] | undefined =
-    academyStore.fetchAcademies().data?.data.data;
-
   const departments = divisionStore.getDivisionByType('FACULTY').data?.data.data;
 
   function handleChange({ name, value }: ValueType) {
     setDivision((old) => ({ ...old, [name]: value }));
   }
-  console.log(data?.data.data);
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
     mutateAsync(updateDivisionInfo, {

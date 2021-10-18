@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, useHistory, useRouteMatch } from 'react-router';
+import toast from 'react-hot-toast';
+import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 import { authenticatorStore } from '../../../store';
@@ -8,6 +9,8 @@ import { divisionStore } from '../../../store/divisions.store';
 import { DivisionInfo } from '../../../types/services/division.types';
 import NewAcademicProgram from '../../../views/programs/NewAcademicProgram';
 import Button from '../../Atoms/custom/Button';
+import Loader from '../../Atoms/custom/Loader';
+import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
@@ -28,37 +31,47 @@ export default function Departments({ fetchType }: IDepartment) {
   const { url, path } = useRouteMatch();
   const history = useHistory();
   const [departments, setDepartments] = useState<FilteredData[]>();
+  const { search } = useLocation();
+  const facultyId = new URLSearchParams(search).get('fac');
   const { data: userInfo } = authenticatorStore.authUser();
-  const { data, isSuccess, isLoading } = divisionStore.getDivisionByType(
-    fetchType.toUpperCase(),
-  );
+  const { data, isSuccess, isLoading, isError } = facultyId
+    ? divisionStore.getDepartmentsInFaculty(facultyId)
+    : divisionStore.getDivisionByType(fetchType.toUpperCase());
+
+  let facultyData: any;
+
+  if (facultyId) {
+    ({ data: facultyData } = divisionStore.getDivision(facultyId));
+  }
 
   useEffect(() => {
     // extract department data to display
     let formattedDeparts: any = [];
 
-    const filteredInfo = data?.data.data.map((department: DivisionInfo) =>
-      _.pick(department, [
-        'id',
-        'name',
-        'description',
-        'generic_status',
-        'total_num_childreen',
-      ]),
-    );
+    if (isSuccess && data?.data) {
+      const filteredInfo = data?.data.data.map((department: DivisionInfo) =>
+        _.pick(department, [
+          'id',
+          'name',
+          'description',
+          'generic_status',
+          'total_num_childreen',
+        ]),
+      );
 
-    filteredInfo?.map((department: any) => {
-      let filteredData: any = {
-        id: department.id.toString(),
-        decription: department.description,
-        name: department.name,
-        status: department.generic_status,
-        programs: department.total_num_childreen || 0,
-      };
-      formattedDeparts.push(filteredData);
-    });
+      filteredInfo?.map((department: any) => {
+        let filteredData: any = {
+          id: department.id.toString(),
+          decription: department.description,
+          name: department.name,
+          status: department.generic_status,
+          programs: department.total_num_childreen || 0,
+        };
+        formattedDeparts.push(filteredData);
+      });
 
-    data?.data.data && setDepartments(formattedDeparts);
+      data?.data.data && setDepartments(formattedDeparts);
+    } else if (isError) toast.error('error occurred when loading departments');
   }, [data]);
 
   function handleClose() {
@@ -75,13 +88,13 @@ export default function Departments({ fetchType }: IDepartment) {
     {
       name: 'Add Program',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/add`); // go to add prog
+        history.push(`${path}/${id}/new`); // go to add prog
       },
     },
     {
       name: 'View Programs',
       handleAction: (id: string | number | undefined) => {
-        history.push({ pathname: `/dashboard/programs/`, search: `?query=${id}` });
+        history.push({ pathname: `/dashboard/programs/`, search: `?dp=${id}` });
       },
     },
   ];
@@ -99,22 +112,26 @@ export default function Departments({ fetchType }: IDepartment) {
         path="*"
         render={() => (
           <main>
+            {departments && departments?.length > 0 && (
+              <section>
+                <TableHeader
+                  title={`${
+                    facultyData?.data.data.name
+                      ? `${facultyData?.data.data.name} / Department`
+                      : 'department'
+                  }`}
+                  totalItems={`${departments?.length} departments` || 0}
+                  handleSearch={() => {}}>
+                  <Link to={`${url}/new`}>
+                    <Button>Add department</Button>
+                  </Link>
+                </TableHeader>
+              </section>
+            )}
             <section>
-              <TableHeader
-                title="Department"
-                totalItems={departments?.length || 0}
-                handleSearch={() => {}}>
-                <Link to={`${url}/add`}>
-                  <Button>Add department</Button>
-                </Link>
-              </TableHeader>
-            </section>
-            <section>
-              {isLoading && 'Department loading...'}
-              {isSuccess
-                ? departments?.length === 0
-                : 'No Departments found, try to add one'}
-              {departments && (
+              {departments && departments?.length === 0 && isLoading ? (
+                <Loader />
+              ) : departments && departments?.length > 0 ? (
                 <Table<FilteredData>
                   handleSelect={() => {}}
                   statusColumn="status"
@@ -123,8 +140,32 @@ export default function Departments({ fetchType }: IDepartment) {
                   hide={['id']}
                   actions={actions}
                 />
+              ) : (
+                <NoDataAvailable
+                  buttonLabel="Add new department"
+                  title="No department available"
+                  handleClick={() => history.push(`/dashboard/divisions/departments/new`)}
+                  description="And the web just isnt the same without you. Lets get you back online!"
+                />
               )}
             </section>
+
+            <Route
+              exact
+              path={`${path}/new`}
+              render={() => {
+                return (
+                  <PopupMolecule
+                    title="New Department"
+                    open
+                    onClose={() => history.goBack()}>
+                    <NewDepartment
+                      academy_id={userInfo?.data.data.academy.id.toString()}
+                    />
+                  </PopupMolecule>
+                );
+              }}
+            />
             {/* modify department */}
             <Route
               exact
@@ -136,23 +177,6 @@ export default function Departments({ fetchType }: IDepartment) {
                     open={true}
                     onClose={handleClose}>
                     <UpdateDepartment
-                      academy_id={userInfo?.data.data.academy.id.toString()}
-                    />
-                  </PopupMolecule>
-                );
-              }}
-            />
-
-            <Route
-              exact
-              path={`${path}/add`}
-              render={() => {
-                return (
-                  <PopupMolecule
-                    title="New Department"
-                    open
-                    onClose={() => history.goBack()}>
-                    <NewDepartment
                       academy_id={userInfo?.data.data.academy.id.toString()}
                     />
                   </PopupMolecule>

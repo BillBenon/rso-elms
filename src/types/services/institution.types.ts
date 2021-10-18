@@ -12,10 +12,11 @@ export interface BasicInstitutionInfo {
   moto: string;
   name: string;
   phone_number: string;
-  post_code: string;
+  postal_code: string;
   short_name: string;
   website_link: string;
   head_office_location_id?: number;
+  id: number | string;
 }
 
 export interface InstitutionInfo extends Table, BasicInstitutionInfo {

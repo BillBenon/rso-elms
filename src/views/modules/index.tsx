@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
@@ -11,27 +12,29 @@ import { advancedTypeChecker } from '../../utils/getOption';
 import ModuleDetails from './ModuleDetails';
 
 export default function Modules() {
-  const { data, isLoading } = moduleStore.getAllModules();
+  const { data, isLoading, isSuccess, isError } = moduleStore.getAllModules();
 
   const [modules, setModules] = useState<CommonCardDataType[]>([]);
   const { path } = useRouteMatch();
 
   useEffect(() => {
-    let newModules: CommonCardDataType[] = [];
-    data?.data.data.forEach((module) => {
-      newModules.push({
-        status: {
-          type: advancedTypeChecker(module.generic_status),
-          text: module.generic_status.toString(),
-        },
-        code: module.code,
-        title: module.name,
-        description: module.description,
-        id: module.id,
+    if (isSuccess && data?.data) {
+      let newModules: CommonCardDataType[] = [];
+      data?.data.data.forEach((module) => {
+        newModules.push({
+          status: {
+            type: advancedTypeChecker(module.generic_status),
+            text: module.generic_status.toString(),
+          },
+          code: module.code,
+          title: module.name,
+          description: module.description,
+          id: module.id,
+        });
       });
-    });
 
-    setModules(newModules);
+      setModules(newModules);
+    } else if (isError) toast.error('error occurred when loading modules');
   }, [data]);
 
   function handleSearch() {}

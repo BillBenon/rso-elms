@@ -21,6 +21,7 @@ import programStore from '../../store/program.store';
 import { CommonCardDataType, Link, ParamType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from './AcademicPrograms';
+import AddLevelToProgram from './AddLevelToProgram';
 
 export default function ProgramDetailsMolecule() {
   const { id } = useParams<ParamType>();
@@ -122,6 +123,20 @@ export default function ProgramDetailsMolecule() {
       </div>
       <TabNavigation tabs={tabs}>
         <Switch>
+          <Route
+            exact
+            path={`${path}/level/add`}
+            render={() => {
+              return (
+                <PopupMolecule
+                  title="Add level to program"
+                  open={true}
+                  onClose={() => history.goBack()}>
+                  <AddLevelToProgram />
+                </PopupMolecule>
+              );
+            }}
+          />
           <Route
             exact
             path={`${path}`}

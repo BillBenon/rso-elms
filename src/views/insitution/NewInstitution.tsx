@@ -25,9 +25,10 @@ export default function NewInstitution() {
     moto: '',
     name: '',
     phone_number: '',
-    post_code: '',
+    postal_code: '',
     short_name: '',
     website_link: '',
+    id: '',
   });
   const handleChange = (e: ValueType) => {
     setValues({ ...values, [e.name]: e.value });
