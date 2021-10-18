@@ -78,7 +78,7 @@ export default function Modules() {
                       </Button> */}
                     </TableHeader>
                   </section>
-                  <section className="flex flex-wrap justify-between mt-2">
+                  <section className="flex flex-wrap justify-start gap-4 mt-2">
                     {isLoading ? (
                       <Loader />
                     ) : (

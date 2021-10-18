@@ -99,7 +99,11 @@ export default function Intakes() {
       <BreadCrumb list={list} />
       <TableHeader
         title={`${registrationControlId ? regControlName() : 'Intakes'}`}
-        totalItems={registrationControlId ? `${intakes.length} intakes` : intakes.length}
+        totalItems={
+          registrationControlId
+            ? `${intakes.length} intakes`
+            : `${intakes.length} intakes`
+        }
         handleSearch={handleSearch}>
         {registrationControlId && (
           <Link
@@ -113,7 +117,7 @@ export default function Intakes() {
         )}
       </TableHeader>
 
-      <section className="flex flex-wrap justify-between mt-2">
+      <section className="flex flex-wrap justify-start gap-4 mt-2">
         {intakes.map((intake, index) => (
           <div key={intake.code + Math.random() * 10} className="p-1 mt-3">
             <Tooltip
