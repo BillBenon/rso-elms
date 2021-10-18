@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Route, Switch, useHistory, useRouteMatch } from 'react-router';
+import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 import { authenticatorStore } from '../../../store';
@@ -31,10 +31,14 @@ export default function Departments({ fetchType }: IDepartment) {
   const { url, path } = useRouteMatch();
   const history = useHistory();
   const [departments, setDepartments] = useState<FilteredData[]>();
+  const { search } = useLocation();
+  const facultyId = new URLSearchParams(search).get('fac');
   const { data: userInfo } = authenticatorStore.authUser();
-  const { data, isSuccess, isLoading, isError } = divisionStore.getDivisionByType(
-    fetchType.toUpperCase(),
-  );
+  const { data, isSuccess, isLoading, isError } = facultyId
+    ? divisionStore.getDepartmentsInFaculty(facultyId)
+    : divisionStore.getDivisionByType('DEPARTMENT');
+
+  const { data: facultyData } = divisionStore.getDivision(facultyId || '');
 
   useEffect(() => {
     // extract department data to display
@@ -86,7 +90,7 @@ export default function Departments({ fetchType }: IDepartment) {
     {
       name: 'View Programs',
       handleAction: (id: string | number | undefined) => {
-        history.push({ pathname: `/dashboard/programs/`, search: `?query=${id}` });
+        history.push({ pathname: `/dashboard/programs/`, search: `?dp=${id}` });
       },
     },
   ];
@@ -104,30 +108,24 @@ export default function Departments({ fetchType }: IDepartment) {
         path="*"
         render={() => (
           <main>
+            {departments && departments?.length > 0 && (
+              <section>
+                <TableHeader
+                  title={`${
+                    facultyData?.data.data.name
+                      ? `${facultyData.data.data.name} / Department`
+                      : 'department'
+                  }`}
+                  totalItems={`${departments?.length} departments` || 0}
+                  handleSearch={() => {}}>
+                  <Link to={`${url}/add`}>
+                    <Button>Add department</Button>
+                  </Link>
+                </TableHeader>
+              </section>
+            )}
             <section>
-              <TableHeader
-                title="Department"
-                totalItems={departments?.length || 0}
-                handleSearch={() => {}}>
-                <Link to={`${url}/add`}>
-                  <Button>Add department</Button>
-                </Link>
-              </TableHeader>
-            </section>
-            <section>
-              {isSuccess ? (
-                departments?.length === 0
-              ) : (
-                <NoDataAvailable
-                  buttonLabel="Add new department"
-                  title="No departments available"
-                  handleClick={() => {
-                    history.push(`${url}/add`);
-                  }}
-                  description="Try adding some departments as none have been added yet!"
-                />
-              )}
-              {departments && (
+              {departments && departments?.length > 0 ? (
                 <Table<FilteredData>
                   handleSelect={() => {}}
                   statusColumn="status"
@@ -135,6 +133,13 @@ export default function Departments({ fetchType }: IDepartment) {
                   uniqueCol={'id'}
                   hide={['id']}
                   actions={actions}
+                />
+              ) : (
+                <NoDataAvailable
+                  buttonLabel="Add new department"
+                  title={'No department available'}
+                  handleClick={() => history.push(`/dashboard/divisions/add`)}
+                  description="And the web just isnt the same without you. Lets get you back online!"
                 />
               )}
               {isLoading && <Loader />}

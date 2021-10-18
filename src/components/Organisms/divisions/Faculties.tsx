@@ -85,7 +85,11 @@ export default function Faculties({ fetchType }: IFaculties) {
     {
       name: 'View Departments',
       handleAction: (id: string | number | undefined) => {
-        history.push({ pathname: `${path}/${id}/view-departments` });
+        // history.push({ pathname: `${path}/${id}/view-departments` });
+        history.push({
+          pathname: `/dashboard/divisions/departments`,
+          search: `?fac=${id}`,
+        });
       },
     },
   ];
