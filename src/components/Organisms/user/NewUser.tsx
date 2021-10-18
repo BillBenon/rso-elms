@@ -255,8 +255,6 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
               options={getDropDownOptions({
                 inputs: programs.data?.data.data || [],
                 labelName: 'name',
-                //@ts-ignore
-                getDropDownOptions: (program) => program.program.name,
               })}
               name="intake_program_id"
               placeholder={'Program to be enrolled in'}

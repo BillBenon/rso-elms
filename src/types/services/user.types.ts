@@ -11,6 +11,7 @@ export interface UserInfo extends CreateUserInfo, Table {
   person: PersonInfo;
   academy: AcademyInfo;
   institution_id: string;
+  institution_name?:string,
   activated: boolean;
   active_session: boolean;
   image_url: string;
@@ -81,7 +82,7 @@ export interface UpdateUserInfo {
   nid: string,
   other_rank: string,
   password: string,
-  password_reset_period_in_days: 0,
+  password_reset_period_in_days: number,
   person_id: string,
   phone: string,
   place_of_birth: string,
@@ -92,7 +93,7 @@ export interface UpdateUserInfo {
   rank_depart: string,
   relationship_with_next_of_ken: string,
   reset_date: string,
-  residence_location_id: 0,
+  residence_location_id: number,
   sex: GenderStatus,
   spouse_name: string,
   user_type: UserType,

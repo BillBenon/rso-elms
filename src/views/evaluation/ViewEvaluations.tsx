@@ -17,16 +17,15 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import { Link as LinkList } from '../../types';
-import { getQueryParamasId } from '../../utils/getQueryParamasID';
 import EvaluationContent from './EvaluationContent';
 import EvaluationTest from './EvaluationTest';
 
 export default function ViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
   const history = useHistory();
-  const location = useLocation();
+  const { search } = useLocation();
   const { url, path } = useRouteMatch();
-  const queryStr = getQueryParamasId(location.search);
+  const evaluationId = new URLSearchParams(search).get('evaluationId');
 
   const list: LinkList[] = [
     { to: '/', title: 'home' },
@@ -102,7 +101,7 @@ export default function ViewEvaluations() {
               </Link>
             </TableHeader>
 
-            <TabNavigation tabs={tabs} onTabChange={(event) => {}}>
+            <TabNavigation tabs={tabs}>
               <Route
                 exact
                 path={`${path}/submissions`}
@@ -129,7 +128,7 @@ export default function ViewEvaluations() {
                         handleClick={() => history.push(`${url}/new`)}
                         description="And the web just isnt the same without you. Lets get you back online!"
                       />
-                    ) : queryStr.query ? (
+                    ) : evaluationId ? (
                       <EvaluationContent />
                     ) : (
                       evaluations?.map((info: any, index: number) => (
@@ -139,7 +138,7 @@ export default function ViewEvaluations() {
                             handleClick={() => {
                               history.push({
                                 pathname: `${url}`,
-                                search: `?query=${info.id}`,
+                                search: `?evaluationId=${info.id}`,
                               });
                             }}
                             data={info}

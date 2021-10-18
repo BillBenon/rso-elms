@@ -18,6 +18,7 @@ import { UserType } from '../../types/services/user.types';
 
 export type UserTypes = {
   id: string;
+  username: string;
   'full name': string;
   email: string;
   NID: string;
@@ -41,6 +42,7 @@ export default function Users() {
     userInfo?.map((obj) => {
       let {
         id,
+        username,
         first_name,
         last_name,
         email,
@@ -52,6 +54,7 @@ export default function Users() {
 
       let user: UserTypes = {
         id: id.toString(),
+        username: username,
         'full name': first_name + ' ' + last_name,
         email: email,
         NID: person && person.nid,
