@@ -96,17 +96,19 @@ export default function Faculties({ fetchType }: IFaculties) {
   return (
     <main>
       <section>
-        <TableHeader
-          title="Faculty"
-          totalItems={`${faculties?.length} faculties` || 0}
-          handleSearch={() => {}}>
-          <Link to={`${url}/add`}>
-            <Button>Add Faculty</Button>
-          </Link>
-        </TableHeader>
+        {faculties && faculties?.length > 0 && (
+          <TableHeader
+            title="Faculty"
+            totalItems={`${faculties?.length} faculties` || 0}
+            handleSearch={() => {}}>
+            <Link to={`${url}/add`}>
+              <Button>Add Faculty</Button>
+            </Link>
+          </TableHeader>
+        )}
       </section>
       <section>
-        {isSuccess ? (
+        {/* {isSuccess ? (
           faculties?.length === 0
         ) : (
           <NoDataAvailable
@@ -117,14 +119,22 @@ export default function Faculties({ fetchType }: IFaculties) {
             }}
             description="Try adding some faculties as none have been added yet!"
           />
-        )}
-        {faculties && (
+        )} */}
+        {faculties && faculties?.length > 0 ? (
           <Table<FilteredData>
+            handleSelect={() => {}}
             statusColumn="status"
             data={faculties}
-            hide={['id']}
             uniqueCol={'id'}
+            hide={['id']}
             actions={actions}
+          />
+        ) : (
+          <NoDataAvailable
+            buttonLabel="Add new department"
+            title={'No department available'}
+            handleClick={() => history.push(`/dashboard/divisions/add`)}
+            description="And the web just isnt the same without you. Lets get you back online!"
           />
         )}
         {isLoading && <Loader />}

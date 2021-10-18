@@ -42,7 +42,6 @@ export default function Departments({ fetchType }: IDepartment) {
 
   if (facultyId) {
     ({ data: facultyData } = divisionStore.getDivision(facultyId));
-    console.log('data', facultyData);
   }
 
   useEffect(() => {
@@ -130,7 +129,9 @@ export default function Departments({ fetchType }: IDepartment) {
               </section>
             )}
             <section>
-              {departments && departments?.length > 0 ? (
+              {departments && departments?.length === 0 && isLoading ? (
+                <Loader />
+              ) : departments && departments?.length > 0 ? (
                 <Table<FilteredData>
                   handleSelect={() => {}}
                   statusColumn="status"
@@ -147,7 +148,6 @@ export default function Departments({ fetchType }: IDepartment) {
                   description="And the web just isnt the same without you. Lets get you back online!"
                 />
               )}
-              {isLoading && <Loader />}
             </section>
             {/* modify department */}
             <Route
