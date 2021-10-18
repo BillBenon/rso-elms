@@ -27,6 +27,14 @@ class RegistrationControlService {
     return await adminstrationAxios.get(`/regControls/getRegistrationControlById/${id}`);
   }
 
+  public async getByAcademy(
+    id: string,
+  ): Promise<AxiosResponse<Response<IRegistrationControlInfo[]>>> {
+    return await adminstrationAxios.get(
+      `/regControls/getRegistrationControlsByAcademy/${id}`,
+    );
+  }
+
   public async update(
     regControl: IRegistrationControlCreateInfo,
   ): Promise<AxiosResponse<Response<IRegistrationControlInfo>>> {
