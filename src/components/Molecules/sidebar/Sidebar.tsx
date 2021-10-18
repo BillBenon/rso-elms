@@ -48,7 +48,9 @@ export default function Sidebar() {
     <div className="bg-white md:h-screen">
       <div className="px-4 py-4">
         <AcademyProfileCard src="/images/nisslogo.png" alt="academy logo">
-          National Intelligence and Security Service
+          {authUser?.academy
+            ? authUser.academy.name
+            : 'National Intelligence and Security Service'}
         </AcademyProfileCard>
       </div>
       <SidebarLinks links={defaultLinks()} />
