@@ -257,21 +257,6 @@ export default function AcademicProgram() {
         {/* modify academic program */}
         <Route path={`${path}/:id/edit`} render={() => <UpdateAcademicProgram />} />
 
-        {/* add prerequisite popup */}
-        <Route
-          exact
-          path={`${path}/add/prerequisite`}
-          render={() => {
-            return (
-              <PopupMolecule
-                title="Add prerequisite"
-                open={true}
-                onClose={history.goBack}>
-                another form here
-              </PopupMolecule>
-            );
-          }}
-        />
         {/* show academic program details */}
         <Route path={`${path}/:id`} render={() => <ProgramDetails />} />
       </Switch>
