@@ -94,7 +94,7 @@ export default function Navigation() {
                   <div className="pl-2">
                     <p>{authUser?.username}</p>
                     <p className="text-xs pt-1 text-txt-secondary">
-                      {authUser?.user_type}
+                      {authUser?.user_type.replaceAll('_', ' ')}
                     </p>
                   </div>
                 </div>

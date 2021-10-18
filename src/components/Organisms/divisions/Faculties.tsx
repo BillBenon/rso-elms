@@ -168,7 +168,7 @@ export default function Faculties({ fetchType }: IFaculties) {
 
         <Route
           exact
-          path={`${path}/:id/add`}
+          path={`${path}/:id/new`}
           render={() => {
             return (
               <PopupMolecule title="New Department" open onClose={handleClose}>
