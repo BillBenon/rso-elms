@@ -133,7 +133,7 @@ export default function AcademicProgram() {
                     )}
                   </TableHeader>
                 </section>
-                <section className="flex flex-wrap justify-between mt-2">
+                <section className="flex flex-wrap justify-start gap-2 mt-2">
                   {programs.length === 0 && isLoading ? (
                     <Loader />
                   ) : programs.length > 0 ? (
