@@ -41,8 +41,6 @@ function Levels() {
     { to: 'levels', title: 'Level' },
   ];
 
-  console.log('we go: ', userInfo?.data);
-
   //actions to be displayed in table
   const actions = [
     {

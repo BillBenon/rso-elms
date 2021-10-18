@@ -79,7 +79,7 @@ export default function Faculties({ fetchType }: IFaculties) {
     {
       name: 'Add Department',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/add`);
+        history.push(`${path}/${id}/new`);
       },
     },
     {
@@ -101,7 +101,7 @@ export default function Faculties({ fetchType }: IFaculties) {
             title="Faculty"
             totalItems={`${faculties?.length} faculties` || 0}
             handleSearch={() => {}}>
-            <Link to={`${url}/add`}>
+            <Link to={`${url}/new`}>
               <Button>Add Faculty</Button>
             </Link>
           </TableHeader>
@@ -131,9 +131,9 @@ export default function Faculties({ fetchType }: IFaculties) {
           />
         ) : (
           <NoDataAvailable
-            buttonLabel="Add new department"
+            buttonLabel="Add new faculty"
             title={'No department available'}
-            handleClick={() => history.push(`/dashboard/divisions/add`)}
+            handleClick={() => history.push(`/dashboard/divisions/new`)}
             description="And the web just isnt the same without you. Lets get you back online!"
           />
         )}
@@ -156,7 +156,7 @@ export default function Faculties({ fetchType }: IFaculties) {
 
         <Route
           exact
-          path={`${path}/add`}
+          path={`${path}/new`}
           render={() => {
             return (
               <PopupMolecule title="New Faculty" open onClose={handleClose}>
