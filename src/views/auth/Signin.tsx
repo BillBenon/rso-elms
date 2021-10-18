@@ -26,15 +26,15 @@ function SignIn() {
         )}
         <div className="px-5 py-8 md:rounded-md mx-auto lg:py-20 h-screen">
           <AcademyProfileCard
-            src="/icons/police-logo.svg"
+            src="/images/nisslogo.png"
             alt="academy logo"
             size="80"
             bgColor="none"
             txtSize="lg"
             fontWeight="semibold"
             color="primary"
-            subtitle="Service . Protection . Integrity">
-            Rwanda National Police
+            subtitle="Alertness . Reliability . Integrity">
+            National Intelligence and Security Service
           </AcademyProfileCard>
           <Switch>
             <Route exact path={`${path}`} render={() => <SignInForm />} />
