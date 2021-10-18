@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
-import { useLocation } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
@@ -11,7 +10,6 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
-import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
 import { moduleStore } from '../../store/modules.store';
 import { subjectStore } from '../../store/subject.store';
@@ -57,6 +55,7 @@ export default function ModuleDetails() {
       let loadedSubjects: CommonCardDataType[] = [];
       subjectData.data.data.data.forEach((subject) => {
         let cardData: CommonCardDataType = {
+          id: subject.id,
           code: subject.title,
           description: subject.content,
           title: subject.module.name || `Subject ${subject.title}`,
@@ -91,7 +90,7 @@ export default function ModuleDetails() {
   return (
     <>
       <Switch>
-        <Route path={`${path}/s/:subjectId`} component={SubjectDetails} />
+        <Route path={`${path}/subjects/:subjectId`} component={SubjectDetails} />
         <Route
           path={`${path}`}
           render={() => (
@@ -134,7 +133,13 @@ export default function ModuleDetails() {
                     <section className="flex flex-wrap justify-start gap-4 mt-2">
                       {subjects.map((subject, i) => (
                         <div key={i} className="p-1 mt-3">
-                          <CommonCardMolecule data={subject} />
+                          <CommonCardMolecule
+                            to={{
+                              title: 'Subject details',
+                              to: `${url}/subjects/${subject.id}`,
+                            }}
+                            data={subject}
+                          />
                         </div>
                       ))}
                     </section>
@@ -149,19 +154,6 @@ export default function ModuleDetails() {
                   return (
                     <PopupMolecule title="New Subject" open onClose={handleClose}>
                       <NewSubjectForm />
-                    </PopupMolecule>
-                  );
-                }}
-              />
-
-              {/* add lesson popup */}
-              <Route
-                exact
-                path={`${path}/subjects/:subjectId/add-lesson`}
-                render={() => {
-                  return (
-                    <PopupMolecule title="Add lesson" open onClose={handleClose}>
-                      <NewLessonForm />
                     </PopupMolecule>
                   );
                 }}

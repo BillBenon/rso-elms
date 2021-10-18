@@ -13,10 +13,15 @@ import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 interface ParamType {
   subjectId: string;
+  id: string;
 }
 
 export default function NewLessonForm() {
-  const { subjectId } = useParams<ParamType>();
+  const { id, subjectId } = useParams<ParamType>();
+  console.log('====================================');
+  console.log(subjectId);
+  console.log('====================================');
+
   const subject = subjectStore.getSubject(subjectId).data?.data.data;
   const { mutateAsync } = lessonStore.addLesson();
   const history = useHistory();
