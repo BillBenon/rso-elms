@@ -22,7 +22,7 @@ export default function NoDataAvailable({
   return (
     <div className="w-full py-12 bg-transparent">
       <div className="text-center">
-        <div className="rounded-full inline-block py-3 px-3 bg-blue-100">
+        <div className="rounded-full inline-block py-3 px-3 bg-green-100 bg-opacity-35">
           <Icon name={icon} size={32} fill="primary" />
         </div>
       </div>
