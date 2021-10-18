@@ -10,10 +10,13 @@ import {
 
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
+import Panel from '../../components/Atoms/custom/Panel';
 import Heading from '../../components/Atoms/Text/Heading';
+import Accordion from '../../components/Molecules/Accordion';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import PopupMolecule from '../../components/Molecules/Popup';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
+import { lessonStore } from '../../store/lesson.store';
 import { subjectStore } from '../../store/subject.store';
 import { Link } from '../../types';
 
@@ -28,6 +31,7 @@ export default function SubjectDetails() {
   const history = useHistory();
 
   const subjectData = subjectStore.getSubject(subjectId);
+  const lessons = lessonStore.getLessonsBySubject(subjectId).data?.data.data || [];
 
   const list: Link[] = [
     { to: 'home', title: 'home' },
@@ -71,15 +75,24 @@ export default function SubjectDetails() {
                 color="primary"
                 fontSize="base"
                 className="underline">
-                Lessons ({'3'})
+                Lessons ({lessons.length})
               </Heading>
               <BrowserLink to={`${url}/add-lesson`}>
                 <Button>New lesson</Button>
               </BrowserLink>
             </div>
-            <Heading fontSize="base" fontWeight="semibold">
+            <Heading fontSize="base" className="mb-6" fontWeight="semibold">
               Ongoing Lessons
             </Heading>
+
+            <Accordion>
+              <Panel bgColor="primary" title={'Lesson 1'}>
+                <h2>Welcome</h2>
+              </Panel>
+              <Panel title={'Lesson 2'}>
+                <h2>Lesson 2</h2>
+              </Panel>
+            </Accordion>
           </div>
         </div>
       </div>

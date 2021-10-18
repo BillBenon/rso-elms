@@ -277,14 +277,6 @@ export default function AcademicProgram() {
         />
         {/* show academic program details */}
         <Route path={`${path}/:id`} render={() => <ProgramDetails />} />
-
-        {/* <Route
-          exact
-          path={`${path}/:id/view-program`}
-          render={() => <ViewProgramsInDepartment />}
-        /> */}
-
-        <Route exact path={`${path}/:id/details`} render={() => <ProgramDetails />} />
       </Switch>
     </main>
   );

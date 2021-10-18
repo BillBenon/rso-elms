@@ -17,7 +17,7 @@ class LessonService {
     return await adminstrationAxios.get(`/lessons/getLessonById/${id}`);
   }
 
-  public async getLessonsByModule(
+  public async getLessonsBySubject(
     subjectId: string,
   ): Promise<AxiosResponse<Response<LessonInfo[]>>> {
     return await adminstrationAxios.get(`/lessons/getLessonsBySubject/${subjectId}`);
