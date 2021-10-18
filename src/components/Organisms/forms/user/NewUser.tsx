@@ -157,7 +157,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         </DropdownMolecule>
         <InputMolecule
           name="first_name"
-          placeholder="eg: Kabera"
+          placeholder="eg: Manzi"
           value={details.first_name}
           handleChange={handleChange}>
           First name
@@ -176,10 +176,26 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Email
         </InputMolecule>
+        <InputMolecule
+          name="username"
+          placeholder="Enter username"
+          value={details.username}
+          handleChange={handleChange}>
+          Username
+        </InputMolecule>
+        <InputMolecule
+          type="password"
+          name="password"
+          placeholder="Enter password"
+          value={details.password}
+          handleChange={handleChange}>
+          Password
+        </InputMolecule>
         <DateMolecule
           handleChange={handleChange}
           name="birth_date"
           width="60 md:w-80"
+          padding={3}
           date_time_type={false}>
           Date of Birth
         </DateMolecule>

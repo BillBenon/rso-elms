@@ -13,7 +13,7 @@ import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function NewDepartment({ onSubmit, academy_id }: IDivisionsAcademyType) {
-  const { id } = useParams<ParamType>();
+  const { id: facultyId } = useParams<ParamType>();
 
   const [division, setDivision] = useState<DivisionCreateInfo>({
     academy_id: academy_id || '',
@@ -22,7 +22,7 @@ export default function NewDepartment({ onSubmit, academy_id }: IDivisionsAcadem
     division_type: 'DEPARTMENT',
     id: '',
     name: '',
-    parent_id: id ? id : '',
+    parent_id: facultyId ? facultyId : '',
   });
   const { mutateAsync } = divisionStore.createDivision(division.division_type);
   const history = useHistory();
@@ -68,14 +68,16 @@ export default function NewDepartment({ onSubmit, academy_id }: IDivisionsAcadem
         Descripiton
       </TextAreaMolecule>
 
-      <DropdownMolecule
-        width="82"
-        placeholder="Select faculty"
-        options={getDropDownOptions({ inputs: faculties || [] })}
-        name="parent_id"
-        handleChange={handleChange}>
-        Faculty
-      </DropdownMolecule>
+      {!facultyId && (
+        <DropdownMolecule
+          width="82"
+          placeholder="Select faculty"
+          options={getDropDownOptions({ inputs: faculties || [] })}
+          name="parent_id"
+          handleChange={handleChange}>
+          Faculty
+        </DropdownMolecule>
+      )}
 
       {/* save button */}
       <div className="mt-5">
