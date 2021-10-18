@@ -12,7 +12,7 @@
 
 .check-box:checked{
     background-color: #2337CC;
-    background-image: url('../../../../../public/icons/check.svg');
+    background-image: url('/icons/check.svg');
     background-position: center;
     border-color: #2337CC;
 }
