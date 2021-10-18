@@ -121,7 +121,7 @@ export default function UpdateAcademicProgram<E>({
           placeholder="Select incharge"
           options={getDropDownOptions({
             inputs: instructors || [],
-            labelName: ['username'],
+            labelName: ['first_name', 'last_name'],
           })}
           name="current_admin_id"
           handleChange={(e: ValueType) => handleChange(e)}>
