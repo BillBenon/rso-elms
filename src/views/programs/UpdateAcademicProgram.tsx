@@ -115,13 +115,13 @@ export default function UpdateAcademicProgram<E>({
         <DropdownMolecule
           defaultValue={getDropDownOptions({
             inputs: instructors || [],
-            labelName: 'username',
+            labelName: ['username'],
           }).find((incharge) => incharge.value === data?.data.data.incharge?.username)}
           width="64"
           placeholder="Select incharge"
           options={getDropDownOptions({
             inputs: instructors || [],
-            labelName: 'username',
+            labelName: ['username'],
           })}
           name="current_admin_id"
           handleChange={(e: ValueType) => handleChange(e)}>

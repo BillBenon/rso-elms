@@ -32,19 +32,8 @@ class DivisionStore {
     );
   }
 
-  updateDivision(divisionType: string) {
-    return useMutation(divisionService.modifyDivision, {
-      onSuccess(newData) {
-        queryClient.setQueryData(['divisions/type', divisionType], (old) => {
-          const previousData = old as AxiosResponse<Response<DivisionInfo[]>>;
-          previousData.data.data = previousData.data.data.map((fac: DivisionInfo) => {
-            if (fac.id === newData.data.data.id) return newData.data.data;
-            else return fac;
-          });
-          return previousData;
-        });
-      },
-    });
+  updateDivision() {
+    return useMutation(divisionService.modifyDivision);
   }
 }
 

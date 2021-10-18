@@ -42,7 +42,6 @@ export default function Departments({ fetchType }: IDepartment) {
 
   if (facultyId) {
     ({ data: facultyData } = divisionStore.getDivision(facultyId));
-    console.log('data', facultyData);
   }
 
   useEffect(() => {
@@ -89,7 +88,7 @@ export default function Departments({ fetchType }: IDepartment) {
     {
       name: 'Add Program',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/add`); // go to add prog
+        history.push(`${path}/${id}/new`); // go to add prog
       },
     },
     {
@@ -123,14 +122,16 @@ export default function Departments({ fetchType }: IDepartment) {
                   }`}
                   totalItems={`${departments?.length} departments` || 0}
                   handleSearch={() => {}}>
-                  <Link to={`${url}/add`}>
+                  <Link to={`${url}/new`}>
                     <Button>Add department</Button>
                   </Link>
                 </TableHeader>
               </section>
             )}
             <section>
-              {departments && departments?.length > 0 ? (
+              {departments && departments?.length === 0 && isLoading ? (
+                <Loader />
+              ) : departments && departments?.length > 0 ? (
                 <Table<FilteredData>
                   handleSelect={() => {}}
                   statusColumn="status"
@@ -142,13 +143,29 @@ export default function Departments({ fetchType }: IDepartment) {
               ) : (
                 <NoDataAvailable
                   buttonLabel="Add new department"
-                  title={'No department available'}
-                  handleClick={() => history.push(`/dashboard/divisions/add`)}
+                  title="No department available"
+                  handleClick={() => history.push(`/dashboard/divisions/departments/new`)}
                   description="And the web just isnt the same without you. Lets get you back online!"
                 />
               )}
-              {isLoading && <Loader />}
             </section>
+
+            <Route
+              exact
+              path={`${path}/new`}
+              render={() => {
+                return (
+                  <PopupMolecule
+                    title="New Department"
+                    open
+                    onClose={() => history.goBack()}>
+                    <NewDepartment
+                      academy_id={userInfo?.data.data.academy.id.toString()}
+                    />
+                  </PopupMolecule>
+                );
+              }}
+            />
             {/* modify department */}
             <Route
               exact
@@ -160,23 +177,6 @@ export default function Departments({ fetchType }: IDepartment) {
                     open={true}
                     onClose={handleClose}>
                     <UpdateDepartment
-                      academy_id={userInfo?.data.data.academy.id.toString()}
-                    />
-                  </PopupMolecule>
-                );
-              }}
-            />
-
-            <Route
-              exact
-              path={`${path}/add`}
-              render={() => {
-                return (
-                  <PopupMolecule
-                    title="New Department"
-                    open
-                    onClose={() => history.goBack()}>
-                    <NewDepartment
                       academy_id={userInfo?.data.data.academy.id.toString()}
                     />
                   </PopupMolecule>
