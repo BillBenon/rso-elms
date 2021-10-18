@@ -28,7 +28,7 @@ interface IDepartment {
 }
 
 export default function Departments({ fetchType }: IDepartment) {
-  const { url, path } = useRouteMatch();
+  const { path } = useRouteMatch();
   const history = useHistory();
   const [departments, setDepartments] = useState<FilteredData[]>();
   const { search } = useLocation();
@@ -37,12 +37,6 @@ export default function Departments({ fetchType }: IDepartment) {
   const { data, isSuccess, isLoading, isError } = facultyId
     ? divisionStore.getDepartmentsInFaculty(facultyId)
     : divisionStore.getDivisionByType(fetchType.toUpperCase());
-
-  let facultyData: any;
-
-  if (facultyId) {
-    ({ data: facultyData } = divisionStore.getDivision(facultyId));
-  }
 
   useEffect(() => {
     // extract department data to display
@@ -88,7 +82,7 @@ export default function Departments({ fetchType }: IDepartment) {
     {
       name: 'Add Program',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/new`); // go to add prog
+        history.push({ pathname: `/dashboard/programs/add`, search: `?dp=${id}` });
       },
     },
     {
@@ -112,22 +106,6 @@ export default function Departments({ fetchType }: IDepartment) {
         path="*"
         render={() => (
           <main>
-            {departments && departments?.length > 0 && (
-              <section>
-                <TableHeader
-                  title={`${
-                    facultyData?.data.data.name
-                      ? `${facultyData?.data.data.name} / Department`
-                      : 'department'
-                  }`}
-                  totalItems={`${departments?.length} departments` || 0}
-                  handleSearch={() => {}}>
-                  <Link to={`${url}/new`}>
-                    <Button>Add department</Button>
-                  </Link>
-                </TableHeader>
-              </section>
-            )}
             <section>
               {departments && departments?.length === 0 && isLoading ? (
                 <Loader />
@@ -150,22 +128,6 @@ export default function Departments({ fetchType }: IDepartment) {
               )}
             </section>
 
-            <Route
-              exact
-              path={`${path}/new`}
-              render={() => {
-                return (
-                  <PopupMolecule
-                    title="New Department"
-                    open
-                    onClose={() => history.goBack()}>
-                    <NewDepartment
-                      academy_id={userInfo?.data.data.academy.id.toString()}
-                    />
-                  </PopupMolecule>
-                );
-              }}
-            />
             {/* modify department */}
             <Route
               exact

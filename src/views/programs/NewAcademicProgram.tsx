@@ -3,7 +3,7 @@
 import _ from 'lodash';
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -14,7 +14,7 @@ import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule'
 import { divisionStore } from '../../store/divisions.store';
 import programStore from '../../store/program.store';
 import usersStore from '../../store/users.store';
-import { CommonFormProps, ParamType, ValueType } from '../../types';
+import { CommonFormProps, ValueType } from '../../types';
 import {
   CreateProgramInfo,
   ProgramStatus,
@@ -27,12 +27,13 @@ interface INewAcademyProgram<K> extends CommonFormProps<K> {}
 
 export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E>) {
   const history = useHistory();
-  const { id } = useParams<ParamType>();
+  const { search } = useLocation();
+  const facultyId = new URLSearchParams(search).get('dp');
 
   const { data: inCharge } = usersStore.fetchUsers();
 
   const instructors = inCharge?.data.data.filter(
-    (user) => user.user_type === UserType.ADMIN,
+    (user) => user.user_type === UserType.ADMIN || UserType.INSTRUCTOR,
   );
 
   const departments = divisionStore.getDivisionByType('DEPARTMENT').data?.data.data;
@@ -41,7 +42,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
   const [details, setDetails] = useState<CreateProgramInfo>({
     code: '',
     current_admin_id: '',
-    department_id: id ? id : '',
+    department_id: facultyId ? facultyId : '',
     description: '',
     name: '',
     type: ProgramType.SHORT_COURSE,
@@ -123,7 +124,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
             Incharge
           </DropdownMolecule>
 
-          {!id && (
+          {!facultyId && (
             <DropdownMolecule
               width="64"
               placeholder="Select department"
