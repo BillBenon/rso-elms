@@ -1,4 +1,4 @@
-import '../../../styles/components/Atoms/input/checkbox.css';
+import '../../../styles/components/Atoms/input/checkbox.scss';
 
 import React, { FormEvent, useEffect, useState } from 'react';
 
