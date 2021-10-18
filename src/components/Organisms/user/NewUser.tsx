@@ -230,7 +230,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Education level
         </DropdownMolecule>
-        {![UserType.SUPER_ADMIN, UserType.ADMIN].includes(details.user_type) && (
+        {![UserType.SUPER_ADMIN].includes(details.user_type) && (
           <DropdownMolecule
             options={getDropDownOptions({ inputs: academies || [] })}
             name="academy_id"
