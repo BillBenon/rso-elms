@@ -33,7 +33,11 @@ const interceptAdminResError = (error: Error | AxiosError<AxiosResponse<Response
   if (axios.isAxiosError(error)) {
     const e = error?.response;
 
-    if (e?.status === 401 && !authIgnore.includes(window.location.pathname)) {
+    if (
+      e?.status === 401 &&
+      !authIgnore.includes(window.location.pathname) &&
+      window.location.pathname !== '/login'
+    ) {
       window.location.href = '/login';
     }
 

@@ -10,6 +10,7 @@ import programStore from '../../../../store/program.store';
 import usersStore from '../../../../store/users.store';
 import { CommonFormProps, ParamType, ValueType } from '../../../../types';
 import { AcademyInfo } from '../../../../types/services/academy.types';
+import { IntakeProgramInfo } from '../../../../types/services/program.types';
 import {
   DocType,
   EducationLevel,
@@ -157,13 +158,18 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
 
     if (onSubmit) onSubmit(e);
 
+    Object.keys(details).map((val) => {
+      //@ts-ignore
+      if (!details[val]) details[val] = '';
+    });
+
     await mutateAsync(details, {
       onSuccess(data) {
         toast.success(data.data.message);
         history.goBack();
       },
       onError() {
-        toast.error('An error occurred when creating user, please try again later');
+        toast.error('An error occurred when editing user, please try again later');
       },
     });
   }
@@ -323,7 +329,9 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
             <DropdownMolecule
               options={getDropDownOptions({
                 inputs: programs.data?.data.data || [],
-                labelName: ['code'],
+                labelName: ['name'],
+                //@ts-ignore
+                getOptionLabel: (prog: IntakeProgramInfo) => prog.program.code,
               })}
               name="intake_program_id"
               placeholder={'Program to be enrolled in'}
@@ -343,7 +351,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
             </DropdownMolecule>
           </>
         )}
-        <Button type="submit">Create</Button>
+        <Button type="submit">Update</Button>
       </form>
     </div>
   );

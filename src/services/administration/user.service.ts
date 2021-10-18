@@ -16,11 +16,21 @@ class UserService {
   ): Promise<AxiosResponse<Response<UserInfo>>> {
     return await adminstrationAxios.post('/users/modifyUser', userInfo);
   }
+  public async updateProfile(
+    userInfo: UpdateUserInfo,
+  ): Promise<AxiosResponse<Response<UserInfo>>> {
+    return await adminstrationAxios.post('/users/updateProfile', userInfo);
+  }
   public async fetchUsers(): Promise<AxiosResponse<Response<UserInfo[]>>> {
     return await adminstrationAxios.get('/users/getUsers');
   }
   public async getUserByid(id: string): Promise<AxiosResponse<Response<UserInfo>>> {
     return await adminstrationAxios.get(`/users/getUserById/${id}`);
+  }
+  public async getUsersByInstitution(
+    institutionId: string,
+  ): Promise<AxiosResponse<Response<UserInfo>>> {
+    return await adminstrationAxios.get(`users/getUsersByInstitution/${institutionId}`);
   }
   public async getUserAccountByNid(
     nid: string,

@@ -176,6 +176,21 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Email
         </InputMolecule>
+        <InputMolecule
+          name="username"
+          placeholder="Enter username"
+          value={details.username}
+          handleChange={handleChange}>
+          Username
+        </InputMolecule>
+        <InputMolecule
+          type="password"
+          name="password"
+          placeholder="Enter password"
+          value={details.password}
+          handleChange={handleChange}>
+          Password
+        </InputMolecule>
         <DateMolecule
           handleChange={handleChange}
           name="birth_date"
