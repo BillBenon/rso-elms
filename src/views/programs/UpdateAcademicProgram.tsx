@@ -78,7 +78,7 @@ export default function UpdateAcademicProgram<E>({
 
   return (
     <form onSubmit={updateProgram}>
-      <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
+      <div className="p-6 w-auto lg:w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
         <div className="py-5 mb-3 capitalize">
           <Heading color="txt-primary" fontWeight="bold">
             Edit Program

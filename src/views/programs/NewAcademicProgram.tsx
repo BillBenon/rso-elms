@@ -33,7 +33,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
   const { data: inCharge } = usersStore.fetchUsers();
 
   const instructors = inCharge?.data.data.filter(
-    (user) => user.user_type === UserType.ADMIN,
+    (user) => user.user_type === UserType.ADMIN || UserType.INSTRUCTOR,
   );
 
   const departments = divisionStore.getDivisionByType('DEPARTMENT').data?.data.data;

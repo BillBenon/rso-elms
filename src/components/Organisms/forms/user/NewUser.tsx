@@ -180,6 +180,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}
           name="birth_date"
           width="60 md:w-80"
+          padding={3}
           date_time_type={false}>
           Date of Birth
         </DateMolecule>
