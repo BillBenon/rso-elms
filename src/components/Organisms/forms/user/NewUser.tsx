@@ -157,7 +157,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         </DropdownMolecule>
         <InputMolecule
           name="first_name"
-          placeholder="eg: Kabera"
+          placeholder="eg: Manzi"
           value={details.first_name}
           handleChange={handleChange}>
           First name
