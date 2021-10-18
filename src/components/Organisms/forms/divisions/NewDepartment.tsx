@@ -2,7 +2,6 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { queryClient } from '../../../../plugins/react-query';
 import { divisionStore } from '../../../../store/divisions.store';
 import { IDivisionsAcademyType, ParamType, ValueType } from '../../../../types';
 import { DivisionCreateInfo } from '../../../../types/services/division.types';
@@ -24,7 +23,7 @@ export default function NewDepartment({ onSubmit, academy_id }: IDivisionsAcadem
     name: '',
     parent_id: facultyId ? facultyId : '',
   });
-  const { mutateAsync } = divisionStore.createDivision(division.division_type);
+  const { mutateAsync } = divisionStore.createDivision();
   const history = useHistory();
 
   function handleChange({ name, value }: ValueType) {
@@ -38,8 +37,12 @@ export default function NewDepartment({ onSubmit, academy_id }: IDivisionsAcadem
     mutateAsync(division, {
       onSuccess: () => {
         toast.success('Department created');
-        queryClient.invalidateQueries(['divisions/type']);
-        history.goBack();
+        if (facultyId) {
+          history.push({
+            pathname: `/dashboard/divisions/departments`,
+            search: `?fac=${facultyId}`,
+          });
+        }
       },
       onError: () => {
         toast.error('something wrong happened while creating department');
