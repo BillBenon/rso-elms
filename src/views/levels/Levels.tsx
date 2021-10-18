@@ -56,7 +56,7 @@ function Levels() {
         <BreadCrumb list={list}></BreadCrumb>
       </section>
       <section className="">
-        <TableHeader title="Levels" totalItems={3}>
+        <TableHeader title="Levels" totalItems={`${levels?.length} levels`}>
           <Link to={`${url}/add`}>
             <Button>Add Level</Button>
           </Link>
@@ -71,12 +71,12 @@ function Levels() {
             statusColumn="status"
             data={levels}
             uniqueCol={'id'}
+            hide={['id']}
             actions={actions}
           />
         )}
       </section>
 
-      {/* add new level popup */}
       <Switch>
         {/* update level popup */}
         <Route
@@ -91,6 +91,7 @@ function Levels() {
           }}
         />
 
+        {/* add new level popup */}
         <Route
           exact
           path={`${path}/add`}
