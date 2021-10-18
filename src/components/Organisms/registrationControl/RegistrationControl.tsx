@@ -41,29 +41,31 @@ export default function RegistrationControl() {
   let RegistrationControls: IRegistrationInfo[] = [];
   let RegInfo = data?.data.data;
 
-  RegInfo?.map((obj: IRegistrationControlInfo) => {
-    obj.expected_end_date = moment(obj.expected_end_date).format('MMM D YYYY');
-    obj.expected_start_date = moment(obj.expected_start_date).format('MMM D YYYY');
+  if (RegInfo?.length! > 0) {
+    RegInfo?.map((obj: IRegistrationControlInfo) => {
+      obj.expected_end_date = moment(obj.expected_end_date).format('MMM D YYYY');
+      obj.expected_start_date = moment(obj.expected_start_date).format('MMM D YYYY');
 
-    let {
-      description,
-      generic_status,
-      id,
-      academy: { name }, //destructure name inside academy obj
-      expected_start_date,
-      expected_end_date,
-    } = obj;
+      let {
+        description,
+        generic_status,
+        id,
+        academy: { name }, //destructure name inside academy obj
+        expected_start_date,
+        expected_end_date,
+      } = obj;
 
-    let registrationcontrol: IRegistrationInfo = {
-      'start date': expected_start_date,
-      'end date': expected_end_date,
-      description,
-      'academy name': name,
-      status: generic_status,
-      id: id,
-    };
-    RegistrationControls.push(registrationcontrol);
-  });
+      let registrationcontrol: IRegistrationInfo = {
+        'start date': expected_start_date,
+        'end date': expected_end_date,
+        description,
+        'academy name': name,
+        status: generic_status,
+        id: id,
+      };
+      RegistrationControls.push(registrationcontrol);
+    });
+  }
 
   const controlActions = [
     {
@@ -117,7 +119,7 @@ export default function RegistrationControl() {
 
       <div className="mt-14">
         {isLoading && <Loader />}
-        {isSuccess && RegistrationControls ? (
+        {isSuccess && RegistrationControls.length > 0 ? (
           <Table<IRegistrationInfo>
             statusColumn="status"
             data={RegistrationControls}
