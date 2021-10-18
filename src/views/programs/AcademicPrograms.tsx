@@ -124,7 +124,7 @@ export default function AcademicProgram() {
                         <Button>Add Program To Intake</Button>
                       </Link>
                     ) : (
-                      <Link to={`${url}/add`}>
+                      <Link to={`/dashboard/programs/add`}>
                         <Button>Add New Program</Button>
                       </Link>
                     )}

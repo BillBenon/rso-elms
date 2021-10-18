@@ -105,9 +105,7 @@ export default function Intakes() {
       <TableHeader
         title={`${registrationControlId ? regControlName() : 'Intakes'}`}
         totalItems={
-          registrationControlId
-            ? `${intakes.length} intakes`
-            : `${intakes.length} intakes`
+          registrationControlId ? `${intakes.length} intakes` : `${intakes.length}`
         }
         handleSearch={handleSearch}>
         {registrationControlId && (
@@ -170,7 +168,7 @@ export default function Intakes() {
 
         {isLoading && <Loader />}
 
-        {!isLoading && intakes.length <= 0 && (
+        {!isLoading && intakes && intakes.length <= 0 && (
           <NoDataAvailable
             buttonLabel="Add new Intake"
             title={
