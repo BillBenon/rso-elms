@@ -1,7 +1,8 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 
+import { queryClient } from '../../../../plugins/react-query';
 import { lessonStore } from '../../../../store/lesson.store';
 import { subjectStore } from '../../../../store/subject.store';
 import { ValueType } from '../../../../types';
@@ -11,12 +12,12 @@ import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-interface ParamType {
-  subjectId: string;
-}
-
 export default function NewLessonForm() {
-  const { subjectId } = useParams<ParamType>();
+  const { url } = useRouteMatch();
+
+  const urlArray = url.split('/');
+  const subjectId = urlArray[urlArray.length - 2];
+
   const subject = subjectStore.getSubject(subjectId).data?.data.data;
   const { mutateAsync } = lessonStore.addLesson();
   const history = useHistory();
@@ -38,7 +39,8 @@ export default function NewLessonForm() {
     await mutateAsync(lesson, {
       async onSuccess(data) {
         toast.success(data.data.message);
-        history.go(-2);
+        queryClient.invalidateQueries(['lessons/subject/id']);
+        history.go(-1);
       },
       onError() {
         toast.error('error occurred please try again');
@@ -60,13 +62,13 @@ export default function NewLessonForm() {
         value={lesson.title}
         required
         handleChange={handleChange}
-        name="lesson-name">
+        name="title">
         Lesson title
       </InputMolecule>
       <TextAreaMolecule
         required
         value={lesson.content}
-        name="description"
+        name="content"
         handleChange={handleChange}>
         Lesson description
       </TextAreaMolecule>
