@@ -24,7 +24,11 @@ function Levels() {
   const { data: userInfo } = authenticatorStore.authUser();
   const [levels, setLevels] = useState<FilteredLevels[]>();
 
-  const { data, isSuccess, isLoading } = levelStore.getLevels(); // fetch levels
+  const { data, isLoading } = levelStore.getLevelsByAcademy(
+    userInfo?.data.data.academy.id.toString() || '',
+  ); // fetch levels
+
+  console.log(userInfo?.data.data.academy.id.toString());
 
   useEffect(() => {
     // filter data to display
@@ -67,23 +71,21 @@ function Levels() {
 
       <section>
         {isLoading && <Loader />}
-        {isSuccess ? (
-          levels?.length === 0
-        ) : (
-          <NoDataAvailable
-            buttonLabel="Add new level"
-            title={'No levels available'}
-            handleClick={() => history.push(`${url}/add`)}
-            description="No levels have been added yet."
-          />
-        )}
-        {levels && (
+
+        {levels && levels?.length > 0 ? (
           <Table<FilteredLevels>
             statusColumn="status"
             data={levels}
             uniqueCol={'id'}
             hide={['id']}
             actions={actions}
+          />
+        ) : (
+          <NoDataAvailable
+            buttonLabel="Add new level"
+            title={'No levels available'}
+            handleClick={() => history.push(`${url}/add`)}
+            description="No levels have been added yet."
           />
         )}
       </section>
