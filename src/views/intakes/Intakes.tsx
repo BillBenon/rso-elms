@@ -105,9 +105,7 @@ export default function Intakes() {
       <TableHeader
         title={`${registrationControlId ? regControlName() : 'Intakes'}`}
         totalItems={
-          registrationControlId
-            ? `${intakes.length} intakes`
-            : `${intakes.length} intakes`
+          registrationControlId ? `${intakes.length} intakes` : `${intakes.length}`
         }
         handleSearch={handleSearch}>
         {registrationControlId && (
@@ -170,7 +168,7 @@ export default function Intakes() {
 
         {isLoading && <Loader />}
 
-        {!isLoading && intakes.length <= 0 && (
+        {!isLoading && intakes && intakes.length <= 0 && (
           <NoDataAvailable
             buttonLabel="Add new Intake"
             title={
@@ -197,25 +195,32 @@ export default function Intakes() {
           path={`${url}/:id/add-intake`}
           render={() => {
             return (
-              <PopupMolecule title="New intake" open onClose={handleClose}>
+              <PopupMolecule
+                closeOnClickOutSide={false}
+                title="New intake"
+                open
+                onClose={handleClose}>
                 <NewIntake handleSuccess={intakeCreated} />
               </PopupMolecule>
             );
           }}
         />
-
-        {/* edit intake to reg control */}
         <Route
           exact
           path={`${url}/:id/edit`}
           render={() => {
             return (
-              <PopupMolecule title="Update intake" open onClose={handleClose}>
+              <PopupMolecule
+                closeOnClickOutSide={false}
+                title="Update intake"
+                open
+                onClose={handleClose}>
                 <UpdateIntake handleSuccess={handleClose} />
               </PopupMolecule>
             );
           }}
         />
+        ;
       </Switch>
     </div>
   );
