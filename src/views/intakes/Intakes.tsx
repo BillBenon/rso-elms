@@ -21,6 +21,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
 import NewIntake from '../../components/Organisms/intake/NewIntake';
 import UpdateIntake from '../../components/Organisms/intake/UpdateIntake';
+import { authenticatorStore } from '../../store';
 import { intakeStore } from '../../store/intake.store';
 import registrationControlStore from '../../store/registrationControl.store';
 import { CommonCardDataType, Link as LinkType, ValueType } from '../../types';
@@ -35,6 +36,7 @@ const list: LinkType[] = [
 
 export default function Intakes() {
   const [intakes, setIntakes] = useState<CommonCardDataType[]>([]);
+  const { data: userInfo } = authenticatorStore.authUser();
 
   const history = useHistory();
   const { url } = useRouteMatch();
@@ -56,7 +58,10 @@ export default function Intakes() {
     data,
     isLoading,
     refetch: refetchIntakes,
-  } = intakeStore.getAll(registrationControlId!);
+  } = intakeStore.getIntakesByAcademy(
+    registrationControlId || userInfo?.data.data.academy.id.toString()!,
+    !!registrationControlId,
+  );
 
   useEffect(() => {
     if (isSuccess && data?.data) {
