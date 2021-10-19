@@ -22,9 +22,23 @@ class Levelstore {
     return useQuery('levels', levelService.getLevels);
   }
 
+  // getLevelsByAcademy(id: string) {
+  //   return useQuery<AxiosResponse<Response<ILevel>>, Response>(
+  //     'levels/academy',
+  //     levelService.getLevelsByAcademy(id),
+  //   );
+  // }
+
   getLevelById(id: string) {
     return useQuery<AxiosResponse<Response<ILevel>>, Response>(['levels/id', id], () =>
       levelService.getLevelById(id),
+    );
+  }
+
+  getLevelsByAcademy(id: string) {
+    return useQuery<AxiosResponse<Response<ILevel[]>>, Response>(
+      ['levels/academy', id],
+      () => levelService.getLevelsByAcademy(id),
     );
   }
 

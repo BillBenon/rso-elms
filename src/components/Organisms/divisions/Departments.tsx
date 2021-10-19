@@ -38,6 +38,12 @@ export default function Departments({ fetchType }: IDepartment) {
     ? divisionStore.getDepartmentsInFaculty(facultyId)
     : divisionStore.getDivisionByType(fetchType.toUpperCase());
 
+  let facultyData: any;
+
+  if (facultyId) {
+    ({ data: facultyData } = divisionStore.getDivision(facultyId));
+  }
+
   useEffect(() => {
     // extract department data to display
     let formattedDeparts: any = [];
@@ -106,6 +112,19 @@ export default function Departments({ fetchType }: IDepartment) {
         path="*"
         render={() => (
           <main>
+            {departments && departments?.length > 0 && (
+              <section>
+                <TableHeader
+                  title={`${
+                    facultyData?.data.data.name
+                      ? `${facultyData?.data.data.name} / Department`
+                      : 'department'
+                  }`}
+                  totalItems={`${departments?.length} departments` || 0}
+                  handleSearch={() => {}}></TableHeader>
+              </section>
+            )}
+
             <section>
               {departments && departments?.length === 0 && isLoading ? (
                 <Loader />
