@@ -220,12 +220,21 @@ export default function AcademicProgram() {
                         </div>
                       </Tooltip>
                     ))
+                  ) : intakeId ? (
+                    <NoDataAvailable
+                      buttonLabel="Add new program to intake"
+                      title={'No program available in this intake'}
+                      handleClick={() =>
+                        history.push(`${url}/add-program-to-intake?intakeId=${intakeId}`)
+                      }
+                      description="There are no programs added yet, click on the above button to add some!"
+                    />
                   ) : (
                     <NoDataAvailable
                       buttonLabel="Add new program"
                       title={'No program available'}
                       handleClick={() => history.push(`/dashboard/programs/add`)}
-                      description="And the web just isnt the same without you. Lets get you back online!"
+                      description="There are no programs added yet, click on the above button to add some!"
                     />
                   )}
                 </section>
