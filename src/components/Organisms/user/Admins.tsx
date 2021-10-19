@@ -13,14 +13,19 @@ export default function Admins({ admins }: { admins: UserTypes[] }) {
   function handleSearch(_e: ValueType) {}
   const adminActions = [
     { name: 'Add Role', handleAction: () => {} },
-    { name: 'Edit admin', handleAction: () => {} },
+    {
+      name: 'Edit admin',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`/dashboard/users/${id}/edit`); // go to edit user
+      },
+    },
     { name: 'View', handleAction: () => {} },
   ];
   return (
     <>
       <TableHeader
         title="Admins"
-        totalItems={admins && admins.length > 0 ? admins.length : 0}
+        totalItems={`${admins && admins.length > 0 ? admins.length : 0} admins`}
         handleSearch={handleSearch}>
         <div className="flex gap-3">
           <div className="flex gap-3">
@@ -48,6 +53,7 @@ export default function Admins({ admins }: { admins: UserTypes[] }) {
               data={admins}
               actions={adminActions}
               hide={['id', 'user_type']}
+              uniqueCol="id"
             />
           )}
         </div>

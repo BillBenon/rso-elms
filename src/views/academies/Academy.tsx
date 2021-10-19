@@ -6,7 +6,9 @@ import { Link, Switch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
+import Loader from '../../components/Atoms/custom/Loader';
 import ILabel from '../../components/Atoms/Text/ILabel';
+import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import academyStore from '../../store/academy.store';
@@ -27,7 +29,7 @@ export default function Academy() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
 
-  const { data } = academyStore.fetchAcademies();
+  const { data, isLoading, isSuccess } = academyStore.fetchAcademies();
   const academyInfo = data?.data.data;
   let academies: AcademyTypes[] = [];
   const users = usersStore.fetchUsers();
@@ -83,28 +85,43 @@ export default function Academy() {
                   Academy
                 </ILabel>
               </div>
-              <div className="py-4">
-                <TableHeader
-                  title="Academy"
-                  totalItems={academies.length}
-                  handleSearch={handleSearch}>
-                  <Link to={`${url}/add`}>
-                    <Button>New academy</Button>
-                  </Link>
-                </TableHeader>
-              </div>
+              {isLoading && <Loader />}
+              {isSuccess ? (
+                academies?.length === 0
+              ) : (
+                <NoDataAvailable
+                  buttonLabel="Add new academy"
+                  title={'No academies available'}
+                  handleClick={() => history.push(`${url}/add`)}
+                  description="the academies are not yet created, click above to create new ones"
+                />
+              )}
+              {academies && (
+                <>
+                  <div className="py-4">
+                    <TableHeader
+                      title="Academy"
+                      totalItems={`${academies.length} academies`}
+                      handleSearch={handleSearch}>
+                      <Link to={`${url}/add`}>
+                        <Button>New academy</Button>
+                      </Link>
+                    </TableHeader>
+                  </div>
 
-              <div className="mt-14">
-                {academyInfo && (
-                  <Table<AcademyTypes>
-                    statusColumn="status"
-                    data={academies}
-                    actions={academyActions}
-                    hide={['id']}
-                    uniqueCol="id"
-                  />
-                )}
-              </div>
+                  <div className="mt-14">
+                    {academyInfo && (
+                      <Table<AcademyTypes>
+                        statusColumn="status"
+                        data={academies}
+                        actions={academyActions}
+                        hide={['id']}
+                        uniqueCol="id"
+                      />
+                    )}
+                  </div>
+                </>
+              )}
             </>
           )}
         />

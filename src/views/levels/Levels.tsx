@@ -3,7 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
+import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
@@ -41,8 +43,6 @@ function Levels() {
     { to: 'levels', title: 'Level' },
   ];
 
-  console.log('we go: ', userInfo?.data);
-
   //actions to be displayed in table
   const actions = [
     {
@@ -66,8 +66,17 @@ function Levels() {
       </section>
 
       <section>
-        {isLoading && 'levels loading...'}
-        {isSuccess ? levels?.length === 0 : 'No levels found, try to add one'}
+        {isLoading && <Loader />}
+        {isSuccess ? (
+          levels?.length === 0
+        ) : (
+          <NoDataAvailable
+            buttonLabel="Add new level"
+            title={'No levels available'}
+            handleClick={() => history.push(`${url}/add`)}
+            description="No levels have been added yet."
+          />
+        )}
         {levels && (
           <Table<FilteredLevels>
             statusColumn="status"

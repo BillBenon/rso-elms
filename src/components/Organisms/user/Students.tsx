@@ -16,14 +16,19 @@ export default function Students({ students }: { students: UserTypes[] }) {
   function handleSearch(_e: ValueType) {}
   const studentActions = [
     { name: 'Add Role', handleAction: () => {} },
-    { name: 'Edit student', handleAction: () => {} },
+    {
+      name: 'Edit student',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`/dashboard/users/${id}/edit`); // go to edit user
+      },
+    },
     { name: 'View', handleAction: () => {} },
   ];
   return (
     <>
       <TableHeader
         title="Students"
-        totalItems={students && students.length > 0 ? students.length : 0}
+        totalItems={`${students && students.length > 0 ? students.length : 0} students`}
         handleSearch={handleSearch}>
         <div className="flex gap-3">
           <Link to={`${url}/import`}>
@@ -49,6 +54,7 @@ export default function Students({ students }: { students: UserTypes[] }) {
               data={students}
               actions={studentActions}
               hide={['id', 'user_type']}
+              uniqueCol="id"
             />
           )}
         </div>
