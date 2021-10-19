@@ -252,7 +252,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
             <DropdownMolecule
               options={getDropDownOptions({
                 inputs: intakes.data?.data.data || [],
-                labelName: 'code',
+                labelName: ['code'],
               })}
               name="intake"
               placeholder={'intake to be enrolled in'}
@@ -262,7 +262,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
             <DropdownMolecule
               options={getDropDownOptions({
                 inputs: programs.data?.data.data || [],
-                labelName: 'name',
+                labelName: ['name'],
                 //@ts-ignore
                 getOptionLabel: (prog: IntakeProgramInfo) => prog.program.code,
               })}
@@ -274,7 +274,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
             <DropdownMolecule
               options={getDropDownOptions({
                 inputs: levels.data?.data.data || [],
-                labelName: 'name', //@ts-ignore
+                labelName: ['name'], //@ts-ignore
                 getOptionLabel: (level) => level.level && level.level.name,
               })}
               name="academic_program_level_id"

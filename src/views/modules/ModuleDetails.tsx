@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
-import { useLocation } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
@@ -11,12 +10,12 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
-import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
 import { moduleStore } from '../../store/modules.store';
 import { subjectStore } from '../../store/subject.store';
 import { CommonCardDataType, Link, ParamType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
+import SubjectDetails from '../subjects/SubjectDetails';
 
 export default function ModuleDetails() {
   const [subjects, setSubjects] = useState<CommonCardDataType[]>([]);
@@ -30,11 +29,11 @@ export default function ModuleDetails() {
 
   const tabs = [
     {
-      label: 'Subject',
+      label: 'Subjects',
       href: `${url}`,
     },
     {
-      label: 'Module Preriquisite',
+      label: 'Preriquisites',
       href: `${url}/prereqs`,
     },
     {
@@ -56,6 +55,7 @@ export default function ModuleDetails() {
       let loadedSubjects: CommonCardDataType[] = [];
       subjectData.data.data.data.forEach((subject) => {
         let cardData: CommonCardDataType = {
+          id: subject.id,
           code: subject.title,
           description: subject.content,
           title: subject.module.name || `Subject ${subject.title}`,
@@ -89,80 +89,79 @@ export default function ModuleDetails() {
 
   return (
     <>
-      <main className="px-4">
-        <section>
-          <BreadCrumb list={list} />
-        </section>
-        <div className="mt-11 pb-6">
-          <div className="flex flex-wrap justify-between items-center">
-            <div className="flex gap-2 items-center">
-              <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
-                {moduleData.data?.data.data.name} module
-              </Heading>
-            </div>
-            <div className="flex flex-wrap justify-start items-center">
-              <SearchMolecule handleChange={handleSearch} />
-              <button className="border p-0 rounded-md mx-2">
-                <Icon name="filter" />
-              </button>
-            </div>
-
-            <div className="flex gap-3">
-              <Button onClick={() => history.push(`${url}/add-subject`)}>
-                Add new Subject
-              </Button>
-            </div>
-          </div>
-        </div>
-        <TabNavigation tabs={tabs}>
-          <>
-            {subjects.length < 1 && subjectData.isSuccess ? (
-              <NoDataAvailable
-                title={'No subjects registered'}
-                description={
-                  'The history object is mutable. Therefore it is recommended to access the location from the render props of <Route>, not from'
-                }
-                handleClick={() => history.push(`${url}/add-subject`)}
-              />
-            ) : (
-              <section className="flex flex-wrap justify-start gap-4 mt-2">
-                {subjects.map((subject, i) => (
-                  <div key={i} className="p-1 mt-3">
-                    <CommonCardMolecule data={subject} />
-                  </div>
-                ))}
+      <Switch>
+        <Route path={`${path}/subjects/:subjectId`} component={SubjectDetails} />
+        <Route
+          path={`${path}`}
+          render={() => (
+            <main className="px-4">
+              <section>
+                <BreadCrumb list={list} />
               </section>
-            )}
-          </>
-        </TabNavigation>
-        <Switch>
-          {/* add subject popup */}
-          <Route
-            exact
-            path={`${path}/add-subject`}
-            render={() => {
-              return (
-                <PopupMolecule title="New Subject" open onClose={handleClose}>
-                  <NewSubjectForm />
-                </PopupMolecule>
-              );
-            }}
-          />
+              <div className="mt-11 pb-6">
+                <div className="flex flex-wrap justify-between items-center">
+                  <div className="flex gap-2 items-center">
+                    <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
+                      {moduleData.data?.data.data.name} module
+                    </Heading>
+                  </div>
+                  <div className="flex flex-wrap justify-start items-center">
+                    <SearchMolecule handleChange={handleSearch} />
+                    <button className="border p-0 rounded-md mx-2">
+                      <Icon name="filter" />
+                    </button>
+                  </div>
 
-          {/* add lesson popup */}
-          <Route
-            exact
-            path={`${path}/subjects/:subjectId/add-lesson`}
-            render={() => {
-              return (
-                <PopupMolecule title="Add lesson" open onClose={handleClose}>
-                  <NewLessonForm />
-                </PopupMolecule>
-              );
-            }}
-          />
-        </Switch>
-      </main>
+                  <div className="flex gap-3">
+                    <Button onClick={() => history.push(`${url}/add-subject`)}>
+                      Add new Subject
+                    </Button>
+                  </div>
+                </div>
+              </div>
+              <TabNavigation tabs={tabs}>
+                <>
+                  {subjects.length < 1 && subjectData.isSuccess ? (
+                    <NoDataAvailable
+                      title={'No subjects registered'}
+                      description={
+                        'The history object is mutable. Therefore it is recommended to access the location from the render props of <Route>, not from'
+                      }
+                      handleClick={() => history.push(`${url}/add-subject`)}
+                    />
+                  ) : (
+                    <section className="flex flex-wrap justify-start gap-4 mt-2">
+                      {subjects.map((subject, i) => (
+                        <div key={i} className="p-1 mt-3">
+                          <CommonCardMolecule
+                            to={{
+                              title: 'Subject details',
+                              to: `${url}/subjects/${subject.id}`,
+                            }}
+                            data={subject}
+                          />
+                        </div>
+                      ))}
+                    </section>
+                  )}
+                </>
+              </TabNavigation>
+              {/* add subject popup */}
+              <Route
+                exact
+                path={`${path}/add-subject`}
+                render={() => {
+                  return (
+                    <PopupMolecule title="New Subject" open onClose={handleClose}>
+                      <NewSubjectForm />
+                    </PopupMolecule>
+                  );
+                }}
+              />
+            </main>
+          )}
+        />
+      </Switch>
     </>
   );
 }
