@@ -40,6 +40,17 @@ class UserStore {
       },
     });
   }
+  updateUuser() {
+    return useMutation(userService.updateProfile, {
+      onSuccess(newData) {
+        queryClient.setQueryData(['users'], (old) => {
+          const previousData = old as AxiosResponse<Response<UserInfo[]>>;
+          previousData.data.data.push(newData.data.data);
+          return previousData;
+        });
+      },
+    });
+  }
 }
 
 export default new UserStore();

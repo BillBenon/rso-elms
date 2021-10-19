@@ -69,7 +69,7 @@ function CompleteProfile(props: any) {
   const [completeStep, setCompleteStep] = useState(0);
   const history = useHistory();
 
-  const { mutateAsync } = usersStore.modifyUser();
+  const { mutateAsync } = usersStore.updateUuser();
 
   async function saveInfo(isComplete: boolean) {
     let userFromLocalStorage: UpdateUserInfo = JSON.parse(
