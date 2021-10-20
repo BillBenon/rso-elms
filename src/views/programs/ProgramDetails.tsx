@@ -23,6 +23,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
+import { queryClient } from '../../plugins/react-query';
 import { moduleStore } from '../../store/modules.store';
 import programStore from '../../store/program.store';
 import { CommonCardDataType, Link as Links, ParamType } from '../../types';
@@ -97,7 +98,7 @@ export default function ProgramDetailsMolecule() {
   const list: Links[] = [
     { to: 'home', title: 'home' },
     { to: 'subjects', title: 'Faculty' },
-    { to: 'subjects', title: 'Programs' },
+    { to: 'programs', title: 'Programs' },
     { to: 'modules', title: 'Modules' },
   ];
 
@@ -105,7 +106,13 @@ export default function ProgramDetailsMolecule() {
   const handleClose = () => {
     history.goBack();
   };
-  console.log(programLevels);
+
+  // re fetch data whenever user come back on this page
+  useEffect(() => {
+    if (location.pathname === path || location.pathname === `${path}/`) {
+      queryClient.invalidateQueries(['levels/program_id']);
+    }
+  }, [location]);
 
   return (
     <>
@@ -198,8 +205,12 @@ export default function ProgramDetailsMolecule() {
                           <Heading color="txt-secondary" fontSize="base">
                             Modules
                           </Heading>
-                          <Heading color="primary" fontSize="base" fontWeight="bold">
-                            Total Modules: 10
+                          <Heading
+                            color="primary"
+                            fontSize="base"
+                            fontWeight="bold"
+                            className="pt-4">
+                            Total Modules: {programModules.length}
                           </Heading>
                         </div>
                       </div>
