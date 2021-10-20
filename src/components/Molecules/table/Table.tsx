@@ -62,6 +62,10 @@ export function Table<T>({
     setCurrentRows(data.slice(indexOfFirstRow, indexOfLastRow));
   }, [currentPage, data]);
 
+  useEffect(() => {
+    selected.forEach((sel) => changeSelect(sel, true));
+  }, [data]);
+
   // Change page
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
@@ -69,24 +73,32 @@ export function Table<T>({
   function _handleSelectAll() {
     // when set is full we uncheck
     if (selected.size === currentRows.length) {
-      setSelected(new Set('')); // set set to empty, since we unselected each and everything
-
-      _.map(currentRows, 'id').forEach((val) => {
-        changeSelect(val, false); // unmark all current rows in table as selected
-      });
-
-      if (handleSelect) handleSelect([]);
+      unSelectAll();
     } else {
-      const newSelRow = new Set('');
-
-      // else when set is not full we add  all ids
-      _.map(currentRows, 'id').forEach((val) => {
-        changeSelect(val, true); // mark current rows in table as selected
-        newSelRow.add(val + '');
-      });
-      setSelected(new Set([...newSelRow])); // add new selected list in selected state
-      if (handleSelect) handleSelect(Array.from(newSelRow));
+      selectAll();
     }
+  }
+
+  function selectAll() {
+    const newSelRow = new Set('');
+
+    // else when set is not full we add  all ids
+    _.map(currentRows, 'id').forEach((val) => {
+      changeSelect(val, true); // mark current rows in table as selected
+      newSelRow.add(val + '');
+    });
+    setSelected(new Set([...newSelRow])); // add new selected list in selected state
+    if (handleSelect) handleSelect(Array.from(newSelRow));
+  }
+
+  function unSelectAll() {
+    setSelected(new Set('')); // set set to empty, since we unselected each and everything
+
+    _.map(currentRows, 'id').forEach((val) => {
+      changeSelect(val, false); // unmark all current rows in table as selected
+    });
+
+    if (handleSelect) handleSelect([]);
   }
 
   //handle single select
