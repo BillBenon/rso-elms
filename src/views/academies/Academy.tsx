@@ -5,16 +5,17 @@ import { Route, useHistory, useRouteMatch } from 'react-router';
 import { Link, Switch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
-import Icon from '../../components/Atoms/custom/Icon';
 import Loader from '../../components/Atoms/custom/Loader';
-import ILabel from '../../components/Atoms/Text/ILabel';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import NewAcademy from '../../components/Organisms/forms/academy/NewAcademy';
+import { authenticatorStore } from '../../store';
 import academyStore from '../../store/academy.store';
 import usersStore from '../../store/users.store';
+import { Link as LinkList } from '../../types';
 import { GenericStatus, ValueType } from '../../types';
-import AddAcademy from './Addcademy';
 import UpdateAcademy from './UpdateAcademy';
 
 type AcademyTypes = {
@@ -29,7 +30,14 @@ export default function Academy() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
 
-  const { data, isLoading, isSuccess } = academyStore.fetchAcademies();
+  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { data, isLoading, isSuccess } = academyStore.getAcademiesByInstitution(
+    authUser?.institution_id || '',
+  );
+  const list: LinkList[] = [
+    { to: '/', title: 'Institution Admin' },
+    { to: 'academies', title: 'Academies' },
+  ];
   const academyInfo = data?.data.data;
   let academies: AcademyTypes[] = [];
   const users = usersStore.fetchUsers();
@@ -71,32 +79,11 @@ export default function Academy() {
           path={`${path}`}
           render={() => (
             <>
-              <div className="flex flex-wrap justify-start items-center">
-                <ILabel size="sm" color="gray" weight="medium">
-                  Institution Admin
-                </ILabel>
-                <Icon name="chevron-right" />
-
-                <ILabel size="sm" color="gray" weight="medium">
-                  Academies
-                </ILabel>
-                <Icon name="chevron-right" fill="gray" />
-                <ILabel size="sm" color="primary" weight="medium">
-                  Academy
-                </ILabel>
-              </div>
-              {isLoading && <Loader />}
-              {isSuccess ? (
-                academies?.length === 0
-              ) : (
-                <NoDataAvailable
-                  buttonLabel="Add new academy"
-                  title={'No academies available'}
-                  handleClick={() => history.push(`${url}/add`)}
-                  description="the academies are not yet created, click above to create new ones"
-                />
-              )}
-              {academies && (
+              <section>
+                <BreadCrumb list={list}></BreadCrumb>
+              </section>
+              {isLoading && academies.length === 0 && <Loader />}
+              {academies.length > 0 && isSuccess ? (
                 <>
                   <div className="py-4">
                     <TableHeader
@@ -121,12 +108,20 @@ export default function Academy() {
                     )}
                   </div>
                 </>
-              )}
+              ) : isSuccess && academies.length === 0 ? (
+                <NoDataAvailable
+                  icon="academy"
+                  buttonLabel="Add new academy"
+                  title={'No academies available'}
+                  handleClick={() => history.push(`${url}/add`)}
+                  description="the academies are not yet created, click above to create new ones"
+                />
+              ) : null}
             </>
           )}
         />
         {/* create academy */}
-        <Route exact path={`${path}/add`} render={() => <AddAcademy />} />
+        <Route exact path={`${path}/add`} render={() => <NewAcademy />} />
 
         {/* modify academy */}
         <Route exact path={`${path}/:id/edit`} render={() => <UpdateAcademy />} />

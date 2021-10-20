@@ -16,6 +16,7 @@ import Students from '../../components/Organisms/user/Students';
 import usersStore from '../../store/users.store';
 import { GenericStatus } from '../../types';
 import { UserType } from '../../types/services/user.types';
+import UserDetails from './UserDetails';
 
 export type UserTypes = {
   id: string;
@@ -110,10 +111,12 @@ export default function Users() {
           {userType}
         </ILabel>
       </div>
-      {isLoading && <Loader />}
+      {isLoading && users.length === 0 && <Loader />}
       <Switch>
         <Route exact path={`${path}/add`} render={() => <NewUser />} />
         <Route exact path={`${path}/:id/edit`} render={() => <UpdateUser />} />
+        <Route exact path={`${path}/:id/profile`} component={UserDetails} />
+
         <Route
           exact
           path={`${path}/import`}
@@ -126,40 +129,42 @@ export default function Users() {
             </PopupMolecule>
           )}
         />
-        <Route
-          path={`${path}`}
-          render={() => {
-            return (
-              <>
-                <TableHeader
-                  totalItems={`${users.length} users`}
-                  title={'users'}
-                  showSearch={false}
-                />
+        {isSuccess && (
+          <Route
+            path={`${path}`}
+            render={() => {
+              return (
+                <>
+                  <TableHeader
+                    totalItems={`${users.length} users`}
+                    title={'users'}
+                    showSearch={false}
+                  />
 
-                <TabNavigation
-                  tabs={tabs}
-                  onTabChange={(event) => setUserType(event.activeTabLabel)}>
-                  <Route
-                    exact
-                    path={`${path}`}
-                    render={() => <Students students={students} />}
-                  />
-                  <Route
-                    exact
-                    path={`${path}/instructors`}
-                    render={() => <Instructors instructors={instructors} />}
-                  />
-                  <Route
-                    exact
-                    path={`${path}/admins`}
-                    render={() => <Admins admins={admins} />}
-                  />
-                </TabNavigation>
-              </>
-            );
-          }}
-        />
+                  <TabNavigation
+                    tabs={tabs}
+                    onTabChange={(event) => setUserType(event.activeTabLabel)}>
+                    <Route
+                      exact
+                      path={`${path}`}
+                      render={() => <Students students={students} />}
+                    />
+                    <Route
+                      exact
+                      path={`${path}/instructors`}
+                      render={() => <Instructors instructors={instructors} />}
+                    />
+                    <Route
+                      exact
+                      path={`${path}/admins`}
+                      render={() => <Admins admins={admins} />}
+                    />
+                  </TabNavigation>
+                </>
+              );
+            }}
+          />
+        )}
       </Switch>
     </div>
   );

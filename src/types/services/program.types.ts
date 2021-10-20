@@ -3,6 +3,7 @@ import { Table } from '..';
 import { GenericStatus } from './common.types';
 import { DivisionInfo } from './division.types';
 import { IntakeInfo } from './intake.types';
+import { ILevel } from './levels.types';
 import { UserInfo } from './user.types';
 
 export interface ProgramInfo extends CreateProgramInfo, Table {
@@ -22,10 +23,14 @@ export interface CreateProgramInfo {
 
 export interface CreateAcademicProgramLevel {
   endg_flow: number;
-  id: string;
   level_id?: number;
   program_id: string;
   starting_flow: number;
+}
+
+export interface AcademicProgramLevel extends CreateAcademicProgramLevel, Table {
+  level: ILevel;
+  program: ProgramInfo;
 }
 
 export enum ProgramStatus {

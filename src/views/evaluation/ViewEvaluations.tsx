@@ -121,6 +121,7 @@ export default function ViewEvaluations() {
                   <section>
                     {evaluations.length <= 0 ? (
                       <NoDataAvailable
+                        icon="evaluation"
                         buttonLabel="Add new evaluation"
                         title={'No evaluations available'}
                         handleClick={() => history.push(`${url}/new`)}

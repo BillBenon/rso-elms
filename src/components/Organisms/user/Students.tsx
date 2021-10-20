@@ -22,14 +22,20 @@ export default function Students({ students }: { students: UserTypes[] }) {
         history.push(`/dashboard/users/${id}/edit`); // go to edit user
       },
     },
-    { name: 'View', handleAction: () => {} },
+    {
+      name: 'View Student',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`${url}/${id}/profile`); // go to view user profile
+      },
+    },
   ];
   return (
     <>
       <TableHeader
         title="Students"
         totalItems={`${students && students.length > 0 ? students.length : 0} students`}
-        handleSearch={handleSearch}>
+        handleSearch={handleSearch}
+        showSearch={students && students.length > 0}>
         <div className="flex gap-3">
           <Link to={`${url}/import`}>
             <Button styleType="outline">Import users</Button>
@@ -43,6 +49,7 @@ export default function Students({ students }: { students: UserTypes[] }) {
         <div className="pt-8">
           {students.length <= 0 ? (
             <NoDataAvailable
+              icon="user"
               buttonLabel="Add new student"
               title={'No students available'}
               handleClick={() => history.push(`/dashboard/users/add`)}
