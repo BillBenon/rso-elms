@@ -109,7 +109,7 @@ export default function Roles() {
         {roles && (
           <Table<FilteredRoles>
             selectorActions={manyActions}
-            hide={['id', 'name']}
+            hide={['id']}
             handleSelect={handleSelect}
             statusColumn="status"
             data={roles}

@@ -41,7 +41,6 @@ const SignInForm = () => {
     await mutateAsync(details, {
       onSuccess(data) {
         setLoading(false);
-        toast.success('Authenticated', { duration: 2000, id: toastId });
         cookie.setCookie('jwt_info', JSON.stringify(data?.data.data));
         toast.success(data.data.message, { duration: 1200 });
         redirectTo('/redirecting');
