@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
+import {
+  Link,
+  Route,
+  Switch,
+  useHistory,
+  useParams,
+  useRouteMatch,
+} from 'react-router-dom';
 
 import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
@@ -18,7 +25,7 @@ import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPr
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
 import { moduleStore } from '../../store/modules.store';
 import programStore from '../../store/program.store';
-import { CommonCardDataType, Link, ParamType } from '../../types';
+import { CommonCardDataType, Link as Links, ParamType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from './AcademicPrograms';
 import AddLevelToProgram from './AddLevelToProgram';
@@ -51,6 +58,9 @@ export default function ProgramDetailsMolecule() {
   }, [getAllModuleStore.data?.data.data]);
 
   const program = programStore.getProgramById(id).data?.data.data;
+  const programLevels = programStore.getLevelsByAcademicProgram(
+    program?.id.toString() || '',
+  ).data?.data.data;
 
   const getProgramData = () => {
     let programData: IProgramData | undefined;
@@ -84,7 +94,7 @@ export default function ProgramDetailsMolecule() {
     },
   ];
 
-  const list: Link[] = [
+  const list: Links[] = [
     { to: 'home', title: 'home' },
     { to: 'subjects', title: 'Faculty' },
     { to: 'subjects', title: 'Programs' },
@@ -95,6 +105,7 @@ export default function ProgramDetailsMolecule() {
   const handleClose = () => {
     history.goBack();
   };
+  console.log(programLevels);
 
   return (
     <>
@@ -193,18 +204,37 @@ export default function ProgramDetailsMolecule() {
                         </div>
                       </div>
                       {/* levels */}
-                      <div className="flex flex-col gap-7 bg-main w-60 p-6">
-                        <Heading color="txt-secondary" fontSize="base">
-                          Levels
-                        </Heading>
-                        <div className="flex flex-col gap-8">
-                          <Heading color="primary" fontSize="base" fontWeight="semibold">
-                            Level 1
+                      <div className=" bg-main">
+                        <div className="flex flex-col gap-7 w-60 p-6">
+                          <Heading color="txt-secondary" fontSize="base">
+                            Levels
                           </Heading>
-                          <Heading color="primary" fontSize="base" fontWeight="semibold">
-                            Level 2
-                          </Heading>
+                          <div className="flex flex-col gap-8">
+                            {programLevels && programLevels?.length > 0 ? (
+                              programLevels.map((programLevel) => (
+                                <Heading
+                                  key={programLevel.id}
+                                  color="primary"
+                                  fontSize="base"
+                                  fontWeight="semibold">
+                                  {programLevel.level.name}
+                                </Heading>
+                              ))
+                            ) : (
+                              <Heading
+                                color="primary"
+                                fontSize="base"
+                                fontWeight="semibold">
+                                No levels available
+                              </Heading>
+                            )}
+                          </div>
                         </div>
+                        {programLevels && programLevels?.length < 0 && (
+                          <div className="text-primary-500 py-2 text-right text-sm mr-3">
+                            <Link to={`${url}/level/add`}>+ Add levels</Link>
+                          </div>
+                        )}
                       </div>
                     </div>
                     {/* intakes */}
