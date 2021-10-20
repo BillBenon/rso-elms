@@ -19,7 +19,7 @@ export default function ImportUsers<K>({ onSubmit, userType = 'students' }: IUse
   const programs: AcademyInfo[] | undefined =
     academyStore.fetchAcademies().data?.data.data;
 
-  const [details, setDetails] = useState({
+  const [, setDetails] = useState({
     academy: '',
     program: '',
   });
@@ -58,7 +58,7 @@ export default function ImportUsers<K>({ onSubmit, userType = 'students' }: IUse
       </form>
       <div className="pt-2 w-80">
         <div className="flex gap-2 items-center">
-          <Icon name="alert" />
+          <Icon name="alert" stroke="primary" />
           <Heading fontSize="sm" color="txt-secondary">
             Amet minim mollit non deserunt ullamco est sit aliqua dolor do amet sint.
             Velit officia
@@ -67,7 +67,7 @@ export default function ImportUsers<K>({ onSubmit, userType = 'students' }: IUse
         <div className="pt-2 px-6">
           <Button styleType="text" color="primary">
             <span className=" flex items-center">
-              <Icon name="download" />
+              <Icon name="download" fill="primary" />
               Download template
             </span>
           </Button>
