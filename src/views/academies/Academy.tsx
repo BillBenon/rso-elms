@@ -11,11 +11,11 @@ import ILabel from '../../components/Atoms/Text/ILabel';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import NewAcademy from '../../components/Organisms/forms/academy/NewAcademy';
 import { authenticatorStore } from '../../store';
 import academyStore from '../../store/academy.store';
 import usersStore from '../../store/users.store';
 import { GenericStatus, ValueType } from '../../types';
-import AddAcademy from './Addcademy';
 import UpdateAcademy from './UpdateAcademy';
 
 type AcademyTypes = {
@@ -131,7 +131,7 @@ export default function Academy() {
           )}
         />
         {/* create academy */}
-        <Route exact path={`${path}/add`} render={() => <AddAcademy />} />
+        <Route exact path={`${path}/add`} render={() => <NewAcademy />} />
 
         {/* modify academy */}
         <Route exact path={`${path}/:id/edit`} render={() => <UpdateAcademy />} />
