@@ -108,18 +108,6 @@ export default function Faculties({ fetchType }: IFaculties) {
         )}
       </section>
       <section>
-        {/* {isSuccess ? (
-          faculties?.length === 0
-        ) : (
-          <NoDataAvailable
-            buttonLabel="Add new faculty"
-            title="No faculties available"
-            handleClick={() => {
-              history.push(`${url}/add`);
-            }}
-            description="Try adding some faculties as none have been added yet!"
-          />
-        )} */}
         {faculties && faculties?.length > 0 ? (
           <Table<FilteredData>
             handleSelect={() => {}}
@@ -131,6 +119,7 @@ export default function Faculties({ fetchType }: IFaculties) {
           />
         ) : (
           <NoDataAvailable
+            icon="faculty"
             buttonLabel="Add new faculty"
             title={'No department available'}
             handleClick={() => history.push(`/dashboard/divisions/new`)}

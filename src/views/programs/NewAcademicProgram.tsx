@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import _ from 'lodash';
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useLocation } from 'react-router-dom';

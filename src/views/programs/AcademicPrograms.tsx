@@ -222,6 +222,7 @@ export default function AcademicProgram() {
                     ))
                   ) : intakeId ? (
                     <NoDataAvailable
+                      icon="program"
                       buttonLabel="Add new program to intake"
                       title={'No program available in this intake'}
                       handleClick={() =>

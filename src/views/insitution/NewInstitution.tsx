@@ -78,7 +78,6 @@ export default function NewInstitution() {
           <div className="py-4">
             <InputMolecule
               name="name"
-              required
               value={values.name}
               placeholder="Rwanda National Police"
               handleChange={(e) => handleChange(e)}>
@@ -88,7 +87,6 @@ export default function NewInstitution() {
           <div className="py-4">
             <InputMolecule
               name="email"
-              required
               value={values.email}
               placeholder="rnp@gov.rw"
               handleChange={(e) => handleChange(e)}>
@@ -98,7 +96,6 @@ export default function NewInstitution() {
           <div className="py-4">
             <InputMolecule
               name="phone_number"
-              required
               value={values.phone_number}
               placeholder="Phone number"
               handleChange={(e) => handleChange(e)}>
@@ -107,17 +104,16 @@ export default function NewInstitution() {
           </div>
           <div className="py-4">
             <InputMolecule
-              required
               name="website_link"
+              required={false}
               value={values.website_link}
               placeholder="www.rnp.gov.rw"
               handleChange={(e) => handleChange(e)}>
-              Institution website(optinal)
+              Institution website(optional)
             </InputMolecule>
           </div>
           <div className="py-4">
             <TextAreaMolecule
-              required
               name="moto"
               value={values.moto}
               placeholder="Motto"
@@ -127,7 +123,6 @@ export default function NewInstitution() {
           </div>
           <div className="py-4">
             <TextAreaMolecule
-              required
               name="mission"
               value={values.mission}
               placeholder="Mission"

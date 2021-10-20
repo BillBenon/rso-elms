@@ -82,6 +82,7 @@ function Levels() {
           />
         ) : (
           <NoDataAvailable
+            icon="level"
             buttonLabel="Add new level"
             title={'No levels available'}
             handleClick={() => history.push(`${url}/add`)}
