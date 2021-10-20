@@ -11,6 +11,7 @@ import ILabel from '../../components/Atoms/Text/ILabel';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import { authenticatorStore } from '../../store';
 import academyStore from '../../store/academy.store';
 import usersStore from '../../store/users.store';
 import { GenericStatus, ValueType } from '../../types';
@@ -29,7 +30,11 @@ export default function Academy() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
 
-  const { data, isLoading, isSuccess } = academyStore.fetchAcademies();
+  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { data, isLoading, isSuccess } = academyStore.getAcademiesByInstitution(
+    authUser?.institution_id || '',
+  );
+
   const academyInfo = data?.data.data;
   let academies: AcademyTypes[] = [];
   const users = usersStore.fetchUsers();

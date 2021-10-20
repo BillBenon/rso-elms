@@ -13,6 +13,7 @@ import Admins from '../../components/Organisms/user/Admins';
 import ImportUsers from '../../components/Organisms/user/ImportUsers';
 import Instructors from '../../components/Organisms/user/Instructors';
 import Students from '../../components/Organisms/user/Students';
+import { authenticatorStore } from '../../store';
 import usersStore from '../../store/users.store';
 import { GenericStatus } from '../../types';
 import { UserType } from '../../types/services/user.types';
@@ -33,7 +34,11 @@ export default function Users() {
   const history = useHistory();
   const [userType, setUserType] = useState('Students');
 
-  const { data, isSuccess, isLoading } = usersStore.fetchUsers();
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
+  const { data, isSuccess, isLoading } = usersStore.getUsersByInstitution(
+    authUser?.institution_id || '',
+  );
 
   const userInfo = data?.data.data;
 

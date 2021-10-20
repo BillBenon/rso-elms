@@ -171,7 +171,7 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
                 handleChange={(e) => handleChange(e)}>
                 academy phone number
               </InputMolecule>
-              <InputMolecule
+              {/* <InputMolecule
                 name="fax_number"
                 value={details.fax_number}
                 handleChange={(e) => handleChange(e)}>
@@ -195,7 +195,7 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
                 value={details.moto}
                 handleChange={(e) => handleChange(e)}>
                 academy motto
-              </InputMolecule>
+              </InputMolecule> */}
             </div>
             {/* second column */}
             <div className="w-80">
