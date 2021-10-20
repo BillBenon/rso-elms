@@ -6,6 +6,7 @@ import Dashboard from './layout/Dashboard';
 import { authenticatorStore } from './store';
 import { UserInfo } from './types/services/user.types';
 import Academies from './views/academies/Academy';
+import CalendarView from './views/calendar/Calendar';
 import Divisions from './views/divisions/Divisions';
 import ViewEvaluations from './views/evaluation/ViewEvaluations';
 import NewInstitution from './views/insitution/NewInstitution';
@@ -35,6 +36,7 @@ const RouterProtection = () => {
       {/*start of institution admin */}
       <Route path="/dashboard/role/:id/view" component={ViewRole} />
       <Route path="/dashboard/academies" component={Academies} />
+      <Route path="/dashboard/calendar" component={CalendarView} />
       <Route path="/dashboard/roles" component={Roles} />
       <Route path="/dashboard/users" component={Users} />
       <Route path="/dashboard/privileges" component={PrivilegesView} />
@@ -48,6 +50,7 @@ const RouterProtection = () => {
       {/* start of academic admin pages */}
       <Route path="/dashboard/modules" component={Modules} />
       <Route path="/dashboard/subjects" component={Subjects} />
+      <Route path="/dashboard/calendar" component={CalendarView} />
       <Route path="/dashboard/evaluations" component={ViewEvaluations} />
       <Route path="/dashboard/registration-control" component={RegistrationControl} />
       <Route path="/dashboard/divisions" component={Divisions} />
