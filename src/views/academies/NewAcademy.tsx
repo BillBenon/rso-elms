@@ -1,6 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
@@ -11,13 +11,11 @@ import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import { authenticatorService } from '../../services';
 import academyStore from '../../store/academy.store';
 import locationStore from '../../store/location.store';
-import usersStore from '../../store/users.store';
 import { CommonFormProps, ValueType } from '../../types';
 import { AcademyCreateInfo } from '../../types/services/academy.types';
-import { UserType } from '../../types/services/user.types';
-import { getDropDownOptions, getInchargeDropdown } from '../../utils/getOption';
+import { getDropDownOptions } from '../../utils/getOption';
 
-export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
+export default function NewAcademy<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
 
   useEffect(() => {
@@ -85,10 +83,10 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     }));
   }
   const { mutateAsync } = academyStore.createAcademy();
-  const users = usersStore.fetchUsers();
-  const admins = users.data?.data.data.filter(
-    (user) => user.user_type === UserType.ADMIN,
-  );
+  // const users = usersStore.fetchUsers();
+  // const admins = users.data?.data.data.filter(
+  //   (user) => user.user_type === UserType.ADMIN,
+  // );
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
@@ -171,7 +169,7 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
                 handleChange={(e) => handleChange(e)}>
                 academy phone number
               </InputMolecule>
-              <InputMolecule
+              {/* <InputMolecule
                 name="fax_number"
                 value={details.fax_number}
                 handleChange={(e) => handleChange(e)}>
@@ -195,7 +193,7 @@ export default function AddAcademy<E>({ onSubmit }: CommonFormProps<E>) {
                 value={details.moto}
                 handleChange={(e) => handleChange(e)}>
                 academy motto
-              </InputMolecule>
+              </InputMolecule> */}
             </div>
             {/* second column */}
             <div className="w-80">

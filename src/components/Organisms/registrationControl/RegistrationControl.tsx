@@ -134,6 +134,7 @@ export default function RegistrationControl() {
 
         {!isLoading && RegistrationControls.length < 1 && (
           <NoDataAvailable
+            icon="reg-control"
             buttonLabel="Add new Registration Control"
             title={'No Registration Control Available'}
             handleClick={() => {

@@ -20,6 +20,11 @@ class UserStore {
   fetchUsers() {
     return useQuery('users', userService.fetchUsers);
   }
+  getUsersByInstitution(institutionId: string) {
+    return useQuery(['users/institution', institutionId], () =>
+      userService.getUsersByInstitution(institutionId),
+    );
+  }
   getUserById(id: string) {
     return useQuery(['user/id', id], () => userService.getUserByid(id));
   }

@@ -29,7 +29,7 @@ class UserService {
   }
   public async getUsersByInstitution(
     institutionId: string,
-  ): Promise<AxiosResponse<Response<UserInfo>>> {
+  ): Promise<AxiosResponse<Response<UserInfo[]>>> {
     return await adminstrationAxios.get(`users/getUsersByInstitution/${institutionId}`);
   }
   public async getUserAccountByNid(

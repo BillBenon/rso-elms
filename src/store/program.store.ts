@@ -4,7 +4,7 @@ import { useMutation, useQuery } from 'react-query';
 import { queryClient } from '../plugins/react-query';
 import { programService } from '../services/administration/program.service';
 import { Response } from '../types';
-import { CreateProgramInfo, ProgramInfo } from '../types/services/program.types';
+import { CreateProgramInfo } from '../types/services/program.types';
 
 class ProgramStore {
   createProgram() {
@@ -47,18 +47,7 @@ class ProgramStore {
   }
 
   modifyProgram() {
-    return useMutation(programService.modifyProgram, {
-      onSuccess(newData) {
-        queryClient.setQueryData(['academies'], (old) => {
-          const previousData = old as AxiosResponse<Response<ProgramInfo[]>>;
-          previousData.data.data.map((program: ProgramInfo, index: number) => {
-            if (program.id == newData.data.data.id)
-              previousData.data.data[index] = newData.data.data;
-          });
-          return previousData;
-        });
-      },
-    });
+    return useMutation(programService.modifyProgram);
   }
 }
 

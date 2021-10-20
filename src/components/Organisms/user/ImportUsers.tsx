@@ -19,7 +19,7 @@ export default function ImportUsers<K>({ onSubmit, userType = 'students' }: IUse
   const programs: AcademyInfo[] | undefined =
     academyStore.fetchAcademies().data?.data.data;
 
-  const [details, setDetails] = useState({
+  const [, setDetails] = useState({
     academy: '',
     program: '',
   });
