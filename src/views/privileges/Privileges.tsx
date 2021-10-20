@@ -55,7 +55,9 @@ export default function PrivilegesView() {
       <section>
         <TableHeader
           title="Privileges"
-          totalItems={privileges?.length || 0}
+          totalItems={`${
+            privileges && privileges.length > 0 ? privileges.length : 0
+          } privileges`}
           handleSearch={handleSearch}></TableHeader>
       </section>
       <section>
