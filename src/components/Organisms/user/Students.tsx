@@ -49,6 +49,7 @@ export default function Students({ students }: { students: UserTypes[] }) {
         <div className="pt-8">
           {students.length <= 0 ? (
             <NoDataAvailable
+              icon="user"
               buttonLabel="Add new student"
               title={'No students available'}
               handleClick={() => history.push(`/dashboard/users/add`)}

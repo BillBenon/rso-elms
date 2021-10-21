@@ -123,6 +123,7 @@ export default function ModuleDetails() {
                 <>
                   {subjects.length < 1 && subjectData.isSuccess ? (
                     <NoDataAvailable
+                      icon="module"
                       title={'No subjects registered'}
                       description={
                         'The history object is mutable. Therefore it is recommended to access the location from the render props of <Route>, not from'

@@ -110,6 +110,7 @@ export default function Academy() {
                 </>
               ) : isSuccess && academies.length === 0 ? (
                 <NoDataAvailable
+                  icon="academy"
                   buttonLabel="Add new academy"
                   title={'No academies available'}
                   handleClick={() => history.push(`${url}/add`)}

@@ -108,6 +108,7 @@ export default function Roles() {
           />
         ) : isSuccess && roles?.length === 0 ? (
           <NoDataAvailable
+            icon="role"
             buttonLabel="Add new role"
             title={'No roles available'}
             handleClick={() => history.push(`${url}/add`)}
