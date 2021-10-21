@@ -31,7 +31,7 @@ export default function Departments({ fetchType }: IDepartment) {
   const { search } = useLocation();
   const facultyId = new URLSearchParams(search).get('fac');
   const { data: userInfo } = authenticatorStore.authUser();
-  const { data, isSuccess, isLoading, isError } = facultyId
+  let { data, isSuccess, isLoading, isError } = facultyId
     ? divisionStore.getDepartmentsInFaculty(facultyId)
     : divisionStore.getDivisionByType(fetchType.toUpperCase());
 
