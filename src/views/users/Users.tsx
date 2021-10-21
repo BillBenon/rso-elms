@@ -16,6 +16,7 @@ import Students from '../../components/Organisms/user/Students';
 import usersStore from '../../store/users.store';
 import { GenericStatus } from '../../types';
 import { UserType } from '../../types/services/user.types';
+import UserDetails from './UserDetails';
 
 export type UserTypes = {
   id: string;
@@ -114,6 +115,8 @@ export default function Users() {
       <Switch>
         <Route exact path={`${path}/add`} render={() => <NewUser />} />
         <Route exact path={`${path}/:id/edit`} render={() => <UpdateUser />} />
+        <Route exact path={`${path}/:id/profile`} component={UserDetails} />
+
         <Route
           exact
           path={`${path}/import`}

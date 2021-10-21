@@ -37,6 +37,7 @@ const RouterProtection = () => {
       <Route path="/dashboard/academies" component={Academies} />
       <Route path="/dashboard/roles" component={Roles} />
       <Route path="/dashboard/users" component={Users} />
+
       <Route path="/dashboard/privileges" component={PrivilegesView} />
       <Route exact path="/dashboard/institution/:id/edit" component={UpdateInstitution} />
       {/* end of institution admin page */}

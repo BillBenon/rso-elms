@@ -19,7 +19,12 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
         history.push(`/dashboard/users/${id}/edit`); // go to edit user
       },
     },
-    { name: 'View', handleAction: () => {} },
+    {
+      name: 'View instructor',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`/dashboard/users/${id}/profile`); // go to view user profile
+      },
+    },
   ];
   return (
     <>

@@ -22,7 +22,12 @@ export default function Students({ students }: { students: UserTypes[] }) {
         history.push(`/dashboard/users/${id}/edit`); // go to edit user
       },
     },
-    { name: 'View', handleAction: () => {} },
+    {
+      name: 'View Student',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`${url}/${id}/profile`); // go to view user profile
+      },
+    },
   ];
   return (
     <>
