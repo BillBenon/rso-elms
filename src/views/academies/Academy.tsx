@@ -11,12 +11,12 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewAcademy from '../../components/Organisms/forms/academy/NewAcademy';
+import UpdateAcademy from '../../components/Organisms/forms/academy/UpdateAcademy';
 import { authenticatorStore } from '../../store';
 import academyStore from '../../store/academy.store';
 import usersStore from '../../store/users.store';
 import { Link as LinkList } from '../../types';
 import { GenericStatus, ValueType } from '../../types';
-import UpdateAcademy from './UpdateAcademy';
 
 type AcademyTypes = {
   id: number | string | undefined;
