@@ -23,7 +23,6 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
-import { queryClient } from '../../plugins/react-query';
 import { moduleStore } from '../../store/modules.store';
 import programStore from '../../store/program.store';
 import { CommonCardDataType, Link as Links, ParamType } from '../../types';
@@ -106,13 +105,6 @@ export default function ProgramDetailsMolecule() {
   const handleClose = () => {
     history.goBack();
   };
-
-  // re fetch data whenever user come back on this page
-  useEffect(() => {
-    if (location.pathname === path || location.pathname === `${path}/`) {
-      queryClient.invalidateQueries(['levels/program_id']);
-    }
-  }, [location]);
 
   return (
     <>
