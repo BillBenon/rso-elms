@@ -42,7 +42,7 @@ const SignInForm = () => {
       onSuccess(data) {
         setLoading(false);
         cookie.setCookie('jwt_info', JSON.stringify(data?.data.data));
-        toast.success(data.data.message, { duration: 1200 });
+        toast.success(data.data.message, { duration: 1200, id: toastId });
         redirectTo('/redirecting');
       },
       onError(error) {
