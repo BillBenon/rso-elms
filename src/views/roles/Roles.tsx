@@ -96,27 +96,24 @@ export default function Roles() {
       </section>
       <section>
         {isLoading && <Loader />}
-        {isSuccess && !isLoading ? (
-          roles?.length === 0
-        ) : (
-          <NoDataAvailable
-            buttonLabel="Add new role"
-            title={'No roles available'}
-            handleClick={() => history.push(`${url}/add`)}
-            description="There are no roles added yet. Click above to add some"
-          />
-        )}
-        {roles && (
+        {roles && roles.length > 0 && isSuccess ? (
           <Table<FilteredRoles>
             selectorActions={manyActions}
-            hide={['id', 'name']}
+            hide={['id']}
             handleSelect={handleSelect}
             statusColumn="status"
             data={roles}
             uniqueCol={'id'}
             actions={actions}
           />
-        )}
+        ) : isSuccess && roles?.length === 0 ? (
+          <NoDataAvailable
+            buttonLabel="Add new role"
+            title={'No roles available'}
+            handleClick={() => history.push(`${url}/add`)}
+            description="There are no roles added yet. Click above to add some"
+          />
+        ) : null}
       </section>
 
       <Switch>

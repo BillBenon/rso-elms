@@ -26,7 +26,8 @@ export default function Admins({ admins }: { admins: UserTypes[] }) {
       <TableHeader
         title="Admins"
         totalItems={`${admins && admins.length > 0 ? admins.length : 0} admins`}
-        handleSearch={handleSearch}>
+        handleSearch={handleSearch}
+        showSearch={admins && admins.length > 0}>
         <div className="flex gap-3">
           <div className="flex gap-3">
             <Link to={`/dashboard/users/import`}>

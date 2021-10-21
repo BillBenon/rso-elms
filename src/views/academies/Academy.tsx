@@ -90,18 +90,8 @@ export default function Academy() {
                   Academy
                 </ILabel>
               </div>
-              {isLoading && <Loader />}
-              {isSuccess ? (
-                academies?.length === 0
-              ) : (
-                <NoDataAvailable
-                  buttonLabel="Add new academy"
-                  title={'No academies available'}
-                  handleClick={() => history.push(`${url}/add`)}
-                  description="the academies are not yet created, click above to create new ones"
-                />
-              )}
-              {academies && (
+              {isLoading && academies.length === 0 && <Loader />}
+              {academies.length > 0 && isSuccess ? (
                 <>
                   <div className="py-4">
                     <TableHeader
@@ -126,7 +116,14 @@ export default function Academy() {
                     )}
                   </div>
                 </>
-              )}
+              ) : isSuccess && academies.length === 0 ? (
+                <NoDataAvailable
+                  buttonLabel="Add new academy"
+                  title={'No academies available'}
+                  handleClick={() => history.push(`${url}/add`)}
+                  description="the academies are not yet created, click above to create new ones"
+                />
+              ) : null}
             </>
           )}
         />

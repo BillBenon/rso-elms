@@ -29,7 +29,8 @@ export default function Students({ students }: { students: UserTypes[] }) {
       <TableHeader
         title="Students"
         totalItems={`${students && students.length > 0 ? students.length : 0} students`}
-        handleSearch={handleSearch}>
+        handleSearch={handleSearch}
+        showSearch={students && students.length > 0}>
         <div className="flex gap-3">
           <Link to={`${url}/import`}>
             <Button styleType="outline">Import users</Button>

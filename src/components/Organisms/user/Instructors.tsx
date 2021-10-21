@@ -28,7 +28,8 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
         totalItems={`${
           instructors && instructors.length > 0 ? instructors.length : 0
         } instructors`}
-        handleSearch={handleSearch}>
+        handleSearch={handleSearch}
+        showSearch={instructors && instructors.length > 0}>
         <div className="flex gap-3">
           <Link to={`/dashboard/users/import`}>
             <Button styleType="outline">Import users</Button>
