@@ -33,7 +33,7 @@ export default function Students({ students }: { students: UserTypes[] }) {
     <>
       <TableHeader
         title="Students"
-        totalItems={`${students && students.length > 0 ? students.length : 0} students`}
+        totalItems={students && students.length > 0 ? students.length : 0}
         handleSearch={handleSearch}
         showSearch={students && students.length > 0}>
         <div className="flex gap-3">

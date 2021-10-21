@@ -241,7 +241,7 @@ export default function ProgramDetailsMolecule() {
                             )}
                           </div>
                         </div>
-                        {programLevels && programLevels?.length < 0 && (
+                        {programLevels && programLevels?.length === 0 && (
                           <div className="text-primary-500 py-2 text-right text-sm mr-3">
                             <Link to={`${url}/level/add`}>+ Add levels</Link>
                           </div>

@@ -87,7 +87,7 @@ export default function Roles() {
       <section>
         <TableHeader
           title="Roles"
-          totalItems={`${roles && roles.length > 0 ? roles.length : 0} roles`}
+          totalItems={roles && roles.length > 0 ? roles.length : 0}
           handleSearch={handleSearch}>
           <Link to={`${url}/add`}>
             <Button>Add Role</Button>
