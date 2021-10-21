@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { CommonInputProps, InputProps, ValueType } from '../../../types';
+import { InputProps } from '../../../types';
 import Input from '../../Atoms/Input/Input';
 import Error from '../../Atoms/Text/Error';
 import ILabel from '../../Atoms/Text/ILabel';

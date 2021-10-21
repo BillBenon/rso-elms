@@ -21,6 +21,12 @@ class AcademyStore {
   fetchAcademies() {
     return useQuery('academies', academyService.fetchAcademies);
   }
+  getAcademiesByInstitution(institutionId: string) {
+    return useQuery(['academies/instutionId', institutionId], () =>
+      academyService.getAcademiesByInstitution(institutionId),
+    );
+  }
+
   getAcademyById(id: string) {
     return useQuery(['academies/id', id], () => academyService.getAcademyById(id));
   }

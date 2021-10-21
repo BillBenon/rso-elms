@@ -2,19 +2,16 @@ import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
-import { Link } from 'react-router-dom';
 
 import { authenticatorStore } from '../../../store';
 import { divisionStore } from '../../../store/divisions.store';
 import { DivisionInfo } from '../../../types/services/division.types';
 import NewAcademicProgram from '../../../views/programs/NewAcademicProgram';
-import Button from '../../Atoms/custom/Button';
 import Loader from '../../Atoms/custom/Loader';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
-import NewDepartment from '../forms/divisions/NewDepartment';
 import UpdateDepartment from '../forms/divisions/UpdateDepartment';
 
 interface FilteredData
@@ -30,18 +27,18 @@ interface IDepartment {
 export default function Departments({ fetchType }: IDepartment) {
   const { path } = useRouteMatch();
   const history = useHistory();
-  const [departments, setDepartments] = useState<FilteredData[]>();
+  const [departments, setDepartments] = useState<FilteredData[]>([]);
   const { search } = useLocation();
   const facultyId = new URLSearchParams(search).get('fac');
   const { data: userInfo } = authenticatorStore.authUser();
-  const { data, isSuccess, isLoading, isError } = facultyId
+  let { data, isSuccess, isLoading, isError } = facultyId
     ? divisionStore.getDepartmentsInFaculty(facultyId)
     : divisionStore.getDivisionByType(fetchType.toUpperCase());
 
   let facultyData: any;
 
   if (facultyId) {
-    ({ data: facultyData } = divisionStore.getDivision(facultyId));
+    ({ data: facultyData, isSuccess } = divisionStore.getDivision(facultyId));
   }
 
   useEffect(() => {
@@ -126,9 +123,8 @@ export default function Departments({ fetchType }: IDepartment) {
             )}
 
             <section>
-              {departments && departments?.length === 0 && isLoading ? (
-                <Loader />
-              ) : departments && departments?.length > 0 ? (
+              {isLoading && departments.length === 0 && <Loader />}
+              {isSuccess && departments?.length > 0 ? (
                 <Table<FilteredData>
                   handleSelect={() => {}}
                   statusColumn="status"
@@ -137,14 +133,15 @@ export default function Departments({ fetchType }: IDepartment) {
                   hide={['id']}
                   actions={actions}
                 />
-              ) : (
+              ) : isSuccess && departments.length === 0 ? (
                 <NoDataAvailable
+                  icon="faculty"
                   buttonLabel="Add new department"
                   title="No department available"
                   handleClick={() => history.push(`/dashboard/divisions/departments/new`)}
                   description="And the web just isnt the same without you. Lets get you back online!"
                 />
-              )}
+              ) : null}
             </section>
 
             {/* modify department */}

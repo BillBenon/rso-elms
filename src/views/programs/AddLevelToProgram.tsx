@@ -15,14 +15,13 @@ import { getDropDownOptions } from '../../utils/getOption';
 interface FilteredLevels
   extends Pick<ILevel, 'id' | 'name' | 'description' | 'generic_status' | 'flow'> {}
 
-let filteredLevelFlows: FilteredLevels[];
-
 export default function AddLevelToProgram() {
   const { id: progId } = useParams<ParamType>();
   const history = useHistory();
   const [levels, setLevels] = useState<FilteredLevels[]>();
   const { data: levelsInfo } = levelStore.getLevels(); // fetch levels
   const { mutateAsync } = programStore.addProgramToLevel();
+  const [filteredLevelFlows, setFilteredLevelFlows] = useState<FilteredLevels[]>([]);
 
   useEffect(() => {
     setLevelFlows((flows) => ({ ...flows, program_id: progId }));
@@ -30,7 +29,6 @@ export default function AddLevelToProgram() {
 
   const [levelFlows, setLevelFlows] = useState<CreateAcademicProgramLevel>({
     endg_flow: 0,
-    id: '',
     program_id: progId,
     starting_flow: 0,
   });
@@ -52,11 +50,12 @@ export default function AddLevelToProgram() {
   }
 
   useEffect(() => {
-    filteredLevelFlows =
+    let newLevelFlow =
       levels?.filter(
         (flow) =>
           flow.flow > levelFlows.starting_flow && flow.flow !== levelFlows.starting_flow,
       ) || [];
+    setFilteredLevelFlows(newLevelFlow);
   }, [levelFlows.starting_flow]);
 
   function addLevelToProg<T>(e: FormEvent<T>) {
@@ -79,11 +78,13 @@ export default function AddLevelToProgram() {
         <DropdownMolecule
           options={getDropDownOptions({ inputs: levels || [], value: 'flow' })}
           name="starting_flow"
+          placeholder="Starting flow"
           handleChange={handleChange}>
           Start level
         </DropdownMolecule>
 
         <DropdownMolecule
+          placeholder="Ending flow"
           options={getDropDownOptions({
             inputs: filteredLevelFlows,
             value: 'flow',

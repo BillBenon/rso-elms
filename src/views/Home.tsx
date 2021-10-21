@@ -29,7 +29,7 @@ function Home() {
           </div>
         </div>
         <div className="items-center justify-center hidden lg:flex bg-secondary">
-          <img className="block w-3/4" src={'/icons/login.svg'} alt="img" />
+          <img className="block w-5/6" src={'/icons/login.svg'} alt="img" />
         </div>
       </div>
     </>
