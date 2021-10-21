@@ -1,14 +1,18 @@
 .rbc-header{
    padding-top:20px;
+   height:80px;
    border-bottom: none !important;
 }
 .rbc-event{
     border: none !important;
-    border-left: 7px solid #3CD278 !important;
     border-radius: 8px 3px 3px 8px ;
-    background-color: transparent !important;
-    color:  black !important;
+    background-color: #3CD278 !important;
     padding-top: 10px;
     padding-bottom: 10px;
-    box-shadow: 0.5px 2px 0 #9ca5a0;
+    height: auto !important;
+}
+
+.rbc-timeslot-group{
+    min-height: 72px !important;
+    height: auto !important;
 }

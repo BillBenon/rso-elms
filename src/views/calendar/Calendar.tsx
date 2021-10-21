@@ -4,13 +4,15 @@ import '../../styles/components/Molecules/calendar.scss';
 import moment from 'moment';
 import React from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
+import PopupMolecule from '../../components/Molecules/Popup';
+import EventDetails from '../../components/Organisms/calendar/EventDetails';
 import { events } from '../../static/events';
 import { Link, ValueType } from '../../types';
 
@@ -81,13 +83,24 @@ export default function CalendarView() {
         step={60}
         startAccessor="start"
         endAccessor="end"
-        view="week"
+        view="day"
         showMultiDayTimes={false}
         views={['day', 'week']}
         defaultDate={new Date(2015, 3, 12)}
         style={{ height: 800 }}
         onSelectEvent={(event) => history.push(`${path}/event/${event.id}`)}
       />
+      <Switch>
+        <Route
+          exact
+          path={`${path}/event/:eventId`}
+          render={() => (
+            <PopupMolecule title="Event details" open>
+              <EventDetails />
+            </PopupMolecule>
+          )}
+        />
+      </Switch>
     </div>
   );
 }
