@@ -26,7 +26,7 @@ export default function UpdateFaculty({ onSubmit, academy_id }: IDivisionsAcadem
     name: '',
   });
 
-  const { mutateAsync } = divisionStore.updateDivision(division.division_type);
+  const { mutateAsync } = divisionStore.updateDivision();
 
   const updateDivisionInfo: any = {
     academy_id: division.academy?.id,

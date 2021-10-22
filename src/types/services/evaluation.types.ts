@@ -1,5 +1,3 @@
-import { ValueType } from '..';
-
 export enum IEvaluationTypeEnum {
   EXAM = 'EXAM',
   CAT = 'CAT',
@@ -15,11 +13,7 @@ export enum IQuestionaireTypeEnum {
 }
 
 export interface IEvaluationProps {
-  values: any;
-  handleChange: (_e: ValueType) => any;
   handleNext: () => void;
-  handleProgramsChange?: (_e: ValueType) => any;
-  isLoading?: boolean;
   handleGoBack: () => void;
   handleAddQuestion?: () => void;
 }
@@ -34,17 +28,43 @@ export enum IEvaluationClassification {
   SUBJECT = 'SUBJECT',
 }
 
+export enum IEligibleClassEnum {
+  MULTIPLE_CLASSES = 'MULTIPLE_CLASSES',
+  SINGLE_CLASS = 'SINGLE_CLASS',
+}
+
+export enum IAccessTypeEnum {
+  PRIVATE = 'PRIVATE',
+  PUBLIC = 'PUBLIC',
+}
+
+export enum IContentFormatEnum {
+  MP4 = 'MP4',
+  PNG = 'PNG',
+  DOC = 'DOC',
+  PDF = 'PDF',
+}
+
+export enum IEvaluationType {
+  PENDING = 'PENDING',
+  ON_GOING = 'ON_GOING',
+  UNMARKED = 'UNMARKED',
+  MARKING = 'MARKING',
+  MARKED = 'MARKED',
+  CANCELED = 'CANCELED',
+}
+
 export interface IEvaluationCreate {
   access_type: string;
   allow_submission_time: string;
   classification: IEvaluationClassification;
   content_format: string;
-  due_on: string;
+  due_on: string | null;
   eligible_group: string;
   evaluation_status: string;
   evaluation_type: IEvaluationTypeEnum;
   exam_instruction: string;
-  id: number;
+  id: string | number;
   intake_level_class_id: number;
   is_consider_on_report: boolean;
   marking_reminder_date: string;

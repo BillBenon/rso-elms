@@ -31,7 +31,7 @@ export default function UpdateDepartment({ onSubmit }: IDivisionsAcademyType) {
     parent_id: '',
   });
 
-  const { mutateAsync } = divisionStore.updateDivision(division.division_type);
+  const { mutateAsync } = divisionStore.updateDivision();
 
   const updateDivisionInfo: any = {
     academy_id: division.academy?.id,
@@ -46,9 +46,6 @@ export default function UpdateDepartment({ onSubmit }: IDivisionsAcademyType) {
   useEffect(() => {
     data?.data && setDivision(data?.data.data);
   }, [data]);
-
-  const academies: AcademyInfo[] | undefined =
-    academyStore.fetchAcademies().data?.data.data;
 
   const departments = divisionStore.getDivisionByType('FACULTY').data?.data.data;
 
