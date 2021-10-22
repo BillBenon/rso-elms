@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { CommonInputProps, InputProps, ValueType } from '../../../types';
+import { InputProps } from '../../../types';
 import Input from '../../Atoms/Input/Input';
 import Error from '../../Atoms/Text/Error';
 import ILabel from '../../Atoms/Text/ILabel';
@@ -20,6 +20,7 @@ export default function InputMolecule<T>({
   readOnly = false,
   required = true,
   ref,
+
   ...attrs
 }: IInputMolecule<T>) {
   return (
@@ -28,8 +29,8 @@ export default function InputMolecule<T>({
         {children}
       </ILabel>
       <Input
-        {...attrs}
         ref={ref}
+        {...attrs}
         readonly={readOnly}
         required={required}
         name={name}
