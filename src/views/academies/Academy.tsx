@@ -88,7 +88,7 @@ export default function Academy() {
                   <div className="py-4">
                     <TableHeader
                       title="Academy"
-                      totalItems={`${academies.length} academies`}
+                      totalItems={academies.length}
                       handleSearch={handleSearch}>
                       <Link to={`${url}/add`}>
                         <Button>New academy</Button>
