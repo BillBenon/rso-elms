@@ -1,25 +1,10 @@
-/* eslint-disable no-unused-vars */
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import DesktopDatePicker from '@mui/lab/DatePicker';
-import LocalizationProvider from '@mui/lab/LocalizationProvider';
-import Box from '@mui/material/Box';
+import 'react-modern-calendar-datepicker/lib/DatePicker.css';
+
 import React, { useState } from 'react';
 
 import { Link as LinkList, ValueType } from '../../../../types';
-import {
-  EvaluationTypeEnum,
-  IEvaluationProps,
-} from '../../../../types/services/evaluation.types';
-import { getDropDownStatusOptions } from '../../../../utils/getOption';
-import Button from '../../../Atoms/custom/Button';
-import Icon from '../../../Atoms/custom/Icon';
 import Heading from '../../../Atoms/Text/Heading';
 import BreadCrumb from '../../../Molecules/BreadCrumb';
-import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
-import InputMolecule from '../../../Molecules/input/InputMolecule';
-import RadioMolecule from '../../../Molecules/input/RadioMolecule';
-import SwitchMolecule from '../../../Molecules/input/SwitchMolecule';
-import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 import Stepper from '../../../Molecules/Stepper/Stepper';
 import EvaluationInfoComponent from './EvaluationInfoComponent';
 import EvaluationQuestionComponent from './EvaluationQuestionComponent';
@@ -50,8 +35,6 @@ export default function NewEvaluation() {
     },
   ]);
 
-  function handleChange(e: ValueType) {}
-
   const [isLoading, setIsLoading] = useState();
   function handleSubmit() {
     setCurrentStep(currentStep + 1);
@@ -63,14 +46,8 @@ export default function NewEvaluation() {
 
   function handleAddQuestion() {
     let previousState = [...questions];
-    console.log(previousState);
     previousState.push(previousState[0]);
     setQuestions(previousState);
-    // setQuestions((prevState: any) => {
-    //   // Object.assign would also work
-    //   return [{ ...prevState, ...previousState }];
-    // });
-    // questions.push([...questions, previousState]);
   }
 
   return (
@@ -94,16 +71,14 @@ export default function NewEvaluation() {
           navigateToStepHandler={() => console.log('submitted')}>
           <EvaluationInfoComponent
             values={[]}
-            handleChange={handleChange}
             handleNext={handleSubmit}
             handleGoBack={handleBack}
           />
           <EvaluationQuestionComponent
             values={questions}
-            handleChange={handleChange}
             handleNext={handleSubmit}
-            isLoading={isLoading}
             handleGoBack={handleBack}
+            isLoading={isLoading}
             handleAddQuestion={handleAddQuestion}
           />
         </Stepper>

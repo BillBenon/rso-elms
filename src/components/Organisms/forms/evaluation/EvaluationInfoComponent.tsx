@@ -1,10 +1,12 @@
-import { DesktopDatePicker, LocalizationProvider } from '@mui/lab';
-import AdapterDateFns from '@mui/lab/AdapterDateFns';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import DatePicker, { DayRange } from 'react-modern-calendar-datepicker';
 
 import { moduleStore } from '../../../../store/modules.store';
-import { CommonCardDataType } from '../../../../types';
+import { ValueType } from '../../../../types';
 import {
+  IAccessTypeEnum,
+  IContentFormatEnum,
+  IEligibleClassEnum,
   IEvaluationClassification,
   IEvaluationCreate,
   IEvaluationProps,
@@ -17,29 +19,31 @@ import {
   getDropDownStatusOptions,
 } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
+import Icon from '../../../Atoms/custom/Icon';
+import ILabel from '../../../Atoms/Text/ILabel';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
-import SwitchMolecule from '../../../Molecules/input/SwitchMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-export default function EvaluationInfoComponent({
-  values,
-  handleChange,
-  handleNext,
-}: IEvaluationProps) {
+export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps) {
   const { data } = moduleStore.getAllModules();
+  const [dayRange, setDayRange] = React.useState<DayRange>({
+    from: null,
+    to: null,
+  });
+
   const [details, setDetails] = useState<IEvaluationCreate>({
-    access_type: '',
+    access_type: IAccessTypeEnum.PUBLIC,
     allow_submission_time: '',
     classification: IEvaluationClassification.MODULAR,
-    content_format: '',
-    due_on: '',
-    eligible_group: '',
+    content_format: IContentFormatEnum.DOC,
+    due_on: dayRange.to + '' || null,
+    eligible_group: IEligibleClassEnum.MULTIPLE_CLASSES,
     evaluation_status: '',
     evaluation_type: IEvaluationTypeEnum.CAT,
     exam_instruction: '',
-    id: 0,
+    id: '',
     intake_level_class_id: 0,
     is_consider_on_report: true,
     marking_reminder_date: '',
@@ -51,6 +55,22 @@ export default function EvaluationInfoComponent({
     time_limit: '',
     total_mark: 0,
   });
+
+  function handleChange({ name, value }: ValueType) {
+    setDetails((details) => ({ ...details, [name]: value }));
+  }
+
+  const renderCustomInput = ({ ref }: any) => (
+    <div className="flex flex-col gap-2 pb-2">
+      <ILabel className="capitalize" size="sm" weight="medium">
+        Due on
+      </ILabel>
+      <div className="rounded-lg border-2 border-bcolor w-auto md:w-40 flex items-center">
+        <input ref={ref} className="w-28 outline-none bg-transparent" readOnly />
+        <Icon name="calendar" />
+      </div>
+    </div>
+  );
 
   return (
     <div>
@@ -65,14 +85,14 @@ export default function EvaluationInfoComponent({
           name="evaluation_name"
           placeholder="Evaluation Name"
           value={details.name}
-          handleChange={() => {}}>
+          handleChange={handleChange}>
           Evaluation Name
         </InputMolecule>
         <DropdownMolecule
           width="64"
           name="evaluation_type"
           placeholder="Evaluation Type"
-          handleChange={() => {}}
+          handleChange={handleChange}
           options={getDropDownStatusOptions(IEvaluationTypeEnum)}>
           Evaluation type
         </DropdownMolecule>
@@ -85,24 +105,24 @@ export default function EvaluationInfoComponent({
             { label: 'MODULAR', value: IEvaluationClassification.MODULAR },
             { label: 'SUBJECT', value: IEvaluationClassification.SUBJECT },
           ]}
-          handleChange={() => {}}>
+          handleChange={handleChange}>
           Evaluation classification
         </RadioMolecule>
 
         <DropdownMolecule
           width="64"
-          name="programs"
+          name="module"
           placeholder="Select module"
-          handleChange={() => {}}
+          handleChange={handleChange}
           options={getDropDownOptions({ inputs: data?.data.data || [] })}>
           Select module
         </DropdownMolecule>
 
         <DropdownMolecule
           width="64"
-          name="programs"
+          name="subject_academic_year_period_id"
           placeholder="Select subject"
-          handleChange={() => {}}
+          handleChange={handleChange}
           isMulti
           options={[]}>
           Select subject
@@ -110,100 +130,131 @@ export default function EvaluationInfoComponent({
 
         <RadioMolecule
           className="pb-4"
-          value=""
-          name="status"
+          value={details.eligible_group}
+          name="eligible_group"
           options={[
-            { label: 'public', value: '' },
-            { label: 'private', value: '' },
+            { label: 'MULTIPLE CLASSES', value: IEligibleClassEnum.MULTIPLE_CLASSES },
+            { label: 'SINGLE CLASS', value: IEligibleClassEnum.SINGLE_CLASS },
           ]}
-          handleChange={() => {}}>
+          handleChange={handleChange}>
           Eligible Class
         </RadioMolecule>
 
         <RadioMolecule
           className="pb-4"
-          value=""
-          name="status"
+          value={details.access_type}
+          name="access_type"
           options={[
-            { label: 'public', value: '' },
-            { label: 'private', value: '' },
+            { label: 'PUBLIC', value: IAccessTypeEnum.PUBLIC },
+            { label: 'PRIVATE', value: IAccessTypeEnum.PRIVATE },
           ]}
-          handleChange={() => {}}>
+          handleChange={handleChange}>
           Accessibility
         </RadioMolecule>
 
         <RadioMolecule
           className="pb-4"
-          value=""
-          name="status"
+          value={details.questionaire_type}
+          name="evaluation_status"
           options={[
-            { label: 'open', value: '' },
-            { label: 'multiple choice', value: '' },
+            { label: 'Open', value: IQuestionaireTypeEnum.OPEN },
+            { label: 'Multiple choice', value: IQuestionaireTypeEnum.MULTIPLE },
+            { label: 'Both', value: IQuestionaireTypeEnum.HYBRID },
+            { label: 'Field', value: IQuestionaireTypeEnum.FIELD },
           ]}
-          handleChange={() => {}}>
+          handleChange={handleChange}>
           Questionaire type
         </RadioMolecule>
 
-        <SwitchMolecule
+        <DropdownMolecule
+          width="64"
+          name="submision_type"
+          placeholder="Select submission type"
+          handleChange={handleChange}
+          options={[
+            { label: 'File', value: ISubmissionTypeEnum.FILE },
+            { label: 'Online text', value: ISubmissionTypeEnum.ONLINE_TEXT },
+          ]}>
+          Submission type
+        </DropdownMolecule>
+
+        <DropdownMolecule
+          width="64"
+          name="submision_type"
+          placeholder="Select submission type"
+          handleChange={handleChange}
+          options={[
+            { label: 'DOC', value: IContentFormatEnum.DOC },
+            { label: 'MP4', value: IContentFormatEnum.MP4 },
+            { label: 'PDF', value: IContentFormatEnum.PDF },
+            { label: 'PNG', value: IContentFormatEnum.PNG },
+          ]}>
+          Content format
+        </DropdownMolecule>
+
+        <InputMolecule
+          width="28"
+          type="number"
+          name="maximum_file_size"
+          value={details.maximum_file_size}
+          handleChange={handleChange}>
+          Maximum file size (Mbs)
+        </InputMolecule>
+
+        {/* <SwitchMolecule
           loading={false}
           name="shuffle"
           value={false}
-          handleChange={() => {}}>
-          True
-        </SwitchMolecule>
+          handleChange={handleChange}>
+          Shuffle evaluation questions
+        </SwitchMolecule> */}
 
-        <TextAreaMolecule name={'description'} value="" handleChange={() => {}}>
+        <TextAreaMolecule
+          name={'exam_instruction'}
+          value={details.exam_instruction}
+          handleChange={handleChange}>
           Evaluation instructions
         </TextAreaMolecule>
 
-        <InputMolecule width="28" name="evaluation_name" value="" handleChange={() => {}}>
+        <InputMolecule
+          width="28"
+          name="total_mark"
+          value={details.total_mark}
+          handleChange={handleChange}>
           Evaluation marks
         </InputMolecule>
-
-        <div className="relative">
-          <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <DesktopDatePicker
-              label="Custom input"
-              value={''}
-              className="shit"
-              onChange={() => {}}
-              renderInput={({ inputRef, inputProps, InputProps }) => (
-                <div className="flex items-center">
-                  <InputMolecule
-                    ref={inputRef}
-                    // {...inputProps}
-                    width="32"
-                    name="evaluation_name"
-                    value=""
-                    handleChange={() => {}}>
-                    Due on
-                  </InputMolecule>
-                  {InputProps?.endAdornment}
-                </div>
-              )}
-            />
-          </LocalizationProvider>
-        </div>
 
         <InputMolecule
           // className="p-2"
           width="16"
-          name="evaluation_name"
-          value=""
+          name="time_limit"
+          value={details.time_limit}
           placeholder="00"
-          handleChange={() => {}}>
+          handleChange={handleChange}>
           Time limit (In mins)
         </InputMolecule>
 
+        <DatePicker
+          value={dayRange}
+          onChange={setDayRange}
+          colorPrimary="#1C2CA3"
+          colorPrimaryLight="#4F5FD6" // and this
+          calendarPopperPosition="bottom"
+          inputClassName="absolute"
+          inputPlaceholder="Select a day"
+          renderInput={renderCustomInput} // render a custom input
+          shouldHighlightWeekends
+        />
+
         <RadioMolecule
           className="pb-4"
-          value=""
+          value={details.is_consider_on_report.toString()}
           name="status"
           options={[
-            { label: 'Yes', value: '' },
-            { label: 'No', value: '' },
+            { label: 'Yes', value: 'true' },
+            { label: 'No', value: 'false' },
           ]}
-          handleChange={() => {}}>
+          handleChange={handleChange}>
           Consider on report
         </RadioMolecule>
 
