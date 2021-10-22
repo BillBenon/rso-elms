@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router';
@@ -47,7 +45,7 @@ export default function UpdateAcademicProgram<E>({
     type: ProgramType.SHORT_COURSE,
     status: ProgramStatus.ACTIVE,
   });
-  const { mutateAsync } = programStore.modifyProgram();
+  const { mutate } = programStore.modifyProgram();
 
   useEffect(() => {
     data?.data.data && setDetails({ ...data?.data.data });
@@ -60,17 +58,17 @@ export default function UpdateAcademicProgram<E>({
     }));
   }
 
-  async function updateProgram<T>(e: FormEvent<T>) {
-    const toastId = toast.loading('Upading program control');
-
+  function updateProgram<T>(e: FormEvent<T>) {
     e.preventDefault();
-    await mutateAsync(details, {
+    mutate(details, {
       onSuccess() {
-        history.goBack();
-        toast.success('program updated', { id: toastId });
+        toast.success('Successfully updated program', { duration: 1200 });
+        setTimeout(() => {
+          history.goBack();
+        }, 900);
       },
       onError(error) {
-        toast.error(error + '', { id: toastId });
+        toast.error(error + '');
       },
     });
     if (onSubmit) onSubmit(e);
@@ -78,7 +76,7 @@ export default function UpdateAcademicProgram<E>({
 
   return (
     <form onSubmit={updateProgram}>
-      <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
+      <div className="p-6 w-auto lg:w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
         <div className="py-5 mb-3 capitalize">
           <Heading color="txt-primary" fontWeight="bold">
             Edit Program
@@ -115,13 +113,13 @@ export default function UpdateAcademicProgram<E>({
         <DropdownMolecule
           defaultValue={getDropDownOptions({
             inputs: instructors || [],
-            labelName: 'username',
+            labelName: ['username'],
           }).find((incharge) => incharge.value === data?.data.data.incharge?.username)}
           width="64"
           placeholder="Select incharge"
           options={getDropDownOptions({
             inputs: instructors || [],
-            labelName: 'username',
+            labelName: ['first_name', 'last_name'],
           })}
           name="current_admin_id"
           handleChange={(e: ValueType) => handleChange(e)}>

@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
+import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
@@ -39,7 +40,7 @@ export default function UpdateInstitution() {
     institution &&
       setValues({
         current_admin_id: institution.current_admin_id,
-        head_office_location_id: institution.head_office_location_id,
+        head_office_location_id: 17445,
         email: institution.email,
         fax_number: institution.fax_number,
         full_address: institution.full_address,
@@ -82,79 +83,87 @@ export default function UpdateInstitution() {
         Edit a new institution
       </Heading>
       <div className="pb-8"></div>
-      <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2">
-        <div className="py-4">
-          <InputMolecule
-            name="name"
-            required
-            value={values.name}
-            placeholder="institution name"
-            handleChange={(e) => handleChange(e)}>
-            Institution name
-          </InputMolecule>
+      <form onSubmit={handleSubmit}>
+        <div className="grid grid-cols-1 md:grid-cols-2">
+          <>
+            <div className="py-4">
+              <InputMolecule
+                name="name"
+                value={values.name}
+                placeholder="institution name"
+                handleChange={(e) => handleChange(e)}>
+                Institution name
+              </InputMolecule>
+            </div>
+            <div className="py-4">
+              <InputMolecule
+                name="short_name"
+                value={values.short_name}
+                placeholder="institution short name"
+                handleChange={(e) => handleChange(e)}>
+                Institution short name (abbreviations)
+              </InputMolecule>
+            </div>
+            <div className="py-4">
+              <InputMolecule
+                name="email"
+                value={values.email}
+                placeholder="rnp@gov.rw"
+                handleChange={(e) => handleChange(e)}>
+                Institution email
+              </InputMolecule>
+            </div>
+            <div className="py-4">
+              <InputMolecule
+                name="phone_number"
+                value={values.phone_number}
+                placeholder="Phone number"
+                handleChange={(e) => handleChange(e)}>
+                Institution Phone number
+              </InputMolecule>
+            </div>
+          </>
+          <>
+            <div className="py-4">
+              <InputMolecule
+                name="website_link"
+                required={false}
+                value={values.website_link}
+                placeholder="www.rnp.gov.rw"
+                handleChange={(e) => handleChange(e)}>
+                Institution website(optional)
+              </InputMolecule>
+            </div>
+            <div className="py-4">
+              <TextAreaMolecule
+                name="moto"
+                value={values.moto}
+                placeholder="Motto"
+                handleChange={(e) => handleChange(e)}>
+                Institution motto
+              </TextAreaMolecule>
+            </div>
+            <div className="py-4">
+              <TextAreaMolecule
+                name="mission"
+                value={values.mission}
+                placeholder="Mission"
+                handleChange={(e) => handleChange(e)}>
+                Institution mission
+              </TextAreaMolecule>
+            </div>
+          </>
         </div>
-        <div className="py-4">
-          <InputMolecule
-            name="short_name"
-            value={values.short_name}
-            placeholder="institution short name"
-            handleChange={(e) => handleChange(e)}>
-            Institution short name (abbreviations)
-          </InputMolecule>
-        </div>
-        <div className="py-4">
-          <InputMolecule
-            name="email"
-            required
-            value={values.email}
-            placeholder="rnp@gov.rw"
-            handleChange={(e) => handleChange(e)}>
-            Institution email
-          </InputMolecule>
-        </div>
-        <div className="py-4">
-          <InputMolecule
-            name="phone_number"
-            required
-            value={values.phone_number}
-            placeholder="Phone number"
-            handleChange={(e) => handleChange(e)}>
-            Institution Phone number
-          </InputMolecule>
-        </div>
-        <div className="py-4">
-          <InputMolecule
-            required
-            name="website_link"
-            value={values.website_link}
-            placeholder="www.rnp.gov.rw"
-            handleChange={(e) => handleChange(e)}>
-            Institution website(optinal)
-          </InputMolecule>
-        </div>
-        <div className="py-4">
-          <TextAreaMolecule
-            required
-            name="moto"
-            value={values.moto}
-            placeholder="Motto"
-            handleChange={(e) => handleChange(e)}>
-            Institution motto
-          </TextAreaMolecule>
-        </div>
-        <div className="py-4">
-          <TextAreaMolecule
-            required
-            name="mission"
-            value={values.mission}
-            placeholder="Mission"
-            handleChange={(e) => handleChange(e)}>
-            Institution mission
-          </TextAreaMolecule>
-        </div>
+
         <div className="py-4 col-span-2">
-          <ILabel className="block pb-1">Institution logo</ILabel>
-          <Button styleType="outline">Upload logo</Button>
+          <ILabel className="block pb-2">Institution logo</ILabel>
+
+          <Button type="button" styleType="outline">
+            <span className="flex items-center">
+              <Icon name="attach" useheightandpadding={false} fill="primary" />
+              <span className="">Upload logo</span>
+            </span>
+          </Button>
         </div>
         <div className="py-4 col-span-2">
           <Button onClick={() => handleSubmit} type="submit">

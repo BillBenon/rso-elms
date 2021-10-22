@@ -3,7 +3,9 @@ import React, { useEffect, useState } from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
+import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
@@ -22,7 +24,11 @@ function Levels() {
   const { data: userInfo } = authenticatorStore.authUser();
   const [levels, setLevels] = useState<FilteredLevels[]>();
 
-  const { data, isSuccess, isLoading } = levelStore.getLevels(); // fetch levels
+  const { data, isLoading } = levelStore.getLevelsByAcademy(
+    userInfo?.data.data.academy.id.toString() || '',
+  ); // fetch levels
+
+  console.log(userInfo?.data.data.academy.id.toString());
 
   useEffect(() => {
     // filter data to display
@@ -41,8 +47,6 @@ function Levels() {
     { to: 'levels', title: 'Level' },
   ];
 
-  console.log('we go: ', userInfo?.data);
-
   //actions to be displayed in table
   const actions = [
     {
@@ -58,7 +62,7 @@ function Levels() {
         <BreadCrumb list={list}></BreadCrumb>
       </section>
       <section className="">
-        <TableHeader title="Levels" totalItems={3}>
+        <TableHeader title="Levels" totalItems={`${levels?.length} levels`}>
           <Link to={`${url}/add`}>
             <Button>Add Level</Button>
           </Link>
@@ -66,19 +70,27 @@ function Levels() {
       </section>
 
       <section>
-        {isLoading && 'levels loading...'}
-        {isSuccess ? levels?.length === 0 : 'No levels found, try to add one'}
-        {levels && (
+        {isLoading && <Loader />}
+
+        {levels && levels?.length > 0 ? (
           <Table<FilteredLevels>
             statusColumn="status"
             data={levels}
             uniqueCol={'id'}
+            hide={['id']}
             actions={actions}
+          />
+        ) : (
+          <NoDataAvailable
+            icon="level"
+            buttonLabel="Add new level"
+            title={'No levels available'}
+            handleClick={() => history.push(`${url}/add`)}
+            description="No levels have been added yet."
           />
         )}
       </section>
 
-      {/* add new level popup */}
       <Switch>
         {/* update level popup */}
         <Route
@@ -93,6 +105,7 @@ function Levels() {
           }}
         />
 
+        {/* add new level popup */}
         <Route
           exact
           path={`${path}/add`}

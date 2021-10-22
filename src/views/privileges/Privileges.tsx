@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 
+import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
+import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
@@ -10,7 +12,7 @@ import { privilegeStore } from '../../store';
 import { PrivilegeRes } from '../../types';
 
 export default function PrivilegesView() {
-  const { path } = useRouteMatch();
+  const { path, url } = useRouteMatch();
   const location = useLocation();
 
   const [privileges, setPrivileges] = useState<PrivilegeRes[]>([]);
@@ -55,23 +57,26 @@ export default function PrivilegesView() {
       <section>
         <TableHeader
           title="Privileges"
-          totalItems={privileges?.length || 0}
+          totalItems={privileges && privileges.length > 0 ? privileges.length : 0}
           handleSearch={handleSearch}></TableHeader>
       </section>
       <section>
-        {isLoading && 'loading...'}
-        {isSuccess &&
-          privileges &&
-          (privileges.length == 0 ? (
-            'No data.'
-          ) : (
-            <Table<PrivilegeRes>
-              uniqueCol="id"
-              statusColumn="status"
-              data={privileges}
-              actions={actions}
-            />
-          ))}
+        {isLoading && <Loader />}
+        {isSuccess && privileges.length > 0 ? (
+          <Table<PrivilegeRes>
+            uniqueCol="id"
+            statusColumn="status"
+            data={privileges}
+            actions={actions}
+          />
+        ) : isSuccess && privileges.length === 0 ? (
+          <NoDataAvailable
+            buttonLabel="Add new privilege"
+            title={'No privilege available'}
+            handleClick={() => history.push(`${url}/add`)}
+            description="There are no priviledges added yet. Click above to add some"
+          />
+        ) : null}
       </section>
 
       <Switch>

@@ -25,6 +25,7 @@ export default function Sidebar() {
     const academicAdminLinks: linkProps[] = [
       { title: 'Programs', to: '/dashboard/programs', icon: 'program' },
       { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
+      { title: 'Calendar', to: '/dashboard/calendar', icon: 'calendar' },
       { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
       { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
       // { title: 'Subjects', to: '/dashboard/subjects', icon: 'module' },
@@ -52,10 +53,10 @@ export default function Sidebar() {
   return (
     <div className="bg-white md:h-screen">
       <div className="px-4 py-4">
-        <AcademyProfileCard
-          src="https://upload.wikimedia.org/wikipedia/commons/5/54/Rwanda_National_Police.png"
-          alt="academy logo">
-          National Intelligence and Security Service
+        <AcademyProfileCard src="/images/nisslogo.png" alt="academy logo">
+          {authUser?.academy
+            ? authUser.academy.name
+            : 'National Intelligence and Security Service'}
         </AcademyProfileCard>
       </div>
       <SidebarLinks links={defaultLinks()} />

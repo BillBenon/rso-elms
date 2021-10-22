@@ -33,6 +33,16 @@ class RegistrationControlStore {
     });
   }
 
+  fetchRegControlByAcademy(id: string, enabled = true) {
+    return useQuery(
+      ['regControl/academyId', id],
+      () => registrationControlService.getByAcademy(id),
+      {
+        enabled,
+      },
+    );
+  }
+
   updateRegControl() {
     return useMutation(registrationControlService.update, {
       onSuccess(newData) {

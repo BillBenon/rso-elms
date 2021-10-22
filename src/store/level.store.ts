@@ -1,22 +1,13 @@
 import { AxiosResponse } from 'axios';
 import { useMutation, useQuery } from 'react-query';
 
-import { queryClient } from '../plugins/react-query';
 import { levelService } from '../services/administration/levels.service';
 import { Response } from '../types';
 import { ILevel } from '../types/services/levels.types';
 
 class Levelstore {
   addLevel() {
-    return useMutation(levelService.addLevel, {
-      onSuccess(newData) {
-        queryClient.setQueryData(['levels'], (old) => {
-          const previousData = old as AxiosResponse<Response<ILevel[]>>;
-          previousData.data.data.push(newData.data.data);
-          return previousData;
-        });
-      },
-    });
+    return useMutation(levelService.addLevel);
   }
   getLevels() {
     return useQuery('levels', levelService.getLevels);
@@ -25,6 +16,13 @@ class Levelstore {
   getLevelById(id: string) {
     return useQuery<AxiosResponse<Response<ILevel>>, Response>(['levels/id', id], () =>
       levelService.getLevelById(id),
+    );
+  }
+
+  getLevelsByAcademy(id: string) {
+    return useQuery<AxiosResponse<Response<ILevel[]>>, Response>(
+      ['levels/academy', id],
+      () => levelService.getLevelsByAcademy(id),
     );
   }
 

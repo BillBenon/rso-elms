@@ -15,7 +15,7 @@ type IProps = {
   className?: string;
 };
 const iconStyle: colorStyleType = {
-  primary: '#2337CC',
+  primary: '#0D4B44',
   error: '#EF4444',
   warning: '#FACD23',
   success: '#3CD278',

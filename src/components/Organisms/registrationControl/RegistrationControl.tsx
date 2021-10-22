@@ -2,6 +2,7 @@ import moment from 'moment';
 import React from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
+import { authenticatorStore } from '../../../store';
 import registrationControlStore from '../../../store/registrationControl.store';
 import { GenericStatus, ValueType } from '../../../types';
 import { IRegistrationControlInfo } from '../../../types/services/registrationControl.types';
@@ -10,6 +11,7 @@ import Icon from '../../Atoms/custom/Icon';
 import Loader from '../../Atoms/custom/Loader';
 import Heading from '../../Atoms/Text/Heading';
 import ILabel from '../../Atoms/Text/ILabel';
+import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
@@ -20,7 +22,11 @@ import RegControlDetails from './RegControlDetails';
 export default function RegistrationControl() {
   const { url } = useRouteMatch();
   const history = useHistory();
-  const { data, isLoading, isSuccess } = registrationControlStore.fetchRegControl();
+  const { data: userInfo } = authenticatorStore.authUser();
+  const { data, isLoading, isSuccess } =
+    registrationControlStore.fetchRegControlByAcademy(
+      userInfo?.data.data.academy.id.toString()!,
+    );
 
   function handleSearch(_e: ValueType) {}
 
@@ -36,29 +42,31 @@ export default function RegistrationControl() {
   let RegistrationControls: IRegistrationInfo[] = [];
   let RegInfo = data?.data.data;
 
-  RegInfo?.map((obj: IRegistrationControlInfo) => {
-    obj.expected_end_date = moment(obj.expected_end_date).format('MMM D YYYY');
-    obj.expected_start_date = moment(obj.expected_start_date).format('MMM D YYYY');
+  if (RegInfo?.length! > 0) {
+    RegInfo?.map((obj: IRegistrationControlInfo) => {
+      obj.expected_end_date = moment(obj.expected_end_date).format('MMM D YYYY');
+      obj.expected_start_date = moment(obj.expected_start_date).format('MMM D YYYY');
 
-    let {
-      description,
-      generic_status,
-      id,
-      academy: { name }, //destructure name inside academy obj
-      expected_start_date,
-      expected_end_date,
-    } = obj;
+      let {
+        description,
+        generic_status,
+        id,
+        academy: { name }, //destructure name inside academy obj
+        expected_start_date,
+        expected_end_date,
+      } = obj;
 
-    let registrationcontrol: IRegistrationInfo = {
-      'start date': expected_start_date,
-      'end date': expected_end_date,
-      description,
-      'academy name': name,
-      status: generic_status,
-      id: id,
-    };
-    RegistrationControls.push(registrationcontrol);
-  });
+      let registrationcontrol: IRegistrationInfo = {
+        'start date': expected_start_date,
+        'end date': expected_end_date,
+        description,
+        'academy name': name,
+        status: generic_status,
+        id: id,
+      };
+      RegistrationControls.push(registrationcontrol);
+    });
+  }
 
   const controlActions = [
     {
@@ -112,7 +120,7 @@ export default function RegistrationControl() {
 
       <div className="mt-14">
         {isLoading && <Loader />}
-        {isSuccess && RegistrationControls ? (
+        {isSuccess && RegistrationControls.length > 0 ? (
           <Table<IRegistrationInfo>
             statusColumn="status"
             data={RegistrationControls}
@@ -124,7 +132,17 @@ export default function RegistrationControl() {
           ''
         )}
 
-        {!isLoading && RegistrationControls.length < 1 && <span>No data found</span>}
+        {!isLoading && RegistrationControls.length < 1 && (
+          <NoDataAvailable
+            icon="reg-control"
+            buttonLabel="Add new Registration Control"
+            title={'No Registration Control Available'}
+            handleClick={() => {
+              history.push(`${url}/add`);
+            }}
+            description="And the web just isn't the same without you. Lets get you back online!"
+          />
+        )}
       </div>
 
       {/* add reg control popup */}

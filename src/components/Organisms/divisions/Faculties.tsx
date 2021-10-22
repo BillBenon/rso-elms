@@ -30,7 +30,7 @@ interface IFaculties {
 export default function Faculties({ fetchType }: IFaculties) {
   const { url, path } = useRouteMatch();
   const history = useHistory();
-  const [faculties, setFaculties] = useState<FilteredData[]>();
+  const [faculties, setFaculties] = useState<FilteredData[]>([]);
   const { data: userInfo } = authenticatorStore.authUser();
 
   const { data, isSuccess, isLoading, isError } = divisionStore.getDivisionByType(
@@ -79,7 +79,7 @@ export default function Faculties({ fetchType }: IFaculties) {
     {
       name: 'Add Department',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/add`);
+        history.push(`${path}/${id}/new`);
       },
     },
     {
@@ -96,38 +96,38 @@ export default function Faculties({ fetchType }: IFaculties) {
   return (
     <main>
       <section>
-        <TableHeader
-          title="Faculty"
-          totalItems={`${faculties?.length} faculties` || 0}
-          handleSearch={() => {}}>
-          <Link to={`${url}/add`}>
-            <Button>Add Faculty</Button>
-          </Link>
-        </TableHeader>
+        {faculties && faculties?.length > 0 && (
+          <TableHeader
+            title="Faculty"
+            totalItems={`${faculties?.length} faculties` || 0}
+            handleSearch={() => {}}>
+            <Link to={`${url}/new`}>
+              <Button>Add Faculty</Button>
+            </Link>
+          </TableHeader>
+        )}
       </section>
       <section>
-        {isSuccess ? (
-          faculties?.length === 0
-        ) : (
-          <NoDataAvailable
-            buttonLabel="Add new faculty"
-            title="No faculties available"
-            handleClick={() => {
-              history.push(`${url}/add`);
-            }}
-            description="Try adding some faculties as none have been added yet!"
-          />
-        )}
-        {faculties && (
+        {isLoading && faculties.length === 0 && <Loader />}
+
+        {isSuccess && faculties?.length > 0 ? (
           <Table<FilteredData>
+            handleSelect={() => {}}
             statusColumn="status"
             data={faculties}
-            hide={['id']}
             uniqueCol={'id'}
+            hide={['id']}
             actions={actions}
           />
-        )}
-        {isLoading && <Loader />}
+        ) : isSuccess && faculties.length === 0 ? (
+          <NoDataAvailable
+            icon="faculty"
+            buttonLabel="Add new faculty"
+            title={'No department available'}
+            handleClick={() => history.push(`/dashboard/divisions/new`)}
+            description="And the web just isnt the same without you. Lets get you back online!"
+          />
+        ) : null}
       </section>
 
       <Switch>
@@ -146,7 +146,7 @@ export default function Faculties({ fetchType }: IFaculties) {
 
         <Route
           exact
-          path={`${path}/add`}
+          path={`${path}/new`}
           render={() => {
             return (
               <PopupMolecule title="New Faculty" open onClose={handleClose}>
@@ -158,7 +158,7 @@ export default function Faculties({ fetchType }: IFaculties) {
 
         <Route
           exact
-          path={`${path}/:id/add`}
+          path={`${path}/:id/new`}
           render={() => {
             return (
               <PopupMolecule title="New Department" open onClose={handleClose}>

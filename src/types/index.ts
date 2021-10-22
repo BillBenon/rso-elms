@@ -116,6 +116,7 @@ export type IconType =
   | 'alert'
   | 'attach'
   | 'chevron-right'
+  | 'chevron-left'
   | 'close'
   | 'download'
   | 'edit'
@@ -135,8 +136,9 @@ export type IconType =
   | 'settings'
   | 'switch'
   | 'user'
-  | 'evaluation'
-  | 'calendar';
+  | 'back-arrow'
+  | 'calendar'
+  | 'evaluation';
 
 export interface FormPropType {
   onSubmit?: <E>(_e: FormEvent<E>) => void;

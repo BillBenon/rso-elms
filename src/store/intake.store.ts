@@ -12,6 +12,7 @@ class IntakeStore {
   addPrograms() {
     return useMutation(intakeService.addPrograms);
   }
+
   getAll(registrationControlId?: string) {
     if (registrationControlId)
       return useQuery(['intakes/registrationControl', registrationControlId], () =>
@@ -33,10 +34,15 @@ class IntakeStore {
     );
   }
 
-  getIntakesByAcademy(academyId: string) {
-    return useQuery(['intakes/academy', academyId], () =>
-      intakeService.getIntakesByAcademy(academyId),
-    );
+  getIntakesByAcademy(id: string, fetchByReg = false) {
+    if (fetchByReg)
+      return useQuery(['intakes/registrationControl', id], () =>
+        intakeService.getIntakesPyRegistrationControl(id),
+      );
+    else
+      return useQuery(['intakes/academy', id], () =>
+        intakeService.getIntakesByAcademy(id),
+      );
   }
   getIntakesByRegControl(regControlId: string) {
     return useQuery(['intakes/regcontrol', regControlId], () =>

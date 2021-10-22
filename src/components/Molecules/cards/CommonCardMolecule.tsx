@@ -1,4 +1,4 @@
-import '../../../styles/components/Molecules/cards/CommonCardMolecule.scss';
+import '../../../styles/components/Molecules/cards/CommonCardMolecule.css';
 
 import React, { ReactNode } from 'react';
 import { useHistory } from 'react-router-dom';
@@ -39,8 +39,7 @@ export default function CommonCardMolecule({
 
   return (
     <div
-      id="course-card-molecule"
-      className={`bg-main p-6 rounded-lg 
+      className={`course-card-molecule bg-main p-6 rounded-lg 
       ${active && 'border-4 border-primary-500 border-solid'}
       ${to && 'cursor-pointer'}
       ${className}
@@ -61,7 +60,7 @@ export default function CommonCardMolecule({
             {data.subTitle}
           </Heading>
         )}
-        <p id="course-card-description" className="py-4 text-txt-secondary text-sm mt-4">
+        <p className="course-card-description py-4 text-txt-secondary text-sm mt-4">
           {data.description}
         </p>
 

@@ -3,10 +3,8 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { queryClient } from '../../../../plugins/react-query';
-import academyStore from '../../../../store/academy.store';
 import { divisionStore } from '../../../../store/divisions.store';
 import { IDivisionsAcademyType, ParamType, ValueType } from '../../../../types';
-import { AcademyInfo } from '../../../../types/services/academy.types';
 import { DivisionCreateInfo } from '../../../../types/services/division.types';
 import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';

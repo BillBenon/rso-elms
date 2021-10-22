@@ -10,7 +10,9 @@ import {
 } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
+import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
@@ -85,7 +87,7 @@ export default function Roles() {
       <section>
         <TableHeader
           title="Roles"
-          totalItems={roles?.length || 0}
+          totalItems={roles && roles.length > 0 ? roles.length : 0}
           handleSearch={handleSearch}>
           <Link to={`${url}/add`}>
             <Button>Add Role</Button>
@@ -93,19 +95,26 @@ export default function Roles() {
         </TableHeader>
       </section>
       <section>
-        {isLoading && 'Roles loading...'}
-        {isSuccess ? roles?.length === 0 : 'No Roles found, try to add one'}
-        {roles && (
+        {isLoading && <Loader />}
+        {roles && roles.length > 0 && isSuccess ? (
           <Table<FilteredRoles>
             selectorActions={manyActions}
-            hide={['id', 'name']}
+            hide={['id']}
             handleSelect={handleSelect}
             statusColumn="status"
             data={roles}
             uniqueCol={'id'}
             actions={actions}
           />
-        )}
+        ) : isSuccess && roles?.length === 0 ? (
+          <NoDataAvailable
+            icon="role"
+            buttonLabel="Add new role"
+            title={'No roles available'}
+            handleClick={() => history.push(`${url}/add`)}
+            description="There are no roles added yet. Click above to add some"
+          />
+        ) : null}
       </section>
 
       <Switch>

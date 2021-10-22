@@ -21,20 +21,20 @@ function SignIn() {
           </div>
         ) : (
           <div className="items-center justify-center hidden lg:flex bg-secondary">
-            <img className="block w-3/4" src={'/icons/login.svg'} alt="img" />
+            <img className="block w-5/6" src={'/icons/login.svg'} alt="img" />
           </div>
         )}
         <div className="px-5 py-8 md:rounded-md mx-auto lg:py-20 h-screen">
           <AcademyProfileCard
-            src="/icons/police-logo.svg"
+            src="/images/nisslogo.png"
             alt="academy logo"
             size="80"
             bgColor="none"
             txtSize="lg"
             fontWeight="semibold"
             color="primary"
-            subtitle="Service . Protection . Integrity">
-            Rwanda National Police
+            subtitle="Alertness . Reliability . Integrity">
+            National Intelligence and Security Service
           </AcademyProfileCard>
           <Switch>
             <Route exact path={`${path}`} render={() => <SignInForm />} />

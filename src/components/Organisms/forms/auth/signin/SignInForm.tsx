@@ -1,6 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Link, useHistory, useRouteMatch } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { queryClient } from '../../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../../store';
@@ -13,7 +13,6 @@ import InputMolecule from '../../../../Molecules/input/InputMolecule';
 
 const SignInForm = () => {
   const history = useHistory();
-  const { url } = useRouteMatch();
   const [loading, setLoading] = useState(false);
   const { mutateAsync } = authenticatorStore.login();
   const [details, setDetails] = useState<LoginInfo>({
@@ -42,9 +41,8 @@ const SignInForm = () => {
     await mutateAsync(details, {
       onSuccess(data) {
         setLoading(false);
-        toast.success('Authenticated', { duration: 2000, id: toastId });
         cookie.setCookie('jwt_info', JSON.stringify(data?.data.data));
-        toast.success(data.data.message, { duration: 1200 });
+        toast.success(data.data.message, { duration: 1200, id: toastId });
         redirectTo('/redirecting');
       },
       onError(error) {
@@ -71,7 +69,7 @@ const SignInForm = () => {
       </div>
 
       <form onSubmit={login}>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
           <InputMolecule
             name="username"
             placeholder="Enter your username"
@@ -103,7 +101,8 @@ const SignInForm = () => {
         <p className="text-sm text-txt-secondary">
           Not sure you&apos;re registered?
           <span className="text-primary-500 px-2">
-            <Link to={`${url}/search`}>Find out</Link>
+            {/* <Link to={`${url}/search`}>Find out</Link> */}
+            <Link to={``}>Find out</Link>
           </span>
         </p>
       </div>

@@ -14,9 +14,9 @@ class LessonStore {
     return useQuery(['lessons/id', id], () => lessonService.getLesson(id));
   }
 
-  getLessonsBySubject(moduleId: string) {
-    return useQuery(['lessons/id', moduleId], () =>
-      lessonService.getLessonsByModule(moduleId),
+  getLessonsBySubject(subjectId: string) {
+    return useQuery(['lessons/subject/id', subjectId], () =>
+      lessonService.getLessonsBySubject(subjectId),
     );
   }
 

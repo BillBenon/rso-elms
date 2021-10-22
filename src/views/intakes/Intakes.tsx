@@ -21,6 +21,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
 import NewIntake from '../../components/Organisms/intake/NewIntake';
 import UpdateIntake from '../../components/Organisms/intake/UpdateIntake';
+import { authenticatorStore } from '../../store';
 import { intakeStore } from '../../store/intake.store';
 import registrationControlStore from '../../store/registrationControl.store';
 import { CommonCardDataType, Link as LinkType, ValueType } from '../../types';
@@ -35,6 +36,7 @@ const list: LinkType[] = [
 
 export default function Intakes() {
   const [intakes, setIntakes] = useState<CommonCardDataType[]>([]);
+  const { data: userInfo } = authenticatorStore.authUser();
 
   const history = useHistory();
   const { url } = useRouteMatch();
@@ -56,7 +58,10 @@ export default function Intakes() {
     data,
     isLoading,
     refetch: refetchIntakes,
-  } = intakeStore.getAll(registrationControlId!);
+  } = intakeStore.getIntakesByAcademy(
+    registrationControlId || userInfo?.data.data.academy.id.toString()!,
+    !!registrationControlId,
+  );
 
   useEffect(() => {
     if (isSuccess && data?.data) {
@@ -99,7 +104,9 @@ export default function Intakes() {
       <BreadCrumb list={list} />
       <TableHeader
         title={`${registrationControlId ? regControlName() : 'Intakes'}`}
-        totalItems={registrationControlId ? `${intakes.length} intakes` : intakes.length}
+        totalItems={
+          registrationControlId ? `${intakes.length} intakes` : `${intakes.length}`
+        }
         handleSearch={handleSearch}>
         {registrationControlId && (
           <Link
@@ -113,7 +120,7 @@ export default function Intakes() {
         )}
       </TableHeader>
 
-      <section className="flex flex-wrap justify-between mt-2">
+      <section className="flex flex-wrap justify-start gap-4 mt-2">
         {intakes.map((intake, index) => (
           <div key={intake.code + Math.random() * 10} className="p-1 mt-3">
             <Tooltip
@@ -161,8 +168,9 @@ export default function Intakes() {
 
         {isLoading && <Loader />}
 
-        {!isLoading && intakes.length <= 0 && (
+        {!isLoading && intakes && intakes.length <= 0 && (
           <NoDataAvailable
+            icon="academy"
             buttonLabel="Add new Intake"
             title={
               registrationControlId
@@ -188,25 +196,32 @@ export default function Intakes() {
           path={`${url}/:id/add-intake`}
           render={() => {
             return (
-              <PopupMolecule title="New intake" open onClose={handleClose}>
+              <PopupMolecule
+                closeOnClickOutSide={false}
+                title="New intake"
+                open
+                onClose={handleClose}>
                 <NewIntake handleSuccess={intakeCreated} />
               </PopupMolecule>
             );
           }}
         />
-
-        {/* edit intake to reg control */}
         <Route
           exact
           path={`${url}/:id/edit`}
           render={() => {
             return (
-              <PopupMolecule title="Update intake" open onClose={handleClose}>
+              <PopupMolecule
+                closeOnClickOutSide={false}
+                title="Update intake"
+                open
+                onClose={handleClose}>
                 <UpdateIntake handleSuccess={handleClose} />
               </PopupMolecule>
             );
           }}
         />
+        ;
       </Switch>
     </div>
   );

@@ -20,6 +20,11 @@ class UserStore {
   fetchUsers() {
     return useQuery('users', userService.fetchUsers);
   }
+  getUsersByInstitution(institutionId: string) {
+    return useQuery(['users/institution', institutionId], () =>
+      userService.getUsersByInstitution(institutionId),
+    );
+  }
   getUserById(id: string) {
     return useQuery(['user/id', id], () => userService.getUserByid(id));
   }
@@ -31,6 +36,17 @@ class UserStore {
   }
   modifyUser() {
     return useMutation(userService.modifyUser, {
+      onSuccess(newData) {
+        queryClient.setQueryData(['users'], (old) => {
+          const previousData = old as AxiosResponse<Response<UserInfo[]>>;
+          previousData.data.data.push(newData.data.data);
+          return previousData;
+        });
+      },
+    });
+  }
+  updateUuser() {
+    return useMutation(userService.updateProfile, {
       onSuccess(newData) {
         queryClient.setQueryData(['users'], (old) => {
           const previousData = old as AxiosResponse<Response<UserInfo[]>>;

@@ -1,5 +1,5 @@
 {
-  "name": "vite-react-tailwind-starter",
+  "name": "rso-elms",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",
@@ -17,6 +17,7 @@
     "moment": "^2.29.1",
     "react": "17.0.2",
     "react-countdown": "^2.3.2",
+    "react-big-calendar": "^0.38.0",
     "react-dom": "17.0.2",
     "react-hot-toast": "2.1.1",
     "react-modern-calendar-datepicker": "^3.1.6",
@@ -36,6 +37,7 @@
     "@types/lodash": "4.14.173",
     "@types/node": "^16.10.2",
     "@types/react": "^17.0.27",
+    "@types/react-big-calendar": "^0.36.0",
     "@types/react-dom": "17.0.0",
     "@types/react-router-dom": "5.1.7",
     "@types/react-select": "4.0.17",

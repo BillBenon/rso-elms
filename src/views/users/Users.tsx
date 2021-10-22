@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
-import Badge from '../../components/Atoms/custom/Badge';
 import Icon from '../../components/Atoms/custom/Icon';
-import Heading from '../../components/Atoms/Text/Heading';
+import Loader from '../../components/Atoms/custom/Loader';
 import ILabel from '../../components/Atoms/Text/ILabel';
 import PopupMolecule from '../../components/Molecules/Popup';
+import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import NewUser from '../../components/Organisms/forms/user/NewUser';
+import UpdateUser from '../../components/Organisms/forms/user/UpdateUser';
 import Admins from '../../components/Organisms/user/Admins';
 import ImportUsers from '../../components/Organisms/user/ImportUsers';
 import Instructors from '../../components/Organisms/user/Instructors';
-import NewUser from '../../components/Organisms/user/NewUser';
 import Students from '../../components/Organisms/user/Students';
 import usersStore from '../../store/users.store';
 import { GenericStatus } from '../../types';
 import { UserType } from '../../types/services/user.types';
+import UserDetails from './UserDetails';
 
 export type UserTypes = {
   id: string;
@@ -32,7 +34,7 @@ export default function Users() {
   const history = useHistory();
   const [userType, setUserType] = useState('Students');
 
-  const { data, isSuccess } = usersStore.fetchUsers();
+  const { data, isSuccess, isLoading } = usersStore.fetchUsers();
 
   const userInfo = data?.data.data;
 
@@ -109,8 +111,12 @@ export default function Users() {
           {userType}
         </ILabel>
       </div>
+      {isLoading && users.length === 0 && <Loader />}
       <Switch>
         <Route exact path={`${path}/add`} render={() => <NewUser />} />
+        <Route exact path={`${path}/:id/edit`} render={() => <UpdateUser />} />
+        <Route exact path={`${path}/:id/profile`} component={UserDetails} />
+
         <Route
           exact
           path={`${path}/import`}
@@ -123,47 +129,42 @@ export default function Users() {
             </PopupMolecule>
           )}
         />
-        <Route
-          path={`${path}`}
-          render={() => {
-            return (
-              <>
-                <div className="flex gap-2 items-center py-3">
-                  <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
-                    users
-                  </Heading>
-                  <Badge
-                    badgetxtcolor="main"
-                    badgecolor="primary"
-                    fontWeight="normal"
-                    className="h-6 w-9 flex justify-center items-center">
-                    {users.length}
-                  </Badge>
-                </div>
+        {isSuccess && (
+          <Route
+            path={`${path}`}
+            render={() => {
+              return (
+                <>
+                  <TableHeader
+                    totalItems={users.length}
+                    title={'users'}
+                    showSearch={false}
+                  />
 
-                <TabNavigation
-                  tabs={tabs}
-                  onTabChange={(event) => setUserType(event.activeTabLabel)}>
-                  <Route
-                    exact
-                    path={`${path}`}
-                    render={() => <Students students={students} />}
-                  />
-                  <Route
-                    exact
-                    path={`${path}/instructors`}
-                    render={() => <Instructors instructors={instructors} />}
-                  />
-                  <Route
-                    exact
-                    path={`${path}/admins`}
-                    render={() => <Admins admins={admins} />}
-                  />
-                </TabNavigation>
-              </>
-            );
-          }}
-        />
+                  <TabNavigation
+                    tabs={tabs}
+                    onTabChange={(event) => setUserType(event.activeTabLabel)}>
+                    <Route
+                      exact
+                      path={`${path}`}
+                      render={() => <Students students={students} />}
+                    />
+                    <Route
+                      exact
+                      path={`${path}/instructors`}
+                      render={() => <Instructors instructors={instructors} />}
+                    />
+                    <Route
+                      exact
+                      path={`${path}/admins`}
+                      render={() => <Admins admins={admins} />}
+                    />
+                  </TabNavigation>
+                </>
+              );
+            }}
+          />
+        )}
       </Switch>
     </div>
   );

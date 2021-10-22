@@ -13,15 +13,26 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
   function handleSearch(_e: ValueType) {}
   const instructorActions = [
     { name: 'Add Role', handleAction: () => {} },
-    { name: 'Edit instructor', handleAction: () => {} },
-    { name: 'View', handleAction: () => {} },
+    {
+      name: 'Edit instructor',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`/dashboard/users/${id}/edit`); // go to edit user
+      },
+    },
+    {
+      name: 'View instructor',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`/dashboard/users/${id}/profile`); // go to view user profile
+      },
+    },
   ];
   return (
     <>
       <TableHeader
         title="Instructors"
         totalItems={instructors && instructors.length > 0 ? instructors.length : 0}
-        handleSearch={handleSearch}>
+        handleSearch={handleSearch}
+        showSearch={instructors && instructors.length > 0}>
         <div className="flex gap-3">
           <Link to={`/dashboard/users/import`}>
             <Button styleType="outline">Import users</Button>
@@ -35,6 +46,7 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
         <div className="pt-8">
           {instructors.length <= 0 ? (
             <NoDataAvailable
+              icon="user"
               buttonLabel="Add new instructor"
               title={'No instructor available'}
               handleClick={() => history.push(`/dashboard/users/add`)}
@@ -46,6 +58,7 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
               data={instructors}
               actions={instructorActions}
               hide={['id', 'user_type']}
+              uniqueCol="id"
             />
           )}
         </div>

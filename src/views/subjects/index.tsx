@@ -6,7 +6,6 @@ import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
 import { subjectStore } from '../../store/subject.store';
 import { CommonCardDataType, Link } from '../../types';
@@ -54,7 +53,7 @@ export default function Subjects() {
     <>
       <main className="px-4">
         <section>
-          <BreadCrumb list={list}></BreadCrumb>
+          <BreadCrumb list={list} />
         </section>
         <section className="">
           <TableHeader
@@ -84,19 +83,6 @@ export default function Subjects() {
               return (
                 <PopupMolecule title="New Subject" open onClose={handleClose}>
                   <NewSubjectForm />
-                </PopupMolecule>
-              );
-            }}
-          />
-
-          {/* add lesson popup */}
-          <Route
-            exact
-            path={`${path}/:id/add-lesson`}
-            render={() => {
-              return (
-                <PopupMolecule title="Add lesson" open onClose={handleClose}>
-                  <NewLessonForm />
                 </PopupMolecule>
               );
             }}
