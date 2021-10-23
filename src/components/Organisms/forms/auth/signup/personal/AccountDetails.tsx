@@ -79,13 +79,14 @@ function AccountDetails<E>({
             handleChange={handleChange}>
             Username
           </InputMolecule>
-          <InputMolecule
+          {/* <InputMolecule
             name="pin"
+            type="password"
             placeholder="Enter pin of 5 numbers"
             value={accountDetails.pin}
             handleChange={handleChange}>
             Pin
-          </InputMolecule>
+          </InputMolecule> */}
           <InputMolecule
             name="password"
             placeholder="password"

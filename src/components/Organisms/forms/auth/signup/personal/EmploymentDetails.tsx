@@ -25,6 +25,8 @@ function EmploymentDetails<E>({
     emp_no: '',
     date_of_commission: '',
     date_of_last_promotion: '',
+    place_of_issue: '',
+    date_of_issue: '',
   });
 
   const moveBack = () => {
@@ -58,6 +60,8 @@ function EmploymentDetails<E>({
         emp_no: personInfo.emp_no,
         date_of_commission: personInfo.date_of_commission,
         date_of_last_promotion: personInfo.date_of_last_promotion,
+        place_of_issue: personInfo.place_of_issue,
+        date_of_issue: personInfo.date_of_issue,
       });
   }, [user.data?.data.data.person]);
 
@@ -65,58 +69,81 @@ function EmploymentDetails<E>({
     <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
       {!isVertical && <Heading fontWeight="semibold">{display_label}</Heading>}
       <form onSubmit={moveForward}>
-        <div className="flex flex-col gap-4">
-          <DropdownMolecule
-            placeholder="Select current rank"
-            name="current_rank_id"
-            className="w-72"
-            handleChange={handleChange}
-            options={[]}>
-            Current Rank
-          </DropdownMolecule>
-          <InputMolecule
-            name="other_rank"
-            placeholder="other ranks u might hold"
-            value={employmentDetails.other_rank}
-            handleChange={handleChange}>
-            Other rank
-          </InputMolecule>
+        <div className="grid grid-cols-1 md:grid-cols-2">
+          <div className="flex flex-col gap-4">
+            <DropdownMolecule
+              placeholder="Select current rank"
+              name="current_rank_id"
+              className="w-72"
+              handleChange={handleChange}
+              options={[]}>
+              Current Rank
+            </DropdownMolecule>
+            <InputMolecule
+              required={false}
+              name="other_rank"
+              placeholder="other ranks u might hold"
+              value={employmentDetails.other_rank}
+              handleChange={handleChange}>
+              Other rank
+            </InputMolecule>
+          </div>
+          <div className="flex flex-col gap-4">
+            <InputMolecule
+              name="emp_no"
+              placeholder="Service number"
+              value={employmentDetails.emp_no}
+              handleChange={handleChange}>
+              Service / Employment number
+            </InputMolecule>
+
+            <DateMolecule
+              defaultValue={employmentDetails.date_of_commission}
+              handleChange={handleChange}
+              name="date_of_commission"
+              date_time_type={false}
+              width="60 md:w-80">
+              Date of commission
+            </DateMolecule>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            <InputMolecule
+              name="rank_depart"
+              placeholder="eg: Rwanda"
+              value={employmentDetails.rank_depart}
+              handleChange={handleChange}>
+              Current rank department
+            </InputMolecule>
+
+            <DateMolecule
+              defaultValue={employmentDetails.date_of_last_promotion}
+              handleChange={handleChange}
+              name="date_of_last_promotion"
+              date_time_type={false}
+              width="60 md:w-80">
+              Date of last promotion
+            </DateMolecule>
+          </div>
+          <div className="flex flex-col gap-4">
+            <InputMolecule
+              name="place_of_issue"
+              value={employmentDetails.place_of_issue}
+              placeholder={`Enter the place the document was issued`}
+              handleChange={handleChange}>
+              Place of issue
+            </InputMolecule>
+            <DateMolecule
+              defaultValue={employmentDetails.date_of_issue}
+              handleChange={handleChange}
+              name="date_of_issue"
+              date_time_type={false}
+              width="60 md:w-80">
+              Date of issue
+            </DateMolecule>
+          </div>
         </div>
-        <div className="flex flex-col gap-4">
-          <InputMolecule
-            name="rank_depart"
-            placeholder="eg: Rwanda"
-            value={employmentDetails.rank_depart}
-            handleChange={handleChange}>
-            Current rank department
-          </InputMolecule>
-          <InputMolecule
-            name="emp_no"
-            placeholder="Employment number"
-            value={employmentDetails.emp_no}
-            handleChange={handleChange}>
-            Service / Employment number
-          </InputMolecule>
-        </div>
-        <div className="flex flex-col gap-4">
-          <DateMolecule
-            defaultValue={employmentDetails.date_of_commission}
-            handleChange={handleChange}
-            name="date_of_commission"
-            date_time_type={false}
-            width="60 md:w-80">
-            Date of commission
-          </DateMolecule>
-          <DateMolecule
-            defaultValue={employmentDetails.date_of_last_promotion}
-            handleChange={handleChange}
-            name="date_of_last_promotion"
-            date_time_type={false}
-            width="60 md:w-80">
-            Date of last promotion
-          </DateMolecule>
-        </div>
-        <div className="flex w-80 justify-between">
+        <div className="flex w-4/5 my-4 justify-between">
           {prevStep && (
             <Button
               styleType="text"

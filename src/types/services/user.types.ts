@@ -129,6 +129,9 @@ export interface CreateUserInfo {
   user_type: UserType;
   username: string;
   intake_id: string;
+  nationality: string;
+  document_expire_on: string,
+
 }
 
 export interface PersonDetail
@@ -143,27 +146,13 @@ export interface PersonDetail
     | 'birth_date'
     | 'religion'
     | 'blood_group'
-  > {}
-
-export interface FamilyDetail
-  extends Pick<
-    PersonInfo,
-    'father_names' | 'mother_names' | 'marital_status' | 'spouse_name'
-  > {}
-
-export interface NationalDocument
-  extends Pick<
-    PersonInfo,
-    | 'nationality'
-    | 'doc_type'
-    | 'nid'
+    | 'father_names' 
+    | 'mother_names' 
+    | 'marital_status' 
+    | 'spouse_name'
     | 'residence_location_id'
-    | 'place_of_issue'
-    | 'date_of_issue'
     | 'place_of_residence'
-    | 'document_expire_on'
-  > {}
-
+    > {}
 export interface EmploymentDetail
   extends Pick<
     PersonInfo,
@@ -171,6 +160,8 @@ export interface EmploymentDetail
     | 'current_rank_id'
     | 'other_rank'
     | 'rank_depart'
+    | 'place_of_issue'
+    | 'date_of_issue'
     | 'date_of_commission'
     | 'date_of_last_promotion'
   > {}
