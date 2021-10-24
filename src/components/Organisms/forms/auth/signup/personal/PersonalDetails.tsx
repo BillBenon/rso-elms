@@ -53,7 +53,6 @@ function PersonalDetails<E>({
     e.preventDefault();
     let data: any = JSON.parse(localStorage.getItem('user') || '{}');
     let newObj = Object.assign({}, data, personalDetails);
-    console.log(JSON.stringify(newObj));
 
     Object.keys(newObj).map((val) => {
       //@ts-ignore

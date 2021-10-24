@@ -6,8 +6,6 @@ import CompleteProfileHeader from '../../components/Molecules/CompleteProfileHea
 import Stepper from '../../components/Molecules/Stepper/Stepper';
 import AccountDetails from '../../components/Organisms/forms/auth/signup/personal/AccountDetails';
 import EmploymentDetails from '../../components/Organisms/forms/auth/signup/personal/EmploymentDetails';
-import FamilyDetails from '../../components/Organisms/forms/auth/signup/personal/FamilyDetails';
-import NationalDocuments from '../../components/Organisms/forms/auth/signup/personal/NationalDocument';
 import PersonalDetails from '../../components/Organisms/forms/auth/signup/personal/PersonalDetails';
 import usersStore from '../../store/users.store';
 import { ProfileStatus, UpdateUserInfo } from '../../types/services/user.types';
@@ -69,7 +67,7 @@ function CompleteProfile(props: any) {
   const [completeStep, setCompleteStep] = useState(0);
   const history = useHistory();
 
-  const { mutateAsync } = usersStore.updateUuser();
+  const { mutateAsync } = usersStore.updateUser();
 
   async function saveInfo(isComplete: boolean) {
     let userFromLocalStorage: UpdateUserInfo = JSON.parse(
@@ -121,20 +119,6 @@ function CompleteProfile(props: any) {
           fetched_id={props.location.state.detail.id}
           display_label="Personal details"
           isVertical
-          nextStep={nextStep}
-        />
-        <FamilyDetails
-          fetched_id={props.location.state.detail.id}
-          display_label="Family details"
-          isVertical
-          prevStep={prevStep}
-          nextStep={nextStep}
-        />
-        <NationalDocuments
-          fetched_id={props.location.state.detail.id}
-          display_label="National documents"
-          isVertical
-          prevStep={prevStep}
           nextStep={nextStep}
         />
         <EmploymentDetails

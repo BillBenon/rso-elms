@@ -40,8 +40,6 @@ function EmploymentDetails<E>({
     e.preventDefault();
     let data: any = JSON.parse(localStorage.getItem('user') || '{}');
     let newObj = Object.assign({}, data, employmentDetails);
-    console.log(JSON.stringify(newObj));
-
     Object.keys(newObj).map((val) => {
       //@ts-ignore
       if (!newObj[val]) newObj[val] = '';

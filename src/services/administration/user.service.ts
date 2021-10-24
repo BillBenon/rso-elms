@@ -19,7 +19,7 @@ class UserService {
   public async updateProfile(
     userInfo: UpdateUserInfo,
   ): Promise<AxiosResponse<Response<UserInfo>>> {
-    return await adminstrationAxios.post('/users/updateProfile', userInfo);
+    return await adminstrationAxios.put('/users/updateProfile', userInfo);
   }
   public async fetchUsers(): Promise<AxiosResponse<Response<UserInfo[]>>> {
     return await adminstrationAxios.get('/users/getUsers');

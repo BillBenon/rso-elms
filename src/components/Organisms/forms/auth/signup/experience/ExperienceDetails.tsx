@@ -14,6 +14,7 @@ import Icon from '../../../../../Atoms/custom/Icon';
 import Panel from '../../../../../Atoms/custom/Panel';
 import Heading from '../../../../../Atoms/Text/Heading';
 import Accordion from '../../../../../Molecules/Accordion';
+import CompleteProfileHeader from '../../../../../Molecules/CompleteProfileHeader';
 import DateMolecule from '../../../../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../../Molecules/input/InputMolecule';
@@ -38,7 +39,7 @@ function ExperienceDetails(props: any) {
   });
 
   const experiences = experienceStore.getPersonExperiences(
-    props.location.state.detail.person_id,
+    props.location.state.detail.person.id,
   );
   useEffect(() => {
     experiences.data?.data.data.length &&
@@ -47,11 +48,24 @@ function ExperienceDetails(props: any) {
 
   const [totalExperience, setTotalExperience] = useState<ExperienceInfo[]>([]);
 
-  useEffect(
-    //@ts-ignore
-    () => setTotalExperience(JSON.parse(localStorage.getItem('totalExperience'))),
-    [],
-  );
+  // useEffect(
+  //   //@ts-ignore
+  //   () => setTotalExperience(JSON.parse(localStorage.getItem('totalExperience'))),
+  //   [],
+  // );
+
+  useEffect(() => {
+    let data: ExperienceInfo = JSON.parse(
+      localStorage.getItem('totalExperience') || '{}',
+    );
+
+    // Object.keys(person).map((val) => {
+    //   //@ts-ignore
+    //   if (!person[val]) person[val] = '';
+    // });
+
+    localStorage.setItem('user', JSON.stringify({ ...data }));
+  }, [totalExperience]);
 
   useEffect(
     //@ts-ignore
@@ -118,119 +132,125 @@ function ExperienceDetails(props: any) {
   }
 
   return (
-    <div className="grid lg:grid-cols-2 grid-cols-1 w-full mx-auto px-10 py-20">
-      <div className="flex flex-col gap-4">
-        <Heading fontSize="2xl" fontWeight="semibold" className="py-3">
-          {experienceData.type.replaceAll('_', ' ')}
-        </Heading>
-        <div className="grid lg:grid-cols-2 grid-cols-1">
-          <div>
-            <div className="flex flex-col gap-4">
-              <DropdownMolecule
-                name="type"
-                handleChange={handleChange}
-                defaultValue={getDropDownStatusOptions(ExperienceTypeStatus).find(
-                  (exp) => exp.value === experienceData.type,
-                )}
-                options={getDropDownStatusOptions(ExperienceTypeStatus)}>
-                Experience type
-              </DropdownMolecule>
-              <InputMolecule
-                name="level"
-                placeholder="Level"
-                value={experienceData.level}
-                handleChange={handleChange}>
-                Education Level
-                <span className="text-txt-secondary"> (Write in full abbreviation)</span>
-              </InputMolecule>
-            </div>
-            <div className="flex flex-col gap-4">
-              <InputMolecule
-                placeholder={`Enter your occupation`}
-                name="occupation"
-                value={experienceData.occupation}
-                handleChange={handleChange}>
-                Occupation
-              </InputMolecule>
-              <TextAreaMolecule
-                name="description"
-                value={experienceData.description}
-                handleChange={handleChange}>
-                Description
-              </TextAreaMolecule>
-            </div>
-          </div>
-          {/* second column */}
-          <div className="px-5">
-            <div className="flex flex-col gap-4">
-              <DateMolecule
-                handleChange={handleChange}
-                defaultValue={experienceData.start_date}
-                name="start_date"
-                startYear={new Date().getFullYear() - 25}
-                width="60 md:w-80">
-                Start Date
-              </DateMolecule>
-              <DateMolecule
-                handleChange={handleChange}
-                name="end_date"
-                endYear={new Date().getFullYear() + 50}
-                defaultValue={experienceData.end_date}
-                width="60 md:w-80">
-                End Date
-              </DateMolecule>
-            </div>
+    <div className="bg-main p-8 md:px-20">
+      <CompleteProfileHeader />
+      <div className="grid lg:grid-cols-2 grid-cols-1 mx-auto px-5">
+        <div className="flex flex-col gap-4">
+          <Heading fontSize="2xl" fontWeight="semibold" className="py-3">
+            {experienceData.type.replaceAll('_', ' ')}
+          </Heading>
+          <div className="grid lg:grid-cols-2 grid-cols-1">
             <div>
-              <div className="mb-3">
+              <div className="flex flex-col gap-4">
+                <DropdownMolecule
+                  name="type"
+                  handleChange={handleChange}
+                  defaultValue={getDropDownStatusOptions(ExperienceTypeStatus).find(
+                    (exp) => exp.value === experienceData.type,
+                  )}
+                  options={getDropDownStatusOptions(ExperienceTypeStatus)}>
+                  Experience type
+                </DropdownMolecule>
                 <InputMolecule
-                  placeholder={`Enter document title (eg: proof, certificate)`}
-                  name="proof"
-                  value={experienceData.proof}
+                  name="level"
+                  placeholder="Level"
+                  value={experienceData.level}
                   handleChange={handleChange}>
-                  Document title
+                  Education Level
+                  <span className="text-txt-secondary">
+                    {' '}
+                    (Write in full abbreviation)
+                  </span>
                 </InputMolecule>
               </div>
-              <Button styleType="outline" className="p-0">
-                <span className="flex items-center">
-                  <Icon name="attach" useheightandpadding={false} fill="primary" />
-                  <span className="m-auto font-semibold">Upload</span>
-                </span>
-              </Button>
+              <div className="flex flex-col gap-4">
+                <InputMolecule
+                  placeholder={`Enter your occupation`}
+                  name="occupation"
+                  value={experienceData.occupation}
+                  handleChange={handleChange}>
+                  Occupation
+                </InputMolecule>
+                <TextAreaMolecule
+                  name="description"
+                  value={experienceData.description}
+                  handleChange={handleChange}>
+                  Description
+                </TextAreaMolecule>
+              </div>
+            </div>
+            {/* second column */}
+            <div className="px-20">
+              <div className="flex flex-col gap-4">
+                <DateMolecule
+                  handleChange={handleChange}
+                  defaultValue={experienceData.start_date}
+                  name="start_date"
+                  startYear={new Date().getFullYear() - 25}
+                  width="60 md:w-80">
+                  Start Date
+                </DateMolecule>
+                <DateMolecule
+                  handleChange={handleChange}
+                  name="end_date"
+                  endYear={new Date().getFullYear() + 50}
+                  defaultValue={experienceData.end_date}
+                  width="60 md:w-80">
+                  End Date
+                </DateMolecule>
+              </div>
+              <div>
+                <div className="mb-3">
+                  <InputMolecule
+                    placeholder={`Enter document title (eg: proof, certificate)`}
+                    name="proof"
+                    value={experienceData.proof}
+                    handleChange={handleChange}>
+                    Document title
+                  </InputMolecule>
+                </div>
+                <Button styleType="outline" className="p-0">
+                  <span className="flex items-center">
+                    <Icon name="attach" useheightandpadding={false} fill="primary" />
+                    <span className="m-auto font-semibold">Upload</span>
+                  </span>
+                </Button>
+              </div>
             </div>
           </div>
+          <div className="flex justify-between">
+            <Button styleType="outline" onClick={() => handleMore()}>
+              Add more
+            </Button>
+            <Button onClick={() => saveData()}>Save</Button>
+          </div>
         </div>
-        <div className="flex justify-between">
-          <Button styleType="outline" onClick={() => handleMore()}>
-            Add more
-          </Button>
-          <Button onClick={() => saveData()}>Save</Button>
-        </div>
-      </div>
 
-      <div className="md:px-20 px-5">
-        {totalExperience.length > 0 && <p className="py-3">Experiences</p>}
-        <Accordion>
-          {totalExperience.map((exp) => {
-            return (
-              <Panel
-                bgColor="tertiary"
-                key={exp.type}
-                title={exp.type.replaceAll('_', ' ')}
-                subtitle={exp.description}>
-                <div>Occupation: {exp.occupation}</div>
-                <div>Level: {exp.level}</div>
-                <div>Start Date: {exp.start_date}</div>
-                <div>End Date: {exp.end_date}</div>
-                <div className="flex items-center">
-                  <Icon name="attach" fill="primary" />
-                  <span className="border-txt-primary border-b font-medium">
-                    {exp.proof}
-                  </span>
-                </div>
-              </Panel>
-            );
-          })}
-        </Accordion>
+        <div className="md:px-20 px-5">
+          {totalExperience.length > 0 && <p className="py-3">Experiences</p>}
+          <Accordion>
+            {totalExperience.map((exp) => {
+              return (
+                <Panel
+                  bgColor="tertiary"
+                  key={exp.type}
+                  title={exp.type.replaceAll('_', ' ')}
+                  subtitle={exp.description}>
+                  <div>Occupation: {exp.occupation}</div>
+                  <div>Level: {exp.level}</div>
+                  <div>Start Date: {exp.start_date}</div>
+                  <div>End Date: {exp.end_date}</div>
+                  <div className="flex items-center">
+                    <Icon name="attach" fill="primary" />
+                    <span className="border-txt-primary border-b font-medium">
+                      {exp.proof}
+                    </span>
+                  </div>
+                </Panel>
+              );
+            })}
+          </Accordion>
+        </div>
       </div>
     </div>
   );
