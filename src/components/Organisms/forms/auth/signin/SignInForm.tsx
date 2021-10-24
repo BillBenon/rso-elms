@@ -102,7 +102,7 @@ const SignInForm = () => {
       <div className="text-txt-secondary py-2">
         <p className="text-sm text-txt-secondary">
           Not sure you&apos;re registered?
-          <span className="text-primary-500 px-2">
+          <span className="text-primary-500 font-bold px-2">
             <Link to={`${url}/search`}>Find out</Link>
           </span>
         </p>
