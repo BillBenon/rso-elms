@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 export enum IEvaluationTypeEnum {
   EXAM = 'EXAM',
   CAT = 'CAT',
@@ -45,7 +46,7 @@ export enum IContentFormatEnum {
   PDF = 'PDF',
 }
 
-export enum IEvaluationType {
+export enum IEvaluationStatus {
   PENDING = 'PENDING',
   ON_GOING = 'ON_GOING',
   UNMARKED = 'UNMARKED',
@@ -54,25 +55,60 @@ export enum IEvaluationType {
   CANCELED = 'CANCELED',
 }
 
+export enum IEligibleGroup {
+  MULTIPLE_CLASSES = 'MULTIPLE_CLASSES',
+  SINGLE_CLASS = 'SINGLE_CLASS',
+}
+
 export interface IEvaluationCreate {
   access_type: string;
   allow_submission_time: string;
+  class_ids: string;
+  subject_academic_year_period_id: number;
   classification: IEvaluationClassification;
   content_format: string;
   due_on: string | null;
   eligible_group: string;
-  evaluation_status: string;
+  evaluation_status: IEvaluationStatus;
   evaluation_type: IEvaluationTypeEnum;
   exam_instruction: string;
-  id: string | number;
-  intake_level_class_id: number;
   is_consider_on_report: boolean;
   marking_reminder_date: string;
   maximum_file_size: number;
   name: string;
+  id: '';
   questionaire_type: IQuestionaireTypeEnum;
-  subject_academic_year_period_id: number;
   submision_type: ISubmissionTypeEnum;
-  time_limit: string;
+  time_limit: number;
   total_mark: number;
+}
+
+export interface IEvaluationInfo {
+  id: string;
+  name: string;
+  subject_academic_year_period: string;
+  access_type: IAccessTypeEnum;
+  evaluation_type: IEvaluationTypeEnum;
+  questionaire_type: IQuestionaireTypeEnum;
+  exam_instruction: string;
+  submision_type: ISubmissionTypeEnum;
+  total_mark: number;
+  evaluation_status: IEvaluationStatus;
+  eligible_group: IEligibleGroup;
+  classification: IEvaluationClassification;
+  allow_submission_time: string;
+  due_on: string;
+  time_limit: number;
+  marking_reminder_date: string;
+  content_format: string;
+  maximum_file_size: number;
+  is_consider_on_report: boolean;
+  subject_academic_year_period_id: string;
+  group_evaluations: [];
+  private_attendees: [];
+  student_answers: [];
+  evaluation_attachments: [];
+  evaluation_approvals: [];
+  student_evaluations: [];
+  evaluation_comments: [];
 }
