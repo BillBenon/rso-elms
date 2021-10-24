@@ -13,7 +13,13 @@ const administrationModuleConfig: AxiosRequestConfig = {
   baseURL: 'http://197.243.110.147:8080/administration-service/api',
 };
 
+const evalutationModuleConfig: AxiosRequestConfig = {
+  ...commonConfig,
+  baseURL: 'http://197.243.110.147:8080/evaluation-service/api',
+};
+
 const adminstrationAxios = axios.create(administrationModuleConfig);
+const evaluationAxios = axios.create(evalutationModuleConfig);
 const authIgnore: string[] = ['/'];
 
 const interceptAdminReq = (config: AxiosRequestConfig) => {
@@ -56,6 +62,8 @@ const interceptAdminResError = (error: Error | AxiosError<AxiosResponse<Response
 };
 
 adminstrationAxios.interceptors.request.use(interceptAdminReq);
+evaluationAxios.interceptors.request.use(interceptAdminReq);
 adminstrationAxios.interceptors.response.use((config) => config, interceptAdminResError);
+evaluationAxios.interceptors.response.use((config) => config, interceptAdminResError);
 
-export { adminstrationAxios };
+export { adminstrationAxios, evaluationAxios };
