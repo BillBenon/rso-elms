@@ -60,8 +60,7 @@ export function Tabs({
             ${fontSizeStyle['sm']} ${fontWeightStyle['bold']} text-${
                 colorStyle[activeTabIndex == i ? 'primary' : 'gray']
               } border-${colorStyle[activeTabIndex == i ? 'primary' : 'lightgray']}`}
-              onClick={() => slideTo(i)}
-              disabled={activeTabIndex === i || tProps.disabled}>
+              onClick={() => slideTo(i)}>
               {tProps.label}
             </button>
           );
