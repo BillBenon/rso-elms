@@ -1,11 +1,11 @@
-import React, { JSXElementConstructor, ReactChild, ReactElement, useState } from 'react';
+import React, { JSXElementConstructor, ReactElement, useState } from 'react';
 
 import { colorStyle, fontSizeStyle, fontWeightStyle } from '../../../global/global-vars';
 interface TabProps {
   label: string;
   disabled?: boolean;
   className?: string;
-  children: any;
+  children: React.ReactNode;
 }
 
 export const Tab = ({ className = '', children }: TabProps) => {
@@ -60,7 +60,8 @@ export function Tabs({
             ${fontSizeStyle['sm']} ${fontWeightStyle['bold']} text-${
                 colorStyle[activeTabIndex == i ? 'primary' : 'gray']
               } border-${colorStyle[activeTabIndex == i ? 'primary' : 'lightgray']}`}
-              onClick={() => slideTo(i)}>
+              onClick={() => slideTo(i)}
+              disabled={activeTabIndex === i || tProps.disabled}>
               {tProps.label}
             </button>
           );
