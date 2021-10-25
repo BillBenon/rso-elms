@@ -87,7 +87,7 @@ export default function CalendarView() {
         showMultiDayTimes={false}
         views={['day', 'week']}
         defaultDate={new Date(2015, 3, 12)}
-        style={{ height: 800 }}
+        style={{ height: 900 }}
         onSelectEvent={(event) => history.push(`${path}/event/${event.id}`)}
       />
       <Switch>
