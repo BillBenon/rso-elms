@@ -1,11 +1,11 @@
-import React, { JSXElementConstructor, ReactChild, ReactElement, useState } from 'react';
+import React, { JSXElementConstructor, ReactElement, useState } from 'react';
 
 import { colorStyle, fontSizeStyle, fontWeightStyle } from '../../../global/global-vars';
 interface TabProps {
   label: string;
   disabled?: boolean;
   className?: string;
-  children: ReactChild;
+  children: React.ReactNode;
 }
 
 export const Tab = ({ className = '', children }: TabProps) => {
