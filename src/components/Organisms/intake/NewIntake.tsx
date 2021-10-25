@@ -25,7 +25,6 @@ interface IProps {
   handleNext: <T>(_e: FormEvent<T>) => any;
   handleProgramsChange?: (_e: ValueType) => any;
 }
-
 interface ParamType {
   id: string;
 }
