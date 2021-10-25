@@ -19,7 +19,6 @@ export default function Input<T>({
   pcolor = 'txt-secondary',
   width = '80',
   handleChange,
-  ref,
   className = '',
   ...attrs
 }: InputProps<T>) {
@@ -37,7 +36,6 @@ export default function Input<T>({
       placeholder={placeholder}
       name={name}
       type={type}
-      ref={ref}
       value={_value}
       readOnly={readonly}
       required={required}

@@ -18,7 +18,6 @@ import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import { Link as LinkList } from '../../types';
 import EvaluationContent from './EvaluationContent';
-import EvaluationTest from './EvaluationTest';
 
 export default function ViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
@@ -87,7 +86,6 @@ export default function ViewEvaluations() {
   return (
     <Switch>
       <Route exact path={`${path}/new`} render={() => <NewEvaluation />} />
-      <Route exact path={`${path}/test`} render={() => <EvaluationTest />} />
       <Route
         path={`${path}`}
         render={() => (
@@ -101,7 +99,7 @@ export default function ViewEvaluations() {
               </Link>
             </TableHeader>
 
-            <TabNavigation tabs={tabs}>
+            <TabNavigation tabs={tabs} onTabChange={(event) => {}}>
               <Route
                 exact
                 path={`${path}/submissions`}
