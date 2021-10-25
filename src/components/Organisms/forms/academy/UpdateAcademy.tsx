@@ -5,20 +5,20 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import Button from '../../components/Atoms/custom/Button';
-import Icon from '../../components/Atoms/custom/Icon';
-import Heading from '../../components/Atoms/Text/Heading';
-import ILabel from '../../components/Atoms/Text/ILabel';
-import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
-import InputMolecule from '../../components/Molecules/input/InputMolecule';
-import academyStore from '../../store/academy.store';
-import locationStore from '../../store/location.store';
-import usersStore from '../../store/users.store';
-import { CommonFormProps, ParamType, ValueType } from '../../types';
-import { AcademyCreateInfo } from '../../types/services/academy.types';
-import { LocationInfo } from '../../types/services/location.types';
-import { UserType } from '../../types/services/user.types';
-import { getDropDownOptions, getInchargeDropdown } from '../../utils/getOption';
+import academyStore from '../../../../store/academy.store';
+import locationStore from '../../../../store/location.store';
+import usersStore from '../../../../store/users.store';
+import { CommonFormProps, ParamType, ValueType } from '../../../../types';
+import { AcademyCreateInfo } from '../../../../types/services/academy.types';
+import { LocationInfo } from '../../../../types/services/location.types';
+import { UserType } from '../../../../types/services/user.types';
+import { getDropDownOptions, getInchargeDropdown } from '../../../../utils/getOption';
+import Button from '../../../Atoms/custom/Button';
+import Icon from '../../../Atoms/custom/Icon';
+import Heading from '../../../Atoms/Text/Heading';
+import ILabel from '../../../Atoms/Text/ILabel';
+import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
+import InputMolecule from '../../../Molecules/input/InputMolecule';
 
 export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();

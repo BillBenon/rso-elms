@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
+import { queryClient } from '../../plugins/react-query';
 import { levelStore } from '../../store/level.store';
 import programStore from '../../store/program.store';
 import { ParamType, ValueType } from '../../types';
@@ -64,6 +65,7 @@ export default function AddLevelToProgram() {
     mutateAsync(levelFlows, {
       onSuccess() {
         toast.success('Level added to program');
+        queryClient.invalidateQueries(['levels/program_id']);
         history.push(`/dashboard/programs/${progId}/`);
       },
       onError() {
