@@ -27,6 +27,7 @@ import { moduleStore } from '../../store/modules.store';
 import programStore from '../../store/program.store';
 import { CommonCardDataType, Link as Links, ParamType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
+import ModuleLevels from '../modules/ModuleLevels';
 import { IProgramData } from './AcademicPrograms';
 import AddLevelToProgram from './AddLevelToProgram';
 
@@ -91,6 +92,10 @@ export default function ProgramDetailsMolecule() {
     {
       label: 'Program modules',
       href: `${url}/modules`,
+    },
+    {
+      label: 'Program levels',
+      href: `${url}/levels`,
     },
   ];
 
@@ -261,6 +266,10 @@ export default function ProgramDetailsMolecule() {
               </div>
             )}
           />
+
+          {/* program leves */}
+          <Route exact path={`${path}/levels`} render={() => <ModuleLevels />} />
+
           {/* add module popup */}
           <Route
             exact

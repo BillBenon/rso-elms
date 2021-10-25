@@ -5,7 +5,7 @@ interface TabProps {
   label: string;
   disabled?: boolean;
   className?: string;
-  children: ReactChild;
+  children: any;
 }
 
 export const Tab = ({ className = '', children }: TabProps) => {
@@ -60,8 +60,7 @@ export function Tabs({
             ${fontSizeStyle['sm']} ${fontWeightStyle['bold']} text-${
                 colorStyle[activeTabIndex == i ? 'primary' : 'gray']
               } border-${colorStyle[activeTabIndex == i ? 'primary' : 'lightgray']}`}
-              onClick={() => slideTo(i)}
-              disabled={activeTabIndex === i || tProps.disabled}>
+              onClick={() => slideTo(i)}>
               {tProps.label}
             </button>
           );
