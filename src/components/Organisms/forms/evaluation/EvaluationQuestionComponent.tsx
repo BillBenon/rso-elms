@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { IEvaluationTypeEnum } from '../../../../types/services/evaluation.types';
+import { IEvaluationProps } from '../../../../types/services/evaluation.types';
 import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
 import Heading from '../../../Atoms/Text/Heading';
@@ -8,16 +8,34 @@ import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function EvaluationQuestionComponent({
-  values,
-  handleChange,
   handleNext,
   handleGoBack,
-  isLoading,
-  handleAddQuestion,
-}: IEvaluationTypeEnum) {
+}: IEvaluationProps) {
+  const [questions, setQuestions] = useState<any>([
+    {
+      code: '',
+      current_admin_id: '',
+
+      description: '',
+      name: '',
+    },
+    {
+      code: '',
+      current_admin_id: '',
+
+      description: '',
+      name: '',
+    },
+  ]);
+
+  function handleAddQuestion() {
+    let previousState = [...questions];
+    previousState.push(previousState[0]);
+    setQuestions(previousState);
+  }
   return (
     <>
-      {values.map((question: any, index: any) => (
+      {questions.map((question: any, index: any) => (
         <>
           <div className="flex justify-between w-2/3 bg-main px-6 py-10 mt-8" key={index}>
             <form
@@ -56,7 +74,7 @@ export default function EvaluationQuestionComponent({
           </div>
         </>
       ))}
-      <Button styleType="text" color="gray" onClick={handleGoBack} disabled={isLoading}>
+      <Button styleType="text" color="gray" onClick={handleGoBack}>
         Back
       </Button>
       <div className="pt-6 flex flex-col">
