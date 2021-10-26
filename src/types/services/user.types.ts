@@ -133,7 +133,7 @@ export interface CreateUserInfo {
   document_expire_on: string,
 
 }
-
+export interface UserView extends Pick<UserInfo, 'id'| 'first_name' | 'last_name' | 'image_url'> { selected?: boolean}
 export interface PersonDetail
   extends Pick<
     PersonInfo,

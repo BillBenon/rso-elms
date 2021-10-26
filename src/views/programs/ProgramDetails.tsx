@@ -4,6 +4,7 @@ import {
   Route,
   Switch,
   useHistory,
+  useLocation,
   useParams,
   useRouteMatch,
 } from 'react-router-dom';
@@ -23,19 +24,62 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
+import intakeProgramStore from '../../store/intake-program.store';
 import { moduleStore } from '../../store/modules.store';
 import programStore from '../../store/program.store';
 import { CommonCardDataType, Link as Links, ParamType } from '../../types';
+import { UserView } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from './AcademicPrograms';
 import AddLevelToProgram from './AddLevelToProgram';
+import { DummyUser } from './dummyUsers';
 
 export default function ProgramDetailsMolecule() {
   const { id } = useParams<ParamType>();
+  const { search } = useLocation();
+  const intakeProgId = new URLSearchParams(search).get('intakeProg');
   const history = useHistory();
   const { path, url } = useRouteMatch();
 
   const getAllModuleStore = moduleStore.getModulesByProgram(id);
+  const studentsProgram = intakeProgramStore.getStudentsByIntakeProgram(
+    intakeProgId || '',
+  ).data?.data.data;
+  const instructorsProgram = intakeProgramStore.getStudentsByIntakeProgram(
+    intakeProgId || '',
+  ).data?.data.data;
+
+  const [students, setStudents] = useState<UserView[]>([]);
+  const [instructors, setInstructors] = useState<UserView[]>([]);
+
+  useEffect(() => {
+    studentsProgram?.map((stud) =>
+      setStudents([
+        ...students,
+        {
+          id: stud.id,
+          first_name: stud.first_name,
+          last_name: stud.last_name,
+          image_url: stud.image_url,
+        },
+      ]),
+    );
+  }, [studentsProgram]);
+
+  useEffect(() => {
+    instructorsProgram?.map((inst) =>
+      setInstructors([
+        ...instructors,
+        {
+          id: inst.id,
+          first_name: inst.first_name,
+          last_name: inst.last_name,
+          image_url: inst.image_url,
+        },
+      ]),
+    );
+  }, [instructorsProgram]);
+
   const [programModules, setProgramModules] = useState<CommonCardDataType[]>([]);
 
   useEffect(() => {
@@ -55,7 +99,7 @@ export default function ProgramDetailsMolecule() {
     });
 
     setProgramModules(newModules);
-  }, [getAllModuleStore.data?.data.data]);
+  }, [getAllModuleStore.data?.data.data, id]);
 
   const program = programStore.getProgramById(id).data?.data.data;
   const programLevels = programStore.getLevelsByAcademicProgram(
@@ -105,7 +149,6 @@ export default function ProgramDetailsMolecule() {
   const handleClose = () => {
     history.goBack();
   };
-
   return (
     <>
       <BreadCrumb list={list} />
@@ -123,12 +166,6 @@ export default function ProgramDetailsMolecule() {
               <Icon name="filter" />
             </button>
           </div>
-
-          {/* <div className="flex gap-3">
-            <Button onClick={() => history.push(`${url}/add-subject`)}>
-              Add new Subject
-            </Button>
-          </div> */}
         </div>
       </div>
       <TabNavigation tabs={tabs}>
@@ -184,10 +221,20 @@ export default function ProgramDetailsMolecule() {
                   )}
                 </div>
 
-                <div className="flex flex-col gap-8">
+                <div className="flex flex-col gap-8 z-0">
                   <div className="flex gap-8">
-                    <UsersPreview title="Students" totalUsers={100} />
-                    <UsersPreview title="Instructors" totalUsers={8} />
+                    <UsersPreview
+                      title="Students"
+                      label="Students in Cadette programs"
+                      data={DummyUser}
+                      totalUsers={DummyUser.length || 0}
+                    />
+                    <UsersPreview
+                      title="Instructors"
+                      label="Instructors in Cadette programs"
+                      data={DummyUser}
+                      totalUsers={DummyUser.length || 0}
+                    />
                   </div>
                   <div className="flex gap-8">
                     {/* models */}
@@ -234,8 +281,13 @@ export default function ProgramDetailsMolecule() {
                           </div>
                         </div>
                         {programLevels && programLevels?.length === 0 && (
-                          <div className="text-primary-500 py-2 text-right text-sm mr-3">
-                            <Link to={`${url}/level/add`}>+ Add levels</Link>
+                          <div className="text-primary-500 py-2 text-sm mr-3">
+                            <Link
+                              to={`${url}/level/add`}
+                              className="flex items-center justify-end">
+                              <Icon name="add" size={12} fill="primary" />
+                              Add levels
+                            </Link>
                           </div>
                         )}
                       </div>
