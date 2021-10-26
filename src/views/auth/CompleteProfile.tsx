@@ -8,9 +8,9 @@ import AccountDetails from '../../components/Organisms/forms/auth/signup/persona
 import EmploymentDetails from '../../components/Organisms/forms/auth/signup/personal/EmploymentDetails';
 import PersonalDetails from '../../components/Organisms/forms/auth/signup/personal/PersonalDetails';
 import usersStore from '../../store/users.store';
-import { ProfileStatus, UpdateUserInfo } from '../../types/services/user.types';
+import { ProfileStatus, UpdateUserInfo, UserInfo } from '../../types/services/user.types';
 
-function CompleteProfile(props: any) {
+function CompleteProfile() {
   const [personalInfo, setPersonalInfo] = useState({
     academic_program_level_id: '',
     academy_id: '',
@@ -27,7 +27,9 @@ function CompleteProfile(props: any) {
     user_type: '',
   });
 
-  const user = usersStore.getUserById(props.location.state.detail.id.toString());
+  let foundUser: UserInfo = JSON.parse(localStorage.getItem('foundUser') || '{}');
+
+  const user = usersStore.getUserById(foundUser.id.toString());
   useEffect(() => {
     const userInfo = user.data?.data.data;
     userInfo &&
@@ -79,11 +81,9 @@ function CompleteProfile(props: any) {
         onSuccess(data) {
           let personInfo = data.data.data;
           toast.success('personal information successfully updated', { duration: 1200 });
+          localStorage.setItem('foundUser', JSON.stringify(personInfo));
           setTimeout(() => {
-            history.push({
-              pathname: '/complete-profile/experience',
-              state: { detail: personInfo },
-            });
+            history.push('/complete-profile/experience');
           }, 900);
         },
         onError() {
@@ -111,25 +111,26 @@ function CompleteProfile(props: any) {
     <div className="bg-main p-8 md:px-20 md:py-14">
       <CompleteProfileHeader />
       <Stepper
+        isDisabled={false}
         isVertical
         currentStep={currentStep}
         completeStep={completeStep}
         navigateToStepHandler={navigateToStepHandler}>
         <PersonalDetails
-          fetched_id={props.location.state.detail.id}
+          fetched_id={foundUser.id.toString()}
           display_label="Personal details"
           isVertical
           nextStep={nextStep}
         />
         <EmploymentDetails
-          fetched_id={props.location.state.detail.id}
+          fetched_id={foundUser.id.toString()}
           display_label="Employment details"
           isVertical
           prevStep={prevStep}
           nextStep={nextStep}
         />
         <AccountDetails
-          fetched_id={props.location.state.detail.id}
+          fetched_id={foundUser.id.toString()}
           display_label="Account details"
           isVertical
           prevStep={prevStep}
