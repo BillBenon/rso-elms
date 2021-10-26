@@ -9,7 +9,7 @@ import {
   IntakeStatus,
   PeriodType,
 } from '../../../types/services/intake.types';
-import { formatDateToIso } from '../../../utils/date-helper';
+import { formatDateToYyMmDd } from '../../../utils/date-helper';
 import { getDropDownStatusOptions } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';
 import DateMolecule from '../../Molecules/input/DateMolecule';
@@ -67,8 +67,6 @@ export default function NewIntake(props: CProps) {
       let data = {
         ...values,
         code,
-        expected_end_date: formatDateToIso(values.expected_end_date),
-        expected_start_date: formatDateToIso(values.expected_start_date),
       };
 
       console.log('request', data);
@@ -85,38 +83,6 @@ export default function NewIntake(props: CProps) {
       });
     }
   }
-
-  // eslint-disable-next-line no-unused-vars
-  const stepperContent = {
-    currentStep: currentStep,
-    completeStep: currentStep,
-    content: [
-      {
-        label: 'info',
-        content: (
-          <IntakeInfoComponent
-            values={values}
-            handleChange={handleChange}
-            handleNext={handleSubmit}
-            display_label="Intake Info"
-          />
-        ),
-        clicked: () => {},
-      },
-      {
-        label: 'more',
-        content: (
-          <IntakeStatusComponent
-            values={values}
-            handleChange={handleChange}
-            handleNext={handleSubmit}
-            display_label="Intake Status"
-          />
-        ),
-        clicked: () => {},
-      },
-    ],
-  };
 
   return (
     <div className="w-full">
@@ -199,7 +165,9 @@ function IntakeStatusComponent({ handleChange, handleNext }: IProps) {
         <DateMolecule
           showTime={false}
           endYear={new Date().getFullYear() + 15}
-          defaultValue={(new Date().getFullYear() + 3).toString()}
+          defaultValue={formatDateToYyMmDd(
+            new Date((new Date().getFullYear() + 4).toString()).toISOString(),
+          )}
           handleChange={handleChange}
           name={'expected_end_date'}>
           Expected End Date
