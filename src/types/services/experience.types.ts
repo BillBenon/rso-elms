@@ -3,7 +3,7 @@ export interface ExperienceInfo {
   attachment_id: string;
   description: string;
   end_date: string;
-  id: string;
+  id: number;
   level: string;
   location: string;
   occupation: string;
