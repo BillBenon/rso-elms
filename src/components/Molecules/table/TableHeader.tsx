@@ -7,11 +7,12 @@ import Heading from '../../Atoms/Text/Heading';
 import SearchMolecule from '../input/SearchMolecule';
 
 type ITableHeader = {
-  title: string;
+  title?: string;
   totalItems?: number | string;
   children?: React.ReactNode;
   showSearch?: boolean;
   showBadge?: boolean;
+  usePadding?: boolean;
   handleSearch?: (_e: ValueType) => void;
 };
 
@@ -22,6 +23,7 @@ export default function TableHeader({
   children,
   showBadge = true,
   showSearch = true,
+  usePadding = true,
 }: ITableHeader) {
   const handleChange = (e: ValueType) => {
     if (showSearch && handleSearch) {
@@ -30,7 +32,7 @@ export default function TableHeader({
   };
 
   return (
-    <div className="mt-11 pb-6">
+    <div className={`pt-4 ${usePadding && 'pb-6'}`}>
       <div className="flex flex-wrap justify-between items-center">
         <div className="flex gap-2 items-center">
           <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
