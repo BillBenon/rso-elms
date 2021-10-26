@@ -116,6 +116,7 @@ export type IconType =
   | 'alert'
   | 'attach'
   | 'chevron-right'
+  | 'chevron-left'
   | 'close'
   | 'download'
   | 'edit'
@@ -136,6 +137,7 @@ export type IconType =
   | 'switch'
   | 'user'
   | 'back-arrow'
+  | 'calendar'
   | 'evaluation';
 
 export interface FormPropType {

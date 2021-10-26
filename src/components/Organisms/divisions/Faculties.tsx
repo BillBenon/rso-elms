@@ -30,7 +30,7 @@ interface IFaculties {
 export default function Faculties({ fetchType }: IFaculties) {
   const { url, path } = useRouteMatch();
   const history = useHistory();
-  const [faculties, setFaculties] = useState<FilteredData[]>();
+  const [faculties, setFaculties] = useState<FilteredData[]>([]);
   const { data: userInfo } = authenticatorStore.authUser();
 
   const { data, isSuccess, isLoading, isError } = divisionStore.getDivisionByType(
@@ -108,7 +108,9 @@ export default function Faculties({ fetchType }: IFaculties) {
         )}
       </section>
       <section>
-        {faculties && faculties?.length > 0 ? (
+        {isLoading && faculties.length === 0 && <Loader />}
+
+        {isSuccess && faculties?.length > 0 ? (
           <Table<FilteredData>
             handleSelect={() => {}}
             statusColumn="status"
@@ -117,7 +119,7 @@ export default function Faculties({ fetchType }: IFaculties) {
             hide={['id']}
             actions={actions}
           />
-        ) : (
+        ) : isSuccess && faculties.length === 0 ? (
           <NoDataAvailable
             icon="faculty"
             buttonLabel="Add new faculty"
@@ -125,8 +127,7 @@ export default function Faculties({ fetchType }: IFaculties) {
             handleClick={() => history.push(`/dashboard/divisions/new`)}
             description="And the web just isnt the same without you. Lets get you back online!"
           />
-        )}
-        {isLoading && <Loader />}
+        ) : null}
       </section>
 
       <Switch>
