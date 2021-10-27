@@ -170,6 +170,7 @@ export default function Intakes() {
 
         {!isLoading && intakes && intakes.length <= 0 && (
           <NoDataAvailable
+            fill={false}
             icon="academy"
             buttonLabel="Add new Intake"
             title={

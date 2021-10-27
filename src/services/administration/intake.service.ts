@@ -8,7 +8,7 @@ import {
   IntakePrograms,
   IntakeProgramsCreate,
 } from '../../types/services/intake.types';
-import { IntakeProgramInfo } from '../../types/services/program.types';
+import { IntakeProgramInfo } from '../../types/services/intake-program.types';
 
 class IntakeService {
   public async create(

@@ -35,26 +35,10 @@ class UserStore {
     return useQuery('languages', userService.getLanguages);
   }
   modifyUser() {
-    return useMutation(userService.modifyUser, {
-      onSuccess(newData) {
-        queryClient.setQueryData(['users'], (old) => {
-          const previousData = old as AxiosResponse<Response<UserInfo[]>>;
-          previousData.data.data.push(newData.data.data);
-          return previousData;
-        });
-      },
-    });
+    return useMutation(userService.modifyUser);
   }
-  updateUuser() {
-    return useMutation(userService.updateProfile, {
-      onSuccess(newData) {
-        queryClient.setQueryData(['users'], (old) => {
-          const previousData = old as AxiosResponse<Response<UserInfo[]>>;
-          previousData.data.data.push(newData.data.data);
-          return previousData;
-        });
-      },
-    });
+  updateUser() {
+    return useMutation(userService.updateProfile);
   }
 }
 

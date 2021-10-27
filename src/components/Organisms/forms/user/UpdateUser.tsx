@@ -10,7 +10,7 @@ import programStore from '../../../../store/program.store';
 import usersStore from '../../../../store/users.store';
 import { CommonFormProps, ParamType, ValueType } from '../../../../types';
 import { AcademyInfo } from '../../../../types/services/academy.types';
-import { IntakeProgramInfo } from '../../../../types/services/program.types';
+import { IntakeProgramInfo } from '../../../../types/services/intake-program.types';
 import {
   DocType,
   EducationLevel,

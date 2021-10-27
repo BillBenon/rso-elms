@@ -15,7 +15,7 @@ export default function Dashboard({ children }: IDashboard) {
         {/* navbar and body */}
         <div className="w-full md:col-span-9 xl:col-span-9 col-span-10 block">
           <Navigation />
-          <div className="block w-full h-auto py-5 px-8">{children}</div>
+          <div className="block relative w-full h-auto py-5 px-8">{children}</div>
         </div>
       </div>
     </>

@@ -1,11 +1,6 @@
-import { AxiosResponse } from 'axios';
 import { useMutation, useQuery } from 'react-query';
 
-import { queryClient } from '../plugins/react-query';
 import { divisionService } from '../services/administration/divisions.service';
-import { Response } from '../types';
-import { DivisionInfo } from '../types/services/division.types';
-
 class DivisionStore {
   createDivision() {
     return useMutation(divisionService.addDivision);

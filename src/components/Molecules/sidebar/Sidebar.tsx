@@ -35,7 +35,6 @@ export default function Sidebar() {
         title: 'Registration Control',
         to: '/dashboard/registration-control',
         icon: 'reg-control',
-        fill: true,
       },
     ];
 

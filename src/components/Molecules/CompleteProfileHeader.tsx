@@ -15,8 +15,8 @@ const CompleteProfileHeader = () => {
         </p>
       </div>
       <div>
-        <AcademyProfileCard src="/icons/police-logo.svg" alt="academy logo" size="39">
-          Rwanda National Police
+        <AcademyProfileCard src="/images/nisslogo.png" alt="academy logo">
+          National Intelligence and Security Service
         </AcademyProfileCard>
       </div>
     </div>
