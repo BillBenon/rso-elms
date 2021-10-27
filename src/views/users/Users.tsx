@@ -136,7 +136,7 @@ export default function Users() {
               return (
                 <>
                   <TableHeader
-                    totalItems={`${users.length} users`}
+                    totalItems={users.length}
                     title={'users'}
                     showSearch={false}
                   />

@@ -40,7 +40,7 @@ export default function UpdateInstitution() {
     institution &&
       setValues({
         current_admin_id: institution.current_admin_id,
-        head_office_location_id: institution.head_office_location_id,
+        head_office_location_id: 17445,
         email: institution.email,
         fax_number: institution.fax_number,
         full_address: institution.full_address,

@@ -30,7 +30,7 @@ export default function Admins({ admins }: { admins: UserTypes[] }) {
     <>
       <TableHeader
         title="Admins"
-        totalItems={`${admins && admins.length > 0 ? admins.length : 0} admins`}
+        totalItems={admins && admins.length > 0 ? admins.length : 0}
         handleSearch={handleSearch}
         showSearch={admins && admins.length > 0}>
         <div className="flex gap-3">

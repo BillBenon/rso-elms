@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
@@ -9,8 +7,6 @@ import { levelStore } from '../../../../store/level.store';
 import { IDivisionsAcademyType, ValueType } from '../../../../types';
 import { IcreateLevel } from '../../../../types/services/levels.types';
 import Button from '../../../Atoms/custom/Button';
-import Icon from '../../../Atoms/custom/Icon';
-import ILabel from '../../../Atoms/Text/ILabel';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
@@ -37,7 +33,7 @@ function NewLevel({ onSubmit, academy_id }: IDivisionsAcademyType) {
     mutateAsync(level, {
       onSuccess: () => {
         toast.success('Level created');
-        queryClient.invalidateQueries(['levels']);
+        queryClient.invalidateQueries(['levels/academy']);
         history.goBack();
       },
       onError: (error) => {
