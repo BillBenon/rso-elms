@@ -16,6 +16,7 @@ export type StepProps = {
   isVertical?: boolean;
   isFirstStep: boolean;
   width?: string;
+  isDisabled?: boolean;
 };
 
 const Step = ({
@@ -29,13 +30,14 @@ const Step = ({
   isFirstStep,
   isError,
   width = 'w-60',
+  isDisabled = true,
 }: StepProps) => {
   return (
     <div className="flex justify-between">
       {/* display_label */}
       {isVertical && (
         <div
-          onKeyDown={() => navigateToStepHandler(index)}
+          onKeyDown={() => (isDisabled ? {} : navigateToStepHandler(index))}
           className={`cursor-pointer flex items-end w-max
         ${
           isActive
@@ -46,7 +48,7 @@ const Step = ({
             ? 'text-primary-400'
             : 'text-txt-secondary'
         }`}
-          onClick={() => navigateToStepHandler(index)}>
+          onClick={() => (isDisabled ? {} : navigateToStepHandler(index))}>
           <div>{display_label}</div>
         </div>
       )}

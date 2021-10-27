@@ -1,16 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Link,
   Route,
   Switch,
   useHistory,
+  useLocation,
   useParams,
   useRouteMatch,
 } from 'react-router-dom';
 
 import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
-import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import AddCard from '../../components/Molecules/cards/AddCard';
@@ -18,25 +17,67 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import UsersPreview from '../../components/Molecules/cards/UsersPreview';
-import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
+import intakeProgramStore from '../../store/intake-program.store';
 import { moduleStore } from '../../store/modules.store';
 import programStore from '../../store/program.store';
 import { CommonCardDataType, Link as Links, ParamType } from '../../types';
+import { UserView } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ModuleLevels from '../modules/ModuleLevels';
 import { IProgramData } from './AcademicPrograms';
 import AddLevelToProgram from './AddLevelToProgram';
+import { DummyUser } from './dummyUsers';
 
 export default function ProgramDetailsMolecule() {
   const { id } = useParams<ParamType>();
+  const { search } = useLocation();
+  const intakeProgId = new URLSearchParams(search).get('intakeProg');
   const history = useHistory();
   const { path, url } = useRouteMatch();
 
   const getAllModuleStore = moduleStore.getModulesByProgram(id);
+  const studentsProgram = intakeProgramStore.getStudentsByIntakeProgram(
+    intakeProgId || '',
+  ).data?.data.data;
+  const instructorsProgram = intakeProgramStore.getStudentsByIntakeProgram(
+    intakeProgId || '',
+  ).data?.data.data;
+
+  const [students, setStudents] = useState<UserView[]>([]);
+  const [instructors, setInstructors] = useState<UserView[]>([]);
+
+  useEffect(() => {
+    studentsProgram?.map((stud) =>
+      setStudents([
+        ...students,
+        {
+          id: stud.id,
+          first_name: stud.first_name,
+          last_name: stud.last_name,
+          image_url: stud.image_url,
+        },
+      ]),
+    );
+  }, [studentsProgram]);
+
+  useEffect(() => {
+    instructorsProgram?.map((inst) =>
+      setInstructors([
+        ...instructors,
+        {
+          id: inst.id,
+          first_name: inst.first_name,
+          last_name: inst.last_name,
+          image_url: inst.image_url,
+        },
+      ]),
+    );
+  }, [instructorsProgram]);
+
   const [programModules, setProgramModules] = useState<CommonCardDataType[]>([]);
 
   useEffect(() => {
@@ -56,12 +97,9 @@ export default function ProgramDetailsMolecule() {
     });
 
     setProgramModules(newModules);
-  }, [getAllModuleStore.data?.data.data]);
+  }, [getAllModuleStore.data?.data.data, id]);
 
   const program = programStore.getProgramById(id).data?.data.data;
-  const programLevels = programStore.getLevelsByAcademicProgram(
-    program?.id.toString() || '',
-  ).data?.data.data;
 
   const getProgramData = () => {
     let programData: IProgramData | undefined;
@@ -99,6 +137,10 @@ export default function ProgramDetailsMolecule() {
     },
   ];
 
+  const handleClose = () => {
+    history.goBack();
+  };
+
   const list: Links[] = [
     { to: 'home', title: 'home' },
     { to: 'subjects', title: 'Faculty' },
@@ -110,7 +152,10 @@ export default function ProgramDetailsMolecule() {
     <>
       <BreadCrumb list={list} />
 
-      <div className="pt-8">
+      <div className="pt-5">
+        <Heading className="pb-5" fontWeight="semibold" fontSize="xl">
+          {program?.name}
+        </Heading>
         <TabNavigation tabs={tabs}>
           <Switch>
             <Route
@@ -164,81 +209,104 @@ export default function ProgramDetailsMolecule() {
                     )}
                   </div>
 
-                  <div className="flex flex-col gap-8">
+                  <div className="flex flex-col gap-8 z-0">
                     <div className="flex gap-8">
-                      <UsersPreview title="Students" totalUsers={100} />
-                      <UsersPreview title="Instructors" totalUsers={8} />
+                      <UsersPreview
+                        title="Students"
+                        label="Students in Cadette programs"
+                        data={DummyUser}
+                        totalUsers={DummyUser.length || 0}
+                      />
+                      <UsersPreview
+                        title="Instructors"
+                        label="Instructors in Cadette programs"
+                        data={DummyUser}
+                        totalUsers={DummyUser.length || 0}
+                      />
                     </div>
-                    <div className="flex gap-8">
-                      {/* models */}
-                      <div className="flex flex-col gap-8">
-                        <div className="flex flex-col gap-6 w-60 py-4 px-6 h-32 bg-main">
-                          <div className="flex flex-col gap-2">
-                            <Heading color="txt-secondary" fontSize="base">
-                              Modules
-                            </Heading>
-                            <Heading
-                              color="primary"
-                              fontSize="base"
-                              fontWeight="bold"
-                              className="pt-4">
-                              Total Modules: {programModules.length}
-                            </Heading>
-                          </div>
-                        </div>
+
+                    <div className="flex flex-col gap-8">
+                      <div className="flex gap-8">
+                        {/* models */}
+                        {/* <div className="flex flex-col gap-8">
+                          <div className="flex flex-col gap-6 w-60 py-4 px-6 h-32 bg-main">
+                            <div className="flex flex-col gap-2">
+                              <Heading color="txt-secondary" fontSize="base">
+                                Modules
+                              </Heading>
+                              <Heading
+                                color="primary"
+                                fontSize="base"
+                                fontWeight="bold"
+                                className="pt-4">
+                                Total Modules: {programModules.length}
+                              </Heading>
+                            </div>
+                    </div> */}
                         {/* levels */}
-                        <div className=" bg-main">
-                          <div className="flex flex-col gap-7 w-60 p-6">
-                            <Heading color="txt-secondary" fontSize="base">
-                              Levels
-                            </Heading>
-                            <div className="flex flex-col gap-8">
-                              {programLevels && programLevels?.length > 0 ? (
-                                programLevels.map((programLevel) => (
+                        {/*<div className=" bg-main">
+                            <div className="flex flex-col gap-7 w-60 p-6">
+                              <Heading color="txt-secondary" fontSize="base">
+                                Levels
+                              </Heading>
+                              <div className="flex flex-col gap-8">
+                                {programLevels && programLevels?.length > 0 ? (
+                                  programLevels.map((programLevel) => (
+                                    <Heading
+                                      key={programLevel.id}
+                                      color="primary"
+                                      fontSize="base"
+                                      fontWeight="semibold">
+                                      {programLevel.level.name}
+                                    </Heading>
+                                  ))
+                                ) : (
                                   <Heading
-                                    key={programLevel.id}
                                     color="primary"
                                     fontSize="base"
                                     fontWeight="semibold">
-                                    {programLevel.level.name}
+                                    No levels available
                                   </Heading>
-                                ))
-                              ) : (
-                                <Heading
-                                  color="primary"
-                                  fontSize="base"
-                                  fontWeight="semibold">
-                                  No levels available
-                                </Heading>
-                              )}
+                                )}
+                              </div>
                             </div>
+                            {programLevels && programLevels?.length === 0 && (
+                              <div className="text-primary-500 py-2 text-right text-sm mr-3">
+                                <Link to={`${url}/level/add`}>+ Add levels</Link>
+                              </div>
+                            )}
                           </div>
                           {programLevels && programLevels?.length === 0 && (
-                            <div className="text-primary-500 py-2 text-right text-sm mr-3">
-                              <Link to={`${url}/level/add`}>+ Add levels</Link>
+                            <div className="text-primary-500 py-2 text-sm mr-3">
+                              <Link
+                                to={`${url}/level/add`}
+                                className="flex items-center justify-end">
+                                <Icon name="add" size={12} fill="primary" />
+                                Add levels
+                              </Link>
                             </div>
                           )}
-                        </div>
-                      </div>
-                      {/* intakes */}
-                      <div className="flex flex-col gap-8">
-                        <div className="flex flex-col gap-7 bg-main w-60 p-6">
-                          <Heading color="txt-secondary" fontSize="base">
-                            Intakes
-                          </Heading>
-                          <div className="flex flex-col gap-8">
-                            <Heading
-                              color="primary"
-                              fontSize="base"
-                              fontWeight="semibold">
-                              Active Intakes
+                        </div> */}
+                        {/* intakes */}
+                        <div className="flex flex-col gap-8">
+                          <div className="flex flex-col gap-7 bg-main w-60 p-6">
+                            <Heading color="txt-secondary" fontSize="base">
+                              Intakes
                             </Heading>
-                            <Heading
-                              color="primary"
-                              fontSize="base"
-                              fontWeight="semibold">
-                              Passive Intakes
-                            </Heading>
+                            <div className="flex flex-col gap-8">
+                              <Heading
+                                color="primary"
+                                fontSize="base"
+                                fontWeight="semibold">
+                                Active Intakes
+                              </Heading>
+                              <Heading
+                                color="primary"
+                                fontSize="base"
+                                fontWeight="semibold">
+                                Passive Intakes
+                              </Heading>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -247,10 +315,8 @@ export default function ProgramDetailsMolecule() {
                 </div>
               )}
             />
-
             {/* program leves */}
             <Route exact path={`${path}/levels`} render={() => <ModuleLevels />} />
-
             {/* add module popup */}
             <Route
               exact
@@ -263,8 +329,7 @@ export default function ProgramDetailsMolecule() {
                 );
               }}
             />
-
-            {/* add prerequesite popup */}
+            \{/* add prerequesite popup */}
             <Route
               exact
               path={`${path}/modules/:moduleId/add-prereq`}
@@ -280,7 +345,6 @@ export default function ProgramDetailsMolecule() {
                 );
               }}
             />
-
             <Route
               path={`${path}/modules`}
               render={() => (

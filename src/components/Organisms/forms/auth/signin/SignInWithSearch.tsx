@@ -44,8 +44,9 @@ function SignInWithSearch<E>({ onSubmit }: CommonFormProps<E>) {
         }, 900);
       } else {
         toast.success("You're already registered!", { duration: 1200 });
+        localStorage.setItem('foundUser', JSON.stringify(foundUser));
         setTimeout(() => {
-          history.push({ pathname: '/complete-profile', state: { detail: foundUser } });
+          history.push('/complete-profile');
         }, 900);
       }
     } else {

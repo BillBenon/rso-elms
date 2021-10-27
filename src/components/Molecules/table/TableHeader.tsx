@@ -32,7 +32,7 @@ export default function TableHeader({
   };
 
   return (
-    <div className={`mt-11 ${usePadding && 'pb-6'}`}>
+    <div className={`pt-4 ${usePadding && 'pb-6'}`}>
       <div className="flex flex-wrap justify-between items-center">
         <div className="flex gap-2 items-center">
           <Heading className="capitalize" fontSize="2xl" fontWeight="bold">

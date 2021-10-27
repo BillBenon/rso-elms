@@ -5,6 +5,7 @@ import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 
 interface IProps {
+  fill?: boolean;
   title: string;
   icon?: IconType;
   description: string;
@@ -18,12 +19,18 @@ export default function NoDataAvailable({
   description,
   buttonLabel = 'Create new',
   handleClick,
+  fill = true,
 }: IProps) {
   return (
     <div className="w-full py-12 bg-transparent">
       <div className="text-center">
         <div className="rounded-full inline-block py-3 px-3 bg-lightgreen bg-opacity-35">
-          <Icon name={icon} size={32} fill="primary" />
+          <Icon
+            name={icon}
+            size={32}
+            stroke={!fill ? 'primary' : 'none'}
+            fill={fill ? 'primary' : 'none'}
+          />
         </div>
       </div>
       <p className="text-base font-semibold pt-4 pb-2 text-center">{title}</p>

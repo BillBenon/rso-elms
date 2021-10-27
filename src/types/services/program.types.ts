@@ -1,8 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Table } from '..';
-import { GenericStatus } from './common.types';
 import { DivisionInfo } from './division.types';
-import { IntakeInfo } from './intake.types';
 import { ILevel } from './levels.types';
 import { UserInfo } from './user.types';
 
@@ -41,9 +39,4 @@ export enum ProgramStatus {
 export enum ProgramType {
   SHORT_COURSE = 'SHORT_COURSE',
   ACADEMIC = 'ACADEMIC',
-}
-export interface IntakeProgramInfo extends Table {
-  intake: IntakeInfo;
-  program: ProgramInfo;
-  description: string;
 }
