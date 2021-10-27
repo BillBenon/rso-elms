@@ -17,6 +17,7 @@ import {
   EducationLevel,
   GenderStatus,
   MaritalStatus,
+  SendCommunicationMsg,
   UserType,
 } from '../../../../types/services/user.types';
 import {
@@ -67,6 +68,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     intake_id: '',
     nationality: '',
     document_expire_on: '',
+    send_communication_msg: SendCommunicationMsg.BOTH,
   });
 
   const [otherDetails, setOtherDetails] = useState({
