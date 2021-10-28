@@ -5,9 +5,12 @@ import { useLocation } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
+import { authenticatorStore } from '../../store';
+import { divisionStore } from '../../store/divisions.store';
 import { intakeStore } from '../../store/intake.store';
 import programStore from '../../store/program.store';
 import { GenericStatus, ValueType } from '../../types';
+import { DivisionInfo } from '../../types/services/division.types';
 import { IntakeProgram, IntakeProgramsCreate } from '../../types/services/intake.types';
 import { ProgramInfo } from '../../types/services/program.types';
 import { getDropDownOptions } from '../../utils/getOption';
@@ -22,14 +25,24 @@ export default function AddAcademicProgramToIntake({ submited }: PropType) {
   const { search } = useLocation();
   const intakeId = new URLSearchParams(search).get('intakeId');
   const intake = intakeStore.getIntakeById(intakeId!);
+  const [departmentId, setDepartmentId] = useState('');
+  const { data: userInfo } = authenticatorStore.authUser();
 
-  const programsInfo = programStore.fetchPrograms();
   const addProgram = intakeStore.addPrograms();
 
-  let programs: ProgramInfo[] = programsInfo.data?.data.data || [];
+  const departments: DivisionInfo[] =
+    divisionStore.getDivisionsByAcademy(
+      'DEPARTMENT',
+      userInfo?.data.data.academy.id.toString() || '',
+    ).data?.data.data || [];
+  function handleDepartments(e: ValueType) {
+    setDepartmentId(e.value.toString());
+  }
+
+  let programs: ProgramInfo[] =
+    programStore.getProgramsByDepartment(departmentId).data?.data.data || [];
 
   function handlePrograms(e: ValueType) {
-    console.log(e.value);
     // @ts-ignore
     setSelectedPrograms(e.value);
   }
@@ -77,6 +90,13 @@ export default function AddAcademicProgramToIntake({ submited }: PropType) {
         handleChange={() => 0}>
         Intake title
       </InputMolecule>
+      <DropdownMolecule
+        name="departmentId"
+        placeholder="Department"
+        handleChange={handleDepartments}
+        options={getDropDownOptions({ inputs: departments || [] })}>
+        Department
+      </DropdownMolecule>
       <DropdownMolecule
         name="programs"
         placeholder="Program"

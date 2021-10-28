@@ -16,7 +16,7 @@ import IntakesView from './views/intakes/Intakes';
 import Levels from './views/levels/Levels';
 import Modules from './views/modules';
 import PrivilegesView from './views/privileges/Privileges';
-import AcademicPrograms from './views/programs/AcademicPrograms';
+import AcademicProgram from './views/programs/AcademicPrograms';
 import NewAcademicProgram from './views/programs/NewAcademicProgram';
 import Roles from './views/roles/Roles';
 import ViewRole from './views/roles/ViewRole';
@@ -55,7 +55,7 @@ const RouterProtection = () => {
       <Route path="/dashboard/evaluations" component={ViewEvaluations} />
       <Route path="/dashboard/registration-control" component={RegistrationControl} />
       <Route path="/dashboard/divisions" component={Divisions} />
-      <Route path="/dashboard/programs" component={AcademicPrograms} />
+      <Route path="/dashboard/programs" component={AcademicProgram} />
       <Route path="/dashboard/programs/new" component={NewAcademicProgram} />
       <Route path="/dashboard/levels" component={Levels} />
       <Route path="/dashboard/intakes" component={IntakesView} />

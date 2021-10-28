@@ -33,6 +33,11 @@ class ModuleService {
     );
   }
 
+  public async getModulesByAcademy(
+    academyId: string,
+  ): Promise<AxiosResponse<Response<ModuleInfo[]>>> {
+    return await adminstrationAxios.get(`/getModulesByAccademy/${academyId}`);
+  }
   public async modifyModule(
     updated: CreateModuleInfo,
   ): Promise<AxiosResponse<Response<ModuleInfo[]>>> {

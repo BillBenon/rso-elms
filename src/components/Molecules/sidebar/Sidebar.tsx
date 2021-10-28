@@ -23,11 +23,11 @@ export default function Sidebar() {
       { title: 'Privileges', to: '/dashboard/privileges', icon: 'module' },
     ];
     const academicAdminLinks: linkProps[] = [
-      { title: 'Programs', to: '/dashboard/programs', icon: 'program' },
+      // { title: 'Programs', to: '/dashboard/programs', icon: 'program' },
       { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
       { title: 'Calendar', to: '/dashboard/calendar', icon: 'calendar' },
       { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
-      { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
+      // { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
       // { title: 'Subjects', to: '/dashboard/subjects', icon: 'module' },
       { title: 'Evalutaions', to: '/dashboard/evaluations', icon: 'evaluation' },
       { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },

@@ -18,6 +18,11 @@ class DivisionStore {
       divisionService.getFacultyByDepartment(id),
     );
   }
+  getDivisionsByAcademy(divisionType: string, academyId: string) {
+    return useQuery(['faculties/academy', divisionType, academyId], () =>
+      divisionService.getDivisionsByAcademy(divisionType, academyId),
+    );
+  }
 
   updateDivision() {
     return useMutation(divisionService.modifyDivision);
