@@ -47,7 +47,7 @@ export default function Navigation() {
     });
   }
   return (
-    <nav className="bg-main z-0">
+    <nav className="bg-main">
       <div className=" mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-24">
           <div className="flex items-center">
