@@ -219,15 +219,16 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
 
         <InputMolecule
           width="28"
+          type="number"
           name="total_mark"
           value={details.total_mark}
           handleChange={handleChange}>
           Evaluation marks
         </InputMolecule>
-
         <InputMolecule
           // className="p-2"
           width="16"
+          type="text"
           name="time_limit"
           value={details.time_limit}
           placeholder="00"
