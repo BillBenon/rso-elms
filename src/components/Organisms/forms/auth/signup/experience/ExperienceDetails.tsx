@@ -32,7 +32,7 @@ function ExperienceDetails() {
 
   async function finishSteps(isComplete: boolean) {
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
-    history.push('/complete-profile/more');
+    history.push('/dashboard/divisions');
   }
   return (
     <div className="bg-main p-8 md:px-20">
