@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import Dashboard from './layout/Dashboard';
 import { authenticatorStore } from './store';
-import { UserInfo } from './types/services/user.types';
+import { UserInfo, UserType } from './types/services/user.types';
 import Academies from './views/academies/Academy';
 import CalendarView from './views/calendar/Calendar';
 import Divisions from './views/divisions/Divisions';
@@ -65,14 +65,23 @@ const RouterProtection = () => {
     </>
   );
 
+  const InstructorRoutes = () => (
+    <>
+      {/* start of instructor pages */}
+      <Route path="/dashboard/view-evaluation" component={ViewEvaluations} />
+      {/* end of instructor pages */}
+    </>
+  );
+
   return (
     <>
-      {(authUser?.user_type == 'SUPER_ADMIN' || import.meta.env.DEV) && (
+      {(authUser?.user_type == UserType.SUPER_ADMIN || import.meta.env.DEV) && (
         <Route exact path="/institution/new" component={NewInstitution} />
       )}
       <Dashboard>
-        {authUser?.user_type == 'SUPER_ADMIN' && InstitutionAdminRoutes()}
-        {authUser?.user_type == 'ADMIN' && AcademicAdminRoutes()}
+        {authUser?.user_type === UserType.SUPER_ADMIN && InstitutionAdminRoutes()}
+        {authUser?.user_type === UserType.ADMIN && AcademicAdminRoutes()}
+        {authUser?.user_type === UserType.INSTRUCTOR && InstructorRoutes()}
       </Dashboard>
       {/* protected routes  */}
 

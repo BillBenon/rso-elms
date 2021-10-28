@@ -28,7 +28,8 @@ export default function Redirecting() {
 
   const notAllowed =
     data?.data.data.user_type === UserType.SUPER_ADMIN ||
-    data?.data.data.user_type === UserType.ADMIN
+    data?.data.data.user_type === UserType.ADMIN ||
+    data?.data.data.user_type === UserType.INSTRUCTOR
       ? false
       : true;
   useEffect(() => {
@@ -42,6 +43,8 @@ export default function Redirecting() {
         //   redirectTo('/complete-profile/experience');
         // else redirectTo('/dashboard/divisions');
         redirectTo('/dashboard/divisions');
+      } else if (data?.data.data.user_type === UserType.INSTRUCTOR) {
+        redirectTo('/dashboard/view-evaluation');
       }
     }
     setUserNotAllowed(notAllowed);
