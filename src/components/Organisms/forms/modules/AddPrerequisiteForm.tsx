@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
+import { authenticatorStore } from '../../../../store';
 import { moduleStore } from '../../../../store/modules.store';
 import { GenericStatus, ValueType } from '../../../../types';
-import { CreatePrerequisites } from '../../../../types/services/modules.types';
+import {
+  CreatePrerequisites,
+  ModuleInfo,
+} from '../../../../types/services/modules.types';
 import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
@@ -31,9 +35,11 @@ export default function AddPrerequesitesForm() {
     setValues({ ...values, [e.name]: e.value });
   }
 
-  const modules =
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
+  let modules =
     moduleStore
-      .getAllModules()
+      .getModulesByAcademy((authUser?.academy_id || authUser?.academy.id) + '')
       .data?.data.data.filter((module) => module.id != moduleId) || [];
 
   const handleSubmit = async () => {
