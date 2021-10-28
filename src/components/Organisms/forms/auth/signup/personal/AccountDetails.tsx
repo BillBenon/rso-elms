@@ -2,9 +2,14 @@ import React, { useEffect, useState } from 'react';
 
 import usersStore from '../../../../../../store/users.store';
 import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../types';
-import { AccountDetail } from '../../../../../../types/services/user.types';
+import {
+  AccountDetail,
+  SendCommunicationMsg,
+} from '../../../../../../types/services/user.types';
+import { getDropDownStatusOptions } from '../../../../../../utils/getOption';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
+import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../../Molecules/input/InputMolecule';
 
 interface Account<E> extends CommonStepProps, CommonFormProps<E> {}
@@ -18,10 +23,10 @@ function AccountDetails<E>({
 }: Account<E>) {
   const [accountDetails, setAccountDetails] = useState<AccountDetail>({
     username: '',
-    email: '',
     pin: '',
     password: '',
     confirm_password: '',
+    send_communication_msg: SendCommunicationMsg.EMIAL,
   });
   const handleChange = (e: ValueType) => {
     setAccountDetails({ ...accountDetails, [e.name]: e.value });
@@ -47,10 +52,10 @@ function AccountDetails<E>({
     personInfo &&
       setAccountDetails({
         username: personInfo.username,
-        email: personInfo.email,
         pin: personInfo.pin,
         password: personInfo.password,
         confirm_password: personInfo.password,
+        send_communication_msg: personInfo.send_communication_msg,
       });
   }, [user.data?.data.data]);
 
@@ -63,14 +68,16 @@ function AccountDetails<E>({
       )}
       <form onSubmit={moveForward}>
         <div className="flex flex-col gap-4">
-          <InputMolecule
-            name="email"
-            value={accountDetails.email}
-            type="email"
-            placeholder="username@example.com"
-            handleChange={handleChange}>
-            Email
-          </InputMolecule>
+          <DropdownMolecule
+            handleChange={handleChange}
+            name="send_communication_msg"
+            placeholder="Select way of communication"
+            defaultValue={getDropDownStatusOptions(SendCommunicationMsg).find(
+              (msg) => msg.value === SendCommunicationMsg.EMIAL,
+            )}
+            options={getDropDownStatusOptions(SendCommunicationMsg)}>
+            How would you like to be communicated?
+          </DropdownMolecule>
           <InputMolecule
             name="username"
             placeholder="username"
