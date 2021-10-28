@@ -33,8 +33,9 @@ export default function Faculties({ fetchType }: IFaculties) {
   const [faculties, setFaculties] = useState<FilteredData[]>([]);
   const { data: userInfo } = authenticatorStore.authUser();
 
-  const { data, isSuccess, isLoading, isError } = divisionStore.getDivisionByType(
+  const { data, isSuccess, isLoading, isError } = divisionStore.getDivisionsByAcademy(
     fetchType.toUpperCase(),
+    userInfo?.data.data.academy.id.toString() || '',
   );
 
   useEffect(() => {
