@@ -6,6 +6,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import { queryClient } from '../../plugins/react-query';
+import { authenticatorStore } from '../../store';
 import { levelStore } from '../../store/level.store';
 import programStore from '../../store/program.store';
 import { ParamType, ValueType } from '../../types';
@@ -20,7 +21,11 @@ export default function AddLevelToProgram() {
   const { id: progId } = useParams<ParamType>();
   const history = useHistory();
   const [levels, setLevels] = useState<FilteredLevels[]>();
-  const { data: levelsInfo } = levelStore.getLevels(); // fetch levels
+  const { data: userInfo } = authenticatorStore.authUser();
+  const { data: levelsInfo } = levelStore.getLevelsByAcademy(
+    userInfo?.data.data.academy.id.toString() || '',
+  ); // fetch levels
+
   const { mutateAsync } = programStore.addProgramToLevel();
   const [filteredLevelFlows, setFilteredLevelFlows] = useState<FilteredLevels[]>([]);
 

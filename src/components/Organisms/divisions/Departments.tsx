@@ -33,7 +33,10 @@ export default function Departments({ fetchType }: IDepartment) {
   const { data: userInfo } = authenticatorStore.authUser();
   let { data, isSuccess, isLoading, isError } = facultyId
     ? divisionStore.getDepartmentsInFaculty(facultyId)
-    : divisionStore.getDivisionByType(fetchType.toUpperCase());
+    : divisionStore.getDivisionsByAcademy(
+        fetchType.toUpperCase(),
+        userInfo?.data.data.academy.id.toString() || '',
+      );
 
   let facultyData: any;
 

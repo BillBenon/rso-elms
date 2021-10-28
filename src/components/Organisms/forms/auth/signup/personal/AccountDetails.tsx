@@ -26,7 +26,7 @@ function AccountDetails<E>({
     pin: '',
     password: '',
     confirm_password: '',
-    send_communication_msg: SendCommunicationMsg.EMIAL,
+    send_communication_msg: SendCommunicationMsg.EMAIL,
   });
   const handleChange = (e: ValueType) => {
     setAccountDetails({ ...accountDetails, [e.name]: e.value });
@@ -73,7 +73,7 @@ function AccountDetails<E>({
             name="send_communication_msg"
             placeholder="Select way of communication"
             defaultValue={getDropDownStatusOptions(SendCommunicationMsg).find(
-              (msg) => msg.value === SendCommunicationMsg.EMIAL,
+              (msg) => msg.value === SendCommunicationMsg.EMAIL,
             )}
             options={getDropDownStatusOptions(SendCommunicationMsg)}>
             How would you like to be communicated?
