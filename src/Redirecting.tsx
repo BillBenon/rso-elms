@@ -11,6 +11,7 @@ import { experienceStore } from './store/experience.store';
 import { Response } from './types';
 import { ExperienceInfo } from './types/services/experience.types';
 import { PersonInfo, UserType } from './types/services/user.types';
+import NotApproved from './views/NotApproved';
 
 export default function Redirecting() {
   const [hasNoAcademy, setHasNoAcademy] = useState(false);
@@ -24,11 +25,14 @@ export default function Redirecting() {
     person?.id.toString() || '',
   ));
 
-  console.log(experiences?.data.data);
-
   if (experiences?.data.data.length === 0 && data?.data.data.user_type === UserType.ADMIN)
     window.location.href = '/complete-profile/experience';
 
+  const notAllowed =
+    data?.data.data.user_type === UserType.SUPER_ADMIN ||
+    data?.data.data.user_type === UserType.ADMIN
+      ? false
+      : true;
   useEffect(() => {
     if (data?.data.data.user_type === UserType.SUPER_ADMIN)
       window.location.href = '/dashboard/users';
@@ -39,7 +43,7 @@ export default function Redirecting() {
         window.location.href = '/complete-profile/experience';
       else window.location.href = '/dashboard/divisions';
     }
-    setUserNotAllowed(true);
+    setUserNotAllowed(notAllowed);
   }, [data?.data.data]);
 
   // const redirectTo = (path: string) => {
@@ -93,11 +97,13 @@ export default function Redirecting() {
           })}
 
         {/* when user type is not yet supported in system */}
-        {userNotAllowed &&
-          ErrorCard({
-            text: 'User type %% is not allowed to use this sytem, please contact Admin.',
-            value: data?.data.data.user_type,
-          })}
+        {userNotAllowed && (
+          // ErrorCard({
+          //   text: 'User type %% is not allowed to use this sytem, please contact Admin.',
+          //   value: data?.data.data.user_type,
+          // })
+          <NotApproved />
+        )}
 
         {/* <p>User has no Academy, please contact admin to give you </p> */}
         {!hasNoAcademy && !userNotAllowed && (
