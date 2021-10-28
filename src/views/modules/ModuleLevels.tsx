@@ -61,11 +61,7 @@ export default function ModuleLevels() {
   ];
 
   return (
-    <>
-      <TableHeader usePadding={false} showBadge={false} showSearch={false}>
-        <Button styleType="outline">View classes</Button>
-        <Button styleType="outline">Add module</Button>
-      </TableHeader>
+    <div className="flex justify-between pt-4 py-2">
       <Tabs>
         <Tab label="Level 1">
           <div className="flex flex-wrap justify-start gap-6 mt-4">
@@ -104,6 +100,10 @@ export default function ModuleLevels() {
           </div>
         </Tab>
       </Tabs>
-    </>
+      <TableHeader usePadding={false} showBadge={false} showSearch={false}>
+        <Button styleType="outline">View classes</Button>
+        <Button styleType="outline">Add module</Button>
+      </TableHeader>
+    </div>
   );
 }

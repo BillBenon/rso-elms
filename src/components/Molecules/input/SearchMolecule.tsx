@@ -6,15 +6,21 @@ import Input from '../../Atoms/Input/Input';
 
 interface ISearchMolecule<T> extends CommonProps<T> {
   handleChange: (_e: ValueType) => void;
+  placeholder?: string;
+  width?: string;
 }
 
-export default function SearchMolecule<T>({ handleChange }: ISearchMolecule<T>) {
+export default function SearchMolecule<T>({
+  handleChange,
+  placeholder = 'Search here',
+  width = 'w-72',
+}: ISearchMolecule<T>) {
   return (
-    <div className="rounded-lg border-2 border-bcolor w-72 flex items-center">
+    <div className={`rounded-lg border-2 border-bcolor flex items-center ${width}`}>
       <Icon name="search" />
       <Input
         name="search"
-        placeholder="Search here"
+        placeholder={placeholder}
         fcolor="error"
         bcolor="none"
         width="auto md:w-52"

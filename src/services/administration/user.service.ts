@@ -19,7 +19,7 @@ class UserService {
   public async updateProfile(
     userInfo: UpdateUserInfo,
   ): Promise<AxiosResponse<Response<UserInfo>>> {
-    return await adminstrationAxios.post('/users/updateProfile', userInfo);
+    return await adminstrationAxios.put('/users/updateProfile', userInfo);
   }
   public async fetchUsers(): Promise<AxiosResponse<Response<UserInfo[]>>> {
     return await adminstrationAxios.get('/users/getUsers');
@@ -31,6 +31,11 @@ class UserService {
     institutionId: string,
   ): Promise<AxiosResponse<Response<UserInfo[]>>> {
     return await adminstrationAxios.get(`users/getUsersByInstitution/${institutionId}`);
+  }
+  public async getUsersByAcademy(
+    academyId: string,
+  ): Promise<AxiosResponse<Response<UserInfo[]>>> {
+    return await adminstrationAxios.get(`users/getUsersByAcademy/${academyId}`);
   }
   public async getUserAccountByNid(
     nid: string,

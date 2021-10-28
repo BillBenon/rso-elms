@@ -23,7 +23,8 @@ import { intakeStore } from '../../store/intake.store';
 import programStore from '../../store/program.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
 import { DivisionInfo } from '../../types/services/division.types';
-import { IntakeProgramInfo, ProgramInfo } from '../../types/services/program.types';
+import { IntakeProgramInfo } from '../../types/services/intake-program.types';
+import { ProgramInfo } from '../../types/services/program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import AddAcademicProgramToIntake from './AddAcademicProgramToIntake';
 import NewAcademicProgram from './NewAcademicProgram';
@@ -57,14 +58,9 @@ export default function AcademicProgram() {
     ? programStore.getProgramsByDepartment(dp?.toString() || '')
     : programStore.fetchPrograms();
 
-  const programInfo = data?.data.data;
+  const programInfo = data?.data.data || [];
 
   const intake = intakeId ? intakeStore.getIntakeById(intakeId!, true) : null;
-
-  // fetch intake if id is available
-  if (intakeId && !intake?.isSuccess && !intake?.isLoading) intake?.refetch();
-
-  // const programInfo = programData || data;
 
   useEffect(() => {
     if (location.pathname === path || location.pathname === `${path}/`) {
@@ -134,14 +130,23 @@ export default function AcademicProgram() {
                   {programs.length === 0 && isLoading ? (
                     <Loader />
                   ) : programs.length > 0 ? (
-                    programs.map((Common) => (
+                    programs.map((Common, index: number) => (
                       <Tooltip
                         key={Common.code}
                         trigger={
                           <div className="p-1 mt-3">
                             <CommonCardMolecule
                               data={Common}
-                              to={{ title: 'module', to: `programs/${Common.id}` }}
+                              handleClick={() =>
+                                history.push({
+                                  pathname: `/dashboard/programs/${Common.id}`,
+                                  search: `?intakeProg=${programInfo[index].id}`,
+                                })
+                              }
+                              // to={{
+                              //   title: 'module',
+                              //   to: `/dashboard/programs/${Common.id}`,
+                              // }}
                             />
                           </div>
                         }

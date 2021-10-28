@@ -20,6 +20,14 @@ class DivisionService {
   ): Promise<AxiosResponse<Response<DivisionInfo>>> {
     return await adminstrationAxios.get(`/divisions/getDivisionById/${id}`);
   }
+  public async getDivisionsByAcademy(
+    divisionType: string,
+    academyId: string,
+  ): Promise<AxiosResponse<Response<DivisionInfo[]>>> {
+    return await adminstrationAxios.get(
+      `divisions/getDivisionsByTypeAndAcademy/${divisionType}/${academyId}`,
+    );
+  }
 
   public async getFacultyByDepartment(
     id: string,

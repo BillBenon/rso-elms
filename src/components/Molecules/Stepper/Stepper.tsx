@@ -12,6 +12,7 @@ type StepperProps = {
   navigateToStepHandler: (_index: number) => void;
   width?: string;
   children: StepChildrenType;
+  isDisabled?: boolean;
 };
 
 const Stepper = ({
@@ -22,6 +23,7 @@ const Stepper = ({
   width,
   completeStep,
   currentStep = 0,
+  isDisabled,
 }: StepperProps) => {
   const StepHeader = () => {
     return (
@@ -41,6 +43,7 @@ const Stepper = ({
               isComplete={completeStep >= i}
               width={width}
               navigateToStepHandler={navigateToStepHandler}
+              isDisabled={isDisabled}
             />
           );
         })}

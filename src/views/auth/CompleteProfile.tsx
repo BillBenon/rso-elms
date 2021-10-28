@@ -6,13 +6,11 @@ import CompleteProfileHeader from '../../components/Molecules/CompleteProfileHea
 import Stepper from '../../components/Molecules/Stepper/Stepper';
 import AccountDetails from '../../components/Organisms/forms/auth/signup/personal/AccountDetails';
 import EmploymentDetails from '../../components/Organisms/forms/auth/signup/personal/EmploymentDetails';
-import FamilyDetails from '../../components/Organisms/forms/auth/signup/personal/FamilyDetails';
-import NationalDocuments from '../../components/Organisms/forms/auth/signup/personal/NationalDocument';
 import PersonalDetails from '../../components/Organisms/forms/auth/signup/personal/PersonalDetails';
 import usersStore from '../../store/users.store';
-import { ProfileStatus, UpdateUserInfo } from '../../types/services/user.types';
+import { ProfileStatus, UpdateUserInfo, UserInfo } from '../../types/services/user.types';
 
-function CompleteProfile(props: any) {
+function CompleteProfile() {
   const [personalInfo, setPersonalInfo] = useState({
     academic_program_level_id: '',
     academy_id: '',
@@ -27,9 +25,30 @@ function CompleteProfile(props: any) {
     profile_status: ProfileStatus.INCOMPLETE,
     residence_location_id: 0,
     user_type: '',
+    nid: '',
+    phone: '',
+    email: '',
   });
 
-  const user = usersStore.getUserById(props.location.state.detail.id.toString());
+  const [currentStep, setCurrentStep] = useState(0);
+  const [completeStep, setCompleteStep] = useState(0);
+  const history = useHistory();
+
+  // const authUser = authenticatorStore.authUser().data?.data;
+
+  // if (authUser?.data) {
+  //   console.log(authUser);
+
+  //   localStorage.setItem('foundUser', JSON.stringify(authUser.data));
+  //   authenticatorStore.logout();
+  // }
+
+  let foundUser: UserInfo = JSON.parse(localStorage.getItem('foundUser') || '{}');
+  if (!foundUser.id) {
+    history.push('/login/search');
+    return <></>;
+  }
+  const user = usersStore.getUserById(foundUser.id.toString());
   useEffect(() => {
     const userInfo = user.data?.data.data;
     userInfo &&
@@ -50,6 +69,9 @@ function CompleteProfile(props: any) {
             : userInfo.profile_status,
         residence_location_id: userInfo.residence_location_id,
         user_type: userInfo.user_type,
+        nid: userInfo.person.nid,
+        phone: userInfo.person.phone_number,
+        email: userInfo.email,
       });
   }, [user.data]);
 
@@ -65,11 +87,7 @@ function CompleteProfile(props: any) {
     localStorage.setItem('user', JSON.stringify({ ...data, ...person }));
   }, [personalInfo]);
 
-  const [currentStep, setCurrentStep] = useState(0);
-  const [completeStep, setCompleteStep] = useState(0);
-  const history = useHistory();
-
-  const { mutateAsync } = usersStore.updateUuser();
+  const { mutateAsync } = usersStore.updateUser();
 
   async function saveInfo(isComplete: boolean) {
     let userFromLocalStorage: UpdateUserInfo = JSON.parse(
@@ -78,14 +96,10 @@ function CompleteProfile(props: any) {
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
     if (personalInfo) {
       await mutateAsync(userFromLocalStorage, {
-        onSuccess(data) {
-          let personInfo = data.data.data;
+        onSuccess() {
           toast.success('personal information successfully updated', { duration: 1200 });
           setTimeout(() => {
-            history.push({
-              pathname: '/complete-profile/experience',
-              state: { detail: personInfo },
-            });
+            history.push('/login');
           }, 900);
         },
         onError() {
@@ -113,39 +127,26 @@ function CompleteProfile(props: any) {
     <div className="bg-main p-8 md:px-20 md:py-14">
       <CompleteProfileHeader />
       <Stepper
+        isDisabled={false}
         isVertical
         currentStep={currentStep}
         completeStep={completeStep}
         navigateToStepHandler={navigateToStepHandler}>
         <PersonalDetails
-          fetched_id={props.location.state.detail.id}
+          fetched_id={foundUser.id.toString()}
           display_label="Personal details"
           isVertical
           nextStep={nextStep}
         />
-        <FamilyDetails
-          fetched_id={props.location.state.detail.id}
-          display_label="Family details"
-          isVertical
-          prevStep={prevStep}
-          nextStep={nextStep}
-        />
-        <NationalDocuments
-          fetched_id={props.location.state.detail.id}
-          display_label="National documents"
-          isVertical
-          prevStep={prevStep}
-          nextStep={nextStep}
-        />
         <EmploymentDetails
-          fetched_id={props.location.state.detail.id}
+          fetched_id={foundUser.id.toString()}
           display_label="Employment details"
           isVertical
           prevStep={prevStep}
           nextStep={nextStep}
         />
         <AccountDetails
-          fetched_id={props.location.state.detail.id}
+          fetched_id={foundUser.id.toString()}
           display_label="Account details"
           isVertical
           prevStep={prevStep}

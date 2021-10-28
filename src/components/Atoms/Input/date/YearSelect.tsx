@@ -62,7 +62,7 @@ const YearSelect = (props: YProp) => {
       placeholder={props.placeholder}
       className={props.className}
       options={years}
-      padding={props.padding}
+      padding={props.padding || 3}
       defaultValue={newDefaultValue}
       width={props.width}
       handleChange={(e: ValueType) => props.onChange(e)}

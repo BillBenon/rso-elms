@@ -16,7 +16,16 @@ export type Color =
   | 'gray'
   | 'lightgray';
 
-export type fontSize = 'xs' | 'sm' | 'base' | 'tiny' | 'lg' | '2xl' | '3xl' | '4xl';
+export type fontSize =
+  | 'xs'
+  | 'sm'
+  | 'base'
+  | 'tiny'
+  | 'lg'
+  | 'xl'
+  | '2xl'
+  | '3xl'
+  | '4xl';
 export type textTransform = 'uppercase' | 'lowerCase' | 'capitalize' | 'normal-case';
 export type width = 'default' | 'full';
 export type fontWeight = 'normal' | 'medium' | 'semibold' | 'bold';
