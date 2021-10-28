@@ -7,7 +7,6 @@ import Stepper from '../../components/Molecules/Stepper/Stepper';
 import AccountDetails from '../../components/Organisms/forms/auth/signup/personal/AccountDetails';
 import EmploymentDetails from '../../components/Organisms/forms/auth/signup/personal/EmploymentDetails';
 import PersonalDetails from '../../components/Organisms/forms/auth/signup/personal/PersonalDetails';
-import { authenticatorStore } from '../../store';
 import usersStore from '../../store/users.store';
 import { ProfileStatus, UpdateUserInfo, UserInfo } from '../../types/services/user.types';
 
@@ -35,12 +34,14 @@ function CompleteProfile() {
   const [completeStep, setCompleteStep] = useState(0);
   const history = useHistory();
 
-  const authUser = authenticatorStore.authUser().data?.data;
+  // const authUser = authenticatorStore.authUser().data?.data;
 
-  if (authUser?.data) {
-    localStorage.setItem('foundUser', JSON.stringify(authUser.data));
-    authenticatorStore.logout();
-  }
+  // if (authUser?.data) {
+  //   console.log(authUser);
+
+  //   localStorage.setItem('foundUser', JSON.stringify(authUser.data));
+  //   authenticatorStore.logout();
+  // }
 
   let foundUser: UserInfo = JSON.parse(localStorage.getItem('foundUser') || '{}');
   if (!foundUser.id) {
