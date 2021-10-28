@@ -5,6 +5,7 @@ import RegistrationControl from './components/Organisms/registrationControl/Regi
 import Dashboard from './layout/Dashboard';
 import { authenticatorStore } from './store';
 import { UserInfo, UserType } from './types/services/user.types';
+import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';
 import CalendarView from './views/calendar/Calendar';
 import Divisions from './views/divisions/Divisions';
@@ -55,6 +56,7 @@ const RouterProtection = () => {
       <Route path="/dashboard/evaluations" component={ViewEvaluations} />
       <Route path="/dashboard/registration-control" component={RegistrationControl} />
       <Route path="/dashboard/divisions" component={Divisions} />
+      <Route path="/dashboard/academic-years" component={AcademicYears} />
       <Route path="/dashboard/programs" component={AcademicProgram} />
       <Route path="/dashboard/programs/new" component={NewAcademicProgram} />
       <Route path="/dashboard/levels" component={Levels} />
