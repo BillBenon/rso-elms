@@ -79,7 +79,7 @@ export default function Navigation() {
               <div className="ml-3 relative">
                 <div className="flex">
                   <button
-                    className="max-w-xs bg-main rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-white"
+                    className="max-w-xs bg-main rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-white"
                     id="user-menu"
                     aria-label="User menu"
                     aria-haspopup="true"
@@ -102,7 +102,7 @@ export default function Navigation() {
                 Profile dropdown panel, show/hide based on dropdown state.
               */}
                 {showProfileMenu && (
-                  <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5">
+                  <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 z-10">
                     <div
                       className="py-1 rounded-md bg-white shadow-xs"
                       role="menu"
