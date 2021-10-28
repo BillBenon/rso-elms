@@ -28,8 +28,6 @@ function Levels() {
     userInfo?.data.data.academy.id.toString() || '',
   ); // fetch levels
 
-  console.log(userInfo?.data.data.academy.id.toString());
-
   useEffect(() => {
     // filter data to display
     const filterdData = data?.data.data.map((level) =>

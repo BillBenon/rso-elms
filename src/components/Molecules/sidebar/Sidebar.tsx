@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { authenticatorStore } from '../../../store';
-import { UserInfo } from '../../../types/services/user.types';
+import { UserInfo, UserType } from '../../../types/services/user.types';
 import SidebarLinks, { linkProps } from '../../Atoms/custom/SidebarLinks';
 import AcademyProfileCard from '../cards/AcademyProfileCard';
 
@@ -23,11 +23,11 @@ export default function Sidebar() {
       { title: 'Privileges', to: '/dashboard/privileges', icon: 'module' },
     ];
     const academicAdminLinks: linkProps[] = [
-      { title: 'Programs', to: '/dashboard/programs', icon: 'program' },
+      // { title: 'Programs', to: '/dashboard/programs', icon: 'program' },
       { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
       { title: 'Calendar', to: '/dashboard/calendar', icon: 'calendar' },
       { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
-      { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
+      // { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
       // { title: 'Subjects', to: '/dashboard/subjects', icon: 'module' },
       { title: 'Evalutaions', to: '/dashboard/evaluations', icon: 'evaluation' },
       { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
@@ -35,12 +35,17 @@ export default function Sidebar() {
         title: 'Registration Control',
         to: '/dashboard/registration-control',
         icon: 'reg-control',
-        fill: true,
       },
     ];
 
-    if (authUser?.user_type == 'SUPER_ADMIN') routes.push(...institutionAdminLinks);
-    if (authUser?.user_type == 'ADMIN') routes.push(...academicAdminLinks);
+    const instructorAdminLinks: linkProps[] = [
+      { title: 'Evalutaions', to: '/dashboard/view-evaluation', icon: 'evaluation' },
+    ];
+
+    if (authUser?.user_type == UserType.SUPER_ADMIN)
+      routes.push(...institutionAdminLinks);
+    if (authUser?.user_type == UserType.ADMIN) routes.push(...academicAdminLinks);
+    if (authUser?.user_type == UserType.INSTRUCTOR) routes.push(...instructorAdminLinks);
 
     return routes;
   };

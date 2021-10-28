@@ -1,11 +1,6 @@
-import { AxiosResponse } from 'axios';
 import { useMutation, useQuery } from 'react-query';
 
-import { queryClient } from '../plugins/react-query';
 import { divisionService } from '../services/administration/divisions.service';
-import { Response } from '../types';
-import { DivisionInfo } from '../types/services/division.types';
-
 class DivisionStore {
   createDivision() {
     return useMutation(divisionService.addDivision);
@@ -21,6 +16,11 @@ class DivisionStore {
   getDepartmentsInFaculty(id: string) {
     return useQuery(['faculties/departments', id], () =>
       divisionService.getFacultyByDepartment(id),
+    );
+  }
+  getDivisionsByAcademy(divisionType: string, academyId: string) {
+    return useQuery(['faculties/academy', divisionType, academyId], () =>
+      divisionService.getDivisionsByAcademy(divisionType, academyId),
     );
   }
 

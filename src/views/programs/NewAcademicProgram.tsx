@@ -10,6 +10,7 @@ import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule'
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
+import { authenticatorStore } from '../../store';
 import { divisionStore } from '../../store/divisions.store';
 import programStore from '../../store/program.store';
 import usersStore from '../../store/users.store';
@@ -29,10 +30,13 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
   const { search } = useLocation();
   const facultyId = new URLSearchParams(search).get('dp');
 
-  const { data: inCharge } = usersStore.fetchUsers();
+  const { data: userInfo } = authenticatorStore.authUser();
+  const { data: inCharge } = usersStore.getUsersByAcademy(
+    userInfo?.data.data.academy.id.toString() || '',
+  );
 
   const instructors = inCharge?.data.data.filter(
-    (user) => user.user_type === UserType.ADMIN || UserType.INSTRUCTOR,
+    (user) => user.user_type === UserType.INSTRUCTOR,
   );
 
   const departments = divisionStore.getDivisionByType('DEPARTMENT').data?.data.data;
@@ -112,7 +116,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
             Program description
           </TextAreaMolecule>
           <DropdownMolecule
-            width="64"
+            width="60 md:w-80"
             placeholder="Select incharge"
             options={getDropDownOptions({
               inputs: instructors || [],
@@ -125,7 +129,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
 
           {!facultyId && (
             <DropdownMolecule
-              width="64"
+              width="60 md:w-80"
               placeholder="Select department"
               options={getDropDownOptions({ inputs: departments || [] })}
               name="department_id"

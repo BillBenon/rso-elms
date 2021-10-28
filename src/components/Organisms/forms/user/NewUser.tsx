@@ -10,13 +10,14 @@ import programStore from '../../../../store/program.store';
 import usersStore from '../../../../store/users.store';
 import { CommonFormProps, ValueType } from '../../../../types';
 import { AcademyInfo } from '../../../../types/services/academy.types';
-import { IntakeProgramInfo } from '../../../../types/services/program.types';
+import { IntakeProgramInfo } from '../../../../types/services/intake-program.types';
 import {
   CreateUserInfo,
   DocType,
   EducationLevel,
   GenderStatus,
   MaritalStatus,
+  SendCommunicationMsg,
   UserType,
 } from '../../../../types/services/user.types';
 import {
@@ -65,6 +66,9 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     user_type: UserType.STUDENT,
     username: '',
     intake_id: '',
+    nationality: '',
+    document_expire_on: '',
+    send_communication_msg: SendCommunicationMsg.BOTH,
   });
 
   const [otherDetails, setOtherDetails] = useState({
@@ -126,6 +130,8 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   );
   let programId = selectedProgram?.program.id.toString() || '';
   let levels = programStore.getLevelsByAcademicProgram(programId);
+
+  let nationalities: [] = [];
 
   useEffect(() => {
     levels.refetch();
@@ -215,7 +221,16 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           name="sex">
           Gender
         </RadioMolecule>
-
+        <DropdownMolecule
+          width="60 md:w-80"
+          name="nationality"
+          defaultValue={getDropDownOptions({ inputs: nationalities }).find(
+            (national) => national.value === details.nationality,
+          )}
+          handleChange={handleChange}
+          options={[]}>
+          Nationality
+        </DropdownMolecule>
         <DropdownMolecule
           placeholder={'Select your reference'}
           handleChange={handleChange}
@@ -226,6 +241,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           options={getDropDownStatusOptions(DocType)}>
           Reference Number
         </DropdownMolecule>
+
         <InputMolecule
           name="nid"
           type="text"
@@ -234,6 +250,17 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           {details.doc_type.replaceAll('_', ' ')}
         </InputMolecule>
+        {details.doc_type == DocType.PASSPORT && (
+          <DateMolecule
+            handleChange={handleChange}
+            name="document_expire_on"
+            defaultValue={details.document_expire_on}
+            endYear={new Date().getFullYear() + 50}
+            startYear={new Date().getFullYear()}
+            width="60 md:w-80">
+            Passport expiry date
+          </DateMolecule>
+        )}
         <DropdownMolecule
           defaultValue={getDropDownStatusOptions(MaritalStatus).find(
             (marital_status) => marital_status.label === details.marital_status,

@@ -1,22 +1,10 @@
-import { AxiosResponse } from 'axios';
 import { useMutation, useQuery } from 'react-query';
 
-import { queryClient } from '../plugins/react-query';
 import { programService } from '../services/administration/program.service';
-import { Response } from '../types';
-import { CreateProgramInfo } from '../types/services/program.types';
 
 class ProgramStore {
   createProgram() {
-    return useMutation(programService.createProgram, {
-      onSuccess(newData) {
-        queryClient.setQueryData(['programs'], (old) => {
-          const previousData = old as AxiosResponse<Response<CreateProgramInfo[]>>;
-          previousData.data.data.push(newData.data.data);
-          return previousData;
-        });
-      },
-    });
+    return useMutation(programService.createProgram);
   }
   addProgramToLevel() {
     return useMutation(programService.addProgramToLevel);

@@ -170,8 +170,11 @@ export default function Intakes() {
 
         {!isLoading && intakes && intakes.length <= 0 && (
           <NoDataAvailable
+            fill={false}
             icon="academy"
-            buttonLabel="Add new Intake"
+            buttonLabel={
+              registrationControlId ? 'Add Intake ' : 'Go to registration control'
+            }
             title={
               registrationControlId
                 ? 'No intake available in this reg Control'
@@ -182,9 +185,9 @@ export default function Intakes() {
                 history.push(
                   `${url}/${registrationControlId}/add-intake?regId=${registrationControlId}`,
                 );
-              else history.push(`${url}/${registrationControlId}/add-intake`);
+              else history.push('/dashboard/registration-control');
             }}
-            description="And the web just isn't the same without you. Lets get you back online!"
+            description="Oops! No data found"
           />
         )}
       </section>

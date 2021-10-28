@@ -29,6 +29,11 @@ class Levelstore {
   modifyLevel() {
     return useMutation(levelService.modifylevel);
   }
+  getLevelsByProgram(programId: string) {
+    return useQuery(['levels/program', programId], () =>
+      levelService.getLevelsByProgram(programId),
+    );
+  }
 }
 
 export const levelStore = new Levelstore();

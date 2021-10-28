@@ -51,7 +51,11 @@ export default function CommonCardMolecule({
       onKeyPress={handlePress}>
       <div className="flex justify-between items-center">
         <Heading fontWeight="semibold">{data.code}</Heading>
-        {data.status && <Badge badgecolor={data.status.type}>{data.status.text}</Badge>}
+        {data.status && (
+          <Badge badgecolor={data.status.type} className="capitalize">
+            {data.status.text}
+          </Badge>
+        )}
       </div>
       <div className="mt-6">
         <Heading fontWeight="semibold">{data.title}</Heading>

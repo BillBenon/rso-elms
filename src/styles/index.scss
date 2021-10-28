@@ -10,43 +10,43 @@
   font-family: 'Inter', sans-serif;
   @apply to-txt-primary;
 }
-body,html{
-    @apply bg-secondary;
+body,
+html {
+  @apply bg-secondary;
 }
-.border-b-3{
-    border-bottom-width:3px ;
+.border-b-3 {
+  border-bottom-width: 3px;
 }
 
-.css-1rhbuit-multiValue{
-  background: #FFFFFF !important;
+.css-1rhbuit-multiValue {
+  background: #ffffff !important;
   border-radius: 25px !important;
   padding: 5px 15px !important;
-  // padding-right: 4px !important;
-  // padding-left: 3px !important;
   align-items: center !important;
 }
 
-.css-1okebmr-indicatorSeparator{
+.css-1okebmr-indicatorSeparator {
   display: none !important;
 }
 
-.css-xb97g8{
+.css-xb97g8 {
   width: 20px;
   height: 20px;
   border-radius: 30% !important;
-  background-color: #97A0A8 !important;
+  background-color: #97a0a8 !important;
   border-radius: 50% !important;
   cursor: pointer;
 }
 
-.css-xb97g8:hover{
+.css-xb97g8:hover {
   background-color: #646a6e !important;
 }
 
-.css-xb97g8 svg{
-  fill: #FFFFFF !important;
-}.css-xb97g8:hover svg{
-  fill: #FFFFFF !important;
+.css-xb97g8 svg {
+  fill: #ffffff !important;
+}
+.css-xb97g8:hover svg {
+  fill: #ffffff !important;
 }
 
 // scrollbar
@@ -57,15 +57,15 @@ body,html{
 }
 
 ::-webkit-scrollbar-track {
-  background: transparent; 
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
   background: #888;
-  border-radius:3px;
+  border-radius: 3px;
 }
 
-::-webkit-scrollbar-track-piece{
+::-webkit-scrollbar-track-piece {
   max-height: 20px;
 }
 
