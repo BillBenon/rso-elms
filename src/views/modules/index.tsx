@@ -1,19 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
+import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import { authenticatorStore } from '../../store';
 import { moduleStore } from '../../store/modules.store';
 import { CommonCardDataType, Link } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ModuleDetails from './ModuleDetails';
 
 export default function Modules() {
-  const { data, isLoading, isSuccess, isError } = moduleStore.getAllModules();
-
+  const { data: userInfo } = authenticatorStore.authUser();
+  const { data, isLoading, isSuccess, isError } = moduleStore.getModulesByAcademy(
+    userInfo?.data.data.academy.id.toString() || '',
+  );
+  const history = useHistory();
   const [modules, setModules] = useState<CommonCardDataType[]>([]);
   const { path } = useRouteMatch();
 
@@ -77,6 +82,14 @@ export default function Modules() {
                   <section className="flex flex-wrap justify-start gap-2 mt-2">
                     {isLoading ? (
                       <Loader />
+                    ) : modules.length == 0 ? (
+                      <NoDataAvailable
+                        icon="module"
+                        buttonLabel="Go to divisions"
+                        title={'No department available'}
+                        handleClick={() => history.push(`/dashboard/divisions`)}
+                        description="You should look the modules from the department they belong to"
+                      />
                     ) : (
                       modules.map((course, index) => (
                         <ModuleCard course={course} key={index} />

@@ -228,5 +228,5 @@ export enum UserType {
 }
 
 export enum SendCommunicationMsg {
-  EMIAL = 'EMAIL', SMS = 'SMS', BOTH ='BOTH'
+  EMAIL = 'EMAIL', SMS = 'SMS', BOTH ='BOTH'
 }

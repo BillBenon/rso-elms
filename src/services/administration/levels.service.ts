@@ -19,6 +19,14 @@ class LevelService {
     return await adminstrationAxios.get(`/levels/getLevelsByAcademy/${id}`);
   }
 
+  public async getLevelsByProgram(
+    programId: string,
+  ): Promise<AxiosResponse<Response<ILevel[]>>> {
+    return await adminstrationAxios.get(
+      `/programs/getLevelsByAcademicProgram/${programId}`,
+    );
+  }
+
   public async getLevelById(id: string): Promise<AxiosResponse<Response<ILevel>>> {
     return await adminstrationAxios.get(`/levels/getLevelsByAcademy/${id}`);
   }

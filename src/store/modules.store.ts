@@ -14,6 +14,12 @@ class ModuleStore {
     return useQuery(['modules/id', id], () => moduleService.getModuleById(id));
   }
 
+  getModulesByAcademy(academyId: string) {
+    return useQuery(['modules/academy/id', academyId], () =>
+      moduleService.getModulesByAcademy(academyId),
+    );
+  }
+
   getModulesByProgram(programId: string) {
     return useQuery(['modules/program/id', programId], () =>
       moduleService.getModulesByProgram(programId),
