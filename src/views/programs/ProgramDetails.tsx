@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Link,
   Route,
   Switch,
   useHistory,
@@ -11,7 +10,6 @@ import {
 
 import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
-import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import AddCard from '../../components/Molecules/cards/AddCard';
@@ -102,9 +100,6 @@ export default function ProgramDetailsMolecule() {
   }, [getAllModuleStore.data?.data.data, id]);
 
   const program = programStore.getProgramById(id).data?.data.data;
-  const programLevels = programStore.getLevelsByAcademicProgram(
-    program?.id.toString() || '',
-  ).data?.data.data;
 
   const getProgramData = () => {
     let programData: IProgramData | undefined;
@@ -157,7 +152,10 @@ export default function ProgramDetailsMolecule() {
     <>
       <BreadCrumb list={list} />
 
-      <div className="pt-8">
+      <div className="pt-5">
+        <Heading className="pb-5" fontWeight="semibold" fontSize="xl">
+          {program?.name}
+        </Heading>
         <TabNavigation tabs={tabs}>
           <Switch>
             <Route
@@ -229,22 +227,8 @@ export default function ProgramDetailsMolecule() {
 
                     <div className="flex flex-col gap-8">
                       <div className="flex gap-8">
-                        <UsersPreview
-                          title="Students"
-                          totalUsers={100}
-                          label="Students"
-                          data={DummyUser}
-                        />
-                        <UsersPreview
-                          title="Instructors"
-                          totalUsers={8}
-                          label="Instructors"
-                          data={DummyUser}
-                        />
-                      </div>
-                      <div className="flex gap-8">
                         {/* models */}
-                        <div className="flex flex-col gap-8">
+                        {/* <div className="flex flex-col gap-8">
                           <div className="flex flex-col gap-6 w-60 py-4 px-6 h-32 bg-main">
                             <div className="flex flex-col gap-2">
                               <Heading color="txt-secondary" fontSize="base">
@@ -258,9 +242,9 @@ export default function ProgramDetailsMolecule() {
                                 Total Modules: {programModules.length}
                               </Heading>
                             </div>
-                          </div>
-                          {/* levels */}
-                          <div className=" bg-main">
+                    </div> */}
+                        {/* levels */}
+                        {/*<div className=" bg-main">
                             <div className="flex flex-col gap-7 w-60 p-6">
                               <Heading color="txt-secondary" fontSize="base">
                                 Levels
@@ -302,7 +286,7 @@ export default function ProgramDetailsMolecule() {
                               </Link>
                             </div>
                           )}
-                        </div>
+                        </div> */}
                         {/* intakes */}
                         <div className="flex flex-col gap-8">
                           <div className="flex flex-col gap-7 bg-main w-60 p-6">

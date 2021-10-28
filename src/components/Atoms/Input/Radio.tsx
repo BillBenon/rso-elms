@@ -63,7 +63,7 @@ export default function Radio<T>({
             <span>{label}</span>
           ) : (
             <span className="block">
-              <span className="font-semibold inline-block"> {label} </span>
+              <span className="font-semibold inline-block text-sm"> {label} </span>
               <span className="text-txt-secondary text-sm inline-block">{subLabel}</span>
             </span>
           )}

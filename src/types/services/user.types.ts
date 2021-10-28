@@ -131,6 +131,7 @@ export interface CreateUserInfo {
   intake_id: string;
   nationality: string;
   document_expire_on: string,
+  send_communication_msg: SendCommunicationMsg
 
 }
 export interface UserView extends Pick<UserInfo, 'id'| 'first_name' | 'last_name' | 'image_url'> { selected?: boolean}
@@ -167,7 +168,7 @@ export interface EmploymentDetail
   > {}
 
 export interface AccountDetail
-  extends Pick<UserInfo, 'username' | 'email' | 'pin' | 'password'> {
+  extends Pick<UserInfo, 'username' |'pin' | 'password' | 'send_communication_msg'> {
   confirm_password: string;
 }
 
@@ -224,4 +225,8 @@ export enum UserType {
   ADMIN = 'ADMIN',
   INSTRUCTOR = 'INSTRUCTOR',
   STUDENT = 'STUDENT',
+}
+
+export enum SendCommunicationMsg {
+  EMIAL = 'EMAIL', SMS = 'SMS', BOTH ='BOTH'
 }

@@ -25,10 +25,20 @@ function CompleteProfile() {
     profile_status: ProfileStatus.INCOMPLETE,
     residence_location_id: 0,
     user_type: '',
+    nid: '',
+    phone: '',
+    email: '',
   });
 
-  let foundUser: UserInfo = JSON.parse(localStorage.getItem('foundUser') || '{}');
+  const [currentStep, setCurrentStep] = useState(0);
+  const [completeStep, setCompleteStep] = useState(0);
+  const history = useHistory();
 
+  let foundUser: UserInfo = JSON.parse(localStorage.getItem('foundUser') || '{}');
+  if (!foundUser.id) {
+    history.push('/login/search');
+    return <></>;
+  }
   const user = usersStore.getUserById(foundUser.id.toString());
   useEffect(() => {
     const userInfo = user.data?.data.data;
@@ -50,6 +60,9 @@ function CompleteProfile() {
             : userInfo.profile_status,
         residence_location_id: userInfo.residence_location_id,
         user_type: userInfo.user_type,
+        nid: userInfo.person.nid,
+        phone: userInfo.person.phone_number,
+        email: userInfo.email,
       });
   }, [user.data]);
 
@@ -65,10 +78,6 @@ function CompleteProfile() {
     localStorage.setItem('user', JSON.stringify({ ...data, ...person }));
   }, [personalInfo]);
 
-  const [currentStep, setCurrentStep] = useState(0);
-  const [completeStep, setCompleteStep] = useState(0);
-  const history = useHistory();
-
   const { mutateAsync } = usersStore.updateUser();
 
   async function saveInfo(isComplete: boolean) {
@@ -78,12 +87,10 @@ function CompleteProfile() {
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
     if (personalInfo) {
       await mutateAsync(userFromLocalStorage, {
-        onSuccess(data) {
-          let personInfo = data.data.data;
+        onSuccess() {
           toast.success('personal information successfully updated', { duration: 1200 });
-          localStorage.setItem('foundUser', JSON.stringify(personInfo));
           setTimeout(() => {
-            history.push('/complete-profile/experience');
+            history.push('/login');
           }, 900);
         },
         onError() {

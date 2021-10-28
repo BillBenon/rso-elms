@@ -2,7 +2,6 @@ import React from 'react';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
-import Heading from '../../components/Atoms/Text/Heading';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
@@ -62,16 +61,7 @@ export default function ModuleLevels() {
   ];
 
   return (
-    <>
-      <div className="flex justify-between pt-4">
-        <Heading className="self-start" fontWeight="semibold" fontSize="xl">
-          Program Title
-        </Heading>
-        <TableHeader usePadding={false} showBadge={false} showSearch={false}>
-          <Button styleType="outline">View classes</Button>
-          <Button styleType="outline">Add module</Button>
-        </TableHeader>
-      </div>
+    <div className="flex justify-between pt-4 py-2">
       <Tabs>
         <Tab label="Level 1">
           <div className="flex flex-wrap justify-start gap-6 mt-4">
@@ -110,6 +100,10 @@ export default function ModuleLevels() {
           </div>
         </Tab>
       </Tabs>
-    </>
+      <TableHeader usePadding={false} showBadge={false} showSearch={false}>
+        <Button styleType="outline">View classes</Button>
+        <Button styleType="outline">Add module</Button>
+      </TableHeader>
+    </div>
   );
 }
