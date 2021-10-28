@@ -25,11 +25,6 @@ class ModuleStore {
       moduleService.getModulesByProgram(programId),
     );
   }
-  getModulesByAcademy(academyId: string) {
-    return useQuery(['modules/academy/id', academyId], () =>
-      moduleService.getModulesByAcademy(academyId),
-    );
-  }
 
   modifyModule() {
     return useMutation(moduleService.modifyModule);
