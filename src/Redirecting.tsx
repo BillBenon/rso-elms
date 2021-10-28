@@ -1,33 +1,62 @@
 import './styles/redirecting.scss';
 
+import { AxiosResponse } from 'axios';
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import Button from './components/Atoms/custom/Button';
 import Icon from './components/Atoms/custom/Icon';
 import { authenticatorStore } from './store';
+import { experienceStore } from './store/experience.store';
+import { Response } from './types';
+import { ExperienceInfo } from './types/services/experience.types';
+import { PersonInfo, UserType } from './types/services/user.types';
 
 export default function Redirecting() {
-  const history = useHistory();
   const [hasNoAcademy, setHasNoAcademy] = useState(false);
   const [userNotAllowed, setUserNotAllowed] = useState(false);
   const { data } = authenticatorStore.authUser();
+  let experiences: AxiosResponse<Response<ExperienceInfo[]>> | undefined;
+
+  let person: PersonInfo | undefined = data?.data.data.person;
+
+  ({ data: experiences } = experienceStore.getPersonExperiences(
+    person?.id.toString() || '',
+  ));
+
+  console.log(experiences?.data.data);
+
+  if (experiences?.data.data.length === 0 && data?.data.data.user_type === UserType.ADMIN)
+    window.location.href = '/complete-profile/experience';
 
   useEffect(() => {
-    if (data?.data.data.user_type == 'SUPER_ADMIN') redirectTo('/dashboard/users');
-    else if (data?.data.data.user_type == 'ADMIN') {
-      console.log(data.data.data);
-      if (!data.data.data.academy) setHasNoAcademy(true);
-      else redirectTo('/dashboard/programs');
-    } else {
-      setUserNotAllowed(true);
+    if (data?.data.data.user_type === UserType.SUPER_ADMIN)
+      window.location.href = '/dashboard/users';
+    else if (data?.data.data.user_type === UserType.ADMIN) {
+      let val = !data?.data.data.academy ? true : false;
+      setHasNoAcademy(val);
+      if (experiences?.data.data.length === 0)
+        window.location.href = '/complete-profile/experience';
+      else window.location.href = '/dashboard/divisions';
     }
+    setUserNotAllowed(true);
   }, [data?.data.data]);
 
-  const redirectTo = (path: string) => {
-    history.push(path);
-  };
+  // const redirectTo = (path: string) => {
+  //   history.push(path);
+  // };
+
+  // if (data?.data.data.user_type == 'SUPER_ADMIN') redirectTo('/dashboard/users');
+  // else if (data?.data.data.user_type == 'ADMIN') {
+  //   if (!data.data.data.academy) setHasNoAcademy(true);
+  //   else {
+  //     if (experiences?.length == 0) redirectTo('/complete-profile/experience');
+  //     else redirectTo('/dashboard/programs');
+  //   }
+  // } else {
+  //   setUserNotAllowed(true);
+  // }
+
   return (
     <>
       <div>
