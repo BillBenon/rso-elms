@@ -8,7 +8,7 @@ import {
 } from '../../types/services/evaluation.types';
 
 class EvaluationService {
-  public async createAcademy(
+  public async createEvaluation(
     evaluationInfo: IEvaluationCreate,
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
     return await evaluationAxios.post('/evaluations/add', evaluationInfo);

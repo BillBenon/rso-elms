@@ -25,6 +25,8 @@ export type TextDecoration = 'no-underline' | 'underline';
 export type Status =
   | 'pending'
   | 'ongoing'
+  | 'initial'
+  | 'closed'
   | 'complete'
   | 'active'
   | 'inactive'
