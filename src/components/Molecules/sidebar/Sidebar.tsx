@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { authenticatorStore } from '../../../store';
-import { UserInfo } from '../../../types/services/user.types';
+import { UserInfo, UserType } from '../../../types/services/user.types';
 import SidebarLinks, { linkProps } from '../../Atoms/custom/SidebarLinks';
 import AcademyProfileCard from '../cards/AcademyProfileCard';
 
@@ -38,8 +38,14 @@ export default function Sidebar() {
       },
     ];
 
-    if (authUser?.user_type == 'SUPER_ADMIN') routes.push(...institutionAdminLinks);
-    if (authUser?.user_type == 'ADMIN') routes.push(...academicAdminLinks);
+    const instructorAdminLinks: linkProps[] = [
+      { title: 'Evalutaions', to: '/dashboard/view-evaluation', icon: 'evaluation' },
+    ];
+
+    if (authUser?.user_type == UserType.SUPER_ADMIN)
+      routes.push(...institutionAdminLinks);
+    if (authUser?.user_type == UserType.ADMIN) routes.push(...academicAdminLinks);
+    if (authUser?.user_type == UserType.INSTRUCTOR) routes.push(...instructorAdminLinks);
 
     return routes;
   };
