@@ -16,6 +16,7 @@ export const fontWeightStyle: fontWeightStyleType = {
 
 export const fontSizeStyle: fontSizeStyleType = {
   xs: 'text-xs',
+  xl: 'text-xl',
   sm: 'text-sm',
   tiny: 'text-tiny',
   lg: 'text-lg',
