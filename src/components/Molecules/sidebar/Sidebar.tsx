@@ -38,14 +38,19 @@ export default function Sidebar() {
       },
     ];
 
-    const instructorAdminLinks: linkProps[] = [
+    const instructorLinks: linkProps[] = [
       { title: 'Evalutaions', to: '/dashboard/view-evaluation', icon: 'evaluation' },
+    ];
+
+    const studentLinks: linkProps[] = [
+      { title: 'Evalutaions', to: '/dashboard/evaluation-test', icon: 'evaluation' },
     ];
 
     if (authUser?.user_type == UserType.SUPER_ADMIN)
       routes.push(...institutionAdminLinks);
     if (authUser?.user_type == UserType.ADMIN) routes.push(...academicAdminLinks);
-    if (authUser?.user_type == UserType.INSTRUCTOR) routes.push(...instructorAdminLinks);
+    if (authUser?.user_type == UserType.INSTRUCTOR) routes.push(...instructorLinks);
+    if (authUser?.user_type == UserType.STUDENT) routes.push(...studentLinks);
 
     return routes;
   };

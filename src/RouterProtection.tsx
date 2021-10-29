@@ -8,6 +8,7 @@ import { UserInfo, UserType } from './types/services/user.types';
 import Academies from './views/academies/Academy';
 import CalendarView from './views/calendar/Calendar';
 import Divisions from './views/divisions/Divisions';
+import EvaluationTest from './views/evaluation/EvaluationTest';
 import ViewEvaluations from './views/evaluation/ViewEvaluations';
 import NewInstitution from './views/insitution/NewInstitution';
 import UpdateInstitution from './views/insitution/UpdateInstitution';
@@ -73,6 +74,13 @@ const RouterProtection = () => {
     </>
   );
 
+  const StudentRoutes = () => (
+    <>
+      {/* start of student pages */}
+      <Route path="/dashboard/evaluation-test" component={EvaluationTest} />
+      {/* end of student pages */}
+    </>
+  );
   return (
     <>
       {(authUser?.user_type == UserType.SUPER_ADMIN || import.meta.env.DEV) && (
@@ -82,6 +90,7 @@ const RouterProtection = () => {
         {authUser?.user_type === UserType.SUPER_ADMIN && InstitutionAdminRoutes()}
         {authUser?.user_type === UserType.ADMIN && AcademicAdminRoutes()}
         {authUser?.user_type === UserType.INSTRUCTOR && InstructorRoutes()}
+        {authUser?.user_type === UserType.STUDENT && StudentRoutes()}
       </Dashboard>
       {/* protected routes  */}
 
