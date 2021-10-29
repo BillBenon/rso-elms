@@ -24,6 +24,7 @@ export default function Sidebar() {
     ];
     const academicAdminLinks: linkProps[] = [
       // { title: 'Programs', to: '/dashboard/programs', icon: 'program' },
+      { title: 'Academic years', to: '/dashboard/academic-years', icon: 'program' },
       { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
       { title: 'Calendar', to: '/dashboard/calendar', icon: 'calendar' },
       { title: 'Levels', to: '/dashboard/levels', icon: 'level' },

@@ -14,7 +14,7 @@ export default function EvaluationTest() {
             Remaining time:
           </Heading>
           <Heading>
-            <Countdown date={Date.now() + 5000} renderer={Renderer} />
+            <Countdown date={Date.now() + 10000} renderer={Renderer} />
           </Heading>
         </div>
       </div>

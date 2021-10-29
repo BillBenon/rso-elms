@@ -25,13 +25,13 @@ export enum ISubmissionTypeEnum {
 }
 
 export enum IEvaluationClassification {
-  MODULAR = 'MODULAR',
+  MODULE = 'MODULE',
   SUBJECT = 'SUBJECT',
 }
 
 export enum IEligibleClassEnum {
-  MULTIPLE_CLASSES = 'MULTIPLE_CLASSES',
-  SINGLE_CLASS = 'SINGLE_CLASS',
+  MULTIPLE = 'MULTIPLE',
+  SINGLE = 'SINGLE',
 }
 
 export enum IAccessTypeEnum {
@@ -64,17 +64,17 @@ export interface IEvaluationCreate {
   access_type: string;
   allow_submission_time: string;
   class_ids: string;
-  subject_academic_year_period_id: number;
+  subject_academic_year_period_id: string;
   classification: IEvaluationClassification;
   content_format: string;
-  due_on: string | null;
+  due_on: string;
   eligible_group: string;
   evaluation_status: IEvaluationStatus;
   evaluation_type: IEvaluationTypeEnum;
   exam_instruction: string;
   is_consider_on_report: boolean;
   marking_reminder_date: string;
-  maximum_file_size: number;
+  maximum_file_size: number | string;
   name: string;
   id: '';
   questionaire_type: IQuestionaireTypeEnum;

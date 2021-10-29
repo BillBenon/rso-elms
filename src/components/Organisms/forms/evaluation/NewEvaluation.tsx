@@ -1,5 +1,3 @@
-import 'react-modern-calendar-datepicker/lib/DatePicker.css';
-
 import React, { useState } from 'react';
 
 import { Link as LinkList } from '../../../../types';
