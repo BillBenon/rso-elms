@@ -9,6 +9,7 @@ import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';
 import CalendarView from './views/calendar/Calendar';
 import Divisions from './views/divisions/Divisions';
+import EvaluationContent from './views/evaluation/EvaluationContent';
 import ViewEvaluations from './views/evaluation/ViewEvaluations';
 import NewInstitution from './views/insitution/NewInstitution';
 import UpdateInstitution from './views/insitution/UpdateInstitution';
@@ -54,6 +55,7 @@ const RouterProtection = () => {
       <Route path="/dashboard/subjects" component={Subjects} />
       <Route path="/dashboard/calendar" component={CalendarView} />
       <Route path="/dashboard/evaluations" component={ViewEvaluations} />
+      <Route path="/dashboard/evaluations/:id" component={EvaluationContent} />
       <Route path="/dashboard/registration-control" component={RegistrationControl} />
       <Route path="/dashboard/divisions" component={Divisions} />
       <Route path="/dashboard/academic-years" component={AcademicYears} />

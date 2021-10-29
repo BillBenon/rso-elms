@@ -1,9 +1,17 @@
+import moment from 'moment';
 import React from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 
 import Heading from '../../components/Atoms/Text/Heading';
+import { ParamType } from '../../types';
+import { IEvaluationInfo } from '../../types/services/evaluation.types';
 import ContentSpan from './ContentSpan';
 
 export default function EvaluationContent() {
+  const { state } = useLocation<IEvaluationInfo[]>();
+  const { id } = useParams<ParamType>();
+
+  const evaluationInfo = state.find((evaluation) => evaluation.id === id);
   return (
     <div className="block pr-24 pb-8 w-11/12">
       <Heading fontWeight="semibold" className="pt-8">
@@ -13,11 +21,9 @@ export default function EvaluationContent() {
         <div>
           {/* first column */}
           <div className="flex flex-col gap-4">
-            <ContentSpan title="Evaluation name">
-              Quiz on the basics of the nervous system.
-            </ContentSpan>
+            <ContentSpan title="Evaluation name">{evaluationInfo?.name}</ContentSpan>
 
-            <ContentSpan title="Time Limit" subTitle="2h 30 mins" />
+            <ContentSpan title="Total number of questions" subTitle="5" />
 
             <div className="flex flex-col gap-4">
               <Heading color="txt-secondary" fontSize="base">
@@ -39,25 +45,42 @@ export default function EvaluationContent() {
         </div>
         {/* second column */}
         <div className="flex flex-col gap-4">
-          <ContentSpan title="Evaluation type" subTitle="Quiz" />
+          <ContentSpan
+            title="Evaluation type"
+            subTitle={evaluationInfo?.evaluation_type}
+          />
 
-          <div className="flex flex-col gap-4">
-            <ContentSpan title="Time Limit" subTitle="2h 30 mins" />
-          </div>
+          <ContentSpan
+            title="Time Limit"
+            subTitle={moment
+              .utc()
+              .startOf('year')
+              .add({ minutes: evaluationInfo?.time_limit })
+              .format('H [h ]mm[ mins]')}
+          />
         </div>
 
         {/* tjird column */}
         <div className="flex flex-col gap-4">
-          <ContentSpan title="Evaluation type" subTitle="Quiz" />
+          <ContentSpan
+            title="Due on"
+            subTitle={moment(evaluationInfo?.due_on).format('MM/DD/YYYY')}
+          />
 
-          <ContentSpan title="Time Limit" subTitle="2h 30 min" />
+          <ContentSpan
+            title="Questionaire type"
+            subTitle={evaluationInfo?.questionaire_type}
+          />
         </div>
 
         {/* tjird column */}
         <div className="flex flex-col gap-4">
-          <ContentSpan title="Evaluation type" subTitle="Quiz" />
-
-          <ContentSpan title="Time Limit" subTitle="2h 30 mins" />
+          <ContentSpan title="Number of questions" subTitle="5" />
+          <ContentSpan
+            title="Consider on report"
+            subTitle={evaluationInfo?.is_consider_on_report ? 'Yes' : 'No'}
+          />{' '}
+          <ContentSpan title="Access type" subTitle={evaluationInfo?.access_type} />
         </div>
       </div>
 

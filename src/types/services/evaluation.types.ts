@@ -6,6 +6,11 @@ export enum IEvaluationTypeEnum {
   QUIZ = 'QUIZ',
 }
 
+export enum IQuestionType {
+  MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
+  OPEN = 'OPEN',
+}
+
 export enum IQuestionaireTypeEnum {
   MULTIPLE = 'MULTIPLE',
   FIELD = 'FIELD',

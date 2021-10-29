@@ -13,8 +13,8 @@ class EvaluationService {
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
     return await evaluationAxios.post('/evaluations/add', evaluationInfo);
   }
-  public async fetEvaluations(): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
-    return await evaluationAxios.get('/academies/getAcademies');
+  public async fetchEvaluations(): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
+    return await evaluationAxios.get('/evaluations/getAll');
   }
   public async getEvaluationById(
     id: string,

@@ -16,31 +16,31 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
+import { evaluationStore } from '../../store/evaluation.store';
 import { Link as LinkList } from '../../types';
-import EvaluationContent from './EvaluationContent';
+import { advancedTypeChecker } from '../../utils/getOption';
 import EvaluationTest from './EvaluationTest';
 
 export default function ViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
   const history = useHistory();
-  const { search } = useLocation();
   const { url, path } = useRouteMatch();
-  const evaluationId = new URLSearchParams(search).get('evaluationId');
+  const { data } = evaluationStore.getEvaluations();
 
   const list: LinkList[] = [
     { to: '/', title: 'home' },
     { to: 'evaluations', title: 'evaluations' },
   ];
 
-  const data = [
-    {
-      id: 1,
-      status: { type: 'warning', text: 'pending' },
-      description: '100 marks',
-      title: 'Semester 1 exam',
-      code: 'Exam',
-    },
-  ];
+  // const data = [
+  //   {
+  //     id: 1,
+  //     status: { type: 'warning', text: 'pending' },
+  //     description: '100 marks',
+  //     title: 'Semester 1 exam',
+  //     code: 'Exam',
+  //   },
+  // ];
 
   const data2 = [
     {
@@ -81,8 +81,22 @@ export default function ViewEvaluations() {
   ];
 
   useEffect(() => {
-    setEvaluations(data);
-  }, []);
+    let formattedEvals: any = [];
+    data?.data.data.map((evaluation) => {
+      let formattedEvaluations = {
+        id: evaluation.id,
+        title: evaluation.name,
+        code: evaluation.evaluation_type,
+        description: `${evaluation.total_mark} marks`,
+        status: {
+          type: advancedTypeChecker(evaluation.evaluation_status),
+          text: evaluation.evaluation_status,
+        },
+      };
+      formattedEvals.push(formattedEvaluations);
+    });
+    setEvaluations(formattedEvals);
+  }, [data?.data.data]);
 
   return (
     <Switch>
@@ -129,8 +143,6 @@ export default function ViewEvaluations() {
                         handleClick={() => history.push(`${url}/new`)}
                         description="And the web just isnt the same without you. Lets get you back online!"
                       />
-                    ) : evaluationId ? (
-                      <EvaluationContent />
                     ) : (
                       evaluations?.map((info: any, index: number) => (
                         <div key={index}>
@@ -138,8 +150,8 @@ export default function ViewEvaluations() {
                             className="cursor-pointer"
                             handleClick={() => {
                               history.push({
-                                pathname: `${url}`,
-                                search: `?evaluationId=${info.id}`,
+                                pathname: `${path}/${info.id}`,
+                                state: data?.data.data,
                               });
                             }}
                             data={info}

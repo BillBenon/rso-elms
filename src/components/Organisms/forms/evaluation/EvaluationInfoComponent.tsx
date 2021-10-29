@@ -69,8 +69,9 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
     e.preventDefault(); // prevent page to reload:
 
     mutate(details, {
-      onSuccess: () => {
+      onSuccess: (data) => {
         toast.success('evaluation created');
+        localStorage.setItem('evaluationId', JSON.stringify(data?.data.data.id));
         handleNext();
       },
       onError: (error) => {
