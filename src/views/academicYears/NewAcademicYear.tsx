@@ -4,7 +4,6 @@ import { useHistory } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import DateMolecule from '../../components/Molecules/input/DateMolecule';
-import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
 import { queryClient } from '../../plugins/react-query';
 import { authenticatorStore } from '../../store';
@@ -14,6 +13,7 @@ import {
   IAcademicYearStatus,
   ICreateAcademicYear,
 } from '../../types/services/academicyears.types';
+import { getDropDownStatusOptions } from '../../utils/getOption';
 
 export default function NewAcademicYear() {
   const history = useHistory();
@@ -36,11 +36,18 @@ export default function NewAcademicYear() {
   function submitForm(e: FormEvent) {
     e.preventDefault();
 
-    mutate(years, {
-      onSuccess: () => {
+    let name = `YEAR ${new Date(years.plannedStartOn).getFullYear()}-${new Date(
+      years.plannedEndOn,
+    ).getFullYear()}`;
+    let data = {
+      ...years,
+      name,
+    };
+    mutate(data, {
+      onSuccess: (year) => {
         toast.success('Academic year created', { duration: 5000 });
         queryClient.invalidateQueries(['academicyears']);
-        history.goBack();
+        history.push(`/dashboard/academic-years/${year.data.data.id}/period/add`);
       },
       onError: (error) => {
         console.log(error);
@@ -51,9 +58,9 @@ export default function NewAcademicYear() {
 
   return (
     <form onSubmit={submitForm}>
-      <InputMolecule required value={years.name} name="name" handleChange={handleChange}>
+      {/* <InputMolecule required value={years.name} name="name" handleChange={handleChange}>
         Name
-      </InputMolecule>
+      </InputMolecule> */}
       <DateMolecule
         startYear={new Date().getFullYear()}
         endYear={new Date().getFullYear() + 100}
@@ -66,7 +73,7 @@ export default function NewAcademicYear() {
 
       <DateMolecule
         handleChange={handleChange}
-        startYear={new Date().getFullYear()}
+        startYear={new Date(years.plannedStartOn).getFullYear()}
         endYear={new Date().getFullYear() + 100}
         padding={3}
         reverse={false}
@@ -78,12 +85,7 @@ export default function NewAcademicYear() {
         className="mt-4"
         value={years.status}
         name="status"
-        options={[
-          { label: 'Initial', value: 'INITIAL' },
-          { label: 'started', value: 'STARTED' },
-          { label: 'suspended', value: 'SUSPENDED' },
-          { label: 'closed', value: 'CLOSED' },
-        ]}
+        options={getDropDownStatusOptions(IAcademicYearStatus)}
         handleChange={handleChange}>
         Status
       </RadioMolecule>

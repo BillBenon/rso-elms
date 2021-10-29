@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Table } from '..';
 
 export interface IAcademicYearInfo extends Table {

@@ -14,6 +14,7 @@ import { authenticatorStore } from '../../store';
 import academicyearsStore from '../../store/academicyears.store';
 import { Link as Links } from '../../types';
 import { IAcademicYearInfo } from '../../types/services/academicyears.types';
+import NewAcademicPeriod from '../academicPeriods/NewAcademicPeriod';
 import NewAcademicYear from './NewAcademicYear';
 import UpdateAcademicYear from './UpdateAcademicYear';
 
@@ -98,7 +99,7 @@ export default function AcademicYears() {
       <section>
         <TableHeader
           title="Academic years"
-          totalItems={`${years?.length} years`}
+          totalItems={years?.length || 0}
           showSearch={false}>
           {years.length > 0 && (
             <Link to={`${url}/new`}>
@@ -108,36 +109,43 @@ export default function AcademicYears() {
         </TableHeader>
       </section>
 
-      <section>
-        {isLoading && years?.length === 0 && <Loader />}
-
-        {isSuccess && years?.length > 0 ? (
-          <Table<FilteredData>
-            statusColumn="status"
-            data={years}
-            uniqueCol={'id'}
-            hide={['id']}
-            actions={actions}
-          />
-        ) : isSuccess && years.length === 0 ? (
-          <NoDataAvailable
-            icon="level"
-            buttonLabel="Add new year"
-            title={'No years available'}
-            handleClick={() => history.push(`${url}/new`)}
-            description="No academic years have been added yet."
-          />
-        ) : null}
-      </section>
-
       <Switch>
+        {/* list all academic years */}
+        <Route
+          exact
+          path={`${path}`}
+          render={() => (
+            <section>
+              {isLoading && years?.length === 0 && <Loader />}
+
+              {isSuccess && years?.length > 0 ? (
+                <Table<FilteredData>
+                  statusColumn="status"
+                  data={years}
+                  uniqueCol={'id'}
+                  hide={['id']}
+                  actions={actions}
+                />
+              ) : isSuccess && years.length === 0 ? (
+                <NoDataAvailable
+                  icon="program"
+                  buttonLabel="Add new year"
+                  title={'No years available'}
+                  handleClick={() => history.push(`${url}/new`)}
+                  description="No academic years have been added yet."
+                />
+              ) : null}
+            </section>
+          )}
+        />
+
         {/* update year popup */}
         <Route
           exact
           path={`${path}/:id/edit`}
           render={() => {
             return (
-              <PopupMolecule title="Update Level" open onClose={history.goBack}>
+              <PopupMolecule title="Update Academic year" open onClose={history.goBack}>
                 <UpdateAcademicYear academicYears={years} />
               </PopupMolecule>
             );
@@ -152,6 +160,22 @@ export default function AcademicYears() {
             return (
               <PopupMolecule title="New academic year" open onClose={history.goBack}>
                 <NewAcademicYear />
+              </PopupMolecule>
+            );
+          }}
+        />
+        {/* add academic period popup */}
+        <Route
+          exact
+          path={`${path}/:id/period/add`}
+          render={() => {
+            return (
+              <PopupMolecule
+                closeOnClickOutSide={false}
+                title="Academic period"
+                open
+                onClose={history.goBack}>
+                <NewAcademicPeriod />
               </PopupMolecule>
             );
           }}
