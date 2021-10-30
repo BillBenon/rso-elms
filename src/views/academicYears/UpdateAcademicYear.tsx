@@ -14,6 +14,7 @@ import {
   IAcademicYearStatus,
   ICreateAcademicYear,
 } from '../../types/services/academicyears.types';
+import { getDropDownStatusOptions } from '../../utils/getOption';
 import { FilteredData } from './AcademicYears';
 
 interface IUpdateYearProps {
@@ -101,12 +102,7 @@ export default function UpdateAcademicYear({ academicYears }: IUpdateYearProps) 
         className="mt-4"
         value={years.status.toString()}
         name="status"
-        options={[
-          { label: 'Initial', value: 'INITIAL' },
-          { label: 'started', value: 'STARTED' },
-          { label: 'suspended', value: 'SUSPENDED' },
-          { label: 'closed', value: 'CLOSED' },
-        ]}
+        options={getDropDownStatusOptions(IAcademicYearStatus)}
         handleChange={handleChange}>
         Status
       </RadioMolecule>

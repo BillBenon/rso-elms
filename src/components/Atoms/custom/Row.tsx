@@ -19,6 +19,7 @@ const statusColors: statusStyleType = {
   inactive: 'error',
   suspended: 'error',
   cancelled: 'error',
+  started: 'success',
 };
 
 const Row = ({ keys, data, statusColumn }: RowProps) => {

@@ -40,6 +40,7 @@ export type Status =
   | 'active'
   | 'inactive'
   | 'suspended'
+  | 'started'
   | 'cancelled';
 
 export type Page =
