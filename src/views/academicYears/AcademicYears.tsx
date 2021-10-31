@@ -16,6 +16,7 @@ import { Link as Links } from '../../types';
 import { IAcademicYearInfo } from '../../types/services/academicyears.types';
 import AcademicPeriod from '../academicPeriods/AcademicPeriod';
 import NewAcademicPeriod from '../academicPeriods/NewAcademicPeriod';
+import UpdateAcademicPeriod from '../academicPeriods/UpdateAcademicPeriod';
 import NewAcademicYear from './NewAcademicYear';
 import UpdateAcademicYear from './UpdateAcademicYear';
 
@@ -196,10 +197,26 @@ export default function AcademicYears() {
           return (
             <PopupMolecule
               closeOnClickOutSide={false}
-              title="Academic period"
+              title="New Academic period"
               open
               onClose={history.goBack}>
               <NewAcademicPeriod />
+            </PopupMolecule>
+          );
+        }}
+      />
+      {/* change academic period popup */}
+      <Route
+        exact
+        path={`${path}/:id/period/edit`}
+        render={() => {
+          return (
+            <PopupMolecule
+              closeOnClickOutSide={false}
+              title="Change academic period"
+              open
+              onClose={history.goBack}>
+              <UpdateAcademicPeriod />
             </PopupMolecule>
           );
         }}

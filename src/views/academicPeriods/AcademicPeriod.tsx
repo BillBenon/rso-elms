@@ -1,6 +1,13 @@
 import React, { useEffect } from 'react';
-import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
+import {
+  Link,
+  useHistory,
+  useLocation,
+  useParams,
+  useRouteMatch,
+} from 'react-router-dom';
 
+import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -51,7 +58,7 @@ export default function AcademicPeriod() {
       <section>
         <BreadCrumb list={list} />
       </section>
-      {periods && periods?.length > 0 && (
+      {periods && periods.length > 0 && (
         <section>
           <TableHeader
             title={`${
@@ -59,8 +66,14 @@ export default function AcademicPeriod() {
                 ? `${data?.data.data[0].academic_year.name} / academic period`
                 : 'academic period'
             }`}
-            totalItems={periods?.length || 0}
-            handleSearch={() => {}}></TableHeader>
+            totalItems={periods.length || 0}
+            showSearch={false}>
+            {periods.length > 0 && (
+              <Link to={`${url}/edit`}>
+                <Button>Change period</Button>
+              </Link>
+            )}
+          </TableHeader>
         </section>
       )}
       <section>

@@ -14,34 +14,30 @@ import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
-import AddCard from '../../components/Molecules/cards/AddCard';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
-import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
-import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import UsersPreview from '../../components/Molecules/cards/UsersPreview';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
 import intakeProgramStore from '../../store/intake-program.store';
-import { moduleStore } from '../../store/modules.store';
 import programStore from '../../store/program.store';
-import { CommonCardDataType, Link as Links, ParamType } from '../../types';
+import { Link as Links, ParamType } from '../../types';
 import { UserView } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ModuleLevels from '../modules/ModuleLevels';
+import ProgramModules from '../modules/ProgramModules';
 import { IProgramData } from './AcademicPrograms';
 import AddLevelToProgram from './AddLevelToProgram';
 import { DummyUser } from './dummyUsers';
 
 export default function ProgramDetailsMolecule() {
-  const { id } = useParams<ParamType>();
   const { search } = useLocation();
   const intakeProgId = new URLSearchParams(search).get('intakeProg');
   const history = useHistory();
   const { path, url } = useRouteMatch();
+  const { id } = useParams<ParamType>();
 
-  const getAllModuleStore = moduleStore.getModulesByProgram(id);
   const studentsProgram = intakeProgramStore.getStudentsByIntakeProgram(
     intakeProgId || '',
   ).data?.data.data;
@@ -79,27 +75,6 @@ export default function ProgramDetailsMolecule() {
       ]),
     );
   }, [instructorsProgram]);
-
-  const [programModules, setProgramModules] = useState<CommonCardDataType[]>([]);
-
-  useEffect(() => {
-    let newModules: CommonCardDataType[] = [];
-    getAllModuleStore.data?.data.data.forEach((module) => {
-      newModules.push({
-        status: {
-          type: advancedTypeChecker(module.generic_status),
-          text: module.generic_status.toString(),
-        },
-        id: module.id,
-        code: module.code,
-        title: module.name,
-        description: module.description,
-        subTitle: `total subject: ${module.total_num_subjects || 'None'}`,
-      });
-    });
-
-    setProgramModules(newModules);
-  }, [getAllModuleStore.data?.data.data, id]);
 
   const program = programStore.getProgramById(id).data?.data.data;
   const programLevels = programStore.getLevelsByAcademicProgram(id).data?.data.data;
@@ -341,31 +316,7 @@ export default function ProgramDetailsMolecule() {
                 );
               }}
             />
-            <Route
-              path={`${path}/modules`}
-              render={() => (
-                <section className="mt-4 flex flex-wrap justify-start gap-4">
-                  {programModules.length <= 0 ? (
-                    <NoDataAvailable
-                      buttonLabel="Add new modules"
-                      title={'No Modules available in this program'}
-                      handleClick={() => history.push(`${url}/modules/add`)}
-                      description="And the web just isnt the same without you. Lets get you back online!"
-                    />
-                  ) : (
-                    <>
-                      <AddCard
-                        title={'Add new module'}
-                        onClick={() => history.push(`${url}/modules/add`)}
-                      />
-                      {programModules?.map((module) => (
-                        <ModuleCard course={module} key={module.code} />
-                      ))}
-                    </>
-                  )}
-                </section>
-              )}
-            />
+            <Route path={`${path}/modules`} render={() => <ProgramModules />} />
           </Switch>
         </TabNavigation>
       </div>

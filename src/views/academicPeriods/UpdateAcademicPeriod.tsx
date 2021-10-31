@@ -1,6 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
@@ -11,7 +11,7 @@ import { ICreateAcademicPeriod } from '../../types/services/academicperiod.types
 import { PeriodType } from '../../types/services/intake.types';
 import { getDropDownStatusOptions } from '../../utils/getOption';
 
-function NewAcademicPeriod() {
+function UpdateAcademicPeriod() {
   const { id: yearId } = useParams<ParamType>();
   const history = useHistory();
   const [period, setPeriod] = useState<ICreateAcademicPeriod>({
@@ -61,11 +61,10 @@ function NewAcademicPeriod() {
     }));
   }
 
-  const { mutateAsync } = academicperiodStore.createAcademicPeriod();
+  const { mutateAsync } = academicperiodStore.modifyAcademicPeriod();
 
   function createPeriod<T>(e: FormEvent<T>) {
     e.preventDefault();
-
     mutateAsync(period, {
       onSuccess() {
         toast.success('academic period successfully added');
@@ -77,7 +76,6 @@ function NewAcademicPeriod() {
       },
     });
   }
-
   return (
     <form onSubmit={createPeriod}>
       <p className="text-txt-secondary pt-2 pb-6">
@@ -96,10 +94,10 @@ function NewAcademicPeriod() {
         Period Type
       </DropdownMolecule>
       <div className="mt-5">
-        <Button type="submit">Save</Button>
+        <Button type="submit">Change</Button>
       </div>
     </form>
   );
 }
 
-export default NewAcademicPeriod;
+export default UpdateAcademicPeriod;
