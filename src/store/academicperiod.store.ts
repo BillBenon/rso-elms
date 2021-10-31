@@ -7,9 +7,13 @@ class AcademyPeriodStore {
     return useMutation(academicPeriodService.createAcademicPeriod);
   }
 
-  getAcademicPeriodsByAcademicYear(academyId: string) {
-    return useQuery(['academicPeriod/years', academyId], () =>
-      academicPeriodService.getAcademicPeriodsByAcademicYear(academyId),
+  getAcademicPeriodsByAcademicYear(academyId: string, enabled = true) {
+    return useQuery(
+      ['academicPeriod/years', academyId],
+      () => academicPeriodService.getAcademicPeriodsByAcademicYear(academyId),
+      {
+        enabled,
+      },
     );
   }
 

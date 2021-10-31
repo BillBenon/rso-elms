@@ -13,6 +13,12 @@ class AcademyStore {
     );
   }
 
+  getAcademicYearById(id: string) {
+    return useQuery(['academicyears/id', id], () =>
+      academicyearsService.getAcademicYearById(id),
+    );
+  }
+
   modifyAcademy() {
     return useMutation(academicyearsService.modifyAcademicYear);
   }

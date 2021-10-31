@@ -14,6 +14,7 @@ import { authenticatorStore } from '../../store';
 import academicyearsStore from '../../store/academicyears.store';
 import { Link as Links } from '../../types';
 import { IAcademicYearInfo } from '../../types/services/academicyears.types';
+import AcademicPeriod from '../academicPeriods/AcademicPeriod';
 import NewAcademicPeriod from '../academicPeriods/NewAcademicPeriod';
 import NewAcademicYear from './NewAcademicYear';
 import UpdateAcademicYear from './UpdateAcademicYear';
@@ -54,7 +55,13 @@ export default function AcademicYears() {
     {
       name: 'Edit year',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit level
+        history.push(`${path}/${id}/edit`); // go to edit year
+      },
+    },
+    {
+      name: 'Manage Period',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`${path}/${id}/period`); // go to manage period
       },
     },
   ];
@@ -91,30 +98,30 @@ export default function AcademicYears() {
   }, [academicYears, academicYears?.data.data]);
 
   return (
-    <>
-      <section>
-        <BreadCrumb list={list} />
-      </section>
+    <Switch>
+      {/* list all academic years */}
+      <Route
+        exact
+        path={`${path}`}
+        render={() => (
+          <>
+            <section>
+              <BreadCrumb list={list} />
+            </section>
 
-      <section>
-        <TableHeader
-          title="Academic years"
-          totalItems={years?.length || 0}
-          showSearch={false}>
-          {years.length > 0 && (
-            <Link to={`${url}/new`}>
-              <Button>Add year</Button>
-            </Link>
-          )}
-        </TableHeader>
-      </section>
+            <section>
+              <TableHeader
+                title="Academic years"
+                totalItems={years?.length || 0}
+                showSearch={false}>
+                {years.length > 0 && (
+                  <Link to={`${url}/new`}>
+                    <Button>Add year</Button>
+                  </Link>
+                )}
+              </TableHeader>
+            </section>
 
-      <Switch>
-        {/* list all academic years */}
-        <Route
-          exact
-          path={`${path}`}
-          render={() => (
             <section>
               {isLoading && years?.length === 0 && <Loader />}
 
@@ -136,51 +143,67 @@ export default function AcademicYears() {
                 />
               ) : null}
             </section>
-          )}
-        />
+          </>
+        )}
+      />
 
-        {/* update year popup */}
-        <Route
-          exact
-          path={`${path}/:id/edit`}
-          render={() => {
-            return (
-              <PopupMolecule title="Update Academic year" open onClose={history.goBack}>
-                <UpdateAcademicYear academicYears={years} />
-              </PopupMolecule>
-            );
-          }}
-        />
+      {/* update year popup */}
+      <Route
+        exact
+        path={`${path}/:id/edit`}
+        render={() => {
+          return (
+            <PopupMolecule title="Update Academic year" open onClose={history.goBack}>
+              <UpdateAcademicYear academicYears={years} />
+            </PopupMolecule>
+          );
+        }}
+      />
 
-        {/* add new year popup */}
-        <Route
-          exact
-          path={`${path}/new`}
-          render={() => {
-            return (
-              <PopupMolecule title="New academic year" open onClose={history.goBack}>
-                <NewAcademicYear />
-              </PopupMolecule>
-            );
-          }}
-        />
-        {/* add academic period popup */}
-        <Route
-          exact
-          path={`${path}/:id/period/add`}
-          render={() => {
-            return (
-              <PopupMolecule
-                closeOnClickOutSide={false}
-                title="Academic period"
-                open
-                onClose={history.goBack}>
-                <NewAcademicPeriod />
-              </PopupMolecule>
-            );
-          }}
-        />
-      </Switch>
-    </>
+      {/* add new year popup */}
+      <Route
+        exact
+        path={`${path}/new`}
+        render={() => {
+          return (
+            <PopupMolecule title="New academic year" open onClose={history.goBack}>
+              <NewAcademicYear />
+            </PopupMolecule>
+          );
+        }}
+      />
+      {/* show academic period popup */}
+      <Route
+        exact
+        path={`${path}/:id/period`}
+        render={() => {
+          return (
+            // <PopupMolecule
+            //   closeOnClickOutSide={false}
+            //   title="Academic period"
+            //   open
+            //   onClose={history.goBack}>
+            <AcademicPeriod />
+            // </PopupMolecule>
+          );
+        }}
+      />
+      {/* add academic period popup */}
+      <Route
+        exact
+        path={`${path}/:id/period/add`}
+        render={() => {
+          return (
+            <PopupMolecule
+              closeOnClickOutSide={false}
+              title="Academic period"
+              open
+              onClose={history.goBack}>
+              <NewAcademicPeriod />
+            </PopupMolecule>
+          );
+        }}
+      />
+    </Switch>
   );
 }
