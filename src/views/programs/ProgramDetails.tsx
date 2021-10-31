@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Link,
   Route,
   Switch,
   useHistory,
@@ -10,6 +11,7 @@ import {
 
 import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
+import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import AddCard from '../../components/Molecules/cards/AddCard';
@@ -100,6 +102,7 @@ export default function ProgramDetailsMolecule() {
   }, [getAllModuleStore.data?.data.data, id]);
 
   const program = programStore.getProgramById(id).data?.data.data;
+  const programLevels = programStore.getLevelsByAcademicProgram(id).data?.data.data;
 
   const getProgramData = () => {
     let programData: IProgramData | undefined;
@@ -225,55 +228,48 @@ export default function ProgramDetailsMolecule() {
                       />
                     </div>
 
-                    <div className="flex flex-col gap-8">
-                      <div className="flex gap-8">
-                        {/* models */}
-                        {/* <div className="flex flex-col gap-8">
-                          <div className="flex flex-col gap-6 w-60 py-4 px-6 h-32 bg-main">
-                            <div className="flex flex-col gap-2">
-                              <Heading color="txt-secondary" fontSize="base">
-                                Modules
-                              </Heading>
-                              <Heading
-                                color="primary"
-                                fontSize="base"
-                                fontWeight="bold"
-                                className="pt-4">
-                                Total Modules: {programModules.length}
-                              </Heading>
-                            </div>
-                    </div> */}
-                        {/* levels */}
-                        {/*<div className=" bg-main">
-                            <div className="flex flex-col gap-7 w-60 p-6">
-                              <Heading color="txt-secondary" fontSize="base">
-                                Levels
-                              </Heading>
-                              <div className="flex flex-col gap-8">
-                                {programLevels && programLevels?.length > 0 ? (
-                                  programLevels.map((programLevel) => (
-                                    <Heading
-                                      key={programLevel.id}
-                                      color="primary"
-                                      fontSize="base"
-                                      fontWeight="semibold">
-                                      {programLevel.level.name}
-                                    </Heading>
-                                  ))
-                                ) : (
+                    {/* models */}
+                    {/* <div className="flex flex-col gap-8">
+                              <div className="flex flex-col gap-6 w-60 py-4 px-6 h-32 bg-main">
+                                <div className="flex flex-col gap-2">
+                                  <Heading color="txt-secondary" fontSize="base">
+                                    Modules
+                                  </Heading>
                                   <Heading
                                     color="primary"
                                     fontSize="base"
-                                    fontWeight="semibold">
-                                    No levels available
+                                    fontWeight="bold"
+                                    className="pt-4">
+                                    Total Modules: {programModules.length}
                                   </Heading>
-                                )}
+                                </div>
                               </div>
-                            </div>
-                            {programLevels && programLevels?.length === 0 && (
-                              <div className="text-primary-500 py-2 text-right text-sm mr-3">
-                                <Link to={`${url}/level/add`}>+ Add levels</Link>
-                              </div>
+                            </div> */}
+                    <div className="flex gap-8">
+                      {/* levels */}
+                      {!intakeProgId && (
+                        <div className="flex flex-col gap-7 w-60 p-6 bg-main">
+                          <Heading color="txt-secondary" fontSize="base">
+                            Levels
+                          </Heading>
+                          <div className="flex flex-col gap-8">
+                            {programLevels && programLevels?.length > 0 ? (
+                              programLevels.map((programLevel) => (
+                                <Heading
+                                  key={programLevel.id}
+                                  color="primary"
+                                  fontSize="base"
+                                  fontWeight="semibold">
+                                  {programLevel.level.name}
+                                </Heading>
+                              ))
+                            ) : (
+                              <Heading
+                                color="primary"
+                                fontSize="base"
+                                fontWeight="semibold">
+                                No levels available
+                              </Heading>
                             )}
                           </div>
                           {programLevels && programLevels?.length === 0 && (
@@ -286,27 +282,27 @@ export default function ProgramDetailsMolecule() {
                               </Link>
                             </div>
                           )}
-                        </div> */}
-                        {/* intakes */}
-                        <div className="flex flex-col gap-8">
-                          <div className="flex flex-col gap-7 bg-main w-60 p-6">
-                            <Heading color="txt-secondary" fontSize="base">
-                              Intakes
+                        </div>
+                      )}
+                      {/* intakes */}
+                      <div className="flex flex-col gap-8">
+                        <div className="flex flex-col gap-7 bg-main w-60 p-6">
+                          <Heading color="txt-secondary" fontSize="base">
+                            Intakes
+                          </Heading>
+                          <div className="flex flex-col gap-8">
+                            <Heading
+                              color="primary"
+                              fontSize="base"
+                              fontWeight="semibold">
+                              Active Intakes
                             </Heading>
-                            <div className="flex flex-col gap-8">
-                              <Heading
-                                color="primary"
-                                fontSize="base"
-                                fontWeight="semibold">
-                                Active Intakes
-                              </Heading>
-                              <Heading
-                                color="primary"
-                                fontSize="base"
-                                fontWeight="semibold">
-                                Passive Intakes
-                              </Heading>
-                            </div>
+                            <Heading
+                              color="primary"
+                              fontSize="base"
+                              fontWeight="semibold">
+                              Passive Intakes
+                            </Heading>
                           </div>
                         </div>
                       </div>

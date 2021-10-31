@@ -70,34 +70,31 @@ export default function AcademicProgram() {
 
   let programs: IProgramData[] = [];
 
-  programInfo?.map((obj) => {
-    if (intakeId) obj = (obj as IntakeProgramInfo).program;
-    else obj = obj as ProgramInfo;
+  programInfo?.map((prog) => {
+    if (intakeId) prog = (prog as IntakeProgramInfo).program;
+    else prog = prog as ProgramInfo;
 
-    let { id, code, name, description, generic_status, department, incharge, type } = obj;
-
-    let prog: IProgramData = {
-      id: id,
+    let program: IProgramData = {
+      id: prog.id,
       status: {
-        type: advancedTypeChecker(generic_status),
-        text: generic_status.toString(),
+        type: advancedTypeChecker(prog.generic_status),
+        text: prog.generic_status.toString(),
       },
-      code: code,
-      title: name,
-      subTitle: type.replaceAll('_', ' '),
-      description: description,
-      department: department,
-      incharge: incharge && incharge.username,
+      code: prog.code,
+      title: prog.name,
+      subTitle: prog.type.replaceAll('_', ' '),
+      description: prog.description,
+      department: prog.department,
+      incharge: prog.incharge && prog.incharge.username,
     };
 
-    programs.push(prog);
+    programs.push(program);
   });
 
   function submited() {
     refetch();
     history.goBack();
   }
-
   return (
     <main className="px-4">
       <Switch>
@@ -138,15 +135,15 @@ export default function AcademicProgram() {
                             <CommonCardMolecule
                               data={Common}
                               handleClick={() =>
-                                history.push({
-                                  pathname: `/dashboard/programs/${Common.id}`,
-                                  search: `?intakeProg=${programInfo[index].id}`,
-                                })
+                                intakeId
+                                  ? history.push({
+                                      pathname: `/dashboard/programs/${Common.id}`,
+                                      search: `?intakeProg=${programInfo[index].id}`,
+                                    })
+                                  : dp
+                                  ? history.push(`/dashboard/programs/${Common.id}`)
+                                  : {}
                               }
-                              // to={{
-                              //   title: 'module',
-                              //   to: `/dashboard/programs/${Common.id}`,
-                              // }}
                             />
                           </div>
                         }

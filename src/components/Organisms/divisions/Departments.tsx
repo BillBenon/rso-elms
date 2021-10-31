@@ -120,7 +120,11 @@ export default function Departments({ fetchType }: IDepartment) {
                       ? `${facultyData?.data.data.name} / Department`
                       : 'department'
                   }`}
-                  totalItems={`${departments?.length} departments` || 0}
+                  totalItems={
+                    facultyData?.data.data.name
+                      ? `${departments?.length} departments`
+                      : departments?.length
+                  }
                   handleSearch={() => {}}></TableHeader>
               </section>
             )}
