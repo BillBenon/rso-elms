@@ -26,6 +26,7 @@ export default function Sidebar() {
       // { title: 'Programs', to: '/dashboard/programs', icon: 'program' },
       { title: 'Academic years', to: '/dashboard/academic-years', icon: 'program' },
       { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
+      { title: 'Users', to: '/dashboard/users', icon: 'user' },
       { title: 'Calendar', to: '/dashboard/calendar', icon: 'calendar' },
       { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
       // { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
