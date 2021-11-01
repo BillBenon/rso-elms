@@ -10,24 +10,15 @@ export default function Loader() {
     'Your time is very important to us. Please wait a little bit',
     'Still faster than Windows update',
     'Bored of slow loading spinner?, buy more RAM!',
-    'Kindly hold on until I finish a cup of coffee.',
     'We will be back in 1/0 minutes.',
-    "Why don't you order a sandwich?",
     "Don't panic, Just count to infinite.",
     'Please wait, Your PC is not a superman!',
     'Swapping time and space...',
-    'Have a good day.',
     'The architects are still drafting',
-    'The bits are breeding',
     "We're building the buildings as fast as we can",
-    '...and enjoy the elevator music...',
     "Don't worry - a few bits tried to escape, but we caught them",
-    'Checking the gravitational constant in your locale...',
-    "We're testing your patience",
     'The bits are flowing slowly today',
     "It's still faster than you could draw it",
-    "Aren't we there yet?",
-    "The last time I tried this the monkey didn't survive. Let's hope it works better this time.",
     'Just count to 10',
     'Why so serious?',
     "It's not you. It's me.",
@@ -35,33 +26,9 @@ export default function Loader() {
     "Don't panic...",
     'Do not run! We are your friends!',
     "We're making you a cookie.",
-    'Computing chance of success',
     "I swear it's almost done.",
-    "Let's take a mindfulness minute...",
-    'Putting the icing on the cake. The cake is not a lie...',
-    'Cleaning off the cobwebs...',
-    'Spinning the wheel of fortune...',
-    'Get some coffee and come back in 0 minutes..',
-    'Spinning the hamster…',
-    'Wait, do you smell something burning?',
-    'Computing the secret to life, the universe, and everything.',
-    "i'm not lazy, I'm just relaxed!!",
-    'I think I am, therefore, I am. I think.',
-    'May the forks be with you',
     'If you type Google into Google you can break the internet',
     'If I’m not back in 1 minutes, just wait longer.',
-    'Laughing at your pictures-i mean, loading...',
-    'Winter is coming...',
-    'What the what?',
-    'Initializing the initializer...',
-    'Optimizing the optimizer...',
-    'Optimizing the optimizer...',
-    'Updating Updater...',
-    'Downloading Downloader...',
-    'Debugging Debugger...',
-    'You seem like a nice person...',
-    'Feeding unicorns...',
-    'Doing the heavy lifting',
     "We're working very Hard .... Really",
   ];
 
@@ -70,7 +37,7 @@ export default function Loader() {
   }, []);
 
   return (
-    <div className="preloader" style={{ opacity: 1 }}>
+    <div className="preloader m-auto" style={{ opacity: 1, marginTop: '10%' }}>
       <svg
         version="1.1"
         id="sun"
