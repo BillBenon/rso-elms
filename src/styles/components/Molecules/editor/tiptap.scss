@@ -1,0 +1,7 @@
+#tiptap-editor{
+    @apply border border-solid border-gray-100 bg-main rounded-lg pt-1 pb-4 px-1;
+    
+    .ProseMirror{
+        @apply px-4 outline-none;
+    }
+}

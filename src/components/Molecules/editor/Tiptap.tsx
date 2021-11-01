@@ -1,4 +1,4 @@
-
+import '../../../styles/components/Molecules/editor/tiptap.scss';
 
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -42,7 +42,7 @@ export default function Tiptap() {
   });
 
   return (
-    <section>
+    <section id="tiptap-editor">
       <article>
         <MenuBar editor={editor} />
       </article>
