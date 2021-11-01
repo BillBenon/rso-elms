@@ -41,9 +41,11 @@ function ProgramModules() {
   return (
     <Tabs>
       <Tab label="Overview">
-        <Link to={`/dashboard/levels/add`}>
-          <Button>Add Level</Button>
-        </Link>
+        <div className="text-right">
+          <Link to={`/dashboard/levels/add`}>
+            <Button>Add Level</Button>
+          </Link>
+        </div>
         <section className="mt-4 flex flex-wrap justify-start gap-4">
           {programModules.length <= 0 ? (
             <NoDataAvailable
