@@ -5,7 +5,7 @@
 }
 .rbc-event{
     border: none !important;
-    border-radius: 8px 3px 3px 8px ;
+    border-radius: 5px 3px 3px 5px ;
     background-color: #3CD278 !important;
     padding-top: 10px;
     padding-bottom: 10px;
@@ -15,4 +15,7 @@
 .rbc-timeslot-group{
     min-height: 72px !important;
     height: auto !important;
+}
+.rbc-toolbar{
+    display: none !important;
 }

@@ -13,6 +13,8 @@ import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import EventDetails from '../../components/Organisms/calendar/EventDetails';
+import NewEvent from '../../components/Organisms/calendar/NewEvent';
+import NewVenue from '../../components/Organisms/calendar/NewVenue';
 import { events } from '../../static/events';
 import { Link, ValueType } from '../../types';
 
@@ -31,10 +33,10 @@ export default function CalendarView() {
   return (
     <div>
       <BreadCrumb list={list} />
-      <Heading fontSize="2xl" fontWeight="semibold">
+      <Heading fontSize="2xl" className="my-6" fontWeight="semibold">
         Class 2 C
       </Heading>
-      <div className="flex items-center gap-5 py-2 ">
+      {/* <div className="flex items-center gap-5 py-2 ">
         <Heading fontSize="lg" fontWeight="semibold" className="pt-5">
           {'Sept 2021'}
         </Heading>
@@ -58,7 +60,7 @@ export default function CalendarView() {
             />
           </button>
         </div>
-      </div>
+      </div> */}
       <div className="my-5">
         <div className="flex flex-wrap justify-between items-center">
           <div>
@@ -83,7 +85,7 @@ export default function CalendarView() {
         step={60}
         startAccessor="start"
         endAccessor="end"
-        view="day"
+        view="week"
         showMultiDayTimes={false}
         views={['day', 'week']}
         defaultDate={new Date(2015, 3, 12)}
@@ -91,6 +93,24 @@ export default function CalendarView() {
         onSelectEvent={(event) => history.push(`${path}/event/${event.id}`)}
       />
       <Switch>
+        <Route
+          exact
+          path={`${path}/event/new`}
+          render={() => (
+            <PopupMolecule title="New Event" open>
+              <NewEvent />
+            </PopupMolecule>
+          )}
+        />
+        <Route
+          exact
+          path={`${path}/venue/new`}
+          render={() => (
+            <PopupMolecule title="New Venue" open>
+              <NewVenue />
+            </PopupMolecule>
+          )}
+        />
         <Route
           exact
           path={`${path}/event/:eventId`}
