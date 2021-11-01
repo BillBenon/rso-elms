@@ -1,4 +1,18 @@
-button{
-    @apply mx-1 my-2 px-2 border border-gray-200 rounded;
+#editor-menubar{
+    
+    button{
+        @apply  rounded mr-1;
+        &:hover{
+            @apply bg-tertiary;
+        }
+        
+        &.is-active{
+            @apply bg-tertiary;
+    
+        }
+    }
 
+    .ProseMirror{
+        @apply px-4 outline-none;
+    }
 }
