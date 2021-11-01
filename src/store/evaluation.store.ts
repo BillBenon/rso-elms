@@ -7,8 +7,21 @@ class EvaluationStore {
     return useMutation(evaluationService.createEvaluation);
   }
 
+  createEvaluationQuestions() {
+    return useMutation(evaluationService.createEvaluationQuestion);
+  }
+
   getEvaluations() {
     return useQuery('evaluations', evaluationService.fetchEvaluations);
+  }
+
+  getEvaluationById(id: string) {
+    return useQuery(['evaluation', id], () => evaluationService.getEvaluationById(id));
+  }
+  getEvaluationQuestions(id: string) {
+    return useQuery(['evaluation/questions', id], () =>
+      evaluationService.getEvaluationQuestions(id),
+    );
   }
 }
 

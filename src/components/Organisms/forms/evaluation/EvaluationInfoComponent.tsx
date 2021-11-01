@@ -66,19 +66,20 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
   }
 
   function submitForm(e: FormEvent) {
-    e.preventDefault(); // prevent page to reload:
+    e.preventDefault();
 
-    mutate(details, {
-      onSuccess: (data) => {
-        toast.success('evaluation created');
-        localStorage.setItem('evaluationId', JSON.stringify(data?.data.data.id));
-        handleNext();
-      },
-      onError: (error) => {
-        console.log(error);
-        toast.error(error + '');
-      },
-    });
+    // mutate(details, {
+    //   onSuccess: (data) => {
+    //     toast.success('Evaluation created');
+    //     localStorage.setItem('evaluationId', JSON.stringify(data?.data.data.id));
+    //     handleNext();
+    //   },
+    //   onError: (error) => {
+    //     console.log(error);
+    //     toast.error(error + '');
+    //   },
+    // });
+    handleNext();
   }
 
   return (

@@ -108,6 +108,7 @@ export interface IEvaluationInfo {
   content_format: string;
   maximum_file_size: number;
   is_consider_on_report: boolean;
+  number_of_questions: string;
   subject_academic_year_period_id: string;
   group_evaluations: [];
   private_attendees: [];
@@ -116,4 +117,30 @@ export interface IEvaluationInfo {
   evaluation_approvals: [];
   student_evaluations: [];
   evaluation_comments: [];
+}
+
+export interface IEvaluationChoices {
+  answer_content: string;
+  correct: boolean;
+}
+
+export interface IEvaluationQuestion {
+  evaluation_id: string;
+  mark: string;
+  parent_question_id: string;
+  question: string;
+  question_type: IQuestionType;
+}
+
+export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
+  sub_questions: IEvaluationQuestion[];
+}
+
+export interface IEvaluationQuestionsInfo {
+  id: string;
+  question: string;
+  mark: number;
+  evaluationQuestions: [];
+  questionType: IQuestionType;
+  multipleChoiceAnswers: [];
 }

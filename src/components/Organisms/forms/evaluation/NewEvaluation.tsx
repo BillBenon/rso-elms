@@ -14,7 +14,7 @@ export default function NewEvaluation() {
     { to: 'new', title: 'new evaluation' },
   ];
 
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(1);
 
   function handleSubmit() {
     setCurrentStep(currentStep + 1);

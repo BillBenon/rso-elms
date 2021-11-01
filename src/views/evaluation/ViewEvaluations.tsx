@@ -4,11 +4,12 @@ import {
   Route,
   Switch,
   useHistory,
-  useLocation,
+  useParams,
   useRouteMatch,
 } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -17,7 +18,8 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import { evaluationStore } from '../../store/evaluation.store';
-import { Link as LinkList } from '../../types';
+import { CommonCardDataType, Link as LinkList, ParamType } from '../../types';
+import { IEvaluationInfo } from '../../types/services/evaluation.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import EvaluationTest from './EvaluationTest';
 
@@ -25,7 +27,8 @@ export default function ViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
   const history = useHistory();
   const { url, path } = useRouteMatch();
-  const { data } = evaluationStore.getEvaluations();
+  const { id } = useParams<ParamType>();
+  const { data, isSuccess, isLoading } = evaluationStore.getEvaluations();
 
   const list: LinkList[] = [
     { to: '/', title: 'home' },
@@ -69,19 +72,9 @@ export default function ViewEvaluations() {
     },
   ];
 
-  const tabs = [
-    {
-      label: 'Overview evaluation',
-      href: `${url}`,
-    },
-    {
-      label: 'Submissions',
-      href: `${url}/submissions`,
-    },
-  ];
 
   useEffect(() => {
-    let formattedEvals: any = [];
+    let formattedEvals: CommonCardDataType[] = [];
     data?.data.data.map((evaluation) => {
       let formattedEvaluations = {
         id: evaluation.id,
@@ -98,74 +91,51 @@ export default function ViewEvaluations() {
     setEvaluations(formattedEvals);
   }, [data?.data.data]);
 
+  console.log(data?.data.data)
+
   return (
     <Switch>
-      <Route exact path={`${path}/new`} render={() => <NewEvaluation />} />
-      <Route exact path={`${path}/test`} render={() => <EvaluationTest />} />
-      <Route
-        path={`${path}`}
-        render={() => (
+
           <div>
             <section>
               <BreadCrumb list={list}></BreadCrumb>
             </section>
-            <TableHeader title="Evaluations" showBadge={false} showSearch={false}>
-              <Link to={`${path}/new`}>
+            {isSuccess ?( <TableHeader title="Evaluations" showBadge={false} showSearch={false}>
+              <Link to={`/dashboard/evaluation/new`}>
                 <Button>New Evaluation</Button>
               </Link>
-            </TableHeader>
+            </TableHeader>): null}
+            
 
-            <TabNavigation tabs={tabs}>
-              <Route
-                exact
-                path={`${path}/submissions`}
-                render={() => (
-                  <Table<any>
-                    statusColumn="status"
-                    data={data2}
-                    hide={['id']}
-                    uniqueCol={'id'}
-                    // actions={actions
-                  />
-                )}
-              />
+            <section>
+            {isLoading && evaluations.length === 0 && <Loader />}
 
-              <Route
-                exact
-                path={`${path}`}
-                render={() => (
-                  <section>
-                    {evaluations.length <= 0 ? (
-                      <NoDataAvailable
-                        icon="evaluation"
-                        buttonLabel="Add new evaluation"
-                        title={'No evaluations available'}
-                        handleClick={() => history.push(`${url}/new`)}
-                        description="And the web just isnt the same without you. Lets get you back online!"
-                      />
-                    ) : (
-                      evaluations?.map((info: any, index: number) => (
-                        <div key={index}>
-                          <CommonCardMolecule
-                            className="cursor-pointer"
-                            handleClick={() => {
-                              history.push({
-                                pathname: `${path}/${info.id}`,
-                                state: data?.data.data,
-                              });
-                            }}
-                            data={info}
-                          />
-                        </div>
-                      ))
-                    )}
-                  </section>
-                )}
-              />
-            </TabNavigation>
+              {isSuccess && evaluations.length === 0 ? (
+                <NoDataAvailable
+                  icon="evaluation"
+                  buttonLabel="Add new evaluation"
+                  title={'No evaluations available'}
+                  handleClick={() => history.push(`${url}/new`)}
+                  description="And the web just isnt the same without you. Lets get you back online!"
+                />
+              ) : isSuccess && evaluations.length > 0 ? (
+                evaluations?.map((info: CommonCardDataType, index: number) => (
+                  <div key={index}>
+                    <CommonCardMolecule
+                      className="cursor-pointer"
+                      handleClick={() => {
+                        history.push(
+                          `${path}/${info.id}`,
+                        );
+                      }}
+                      data={info}
+                    />
+                  </div>
+                ))
+              ): null}
+            </section>
           </div>
         )}
-      />
     </Switch>
   );
 }
