@@ -54,8 +54,8 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
     questionaire_type: IQuestionaireTypeEnum.MULTIPLE,
     subject_academic_year_period_id: '',
     submision_type: ISubmissionTypeEnum.ONLINE_TEXT,
-    time_limit: 0,
-    total_mark: 0,
+    time_limit: 30,
+    total_mark: 10,
   });
 
   const { mutate } = evaluationStore.createEvaluation();
@@ -166,18 +166,7 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
           handleChange={handleChange}>
           Questionaire type
         </RadioMolecule>
-        <DropdownMolecule
-          width="64"
-          name="submision_type"
-          placeholder="Select submission type"
-          handleChange={handleChange}
-          options={[
-            { label: 'File', value: ISubmissionTypeEnum.FILE },
-            { label: 'Online text', value: ISubmissionTypeEnum.ONLINE_TEXT },
-          ]}>
-          Submission type
-        </DropdownMolecule>
-        {details.submision_type === ISubmissionTypeEnum.FILE && (
+        {details.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
           <>
             <DropdownMolecule
               width="64"
@@ -185,24 +174,39 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
               placeholder="Select submission type"
               handleChange={handleChange}
               options={[
-                { label: 'DOC', value: IContentFormatEnum.DOC },
-                { label: 'MP4', value: IContentFormatEnum.MP4 },
-                { label: 'PDF', value: IContentFormatEnum.PDF },
-                { label: 'PNG', value: IContentFormatEnum.PNG },
+                { label: 'File', value: ISubmissionTypeEnum.FILE },
+                { label: 'Online text', value: ISubmissionTypeEnum.ONLINE_TEXT },
               ]}>
-              Content format
+              Submission type
             </DropdownMolecule>
+            {details.submision_type === ISubmissionTypeEnum.FILE && (
+              <>
+                <DropdownMolecule
+                  width="64"
+                  name="submision_type"
+                  placeholder="Select submission type"
+                  handleChange={handleChange}
+                  options={[
+                    { label: 'DOC', value: IContentFormatEnum.DOC },
+                    { label: 'MP4', value: IContentFormatEnum.MP4 },
+                    { label: 'PDF', value: IContentFormatEnum.PDF },
+                    { label: 'PNG', value: IContentFormatEnum.PNG },
+                  ]}>
+                  Content format
+                </DropdownMolecule>
 
-            <InputMolecule
-              width="28"
-              type="number"
-              name="maximum_file_size"
-              value={details.maximum_file_size}
-              handleChange={handleChange}>
-              Maximum file size (Mbs)
-            </InputMolecule>
+                <InputMolecule
+                  width="28"
+                  type="number"
+                  name="maximum_file_size"
+                  value={details.maximum_file_size}
+                  handleChange={handleChange}>
+                  Maximum file size (Mbs)
+                </InputMolecule>
+              </>
+            )}
           </>
-        )}
+        ) : null}
         {/* <SwitchMolecule
           loading={false}
           name="shuffle"
@@ -224,34 +228,38 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
           handleChange={handleChange}>
           Evaluation marks
         </InputMolecule>
-        <InputMolecule
-          // className="p-2"
-          width="16"
-          type="text"
-          name="time_limit"
-          value={details.time_limit}
-          placeholder="00"
-          handleChange={handleChange}>
-          Time limit (In mins)
-        </InputMolecule>
-        <DateMolecule
-          startYear={new Date().getFullYear()}
-          endYear={new Date().getFullYear() + 100}
-          padding={3}
-          reverse={false}
-          handleChange={handleChange}
-          name={'allow_submission_time'}>
-          Start Date
-        </DateMolecule>
-        <DateMolecule
-          handleChange={handleChange}
-          startYear={new Date().getFullYear()}
-          endYear={new Date().getFullYear() + 100}
-          padding={3}
-          reverse={false}
-          name={'due_on'}>
-          Due on
-        </DateMolecule>{' '}
+        {details.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
+          <>
+            <InputMolecule
+              width="16"
+              type="text"
+              name="time_limit"
+              value={details.time_limit}
+              handleChange={handleChange}>
+              Time limit (In mins)
+            </InputMolecule>
+            <DateMolecule
+              startYear={new Date().getFullYear()}
+              endYear={new Date().getFullYear() + 100}
+              padding={3}
+              reverse={false}
+              showTime
+              handleChange={handleChange}
+              name={'allow_submission_time'}>
+              Start Date
+            </DateMolecule>
+            <DateMolecule
+              handleChange={handleChange}
+              startYear={new Date().getFullYear()}
+              endYear={new Date().getFullYear() + 100}
+              padding={3}
+              showTime
+              reverse={false}
+              name={'due_on'}>
+              Due on
+            </DateMolecule>{' '}
+          </>
+        ) : null}
         <DateMolecule
           handleChange={handleChange}
           startYear={new Date().getFullYear()}
