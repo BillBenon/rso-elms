@@ -103,7 +103,6 @@ export default function Intakes() {
   return (
     <Switch>
       <Route
-        exact
         path={`${path}`}
         render={() => {
           return (
@@ -118,12 +117,7 @@ export default function Intakes() {
                 }
                 handleSearch={handleSearch}>
                 {registrationControlId && (
-                  <Link
-                    to={
-                      !registrationControlId
-                        ? `${url}/${registrationControlId}/add-intake`
-                        : `${url}/${registrationControlId}/add-intake?regId=${registrationControlId}`
-                    }>
+                  <Link to={`${url}/${registrationControlId}/add-intake`}>
                     <Button>Add Intake</Button>
                   </Link>
                 )}
@@ -161,11 +155,7 @@ export default function Intakes() {
                         </div>
                         <div className="mt-4 space-x-4">
                           <Link
-                            to={
-                              !registrationControlId
-                                ? `${url}/${data?.data.data[index].id}/edit`
-                                : `${url}/${data?.data.data[index].id}/edit?regId=${registrationControlId}`
-                            }>
+                            to={`${url}/${data?.data.data[index].id}/edit/${registrationControlId}`}>
                             <Button>Edit Intake</Button>
                           </Link>
                           <Button styleType="outline">Change Status</Button>
@@ -191,9 +181,7 @@ export default function Intakes() {
                     }
                     handleClick={() => {
                       if (registrationControlId)
-                        history.push(
-                          `${url}/${registrationControlId}/add-intake?regId=${registrationControlId}`,
-                        );
+                        history.push(`${url}/${registrationControlId}/add-intake`);
                       else history.push('/dashboard/registration-control');
                     }}
                     description="Oops! No data found"
@@ -205,7 +193,7 @@ export default function Intakes() {
                 {/* add intake to reg control */}
                 <Route
                   exact
-                  path={`${url}/:id/add-intake`}
+                  path={`${path}/:id/add-intake`}
                   render={() => {
                     return (
                       <PopupMolecule
@@ -220,7 +208,7 @@ export default function Intakes() {
                 />
                 <Route
                   exact
-                  path={`${url}/:id/edit`}
+                  path={`${path}/:id/edit/:regid`}
                   render={() => {
                     return (
                       <PopupMolecule
