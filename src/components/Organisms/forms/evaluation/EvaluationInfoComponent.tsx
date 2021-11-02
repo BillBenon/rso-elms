@@ -1,3 +1,4 @@
+import { Editor } from '@tiptap/react';
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 
@@ -22,11 +23,13 @@ import {
   getDropDownStatusOptions,
 } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
+import ILabel from '../../../Atoms/Text/ILabel';
+import Tiptap from '../../../Molecules/editor/Tiptap';
 import DateMolecule from '../../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
-import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
+// import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps) {
   const { data } = moduleStore.getAllModules();
@@ -63,6 +66,11 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
   function handleChange({ name, value }: ValueType) {
     if (name === 'module') setModuleId(value.toString());
     else setDetails((details) => ({ ...details, [name]: value }));
+  }
+
+  function handleEditorChange(editor: Editor) {
+    console.log(editor.getHTML());
+    setDetails((details) => ({ ...details, exam_instruction: editor.getHTML() }));
   }
 
   function submitForm(e: FormEvent) {
@@ -208,12 +216,18 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
           handleChange={handleChange}>
           Shuffle evaluation questions
         </SwitchMolecule> */}
-        <TextAreaMolecule
+        {/* <TextAreaMolecule
           name={'exam_instruction'}
           value={details.exam_instruction}
           handleChange={handleChange}>
-          Evaluation instructions
-        </TextAreaMolecule>
+          
+        </TextAreaMolecule> */}
+        <div>
+          <div className="my-1">
+            <ILabel size="sm">Evaluation instructions</ILabel>
+          </div>
+          <Tiptap content={details.exam_instruction} handleChange={handleEditorChange} />
+        </div>
         <InputMolecule
           width="28"
           type="number"
