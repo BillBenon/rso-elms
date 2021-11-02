@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Route,
-  Switch,
-  useHistory,
-  useLocation,
-  useParams,
-  useRouteMatch,
-} from 'react-router';
+import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
 
 import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
@@ -20,7 +13,8 @@ import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPr
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
 import intakeProgramStore from '../../store/intake-program.store';
 import programStore from '../../store/program.store';
-import { Link as Links, ParamType } from '../../types';
+import { Link as Links } from '../../types';
+import { IntakeProgParam } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ModuleLevels from '../modules/ModuleLevels';
@@ -30,17 +24,14 @@ import { DummyUser } from '../programs/dummyUsers';
 import IntakeProgramModules from './IntakeProgramModules';
 
 function IntakeProgramDetails() {
-  const { search } = useLocation();
-  const intakeProgId = new URLSearchParams(search).get('intakeProg');
   const history = useHistory();
   const { path, url } = useRouteMatch();
-  const { id } = useParams<ParamType>();
+  const { id, intakeProg } = useParams<IntakeProgParam>();
 
-  const studentsProgram = intakeProgramStore.getStudentsByIntakeProgram(
-    intakeProgId || '',
-  ).data?.data.data;
+  const studentsProgram = intakeProgramStore.getStudentsByIntakeProgram(intakeProg || '')
+    .data?.data.data;
   const instructorsProgram = intakeProgramStore.getStudentsByIntakeProgram(
-    intakeProgId || '',
+    intakeProg || '',
   ).data?.data.data;
 
   const [students, setStudents] = useState<UserView[]>([]);

@@ -12,7 +12,7 @@ class AcademicPeriodService {
     academicPeriodInfo: ICreateAcademicPeriod,
   ): Promise<AxiosResponse<Response<IAcademicPeriodInfo>>> {
     return await adminstrationAxios.post(
-      '/periods/addAcademicPeriod',
+      '/periods/addAcademicPeriods',
       academicPeriodInfo,
     );
   }
