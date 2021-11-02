@@ -9,6 +9,7 @@ import { UserInfo, UserType } from './types/services/user.types';
 import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';
 import CalendarView from './views/calendar/Calendar';
+import ChoosePrograms from './views/calendar/ChoosePrograms';
 import Divisions from './views/divisions/Divisions';
 import EvaluationContent from './views/evaluation/EvaluationContent';
 import EvaluationTest from './views/evaluation/EvaluationTest';
@@ -53,6 +54,7 @@ const RouterProtection = () => {
       {/* start of academic admin pages */}
       <Route path="/dashboard/modules" component={Modules} />
       <Route path="/dashboard/subjects" component={Subjects} />
+      <Route exact path="/dashboard/schedule" component={ChoosePrograms} />
       <Route path="/dashboard/calendar" component={CalendarView} />
       <Route exact path="/dashboard/evaluations" component={ViewEvaluations} />
       <Route exact path="/dashboard/evaluation/new" component={NewEvaluation} />
