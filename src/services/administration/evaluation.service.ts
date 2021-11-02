@@ -3,9 +3,9 @@ import { AxiosResponse } from 'axios';
 import { evaluationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
+  ICreateEvaluationQuestions,
   IEvaluationCreate,
   IEvaluationInfo,
-  IEvaluationQuestions,
   IEvaluationQuestionsInfo,
 } from '../../types/services/evaluation.types';
 
@@ -17,7 +17,7 @@ class EvaluationService {
   }
 
   public async createEvaluationQuestion(
-    questionsInfo: IEvaluationQuestions,
+    questionsInfo: ICreateEvaluationQuestions,
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
     return await evaluationAxios.post('/evaluationQuestions/add', questionsInfo);
   }

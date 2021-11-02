@@ -4,9 +4,9 @@ import toast from 'react-hot-toast';
 import { evaluationStore } from '../../../../store/evaluation.store';
 import { ValueType } from '../../../../types';
 import {
+  ICreateEvaluationQuestions,
   IEvaluationProps,
   IEvaluationQuestion,
-  IEvaluationQuestions,
   IQuestionType,
 } from '../../../../types/services/evaluation.types';
 import Button from '../../../Atoms/custom/Button';
@@ -16,7 +16,7 @@ import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-const initialState = {
+const initialState: ICreateEvaluationQuestions = {
   evaluation_id: localStorage.getItem('evaluationId')?.toString() || '',
   mark: '',
   parent_question_id: '',
@@ -25,11 +25,10 @@ const initialState = {
   sub_questions: [],
 };
 
-export default function EvaluationQuestionComponent({
-  handleNext,
-  handleGoBack,
-}: IEvaluationProps) {
-  const [questions, setQuestions] = useState<IEvaluationQuestions[]>([initialState]);
+export default function EvaluationQuestionComponent({ handleGoBack }: IEvaluationProps) {
+  const [questions, setQuestions] = useState<ICreateEvaluationQuestions[]>([
+    initialState,
+  ]);
 
   function handleAddQuestion() {
     let newQuestion = initialState;

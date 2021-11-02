@@ -43,11 +43,11 @@ export default function NewEvaluation() {
           isVertical={false}
           isInline={false}
           navigateToStepHandler={() => console.log('submitted')}>
-          <EvaluationInfoComponent handleNext={handleSubmit} handleGoBack={handleBack} />
           <EvaluationQuestionComponent
             handleNext={handleSubmit}
             handleGoBack={handleBack}
           />
+          <EvaluationInfoComponent handleNext={handleSubmit} handleGoBack={handleBack} />
         </Stepper>
       </div>
     </div>

@@ -13,7 +13,6 @@ export default function EvaluationContent() {
   const { id } = useParams<ParamType>();
   const { url, path } = useRouteMatch();
   const evaluationQuestions = evaluationStore.getEvaluationQuestions(id).data?.data.data;
-  console.log(evaluationQuestions);
 
   const tabs = [
     {
