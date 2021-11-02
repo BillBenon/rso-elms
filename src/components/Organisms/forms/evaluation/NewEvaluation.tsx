@@ -6,6 +6,7 @@ import BreadCrumb from '../../../Molecules/BreadCrumb';
 import Stepper from '../../../Molecules/Stepper/Stepper';
 import EvaluationInfoComponent from './EvaluationInfoComponent';
 import EvaluationQuestionComponent from './EvaluationQuestionComponent';
+import EvaluationSettings from './EvaluationSettings';
 
 export default function NewEvaluation() {
   const list: LinkList[] = [
@@ -43,11 +44,12 @@ export default function NewEvaluation() {
           isVertical={false}
           isInline={false}
           navigateToStepHandler={() => console.log('submitted')}>
+          <EvaluationInfoComponent handleNext={handleSubmit} handleGoBack={handleBack} />
           <EvaluationQuestionComponent
             handleNext={handleSubmit}
             handleGoBack={handleBack}
           />
-          <EvaluationInfoComponent handleNext={handleSubmit} handleGoBack={handleBack} />
+          <EvaluationSettings handleNext={handleSubmit} handleGoBack={handleBack} />
         </Stepper>
       </div>
     </div>

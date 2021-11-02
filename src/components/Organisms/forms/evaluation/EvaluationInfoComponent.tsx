@@ -2,6 +2,7 @@ import { Editor } from '@tiptap/react';
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 
+import { authenticatorStore } from '../../../../store';
 import { evaluationStore } from '../../../../store/evaluation.store';
 import { moduleStore } from '../../../../store/modules.store';
 import { subjectStore } from '../../../../store/subject.store';
@@ -34,12 +35,14 @@ import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps) {
   const { data } = moduleStore.getAllModules();
   const [moduleId, setModuleId] = useState<string>('');
+  const authUser = authenticatorStore.authUser().data?.data.data;
   let subjects;
 
   ({ data: subjects } = subjectStore.getSubjectsByModule(moduleId));
 
   const [details, setDetails] = useState<IEvaluationCreate>({
     access_type: IAccessTypeEnum.PUBLIC,
+    academy_id: authUser?.academy.id.toString() || '',
     allow_submission_time: '',
     class_ids: '',
     id: '',
@@ -87,7 +90,6 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
         toast.error(error + '');
       },
     });
-    handleNext();
   }
 
   return (
@@ -258,6 +260,7 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
               padding={3}
               reverse={false}
               showTime
+              breakToNextLine
               handleChange={handleChange}
               name={'allow_submission_time'}>
               Start Date
@@ -268,6 +271,7 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
               endYear={new Date().getFullYear() + 100}
               padding={3}
               showTime
+              breakToNextLine
               reverse={false}
               name={'due_on'}>
               Due on

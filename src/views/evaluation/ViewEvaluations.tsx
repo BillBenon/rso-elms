@@ -14,7 +14,7 @@ import { advancedTypeChecker } from '../../utils/getOption';
 export default function ViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
   const history = useHistory();
-  const { url, path } = useRouteMatch();
+  const { path } = useRouteMatch();
   const { data, isSuccess, isLoading } = evaluationStore.getEvaluations();
 
   const list: LinkList[] = [
@@ -72,7 +72,7 @@ export default function ViewEvaluations() {
               icon="evaluation"
               buttonLabel="Add new evaluation"
               title={'No evaluations available'}
-              handleClick={() => history.push(`${url}/new`)}
+              handleClick={() => history.push(`/dashboard/evaluation/new`)}
               description="And the web just isnt the same without you. Lets get you back online!"
             />
           ) : isSuccess && evaluations.length > 0 ? (

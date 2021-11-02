@@ -1,5 +1,4 @@
 import React, { FormEvent, useState } from 'react';
-import toast from 'react-hot-toast';
 
 import { evaluationStore } from '../../../../store/evaluation.store';
 import { ValueType } from '../../../../types';
@@ -25,7 +24,10 @@ const initialState: ICreateEvaluationQuestions = {
   sub_questions: [],
 };
 
-export default function EvaluationQuestionComponent({ handleGoBack }: IEvaluationProps) {
+export default function EvaluationQuestionComponent({
+  handleGoBack,
+  handleNext,
+}: IEvaluationProps) {
   const [questions, setQuestions] = useState<ICreateEvaluationQuestions[]>([
     initialState,
   ]);
@@ -46,16 +48,16 @@ export default function EvaluationQuestionComponent({ handleGoBack }: IEvaluatio
   function submitForm(index: number, e: FormEvent) {
     e.preventDefault();
 
-    mutate(questions[index], {
-      onSuccess: (data) => {
-        toast.success('Question added');
-        localStorage.setItem('evaluationId', JSON.stringify(data?.data.data.id));
-      },
-      onError: (error) => {
-        console.log(error);
-        toast.error(error + '');
-      },
-    });
+    // mutate(questions[index], {
+    //   onSuccess: (data) => {
+    //     toast.success('Question added');
+    //     localStorage.setItem('evaluationId', JSON.stringify(data?.data.data.id));
+    //   },
+    //   onError: (error) => {
+    //     console.log(error);
+    //     toast.error(error + '');
+    //   },
+    // });
   }
 
   return (
@@ -122,7 +124,7 @@ export default function EvaluationQuestionComponent({ handleGoBack }: IEvaluatio
         </div>
 
         <div>
-          <Button>Next</Button>
+          <Button onClick={handleNext}>Next</Button>
         </div>
       </div>
     </>

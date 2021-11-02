@@ -67,6 +67,7 @@ export enum IEligibleGroup {
 
 export interface IEvaluationCreate {
   access_type: string;
+  academy_id: string;
   allow_submission_time: string;
   class_ids: string;
   subject_academic_year_period_id: string;
@@ -91,6 +92,7 @@ export interface IEvaluationCreate {
 export interface IEvaluationInfo {
   id: string;
   name: string;
+  academy_id: string;
   subject_academic_year_period: string;
   access_type: IAccessTypeEnum;
   evaluation_type: IEvaluationTypeEnum;

@@ -12,6 +12,7 @@ type PropType = {
   loading?: boolean;
   error?: string;
   className?: string;
+  showLabelFirst?: boolean;
   handleChange: (_e: ValueType) => void;
 };
 
@@ -25,6 +26,7 @@ export default function SwitchMolecule({
   loading = false,
   handleChange,
   className,
+  showLabelFirst = false,
   error,
   ...attrs
 }: PropType) {
@@ -36,7 +38,7 @@ export default function SwitchMolecule({
         <>
           <div className="flex gap-3">
             <Switch name={name} value={value} handleChange={handleChange}></Switch>
-            <ILabel size="sm" className="pt-2">
+            <ILabel size="sm" className={`pt-2 ${showLabelFirst && 'order-first'}`}>
               {children}
             </ILabel>
           </div>
