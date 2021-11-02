@@ -103,6 +103,12 @@ export default function Intakes() {
   return (
     <Switch>
       <Route
+        path={`${path}/programs/:id`}
+        render={() => {
+          return <IntakePrograms />;
+        }}
+      />
+      <Route
         path={`${path}`}
         render={() => {
           return (
@@ -224,12 +230,6 @@ export default function Intakes() {
               </Switch>
             </div>
           );
-        }}
-      />
-      <Route
-        path={`${path}/programs/:id`}
-        render={() => {
-          return <IntakePrograms />;
         }}
       />
     </Switch>

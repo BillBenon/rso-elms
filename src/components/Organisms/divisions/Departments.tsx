@@ -143,6 +143,7 @@ export default function Departments({ fetchType }: IDepartment) {
               ) : isSuccess && departments.length === 0 ? (
                 <NoDataAvailable
                   icon="faculty"
+                  showButton={false}
                   buttonLabel="Add new department"
                   title="No department available"
                   handleClick={() => history.push(`/dashboard/divisions/departments/new`)}
