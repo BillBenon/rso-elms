@@ -1,5 +1,7 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 
+import { IEvaluationProps } from '../../../../types/services/evaluation.types';
 import { getDropDownOptions } from '../../../../utils/getOption';
 import Input from '../../../Atoms/Input/Input';
 import Heading from '../../../Atoms/Text/Heading';
@@ -7,7 +9,10 @@ import ILabel from '../../../Atoms/Text/ILabel';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import SwitchMolecule from '../../../Molecules/input/SwitchMolecule';
 
-export default function EvaluationSettings() {
+export default function EvaluationSettings({
+  handleNext,
+  handleGoBack,
+}: IEvaluationProps) {
   return (
     <div>
       <Heading fontSize="base" fontWeight="medium">
