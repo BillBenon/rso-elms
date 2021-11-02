@@ -56,10 +56,9 @@ const SignInForm = () => {
         toast.error('Authentication failed', { duration: 3000, id: toastId });
       },
     });
-
-    useEffect(() => logout(), []);
   }
 
+  useEffect(() => logout(), []);
   return (
     <>
       <div className="py-11">
