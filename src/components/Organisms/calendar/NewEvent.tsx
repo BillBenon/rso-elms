@@ -6,6 +6,7 @@ import { getDropDownStatusOptions } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';
 import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../Molecules/input/InputMolecule';
+import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
 
 export default function NewEvent() {
   const [values, setvalues] = useState<CreateEvent>({
@@ -43,13 +44,13 @@ export default function NewEvent() {
             Event Category
           </DropdownMolecule>
         </div>
-        <InputMolecule
+        <TextAreaMolecule
           name="description"
           placeholder="Event Description"
           value={values.description}
           handleChange={handleChange}>
           Event Description
-        </InputMolecule>
+        </TextAreaMolecule>
         <div className="pt-4">
           <Button type="submit">Save</Button>
         </div>
