@@ -73,7 +73,7 @@ const Step = ({
           hasError={isError}
           isActive={isActive}
           isComplete={isComplete}
-          clicked={() => navigateToStepHandler(index)}>
+          clicked={() => (isDisabled ? {} : navigateToStepHandler(index))}>
           {indicator}
         </Indicator>
       </div>

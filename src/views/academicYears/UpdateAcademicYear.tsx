@@ -11,10 +11,10 @@ import { authenticatorStore } from '../../store';
 import academicyearsStore from '../../store/academicyears.store';
 import { ParamType, ValueType } from '../../types';
 import {
-  IAcademicYearInfo,
   IAcademicYearStatus,
   ICreateAcademicYear,
 } from '../../types/services/academicyears.types';
+import { getDropDownStatusOptions } from '../../utils/getOption';
 import { FilteredData } from './AcademicYears';
 
 interface IUpdateYearProps {
@@ -49,7 +49,15 @@ export default function UpdateAcademicYear({ academicYears }: IUpdateYearProps) 
   function submitForm(e: FormEvent) {
     e.preventDefault();
 
-    mutate(years, {
+    let name = `YEAR ${new Date(years.plannedStartOn).getFullYear()}-${new Date(
+      years.plannedEndOn,
+    ).getFullYear()}`;
+    let data = {
+      ...years,
+      name,
+    };
+
+    mutate(data, {
       onSuccess: () => {
         toast.success('Academic year updated', { duration: 5000 });
         queryClient.invalidateQueries(['academicyears']);
@@ -64,9 +72,10 @@ export default function UpdateAcademicYear({ academicYears }: IUpdateYearProps) 
 
   return (
     <form onSubmit={submitForm}>
-      <InputMolecule required value={years.name} name="name" handleChange={handleChange}>
+      <InputMolecule readOnly value={years.name} name="name" handleChange={handleChange}>
         Name
       </InputMolecule>
+
       <DateMolecule
         startYear={new Date().getFullYear()}
         endYear={new Date().getFullYear() + 100}
@@ -81,7 +90,7 @@ export default function UpdateAcademicYear({ academicYears }: IUpdateYearProps) 
       <DateMolecule
         handleChange={handleChange}
         defaultValue={years.plannedEndOn}
-        startYear={new Date().getFullYear()}
+        startYear={new Date(years.plannedStartOn).getFullYear()}
         endYear={new Date().getFullYear() + 100}
         padding={3}
         reverse={false}
@@ -93,12 +102,7 @@ export default function UpdateAcademicYear({ academicYears }: IUpdateYearProps) 
         className="mt-4"
         value={years.status.toString()}
         name="status"
-        options={[
-          { label: 'Initial', value: 'INITIAL' },
-          { label: 'started', value: 'STARTED' },
-          { label: 'suspended', value: 'SUSPENDED' },
-          { label: 'closed', value: 'CLOSED' },
-        ]}
+        options={getDropDownStatusOptions(IAcademicYearStatus)}
         handleChange={handleChange}>
         Status
       </RadioMolecule>

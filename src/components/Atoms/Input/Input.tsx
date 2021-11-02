@@ -15,7 +15,7 @@ export default function Input<T>({
   name,
   full,
   fcolor = 'primary',
-  bcolor = 'bcolor',
+  bcolor = 'tertiary',
   pcolor = 'txt-secondary',
   width = '80',
   handleChange,

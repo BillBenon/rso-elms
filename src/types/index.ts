@@ -11,7 +11,6 @@ export type Color =
   | 'success'
   | 'txt-primary'
   | 'txt-secondary'
-  | 'bcolor'
   | 'none'
   | 'gray'
   | 'lightgray';
@@ -40,6 +39,7 @@ export type Status =
   | 'active'
   | 'inactive'
   | 'suspended'
+  | 'started'
   | 'cancelled';
 
 export type Page =

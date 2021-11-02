@@ -1,66 +1,103 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
 
-import { IEvaluationProps } from '../../../../types/services/evaluation.types';
+import { evaluationStore } from '../../../../store/evaluation.store';
+import { ValueType } from '../../../../types';
+import {
+  ICreateEvaluationQuestions,
+  IEvaluationProps,
+  IEvaluationQuestion,
+  IQuestionType,
+} from '../../../../types/services/evaluation.types';
 import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
 import Heading from '../../../Atoms/Text/Heading';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
+import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-export default function EvaluationQuestionComponent({
-  handleNext,
-  handleGoBack,
-}: IEvaluationProps) {
-  const [questions, setQuestions] = useState<any>([
-    {
-      code: '',
-      current_admin_id: '',
+const initialState: ICreateEvaluationQuestions = {
+  evaluation_id: localStorage.getItem('evaluationId')?.toString() || '',
+  mark: '',
+  parent_question_id: '',
+  question: '',
+  question_type: IQuestionType.OPEN,
+  sub_questions: [],
+};
 
-      description: '',
-      name: '',
-    },
-    {
-      code: '',
-      current_admin_id: '',
-
-      description: '',
-      name: '',
-    },
+export default function EvaluationQuestionComponent({ handleGoBack }: IEvaluationProps) {
+  const [questions, setQuestions] = useState<ICreateEvaluationQuestions[]>([
+    initialState,
   ]);
 
   function handleAddQuestion() {
-    let previousState = [...questions];
-    previousState.push(previousState[0]);
-    setQuestions(previousState);
+    let newQuestion = initialState;
+    setQuestions([...questions, newQuestion]);
   }
+
+  function handleChange(index: number, { name, value }: ValueType) {
+    let questionInfo = [...questions];
+    questionInfo[index] = { ...questionInfo[index], [name]: value };
+    setQuestions(questionInfo);
+  }
+
+  const { mutate } = evaluationStore.createEvaluationQuestions();
+
+  function submitForm(index: number, e: FormEvent) {
+    e.preventDefault();
+
+    mutate(questions[index], {
+      onSuccess: (data) => {
+        toast.success('Question added');
+        localStorage.setItem('evaluationId', JSON.stringify(data?.data.data.id));
+      },
+      onError: (error) => {
+        console.log(error);
+        toast.error(error + '');
+      },
+    });
+  }
+
   return (
     <>
-      {questions.map((question: any, index: any) => (
+      {questions.map((question: IEvaluationQuestion, index: number) => (
         <>
           <div className="flex justify-between w-2/3 bg-main px-6 py-10 mt-8" key={index}>
             <form
               className="flex flex-col gap-4"
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleNext();
-              }}>
+              onSubmit={(e: FormEvent) => submitForm(index, e)}>
               <DropdownMolecule
                 width="64"
-                name="Select question type"
+                name="question_type"
                 placeholder="Program"
                 handleChange={() => {}}
-                isMulti
-                options={[]}>
+                options={[
+                  { label: 'OPEN', value: IQuestionType.OPEN },
+                  { label: 'MULTIPLE CHOICE', value: IQuestionType.MULTIPLE_CHOICE },
+                ]}>
                 Question type
               </DropdownMolecule>
 
               <TextAreaMolecule
-                name={'description'}
-                value=""
+                name={'question'}
+                value={question.question}
                 placeholder="Enter question"
                 handleChange={() => {}}>
                 Question {index + 1}
               </TextAreaMolecule>
+
+              <InputMolecule
+                name={'mark'}
+                width="24"
+                value={question.mark}
+                handleChange={(e: ValueType) => handleChange(index, e)}>
+                Question marks
+              </InputMolecule>
+              <div>
+                <Button type="submit" onSubmit={(e: FormEvent) => submitForm(index, e)}>
+                  save question
+                </Button>
+              </div>
             </form>
 
             <div className="pr-14">
@@ -74,7 +111,7 @@ export default function EvaluationQuestionComponent({
           </div>
         </>
       ))}
-      <Button styleType="text" color="gray" onClick={handleGoBack}>
+      <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
         Back
       </Button>
       <div className="pt-6 flex flex-col">
@@ -85,7 +122,7 @@ export default function EvaluationQuestionComponent({
         </div>
 
         <div>
-          <Button>Create evaluation</Button>
+          <Button>Next</Button>
         </div>
       </div>
     </>

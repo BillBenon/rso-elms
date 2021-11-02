@@ -92,8 +92,8 @@ export default function UpdateIntake(props: CProps) {
         {
           async onSuccess(data) {
             toast.success(data.data.message, { id: toastId });
-            queryClient.invalidateQueries('intakes');
-            queryClient.invalidateQueries('intakes/registrationControl');
+            // queryClient.invalidateQueries(['intakes/registrationControl', id]);
+            queryClient.invalidateQueries(['intakes/academy', id]);
             setFormLoading(false);
             props.handleSuccess();
           },

@@ -9,7 +9,7 @@ type PropType = {
   children: ReactNode;
   value: boolean;
   name: string;
-  loading: boolean;
+  loading?: boolean;
   error?: string;
   className?: string;
   handleChange: (_e: ValueType) => void;
@@ -34,9 +34,11 @@ export default function SwitchMolecule({
         <div className="animate-pulse w-24 h-4 bg-secondary rounded"></div>
       ) : (
         <>
-          <ILabel>{children}</ILabel>
-          <div className="mt-2">
+          <div className="flex gap-3">
             <Switch name={name} value={value} handleChange={handleChange}></Switch>
+            <ILabel size="sm" className="pt-2">
+              {children}
+            </ILabel>
           </div>
           {error && <Error>{error}</Error>}
         </>

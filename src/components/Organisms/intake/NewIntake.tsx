@@ -69,8 +69,6 @@ export default function NewIntake(props: CProps) {
         code,
       };
 
-      console.log('request', data);
-
       await mutateAsync(data, {
         async onSuccess(data) {
           toast.success(data.data.message);

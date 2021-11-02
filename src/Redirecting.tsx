@@ -38,12 +38,15 @@ export default function Redirecting() {
     if (data?.data.data.user_type === UserType.ADMIN) {
       let val = !data?.data.data.academy ? true : false;
       setHasNoAcademy(val && !isLoading);
+
       // if (experiences?.data.data.length === 0)
       //   redirectTo('/complete-profile/experience');
       // else redirectTo('/dashboard/divisions');
       redirectTo('/dashboard/divisions');
     } else if (data?.data.data.user_type === UserType.INSTRUCTOR) {
       redirectTo('/dashboard/view-evaluation');
+    } else if (data?.data.data.user_type === UserType.STUDENT) {
+      redirectTo('/dashboard/evaluation-test');
     }
     // }
 
