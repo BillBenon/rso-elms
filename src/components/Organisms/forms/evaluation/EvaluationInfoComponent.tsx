@@ -222,7 +222,7 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
           handleChange={handleChange}>
           
         </TextAreaMolecule> */}
-        <div>
+        <div className="my-2">
           <div className="my-1">
             <ILabel size="sm">Evaluation instructions</ILabel>
           </div>
