@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { CommonProps, ValueType } from '../../../types';
 import Icon from '../../Atoms/custom/Icon';
@@ -15,10 +15,14 @@ export default function SearchMolecule<T>({
   placeholder = 'Search here',
   width = 'w-72',
 }: ISearchMolecule<T>) {
+  const [fcolor, setFcolor] = useState<string>('tertiary');
+
   return (
-    <div className={`rounded-lg border-2 border-bcolor flex items-center ${width}`}>
+    <div className={`rounded-lg border-2 border-${fcolor} flex items-center ${width}`}>
       <Icon name="search" />
       <Input
+        onFocus={() => setFcolor('primary-500')}
+        onBlur={() => setFcolor('bcolor')}
         name="search"
         placeholder={placeholder}
         fcolor="error"

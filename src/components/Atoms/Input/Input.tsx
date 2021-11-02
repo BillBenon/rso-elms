@@ -11,18 +11,18 @@ export default function Input<T>({
   type = 'text',
   readonly = false,
   required = true,
-  value,
+  value = '',
   name,
   full,
   fcolor = 'primary',
-  bcolor = 'bcolor',
+  bcolor = 'tertiary',
   pcolor = 'txt-secondary',
   width = '80',
   handleChange,
   className = '',
   ...attrs
 }: InputProps<T>) {
-  const [_value, setValue] = useState<string>();
+  const [_value, setValue] = useState<string>('');
 
   useEffect(() => setValue(value?.toString()), [value]);
 

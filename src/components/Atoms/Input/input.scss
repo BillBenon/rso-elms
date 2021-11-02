@@ -3,3 +3,7 @@ textarea input,
 textareaca::-webkit-input-placeholder {
   font-size: 14px;
 }
+
+input:focus,textarea:focus{
+  @apply border-primary-500
+}

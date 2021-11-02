@@ -3,23 +3,38 @@ import { AxiosResponse } from 'axios';
 import { evaluationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
+  ICreateEvaluationQuestions,
   IEvaluationCreate,
   IEvaluationInfo,
+  IEvaluationQuestionsInfo,
 } from '../../types/services/evaluation.types';
 
 class EvaluationService {
-  public async createAcademy(
+  public async createEvaluation(
     evaluationInfo: IEvaluationCreate,
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
     return await evaluationAxios.post('/evaluations/add', evaluationInfo);
   }
-  public async fetEvaluations(): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
-    return await evaluationAxios.get('/academies/getAcademies');
+
+  public async createEvaluationQuestion(
+    questionsInfo: ICreateEvaluationQuestions,
+  ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
+    return await evaluationAxios.post('/evaluationQuestions/add', questionsInfo);
   }
+  public async fetchEvaluations(): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
+    return await evaluationAxios.get('/evaluations/getAll');
+  }
+
   public async getEvaluationById(
     id: string,
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
     return await evaluationAxios.get(`/evaluations/getById/${id}`);
+  }
+
+  public async getEvaluationQuestions(
+    id: string,
+  ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>> {
+    return await evaluationAxios.get(`/evaluationQuestions/getEvaluationQuestions/${id}`);
   }
 
   public async modifyEvaluation(

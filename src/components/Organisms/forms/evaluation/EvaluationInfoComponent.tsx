@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
-import DatePicker, { DayRange } from 'react-modern-calendar-datepicker';
+import { Editor } from '@tiptap/react';
+import React, { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
 
+import { authenticatorStore } from '../../../../store';
+import { evaluationStore } from '../../../../store/evaluation.store';
 import { moduleStore } from '../../../../store/modules.store';
+import { subjectStore } from '../../../../store/subject.store';
 import { ValueType } from '../../../../types';
 import {
   IAccessTypeEnum,
@@ -20,70 +24,80 @@ import {
   getDropDownStatusOptions,
 } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
-import Icon from '../../../Atoms/custom/Icon';
 import ILabel from '../../../Atoms/Text/ILabel';
+import Tiptap from '../../../Molecules/editor/Tiptap';
+import DateMolecule from '../../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
-import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
+// import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps) {
   const { data } = moduleStore.getAllModules();
-  const [dayRange, setDayRange] = React.useState<DayRange>({
-    from: null,
-    to: null,
-  });
+  const [moduleId, setModuleId] = useState<string>('');
+  const authUser = authenticatorStore.authUser().data?.data.data;
+  let subjects;
+
+  ({ data: subjects } = subjectStore.getSubjectsByModule(moduleId));
 
   const [details, setDetails] = useState<IEvaluationCreate>({
     access_type: IAccessTypeEnum.PUBLIC,
+    academy_id: authUser?.academy.id.toString() || '',
     allow_submission_time: '',
     class_ids: '',
     id: '',
-    classification: IEvaluationClassification.MODULAR,
+    classification: IEvaluationClassification.MODULE,
     content_format: IContentFormatEnum.DOC,
-    due_on: dayRange.to + '' || null,
-    eligible_group: IEligibleClassEnum.MULTIPLE_CLASSES,
+    due_on: '',
+    eligible_group: IEligibleClassEnum.MULTIPLE,
     evaluation_status: IEvaluationStatus.PENDING,
     evaluation_type: IEvaluationTypeEnum.CAT,
     exam_instruction: '',
     is_consider_on_report: true,
     marking_reminder_date: '',
-    maximum_file_size: 0,
+    maximum_file_size: '',
     name: '',
     questionaire_type: IQuestionaireTypeEnum.MULTIPLE,
-    subject_academic_year_period_id: 0,
+    subject_academic_year_period_id: '',
     submision_type: ISubmissionTypeEnum.ONLINE_TEXT,
-    time_limit: 0,
-    total_mark: 0,
+    time_limit: 30,
+    total_mark: 10,
   });
 
+  const { mutate } = evaluationStore.createEvaluation();
+
   function handleChange({ name, value }: ValueType) {
-    setDetails((details) => ({ ...details, [name]: value }));
+    if (name === 'module') setModuleId(value.toString());
+    else setDetails((details) => ({ ...details, [name]: value }));
   }
 
-  const renderCustomInput = ({ ref }: any) => (
-    <div className="flex flex-col gap-2 pb-2">
-      <ILabel className="capitalize" size="sm" weight="medium">
-        Due on
-      </ILabel>
-      <div className="rounded-lg border-2 border-bcolor w-auto md:w-40 flex items-center">
-        <input ref={ref} className="w-28 outline-none bg-transparent" readOnly />
-        <Icon name="calendar" />
-      </div>
-    </div>
-  );
+  function handleEditorChange(editor: Editor) {
+    console.log(editor.getHTML());
+    setDetails((details) => ({ ...details, exam_instruction: editor.getHTML() }));
+  }
+
+  function submitForm(e: FormEvent) {
+    e.preventDefault();
+
+    mutate(details, {
+      onSuccess: (data) => {
+        toast.success('Evaluation created');
+        localStorage.setItem('evaluationId', JSON.stringify(data?.data.data.id));
+        handleNext();
+      },
+      onError: (error) => {
+        console.log(error);
+        toast.error(error + '');
+      },
+    });
+  }
 
   return (
     <div>
-      <form
-        className="pt-6"
-        onSubmit={(e) => {
-          e.preventDefault();
-          // handleNext();
-        }}>
+      <form className="pt-6" onSubmit={submitForm}>
         <InputMolecule
           width="80"
-          name="evaluation_name"
+          name="name"
           placeholder="Evaluation Name"
           value={details.name}
           handleChange={handleChange}>
@@ -97,19 +111,17 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
           options={getDropDownStatusOptions(IEvaluationTypeEnum)}>
           Evaluation type
         </DropdownMolecule>
-
         <RadioMolecule
           className="pb-4"
           value={details.classification}
           name="classification"
           options={[
-            { label: 'MODULAR', value: IEvaluationClassification.MODULAR },
+            { label: 'MODULE', value: IEvaluationClassification.MODULE },
             { label: 'SUBJECT', value: IEvaluationClassification.SUBJECT },
           ]}
           handleChange={handleChange}>
           Evaluation classification
         </RadioMolecule>
-
         <DropdownMolecule
           width="64"
           name="module"
@@ -118,29 +130,28 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
           options={getDropDownOptions({ inputs: data?.data.data || [] })}>
           Select module
         </DropdownMolecule>
-
         <DropdownMolecule
           width="64"
           name="subject_academic_year_period_id"
           placeholder="Select subject"
           handleChange={handleChange}
-          isMulti
-          options={[]}>
+          options={getDropDownOptions({
+            inputs: subjects?.data.data || [],
+            labelName: ['title'],
+          })}>
           Select subject
         </DropdownMolecule>
-
         <RadioMolecule
           className="pb-4"
           value={details.eligible_group}
           name="eligible_group"
           options={[
-            { label: 'MULTIPLE CLASSES', value: IEligibleClassEnum.MULTIPLE_CLASSES },
-            { label: 'SINGLE CLASS', value: IEligibleClassEnum.SINGLE_CLASS },
+            { label: 'MULTIPLE CLASSES', value: IEligibleClassEnum.MULTIPLE },
+            { label: 'SINGLE CLASS', value: IEligibleClassEnum.SINGLE },
           ]}
           handleChange={handleChange}>
           Eligible Class
         </RadioMolecule>
-
         <RadioMolecule
           className="pb-4"
           value={details.access_type}
@@ -152,11 +163,10 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
           handleChange={handleChange}>
           Accessibility
         </RadioMolecule>
-
         <RadioMolecule
           className="pb-4"
           value={details.questionaire_type}
-          name="evaluation_status"
+          name="questionaire_type"
           options={[
             { label: 'Open', value: IQuestionaireTypeEnum.OPEN },
             { label: 'Multiple choice', value: IQuestionaireTypeEnum.MULTIPLE },
@@ -166,42 +176,47 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
           handleChange={handleChange}>
           Questionaire type
         </RadioMolecule>
+        {details.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
+          <>
+            <DropdownMolecule
+              width="64"
+              name="submision_type"
+              placeholder="Select submission type"
+              handleChange={handleChange}
+              options={[
+                { label: 'File', value: ISubmissionTypeEnum.FILE },
+                { label: 'Online text', value: ISubmissionTypeEnum.ONLINE_TEXT },
+              ]}>
+              Submission type
+            </DropdownMolecule>
+            {details.submision_type === ISubmissionTypeEnum.FILE && (
+              <>
+                <DropdownMolecule
+                  width="64"
+                  name="submision_type"
+                  placeholder="Select submission type"
+                  handleChange={handleChange}
+                  options={[
+                    { label: 'DOC', value: IContentFormatEnum.DOC },
+                    { label: 'MP4', value: IContentFormatEnum.MP4 },
+                    { label: 'PDF', value: IContentFormatEnum.PDF },
+                    { label: 'PNG', value: IContentFormatEnum.PNG },
+                  ]}>
+                  Content format
+                </DropdownMolecule>
 
-        <DropdownMolecule
-          width="64"
-          name="submision_type"
-          placeholder="Select submission type"
-          handleChange={handleChange}
-          options={[
-            { label: 'File', value: ISubmissionTypeEnum.FILE },
-            { label: 'Online text', value: ISubmissionTypeEnum.ONLINE_TEXT },
-          ]}>
-          Submission type
-        </DropdownMolecule>
-
-        <DropdownMolecule
-          width="64"
-          name="submision_type"
-          placeholder="Select submission type"
-          handleChange={handleChange}
-          options={[
-            { label: 'DOC', value: IContentFormatEnum.DOC },
-            { label: 'MP4', value: IContentFormatEnum.MP4 },
-            { label: 'PDF', value: IContentFormatEnum.PDF },
-            { label: 'PNG', value: IContentFormatEnum.PNG },
-          ]}>
-          Content format
-        </DropdownMolecule>
-
-        <InputMolecule
-          width="28"
-          type="number"
-          name="maximum_file_size"
-          value={details.maximum_file_size}
-          handleChange={handleChange}>
-          Maximum file size (Mbs)
-        </InputMolecule>
-
+                <InputMolecule
+                  width="28"
+                  type="number"
+                  name="maximum_file_size"
+                  value={details.maximum_file_size}
+                  handleChange={handleChange}>
+                  Maximum file size (Mbs)
+                </InputMolecule>
+              </>
+            )}
+          </>
+        ) : null}
         {/* <SwitchMolecule
           loading={false}
           name="shuffle"
@@ -209,44 +224,69 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
           handleChange={handleChange}>
           Shuffle evaluation questions
         </SwitchMolecule> */}
-
-        <TextAreaMolecule
+        {/* <TextAreaMolecule
           name={'exam_instruction'}
           value={details.exam_instruction}
           handleChange={handleChange}>
-          Evaluation instructions
-        </TextAreaMolecule>
-
+          
+        </TextAreaMolecule> */}
+        <div className="my-2">
+          <div className="my-1">
+            <ILabel size="sm">Evaluation instructions</ILabel>
+          </div>
+          <Tiptap content={details.exam_instruction} handleChange={handleEditorChange} />
+        </div>
         <InputMolecule
           width="28"
+          type="number"
           name="total_mark"
           value={details.total_mark}
           handleChange={handleChange}>
           Evaluation marks
         </InputMolecule>
-
-        <InputMolecule
-          // className="p-2"
-          width="16"
-          name="time_limit"
-          value={details.time_limit}
-          placeholder="00"
-          handleChange={handleChange}>
-          Time limit (In mins)
-        </InputMolecule>
-
-        <DatePicker
-          value={dayRange}
-          onChange={setDayRange}
-          colorPrimary="#1C2CA3"
-          colorPrimaryLight="#4F5FD6" // and this
-          calendarPopperPosition="bottom"
-          inputClassName="absolute"
-          inputPlaceholder="Select a day"
-          renderInput={renderCustomInput} // render a custom input
-          shouldHighlightWeekends
-        />
-
+        {details.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
+          <>
+            <InputMolecule
+              width="16"
+              type="text"
+              name="time_limit"
+              value={details.time_limit}
+              handleChange={handleChange}>
+              Time limit (In mins)
+            </InputMolecule>
+            <DateMolecule
+              startYear={new Date().getFullYear()}
+              endYear={new Date().getFullYear() + 100}
+              padding={3}
+              reverse={false}
+              showTime
+              breakToNextLine
+              handleChange={handleChange}
+              name={'allow_submission_time'}>
+              Start Date
+            </DateMolecule>
+            <DateMolecule
+              handleChange={handleChange}
+              startYear={new Date().getFullYear()}
+              endYear={new Date().getFullYear() + 100}
+              padding={3}
+              showTime
+              breakToNextLine
+              reverse={false}
+              name={'due_on'}>
+              Due on
+            </DateMolecule>{' '}
+          </>
+        ) : null}
+        <DateMolecule
+          handleChange={handleChange}
+          startYear={new Date().getFullYear()}
+          endYear={new Date().getFullYear() + 100}
+          padding={3}
+          reverse={false}
+          name={'marking_reminder_date'}>
+          Marking reminder date
+        </DateMolecule>
         <RadioMolecule
           className="pb-4"
           value={details.is_consider_on_report.toString()}
@@ -258,11 +298,8 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
           handleChange={handleChange}>
           Consider on report
         </RadioMolecule>
-
         <div className="pt-3">
-          <Button type="submit" onClick={handleNext}>
-            Next
-          </Button>
+          <Button type="submit">Next</Button>
         </div>
       </form>
     </div>

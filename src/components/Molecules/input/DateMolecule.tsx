@@ -39,6 +39,7 @@ type IProp = {
   reverse?: boolean;
   padding?: number;
   date_time_type?: boolean;
+  breakToNextLine?: boolean;
 };
 
 function DateMolecule({
@@ -71,6 +72,7 @@ function DateMolecule({
   padding,
   defaultValue,
   date_time_type = true,
+  breakToNextLine = false,
 }: IProp) {
   let defaultValueDate = defaultValue ? new Date(defaultValue) : new Date();
 
@@ -83,7 +85,12 @@ function DateMolecule({
   });
 
   const dateFormat = () => {
-    let date = `${dateState.Year}-${dateState.Month}-${dateState.Day} ${dateState.Hours}:${dateState.Minutes}:00`;
+    let date = `${dateState.Year}-${
+      dateState.Month >= 10 ? dateState.Month : `${dateState.Month}`
+    }-${dateState.Day >= 10 ? dateState.Day : `0${dateState.Day}`} ${
+      dateState.Hours >= 10 ? dateState.Hours : `0${dateState.Hours}`
+    }:${dateState.Minutes >= 10 ? dateState.Minutes : `0${dateState.Minutes}`}:00`;
+
     let selectedDate: string;
     if (date_time_type) {
       selectedDate = formatDateToIso(date);
@@ -91,14 +98,6 @@ function DateMolecule({
       selectedDate = formatDateToYyMmDd(date);
     }
     handleChange({ name: name, value: selectedDate });
-
-    // const hours = dateState.Hours < 10 ? '0' + dateState.Hours : '' + dateState.Hours;
-    // const days = dateState.Day < 10 ? '0' + dateState.Day : '' + dateState.Day;
-    // const months = dateState.Month < 10 ? '0' + dateState.Month : '' + dateState.Month;
-    // const minutes =
-    //   dateState.Minutes < 10 ? '0' + dateState.Minutes : '' + dateState.Minutes;
-    // let selectedDate: string = `${dateState.Year}-${months}-${days} ${hours}:${minutes}:00`;
-    // handleChange({ name: name, value: selectedDate });
   };
 
   useEffect(() => {
@@ -130,9 +129,9 @@ function DateMolecule({
       <ILabel size="sm" weight="medium">
         {children}
       </ILabel>
-      <div className="flex gap-2">
+      <div className={`flex ${breakToNextLine && 'flex-col gap-4'} gap-2`}>
         {showDate && (
-          <>
+          <div className="flex gap-2">
             <YearSelect
               reverse={reverse}
               defaultValue={defaultValueDate.getFullYear().toString()}
@@ -174,10 +173,10 @@ function DateMolecule({
               disabled={dayDisabled}
               padding={padding}
             />
-          </>
+          </div>
         )}
         {showTime && (
-          <>
+          <div className="flex gap-2">
             <HourSelect
               defaultValue={dateState.Hours.toString()}
               value={dateState.Hours}
@@ -193,12 +192,12 @@ function DateMolecule({
               value={dateState.Minutes}
               onChange={handleDate}
               name="Minutes"
-              placeholder="Minutes"
+              placeholder="mins"
               width={minuteWidth}
               disabled={minuteDisabled}
               padding={padding}
             />
-          </>
+          </div>
         )}
       </div>
     </div>

@@ -12,7 +12,7 @@ interface Props extends DropdownProps {
 export default function DropdownMolecule(props: Props) {
   return (
     <div className="pb-">
-      <ILabel size="sm" weight="medium">
+      <ILabel size="sm" weight="medium" textTransform="normal-case">
         {props.children}
       </ILabel>
       <div className="mt-2 flex flex-col">

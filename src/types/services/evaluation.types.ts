@@ -6,6 +6,11 @@ export enum IEvaluationTypeEnum {
   QUIZ = 'QUIZ',
 }
 
+export enum IQuestionType {
+  MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
+  OPEN = 'OPEN',
+}
+
 export enum IQuestionaireTypeEnum {
   MULTIPLE = 'MULTIPLE',
   FIELD = 'FIELD',
@@ -25,13 +30,13 @@ export enum ISubmissionTypeEnum {
 }
 
 export enum IEvaluationClassification {
-  MODULAR = 'MODULAR',
+  MODULE = 'MODULE',
   SUBJECT = 'SUBJECT',
 }
 
 export enum IEligibleClassEnum {
-  MULTIPLE_CLASSES = 'MULTIPLE_CLASSES',
-  SINGLE_CLASS = 'SINGLE_CLASS',
+  MULTIPLE = 'MULTIPLE',
+  SINGLE = 'SINGLE',
 }
 
 export enum IAccessTypeEnum {
@@ -62,19 +67,20 @@ export enum IEligibleGroup {
 
 export interface IEvaluationCreate {
   access_type: string;
+  academy_id: string;
   allow_submission_time: string;
   class_ids: string;
-  subject_academic_year_period_id: number;
+  subject_academic_year_period_id: string;
   classification: IEvaluationClassification;
   content_format: string;
-  due_on: string | null;
+  due_on: string;
   eligible_group: string;
   evaluation_status: IEvaluationStatus;
   evaluation_type: IEvaluationTypeEnum;
   exam_instruction: string;
   is_consider_on_report: boolean;
   marking_reminder_date: string;
-  maximum_file_size: number;
+  maximum_file_size: number | string;
   name: string;
   id: '';
   questionaire_type: IQuestionaireTypeEnum;
@@ -86,6 +92,7 @@ export interface IEvaluationCreate {
 export interface IEvaluationInfo {
   id: string;
   name: string;
+  academy_id: string;
   subject_academic_year_period: string;
   access_type: IAccessTypeEnum;
   evaluation_type: IEvaluationTypeEnum;
@@ -103,6 +110,7 @@ export interface IEvaluationInfo {
   content_format: string;
   maximum_file_size: number;
   is_consider_on_report: boolean;
+  number_of_questions: string;
   subject_academic_year_period_id: string;
   group_evaluations: [];
   private_attendees: [];
@@ -111,4 +119,30 @@ export interface IEvaluationInfo {
   evaluation_approvals: [];
   student_evaluations: [];
   evaluation_comments: [];
+}
+
+export interface IEvaluationChoices {
+  answer_content: string;
+  correct: boolean;
+}
+
+export interface IEvaluationQuestion {
+  evaluation_id: string;
+  mark: string;
+  parent_question_id: string;
+  question: string;
+  question_type: IQuestionType;
+}
+
+export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
+  sub_questions: IEvaluationQuestion[];
+}
+
+export interface IEvaluationQuestionsInfo {
+  id: string;
+  question: string;
+  mark: number;
+  evaluationQuestions: [];
+  questionType: IQuestionType;
+  multipleChoiceAnswers: [];
 }

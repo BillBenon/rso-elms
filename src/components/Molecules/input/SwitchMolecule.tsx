@@ -9,9 +9,10 @@ type PropType = {
   children: ReactNode;
   value: boolean;
   name: string;
-  loading: boolean;
+  loading?: boolean;
   error?: string;
   className?: string;
+  showLabelFirst?: boolean;
   handleChange: (_e: ValueType) => void;
 };
 
@@ -25,6 +26,7 @@ export default function SwitchMolecule({
   loading = false,
   handleChange,
   className,
+  showLabelFirst = false,
   error,
   ...attrs
 }: PropType) {
@@ -34,9 +36,11 @@ export default function SwitchMolecule({
         <div className="animate-pulse w-24 h-4 bg-secondary rounded"></div>
       ) : (
         <>
-          <ILabel>{children}</ILabel>
-          <div className="mt-2">
+          <div className="flex gap-3">
             <Switch name={name} value={value} handleChange={handleChange}></Switch>
+            <ILabel size="sm" className={`pt-2 ${showLabelFirst && 'order-first'}`}>
+              {children}
+            </ILabel>
           </div>
           {error && <Error>{error}</Error>}
         </>

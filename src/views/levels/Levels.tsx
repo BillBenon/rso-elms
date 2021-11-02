@@ -60,7 +60,7 @@ function Levels() {
         <BreadCrumb list={list}></BreadCrumb>
       </section>
       <section className="">
-        <TableHeader title="Levels" totalItems={`${levels?.length} levels`}>
+        <TableHeader title="Levels" totalItems={levels?.length || 0}>
           <Link to={`${url}/add`}>
             <Button>Add Level</Button>
           </Link>
