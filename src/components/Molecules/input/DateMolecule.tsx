@@ -39,6 +39,7 @@ type IProp = {
   reverse?: boolean;
   padding?: number;
   date_time_type?: boolean;
+  breakToNextLine?: boolean;
 };
 
 function DateMolecule({
@@ -71,6 +72,7 @@ function DateMolecule({
   padding,
   defaultValue,
   date_time_type = true,
+  breakToNextLine = false,
 }: IProp) {
   let defaultValueDate = defaultValue ? new Date(defaultValue) : new Date();
 
@@ -122,9 +124,9 @@ function DateMolecule({
       <ILabel size="sm" weight="medium">
         {children}
       </ILabel>
-      <div className="flex gap-2">
+      <div className={`flex ${breakToNextLine && 'flex-col gap-4'} gap-2`}>
         {showDate && (
-          <>
+          <div className="flex gap-2">
             <YearSelect
               reverse={reverse}
               defaultValue={defaultValueDate.getFullYear().toString()}
@@ -166,10 +168,10 @@ function DateMolecule({
               disabled={dayDisabled}
               padding={padding}
             />
-          </>
+          </div>
         )}
         {showTime && (
-          <>
+          <div className="flex gap-2">
             <HourSelect
               defaultValue={dateState.Hours.toString()}
               value={dateState.Hours}
@@ -185,12 +187,12 @@ function DateMolecule({
               value={dateState.Minutes}
               onChange={handleDate}
               name="Minutes"
-              placeholder="Minutes"
+              placeholder="mins"
               width={minuteWidth}
               disabled={minuteDisabled}
               padding={padding}
             />
-          </>
+          </div>
         )}
       </div>
     </div>
