@@ -56,9 +56,9 @@ export default function ModuleDetails() {
       subjectData.data.data.data.forEach((subject) => {
         let cardData: CommonCardDataType = {
           id: subject.id,
-          code: subject.title,
+          code: subject.module.name || `Subject ${subject.title}`,
           description: subject.content,
-          title: subject.module.name || `Subject ${subject.title}`,
+          title: subject.title,
           status: {
             type: advancedTypeChecker(subject.generic_status),
             text: subject.generic_status.toString(),

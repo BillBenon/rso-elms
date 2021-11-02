@@ -1,9 +1,14 @@
 .course-card-molecule{
     width:354px;
+    border:2px solid transparent;
 }
 .course-card-description{
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+}
+
+.course-card-molecule:hover{
+    @apply border-primary-500;
 }
