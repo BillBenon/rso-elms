@@ -57,7 +57,9 @@ export default function Radio<T>({
           <span
             className={`mx-2 w-5 h-5 rounded-full border-solid 
             ${
-              active === value ? 'border-6 border-primary-500' : 'border-4 border-bcolor'
+              active === value
+                ? 'border-6 border-primary-500'
+                : 'border-4 border-tertiary'
             }`}></span>
           {!subLabel ? (
             <span>{label}</span>

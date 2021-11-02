@@ -85,10 +85,10 @@ export default function EvaluationContent() {
             </div>
           </div>
           <div className="flex">
-            <div className="w-14 h-14 border-bcolor border-2 border-r-0 rounded-tl-md rounded-bl-md right-rounded-md flex items-center justify-center">
+            <div className="w-14 h-14 border-tertiary border-2 border-r-0 rounded-tl-md rounded-bl-md right-rounded-md flex items-center justify-center">
               B
             </div>
-            <div className="w-80 h-14 border-bcolor border-2 rounded-tr-md rounded-br-md flex items-center px-4">
+            <div className="w-80 h-14 border-tertiary border-2 rounded-tr-md rounded-br-md flex items-center px-4">
               This is the second answer.
             </div>
           </div>
