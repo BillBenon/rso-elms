@@ -11,6 +11,7 @@ interface IProps {
   description: string;
   buttonLabel?: string;
   handleClick?: () => any;
+  showButton?: boolean;
 }
 
 export default function NoDataAvailable({
@@ -20,6 +21,7 @@ export default function NoDataAvailable({
   buttonLabel = 'Create new',
   handleClick,
   fill = true,
+  showButton = true,
 }: IProps) {
   return (
     <div className="w-full py-12 bg-transparent">
@@ -39,9 +41,11 @@ export default function NoDataAvailable({
           {description}
         </p>
       </div>
-      <div className="pt-4 text-center">
-        <Button onClick={handleClick}>{buttonLabel}</Button>
-      </div>
+      {showButton && (
+        <div className="pt-4 text-center">
+          <Button onClick={handleClick}>{buttonLabel}</Button>
+        </div>
+      )}
     </div>
   );
 }

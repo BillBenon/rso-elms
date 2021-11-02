@@ -12,11 +12,14 @@ type RowProps = {
 const statusColors: statusStyleType = {
   pending: 'warning',
   ongoing: 'warning',
+  initial: 'warning',
+  closed: 'error',
   complete: 'success',
   active: 'success',
   inactive: 'error',
   suspended: 'error',
   cancelled: 'error',
+  started: 'success',
 };
 
 const Row = ({ keys, data, statusColumn }: RowProps) => {

@@ -10,7 +10,7 @@ const NotFound = () => {
 
   useEffect(() => {
     if (data?.data.data.user_type == 'SUPER_ADMIN') redirectTo('/dashboard/users');
-    if (data?.data.data.user_type == 'ADMIN') redirectTo('/dashboard/programs');
+    if (data?.data.data.user_type == 'ADMIN') redirectTo('/dashboard/divisions');
   }, [data?.data.data]);
 
   const redirectTo = (path: string) => {

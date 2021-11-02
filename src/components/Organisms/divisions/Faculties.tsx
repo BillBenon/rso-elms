@@ -100,7 +100,7 @@ export default function Faculties({ fetchType }: IFaculties) {
         {faculties && faculties?.length > 0 && (
           <TableHeader
             title="Faculty"
-            totalItems={`${faculties?.length} faculties` || 0}
+            totalItems={faculties?.length || 0}
             handleSearch={() => {}}>
             <Link to={`${url}/new`}>
               <Button>Add Faculty</Button>

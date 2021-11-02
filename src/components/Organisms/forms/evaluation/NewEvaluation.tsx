@@ -1,5 +1,3 @@
-import 'react-modern-calendar-datepicker/lib/DatePicker.css';
-
 import React, { useState } from 'react';
 
 import { Link as LinkList } from '../../../../types';
@@ -8,6 +6,7 @@ import BreadCrumb from '../../../Molecules/BreadCrumb';
 import Stepper from '../../../Molecules/Stepper/Stepper';
 import EvaluationInfoComponent from './EvaluationInfoComponent';
 import EvaluationQuestionComponent from './EvaluationQuestionComponent';
+import EvaluationSettings from './EvaluationSettings';
 
 export default function NewEvaluation() {
   const list: LinkList[] = [
@@ -16,7 +15,7 @@ export default function NewEvaluation() {
     { to: 'new', title: 'new evaluation' },
   ];
 
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(1);
 
   function handleSubmit() {
     setCurrentStep(currentStep + 1);
@@ -50,6 +49,7 @@ export default function NewEvaluation() {
             handleNext={handleSubmit}
             handleGoBack={handleBack}
           />
+          <EvaluationSettings handleNext={handleSubmit} handleGoBack={handleBack} />
         </Stepper>
       </div>
     </div>

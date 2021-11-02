@@ -31,6 +31,7 @@ export default function Switch({
     <div className="my-switch" {...attrs}>
       <div className="holder">
         <button
+          type="button"
           className={`switch-holder ${active && 'active'} outline-none`}
           // @ts-ignore
           onClick={handleClick}>

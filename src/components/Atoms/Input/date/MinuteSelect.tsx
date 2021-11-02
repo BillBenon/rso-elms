@@ -30,8 +30,15 @@ const MinuteSelect = (mprops: MProp) => {
     return minOptions;
   };
 
+  let defaultValue: string;
+  if (mprops.defaultValue)
+    defaultValue =
+      parseInt(mprops.defaultValue) < 10
+        ? `0${mprops.defaultValue}`
+        : mprops.defaultValue;
+
   let minutes = renderMinuteOptions();
-  let newDefaultValue = minutes.find((minute) => minute.value === mprops.defaultValue);
+  let newDefaultValue = minutes.find((minute) => minute.value === defaultValue);
 
   return (
     <DropDown

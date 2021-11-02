@@ -19,11 +19,9 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
-import { intakeStore } from '../../store/intake.store';
 import programStore from '../../store/program.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
 import { DivisionInfo } from '../../types/services/division.types';
-import { IntakeProgramInfo } from '../../types/services/intake-program.types';
 import { ProgramInfo } from '../../types/services/program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import AddAcademicProgramToIntake from './AddAcademicProgramToIntake';
@@ -40,7 +38,6 @@ export default function AcademicProgram() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
   const { search } = useLocation();
-  const intakeId = new URLSearchParams(search).get('intakeId');
   const location = useLocation();
 
   const list: LinkList[] = [
@@ -52,15 +49,11 @@ export default function AcademicProgram() {
 
   const dp = new URLSearchParams(search).get('dp');
 
-  const { data, refetch, isLoading } = intakeId
-    ? intakeStore.getProgramsByIntake(intakeId)
-    : dp
+  const { data, refetch, isLoading } = dp
     ? programStore.getProgramsByDepartment(dp?.toString() || '')
     : programStore.fetchPrograms();
 
   const programInfo = data?.data.data || [];
-
-  const intake = intakeId ? intakeStore.getIntakeById(intakeId!, true) : null;
 
   useEffect(() => {
     if (location.pathname === path || location.pathname === `${path}/`) {
@@ -70,34 +63,30 @@ export default function AcademicProgram() {
 
   let programs: IProgramData[] = [];
 
-  programInfo?.map((obj) => {
-    if (intakeId) obj = (obj as IntakeProgramInfo).program;
-    else obj = obj as ProgramInfo;
+  programInfo?.map((prog) => {
+    prog = prog as ProgramInfo;
 
-    let { id, code, name, description, generic_status, department, incharge, type } = obj;
-
-    let prog: IProgramData = {
-      id: id,
+    let program: IProgramData = {
+      id: prog.id,
       status: {
-        type: advancedTypeChecker(generic_status),
-        text: generic_status.toString(),
+        type: advancedTypeChecker(prog.generic_status),
+        text: prog.generic_status.toString(),
       },
-      code: code,
-      title: name,
-      subTitle: type.replaceAll('_', ' '),
-      description: description,
-      department: department,
-      incharge: incharge && incharge.username,
+      code: prog.code,
+      title: prog.name,
+      subTitle: prog.type.replaceAll('_', ' '),
+      description: prog.description,
+      department: prog.department,
+      incharge: prog.incharge && prog.incharge.username,
     };
 
-    programs.push(prog);
+    programs.push(program);
   });
 
   function submited() {
     refetch();
     history.goBack();
   }
-
   return (
     <main className="px-4">
       <Switch>
@@ -113,40 +102,28 @@ export default function AcademicProgram() {
                 <section>
                   <TableHeader
                     totalItems={`${programs.length} programs`}
-                    title={`${intakeId ? intake?.data?.data.data.title : 'Programs'}`}
+                    title="Programs"
                     showSearch={false}>
-                    {intakeId ? (
-                      <Link to={`${url}/add-program-to-intake?intakeId=${intakeId}`}>
-                        <Button>Add Program To Intake</Button>
-                      </Link>
-                    ) : (
-                      <Link to={`/dashboard/programs/add`}>
-                        <Button>Add New Program</Button>
-                      </Link>
-                    )}
+                    <Link to={`/dashboard/programs/add`}>
+                      <Button>Add New Program</Button>
+                    </Link>
                   </TableHeader>
                 </section>
                 <section className="flex flex-wrap justify-start gap-2 mt-2">
                   {programs.length === 0 && isLoading ? (
                     <Loader />
                   ) : programs.length > 0 ? (
-                    programs.map((Common, index: number) => (
+                    programs.map((Common) => (
                       <Tooltip
                         key={Common.code}
                         trigger={
                           <div className="p-1 mt-3">
                             <CommonCardMolecule
+                              className="cursor-pointer"
                               data={Common}
                               handleClick={() =>
-                                history.push({
-                                  pathname: `/dashboard/programs/${Common.id}`,
-                                  search: `?intakeProg=${programInfo[index].id}`,
-                                })
+                                dp ? history.push(`/dashboard/programs/${Common.id}`) : {}
                               }
-                              // to={{
-                              //   title: 'module',
-                              //   to: `/dashboard/programs/${Common.id}`,
-                              // }}
                             />
                           </div>
                         }
@@ -225,16 +202,6 @@ export default function AcademicProgram() {
                         </div>
                       </Tooltip>
                     ))
-                  ) : intakeId ? (
-                    <NoDataAvailable
-                      icon="program"
-                      buttonLabel="Add new program to intake"
-                      title={'No program available in this intake'}
-                      handleClick={() =>
-                        history.push(`${url}/add-program-to-intake?intakeId=${intakeId}`)
-                      }
-                      description="There are no programs added yet, click on the above button to add some!"
-                    />
                   ) : (
                     <NoDataAvailable
                       buttonLabel="Add new program"

@@ -1,27 +1,27 @@
 import { useMutation, useQuery } from 'react-query';
 
-import { divisionService } from '../services/administration/divisions.service';
+import { evaluationService } from '../services/administration/evaluation.service';
 
 class EvaluationStore {
   createEvaluation() {
-    return useMutation(divisionService.addDivision);
-  }
-  getDivisionByType(type: string) {
-    return useQuery(['divisions/type', type], () => divisionService.getDivision(type));
+    return useMutation(evaluationService.createEvaluation);
   }
 
-  getDivision(id: string) {
-    return useQuery(['divisions/id', id], () => divisionService.getDivisionById(id));
+  createEvaluationQuestions() {
+    return useMutation(evaluationService.createEvaluationQuestion);
   }
 
-  getDepartmentsInFaculty(id: string) {
-    return useQuery(['faculties/departments', id], () =>
-      divisionService.getFacultyByDepartment(id),
+  getEvaluations() {
+    return useQuery('evaluations', evaluationService.fetchEvaluations);
+  }
+
+  getEvaluationById(id: string) {
+    return useQuery(['evaluation', id], () => evaluationService.getEvaluationById(id));
+  }
+  getEvaluationQuestions(id: string) {
+    return useQuery(['evaluation/questions', id], () =>
+      evaluationService.getEvaluationQuestions(id),
     );
-  }
-
-  updateDivision() {
-    return useMutation(divisionService.modifyDivision);
   }
 }
 
