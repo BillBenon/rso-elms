@@ -24,7 +24,6 @@ export default function Sidebar() {
     ];
     const academicAdminLinks: linkProps[] = [
       // { title: 'Programs', to: '/dashboard/programs', icon: 'program' },
-      { title: 'Academic years', to: '/dashboard/academic-years', icon: 'program' },
       { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
       { title: 'Users', to: '/dashboard/users', icon: 'user' },
       { title: 'Calendar', to: '/dashboard/calendar', icon: 'calendar' },
@@ -38,16 +37,28 @@ export default function Sidebar() {
         to: '/dashboard/registration-control',
         icon: 'reg-control',
       },
+      { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
+      { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
+      { title: 'Calendar', to: '/dashboard/calendar', icon: 'calendar' },
+      { title: 'Academic years', to: '/dashboard/academic-years', icon: 'program' },
+      // { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
+      // { title: 'Subjects', to: '/dashboard/subjects', icon: 'module' },
+      { title: 'Evalutaions', to: '/dashboard/evaluations', icon: 'evaluation' },
     ];
 
-    const instructorAdminLinks: linkProps[] = [
+    const instructorLinks: linkProps[] = [
       { title: 'Evalutaions', to: '/dashboard/view-evaluation', icon: 'evaluation' },
+    ];
+
+    const studentLinks: linkProps[] = [
+      { title: 'Evalutaions', to: '/dashboard/evaluation-test', icon: 'evaluation' },
     ];
 
     if (authUser?.user_type == UserType.SUPER_ADMIN)
       routes.push(...institutionAdminLinks);
     if (authUser?.user_type == UserType.ADMIN) routes.push(...academicAdminLinks);
-    if (authUser?.user_type == UserType.INSTRUCTOR) routes.push(...instructorAdminLinks);
+    if (authUser?.user_type == UserType.INSTRUCTOR) routes.push(...instructorLinks);
+    if (authUser?.user_type == UserType.STUDENT) routes.push(...studentLinks);
 
     return routes;
   };

@@ -36,7 +36,7 @@ export default function RegistrationControl() {
     description: string;
     status: GenericStatus;
     id: string | number | undefined;
-    'academy name': string;
+    // 'academy name': string;
   }
 
   let RegistrationControls: IRegistrationInfo[] = [];
@@ -51,7 +51,7 @@ export default function RegistrationControl() {
         description,
         generic_status,
         id,
-        academy: { name }, //destructure name inside academy obj
+        // academy: { name }, //destructure name inside academy obj
         expected_start_date,
         expected_end_date,
       } = obj;
@@ -60,7 +60,7 @@ export default function RegistrationControl() {
         'start date': expected_start_date,
         'end date': expected_end_date,
         description,
-        'academy name': name,
+        // 'academy name': name,
         status: generic_status,
         id: id,
       };

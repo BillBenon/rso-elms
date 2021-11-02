@@ -1,16 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  Link,
   Route,
   Switch,
   useHistory,
+  useLocation,
   useParams,
   useRouteMatch,
-} from 'react-router-dom';
+} from 'react-router';
 
 import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
-import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
@@ -19,22 +18,63 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
+import intakeProgramStore from '../../store/intake-program.store';
 import programStore from '../../store/program.store';
 import { Link as Links, ParamType } from '../../types';
+import { UserView } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ModuleLevels from '../modules/ModuleLevels';
-import ProgramModules from '../modules/ProgramModules';
-import { IProgramData } from './AcademicPrograms';
-import AddLevelToProgram from './AddLevelToProgram';
-import { DummyUser } from './dummyUsers';
+import { IProgramData } from '../programs/AcademicPrograms';
+import AddLevelToProgram from '../programs/AddLevelToProgram';
+import { DummyUser } from '../programs/dummyUsers';
+import IntakeProgramModules from './IntakeProgramModules';
 
-export default function ProgramDetailsMolecule() {
+function IntakeProgramDetails() {
+  const { search } = useLocation();
+  const intakeProgId = new URLSearchParams(search).get('intakeProg');
   const history = useHistory();
   const { path, url } = useRouteMatch();
   const { id } = useParams<ParamType>();
 
+  const studentsProgram = intakeProgramStore.getStudentsByIntakeProgram(
+    intakeProgId || '',
+  ).data?.data.data;
+  const instructorsProgram = intakeProgramStore.getStudentsByIntakeProgram(
+    intakeProgId || '',
+  ).data?.data.data;
+
+  const [students, setStudents] = useState<UserView[]>([]);
+  const [instructors, setInstructors] = useState<UserView[]>([]);
+
+  useEffect(() => {
+    studentsProgram?.map((stud) =>
+      setStudents([
+        ...students,
+        {
+          id: stud.id,
+          first_name: stud.first_name,
+          last_name: stud.last_name,
+          image_url: stud.image_url,
+        },
+      ]),
+    );
+  }, [studentsProgram]);
+
+  useEffect(() => {
+    instructorsProgram?.map((inst) =>
+      setInstructors([
+        ...instructors,
+        {
+          id: inst.id,
+          first_name: inst.first_name,
+          last_name: inst.last_name,
+          image_url: inst.image_url,
+        },
+      ]),
+    );
+  }, [instructorsProgram]);
+
   const program = programStore.getProgramById(id).data?.data.data;
-  const programLevels = programStore.getLevelsByAcademicProgram(id).data?.data.data;
 
   const getProgramData = () => {
     let programData: IProgramData | undefined;
@@ -74,11 +114,10 @@ export default function ProgramDetailsMolecule() {
 
   const list: Links[] = [
     { to: 'home', title: 'home' },
-    { to: 'divisions', title: 'Faculty' },
-    { to: 'programs', title: 'Programs' },
+    { to: 'intakes', title: 'intakes' },
+    { to: 'intakes/programs', title: 'Programs' },
     { to: `${url}`, title: 'details' },
   ];
-
   return (
     <>
       <BreadCrumb list={list} />
@@ -155,85 +194,6 @@ export default function ProgramDetailsMolecule() {
                         totalUsers={DummyUser.length || 0}
                       />
                     </div>
-
-                    {/* models */}
-                    {/* <div className="flex flex-col gap-8">
-                              <div className="flex flex-col gap-6 w-60 py-4 px-6 h-32 bg-main">
-                                <div className="flex flex-col gap-2">
-                                  <Heading color="txt-secondary" fontSize="base">
-                                    Modules
-                                  </Heading>
-                                  <Heading
-                                    color="primary"
-                                    fontSize="base"
-                                    fontWeight="bold"
-                                    className="pt-4">
-                                    Total Modules: {programModules.length}
-                                  </Heading>
-                                </div>
-                              </div>
-                            </div> */}
-                    <div className="flex gap-8">
-                      {/* levels */}
-                      <div className="flex flex-col gap-7 w-60 p-6 bg-main">
-                        <Heading color="txt-secondary" fontSize="base">
-                          Levels
-                        </Heading>
-                        <div className="flex flex-col gap-8">
-                          {programLevels && programLevels?.length > 0 ? (
-                            programLevels.map((programLevel) => (
-                              <Heading
-                                key={programLevel.id}
-                                color="primary"
-                                fontSize="base"
-                                fontWeight="semibold">
-                                {programLevel.level.name}
-                              </Heading>
-                            ))
-                          ) : (
-                            <Heading
-                              color="primary"
-                              fontSize="base"
-                              fontWeight="semibold">
-                              No levels available
-                            </Heading>
-                          )}
-                        </div>
-                        {programLevels && programLevels?.length === 0 && (
-                          <div className="text-primary-500 py-2 text-sm mr-3">
-                            <Link
-                              to={`${url}/level/add`}
-                              className="flex items-center justify-end">
-                              <Icon name="add" size={12} fill="primary" />
-                              Add levels
-                            </Link>
-                          </div>
-                        )}
-                      </div>
-
-                      {/* intakes */}
-                      <div className="flex flex-col gap-8">
-                        <div className="flex flex-col gap-7 bg-main w-60 p-6">
-                          <Heading color="txt-secondary" fontSize="base">
-                            Intakes
-                          </Heading>
-                          <div className="flex flex-col gap-8">
-                            <Heading
-                              color="primary"
-                              fontSize="base"
-                              fontWeight="semibold">
-                              Active Intakes
-                            </Heading>
-                            <Heading
-                              color="primary"
-                              fontSize="base"
-                              fontWeight="semibold">
-                              Passive Intakes
-                            </Heading>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
                   </div>
                 </div>
               )}
@@ -268,10 +228,12 @@ export default function ProgramDetailsMolecule() {
                 );
               }}
             />
-            <Route path={`${path}/modules`} render={() => <ProgramModules />} />
+            <Route path={`${path}/modules`} render={() => <IntakeProgramModules />} />
           </Switch>
         </TabNavigation>
       </div>
     </>
   );
 }
+
+export default IntakeProgramDetails;

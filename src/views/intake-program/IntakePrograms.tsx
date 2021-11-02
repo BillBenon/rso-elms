@@ -5,6 +5,7 @@ import {
   Switch,
   useHistory,
   useLocation,
+  useParams,
   useRouteMatch,
 } from 'react-router-dom';
 
@@ -19,27 +20,22 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
+import { intakeStore } from '../../store/intake.store';
 import programStore from '../../store/program.store';
-import { CommonCardDataType, Link as LinkList } from '../../types';
-import { DivisionInfo } from '../../types/services/division.types';
-import { ProgramInfo } from '../../types/services/program.types';
+import { Link as LinkList, ParamType } from '../../types';
+import { IntakeProgramInfo } from '../../types/services/intake-program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
-import AddAcademicProgramToIntake from './AddAcademicProgramToIntake';
-import NewAcademicProgram from './NewAcademicProgram';
-import ProgramDetails from './ProgramDetails';
-import UpdateAcademicProgram from './UpdateAcademicProgram';
+import { IProgramData } from '../programs/AcademicPrograms';
+import AddAcademicProgramToIntake from '../programs/AddAcademicProgramToIntake';
+import NewAcademicProgram from '../programs/NewAcademicProgram';
+import UpdateAcademicProgram from '../programs/UpdateAcademicProgram';
+import IntakeProgramDetails from './IntakeProgramDetails';
 
-export interface IProgramData extends CommonCardDataType {
-  department: DivisionInfo;
-  incharge: string;
-}
-
-export default function AcademicProgram() {
+function IntakePrograms() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
-  const { search } = useLocation();
+  const { id: intakeId } = useParams<ParamType>();
   const location = useLocation();
-
   const list: LinkList[] = [
     { to: 'home', title: 'home' },
     { to: 'users', title: 'users' },
@@ -47,13 +43,13 @@ export default function AcademicProgram() {
     { to: `${url}`, title: 'Programs' },
   ];
 
-  const dp = new URLSearchParams(search).get('dp');
-
-  const { data, refetch, isLoading } = dp
-    ? programStore.getProgramsByDepartment(dp?.toString() || '')
+  const { data, refetch, isLoading } = intakeId
+    ? intakeStore.getProgramsByIntake(intakeId)
     : programStore.fetchPrograms();
 
   const programInfo = data?.data.data || [];
+
+  const intake = intakeId ? intakeStore.getIntakeById(intakeId!, true) : null;
 
   useEffect(() => {
     if (location.pathname === path || location.pathname === `${path}/`) {
@@ -64,8 +60,7 @@ export default function AcademicProgram() {
   let programs: IProgramData[] = [];
 
   programInfo?.map((prog) => {
-    prog = prog as ProgramInfo;
-
+    prog = (prog as IntakeProgramInfo).program;
     let program: IProgramData = {
       id: prog.id,
       status: {
@@ -97,15 +92,15 @@ export default function AcademicProgram() {
             return (
               <>
                 <section>
-                  <BreadCrumb list={list}></BreadCrumb>
+                  <BreadCrumb list={list} />
                 </section>
                 <section>
                   <TableHeader
                     totalItems={`${programs.length} programs`}
-                    title="Programs"
+                    title={`${intakeId ? intake?.data?.data.data.title : 'Programs'}`}
                     showSearch={false}>
-                    <Link to={`/dashboard/programs/add`}>
-                      <Button>Add New Program</Button>
+                    <Link to={`${url}/add-program-to-intake?intakeId=${intakeId}`}>
+                      <Button>Add Program To Intake</Button>
                     </Link>
                   </TableHeader>
                 </section>
@@ -113,7 +108,7 @@ export default function AcademicProgram() {
                   {programs.length === 0 && isLoading ? (
                     <Loader />
                   ) : programs.length > 0 ? (
-                    programs.map((Common) => (
+                    programs.map((Common, index: number) => (
                       <Tooltip
                         key={Common.code}
                         trigger={
@@ -122,7 +117,9 @@ export default function AcademicProgram() {
                               className="cursor-pointer"
                               data={Common}
                               handleClick={() =>
-                                dp ? history.push(`/dashboard/programs/${Common.id}`) : {}
+                                history.push(
+                                  `${url}/${Common.id}/${programInfo[index].id}`,
+                                )
                               }
                             />
                           </div>
@@ -204,9 +201,12 @@ export default function AcademicProgram() {
                     ))
                   ) : (
                     <NoDataAvailable
-                      buttonLabel="Add new program"
-                      title={'No program available'}
-                      handleClick={() => history.push(`/dashboard/programs/add`)}
+                      icon="program"
+                      buttonLabel="Add new program to intake"
+                      title={'No program available in this intake'}
+                      handleClick={() =>
+                        history.push(`${url}/add-program-to-intake?intakeId=${intakeId}`)
+                      }
                       description="There are no programs added yet, click on the above button to add some!"
                     />
                   )}
@@ -239,9 +239,11 @@ export default function AcademicProgram() {
         {/* modify academic program */}
         <Route path={`${path}/:id/edit`} render={() => <UpdateAcademicProgram />} />
 
-        {/* show academic program details */}
-        <Route path={`${path}/:id`} render={() => <ProgramDetails />} />
+        {/* show intake academic program details */}
+        <Route path={`${path}/:id/:intakeProg`} render={() => <IntakeProgramDetails />} />
       </Switch>
     </main>
   );
 }
+
+export default IntakePrograms;

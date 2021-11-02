@@ -85,7 +85,12 @@ function DateMolecule({
   });
 
   const dateFormat = () => {
-    let date = `${dateState.Year}-${dateState.Month}-${dateState.Day} ${dateState.Hours}:${dateState.Minutes}:00`;
+    let date = `${dateState.Year}-${
+      dateState.Month >= 10 ? dateState.Month : `${dateState.Month}`
+    }-${dateState.Day >= 10 ? dateState.Day : `0${dateState.Day}`} ${
+      dateState.Hours >= 10 ? dateState.Hours : `0${dateState.Hours}`
+    }:${dateState.Minutes >= 10 ? dateState.Minutes : `0${dateState.Minutes}`}:00`;
+
     let selectedDate: string;
     if (date_time_type) {
       selectedDate = formatDateToIso(date);

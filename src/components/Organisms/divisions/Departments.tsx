@@ -120,7 +120,11 @@ export default function Departments({ fetchType }: IDepartment) {
                       ? `${facultyData?.data.data.name} / Department`
                       : 'department'
                   }`}
-                  totalItems={`${departments?.length} departments` || 0}
+                  totalItems={
+                    facultyData?.data.data.name
+                      ? `${departments?.length} departments`
+                      : departments?.length
+                  }
                   handleSearch={() => {}}></TableHeader>
               </section>
             )}
@@ -139,6 +143,7 @@ export default function Departments({ fetchType }: IDepartment) {
               ) : isSuccess && departments.length === 0 ? (
                 <NoDataAvailable
                   icon="faculty"
+                  showButton={false}
                   buttonLabel="Add new department"
                   title="No department available"
                   handleClick={() => history.push(`/dashboard/divisions/departments/new`)}
