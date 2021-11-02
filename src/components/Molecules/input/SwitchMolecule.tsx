@@ -9,7 +9,7 @@ type PropType = {
   children: ReactNode;
   value: boolean;
   name: string;
-  loading: boolean;
+  loading?: boolean;
   error?: string;
   className?: string;
   handleChange: (_e: ValueType) => void;
