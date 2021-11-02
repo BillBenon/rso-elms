@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router';
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
-import Button from '../../components/Atoms/custom/Button';
 import AddCard from '../../components/Molecules/cards/AddCard';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
 import { moduleStore } from '../../store/modules.store';
 import { CommonCardDataType, ParamType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
@@ -39,57 +37,26 @@ function ProgramModules() {
   }, [getAllModuleStore.data?.data.data, id]);
 
   return (
-    <Tabs>
-      <Tab label="Overview">
-        <div className="text-right">
-          <Link to={`/dashboard/levels/add`}>
-            <Button>Add Level</Button>
-          </Link>
-        </div>
-        <section className="mt-4 flex flex-wrap justify-start gap-4">
-          {programModules.length <= 0 ? (
-            <NoDataAvailable
-              buttonLabel="Add new modules"
-              title={'No Modules available in this program'}
-              handleClick={() => history.push(`${url}/modules/add`)}
-              description="And the web just isnt the same without you. Lets get you back online!"
-            />
-          ) : (
-            <>
-              <AddCard
-                title={'Add new module'}
-                onClick={() => history.push(`${url}/modules/add`)}
-              />
-              {programModules?.map((module) => (
-                <ModuleCard course={module} key={module.code} />
-              ))}
-            </>
-          )}
-        </section>
-      </Tab>
-      <Tab label="Level 1">
-        <section className="mt-4 flex flex-wrap justify-start gap-4">
-          {programModules.length <= 0 ? (
-            <NoDataAvailable
-              buttonLabel="Add new modules"
-              title={'No Modules available in this program'}
-              handleClick={() => history.push(`${url}/modules/add`)}
-              description="And the web just isnt the same without you. Lets get you back online!"
-            />
-          ) : (
-            <>
-              <AddCard
-                title={'Add new module'}
-                onClick={() => history.push(`${url}/modules/add`)}
-              />
-              {programModules?.map((module) => (
-                <ModuleCard course={module} key={module.code} />
-              ))}
-            </>
-          )}
-        </section>
-      </Tab>
-    </Tabs>
+    <section className="mt-4 flex flex-wrap justify-start gap-4">
+      {programModules.length <= 0 ? (
+        <NoDataAvailable
+          buttonLabel="Add new modules"
+          title={'No Modules available in this program'}
+          handleClick={() => history.push(`${url}/modules/add`)}
+          description="And the web just isnt the same without you. Lets get you back online!"
+        />
+      ) : (
+        <>
+          <AddCard
+            title={'Add new module'}
+            onClick={() => history.push(`/dashboard/programs/${id}/modules/add`)}
+          />
+          {programModules?.map((module) => (
+            <ModuleCard course={module} key={module.code} />
+          ))}
+        </>
+      )}
+    </section>
   );
 }
 

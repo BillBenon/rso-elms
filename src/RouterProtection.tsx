@@ -13,7 +13,6 @@ import EvaluationTest from './views/evaluation/EvaluationTest';
 import ViewEvaluations from './views/evaluation/ViewEvaluations';
 import NewInstitution from './views/insitution/NewInstitution';
 import UpdateInstitution from './views/insitution/UpdateInstitution';
-import IntakeModulesView from './views/intakes/IntakeModules';
 import IntakesView from './views/intakes/Intakes';
 import Levels from './views/levels/Levels';
 import Modules from './views/modules';
@@ -60,7 +59,7 @@ const RouterProtection = () => {
       <Route path="/dashboard/programs" component={AcademicProgram} />
       <Route path="/dashboard/levels" component={Levels} />
       <Route path="/dashboard/intakes" component={IntakesView} />
-      <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} />
+      {/* <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} /> */}
 
       {/* end of academic admin pages */}
     </>

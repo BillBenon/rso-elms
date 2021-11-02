@@ -26,6 +26,7 @@ import { intakeStore } from '../../store/intake.store';
 import registrationControlStore from '../../store/registrationControl.store';
 import { CommonCardDataType, Link as LinkType, ValueType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
+import IntakePrograms from '../intake-program/IntakePrograms';
 
 const list: LinkType[] = [
   { to: 'home', title: 'Institution Admin' },
@@ -39,7 +40,7 @@ export default function Intakes() {
   const { data: userInfo } = authenticatorStore.authUser();
 
   const history = useHistory();
-  const { url } = useRouteMatch();
+  const { url, path } = useRouteMatch();
   const { search } = useLocation();
   const registrationControlId = new URLSearchParams(search).get('regId');
 
@@ -100,132 +101,149 @@ export default function Intakes() {
   }
 
   return (
-    <div>
-      <BreadCrumb list={list} />
-      <TableHeader
-        title={`${registrationControlId ? regControlName() : 'Intakes'}`}
-        totalItems={
-          registrationControlId ? `${intakes.length} intakes` : `${intakes.length}`
-        }
-        handleSearch={handleSearch}>
-        {registrationControlId && (
-          <Link
-            to={
-              !registrationControlId
-                ? `${url}/${registrationControlId}/add-intake`
-                : `${url}/${registrationControlId}/add-intake?regId=${registrationControlId}`
-            }>
-            <Button>Add Intake</Button>
-          </Link>
-        )}
-      </TableHeader>
-
-      <section className="flex flex-wrap justify-start gap-4 mt-2">
-        {intakes.map((intake, index) => (
-          <div key={intake.code + Math.random() * 10} className="p-1 mt-3">
-            <Tooltip
-              key={intake.code + Math.random() * 10}
-              trigger={
-                <div className="p-1 mt-3">
-                  <CommonCardMolecule data={intake} />
-                </div>
-              }
-              open>
-              <div className="w-96">
-                <div className="flex flex-col gap-6">
-                  <div className="flex flex-col gap-2">
-                    <Heading color="txt-secondary" fontSize="sm">
-                      Total Students Enroled
-                    </Heading>
-                    <Heading fontSize="sm" fontWeight="semibold">
-                      {data?.data.data[index].total_num_students || 0}
-                    </Heading>
-                  </div>
-                </div>
-
-                <div>
-                  <Link
-                    className="outline-none"
-                    to={`/dashboard/programs?intakeId=${data?.data.data[index].id}`}>
-                    <Button styleType="text">View programs</Button>
-                  </Link>
-                </div>
-                <div className="mt-4 space-x-4">
+    <Switch>
+      <Route
+        exact
+        path={`${path}`}
+        render={() => {
+          return (
+            <div>
+              <BreadCrumb list={list} />
+              <TableHeader
+                title={`${registrationControlId ? regControlName() : 'Intakes'}`}
+                totalItems={
+                  registrationControlId
+                    ? `${intakes.length} intakes`
+                    : `${intakes.length}`
+                }
+                handleSearch={handleSearch}>
+                {registrationControlId && (
                   <Link
                     to={
                       !registrationControlId
-                        ? `${url}/${data?.data.data[index].id}/edit`
-                        : `${url}/${data?.data.data[index].id}/edit?regId=${registrationControlId}`
+                        ? `${url}/${registrationControlId}/add-intake`
+                        : `${url}/${registrationControlId}/add-intake?regId=${registrationControlId}`
                     }>
-                    <Button>Edit Intake</Button>
+                    <Button>Add Intake</Button>
                   </Link>
-                  <Button styleType="outline">Change Status</Button>
-                </div>
-              </div>
-            </Tooltip>
-          </div>
-        ))}
+                )}
+              </TableHeader>
 
-        {isLoading && <Loader />}
+              <section className="flex flex-wrap justify-start gap-4 mt-2">
+                {intakes.map((intake, index) => (
+                  <div key={intake.code + Math.random() * 10} className="p-1 mt-3">
+                    <Tooltip
+                      key={intake.code + Math.random() * 10}
+                      trigger={
+                        <div className="p-1 mt-3">
+                          <CommonCardMolecule data={intake} />
+                        </div>
+                      }
+                      open>
+                      <div className="w-96">
+                        <div className="flex flex-col gap-6">
+                          <div className="flex flex-col gap-2">
+                            <Heading color="txt-secondary" fontSize="sm">
+                              Total Students Enroled
+                            </Heading>
+                            <Heading fontSize="sm" fontWeight="semibold">
+                              {data?.data.data[index].total_num_students || 0}
+                            </Heading>
+                          </div>
+                        </div>
 
-        {!isLoading && intakes && intakes.length <= 0 && (
-          <NoDataAvailable
-            fill={false}
-            icon="academy"
-            buttonLabel={
-              registrationControlId ? 'Add Intake ' : 'Go to registration control'
-            }
-            title={
-              registrationControlId
-                ? 'No intake available in this reg Control'
-                : 'No intake available'
-            }
-            handleClick={() => {
-              if (registrationControlId)
-                history.push(
-                  `${url}/${registrationControlId}/add-intake?regId=${registrationControlId}`,
-                );
-              else history.push('/dashboard/registration-control');
-            }}
-            description="Oops! No data found"
-          />
-        )}
-      </section>
+                        <div>
+                          <Link
+                            className="outline-none"
+                            to={`${url}/programs/${data?.data.data[index].id}`}>
+                            <Button styleType="text">View programs</Button>
+                          </Link>
+                        </div>
+                        <div className="mt-4 space-x-4">
+                          <Link
+                            to={
+                              !registrationControlId
+                                ? `${url}/${data?.data.data[index].id}/edit`
+                                : `${url}/${data?.data.data[index].id}/edit?regId=${registrationControlId}`
+                            }>
+                            <Button>Edit Intake</Button>
+                          </Link>
+                          <Button styleType="outline">Change Status</Button>
+                        </div>
+                      </div>
+                    </Tooltip>
+                  </div>
+                ))}
 
-      <Switch>
-        {/* add intake to reg control */}
-        <Route
-          exact
-          path={`${url}/:id/add-intake`}
-          render={() => {
-            return (
-              <PopupMolecule
-                closeOnClickOutSide={false}
-                title="New intake"
-                open
-                onClose={handleClose}>
-                <NewIntake handleSuccess={intakeCreated} />
-              </PopupMolecule>
-            );
-          }}
-        />
-        <Route
-          exact
-          path={`${url}/:id/edit`}
-          render={() => {
-            return (
-              <PopupMolecule
-                closeOnClickOutSide={false}
-                title="Update intake"
-                open
-                onClose={handleClose}>
-                <UpdateIntake handleSuccess={handleClose} />
-              </PopupMolecule>
-            );
-          }}
-        />
-        ;
-      </Switch>
-    </div>
+                {isLoading && <Loader />}
+
+                {!isLoading && intakes && intakes.length <= 0 && (
+                  <NoDataAvailable
+                    fill={false}
+                    icon="academy"
+                    buttonLabel={
+                      registrationControlId ? 'Add Intake ' : 'Go to registration control'
+                    }
+                    title={
+                      registrationControlId
+                        ? 'No intake available in this reg Control'
+                        : 'No intake available'
+                    }
+                    handleClick={() => {
+                      if (registrationControlId)
+                        history.push(
+                          `${url}/${registrationControlId}/add-intake?regId=${registrationControlId}`,
+                        );
+                      else history.push('/dashboard/registration-control');
+                    }}
+                    description="Oops! No data found"
+                  />
+                )}
+              </section>
+
+              <Switch>
+                {/* add intake to reg control */}
+                <Route
+                  exact
+                  path={`${url}/:id/add-intake`}
+                  render={() => {
+                    return (
+                      <PopupMolecule
+                        closeOnClickOutSide={false}
+                        title="New intake"
+                        open
+                        onClose={handleClose}>
+                        <NewIntake handleSuccess={intakeCreated} />
+                      </PopupMolecule>
+                    );
+                  }}
+                />
+                <Route
+                  exact
+                  path={`${url}/:id/edit`}
+                  render={() => {
+                    return (
+                      <PopupMolecule
+                        closeOnClickOutSide={false}
+                        title="Update intake"
+                        open
+                        onClose={handleClose}>
+                        <UpdateIntake handleSuccess={handleClose} />
+                      </PopupMolecule>
+                    );
+                  }}
+                />
+              </Switch>
+            </div>
+          );
+        }}
+      />
+      <Route
+        path={`${path}/programs/:id`}
+        render={() => {
+          return <IntakePrograms />;
+        }}
+      />
+    </Switch>
   );
 }
