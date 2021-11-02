@@ -16,7 +16,7 @@ export default function SearchMolecule<T>({
   width = 'w-72',
 }: ISearchMolecule<T>) {
   return (
-    <div className={`rounded-lg border-2 border-bcolor flex items-center ${width}`}>
+    <div className={`rounded-lg border-2 border-tertiary flex items-center ${width}`}>
       <Icon name="search" />
       <Input
         name="search"

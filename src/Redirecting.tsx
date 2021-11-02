@@ -29,7 +29,8 @@ export default function Redirecting() {
   const notAllowed =
     data?.data.data.user_type === UserType.SUPER_ADMIN ||
     data?.data.data.user_type === UserType.ADMIN ||
-    data?.data.data.user_type === UserType.INSTRUCTOR
+    data?.data.data.user_type === UserType.INSTRUCTOR ||
+    data?.data.data.user_type === UserType.STUDENT
       ? false
       : true;
   useEffect(() => {
@@ -45,6 +46,8 @@ export default function Redirecting() {
         redirectTo('/dashboard/divisions');
       } else if (data?.data.data.user_type === UserType.INSTRUCTOR) {
         redirectTo('/dashboard/view-evaluation');
+      } else if (data?.data.data.user_type === UserType.STUDENT) {
+        redirectTo('/dashboard/evaluation-test');
       }
     }
     setUserNotAllowed(notAllowed);

@@ -19,6 +19,12 @@ class AcademicYearService {
     return await adminstrationAxios.get(`/yers/getAcademicYearsByAcademy/${academyId}`);
   }
 
+  public async getAcademicYearById(
+    id: string,
+  ): Promise<AxiosResponse<Response<IAcademicYearInfo>>> {
+    return await adminstrationAxios.get(`yers/getAcademicYearById/${id}`);
+  }
+
   public async modifyAcademicYear(
     yearInfo: ICreateAcademicYear,
   ): Promise<AxiosResponse<Response<IAcademicYearInfo>>> {

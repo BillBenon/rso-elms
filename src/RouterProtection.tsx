@@ -9,16 +9,15 @@ import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';
 import CalendarView from './views/calendar/Calendar';
 import Divisions from './views/divisions/Divisions';
+import EvaluationTest from './views/evaluation/EvaluationTest';
 import ViewEvaluations from './views/evaluation/ViewEvaluations';
 import NewInstitution from './views/insitution/NewInstitution';
 import UpdateInstitution from './views/insitution/UpdateInstitution';
-import IntakeModulesView from './views/intakes/IntakeModules';
 import IntakesView from './views/intakes/Intakes';
 import Levels from './views/levels/Levels';
 import Modules from './views/modules';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicProgram from './views/programs/AcademicPrograms';
-import NewAcademicProgram from './views/programs/NewAcademicProgram';
 import Roles from './views/roles/Roles';
 import ViewRole from './views/roles/ViewRole';
 import Subjects from './views/subjects';
@@ -58,10 +57,9 @@ const RouterProtection = () => {
       <Route path="/dashboard/divisions" component={Divisions} />
       <Route path="/dashboard/academic-years" component={AcademicYears} />
       <Route path="/dashboard/programs" component={AcademicProgram} />
-      <Route path="/dashboard/programs/new" component={NewAcademicProgram} />
       <Route path="/dashboard/levels" component={Levels} />
       <Route path="/dashboard/intakes" component={IntakesView} />
-      <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} />
+      {/* <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} /> */}
 
       {/* end of academic admin pages */}
     </>
@@ -75,6 +73,13 @@ const RouterProtection = () => {
     </>
   );
 
+  const StudentRoutes = () => (
+    <>
+      {/* start of student pages */}
+      <Route path="/dashboard/evaluation-test" component={EvaluationTest} />
+      {/* end of student pages */}
+    </>
+  );
   return (
     <>
       {(authUser?.user_type == UserType.SUPER_ADMIN || import.meta.env.DEV) && (
@@ -84,6 +89,7 @@ const RouterProtection = () => {
         {authUser?.user_type === UserType.SUPER_ADMIN && InstitutionAdminRoutes()}
         {authUser?.user_type === UserType.ADMIN && AcademicAdminRoutes()}
         {authUser?.user_type === UserType.INSTRUCTOR && InstructorRoutes()}
+        {authUser?.user_type === UserType.STUDENT && StudentRoutes()}
       </Dashboard>
       {/* protected routes  */}
 
