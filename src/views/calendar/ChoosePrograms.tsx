@@ -1,28 +1,44 @@
 import React from 'react';
-import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+import {
+  Link as BrowserLink,
+  Route,
+  Switch,
+  useHistory,
+  useRouteMatch,
+} from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
+import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import NewEvent from '../../components/Organisms/calendar/NewEvent';
+import NewVenue from '../../components/Organisms/calendar/NewVenue';
 import programStore from '../../store/program.store';
-import { CommonCardDataType } from '../../types';
+import { CommonCardDataType, Link } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
+
+const list: Link[] = [
+  { to: 'home', title: 'home' },
+  { to: 'academy', title: 'Academy' },
+  { to: `calendar`, title: 'Schedule' },
+];
 
 export default function ChoosePrograms() {
   const { data, isLoading } = programStore.fetchPrograms();
   const history = useHistory();
-  const { url } = useRouteMatch();
+  const { path } = useRouteMatch();
 
   const tabs = [
     {
       label: 'Program timetable',
-      href: `${url}`,
+      href: `${path}`,
     },
     {
       label: 'Instructors timetable',
-      href: `${url}/instructors`,
+      href: `${path}/instructors`,
     },
   ];
   let programs: CommonCardDataType[] = [];
@@ -43,38 +59,65 @@ export default function ChoosePrograms() {
     programs.push(prog);
   });
 
+  const handleClose = () => {
+    history.goBack();
+  };
+
   return (
     <div>
+      <BreadCrumb list={list} />
       <TableHeader totalItems={`${programs.length} programs`} title={'TimeTable'}>
         <div className="flex gap-4">
-          <Button>Add event</Button>
-          <Button styleType="outline">Add Venue</Button>
+          <BrowserLink to={`${path}/event/new`}>
+            <Button>Add event</Button>
+          </BrowserLink>
+          <BrowserLink to={`${path}/venue/new`}>
+            <Button styleType="outline">Add Venue</Button>
+          </BrowserLink>
         </div>
       </TableHeader>
       <TabNavigation tabs={tabs}>
         <Switch>
           <Route
-            exact
-            path={`${url}`}
+            path={`${path}`}
             render={() => (
-              <div className="flex gap-4 flex-wrap">
-                {programs.length === 0 && isLoading ? (
-                  <Loader />
-                ) : (
-                  programs.map((program) => (
-                    <CommonCardMolecule
-                      key={program.id}
-                      data={program}
-                      handleClick={() =>
-                        history.push(`/dashboard/calendar/p/${program.id}`)
-                      }
-                    />
-                  ))
-                )}
-              </div>
+              <>
+                <div className="flex gap-4 flex-wrap">
+                  {programs.length === 0 && isLoading ? (
+                    <Loader />
+                  ) : (
+                    programs.map((program) => (
+                      <CommonCardMolecule
+                        key={program.id}
+                        data={program}
+                        handleClick={() =>
+                          history.push(`/dashboard/calendar/p/${program.id}`)
+                        }
+                      />
+                    ))
+                  )}
+                </div>
+                <Route
+                  exact
+                  path={`${path}/event/new`}
+                  render={() => (
+                    <PopupMolecule title="New Event" open onClose={handleClose}>
+                      <NewEvent />
+                    </PopupMolecule>
+                  )}
+                />
+                <Route
+                  exact
+                  path={`${path}/venue/new`}
+                  render={() => (
+                    <PopupMolecule title="New Venue" open onClose={handleClose}>
+                      <NewVenue />
+                    </PopupMolecule>
+                  )}
+                />
+              </>
             )}
           />
-          <Route exact path={`${url}/admins`} render={() => <h2>Comming soon...</h2>} />
         </Switch>
       </TabNavigation>
     </div>

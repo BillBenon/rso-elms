@@ -39,7 +39,6 @@ export default function Sidebar() {
       },
       { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
       { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
-      { title: 'Calendar', to: '/dashboard/calendar', icon: 'calendar' },
       { title: 'Academic years', to: '/dashboard/academic-years', icon: 'program' },
       // { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
       // { title: 'Subjects', to: '/dashboard/subjects', icon: 'module' },
