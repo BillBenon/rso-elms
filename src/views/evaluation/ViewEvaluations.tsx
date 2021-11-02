@@ -32,33 +32,6 @@ export default function ViewEvaluations() {
   //   },
   // ];
 
-  const data2 = [
-    {
-      id: 1,
-      'Student code': '034909',
-      status: 'active',
-      score: '25',
-      code: 'Exam',
-      'time used': '20:09',
-    },
-    {
-      id: 2,
-      'Student code': '034909',
-      status: 'pending',
-      score: '25',
-      code: 'Exam',
-      'time used': '20:09',
-    },
-    {
-      id: 3,
-      'Student code': '034909',
-      status: 'inactive',
-      score: '25',
-      code: 'Exam',
-      'time used': '20:09',
-    },
-  ];
-
   useEffect(() => {
     let formattedEvals: CommonCardDataType[] = [];
     data?.data.data.map((evaluation) => {
@@ -76,8 +49,6 @@ export default function ViewEvaluations() {
     });
     setEvaluations(formattedEvals);
   }, [data?.data.data]);
-
-  console.log(data?.data.data);
 
   return (
     <Switch>

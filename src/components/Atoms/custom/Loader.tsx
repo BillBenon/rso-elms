@@ -28,7 +28,7 @@ export default function Loader() {
     "We're making you a cookie.",
     "I swear it's almost done.",
     'If you type Google into Google you can break the internet',
-    'If I’m not back in 1 minutes, just wait longer.',
+    'Hold on a minute.',
     "We're working very Hard .... Really",
   ];
 

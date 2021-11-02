@@ -11,7 +11,6 @@ export type Color =
   | 'success'
   | 'txt-primary'
   | 'txt-secondary'
-  | 'bcolor'
   | 'none'
   | 'gray'
   | 'lightgray';

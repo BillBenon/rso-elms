@@ -15,7 +15,7 @@ export default function SearchMolecule<T>({
   placeholder = 'Search here',
   width = 'w-72',
 }: ISearchMolecule<T>) {
-  const [fcolor, setFcolor] = useState<string>('bcolor');
+  const [fcolor, setFcolor] = useState<string>('tertiary');
 
   return (
     <div className={`rounded-lg border-2 border-${fcolor} flex items-center ${width}`}>

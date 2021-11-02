@@ -91,14 +91,6 @@ function DateMolecule({
       selectedDate = formatDateToYyMmDd(date);
     }
     handleChange({ name: name, value: selectedDate });
-
-    // const hours = dateState.Hours < 10 ? '0' + dateState.Hours : '' + dateState.Hours;
-    // const days = dateState.Day < 10 ? '0' + dateState.Day : '' + dateState.Day;
-    // const months = dateState.Month < 10 ? '0' + dateState.Month : '' + dateState.Month;
-    // const minutes =
-    //   dateState.Minutes < 10 ? '0' + dateState.Minutes : '' + dateState.Minutes;
-    // let selectedDate: string = `${dateState.Year}-${months}-${days} ${hours}:${minutes}:00`;
-    // handleChange({ name: name, value: selectedDate });
   };
 
   useEffect(() => {
