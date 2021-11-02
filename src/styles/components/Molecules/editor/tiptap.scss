@@ -3,5 +3,44 @@
     
     .ProseMirror{
         @apply px-4 outline-none;
+
+        pre{
+            @apply bg-tertiary rounded p-1 px-3;
+        }
+        blockquote{
+            @apply border-l-4 border-solid px-3 ml-2 mt-2 bg-gray-50 py-2;
+        }
+
+        p{
+            @apply my-5;
+        }
+
+        ul,ol{
+            @apply pl-8;
+            p{
+                @apply my-2 box-border;
+            }
+        }
+
+
+
+        ul{
+            @apply list-disc ;
+        }
+        ol{
+            @apply list-decimal;
+            counter-reset: item ;
+            li {
+                display: block; 
+                p{
+                    margin-left:.5rem;
+                    display: inline-flex;
+                }
+            }
+            li:before { 
+                content: counters(item, ".") ".";
+                counter-increment: item 
+            }
+        }
     }
 }

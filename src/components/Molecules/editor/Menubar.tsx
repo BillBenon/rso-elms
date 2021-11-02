@@ -31,26 +31,21 @@ export default function MenuBar({ editor }: IProps) {
         className={editor.isActive('strike') ? 'is-active' : ''}>
         <Icon name="text-strikethrough" />
       </button>
-      <button
-        onClick={() => editor.chain().focus().toggleCode().run()}
-        className={editor.isActive('code') ? 'is-active' : ''}>
-        <Icon name="code" />
-      </button>
       {/* <button onClick={() => editor.chain().focus().unsetAllMarks().run()}>
         clear marks
         </button>
         <button onClick={() => editor.chain().focus().clearNodes().run()}>
         clear nodes
       </button> */}
-      <button
+      {/* <button
         onClick={() => editor.chain().focus().setParagraph().run()}
         className={editor.isActive('paragraph') ? 'is-active' : ''}>
         <Icon name="paragraph" />
-      </button>
+      </button> */}
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}>
-        <Icon name="heading" />
+        <Icon name="heading-h1" />
       </button>
       {/* <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
@@ -60,7 +55,7 @@ export default function MenuBar({ editor }: IProps) {
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
         className={editor.isActive('heading', { level: 3 }) ? 'is-active' : ''}>
-        <Icon name="heading" />
+        <Icon name="heading-h2" />
       </button>
       {/* <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
@@ -70,7 +65,7 @@ export default function MenuBar({ editor }: IProps) {
       <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
         className={editor.isActive('heading', { level: 5 }) ? 'is-active' : ''}>
-        <Icon name="heading" />
+        <Icon name="heading-h3" />
       </button>
       {/* <button
         onClick={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
