@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 
@@ -21,6 +21,11 @@ const SignInForm = () => {
     password: '',
   });
 
+  function logout() {
+    queryClient.clear();
+    cookie.eraseCookie('jwt_info');
+  }
+
   const redirectTo = (path: string) => {
     history.push(path);
   };
@@ -36,8 +41,7 @@ const SignInForm = () => {
     setLoading(true);
     const toastId = toast.loading('Authenticating...');
     e.preventDefault();
-    queryClient.clear();
-    cookie.eraseCookie('jwt_info');
+    logout();
 
     await mutateAsync(details, {
       onSuccess(data) {
@@ -54,6 +58,7 @@ const SignInForm = () => {
     });
   }
 
+  useEffect(() => logout(), []);
   return (
     <>
       <div className="py-11">

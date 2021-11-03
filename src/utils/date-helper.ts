@@ -1,3 +1,5 @@
+import moment from 'moment';
+
 export const monthNum: Record<number, string> = {
   1: 'January',
   2: 'February',
@@ -50,7 +52,10 @@ export function formatDateToYyMmDd(date: string) {
 }
 
 export function formatDateToIso(date: string | Date): string {
-  let formatedDate = new Date(date).toISOString().split('T').join(' ');
+  let formatedDate = moment(new Date(`${date} UTC`))
+    .toISOString()
+    .split('T')
+    .join(' ');
 
   return formatedDate.substring(0, formatedDate.length - 5);
 }

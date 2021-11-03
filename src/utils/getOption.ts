@@ -1,4 +1,5 @@
 import { SelectData } from '../types';
+import { IEvaluationStatus } from '../types/services/evaluation.types';
 import { IntakeStatus } from '../types/services/intake.types';
 import { GenericStatus } from './../types/services/common.types';
 
@@ -54,7 +55,7 @@ export function getDropDownStatusOptions(status: any): SelectData[] {
 }
 
 export function advancedTypeChecker(
-  status: GenericStatus | IntakeStatus,
+  status: GenericStatus | IntakeStatus | IEvaluationStatus,
 ): 'success' | 'warning' | 'error' {
   let successStatus = ['active', 'completed', 'opened', 'started'];
   let errorStatus = ['inactive', 'closed', 'voided', 'suspended'];
