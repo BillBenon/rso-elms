@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 
 import { intakeProgramService } from '../services/administration/IntakeProgram.service';
 
@@ -7,6 +7,9 @@ class IntakeProgramStore {
     return useQuery(['students/intakeProgramId', intakeProgramId], () =>
       intakeProgramService.getStudentsByIntakeProgram(intakeProgramId),
     );
+  }
+  addLevelsToIntakeProgram() {
+    return useMutation(intakeProgramService.addLevelsToIntakeProgram);
   }
 }
 

@@ -178,15 +178,7 @@ export default function AcademicYears() {
         exact
         path={`${path}/:id/period`}
         render={() => {
-          return (
-            // <PopupMolecule
-            //   closeOnClickOutSide={false}
-            //   title="Academic period"
-            //   open
-            //   onClose={history.goBack}>
-            <AcademicPeriod />
-            // </PopupMolecule>
-          );
+          return <AcademicPeriod />;
         }}
       />
       {/* add academic period popup */}
