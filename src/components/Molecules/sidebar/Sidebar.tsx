@@ -7,7 +7,6 @@ import AcademyProfileCard from '../cards/AcademyProfileCard';
 
 export default function Sidebar() {
   const [authUser, setAuthUser] = useState<UserInfo>();
-  // const [organization, setOrganization] = useState({ name: '', photo: '' });
   const { data } = authenticatorStore.authUser();
 
   useEffect(() => {
