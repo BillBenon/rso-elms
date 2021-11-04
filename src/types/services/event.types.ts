@@ -32,3 +32,5 @@ export interface CreateVenue {
   status: GenericStatus;
   venueType: venueType;
 }
+
+export interface VenueInfo extends CreateVenue, Table {}
