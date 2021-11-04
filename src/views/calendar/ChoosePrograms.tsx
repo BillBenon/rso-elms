@@ -19,6 +19,8 @@ import NewVenue from '../../components/Organisms/calendar/NewVenue';
 import programStore from '../../store/program.store';
 import { CommonCardDataType, Link } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
+import CalendarView from './Calendar';
+import ProgramLevelsTimeTable from './ProgramLevelsTimeTable';
 
 const list: Link[] = [
   { to: 'home', title: 'home' },
@@ -66,22 +68,25 @@ export default function ChoosePrograms() {
   return (
     <div>
       <BreadCrumb list={list} />
-      <TableHeader totalItems={`${programs.length} programs`} title={'TimeTable'}>
-        <div className="flex gap-4">
-          <BrowserLink to={`${path}/event/new`}>
-            <Button>Add event</Button>
-          </BrowserLink>
-          <BrowserLink to={`${path}/venue/new`}>
-            <Button styleType="outline">Add Venue</Button>
-          </BrowserLink>
-        </div>
-      </TableHeader>
-      <TabNavigation tabs={tabs}>
-        <Switch>
-          <Route
-            path={`${path}`}
-            render={() => (
-              <>
+
+      <Switch>
+        <Route exact path={`${path}/p/:id`} component={ProgramLevelsTimeTable} />
+        <Route exact path={`${path}/p/:id/calendar`} component={CalendarView} />
+        <Route
+          path={`${path}`}
+          render={() => (
+            <>
+              <TableHeader totalItems={`${programs.length} programs`} title={'Timetable'}>
+                <div className="flex gap-4">
+                  <BrowserLink to={`${path}/event/new`}>
+                    <Button>Add event</Button>
+                  </BrowserLink>
+                  <BrowserLink to={`${path}/venue/new`}>
+                    <Button styleType="outline">Add Venue</Button>
+                  </BrowserLink>
+                </div>
+              </TableHeader>
+              <TabNavigation tabs={tabs}>
                 <div className="flex gap-4 flex-wrap">
                   {programs.length === 0 && isLoading ? (
                     <Loader />
@@ -91,7 +96,7 @@ export default function ChoosePrograms() {
                         key={program.id}
                         data={program}
                         handleClick={() =>
-                          history.push(`/dashboard/calendar/p/${program.id}`)
+                          history.push(`/dashboard/schedule/p/${program.id}`)
                         }
                       />
                     ))
@@ -115,11 +120,11 @@ export default function ChoosePrograms() {
                     </PopupMolecule>
                   )}
                 />
-              </>
-            )}
-          />
-        </Switch>
-      </TabNavigation>
+              </TabNavigation>
+            </>
+          )}
+        />
+      </Switch>
     </div>
   );
 }
