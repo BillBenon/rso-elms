@@ -1,8 +1,12 @@
 import React, { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useHistory } from 'react-router';
 
+import { eventStore } from '../../../store/timetable/event.store';
 import { GenericStatus, ValueType } from '../../../types';
 import { CreateEvent, eventCategory } from '../../../types/services/event.types';
 import { getDropDownStatusOptions } from '../../../utils/getOption';
+import { randomString } from '../../../utils/random-text';
 import Button from '../../Atoms/custom/Button';
 import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../Molecules/input/InputMolecule';
@@ -10,12 +14,16 @@ import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
 
 export default function NewEvent() {
   const [values, setvalues] = useState<CreateEvent>({
-    code: '',
+    code: randomString(8).toUpperCase(),
     description: '',
     eventCategory: eventCategory.VISIT,
     name: '',
     status: GenericStatus.ACTIVE,
   });
+
+  const history = useHistory();
+
+  const { mutateAsync, isLoading } = eventStore.createEvent();
 
   function handleChange(e: ValueType) {
     setvalues((val) => ({ ...val, [e.name]: e.value }));
@@ -23,6 +31,15 @@ export default function NewEvent() {
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
+    await mutateAsync(values, {
+      async onSuccess(_data) {
+        toast.success('Event was created successfully');
+        history.goBack();
+      },
+      onError() {
+        toast.error('error occurred please try again');
+      },
+    });
   }
 
   return (
@@ -52,7 +69,9 @@ export default function NewEvent() {
           Event Description
         </TextAreaMolecule>
         <div className="pt-4">
-          <Button type="submit">Save</Button>
+          <Button type="submit" disabled={isLoading}>
+            Save
+          </Button>
         </div>
       </form>
     </div>

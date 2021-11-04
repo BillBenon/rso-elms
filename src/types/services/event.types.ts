@@ -1,4 +1,4 @@
-import { GenericStatus } from '..';
+import { GenericStatus, Table } from '..';
 
 export interface CreateEvent {
   code: string;
@@ -6,6 +6,10 @@ export interface CreateEvent {
   eventCategory: eventCategory;
   name: string;
   status: GenericStatus;
+}
+
+export interface EventInfo extends CreateEvent, Table {
+  event_category: eventCategory;
 }
 
 export enum eventCategory {
