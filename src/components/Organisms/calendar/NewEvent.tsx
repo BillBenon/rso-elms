@@ -13,6 +13,8 @@ import InputMolecule from '../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
 
 export default function NewEvent() {
+  const history = useHistory();
+
   const [values, setvalues] = useState<CreateEvent>({
     code: randomString(8).toUpperCase(),
     description: '',
@@ -20,8 +22,6 @@ export default function NewEvent() {
     name: '',
     status: GenericStatus.ACTIVE,
   });
-
-  const history = useHistory();
 
   const { mutateAsync, isLoading } = eventStore.createEvent();
 
