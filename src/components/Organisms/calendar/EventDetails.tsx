@@ -8,6 +8,5 @@ interface Param {
 export default function EventDetails() {
   const { eventId } = useParams<Param>();
 
-  console.log('event id', eventId);
   return <div></div>;
 }

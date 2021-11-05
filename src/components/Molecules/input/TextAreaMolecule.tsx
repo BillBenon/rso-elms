@@ -9,7 +9,7 @@ interface ITextareaMolecule<T> extends CommonInputProps<T> {
   name: string;
   value: string | undefined;
   handleChange: (_e: ValueType) => void;
-  children: React.ReactNode;
+  children?: React.ReactNode;
   error?: string;
   placeholder?: string;
   type?: string;
@@ -26,9 +26,11 @@ export default function TextAreaMolecule<T>({
 }: ITextareaMolecule<T>) {
   return (
     <div className="flex flex-col gap-3">
-      <ILabel size="sm" weight="medium">
-        {children}
-      </ILabel>
+      {children ? (
+        <ILabel size="sm" weight="medium">
+          {children}
+        </ILabel>
+      ) : null}
       <Textarea
         {...attrs}
         name={name}

@@ -33,9 +33,9 @@ import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 // import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps) {
-  const { data } = moduleStore.getAllModules();
   const [moduleId, setModuleId] = useState<string>('');
   const authUser = authenticatorStore.authUser().data?.data.data;
+  const { data } = moduleStore.getModulesByAcademy(authUser?.academy.id.toString() || '');
   let subjects;
 
   ({ data: subjects } = subjectStore.getSubjectsByModule(moduleId));
@@ -43,6 +43,7 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
   const [details, setDetails] = useState<IEvaluationCreate>({
     access_type: IAccessTypeEnum.PUBLIC,
     academy_id: authUser?.academy.id.toString() || '',
+    instructor_id: authUser?.id.toString() || '',
     allow_submission_time: '',
     class_ids: '',
     id: '',
@@ -72,7 +73,7 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
   }
 
   function handleEditorChange(editor: Editor) {
-    console.log(editor.getHTML());
+    // console.log(editor.getHTML());
     setDetails((details) => ({ ...details, exam_instruction: editor.getHTML() }));
   }
 
@@ -81,7 +82,7 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
 
     mutate(details, {
       onSuccess: (data) => {
-        toast.success('Evaluation created');
+        toast.success('Evaluation created', { duration: 5000 });
         localStorage.setItem('evaluationId', JSON.stringify(data?.data.data.id));
         handleNext();
       },
@@ -111,7 +112,7 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
           options={getDropDownStatusOptions(IEvaluationTypeEnum)}>
           Evaluation type
         </DropdownMolecule>
-        <RadioMolecule
+        {/* <RadioMolecule
           className="pb-4"
           value={details.classification}
           name="classification"
@@ -121,7 +122,7 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
           ]}
           handleChange={handleChange}>
           Evaluation classification
-        </RadioMolecule>
+        </RadioMolecule> */}
         <DropdownMolecule
           width="64"
           name="module"
@@ -206,7 +207,7 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
                 </DropdownMolecule>
 
                 <InputMolecule
-                  width="28"
+                  width="24"
                   type="number"
                   name="maximum_file_size"
                   value={details.maximum_file_size}
@@ -237,7 +238,7 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
           <Tiptap content={details.exam_instruction} handleChange={handleEditorChange} />
         </div>
         <InputMolecule
-          width="28"
+          style={{ width: '6rem' }}
           type="number"
           name="total_mark"
           value={details.total_mark}
@@ -247,12 +248,12 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
         {details.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
           <>
             <InputMolecule
-              width="16"
+              style={{ width: '6rem' }}
               type="text"
               name="time_limit"
               value={details.time_limit}
               handleChange={handleChange}>
-              Time limit (In mins)
+              Time limit (in mins)
             </InputMolecule>
             <DateMolecule
               startYear={new Date().getFullYear()}

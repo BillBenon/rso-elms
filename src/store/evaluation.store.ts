@@ -11,8 +11,20 @@ class EvaluationStore {
     return useMutation(evaluationService.createEvaluationQuestion);
   }
 
-  getEvaluations() {
-    return useQuery('evaluations', evaluationService.fetchEvaluations);
+  createEvaluationSettings() {
+    return useMutation(evaluationService.createEvaluationSettings);
+  }
+
+  getEvaluations(academy: string, instructor: string) {
+    return useQuery('evaluations', () =>
+      evaluationService.fetchEvaluationsByInstructorAndAcademy(academy, instructor),
+    );
+  }
+
+  getEvaluationsBySubject(subject: string) {
+    return useQuery(['evaluations', subject], () =>
+      evaluationService.fetchEvaluationsBySubject(subject),
+    );
   }
 
   getEvaluationById(id: string) {

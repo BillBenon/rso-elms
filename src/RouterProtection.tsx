@@ -56,9 +56,8 @@ const RouterProtection = () => {
       <Route path="/dashboard/subjects" component={Subjects} />
       <Route path="/dashboard/schedule" component={ChoosePrograms} />
       <Route path="/dashboard/calendar" component={CalendarView} />
-      <Route exact path="/dashboard/evaluations" component={ViewEvaluations} />
-      <Route exact path="/dashboard/evaluation/new" component={NewEvaluation} />
-      <Route path="/dashboard/evaluations/:id" component={EvaluationContent} />
+      {/* <Route exact path="/dashboard/evaluations" component={ViewEvaluations} />
+      <Route exact path="/dashboard/evaluation/new" component={NewEvaluation} /> */}
       <Route path="/dashboard/registration-control" component={RegistrationControl} />
       <Route path="/dashboard/divisions" component={Divisions} />
       <Route path="/dashboard/academic-years" component={AcademicYears} />
@@ -75,7 +74,9 @@ const RouterProtection = () => {
   const InstructorRoutes = () => (
     <>
       {/* start of instructor pages */}
-      <Route path="/dashboard/view-evaluation" component={ViewEvaluations} />
+      <Route exact path="/dashboard/evaluations" component={ViewEvaluations} />
+      <Route exact path="/dashboard/evaluation/new" component={NewEvaluation} />
+      <Route path="/dashboard/evaluations/:id" component={EvaluationContent} />
       {/* end of instructor pages */}
     </>
   );
@@ -83,7 +84,7 @@ const RouterProtection = () => {
   const StudentRoutes = () => (
     <>
       {/* start of student pages */}
-      <Route path="/dashboard/evaluation-test" component={EvaluationTest} />
+      <Route path="/dashboard/student/evaluations" component={EvaluationTest} />
       {/* end of student pages */}
     </>
   );
