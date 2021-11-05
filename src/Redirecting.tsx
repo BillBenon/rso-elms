@@ -31,7 +31,6 @@ export default function Redirecting() {
       data?.data.data.user_type === UserType.INSTRUCTOR
         ? false
         : true;
-    console.log('taking effect', data?.data.data.user_type === UserType.ADMIN);
     if (data?.data.data.user_type === UserType.SUPER_ADMIN)
       redirectTo('/dashboard/users');
     // if (experiences?.data.data) {
@@ -44,9 +43,9 @@ export default function Redirecting() {
       // else redirectTo('/dashboard/divisions');
       redirectTo('/dashboard/divisions');
     } else if (data?.data.data.user_type === UserType.INSTRUCTOR) {
-      redirectTo('/dashboard/view-evaluation');
+      redirectTo('/dashboard/evaluations');
     } else if (data?.data.data.user_type === UserType.STUDENT) {
-      redirectTo('/dashboard/evaluation-test');
+      redirectTo('/dashboard/student/evaluations');
     }
     // }
 
