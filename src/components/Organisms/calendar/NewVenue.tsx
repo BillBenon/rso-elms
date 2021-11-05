@@ -1,5 +1,8 @@
 import React, { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useHistory } from 'react-router-dom';
 
+import { venueStore } from '../../../store/timetable/venue.store';
 import { GenericStatus, ValueType } from '../../../types';
 import { CreateVenue, venueType } from '../../../types/services/event.types';
 import { getDropDownStatusOptions } from '../../../utils/getOption';
@@ -8,6 +11,8 @@ import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../Molecules/input/InputMolecule';
 
 export default function NewVenue() {
+  const history = useHistory();
+
   const [values, setvalues] = useState<CreateVenue>({
     venueType: venueType.CLASS,
     name: '',
@@ -18,8 +23,19 @@ export default function NewVenue() {
     setvalues((val) => ({ ...val, [e.name]: e.value }));
   }
 
+  const { mutateAsync, isLoading } = venueStore.createVenue();
+
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
+    await mutateAsync(values, {
+      async onSuccess(_data) {
+        toast.success('Venue was created successfully');
+        history.goBack();
+      },
+      onError() {
+        toast.error('error occurred please try again');
+      },
+    });
   }
 
   return (
@@ -30,7 +46,7 @@ export default function NewVenue() {
           placeholder="Venue name"
           value={values.name}
           handleChange={handleChange}>
-          Intake title
+          Venu name
         </InputMolecule>
         <DropdownMolecule
           name="venueType"
@@ -40,7 +56,9 @@ export default function NewVenue() {
           Venue type
         </DropdownMolecule>
         <div className="pt-4">
-          <Button type="submit">Save</Button>
+          <Button disabled={isLoading} type="submit">
+            Save
+          </Button>
         </div>
       </form>
     </div>

@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
-import { IcreateLevel, ILevel } from '../../types/services/levels.types';
+import { IcreateLevel, ILevel, ProgramLevel } from '../../types/services/levels.types';
 
 class LevelService {
   public async addLevel(level: IcreateLevel): Promise<AxiosResponse<Response<ILevel>>> {
@@ -21,7 +21,7 @@ class LevelService {
 
   public async getLevelsByProgram(
     programId: string,
-  ): Promise<AxiosResponse<Response<ILevel[]>>> {
+  ): Promise<AxiosResponse<Response<ProgramLevel[]>>> {
     return await adminstrationAxios.get(
       `/programs/getLevelsByAcademicProgram/${programId}`,
     );

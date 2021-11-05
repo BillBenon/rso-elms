@@ -15,21 +15,15 @@ import {
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
-import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import EventDetails from '../../components/Organisms/calendar/EventDetails';
 import NewEvent from '../../components/Organisms/calendar/NewEvent';
 import NewVenue from '../../components/Organisms/calendar/NewVenue';
 import { events } from '../../static/events';
-import { Link, ValueType } from '../../types';
+import { ValueType } from '../../types';
 
 const localizer = momentLocalizer(moment);
-const list: Link[] = [
-  { to: 'home', title: 'home' },
-  { to: 'academy', title: 'Academy' },
-  { to: `calendar`, title: 'Schedule' },
-];
 
 export default function CalendarView() {
   const handleSearch = (_e: ValueType) => {};
@@ -42,7 +36,6 @@ export default function CalendarView() {
 
   return (
     <div>
-      <BreadCrumb list={list} />
       <Heading fontSize="2xl" className="my-6" fontWeight="semibold">
         Class 2 C
       </Heading>

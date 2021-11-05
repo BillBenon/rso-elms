@@ -7,7 +7,6 @@ import AcademyProfileCard from '../cards/AcademyProfileCard';
 
 export default function Sidebar() {
   const [authUser, setAuthUser] = useState<UserInfo>();
-  // const [organization, setOrganization] = useState({ name: '', photo: '' });
   const { data } = authenticatorStore.authUser();
 
   useEffect(() => {
@@ -23,14 +22,11 @@ export default function Sidebar() {
       { title: 'Privileges', to: '/dashboard/privileges', icon: 'module' },
     ];
     const academicAdminLinks: linkProps[] = [
-      // { title: 'Programs', to: '/dashboard/programs', icon: 'program' },
       { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
       { title: 'Academic years', to: '/dashboard/academic-years', icon: 'program' },
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
       { title: 'Users', to: '/dashboard/users', icon: 'user' },
       { title: 'Evalutaions', to: '/dashboard/evaluations', icon: 'evaluation' },
-      // { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
-      // { title: 'Subjects', to: '/dashboard/subjects', icon: 'module' },
       {
         title: 'Registration Control',
         to: '/dashboard/registration-control',
@@ -38,9 +34,7 @@ export default function Sidebar() {
       },
       { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
       { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
-      { title: 'Calendar', to: '/dashboard/calendar', icon: 'calendar' },
-      // { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
-      // { title: 'Subjects', to: '/dashboard/subjects', icon: 'module' },
+      { title: 'Academic years', to: '/dashboard/academic-years', icon: 'program' },
     ];
 
     const instructorLinks: linkProps[] = [
