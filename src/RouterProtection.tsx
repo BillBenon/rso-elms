@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route } from 'react-router-dom';
 
-import NewEvaluation from './components/Organisms/forms/evaluation/NewEvaluation';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import Dashboard from './layout/Dashboard';
 import { authenticatorStore } from './store';
@@ -11,7 +10,6 @@ import Academies from './views/academies/Academy';
 import CalendarView from './views/calendar/Calendar';
 import ChoosePrograms from './views/calendar/ChoosePrograms';
 import Divisions from './views/divisions/Divisions';
-import EvaluationContent from './views/evaluation/EvaluationContent';
 import EvaluationTest from './views/evaluation/EvaluationTest';
 import ViewEvaluations from './views/evaluation/ViewEvaluations';
 import NewInstitution from './views/insitution/NewInstitution';
@@ -74,9 +72,7 @@ const RouterProtection = () => {
   const InstructorRoutes = () => (
     <>
       {/* start of instructor pages */}
-      <Route exact path="/dashboard/evaluations" component={ViewEvaluations} />
-      <Route exact path="/dashboard/evaluation/new" component={NewEvaluation} />
-      <Route path="/dashboard/evaluations/:id" component={EvaluationContent} />
+      <Route path="/dashboard/evaluations" component={ViewEvaluations} />
       {/* end of instructor pages */}
     </>
   );
