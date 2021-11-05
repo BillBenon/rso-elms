@@ -40,6 +40,8 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const [details, setDetails] = useState<CreateUserInfo>({
     activation_key: '',
     academy_id: '',
+    deployed_on: '',
+    deployment_number: `DEP-${parseInt(Math.random() * 10000 + '')}`,
     birth_date: '',
     doc_type: DocType.NID,
     education_level: EducationLevel.ILLITERATE,
@@ -161,6 +163,28 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           User type
         </DropdownMolecule>
+        {details.user_type === UserType.INSTRUCTOR ? (
+          <>
+            <DateMolecule
+              handleChange={handleChange}
+              startYear={new Date().getFullYear()}
+              endYear={new Date().getFullYear() + 100}
+              padding={3}
+              reverse={false}
+              name="deployed_on"
+              width="60 md:w-80">
+              Deployment date
+            </DateMolecule>
+            <InputMolecule
+              readOnly
+              name="deployment_number"
+              placeholder="eg: Manzi"
+              value={details.deployment_number}
+              handleChange={handleChange}>
+              Deployment number
+            </InputMolecule>
+          </>
+        ) : null}
         <InputMolecule
           name="first_name"
           placeholder="eg: Manzi"

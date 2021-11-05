@@ -124,7 +124,7 @@ export default function Faculties({ fetchType }: IFaculties) {
           <NoDataAvailable
             icon="faculty"
             buttonLabel="Add new faculty"
-            title={'No department available'}
+            title={'No faculty available'}
             handleClick={() => history.push(`/dashboard/divisions/new`)}
             description="And the web just isnt the same without you. Lets get you back online!"
           />
