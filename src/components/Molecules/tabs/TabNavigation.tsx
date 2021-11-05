@@ -21,18 +21,21 @@ interface TabsImportantProps {
 interface Iprops extends TabsImportantProps {
   className?: string;
   children: ReactNode;
+  headerComponent?: ReactNode;
 }
 
 export default function TabNavigation({
   className = '',
   tabs,
   children,
+  headerComponent,
   onTabChange,
 }: Iprops) {
   return (
     <div className={`tabs ${className}`}>
-      <div className="pb-3">
+      <div className="pb-3 flex flex-wrap items-center justify-between">
         <TabHeadings onTabChange={onTabChange} tabs={tabs} />
+        {headerComponent && headerComponent}
       </div>
       {children}
     </div>
