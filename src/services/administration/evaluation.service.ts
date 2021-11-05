@@ -4,6 +4,7 @@ import { evaluationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
   ICreateEvaluationQuestions,
+  IEvaluationApproval,
   IEvaluationCreate,
   IEvaluationInfo,
   IEvaluationQuestionsInfo,
@@ -21,8 +22,27 @@ class EvaluationService {
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
     return await evaluationAxios.post('/evaluationQuestions/add', questionsInfo);
   }
-  public async fetchEvaluations(): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
-    return await evaluationAxios.get('/evaluations/getAll');
+
+  public async createEvaluationSettings(
+    settings: IEvaluationApproval,
+  ): Promise<AxiosResponse<Response<IEvaluationApproval>>> {
+    return await evaluationAxios.post(
+      '/evaluationApprovals/addApprovalToEvaluation',
+      settings,
+    );
+  }
+  public async fetchEvaluationsByInstructorAndAcademy(
+    academy: string,
+    instructor: string,
+  ): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
+    return await evaluationAxios.get(
+      `/evaluations/getEvaluationsByAcademy/${academy}/narrowByInstructor/${instructor}`,
+    );
+  }
+  public async fetchEvaluationsBySubject(
+    subject: string,
+  ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
+    return await evaluationAxios.get(`/evaluations/getEvaluationsBySubject/${subject}`);
   }
 
   public async getEvaluationById(

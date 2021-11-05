@@ -1,4 +1,5 @@
 import React, { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import { evaluationStore } from '../../../../store/evaluation.store';
 import { ValueType } from '../../../../types';
@@ -15,19 +16,20 @@ import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-const initialState: ICreateEvaluationQuestions = {
-  evaluation_id: localStorage.getItem('evaluationId')?.toString() || '',
-  mark: '',
-  parent_question_id: '',
-  question: '',
-  question_type: IQuestionType.OPEN,
-  sub_questions: [],
-};
-
 export default function EvaluationQuestionComponent({
   handleGoBack,
   handleNext,
 }: IEvaluationProps) {
+  const initialState: ICreateEvaluationQuestions = {
+    evaluation_id: JSON.parse(localStorage.getItem('evaluationId') || '{}'),
+    mark: '',
+    parent_question_id: '',
+    question: '',
+    question_type: IQuestionType.OPEN,
+    sub_questions: [],
+    submitted: false,
+  };
+
   const [questions, setQuestions] = useState<ICreateEvaluationQuestions[]>([
     initialState,
   ]);
@@ -48,16 +50,20 @@ export default function EvaluationQuestionComponent({
   function submitForm(index: number, e: FormEvent) {
     e.preventDefault();
 
-    // mutate(questions[index], {
-    //   onSuccess: (data) => {
-    //     toast.success('Question added');
-    //     localStorage.setItem('evaluationId', JSON.stringify(data?.data.data.id));
-    //   },
-    //   onError: (error) => {
-    //     console.log(error);
-    //     toast.error(error + '');
-    //   },
-    // });
+    //first remove the button for submitted question
+    let questionInfo = [...questions];
+    questionInfo[index] = { ...questionInfo[index], submitted: true };
+    setQuestions(questionInfo);
+
+    mutate(questions[index], {
+      onSuccess: () => {
+        toast.success('Question added', { duration: 5000 });
+      },
+      onError: (error) => {
+        console.log(error);
+        toast.error(error + '');
+      },
+    });
   }
 
   return (
@@ -71,7 +77,7 @@ export default function EvaluationQuestionComponent({
               <DropdownMolecule
                 width="64"
                 name="question_type"
-                placeholder="Program"
+                placeholder="Question type"
                 handleChange={() => {}}
                 options={[
                   { label: 'OPEN', value: IQuestionType.OPEN },
@@ -84,21 +90,23 @@ export default function EvaluationQuestionComponent({
                 name={'question'}
                 value={question.question}
                 placeholder="Enter question"
-                handleChange={() => {}}>
+                handleChange={(e: ValueType) => handleChange(index, e)}>
                 Question {index + 1}
               </TextAreaMolecule>
 
               <InputMolecule
                 name={'mark'}
-                width="24"
+                style={{ width: '6rem' }}
                 value={question.mark}
                 handleChange={(e: ValueType) => handleChange(index, e)}>
                 Question marks
               </InputMolecule>
               <div>
-                <Button type="submit" onSubmit={(e: FormEvent) => submitForm(index, e)}>
-                  save question
-                </Button>
+                {!question.submitted ? (
+                  <Button type="submit" onSubmit={(e: FormEvent) => submitForm(index, e)}>
+                    save question
+                  </Button>
+                ) : null}
               </div>
             </form>
 
@@ -124,7 +132,7 @@ export default function EvaluationQuestionComponent({
         </div>
 
         <div>
-          <Button onClick={handleNext}>Next</Button>
+          <Button onClick={handleNext}>Finish</Button>
         </div>
       </div>
     </>

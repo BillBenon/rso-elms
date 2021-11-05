@@ -34,15 +34,6 @@ function CompleteProfile() {
   const [completeStep, setCompleteStep] = useState(0);
   const history = useHistory();
 
-  // const authUser = authenticatorStore.authUser().data?.data;
-
-  // if (authUser?.data) {
-  //   console.log(authUser);
-
-  //   localStorage.setItem('foundUser', JSON.stringify(authUser.data));
-  //   authenticatorStore.logout();
-  // }
-
   let foundUser: UserInfo = JSON.parse(localStorage.getItem('foundUser') || '{}');
   if (!foundUser.id) {
     history.push('/login/search');
