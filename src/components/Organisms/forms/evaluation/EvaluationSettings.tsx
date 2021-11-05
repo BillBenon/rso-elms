@@ -66,8 +66,6 @@ export default function EvaluationSettings({ handleGoBack }: IEvaluationProps) {
   ];
 
   function handleChange({ name, value }: ValueType) {
-    console.log(value);
-
     setSettings((settings) => ({ ...settings, [name]: value }));
   }
 
