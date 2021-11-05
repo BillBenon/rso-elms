@@ -20,7 +20,7 @@ export default function ContentSpan({
       <Heading color="txt-secondary" fontSize="base">
         {title}
       </Heading>
-      <Heading fontWeight="semibold" fontSize="base">
+      <Heading fontWeight="semibold" fontSize="sm">
         {children || subTitle}
       </Heading>
     </div>
