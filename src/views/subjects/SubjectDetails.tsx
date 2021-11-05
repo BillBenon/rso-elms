@@ -17,6 +17,7 @@ import Accordion from '../../components/Molecules/Accordion';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
+import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
 import { lessonStore } from '../../store/lesson.store';
 import { subjectStore } from '../../store/subject.store';
@@ -52,6 +53,17 @@ export default function SubjectDetails() {
     history.goBack();
   };
 
+  const tabs = [
+    {
+      label: `Lessons(${lessons.length})`,
+      href: `${url}`,
+    },
+    {
+      label: 'Evaluations',
+      href: `${url}/evaluation`,
+    },
+  ];
+
   return (
     <main className="px-4">
       <section>
@@ -71,50 +83,59 @@ export default function SubjectDetails() {
             {lessons.length + ' lessons'}
           </Heading>
           <p className="w-10/12 text-base">{subjectData.data?.data.data.content}</p>
-          <div className="py-6 w-full">
-            {isLoading ? (
-              <Loader />
-            ) : lessons.length === 0 ? (
-              <NoDataAvailable
-                title={'No lessons available'}
-                description={
-                  'A lesson or class is a structured period of time where learning is intended to occur. It involves one or more students being taught by a teacher or instructor.'
-                }
-                handleClick={() => history.push(`${url}/add-lesson`)}
+
+          <TabNavigation
+            tabs={tabs}
+            headerComponent={
+              <BrowserLink to={`${url}/add-lesson`}>
+                <Button>New lesson</Button>
+              </BrowserLink>
+            }
+            className="pt-6">
+            <Switch>
+              <Route
+                exact
+                path={url}
+                render={() => (
+                  <>
+                    <div className="pt-6 w-full">
+                      {isLoading ? (
+                        <Loader />
+                      ) : lessons.length === 0 ? (
+                        <NoDataAvailable
+                          title={'No lessons available'}
+                          description={
+                            'A lesson or class is a structured period of time where learning is intended to occur. It involves one or more students being taught by a teacher or instructor.'
+                          }
+                          handleClick={() => history.push(`${url}/add-lesson`)}
+                        />
+                      ) : (
+                        <>
+                          <Heading fontSize="base" className="mb-6" fontWeight="semibold">
+                            Ongoing Lessons
+                          </Heading>
+                          <Accordion>
+                            {lessons.map((les) => {
+                              return (
+                                <Panel bgColor="main" key={les.id} title={les.title}>
+                                  <div className="md:w-10/12 lg:w-2/3">
+                                    <p className="font-medium text-gray-600 text-sm">
+                                      {les.content}
+                                    </p>
+                                  </div>
+                                </Panel>
+                              );
+                            })}
+                          </Accordion>
+                        </>
+                      )}
+                    </div>
+                  </>
+                )}
               />
-            ) : (
-              <>
-                <div className="flex justify-between">
-                  <Heading
-                    fontWeight="semibold"
-                    color="primary"
-                    fontSize="base"
-                    className="underline">
-                    Lessons ({lessons.length})
-                  </Heading>
-                  <BrowserLink to={`${url}/add-lesson`}>
-                    <Button>New lesson</Button>
-                  </BrowserLink>
-                </div>
-                <Heading fontSize="base" className="mb-6" fontWeight="semibold">
-                  Ongoing Lessons
-                </Heading>
-                <Accordion>
-                  {lessons.map((les) => {
-                    return (
-                      <Panel bgColor="main" key={les.id} title={les.title}>
-                        <div className="md:w-10/12 lg:w-2/3">
-                          <p className="font-medium text-gray-600 text-sm">
-                            {les.content}
-                          </p>
-                        </div>
-                      </Panel>
-                    );
-                  })}
-                </Accordion>
-              </>
-            )}
-          </div>
+              <Route path={`${url}/evaluation`} render={() => <h2>Evaluations</h2>} />
+            </Switch>
+          </TabNavigation>
         </div>
         <div className="hidden lg:block"></div>
       </div>
