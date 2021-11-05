@@ -7,6 +7,7 @@ import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import { authenticatorStore } from '../../store';
 import { evaluationStore } from '../../store/evaluation.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
@@ -15,7 +16,11 @@ export default function ViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
   const history = useHistory();
   const { path } = useRouteMatch();
-  const { data, isSuccess, isLoading } = evaluationStore.getEvaluations();
+  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { data, isSuccess, isLoading } = evaluationStore.getEvaluations(
+    authUser?.academy.id.toString() || '',
+    authUser?.id.toString() || '',
+  );
 
   const list: LinkList[] = [
     { to: '/', title: 'home' },
@@ -64,7 +69,7 @@ export default function ViewEvaluations() {
           </TableHeader>
         ) : null}
 
-        <section>
+        <section className="flex flex-wrap justify-start gap-4 mt-2">
           {isLoading && evaluations.length === 0 && <Loader />}
 
           {isSuccess && evaluations.length === 0 ? (

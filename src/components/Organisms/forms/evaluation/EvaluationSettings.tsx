@@ -1,65 +1,149 @@
-/* eslint-disable no-unused-vars */
-import React from 'react';
+import React, { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useHistory } from 'react-router-dom';
 
-import { IEvaluationProps } from '../../../../types/services/evaluation.types';
+import { authenticatorStore } from '../../../../store';
+import { evaluationStore } from '../../../../store/evaluation.store';
+import usersStore from '../../../../store/users.store';
+import { ValueType } from '../../../../types';
+import {
+  IEvaluationApproval,
+  IEvaluationApprovalStatus,
+  IEvaluationProps,
+} from '../../../../types/services/evaluation.types';
+import { UserType } from '../../../../types/services/user.types';
 import { getDropDownOptions } from '../../../../utils/getOption';
+import Button from '../../../Atoms/custom/Button';
 import Input from '../../../Atoms/Input/Input';
 import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import SwitchMolecule from '../../../Molecules/input/SwitchMolecule';
 
-export default function EvaluationSettings({
-  handleNext,
-  handleGoBack,
-}: IEvaluationProps) {
+export default function EvaluationSettings({ handleGoBack }: IEvaluationProps) {
+  const history = useHistory();
+  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { data: inCharge } = usersStore.getUsersByAcademy(
+    authUser?.academy.id.toString() || '',
+  );
+
+  const instructors = inCharge?.data.data.filter(
+    (user) => user.user_type === UserType.INSTRUCTOR,
+  );
+
+  const [settings, setSettings] = useState<IEvaluationApproval>({
+    approver: '',
+    evaluation: JSON.parse(localStorage.getItem('evaluationId') || '{}'),
+    evaluation_approval_status: IEvaluationApprovalStatus.REVIEWING,
+    id: '',
+    preparer: authUser?.id.toString() || '',
+    reviewer: '',
+    to_be_approved: false,
+    to_be_reviewed: false,
+  });
+
+  const statuses = [
+    {
+      label: IEvaluationApprovalStatus.REVIEWING,
+      value: IEvaluationApprovalStatus.REVIEWING,
+    },
+    {
+      label: IEvaluationApprovalStatus.DRAFT,
+      value: IEvaluationApprovalStatus.DRAFT,
+    },
+    {
+      label: IEvaluationApprovalStatus.APPROVING,
+      value: IEvaluationApprovalStatus.APPROVING,
+    },
+    {
+      label: IEvaluationApprovalStatus.RETURNED,
+      value: IEvaluationApprovalStatus.RETURNED,
+    },
+    {
+      label: 'REVIEWED TO APPROVE',
+      value: IEvaluationApprovalStatus.REVIEWED_TO_APPROVE,
+    },
+  ];
+
+  function handleChange({ name, value }: ValueType) {
+    console.log(value);
+
+    setSettings((settings) => ({ ...settings, [name]: value }));
+  }
+
+  const { mutate } = evaluationStore.createEvaluationSettings();
+
+  function handleSubmit(e: FormEvent) {
+    e.preventDefault();
+
+    mutate(settings, {
+      onSuccess: () => {
+        toast.success('Settings added', { duration: 5000 });
+        localStorage.removeItem('evaluationId');
+        history.push('/dashboard/evaluations');
+      },
+      onError: (error) => {
+        console.log(error);
+        toast.error(error + '');
+      },
+    });
+  }
+
   return (
-    <div>
+    <form onSubmit={handleSubmit}>
       <Heading fontSize="base" fontWeight="medium">
         Evaluation Settings
       </Heading>
       <div className="flex gap-6 items-center mt-12">
         <Heading fontSize="sm" fontWeight="medium">
-          Evaluation Settings
+          Prepared by
         </Heading>
         <Input
           readonly
           width="60"
-          name="maximum_file_size"
-          value="Munezero Didier"
-          handleChange={() => {}}
+          name="preparer"
+          value=""
+          placeholder={`${authUser?.first_name} ${authUser?.last_name}`}
         />
       </div>
       <div className="pt-6 flex-col">
-        <ILabel>Shuffle evaluation questions</ILabel>
+        {/* <ILabel>Shuffle evaluation questions</ILabel>
         <SwitchMolecule
           loading={false}
           name="shuffle"
           value={false}
-          handleChange={() => {}}>
+          handleChange={handleChange}>
           True
-        </SwitchMolecule>
+        </SwitchMolecule> */}
       </div>{' '}
       <div className="pt-6 flex-col">
-        <ILabel>Evaluation Reviewing status</ILabel>
+        <DropdownMolecule
+          width="60"
+          placeholder="Reviewer"
+          options={statuses}
+          name="evaluation_approval_status"
+          handleChange={handleChange}>
+          Evaluation Reviewing status
+        </DropdownMolecule>
+        {/* <ILabel>Evaluation Reviewing status</ILabel> */}
         <SwitchMolecule
           loading={false}
-          name="shuffle"
-          value={true}
-          handleChange={() => {}}>
+          name="to_be_reviewed"
+          value={settings.to_be_reviewed}
+          handleChange={handleChange}>
           True
         </SwitchMolecule>
       </div>
       <div className="pt-6">
         <DropdownMolecule
           width="60"
-          placeholder="Approver"
+          placeholder="Reviewer"
           options={getDropDownOptions({
-            inputs: [],
+            inputs: instructors || [],
             labelName: ['first_name', 'last_name'],
           })}
-          name="current_admin_id"
-          handleChange={() => {}}>
+          name="reviewer"
+          handleChange={handleChange}>
           To be reviewed by
         </DropdownMolecule>
       </div>
@@ -68,9 +152,9 @@ export default function EvaluationSettings({
         <SwitchMolecule
           showLabelFirst
           loading={false}
-          name="shuffle"
-          value={true}
-          handleChange={() => {}}>
+          name="to_be_approved"
+          value={settings.to_be_approved}
+          handleChange={handleChange}>
           True
         </SwitchMolecule>
       </div>
@@ -79,11 +163,11 @@ export default function EvaluationSettings({
           width="60"
           placeholder="Approver"
           options={getDropDownOptions({
-            inputs: [],
+            inputs: instructors || [],
             labelName: ['first_name', 'last_name'],
           })}
-          name="current_admin_id"
-          handleChange={() => {}}>
+          name="approver"
+          handleChange={handleChange}>
           To be approved by
         </DropdownMolecule>
       </div>
@@ -93,32 +177,39 @@ export default function EvaluationSettings({
           showLabelFirst
           loading={false}
           name="shuffle"
-          value={true}
-          handleChange={() => {}}>
+          value={false}
+          handleChange={handleChange}>
           True
         </SwitchMolecule>
       </div>
       <div className="pt-6">
         <DropdownMolecule
-          isMulti
           width="60"
-          placeholder="Marker"
+          placeholder="marker"
           options={getDropDownOptions({
-            inputs: [],
+            inputs: instructors || [],
             labelName: ['first_name', 'last_name'],
           })}
-          name="current_admin_id"
-          handleChange={() => {}}>
+          name="approver"
+          handleChange={handleChange}>
           To be marked by
         </DropdownMolecule>
       </div>
+      {/* <div className="flex flex-col"> */}
+      <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
+        Back
+      </Button>
+      <div className="pt-4">
+        <Button type="submit">Save</Button>
+      </div>
+      {/* </div> */}
       {/* <SwitchMolecule
         loading={false}
         name="shuffle"
         value={false}
-        handleChange={() => {}}>
+        handleChange={handleChange}>
         Evaluation Reviewing status
       </SwitchMolecule> */}
-    </div>
+    </form>
   );
 }
