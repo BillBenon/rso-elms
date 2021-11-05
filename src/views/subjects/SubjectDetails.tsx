@@ -57,13 +57,13 @@ export default function SubjectDetails() {
       <section>
         <BreadCrumb list={list} />
       </section>
-      <div className="md:flex pt-4 md:pt-11">
+      <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 pt-4 md:pt-11">
         <div className="w-44">
           <button className="outline-none" onClick={goBack}>
             <Icon name={'back-arrow'} bgColor="gray" />
           </button>
         </div>
-        <div className="pt-4 md:pt-0">
+        <div className="md:col-span-3 pt-4 md:pt-0">
           <Heading fontSize="2xl" fontWeight="semibold">
             {subjectData.data?.data.data.title}
           </Heading>
@@ -71,7 +71,7 @@ export default function SubjectDetails() {
             {lessons.length + ' lessons'}
           </Heading>
           <p className="w-10/12 text-base">{subjectData.data?.data.data.content}</p>
-          <div className="py-6">
+          <div className="py-6 w-full">
             {isLoading ? (
               <Loader />
             ) : lessons.length === 0 ? (
@@ -116,6 +116,7 @@ export default function SubjectDetails() {
             )}
           </div>
         </div>
+        <div className="hidden lg:block"></div>
       </div>
       <Switch>
         {/* add lesson popup */}
