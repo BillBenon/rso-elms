@@ -12,6 +12,7 @@ interface ITextareaMolecule<T> extends CommonInputProps<T> {
   children?: React.ReactNode;
   error?: string;
   placeholder?: string;
+  readOnly?: boolean;
   type?: string;
 }
 export default function TextAreaMolecule<T>({
@@ -20,6 +21,7 @@ export default function TextAreaMolecule<T>({
   handleChange,
   children,
   error = '',
+  readOnly = false,
   placeholder = '',
   type = 'text',
   ...attrs
@@ -33,6 +35,7 @@ export default function TextAreaMolecule<T>({
       ) : null}
       <Textarea
         {...attrs}
+        readonly={readOnly}
         name={name}
         placeholder={placeholder}
         fcolor={error ? 'error' : undefined}
