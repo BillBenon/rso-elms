@@ -71,7 +71,7 @@ export default function ChoosePrograms() {
 
       <Switch>
         <Route exact path={`${path}/p/:id`} component={ProgramLevelsTimeTable} />
-        <Route exact path={`${path}/p/:id/calendar`} component={CalendarView} />
+        <Route path={`${path}/p/:id/calendar`} component={CalendarView} />
         <Route
           path={`${path}`}
           render={() => (
