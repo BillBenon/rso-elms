@@ -132,7 +132,7 @@ export default function EvaluationQuestionComponent({
         </div>
 
         <div>
-          <Button onClick={handleNext}>Finish</Button>
+          <Button onClick={handleNext}>save</Button>
         </div>
       </div>
     </>
