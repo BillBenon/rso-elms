@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route } from 'react-router-dom';
 
-import NewEvaluation from './components/Organisms/forms/evaluation/NewEvaluation';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import Dashboard from './layout/Dashboard';
 import { authenticatorStore } from './store';
@@ -11,7 +10,6 @@ import Academies from './views/academies/Academy';
 import CalendarView from './views/calendar/Calendar';
 import ChoosePrograms from './views/calendar/ChoosePrograms';
 import Divisions from './views/divisions/Divisions';
-import EvaluationContent from './views/evaluation/EvaluationContent';
 import EvaluationTest from './views/evaluation/EvaluationTest';
 import ViewEvaluations from './views/evaluation/ViewEvaluations';
 import NewInstitution from './views/insitution/NewInstitution';
@@ -54,11 +52,10 @@ const RouterProtection = () => {
       {/* start of academic admin pages */}
       <Route path="/dashboard/modules" component={Modules} />
       <Route path="/dashboard/subjects" component={Subjects} />
-      <Route exact path="/dashboard/schedule" component={ChoosePrograms} />
+      <Route path="/dashboard/schedule" component={ChoosePrograms} />
       <Route path="/dashboard/calendar" component={CalendarView} />
-      <Route exact path="/dashboard/evaluations" component={ViewEvaluations} />
-      <Route exact path="/dashboard/evaluation/new" component={NewEvaluation} />
-      <Route path="/dashboard/evaluations/:id" component={EvaluationContent} />
+      {/* <Route exact path="/dashboard/evaluations" component={ViewEvaluations} />
+      <Route exact path="/dashboard/evaluation/new" component={NewEvaluation} /> */}
       <Route path="/dashboard/registration-control" component={RegistrationControl} />
       <Route path="/dashboard/divisions" component={Divisions} />
       <Route path="/dashboard/academic-years" component={AcademicYears} />
@@ -75,7 +72,7 @@ const RouterProtection = () => {
   const InstructorRoutes = () => (
     <>
       {/* start of instructor pages */}
-      <Route path="/dashboard/view-evaluation" component={ViewEvaluations} />
+      <Route path="/dashboard/evaluations" component={ViewEvaluations} />
       {/* end of instructor pages */}
     </>
   );
@@ -83,7 +80,7 @@ const RouterProtection = () => {
   const StudentRoutes = () => (
     <>
       {/* start of student pages */}
-      <Route path="/dashboard/evaluation-test" component={EvaluationTest} />
+      <Route path="/dashboard/student/evaluations" component={EvaluationTest} />
       {/* end of student pages */}
     </>
   );

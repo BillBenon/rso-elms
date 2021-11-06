@@ -15,26 +15,18 @@ import {
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
-import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
-import EventDetails from '../../components/Organisms/calendar/EventDetails';
-import NewEvent from '../../components/Organisms/calendar/NewEvent';
-import NewVenue from '../../components/Organisms/calendar/NewVenue';
+import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedule';
 import { events } from '../../static/events';
-import { Link, ValueType } from '../../types';
+import { ValueType } from '../../types';
 
 const localizer = momentLocalizer(moment);
-const list: Link[] = [
-  { to: 'home', title: 'home' },
-  { to: 'academy', title: 'Academy' },
-  { to: `calendar`, title: 'Schedule' },
-];
 
 export default function CalendarView() {
   const handleSearch = (_e: ValueType) => {};
   const history = useHistory();
-  const { path } = useRouteMatch();
+  const { path, url } = useRouteMatch();
 
   const handleClose = () => {
     history.goBack();
@@ -42,7 +34,6 @@ export default function CalendarView() {
 
   return (
     <div>
-      <BreadCrumb list={list} />
       <Heading fontSize="2xl" className="my-6" fontWeight="semibold">
         Class 2 C
       </Heading>
@@ -59,7 +50,7 @@ export default function CalendarView() {
           </div>
 
           <div className="flex gap-3">
-            <BrowserLink to={`${path}/event/new`}>
+            <BrowserLink to={`${url}/new-schedule`}>
               <Button>New schedule</Button>
             </BrowserLink>
           </div>
@@ -86,28 +77,10 @@ export default function CalendarView() {
       <Switch>
         <Route
           exact
-          path={`${path}/event/new`}
+          path={`${path}/new-schedule`}
           render={() => (
-            <PopupMolecule title="New Event" open onClose={handleClose}>
-              <NewEvent />
-            </PopupMolecule>
-          )}
-        />
-        <Route
-          exact
-          path={`${path}/venue/new`}
-          render={() => (
-            <PopupMolecule title="New Venue" open onClose={handleClose}>
-              <NewVenue />
-            </PopupMolecule>
-          )}
-        />
-        <Route
-          exact
-          path={`${path}/event/:eventId`}
-          render={() => (
-            <PopupMolecule title="Event details" open onClose={handleClose}>
-              <EventDetails />
+            <PopupMolecule title="New Schedule" open onClose={handleClose}>
+              <NewSchedule />
             </PopupMolecule>
           )}
         />

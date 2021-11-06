@@ -10,6 +10,7 @@ import RouterProtection from './RouterProtection';
 import CompleteProfile from './views/auth/CompleteProfile';
 import Signin from './views/auth/Signin';
 import Home from './views/Home';
+import NewInstitution from './views/insitution/NewInstitution';
 import NotFound from './views/NotFound';
 
 const App = () => {
@@ -28,6 +29,7 @@ const App = () => {
             />
             <Route exact path="/complete-profile/more" component={MoreInfo} />
             <Route exact path="/complete-profile/other" component={OtherDetails} />
+            <Route exact path="/new-institution" component={NewInstitution} />
             <Route path="/login" component={Signin} />
             <Redirect exact from="/" to="/login" />
             <RouterProtection />

@@ -11,7 +11,7 @@ export interface UserInfo extends CreateUserInfo, Table {
   person: PersonInfo;
   academy: AcademyInfo;
   institution_id: string;
-  institution_name?:string,
+  institution_name?: string;
   activated: boolean;
   active_session: boolean;
   image_url: string;
@@ -57,53 +57,55 @@ export interface PersonInfo extends Table {
 }
 
 export interface UpdateUserInfo {
-  academic_program_level_id: string,
-  academy_id: string,
-  activation_key: string,
-  birth_date: string,
-  blood_group: string,
-  current_rank_id: string,
-  date_of_commission: string,
-  date_of_issue: string,
-  date_of_last_promotion: string,
-  doc_type: DocType,
-  document_expire_on: string,
-  education_level: EducationLevel,
-  email: string,
-  emp_no: string,
-  father_names: string,
-  first_name: string,
-  id: string,
-  intake_program_id: string,
-  last_name: string,
-  marital_status: MaritalStatus,
-  mother_names: string,
-  next_of_keen_proculation_reason: string,
-  nid: string,
-  other_rank: string,
-  password: string,
-  password_reset_period_in_days: number,
-  person_id: string,
-  phone: string,
-  place_of_birth: string,
-  place_of_birth_description: string,
-  place_of_issue: string,
-  place_of_residence: string,
-  profile_status: ProfileStatus,
-  rank_depart: string,
-  relationship_with_next_of_ken: string,
-  reset_date: string,
-  residence_location_id: number,
-  sex: GenderStatus,
-  spouse_name: string,
-  user_type: UserType,
-  username: string
+  academic_program_level_id: string;
+  academy_id: string;
+  activation_key: string;
+  birth_date: string;
+  blood_group: string;
+  current_rank_id: string;
+  date_of_commission: string;
+  date_of_issue: string;
+  date_of_last_promotion: string;
+  doc_type: DocType;
+  document_expire_on: string;
+  education_level: EducationLevel;
+  email: string;
+  emp_no: string;
+  father_names: string;
+  first_name: string;
+  id: string;
+  intake_program_id: string;
+  last_name: string;
+  marital_status: MaritalStatus;
+  mother_names: string;
+  next_of_keen_proculation_reason: string;
+  nid: string;
+  other_rank: string;
+  password: string;
+  password_reset_period_in_days: number;
+  person_id: string;
+  phone: string;
+  place_of_birth: string;
+  place_of_birth_description: string;
+  place_of_issue: string;
+  place_of_residence: string;
+  profile_status: ProfileStatus;
+  rank_depart: string;
+  relationship_with_next_of_ken: string;
+  reset_date: string;
+  residence_location_id: number;
+  sex: GenderStatus;
+  spouse_name: string;
+  user_type: UserType;
+  username: string;
 }
 
 export interface CreateUserInfo {
   activation_key: string;
   academy_id: string;
   birth_date: string;
+  deployed_on: string;
+  deployment_number: string;
   doc_type: DocType;
   education_level: EducationLevel;
   email: string;
@@ -130,11 +132,13 @@ export interface CreateUserInfo {
   username: string;
   intake_id: string;
   nationality: string;
-  document_expire_on: string,
-  send_communication_msg: SendCommunicationMsg
-
+  document_expire_on: string;
+  send_communication_msg: SendCommunicationMsg;
 }
-export interface UserView extends Pick<UserInfo, 'id'| 'first_name' | 'last_name' | 'image_url'> { selected?: boolean}
+export interface UserView
+  extends Pick<UserInfo, 'id' | 'first_name' | 'last_name' | 'image_url'> {
+  selected?: boolean;
+}
 export interface PersonDetail
   extends Pick<
     PersonInfo,
@@ -147,13 +151,13 @@ export interface PersonDetail
     | 'birth_date'
     | 'religion'
     | 'blood_group'
-    | 'father_names' 
-    | 'mother_names' 
-    | 'marital_status' 
+    | 'father_names'
+    | 'mother_names'
+    | 'marital_status'
     | 'spouse_name'
     | 'residence_location_id'
     | 'place_of_residence'
-    > {}
+  > {}
 export interface EmploymentDetail
   extends Pick<
     PersonInfo,
@@ -168,7 +172,7 @@ export interface EmploymentDetail
   > {}
 
 export interface AccountDetail
-  extends Pick<UserInfo, 'username' |'pin' | 'password' | 'send_communication_msg'> {
+  extends Pick<UserInfo, 'username' | 'pin' | 'password' | 'send_communication_msg'> {
   confirm_password: string;
 }
 
@@ -228,5 +232,7 @@ export enum UserType {
 }
 
 export enum SendCommunicationMsg {
-  EMAIL = 'EMAIL', SMS = 'SMS', BOTH ='BOTH'
+  EMAIL = 'EMAIL',
+  SMS = 'SMS',
+  BOTH = 'BOTH',
 }

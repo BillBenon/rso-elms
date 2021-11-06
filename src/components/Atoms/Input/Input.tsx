@@ -28,7 +28,7 @@ export default function Input<T>({
 
   function handleOnChange(e: any) {
     setValue(e.target.value);
-    handleChange({ name, value: e.target.value, event: e });
+    if (handleChange) handleChange({ name, value: e.target.value, event: e });
   }
   return (
     <input

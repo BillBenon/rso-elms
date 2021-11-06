@@ -34,7 +34,6 @@ export default function ViewRole() {
   function removePrivilege(rolePrivilege: RolePrivilege) {
     deletePrivilege(rolePrivilege.id.toString(), {
       onSuccess: () => {
-        console.log('succeded');
         queryClient.setQueryData(['privilegesByRole/id', role?.id + ''], (old) => {
           const oldest = old as AxiosResponse<Response<RolePrivilege[]>>;
           oldest.data.data = oldest.data.data.filter(

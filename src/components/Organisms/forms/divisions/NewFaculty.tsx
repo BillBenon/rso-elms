@@ -32,7 +32,7 @@ export default function NewFaculty({ onSubmit, academy_id }: IDivisionsAcademyTy
       onSuccess: () => {
         toast.success('Faculty created');
         queryClient.invalidateQueries(['divisions/type']);
-        history.goBack();
+        history.push('/dashboard/divisions');
       },
       onError: () => {
         toast.error('something wrong happened while creating faculty');

@@ -167,7 +167,7 @@ export default function EvaluationContent() {
                 {evaluationQuestions?.map((question, index: number) =>
                   question.multipleChoiceAnswers.length > 0 ? (
                     <>
-                      <div className="mt-7 flex justify-between">
+                      <div className="mt-3 flex justify-between">
                         <ContentSpan title={`Question ${index + 1}`} className="gap-3">
                           What is the nervous system?
                         </ContentSpan>
@@ -196,7 +196,7 @@ export default function EvaluationContent() {
                       </div>
                     </>
                   ) : (
-                    <div className="mt-7 flex justify-between">
+                    <div className="mt-3 flex justify-between">
                       <ContentSpan title={`Question ${index + 1}`} className="gap-3">
                         {question.question}
                       </ContentSpan>

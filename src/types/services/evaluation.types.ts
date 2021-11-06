@@ -65,9 +65,19 @@ export enum IEligibleGroup {
   SINGLE_CLASS = 'SINGLE_CLASS',
 }
 
+export enum IEvaluationApprovalStatus {
+  DRAFT = 'DRAFT',
+  REVIEWING = 'REVIEWING',
+  APPROVING = 'APPROVING',
+  REVIEWED_TO_APPROVE = 'REVIEWED_TO_APPROVE',
+  RETURNED = 'REVIEWED_TO_APPROVE',
+  APPROVED = 'APPROVED',
+}
+
 export interface IEvaluationCreate {
   access_type: string;
   academy_id: string;
+  instructor_id: string;
   allow_submission_time: string;
   class_ids: string;
   subject_academic_year_period_id: string;
@@ -131,11 +141,13 @@ export interface IEvaluationQuestion {
   mark: string;
   parent_question_id: string;
   question: string;
+  submitted: boolean;
   question_type: IQuestionType;
 }
 
 export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
   sub_questions: IEvaluationQuestion[];
+  submitted: boolean;
 }
 
 export interface IEvaluationQuestionsInfo {
@@ -145,4 +157,15 @@ export interface IEvaluationQuestionsInfo {
   evaluationQuestions: [];
   questionType: IQuestionType;
   multipleChoiceAnswers: [];
+}
+
+export interface IEvaluationApproval {
+  approver: string;
+  evaluation: string;
+  evaluation_approval_status: string;
+  id: string;
+  preparer: string;
+  reviewer: string;
+  to_be_approved: boolean;
+  to_be_reviewed: boolean;
 }
