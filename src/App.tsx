@@ -7,6 +7,8 @@ import OtherDetails from './components/Organisms/forms/auth/signup/more-details/
 import { MainLayout } from './layout/MainLayout';
 import Redirecting from './Redirecting';
 import RouterProtection from './RouterProtection';
+import { scheduleAppliesTo } from './types/services/event.types';
+import { getDropDownStatusOptions } from './utils/getOption';
 import CompleteProfile from './views/auth/CompleteProfile';
 import Signin from './views/auth/Signin';
 import Home from './views/Home';
@@ -14,6 +16,7 @@ import NewInstitution from './views/insitution/NewInstitution';
 import NotFound from './views/NotFound';
 
 const App = () => {
+  console.log(getDropDownStatusOptions(scheduleAppliesTo));
   return (
     <>
       <MainLayout>
