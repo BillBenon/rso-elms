@@ -98,7 +98,7 @@ export default function EvaluationSettings({ handleGoBack }: IEvaluationProps) {
         </Heading>
         <Input
           readonly
-          width="60"
+          style={{ width: '15rem' }}
           name="preparer"
           value=""
           placeholder={`${authUser?.first_name} ${authUser?.last_name}`}
@@ -132,19 +132,21 @@ export default function EvaluationSettings({ handleGoBack }: IEvaluationProps) {
           True
         </SwitchMolecule>
       </div>
-      <div className="pt-6">
-        <DropdownMolecule
-          width="60"
-          placeholder="Reviewer"
-          options={getDropDownOptions({
-            inputs: instructors || [],
-            labelName: ['first_name', 'last_name'],
-          })}
-          name="reviewer"
-          handleChange={handleChange}>
-          To be reviewed by
-        </DropdownMolecule>
-      </div>
+      {settings.to_be_reviewed && (
+        <div className="pt-6">
+          <DropdownMolecule
+            width="60"
+            placeholder="Reviewer"
+            options={getDropDownOptions({
+              inputs: instructors || [],
+              labelName: ['first_name', 'last_name'],
+            })}
+            name="reviewer"
+            handleChange={handleChange}>
+            To be reviewed by
+          </DropdownMolecule>
+        </div>
+      )}
       <div className="pt-6 flex-col">
         <ILabel>Evaluation Approval status</ILabel>
         <SwitchMolecule
@@ -156,20 +158,22 @@ export default function EvaluationSettings({ handleGoBack }: IEvaluationProps) {
           True
         </SwitchMolecule>
       </div>
-      <div className="pt-6">
-        <DropdownMolecule
-          width="60"
-          placeholder="Approver"
-          options={getDropDownOptions({
-            inputs: instructors || [],
-            labelName: ['first_name', 'last_name'],
-          })}
-          name="approver"
-          handleChange={handleChange}>
-          To be approved by
-        </DropdownMolecule>
-      </div>
-      <div className="pt-6 flex-col">
+      {settings.to_be_approved && (
+        <div className="pt-6">
+          <DropdownMolecule
+            width="60"
+            placeholder="Approver"
+            options={getDropDownOptions({
+              inputs: instructors || [],
+              labelName: ['first_name', 'last_name'],
+            })}
+            name="approver"
+            handleChange={handleChange}>
+            To be approved by
+          </DropdownMolecule>
+        </div>
+      )}
+      {/* <div className="pt-6 flex-col">
         <ILabel>Marking status</ILabel>
         <SwitchMolecule
           showLabelFirst
@@ -179,7 +183,7 @@ export default function EvaluationSettings({ handleGoBack }: IEvaluationProps) {
           handleChange={handleChange}>
           True
         </SwitchMolecule>
-      </div>
+      </div> */}
       <div className="pt-6">
         <DropdownMolecule
           width="60"
@@ -198,7 +202,7 @@ export default function EvaluationSettings({ handleGoBack }: IEvaluationProps) {
         Back
       </Button>
       <div className="pt-4">
-        <Button type="submit">Save</Button>
+        <Button type="submit">Finish</Button>
       </div>
       {/* </div> */}
       {/* <SwitchMolecule

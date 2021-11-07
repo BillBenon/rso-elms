@@ -75,6 +75,7 @@ export default function EvaluationQuestionComponent({
               className="flex flex-col gap-4"
               onSubmit={(e: FormEvent) => submitForm(index, e)}>
               <DropdownMolecule
+                disabled={question.submitted}
                 width="64"
                 name="question_type"
                 placeholder="Question type"
@@ -87,6 +88,7 @@ export default function EvaluationQuestionComponent({
               </DropdownMolecule>
 
               <TextAreaMolecule
+                readOnly={question.submitted}
                 name={'question'}
                 value={question.question}
                 placeholder="Enter question"
@@ -95,6 +97,8 @@ export default function EvaluationQuestionComponent({
               </TextAreaMolecule>
 
               <InputMolecule
+                readonly={question.submitted}
+                type="number"
                 name={'mark'}
                 style={{ width: '6rem' }}
                 value={question.mark}
@@ -132,7 +136,7 @@ export default function EvaluationQuestionComponent({
         </div>
 
         <div>
-          <Button onClick={handleNext}>Finish</Button>
+          <Button onClick={handleNext}>save</Button>
         </div>
       </div>
     </>
