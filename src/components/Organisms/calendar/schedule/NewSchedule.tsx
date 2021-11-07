@@ -9,11 +9,11 @@ import usersStore from '../../../../store/users.store';
 import { SelectData, ValueType } from '../../../../types';
 import {
   CreateEventSchedule,
+  frequencyType,
   methodOfInstruction,
   recurringDays,
   scheduleAppliesTo,
-  scheduleType,
-} from '../../../../types/services/event.types';
+} from '../../../../types/services/schedule.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import CheckboxMolecule from '../../../Molecules/input/CheckboxMolecule';
@@ -41,7 +41,7 @@ export default function NewSchedule() {
     plannedScheduleStartDate: '',
     plannedStartHour: new Date().toLocaleTimeString(),
     venue: '',
-    scheduleType: scheduleType.ONETIME,
+    frequencyType: frequencyType.ONETIME,
   });
 
   function handleChange(e: ValueType) {
@@ -131,8 +131,8 @@ function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
           type="block"
           handleChange={handleChange}
           name={'scheduleType'}
-          value={values.scheduleType}
-          options={getDropDownStatusOptions(scheduleType)}>
+          value={values.frequencyType}
+          options={getDropDownStatusOptions(frequencyType)}>
           Event type
         </RadioMolecule>
       </div>
@@ -163,7 +163,7 @@ function SecondStep({ values, handleChange, handleSubmit }: IStepProps) {
         handleChange={handleChange}>
         Planned start time
       </InputMolecule>
-      {values.scheduleType === scheduleType.REPEATING ? (
+      {values.frequencyType === frequencyType.REPEATING ? (
         <CheckboxMolecule
           isFlex
           options={getDropDownStatusOptions(recurringDays).slice(0, 7)}
