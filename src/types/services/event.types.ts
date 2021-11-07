@@ -1,5 +1,5 @@
 import { GenericStatus, Table } from '..';
-
+/* eslint-disable no-unused-vars */
 export interface CreateEvent {
   code: string;
   description: string;
@@ -28,9 +28,9 @@ export enum venueType {
 }
 
 export enum scheduleAppliesTo {
-  CLASS = 'APPLIES_TO_CLASS',
-  LEVEL = 'APPLIES_TO_LEVEL',
-  PROGRAM = 'APPLIES_TO_PROGRAM',
+  APPLIES_TO_CLASS = 'APPLIES_TO_CLASS',
+  APPLIES_TO_LEVEL = 'APPLIES_TO_LEVEL',
+  APPLIES_TO_PROGRAM = 'APPLIES_TO_PROGRAM',
 }
 
 export enum methodOfInstruction {
@@ -65,8 +65,9 @@ export interface CreateVenue {
 export interface VenueInfo extends CreateVenue, Table {}
 
 export interface CreateEventSchedule {
+  startDate: string;
   appliesTo?: scheduleAppliesTo;
-  beneficiaries?: Object[];
+  beneficiaries?: string[];
   event: string;
   methodOfInstruction: methodOfInstruction;
   period: number;
