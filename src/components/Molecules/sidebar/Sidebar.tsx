@@ -17,25 +17,22 @@ export default function Sidebar() {
     const routes: linkProps[] = [];
     const institutionAdminLinks: linkProps[] = [
       { title: 'Users', to: '/dashboard/users', icon: 'user' },
+      { title: 'Roles', to: '/dashboard/roles', icon: 'role' },
       { title: 'Academies', to: '/dashboard/academies', icon: 'academy', fill: false },
       { title: 'Evalutaions', to: '/dashboard/evaluations', icon: 'evaluation' },
-      { title: 'Roles', to: '/dashboard/roles', icon: 'role' },
       { title: 'Privileges', to: '/dashboard/privileges', icon: 'module' },
     ];
     const academicAdminLinks: linkProps[] = [
-      { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
-      { title: 'Academic years', to: '/dashboard/academic-years', icon: 'program' },
-      { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
       { title: 'Users', to: '/dashboard/users', icon: 'user' },
-      // { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
-      // { title: 'Subjects', to: '/dashboard/subjects', icon: 'module' },
+      { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
+      { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
+      { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
+      { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
       {
         title: 'Registration Control',
         to: '/dashboard/registration-control',
         icon: 'reg-control',
       },
-      { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
-      { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
       { title: 'Academic years', to: '/dashboard/academic-years', icon: 'program' },
     ];
 
