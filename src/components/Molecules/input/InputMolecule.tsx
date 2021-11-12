@@ -19,6 +19,7 @@ export default function InputMolecule<T>({
   type = 'text',
   readOnly = false,
   required = true,
+  defaultValue,
   ref,
   ...attrs
 }: IInputMolecule<T>) {
@@ -28,6 +29,7 @@ export default function InputMolecule<T>({
         {children}
       </ILabel>
       <Input
+        defaultValue={defaultValue}
         {...attrs}
         ref={ref}
         readonly={readOnly}

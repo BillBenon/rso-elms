@@ -34,6 +34,7 @@ export interface CommonStepProps {
 }
 
 export interface InputProps<T> extends CommonInputProps<T> {
+  defaultValue?: string;
   placeholder?: string;
   type?: string;
   readonly?: boolean;
