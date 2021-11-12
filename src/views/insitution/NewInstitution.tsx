@@ -130,6 +130,15 @@ export default function NewInstitution() {
               Institution mission
             </TextAreaMolecule>
           </div>
+          <div className="py-4">
+            <TextAreaMolecule
+              name="full_address"
+              value={values.full_address}
+              placeholder="Address"
+              handleChange={(e) => handleChange(e)}>
+              Institution HQ address
+            </TextAreaMolecule>
+          </div>
           <div className="py-4 col-span-2">
             <ILabel className="block pb-1">Institution logo</ILabel>
             <Button styleType="outline">Upload logo</Button>

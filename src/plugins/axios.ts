@@ -18,8 +18,15 @@ const evalutationModuleConfig: AxiosRequestConfig = {
   baseURL: 'http://197.243.110.147:8080/evaluation-service/api',
 };
 
+const timetableModuleConfig: AxiosRequestConfig = {
+  ...commonConfig,
+  baseURL: 'http://197.243.110.147:8080/timetable-service/api',
+};
+
 const adminstrationAxios = axios.create(administrationModuleConfig);
 const evaluationAxios = axios.create(evalutationModuleConfig);
+const timetableAxios = axios.create(timetableModuleConfig);
+
 const authIgnore: string[] = ['/'];
 
 const interceptAdminReq = (config: AxiosRequestConfig) => {
@@ -62,8 +69,12 @@ const interceptAdminResError = (error: Error | AxiosError<AxiosResponse<Response
 };
 
 adminstrationAxios.interceptors.request.use(interceptAdminReq);
-evaluationAxios.interceptors.request.use(interceptAdminReq);
 adminstrationAxios.interceptors.response.use((config) => config, interceptAdminResError);
+
+evaluationAxios.interceptors.request.use(interceptAdminReq);
 evaluationAxios.interceptors.response.use((config) => config, interceptAdminResError);
 
-export { adminstrationAxios, evaluationAxios };
+timetableAxios.interceptors.request.use(interceptAdminReq);
+timetableAxios.interceptors.response.use((config) => config, interceptAdminResError);
+
+export { adminstrationAxios, evaluationAxios, timetableAxios };

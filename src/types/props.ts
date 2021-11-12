@@ -33,12 +33,13 @@ export interface CommonStepProps {
   isVertical?: boolean;
 }
 
+/* @ts-ignore */
 export interface InputProps<T> extends CommonInputProps<T> {
   defaultValue?: string;
   placeholder?: string;
   type?: string;
   readonly?: boolean;
-  handleChange: (_e: ValueType) => void;
+  handleChange?: (_e: ValueType) => void;
   value: string | number | undefined;
   name: string;
   full?: boolean;

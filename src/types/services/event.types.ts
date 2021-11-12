@@ -1,11 +1,15 @@
-import { GenericStatus } from '..';
-
+import { GenericStatus, Table } from '..';
+/* eslint-disable no-unused-vars */
 export interface CreateEvent {
   code: string;
   description: string;
   eventCategory: eventCategory;
   name: string;
   status: GenericStatus;
+}
+
+export interface EventInfo extends CreateEvent, Table {
+  event_category: eventCategory;
 }
 
 export enum eventCategory {
@@ -22,9 +26,10 @@ export enum venueType {
   CLASS = 'CLASS',
   FIELD = 'FIELD',
 }
-
 export interface CreateVenue {
   name: string;
   status: GenericStatus;
   venueType: venueType;
 }
+
+export interface VenueInfo extends CreateVenue, Table {}

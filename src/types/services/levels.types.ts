@@ -1,4 +1,5 @@
 import { Table } from '..';
+import { ProgramInfo } from './program.types';
 
 export interface IcreateLevel {
   id: number | string;
@@ -12,4 +13,9 @@ export interface IcreateLevel {
 export interface ILevel extends Table, IcreateLevel {
   lastStatusChangeReason: string;
   flow: number;
+}
+
+export interface ProgramLevel extends Table {
+  level: ILevel;
+  program: ProgramInfo;
 }

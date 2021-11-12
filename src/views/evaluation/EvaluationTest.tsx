@@ -2,9 +2,14 @@ import React from 'react';
 import Countdown from 'react-countdown';
 
 import Heading from '../../components/Atoms/Text/Heading';
+import { evaluationStore } from '../../store/evaluation.store';
 import QuestionContainer from './QuestionContainer';
 
 export default function EvaluationTest() {
+  const { data: questions } = evaluationStore.getEvaluationQuestions(
+    'b22ee1a0-1da1-4fd1-a91f-011d3e384d9c',
+  );
+
   return (
     <div>
       <div className="flex justify-between">
@@ -14,13 +19,20 @@ export default function EvaluationTest() {
             Remaining time:
           </Heading>
           <Heading>
-            <Countdown date={Date.now() + 10000} renderer={Renderer} />
+            <Countdown date={Date.now() + 10000000000} renderer={Renderer} />
           </Heading>
         </div>
       </div>
 
-      <QuestionContainer />
-      <QuestionContainer />
+      {questions?.data.data.map((question) => (
+        <QuestionContainer
+          key={question.id}
+          question={question.question}
+          marks={question.mark}
+          isMultipleChoice={question.multipleChoiceAnswers.length > 0}
+        />
+      ))}
+      {/* <QuestionContainer /> */}
     </div>
   );
 }
@@ -28,7 +40,7 @@ export default function EvaluationTest() {
 // Renderer callback with condition
 function Renderer({ hours, minutes, seconds, completed }: any) {
   if (completed) {
-    window.location.href = '/dashboard/evaluations';
+    window.location.href = '/dashboard/student/evaluations';
   } else {
     // Render a countdown
     return (
