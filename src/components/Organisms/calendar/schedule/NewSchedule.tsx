@@ -1,11 +1,11 @@
 import React, { FormEvent, useState } from 'react';
 
-import { authenticatorStore } from '../../../../store';
-import { levelStore } from '../../../../store/level.store';
-import programStore from '../../../../store/program.store';
+import { authenticatorStore } from '../../../../store/administration';
+import { levelStore } from '../../../../store/administration/level.store';
+import programStore from '../../../../store/administration/program.store';
+import usersStore from '../../../../store/administration/users.store';
 import { eventStore } from '../../../../store/timetable/event.store';
 import { venueStore } from '../../../../store/timetable/venue.store';
-import usersStore from '../../../../store/users.store';
 import { SelectData, ValueType } from '../../../../types';
 import {
   CreateEventSchedule,

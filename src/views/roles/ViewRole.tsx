@@ -18,7 +18,7 @@ import Tiptap from '../../components/Molecules/editor/Tiptap';
 import PopupMolecule from '../../components/Molecules/Popup';
 import AddPrivileges from '../../components/Organisms/forms/roles/AddPrivileges';
 import { queryClient } from '../../plugins/react-query';
-import { roleStore } from '../../store';
+import { roleStore } from '../../store/administration';
 import { ParamType, Response, RolePrivilege, RoleRes } from '../../types';
 
 export default function ViewRole() {

@@ -7,8 +7,8 @@ import DateMolecule from '../../components/Molecules/input/DateMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
 import { queryClient } from '../../plugins/react-query';
-import { authenticatorStore } from '../../store';
-import academicyearsStore from '../../store/academicyears.store';
+import { authenticatorStore } from '../../store/administration';
+import academicyearsStore from '../../store/administration/academicyears.store';
 import { ParamType, ValueType } from '../../types';
 import {
   IAcademicYearStatus,

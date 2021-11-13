@@ -5,9 +5,9 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import academyStore from '../../../../store/academy.store';
-import locationStore from '../../../../store/location.store';
-import usersStore from '../../../../store/users.store';
+import academyStore from '../../../../store/administration/academy.store';
+import locationStore from '../../../../store/administration/location.store';
+import usersStore from '../../../../store/administration/users.store';
 import { CommonFormProps, ParamType, ValueType } from '../../../../types';
 import { AcademyCreateInfo } from '../../../../types/services/academy.types';
 import { LocationInfo } from '../../../../types/services/location.types';

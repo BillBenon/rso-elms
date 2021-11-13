@@ -3,7 +3,7 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useHistory } from 'react-router-dom';
 
-import usersStore from '../../../../../store/users.store';
+import usersStore from '../../../../../store/administration/users.store';
 import { CommonFormProps, ValueType } from '../../../../../types';
 import { DocType, ProfileStatus } from '../../../../../types/services/user.types';
 import { getDropDownStatusOptions } from '../../../../../utils/getOption';

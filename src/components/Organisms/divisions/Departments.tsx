@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 
-import { authenticatorStore } from '../../../store';
-import { divisionStore } from '../../../store/divisions.store';
+import { authenticatorStore } from '../../../store/administration';
+import { divisionStore } from '../../../store/administration/divisions.store';
 import { DivisionInfo } from '../../../types/services/division.types';
 import NewAcademicProgram from '../../../views/programs/NewAcademicProgram';
 import Loader from '../../Atoms/custom/Loader';

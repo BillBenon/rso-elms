@@ -2,8 +2,8 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
 
-import { authenticatorStore } from '../../../store';
-import registrationControlStore from '../../../store/registrationControl.store';
+import { authenticatorStore } from '../../../store/administration';
+import registrationControlStore from '../../../store/administration/registrationControl.store';
 import { CommonFormProps, ValueType } from '../../../types';
 import { IRegistrationControlCreateInfo } from '../../../types/services/registrationControl.types';
 import Button from '../../Atoms/custom/Button';

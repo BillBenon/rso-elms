@@ -7,7 +7,7 @@ import Stepper from '../../components/Molecules/Stepper/Stepper';
 import AccountDetails from '../../components/Organisms/forms/auth/signup/personal/AccountDetails';
 import EmploymentDetails from '../../components/Organisms/forms/auth/signup/personal/EmploymentDetails';
 import PersonalDetails from '../../components/Organisms/forms/auth/signup/personal/PersonalDetails';
-import usersStore from '../../store/users.store';
+import usersStore from '../../store/administration/users.store';
 import { ProfileStatus, UpdateUserInfo, UserInfo } from '../../types/services/user.types';
 
 function CompleteProfile() {

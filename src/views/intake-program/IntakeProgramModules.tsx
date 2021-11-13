@@ -14,7 +14,7 @@ import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
-import { moduleStore } from '../../store/modules.store';
+import { moduleStore } from '../../store/administration/modules.store';
 import { CommonCardDataType } from '../../types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
 import { advancedTypeChecker } from '../../utils/getOption';

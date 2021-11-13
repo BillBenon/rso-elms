@@ -1,8 +1,8 @@
 import { AxiosResponse } from 'axios';
 import { useMutation, useQuery } from 'react-query';
 
-import { roleService } from '../services';
-import { PrivilegeRes, Response, RolePrivilege, RoleRes } from '../types';
+import { roleService } from '../../services';
+import { PrivilegeRes, Response, RolePrivilege, RoleRes } from '../../types';
 
 class RoleStore {
   addRole() {

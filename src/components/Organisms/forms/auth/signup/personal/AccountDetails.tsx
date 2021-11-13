@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import usersStore from '../../../../../../store/users.store';
+import usersStore from '../../../../../../store/administration/users.store';
 import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../types';
 import {
   AccountDetail,

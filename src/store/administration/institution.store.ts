@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
 
-import { institutionService } from '../services/administration/institution.service';
+import { institutionService } from '../../services/administration/institution.service';
 
 class InstitutionStore {
   create() {

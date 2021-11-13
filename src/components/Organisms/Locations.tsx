@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import locationStore from '../../store/location.store';
+import locationStore from '../../store/administration/location.store';
 import { SelectData, ValueType } from '../../types';
 import { getDropDownOptions } from '../../utils/getOption';
 import Heading from '../Atoms/Text/Heading';

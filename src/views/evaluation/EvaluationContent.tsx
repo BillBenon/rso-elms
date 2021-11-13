@@ -5,7 +5,7 @@ import { Route, useParams, useRouteMatch } from 'react-router-dom';
 import Heading from '../../components/Atoms/Text/Heading';
 import Table from '../../components/Molecules/table/Table';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
-import { evaluationStore } from '../../store/evaluation.store';
+import { evaluationStore } from '../../store/administration/evaluation.store';
 import { ParamType } from '../../types';
 import ContentSpan from './ContentSpan';
 

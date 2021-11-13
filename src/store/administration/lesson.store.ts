@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
 
-import { lessonService } from '../services/administration/lesson.service';
+import { lessonService } from '../../services/administration/lesson.service';
 
 class LessonStore {
   addLesson() {

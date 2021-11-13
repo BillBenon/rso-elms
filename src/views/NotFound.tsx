@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import Button from '../components/Atoms/custom/Button';
-import { authenticatorStore } from '../store';
+import { authenticatorStore } from '../store/administration/authenticator.store';
 
 const NotFound = () => {
   const history = useHistory();

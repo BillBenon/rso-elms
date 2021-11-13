@@ -1,7 +1,7 @@
 import React from 'react';
 
 import SignInWithRegControl from '../../components/Organisms/forms/auth/signin/SignInWithRegControl';
-import registrationControlStore from '../../store/registrationControl.store';
+import registrationControlStore from '../../store/administration/registrationControl.store';
 
 export default function OpenRegistrations() {
   const { data, isLoading, isSuccess } = registrationControlStore.fetchRegControl();

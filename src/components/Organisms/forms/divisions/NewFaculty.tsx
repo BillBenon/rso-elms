@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
 import { queryClient } from '../../../../plugins/react-query';
-import { divisionStore } from '../../../../store/divisions.store';
+import { divisionStore } from '../../../../store/administration/divisions.store';
 import { IDivisionsAcademyType, ValueType } from '../../../../types';
 import { DivisionCreateInfo } from '../../../../types/services/division.types';
 import Button from '../../../Atoms/custom/Button';

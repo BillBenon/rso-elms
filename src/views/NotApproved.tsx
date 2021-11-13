@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import Button from '../components/Atoms/custom/Button';
 import Heading from '../components/Atoms/Text/Heading';
 import AcademyProfileCard from '../components/Molecules/cards/AcademyProfileCard';
-import { authenticatorStore } from '../store';
+import { authenticatorStore } from '../store/administration';
 
 function NotApproved() {
   const authUser = authenticatorStore.authUser().data?.data;
