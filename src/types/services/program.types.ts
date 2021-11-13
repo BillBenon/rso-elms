@@ -6,7 +6,8 @@ import { UserInfo } from './user.types';
 
 export interface ProgramInfo extends CreateProgramInfo, Table {
   department: DivisionInfo;
-  incharge: UserInfo;
+  current_admin_names: string;
+  total_num_modules: number;
 }
 
 export interface CreateProgramInfo {

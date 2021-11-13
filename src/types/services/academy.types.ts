@@ -5,6 +5,13 @@ import { LocationInfo } from './location.types';
 export interface AcademyInfo extends AcademyCreateInfo, Table {
   institution: InstitutionInfo;
   village: LocationInfo;
+  post_code: string;
+  village_id: string;
+  total_num_students: number;
+  total_num_instructors: number;
+  total_num_programs: number;
+  total_num_faculties: number;
+  total_num_departments: number;
 }
 
 export interface AcademyCreateInfo {
