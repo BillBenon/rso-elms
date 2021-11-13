@@ -2,7 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 
-import { intakeStore } from '../../../store/intake.store';
+import { intakeStore } from '../../../store/administration/intake.store';
 import { ValueType } from '../../../types';
 import {
   IntakeInfo,

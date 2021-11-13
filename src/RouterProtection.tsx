@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import Dashboard from './layout/Dashboard';
-import { authenticatorStore } from './store';
+import { authenticatorStore } from './store/administration';
 import { UserInfo, UserType } from './types/services/user.types';
 import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';

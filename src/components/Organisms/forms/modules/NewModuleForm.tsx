@@ -3,8 +3,8 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { queryClient } from '../../../../plugins/react-query';
-import { moduleStore } from '../../../../store/modules.store';
-import programStore from '../../../../store/program.store';
+import { moduleStore } from '../../../../store/administration/modules.store';
+import programStore from '../../../../store/administration/program.store';
 import { ParamType, ValueType } from '../../../../types';
 import { CreateModuleInfo } from '../../../../types/services/modules.types';
 import Button from '../../../Atoms/custom/Button';

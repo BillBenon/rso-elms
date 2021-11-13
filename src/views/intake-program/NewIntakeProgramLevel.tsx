@@ -8,12 +8,12 @@ import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule'
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import SwitchMolecule from '../../components/Molecules/input/SwitchMolecule';
 import { queryClient } from '../../plugins/react-query';
-import { authenticatorStore } from '../../store';
-import academicyearsStore from '../../store/academicyears.store';
-import { intakeStore } from '../../store/intake.store';
-import intakeProgramStore from '../../store/intake-program.store';
-import programStore from '../../store/program.store';
-import usersStore from '../../store/users.store';
+import { authenticatorStore } from '../../store/administration';
+import academicyearsStore from '../../store/administration/academicyears.store';
+import { intakeStore } from '../../store/administration/intake.store';
+import intakeProgramStore from '../../store/administration/intake-program.store';
+import programStore from '../../store/administration/program.store';
+import usersStore from '../../store/administration/users.store';
 import { ValueType } from '../../types';
 import {
   CreateLevelsIntakeProgram,

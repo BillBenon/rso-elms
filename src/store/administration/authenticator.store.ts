@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
 
-import { authenticatorService } from '../services/administration/authenticator.service';
+import { authenticatorService } from '../../services/administration/authenticator.service';
 
 class AuthenticatorStore {
   login() {

@@ -1,6 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 
-import academyStore from '../../../store/academy.store';
+import academyStore from '../../../store/administration/academy.store';
 import { CommonFormProps, ValueType } from '../../../types';
 import { AcademyInfo } from '../../../types/services/academy.types';
 import { getDropDownOptions } from '../../../utils/getOption';

@@ -3,11 +3,11 @@ import { useParams, useRouteMatch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import SkeletonLoader from '../../components/Atoms/custom/SkeletonLoader';
 import Heading from '../../components/Atoms/Text/Heading';
-import AddCard from '../../components/Molecules/cards/AddCard';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import { levelStore } from '../../store/level.store';
-import programStore from '../../store/program.store';
+import { levelStore } from '../../store/administration/level.store';
+import programStore from '../../store/administration/program.store';
 import { ParamType } from '../../types';
 
 export default function ProgramLevelsTimeTable() {
@@ -29,8 +29,12 @@ export default function ProgramLevelsTimeTable() {
           <Heading fontSize="xl" fontWeight="bold">
             {lvl.level.name}
           </Heading>
-          <div className="flex flex-wrap justify-start pt-5">
-            <AddCard title={'No classes here'} onClick={() => {}} />
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 pt-5">
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className="p-3">
+                <SkeletonLoader height={200} />
+              </div>
+            ))}
           </div>
         </div>
       ))}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { authenticatorStore } from '../../../store';
+import { authenticatorStore } from '../../../store/administration';
 import { UserInfo, UserType } from '../../../types/services/user.types';
 import SidebarLinks, { linkProps } from '../../Atoms/custom/SidebarLinks';
 import AcademyProfileCard from '../cards/AcademyProfileCard';

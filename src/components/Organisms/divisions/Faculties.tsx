@@ -4,8 +4,8 @@ import toast from 'react-hot-toast';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import { authenticatorStore } from '../../../store';
-import { divisionStore } from '../../../store/divisions.store';
+import { authenticatorStore } from '../../../store/administration';
+import { divisionStore } from '../../../store/administration/divisions.store';
 import { DivisionInfo } from '../../../types/services/division.types';
 import Button from '../../Atoms/custom/Button';
 import Loader from '../../Atoms/custom/Loader';

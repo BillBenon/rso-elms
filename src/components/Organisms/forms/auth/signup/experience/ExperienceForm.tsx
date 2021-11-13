@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { UseMutateAsyncFunction } from 'react-query';
 
-import { authenticatorStore } from '../../../../../../store';
-import { experienceStore } from '../../../../../../store/experience.store';
+import { authenticatorStore } from '../../../../../../store/administration';
+import { experienceStore } from '../../../../../../store/administration/experience.store';
 import {
   CommonFormProps,
   CommonStepProps,

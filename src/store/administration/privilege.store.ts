@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
 
-import { privilegeService } from '../services';
+import { privilegeService } from '../../services';
 
 class PrivilegeStore {
   modifyPrivilege() {
