@@ -31,7 +31,7 @@ export default function Input<T>({
     if (handleChange) handleChange({ name, value: e.target.value, event: e });
   }
   useEffect(() => {
-    handleChange({ name, value });
+    if (handleChange) handleChange({ name, value });
   }, [value]);
 
   return (
