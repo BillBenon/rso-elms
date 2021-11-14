@@ -13,56 +13,40 @@ import academicyearsStore from '../../store/academicyears.store';
 import { intakeStore } from '../../store/intake.store';
 import intakeProgramStore from '../../store/intake-program.store';
 import programStore from '../../store/program.store';
-import usersStore from '../../store/users.store';
 import { ValueType } from '../../types';
 import {
-  CreateLevelsIntakeProgram,
+  CreateLevelIntakeProgram,
   IntakeProgParam,
-  IntakeProgramInfo,
   ProgressStatus,
 } from '../../types/services/intake-program.types';
-import { ILevel } from '../../types/services/levels.types';
-import { ProgramInfo } from '../../types/services/program.types';
-import { UserInfo, UserType } from '../../types/services/user.types';
-import { getDropDownOptions } from '../../utils/getOption';
-
-interface CombinedData extends CreateLevelsIntakeProgram {
-  program: ProgramInfo;
-  level: ILevel;
-  checked: boolean;
+import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
+interface PeriodStep {
+  prd: IAcademicPeriodInfo;
+  values: CreateLevelIntakeProgram;
+  handleChange: (_e: ValueType) => any;
 }
 
-interface StepProps {
-  values: CombinedData[];
-  display_label: string;
-  handleChange: (_index: number, _e: ValueType) => any;
-  handleNext: <T>(_e: FormEvent<T>) => any;
-  handleCheck: (_index: number) => void;
-}
-
-interface StepLevelYear extends StepProps {
-  intakeProgram?: IntakeProgramInfo;
-  academicyears: IAcademicYearInfo[];
-  instructors: UserInfo[];
-}
-
-interface StepLevelPeriod extends StepProps {
-  academicyears: IAcademicYearInfo[];
-  academicperiods: IAcademicPeriodInfo[];
-}
-
+import DateMolecule from '../../components/Molecules/input/DateMolecule';
 import Stepper from '../../components/Molecules/Stepper/Stepper';
+import academicperiodStore from '../../store/academicperiod.store';
+import instructordeploymentStore from '../../store/instructordeployment.store';
 import { IAcademicPeriodInfo } from '../../types/services/academicperiod.types';
-import { IAcademicYearInfo } from '../../types/services/academicyears.types';
 
 export default function NewIntakeProgramLevel() {
-  const [currentStep, setCurrentStep] = useState(0);
-
-  const [values, setvalues] = useState<CombinedData[]>([]);
   const history = useHistory();
+  const [currentStep, setCurrentStep] = useState(0);
+  const [completeStep, setCompleteStep] = useState(0);
+  const [lastStep, setLastStep] = useState(0);
+
+  const nextStep = (isComplete: boolean) => {
+    if (currentStep === lastStep) setDone(checked);
+    setCurrentStep((currentStep) => currentStep + 1);
+    if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
+  };
   const { id: programId, intakeProg } = useParams<IntakeProgParam>();
 
-  const programLevels = programStore.getLevelsByAcademicProgram(programId);
+  const programLevels =
+    programStore.getLevelsByAcademicProgram(programId).data?.data.data;
 
   const authUser = authenticatorStore.authUser().data?.data.data;
   const intakes = intakeStore.getIntakesByProgram(programId).data?.data.data;
@@ -74,138 +58,85 @@ export default function NewIntakeProgramLevel() {
       ?.data.data || [];
 
   const instructors =
-    usersStore
-      .fetchUsers()
-      .data?.data.data.filter((user) => user.user_type === UserType.INSTRUCTOR) || [];
+    instructordeploymentStore.getInstructorsDeployedInAcademy(
+      authUser?.academy.id.toString() || '',
+    ).data?.data.data || [];
 
-  useEffect(() => {
-    let newData: CombinedData[] = [];
-    let i = 0;
-    programLevels.data?.data.data.forEach((pl) => {
-      newData.push({
-        checked: i === 0,
-        program: pl.program,
-        level: pl.level,
-        academic_period_id: '',
-        academic_program_level_id: '',
-        academic_year_id: '',
-        academic_year_program_intake_level_id: 0,
-        actual_end_on: '',
-        actual_start_on: '',
-        id: 0,
-        incharge_id: '',
-        intake_program_id: intakeProgram?.id.toString() || '',
-        planed_end_on: '',
-        planed_start_on: '',
-        progress_status: ProgressStatus.STARTED,
-      });
-      i++;
-    });
+  const academicperiods = academicperiodStore.getAllPeriods().data?.data.data || [];
 
-    setvalues(newData);
-  }, [programLevels.data?.data.data]);
+  const [values, setvalues] = useState<CreateLevelIntakeProgram>({
+    academic_period_id: '',
+    academic_program_level_id: '',
+    academic_year_id: '',
+    academic_year_program_intake_level_id: 0,
+    actual_end_on: '',
+    actual_start_on: '',
+    incharge_id: '70ee81f0-39ca-4282-9a0d-ff9bc4106f9d',
+    intake_program_id: intakeProgram?.id.toString() || '',
+    planed_end_on: '',
+    planed_start_on: '',
+    progress_status: ProgressStatus.STARTED,
+  });
 
-  // let academicperiods: IAcademicPeriodInfo[][] = [];
-  // function keepAcademicPeriods() {
+  const [checked, setchecked] = useState(0);
+  const [done, setDone] = useState(0);
 
-  // values.map((val) => {
-  //   let fetchedData =
-  //     academicperiodStore.getAcademicPeriodsByAcademicYear(
-  //       val.academic_year_id.toString(),
-  //     ).data?.data.data || [];
-  //   academicperiods.push(fetchedData);
-  // });
-  // console.log(academicperiods);
-  // }
-  // keepAcademicPeriods();
+  const { mutateAsync } = intakeProgramStore.addLevelToIntakeProgram();
 
-  function handleChange(index: number, e: ValueType) {
-    let previousState = [...values];
-    previousState[index] = {
-      ...previousState[index],
-      [e.name]: e.value,
-    };
-    setvalues(previousState);
+  function handleChange(e: ValueType) {
+    setvalues({ ...values, [e.name]: e.value });
   }
 
-  const { mutateAsync } = intakeProgramStore.addLevelsToIntakeProgram();
-
-  const handleCheck = (index: number) => {
-    let previousState = [...values];
-    previousState[index] = {
-      ...previousState[index],
-      checked: !previousState[index].checked,
-    };
-    setvalues(previousState);
+  const handleCheck = (index: number, id: string) => {
+    setvalues({ ...values, academic_program_level_id: id });
+    setchecked(index);
   };
 
-  function submitForm<T>(e: FormEvent<T>) {
-    e.preventDefault(); // prevent page to reload:
+  useEffect(
+    () =>
+      setvalues({
+        ...values,
+        academic_period_id: document.getElementById('academic_period_id')?.title || '',
+      }),
+    [document.getElementById('academic_period_id')?.title],
+  );
 
-    if (currentStep === 0) setCurrentStep(currentStep + 1);
-    else {
-      mutateAsync(
-        values.filter((val) => val.checked),
-        {
-          onSuccess: () => {
-            toast.success('Levels added to program');
-            queryClient.invalidateQueries(['levels/academy']);
-            history.goBack();
-          },
-          onError: (error) => {
-            console.log(error);
-            toast.error('something wrong happened while creating level');
-          },
-        },
-      );
-    }
+  async function submitForm<T>(e: FormEvent<T>) {
+    e.preventDefault(); // prevent page to reload:
+    await mutateAsync(values, {
+      onSuccess: () => {
+        toast.success('Levels added to program');
+        queryClient.invalidateQueries(['levels/academy']);
+        nextStep(true);
+      },
+      onError: (error) => {
+        console.log(error);
+        toast.error('something wrong happened while creating level');
+      },
+    });
   }
 
-  return (
-    <div className="w-full">
-      <Stepper
-        currentStep={currentStep}
-        completeStep={currentStep}
-        width="w-64"
-        isVertical={false}
-        isInline={false}
-        navigateToStepHandler={() => console.log('submitted')}>
-        <AddProgramLevelYear
-          display_label="Add Levels to Program Intake"
-          values={values}
-          handleChange={handleChange}
-          handleNext={submitForm}
-          intakeProgram={intakeProgram}
-          academicyears={academicYears}
-          instructors={instructors}
-          handleCheck={handleCheck}
-        />
-        <AddIntakePeriod
-          display_label="New Intake Period"
-          values={values}
-          handleChange={handleChange}
-          handleNext={submitForm}
-          academicyears={academicYears}
-          handleCheck={handleCheck}
-          academicperiods={[]}
-        />
-      </Stepper>
-    </div>
-  );
-}
+  useEffect(() => {
+    programLevels && handleCheck(0, programLevels[0].id.toString());
+  }, [programLevels]);
 
-function AddProgramLevelYear({
-  values,
-  intakeProgram,
-  academicyears,
-  instructors,
-  handleChange,
-  handleNext,
-  handleCheck,
-}: StepLevelYear) {
+  useEffect(() => {
+    setvalues({ ...values, intake_program_id: intakeProgram?.id.toString() || '' });
+  }, [intakeProgram]);
+
+  useEffect(() => {
+    setLastStep(
+      academicperiods.filter((prds) => prds.academic_year.id === values.academic_year_id)
+        .length,
+    );
+  }, [academicperiods]);
+
   return (
-    <form onSubmit={handleNext}>
-      <div className="overflow-y-auto max-h-96">
+    <div className="p-10 w-5/6">
+      <Heading fontWeight="semibold" fontSize="2xl" className="pb-8">
+        Add Levels to Program Intake
+      </Heading>
+      <form onSubmit={submitForm}>
         <InputMolecule
           readOnly
           name="intake_program_id"
@@ -213,99 +144,116 @@ function AddProgramLevelYear({
           handleChange={(_e: ValueType) => {}}>
           Intake Program
         </InputMolecule>
-        <Heading fontSize="sm">Levels</Heading>
-        {values.map((programLevel, index) => (
-          <div key={programLevel.level.id}>
-            <SwitchMolecule
-              value={programLevel.checked}
-              name="level"
-              handleChange={() => handleCheck(index)}>
-              {programLevel.level.name}
-            </SwitchMolecule>
-            {programLevel.checked && (
-              <div className="pl-8 py-3 flex flex-col gap-2">
-                <DropdownMolecule
-                  width="72"
-                  placeholder="Select academic year"
-                  options={getDropDownOptions({ inputs: academicyears })}
-                  name="academic_year_id"
-                  handleChange={(e: ValueType) => handleChange(index, e)}>
-                  Academic Year
-                </DropdownMolecule>
-                <DropdownMolecule
-                  width="72"
-                  placeholder="Select incharge"
-                  options={getDropDownOptions({
-                    inputs: instructors,
-                    labelName: ['first_name', 'last_name'],
-                  })}
-                  name="incharge_id"
-                  handleChange={(e: ValueType) => handleChange(index, e)}>
-                  Instructor Incharge
-                </DropdownMolecule>
-              </div>
-            )}
+        <Heading fontSize="sm" className="py-4">
+          Levels
+        </Heading>
+        {programLevels?.map((programLevel, index) => (
+          <div key={index}>
+            <div className={`${checked === index ? 'bg-main' : ''} px-8 py-4`}>
+              <SwitchMolecule
+                value={checked === index}
+                name="level"
+                handleChange={() => handleCheck(index, programLevel.id.toString())}>
+                {programLevel.level.name}
+              </SwitchMolecule>
+              {checked === index && done === 0 && (
+                <div className="pl-8 py-3 flex flex-col gap-2 ">
+                  <DropdownMolecule
+                    width="72"
+                    placeholder="Select incharge"
+                    options={getDropDownOptions({
+                      inputs: instructors,
+                      labelName: ['first_name', 'last_name'],
+                    })}
+                    name="incharge_id"
+                    handleChange={handleChange}>
+                    Instructor Incharge
+                  </DropdownMolecule>
+                  <DropdownMolecule
+                    width="72"
+                    placeholder="Select academic year"
+                    options={getDropDownOptions({ inputs: academicYears })}
+                    name="academic_year_id"
+                    handleChange={handleChange}>
+                    Academic Year
+                  </DropdownMolecule>
+                  <Stepper
+                    currentStep={currentStep}
+                    completeStep={completeStep}
+                    navigateToStepHandler={() => {}}>
+                    {academicperiods
+                      .filter((prds) => prds.academic_year.id === values.academic_year_id)
+                      .map((prd) => (
+                        <IntakePeriod
+                          key={prd.id}
+                          prd={prd}
+                          values={values}
+                          handleChange={handleChange}
+                        />
+                      ))}
+                  </Stepper>
+                </div>
+              )}
+            </div>
           </div>
         ))}
-      </div>
-
-      <Button className="mt-4" type="submit">
-        Save
+      </form>
+      <Button
+        className="mt-4"
+        onClick={() =>
+          // history.push(`/dashboard/intakes/programs/${intakeProg}/${programId}/modules`)
+          history.goBack()
+        }>
+        Finish
       </Button>
-    </form>
+    </div>
   );
 }
 
-function AddIntakePeriod({
-  values,
-  academicyears,
-  // eslint-disable-next-line no-unused-vars
-  handleChange,
-  handleNext,
-  handleCheck,
-  academicperiods,
-}: StepLevelPeriod) {
-  let chosedLevels = values.filter((val) => val.checked);
+function IntakePeriod({ prd, handleChange, values }: PeriodStep) {
   return (
-    <form onSubmit={handleNext}>
-      <div className="overflow-y-auto max-h-96">
-        <Heading fontSize="sm">Program Levels</Heading>
-        {chosedLevels.map((programLevel, index) => (
-          <div key={programLevel.level.id}>
-            <SwitchMolecule
-              value={programLevel.checked}
-              name="level"
-              handleChange={() => handleCheck(index)}>
-              {programLevel.level.name}
-            </SwitchMolecule>
-            {programLevel.checked && (
-              <div className="pl-8 py-3 flex flex-col gap-2">
-                <InputMolecule
-                  readOnly
-                  width="72"
-                  name="academic_year_id"
-                  value={`${
-                    academicyears.find(
-                      (year) => year.id === programLevel.academic_year_id,
-                    )?.name
-                  }`}
-                  handleChange={(_e: ValueType) => {}}>
-                  Academic Year
-                </InputMolecule>
-                {academicperiods.map((prd) => {
-                  <Heading fontSize="sm" color="primary">
-                    {prd.name}
-                  </Heading>;
-                })}
-              </div>
-            )}
-          </div>
-        ))}
+    <div>
+      <InputMolecule
+        title={prd.id.toString()}
+        id="academic_period_id"
+        type="hidden"
+        value={prd.id}
+        name="academic_period_id"
+      />
+      <Heading fontSize="sm" fontWeight="semibold" color="primary" className="pb-3">
+        {prd.name}
+      </Heading>
+      <DateMolecule
+        startYear={new Date(prd.academic_year.planned_start_on).getFullYear()}
+        endYear={new Date(prd.academic_year.planned_end_on).getFullYear()}
+        handleChange={handleChange}
+        reverse={false}
+        name="planed_start_on">
+        Planned Start Date
+      </DateMolecule>
+      <div className="pt-4">
+        <DateMolecule
+          startYear={new Date(values.planed_start_on).getFullYear()}
+          endYear={new Date(prd.academic_year.planned_end_on).getFullYear()}
+          handleChange={handleChange}
+          name="planed_end_on">
+          Planned End Date
+        </DateMolecule>
       </div>
-
-      <Button className="mt-4" type="submit">
+      <DropdownMolecule
+        width="5/12"
+        handleChange={handleChange}
+        name="progress_status"
+        placeholder="intake period status"
+        defaultValue={getDropDownStatusOptions(ProgressStatus).find(
+          (ps) => ps.value === values.progress_status,
+        )}
+        options={getDropDownStatusOptions(ProgressStatus)}>
+        Intake Period Status
+      </DropdownMolecule>
+      <Button className="mt-4 w-1/4" type="submit">
         Save
       </Button>
-    </form>
+    </div>
   );
 }
