@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 
 import { queryClient } from '../../../plugins/react-query';
-import { intakeStore } from '../../../store/intake.store';
+import { intakeStore } from '../../../store/administration/intake.store';
 import { ValueType } from '../../../types';
 import {
   IntakeInfo,

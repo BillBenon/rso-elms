@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
 
-import { experienceService } from '../services/administration/experience.service';
+import { experienceService } from '../../services/administration/experience.service';
 
 class ExperienceStore {
   create() {

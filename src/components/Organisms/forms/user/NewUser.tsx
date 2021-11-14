@@ -3,11 +3,11 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
 
-import { authenticatorStore } from '../../../../store';
-import academyStore from '../../../../store/academy.store';
-import { intakeStore } from '../../../../store/intake.store';
-import programStore from '../../../../store/program.store';
-import usersStore from '../../../../store/users.store';
+import { authenticatorStore } from '../../../../store/administration';
+import academyStore from '../../../../store/administration/academy.store';
+import { intakeStore } from '../../../../store/administration/intake.store';
+import programStore from '../../../../store/administration/program.store';
+import usersStore from '../../../../store/administration/users.store';
 import { CommonFormProps, ValueType } from '../../../../types';
 import { AcademyInfo } from '../../../../types/services/academy.types';
 import { IntakeProgramInfo } from '../../../../types/services/intake-program.types';

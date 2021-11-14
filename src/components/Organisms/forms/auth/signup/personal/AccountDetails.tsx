@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import usersStore from '../../../../../../store/users.store';
+import usersStore from '../../../../../../store/administration/users.store';
 import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../types';
 import {
   AccountDetail,
@@ -73,7 +73,7 @@ function AccountDetails<E>({
             name="send_communication_msg"
             placeholder="Select way of communication"
             defaultValue={getDropDownStatusOptions(SendCommunicationMsg).find(
-              (msg) => msg.value === SendCommunicationMsg.EMAIL,
+              (msg) => msg.value === accountDetails.send_communication_msg,
             )}
             options={getDropDownStatusOptions(SendCommunicationMsg)}>
             How would you like to be communicated?

@@ -6,7 +6,7 @@ import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import academicperiodStore from '../../store/academicperiod.store';
+import academicperiodStore from '../../store/administration/academicperiod.store';
 import { Link as Links, ParamType } from '../../types';
 import { PeriodType } from '../../types/services/intake.types';
 

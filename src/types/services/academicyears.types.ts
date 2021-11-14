@@ -1,16 +1,15 @@
 /* eslint-disable no-unused-vars */
 import { Table } from '..';
+import { AcademyInfo } from './academy.types';
 
 export interface IAcademicYearInfo extends Table {
   name: string;
-  academyId: string;
+  actual_atart_on: string;
+  actual_end_on: null;
   planned_start_on: string;
   planned_end_on: string;
-  total_num_students: number;
-  total_num_instructors: number;
-  total_num_programs: number;
-  total_num_faculties: number;
-  total_num_departments: number;
+  academy: AcademyInfo;
+  academyId: string;
   status: IAcademicYearStatus;
 }
 

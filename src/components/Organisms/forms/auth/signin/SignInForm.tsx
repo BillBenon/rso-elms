@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 
 import { queryClient } from '../../../../../plugins/react-query';
-import { authenticatorStore } from '../../../../../store';
+import { authenticatorStore } from '../../../../../store/administration';
 import { ValueType } from '../../../../../types';
 import { LoginInfo } from '../../../../../types';
 import cookie from '../../../../../utils/cookie';

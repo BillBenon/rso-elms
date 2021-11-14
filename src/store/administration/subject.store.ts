@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
 
-import { subjectService } from '../services/administration/subject.service';
+import { subjectService } from '../../services/administration/subject.service';
 
 class SubjectStore {
   addSubject() {

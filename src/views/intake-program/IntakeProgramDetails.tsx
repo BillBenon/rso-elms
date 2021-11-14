@@ -11,8 +11,8 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
-import intakeProgramStore from '../../store/intake-program.store';
-import programStore from '../../store/program.store';
+import intakeProgramStore from '../../store/administration/intake-program.store';
+import programStore from '../../store/administration/program.store';
 import { Link as Links } from '../../types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
@@ -80,7 +80,7 @@ function IntakeProgramDetails() {
         subTitle: program.type,
         description: program.description,
         department: program.department,
-        incharge: program.incharge && program.incharge.username,
+        incharge: program.current_admin_names,
       };
     }
 
@@ -171,20 +171,20 @@ function IntakeProgramDetails() {
                   </div>
 
                   <div className="flex flex-col gap-8 z-0">
-                    <div className="flex gap-8">
-                      <UsersPreview
-                        title="Students"
-                        label="Students in Cadette programs"
-                        data={DummyUser}
-                        totalUsers={DummyUser.length || 0}
-                      />
-                      <UsersPreview
-                        title="Instructors"
-                        label="Instructors in Cadette programs"
-                        data={DummyUser}
-                        totalUsers={DummyUser.length || 0}
-                      />
-                    </div>
+                    {/* <div className="flex gap-8"> */}
+                    <UsersPreview
+                      title="Students"
+                      label="Students in Cadette programs"
+                      data={DummyUser}
+                      totalUsers={DummyUser.length || 0}
+                    />
+                    <UsersPreview
+                      title="Instructors"
+                      label="Instructors in Cadette programs"
+                      data={DummyUser}
+                      totalUsers={DummyUser.length || 0}
+                    />
+                    {/* </div> */}
                   </div>
                 </div>
               )}

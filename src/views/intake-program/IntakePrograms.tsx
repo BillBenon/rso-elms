@@ -20,8 +20,8 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
-import { intakeStore } from '../../store/intake.store';
-import programStore from '../../store/program.store';
+import { intakeStore } from '../../store/administration/intake.store';
+import programStore from '../../store/administration/program.store';
 import { Link as LinkList, ParamType } from '../../types';
 import { IntakeProgramInfo } from '../../types/services/intake-program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
@@ -72,7 +72,7 @@ function IntakePrograms() {
       subTitle: prog.type.replaceAll('_', ' '),
       description: prog.description,
       department: prog.department,
-      incharge: prog.incharge && prog.incharge.username,
+      incharge: prog.incharge && prog.incharge.user.username,
     };
 
     programs.push(program);

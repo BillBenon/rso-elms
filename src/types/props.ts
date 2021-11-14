@@ -35,7 +35,7 @@ export interface CommonStepProps {
 
 /* @ts-ignore */
 export interface InputProps<T> extends CommonInputProps<T> {
-  placeholder?: string;
+  defaultValue?: string;
   type?: string;
   readonly?: boolean;
   handleChange?: (_e: ValueType) => void;
@@ -49,7 +49,7 @@ export interface InputProps<T> extends CommonInputProps<T> {
   width?: string | number;
   className?: string;
   required?: boolean;
-  ref?: React.LegacyRef<HTMLInputElement>;
+  reference?: React.LegacyRef<HTMLInputElement>;
 }
 
 export interface DropdownProps extends commonInputProps {

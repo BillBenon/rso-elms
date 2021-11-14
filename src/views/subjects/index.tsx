@@ -7,7 +7,7 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
-import { subjectStore } from '../../store/subject.store';
+import { subjectStore } from '../../store/administration/subject.store';
 import { CommonCardDataType, Link } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 

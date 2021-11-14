@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
 
-import { programService } from '../services/administration/program.service';
+import { programService } from '../../services/administration/program.service';
 
 class ProgramStore {
   createProgram() {

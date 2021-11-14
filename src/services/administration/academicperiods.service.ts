@@ -16,6 +16,11 @@ class AcademicPeriodService {
       academicPeriodInfo,
     );
   }
+
+  public async getAllPeriods(): Promise<AxiosResponse<Response<IAcademicPeriodInfo[]>>> {
+    return await adminstrationAxios.get('/periods/getPeriods');
+  }
+
   public async getAcademicPeriodById(
     id: string,
   ): Promise<AxiosResponse<Response<IAcademicPeriodInfo>>> {

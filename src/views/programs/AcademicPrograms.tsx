@@ -19,7 +19,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
-import programStore from '../../store/program.store';
+import programStore from '../../store/administration/program.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
 import { DivisionInfo } from '../../types/services/division.types';
 import { ProgramInfo } from '../../types/services/program.types';
@@ -77,7 +77,7 @@ export default function AcademicProgram() {
       subTitle: prog.type.replaceAll('_', ' '),
       description: prog.description,
       department: prog.department,
-      incharge: prog.incharge && prog.incharge.username,
+      incharge: prog.incharge && prog.incharge.user.username,
     };
 
     programs.push(program);

@@ -5,7 +5,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import { queryClient } from '../../plugins/react-query';
-import academicperiodStore from '../../store/academicperiod.store';
+import academicperiodStore from '../../store/administration/academicperiod.store';
 import { ParamType, ValueType } from '../../types';
 import { ICreateAcademicPeriod } from '../../types/services/academicperiod.types';
 import { PeriodType } from '../../types/services/intake.types';

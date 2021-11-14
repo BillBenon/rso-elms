@@ -10,8 +10,8 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import { authenticatorStore } from '../../store';
-import academicyearsStore from '../../store/academicyears.store';
+import { authenticatorStore } from '../../store/administration';
+import academicyearsStore from '../../store/administration/academicyears.store';
 import { Link as Links } from '../../types';
 import { IAcademicYearInfo } from '../../types/services/academicyears.types';
 import AcademicPeriod from '../academicPeriods/AcademicPeriod';
@@ -23,14 +23,7 @@ import UpdateAcademicYear from './UpdateAcademicYear';
 export interface FilteredData
   extends Pick<
     IAcademicYearInfo,
-    | 'id'
-    | 'name'
-    | 'academyId'
-    | 'planned_start_on'
-    | 'planned_end_on'
-    | 'status'
-    | 'total_num_programs'
-    | 'total_num_faculties'
+    'id' | 'name' | 'academyId' | 'planned_start_on' | 'planned_end_on' | 'status'
   > {}
 
 export default function AcademicYears() {

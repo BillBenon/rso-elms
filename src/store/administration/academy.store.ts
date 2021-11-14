@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
 
-import { academyService } from '../services/administration/academy.service';
+import { academyService } from '../../services/administration/academy.service';
 
 class AcademyStore {
   createAcademy() {

@@ -2,8 +2,8 @@ import moment from 'moment';
 import React from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
-import { authenticatorStore } from '../../../store';
-import registrationControlStore from '../../../store/registrationControl.store';
+import { authenticatorStore } from '../../../store/administration';
+import registrationControlStore from '../../../store/administration/registrationControl.store';
 import { GenericStatus, ValueType } from '../../../types';
 import { IRegistrationControlInfo } from '../../../types/services/registrationControl.types';
 import Button from '../../Atoms/custom/Button';
