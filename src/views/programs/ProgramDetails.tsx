@@ -47,7 +47,7 @@ export default function ProgramDetailsMolecule() {
         subTitle: program.type,
         description: program.description,
         department: program.department,
-        incharge: program.incharge && program.incharge.username,
+        incharge: program.incharge && program.incharge.user.username,
       };
     }
 

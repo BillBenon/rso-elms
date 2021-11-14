@@ -23,14 +23,7 @@ import UpdateAcademicYear from './UpdateAcademicYear';
 export interface FilteredData
   extends Pick<
     IAcademicYearInfo,
-    | 'id'
-    | 'name'
-    | 'academyId'
-    | 'planned_start_on'
-    | 'planned_end_on'
-    | 'status'
-    | 'total_num_programs'
-    | 'total_num_faculties'
+    'id' | 'name' | 'academyId' | 'planned_start_on' | 'planned_end_on' | 'status'
   > {}
 
 export default function AcademicYears() {
