@@ -2,7 +2,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { privilegeStore } from '../../../../store';
+import { privilegeStore } from '../../../../store/administration';
 import {
   ParamType,
   PrivilegeFeatureType,

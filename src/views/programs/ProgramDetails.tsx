@@ -18,7 +18,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
-import programStore from '../../store/program.store';
+import programStore from '../../store/administration/program.store';
 import { Link as Links, ParamType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ModuleLevels from '../modules/ModuleLevels';

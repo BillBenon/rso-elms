@@ -18,7 +18,7 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewRole from '../../components/Organisms/forms/roles/NewRole';
 import UpdateRole from '../../components/Organisms/forms/roles/UpdateRole';
-import { roleStore } from '../../store';
+import { roleStore } from '../../store/administration';
 import { RoleRes } from '../../types';
 
 interface FilteredRoles extends Pick<RoleRes, 'id' | 'name' | 'description' | 'status'> {}

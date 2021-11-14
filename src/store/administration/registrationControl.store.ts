@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
 
-import { registrationControlService } from '../services/administration/registrationControl.service';
+import { registrationControlService } from '../../services/administration/registrationControl.service';
 
 class RegistrationControlStore {
   createRegControl() {

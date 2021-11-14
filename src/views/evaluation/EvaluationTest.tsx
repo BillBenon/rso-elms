@@ -2,7 +2,7 @@ import React from 'react';
 import Countdown from 'react-countdown';
 
 import Heading from '../../components/Atoms/Text/Heading';
-import { evaluationStore } from '../../store/evaluation.store';
+import { evaluationStore } from '../../store/administration/evaluation.store';
 import QuestionContainer from './QuestionContainer';
 
 export default function EvaluationTest() {

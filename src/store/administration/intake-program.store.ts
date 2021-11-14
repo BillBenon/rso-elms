@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
 
-import { intakeProgramService } from '../services/administration/IntakeProgram.service';
+import { intakeProgramService } from '../../services/administration/IntakeProgram.service';
 
 class IntakeProgramStore {
   getStudentsByIntakeProgram(intakeProgramId: string) {

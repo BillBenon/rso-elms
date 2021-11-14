@@ -8,7 +8,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewPrivilege from '../../components/Organisms/forms/privilege/NewPrivilege';
-import { privilegeStore } from '../../store';
+import { privilegeStore } from '../../store/administration';
 import { PrivilegeRes } from '../../types';
 
 export default function PrivilegesView() {

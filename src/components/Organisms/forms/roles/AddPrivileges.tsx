@@ -2,7 +2,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
-import { roleStore } from '../../../../store';
+import { roleStore } from '../../../../store/administration';
 import { AddPrivilegeRoleType, SelectData, ValueType } from '../../../../types';
 import Button from '../../../Atoms/custom/Button';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';

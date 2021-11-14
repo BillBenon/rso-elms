@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
-import { authenticatorStore } from '../../../../store';
-import { moduleStore } from '../../../../store/modules.store';
+import { authenticatorStore } from '../../../../store/administration';
+import { moduleStore } from '../../../../store/administration/modules.store';
 import { GenericStatus, ValueType } from '../../../../types';
 import {
   CreatePrerequisites,

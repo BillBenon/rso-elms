@@ -4,7 +4,7 @@ import { useHistory, useParams } from 'react-router';
 
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import { divisionStore } from '../../store/divisions.store';
+import { divisionStore } from '../../store/administration/divisions.store';
 import { ParamType } from '../../types';
 import { DivisionInfo } from '../../types/services/division.types';
 

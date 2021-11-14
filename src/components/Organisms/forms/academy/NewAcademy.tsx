@@ -3,8 +3,8 @@ import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
 import { authenticatorService } from '../../../../services';
-import academyStore from '../../../../store/academy.store';
-import locationStore from '../../../../store/location.store';
+import academyStore from '../../../../store/administration/academy.store';
+import locationStore from '../../../../store/administration/location.store';
 import { CommonFormProps, ValueType } from '../../../../types';
 import { AcademyCreateInfo } from '../../../../types/services/academy.types';
 import { getDropDownOptions } from '../../../../utils/getOption';

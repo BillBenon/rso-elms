@@ -4,16 +4,21 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
+import DateMolecule from '../../components/Molecules/input/DateMolecule';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import SwitchMolecule from '../../components/Molecules/input/SwitchMolecule';
+import Stepper from '../../components/Molecules/Stepper/Stepper';
 import { queryClient } from '../../plugins/react-query';
-import { authenticatorStore } from '../../store';
-import academicyearsStore from '../../store/academicyears.store';
-import { intakeStore } from '../../store/intake.store';
-import intakeProgramStore from '../../store/intake-program.store';
-import programStore from '../../store/program.store';
+import { authenticatorStore } from '../../store/administration';
+import academicperiodStore from '../../store/administration/academicperiod.store';
+import academicyearsStore from '../../store/administration/academicyears.store';
+import { intakeStore } from '../../store/administration/intake.store';
+import intakeProgramStore from '../../store/administration/intake-program.store';
+import programStore from '../../store/administration/program.store';
+import instructordeploymentStore from '../../store/instructordeployment.store';
 import { ValueType } from '../../types';
+import { IAcademicPeriodInfo } from '../../types/services/academicperiod.types';
 import {
   CreateLevelIntakeProgram,
   IntakeProgParam,
@@ -25,12 +30,6 @@ interface PeriodStep {
   values: CreateLevelIntakeProgram;
   handleChange: (_e: ValueType) => any;
 }
-
-import DateMolecule from '../../components/Molecules/input/DateMolecule';
-import Stepper from '../../components/Molecules/Stepper/Stepper';
-import academicperiodStore from '../../store/academicperiod.store';
-import instructordeploymentStore from '../../store/instructordeployment.store';
-import { IAcademicPeriodInfo } from '../../types/services/academicperiod.types';
 
 export default function NewIntakeProgramLevel() {
   const history = useHistory();

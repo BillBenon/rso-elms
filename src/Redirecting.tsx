@@ -1,13 +1,9 @@
 import './styles/redirecting.scss';
 
-// import { AxiosResponse } from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { authenticatorStore } from './store';
-// import { experienceStore } from './store/experience.store';
-// import { Response } from './types';
-// import { ExperienceInfo } from './types/services/experience.types';
+import { authenticatorStore } from './store/administration';
 import { UserType } from './types/services/user.types';
 import NotApproved from './views/NotApproved';
 
@@ -16,14 +12,6 @@ export default function Redirecting() {
   const [userNotAllowed, setUserNotAllowed] = useState(false);
   const { data, isLoading } = authenticatorStore.authUser();
   const history = useHistory();
-  // let experiences: AxiosResponse<Response<ExperienceInfo[]>> | undefined;
-
-  // let person: PersonInfo | undefined = data?.data.data.person;
-
-  // ({ data: experiences } = experienceStore.getPersonExperiences(
-  //   person?.id.toString() || '',
-  // ));
-
   useEffect(() => {
     const notAllowed =
       data?.data.data.user_type === UserType.SUPER_ADMIN ||

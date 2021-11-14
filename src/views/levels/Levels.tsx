@@ -11,8 +11,8 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewLevel from '../../components/Organisms/forms/level/NewLevel';
 import UpdateLevel from '../../components/Organisms/forms/level/UpdateLevel';
-import { authenticatorStore } from '../../store';
-import { levelStore } from '../../store/level.store';
+import { authenticatorStore } from '../../store/administration';
+import { levelStore } from '../../store/administration/level.store';
 import { ILevel } from '../../types/services/levels.types';
 
 interface FilteredLevels

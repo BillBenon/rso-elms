@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
 
-import { intakeService } from '../services/administration/intake.service';
+import { intakeService } from '../../services/administration/intake.service';
 
 class IntakeStore {
   create() {
