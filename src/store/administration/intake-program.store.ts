@@ -13,6 +13,11 @@ class IntakeProgramStore {
       intakeProgramService.getLevelsByIntakeProgram(intakeProgramId),
     );
   }
+  getModulesByLevel(levelId: number) {
+    return useQuery(['levels/modules', levelId], () =>
+      intakeProgramService.getModulesByIntakeAcademicYearLevelId(levelId),
+    );
+  }
   addLevelsToIntakeProgram() {
     return useMutation(intakeProgramService.addLevelsToIntakeProgram);
   }

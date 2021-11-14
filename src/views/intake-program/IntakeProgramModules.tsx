@@ -18,6 +18,7 @@ import { moduleStore } from '../../store/administration/modules.store';
 import { CommonCardDataType } from '../../types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
+import IntakeProgramLevelModules from './IntakeProgramLevelModules';
 import NewIntakeProgramLevel from './NewIntakeProgramLevel';
 
 function IntakeProgramModules() {
@@ -89,33 +90,11 @@ function IntakeProgramModules() {
                     </section>
                   </Tab>
                 ) : (
-                  <Tab
+                  <IntakeProgramLevelModules
                     key={level.id}
-                    className=""
-                    label={level.academic_program_level.level.name}>
-                    <section className="mt-4 flex flex-wrap justify-start gap-4">
-                      {programModules.length <= 0 ? (
-                        <NoDataAvailable
-                          buttonLabel="Add new modules"
-                          title={'No Modules available in this program'}
-                          handleClick={() => history.push(`${url}/modules/add`)}
-                          description="And the web just isnt the same without you. Lets get you back online!"
-                        />
-                      ) : (
-                        <>
-                          <AddCard
-                            title={'Add new module'}
-                            onClick={() =>
-                              history.push(`/dashboard/programs/${id}/modules/add`)
-                            }
-                          />
-                          {programModules?.map((module, index) => (
-                            <ModuleCard course={module} key={index} />
-                          ))}
-                        </>
-                      )}
-                    </section>
-                  </Tab>
+                    level={level}
+                    label={level.academic_program_level.level.name}
+                  />
                 ),
               )}
             </Tabs>

@@ -6,6 +6,7 @@ import {
   CreateLevelIntakeProgram,
   LevelIntakeProgram,
 } from '../../types/services/intake-program.types';
+import { ModuleInfo } from '../../types/services/modules.types';
 import { UserInfo } from '../../types/services/user.types';
 
 class IntakeProgramService {
@@ -23,6 +24,14 @@ class IntakeProgramService {
       `academicProgramIntakeLevels/getProgramLevelsByIntakeProgram/${intakeProgramId}`,
     );
   }
+  public async getModulesByIntakeAcademicYearLevelId(
+    academicYearProgramIntakeLevelId: number,
+  ): Promise<AxiosResponse<Response<ModuleInfo[]>>> {
+    return await adminstrationAxios.get(
+      `academicProgramIntakeLevels/getModulesByIntakeAcademicYearLevelId/${academicYearProgramIntakeLevelId}`,
+    );
+  }
+
   public async addLevelsToIntakeProgram(
     newLevels: CreateLevelIntakeProgram[],
   ): Promise<AxiosResponse<Response<LevelIntakeProgram[]>>> {
