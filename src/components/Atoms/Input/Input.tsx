@@ -30,6 +30,10 @@ export default function Input<T>({
     setValue(e.target.value);
     if (handleChange) handleChange({ name, value: e.target.value, event: e });
   }
+  useEffect(() => {
+    if (handleChange) handleChange({ name, value });
+  }, [value]);
+
   return (
     <input
       {...attrs}

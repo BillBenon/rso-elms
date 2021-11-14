@@ -2,11 +2,13 @@
 import { Table } from '..';
 import { DivisionInfo } from './division.types';
 import { ILevel } from './levels.types';
-import { UserInfo } from './user.types';
+import { Incharge, UserInfo } from './user.types';
 
 export interface ProgramInfo extends CreateProgramInfo, Table {
   department: DivisionInfo;
-  incharge: UserInfo;
+  incharge: Incharge;
+  current_admin_names: string;
+  total_num_modules: number;
 }
 
 export interface CreateProgramInfo {

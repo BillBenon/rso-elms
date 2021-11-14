@@ -72,7 +72,7 @@ function IntakePrograms() {
       subTitle: prog.type.replaceAll('_', ' '),
       description: prog.description,
       department: prog.department,
-      incharge: prog.incharge && prog.incharge.username,
+      incharge: prog.incharge && prog.incharge.user.username,
     };
 
     programs.push(program);

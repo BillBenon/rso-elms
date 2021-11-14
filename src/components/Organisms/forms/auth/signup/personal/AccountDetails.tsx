@@ -73,7 +73,7 @@ function AccountDetails<E>({
             name="send_communication_msg"
             placeholder="Select way of communication"
             defaultValue={getDropDownStatusOptions(SendCommunicationMsg).find(
-              (msg) => msg.value === SendCommunicationMsg.EMAIL,
+              (msg) => msg.value === accountDetails.send_communication_msg,
             )}
             options={getDropDownStatusOptions(SendCommunicationMsg)}>
             How would you like to be communicated?
