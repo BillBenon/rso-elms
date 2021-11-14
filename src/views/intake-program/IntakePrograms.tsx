@@ -207,7 +207,7 @@ function IntakePrograms() {
                       handleClick={() =>
                         history.push(`${url}/add-program-to-intake?intakeId=${intakeId}`)
                       }
-                      description="There are no programs added yet, click on the above button to add some!"
+                      description="There are no programs added yet, click on the below button to add some!"
                     />
                   )}
                 </section>
