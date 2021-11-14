@@ -14,7 +14,6 @@ import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
-import UsersPreview from '../../components/Molecules/cards/UsersPreview';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
@@ -26,7 +25,6 @@ import ModuleLevels from '../modules/ModuleLevels';
 import ProgramModules from '../modules/ProgramModules';
 import { IProgramData } from './AcademicPrograms';
 import AddLevelToProgram from './AddLevelToProgram';
-import { DummyUser } from './dummyUsers';
 
 export default function ProgramDetailsMolecule() {
   const history = useHistory();
@@ -141,7 +139,7 @@ export default function ProgramDetailsMolecule() {
                   </div>
 
                   <div className="flex flex-col gap-8 z-0">
-                    <div className="flex gap-8">
+                    {/* <div className="flex gap-8">
                       <UsersPreview
                         title="Students"
                         label="Students in Cadette programs"
@@ -154,25 +152,7 @@ export default function ProgramDetailsMolecule() {
                         data={DummyUser}
                         totalUsers={DummyUser.length || 0}
                       />
-                    </div>
-
-                    {/* models */}
-                    {/* <div className="flex flex-col gap-8">
-                              <div className="flex flex-col gap-6 w-60 py-4 px-6 h-32 bg-main">
-                                <div className="flex flex-col gap-2">
-                                  <Heading color="txt-secondary" fontSize="base">
-                                    Modules
-                                  </Heading>
-                                  <Heading
-                                    color="primary"
-                                    fontSize="base"
-                                    fontWeight="bold"
-                                    className="pt-4">
-                                    Total Modules: {programModules.length}
-                                  </Heading>
-                                </div>
-                              </div>
-                            </div> */}
+                    </div> */}
                     <div className="flex gap-8">
                       {/* levels */}
                       <div className="flex flex-col gap-7 w-60 p-6 bg-main">
