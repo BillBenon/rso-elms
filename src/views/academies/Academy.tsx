@@ -115,7 +115,7 @@ export default function Academy() {
                   buttonLabel="Add new academy"
                   title={'No academies available'}
                   handleClick={() => history.push(`${url}/add`)}
-                  description="the academies are not yet created, click above to create new ones"
+                  description="the academies are not yet created, click below to create new ones"
                 />
               ) : null}
             </>

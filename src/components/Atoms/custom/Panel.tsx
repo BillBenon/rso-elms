@@ -1,6 +1,13 @@
+/* eslint-disable jsx-a11y/interactive-supports-focus */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { ReactNode } from 'react';
 
-import { Color } from '../../../types';
+import { Color, GenericStatus } from '../../../types';
+import { IEvaluationStatus } from '../../../types/services/evaluation.types';
+import { IntakeStatus } from '../../../types/services/intake.types';
+import { IntakeModuleStatus } from '../../../types/services/intake-program.types';
+import { advancedTypeChecker } from '../../../utils/getOption';
+import Badge from './Badge';
 import Icon from './Icon';
 
 export type PanelProps = {
@@ -11,6 +18,10 @@ export type PanelProps = {
   index?: number;
   className?: string;
   bgColor?: Color;
+  badge?: {
+    type: GenericStatus | IntakeStatus | IEvaluationStatus | IntakeModuleStatus;
+    text: string;
+  };
   handleOpen?: (_index: number) => void;
 };
 
@@ -22,28 +33,37 @@ function Panel({
   active = false,
   className,
   bgColor = 'tertiary',
+  badge,
   handleOpen,
 }: PanelProps) {
   function toggleAccordion() {
     if (handleOpen) handleOpen(index || 0);
   }
+
   return (
-    <div className={`bg-${bgColor} text-sm py-3 mb-4 px-4 ${className}`}>
-      <button className="block w-full mb-2" onClick={toggleAccordion}>
+    <div className={`bg-${bgColor} text-sm py-2 w-80 rounded-lg mb-4 px-4 ${className}`}>
+      <div className="w-full mb-2" role="button" onClick={toggleAccordion}>
         <div className={`flex font-semibold justify-between items-center cursor-pointer`}>
-          <p className="text-primary-500">{title}</p>
-          <Icon
-            name="chevron-right"
-            fill="txt-secondary"
-            transform={active ? 'rotate(90deg)' : ''}
-          />
+          <div className="flex-col">
+            <p className="text-primary-500 ">{title}</p>
+            {subtitle && (
+              <p className="py-2 font-semibold text-txt-primary">{subtitle}</p>
+            )}
+          </div>
+          <div className="flex items-center h-full">
+            {badge ? (
+              <Badge className="h-4/5" badgecolor={advancedTypeChecker(badge.type)}>
+                {badge.text}
+              </Badge>
+            ) : null}
+            <Icon
+              name="chevron-right"
+              fill="txt-secondary"
+              transform={active ? 'rotate(90deg)' : ''}
+            />
+          </div>
         </div>
-        {subtitle && (
-          <p className="-mt-2 mb-2 text-left font-semibold text-txt-primary">
-            {subtitle}
-          </p>
-        )}
-      </button>
+      </div>
       <div
         className={`${
           active ? 'h-auto' : 'h-0 overflow-hidden'

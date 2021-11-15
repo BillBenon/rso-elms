@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useRouteMatch } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
 import AddCard from '../../components/Molecules/cards/AddCard';
@@ -8,7 +8,10 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { Tab } from '../../components/Molecules/tabs/tabs';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { CommonCardDataType } from '../../types';
-import { LevelIntakeProgram } from '../../types/services/intake-program.types';
+import {
+  IntakeProgParam,
+  LevelIntakeProgram,
+} from '../../types/services/intake-program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 
 type ILevelIntakeProgram = {
@@ -18,7 +21,7 @@ type ILevelIntakeProgram = {
 
 function IntakeProgramLevelModules({ level, label }: ILevelIntakeProgram) {
   const history = useHistory();
-  const { url } = useRouteMatch();
+  const { id, intakeId, intakeProg } = useParams<IntakeProgParam>();
   const [levelModules, setlevelModules] = useState<CommonCardDataType[]>([]);
 
   const { data: levelModuleStore, isLoading } = intakeProgramStore.getModulesByLevel(
@@ -53,14 +56,18 @@ function IntakeProgramLevelModules({ level, label }: ILevelIntakeProgram) {
           <NoDataAvailable
             buttonLabel="Add new modules"
             title={'No Modules available in this level'}
-            handleClick={() => history.push(`${url}/modules/add`)}
-            description="This level has not received any planned modules to take. you can add one from the button above."
+            handleClick={() =>
+              history.push(
+                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/${level.id}/add-module`,
+              )
+            }
+            description="This level has not received any planned modules to take. you can add one from the button below."
           />
         ) : (
           <>
             <AddCard
               title={'Add new module'}
-              onClick={() => history.push(`/dashboard/programs/modules/add`)}
+              onClick={() => history.push(`/dashboard/intakes/programs/modules/add`)}
             />
             {levelModules &&
               levelModules.map((module, index) => (

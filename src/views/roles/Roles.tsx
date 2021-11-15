@@ -112,7 +112,7 @@ export default function Roles() {
             buttonLabel="Add new role"
             title={'No roles available'}
             handleClick={() => history.push(`${url}/add`)}
-            description="There are no roles added yet. Click above to add some"
+            description="There are no roles added yet. Click below to add some"
           />
         ) : null}
       </section>

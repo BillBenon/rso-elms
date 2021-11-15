@@ -1,6 +1,7 @@
 import { SelectData } from '../types';
 import { IEvaluationStatus } from '../types/services/evaluation.types';
 import { IntakeStatus } from '../types/services/intake.types';
+import { IntakeModuleStatus } from '../types/services/intake-program.types';
 import { GenericStatus } from './../types/services/common.types';
 
 interface GetDropDownOptionsProps {
@@ -9,6 +10,13 @@ interface GetDropDownOptionsProps {
   value?: string;
   getOptionLabel?: (_option: Object) => string;
 }
+
+export const titleCase = (s: string) => {
+  return s
+    .split(' ')
+    .map((w) => w[0].toUpperCase() + w.substr(1).toLowerCase())
+    .join(' ');
+};
 
 export function getDropDownOptions({
   inputs = [],
@@ -45,7 +53,7 @@ export function getDropDownStatusOptions(status: any): SelectData[] {
     stats.map((val) => {
       let label = val.toString().replaceAll('_', ' ');
       let input = {
-        label: label,
+        label: titleCase(label),
         value: val.toString(),
       };
       selectData.push(input);
@@ -55,7 +63,7 @@ export function getDropDownStatusOptions(status: any): SelectData[] {
 }
 
 export function advancedTypeChecker(
-  status: GenericStatus | IntakeStatus | IEvaluationStatus,
+  status: GenericStatus | IntakeStatus | IEvaluationStatus | IntakeModuleStatus,
 ): 'success' | 'warning' | 'error' {
   let successStatus = ['active', 'completed', 'opened', 'started'];
   let errorStatus = ['inactive', 'closed', 'voided', 'suspended'];

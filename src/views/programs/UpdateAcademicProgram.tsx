@@ -114,9 +114,7 @@ export default function UpdateAcademicProgram<E>({
           defaultValue={getDropDownOptions({
             inputs: instructors || [],
             labelName: ['username'],
-          }).find(
-            (incharge) => incharge.value === data?.data.data.incharge.user.username,
-          )}
+          }).find((incharge) => incharge.value === data?.data.data.current_admin_names)}
           width="64"
           placeholder="Select incharge"
           options={getDropDownOptions({
