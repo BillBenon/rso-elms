@@ -50,10 +50,10 @@ class IntakeProgramService {
     );
   }
   public async addModuleToLevel(
-    newModule: AddLevelToModule[],
+    newModule: AddLevelToModule,
   ): Promise<AxiosResponse<Response<ModuleInfo[]>>> {
     return await adminstrationAxios.post(
-      `academicProgramIntakeLevels/addModulesToIntakeProgramLevel`,
+      `academicProgramIntakeLevels/addModuleToIntakeProgramLevel`,
       newModule,
     );
   }
