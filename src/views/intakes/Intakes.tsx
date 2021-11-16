@@ -103,7 +103,7 @@ export default function Intakes() {
   return (
     <Switch>
       <Route
-        path={`${path}/programs/:id`}
+        path={`${path}/programs/:intakeId`}
         render={() => {
           return <IntakePrograms />;
         }}

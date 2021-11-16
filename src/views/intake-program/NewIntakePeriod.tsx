@@ -38,7 +38,7 @@ export function NewIntakePeriod({ prd, handleChange, values }: PeriodStep) {
         handleChange={handleChange}
         reverse={false}
         name="planed_start_on">
-        Planned Start Date
+        Start Date
       </DateMolecule>
       <div className="pt-4">
         <DateMolecule
@@ -46,7 +46,7 @@ export function NewIntakePeriod({ prd, handleChange, values }: PeriodStep) {
           endYear={new Date(prd.academic_year.planned_end_on).getFullYear()}
           handleChange={handleChange}
           name="planed_end_on">
-          Planned End Date
+          End Date
         </DateMolecule>
       </div>
       <DropdownMolecule
