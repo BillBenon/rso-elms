@@ -12,6 +12,10 @@ export interface IntakeProgParam {
   intakeProg: string;
 }
 
+export interface IntakeLevelParam extends IntakeProgParam {
+  level: string;
+}
+
 export interface IntakeProgramInfo extends Table {
   intake: IntakeInfo;
   program: ProgramInfo;

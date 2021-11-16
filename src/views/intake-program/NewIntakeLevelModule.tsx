@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router';
 
@@ -19,15 +19,11 @@ import instructordeploymentStore from '../../store/instructordeployment.store';
 import { ValueType } from '../../types';
 import {
   AddLevelToModule,
+  IntakeLevelParam,
   IntakeModuleStatus,
-  IntakeProgParam,
   ModuleParticipation,
 } from '../../types/services/intake-program.types';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
-
-interface IntakeLevelParam extends IntakeProgParam {
-  level: string;
-}
 
 function NewIntakeLevelModule() {
   const initialState = {
@@ -49,7 +45,6 @@ function NewIntakeLevelModule() {
 
   const history = useHistory();
 
-  const [payload, setPayload] = useState<AddLevelToModule[]>([]);
   const [totalModules, setTotalModules] = useState<AddLevelToModule[]>([]);
 
   const { id, level: levelId, intakeProg } = useParams<IntakeLevelParam>();
@@ -72,8 +67,12 @@ function NewIntakeLevelModule() {
       authUser?.academy.id.toString() || '',
     ).data?.data.data || [];
 
+  useEffect(() => {
+    setvalues({ ...values, academic_year_program_intake_level_id: parseInt(levelId) });
+  }, [levelId]);
+
   async function addMore() {
-    await mutateAsync(payload, {
+    await mutateAsync(values, {
       onSuccess() {
         toast.success('module added to level');
         queryClient.invalidateQueries(['levels/modules']);
@@ -88,9 +87,8 @@ function NewIntakeLevelModule() {
     setvalues(initialState);
   }
 
-  async function submitForm() {
-    setPayload([...payload, values]);
-    await mutateAsync(payload, {
+  function submitForm() {
+    mutateAsync(values, {
       onSuccess: () => {
         toast.success('module added to level');
         queryClient.invalidateQueries(['levels/modules']);
@@ -219,7 +217,7 @@ function NewIntakeLevelModule() {
           </Button>
         </div>
         <div className="pt-2 pb-8">
-          <Button onClick={() => submitForm()}>Save</Button>
+          <Button onClick={submitForm}>Save</Button>
         </div>
       </div>
 

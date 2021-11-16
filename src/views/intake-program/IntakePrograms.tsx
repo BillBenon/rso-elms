@@ -44,8 +44,7 @@ function IntakePrograms() {
   const location = useLocation();
   const list: LinkList[] = [
     { to: 'home', title: 'home' },
-    { to: 'users', title: 'users' },
-    { to: 'faculty', title: 'Faculty' },
+    { to: 'intakes', title: 'intakes' },
     { to: `${url}`, title: 'Programs' },
   ];
 
