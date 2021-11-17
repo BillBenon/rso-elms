@@ -1,23 +1,31 @@
 import React from 'react';
-import { useHistory, useParams, useRouteMatch } from 'react-router';
+import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
 import Students from '../../components/Organisms/user/Students';
+import { authenticatorStore } from '../../store/administration';
 import { classStore } from '../../store/administration/class.store';
 import usersStore from '../../store/administration/users.store';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
 import { UserType, UserTypes } from '../../types/services/user.types';
+import NewClass from './NewClass';
 
 function Classes() {
   const history = useHistory();
-  const { data, isSuccess } = usersStore.fetchUsers();
-  const { url } = useRouteMatch();
+
+  const { url, path } = useRouteMatch();
   const { level: levelId } = useParams<IntakeLevelParam>();
 
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
   let users: UserTypes[] = [];
+  const { data, isSuccess } = usersStore.getUsersByAcademy(
+    authUser?.academy.id.toString() || '',
+  );
 
   if (isSuccess && data?.data.data) {
     data?.data.data.map((obj) => {
@@ -54,28 +62,54 @@ function Classes() {
   const classGroups = classes?.data.data || [];
 
   return (
-    <>
-      <TableHeader usePadding={false} showBadge={false} showSearch={false}>
-        <Button styleType="outline">Add class</Button>
-        <Button styleType="outline">Add students</Button>
-      </TableHeader>
-      {classGroups.length <= 0 ? (
-        <NoDataAvailable
-          buttonLabel="Add new class"
-          title={'No classes available in this level'}
-          handleClick={() => history.push(`${url}/modules/add`)}
-          description="There are no classes added yet, click on the below button to add some!"
-        />
-      ) : (
-        <Tabs>
-          {classGroups.map((cl) => (
-            <Tab key={cl.id} label={cl.class_name}>
-              <Students students={students} showTableHeader={false} />
-            </Tab>
-          ))}
-        </Tabs>
-      )}
-    </>
+    <Switch>
+      <Route
+        exact
+        path={`${path}`}
+        render={() => {
+          return (
+            <>
+              <TableHeader usePadding={false} showBadge={false} showSearch={false}>
+                <Button styleType="outline">Add class</Button>
+                <Button styleType="outline">Add students</Button>
+              </TableHeader>
+              {classGroups.length <= 0 ? (
+                <NoDataAvailable
+                  buttonLabel="Add new class"
+                  icon="academy"
+                  fill={false}
+                  title={'No classes available in this level'}
+                  handleClick={() => history.push(`${url}/add-class`)}
+                  description="There are no classes added yet, click on the below button to add some!"
+                />
+              ) : (
+                <Tabs>
+                  {classGroups.map((cl) => (
+                    <Tab key={cl.id} label={cl.class_name}>
+                      <Students students={students} showTableHeader={false} />
+                    </Tab>
+                  ))}
+                </Tabs>
+              )}
+            </>
+          );
+        }}
+      />
+      {/* add classes to intake program level */}
+      <Route
+        exact
+        path={`${path}/add-class`}
+        render={() => (
+          <PopupMolecule
+            title="New Class"
+            closeOnClickOutSide={false}
+            open
+            onClose={history.goBack}>
+            <NewClass />
+          </PopupMolecule>
+        )}
+      />
+    </Switch>
   );
 }
 

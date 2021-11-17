@@ -114,7 +114,7 @@ function IntakeProgramLevel({ level, label }: ILevelIntakeProgram) {
         }}
       />
       {/* add module to intake program level */}
-      <Route exact path={`${path}/:level/view-class`} render={() => <Classes />} />
+      <Route path={`${path}/:level/view-class`} render={() => <Classes />} />
     </Switch>
   );
 }
