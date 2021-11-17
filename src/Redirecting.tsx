@@ -29,7 +29,7 @@ export default function Redirecting() {
       // if (experiences?.data.data.length === 0)
       //   redirectTo('/complete-profile/experience');
       // else redirectTo('/dashboard/divisions');
-      redirectTo('/dashboard/divisions');
+      redirectTo('/dashboard/users');
     } else if (data?.data.data.user_type === UserType.INSTRUCTOR) {
       redirectTo('/dashboard/evaluations');
     } else if (data?.data.data.user_type === UserType.STUDENT) {

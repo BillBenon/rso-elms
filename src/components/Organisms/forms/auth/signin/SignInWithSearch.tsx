@@ -45,7 +45,7 @@ function SignInWithSearch<E>({ onSubmit }: CommonFormProps<E>) {
         }, 900);
       } else {
         toast.success("You're already registered!", { duration: 1200 });
-        fire(1500);
+        fire(2000);
         localStorage.setItem('foundUser', JSON.stringify(foundUser));
         setTimeout(() => {
           history.push('/complete-profile');

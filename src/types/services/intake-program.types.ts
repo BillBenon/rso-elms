@@ -3,13 +3,17 @@ import { Table } from '..';
 import { IAcademicYearInfo } from './academicyears.types';
 import { IntakeInfo, IntakeStatus } from './intake.types';
 import { ProgramLevel } from './levels.types';
-import { ProgramInfo } from './program.types';
+import { ModuleInfo } from './modules.types';
+import { AcademicProgramLevel, ProgramInfo } from './program.types';
 import { Incharge } from './user.types';
 
 export interface IntakeProgParam {
   id: string;
   intakeId: string;
   intakeProg: string;
+}
+export interface IntakeLevelParam extends IntakeProgParam {
+  level: string;
 }
 
 export interface IntakeProgramInfo extends Table {
@@ -32,6 +36,12 @@ export interface LevelIntakeProgram extends Table {
   intake_program_id: string;
   academic_program_level_id: string;
   incharge_id: string;
+}
+
+export interface IntakeLevelModule extends Table, AddLevelToModule {
+  academic_year_program_intake_level: AcademicProgramLevel;
+  incharge: Incharge;
+  module: ModuleInfo;
 }
 
 export interface CreateLevelIntakeProgram {
