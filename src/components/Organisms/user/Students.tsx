@@ -45,10 +45,10 @@ export default function Students({
           showSearch={students && students.length > 0}>
           <div className="flex gap-3">
             <Link to={`${url}/import`}>
-              <Button styleType="outline">Import users</Button>
+              <Button styleType="outline">Import students</Button>
             </Link>
             <Link to={`${url}/add`}>
-              <Button>New User</Button>
+              <Button>New student</Button>
             </Link>
           </div>
         </TableHeader>
