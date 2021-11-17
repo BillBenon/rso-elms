@@ -40,10 +40,10 @@ function IntakeProgramLevel({ level, label }: ILevelIntakeProgram) {
           text: module.generic_status.toString(),
         },
         id: module.id,
-        code: module.code,
-        title: module.name,
-        description: module.description,
-        subTitle: `total subject: ${module.total_num_subjects || 'None'}`,
+        code: module.module.code,
+        title: module.module.name,
+        description: module.module.description,
+        subTitle: `total subject: ${module.module.total_num_subjects || 'None'}`,
       });
     });
 

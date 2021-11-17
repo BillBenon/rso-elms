@@ -72,7 +72,11 @@ function NewIntakeLevelModule() {
   }, [levelId]);
 
   async function addMore() {
-    await mutateAsync(values, {
+    let payload: AddLevelToModule[] = [];
+
+    payload.push(values);
+
+    await mutateAsync(payload, {
       onSuccess() {
         toast.success('module added to level');
         queryClient.invalidateQueries(['levels/modules']);
@@ -88,7 +92,11 @@ function NewIntakeLevelModule() {
   }
 
   function submitForm() {
-    mutateAsync(values, {
+    let payload: AddLevelToModule[] = [];
+
+    payload.push(values);
+
+    mutateAsync(payload, {
       onSuccess: () => {
         toast.success('module added to level');
         queryClient.invalidateQueries(['levels/modules']);
@@ -221,7 +229,7 @@ function NewIntakeLevelModule() {
         </div>
       </div>
 
-      <div className="px-5">
+      <div className="px-5 md:pl-48">
         {totalModules.length > 0 && <p className="pt-10 pb-4 font-semibold">Modules</p>}
         <Accordion>
           {totalModules.map((mod) => {
