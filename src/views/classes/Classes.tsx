@@ -70,6 +70,9 @@ function Classes() {
           return (
             <>
               <TableHeader usePadding={false} showBadge={false} showSearch={false}>
+                <Button styleType="text" onClick={() => history.goBack()}>
+                  Go back to modules
+                </Button>
                 <Button styleType="outline">Add class</Button>
                 <Button styleType="outline">Add students</Button>
               </TableHeader>
