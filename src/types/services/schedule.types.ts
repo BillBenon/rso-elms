@@ -16,7 +16,7 @@ export enum methodOfInstruction {
 export enum frequencyType {
   ONETIME = 'ONETIME',
   REPEATING = 'REPEATING',
-  DATERANGE = 'DATE_RANGE',
+  DATE_RANGE = 'DATE_RANGE',
 }
 
 export enum recurringDays {

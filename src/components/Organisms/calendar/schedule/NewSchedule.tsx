@@ -52,13 +52,14 @@ export default function NewSchedule() {
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
+    console.log(values);
   }
   return (
     <div>
       <Stepper
         currentStep={currentStep}
         completeStep={currentStep}
-        width="w-64"
+        width="w-32"
         isVertical={false}
         isInline={false}
         navigateToStepHandler={() => console.log('submitted')}>
@@ -68,6 +69,12 @@ export default function NewSchedule() {
           setCurrentStep={setcurrentStep}
         />
         <SecondStep
+          values={values}
+          handleChange={handleChange}
+          setCurrentStep={setcurrentStep}
+          handleSubmit={handleSubmit}
+        />
+        <ThirdStep
           values={values}
           handleChange={handleChange}
           setCurrentStep={setcurrentStep}
@@ -141,27 +148,37 @@ function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
   );
 }
 
-function SecondStep({ values, handleChange, handleSubmit }: IStepProps) {
-  const programs = programStore.fetchPrograms().data?.data.data;
-  const levels = levelStore.getLevels().data?.data.data;
+function SecondStep({ handleChange, setCurrentStep, values }: IStepProps) {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    setCurrentStep(2);
+  };
 
   return (
     <form onSubmit={handleSubmit} className="max-w-sm -mb-6">
-      <InputMolecule
-        name="plannedScheduleStartDate"
-        placeholder="Intake title"
-        type="date"
-        value={values.startDate}
-        handleChange={handleChange}>
-        Start date
-      </InputMolecule>
       <InputMolecule
         name="plannedStartHour"
         placeholder="Intake title"
         type="time"
         value={values.plannedStartHour}
         handleChange={handleChange}>
-        Planned start time
+        Planned start hour
+      </InputMolecule>
+      <InputMolecule
+        type="time"
+        value={values.plannedEndHour}
+        name="plannedEndHour"
+        placeholder="End time"
+        handleChange={handleChange}>
+        Planned end hour
+      </InputMolecule>
+      <InputMolecule
+        name="plannedScheduleStartDate"
+        placeholder="Intake title"
+        type="date"
+        value={values.startDate}
+        handleChange={handleChange}>
+        Schedule Start date
       </InputMolecule>
       {values.frequencyType === frequencyType.REPEATING ? (
         <CheckboxMolecule
@@ -171,16 +188,32 @@ function SecondStep({ values, handleChange, handleSubmit }: IStepProps) {
           placeholder="Repeat days:"
           handleChange={() => console.log('changed')}
         />
-      ) : (
+      ) : values.frequencyType === frequencyType.DATE_RANGE ? (
         <InputMolecule
-          type="time"
-          value={values.plannedEndHour}
-          name="plannedEndHour"
-          placeholder="End time"
+          name="plannedScheduleStartDate"
+          placeholder="Intake title"
+          type="date"
+          value={values.startDate}
           handleChange={handleChange}>
-          Planned end hour
+          Repetition end date
         </InputMolecule>
+      ) : (
+        <></>
       )}
+
+      <div className="pt-3">
+        <Button type="submit">Continue</Button>
+      </div>
+    </form>
+  );
+}
+
+function ThirdStep({ values, handleChange, handleSubmit }: IStepProps) {
+  const programs = programStore.fetchPrograms().data?.data.data;
+  const levels = levelStore.getLevels().data?.data.data;
+
+  return (
+    <form onSubmit={handleSubmit} className="max-w-sm -mb-6">
       <div className="pb-1">
         <DropdownMolecule
           name="appliesTo"
@@ -190,29 +223,34 @@ function SecondStep({ values, handleChange, handleSubmit }: IStepProps) {
           Event concerns
         </DropdownMolecule>
       </div>
-      {values.appliesTo && (
-        <div className="pb-1">
-          <DropdownMolecule
-            name="beneficiaries"
-            isMulti
-            handleChange={handleChange}
-            options={
-              (values.appliesTo == scheduleAppliesTo.APPLIES_TO_LEVEL
-                ? levels
-                : values.appliesTo == scheduleAppliesTo.APPLIES_TO_PROGRAM
-                ? programs
-                : []
-              )?.map((pr) => ({
-                value: pr.id + '',
-                label: pr.name,
-              })) as SelectData[]
-            }
-            placeholder="Select group">
-            {`Select beneficiaries`}
-          </DropdownMolecule>
-        </div>
-      )}
-      <div className="pt-3">
+      <div className="pb-1">
+        <DropdownMolecule
+          name="beneficiaries"
+          isMulti
+          handleChange={handleChange}
+          options={
+            (values.appliesTo == scheduleAppliesTo.APPLIES_TO_LEVEL
+              ? levels
+              : values.appliesTo == scheduleAppliesTo.APPLIES_TO_PROGRAM
+              ? programs
+              : []
+            )?.map((pr) => ({
+              value: pr.id + '',
+              label: pr.name,
+            })) as SelectData[]
+          }
+          placeholder="Select group">
+          {`Select beneficiaries`}
+        </DropdownMolecule>
+      </div>
+      <RadioMolecule
+        options={getDropDownStatusOptions(methodOfInstruction)}
+        handleChange={handleChange}
+        name={'methodOfInstruction'}
+        value={values.methodOfInstruction}>
+        Method of Instruction
+      </RadioMolecule>
+      <div className="pt-5">
         <Button type="submit">Create schedule</Button>
       </div>
     </form>

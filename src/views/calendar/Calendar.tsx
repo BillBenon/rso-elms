@@ -23,7 +23,6 @@ import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedul
 import { ParamType, ValueType } from '../../types';
 import programStore from '../../store/administration/program.store';
 import { scheduleStore } from '../../store/timetable/schedule.store';
-import { ScheduleInfo } from '../../types/services/schedule.types';
 
 const localizer = momentLocalizer(moment);
 
