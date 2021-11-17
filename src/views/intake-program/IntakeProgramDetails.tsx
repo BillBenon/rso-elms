@@ -226,11 +226,7 @@ function IntakeProgramDetails() {
                 );
               }}
             />
-            <Route
-              exact
-              path={`${path}/modules`}
-              render={() => <IntakeProgramModules />}
-            />
+            <Route path={`${path}/modules`} render={() => <IntakeProgramModules />} />
           </Switch>
         </TabNavigation>
       </div>

@@ -11,7 +11,7 @@ import { moduleStore } from '../../store/administration/modules.store';
 import { CommonCardDataType } from '../../types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
-import IntakeProgramLevelModules from './IntakeProgramLevelModules';
+import IntakeProgramLevel from './IntakeProgramLevel';
 
 function IntakeProgramModules() {
   const history = useHistory();
@@ -76,7 +76,7 @@ function IntakeProgramModules() {
             </section>
           </Tab>
         ) : (
-          <IntakeProgramLevelModules
+          <IntakeProgramLevel
             key={level.id}
             level={level}
             label={level.academic_program_level.level.name}

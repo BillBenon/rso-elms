@@ -3,13 +3,19 @@ import { useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { ValueType } from '../../../types';
-import { UserTypes } from '../../../views/users/Users';
+import { UserTypes } from '../../../types/services/user.types';
 import Button from '../../Atoms/custom/Button';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
 
-export default function Students({ students }: { students: UserTypes[] }) {
+export default function Students({
+  students,
+  showTableHeader = true,
+}: {
+  students: UserTypes[];
+  showTableHeader?: boolean;
+}) {
   const { url } = useRouteMatch();
   const history = useHistory();
 
@@ -31,20 +37,22 @@ export default function Students({ students }: { students: UserTypes[] }) {
   ];
   return (
     <>
-      <TableHeader
-        title="Students"
-        totalItems={students && students.length > 0 ? students.length : 0}
-        handleSearch={handleSearch}
-        showSearch={students && students.length > 0}>
-        <div className="flex gap-3">
-          <Link to={`${url}/import`}>
-            <Button styleType="outline">Import users</Button>
-          </Link>
-          <Link to={`${url}/add`}>
-            <Button>New User</Button>
-          </Link>
-        </div>
-      </TableHeader>
+      {showTableHeader && (
+        <TableHeader
+          title="Students"
+          totalItems={students && students.length > 0 ? students.length : 0}
+          handleSearch={handleSearch}
+          showSearch={students && students.length > 0}>
+          <div className="flex gap-3">
+            <Link to={`${url}/import`}>
+              <Button styleType="outline">Import students</Button>
+            </Link>
+            <Link to={`${url}/add`}>
+              <Button>New student</Button>
+            </Link>
+          </div>
+        </TableHeader>
+      )}
       {students && (
         <div className="pt-8">
           {students.length <= 0 ? (
