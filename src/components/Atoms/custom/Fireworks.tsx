@@ -1,6 +1,6 @@
-import React from 'react';
-
 import '../../../styles/components/Atoms/custom/fireworks.css';
+
+import React from 'react';
 
 export default function Fireworks() {
   return (
