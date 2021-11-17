@@ -9,6 +9,8 @@ import {
   Route,
   Switch,
   useHistory,
+  useLocation,
+  useParams,
   useRouteMatch,
 } from 'react-router-dom';
 
@@ -18,15 +20,36 @@ import Heading from '../../components/Atoms/Text/Heading';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedule';
-import { events } from '../../static/events';
-import { ValueType } from '../../types';
+import { ParamType, ValueType } from '../../types';
+import programStore from '../../store/administration/program.store';
+import { scheduleStore } from '../../store/timetable/schedule.store';
+import { ScheduleInfo } from '../../types/services/schedule.types';
 
 const localizer = momentLocalizer(moment);
 
 export default function CalendarView() {
-  const handleSearch = (_e: ValueType) => {};
   const history = useHistory();
+  const { search } = useLocation();
   const { path, url } = useRouteMatch();
+
+  // query parameters
+  const classId = new URLSearchParams(search).get('class_id');
+  const inLevelId = new URLSearchParams(search).get('in_level_id');
+
+  const { id } = useParams<ParamType>();
+  const programInfo = programStore.getProgramById(id).data?.data.data;
+
+  //get events
+  const events =
+    (inLevelId
+      ? scheduleStore.getAllByAcademicProgramIntakeLevel(inLevelId).data?.data.data
+      : scheduleStore.getAllByAcademicProgram(id).data?.data.data
+    )?.map((schedule) => ({
+      id: schedule.id,
+      title: schedule.event.name,
+      start: new Date(schedule.planned_schedule_start_date),
+      end: new Date(schedule.planned_schedule_end_date),
+    })) || [];
 
   const handleClose = () => {
     history.goBack();
@@ -35,7 +58,7 @@ export default function CalendarView() {
   return (
     <div>
       <Heading fontSize="2xl" className="my-6" fontWeight="semibold">
-        Class 2 C
+        {programInfo?.name}
       </Heading>
       <div className="my-5">
         <div className="flex flex-wrap justify-between items-center">
@@ -43,7 +66,7 @@ export default function CalendarView() {
             <Button styleType="outline">Change date range</Button>
           </div>
           <div className="flex flex-wrap justify-start items-center">
-            <SearchMolecule handleChange={handleSearch} />
+            <SearchMolecule handleChange={(_e: ValueType) => {}} />
             <button className="border p-0 rounded-md mx-2">
               <Icon name="filter" />
             </button>
@@ -66,13 +89,9 @@ export default function CalendarView() {
         view="week"
         showMultiDayTimes={false}
         views={['day', 'week']}
-        defaultDate={new Date(2015, 3, 12)}
+        defaultDate={new Date()}
         style={{ height: 900 }}
         onSelectEvent={(event) => history.push(`${path}/event/${event.id}`)}
-        // components={{
-        //   event: CustomEvent,
-        //   // eventWrapper: (event) => <div className="bg-gray-400 rounded"></div>,
-        // }}
       />
       <Switch>
         <Route

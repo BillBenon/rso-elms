@@ -15,7 +15,7 @@ export default function ProgramLevelsTimeTable() {
   const { url } = useRouteMatch();
 
   const programInfo = programStore.getProgramById(id).data?.data.data;
-  const levelsInfo = levelStore.getLevelsByProgram(id).data?.data.data;
+  const levelsInfo = levelStore.getLevelsByProgram(id).data?.data.data || [];
 
   return (
     <div>

@@ -130,7 +130,7 @@ function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
         <RadioMolecule
           type="block"
           handleChange={handleChange}
-          name={'scheduleType'}
+          name={'frequencyType'}
           value={values.frequencyType}
           options={getDropDownStatusOptions(frequencyType)}>
           Event type
