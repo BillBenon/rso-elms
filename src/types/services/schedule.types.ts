@@ -1,5 +1,4 @@
 import { Table } from '..';
-import { IEvaluationStatus } from './evaluation.types';
 import { EventInfo, VenueInfo } from './event.types';
 
 /* eslint-disable no-unused-vars */
@@ -32,6 +31,14 @@ export enum recurringDays {
   WEEKDAYS = 'WEEKDAYS',
 }
 
+export enum ScheduleStatus {
+  PENDING = 'PENDING',
+  ONGOING = 'ONGOING',
+  COMPLETED = 'COMPLETED',
+  CANCELED = 'CANCELED',
+  ON_HOLD = 'ON_HOLD',
+}
+
 export interface Hour {
   hour: number;
   minute: number;
@@ -60,7 +67,7 @@ export interface RecurringSchedule extends Table {
   day_of_week: recurringDays;
   end_hour: Hour;
   start_hour: Hour;
-  timetable_status: IEvaluationStatus;
+  timetable_status: ScheduleStatus;
 }
 
 interface ProgramSchedule extends Table {
@@ -85,6 +92,6 @@ export interface ScheduleInfo extends Table, CommonScheduleProperties {
   schedural_intake_level_classes: IntakeLevelSchedule[];
   schedural_start_date: string;
   start_hour: Hour;
-  timetable_status: IEvaluationStatus;
+  timetable_status: ScheduleStatus;
   venue: VenueInfo;
 }
