@@ -10,6 +10,10 @@ cache:
   paths:
     - node_modules/
 
+install:
+  script:
+    - yarn install
+
 build:
   script:
-    - npm run build
+    - yarn build
