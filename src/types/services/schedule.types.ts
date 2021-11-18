@@ -9,8 +9,8 @@ export enum scheduleAppliesTo {
 }
 
 export enum methodOfInstruction {
-  PRACTICAL = 'PRAC',
-  LECTURE = 'LEC',
+  PRAC = 'PRAC',
+  LEC = 'LEC',
 }
 
 export enum frequencyType {
@@ -58,7 +58,8 @@ export interface CreateEventSchedule extends CommonScheduleProperties {
   beneficiaries?: string[];
   event: string;
   plannedEndHour: string;
-  plannedScheduleStartDate: string;
+  plannedScheduleStartDate: string | Date;
+  plannedScheduleEndDate: string | Date;
   plannedStartHour: string;
   venue: string;
 }

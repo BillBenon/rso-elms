@@ -1,10 +1,13 @@
 import React, { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useHistory } from 'react-router-dom';
 
 import { authenticatorStore } from '../../../../store/administration';
 import { levelStore } from '../../../../store/administration/level.store';
 import programStore from '../../../../store/administration/program.store';
 import usersStore from '../../../../store/administration/users.store';
 import { eventStore } from '../../../../store/timetable/event.store';
+import { scheduleStore } from '../../../../store/timetable/schedule.store';
 import { venueStore } from '../../../../store/timetable/venue.store';
 import { SelectData, ValueType } from '../../../../types';
 import {
@@ -35,24 +38,40 @@ export default function NewSchedule() {
     appliesTo: undefined,
     beneficiaries: undefined,
     event: '',
-    methodOfInstruction: methodOfInstruction.LECTURE,
+    methodOfInstruction: methodOfInstruction.LEC,
     period: 1,
     plannedEndHour: '',
-    plannedScheduleStartDate: '',
+    plannedScheduleStartDate: new Date().toLocaleDateString(),
+    plannedScheduleEndDate: new Date().toLocaleDateString(),
     plannedStartHour: new Date().toLocaleTimeString(),
     venue: '',
     frequencyType: frequencyType.ONETIME,
   });
 
+  //state varibales
+  const [currentStep, setcurrentStep] = useState(0);
+  const history = useHistory();
+
+  //create schedule stores
+  const createOneTimeSchedule = scheduleStore.createOneTimeEvents();
+
   function handleChange(e: ValueType) {
     setvalues((val) => ({ ...val, [e.name]: e.value }));
   }
 
-  const [currentStep, setcurrentStep] = useState(0);
-
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
-    console.log(values);
+    if (values.frequencyType == frequencyType.ONETIME) {
+      createOneTimeSchedule.mutateAsync(values, {
+        async onSuccess(_data) {
+          toast.success('Schedule was created successfully');
+          history.goBack();
+        },
+        onError() {
+          toast.error('error occurred please try again');
+        },
+      });
+    }
   }
   return (
     <div>
