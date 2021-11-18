@@ -20,9 +20,8 @@ install_dependencies:
   artifacts:
         paths:
           - node_modules/
-
-
+          
 build:
-  stabe: build
+  stage: build
   script:
     - npm run build
