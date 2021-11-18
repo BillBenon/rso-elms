@@ -14,8 +14,9 @@ import {
   CreateEventSchedule,
   frequencyType,
   methodOfInstruction,
-  recurringDays,
+  daysOfWeek,
   scheduleAppliesTo,
+  createRecurringSchedule,
 } from '../../../../types/services/schedule.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
@@ -40,6 +41,7 @@ export default function NewSchedule() {
     event: '',
     methodOfInstruction: methodOfInstruction.LEC,
     period: 1,
+    repeatingDays: [],
     plannedEndHour: '',
     plannedScheduleStartDate: new Date().toLocaleDateString(),
     plannedScheduleEndDate: new Date().toLocaleDateString(),
@@ -54,6 +56,8 @@ export default function NewSchedule() {
 
   //create schedule stores
   const createOneTimeSchedule = scheduleStore.createOneTimeEvents();
+  const createRepeatingSchedule = scheduleStore.createRecurringEvents();
+  const createDateRangeSchedule = scheduleStore.createDateRangeEvents();
 
   function handleChange(e: ValueType) {
     setvalues((val) => ({ ...val, [e.name]: e.value }));
@@ -61,8 +65,38 @@ export default function NewSchedule() {
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
+
     if (values.frequencyType == frequencyType.ONETIME) {
       createOneTimeSchedule.mutateAsync(values, {
+        async onSuccess(_data) {
+          toast.success('Schedule was created successfully');
+          history.goBack();
+        },
+        onError() {
+          toast.error('error occurred please try again');
+        },
+      });
+    } else if (values.frequencyType == frequencyType.REPEATING) {
+      const data: CreateEventSchedule = {
+        ...values,
+        recurringSchedule: values.repeatingDays.map((d) => ({
+          dayOfWeek: d,
+          endHour: values.plannedEndHour,
+          startHour: values.plannedStartHour,
+        })) as createRecurringSchedule[],
+      };
+      
+      createRepeatingSchedule.mutateAsync(data, {
+        async onSuccess(_data) {
+          toast.success('Schedule was created successfully');
+          history.goBack();
+        },
+        onError() {
+          toast.error('error occurred please try again');
+        },
+      });
+    } else if (values.frequencyType == frequencyType.DATE_RANGE) {
+      createDateRangeSchedule.mutateAsync(values, {
         async onSuccess(_data) {
           toast.success('Schedule was created successfully');
           history.goBack();
@@ -202,10 +236,11 @@ function SecondStep({ handleChange, setCurrentStep, values }: IStepProps) {
       {values.frequencyType === frequencyType.REPEATING ? (
         <CheckboxMolecule
           isFlex
-          options={getDropDownStatusOptions(recurringDays).slice(0, 7)}
-          name="repeatson"
+          options={getDropDownStatusOptions(daysOfWeek).slice(0, 7)}
+          name="repeatingDays"
           placeholder="Repeat days:"
-          handleChange={() => console.log('changed')}
+          handleChange={handleChange}
+          values={values.repeatingDays}
         />
       ) : values.frequencyType === frequencyType.DATE_RANGE ? (
         <InputMolecule
