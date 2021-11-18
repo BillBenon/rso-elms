@@ -1,7 +1,7 @@
 
 # Official framework image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/node/tags/
-image: node:latest
+image: node:fermium
 
 
 # This folder is cached between builds
@@ -10,7 +10,7 @@ cache:
   paths:
     - node_modules/
 
-install:
+install_dependencies:
   script:
     - npm install
 
