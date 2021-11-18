@@ -1,7 +1,7 @@
 
 # Official framework image. Look for the different tagged releases at:
 # https://hub.docker.com/r/library/node/tags/
-image: node:14.18.1
+# image: node:14.18.1
 
 stages:
   - install
