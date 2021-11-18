@@ -35,7 +35,6 @@ interface IStepProps {
 
 export default function NewSchedule() {
   const [values, setvalues] = useState<CreateEventSchedule>({
-    startDate: new Date().toLocaleDateString(),
     appliesTo: undefined,
     beneficiaries: undefined,
     event: '',
@@ -85,7 +84,7 @@ export default function NewSchedule() {
           startHour: values.plannedStartHour,
         })) as createRecurringSchedule[],
       };
-      
+
       createRepeatingSchedule.mutateAsync(data, {
         async onSuccess(_data) {
           toast.success('Schedule was created successfully');
@@ -229,7 +228,7 @@ function SecondStep({ handleChange, setCurrentStep, values }: IStepProps) {
         name="plannedScheduleStartDate"
         placeholder="Intake title"
         type="date"
-        value={values.startDate}
+        value={values.plannedScheduleStartDate.toLocaleString()}
         handleChange={handleChange}>
         Schedule Start date
       </InputMolecule>
@@ -244,10 +243,10 @@ function SecondStep({ handleChange, setCurrentStep, values }: IStepProps) {
         />
       ) : values.frequencyType === frequencyType.DATE_RANGE ? (
         <InputMolecule
-          name="plannedScheduleStartDate"
+          name="plannedScheduleEndDate"
           placeholder="Intake title"
           type="date"
-          value={values.startDate}
+          value={values.plannedScheduleEndDate.toLocaleString()}
           handleChange={handleChange}>
           Repetition end date
         </InputMolecule>

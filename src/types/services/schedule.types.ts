@@ -54,7 +54,6 @@ interface CommonScheduleProperties {
 }
 
 export interface CreateEventSchedule extends CommonScheduleProperties {
-  startDate: string;
   beneficiaries?: string[];
   event: string;
   plannedEndHour: string;
