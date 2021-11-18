@@ -72,6 +72,7 @@ function OtherDetails(_props: any) {
               { label: 'Kinyarwanda', value: 'kiny' },
               { label: 'English', value: 'en' },
             ]}
+            values={[]}
           />
         </div>
         <div className="md:px-5 px-3">

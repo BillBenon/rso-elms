@@ -2,26 +2,73 @@ import { AxiosResponse } from 'axios';
 
 import { timetableAxios } from '../../plugins/axios';
 import { Response } from '../../types';
-import { CreateEventSchedule, ScheduleInfo } from '../../types/services/schedule.types';
+import {
+  CreateEventSchedule,
+  ScheduleInfo,
+  ScheduleStatus,
+} from '../../types/services/schedule.types';
 
 class ScheduleService {
-  public async getAllSchedules(): Promise<AxiosResponse<Response<ScheduleInfo[]>>> {
-    return await timetableAxios.get('/schedules');
+  public async getAll(): Promise<AxiosResponse<Response<ScheduleInfo[]>>> {
+    return await timetableAxios.get('/schedural');
   }
 
-  public async getSchedule(id: string): Promise<AxiosResponse<Response<ScheduleInfo>>> {
-    return await timetableAxios.get(`/schedules/${id}`);
+  public async getScheduleById(
+    id: string,
+  ): Promise<AxiosResponse<Response<ScheduleInfo>>> {
+    return await timetableAxios.get(`/schedural/${id}`);
   }
 
-  public async createSchedule(
+  public async getAllByAcademicProgramIntakeLevel(
+    academicProgramIntakeLevelId: string,
+  ): Promise<AxiosResponse<Response<ScheduleInfo[]>>> {
+    return await timetableAxios.get(
+      `/schedural/academic-program-intake-level/${academicProgramIntakeLevelId}`,
+    );
+  }
+  public async getAllByAcademicProgramIntakeLevelAndStatus(
+    academicProgramIntakeLevelId: string,
+    status: ScheduleStatus,
+  ): Promise<AxiosResponse<Response<ScheduleInfo[]>>> {
+    return await timetableAxios.get(
+      `/schedural/academic-program-intake-level/${academicProgramIntakeLevelId}/status/${status}`,
+    );
+  }
+  public async getAllByAcademicProgram(
+    academicProgramId: string,
+  ): Promise<AxiosResponse<Response<ScheduleInfo[]>>> {
+    return await timetableAxios.get(`/schedural/academic-program/${academicProgramId}`);
+  }
+  public async getAllByAcademicProgramAndStatus(
+    academicProgramId: string,
+    status: ScheduleStatus,
+  ): Promise<AxiosResponse<Response<ScheduleInfo[]>>> {
+    return await timetableAxios.get(
+      `schedural/academic-program/${academicProgramId}/status/${status}`,
+    );
+  }
+
+  public async createDateRangeEvents(
     schedule: CreateEventSchedule,
   ): Promise<AxiosResponse<Response<ScheduleInfo>>> {
-    return await timetableAxios.post('/schedules', schedule);
+    return await timetableAxios.post('/schedural/date-range-events', schedule);
   }
+
+  public async createOneTimeEvents(
+    schedule: CreateEventSchedule,
+  ): Promise<AxiosResponse<Response<ScheduleInfo>>> {
+    return await timetableAxios.post('/schedural/one-time-events', schedule);
+  }
+  public async createRecurringEvents(
+    schedule: CreateEventSchedule,
+  ): Promise<AxiosResponse<Response<ScheduleInfo>>> {
+    return await timetableAxios.post('/schedural/recurring-events', schedule);
+  }
+
   public async modifySchedule(
     schedule: ScheduleInfo,
   ): Promise<AxiosResponse<Response<ScheduleInfo>>> {
-    return await timetableAxios.put('/schedules', schedule);
+    return await timetableAxios.put(`/schedural/${schedule.id}`, schedule);
   }
 }
 

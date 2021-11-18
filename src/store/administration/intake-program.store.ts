@@ -13,6 +13,11 @@ class IntakeProgramStore {
       intakeProgramService.getLevelsByIntakeProgram(intakeProgramId),
     );
   }
+  getPeriodsByLevel(levelId: number) {
+    return useQuery(['levels/periods', levelId], () =>
+      intakeProgramService.getPeriodsByIntakeAcademicYearLevelId(levelId),
+    );
+  }
   getModulesByLevel(levelId: number) {
     return useQuery(['levels/modules', levelId], () =>
       intakeProgramService.getModulesByIntakeAcademicYearLevelId(levelId),
@@ -23,6 +28,9 @@ class IntakeProgramStore {
   }
   addLevelToIntakeProgram() {
     return useMutation(intakeProgramService.addLevelToIntakeProgram);
+  }
+  addModuleToLevel() {
+    return useMutation(intakeProgramService.addModuleToLevel);
   }
 }
 

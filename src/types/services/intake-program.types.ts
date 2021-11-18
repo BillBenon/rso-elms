@@ -1,14 +1,19 @@
 /* eslint-disable no-unused-vars */
 import { Table } from '..';
 import { IAcademicYearInfo } from './academicyears.types';
-import { IntakeInfo } from './intake.types';
+import { IntakeInfo, IntakeStatus } from './intake.types';
 import { ProgramLevel } from './levels.types';
-import { ProgramInfo } from './program.types';
+import { ModuleInfo } from './modules.types';
+import { AcademicProgramLevel, ProgramInfo } from './program.types';
 import { Incharge } from './user.types';
 
 export interface IntakeProgParam {
   id: string;
+  intakeId: string;
   intakeProg: string;
+}
+export interface IntakeLevelParam extends IntakeProgParam {
+  level: string;
 }
 
 export interface IntakeProgramInfo extends Table {
@@ -33,6 +38,12 @@ export interface LevelIntakeProgram extends Table {
   incharge_id: string;
 }
 
+export interface IntakeLevelModule extends Table, AddLevelToModule {
+  academic_year_program_intake_level: AcademicProgramLevel;
+  incharge: Incharge;
+  module: ModuleInfo;
+}
+
 export interface CreateLevelIntakeProgram {
   academic_period_id: string;
   academic_program_level_id: string;
@@ -47,6 +58,22 @@ export interface CreateLevelIntakeProgram {
   progress_status: ProgressStatus;
 }
 
+export interface AddLevelToModule {
+  academic_year_program_intake_level_id: number;
+  actual_end_on: string;
+  actual_start_on: string;
+  credits: number;
+  incharge_id: string;
+  intake_status: IntakeModuleStatus;
+  marks: number;
+  module_id: string;
+  module_participation: ModuleParticipation;
+  pass_mark: number;
+  planned_end_on: string;
+  planned_start_on: string;
+  weight: number;
+}
+
 // intake program progress status enum
 export enum ProgressStatus {
   STARTED = 'STARTED',
@@ -56,4 +83,18 @@ export enum ProgressStatus {
   ONGOING = 'ONGOING',
   COMPLETED = 'COMPLETED',
   OPENED = 'OPENED',
+}
+
+export enum ModuleParticipation {
+  COMPULSORY = 'COMPULSORY',
+  OPTIONAL = 'OPTIONAl',
+}
+
+export enum IntakeModuleStatus {
+  DRAFT = 'DRAFT',
+  PENDING = 'PENDING',
+  ONGOING = 'ONGOING',
+  SUSPENDED = 'SUSPENDED',
+  COMPLETED = 'COMPLETED',
+  VOIDED = 'VOIDED',
 }

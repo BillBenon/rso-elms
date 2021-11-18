@@ -26,7 +26,7 @@ import IntakeProgramModules from './IntakeProgramModules';
 function IntakeProgramDetails() {
   const history = useHistory();
   const { path, url } = useRouteMatch();
-  const { id, intakeProg } = useParams<IntakeProgParam>();
+  const { id, intakeId, intakeProg } = useParams<IntakeProgParam>();
 
   const studentsProgram = intakeProgramStore.getStudentsByIntakeProgram(intakeProg || '')
     .data?.data.data;
@@ -109,6 +109,7 @@ function IntakeProgramDetails() {
     { to: 'intakes/programs', title: 'Programs' },
     { to: `${url}`, title: 'details' },
   ];
+
   return (
     <>
       <BreadCrumb list={list} />
@@ -161,7 +162,12 @@ function IntakeProgramDetails() {
                           </div>
                         </div>
                         <div className="mt-4 flex space-x-4">
-                          <Button onClick={() => history.push(`${url}/edit`)}>
+                          <Button
+                            onClick={() =>
+                              history.push(
+                                `/dashboard/intakes/programs/${intakeId}/${id}/edit`,
+                              )
+                            }>
                             Edit program
                           </Button>
                           <Button styleType="outline">Change Status</Button>
@@ -191,6 +197,7 @@ function IntakeProgramDetails() {
             />
             {/* program leves */}
             <Route exact path={`${path}/levels`} render={() => <ModuleLevels />} />
+
             {/* add module popup */}
             <Route
               exact
@@ -203,7 +210,7 @@ function IntakeProgramDetails() {
                 );
               }}
             />
-            \{/* add prerequesite popup */}
+            {/* add prerequesite popup */}
             <Route
               exact
               path={`${path}/modules/:moduleId/add-prereq`}

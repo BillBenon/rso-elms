@@ -74,7 +74,7 @@ export default function PrivilegesView() {
             buttonLabel="Add new privilege"
             title={'No privilege available'}
             handleClick={() => history.push(`${url}/add`)}
-            description="There are no priviledges added yet. Click above to add some"
+            description="There are no priviledges added yet. Click below to add some"
           />
         ) : null}
       </section>

@@ -148,6 +148,18 @@ export interface UserView
   extends Pick<UserInfo, 'id' | 'first_name' | 'last_name' | 'image_url'> {
   selected?: boolean;
 }
+
+export type UserTypes = {
+  id: string;
+  username: string;
+  'full name': string;
+  email: string;
+  NID: string;
+  academy: string;
+  status: GenericStatus;
+  user_type: UserType;
+};
+
 export interface PersonDetail
   extends Pick<
     PersonInfo,

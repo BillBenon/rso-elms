@@ -22,7 +22,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
 import { intakeStore } from '../../store/administration/intake.store';
 import programStore from '../../store/administration/program.store';
-import { Link as LinkList, ParamType } from '../../types';
+import { Link as LinkList } from '../../types';
 import { IntakeProgramInfo } from '../../types/services/intake-program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from '../programs/AcademicPrograms';
@@ -30,16 +30,21 @@ import AddAcademicProgramToIntake from '../programs/AddAcademicProgramToIntake';
 import NewAcademicProgram from '../programs/NewAcademicProgram';
 import UpdateAcademicProgram from '../programs/UpdateAcademicProgram';
 import IntakeProgramDetails from './IntakeProgramDetails';
+import NewIntakeLevelModule from './NewIntakeLevelModule';
+import NewIntakeProgramLevel from './NewIntakeProgramLevel';
+
+export interface ParamType {
+  intakeId: string;
+}
 
 function IntakePrograms() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
-  const { id: intakeId } = useParams<ParamType>();
+  const { intakeId } = useParams<ParamType>();
   const location = useLocation();
   const list: LinkList[] = [
     { to: 'home', title: 'home' },
-    { to: 'users', title: 'users' },
-    { to: 'faculty', title: 'Faculty' },
+    { to: 'intakes', title: 'intakes' },
     { to: `${url}`, title: 'Programs' },
   ];
 
@@ -82,6 +87,7 @@ function IntakePrograms() {
     refetch();
     history.goBack();
   }
+
   return (
     <main className="px-4">
       <Switch>
@@ -191,7 +197,8 @@ function IntakePrograms() {
                             </Heading>
                           </div>
                           <div className="mt-4 space-x-4">
-                            <Link to={`${url}/${Common.id}/edit`}>
+                            <Link
+                              to={`/dashboard/intakes/programs/${intakeId}/${Common.id}/edit`}>
                               <Button>Edit program</Button>
                             </Link>
                             <Button styleType="outline">Change Status</Button>
@@ -207,7 +214,7 @@ function IntakePrograms() {
                       handleClick={() =>
                         history.push(`${url}/add-program-to-intake?intakeId=${intakeId}`)
                       }
-                      description="There are no programs added yet, click on the above button to add some!"
+                      description="There are no programs added yet, click on the below button to add some!"
                     />
                   )}
                 </section>
@@ -236,6 +243,19 @@ function IntakePrograms() {
             return <NewAcademicProgram />;
           }}
         />
+        {/* add levels to intake program */}
+        <Route
+          exact
+          path={`${path}/:id/:intakeProg/add-level`}
+          render={() => <NewIntakeProgramLevel />}
+        />
+        {/* add module to intake program level */}
+        <Route
+          exact
+          path={`${path}/:id/:intakeProg/:level/add-module`}
+          render={() => <NewIntakeLevelModule />}
+        />
+
         {/* modify academic program */}
         <Route path={`${path}/:id/edit`} render={() => <UpdateAcademicProgram />} />
 

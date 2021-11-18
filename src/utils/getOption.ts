@@ -1,7 +1,10 @@
 import { SelectData } from '../types';
 import { IEvaluationStatus } from '../types/services/evaluation.types';
 import { IntakeStatus } from '../types/services/intake.types';
+import { IntakeModuleStatus } from '../types/services/intake-program.types';
+import { UserTypes } from '../types/services/user.types';
 import { GenericStatus } from './../types/services/common.types';
+import { UserInfo } from './../types/services/user.types';
 
 interface GetDropDownOptionsProps {
   inputs: any[];
@@ -9,6 +12,13 @@ interface GetDropDownOptionsProps {
   value?: string;
   getOptionLabel?: (_option: Object) => string;
 }
+
+export const titleCase = (s: string) => {
+  return s
+    .split(' ')
+    .map((w) => w[0].toUpperCase() + w.substr(1).toLowerCase())
+    .join(' ');
+};
 
 export function getDropDownOptions({
   inputs = [],
@@ -45,7 +55,7 @@ export function getDropDownStatusOptions(status: any): SelectData[] {
     stats.map((val) => {
       let label = val.toString().replaceAll('_', ' ');
       let input = {
-        label: label,
+        label: titleCase(label),
         value: val.toString(),
       };
       selectData.push(input);
@@ -55,7 +65,7 @@ export function getDropDownStatusOptions(status: any): SelectData[] {
 }
 
 export function advancedTypeChecker(
-  status: GenericStatus | IntakeStatus | IEvaluationStatus,
+  status: GenericStatus | IntakeStatus | IEvaluationStatus | IntakeModuleStatus,
 ): 'success' | 'warning' | 'error' {
   let successStatus = ['active', 'completed', 'opened', 'started'];
   let errorStatus = ['inactive', 'closed', 'voided', 'suspended'];
@@ -65,12 +75,25 @@ export function advancedTypeChecker(
   else return 'warning';
 }
 
-export const getInchargeDropdown = (users?: any[]): SelectData[] => {
+export const getInchargeDropdown = (users?: UserInfo[]): SelectData[] => {
   let options: SelectData[] = [];
 
   users?.map((user) => {
     options.push({
       label: `${user.first_name} ${user.last_name}`,
+      value: user.id.toString(),
+    });
+  });
+
+  return options;
+};
+
+export const getSpecificInchargeDropdown = (users?: UserTypes[]): SelectData[] => {
+  let options: SelectData[] = [];
+
+  users?.map((user) => {
+    options.push({
+      label: user['full name'],
       value: user.id.toString(),
     });
   });

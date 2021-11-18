@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import { ValueType } from '../../../types';
-import { UserTypes } from '../../../views/users/Users';
+import { UserTypes } from '../../../types/services/user.types';
 import Button from '../../Atoms/custom/Button';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import Table from '../../Molecules/table/Table';
@@ -35,10 +35,10 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
         showSearch={instructors && instructors.length > 0}>
         <div className="flex gap-3">
           <Link to={`/dashboard/users/import`}>
-            <Button styleType="outline">Import users</Button>
+            <Button styleType="outline">Import instructors</Button>
           </Link>
           <Link to={`/dashboard/users/add`}>
-            <Button>New User</Button>
+            <Button>New instructor</Button>
           </Link>
         </div>
       </TableHeader>

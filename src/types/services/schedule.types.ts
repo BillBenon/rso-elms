@@ -1,5 +1,4 @@
 import { Table } from '..';
-import { IEvaluationStatus } from './evaluation.types';
 import { EventInfo, VenueInfo } from './event.types';
 
 /* eslint-disable no-unused-vars */
@@ -10,17 +9,17 @@ export enum scheduleAppliesTo {
 }
 
 export enum methodOfInstruction {
-  PRACTICAL = 'PRAC',
-  LECTURE = 'LEC',
+  PRAC = 'PRAC',
+  LEC = 'LEC',
 }
 
 export enum frequencyType {
   ONETIME = 'ONETIME',
   REPEATING = 'REPEATING',
-  DATERANGE = 'DATE_RANGE',
+  DATE_RANGE = 'DATE_RANGE',
 }
 
-export enum recurringDays {
+export enum daysOfWeek {
   MONDAY = 'MONDAY',
   TUESDAY = 'TUESDAY',
   WEDNESDAY = 'WEDNESDAY',
@@ -30,6 +29,14 @@ export enum recurringDays {
   SUNDAY = 'SUNDAY',
   WEEKENDS = 'WEEKENDS',
   WEEKDAYS = 'WEEKDAYS',
+}
+
+export enum ScheduleStatus {
+  PENDING = 'PENDING',
+  ONGOING = 'ONGOING',
+  COMPLETED = 'COMPLETED',
+  CANCELED = 'CANCELED',
+  ON_HOLD = 'ON_HOLD',
 }
 
 export interface Hour {
@@ -47,20 +54,27 @@ interface CommonScheduleProperties {
 }
 
 export interface CreateEventSchedule extends CommonScheduleProperties {
-  startDate: string;
   beneficiaries?: string[];
   event: string;
   plannedEndHour: string;
-  plannedScheduleStartDate: string;
+  plannedScheduleStartDate: string | Date;
+  plannedScheduleEndDate: string | Date;
+  repeatingDays: string[];
+  recurringSchedule?: createRecurringSchedule[];
   plannedStartHour: string;
   venue: string;
 }
 
+export interface createRecurringSchedule {
+  dayOfWeek: daysOfWeek;
+  endHour: string;
+  startHour: string;
+}
 export interface RecurringSchedule extends Table {
-  day_of_week: recurringDays;
+  day_of_week: daysOfWeek;
   end_hour: Hour;
   start_hour: Hour;
-  timetable_status: IEvaluationStatus;
+  timetable_status: ScheduleStatus;
 }
 
 interface ProgramSchedule extends Table {
@@ -85,6 +99,6 @@ export interface ScheduleInfo extends Table, CommonScheduleProperties {
   schedural_intake_level_classes: IntakeLevelSchedule[];
   schedural_start_date: string;
   start_hour: Hour;
-  timetable_status: IEvaluationStatus;
+  timetable_status: ScheduleStatus;
   venue: VenueInfo;
 }
