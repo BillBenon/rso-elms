@@ -12,7 +12,7 @@ interface IInputMolecule<T> extends InputProps<T> {
 export default function InputMolecule<T>({
   name,
   value,
-  handleChange,
+  handleChange = () => {},
   children,
   error = '',
   placeholder = '',

@@ -33,21 +33,17 @@ export default function Redirecting() {
         : true;
     if (data?.data.data.user_type === UserType.SUPER_ADMIN)
       redirectTo('/dashboard/users');
-    // if (experiences?.data.data) {
+
     if (data?.data.data.user_type === UserType.ADMIN) {
       let val = !data?.data.data.academy ? true : false;
       setHasNoAcademy(val && !isLoading);
 
-      // if (experiences?.data.data.length === 0)
-      //   redirectTo('/complete-profile/experience');
-      // else redirectTo('/dashboard/divisions');
       redirectTo('/dashboard/divisions');
     } else if (data?.data.data.user_type === UserType.INSTRUCTOR) {
       redirectTo('/dashboard/evaluations');
     } else if (data?.data.data.user_type === UserType.STUDENT) {
       redirectTo('/dashboard/student/evaluations');
     }
-    // }
 
     setUserNotAllowed(notAllowed && !isLoading);
   }, [data?.data.data, isLoading]);
@@ -77,36 +73,3 @@ export default function Redirecting() {
     </>
   );
 }
-
-// interface ErrorCardProp {
-//   text: string;
-//   value: string | undefined;
-// }
-
-// function ErrorCard({ text, value }: ErrorCardProp) {
-//   const spanValue = <span className="bg-error-400 px-2 rounded">{value}</span>;
-
-//   const realError = text.split('%%');
-
-//   return (
-//     <div className="full-height w-full grid items-center">
-//       <div className="flex justify-center">
-//         <div className=" ">
-//           <div className="flex items-center px-6 py-1 rounded-lg bg-tertiary">
-//             <Icon name="alert" stroke="error" />
-//             <p>
-//               {' '}
-//               {realError[0]} {spanValue} {realError[1]}{' '}
-//             </p>
-//           </div>
-
-//           <div className="flex justify-center pt-5 pb-3">
-//             <Link to="/login">
-//               <Button>Go Back Home</Button>
-//             </Link>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }

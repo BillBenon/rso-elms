@@ -8,7 +8,7 @@ import { InputProps } from '../../../types';
 export default function Input<T>({
   placeholder = '',
   padding = 'px-4',
-  type = 'text',
+  type,
   readonly = false,
   required = true,
   value = '',
@@ -18,7 +18,7 @@ export default function Input<T>({
   bcolor = 'tertiary',
   pcolor = 'txt-secondary',
   width = '80',
-  handleChange,
+  handleChange = () => {},
   className = '',
   ...attrs
 }: InputProps<T>) {
@@ -37,6 +37,7 @@ export default function Input<T>({
       name={name}
       type={type}
       value={_value}
+      spellCheck="true"
       readOnly={readonly}
       required={required}
       autoComplete="off"
