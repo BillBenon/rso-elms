@@ -41,7 +41,7 @@ class EvaluationService {
   }
   public async fetchEvaluationsBySubject(
     subject: string,
-  ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
+  ): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
     return await evaluationAxios.get(`/evaluations/getEvaluationsBySubject/${subject}`);
   }
 

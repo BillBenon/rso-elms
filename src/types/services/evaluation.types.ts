@@ -138,7 +138,7 @@ export interface IEvaluationChoices {
 
 export interface IEvaluationQuestion {
   evaluation_id: string;
-  mark: string;
+  mark: number;
   parent_question_id: string;
   question: string;
   submitted: boolean;

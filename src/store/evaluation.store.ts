@@ -22,7 +22,7 @@ class EvaluationStore {
   }
 
   getEvaluationsBySubject(subject: string) {
-    return useQuery(['evaluations', subject], () =>
+    return useQuery(['evaluations/subject', subject], () =>
       evaluationService.fetchEvaluationsBySubject(subject),
     );
   }

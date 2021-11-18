@@ -58,7 +58,7 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
     marking_reminder_date: '',
     maximum_file_size: '',
     name: '',
-    questionaire_type: IQuestionaireTypeEnum.MULTIPLE,
+    questionaire_type: IQuestionaireTypeEnum.OPEN,
     subject_academic_year_period_id: '',
     submision_type: ISubmissionTypeEnum.ONLINE_TEXT,
     time_limit: 30,
