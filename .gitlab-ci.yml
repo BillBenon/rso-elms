@@ -16,6 +16,7 @@ cache:
 install_dependencies:
   stage: install
   script:
+    - npm install -g npm@latest
     - npm install
   artifacts:
         paths:
