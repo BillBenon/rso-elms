@@ -1,14 +1,22 @@
 import React from 'react';
 
-import { commonInputProps } from '../../../types';
+import { commonInputProps, ValueType } from '../../../types';
 import Checkbox from '../../Atoms/Input/CheckBox';
 import ILabel from '../../Atoms/Text/ILabel';
 
 interface IProps extends commonInputProps {
   isFlex?: boolean;
+  values: string[];
 }
 
 export default function CheckboxMolecule(props: IProps) {
+  const handleChange = (e: ValueType<HTMLInputElement>) => {
+    let selected: string[] = [...props.values];
+    if (!props.values.includes(e.value as string)) selected.push(e.value as string);
+    else selected = [...selected.filter((el) => el != e.value)];
+
+    props.handleChange({ name: props.name, value: selected, event: e });
+  };
   return (
     <div className="py-2">
       <ILabel size="sm" weight="bold">
@@ -22,7 +30,7 @@ export default function CheckboxMolecule(props: IProps) {
               value={op.value}
               checked={false}
               label={op.label}
-              handleChange={() => props.handleChange}
+              handleChange={handleChange}
             />
           </div>
         ))}
