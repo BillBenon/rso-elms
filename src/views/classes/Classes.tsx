@@ -73,7 +73,11 @@ function Classes() {
                 <Button styleType="text" onClick={() => history.goBack()}>
                   Go back to modules
                 </Button>
-                <Button styleType="outline">Add class</Button>
+                <Button
+                  styleType="outline"
+                  onClick={() => history.push(`${url}/add-class`)}>
+                  Add class
+                </Button>
                 <Button styleType="outline">Add students</Button>
               </TableHeader>
               {classGroups.length <= 0 ? (

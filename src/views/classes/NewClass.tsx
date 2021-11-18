@@ -7,6 +7,7 @@ import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule'
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import { queryClient } from '../../plugins/react-query';
 import { authenticatorStore } from '../../store/administration';
+import academicperiodStore from '../../store/administration/academicperiod.store';
 import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import usersStore from '../../store/administration/users.store';
@@ -38,8 +39,12 @@ function NewClass() {
   const { level: levelId, intakeProg, intakeId, id } = useParams<IntakeLevelParam>();
 
   useEffect(() => {
-    setForm({ ...form, intake_level_id: parseInt(levelId) });
-  }, [levelId]);
+    setForm({
+      ...form,
+      class_representative_two_id: form.class_representative_one_id,
+      class_representative_tree_id: form.class_representative_one_id,
+    });
+  }, [form.class_representative_one_id]);
 
   let users: UserTypes[] = [];
   const { data, isSuccess } = usersStore.getUsersByAcademy(
@@ -77,10 +82,18 @@ function NewClass() {
   const [students, setStudents] = useState<UserTypes[]>();
   const [instructors, setInstructors] = useState<UserTypes[]>();
 
+  const level = intakeProgramStore
+    .getLevelsByIntakeProgram(intakeProg)
+    .data?.data.data?.find((lev) => lev.id === parseInt(levelId));
+
   const periods =
-    intakeProgramStore.getPeriodsByLevel(parseInt(levelId)).data?.data.data || [];
+    academicperiodStore.getAcademicPeriodsByAcademicYear(
+      level?.academic_year.id.toString() || '',
+    ).data?.data.data || [];
 
   useEffect(() => {
+    setForm({ ...form, intake_level_id: parseInt(levelId) });
+
     setStudents(users.filter((user) => user.user_type == UserType.STUDENT));
     setInstructors(users.filter((user) => user.user_type == UserType.INSTRUCTOR));
   }, []);
@@ -133,7 +146,7 @@ function NewClass() {
         name="intake_academic_year_period_id"
         handleChange={handleChange}
         options={getDropDownOptions({ inputs: periods })}
-        placeholder="Choose instructor representative">
+        placeholder="Choose period">
         Academic period
       </DropdownMolecule>
 
