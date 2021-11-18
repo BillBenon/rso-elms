@@ -23,6 +23,7 @@ import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedul
 import { ParamType, ValueType } from '../../types';
 import programStore from '../../store/administration/program.store';
 import { scheduleStore } from '../../store/timetable/schedule.store';
+import { getCalendarEvents } from '../../utils/date-helper';
 
 const localizer = momentLocalizer(moment);
 
@@ -39,16 +40,11 @@ export default function CalendarView() {
   const programInfo = programStore.getProgramById(id).data?.data.data;
 
   //get events
-  const events =
-    (inLevelId
+  const events = getCalendarEvents(
+    inLevelId
       ? scheduleStore.getAllByAcademicProgramIntakeLevel(inLevelId).data?.data.data
-      : scheduleStore.getAllByAcademicProgram(id).data?.data.data
-    )?.map((schedule) => ({
-      id: schedule.id,
-      title: schedule.event.name,
-      start: new Date(schedule.planned_schedule_start_date),
-      end: new Date(schedule.planned_schedule_end_date),
-    })) || [];
+      : scheduleStore.getAllByAcademicProgram(id).data?.data.data,
+  );
 
   const handleClose = () => {
     history.goBack();
