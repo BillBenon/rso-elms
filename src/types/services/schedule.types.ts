@@ -19,7 +19,7 @@ export enum frequencyType {
   DATE_RANGE = 'DATE_RANGE',
 }
 
-export enum recurringDays {
+export enum daysOfWeek {
   MONDAY = 'MONDAY',
   TUESDAY = 'TUESDAY',
   WEDNESDAY = 'WEDNESDAY',
@@ -60,12 +60,19 @@ export interface CreateEventSchedule extends CommonScheduleProperties {
   plannedEndHour: string;
   plannedScheduleStartDate: string | Date;
   plannedScheduleEndDate: string | Date;
+  repeatingDays: string[];
+  recurringSchedule?: createRecurringSchedule[];
   plannedStartHour: string;
   venue: string;
 }
 
+export interface createRecurringSchedule {
+  dayOfWeek: daysOfWeek;
+  endHour: string;
+  startHour: string;
+}
 export interface RecurringSchedule extends Table {
-  day_of_week: recurringDays;
+  day_of_week: daysOfWeek;
   end_hour: Hour;
   start_hour: Hour;
   timetable_status: ScheduleStatus;
