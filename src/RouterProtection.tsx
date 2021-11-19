@@ -9,6 +9,7 @@ import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';
 import CalendarView from './views/calendar/Calendar';
 import ChoosePrograms from './views/calendar/ChoosePrograms';
+import Events from './views/calendar/Events';
 import Venues from './views/calendar/Venues';
 import Divisions from './views/divisions/Divisions';
 import EvaluationTest from './views/evaluation/EvaluationTest';
@@ -55,7 +56,8 @@ const RouterProtection = () => {
       <Route path="/dashboard/subjects" component={Subjects} />
       <Route path="/dashboard/schedule" component={ChoosePrograms} />
       <Route path="/dashboard/calendar" component={CalendarView} />
-      <Route path="/dashboard/venue-events" component={Venues} />
+      <Route path="/dashboard/events" component={Events} />
+      <Route path="/dashboard/venues" component={Venues} />
       <Route path="/dashboard/registration-control" component={RegistrationControl} />
       <Route path="/dashboard/divisions" component={Divisions} />
       <Route path="/dashboard/academic-years" component={AcademicYears} />
