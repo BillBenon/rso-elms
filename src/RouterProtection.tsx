@@ -9,6 +9,7 @@ import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';
 import CalendarView from './views/calendar/Calendar';
 import ChoosePrograms from './views/calendar/ChoosePrograms';
+import Venues from './views/calendar/Venues';
 import Divisions from './views/divisions/Divisions';
 import EvaluationTest from './views/evaluation/EvaluationTest';
 import ViewEvaluations from './views/evaluation/ViewEvaluations';
@@ -54,8 +55,7 @@ const RouterProtection = () => {
       <Route path="/dashboard/subjects" component={Subjects} />
       <Route path="/dashboard/schedule" component={ChoosePrograms} />
       <Route path="/dashboard/calendar" component={CalendarView} />
-      {/* <Route exact path="/dashboard/evaluations" component={ViewEvaluations} />
-      <Route exact path="/dashboard/evaluation/new" component={NewEvaluation} /> */}
+      <Route path="/dashboard/venue-events" component={Venues} />
       <Route path="/dashboard/registration-control" component={RegistrationControl} />
       <Route path="/dashboard/divisions" component={Divisions} />
       <Route path="/dashboard/academic-years" component={AcademicYears} />
@@ -63,7 +63,6 @@ const RouterProtection = () => {
       <Route path="/dashboard/users" component={Users} />
       <Route path="/dashboard/levels" component={Levels} />
       <Route path="/dashboard/intakes" component={IntakesView} />
-      {/* <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} /> */}
 
       {/* end of academic admin pages */}
     </>

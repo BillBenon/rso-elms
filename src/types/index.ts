@@ -13,6 +13,7 @@ export type Color =
   | 'txt-secondary'
   | 'none'
   | 'gray'
+  | 'info'
   | 'lightgray';
 
 export type fontSize =

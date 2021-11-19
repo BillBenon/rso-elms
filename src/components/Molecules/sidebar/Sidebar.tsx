@@ -28,6 +28,7 @@ export default function Sidebar() {
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
       { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
       { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
+      { title: 'Venues & events', to: '/dashboard/venue-events', icon: 'calendar' },
       {
         title: 'Registration Control',
         to: '/dashboard/registration-control',
