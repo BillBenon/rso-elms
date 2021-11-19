@@ -61,70 +61,17 @@ export function formatDateToIso(date: string | Date): string {
   return formatedDate.substring(0, formatedDate.length - 5);
 }
 
-export function getCalendarEvents(schedules: ScheduleInfo[] = []) {
-  let localSchedules: ScheduleInfo[] = [];
+export function getWeekBorderDays() {
+  let dayOfToday = new Date().getDay();
 
-  schedules.forEach((s) => {
-    if (
-      s.frequencyType == frequencyType.RECURRING ||
-      s.frequencyType == frequencyType.DATE_RANGE
-    ) {
-      let date = new Date();
+  let monday = new Date();
+  monday.setDate(new Date().getDate() - dayOfToday + 1);
 
-      for (let i = date.getDay(); i < 7; i++) {
-        localSchedules.push({
-          ...s,
-          planned_schedule_start_date: new Date(
-            date.setDate(date.getDate() + 1),
-          ).toLocaleDateString(),
-        });
-      }
-      for (let i = 0; i < date.getDay(); i++) {
-        localSchedules.push({
-          ...s,
-          planned_schedule_start_date: new Date(
-            date.setDate(date.getDate() - i),
-          ).toLocaleDateString(),
-        });
-      }
-    } else localSchedules.push(s);
-  });
+  let sunday = new Date();
+  sunday.setDate(new Date().getDate() + 7 - dayOfToday);
 
-  console.log('====================================');
-  console.log(localSchedules);
-  console.log('====================================');
-
-  return localSchedules.map((schedule) => ({
-    id: schedule.id,
-    title: schedule.event.name,
-    start: getEventStartDate(schedule),
-    end: getEventEndDate(schedule),
-  }));
-}
-
-function getEventStartDate(schedule: ScheduleInfo) {
-  let date = new Date(schedule.planned_schedule_start_date);
-
-  if (schedule.planned_start_hour) {
-    return new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      schedule.planned_start_hour[0],
-      schedule.planned_start_hour[1],
-    );
-  } else return new Date();
-}
-
-function getEventEndDate(schedule: ScheduleInfo) {
-  let date = new Date(schedule.planned_schedule_start_date);
-  if (schedule.planned_end_hour) {
-    return new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      date.getDate(),
-      schedule.planned_end_hour[0],
-      schedule.planned_end_hour[1],
-    );
-  } else return new Date();
+  return {
+    monday: formatDateToYyMmDd(monday.toDateString()),
+    sunday: formatDateToYyMmDd(sunday.toDateString()),
+  };
 }

@@ -23,7 +23,6 @@ import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedul
 import { ParamType, ValueType } from '../../types';
 import programStore from '../../store/administration/program.store';
 import { scheduleStore } from '../../store/timetable/schedule.store';
-import { getCalendarEvents } from '../../utils/date-helper';
 
 const localizer = momentLocalizer(moment);
 
@@ -40,11 +39,12 @@ export default function CalendarView() {
   const programInfo = programStore.getProgramById(id).data?.data.data;
 
   //get events
-  const events = getCalendarEvents(
-    inLevelId
-      ? scheduleStore.getAllByAcademicProgramIntakeLevel(inLevelId).data?.data.data
-      : scheduleStore.getAllByAcademicProgram(id).data?.data.data,
-  );
+  const events: any = [];
+  // getCalendarEvents(
+  //   inLevelId
+  //     ? scheduleStore.getAllByAcademicProgramIntakeLevel(inLevelId).data?.data.data
+  //     : scheduleStore.getAllByAcademicProgram(id).data?.data.data,
+  // );
 
   const handleClose = () => {
     history.goBack();
@@ -85,8 +85,11 @@ export default function CalendarView() {
         showMultiDayTimes={false}
         views={['day', 'week']}
         defaultDate={new Date()}
+        timeslots={1}
         style={{ height: 900 }}
-        onSelectEvent={(event) => history.push(`${path}/event/${event.id}`)}
+        min={new Date(2017, 10, 0, 4, 0, 0)}
+        max={new Date(2017, 10, 0, 23, 59, 59)}
+        // onSelectEvent={(event) => history.push(`${path}/event/${event.id}`)}
       />
       <Switch>
         <Route
