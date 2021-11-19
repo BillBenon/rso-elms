@@ -39,6 +39,9 @@ export type Status =
   | 'active'
   | 'inactive'
   | 'suspended'
+  | 'promoted'
+  | 'retake'
+  | 'expelled'
   | 'started'
   | 'cancelled';
 

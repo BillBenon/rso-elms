@@ -19,7 +19,7 @@ export default function Sidebar() {
       { title: 'Users', to: '/dashboard/users', icon: 'user' },
       { title: 'Roles', to: '/dashboard/roles', icon: 'role' },
       { title: 'Academies', to: '/dashboard/academies', icon: 'academy', fill: false },
-      { title: 'Evalutaions', to: '/dashboard/evaluations', icon: 'evaluation' },
+      { title: 'Evaluations', to: '/dashboard/evaluations', icon: 'evaluation' },
       { title: 'Privileges', to: '/dashboard/privileges', icon: 'module' },
     ];
     const academicAdminLinks: linkProps[] = [
@@ -37,11 +37,11 @@ export default function Sidebar() {
     ];
 
     const instructorLinks: linkProps[] = [
-      { title: 'Evalutaions', to: '/dashboard/evaluations', icon: 'evaluation' },
+      { title: 'Evaluations', to: '/dashboard/evaluations', icon: 'evaluation' },
     ];
 
     const studentLinks: linkProps[] = [
-      { title: 'Evalutaions', to: '/dashboard/student/evaluations', icon: 'evaluation' },
+      { title: 'Evaluations', to: '/dashboard/student/evaluations', icon: 'evaluation' },
     ];
 
     if (authUser?.user_type == UserType.SUPER_ADMIN)
