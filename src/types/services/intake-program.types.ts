@@ -23,6 +23,13 @@ export interface IntakeProgramInfo extends Table {
   description: string;
 }
 
+export interface AddIntakeProgramLevelPeriod {
+  academic_year_program_intake_level_id: string;
+  actual_end_on: string;
+  actual_start_on: string;
+  period_id: string;
+  progress_status: PeriodProgressStatus;
+}
 export interface LevelIntakeProgram extends Table {
   academic_year: IAcademicYearInfo;
   intake_program: IntakeProgramInfo;
@@ -46,7 +53,6 @@ export interface IntakeLevelModule extends Table, AddLevelToModule {
 }
 
 export interface CreateLevelIntakeProgram {
-  academic_period_id: string;
   academic_program_level_id: string;
   academic_year_id: string;
   academic_year_program_intake_level_id: number;
@@ -87,6 +93,18 @@ export interface StudentIntakeProgram extends Table {
   third_party_reg_number: string;
   enroled_on: string;
   completed_on: string;
+}
+
+//intake program period progress status enum
+export enum PeriodProgressStatus {
+  PENDING = 'PENDING',
+  OPENED = 'OPENED',
+  STARTED = 'STARTED',
+  ONGOING = 'ONGOING',
+  SUSPENDED = 'SUSPENDED',
+  COMPLETED = 'COMPLETED',
+  VOIDED = 'VOIDED',
+  CLOSED = 'CLOSED',
 }
 
 // intake program progress status enum

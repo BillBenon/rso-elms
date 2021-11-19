@@ -29,6 +29,9 @@ class IntakeProgramStore {
   addLevelToIntakeProgram() {
     return useMutation(intakeProgramService.addLevelToIntakeProgram);
   }
+  addPeriodsToLevel() {
+    return useMutation(intakeProgramService.addPeriodsToLevel);
+  }
   addModuleToLevel() {
     return useMutation(intakeProgramService.addModuleToLevel);
   }

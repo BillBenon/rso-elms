@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
+  AddIntakeProgramLevelPeriod,
   AddLevelToModule,
   CreateLevelIntakeProgram,
   IntakeLevelModule,
@@ -54,12 +55,22 @@ class IntakeProgramService {
   }
   public async addLevelToIntakeProgram(
     newLevel: CreateLevelIntakeProgram,
-  ): Promise<AxiosResponse<Response<LevelIntakeProgram[]>>> {
+  ): Promise<AxiosResponse<Response<LevelIntakeProgram>>> {
     return await adminstrationAxios.post(
       `academicProgramIntakeLevels/addAcademicProgramLevelToIntakeProgram`,
       newLevel,
     );
   }
+
+  public async addPeriodsToLevel(
+    newPeriod: AddIntakeProgramLevelPeriod[],
+  ): Promise<AxiosResponse<Response<LevelIntakeProgram[]>>> {
+    return await adminstrationAxios.post(
+      `academicProgramIntakeLevels/addPeriodsToIntakeProgramLevel`,
+      newPeriod,
+    );
+  }
+
   public async addModuleToLevel(
     newModule: AddLevelToModule[],
   ): Promise<AxiosResponse<Response<ModuleInfo[]>>> {
