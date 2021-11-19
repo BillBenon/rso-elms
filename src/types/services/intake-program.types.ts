@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-vars */
 import { Table } from '..';
 import { IAcademicYearInfo } from './academicyears.types';
-import { IntakeInfo, IntakeStatus } from './intake.types';
+import { IntakeInfo, IntakeProgram, IntakeStatus } from './intake.types';
 import { ProgramLevel } from './levels.types';
 import { ModuleInfo } from './modules.types';
 import { AcademicProgramLevel, ProgramInfo } from './program.types';
+import { Student, UserInfo } from './user.types';
 import { Incharge } from './user.types';
 
 export interface IntakeProgParam {
@@ -74,6 +75,20 @@ export interface AddLevelToModule {
   weight: number;
 }
 
+export interface StudentIntakeProgram extends Table {
+  student: Student;
+  intake_program: IntakeProgram;
+  enrolment_status: EnrollmentStatus;
+  enrolment_mode: string;
+  rank: string;
+  rank_institution: string;
+  other_rank: string;
+  employee_number: string;
+  third_party_reg_number: string;
+  enroled_on: string;
+  completed_on: string;
+}
+
 // intake program progress status enum
 export enum ProgressStatus {
   STARTED = 'STARTED',
@@ -97,4 +112,11 @@ export enum IntakeModuleStatus {
   SUSPENDED = 'SUSPENDED',
   COMPLETED = 'COMPLETED',
   VOIDED = 'VOIDED',
+}
+
+export enum EnrollmentStatus {
+  PENDING,
+  NEW,
+  RETAKE = 'RETAKE',
+  DISMISSED = 'DISMISSED',
 }

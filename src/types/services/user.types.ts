@@ -4,6 +4,21 @@ import { Table } from '..';
 import { AcademyInfo } from './academy.types';
 import { ILevel } from './levels.types';
 
+export interface InstructorDeployed extends Table {
+  institution_id: string;
+  since_on: string;
+  user: UserInfo;
+  academy: AcademyInfo;
+  description: string;
+}
+
+export interface Student extends Table {
+  reg_number: string;
+  user: UserInfo;
+  academy: AcademyInfo;
+  registered_on: string;
+}
+
 export interface UserInfo extends CreateUserInfo, Table {
   pin: string;
   age_range: string;
@@ -23,6 +38,8 @@ export interface UserInfo extends CreateUserInfo, Table {
   enabled: boolean;
   profile_status: ProfileStatus;
   authorities: [];
+  otp: string;
+  is_otp_active: boolean;
 }
 
 export interface Incharge extends Table {
