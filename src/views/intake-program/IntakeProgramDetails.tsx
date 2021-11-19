@@ -20,7 +20,6 @@ import { advancedTypeChecker } from '../../utils/getOption';
 import ModuleLevels from '../modules/ModuleLevels';
 import { IProgramData } from '../programs/AcademicPrograms';
 import AddLevelToProgram from '../programs/AddLevelToProgram';
-import { DummyUser } from '../programs/dummyUsers';
 import IntakeProgramModules from './IntakeProgramModules';
 
 function IntakeProgramDetails() {
@@ -30,12 +29,12 @@ function IntakeProgramDetails() {
 
   const studentsProgram = intakeProgramStore.getStudentsByIntakeProgram(intakeProg || '')
     .data?.data.data;
-  const instructorsProgram = intakeProgramStore.getStudentsByIntakeProgram(
-    intakeProg || '',
-  ).data?.data.data;
+  // const instructorsProgram = intakeProgramStore.getStudentsByIntakeProgram(
+  //   intakeProg || '',
+  // ).data?.data.data;
 
   const [students, setStudents] = useState<UserView[]>([]);
-  const [instructors, setInstructors] = useState<UserView[]>([]);
+  // const [instructors, setInstructors] = useState<UserView[]>([]);
 
   useEffect(() => {
     studentsProgram?.map((stud) =>
@@ -43,27 +42,27 @@ function IntakeProgramDetails() {
         ...students,
         {
           id: stud.id,
-          first_name: stud.first_name,
-          last_name: stud.last_name,
-          image_url: stud.image_url,
+          first_name: stud.student.user.first_name,
+          last_name: stud.student.user.last_name,
+          image_url: stud.student.user.image_url,
         },
       ]),
     );
   }, [studentsProgram]);
 
-  useEffect(() => {
-    instructorsProgram?.map((inst) =>
-      setInstructors([
-        ...instructors,
-        {
-          id: inst.id,
-          first_name: inst.first_name,
-          last_name: inst.last_name,
-          image_url: inst.image_url,
-        },
-      ]),
-    );
-  }, [instructorsProgram]);
+  // useEffect(() => {
+  //   instructorsProgram?.map((inst) =>
+  //     setInstructors([
+  //       ...instructors,
+  //       {
+  //         id: inst.id,
+  //         first_name: inst.first_name,
+  //         last_name: inst.last_name,
+  //         image_url: inst.image_url,
+  //       },
+  //     ]),
+  //   );
+  // }, [instructorsProgram]);
 
   const program = programStore.getProgramById(id).data?.data.data;
 
@@ -177,20 +176,18 @@ function IntakeProgramDetails() {
                   </div>
 
                   <div className="flex flex-col gap-8 z-0">
-                    {/* <div className="flex gap-8"> */}
                     <UsersPreview
                       title="Students"
                       label="Students in Cadette programs"
-                      data={DummyUser}
-                      totalUsers={DummyUser.length || 0}
+                      data={students}
+                      totalUsers={students.length || 0}
                     />
-                    <UsersPreview
+                    {/* <UsersPreview
                       title="Instructors"
                       label="Instructors in Cadette programs"
-                      data={DummyUser}
-                      totalUsers={DummyUser.length || 0}
-                    />
-                    {/* </div> */}
+                      data={instructors}
+                      totalUsers={instructors.length || 0}
+                    /> */}
                   </div>
                 </div>
               )}
