@@ -1,8 +1,34 @@
-import React, { useState } from 'react';
+import React, { Dispatch, ReactNode, SetStateAction, useState } from 'react';
+import { TextDecoration } from '../../../../types';
 import Icon from '../../../Atoms/custom/Icon';
 
-export default function StudentAnswersMarking() {
+interface PropTypes<T> {
+    data: any;
+    full?: boolean;
+    icon?: boolean;
+    totalMarks: number;
+    setTotalMarks: Dispatch<SetStateAction<number>>;
+    hoverStyle?: TextDecoration;
+    className?: string;
+  }
+export default function StudentAnswer<T>({totalMarks, setTotalMarks}: PropTypes<T>) {
     const [markScored, setMarkScored] = useState(-1);
+    const updateQuestionPoints = (marks: number) => {
+        console.log({markScored,marks});
+        if(markScored == -1) {
+            setTotalMarks(totalMarks+marks);
+        }
+        else if (markScored == 5 && marks == 0 ){ 
+            if(totalMarks-markScored <= 0) setTotalMarks(0)
+            else setTotalMarks(totalMarks-markScored);
+        }
+        else if (markScored == 0 && marks != 0 ){ 
+            setTotalMarks(totalMarks+marks);
+        }
+
+        setMarkScored(marks)
+        
+    } 
   return (
         <div className={`answer-card-molecule bg-main p-6 rounded-lg `}>
             <div className="flex justify-between">
@@ -17,7 +43,7 @@ export default function StudentAnswersMarking() {
                     It is a system that is nervous!!
                 </div>
                 <div className="flex gap-2">
-                    <button className={markScored == -1 || markScored == 0 ? 'normal-button' : 'right-button'} onClick={()=>{setMarkScored(5)}}>
+                    <button className={markScored == -1 || markScored == 0 ? 'normal-button' : 'right-button'} onClick={()=>{updateQuestionPoints(5)}}>
                     <Icon
                         name={"tick"}
                         size={18}
@@ -26,7 +52,7 @@ export default function StudentAnswersMarking() {
                     />
                     </button>
 
-                    <button className={markScored == 0 ? 'wrong-button' : 'normal-button'} onClick={()=>{setMarkScored(0)}}>
+                    <button className={markScored == 0 ? 'wrong-button' : 'normal-button'} onClick={()=>{updateQuestionPoints(0)}}>
                     <Icon
                         name={"cross"}
                         size={18}
