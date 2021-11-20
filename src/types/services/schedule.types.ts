@@ -15,7 +15,7 @@ export enum methodOfInstruction {
 
 export enum frequencyType {
   ONETIME = 'ONETIME',
-  REPEATING = 'REPEATING',
+  RECURRING = 'RECURRING',
   DATE_RANGE = 'DATE_RANGE',
 }
 
@@ -88,10 +88,10 @@ export interface ScheduleInfo extends Table, CommonScheduleProperties {
   end_hour: Hour;
   event: EventInfo;
   method_of_instruction: methodOfInstruction;
-  planned_end_hour: Hour;
+  planned_end_hour: number[];
   planned_schedule_end_date: string;
   planned_schedule_start_date: string;
-  planned_start_hour: Hour;
+  planned_start_hour: number[];
   recurring_schedurals: [];
   schedural_academic_program_intake_levels: RecurringSchedule[];
   schedural_academic_programs: ProgramSchedule[];
@@ -101,4 +101,7 @@ export interface ScheduleInfo extends Table, CommonScheduleProperties {
   start_hour: Hour;
   timetable_status: ScheduleStatus;
   venue: VenueInfo;
+  frequency_type: frequencyType;
+  applies_to: scheduleAppliesTo;
+  period: 1;
 }

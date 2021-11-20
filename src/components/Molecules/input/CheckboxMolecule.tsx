@@ -1,3 +1,4 @@
+import { values } from 'lodash';
 import React from 'react';
 
 import { commonInputProps, ValueType } from '../../../types';
@@ -28,7 +29,7 @@ export default function CheckboxMolecule(props: IProps) {
             <Checkbox
               name={props.name}
               value={op.value}
-              checked={false}
+              checked={props.values.includes(op.value)}
               label={op.label}
               handleChange={handleChange}
             />

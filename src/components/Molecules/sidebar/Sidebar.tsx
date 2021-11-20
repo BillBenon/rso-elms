@@ -28,6 +28,8 @@ export default function Sidebar() {
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
       { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
       { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
+      { title: 'Events', to: '/dashboard/events', icon: 'calendar' },
+      { title: 'Venues', to: '/dashboard/venues', icon: 'program' },
       {
         title: 'Registration Control',
         to: '/dashboard/registration-control',

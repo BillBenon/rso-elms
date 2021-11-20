@@ -29,6 +29,7 @@ const Badge = ({
     warning: 'bg-warning-400',
     primary: 'bg-primary-500',
     secondary: 'bg-secondary',
+    info: 'bg-info-400',
     'txt-secondary': 'bg-txt-secondary',
     main: 'bg-main',
   };
