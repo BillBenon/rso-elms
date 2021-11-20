@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
+import { Student } from '../../types/services/user.types';
 import { IClass, ICreateClass } from './../../types/services/class.types';
 
 class ClassService {
@@ -18,6 +19,13 @@ class ClassService {
   ): Promise<AxiosResponse<Response<IClass[]>>> {
     return await adminstrationAxios.get(
       `/intakeLevelClasses/getIntakeLevelClassByIntakeLevel/${intakeLevelId}`,
+    );
+  }
+  public async getStudentsByClass(
+    classId: string,
+  ): Promise<AxiosResponse<Response<Student[]>>> {
+    return await adminstrationAxios.get(
+      `/intakeLevelClasses/getStudentsByClass/${classId}`,
     );
   }
   public async modifyClass(cl: ICreateClass): Promise<AxiosResponse<Response<IClass>>> {

@@ -2,7 +2,11 @@ import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
-import { InstructorDeployed } from './../../types/services/instructordeployed.types';
+import {
+  DeployInstructor,
+  Instructor,
+  InstructorDeployed,
+} from '../../types/services/instructor.types';
 
 class InstructorDeployment {
   public async getInstructorsDeployedInAcademy(
@@ -11,6 +15,22 @@ class InstructorDeployment {
     return await adminstrationAxios.get(
       `instructorDeployments/getInstructorsDeployedInAcademy/${academyId}`,
     );
+  }
+
+  public async getInstructorById(
+    id: string,
+  ): Promise<AxiosResponse<Response<Instructor[]>>> {
+    return await adminstrationAxios.get(`instructorDeployments/getInstructorById/${id}`);
+  }
+
+  public async getInstructors(): Promise<AxiosResponse<Response<Instructor[]>>> {
+    return await adminstrationAxios.get(`instructorDeployments/getInstructors`);
+  }
+
+  public async deploy(
+    instructor: DeployInstructor,
+  ): Promise<AxiosResponse<Response<InstructorDeployed>>> {
+    return await adminstrationAxios.post('instructorDeployments/deploy', instructor);
   }
 }
 

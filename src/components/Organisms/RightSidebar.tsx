@@ -14,12 +14,17 @@ import SearchMolecule from '../Molecules/input/SearchMolecule';
 interface IRightSidebar {
   label: string;
   isOpen: boolean;
-  onToggle: () => void;
   data: UserView[];
   selectorActions?: { name: string; handleAction: (_data?: string[]) => void }[];
 }
 
-function RightSidebar({ label, isOpen, onToggle, selectorActions, data }: IRightSidebar) {
+function RightSidebar({ label, isOpen, selectorActions, data }: IRightSidebar) {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setOpen(isOpen);
+  }, [isOpen]);
+
   const handleSearch = () => {};
   const [selected, setSelected] = useState(new Set(''));
 
@@ -63,18 +68,18 @@ function RightSidebar({ label, isOpen, onToggle, selectorActions, data }: IRight
 
   return (
     <div
-      className={`bg-main z-50 shadow min-h-screen h-full w-96 px-6 absolute right-0 top-0 sidebar-menu ${
-        isOpen ? 'block' : 'hidden'
+      className={`bg-main z-50 shadow min-h-screen overflow-y-auto h-full w-96 px-6 absolute right-0 top-0 sidebar-menu ${
+        open ? 'block' : 'hidden'
       }`}>
       <div className="flex justify-between">
         <Heading fontSize="lg" fontWeight="semibold" className="pt-3">
           {label}
         </Heading>
-        <Button styleType="text" icon onClick={onToggle} className="self-end">
+        <Button styleType="text" icon onClick={() => setOpen(!open)} className="self-end">
           <Icon name="close" fill="txt-secondary" size={18} />
         </Button>
       </div>
-      <div className="pt-8">
+      <div className="pt-4">
         {selected.size > 0 && (
           <div className="rounded mb-3 py-2 bg-main flex justify-between">
             <div>
@@ -110,7 +115,13 @@ function RightSidebar({ label, isOpen, onToggle, selectorActions, data }: IRight
               name={'user'}
               value={user.id.toString()}
             />
-            <Avatar src={user.image_url} size="48" alt={user.first_name} />
+            <Avatar
+              src={
+                user.image_url || 'https://static.thenounproject.com/png/2643367-200.png'
+              }
+              size="48"
+              alt=""
+            />
             <Heading fontSize="sm" fontWeight="semibold" className="text-center">
               {user.first_name} {user.last_name}
             </Heading>

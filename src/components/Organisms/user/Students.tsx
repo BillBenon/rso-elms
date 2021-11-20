@@ -2,8 +2,9 @@ import React from 'react';
 import { useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
+import { authenticatorStore } from '../../../store/administration';
 import { ValueType } from '../../../types';
-import { UserTypes } from '../../../types/services/user.types';
+import { UserType, UserTypes } from '../../../types/services/user.types';
 import Button from '../../Atoms/custom/Button';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import Table from '../../Molecules/table/Table';
@@ -35,6 +36,9 @@ export default function Students({
       },
     },
   ];
+
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
   return (
     <>
       {showTableHeader && (
@@ -43,14 +47,16 @@ export default function Students({
           totalItems={students && students.length > 0 ? students.length : 0}
           handleSearch={handleSearch}
           showSearch={students && students.length > 0}>
-          <div className="flex gap-3">
-            <Link to={`${url}/import`}>
-              <Button styleType="outline">Import students</Button>
-            </Link>
-            <Link to={`${url}/add`}>
-              <Button>New student</Button>
-            </Link>
-          </div>
+          {authUser?.user_type === UserType.SUPER_ADMIN && (
+            <div className="flex gap-3">
+              <Link to={`${url}/import`}>
+                <Button styleType="outline">Import students</Button>
+              </Link>
+              <Link to={`${url}/add`}>
+                <Button>New student</Button>
+              </Link>
+            </div>
+          )}
         </TableHeader>
       )}
       {students && (

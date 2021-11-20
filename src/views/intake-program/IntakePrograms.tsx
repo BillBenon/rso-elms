@@ -21,9 +21,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
 import { intakeStore } from '../../store/administration/intake.store';
-import programStore from '../../store/administration/program.store';
 import { Link as LinkList } from '../../types';
-import { IntakeProgramInfo } from '../../types/services/intake-program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from '../programs/AcademicPrograms';
 import AddAcademicProgramToIntake from '../programs/AddAcademicProgramToIntake';
@@ -48,9 +46,7 @@ function IntakePrograms() {
     { to: `${url}`, title: 'Programs' },
   ];
 
-  const { data, refetch, isLoading } = intakeId
-    ? intakeStore.getProgramsByIntake(intakeId)
-    : programStore.fetchPrograms();
+  const { data, refetch, isLoading } = intakeStore.getProgramsByIntake(intakeId);
 
   const programInfo = data?.data.data || [];
 
@@ -64,8 +60,8 @@ function IntakePrograms() {
 
   let programs: IProgramData[] = [];
 
-  programInfo?.map((prog) => {
-    prog = (prog as IntakeProgramInfo).program;
+  programInfo?.map((pg) => {
+    let prog = pg.program;
     let program: IProgramData = {
       id: prog.id,
       status: {

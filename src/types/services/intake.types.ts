@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { GenericStatus, Table } from '..';
 import { IRegistrationControlInfo } from './registrationControl.types';
 

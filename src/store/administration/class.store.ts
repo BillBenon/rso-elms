@@ -17,5 +17,10 @@ class ClassStore {
       classService.getClassByLevel(levelId),
     );
   }
+  getStudentsByClass(classId: string) {
+    return useQuery(['class/students', classId], () =>
+      classService.getStudentsByClass(classId),
+    );
+  }
 }
 export const classStore = new ClassStore();
