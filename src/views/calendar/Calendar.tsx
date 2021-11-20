@@ -2,7 +2,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../../styles/components/Molecules/calendar.scss';
 
 import moment from 'moment';
-import React from 'react';
+import React, { useState } from 'react';
 import { Calendar, Event, momentLocalizer } from 'react-big-calendar';
 import {
   Link as BrowserLink,
@@ -23,6 +23,9 @@ import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedul
 import { ParamType, ValueType } from '../../types';
 import programStore from '../../store/administration/program.store';
 import { scheduleStore } from '../../store/timetable/schedule.store';
+import { formatCalendarEvents } from '../../utils/calendar';
+import { DateRange } from '../../types/services/schedule.types';
+import { getWeekBorderDays } from '../../utils/date-helper';
 
 const localizer = momentLocalizer(moment);
 
@@ -30,6 +33,11 @@ export default function CalendarView() {
   const history = useHistory();
   const { search } = useLocation();
   const { path, url } = useRouteMatch();
+
+  const [dateRange, setdateRange] = useState<DateRange>({
+    start_date: getWeekBorderDays().monday,
+    end_date: getWeekBorderDays().sunday,
+  });
 
   // query parameters
   const classId = new URLSearchParams(search).get('class_id');
@@ -39,12 +47,11 @@ export default function CalendarView() {
   const programInfo = programStore.getProgramById(id).data?.data.data;
 
   //get events
-  const events: any = [];
-  // getCalendarEvents(
-  //   inLevelId
-  //     ? scheduleStore.getAllByAcademicProgramIntakeLevel(inLevelId).data?.data.data
-  //     : scheduleStore.getAllByAcademicProgram(id).data?.data.data,
-  // );
+  const events = formatCalendarEvents(
+    (inLevelId
+      ? scheduleStore.getAllByAcademicProgramIntakeLevel(inLevelId).data?.data.data
+      : scheduleStore.getAllByAcademicProgram(id, dateRange).data?.data.data) || [],
+  );
 
   const handleClose = () => {
     history.goBack();
@@ -77,6 +84,14 @@ export default function CalendarView() {
 
       <Calendar
         localizer={localizer}
+        // events={[
+        //   {
+        //     id: '3fd387a7-d048-49a2-bfff-59284a406a51',
+        //     title: 'Break time',
+        //     start: 'Mon Dec 20 2021 05:42:00 GMT+0200 (Central Africa Time)',
+        //     end: 'Mon Dec 20 2021 16:54:00 GMT+0200 (Central Africa Time)',
+        //   },
+        // ]}
         events={events}
         step={60}
         startAccessor="start"

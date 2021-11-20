@@ -46,6 +46,11 @@ export interface Hour {
   second: number;
 }
 
+export interface DateRange {
+  end_date: string;
+  start_date: string;
+}
+
 interface CommonScheduleProperties {
   frequencyType: frequencyType;
   appliesTo?: scheduleAppliesTo;
@@ -85,7 +90,7 @@ interface IntakeLevelSchedule extends Table {
 }
 
 export interface ScheduleInfo extends Table, CommonScheduleProperties {
-  end_hour: Hour;
+  end_hour: number[];
   event: EventInfo;
   method_of_instruction: methodOfInstruction;
   planned_end_hour: number[];
@@ -98,7 +103,8 @@ export interface ScheduleInfo extends Table, CommonScheduleProperties {
   schedural_end_date: string;
   schedural_intake_level_classes: IntakeLevelSchedule[];
   schedural_start_date: string;
-  start_hour: Hour;
+  start_hour: number[];
+  schedule_date: string;
   timetable_status: ScheduleStatus;
   venue: VenueInfo;
   frequency_type: frequencyType;
