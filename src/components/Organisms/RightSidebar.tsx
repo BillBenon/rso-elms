@@ -14,12 +14,17 @@ import SearchMolecule from '../Molecules/input/SearchMolecule';
 interface IRightSidebar {
   label: string;
   isOpen: boolean;
-  onToggle: () => void;
   data: UserView[];
   selectorActions?: { name: string; handleAction: (_data?: string[]) => void }[];
 }
 
-function RightSidebar({ label, isOpen, onToggle, selectorActions, data }: IRightSidebar) {
+function RightSidebar({ label, isOpen, selectorActions, data }: IRightSidebar) {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    setOpen(isOpen);
+  }, [isOpen]);
+
   const handleSearch = () => {};
   const [selected, setSelected] = useState(new Set(''));
 
@@ -64,13 +69,13 @@ function RightSidebar({ label, isOpen, onToggle, selectorActions, data }: IRight
   return (
     <div
       className={`bg-main z-50 shadow min-h-screen overflow-y-auto h-full w-96 px-6 absolute right-0 top-0 sidebar-menu ${
-        isOpen ? 'block' : 'hidden'
+        open ? 'block' : 'hidden'
       }`}>
       <div className="flex justify-between">
         <Heading fontSize="lg" fontWeight="semibold" className="pt-3">
           {label}
         </Heading>
-        <Button styleType="text" icon onClick={onToggle} className="self-end">
+        <Button styleType="text" icon onClick={() => setOpen(!open)} className="self-end">
           <Icon name="close" fill="txt-secondary" size={18} />
         </Button>
       </div>
