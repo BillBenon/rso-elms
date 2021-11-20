@@ -19,6 +19,9 @@ module.exports = {
           500: '#105E55',
           600: '#0D4B44',
         },
+        info: {
+          400: '#E9EBFA',
+        },
         lightblue: '#F6FAFF',
         lightgreen: '#E7EFEE',
         secondary: '#FAFBFC',

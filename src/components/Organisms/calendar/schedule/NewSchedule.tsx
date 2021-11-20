@@ -53,10 +53,7 @@ export default function NewSchedule() {
   const [currentStep, setcurrentStep] = useState(0);
   const history = useHistory();
 
-  //create schedule stores
-  const createOneTimeSchedule = scheduleStore.createOneTimeEvents();
-  const createRepeatingSchedule = scheduleStore.createRecurringEvents();
-  const createDateRangeSchedule = scheduleStore.createDateRangeEvents();
+  const { mutateAsync } = scheduleStore.createEventSchedule();
 
   function handleChange(e: ValueType) {
     setvalues((val) => ({ ...val, [e.name]: e.value }));
@@ -64,19 +61,10 @@ export default function NewSchedule() {
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
+    let data: CreateEventSchedule = { ...values };
 
-    if (values.frequencyType == frequencyType.ONETIME) {
-      createOneTimeSchedule.mutateAsync(values, {
-        async onSuccess(_data) {
-          toast.success('Schedule was created successfully');
-          history.goBack();
-        },
-        onError() {
-          toast.error('error occurred please try again');
-        },
-      });
-    } else if (values.frequencyType == frequencyType.REPEATING) {
-      const data: CreateEventSchedule = {
+    if (values.frequencyType == frequencyType.RECURRING) {
+      data = {
         ...values,
         recurringSchedule: values.repeatingDays.map((d) => ({
           dayOfWeek: d,
@@ -84,27 +72,17 @@ export default function NewSchedule() {
           startHour: values.plannedStartHour,
         })) as createRecurringSchedule[],
       };
-
-      createRepeatingSchedule.mutateAsync(data, {
-        async onSuccess(_data) {
-          toast.success('Schedule was created successfully');
-          history.goBack();
-        },
-        onError() {
-          toast.error('error occurred please try again');
-        },
-      });
-    } else if (values.frequencyType == frequencyType.DATE_RANGE) {
-      createDateRangeSchedule.mutateAsync(values, {
-        async onSuccess(_data) {
-          toast.success('Schedule was created successfully');
-          history.goBack();
-        },
-        onError() {
-          toast.error('error occurred please try again');
-        },
-      });
     }
+
+    mutateAsync(data, {
+      async onSuccess(_data) {
+        toast.success('Schedule was created successfully');
+        history.goBack();
+      },
+      onError() {
+        toast.error('error occurred please try again');
+      },
+    });
   }
   return (
     <div>
@@ -232,7 +210,7 @@ function SecondStep({ handleChange, setCurrentStep, values }: IStepProps) {
         handleChange={handleChange}>
         Schedule Start date
       </InputMolecule>
-      {values.frequencyType === frequencyType.REPEATING ? (
+      {values.frequencyType === frequencyType.RECURRING ? (
         <CheckboxMolecule
           isFlex
           options={getDropDownStatusOptions(daysOfWeek).slice(0, 7)}
@@ -254,14 +232,17 @@ function SecondStep({ handleChange, setCurrentStep, values }: IStepProps) {
         <></>
       )}
 
-      <div className="pt-3">
+      <div className="pt-3 flex justify-between w-80">
+        <Button styleType="text" onClick={() => setCurrentStep(0)}>
+          Back
+        </Button>
         <Button type="submit">Continue</Button>
       </div>
     </form>
   );
 }
 
-function ThirdStep({ values, handleChange, handleSubmit }: IStepProps) {
+function ThirdStep({ values, handleChange, handleSubmit, setCurrentStep }: IStepProps) {
   const programs = programStore.fetchPrograms().data?.data.data;
   const levels = levelStore.getLevels().data?.data.data;
 
@@ -303,7 +284,10 @@ function ThirdStep({ values, handleChange, handleSubmit }: IStepProps) {
         value={values.methodOfInstruction}>
         Method of Instruction
       </RadioMolecule>
-      <div className="pt-5">
+      <div className="pt-8 flex justify-between w-80">
+        <Button styleType="text" onClick={() => setCurrentStep(1)}>
+          Back
+        </Button>
         <Button type="submit">Create schedule</Button>
       </div>
     </form>

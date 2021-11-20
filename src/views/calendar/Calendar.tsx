@@ -39,16 +39,12 @@ export default function CalendarView() {
   const programInfo = programStore.getProgramById(id).data?.data.data;
 
   //get events
-  const events =
-    (inLevelId
-      ? scheduleStore.getAllByAcademicProgramIntakeLevel(inLevelId).data?.data.data
-      : scheduleStore.getAllByAcademicProgram(id).data?.data.data
-    )?.map((schedule) => ({
-      id: schedule.id,
-      title: schedule.event.name,
-      start: new Date(schedule.planned_schedule_start_date),
-      end: new Date(schedule.planned_schedule_end_date),
-    })) || [];
+  const events: any = [];
+  // getCalendarEvents(
+  //   inLevelId
+  //     ? scheduleStore.getAllByAcademicProgramIntakeLevel(inLevelId).data?.data.data
+  //     : scheduleStore.getAllByAcademicProgram(id).data?.data.data,
+  // );
 
   const handleClose = () => {
     history.goBack();
@@ -89,8 +85,11 @@ export default function CalendarView() {
         showMultiDayTimes={false}
         views={['day', 'week']}
         defaultDate={new Date()}
+        timeslots={1}
         style={{ height: 900 }}
-        onSelectEvent={(event) => history.push(`${path}/event/${event.id}`)}
+        min={new Date(2017, 10, 0, 4, 0, 0)}
+        max={new Date(2017, 10, 0, 23, 59, 59)}
+        // onSelectEvent={(event) => history.push(`${path}/event/${event.id}`)}
       />
       <Switch>
         <Route
