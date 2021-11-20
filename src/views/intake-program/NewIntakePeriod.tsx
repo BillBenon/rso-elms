@@ -26,13 +26,15 @@ interface PeriodStep {
 
 export function NewIntakePeriod({ academic_year_id, levelId, checked }: PeriodStep) {
   const [values, setvalues] = useState<AddIntakeProgramLevelPeriod>({
-    academic_year_program_intake_level_id: '',
+    academic_period_id: '',
+    academic_program_intake_level_id: 0,
     actual_end_on: '',
     actual_start_on: '',
-    period_id: '',
-    progress_status: PeriodProgressStatus.PENDING,
+    planed_end_on: '',
+    planed_start_on: '',
+    status: PeriodProgressStatus.STARTED,
   });
-  const [done, setDone] = useState(0);
+  const [done, setDone] = useState(-1);
 
   const [currentStep, setCurrentStep] = useState(0);
   const [completeStep, setCompleteStep] = useState(0);
@@ -52,16 +54,25 @@ export function NewIntakePeriod({ academic_year_id, levelId, checked }: PeriodSt
     () =>
       setvalues({
         ...values,
-        academic_year_program_intake_level_id:
-          document.getElementById('academic_year_program_intake_level_id')?.title || '',
-        period_id: document.getElementById('period_id')?.title || '',
+        academic_program_intake_level_id: parseInt(
+          document.getElementById('academic_program_intake_level_id')?.title || '0',
+        ),
+        academic_period_id: document.getElementById('academic_period_id')?.title || '',
       }),
-    [document.getElementById('period_id')?.title],
+    [document.getElementById('academic_period_id')?.title],
   );
 
   useEffect(() => {
     setLastStep(academicperiods.length);
   }, [academicperiods]);
+
+  useEffect(() => {
+    setvalues({ ...values, actual_start_on: values.planed_start_on });
+  }, [values.planed_start_on]);
+
+  useEffect(() => {
+    setvalues({ ...values, actual_end_on: values.planed_end_on });
+  }, [values.planed_end_on]);
 
   function handleChange(e: ValueType) {
     setvalues({ ...values, [e.name]: e.value });
@@ -71,10 +82,7 @@ export function NewIntakePeriod({ academic_year_id, levelId, checked }: PeriodSt
 
   async function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault(); // prevent page to reload:
-    let payload: AddIntakeProgramLevelPeriod[] = [];
-    payload.push(values);
-
-    await mutateAsync(payload, {
+    await mutateAsync(values, {
       onSuccess: (data) => {
         toast.success(data.data.message);
         queryClient.invalidateQueries(['levels/periods']);
@@ -91,6 +99,7 @@ export function NewIntakePeriod({ academic_year_id, levelId, checked }: PeriodSt
     <div className="pt-4">
       <Stepper
         currentStep={currentStep}
+        width={'w-40'}
         completeStep={completeStep}
         navigateToStepHandler={() => {}}>
         {academicperiods
@@ -99,17 +108,17 @@ export function NewIntakePeriod({ academic_year_id, levelId, checked }: PeriodSt
             <form onSubmit={submitForm} key={prd.id}>
               <InputMolecule
                 title={levelId}
-                id="academic_year_program_intake_level_id"
+                id="academic_program_intake_level_id"
                 type="hidden"
                 value={levelId}
-                name="academic_year_program_intake_level_id"
+                name="academic_program_intake_level_id"
               />
               <InputMolecule
                 title={prd.id.toString()}
-                id="period_id"
+                id="academic_period_id"
                 type="hidden"
                 value={prd.id}
-                name="period_id"
+                name="academic_period_id"
               />
               <Heading
                 fontSize="sm"
@@ -123,25 +132,24 @@ export function NewIntakePeriod({ academic_year_id, levelId, checked }: PeriodSt
                 endYear={new Date(prd.academic_year.planned_end_on).getFullYear()}
                 handleChange={handleChange}
                 reverse={false}
-                name="actual_start_on">
+                name="planed_start_on">
                 Start Date
               </DateMolecule>
               <div className="pt-4">
                 <DateMolecule
-                  startYear={new Date(values.actual_start_on).getFullYear()}
+                  startYear={new Date(values.planed_start_on).getFullYear()}
                   endYear={new Date(prd.academic_year.planned_end_on).getFullYear()}
                   handleChange={handleChange}
-                  name="actual_end_on">
+                  name="planed_end_on">
                   End Date
                 </DateMolecule>
               </div>
               <DropdownMolecule
-                width="5/12"
                 handleChange={handleChange}
-                name="progress_status"
+                name="status"
                 placeholder="intake period status"
                 defaultValue={getDropDownStatusOptions(ProgressStatus).find(
-                  (ps) => ps.value === values.progress_status,
+                  (ps) => ps.value === values.status,
                 )}
                 options={getDropDownStatusOptions(ProgressStatus)}>
                 Intake Period Status

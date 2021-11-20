@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { Table } from '..';
+import { IAcademicPeriodInfo } from './academicperiod.types';
 import { IAcademicYearInfo } from './academicyears.types';
 import { IntakeInfo, IntakeProgram, IntakeStatus } from './intake.types';
 import { ProgramLevel } from './levels.types';
@@ -24,11 +25,26 @@ export interface IntakeProgramInfo extends Table {
 }
 
 export interface AddIntakeProgramLevelPeriod {
-  academic_year_program_intake_level_id: string;
+  academic_period_id: string;
+  academic_program_intake_level_id: number;
   actual_end_on: string;
   actual_start_on: string;
-  period_id: string;
-  progress_status: PeriodProgressStatus;
+  planed_end_on: string;
+  planed_start_on: string;
+  status: PeriodProgressStatus;
+}
+
+export interface IntakeProgramLevelPeriodInfo extends Table {
+  academic_year_program_intake_level: LevelIntakeProgram;
+  academic_period: IAcademicPeriodInfo;
+  planed_start_on: string;
+  planed_end_on: string;
+  actual_start_on: string;
+  actual_end_on: string;
+  progress_status: ProgressStatus;
+  academic_year_program_intake_level_id: string;
+  academic_period_id: string;
+  academic_program_intake_level: LevelIntakeProgram;
 }
 export interface LevelIntakeProgram extends Table {
   academic_year: IAcademicYearInfo;

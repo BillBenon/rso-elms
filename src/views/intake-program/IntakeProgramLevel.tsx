@@ -6,6 +6,7 @@ import Loader from '../../components/Atoms/custom/Loader';
 import AddCard from '../../components/Molecules/cards/AddCard';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import { Tab } from '../../components/Molecules/tabs/tabs';
 import intakeProgramStore from '../../store/administration/intake-program.store';
@@ -16,6 +17,7 @@ import {
 } from '../../types/services/intake-program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import Classes from '../classes/Classes';
+import { NewIntakePeriod } from './NewIntakePeriod';
 
 type ILevelIntakeProgram = {
   level: LevelIntakeProgram;
@@ -50,6 +52,10 @@ function IntakeProgramLevel({ level, label }: ILevelIntakeProgram) {
     setlevelModules(newModule);
   }, [levelModuleStore?.data.data]);
 
+  const { data, isLoading: loadPeriod } = intakeProgramStore.getPeriodsByLevel(
+    parseInt(level.id.toString()),
+  );
+
   return (
     <Switch>
       <Route
@@ -59,6 +65,17 @@ function IntakeProgramLevel({ level, label }: ILevelIntakeProgram) {
           return (
             <Tab label={label}>
               <TableHeader usePadding={false} showBadge={false} showSearch={false}>
+                {data?.data.data.length === 0 && !loadPeriod && (
+                  <Button
+                    styleType="text"
+                    onClick={() =>
+                      history.push(
+                        `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/modules/${level.id}/add-period`,
+                      )
+                    }>
+                    Add academic periods to level
+                  </Button>
+                )}
                 <Button
                   styleType="outline"
                   onClick={() =>
@@ -115,6 +132,24 @@ function IntakeProgramLevel({ level, label }: ILevelIntakeProgram) {
       />
       {/* add module to intake program level */}
       <Route path={`${path}/:level/view-class`} render={() => <Classes />} />
+      {/* add periods to intake level */}
+      <Route
+        exact
+        path={`${path}/:level/add-period`}
+        render={() => (
+          <PopupMolecule
+            title="Add period to level"
+            closeOnClickOutSide={false}
+            open
+            onClose={history.goBack}>
+            <NewIntakePeriod
+              academic_year_id={level.academic_year.id.toString()}
+              checked={0}
+              levelId={level.id.toString()}
+            />
+          </PopupMolecule>
+        )}
+      />
     </Switch>
   );
 }
