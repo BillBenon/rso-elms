@@ -8,6 +8,7 @@ import {
   IEvaluationCreate,
   IEvaluationInfo,
   IEvaluationQuestionsInfo,
+  IStudentAnswer,
 } from '../../types/services/evaluation.types';
 
 class EvaluationService {
@@ -41,7 +42,7 @@ class EvaluationService {
   }
   public async fetchEvaluationsBySubject(
     subject: string,
-  ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
+  ): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
     return await evaluationAxios.get(`/evaluations/getEvaluationsBySubject/${subject}`);
   }
 
@@ -60,7 +61,15 @@ class EvaluationService {
   public async modifyEvaluation(
     evaluationInfo: IEvaluationCreate,
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
-    return await evaluationAxios.put('/academies/modifyAcademy', { ...evaluationInfo });
+    return await evaluationAxios.put('/evaluations/modifyEvaluation', {
+      ...evaluationInfo,
+    });
+  }
+
+  public async addQuestionAnswer(
+    answer: IStudentAnswer,
+  ): Promise<AxiosResponse<Response<IStudentAnswer>>> {
+    return await evaluationAxios.put('evaluationQuestions/add', { ...answer });
   }
 }
 
