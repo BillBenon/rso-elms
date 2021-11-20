@@ -81,7 +81,7 @@ export default function Users() {
     },
   ];
 
-  if (authUser?.user_type === 'ADMIN') {
+  if (authUser?.user_type === UserType.SUPER_ADMIN) {
     tabs.push({
       label: 'Admins',
       href: `${url}/admins`,
