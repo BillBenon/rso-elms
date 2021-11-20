@@ -8,6 +8,11 @@ class IntakeProgramStore {
       intakeProgramService.getStudentsByIntakeProgram(intakeProgramId),
     );
   }
+  getStudentsByAcademy(academyId: string) {
+    return useQuery(['students/academyId', academyId], () =>
+      intakeProgramService.getStudentsByAcademy(academyId),
+    );
+  }
   getLevelsByIntakeProgram(intakeProgramId: string) {
     return useQuery(['levels/intakeProgramId', intakeProgramId], () =>
       intakeProgramService.getLevelsByIntakeProgram(intakeProgramId),

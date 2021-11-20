@@ -3,15 +3,6 @@ import { GenericStatus } from '..';
 import { Table } from '..';
 import { AcademyInfo } from './academy.types';
 import { ILevel } from './levels.types';
-
-export interface InstructorDeployed extends Table {
-  institution_id: string;
-  since_on: string;
-  user: UserInfo;
-  academy: AcademyInfo;
-  description: string;
-}
-
 export interface Student extends Table {
   reg_number: string;
   user: UserInfo;
