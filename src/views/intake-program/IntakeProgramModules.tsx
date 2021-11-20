@@ -59,7 +59,7 @@ function IntakeProgramModules() {
                 <NoDataAvailable
                   buttonLabel="Add new modules"
                   title={'No Modules available in this program'}
-                  handleClick={() => history.push(`${url}/modules/add`)}
+                  handleClick={() => history.push(`${url}/add`)}
                   description="And the web just isnt the same without you. Lets get you back online!"
                 />
               ) : (
