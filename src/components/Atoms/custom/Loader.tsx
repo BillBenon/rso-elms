@@ -37,7 +37,7 @@ export default function Loader() {
   }, []);
 
   return (
-    <div className="preloader m-auto" style={{ opacity: 1, marginTop: '10%' }}>
+    <div className="preloader m-auto" style={{ opacity: 1, marginTop: '15%' }}>
       <svg
         version="1.1"
         id="sun"

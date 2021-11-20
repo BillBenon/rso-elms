@@ -138,7 +138,7 @@ export interface IEvaluationChoices {
 
 export interface IEvaluationQuestion {
   evaluation_id: string;
-  mark: string;
+  mark: number;
   parent_question_id: string;
   question: string;
   submitted: boolean;
@@ -168,4 +168,14 @@ export interface IEvaluationApproval {
   reviewer: string;
   to_be_approved: boolean;
   to_be_reviewed: boolean;
+}
+
+export interface IStudentAnswer {
+  answerAttachment: string;
+  evaluation: string;
+  evaluationQuestion: string;
+  markScored: number | null;
+  multipleChoiceAnswer: string;
+  openAnswer: string;
+  studentEvaluation: string;
 }

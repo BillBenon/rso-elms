@@ -22,7 +22,7 @@ class EvaluationStore {
   }
 
   getEvaluationsBySubject(subject: string) {
-    return useQuery(['evaluations', subject], () =>
+    return useQuery(['evaluations/subject', subject], () =>
       evaluationService.fetchEvaluationsBySubject(subject),
     );
   }
@@ -34,6 +34,10 @@ class EvaluationStore {
     return useQuery(['evaluation/questions', id], () =>
       evaluationService.getEvaluationQuestions(id),
     );
+  }
+
+  addQuestionAnswer() {
+    return useMutation(evaluationService.addQuestionAnswer);
   }
 }
 

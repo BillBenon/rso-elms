@@ -20,9 +20,9 @@ import Heading from '../../components/Atoms/Text/Heading';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedule';
-import { ParamType, ValueType } from '../../types';
 import programStore from '../../store/administration/program.store';
 import { scheduleStore } from '../../store/timetable/schedule.store';
+import { ParamType, ValueType } from '../../types';
 
 const localizer = momentLocalizer(moment);
 
@@ -32,7 +32,6 @@ export default function CalendarView() {
   const { path, url } = useRouteMatch();
 
   // query parameters
-  const classId = new URLSearchParams(search).get('class_id');
   const inLevelId = new URLSearchParams(search).get('in_level_id');
 
   const { id } = useParams<ParamType>();

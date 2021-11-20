@@ -68,7 +68,7 @@ export default function Students({
               statusColumn="status"
               data={students}
               actions={studentActions}
-              hide={['id', 'user_type']}
+              // hide={['id', 'user_type']}
               uniqueCol="id"
             />
           )}

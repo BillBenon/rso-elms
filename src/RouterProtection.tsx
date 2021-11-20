@@ -65,6 +65,8 @@ const RouterProtection = () => {
       <Route path="/dashboard/users" component={Users} />
       <Route path="/dashboard/levels" component={Levels} />
       <Route path="/dashboard/intakes" component={IntakesView} />
+      <Route path="/dashboard/student/evaluations/" component={EvaluationTest} />
+      {/* <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} /> */}
 
       {/* end of academic admin pages */}
     </>
@@ -81,7 +83,7 @@ const RouterProtection = () => {
   const StudentRoutes = () => (
     <>
       {/* start of student pages */}
-      <Route path="/dashboard/student/evaluations" component={EvaluationTest} />
+      <Route path="/dashboard/evaluations/student" component={EvaluationTest} />
       {/* end of student pages */}
     </>
   );
