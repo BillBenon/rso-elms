@@ -86,7 +86,7 @@ export default function Modules() {
                       <NoDataAvailable
                         icon="module"
                         buttonLabel="Go to divisions"
-                        title={'No department available'}
+                        title={'No modules available'}
                         handleClick={() => history.push(`/dashboard/divisions`)}
                         description="You should look the modules from the department they belong to"
                       />

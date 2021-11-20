@@ -76,6 +76,8 @@ const RouterProtection = () => {
     <>
       {/* start of instructor pages */}
       <Route path="/dashboard/evaluations" component={ViewEvaluations} />
+      <Route path="/dashboard/calendar" component={CalendarView} />
+      <Route path="/dashboard/events" component={Events} />
       {/* end of instructor pages */}
     </>
   );
@@ -84,6 +86,7 @@ const RouterProtection = () => {
     <>
       {/* start of student pages */}
       <Route path="/dashboard/evaluations/student" component={EvaluationTest} />
+      <Route path="/dashboard/modules" component={Modules} />
       {/* end of student pages */}
     </>
   );
