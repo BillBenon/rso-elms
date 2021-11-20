@@ -35,6 +35,10 @@ class EvaluationStore {
       evaluationService.getEvaluationQuestions(id),
     );
   }
+
+  addQuestionAnswer() {
+    return useMutation(evaluationService.addQuestionAnswer);
+  }
 }
 
 export const evaluationStore = new EvaluationStore();
