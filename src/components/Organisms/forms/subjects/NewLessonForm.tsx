@@ -3,8 +3,8 @@ import toast from 'react-hot-toast';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
 import { queryClient } from '../../../../plugins/react-query';
-import { lessonStore } from '../../../../store/lesson.store';
-import { subjectStore } from '../../../../store/subject.store';
+import { lessonStore } from '../../../../store/administration/lesson.store';
+import { subjectStore } from '../../../../store/administration/subject.store';
 import { ValueType } from '../../../../types';
 import { Lesson } from '../../../../types/services/lesson.types';
 import Button from '../../../Atoms/custom/Button';

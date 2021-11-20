@@ -2,7 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
-import { roleStore } from '../../../../store';
+import { roleStore } from '../../../../store/administration';
 import { CreateRoleReq, FormPropType, ValueType } from '../../../../types';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';

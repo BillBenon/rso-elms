@@ -8,7 +8,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewPrivilege from '../../components/Organisms/forms/privilege/NewPrivilege';
-import { privilegeStore } from '../../store';
+import { privilegeStore } from '../../store/administration';
 import { PrivilegeRes } from '../../types';
 
 export default function PrivilegesView() {
@@ -74,7 +74,7 @@ export default function PrivilegesView() {
             buttonLabel="Add new privilege"
             title={'No privilege available'}
             handleClick={() => history.push(`${url}/add`)}
-            description="There are no priviledges added yet. Click above to add some"
+            description="There are no priviledges added yet. Click below to add some"
           />
         ) : null}
       </section>

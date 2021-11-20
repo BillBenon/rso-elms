@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 
 import { queryClient } from '../../../plugins/react-query';
-import { authenticatorStore } from '../../../store';
+import { authenticatorStore } from '../../../store/administration';
 import { ValueType } from '../../../types';
 import { UserInfo, UserType } from '../../../types/services/user.types';
 import cookie from '../../../utils/cookie';

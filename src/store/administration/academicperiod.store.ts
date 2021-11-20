@@ -1,10 +1,14 @@
 import { useMutation, useQuery } from 'react-query';
 
-import { academicPeriodService } from '../services/administration/academicperiods.service';
+import { academicPeriodService } from '../../services/administration/academicperiods.service';
 
 class AcademyPeriodStore {
   createAcademicPeriod() {
     return useMutation(academicPeriodService.createAcademicPeriod);
+  }
+
+  getAllPeriods() {
+    return useQuery('academicPeriod', academicPeriodService.getAllPeriods);
   }
 
   getAcademicPeriodsByAcademicYear(academyId: string, enabled = true) {

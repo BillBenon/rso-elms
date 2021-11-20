@@ -18,7 +18,7 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewRole from '../../components/Organisms/forms/roles/NewRole';
 import UpdateRole from '../../components/Organisms/forms/roles/UpdateRole';
-import { roleStore } from '../../store';
+import { roleStore } from '../../store/administration';
 import { RoleRes } from '../../types';
 
 interface FilteredRoles extends Pick<RoleRes, 'id' | 'name' | 'description' | 'status'> {}
@@ -112,7 +112,7 @@ export default function Roles() {
             buttonLabel="Add new role"
             title={'No roles available'}
             handleClick={() => history.push(`${url}/add`)}
-            description="There are no roles added yet. Click above to add some"
+            description="There are no roles added yet. Click below to add some"
           />
         ) : null}
       </section>

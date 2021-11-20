@@ -1,8 +1,8 @@
-import React, { JSXElementConstructor, ReactElement, useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 
-import Panel from '../Atoms/custom/Panel';
+import Panel, { PanelProps } from '../Atoms/custom/Panel';
 
-type PanelChildrenType = ReactElement<JSXElementConstructor<typeof Panel>>[];
+type PanelChildrenType = ReactElement<PanelProps>[];
 
 type IProps = {
   children: PanelChildrenType;
@@ -19,16 +19,23 @@ function Accordion({ children }: IProps) {
   return (
     <div>
       {children.map((panel, i) => {
-        const panelProps: any = panel.props;
-
+        const panelProps: PanelProps = panel.props;
         return (
           <Panel
-            key={i}
+            index={i}
+            bgColor={panelProps.bgColor}
+            key={panel.key}
             active={activePanel === i}
             handleOpen={(i) => handleOpen(i)}
             title={panelProps.title}
             subtitle={panelProps.subtitle}
-            index={i}>
+            className={panelProps.className}
+            badge={
+              panelProps.badge && {
+                type: panelProps.badge.type,
+                text: panelProps.badge.text,
+              }
+            }>
             {panelProps.children}
           </Panel>
         );

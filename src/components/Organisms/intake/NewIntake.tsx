@@ -2,7 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 
-import { intakeStore } from '../../../store/intake.store';
+import { intakeStore } from '../../../store/administration/intake.store';
 import { ValueType } from '../../../types';
 import {
   IntakeInfo,
@@ -11,6 +11,7 @@ import {
 } from '../../../types/services/intake.types';
 import { formatDateToYyMmDd } from '../../../utils/date-helper';
 import { getDropDownStatusOptions } from '../../../utils/getOption';
+import { randomString } from '../../../utils/random-text';
 import Button from '../../Atoms/custom/Button';
 import DateMolecule from '../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
@@ -61,8 +62,9 @@ export default function NewIntake(props: CProps) {
     e.preventDefault();
     if (currentStep === 0) setCurrentStep(currentStep + 1);
     else {
-      let title = values.title.trim().split(' ');
-      let code = `INTK-${title[1]}-${new Date(values.expected_start_date).getFullYear()}`;
+      let code = `INTK-${randomString(4)}-${new Date(
+        values.expected_start_date,
+      ).getFullYear()}`;
 
       let data = {
         ...values,

@@ -18,4 +18,8 @@ export interface ILevel extends Table, IcreateLevel {
 export interface ProgramLevel extends Table {
   level: ILevel;
   program: ProgramInfo;
+  level_id: string;
+  program_id: string;
+  starting_flow: string;
+  endg_flow: string;
 }

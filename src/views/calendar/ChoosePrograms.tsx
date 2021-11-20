@@ -16,7 +16,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewEvent from '../../components/Organisms/calendar/NewEvent';
 import NewVenue from '../../components/Organisms/calendar/NewVenue';
-import programStore from '../../store/program.store';
+import programStore from '../../store/administration/program.store';
 import { CommonCardDataType, Link } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import CalendarView from './Calendar';

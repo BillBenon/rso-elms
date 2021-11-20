@@ -13,22 +13,10 @@ import Admins from '../../components/Organisms/user/Admins';
 import ImportUsers from '../../components/Organisms/user/ImportUsers';
 import Instructors from '../../components/Organisms/user/Instructors';
 import Students from '../../components/Organisms/user/Students';
-import { authenticatorStore } from '../../store';
-import usersStore from '../../store/users.store';
-import { GenericStatus } from '../../types';
-import { UserType } from '../../types/services/user.types';
+import { authenticatorStore } from '../../store/administration';
+import usersStore from '../../store/administration/users.store';
+import { UserType, UserTypes } from '../../types/services/user.types';
 import UserDetails from './UserDetails';
-
-export type UserTypes = {
-  id: string;
-  username: string;
-  'full name': string;
-  email: string;
-  NID: string;
-  academy: string;
-  status: GenericStatus;
-  user_type: UserType;
-};
 
 export default function Users() {
   const { url, path } = useRouteMatch();

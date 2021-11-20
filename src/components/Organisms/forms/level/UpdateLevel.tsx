@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { queryClient } from '../../../../plugins/react-query';
-import { levelStore } from '../../../../store/level.store';
+import { levelStore } from '../../../../store/administration/level.store';
 import { IDivisionsAcademyType, ParamType, ValueType } from '../../../../types';
 import { IcreateLevel } from '../../../../types/services/levels.types';
 import Button from '../../../Atoms/custom/Button';

@@ -2,10 +2,10 @@ import { Editor } from '@tiptap/react';
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 
-import { authenticatorStore } from '../../../../store';
-import { evaluationStore } from '../../../../store/evaluation.store';
-import { moduleStore } from '../../../../store/modules.store';
-import { subjectStore } from '../../../../store/subject.store';
+import { authenticatorStore } from '../../../../store/administration';
+import { evaluationStore } from '../../../../store/administration/evaluation.store';
+import { moduleStore } from '../../../../store/administration/modules.store';
+import { subjectStore } from '../../../../store/administration/subject.store';
 import { ValueType } from '../../../../types';
 import {
   IAccessTypeEnum,

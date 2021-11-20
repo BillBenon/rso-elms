@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
 
-import { divisionService } from '../services/administration/divisions.service';
+import { divisionService } from '../../services/administration/divisions.service';
 class DivisionStore {
   createDivision() {
     return useMutation(divisionService.addDivision);

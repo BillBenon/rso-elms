@@ -8,9 +8,9 @@ import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule'
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
-import { divisionStore } from '../../store/divisions.store';
-import programStore from '../../store/program.store';
-import usersStore from '../../store/users.store';
+import { divisionStore } from '../../store/administration/divisions.store';
+import programStore from '../../store/administration/program.store';
+import usersStore from '../../store/administration/users.store';
 import { CommonFormProps, ParamType, ValueType } from '../../types';
 import {
   CreateProgramInfo,
@@ -114,7 +114,7 @@ export default function UpdateAcademicProgram<E>({
           defaultValue={getDropDownOptions({
             inputs: instructors || [],
             labelName: ['username'],
-          }).find((incharge) => incharge.value === data?.data.data.incharge?.username)}
+          }).find((incharge) => incharge.value === data?.data.data.current_admin_names)}
           width="64"
           placeholder="Select incharge"
           options={getDropDownOptions({

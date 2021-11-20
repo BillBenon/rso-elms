@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
-import { intakeStore } from '../../../store/intake.store';
+import { intakeStore } from '../../../store/administration/intake.store';
 import { CommonCardDataType, Link, ParamType } from '../../../types';
 import { advancedTypeChecker } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';

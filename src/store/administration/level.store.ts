@@ -1,9 +1,9 @@
 import { AxiosResponse } from 'axios';
 import { useMutation, useQuery } from 'react-query';
 
-import { levelService } from '../services/administration/levels.service';
-import { Response } from '../types';
-import { ILevel } from '../types/services/levels.types';
+import { levelService } from '../../services/administration/levels.service';
+import { Response } from '../../types';
+import { ILevel } from '../../types/services/levels.types';
 
 class Levelstore {
   addLevel() {

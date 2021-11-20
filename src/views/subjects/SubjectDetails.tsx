@@ -19,8 +19,8 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
-import { lessonStore } from '../../store/lesson.store';
-import { subjectStore } from '../../store/subject.store';
+import { lessonStore } from '../../store/administration/lesson.store';
+import { subjectStore } from '../../store/administration/subject.store';
 import { Link } from '../../types';
 import ViewEvaluations from '../evaluation/ViewEvaluations';
 

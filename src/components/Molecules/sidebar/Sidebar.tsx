@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import { authenticatorStore } from '../../../store';
+import { authenticatorStore } from '../../../store/administration';
 import { UserInfo, UserType } from '../../../types/services/user.types';
 import SidebarLinks, { linkProps } from '../../Atoms/custom/SidebarLinks';
 import AcademyProfileCard from '../cards/AcademyProfileCard';
@@ -17,34 +17,31 @@ export default function Sidebar() {
     const routes: linkProps[] = [];
     const institutionAdminLinks: linkProps[] = [
       { title: 'Users', to: '/dashboard/users', icon: 'user' },
-      { title: 'Academies', to: '/dashboard/academies', icon: 'academy', fill: false },
-      { title: 'Evalutaions', to: '/dashboard/evaluations', icon: 'evaluation' },
       { title: 'Roles', to: '/dashboard/roles', icon: 'role' },
+      { title: 'Academies', to: '/dashboard/academies', icon: 'academy', fill: false },
+      { title: 'Evaluations', to: '/dashboard/evaluations', icon: 'evaluation' },
       { title: 'Privileges', to: '/dashboard/privileges', icon: 'module' },
     ];
     const academicAdminLinks: linkProps[] = [
-      { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
-      { title: 'Academic years', to: '/dashboard/academic-years', icon: 'program' },
-      { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
       { title: 'Users', to: '/dashboard/users', icon: 'user' },
-      // { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
-      // { title: 'Subjects', to: '/dashboard/subjects', icon: 'module' },
+      { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
+      { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
+      { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
+      { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
       {
         title: 'Registration Control',
         to: '/dashboard/registration-control',
         icon: 'reg-control',
       },
-      { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
-      { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
       { title: 'Academic years', to: '/dashboard/academic-years', icon: 'program' },
     ];
 
     const instructorLinks: linkProps[] = [
-      { title: 'Evalutaions', to: '/dashboard/evaluations', icon: 'evaluation' },
+      { title: 'Evaluations', to: '/dashboard/evaluations', icon: 'evaluation' },
     ];
 
     const studentLinks: linkProps[] = [
-      { title: 'Evalutaions', to: '/dashboard/student/evaluations', icon: 'evaluation' },
+      { title: 'Evaluations', to: '/dashboard/student/evaluations', icon: 'evaluation' },
     ];
 
     if (authUser?.user_type == UserType.SUPER_ADMIN)

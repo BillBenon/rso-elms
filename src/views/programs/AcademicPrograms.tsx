@@ -19,7 +19,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
-import programStore from '../../store/program.store';
+import programStore from '../../store/administration/program.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
 import { DivisionInfo } from '../../types/services/division.types';
 import { ProgramInfo } from '../../types/services/program.types';
@@ -77,7 +77,7 @@ export default function AcademicProgram() {
       subTitle: prog.type.replaceAll('_', ' '),
       description: prog.description,
       department: prog.department,
-      incharge: prog.incharge && prog.incharge.username,
+      incharge: prog.incharge && prog.incharge.user.username,
     };
 
     programs.push(program);
@@ -194,7 +194,7 @@ export default function AcademicProgram() {
                             </Heading>
                           </div>
                           <div className="mt-4 space-x-4">
-                            <Link to={`${url}/${Common.id}/edit`}>
+                            <Link to={`/dashboard/intakes/programs/${Common.id}/edit`}>
                               <Button>Edit program</Button>
                             </Link>
                             <Button styleType="outline">Change Status</Button>
@@ -207,7 +207,7 @@ export default function AcademicProgram() {
                       buttonLabel="Add new program"
                       title={'No program available'}
                       handleClick={() => history.push(`/dashboard/programs/add`)}
-                      description="There are no programs added yet, click on the above button to add some!"
+                      description="There are no programs added yet, click on the below button to add some!"
                     />
                   )}
                 </section>

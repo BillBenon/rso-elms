@@ -6,9 +6,9 @@ import { useHistory, useParams } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import { queryClient } from '../../plugins/react-query';
-import { authenticatorStore } from '../../store';
-import { levelStore } from '../../store/level.store';
-import programStore from '../../store/program.store';
+import { authenticatorStore } from '../../store/administration';
+import { levelStore } from '../../store/administration/level.store';
+import programStore from '../../store/administration/program.store';
 import { ParamType, ValueType } from '../../types';
 import { ILevel } from '../../types/services/levels.types';
 import { CreateAcademicProgramLevel } from '../../types/services/program.types';
@@ -71,7 +71,7 @@ export default function AddLevelToProgram() {
       onSuccess() {
         toast.success('Level added to program');
         queryClient.invalidateQueries(['levels/program_id']);
-        history.push(`/dashboard/programs/${progId}/`);
+        history.push(`/dashboard/programs/${progId}`);
       },
       onError() {
         toast.error('An error occurred please try again');

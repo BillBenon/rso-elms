@@ -3,7 +3,7 @@ import Countdown from 'react-countdown';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import Heading from '../../components/Atoms/Text/Heading';
-import { evaluationStore } from '../../store/evaluation.store';
+import { evaluationStore } from '../../store/administration/evaluation.store';
 import QuestionContainer from './QuestionContainer';
 
 export default function EvaluationTest() {

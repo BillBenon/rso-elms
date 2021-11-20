@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import AddCard from '../../components/Molecules/cards/AddCard';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import { moduleStore } from '../../store/modules.store';
+import { moduleStore } from '../../store/administration/modules.store';
 import { CommonCardDataType, ParamType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 

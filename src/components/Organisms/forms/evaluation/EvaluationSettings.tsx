@@ -2,9 +2,9 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
-import { authenticatorStore } from '../../../../store';
-import { evaluationStore } from '../../../../store/evaluation.store';
-import usersStore from '../../../../store/users.store';
+import { authenticatorStore } from '../../../../store/administration';
+import usersStore from '../../../../store/administration/users.store';
+import { evaluationStore } from '../../../../store/administration/evaluation.store';
 import { ValueType } from '../../../../types';
 import {
   IEvaluationApproval,

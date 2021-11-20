@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query';
 
-import { locationService } from './../services/administration/location.service';
+import { locationService } from '../../services/administration/location.service';
+
 class LocationStore {
   getLocations() {
     return useQuery('locations', locationService.getLocations);
