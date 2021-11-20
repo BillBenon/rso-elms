@@ -12,6 +12,7 @@ import { classStore } from '../../store/administration/class.store';
 import usersStore from '../../store/administration/users.store';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
 import { UserType, UserTypes } from '../../types/services/user.types';
+import ViewStudentReports from '../reports/ViewStudentReports'
 import NewClass from './NewClass';
 
 function Classes() {
@@ -63,6 +64,7 @@ function Classes() {
 
   return (
     <Switch>
+      <Route path={`${path}/reports`} component={ViewStudentReports} />
       <Route
         exact
         path={`${path}`}
