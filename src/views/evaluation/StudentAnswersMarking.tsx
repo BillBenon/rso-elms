@@ -12,33 +12,75 @@ import StudentAnswer from '../../components/Molecules/cards/correction/StudentAn
 import Pagination from '../../components/Molecules/Pagination';
 import { markingStore } from '../../store/administration/marking.store';
 
+
+export interface MarkingCorrection{
+  marked: boolean,
+  mark_scored: number,
+  answer_id: string
+}
+
 export default function StudentAnswersMarking() {
-    const data: string[] = ['data1', 'data2', 'data3', 'data4', 'data5', 'data6', 'data7', 'data8', 'data9', 'data10'];
     const { id } = useParams<ParamType>();
     const { path } = useRouteMatch();
+    const studentAnswers = markingStore.getStudentEvaluationAnswers(id).data?.data.data;
     const [totalMarks, setTotalMarks] = useState(0);
+    const [correction, setCorrection] = useState<Array<MarkingCorrection>>([]);
     const [rowsOnPage, setRowsOnPage] = useState(3);
     const [currentPage, setCurrentPage] = useState(1)
     const indexOfLastRow = currentPage * rowsOnPage;
     const indexOfFirstRow = indexOfLastRow - rowsOnPage;
     const [currentRows, setCurrentRows] = useState(
-        data.slice(indexOfFirstRow, indexOfLastRow),
+        studentAnswers?.slice(indexOfFirstRow, indexOfLastRow),
       );
     useEffect(() => {
-        setCurrentRows(data.slice(indexOfFirstRow, indexOfLastRow));
+        setCurrentRows(studentAnswers?.slice(indexOfFirstRow, indexOfLastRow));
       }, [currentPage]);
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
     const list: LinkList[] = [
         { to: '/', title: 'Instructor' },
         { to: 'evaluations', title: 'evaluations' },
-        { to: '/evaluations/eval', title: 'Evaluation Details' },
-        { to: 'evaluations/eval/marking', title: 'Marking' },
+        { to: '/evaluations/evaluation_id', title: 'Evaluation Details' },
+        { to: 'evaluations/evaluation_id/marking_studentEvaluation', title: 'Marking' },
       ];
 
       const { mutate } = markingStore.finishMarking();
 
+      function updateQuestionPoints(answer_id: string, points: number){
+
+        var flag: number = 0;
+
+        correction.forEach(element => {
+          
+          if(element.answer_id == answer_id){
+            flag++;
+            const newCorretion:MarkingCorrection[] = correction.map((item) => {
+              if (item.answer_id === answer_id) {
+                const updatedItem:MarkingCorrection = {
+                  ...item,
+                  marked: true,
+                  mark_scored: points,
+                };
+                setTotalMarks(totalMarks-item.mark_scored+points);
+                return updatedItem;
+              }
+        
+              return item;
+            });
+        
+            setCorrection(newCorretion);
+          }
+        })
+        if(flag == 0){
+          setCorrection([...correction,{answer_id:answer_id,mark_scored: points, marked: true}]);
+          setTotalMarks(totalMarks+points)
+        }
+        else{
+        
+      }
+      }
+
       function submitMarking(){
-          mutate({mark: totalMarks, answer_id: '5454334-4334-3434-34343434'}, {
+          mutate({mark: totalMarks, answer_id: 'e'}, {
             onSuccess: () => {
               toast.success('Marking finished', { duration: 5000 });
             },
@@ -58,15 +100,15 @@ export default function StudentAnswersMarking() {
             <p className="text-gray-400">Marks obtained: <span className="text-green-300 font-semibold">{totalMarks}</span></p>
         </TableHeader>
         <section className="flex flex-wrap justify-start gap-4 mt-2">
-            {currentRows.map((value, index)=>{
+            {currentRows?.map((studentAnswer)=>{
                 return(
-                <StudentAnswer key={index} data={undefined} totalMarks={totalMarks} setTotalMarks={setTotalMarks}/>
+                <StudentAnswer key={studentAnswer.id}  correction={correction} updateQuestionPoints={updateQuestionPoints} data={studentAnswer} totalMarks={totalMarks} setTotalMarks={setTotalMarks}/>
                 )
             })}
             <div className="flex item-center mx-auto">
             <Pagination
                 rowsPerPage={rowsOnPage}
-                totalRows={data.length}
+                totalRows={studentAnswers?.length || 0}
                 paginate={paginate}
                 currentPage={currentPage}
             />
