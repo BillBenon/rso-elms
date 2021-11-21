@@ -3,6 +3,7 @@ import { useMutation, useQuery } from 'react-query';
 import { scheduleService } from '../../services/timetable/schedule.service';
 import {
   CreateEventSchedule,
+  DateRange,
   frequencyType,
   ScheduleStatus,
 } from '../../types/services/schedule.types';
@@ -38,9 +39,9 @@ class ScheduleStore {
       scheduleService.getAllByAcademicProgramIntakeLevelAndStatus(id, status),
     );
   }
-  getAllByAcademicProgram(id: string) {
+  getAllByAcademicProgram(id: string, range: DateRange) {
     return useQuery(['schedules/program/:id', id], () =>
-      scheduleService.getAllByAcademicProgram(id),
+      scheduleService.getAllByAcademicProgram(id, range),
     );
   }
   getAllByAcademicProgramAndStatus(id: string, status: ScheduleStatus) {

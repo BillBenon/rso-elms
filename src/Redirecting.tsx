@@ -26,7 +26,7 @@ export default function Redirecting() {
       let val = !data?.data.data.academy ? true : false;
       setHasNoAcademy(val && !isLoading);
 
-      redirectTo('/dashboard/divisions');
+      redirectTo('/dashboard/users');
     } else if (data?.data.data.user_type === UserType.INSTRUCTOR) {
       redirectTo('/dashboard/evaluations');
     } else if (data?.data.data.user_type === UserType.STUDENT) {

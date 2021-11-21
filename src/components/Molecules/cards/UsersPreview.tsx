@@ -64,18 +64,28 @@ export default function UsersPreview({ title, label, data, totalUsers }: IUserPr
             </div>
 
             <div className="flex items-center">
-              <Icon name="add" size={12} fill="primary" />
-              <Heading color="primary" fontSize="base" fontWeight="bold" className="-m-1">
-                {totalUsers !== 0 ? totalUsers - 3 : 0}
-              </Heading>
+              {totalUsers > 3 ? (
+                <>
+                  <Icon name="add" size={12} fill="primary" />
+                  <Heading
+                    color="primary"
+                    fontSize="base"
+                    fontWeight="bold"
+                    className="-m-1">
+                    {totalUsers - 3}
+                  </Heading>
+                </>
+              ) : (
+                ''
+              )}
             </div>
           </div>
         </div>
       </div>
       {sidebarOpen && (
         <RightSidebar
-          isOpen={sidebarOpen}
-          onToggle={() => setSidebarOpen(!sidebarOpen)}
+          open={sidebarOpen}
+          handleClose={() => setSidebarOpen(false)}
           label={label}
           data={data}
           selectorActions={[

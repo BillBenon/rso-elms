@@ -1,6 +1,7 @@
 import { Table } from '..';
 import { AcademyInfo } from './academy.types';
 import { GenericStatus } from './common.types';
+import { LocationInfo } from './location.types';
 
 export interface BasicInstitutionInfo {
   current_admin_id: string;
@@ -21,4 +22,6 @@ export interface BasicInstitutionInfo {
 
 export interface InstitutionInfo extends Table, BasicInstitutionInfo {
   academies: AcademyInfo[];
+  villages: LocationInfo;
+  village_id: string;
 }
