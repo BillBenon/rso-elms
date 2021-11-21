@@ -152,7 +152,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
             authUser.data?.data.data.user_type === UserType.SUPER_ADMIN
               ? newUserTypeWithSuper
               : newUserType,
-          ).find((type) => type.label === details.user_type)}
+          ).find((type) => type.value === details.user_type)}
           options={getDropDownStatusOptions(
             authUser.data?.data.data.user_type === UserType.SUPER_ADMIN
               ? newUserTypeWithSuper
@@ -331,7 +331,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
                 inputs: programs.data?.data.data || [],
                 labelName: ['name'],
                 //@ts-ignore
-                getOptionLabel: (prog: IntakeProgramInfo) => prog.program.code,
+                getOptionLabel: (prog: IntakeProgramInfo) => prog.program.name,
               })}
               name="intake_program_id"
               placeholder={'Program to be enrolled in'}

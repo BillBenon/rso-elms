@@ -6,6 +6,9 @@ class ClassStore {
   addClass() {
     return useMutation(classService.addClass);
   }
+  addClassStudent() {
+    return useMutation(classService.addClassStudent);
+  }
   modifyClass() {
     return useMutation(classService.modifyClass);
   }
@@ -15,6 +18,11 @@ class ClassStore {
   getClassByLevel(levelId: string) {
     return useQuery(['class/levelId', levelId], () =>
       classService.getClassByLevel(levelId),
+    );
+  }
+  getStudentsByClass(classId: string) {
+    return useQuery(['class/students', classId], () =>
+      classService.getStudentsByClass(classId),
     );
   }
 }

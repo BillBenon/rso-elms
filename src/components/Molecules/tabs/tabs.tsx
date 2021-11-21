@@ -82,7 +82,6 @@ export function Tabs({
   );
 }
 
-
 export function RoundedTabs({
   activeIndex = 0,
   className = '',

@@ -12,6 +12,11 @@ export interface ICreateClass {
   intake_level_id: number;
 }
 
+export interface IClassStudent {
+  intake_level_class_id: number;
+  students_id: string;
+}
+
 export interface IClass extends Table, ICreateClass {}
 
 export enum ClassGroupType {
