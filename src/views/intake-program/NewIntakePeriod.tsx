@@ -1,5 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useParams } from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -13,18 +14,17 @@ import intakeProgramStore from '../../store/administration/intake-program.store'
 import { ValueType } from '../../types';
 import {
   AddIntakeProgramLevelPeriod,
+  IntakeLevelParam,
   PeriodProgressStatus,
   ProgressStatus,
 } from '../../types/services/intake-program.types';
 import { getDropDownStatusOptions } from '../../utils/getOption';
 
 interface PeriodStep {
-  academic_year_id: string;
   checked: number;
-  levelId: string;
 }
 
-export function NewIntakePeriod({ academic_year_id, levelId, checked }: PeriodStep) {
+export function NewIntakePeriod({ checked }: PeriodStep) {
   const [values, setvalues] = useState<AddIntakeProgramLevelPeriod>({
     academic_period_id: '',
     academic_program_intake_level_id: 0,
@@ -36,13 +36,18 @@ export function NewIntakePeriod({ academic_year_id, levelId, checked }: PeriodSt
   });
   const [done, setDone] = useState(-1);
 
+  const { level: levelId } = useParams<IntakeLevelParam>();
+
+  const intakeLevel = intakeProgramStore.getIntakeLevelById(levelId).data?.data.data;
+
   const [currentStep, setCurrentStep] = useState(0);
   const [completeStep, setCompleteStep] = useState(0);
   const [lastStep, setLastStep] = useState(0);
 
   const academicperiods =
-    academicperiodStore.getAcademicPeriodsByAcademicYear(academic_year_id).data?.data
-      .data || [];
+    academicperiodStore.getAcademicPeriodsByAcademicYear(
+      intakeLevel?.academic_year.id.toString() || '',
+    ).data?.data.data || [];
 
   const nextStep = (isComplete: boolean) => {
     if (currentStep === lastStep) setDone(checked);
@@ -103,7 +108,7 @@ export function NewIntakePeriod({ academic_year_id, levelId, checked }: PeriodSt
         completeStep={completeStep}
         navigateToStepHandler={() => {}}>
         {academicperiods
-          .filter((prds) => prds.academic_year.id === academic_year_id)
+          .filter((prds) => prds.academic_year.id === intakeLevel?.academic_year.id)
           .map((prd) => (
             <form onSubmit={submitForm} key={prd.id}>
               <InputMolecule
