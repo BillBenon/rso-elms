@@ -9,7 +9,6 @@ import { Tabs } from '../../components/Molecules/tabs/tabs';
 import { classStore } from '../../store/administration/class.store';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
 import ViewStudentReports from '../reports/ViewStudentReports';
-import AddStudents from './AddStudents';
 import NewClass from './NewClass';
 import StudentInClass from './StudentInClass';
 
@@ -46,11 +45,6 @@ function Classes() {
                   onClick={() => history.push(`${url}/add-class`)}>
                   Add class
                 </Button>
-                {classGroups.length > 0 && (
-                  <Button styleType="outline">
-                    <AddStudents />
-                  </Button>
-                )}
               </TableHeader>
               {classGroups.length <= 0 ? (
                 <NoDataAvailable

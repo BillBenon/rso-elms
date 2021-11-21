@@ -6,6 +6,9 @@ class ClassStore {
   addClass() {
     return useMutation(classService.addClass);
   }
+  addClassStudent() {
+    return useMutation(classService.addClassStudent);
+  }
   modifyClass() {
     return useMutation(classService.modifyClass);
   }

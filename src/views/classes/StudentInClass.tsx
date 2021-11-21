@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router';
 
+import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { Tab } from '../../components/Molecules/tabs/tabs';
 import Students from '../../components/Organisms/user/Students';
 import { classStore } from '../../store/administration/class.store';
 import { UserTypes } from '../../types/services/user.types';
+import AddStudents from './AddStudents';
 
 type IStudentClass = {
   classId: string;
@@ -39,20 +41,26 @@ function StudentInClass({ classId, label }: IStudentClass) {
 
   return (
     <Tab label={label}>
-      <section className="mt-4 flex flex-wrap justify-start gap-4">
-        {isLoading ? (
-          <Loader />
-        ) : studentsData.length <= 0 ? (
-          <NoDataAvailable
-            buttonLabel="Add new students"
-            title={'No students available in this class'}
-            handleClick={() => history.push(``)}
-            description="This class has not received any students. you can add one from the button below."
-          />
-        ) : (
-          <Students students={students} showTableHeader={false} />
-        )}
-      </section>
+      <div className="flex flex-col">
+        <Button styleType="outline" className="self-end">
+          <AddStudents classId={parseInt(classId)} />
+        </Button>
+        <section className="mt-4 flex flex-wrap gap-4">
+          {isLoading ? (
+            <Loader />
+          ) : studentsData.length <= 0 ? (
+            <NoDataAvailable
+              showButton={false}
+              buttonLabel="Add new students"
+              title={'No students available in this class'}
+              handleClick={() => history.push(``)}
+              description="This class has not received any students. you can add one from the button on the top left."
+            />
+          ) : (
+            <Students students={students} showTableHeader={false} />
+          )}
+        </section>
+      </div>
     </Tab>
   );
 }
