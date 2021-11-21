@@ -19,6 +19,7 @@ interface TabsProps {
   className?: string;
   children: TabChildrenType;
   onTabChange?: (_event: tabEventTypes) => any;
+  headerComponent?: React.ReactNode;
 }
 
 type tabEventTypes = {
@@ -32,6 +33,7 @@ export function Tabs({
   className = '',
   children,
   onTabChange,
+  headerComponent,
 }: TabsProps) {
   const [activeTabIndex, setActivetabIndex] = useState(activeIndex);
 
@@ -71,8 +73,9 @@ export function Tabs({
 
   return (
     <div className={`tabs ${className}`}>
-      <div className="pb-3">
+      <div className="pb-3  flex flex-wrap items-center justify-between">
         <TabHeadings />
+        {headerComponent && headerComponent}
       </div>
       {children[activeTabIndex]}
     </div>
