@@ -13,18 +13,19 @@ import SearchMolecule from '../Molecules/input/SearchMolecule';
 
 interface IRightSidebar {
   label: string;
-  isOpen: boolean;
+  open: boolean;
+  handleClose: () => void;
   data: UserView[];
   selectorActions?: { name: string; handleAction: (_data?: string[]) => void }[];
 }
 
-function RightSidebar({ label, isOpen, selectorActions, data }: IRightSidebar) {
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    setOpen(isOpen);
-  }, [isOpen]);
-
+function RightSidebar({
+  label,
+  open,
+  handleClose,
+  selectorActions,
+  data,
+}: IRightSidebar) {
   const handleSearch = () => {};
   const [selected, setSelected] = useState(new Set(''));
 
@@ -75,7 +76,7 @@ function RightSidebar({ label, isOpen, selectorActions, data }: IRightSidebar) {
         <Heading fontSize="lg" fontWeight="semibold" className="pt-3">
           {label}
         </Heading>
-        <Button styleType="text" icon onClick={() => setOpen(!open)} className="self-end">
+        <Button styleType="text" icon onClick={() => handleClose()} className="self-end">
           <Icon name="close" fill="txt-secondary" size={18} />
         </Button>
       </div>

@@ -1,9 +1,8 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router';
 
+import Button from '../../components/Atoms/custom/Button';
 import RightSidebar from '../../components/Organisms/RightSidebar';
 import { queryClient } from '../../plugins/react-query';
 import { classStore } from '../../store/administration/class.store';
@@ -22,6 +21,9 @@ function AddStudents({ classId }: IAddStudent) {
 
   const studentsProgram = intakeProgramStore.getStudentsByIntakeProgram(intakeProg || '')
     .data?.data.data;
+
+  // const studentsProgram = intakeProgramStore.getStudentsByIntakeProgramLevel(level || '')
+  // .data?.data.data;
 
   const [students, setStudents] = useState<UserView[]>([]);
   useEffect(() => {
@@ -60,10 +62,13 @@ function AddStudents({ classId }: IAddStudent) {
   }
 
   return (
-    <div className="flex flex-col cursor-pointer" onClick={() => setSidebarOpen(true)}>
-      Add student
+    <div className="flex flex-col cursor-pointer">
+      <Button styleType="outline" onClick={() => setSidebarOpen(true)}>
+        Add student
+      </Button>
       <RightSidebar
-        isOpen={sidebarOpen}
+        open={sidebarOpen}
+        handleClose={() => setSidebarOpen(false)}
         label="Add Students to class"
         data={students}
         selectorActions={[
