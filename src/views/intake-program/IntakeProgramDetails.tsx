@@ -101,7 +101,7 @@ function IntakeProgramDetails() {
     },
     {
       label: 'Program levels',
-      href: `${url}/levels/${getLevels.length <= 0 ? '' : getLevels[0].id}`,
+      href: `${url}/levels/${getLevels[0]?.id || ''}`,
     },
   ];
 
@@ -233,7 +233,7 @@ function IntakeProgramDetails() {
               path={`${path}/modules`}
               render={() => <IntakeProgramModules />}
             />
-            <Route path={`${path}/levels/:level`} render={() => <IntakeProgramLevel />} />
+            <Route path={`${path}/levels`} render={() => <IntakeProgramLevel />} />
           </Switch>
         </TabNavigation>
       </div>
