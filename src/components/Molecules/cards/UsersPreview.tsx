@@ -84,7 +84,8 @@ export default function UsersPreview({ title, label, data, totalUsers }: IUserPr
       </div>
       {sidebarOpen && (
         <RightSidebar
-          isOpen={sidebarOpen}
+          open={sidebarOpen}
+          handleClose={() => setSidebarOpen(false)}
           label={label}
           data={data}
           selectorActions={[

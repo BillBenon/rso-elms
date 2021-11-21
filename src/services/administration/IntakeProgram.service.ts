@@ -21,6 +21,13 @@ class IntakeProgramService {
       `/students/getStudentsByIntakeProgram/${intakeProgramId}`,
     );
   }
+  public async getStudentsByIntakeProgramLevel(
+    intakeProgramlevelId: string,
+  ): Promise<AxiosResponse<Response<StudentIntakeProgram[]>>> {
+    return await adminstrationAxios.get(
+      `/students/getStudentsByIntakeProgramLevel/${intakeProgramlevelId}`,
+    );
+  }
 
   public async getStudentsByAcademy(
     intakeProgramId: string,
@@ -35,6 +42,14 @@ class IntakeProgramService {
   ): Promise<AxiosResponse<Response<LevelIntakeProgram[]>>> {
     return await adminstrationAxios.get(
       `academicProgramIntakeLevels/getProgramLevelsByIntakeProgram/${intakeProgramId}`,
+    );
+  }
+
+  public async getIntakeLevelById(
+    levelId: string,
+  ): Promise<AxiosResponse<Response<LevelIntakeProgram>>> {
+    return await adminstrationAxios.get(
+      `academicProgramIntakeLevels/getAcademicProgramIntakeLevelById/${levelId}`,
     );
   }
 

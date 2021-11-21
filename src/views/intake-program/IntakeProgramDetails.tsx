@@ -17,9 +17,9 @@ import { Link as Links } from '../../types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
-import ModuleLevels from '../modules/ModuleLevels';
 import { IProgramData } from '../programs/AcademicPrograms';
 import AddLevelToProgram from '../programs/AddLevelToProgram';
+import IntakeProgramLevel from './IntakeProgramLevel';
 import IntakeProgramModules from './IntakeProgramModules';
 
 function IntakeProgramDetails() {
@@ -86,6 +86,9 @@ function IntakeProgramDetails() {
     return programData;
   };
 
+  const getLevels =
+    intakeProgramStore.getLevelsByIntakeProgram(intakeProg).data?.data.data || [];
+
   const programData = getProgramData();
   const tabs: TabType[] = [
     {
@@ -95,6 +98,10 @@ function IntakeProgramDetails() {
     {
       label: 'Program modules',
       href: `${url}/modules`,
+    },
+    {
+      label: 'Program levels',
+      href: `${url}/levels/${getLevels.length <= 0 ? '' : getLevels[0].id}`,
     },
   ];
 
@@ -192,8 +199,6 @@ function IntakeProgramDetails() {
                 </div>
               )}
             />
-            {/* program leves */}
-            <Route exact path={`${path}/levels`} render={() => <ModuleLevels />} />
 
             {/* add module popup */}
             <Route
@@ -223,7 +228,12 @@ function IntakeProgramDetails() {
                 );
               }}
             />
-            <Route path={`${path}/modules`} render={() => <IntakeProgramModules />} />
+            <Route
+              exact
+              path={`${path}/modules`}
+              render={() => <IntakeProgramModules />}
+            />
+            <Route path={`${path}/levels/:level`} render={() => <IntakeProgramLevel />} />
           </Switch>
         </TabNavigation>
       </div>
