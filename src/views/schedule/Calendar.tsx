@@ -41,6 +41,7 @@ export default function CalendarView() {
 
   // query parameters
   const inLevelId = new URLSearchParams(search).get('in_level_id');
+  const classId = new URLSearchParams(search).get('class_id');
 
   const { id } = useParams<ParamType>();
   const programInfo = programStore.getProgramById(id).data?.data.data;

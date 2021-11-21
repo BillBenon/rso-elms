@@ -21,6 +21,7 @@ import { CommonCardDataType, Link } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import CalendarView from './Calendar';
 import ProgramLevelClasses from './ProgramsLevelClases';
+import TimeTable from './TimeTable';
 
 const list: Link[] = [
   { to: 'home', title: 'home' },
@@ -62,7 +63,7 @@ export default function ScheduleHome() {
       <Switch>
         <Route exact path={`${path}/program/:id`} component={ProgramLevelClasses} />
         <Route path={`${path}/calendar/:id`} component={CalendarView} />
-        <Route path={`${path}/timetable/:id`} component={CalendarView} />
+        <Route path={`${path}/timetable/:id`} component={TimeTable} />
         <Route
           path={`${path}`}
           render={() => (
