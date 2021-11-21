@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams, useRouteMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -10,9 +10,8 @@ import { levelStore } from '../../store/administration/level.store';
 import programStore from '../../store/administration/program.store';
 import { ParamType } from '../../types';
 
-export default function ProgramLevelsTimeTable() {
+export default function ProgramLevelClasses() {
   const { id } = useParams<ParamType>();
-  const { url } = useRouteMatch();
 
   const programInfo = programStore.getProgramById(id).data?.data.data;
   const levelsInfo = levelStore.getLevelsByProgram(id).data?.data.data || [];
@@ -20,7 +19,7 @@ export default function ProgramLevelsTimeTable() {
   return (
     <div>
       <TableHeader showBadge={false} title={`${programInfo?.name}`}>
-        <Link to={`${url}/calendar`}>
+        <Link to={`/dashboard/schedule/calendar/${id}`}>
           <Button styleType="outline">Program calendar</Button>
         </Link>
       </TableHeader>
