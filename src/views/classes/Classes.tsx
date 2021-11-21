@@ -5,58 +5,18 @@ import Button from '../../components/Atoms/custom/Button';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
-import Students from '../../components/Organisms/user/Students';
-import { authenticatorStore } from '../../store/administration';
+import { Tabs } from '../../components/Molecules/tabs/tabs';
 import { classStore } from '../../store/administration/class.store';
-import usersStore from '../../store/administration/users.store';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
-import { UserType, UserTypes } from '../../types/services/user.types';
+import AddStudents from './AddStudents';
 import NewClass from './NewClass';
+import StudentInClass from './StudentInClass';
 
 function Classes() {
   const history = useHistory();
 
   const { url, path } = useRouteMatch();
-  const { level: levelId } = useParams<IntakeLevelParam>();
-
-  const authUser = authenticatorStore.authUser().data?.data.data;
-
-  let users: UserTypes[] = [];
-  const { data, isSuccess } = usersStore.getUsersByAcademy(
-    authUser?.academy.id.toString() || '',
-  );
-
-  if (isSuccess && data?.data.data) {
-    data?.data.data.map((obj) => {
-      let {
-        id,
-        username,
-        first_name,
-        last_name,
-        email,
-        person,
-        academy,
-        generic_status,
-        user_type,
-      } = obj;
-
-      let user: UserTypes = {
-        id: id.toString(),
-        username: username,
-        'full name': first_name + ' ' + last_name,
-        email: email,
-        NID: person && person.nid,
-        academy: academy && academy.name,
-        status: generic_status,
-        user_type: user_type,
-      };
-
-      users.push(user);
-    });
-  }
-
-  const students = users.filter((user) => user.user_type == UserType.STUDENT);
+  const { level: levelId, intakeId, intakeProg, id } = useParams<IntakeLevelParam>();
 
   const { data: classes } = classStore.getClassByLevel(levelId);
   const classGroups = classes?.data.data || [];
@@ -70,7 +30,13 @@ function Classes() {
           return (
             <>
               <TableHeader usePadding={false} showBadge={false} showSearch={false}>
-                <Button styleType="text" onClick={() => history.goBack()}>
+                <Button
+                  styleType="text"
+                  onClick={() =>
+                    history.push(
+                      `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/modules`,
+                    )
+                  }>
                   Go back to modules
                 </Button>
                 <Button
@@ -78,7 +44,11 @@ function Classes() {
                   onClick={() => history.push(`${url}/add-class`)}>
                   Add class
                 </Button>
-                <Button styleType="outline">Add students</Button>
+                {classGroups.length > 0 && (
+                  <Button styleType="outline">
+                    <AddStudents />
+                  </Button>
+                )}
               </TableHeader>
               {classGroups.length <= 0 ? (
                 <NoDataAvailable
@@ -92,9 +62,11 @@ function Classes() {
               ) : (
                 <Tabs>
                   {classGroups.map((cl) => (
-                    <Tab key={cl.id} label={cl.class_name}>
-                      <Students students={students} showTableHeader={false} />
-                    </Tab>
+                    <StudentInClass
+                      key={cl.id}
+                      classId={cl.id.toString()}
+                      label={cl.class_name}
+                    />
                   ))}
                 </Tabs>
               )}

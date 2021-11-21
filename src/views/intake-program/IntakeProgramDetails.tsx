@@ -37,17 +37,17 @@ function IntakeProgramDetails() {
   // const [instructors, setInstructors] = useState<UserView[]>([]);
 
   useEffect(() => {
-    studentsProgram?.map((stud) =>
-      setStudents([
-        ...students,
-        {
-          id: stud.id,
-          first_name: stud.student.user.first_name,
-          last_name: stud.student.user.last_name,
-          image_url: stud.student.user.image_url,
-        },
-      ]),
-    );
+    let studentsView: UserView[] = [];
+    studentsProgram?.forEach((stud) => {
+      let studentView: UserView = {
+        id: stud.id,
+        first_name: stud.student.user.first_name,
+        last_name: stud.student.user.last_name,
+        image_url: stud.student.user.image_url,
+      };
+      studentsView.push(studentView);
+    });
+    setStudents(studentsView);
   }, [studentsProgram]);
 
   // useEffect(() => {
