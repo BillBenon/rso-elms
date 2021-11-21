@@ -1,17 +1,25 @@
 import { useMutation, useQuery } from 'react-query';
 
 import { scheduleService } from '../../services/timetable/schedule.service';
-import { ScheduleStatus } from '../../types/services/schedule.types';
+import {
+  CreateEventSchedule,
+  DateRange,
+  frequencyType,
+  ScheduleStatus,
+} from '../../types/services/schedule.types';
 
 class ScheduleStore {
-  createDateRangeEvents() {
-    return useMutation(scheduleService.createDateRangeEvents);
-  }
-  createOneTimeEvents() {
-    return useMutation(scheduleService.createOneTimeEvents);
-  }
-  createRecurringEvents() {
-    return useMutation(scheduleService.createRecurringEvents);
+  createEventSchedule() {
+    return useMutation((schedule: CreateEventSchedule) => {
+      switch (schedule.frequencyType) {
+        case frequencyType.DATE_RANGE:
+          return scheduleService.createDateRangeEvents(schedule);
+        case frequencyType.RECURRING:
+          return scheduleService.createRecurringEvents(schedule);
+        default:
+          return scheduleService.createOneTimeEvents(schedule);
+      }
+    });
   }
 
   getScheduleById(id: string) {
@@ -31,9 +39,9 @@ class ScheduleStore {
       scheduleService.getAllByAcademicProgramIntakeLevelAndStatus(id, status),
     );
   }
-  getAllByAcademicProgram(id: string) {
+  getAllByAcademicProgram(id: string, range: DateRange) {
     return useQuery(['schedules/program/:id', id], () =>
-      scheduleService.getAllByAcademicProgram(id),
+      scheduleService.getAllByAcademicProgram(id, range),
     );
   }
   getAllByAcademicProgramAndStatus(id: string, status: ScheduleStatus) {

@@ -22,6 +22,7 @@ import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonFo
 import { lessonStore } from '../../store/administration/lesson.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { Link } from '../../types';
+import ViewEvaluations from '../evaluation/ViewEvaluations';
 
 interface ParamType {
   id: string;
@@ -133,7 +134,15 @@ export default function SubjectDetails() {
                   </>
                 )}
               />
-              <Route path={`${url}/evaluation`} render={() => <h2>Evaluations</h2>} />
+              <Route
+                path={`${url}/evaluation`}
+                render={() => (
+                  <ViewEvaluations
+                    {...{ subjectId }}
+                    linkTo="/dashboard/student/evaluations/"
+                  />
+                )}
+              />
             </Switch>
           </TabNavigation>
         </div>

@@ -13,6 +13,7 @@ export type Color =
   | 'txt-secondary'
   | 'none'
   | 'gray'
+  | 'info'
   | 'lightgray';
 
 export type fontSize =
@@ -39,6 +40,9 @@ export type Status =
   | 'active'
   | 'inactive'
   | 'suspended'
+  | 'promoted'
+  | 'retake'
+  | 'expelled'
   | 'started'
   | 'cancelled';
 
@@ -137,6 +141,7 @@ export type IconType =
   | 'ci_heading-h3'
   | 'close'
   | 'code'
+  | 'cross'
   | 'download'
   | 'edit'
   | 'evaluation'
@@ -168,6 +173,7 @@ export type IconType =
   | 'text-italic'
   | 'text-strikethrough'
   | 'text-underline'
+  | 'tick'
   | 'undo'
   | 'user';
 

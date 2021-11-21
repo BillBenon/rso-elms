@@ -8,6 +8,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import { Tabs } from '../../components/Molecules/tabs/tabs';
 import { classStore } from '../../store/administration/class.store';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
+import ViewStudentReports from '../reports/ViewStudentReports';
 import AddStudents from './AddStudents';
 import NewClass from './NewClass';
 import StudentInClass from './StudentInClass';
@@ -23,6 +24,7 @@ function Classes() {
 
   return (
     <Switch>
+      <Route path={`${path}/reports`} component={ViewStudentReports} />
       <Route
         exact
         path={`${path}`}

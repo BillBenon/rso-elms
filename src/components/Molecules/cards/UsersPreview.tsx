@@ -85,7 +85,6 @@ export default function UsersPreview({ title, label, data, totalUsers }: IUserPr
       {sidebarOpen && (
         <RightSidebar
           isOpen={sidebarOpen}
-          onToggle={() => setSidebarOpen(!sidebarOpen)}
           label={label}
           data={data}
           selectorActions={[

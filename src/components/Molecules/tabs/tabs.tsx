@@ -78,3 +78,56 @@ export function Tabs({
     </div>
   );
 }
+
+
+export function RoundedTabs({
+  activeIndex = 0,
+  className = '',
+  children,
+  onTabChange,
+}: TabsProps) {
+  const [activeTabIndex, setActivetabIndex] = useState(activeIndex);
+
+  const slideTo = (index: number) => {
+    const tProps: any = children[index].props;
+    if (onTabChange)
+      onTabChange({
+        activeTabIndex: index,
+        activeTabLabel: tProps.label,
+        previousTabIndex: activeTabIndex,
+      });
+    setActivetabIndex(index);
+  };
+
+  const RoundedTabHeadings = () => {
+    return (
+      <div className="flex flex-wrap justify-start">
+        {children.map((tab, i) => {
+          const tProps: any = tab.props;
+          return (
+            <button
+              key={i}
+              className={`pr-5 pl-3 py-4 ${
+                activeTabIndex === i ? 'border-l-3' : 'border-2'
+              } m-0 rounded
+            ${fontSizeStyle['sm']} ${fontWeightStyle['bold']} text-${
+                colorStyle[activeTabIndex == i ? 'primary' : 'gray']
+              } border-${colorStyle[activeTabIndex == i ? 'primary' : 'gray']}`}
+              onClick={() => slideTo(i)}>
+              {tProps.label}
+            </button>
+          );
+        })}
+      </div>
+    );
+  };
+
+  return (
+    <div className={`tabs ${className}`}>
+      <div className="pb-3">
+        <RoundedTabHeadings />
+      </div>
+      {children[activeTabIndex]}
+    </div>
+  );
+}

@@ -14,15 +14,22 @@ import { CommonCardDataType, Link as LinkList } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import EvaluationContent from './EvaluationContent';
 
-export default function ViewEvaluations() {
+interface IEvaluationProps {
+  subjectId: string;
+  linkTo: string;
+}
+
+export default function ViewEvaluations({ subjectId, linkTo }: IEvaluationProps) {
   const [evaluations, setEvaluations] = useState<any>([]);
   const history = useHistory();
   const { path } = useRouteMatch();
   const authUser = authenticatorStore.authUser().data?.data.data;
-  const { data, isSuccess, isLoading } = evaluationStore.getEvaluations(
-    authUser?.academy.id.toString() || '',
-    authUser?.id.toString() || '',
-  );
+  const { data, isSuccess, isLoading, isError } = !subjectId
+    ? evaluationStore.getEvaluations(
+        authUser?.academy.id.toString() || '',
+        authUser?.id.toString() || '',
+      )
+    : evaluationStore.getEvaluationsBySubject(subjectId);
 
   const list: LinkList[] = [
     { to: '/', title: 'home' },
@@ -67,15 +74,19 @@ export default function ViewEvaluations() {
           path={path}
           render={() => (
             <>
-              <section>
-                <BreadCrumb list={list}></BreadCrumb>
-              </section>
-              {isSuccess ? (
-                <TableHeader title="Evaluations" showBadge={false} showSearch={false}>
-                  <Link to={`${path}/new`}>
-                    <Button>New Evaluation</Button>
-                  </Link>
-                </TableHeader>
+              {path === '/dashboard/evaluations' ? (
+                <>
+                  <section>
+                    <BreadCrumb list={list}></BreadCrumb>
+                  </section>
+                  {isSuccess ? (
+                    <TableHeader title="Evaluations" showBadge={false} showSearch={false}>
+                      <Link to={`${path}/new`}>
+                        <Button>New Evaluation</Button>
+                      </Link>
+                    </TableHeader>
+                  ) : null}
+                </>
               ) : null}
 
               <section className="flex flex-wrap justify-start gap-4 mt-2">
@@ -95,12 +106,25 @@ export default function ViewEvaluations() {
                       <CommonCardMolecule
                         className="cursor-pointer"
                         handleClick={() => {
-                          history.push(`${path}/${info.id}`);
+                          linkTo
+                            ? history.push({
+                                pathname: linkTo,
+                                search: `?evaluation=${info.id}`,
+                              })
+                            : history.push(`${path}/${info.id}`);
                         }}
                         data={info}
                       />
                     </div>
                   ))
+                ) : isError ? (
+                  <NoDataAvailable
+                    icon="evaluation"
+                    showButton={false}
+                    title={'No evaluations available'}
+                    handleClick={() => history.push(`${path}/new`)}
+                    description="And the web just isnt the same without you. Lets get you back online!"
+                  />
                 ) : null}
               </section>
             </>

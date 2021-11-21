@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React from 'react';
-import { Route, useParams, useRouteMatch } from 'react-router-dom';
+import { Route, useParams, useRouteMatch, Switch } from 'react-router-dom';
 
 import Heading from '../../components/Atoms/Text/Heading';
 import Table from '../../components/Molecules/table/Table';
@@ -8,6 +8,7 @@ import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import { evaluationStore } from '../../store/administration/evaluation.store';
 import { ParamType } from '../../types';
 import ContentSpan from './ContentSpan';
+import StudentAnswersMarking from './StudentAnswersMarking';
 
 export default function EvaluationContent() {
   const { id } = useParams<ParamType>();
@@ -32,7 +33,7 @@ export default function EvaluationContent() {
       status: 'active',
       score: '25',
       code: 'Exam',
-      'time used': '20:09',
+      'time used': '24:50',
     },
     {
       id: 2,
@@ -40,7 +41,7 @@ export default function EvaluationContent() {
       status: 'pending',
       score: '25',
       code: 'Exam',
-      'time used': '20:09',
+      'time used': '32:00',
     },
     {
       id: 3,
@@ -48,7 +49,7 @@ export default function EvaluationContent() {
       status: 'inactive',
       score: '25',
       code: 'Exam',
-      'time used': '20:09',
+      'time used': '20:11',
     },
   ];
 
@@ -56,6 +57,8 @@ export default function EvaluationContent() {
 
   return (
     <div className="block pr-24 pb-8 w-11/12">
+      <Switch>
+      <Route path={`${path}/submissions/:id`} component={StudentAnswersMarking} />
       <TabNavigation tabs={tabs}>
         <div className="pt-8">
           <Route
@@ -212,6 +215,7 @@ export default function EvaluationContent() {
           )}
         />
       </TabNavigation>
+      </Switch>
     </div>
   );
 }
