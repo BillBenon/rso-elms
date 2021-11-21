@@ -3,8 +3,8 @@ import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
 import { authenticatorStore } from '../../../../store/administration';
-import usersStore from '../../../../store/administration/users.store';
 import { evaluationStore } from '../../../../store/administration/evaluation.store';
+import usersStore from '../../../../store/administration/users.store';
 import { ValueType } from '../../../../types';
 import {
   IEvaluationApproval,
@@ -12,6 +12,7 @@ import {
   IEvaluationProps,
 } from '../../../../types/services/evaluation.types';
 import { UserType } from '../../../../types/services/user.types';
+import { getLocalStorageData } from '../../../../utils/getLocalStorageItem';
 import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import Input from '../../../Atoms/Input/Input';
@@ -33,7 +34,7 @@ export default function EvaluationSettings({ handleGoBack }: IEvaluationProps) {
 
   const [settings, setSettings] = useState<IEvaluationApproval>({
     approver: '',
-    evaluation: JSON.parse(localStorage.getItem('evaluationId') || '{}'),
+    evaluation: getLocalStorageData('evaluationId'),
     evaluation_approval_status: IEvaluationApprovalStatus.REVIEWING,
     id: '',
     preparer: authUser?.id.toString() || '',

@@ -179,3 +179,13 @@ export interface IStudentAnswer {
   openAnswer: string;
   studentEvaluation: string;
 }
+
+export interface IStudentEvaluationStart {
+  attachment: string;
+  evaluation_id: string;
+  student_id: string;
+}
+export interface IStudentEvaluationStartInfo {
+  id: string;
+  evaluation: IEvaluationInfo;
+}

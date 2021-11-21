@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
+import toast from 'react-hot-toast';
 import { useHistory, useLocation } from 'react-router-dom';
 
+import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
+import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { evaluationStore } from '../../store/administration/evaluation.store';
+import { getLocalStorageData } from '../../utils/getLocalStorageItem';
 import QuestionContainer from './QuestionContainer';
 
 export default function EvaluationTest() {
@@ -14,12 +18,28 @@ export default function EvaluationTest() {
   const { data: timeLimit } = evaluationStore.getEvaluationById(
     evaluationId?.toString() || '',
   );
-  const { data: questions } = evaluationStore.getEvaluationQuestions(
-    evaluationId.toString(),
-  );
+  const {
+    data: questions,
+    isSuccess,
+    isError,
+  } = evaluationStore.getEvaluationQuestions(evaluationId.toString());
   useEffect(() => {
     timeLimit && SetTime(timeLimit?.data?.data?.time_limit * 60 * 1000);
   }, [timeLimit]);
+
+  const { mutate } = evaluationStore.submitEvaluation();
+
+  function autoSubmit() {
+    mutate(getLocalStorageData('studentEvaluationId'), {
+      onSuccess: () => {
+        toast.success('Evaluation submitted', { duration: 5000 });
+        history.push('/dashboard/modules');
+      },
+      onError: (error) => {
+        toast.error(error + '');
+      },
+    });
+  }
 
   return (
     <div>
@@ -33,7 +53,7 @@ export default function EvaluationTest() {
             <Countdown
               key={time}
               date={Date.now() + time}
-              onComplete={() => history.push('/dashboard')}
+              onComplete={autoSubmit}
               renderer={Renderer}
             />
           </Heading>
@@ -41,27 +61,40 @@ export default function EvaluationTest() {
       </div>
 
       {questions && questions?.data.data.length > 0 ? (
-        questions?.data.data.map((question) => (
+        questions?.data.data.map((question, index: number) => (
           <QuestionContainer
             id={question.id}
             key={question.id}
+            isLast={questions.data.data.length - 1 === index}
             question={question.question}
             marks={question.mark}
             isMultipleChoice={question.multipleChoiceAnswers.length > 0}
           />
         ))
+      ) : questions?.data.data.length === 0 && isSuccess ? (
+        <NoDataAvailable
+          icon="faculty"
+          buttonLabel="Go back"
+          title="No questions attached"
+          handleClick={() => history.goBack()}
+          description="No questions available for this evaluation at the moment. Come back later!"
+        />
+      ) : questions?.data.data.length === 0 && isError ? (
+        <NoDataAvailable
+          icon="faculty"
+          buttonLabel="Go back"
+          title="No questions attached"
+          handleClick={() => history.goBack()}
+          description="Something went wrong while loading evaluation questions!"
+        />
       ) : (
-        <div className="mt-16">No questions attached</div>
+        <Loader />
       )}
     </div>
   );
 }
 
-// Renderer callback with condition
 function Renderer({ hours, minutes, seconds }: any) {
-  // if (completed) {
-  //   window.location.href = '/dashboard/';
-  // } else {
   // Render a countdown
   return (
     <span className="text-primary-600">
