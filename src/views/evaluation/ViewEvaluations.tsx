@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Icon from '../../components/Atoms/custom/Icon';
 import Loader from '../../components/Atoms/custom/Loader';
+import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import { authenticatorStore } from '../../store/administration';
 import { evaluationStore } from '../../store/administration/evaluation.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
+import { IStudentEvaluationStart } from '../../types/services/evaluation.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import EvaluationContent from './EvaluationContent';
 
@@ -21,6 +26,7 @@ interface IEvaluationProps {
 
 export default function ViewEvaluations({ subjectId, linkTo }: IEvaluationProps) {
   const [evaluations, setEvaluations] = useState<any>([]);
+  const [confirm, showConfirmation] = useState(false);
   const history = useHistory();
   const { path } = useRouteMatch();
   const authUser = authenticatorStore.authUser().data?.data.data;
@@ -36,15 +42,40 @@ export default function ViewEvaluations({ subjectId, linkTo }: IEvaluationProps)
     { to: 'evaluations', title: 'evaluations' },
   ];
 
-  // const data = [
-  //   {
-  //     id: 1,
-  //     status: { type: 'warning', text: 'pending' },
-  //     description: '100 marks',
-  //     title: 'Semester 1 exam',
-  //     code: 'Exam',
-  //   },
-  // ];
+  //function that moves user to next page according to his type
+  function goToNext(id: string) {
+    linkTo
+      ? history.push({
+          pathname: linkTo,
+          search: `?evaluation=${id}`,
+        })
+      : history.push(`${path}/${id}`);
+  }
+
+  const { mutateAsync, isLoading: loading } = evaluationStore.studentEvaluationStart();
+
+  function generateStudentCode(id: string) {
+    const studentEvaluationStart: IStudentEvaluationStart = {
+      attachment: '',
+      evaluation_id: id,
+      student_id: authUser?.id.toString() || '',
+    };
+
+    console.log('stud: ', studentEvaluationStart);
+    mutateAsync(studentEvaluationStart, {
+      onSuccess: (studentInfo) => {
+        localStorage.setItem(
+          'studentEvaluationId',
+          JSON.stringify(studentInfo.data.data.id),
+        );
+        toast.success('Generated evaluation code', { duration: 5000 });
+        goToNext(studentEvaluationStart.evaluation_id);
+      },
+      onError: (error) => {
+        toast.error(error + '');
+      },
+    });
+  }
 
   useEffect(() => {
     let formattedEvals: CommonCardDataType[] = [];
@@ -103,16 +134,49 @@ export default function ViewEvaluations({ subjectId, linkTo }: IEvaluationProps)
                 ) : isSuccess && evaluations.length > 0 ? (
                   evaluations?.map((info: CommonCardDataType, index: number) => (
                     <div key={index}>
+                      {linkTo ? (
+                        <PopupMolecule
+                          open={confirm}
+                          title="Do you want to continue?"
+                          onClose={() => showConfirmation(false)}>
+                          <div className="">
+                            <Heading fontWeight="semibold">{info.title}</Heading>
+                            <p className="course-card-description leading-5 pb-6 w-96 text-txt-secondary text-sm mt-4">
+                              You are about to attempt this {info.title} test. Are you
+                              sure you want to do it now ? This action is irreversible.
+                            </p>
+
+                            <div className="flex justify-between">
+                              <Button
+                                className="h-6 flex items-center"
+                                disabled={loading}
+                                onClick={() =>
+                                  generateStudentCode(info.id?.toString() || '')
+                                }
+                                type="submit">
+                                <span className="flex items-center">
+                                  <Icon name="loader" useheightandpadding={false} />
+                                  <span className="font-semibold">Yes</span>
+                                </span>
+                              </Button>
+                              {/* <Button
+                                onClick={() =>
+                                  generateStudentCode(info.id?.toString() || '')
+                                }>
+                                Yes
+                              </Button> */}
+                              <Button onClick={() => showConfirmation(false)}>No</Button>
+                            </div>
+                          </div>
+                        </PopupMolecule>
+                      ) : null}
                       <CommonCardMolecule
                         className="cursor-pointer"
-                        handleClick={() => {
+                        handleClick={() =>
                           linkTo
-                            ? history.push({
-                                pathname: linkTo,
-                                search: `?evaluation=${info.id}`,
-                              })
-                            : history.push(`${path}/${info.id}`);
-                        }}
+                            ? showConfirmation(true)
+                            : goToNext(info.id?.toString() || '')
+                        }
                         data={info}
                       />
                     </div>

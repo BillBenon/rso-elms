@@ -6,6 +6,7 @@ import {
   AccountDetail,
   SendCommunicationMsg,
 } from '../../../../../../types/services/user.types';
+import { getLocalStorageData } from '../../../../../../utils/getLocalStorageItem';
 import { getDropDownStatusOptions } from '../../../../../../utils/getOption';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
@@ -36,7 +37,7 @@ function AccountDetails<E>({
   };
   const moveForward = (e: any) => {
     e.preventDefault();
-    let data: any = JSON.parse(localStorage.getItem('user') || '{}');
+    let data: any = getLocalStorageData('user');
     let newObj = Object.assign({}, data, accountDetails);
 
     Object.keys(newObj).map((val) => {

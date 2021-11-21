@@ -65,7 +65,6 @@ const RouterProtection = () => {
       <Route path="/dashboard/users" component={Users} />
       <Route path="/dashboard/levels" component={Levels} />
       <Route path="/dashboard/intakes" component={IntakesView} />
-      <Route path="/dashboard/student/evaluations/" component={EvaluationTest} />
       {/* <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} /> */}
 
       {/* end of academic admin pages */}
@@ -76,6 +75,9 @@ const RouterProtection = () => {
     <>
       {/* start of instructor pages */}
       <Route path="/dashboard/evaluations" component={ViewEvaluations} />
+      <Route path="/dashboard/calendar" component={CalendarView} />
+      <Route path="/dashboard/modules" component={Modules} />
+      <Route path="/dashboard/events" component={Events} />
       {/* end of instructor pages */}
     </>
   );
@@ -84,6 +86,8 @@ const RouterProtection = () => {
     <>
       {/* start of student pages */}
       <Route path="/dashboard/evaluations/student" component={EvaluationTest} />
+      <Route path="/dashboard/modules" component={Modules} />
+      <Route path="/dashboard/student/evaluations/" component={EvaluationTest} />
       {/* end of student pages */}
     </>
   );

@@ -30,7 +30,7 @@ export default function Redirecting() {
     } else if (data?.data.data.user_type === UserType.INSTRUCTOR) {
       redirectTo('/dashboard/evaluations');
     } else if (data?.data.data.user_type === UserType.STUDENT) {
-      redirectTo('/dashboard/student/evaluations');
+      redirectTo('/dashboard/modules');
     }
 
     setUserNotAllowed(notAllowed && !isLoading);
