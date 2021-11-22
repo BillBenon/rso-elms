@@ -11,7 +11,7 @@ import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedule';
+import NewTimeTable from '../../components/Organisms/calendar/schedule/NewTimeTable';
 import { ParamType } from '../../types';
 
 let timetable = [
@@ -147,7 +147,7 @@ export default function TimeTable() {
           path={`${url}/new-schedule`}
           render={() => (
             <PopupMolecule title="Create timetable" open onClose={handleClose}>
-              <NewSchedule />
+              <NewTimeTable />
             </PopupMolecule>
           )}
         />
