@@ -7,6 +7,7 @@ import { Color, colorStyleType, IconType } from '../../../types';
 type IProps = {
   name: IconType;
   size?: number;
+  animate?: boolean;
   fill?: Color;
   stroke?: Color;
   transform?: string;
@@ -28,6 +29,21 @@ const StyledSVGIcon = styled(ReactSVG)`
       css`
         width: ${size}px;
         height: ${size}px;
+      `}
+
+    ${({ animate }: IProps) =>
+      animate &&
+      css`
+        animation: spin 1s linear infinite;
+
+        @keyframes spin {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
       `}
     ${({ transform }: IProps) =>
       transform &&
@@ -54,6 +70,7 @@ export default function Icon({
   fill = 'none',
   stroke = 'none',
   transform = '',
+  animate = false,
   size = 24,
   bgColor,
   className = '',
@@ -67,6 +84,7 @@ export default function Icon({
       <StyledSVGIcon
         src={`/icons/${name}.svg`}
         stroke={stroke}
+        animate={animate}
         transform={transform}
         fill={fill}
         size={size}
