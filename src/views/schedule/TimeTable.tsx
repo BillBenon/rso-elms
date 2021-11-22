@@ -1,7 +1,17 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import {
+  Link,
+  Route,
+  Switch,
+  useHistory,
+  useParams,
+  useRouteMatch,
+} from 'react-router-dom';
+import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
+import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedule';
 import { ParamType } from '../../types';
 
 let timetable = [
@@ -62,10 +72,20 @@ timetable.push(timetable[0]);
 
 export default function TimeTable() {
   const { id } = useParams<ParamType>();
+  const history = useHistory();
+  const { url } = useRouteMatch();
+
+  const handleClose = () => {
+    history.goBack();
+  };
 
   return (
     <div>
-      <TableHeader showBadge={false} title={`Class A timetable`} />
+      <TableHeader showBadge={false} title={`Class A timetable`}>
+        <Link to={`${url}/new-schedule`}>
+          <Button>New timetable</Button>
+        </Link>
+      </TableHeader>
       <div className="bg-primary-500 py-4  px-8 text-sm text-white rounded grid grid-cols-5">
         <p className="px-2">DAYS</p>
         <p className="px-2">TIME</p>
@@ -121,6 +141,17 @@ export default function TimeTable() {
           </div>
         </div>
       ))}
+      <Switch>
+        <Route
+          exact
+          path={`${url}/new-schedule`}
+          render={() => (
+            <PopupMolecule title="Create timetable" open onClose={handleClose}>
+              <NewSchedule />
+            </PopupMolecule>
+          )}
+        />
+      </Switch>
     </div>
   );
 }
