@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useParams, useRouteMatch } from 'react-router-dom';
+import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
-import Button from '../../components/Atoms/custom/Button';
 import AddCard from '../../components/Molecules/cards/AddCard';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -14,7 +13,7 @@ function IntakeProgramModules() {
   const history = useHistory();
   const { url } = useRouteMatch();
   const [programModules, setProgramModules] = useState<CommonCardDataType[]>([]);
-  const { id, intakeId, intakeProg } = useParams<IntakeProgParam>();
+  const { id } = useParams<IntakeProgParam>();
 
   const getAllModuleStore = moduleStore.getModulesByProgram(id);
 
@@ -39,12 +38,6 @@ function IntakeProgramModules() {
 
   return (
     <>
-      <div className="text-right">
-        <Link
-          to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
-          <Button>Add Level</Button>
-        </Link>
-      </div>
       <section className="mt-4 flex flex-wrap justify-start gap-4">
         {programModules.length <= 0 ? (
           <NoDataAvailable
