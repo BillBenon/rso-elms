@@ -19,9 +19,12 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
+import { authenticatorStore } from '../../store/administration';
 import { lessonStore } from '../../store/administration/lesson.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { Link } from '../../types';
+import { UserType } from '../../types/services/user.types';
+import ViewEvaluations from '../evaluation/ViewEvaluations';
 
 interface ParamType {
   id: string;
@@ -35,6 +38,7 @@ export default function SubjectDetails() {
 
   const subjectData = subjectStore.getSubject(subjectId);
   const { data, isLoading } = lessonStore.getLessonsBySubject(subjectId);
+  const userInfo = authenticatorStore.authUser().data?.data.data.user_type;
   const lessons = data?.data.data || [];
 
   const list: Link[] = [
@@ -133,7 +137,19 @@ export default function SubjectDetails() {
                   </>
                 )}
               />
-              <Route path={`${url}/evaluation`} render={() => <h2>Evaluations</h2>} />
+              <Route
+                path={`${url}/evaluation`}
+                render={() => (
+                  <ViewEvaluations
+                    {...{ subjectId }}
+                    linkTo={
+                      userInfo === UserType.STUDENT
+                        ? '/dashboard/student/evaluations/'
+                        : ''
+                    }
+                  />
+                )}
+              />
             </Switch>
           </TabNavigation>
         </div>

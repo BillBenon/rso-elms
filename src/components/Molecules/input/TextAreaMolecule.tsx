@@ -1,14 +1,14 @@
 import React from 'react';
 
-import { CommonInputProps, ValueType } from '../../../types';
+import { InputProps, ValueType } from '../../../types';
 import Textarea from '../../Atoms/Input/Textarea';
 import Error from '../../Atoms/Text/Error';
 import ILabel from '../../Atoms/Text/ILabel';
 
-interface ITextareaMolecule<T> extends CommonInputProps<T> {
+interface ITextareaMolecule<T> extends InputProps<T> {
   name: string;
   value: string | undefined;
-  handleChange: (_e: ValueType) => void;
+  handleChange?: (_e: ValueType) => void;
   children?: React.ReactNode;
   error?: string;
   placeholder?: string;
@@ -18,7 +18,7 @@ interface ITextareaMolecule<T> extends CommonInputProps<T> {
 export default function TextAreaMolecule<T>({
   name,
   value,
-  handleChange,
+  handleChange = () => {},
   children,
   error = '',
   readOnly = false,

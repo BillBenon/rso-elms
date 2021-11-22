@@ -14,7 +14,7 @@ class UserService {
   public async modifyUser(
     userInfo: UpdateUserInfo,
   ): Promise<AxiosResponse<Response<UserInfo>>> {
-    return await adminstrationAxios.post('/users/modifyUser', userInfo);
+    return await adminstrationAxios.put('/users/modifyUser', userInfo);
   }
   public async updateProfile(
     userInfo: UpdateUserInfo,

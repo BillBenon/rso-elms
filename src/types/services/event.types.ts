@@ -32,4 +32,6 @@ export interface CreateVenue {
   venueType: venueType;
 }
 
-export interface VenueInfo extends CreateVenue, Table {}
+export interface VenueInfo extends CreateVenue, Table {
+  venue_type: string;
+}

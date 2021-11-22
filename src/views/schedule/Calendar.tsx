@@ -2,7 +2,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../../styles/components/Molecules/calendar.scss';
 
 import moment from 'moment';
-import React from 'react';
+import React, { useState } from 'react';
 import { Calendar, Event, momentLocalizer } from 'react-big-calendar';
 import {
   Link as BrowserLink,
@@ -20,9 +20,12 @@ import Heading from '../../components/Atoms/Text/Heading';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedule';
-import { ParamType, ValueType } from '../../types';
 import programStore from '../../store/administration/program.store';
 import { scheduleStore } from '../../store/timetable/schedule.store';
+import { formatCalendarEvents } from '../../utils/calendar';
+import { DateRange } from '../../types/services/schedule.types';
+import { getWeekBorderDays } from '../../utils/date-helper';
+import { ParamType, ValueType } from '../../types';
 
 const localizer = momentLocalizer(moment);
 
@@ -31,24 +34,24 @@ export default function CalendarView() {
   const { search } = useLocation();
   const { path, url } = useRouteMatch();
 
+  const [dateRange, setdateRange] = useState<DateRange>({
+    start_date: getWeekBorderDays().monday,
+    end_date: getWeekBorderDays().sunday,
+  });
+
   // query parameters
-  const classId = new URLSearchParams(search).get('class_id');
   const inLevelId = new URLSearchParams(search).get('in_level_id');
+  const classId = new URLSearchParams(search).get('class_id');
 
   const { id } = useParams<ParamType>();
   const programInfo = programStore.getProgramById(id).data?.data.data;
 
-  //get events
-  const events =
+  // get events
+  const events = formatCalendarEvents(
     (inLevelId
       ? scheduleStore.getAllByAcademicProgramIntakeLevel(inLevelId).data?.data.data
-      : scheduleStore.getAllByAcademicProgram(id).data?.data.data
-    )?.map((schedule) => ({
-      id: schedule.id,
-      title: schedule.event.name,
-      start: new Date(schedule.planned_schedule_start_date),
-      end: new Date(schedule.planned_schedule_end_date),
-    })) || [];
+      : scheduleStore.getAllByAcademicProgram(id, dateRange).data?.data.data) || [],
+  );
 
   const handleClose = () => {
     history.goBack();
@@ -89,8 +92,11 @@ export default function CalendarView() {
         showMultiDayTimes={false}
         views={['day', 'week']}
         defaultDate={new Date()}
+        timeslots={1}
         style={{ height: 900 }}
-        onSelectEvent={(event) => history.push(`${path}/event/${event.id}`)}
+        min={new Date(2017, 10, 0, 4, 0, 0)}
+        max={new Date(2017, 10, 0, 23, 59, 59)}
+        // onSelectEvent={(event) => history.push(`${path}/event/${event.id}`)}
       />
       <Switch>
         <Route

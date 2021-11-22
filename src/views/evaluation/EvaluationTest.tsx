@@ -1,14 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
+import toast from 'react-hot-toast';
+import { useHistory, useLocation } from 'react-router-dom';
 
+import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
+import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { evaluationStore } from '../../store/administration/evaluation.store';
+import { getLocalStorageData } from '../../utils/getLocalStorageItem';
 import QuestionContainer from './QuestionContainer';
 
 export default function EvaluationTest() {
-  const { data: questions } = evaluationStore.getEvaluationQuestions(
-    'b22ee1a0-1da1-4fd1-a91f-011d3e384d9c',
+  const { search } = useLocation();
+  const history = useHistory();
+  const [time, SetTime] = useState(0);
+  const evaluationId = new URLSearchParams(search).get('evaluation') || '';
+  const { data: timeLimit } = evaluationStore.getEvaluationById(
+    evaluationId?.toString() || '',
   );
+  const {
+    data: questions,
+    isSuccess,
+    isError,
+  } = evaluationStore.getEvaluationQuestions(evaluationId.toString());
+  useEffect(() => {
+    timeLimit && SetTime(timeLimit?.data?.data?.time_limit * 60 * 1000);
+  }, [timeLimit]);
+
+  const { mutate } = evaluationStore.submitEvaluation();
+
+  function autoSubmit() {
+    mutate(getLocalStorageData('studentEvaluationId'), {
+      onSuccess: () => {
+        toast.success('Evaluation submitted', { duration: 5000 });
+        history.push('/dashboard/modules');
+      },
+      onError: (error) => {
+        toast.error(error + '');
+      },
+    });
+  }
 
   return (
     <div>
@@ -19,34 +50,56 @@ export default function EvaluationTest() {
             Remaining time:
           </Heading>
           <Heading>
-            <Countdown date={Date.now() + 10000000000} renderer={Renderer} />
+            <Countdown
+              key={time}
+              date={Date.now() + time}
+              onComplete={autoSubmit}
+              renderer={Renderer}
+            />
           </Heading>
         </div>
       </div>
 
-      {questions?.data.data.map((question) => (
-        <QuestionContainer
-          key={question.id}
-          question={question.question}
-          marks={question.mark}
-          isMultipleChoice={question.multipleChoiceAnswers.length > 0}
+      {questions && questions?.data.data.length > 0 ? (
+        questions?.data.data.map((question, index: number) => (
+          <QuestionContainer
+            id={question.id}
+            key={question.id}
+            isLast={questions.data.data.length - 1 === index}
+            question={question.question}
+            marks={question.mark}
+            isMultipleChoice={question.multipleChoiceAnswers.length > 0}
+          />
+        ))
+      ) : questions?.data.data.length === 0 && isSuccess ? (
+        <NoDataAvailable
+          icon="faculty"
+          buttonLabel="Go back"
+          title="No questions attached"
+          handleClick={() => history.goBack()}
+          description="No questions available for this evaluation at the moment. Come back later!"
         />
-      ))}
-      {/* <QuestionContainer /> */}
+      ) : questions?.data.data.length === 0 && isError ? (
+        <NoDataAvailable
+          icon="faculty"
+          buttonLabel="Go back"
+          title="No questions attached"
+          handleClick={() => history.goBack()}
+          description="Something went wrong while loading evaluation questions!"
+        />
+      ) : (
+        <Loader />
+      )}
     </div>
   );
 }
 
-// Renderer callback with condition
-function Renderer({ hours, minutes, seconds, completed }: any) {
-  if (completed) {
-    window.location.href = '/dashboard/student/evaluations';
-  } else {
-    // Render a countdown
-    return (
-      <Heading color="success">
-        {hours}:{minutes}:{seconds}
-      </Heading>
-    );
-  }
+function Renderer({ hours, minutes, seconds }: any) {
+  // Render a countdown
+  return (
+    <span className="text-primary-600">
+      {hours}:{minutes}:{seconds}
+    </span>
+  );
+  // }
 }

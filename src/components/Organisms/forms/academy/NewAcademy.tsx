@@ -253,22 +253,7 @@ export default function NewAcademy<E>({ onSubmit }: CommonFormProps<E>) {
                 handleChange={(e) => handleChange(e)}>
                 academy physical address
               </InputMolecule>
-              <div className="flex flex-col">
-                {/* <DropdownMolecule
-                  defaultValue={getInchargeDropdown(admins).find(
-                    (incharge) => incharge.value === details.current_admin_id,
-                  )}
-                  width="60 md:w-80"
-                  placeholder="Select admin"
-                  options={getInchargeDropdown(admins)}
-                  name="current_admin_id"
-                  handleChange={handleChange}>
-                  Add academy admin
-                </DropdownMolecule>
-                <div className="text-primary-500 py-2 text-right w-60 md:w-80">
-                  <Link to="/dashboard/users/add">Create new admin</Link>
-                </div> */}
-              </div>
+
               <div>
                 <div className="mb-3">
                   <ILabel weight="bold">academy logo</ILabel>

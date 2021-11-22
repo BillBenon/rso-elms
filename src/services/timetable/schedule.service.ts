@@ -4,6 +4,7 @@ import { timetableAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
   CreateEventSchedule,
+  DateRange,
   ScheduleInfo,
   ScheduleStatus,
 } from '../../types/services/schedule.types';
@@ -36,8 +37,12 @@ class ScheduleService {
   }
   public async getAllByAcademicProgram(
     academicProgramId: string,
+    range: DateRange,
   ): Promise<AxiosResponse<Response<ScheduleInfo[]>>> {
-    return await timetableAxios.get(`/schedural/academic-program/${academicProgramId}`);
+    return await timetableAxios.put(
+      `/schedural/academic-program/${academicProgramId}`,
+      range,
+    );
   }
   public async getAllByAcademicProgramAndStatus(
     academicProgramId: string,

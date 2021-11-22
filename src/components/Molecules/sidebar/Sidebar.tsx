@@ -19,7 +19,6 @@ export default function Sidebar() {
       { title: 'Users', to: '/dashboard/users', icon: 'user' },
       { title: 'Roles', to: '/dashboard/roles', icon: 'role' },
       { title: 'Academies', to: '/dashboard/academies', icon: 'academy', fill: false },
-      { title: 'Evalutaions', to: '/dashboard/evaluations', icon: 'evaluation' },
       { title: 'Privileges', to: '/dashboard/privileges', icon: 'module' },
     ];
     const academicAdminLinks: linkProps[] = [
@@ -28,6 +27,8 @@ export default function Sidebar() {
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
       { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
       { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
+      { title: 'Events', to: '/dashboard/events', icon: 'calendar' },
+      { title: 'Venues', to: '/dashboard/venues', icon: 'program' },
       {
         title: 'Registration Control',
         to: '/dashboard/registration-control',
@@ -37,11 +38,14 @@ export default function Sidebar() {
     ];
 
     const instructorLinks: linkProps[] = [
-      { title: 'Evalutaions', to: '/dashboard/evaluations', icon: 'evaluation' },
+      { title: 'Evaluations', to: '/dashboard/evaluations', icon: 'evaluation' },
+      { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
+      { title: 'Events', to: '/dashboard/events', icon: 'calendar' },
     ];
 
     const studentLinks: linkProps[] = [
-      { title: 'Evalutaions', to: '/dashboard/student/evaluations', icon: 'evaluation' },
+      { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
+      { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
     ];
 
     if (authUser?.user_type == UserType.SUPER_ADMIN)

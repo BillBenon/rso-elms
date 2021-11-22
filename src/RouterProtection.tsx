@@ -7,8 +7,10 @@ import { authenticatorStore } from './store/administration';
 import { UserInfo, UserType } from './types/services/user.types';
 import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';
-import CalendarView from './views/calendar/Calendar';
-import ChoosePrograms from './views/calendar/ChoosePrograms';
+import CalendarView from './views/schedule/Calendar';
+import ScheduleHome from './views/schedule/ScheduleHome';
+import Events from './views/schedule/Events';
+import Venues from './views/schedule/Venues';
 import Divisions from './views/divisions/Divisions';
 import EvaluationTest from './views/evaluation/EvaluationTest';
 import ViewEvaluations from './views/evaluation/ViewEvaluations';
@@ -52,10 +54,10 @@ const RouterProtection = () => {
       {/* start of academic admin pages */}
       <Route path="/dashboard/modules" component={Modules} />
       <Route path="/dashboard/subjects" component={Subjects} />
-      <Route path="/dashboard/schedule" component={ChoosePrograms} />
+      <Route path="/dashboard/schedule" component={ScheduleHome} />
       <Route path="/dashboard/calendar" component={CalendarView} />
-      {/* <Route exact path="/dashboard/evaluations" component={ViewEvaluations} />
-      <Route exact path="/dashboard/evaluation/new" component={NewEvaluation} /> */}
+      <Route path="/dashboard/events" component={Events} />
+      <Route path="/dashboard/venues" component={Venues} />
       <Route path="/dashboard/registration-control" component={RegistrationControl} />
       <Route path="/dashboard/divisions" component={Divisions} />
       <Route path="/dashboard/academic-years" component={AcademicYears} />
@@ -73,6 +75,9 @@ const RouterProtection = () => {
     <>
       {/* start of instructor pages */}
       <Route path="/dashboard/evaluations" component={ViewEvaluations} />
+      <Route path="/dashboard/calendar" component={CalendarView} />
+      <Route path="/dashboard/modules" component={Modules} />
+      <Route path="/dashboard/events" component={Events} />
       {/* end of instructor pages */}
     </>
   );
@@ -80,7 +85,9 @@ const RouterProtection = () => {
   const StudentRoutes = () => (
     <>
       {/* start of student pages */}
-      <Route path="/dashboard/student/evaluations" component={EvaluationTest} />
+      <Route path="/dashboard/evaluations/student" component={EvaluationTest} />
+      <Route path="/dashboard/modules" component={Modules} />
+      <Route path="/dashboard/student/evaluations/" component={EvaluationTest} />
       {/* end of student pages */}
     </>
   );

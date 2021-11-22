@@ -8,6 +8,7 @@ import {
   MaritalStatus,
   PersonDetail,
 } from '../../../../../../types/services/user.types';
+import { getLocalStorageData } from '../../../../../../utils/getLocalStorageItem';
 import {
   getDropDownOptions,
   getDropDownStatusOptions,
@@ -51,7 +52,7 @@ function PersonalDetails<E>({
 
   const moveForward = (e: any) => {
     e.preventDefault();
-    let data: any = JSON.parse(localStorage.getItem('user') || '{}');
+    let data: any = getLocalStorageData('user');
     let newObj = Object.assign({}, data, personalDetails);
 
     Object.keys(newObj).map((val) => {
