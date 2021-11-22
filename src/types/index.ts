@@ -175,6 +175,7 @@ export type IconType =
   | 'text-underline'
   | 'tick'
   | 'undo'
+  | 'loader'
   | 'user';
 
 export interface FormPropType {

@@ -9,6 +9,7 @@ import {
   IEvaluationQuestion,
   IQuestionType,
 } from '../../../../types/services/evaluation.types';
+import { getLocalStorageData } from '../../../../utils/getLocalStorageItem';
 import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
 import Heading from '../../../Atoms/Text/Heading';
@@ -21,7 +22,7 @@ export default function EvaluationQuestionComponent({
   handleNext,
 }: IEvaluationProps) {
   const initialState: ICreateEvaluationQuestions = {
-    evaluation_id: JSON.parse(localStorage.getItem('evaluationId') || '{}'),
+    evaluation_id: getLocalStorageData('evaluationId'),
     mark: 1,
     parent_question_id: '',
     question: '',

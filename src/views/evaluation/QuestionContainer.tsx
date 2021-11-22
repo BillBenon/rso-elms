@@ -1,6 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Input from '../../components/Atoms/Input/Input';
@@ -15,6 +15,7 @@ interface IQuestionContainerProps {
   question: string;
   id: string;
   marks: number;
+  isLast: boolean;
   choices?: [];
   isMultipleChoice: boolean;
 }
@@ -22,6 +23,7 @@ interface IQuestionContainerProps {
 export default function QuestionContainer({
   question,
   id,
+  isLast,
   marks,
   // choices,
   isMultipleChoice,
@@ -38,28 +40,42 @@ export default function QuestionContainer({
     studentEvaluation: 'fc7bfa35-ce72-4a04-acda-7df1768a817f',
   };
 
+  const history = useHistory();
   const [answer, setAnswer] = useState<IStudentAnswer>(initialState);
 
   function handleChange({ name, value }: ValueType) {
     setAnswer((answer) => ({ ...answer, [name]: value }));
   }
 
-  const { mutateAsync } = evaluationStore.addQuestionAnswer();
+  const { mutateAsync, error } = evaluationStore.addQuestionAnswer();
+  const { mutateAsync: endEvaluation } = evaluationStore.submitEvaluation();
+
+  function submitEvaluation() {
+    endEvaluation(answer.studentEvaluation, {
+      onSuccess: () => {
+        toast.success('Evaluation submitted', { duration: 5000 });
+
+        history.push('/dashboard/modules');
+      },
+      onError: () => {
+        console.log(error);
+        toast.error(error + '');
+      },
+    });
+  }
 
   function submitForm(id: string, e: FormEvent) {
     e.preventDefault();
-    setAnswer((answer) => ({ ...answer, evaluationQuestion: id }));
 
     mutateAsync(answer, {
       onSuccess: () => {
-        toast.success('Question added', { duration: 5000 });
+        toast.success('Question answered', { duration: 5000 });
 
         //first remove the button for submitted question
         let buttonToRemove = document.getElementById(id);
         buttonToRemove?.remove();
       },
       onError: (error) => {
-        console.log(error);
         toast.error(error + '');
       },
     });
@@ -111,6 +127,13 @@ export default function QuestionContainer({
           </Button>
         </div>
       </div>
+      {isLast ? (
+        <div className="py-7">
+          <Button type="submit" onClick={submitEvaluation}>
+            End evaluation
+          </Button>
+        </div>
+      ) : null}
     </form>
   );
 }
