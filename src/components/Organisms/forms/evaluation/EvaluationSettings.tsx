@@ -12,7 +12,10 @@ import {
   IEvaluationProps,
 } from '../../../../types/services/evaluation.types';
 import { UserType } from '../../../../types/services/user.types';
-import { getLocalStorageData } from '../../../../utils/getLocalStorageItem';
+import {
+  getLocalStorageData,
+  setLocalStorageData,
+} from '../../../../utils/getLocalStorageItem';
 import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import Input from '../../../Atoms/Input/Input';
@@ -79,6 +82,7 @@ export default function EvaluationSettings({ handleGoBack }: IEvaluationProps) {
       onSuccess: () => {
         toast.success('Settings added', { duration: 5000 });
         localStorage.removeItem('evaluationId');
+        setLocalStorageData('currentStep', 0);
         history.push('/dashboard/evaluations');
       },
       onError: (error) => {

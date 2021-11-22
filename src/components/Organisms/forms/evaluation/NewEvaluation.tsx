@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 
 import { Link as LinkList } from '../../../../types';
+import {
+  getLocalStorageData,
+  setLocalStorageData,
+} from '../../../../utils/getLocalStorageItem';
 import Heading from '../../../Atoms/Text/Heading';
 import BreadCrumb from '../../../Molecules/BreadCrumb';
 import Stepper from '../../../Molecules/Stepper/Stepper';
@@ -15,14 +19,16 @@ export default function NewEvaluation() {
     { to: 'new', title: 'new evaluation' },
   ];
 
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(getLocalStorageData('currentStep'));
 
   function handleSubmit() {
     setCurrentStep(currentStep + 1);
+    setLocalStorageData('currentStep', currentStep);
   }
 
   function handleBack() {
     if (currentStep >= 1) setCurrentStep(currentStep - 1);
+    setLocalStorageData('currentStep', currentStep);
   }
 
   return (

@@ -6,6 +6,7 @@ import { Link, useHistory } from 'react-router-dom';
 import usersStore from '../../../../../store/administration/users.store';
 import { CommonFormProps, ValueType } from '../../../../../types';
 import { DocType, ProfileStatus } from '../../../../../types/services/user.types';
+import { setLocalStorageData } from '../../../../../utils/getLocalStorageItem';
 import { getDropDownStatusOptions } from '../../../../../utils/getOption';
 import Button from '../../../../Atoms/custom/Button';
 import { fire } from '../../../../Atoms/custom/Fireworks';
@@ -46,7 +47,7 @@ function SignInWithSearch<E>({ onSubmit }: CommonFormProps<E>) {
       } else {
         toast.success("You're already registered!", { duration: 1200 });
         fire(2000);
-        localStorage.setItem('foundUser', JSON.stringify(foundUser));
+        setLocalStorageData('foundUser', foundUser);
         setTimeout(() => {
           history.push('/complete-profile');
         }, 1500);

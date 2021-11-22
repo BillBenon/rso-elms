@@ -19,6 +19,7 @@ import {
   IQuestionaireTypeEnum,
   ISubmissionTypeEnum,
 } from '../../../../types/services/evaluation.types';
+import { setLocalStorageData } from '../../../../utils/getLocalStorageItem';
 import {
   getDropDownOptions,
   getDropDownStatusOptions,
@@ -83,7 +84,7 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
     mutate(details, {
       onSuccess: (data) => {
         toast.success('Evaluation created', { duration: 5000 });
-        localStorage.setItem('evaluationId', JSON.stringify(data?.data.data.id));
+        setLocalStorageData('evaluationId', data.data.data.id);
         handleNext();
       },
       onError: (error) => {
