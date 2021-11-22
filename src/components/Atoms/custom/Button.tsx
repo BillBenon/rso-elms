@@ -44,7 +44,7 @@ export default function Button<T>({
   };
 
   // determine padding based on the style type of button
-  const padding = icon ? '' : full ? 'py-3' : 'py-3 px-6';
+  const padding = icon ? '' : full ? 'py-3' : 'py-3 px-4';
 
   return (
     <button

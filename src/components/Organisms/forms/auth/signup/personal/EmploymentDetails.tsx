@@ -141,7 +141,7 @@ function EmploymentDetails<E>({
             </DateMolecule>
           </div>
         </div>
-        <div className="flex w-4/5 my-4 justify-between">
+        <div className="flex w-4/5 my-6 justify-between">
           {prevStep && (
             <Button
               styleType="text"

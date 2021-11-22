@@ -23,7 +23,7 @@ export default function InputMolecule<T>({
   ...attrs
 }: IInputMolecule<T>) {
   return (
-    <div className="flex flex-col gap-2 pb-2">
+    <div className="flex flex-col gap-2 pb-3">
       <ILabel className="capitalize" size="sm" weight="medium">
         {children}
       </ILabel>
