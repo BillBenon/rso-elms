@@ -8,7 +8,10 @@ import {
   MaritalStatus,
   PersonDetail,
 } from '../../../../../../types/services/user.types';
-import { getLocalStorageData } from '../../../../../../utils/getLocalStorageItem';
+import {
+  getLocalStorageData,
+  setLocalStorageData,
+} from '../../../../../../utils/getLocalStorageItem';
 import {
   getDropDownOptions,
   getDropDownStatusOptions,
@@ -59,7 +62,7 @@ function PersonalDetails<E>({
       //@ts-ignore
       if (!newObj[val]) newObj[val] = '';
     });
-    localStorage.setItem('user', JSON.stringify(newObj));
+    setLocalStorageData('user', newObj);
     nextStep(true);
   };
   const user = usersStore.getUserById(fetched_id.toString());
