@@ -22,10 +22,10 @@ export default function AcademyProfileCard({
   src,
   bgColor = 'secondary',
   alt,
-  size = '70',
+  size = '55',
   txtSize = 'xs',
-  fontWeight = 'medium',
-  color = 'txt-primary',
+  fontWeight = 'semibold',
+  color = 'primary',
   subtitle = '',
 }: ICard) {
   return (
