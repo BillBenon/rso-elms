@@ -9,6 +9,8 @@ import {
   IEvaluationInfo,
   IEvaluationQuestionsInfo,
   IStudentAnswer,
+  IStudentEvaluationStart,
+  IStudentEvaluationStartInfo,
 } from '../../types/services/evaluation.types';
 
 class EvaluationService {
@@ -69,7 +71,24 @@ class EvaluationService {
   public async addQuestionAnswer(
     answer: IStudentAnswer,
   ): Promise<AxiosResponse<Response<IStudentAnswer>>> {
-    return await evaluationAxios.put('evaluationQuestions/add', { ...answer });
+    return await evaluationAxios.post('student-answers/add', answer);
+  }
+
+  public async submitEvaluation(studentEvaluationId: string): Promise<void> {
+    return await evaluationAxios.put(
+      `studentEvaluation/studentEvaluation/${studentEvaluationId}/submit`,
+    );
+  }
+  public async autoSubmitEvaluation(studentEvaluationId: string): Promise<void> {
+    return await evaluationAxios.put(
+      `studentEvaluation/studentEvaluation/${studentEvaluationId}/auto_submit`,
+    );
+  }
+
+  public async studentEvaluationStart(
+    student: IStudentEvaluationStart,
+  ): Promise<AxiosResponse<Response<IStudentEvaluationStartInfo>>> {
+    return await evaluationAxios.post('studentEvaluation/start', student);
   }
 }
 

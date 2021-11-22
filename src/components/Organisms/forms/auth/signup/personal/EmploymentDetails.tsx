@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import usersStore from '../../../../../../store/administration/users.store';
 import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../types';
 import { EmploymentDetail } from '../../../../../../types/services/user.types';
+import { getLocalStorageData } from '../../../../../../utils/getLocalStorageItem';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DateMolecule from '../../../../../Molecules/input/DateMolecule';
@@ -38,7 +39,7 @@ function EmploymentDetails<E>({
 
   const moveForward = (e: any) => {
     e.preventDefault();
-    let data: any = JSON.parse(localStorage.getItem('user') || '{}');
+    let data: any = getLocalStorageData('user');
     let newObj = Object.assign({}, data, employmentDetails);
     Object.keys(newObj).map((val) => {
       //@ts-ignore

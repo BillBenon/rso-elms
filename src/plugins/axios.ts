@@ -72,7 +72,7 @@ adminstrationAxios.interceptors.request.use(interceptAdminReq);
 adminstrationAxios.interceptors.response.use((config) => config, interceptAdminResError);
 
 evaluationAxios.interceptors.request.use(interceptAdminReq);
-evaluationAxios.interceptors.response.use((config) => config, interceptAdminResError);
+// evaluationAxios.interceptors.response.use((config) => config, interceptAdminResError);
 
 timetableAxios.interceptors.request.use(interceptAdminReq);
 timetableAxios.interceptors.response.use((config) => config, interceptAdminResError);

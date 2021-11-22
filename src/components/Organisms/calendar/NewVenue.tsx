@@ -1,6 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
+import { queryClient } from '../../../plugins/react-query';
 
 import { venueStore } from '../../../store/timetable/venue.store';
 import { GenericStatus, ValueType } from '../../../types';
@@ -30,6 +31,7 @@ export default function NewVenue() {
     await mutateAsync(values, {
       async onSuccess(_data) {
         toast.success('Venue was created successfully');
+        queryClient.invalidateQueries(['venues']);
         history.goBack();
       },
       onError() {

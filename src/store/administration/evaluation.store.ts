@@ -39,6 +39,16 @@ class EvaluationStore {
   addQuestionAnswer() {
     return useMutation(evaluationService.addQuestionAnswer);
   }
+
+  submitEvaluation() {
+    return useMutation(evaluationService.submitEvaluation);
+  }
+  autoSubmitEvaluation() {
+    return useMutation(evaluationService.autoSubmitEvaluation);
+  }
+  studentEvaluationStart() {
+    return useMutation(evaluationService.studentEvaluationStart);
+  }
 }
 
 export const evaluationStore = new EvaluationStore();
