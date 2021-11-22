@@ -6,7 +6,7 @@ import { eventStore } from '../../../store/timetable/event.store';
 import { GenericStatus, ValueType } from '../../../types';
 import { CreateEvent, eventCategory } from '../../../types/services/event.types';
 import { getDropDownStatusOptions } from '../../../utils/getOption';
-import { randomString } from '../../../utils/random-text';
+import { randomString } from '../../../utils/random';
 import Button from '../../Atoms/custom/Button';
 import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../Molecules/input/InputMolecule';
