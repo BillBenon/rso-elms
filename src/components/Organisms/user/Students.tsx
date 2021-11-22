@@ -3,7 +3,7 @@ import { useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import { authenticatorStore } from '../../../store/administration';
-import { ValueType } from '../../../types';
+import { GenericStatus, ValueType } from '../../../types';
 import { UserType, UserTypes } from '../../../types/services/user.types';
 import Button from '../../Atoms/custom/Button';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
@@ -36,6 +36,12 @@ export default function Students({
       },
     },
   ];
+
+  const studentStatActions = Object.keys(GenericStatus).map((stat) => ({
+    name: stat,
+    type: stat as GenericStatus,
+    handleStatusAction: () => {},
+  }));
 
   const authUser = authenticatorStore.authUser().data?.data.data;
 
@@ -74,7 +80,8 @@ export default function Students({
               statusColumn="status"
               data={students}
               actions={studentActions}
-              // hide={['id', 'user_type']}
+              statusActions={studentStatActions}
+              hide={['id', 'user_type']}
               uniqueCol="id"
             />
           )}

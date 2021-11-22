@@ -6,7 +6,10 @@ import '../../../styles/components/Molecules/table/table.scss';
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 
-import { ValueType } from '../../../types';
+import { GenericStatus, ValueType } from '../../../types';
+import { IEvaluationStatus } from '../../../types/services/evaluation.types';
+import { IntakeStatus } from '../../../types/services/intake.types';
+import { IntakeModuleStatus } from '../../../types/services/intake-program.types';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import Row from '../../Atoms/custom/Row';
@@ -24,6 +27,11 @@ interface TableProps<T> {
   uniqueCol?: keyof T;
   hide?: (keyof T)[];
   actions?: { name: string; handleAction: (_data?: T[keyof T]) => void }[];
+  statusActions?: {
+    name: string;
+    type: GenericStatus | IntakeStatus | IEvaluationStatus | IntakeModuleStatus;
+    handleStatusAction: (_data?: T[keyof T]) => void;
+  }[];
   selectorActions?: { name: string; handleAction: (_data?: string[]) => void }[];
   handleClick?: () => void;
   statusColumn?: string;
@@ -35,6 +43,7 @@ export function Table<T>({
   hide = [],
   data,
   actions,
+  statusActions,
   selectorActions,
   statusColumn,
   handleSelect,
@@ -195,8 +204,10 @@ export function Table<T>({
         <Row
           key={index + Math.random() * 16}
           data={row}
+          uniqueCol={uniqueCol}
           keys={keys as string[]}
           statusColumn={statusColumn}
+          statusActions={statusActions}
         />
         {actions && actions.length > 0 ? (
           <td className="flex space-x-6 cursor-pointer">
