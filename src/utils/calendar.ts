@@ -1,59 +1,35 @@
-import { frequencyType, ScheduleInfo } from '../types/services/schedule.types';
-import { getWeekBorderDays } from './date-helper';
+import { ScheduleInfo } from '../types/services/schedule.types';
 
-export function formatCalendarEvents(schedules: ScheduleInfo[]) {
-  let events: any[] = [];
-  let monday = new Date(getWeekBorderDays().monday);
+interface BigCalendarEvent {
+  id: string | number;
+  title: string;
+  start: Date;
+  end: Date;
+}
 
-  for (let i = 0; i < schedules.length; i++) {
-    const s = schedules[i];
-    if (s.frequencyType == frequencyType.RECURRING) {
-      for (let j = 0; j < 7; j++) {
-        let day = monday;
-        day.setDate(day.getDate() + j);
+export function formatCalendarEvents(schedules: ScheduleInfo[] = []): BigCalendarEvent[] {
+  let events: BigCalendarEvent[] = [];
 
-        events.push({
-          id: s.id,
-          title: s.event.name,
-          start: new Date(
-            day.getFullYear(),
-            day.getMonth(),
-            day.getDate(),
-            s.start_hour[0],
-            s.start_hour[1],
-          ),
-          end: new Date(
-            day.getFullYear(),
-            day.getMonth(),
-            day.getDate(),
-            s.end_hour[0],
-            s.end_hour[1],
-          ),
-        });
-      }
-    } else {
-      let day = new Date(s.schedule_date || s.schedural_start_date);
-
-      events.push({
-        id: s.id,
-        title: s.event.name,
-        start: new Date(
-          day.getFullYear(),
-          day.getMonth(),
-          day.getDate(),
-          s.start_hour[0],
-          s.start_hour[1],
-        ),
-        end: new Date(
-          day.getFullYear(),
-          day.getMonth(),
-          day.getDate(),
-          s.end_hour[0],
-          s.end_hour[1],
-        ),
-      });
-    }
-  }
-
+  schedules.forEach((s) => {
+    let start = new Date(s.schedule_date || s.schedural_start_date);
+    events.push({
+      id: s.id,
+      title: s.event.name,
+      start: new Date(
+        start.getFullYear(),
+        start.getMonth(),
+        start.getDate(),
+        s.start_hour ? s.start_hour[0] : new Date().getHours(),
+        s.start_hour ? s.start_hour[1] : new Date().getMinutes(),
+      ),
+      end: new Date(
+        start.getFullYear(),
+        start.getMonth(),
+        start.getDate(),
+        s.end_hour ? s.end_hour[0] : new Date().getHours() + 2,
+        s.end_hour ? s.end_hour[1] : new Date().getMinutes(),
+      ),
+    });
+  });
   return events;
 }
