@@ -1,6 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import { queryClient } from '../../../../plugins/react-query';
 
 import { authenticatorStore } from '../../../../store/administration';
 import { levelStore } from '../../../../store/administration/level.store';
@@ -9,7 +10,7 @@ import usersStore from '../../../../store/administration/users.store';
 import { eventStore } from '../../../../store/timetable/event.store';
 import { scheduleStore } from '../../../../store/timetable/schedule.store';
 import { venueStore } from '../../../../store/timetable/venue.store';
-import { SelectData, ValueType } from '../../../../types';
+import { ParamType, SelectData, ValueType } from '../../../../types';
 import {
   CreateEventSchedule,
   frequencyType,
@@ -52,6 +53,7 @@ export default function NewSchedule() {
   //state varibales
   const [currentStep, setcurrentStep] = useState(0);
   const history = useHistory();
+  const { id } = useParams<ParamType>();
 
   const { mutateAsync } = scheduleStore.createEventSchedule();
 
@@ -77,6 +79,8 @@ export default function NewSchedule() {
     mutateAsync(data, {
       async onSuccess(_data) {
         toast.success('Schedule was created successfully');
+        queryClient.invalidateQueries(['schedules/level-intake/:id', id]);
+        queryClient.invalidateQueries(['schedules/program/:id', id]);
         history.goBack();
       },
       onError() {
