@@ -1,6 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
+import { queryClient } from '../../../plugins/react-query';
 
 import { eventStore } from '../../../store/timetable/event.store';
 import { GenericStatus, ValueType } from '../../../types';
@@ -34,6 +35,7 @@ export default function NewEvent() {
     await mutateAsync(values, {
       async onSuccess(_data) {
         toast.success('Event was created successfully');
+        queryClient.invalidateQueries(['events']);
         history.goBack();
       },
       onError() {
