@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
+import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import { queryClient } from '../../plugins/react-query';
@@ -71,14 +72,14 @@ function NewClass() {
     ) || [];
 
   const students =
-    intakeProgramStore.getStudentsByIntakeProgram(intakeProg).data?.data.data || [];
+    intakeProgramStore.getStudentsByIntakeProgramLevel(levelId).data?.data.data || [];
   const users =
     usersStore
       .getUsersByAcademy(authUser?.academy.id.toString() || '')
       .data?.data.data.filter((stud) => stud.user_type === UserType.STUDENT) || [];
 
   const studentsInProgram = users.filter((us) =>
-    students.some((st) => st.student.user.id === us.id),
+    students.some((st) => st.intake_program_student.student.user.id === us.id),
   );
 
   const periods =
@@ -109,74 +110,95 @@ function NewClass() {
   }
 
   return (
-    <form onSubmit={submitForm}>
-      <InputMolecule
-        title={levelId}
-        id="intake_level_id"
-        type="hidden"
-        value={levelId}
-        name="intake_level_id"
-      />
-      <DropdownMolecule
-        name="class_group_type"
-        handleChange={handleChange}
-        defaultValue={getDropDownStatusOptions(ClassGroupType).find(
-          (cl) => cl.value === form.class_group_type,
-        )}
-        options={getDropDownStatusOptions(ClassGroupType)}
-        placeholder="Choose class type">
-        Class Type
-      </DropdownMolecule>
+    <>
+      {periods.length > 0 ? (
+        <form onSubmit={submitForm}>
+          <InputMolecule
+            title={levelId}
+            id="intake_level_id"
+            type="hidden"
+            value={levelId}
+            name="intake_level_id"
+          />
+          <DropdownMolecule
+            name="class_group_type"
+            handleChange={handleChange}
+            defaultValue={getDropDownStatusOptions(ClassGroupType).find(
+              (cl) => cl.value === form.class_group_type,
+            )}
+            options={getDropDownStatusOptions(ClassGroupType)}
+            placeholder="Choose class type">
+            Class Type
+          </DropdownMolecule>
 
-      <InputMolecule
-        value={form.class_name}
-        handleChange={handleChange}
-        name="class_name">
-        Class name
-      </InputMolecule>
+          <InputMolecule
+            value={form.class_name}
+            handleChange={handleChange}
+            name="class_name">
+            Class name
+          </InputMolecule>
 
-      <DropdownMolecule
-        name="intake_academic_year_period_id"
-        handleChange={handleChange}
-        options={getDropDownOptions({
-          inputs: periods || [],
-          labelName: ['name'],
-          //@ts-ignore
-          getOptionLabel: (prd: IntakeProgramLevelPeriodInfo) => prd.academic_period.name,
-        })}
-        placeholder="Choose period">
-        Academic period
-      </DropdownMolecule>
+          <DropdownMolecule
+            name="intake_academic_year_period_id"
+            handleChange={handleChange}
+            options={getDropDownOptions({
+              inputs: periods || [],
+              labelName: ['name'],
+              //@ts-ignore
+              getOptionLabel: (prd: IntakeProgramLevelPeriodInfo) =>
+                prd.academic_period.name,
+            })}
+            placeholder="Choose period">
+            Academic period
+          </DropdownMolecule>
 
-      <DropdownMolecule
-        name="instructor_class_in_charge_id"
-        handleChange={handleChange}
-        options={getDropDownOptions({
-          inputs: instructors_in_academy,
-          labelName: ['first_name', 'last_name'],
-          //@ts-ignore
-          getOptionLabel: (inst: Instructor) =>
-            inst.user.first_name + ' ' + inst.user.last_name,
-        })}
-        placeholder="Choose instructor representative">
-        Instructor representative
-      </DropdownMolecule>
+          <DropdownMolecule
+            name="instructor_class_in_charge_id"
+            handleChange={handleChange}
+            options={getDropDownOptions({
+              inputs: instructors_in_academy,
+              labelName: ['first_name', 'last_name'],
+              //@ts-ignore
+              getOptionLabel: (inst: Instructor) =>
+                inst.user.first_name + ' ' + inst.user.last_name,
+            })}
+            placeholder="Choose instructor representative">
+            Instructor representative
+          </DropdownMolecule>
 
-      <DropdownMolecule
-        name="class_representative_one_id"
-        handleChange={handleChange}
-        options={getDropDownOptions({
-          inputs: studentsInProgram,
-          labelName: ['first_name', 'last_name'],
-        })}
-        placeholder="Choose class representative">
-        Class representative
-      </DropdownMolecule>
+          <DropdownMolecule
+            name="class_representative_one_id"
+            handleChange={handleChange}
+            options={getDropDownOptions({
+              inputs: studentsInProgram,
+              labelName: ['first_name', 'last_name'],
+            })}
+            placeholder="Choose class representative">
+            Class representative
+          </DropdownMolecule>
 
-      <div className="mt-5">
-        <Button type="submit">Save</Button>
-      </div>
-    </form>
+          <div className="mt-5">
+            <Button type="submit">Save</Button>
+          </div>
+        </form>
+      ) : (
+        <div className="w-96">
+          <NoDataAvailable
+            icon="reg-control"
+            title={'No academic periods available yet'}
+            description={
+              'You have not added any academic periods in this level. Therefore, you can not add classes. try adding them first'
+            }
+            buttonLabel={'add academic periods'}
+            handleClick={() =>
+              history.push(
+                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/add-period`,
+              )
+            }
+          />
+        </div>
+      )}
+    </>
   );
 }
 

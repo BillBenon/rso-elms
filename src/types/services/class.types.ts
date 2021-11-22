@@ -1,5 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { Table } from './common.types';
+import { Instructor } from './instructor.types';
+import { IntakeProgramLevelPeriodInfo, LevelIntakeProgram } from './intake-program.types';
+import { Student } from './user.types';
 
 export interface ICreateClass {
   class_group_type: ClassGroupType;
@@ -17,7 +20,21 @@ export interface IClassStudent {
   students_id: string;
 }
 
-export interface IClass extends Table, ICreateClass {}
+export interface StudentsInClass extends Table {
+  student: Student;
+  intake_level_class: IClass;
+}
+
+export interface IClass extends Table, ICreateClass {
+  academic_year_program_intake_level: LevelIntakeProgram;
+  intake_academic_year_period: IntakeProgramLevelPeriodInfo;
+  class_representative_one_id: string;
+  class_representative_two_id: string;
+  class_representative_tree_id: string;
+  instructor_class_incharge: Instructor;
+  class_group_type: ClassGroupType;
+  class_name: string;
+}
 
 export enum ClassGroupType {
   CLASS = 'CLASS',

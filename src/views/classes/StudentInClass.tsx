@@ -29,14 +29,14 @@ function StudentInClass({ classId, label }: IStudentClass) {
     let tempStuds: UserTypes[] = [];
     studentsData.forEach((stud) => {
       tempStuds.push({
-        id: stud.user.id.toString(),
-        username: stud.user.username,
-        'full name': stud.user.first_name + ' ' + stud.user.last_name,
-        email: stud.user.email,
-        NID: stud.user.nid,
-        academy: stud.user.academy.name,
-        status: stud.user.status,
-        user_type: stud.user.user_type,
+        id: stud.id.toString(),
+        username: stud.student.user.username,
+        'full name': stud.student.user.first_name + ' ' + stud.student.user.last_name,
+        email: stud.student.user.email,
+        NID: stud.student.user.nid,
+        academy: stud.student.user.academy.name,
+        status: stud.student.user.status,
+        user_type: stud.student.user.user_type,
       });
     });
     setStudents(tempStuds);
@@ -57,7 +57,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
           </Button>
           <AddStudents classId={parseInt(classId)} />
         </div>
-        <section className="mt-4 flex flex-wrap gap-4">
+        <section>
           {isLoading ? (
             <Loader />
           ) : studentsData.length <= 0 ? (
