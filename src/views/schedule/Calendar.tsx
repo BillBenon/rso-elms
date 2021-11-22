@@ -46,7 +46,7 @@ export default function CalendarView() {
   const { id } = useParams<ParamType>();
   const programInfo = programStore.getProgramById(id).data?.data.data;
 
-  //get events
+  // get events
   const events = formatCalendarEvents(
     (inLevelId
       ? scheduleStore.getAllByAcademicProgramIntakeLevel(inLevelId).data?.data.data
@@ -84,14 +84,6 @@ export default function CalendarView() {
 
       <Calendar
         localizer={localizer}
-        // events={[
-        //   {
-        //     id: '3fd387a7-d048-49a2-bfff-59284a406a51',
-        //     title: 'Break time',
-        //     start: 'Mon Dec 20 2021 05:42:00 GMT+0200 (Central Africa Time)',
-        //     end: 'Mon Dec 20 2021 16:54:00 GMT+0200 (Central Africa Time)',
-        //   },
-        // ]}
         events={events}
         step={60}
         startAccessor="start"
