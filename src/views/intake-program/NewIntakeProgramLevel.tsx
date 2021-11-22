@@ -183,11 +183,7 @@ export default function NewIntakeProgramLevel() {
                 </form>
               )}
               {success && (
-                <NewIntakePeriod
-                  academic_year_id={values.academic_year_id}
-                  checked={checked}
-                  levelId={intakeprogramlevelId}
-                />
+                <NewIntakePeriod checked={checked} level_id={intakeprogramlevelId} />
               )}
             </div>
           )}

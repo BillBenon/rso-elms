@@ -22,9 +22,10 @@ import { getDropDownStatusOptions } from '../../utils/getOption';
 
 interface PeriodStep {
   checked: number;
+  level_id?: string;
 }
 
-export function NewIntakePeriod({ checked }: PeriodStep) {
+export function NewIntakePeriod({ level_id, checked }: PeriodStep) {
   const [values, setvalues] = useState<AddIntakeProgramLevelPeriod>({
     academic_period_id: '',
     academic_program_intake_level_id: 0,
@@ -38,7 +39,8 @@ export function NewIntakePeriod({ checked }: PeriodStep) {
 
   const { level: levelId } = useParams<IntakeLevelParam>();
 
-  const intakeLevel = intakeProgramStore.getIntakeLevelById(levelId).data?.data.data;
+  const intakeLevel = intakeProgramStore.getIntakeLevelById(level_id ? level_id : levelId)
+    .data?.data.data;
 
   const [currentStep, setCurrentStep] = useState(0);
   const [completeStep, setCompleteStep] = useState(0);
