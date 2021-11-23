@@ -5,6 +5,7 @@ import { Response } from '../../types';
 import {
   CreateEventSchedule,
   DateRange,
+  ICreateClassTimeTable,
   ScheduleInfo,
   ScheduleStatus,
 } from '../../types/services/schedule.types';
@@ -74,6 +75,12 @@ class ScheduleService {
     schedule: ScheduleInfo,
   ): Promise<AxiosResponse<Response<ScheduleInfo>>> {
     return await timetableAxios.put(`/schedural/${schedule.id}`, schedule);
+  }
+
+  public async createClassTimetable(
+    tt: ICreateClassTimeTable,
+  ): Promise<AxiosResponse<Response<ScheduleInfo>>> {
+    return await timetableAxios.post('/schedural/class-timetable', tt);
   }
 }
 
