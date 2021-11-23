@@ -9,7 +9,10 @@ import EmploymentDetails from '../../components/Organisms/forms/auth/signup/pers
 import PersonalDetails from '../../components/Organisms/forms/auth/signup/personal/PersonalDetails';
 import usersStore from '../../store/administration/users.store';
 import { ProfileStatus, UpdateUserInfo, UserInfo } from '../../types/services/user.types';
-import { getLocalStorageData } from '../../utils/getLocalStorageItem';
+import {
+  getLocalStorageData,
+  setLocalStorageData,
+} from '../../utils/getLocalStorageItem';
 
 function CompleteProfile() {
   const [personalInfo, setPersonalInfo] = useState({
@@ -76,7 +79,7 @@ function CompleteProfile() {
       if (!person[val]) person[val] = '';
     });
 
-    localStorage.setItem('user', JSON.stringify({ ...data, ...person }));
+    setLocalStorageData('user', { ...data, ...person });
   }, [personalInfo]);
 
   const { mutateAsync } = usersStore.updateUser();
@@ -114,7 +117,7 @@ function CompleteProfile() {
   };
 
   return (
-    <div className="bg-main p-8 md:px-20 md:py-14">
+    <div className="bg-main p-8 md:px-24 md:py-14">
       <CompleteProfileHeader />
       <Stepper
         isDisabled={false}

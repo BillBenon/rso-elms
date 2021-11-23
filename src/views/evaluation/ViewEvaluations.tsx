@@ -16,6 +16,7 @@ import { authenticatorStore } from '../../store/administration';
 import { evaluationStore } from '../../store/administration/evaluation.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
 import { IStudentEvaluationStart } from '../../types/services/evaluation.types';
+import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import { advancedTypeChecker } from '../../utils/getOption';
 import EvaluationContent from './EvaluationContent';
 
@@ -64,10 +65,7 @@ export default function ViewEvaluations({ subjectId, linkTo }: IEvaluationProps)
     console.log('stud: ', studentEvaluationStart);
     mutateAsync(studentEvaluationStart, {
       onSuccess: (studentInfo) => {
-        localStorage.setItem(
-          'studentEvaluationId',
-          JSON.stringify(studentInfo.data.data.id),
-        );
+        setLocalStorageData('studentEvaluationId', studentInfo.data.data.id);
         toast.success('Generated evaluation code', { duration: 5000 });
         goToNext(studentEvaluationStart.evaluation_id);
       },
@@ -184,7 +182,7 @@ export default function ViewEvaluations({ subjectId, linkTo }: IEvaluationProps)
                 ) : isError ? (
                   <NoDataAvailable
                     icon="evaluation"
-                    showButton={false}
+                    buttonLabel="Create Evaluation"
                     title={'No evaluations available'}
                     handleClick={() => history.push(`${path}/new`)}
                     description="And the web just isnt the same without you. Lets get you back online!"
