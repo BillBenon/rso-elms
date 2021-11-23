@@ -3,10 +3,15 @@ import { AxiosResponse } from 'axios';
 import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
+  EnrollInstructorProgram,
+  InstructorProgram,
+} from '../../types/services/instructor.types';
+import {
   AddIntakeProgramLevelPeriod,
   AddLevelToModule,
   CreateLevelIntakeProgram,
   EnrollStudents,
+  EnrollStudentToProgram,
   IntakeLevelModule,
   IntakeProgramLevelPeriodInfo,
   LevelIntakeProgram,
@@ -29,6 +34,22 @@ class IntakeProgramService {
   ): Promise<AxiosResponse<Response<StudentIntakeProgramLevel[]>>> {
     return await adminstrationAxios.get(
       `/students/getStudentsInIntakeProgramLevel/${intakeProgramlevelId}`,
+    );
+  }
+
+  public async getInstructorsByIntakeProgram(
+    programId: string,
+    intakeId: string,
+  ): Promise<AxiosResponse<Response<InstructorProgram[]>>> {
+    return await adminstrationAxios.get(
+      `/instructorEnrolment/getInstructorProgramsOnProgramAndIntake/${programId}/${intakeId}`,
+    );
+  }
+  public async getInstructorsByIntakeProgramLevel(
+    instructorId: string,
+  ): Promise<AxiosResponse<Response<InstructorProgram[]>>> {
+    return await adminstrationAxios.get(
+      `/instructorEnrolment/getInstructorEnrolmentLevelByInstructor/${instructorId}`,
     );
   }
 
@@ -114,6 +135,24 @@ class IntakeProgramService {
     newStudent: EnrollStudents,
   ): Promise<AxiosResponse<Response<LevelIntakeProgram>>> {
     return await adminstrationAxios.post(`students/enrollStudentInLevel`, newStudent);
+  }
+
+  public async enrollStudentToProgram(
+    newStudent: EnrollStudentToProgram,
+  ): Promise<AxiosResponse<Response<StudentIntakeProgram>>> {
+    return await adminstrationAxios.post(
+      `students/enrolStudentInIntakeProgram`,
+      newStudent,
+    );
+  }
+
+  public async enrollInstructorToProgram(
+    newInstructor: EnrollInstructorProgram,
+  ): Promise<AxiosResponse<Response<StudentIntakeProgram>>> {
+    return await adminstrationAxios.post(
+      `instructorEnrolment/enroleInProgram`,
+      newInstructor,
+    );
   }
 
   public async addPeriodsToLevel(

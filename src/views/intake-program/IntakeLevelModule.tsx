@@ -11,6 +11,7 @@ import intakeProgramStore from '../../store/administration/intake-program.store'
 import { CommonCardDataType } from '../../types';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
+import EnrollInstructorToLevel from './EnrollInstructorToLevel';
 import EnrollStudent from './EnrollStudent';
 
 function IntakeLevelModule() {
@@ -57,6 +58,7 @@ function IntakeLevelModule() {
             Add academic periods to level
           </Button>
         )}
+        <EnrollInstructorToLevel />
         <EnrollStudent />
         <Button
           styleType="outline"
