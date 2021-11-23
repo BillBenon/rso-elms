@@ -66,7 +66,7 @@ export default function Sidebar() {
             to: '',
             icon: 'level',
           },
-      { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
+      // { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
     ];
 

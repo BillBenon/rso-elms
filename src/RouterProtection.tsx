@@ -85,7 +85,7 @@ const RouterProtection = () => {
     <>
       {/* start of student pages */}
       <Route path="/dashboard/evaluations/student" component={EvaluationTest} />
-      <Route exact path="/dashboard/student/levels/:id" component={StudentLevel} />
+      <Route exact path="/dashboard/student/levels/:level" component={StudentLevel} />
       <Route path="/dashboard/modules" component={Modules} />
       <Route path="/dashboard/student/evaluations/" component={EvaluationTest} />
       {/* end of student pages */}
