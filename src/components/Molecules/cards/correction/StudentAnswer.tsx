@@ -29,13 +29,13 @@ export default function StudentAnswer<T>({updateQuestionPoints,data,correction}:
                 <div className="rounded-md border-2 border-primary-500 px-2 py-2 answer-box text-primary-500">
                     {data?.open_answer}
                 </div>
-                <div className="flex gap-2">
+                <div className="flex gap-2 h-12 items-center">
                     <button className={!correct?.marked ||correct?.mark_scored == 0 ? 'normal-button' : 'right-button'} onClick={()=>{updateQuestionPoints(data?.id,data?.evaluation_question?.mark)}}>
                     <Icon
                         name={"tick"}
                         size={18}
-                        stroke={data?.marked == null || data?.mark_scored == 0 ? 'none': 'main'}
-                        fill={data?.marked == null || data?.mark_scored == 0 ? 'none': 'main'}
+                        stroke={!correct?.marked ||correct?.mark_scored == 0 ? 'none': 'main'}
+                        fill={ 'none'}
                     />
                     </button>
 
@@ -43,8 +43,8 @@ export default function StudentAnswer<T>({updateQuestionPoints,data,correction}:
                     <Icon
                         name={"cross"}
                         size={18}
-                        stroke={data?.marked == null || data?.mark_scored == 0 ? 'main' : 'none'}
-                        fill={data?.marked == null || data?.mark_scored == 0 ? 'main' : 'none'}
+                        // stroke={data?.marked == null || data?.mark_scored == 0 ? 'main' : 'none'}
+                        fill={!correct?.marked || correct?.mark_scored != 0 ? 'secondary' : 'main'}
                     />
                     </button>
                 </div>

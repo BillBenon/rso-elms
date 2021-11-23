@@ -34,7 +34,7 @@ export default function StudentAnswersMarking() {
       );
     useEffect(() => {
         setCurrentRows(studentAnswers?.slice(indexOfFirstRow, indexOfLastRow));
-      }, [currentPage]);
+      }, [studentAnswers,indexOfFirstRow,indexOfLastRow]);
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
     const list: LinkList[] = [
         { to: '/', title: 'Instructor' },

@@ -22,9 +22,8 @@ class MarkingService {
   public async getStudentEvaluationAnswers(
     id: string,
   ): Promise<AxiosResponse<Response<any[]>>> {
-    const answers = await (await evaluationAxios.get(`/student-answers/getAllByStudentEvaluation/${id}`));
-    console.log(answers.data);
-    return answers;
+    return await evaluationAxios.get(`/student-answers/getAllByStudentEvaluation/${id}`);
+
   }
 }
 export const markingService = new MarkingService();

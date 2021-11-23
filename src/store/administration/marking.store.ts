@@ -9,7 +9,7 @@ finishMarking() {
 }
 
 getStudentEvaluationAnswers(id: string) {
-    return useQuery(['evaluation/questions', id], () =>
+    return useQuery(['studentEvaluation/answers', id], () =>
     markingService.getStudentEvaluationAnswers(id),
     );
 }
