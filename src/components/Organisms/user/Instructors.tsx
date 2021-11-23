@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
+import { authenticatorStore } from '../../../store/administration';
 import { ValueType } from '../../../types';
-import { UserTypes } from '../../../views/users/Users';
+import { UserType, UserTypes } from '../../../types/services/user.types';
 import Button from '../../Atoms/custom/Button';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import Table from '../../Molecules/table/Table';
@@ -26,6 +27,9 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
       },
     },
   ];
+
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
   return (
     <>
       <TableHeader
@@ -33,14 +37,16 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
         totalItems={instructors && instructors.length > 0 ? instructors.length : 0}
         handleSearch={handleSearch}
         showSearch={instructors && instructors.length > 0}>
-        <div className="flex gap-3">
-          <Link to={`/dashboard/users/import`}>
-            <Button styleType="outline">Import users</Button>
-          </Link>
-          <Link to={`/dashboard/users/add`}>
-            <Button>New User</Button>
-          </Link>
-        </div>
+        {authUser?.user_type === UserType.SUPER_ADMIN && (
+          <div className="flex gap-3">
+            <Link to={`/dashboard/users/import`}>
+              <Button styleType="outline">Import instructors</Button>
+            </Link>
+            <Link to={`/dashboard/users/add`}>
+              <Button>New instructor</Button>
+            </Link>
+          </div>
+        )}
       </TableHeader>
       {instructors && (
         <div className="pt-8">

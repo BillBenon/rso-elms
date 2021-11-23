@@ -6,8 +6,10 @@ import { Link, useHistory } from 'react-router-dom';
 import usersStore from '../../../../../store/administration/users.store';
 import { CommonFormProps, ValueType } from '../../../../../types';
 import { DocType, ProfileStatus } from '../../../../../types/services/user.types';
+import { setLocalStorageData } from '../../../../../utils/getLocalStorageItem';
 import { getDropDownStatusOptions } from '../../../../../utils/getOption';
 import Button from '../../../../Atoms/custom/Button';
+import { fire } from '../../../../Atoms/custom/Fireworks';
 import Heading from '../../../../Atoms/Text/Heading';
 import DropdownMolecule from '../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../Molecules/input/InputMolecule';
@@ -44,10 +46,11 @@ function SignInWithSearch<E>({ onSubmit }: CommonFormProps<E>) {
         }, 900);
       } else {
         toast.success("You're already registered!", { duration: 1200 });
-        localStorage.setItem('foundUser', JSON.stringify(foundUser));
+        fire(2000);
+        setLocalStorageData('foundUser', foundUser);
         setTimeout(() => {
           history.push('/complete-profile');
-        }, 900);
+        }, 1500);
       }
     } else {
       toast.error("You're not yet registered!", { duration: 1200 });
@@ -56,50 +59,52 @@ function SignInWithSearch<E>({ onSubmit }: CommonFormProps<E>) {
   }
 
   return (
-    <div className="py-32">
-      <Heading fontSize="lg" className="md:text-3xl" fontWeight="semibold">
-        Search
-      </Heading>
-      <Heading
-        color="txt-secondary"
-        fontSize="sm"
-        className="md:text-sm pt-2"
-        fontWeight="medium">
-        Enter your reference number to find out if you&apos;re already registered
-      </Heading>
+    <>
+      <div className="py-32">
+        <Heading fontSize="lg" className="md:text-3xl" fontWeight="semibold">
+          Search
+        </Heading>
+        <Heading
+          color="txt-secondary"
+          fontSize="sm"
+          className="md:text-sm pt-2"
+          fontWeight="medium">
+          Enter your reference number to find out if you&apos;re already registered
+        </Heading>
 
-      <form onSubmit={filter}>
-        <div className="flex gap-2 items-center py-6">
-          <DropdownMolecule
-            width="36"
-            placeholder="Search by"
-            handleChange={handleChange}
-            name="searchBy"
-            defaultValue={getDropDownStatusOptions(DocType).find(
-              (nid) => nid.value === DocType.NID,
-            )}
-            options={getDropDownStatusOptions(DocType)}
-          />
-          <InputMolecule
-            name="searchInput"
-            value={details.searchInput}
-            handleChange={(e) => handleChange(e)}>
-            <></>
-          </InputMolecule>
+        <form onSubmit={filter}>
+          <div className="flex gap-2 items-center py-6">
+            <DropdownMolecule
+              width="36"
+              placeholder="Search by"
+              handleChange={handleChange}
+              name="searchBy"
+              defaultValue={getDropDownStatusOptions(DocType).find(
+                (nid) => nid.value === DocType.NID,
+              )}
+              options={getDropDownStatusOptions(DocType)}
+            />
+            <InputMolecule
+              name="searchInput"
+              value={details.searchInput}
+              handleChange={(e) => handleChange(e)}>
+              <></>
+            </InputMolecule>
+          </div>
+          <Button type="submit">Search</Button>
+        </form>
+        <div className="text-txt-secondary py-2">
+          <p className="text-base text-txt-secondary">
+            Already have an account?
+            <Link to="/login">
+              <Button styleType="text" className="text-primary-500">
+                Sign in
+              </Button>
+            </Link>
+          </p>
         </div>
-        <Button type="submit">Search</Button>
-      </form>
-      <div className="text-txt-secondary py-2">
-        <p className="text-base text-txt-secondary">
-          Already have an account?
-          <Link to="/login">
-            <Button styleType="text" className="text-primary-500">
-              Sign in
-            </Button>
-          </Link>
-        </p>
       </div>
-    </div>
+    </>
   );
 }
 

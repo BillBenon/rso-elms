@@ -19,6 +19,7 @@ import {
   IQuestionaireTypeEnum,
   ISubmissionTypeEnum,
 } from '../../../../types/services/evaluation.types';
+import { setLocalStorageData } from '../../../../utils/getLocalStorageItem';
 import {
   getDropDownOptions,
   getDropDownStatusOptions,
@@ -58,7 +59,7 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
     marking_reminder_date: '',
     maximum_file_size: '',
     name: '',
-    questionaire_type: IQuestionaireTypeEnum.MULTIPLE,
+    questionaire_type: IQuestionaireTypeEnum.OPEN,
     subject_academic_year_period_id: '',
     submision_type: ISubmissionTypeEnum.ONLINE_TEXT,
     time_limit: 30,
@@ -83,7 +84,7 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
     mutate(details, {
       onSuccess: (data) => {
         toast.success('Evaluation created', { duration: 5000 });
-        localStorage.setItem('evaluationId', JSON.stringify(data?.data.data.id));
+        setLocalStorageData('evaluationId', data.data.data.id);
         handleNext();
       },
       onError: (error) => {

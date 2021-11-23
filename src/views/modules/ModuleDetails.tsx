@@ -10,6 +10,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import UpdateModuleForm from '../../components/Organisms/forms/modules/UpdateModuleForm';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
 import { moduleStore } from '../../store/administration/modules.store';
 import { subjectStore } from '../../store/administration/subject.store';
@@ -155,6 +156,18 @@ export default function ModuleDetails() {
                   return (
                     <PopupMolecule title="New Subject" open onClose={handleClose}>
                       <NewSubjectForm />
+                    </PopupMolecule>
+                  );
+                }}
+              />
+              {/* update module popup */}
+              <Route
+                exact
+                path={`${path}/edit/:moduleId`}
+                render={() => {
+                  return (
+                    <PopupMolecule title="Edit Module" open onClose={handleClose}>
+                      <UpdateModuleForm />
                     </PopupMolecule>
                   );
                 }}

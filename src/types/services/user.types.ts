@@ -3,6 +3,12 @@ import { GenericStatus } from '..';
 import { Table } from '..';
 import { AcademyInfo } from './academy.types';
 import { ILevel } from './levels.types';
+export interface Student extends Table {
+  reg_number: string;
+  user: UserInfo;
+  academy: AcademyInfo;
+  registered_on: string;
+}
 
 export interface UserInfo extends CreateUserInfo, Table {
   pin: string;
@@ -23,6 +29,8 @@ export interface UserInfo extends CreateUserInfo, Table {
   enabled: boolean;
   profile_status: ProfileStatus;
   authorities: [];
+  otp: string;
+  is_otp_active: boolean;
 }
 
 export interface Incharge extends Table {
@@ -107,6 +115,7 @@ export interface UpdateUserInfo {
   spouse_name: string;
   user_type: UserType;
   username: string;
+  send_communication_msg: SendCommunicationMsg;
 }
 
 export interface CreateUserInfo {
@@ -148,6 +157,18 @@ export interface UserView
   extends Pick<UserInfo, 'id' | 'first_name' | 'last_name' | 'image_url'> {
   selected?: boolean;
 }
+
+export type UserTypes = {
+  id: string;
+  username: string;
+  'full name': string;
+  email: string;
+  NID: string;
+  academy: string;
+  status: GenericStatus;
+  user_type: UserType;
+};
+
 export interface PersonDetail
   extends Pick<
     PersonInfo,

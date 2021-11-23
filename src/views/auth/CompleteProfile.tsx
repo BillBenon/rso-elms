@@ -9,6 +9,10 @@ import EmploymentDetails from '../../components/Organisms/forms/auth/signup/pers
 import PersonalDetails from '../../components/Organisms/forms/auth/signup/personal/PersonalDetails';
 import usersStore from '../../store/administration/users.store';
 import { ProfileStatus, UpdateUserInfo, UserInfo } from '../../types/services/user.types';
+import {
+  getLocalStorageData,
+  setLocalStorageData,
+} from '../../utils/getLocalStorageItem';
 
 function CompleteProfile() {
   const [personalInfo, setPersonalInfo] = useState({
@@ -34,7 +38,7 @@ function CompleteProfile() {
   const [completeStep, setCompleteStep] = useState(0);
   const history = useHistory();
 
-  let foundUser: UserInfo = JSON.parse(localStorage.getItem('foundUser') || '{}');
+  let foundUser: UserInfo = getLocalStorageData('foundUser');
   if (!foundUser.id) {
     history.push('/login/search');
     return <></>;
@@ -67,7 +71,7 @@ function CompleteProfile() {
   }, [user.data]);
 
   useEffect(() => {
-    let data: UpdateUserInfo = JSON.parse(localStorage.getItem('user') || '{}');
+    let data: UpdateUserInfo = getLocalStorageData('user');
     let person = { ...personalInfo };
 
     Object.keys(person).map((val) => {
@@ -75,15 +79,13 @@ function CompleteProfile() {
       if (!person[val]) person[val] = '';
     });
 
-    localStorage.setItem('user', JSON.stringify({ ...data, ...person }));
+    setLocalStorageData('user', { ...data, ...person });
   }, [personalInfo]);
 
   const { mutateAsync } = usersStore.updateUser();
 
   async function saveInfo(isComplete: boolean) {
-    let userFromLocalStorage: UpdateUserInfo = JSON.parse(
-      localStorage.getItem('user') || '{}',
-    );
+    let userFromLocalStorage: UpdateUserInfo = getLocalStorageData('user');
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
     if (personalInfo) {
       await mutateAsync(userFromLocalStorage, {
@@ -115,7 +117,7 @@ function CompleteProfile() {
   };
 
   return (
-    <div className="bg-main p-8 md:px-20 md:py-14">
+    <div className="bg-main p-8 md:px-24 md:py-14">
       <CompleteProfileHeader />
       <Stepper
         isDisabled={false}

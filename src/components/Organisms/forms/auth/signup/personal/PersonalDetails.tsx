@@ -9,6 +9,10 @@ import {
   PersonDetail,
 } from '../../../../../../types/services/user.types';
 import {
+  getLocalStorageData,
+  setLocalStorageData,
+} from '../../../../../../utils/getLocalStorageItem';
+import {
   getDropDownOptions,
   getDropDownStatusOptions,
 } from '../../../../../../utils/getOption';
@@ -51,14 +55,14 @@ function PersonalDetails<E>({
 
   const moveForward = (e: any) => {
     e.preventDefault();
-    let data: any = JSON.parse(localStorage.getItem('user') || '{}');
+    let data: any = getLocalStorageData('user');
     let newObj = Object.assign({}, data, personalDetails);
 
     Object.keys(newObj).map((val) => {
       //@ts-ignore
       if (!newObj[val]) newObj[val] = '';
     });
-    localStorage.setItem('user', JSON.stringify(newObj));
+    setLocalStorageData('user', newObj);
     nextStep(true);
   };
   const user = usersStore.getUserById(fetched_id.toString());
@@ -104,7 +108,7 @@ function PersonalDetails<E>({
             handleChange={handleChange}
           />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 ">
           <div>
             <InputMolecule
               name="father_names"
@@ -198,7 +202,7 @@ function PersonalDetails<E>({
             </TextAreaMolecule>
           </div>
         </div>
-        <div className="flex justify-end w-4/5">
+        <div className="flex justify w-4/5">
           <Button type="submit">Next</Button>
         </div>
       </form>

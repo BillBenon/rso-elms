@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import {
+  getLocalStorageData,
+  setLocalStorageData,
+} from '../../../../../../utils/getLocalStorageItem';
 import CompleteProfileHeader from '../../../../../Molecules/CompleteProfileHeader';
 import Stepper from '../../../../../Molecules/Stepper/Stepper';
 import KinAddressDetails from './KinAddressDetails';
@@ -28,31 +32,12 @@ function MoreInfo(props: any) {
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
   };
 
-  //@ts-ignore
-  useEffect(() => setMoreInfo(JSON.parse(localStorage.getItem('moreInfo'))), []);
+  useEffect(() => setMoreInfo(getLocalStorageData('moreInfo')), []);
 
-  //@ts-ignore
-  useEffect(() => localStorage.setItem('moreInfo', moreInfo), [moreInfo]);
+  useEffect(() => setLocalStorageData('moreInfo', moreInfo), [moreInfo]);
 
   async function saveInfo() {
     if (moreInfo) {
-      // await mutateAsync(moreInfo, {
-      //   onSuccess() {
-      //     let personInfo = props.location.state.detail;
-      //     toast.success('these information have been successfully updated', {
-      //       duration: 1200,
-      //     });
-      //     setTimeout(() => {
-      //       history.push({
-      //         pathname: '/complete-profile/other',
-      //         state: { detail: personInfo },
-      //       });
-      //     }, 900);
-      //   },
-      //   onError() {
-      //     toast.error('An error occurred please try again later');
-      //   },
-      // });
       history.push('/complete-profile/other');
     }
   }

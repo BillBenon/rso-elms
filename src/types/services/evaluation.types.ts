@@ -138,16 +138,23 @@ export interface IEvaluationChoices {
 
 export interface IEvaluationQuestion {
   evaluation_id: string;
-  mark: string;
+  multipleChoiceAnswers?: IMultipleChoice[];
+  mark: number;
   parent_question_id: string;
   question: string;
   submitted: boolean;
   question_type: IQuestionType;
 }
 
+export interface IMultipleChoice {
+  answer_content: string;
+  correct: boolean;
+}
+
 export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
   sub_questions: IEvaluationQuestion[];
   submitted: boolean;
+  choices: IMultipleChoice[];
 }
 
 export interface IEvaluationQuestionsInfo {
@@ -168,4 +175,24 @@ export interface IEvaluationApproval {
   reviewer: string;
   to_be_approved: boolean;
   to_be_reviewed: boolean;
+}
+
+export interface IStudentAnswer {
+  answerAttachment: string;
+  evaluation: string;
+  evaluationQuestion: string;
+  markScored: number | null;
+  multipleChoiceAnswer: string;
+  openAnswer: string;
+  studentEvaluation: string;
+}
+
+export interface IStudentEvaluationStart {
+  attachment: string;
+  evaluation_id: string;
+  student_id: string;
+}
+export interface IStudentEvaluationStartInfo {
+  id: string;
+  evaluation: IEvaluationInfo;
 }

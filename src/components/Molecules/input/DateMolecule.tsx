@@ -62,9 +62,9 @@ function DateMolecule({
   hourPlaceholder = 'Hours',
   dayDisabled = false,
   dayClassName,
-  yearWidth = '28',
-  monthWidth = '28',
-  dayWidth = '28',
+  yearWidth = '27',
+  monthWidth = '27',
+  dayWidth = '27',
   hourWidth = '28',
   minuteWidth = '28',
   hourDisabled = false,
@@ -125,7 +125,7 @@ function DateMolecule({
   };
 
   return (
-    <div className={`flex flex-col gap-2 pb-2 w-${width || 'full md:w-80'}`}>
+    <div className={`flex flex-col gap-2 pb-2 w-${width || 'full md:w80'}`}>
       <ILabel size="sm" weight="medium">
         {children}
       </ILabel>
@@ -176,7 +176,7 @@ function DateMolecule({
           </div>
         )}
         {showTime && (
-          <div className="flex gap-2">
+          <div className="flex gap-1">
             <HourSelect
               defaultValue={dateState.Hours.toString()}
               value={dateState.Hours}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
@@ -17,53 +18,52 @@ import { Link as Links } from '../../types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
-import ModuleLevels from '../modules/ModuleLevels';
 import { IProgramData } from '../programs/AcademicPrograms';
 import AddLevelToProgram from '../programs/AddLevelToProgram';
-import { DummyUser } from '../programs/dummyUsers';
+import IntakeProgramLevel from './IntakeProgramLevel';
 import IntakeProgramModules from './IntakeProgramModules';
 
 function IntakeProgramDetails() {
   const history = useHistory();
   const { path, url } = useRouteMatch();
-  const { id, intakeProg } = useParams<IntakeProgParam>();
+  const { id, intakeId, intakeProg } = useParams<IntakeProgParam>();
 
   const studentsProgram = intakeProgramStore.getStudentsByIntakeProgram(intakeProg || '')
     .data?.data.data;
-  const instructorsProgram = intakeProgramStore.getStudentsByIntakeProgram(
-    intakeProg || '',
-  ).data?.data.data;
+  // const instructorsProgram = intakeProgramStore.getStudentsByIntakeProgram(
+  //   intakeProg || '',
+  // ).data?.data.data;
 
   const [students, setStudents] = useState<UserView[]>([]);
-  const [instructors, setInstructors] = useState<UserView[]>([]);
+  // const [instructors, setInstructors] = useState<UserView[]>([]);
 
   useEffect(() => {
-    studentsProgram?.map((stud) =>
-      setStudents([
-        ...students,
-        {
-          id: stud.id,
-          first_name: stud.first_name,
-          last_name: stud.last_name,
-          image_url: stud.image_url,
-        },
-      ]),
-    );
+    let studentsView: UserView[] = [];
+    studentsProgram?.forEach((stud) => {
+      let studentView: UserView = {
+        id: stud.id,
+        first_name: stud.student.user.first_name,
+        last_name: stud.student.user.last_name,
+        image_url: stud.student.user.image_url,
+      };
+      studentsView.push(studentView);
+    });
+    setStudents(studentsView);
   }, [studentsProgram]);
 
-  useEffect(() => {
-    instructorsProgram?.map((inst) =>
-      setInstructors([
-        ...instructors,
-        {
-          id: inst.id,
-          first_name: inst.first_name,
-          last_name: inst.last_name,
-          image_url: inst.image_url,
-        },
-      ]),
-    );
-  }, [instructorsProgram]);
+  // useEffect(() => {
+  //   instructorsProgram?.map((inst) =>
+  //     setInstructors([
+  //       ...instructors,
+  //       {
+  //         id: inst.id,
+  //         first_name: inst.first_name,
+  //         last_name: inst.last_name,
+  //         image_url: inst.image_url,
+  //       },
+  //     ]),
+  //   );
+  // }, [instructorsProgram]);
 
   const program = programStore.getProgramById(id).data?.data.data;
 
@@ -87,6 +87,9 @@ function IntakeProgramDetails() {
     return programData;
   };
 
+  const getLevels =
+    intakeProgramStore.getLevelsByIntakeProgram(intakeProg).data?.data.data || [];
+
   const programData = getProgramData();
   const tabs: TabType[] = [
     {
@@ -96,6 +99,10 @@ function IntakeProgramDetails() {
     {
       label: 'Program modules',
       href: `${url}/modules`,
+    },
+    {
+      label: 'Program levels',
+      href: `${url}/levels/${getLevels[0]?.id || ''}`,
     },
   ];
 
@@ -109,6 +116,7 @@ function IntakeProgramDetails() {
     { to: 'intakes/programs', title: 'Programs' },
     { to: `${url}`, title: 'details' },
   ];
+
   return (
     <>
       <BreadCrumb list={list} />
@@ -117,7 +125,16 @@ function IntakeProgramDetails() {
         <Heading className="pb-5" fontWeight="semibold" fontSize="xl">
           {program?.name}
         </Heading>
-        <TabNavigation tabs={tabs}>
+        <TabNavigation
+          tabs={tabs}
+          headerComponent={
+            <div className="flex justify-end">
+              <Link
+                to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
+                <Button>Add Level</Button>
+              </Link>
+            </div>
+          }>
           <Switch>
             <Route
               exact
@@ -161,7 +178,12 @@ function IntakeProgramDetails() {
                           </div>
                         </div>
                         <div className="mt-4 flex space-x-4">
-                          <Button onClick={() => history.push(`${url}/edit`)}>
+                          <Button
+                            onClick={() =>
+                              history.push(
+                                `/dashboard/intakes/programs/${intakeId}/${id}/edit`,
+                              )
+                            }>
                             Edit program
                           </Button>
                           <Button styleType="outline">Change Status</Button>
@@ -171,26 +193,23 @@ function IntakeProgramDetails() {
                   </div>
 
                   <div className="flex flex-col gap-8 z-0">
-                    {/* <div className="flex gap-8"> */}
                     <UsersPreview
                       title="Students"
                       label="Students in Cadette programs"
-                      data={DummyUser}
-                      totalUsers={DummyUser.length || 0}
+                      data={students}
+                      totalUsers={students.length || 0}
                     />
-                    <UsersPreview
+                    {/* <UsersPreview
                       title="Instructors"
                       label="Instructors in Cadette programs"
-                      data={DummyUser}
-                      totalUsers={DummyUser.length || 0}
-                    />
-                    {/* </div> */}
+                      data={instructors}
+                      totalUsers={instructors.length || 0}
+                    /> */}
                   </div>
                 </div>
               )}
             />
-            {/* program leves */}
-            <Route exact path={`${path}/levels`} render={() => <ModuleLevels />} />
+
             {/* add module popup */}
             <Route
               exact
@@ -203,7 +222,7 @@ function IntakeProgramDetails() {
                 );
               }}
             />
-            \{/* add prerequesite popup */}
+            {/* add prerequesite popup */}
             <Route
               exact
               path={`${path}/modules/:moduleId/add-prereq`}
@@ -219,7 +238,12 @@ function IntakeProgramDetails() {
                 );
               }}
             />
-            <Route path={`${path}/modules`} render={() => <IntakeProgramModules />} />
+            <Route
+              exact
+              path={`${path}/modules`}
+              render={() => <IntakeProgramModules />}
+            />
+            <Route path={`${path}/levels`} render={() => <IntakeProgramLevel />} />
           </Switch>
         </TabNavigation>
       </div>

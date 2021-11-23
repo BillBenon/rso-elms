@@ -11,7 +11,7 @@ import {
 } from '../../../types/services/intake.types';
 import { formatDateToYyMmDd } from '../../../utils/date-helper';
 import { getDropDownStatusOptions } from '../../../utils/getOption';
-import { randomString } from '../../../utils/random-text';
+import { randomString } from '../../../utils/random';
 import Button from '../../Atoms/custom/Button';
 import DateMolecule from '../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../Molecules/input/DropdownMolecule';

@@ -21,7 +21,6 @@ import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleFor
 import programStore from '../../store/administration/program.store';
 import { Link as Links, ParamType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
-import ModuleLevels from '../modules/ModuleLevels';
 import ProgramModules from '../modules/ProgramModules';
 import { IProgramData } from './AcademicPrograms';
 import AddLevelToProgram from './AddLevelToProgram';
@@ -218,8 +217,6 @@ export default function ProgramDetailsMolecule() {
                 </div>
               )}
             />
-            {/* program leves */}
-            <Route exact path={`${path}/levels`} render={() => <ModuleLevels />} />
             {/* add module popup */}
             <Route
               exact
@@ -232,7 +229,7 @@ export default function ProgramDetailsMolecule() {
                 );
               }}
             />
-            \{/* add prerequesite popup */}
+            {/* add prerequesite popup */}
             <Route
               exact
               path={`${path}/modules/:moduleId/add-prereq`}

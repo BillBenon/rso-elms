@@ -17,6 +17,7 @@ import {
   GenderStatus,
   MaritalStatus,
   ProfileStatus,
+  SendCommunicationMsg,
   UpdateUserInfo,
   UserType,
 } from '../../../../types/services/user.types';
@@ -78,6 +79,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
     sex: GenderStatus.MALE,
     spouse_name: '',
     user_type: UserType.STUDENT,
+    send_communication_msg: SendCommunicationMsg.EMAIL,
     username: '',
   });
 
@@ -121,7 +123,9 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
         place_of_birth_description: selectedUser.person.place_of_birth_description,
         place_of_issue: selectedUser.person.place_of_issue,
         place_of_residence: selectedUser.place_of_residence,
-        profile_status: selectedUser.profile_status,
+        profile_status: selectedUser.profile_status
+          ? selectedUser.profile_status
+          : ProfileStatus.INCOMPLETE,
         rank_depart: selectedUser.person.rank_depart,
         relationship_with_next_of_ken: selectedUser.relationship_with_next_of_ken,
         reset_date: selectedUser.reset_date,
@@ -129,6 +133,9 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
         sex: selectedUser.sex,
         spouse_name: selectedUser.person.spouse_name,
         user_type: selectedUser.user_type,
+        send_communication_msg: selectedUser.send_communication_msg
+          ? selectedUser.send_communication_msg
+          : SendCommunicationMsg.EMAIL,
         username: selectedUser.username,
       });
   }, [data]);
@@ -247,9 +254,20 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Email
         </InputMolecule>
-        <DateMolecule handleChange={handleChange} name="birth_date" width="60 md:w-80">
+        <DateMolecule
+          handleChange={handleChange}
+          name="birth_date"
+          width="60 md:w-80"
+          date_time_type={false}>
           Date of Birth
         </DateMolecule>
+        <InputMolecule
+          name="place_of_residence"
+          placeholder={'Enter place of residence'}
+          value={details.place_of_residence}
+          handleChange={handleChange}>
+          Place of residence
+        </InputMolecule>
         <InputMolecule
           name="phone"
           placeholder="Enter phone number"
@@ -294,6 +312,17 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           placeholder={'Select your marital status'}
           handleChange={handleChange}>
           Marital Status
+        </DropdownMolecule>
+        <DropdownMolecule
+          defaultValue={getDropDownStatusOptions(SendCommunicationMsg).find(
+            (send_communication) =>
+              send_communication.label === details.send_communication_msg,
+          )}
+          options={getDropDownStatusOptions(SendCommunicationMsg)}
+          name="send_communication_msg"
+          placeholder={'Select means of communication'}
+          handleChange={handleChange}>
+          Means of Communication
         </DropdownMolecule>
         <DropdownMolecule
           defaultValue={getDropDownStatusOptions(EducationLevel).find(

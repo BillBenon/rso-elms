@@ -3,6 +3,10 @@ import React, { useEffect, useState } from 'react';
 import usersStore from '../../../../../../store/administration/users.store';
 import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../types';
 import { EmploymentDetail } from '../../../../../../types/services/user.types';
+import {
+  getLocalStorageData,
+  setLocalStorageData,
+} from '../../../../../../utils/getLocalStorageItem';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DateMolecule from '../../../../../Molecules/input/DateMolecule';
@@ -38,13 +42,13 @@ function EmploymentDetails<E>({
 
   const moveForward = (e: any) => {
     e.preventDefault();
-    let data: any = JSON.parse(localStorage.getItem('user') || '{}');
+    let data: any = getLocalStorageData('user');
     let newObj = Object.assign({}, data, employmentDetails);
     Object.keys(newObj).map((val) => {
       //@ts-ignore
       if (!newObj[val]) newObj[val] = '';
     });
-    localStorage.setItem('user', JSON.stringify(newObj));
+    setLocalStorageData('user', newObj);
     nextStep(true);
   };
   const user = usersStore.getUserById(fetched_id.toString());
@@ -141,7 +145,7 @@ function EmploymentDetails<E>({
             </DateMolecule>
           </div>
         </div>
-        <div className="flex w-4/5 my-4 justify-between">
+        <div className="flex w-4/5 my-6 justify-between">
           {prevStep && (
             <Button
               styleType="text"

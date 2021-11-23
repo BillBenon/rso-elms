@@ -1,18 +1,23 @@
 import React, { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useHistory, useParams } from 'react-router-dom';
+import { queryClient } from '../../../../plugins/react-query';
 
 import { authenticatorStore } from '../../../../store/administration';
 import { levelStore } from '../../../../store/administration/level.store';
 import programStore from '../../../../store/administration/program.store';
 import usersStore from '../../../../store/administration/users.store';
 import { eventStore } from '../../../../store/timetable/event.store';
+import { scheduleStore } from '../../../../store/timetable/schedule.store';
 import { venueStore } from '../../../../store/timetable/venue.store';
-import { SelectData, ValueType } from '../../../../types';
+import { ParamType, SelectData, ValueType } from '../../../../types';
 import {
   CreateEventSchedule,
   frequencyType,
   methodOfInstruction,
-  recurringDays,
+  daysOfWeek,
   scheduleAppliesTo,
+  createRecurringSchedule,
 } from '../../../../types/services/schedule.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
@@ -31,34 +36,64 @@ interface IStepProps {
 
 export default function NewSchedule() {
   const [values, setvalues] = useState<CreateEventSchedule>({
-    startDate: new Date().toLocaleDateString(),
     appliesTo: undefined,
     beneficiaries: undefined,
     event: '',
-    methodOfInstruction: methodOfInstruction.LECTURE,
+    methodOfInstruction: methodOfInstruction.LEC,
     period: 1,
+    repeatingDays: [],
     plannedEndHour: '',
-    plannedScheduleStartDate: '',
+    plannedScheduleStartDate: new Date().toLocaleDateString(),
+    plannedScheduleEndDate: new Date().toLocaleDateString(),
     plannedStartHour: new Date().toLocaleTimeString(),
     venue: '',
     frequencyType: frequencyType.ONETIME,
   });
 
+  //state varibales
+  const [currentStep, setcurrentStep] = useState(0);
+  const history = useHistory();
+  const { id } = useParams<ParamType>();
+
+  const { mutateAsync } = scheduleStore.createEventSchedule();
+
   function handleChange(e: ValueType) {
     setvalues((val) => ({ ...val, [e.name]: e.value }));
   }
 
-  const [currentStep, setcurrentStep] = useState(0);
-
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
+    let data: CreateEventSchedule = { ...values };
+
+    if (values.frequencyType == frequencyType.RECURRING) {
+      data = {
+        ...values,
+        recurringSchedule: values.repeatingDays.map((d) => ({
+          dayOfWeek: d,
+          endHour: values.plannedEndHour,
+          startHour: values.plannedStartHour,
+        })) as createRecurringSchedule[],
+      };
+    }
+
+    mutateAsync(data, {
+      async onSuccess(_data) {
+        toast.success('Schedule was created successfully');
+        queryClient.invalidateQueries(['schedules/level-intake/:id', id]);
+        queryClient.invalidateQueries(['schedules/program/:id', id]);
+        history.goBack();
+      },
+      onError() {
+        toast.error('error occurred please try again');
+      },
+    });
   }
   return (
     <div>
       <Stepper
         currentStep={currentStep}
         completeStep={currentStep}
-        width="w-64"
+        width="w-32"
         isVertical={false}
         isInline={false}
         navigateToStepHandler={() => console.log('submitted')}>
@@ -68,6 +103,12 @@ export default function NewSchedule() {
           setCurrentStep={setcurrentStep}
         />
         <SecondStep
+          values={values}
+          handleChange={handleChange}
+          setCurrentStep={setcurrentStep}
+          handleSubmit={handleSubmit}
+        />
+        <ThirdStep
           values={values}
           handleChange={handleChange}
           setCurrentStep={setcurrentStep}
@@ -130,7 +171,7 @@ function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
         <RadioMolecule
           type="block"
           handleChange={handleChange}
-          name={'scheduleType'}
+          name={'frequencyType'}
           value={values.frequencyType}
           options={getDropDownStatusOptions(frequencyType)}>
           Event type
@@ -141,46 +182,76 @@ function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
   );
 }
 
-function SecondStep({ values, handleChange, handleSubmit }: IStepProps) {
-  const programs = programStore.fetchPrograms().data?.data.data;
-  const levels = levelStore.getLevels().data?.data.data;
+function SecondStep({ handleChange, setCurrentStep, values }: IStepProps) {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    setCurrentStep(2);
+  };
 
   return (
     <form onSubmit={handleSubmit} className="max-w-sm -mb-6">
-      <InputMolecule
-        name="plannedScheduleStartDate"
-        placeholder="Intake title"
-        type="date"
-        value={values.startDate}
-        handleChange={handleChange}>
-        Start date
-      </InputMolecule>
       <InputMolecule
         name="plannedStartHour"
         placeholder="Intake title"
         type="time"
         value={values.plannedStartHour}
         handleChange={handleChange}>
-        Planned start time
+        Planned start hour
       </InputMolecule>
-      {values.frequencyType === frequencyType.REPEATING ? (
+      <InputMolecule
+        type="time"
+        value={values.plannedEndHour}
+        name="plannedEndHour"
+        placeholder="End time"
+        handleChange={handleChange}>
+        Planned end hour
+      </InputMolecule>
+      <InputMolecule
+        name="plannedScheduleStartDate"
+        placeholder="Intake title"
+        type="date"
+        value={values.plannedScheduleStartDate.toLocaleString()}
+        handleChange={handleChange}>
+        Schedule Start date
+      </InputMolecule>
+      {values.frequencyType === frequencyType.RECURRING ? (
         <CheckboxMolecule
           isFlex
-          options={getDropDownStatusOptions(recurringDays).slice(0, 7)}
-          name="repeatson"
+          options={getDropDownStatusOptions(daysOfWeek).slice(0, 7)}
+          name="repeatingDays"
           placeholder="Repeat days:"
-          handleChange={() => console.log('changed')}
+          handleChange={handleChange}
+          values={values.repeatingDays}
         />
-      ) : (
+      ) : values.frequencyType === frequencyType.DATE_RANGE ? (
         <InputMolecule
-          type="time"
-          value={values.plannedEndHour}
-          name="plannedEndHour"
-          placeholder="End time"
+          name="plannedScheduleEndDate"
+          placeholder="Intake title"
+          type="date"
+          value={values.plannedScheduleEndDate.toLocaleString()}
           handleChange={handleChange}>
-          Planned end hour
+          Repetition end date
         </InputMolecule>
+      ) : (
+        <></>
       )}
+
+      <div className="pt-3 flex justify-between w-80">
+        <Button styleType="text" onClick={() => setCurrentStep(0)}>
+          Back
+        </Button>
+        <Button type="submit">Continue</Button>
+      </div>
+    </form>
+  );
+}
+
+function ThirdStep({ values, handleChange, handleSubmit, setCurrentStep }: IStepProps) {
+  const programs = programStore.fetchPrograms().data?.data.data;
+  const levels = levelStore.getLevels().data?.data.data;
+
+  return (
+    <form onSubmit={handleSubmit} className="max-w-sm -mb-6">
       <div className="pb-1">
         <DropdownMolecule
           name="appliesTo"
@@ -190,29 +261,37 @@ function SecondStep({ values, handleChange, handleSubmit }: IStepProps) {
           Event concerns
         </DropdownMolecule>
       </div>
-      {values.appliesTo && (
-        <div className="pb-1">
-          <DropdownMolecule
-            name="beneficiaries"
-            isMulti
-            handleChange={handleChange}
-            options={
-              (values.appliesTo == scheduleAppliesTo.APPLIES_TO_LEVEL
-                ? levels
-                : values.appliesTo == scheduleAppliesTo.APPLIES_TO_PROGRAM
-                ? programs
-                : []
-              )?.map((pr) => ({
-                value: pr.id + '',
-                label: pr.name,
-              })) as SelectData[]
-            }
-            placeholder="Select group">
-            {`Select beneficiaries`}
-          </DropdownMolecule>
-        </div>
-      )}
-      <div className="pt-3">
+      <div className="pb-1">
+        <DropdownMolecule
+          name="beneficiaries"
+          isMulti
+          handleChange={handleChange}
+          options={
+            (values.appliesTo == scheduleAppliesTo.APPLIES_TO_LEVEL
+              ? levels
+              : values.appliesTo == scheduleAppliesTo.APPLIES_TO_PROGRAM
+              ? programs
+              : []
+            )?.map((pr) => ({
+              value: pr.id + '',
+              label: pr.name,
+            })) as SelectData[]
+          }
+          placeholder="Select group">
+          {`Select beneficiaries`}
+        </DropdownMolecule>
+      </div>
+      <RadioMolecule
+        options={getDropDownStatusOptions(methodOfInstruction)}
+        handleChange={handleChange}
+        name={'methodOfInstruction'}
+        value={values.methodOfInstruction}>
+        Method of Instruction
+      </RadioMolecule>
+      <div className="pt-8 flex justify-between w-80">
+        <Button styleType="text" onClick={() => setCurrentStep(1)}>
+          Back
+        </Button>
         <Button type="submit">Create schedule</Button>
       </div>
     </form>
