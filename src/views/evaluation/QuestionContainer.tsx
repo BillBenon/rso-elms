@@ -9,6 +9,7 @@ import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule'
 import { evaluationStore } from '../../store/administration/evaluation.store';
 import { ValueType } from '../../types';
 import { IStudentAnswer } from '../../types/services/evaluation.types';
+import { getLocalStorageData } from '../../utils/getLocalStorageItem';
 import ContentSpan from './ContentSpan';
 
 interface IQuestionContainerProps {
@@ -37,7 +38,7 @@ export default function QuestionContainer({
     markScored: 0,
     multipleChoiceAnswer: '',
     openAnswer: '',
-    studentEvaluation: 'fc7bfa35-ce72-4a04-acda-7df1768a817f',
+    studentEvaluation: getLocalStorageData('studentEvaluationId'),
   };
 
   const history = useHistory();
@@ -54,11 +55,11 @@ export default function QuestionContainer({
     endEvaluation(answer.studentEvaluation, {
       onSuccess: () => {
         toast.success('Evaluation submitted', { duration: 5000 });
+        localStorage.removeItem('studentEvaluationId');
 
         history.push('/dashboard/modules');
       },
       onError: () => {
-        console.log(error);
         toast.error(error + '');
       },
     });

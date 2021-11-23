@@ -3,7 +3,6 @@ import { toast } from 'react-hot-toast';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
-import Icon from '../../components/Atoms/custom/Icon';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -144,26 +143,20 @@ export default function ViewEvaluations({ subjectId, linkTo }: IEvaluationProps)
                               sure you want to do it now ? This action is irreversible.
                             </p>
 
-                            <div className="flex justify-between">
+                            <div className="flex justify-end gap-4">
                               <Button
-                                className="h-6 flex items-center"
+                                styleType="outline"
+                                onClick={() => showConfirmation(false)}>
+                                No
+                              </Button>
+                              <Button
                                 disabled={loading}
                                 onClick={() =>
                                   generateStudentCode(info.id?.toString() || '')
                                 }
                                 type="submit">
-                                <span className="flex items-center">
-                                  <Icon name="loader" useheightandpadding={false} />
-                                  <span className="font-semibold">Yes</span>
-                                </span>
+                                <span className="font-semibold">Yes</span>
                               </Button>
-                              {/* <Button
-                                onClick={() =>
-                                  generateStudentCode(info.id?.toString() || '')
-                                }>
-                                Yes
-                              </Button> */}
-                              <Button onClick={() => showConfirmation(false)}>No</Button>
                             </div>
                           </div>
                         </PopupMolecule>
