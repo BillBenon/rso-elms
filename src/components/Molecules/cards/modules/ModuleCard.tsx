@@ -42,7 +42,11 @@ export default function ModuleCard({ course }: IProps) {
               to={`/dashboard/modules/${course.id}/add-subject`}>
               <Button>Add subject</Button>
             </BrowserLink>
-            <Button styleType="outline">Edit</Button>
+            <BrowserLink
+              className="outline-none"
+              to={`/dashboard/modules/${course.id}/edit/${course.id}`}>
+              <Button styleType="outline">Edit</Button>
+            </BrowserLink>
           </div>
         </div>
       </Tooltip>

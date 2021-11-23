@@ -229,7 +229,7 @@ export default function ProgramDetailsMolecule() {
                 );
               }}
             />
-            \{/* add prerequesite popup */}
+            {/* add prerequesite popup */}
             <Route
               exact
               path={`${path}/modules/:moduleId/add-prereq`}

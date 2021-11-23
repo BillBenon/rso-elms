@@ -11,15 +11,16 @@ import intakeProgramStore from '../../store/administration/intake-program.store'
 import { CommonCardDataType } from '../../types';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
+import EnrollStudent from './EnrollStudent';
 
 function IntakeLevelModule() {
   const history = useHistory();
   const { id, intakeId, intakeProg, level } = useParams<IntakeLevelParam>();
+
   const [levelModules, setlevelModules] = useState<CommonCardDataType[]>([]);
   const { data: levelModuleStore, isLoading } = intakeProgramStore.getModulesByLevel(
     parseInt(level),
   );
-
   useEffect(() => {
     let newModule: CommonCardDataType[] = [];
     levelModuleStore?.data.data.forEach((module) => {
@@ -42,7 +43,6 @@ function IntakeLevelModule() {
   const { data, isLoading: loadPeriod } = intakeProgramStore.getPeriodsByLevel(
     parseInt(level),
   );
-
   return (
     <>
       <TableHeader usePadding={false} showBadge={false} showSearch={false}>
@@ -57,6 +57,7 @@ function IntakeLevelModule() {
             Add academic periods to level
           </Button>
         )}
+        <EnrollStudent />
         <Button
           styleType="outline"
           onClick={() =>

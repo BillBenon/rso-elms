@@ -8,6 +8,7 @@ import intakeProgramStore from '../../store/administration/intake-program.store'
 import { IntakeProgParam } from '../../types/services/intake-program.types';
 import Classes from '../classes/Classes';
 import NewClass from '../classes/NewClass';
+import EnrollStudent from './EnrollStudent';
 import IntakeLevelModule from './IntakeLevelModule';
 import { NewIntakePeriod } from './NewIntakePeriod';
 
@@ -42,6 +43,12 @@ function IntakeProgramLevel() {
         <TabNavigation tabs={tabs}>
           <Switch>
             <Route exact path={`${path}/:level`} render={() => <IntakeLevelModule />} />
+            {/* enroll student to intake program level */}
+            <Route
+              exact
+              path={`${path}/:level/enroll-students`}
+              render={() => <EnrollStudent />}
+            />
             {/* add module to intake program level */}
             <Route path={`${path}/:level/view-class`} render={() => <Classes />} />
             {/* add classes to intake program level */}

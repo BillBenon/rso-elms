@@ -22,6 +22,10 @@ class ScheduleStore {
     });
   }
 
+  createClassTimetable() {
+    return useMutation(scheduleService.createClassTimetable);
+  }
+
   getScheduleById(id: string) {
     return useQuery(['schedules/id', id], () => scheduleService.getScheduleById(id));
   }

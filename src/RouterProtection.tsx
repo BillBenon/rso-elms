@@ -14,6 +14,7 @@ import NewInstitution from './views/insitution/NewInstitution';
 import UpdateInstitution from './views/insitution/UpdateInstitution';
 import IntakesView from './views/intakes/Intakes';
 import Levels from './views/levels/Levels';
+import StudentLevel from './views/levels/StudentLevel';
 import Modules from './views/modules';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicProgram from './views/programs/AcademicPrograms';
@@ -52,7 +53,6 @@ const RouterProtection = () => {
   const AcademicAdminRoutes = () => (
     <>
       {/* start of academic admin pages */}
-      <Route path="/dashboard/modules" component={Modules} />
       <Route path="/dashboard/subjects" component={Subjects} />
       <Route path="/dashboard/schedule" component={ScheduleHome} />
       <Route path="/dashboard/calendar" component={CalendarView} />
@@ -76,7 +76,6 @@ const RouterProtection = () => {
       {/* start of instructor pages */}
       <Route path="/dashboard/evaluations" component={ViewEvaluations} />
       <Route path="/dashboard/calendar" component={CalendarView} />
-      <Route path="/dashboard/modules" component={Modules} />
       <Route path="/dashboard/events" component={Events} />
       {/* end of instructor pages */}
     </>
@@ -86,6 +85,7 @@ const RouterProtection = () => {
     <>
       {/* start of student pages */}
       <Route path="/dashboard/evaluations/student" component={EvaluationTest} />
+      <Route exact path="/dashboard/student/levels/:id" component={StudentLevel} />
       <Route path="/dashboard/modules" component={Modules} />
       <Route path="/dashboard/student/evaluations/" component={EvaluationTest} />
       {/* end of student pages */}
