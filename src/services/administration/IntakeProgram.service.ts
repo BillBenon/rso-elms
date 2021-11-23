@@ -6,6 +6,7 @@ import {
   AddIntakeProgramLevelPeriod,
   AddLevelToModule,
   CreateLevelIntakeProgram,
+  EnrollStudents,
   IntakeLevelModule,
   IntakeProgramLevelPeriodInfo,
   LevelIntakeProgram,
@@ -84,6 +85,11 @@ class IntakeProgramService {
       `academicProgramIntakeLevels/addAcademicProgramLevelToIntakeProgram`,
       newLevel,
     );
+  }
+  public async enrollStudentsToLevel(
+    newStudent: EnrollStudents,
+  ): Promise<AxiosResponse<Response<LevelIntakeProgram>>> {
+    return await adminstrationAxios.post(`students/enrollStudentInLevel`, newStudent);
   }
 
   public async addPeriodsToLevel(

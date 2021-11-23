@@ -50,6 +50,9 @@ class IntakeProgramStore {
   addModuleToLevel() {
     return useMutation(intakeProgramService.addModuleToLevel);
   }
+  enrollStudentsToLevel() {
+    return useMutation(intakeProgramService.enrollStudentsToLevel);
+  }
 }
 
 export default new IntakeProgramStore();

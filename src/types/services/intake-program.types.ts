@@ -46,6 +46,12 @@ export interface IntakeProgramLevelPeriodInfo extends Table {
   academic_period_id: string;
   academic_program_intake_level: LevelIntakeProgram;
 }
+
+export interface EnrollStudents {
+  academic_year_id: string;
+  intake_program_student_id: number;
+  program_level_id: string;
+}
 export interface LevelIntakeProgram extends Table {
   academic_year: IAcademicYearInfo;
   intake_program: IntakeProgramInfo;
