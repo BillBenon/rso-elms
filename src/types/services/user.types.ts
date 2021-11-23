@@ -114,7 +114,6 @@ export interface UpdateUserInfo {
   sex: GenderStatus;
   spouse_name: string;
   user_type: UserType;
-  send_communication_msg: SendCommunicationMsg;
   username: string;
   send_communication_msg: SendCommunicationMsg;
 }
