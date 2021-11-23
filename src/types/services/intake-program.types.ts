@@ -103,6 +103,15 @@ export interface AddLevelToModule {
   weight: number;
 }
 
+export interface StudentIntakeProgramLevel extends Table {
+  intake_program_student: StudentIntakeProgram;
+  academic_year_program_level: LevelIntakeProgram;
+  enrolment_status: EnrollmentStatus;
+  promotion_status: PromotionStatus;
+  position: number;
+  intake_program_student_id: number;
+  academic_year_program_level_id: number;
+}
 export interface StudentIntakeProgram extends Table {
   student: Student;
   intake_program: IntakeProgram;
@@ -159,4 +168,11 @@ export enum EnrollmentStatus {
   NEW,
   RETAKE = 'RETAKE',
   DISMISSED = 'DISMISSED',
+}
+
+export enum PromotionStatus {
+  PROMOTED = 'PROMOTED',
+  RETAKE = 'RETAKE',
+  DISMISSED = 'DISMISSED',
+  PENDING = 'PENDING',
 }

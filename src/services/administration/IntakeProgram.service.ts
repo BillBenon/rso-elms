@@ -13,6 +13,7 @@ import {
   StudentIntakeProgram,
 } from '../../types/services/intake-program.types';
 import { ModuleInfo } from '../../types/services/modules.types';
+import { StudentIntakeProgramLevel } from './../../types/services/intake-program.types';
 
 class IntakeProgramService {
   public async getStudentsByIntakeProgram(
@@ -24,9 +25,9 @@ class IntakeProgramService {
   }
   public async getStudentsByIntakeProgramLevel(
     intakeProgramlevelId: string,
-  ): Promise<AxiosResponse<Response<StudentIntakeProgram[]>>> {
+  ): Promise<AxiosResponse<Response<StudentIntakeProgramLevel[]>>> {
     return await adminstrationAxios.get(
-      `/students/getStudentsByIntakeProgramLevel/${intakeProgramlevelId}`,
+      `/students/getStudentsInIntakeProgramLevel/${intakeProgramlevelId}`,
     );
   }
 
