@@ -13,6 +13,7 @@ import {
   StudentIntakeProgram,
 } from '../../types/services/intake-program.types';
 import { ModuleInfo } from '../../types/services/modules.types';
+import { Student } from '../../types/services/user.types';
 import { StudentIntakeProgramLevel } from './../../types/services/intake-program.types';
 
 class IntakeProgramService {
@@ -39,6 +40,20 @@ class IntakeProgramService {
     );
   }
 
+  public async getStudentShipByUserId(
+    userId: string,
+  ): Promise<AxiosResponse<Response<Student[]>>> {
+    return await adminstrationAxios.get(`/students/getStudentShipsByUserI/${userId}`);
+  }
+
+  public async getIntakeProgramsByStudent(
+    studentId: string,
+  ): Promise<AxiosResponse<Response<StudentIntakeProgram[]>>> {
+    return await adminstrationAxios.get(
+      `/students/getIntakeProgramsByStudent/${studentId}`,
+    );
+  }
+
   public async getLevelsByIntakeProgram(
     intakeProgramId: string,
   ): Promise<AxiosResponse<Response<LevelIntakeProgram[]>>> {
@@ -52,6 +67,14 @@ class IntakeProgramService {
   ): Promise<AxiosResponse<Response<LevelIntakeProgram>>> {
     return await adminstrationAxios.get(
       `academicProgramIntakeLevels/getAcademicProgramIntakeLevelById/${levelId}`,
+    );
+  }
+
+  public async getStudentLevels(
+    intakeProgramStudentId: string,
+  ): Promise<AxiosResponse<Response<StudentIntakeProgramLevel[]>>> {
+    return await adminstrationAxios.get(
+      `students/getIntakeProgramLevelsOfStudent/${intakeProgramStudentId}`,
     );
   }
 

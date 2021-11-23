@@ -16,11 +16,11 @@ import EnrollStudent from './EnrollStudent';
 function IntakeLevelModule() {
   const history = useHistory();
   const { id, intakeId, intakeProg, level } = useParams<IntakeLevelParam>();
+
   const [levelModules, setlevelModules] = useState<CommonCardDataType[]>([]);
   const { data: levelModuleStore, isLoading } = intakeProgramStore.getModulesByLevel(
     parseInt(level),
   );
-
   useEffect(() => {
     let newModule: CommonCardDataType[] = [];
     levelModuleStore?.data.data.forEach((module) => {
@@ -43,7 +43,6 @@ function IntakeLevelModule() {
   const { data, isLoading: loadPeriod } = intakeProgramStore.getPeriodsByLevel(
     parseInt(level),
   );
-
   return (
     <>
       <TableHeader usePadding={false} showBadge={false} showSearch={false}>
