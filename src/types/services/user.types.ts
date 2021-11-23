@@ -115,6 +115,7 @@ export interface UpdateUserInfo {
   spouse_name: string;
   user_type: UserType;
   username: string;
+  send_communication_msg: SendCommunicationMsg;
 }
 
 export interface CreateUserInfo {

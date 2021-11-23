@@ -30,7 +30,7 @@ function AddStudents({ classId }: IAddStudent) {
     let studentsView: UserView[] = [];
     studentsProgram?.forEach((stud) => {
       let studentView: UserView = {
-        id: stud.student.user.id,
+        id: stud.student.id,
         first_name: stud.student.user.first_name,
         last_name: stud.student.user.last_name,
         image_url: stud.student.user.image_url,
