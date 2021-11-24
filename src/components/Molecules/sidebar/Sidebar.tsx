@@ -55,6 +55,7 @@ export default function Sidebar() {
     ];
 
     const studentLinks: linkProps[] = [
+      { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
       getLevels.length > 0
         ? {
             title: 'Levels',
@@ -67,7 +68,6 @@ export default function Sidebar() {
             icon: 'level',
           },
       // { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
-      { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
     ];
 
     if (authUser?.user_type == UserType.SUPER_ADMIN)

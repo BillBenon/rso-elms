@@ -40,7 +40,7 @@ export default function Redirecting() {
 
       redirectTo('/dashboard/users');
     } else if (data?.data.data.user_type === UserType.INSTRUCTOR) {
-      redirectTo('/dashboard/evaluations');
+      redirectTo('/dashboard/schedule');
     } else if (data?.data.data.user_type === UserType.STUDENT) {
       getLevels.length > 0 &&
         redirectTo(`/dashboard/student/levels/${getLevels[0].id || ''}`);
