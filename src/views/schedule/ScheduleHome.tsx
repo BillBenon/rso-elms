@@ -13,14 +13,14 @@ import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewEvent from '../../components/Organisms/calendar/NewEvent';
 import NewVenue from '../../components/Organisms/calendar/NewVenue';
-import programStore from '../../store/administration/program.store';
+import { authenticatorStore } from '../../store/administration';
+import { intakeStore } from '../../store/administration/intake.store';
 import { CommonCardDataType, Link } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import CalendarView from './Calendar';
-import ProgramLevelClasses from './ProgramsLevelClases';
+import IntakePrograms from './IntakePrograms';
 import TimeTable from './TimeTable';
 
 const list: Link[] = [
@@ -30,27 +30,25 @@ const list: Link[] = [
 ];
 
 export default function ScheduleHome() {
-  const { data, isLoading } = programStore.fetchPrograms();
   const history = useHistory();
   const { path } = useRouteMatch();
 
-  let programs: CommonCardDataType[] = [];
+  const { data: userInfo } = authenticatorStore.authUser();
+  const { data, isLoading } = intakeStore.getIntakesByAcademy(
+    userInfo?.data.data.academy.id.toString()!,
+  );
 
-  data?.data.data.map((p) => {
-    let prog: CommonCardDataType = {
-      id: p.id,
+  let intakes: CommonCardDataType[] =
+    data?.data.data.map((intake) => ({
+      id: intake.id,
+      code: intake.code.toUpperCase(),
+      description: intake.description,
+      title: intake.title || `------`,
       status: {
-        type: advancedTypeChecker(p.generic_status),
-        text: p.generic_status.toString(),
+        type: advancedTypeChecker(intake.intake_status),
+        text: intake.intake_status.toString(),
       },
-      code: p.code,
-      title: p.name,
-      subTitle: p.type.replaceAll('_', ' '),
-      description: p.description,
-    };
-
-    programs.push(prog);
-  });
+    })) || [];
 
   const handleClose = () => {
     history.goBack();
@@ -61,14 +59,14 @@ export default function ScheduleHome() {
       <BreadCrumb list={list} />
 
       <Switch>
-        <Route exact path={`${path}/program/:id`} component={ProgramLevelClasses} />
+        <Route path={`${path}/intake/:id`} component={IntakePrograms} />
         <Route path={`${path}/calendar/:id`} component={CalendarView} />
         <Route path={`${path}/timetable/:id`} component={TimeTable} />
         <Route
           path={`${path}`}
           render={() => (
             <>
-              <TableHeader totalItems={`${programs.length} programs`} title={'Schedule'}>
+              <TableHeader totalItems={`${intakes.length} intakes`} title={'Schedule'}>
                 <div className="flex gap-4">
                   <BrowserLink to={`${path}/event/new`}>
                     <Button>Add event</Button>
@@ -79,15 +77,15 @@ export default function ScheduleHome() {
                 </div>
               </TableHeader>
               <div className="mt-4 flex gap-4 flex-wrap">
-                {programs.length === 0 && isLoading ? (
+                {intakes.length === 0 && isLoading ? (
                   <Loader />
                 ) : (
-                  programs.map((program) => (
+                  intakes.map((intake) => (
                     <CommonCardMolecule
-                      key={program.id}
-                      data={program}
+                      key={intake.id}
+                      data={intake}
                       handleClick={() =>
-                        history.push(`/dashboard/schedule/program/${program.id}`)
+                        history.push(`/dashboard/schedule/intake/${intake.id}`)
                       }
                     />
                   ))

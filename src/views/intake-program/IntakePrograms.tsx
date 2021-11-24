@@ -192,7 +192,13 @@ function IntakePrograms() {
                               {Common.description}
                             </Heading>
                           </div>
-                          <div className="mt-4 space-x-4">
+                          <div className="my-4">
+                            <Link
+                              to={`/dashboard/schedule/programs/${intakeId}/${Common.id}/edit`}>
+                              <Button styleType="text">View schedule</Button>
+                            </Link>
+                          </div>
+                          <div className="space-x-4">
                             <Link
                               to={`/dashboard/intakes/programs/${intakeId}/${Common.id}/edit`}>
                               <Button>Edit program</Button>
