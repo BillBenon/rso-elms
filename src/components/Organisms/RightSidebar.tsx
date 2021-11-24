@@ -17,6 +17,7 @@ interface IRightSidebar {
   handleClose: () => void;
   data: UserView[];
   selectorActions?: { name: string; handleAction: (_data?: string[]) => void }[];
+  dataLabel: string;
 }
 
 function RightSidebar({
@@ -25,6 +26,7 @@ function RightSidebar({
   handleClose,
   selectorActions,
   data,
+  dataLabel = '',
 }: IRightSidebar) {
   const handleSearch = () => {};
   const [selected, setSelected] = useState(new Set(''));
@@ -107,6 +109,10 @@ function RightSidebar({
             width="w-48"
           />
         </div>
+
+        <Heading fontSize="sm" fontWeight="semibold" color="primary" className="pb-4">
+          {dataLabel}
+        </Heading>
 
         {data.map((user) => (
           <div className="flex w-full items-center pb-6 gap-4" key={user.id}>

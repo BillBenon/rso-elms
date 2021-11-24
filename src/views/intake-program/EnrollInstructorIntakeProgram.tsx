@@ -86,6 +86,7 @@ function EnrollInstructorIntakeProgram() {
             handleAction: (data?: string[]) => add(data),
           },
         ]}
+        dataLabel={'Instructors in this academy'}
       />
     </div>
   );

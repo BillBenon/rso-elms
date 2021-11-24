@@ -18,6 +18,7 @@ type IUserPreview = {
   handleSelect?: (_selected: string[] | null) => void;
   buttonAction?: () => void;
   children?: ReactNode;
+  dataLabel: string;
 };
 
 export default function UsersPreview({
@@ -26,6 +27,7 @@ export default function UsersPreview({
   data,
   children,
   totalUsers,
+  dataLabel = '',
 }: IUserPreview) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
@@ -107,6 +109,7 @@ export default function UsersPreview({
               },
             },
           ]}
+          dataLabel={dataLabel}
         />
       )}
     </>

@@ -81,6 +81,7 @@ function AddStudents({ classId }: IAddStudent) {
               handleAction: (data?: string[]) => add(data),
             },
           ]}
+          dataLabel={'Students in this level'}
         />
       ) : (
         <PopupMolecule open={true}>
