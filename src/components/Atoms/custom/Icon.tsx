@@ -18,6 +18,7 @@ const iconStyle: colorStyleType = {
   primary: '#0D4B44',
   error: '#EF4444',
   warning: '#FACD23',
+  main: '#FFF',
   success: '#3CD278',
   'txt-secondary': '#949ca5',
 };
