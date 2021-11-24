@@ -3,7 +3,6 @@ import { toast } from 'react-hot-toast';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
-import Icon from '../../components/Atoms/custom/Icon';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -75,6 +74,11 @@ export default function ViewEvaluations({ subjectId, linkTo }: IEvaluationProps)
     });
   }
 
+  function goToNewEvaluation() {
+    setLocalStorageData('currentStep', 0);
+    history.push(`${path}/new`);
+  }
+
   useEffect(() => {
     let formattedEvals: CommonCardDataType[] = [];
     data?.data.data.map((evaluation) => {
@@ -110,9 +114,7 @@ export default function ViewEvaluations({ subjectId, linkTo }: IEvaluationProps)
                   </section>
                   {isSuccess ? (
                     <TableHeader title="Evaluations" showBadge={false} showSearch={false}>
-                      <Link to={`${path}/new`}>
-                        <Button>New Evaluation</Button>
-                      </Link>
+                      <Button onClick={goToNewEvaluation}>New Evaluation</Button>
                     </TableHeader>
                   ) : null}
                 </>
@@ -144,26 +146,20 @@ export default function ViewEvaluations({ subjectId, linkTo }: IEvaluationProps)
                               sure you want to do it now ? This action is irreversible.
                             </p>
 
-                            <div className="flex justify-between">
+                            <div className="flex justify-starg">
+                              {/* <Button
+                                styleType="outline"
+                                onClick={() => showConfirmation(false)}>
+                                No
+                              </Button> */}
                               <Button
-                                className="h-6 flex items-center"
                                 disabled={loading}
                                 onClick={() =>
                                   generateStudentCode(info.id?.toString() || '')
                                 }
                                 type="submit">
-                                <span className="flex items-center">
-                                  <Icon name="loader" useheightandpadding={false} />
-                                  <span className="font-semibold">Yes</span>
-                                </span>
+                                <span className="font-semibold">Start Evaluation</span>
                               </Button>
-                              {/* <Button
-                                onClick={() =>
-                                  generateStudentCode(info.id?.toString() || '')
-                                }>
-                                Yes
-                              </Button> */}
-                              <Button onClick={() => showConfirmation(false)}>No</Button>
                             </div>
                           </div>
                         </PopupMolecule>

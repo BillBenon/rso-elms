@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
+import { queryClient } from '../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../store/administration';
 import { evaluationStore } from '../../../../store/administration/evaluation.store';
 import usersStore from '../../../../store/administration/users.store';
@@ -83,6 +84,7 @@ export default function EvaluationSettings({ handleGoBack }: IEvaluationProps) {
         toast.success('Settings added', { duration: 5000 });
         localStorage.removeItem('evaluationId');
         setLocalStorageData('currentStep', 0);
+        queryClient.invalidateQueries(['evaluations']);
         history.push('/dashboard/evaluations');
       },
       onError: (error) => {

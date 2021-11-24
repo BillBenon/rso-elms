@@ -29,6 +29,7 @@ const StyledSVGIcon = styled(ReactSVG)`
         width: ${size}px;
         height: ${size}px;
       `}
+
     ${({ transform }: IProps) =>
       transform &&
       css`
