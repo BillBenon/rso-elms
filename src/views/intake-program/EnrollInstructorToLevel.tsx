@@ -13,11 +13,10 @@ import { UserView } from '../../types/services/user.types';
 
 function EnrollInstructorToLevel() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { intakeProg, intakeId, level: levelId } = useParams<IntakeLevelParam>();
+  const { id, intakeId, level: levelId } = useParams<IntakeLevelParam>();
 
   const instructorsInProgram =
-    intakeProgramStore.getInstructorsByIntakeProgram(intakeProg, intakeId).data?.data
-      .data || [];
+    intakeProgramStore.getInstructorsByIntakeProgram(id, intakeId).data?.data.data || [];
 
   const level = intakeProgramStore.getIntakeLevelById(levelId).data?.data.data;
 
@@ -74,6 +73,7 @@ function EnrollInstructorToLevel() {
             handleAction: (data?: string[]) => add(data),
           },
         ]}
+        dataLabel={'Instructors in this program'}
       />
     </div>
   );
