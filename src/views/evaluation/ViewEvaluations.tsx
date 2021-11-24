@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
-import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -74,6 +74,11 @@ export default function ViewEvaluations({ subjectId, linkTo }: IEvaluationProps)
     });
   }
 
+  function goToNewEvaluation() {
+    setLocalStorageData('currentStep', 0);
+    history.push(`${path}/new`);
+  }
+
   useEffect(() => {
     let formattedEvals: CommonCardDataType[] = [];
     data?.data.data.map((evaluation) => {
@@ -109,9 +114,7 @@ export default function ViewEvaluations({ subjectId, linkTo }: IEvaluationProps)
                   </section>
                   {isSuccess ? (
                     <TableHeader title="Evaluations" showBadge={false} showSearch={false}>
-                      <Link to={`${path}/new`}>
-                        <Button>New Evaluation</Button>
-                      </Link>
+                      <Button onClick={goToNewEvaluation}>New Evaluation</Button>
                     </TableHeader>
                   ) : null}
                 </>
@@ -143,19 +146,19 @@ export default function ViewEvaluations({ subjectId, linkTo }: IEvaluationProps)
                               sure you want to do it now ? This action is irreversible.
                             </p>
 
-                            <div className="flex justify-end gap-4">
-                              <Button
+                            <div className="flex justify-starg">
+                              {/* <Button
                                 styleType="outline"
                                 onClick={() => showConfirmation(false)}>
                                 No
-                              </Button>
+                              </Button> */}
                               <Button
                                 disabled={loading}
                                 onClick={() =>
                                   generateStudentCode(info.id?.toString() || '')
                                 }
                                 type="submit">
-                                <span className="font-semibold">Yes</span>
+                                <span className="font-semibold">Start Evaluation</span>
                               </Button>
                             </div>
                           </div>

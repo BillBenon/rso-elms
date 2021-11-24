@@ -138,6 +138,7 @@ export interface IEvaluationChoices {
 
 export interface IEvaluationQuestion {
   evaluation_id: string;
+  multipleChoiceAnswers?: IMultipleChoice[];
   mark: number;
   parent_question_id: string;
   question: string;
@@ -145,9 +146,15 @@ export interface IEvaluationQuestion {
   question_type: IQuestionType;
 }
 
+export interface IMultipleChoice {
+  answer_content: string;
+  correct: boolean;
+}
+
 export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
   sub_questions: IEvaluationQuestion[];
   submitted: boolean;
+  choices: IMultipleChoice[];
 }
 
 export interface IEvaluationQuestionsInfo {

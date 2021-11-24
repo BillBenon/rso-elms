@@ -12,13 +12,13 @@ export default function Redirecting() {
   const [userNotAllowed, setUserNotAllowed] = useState(false);
   const { data, isLoading } = authenticatorStore.authUser();
   const history = useHistory();
+
   useEffect(() => {
     const notAllowed =
       data?.data.data.user_type === UserType.SUPER_ADMIN ||
       data?.data.data.user_type === UserType.ADMIN ||
-      data?.data.data.user_type === UserType.INSTRUCTOR
-        ? false
-        : true;
+      data?.data.data.user_type === UserType.INSTRUCTOR;
+    data?.data.data.user_type === UserType.STUDENT ? false : true;
     if (data?.data.data.user_type === UserType.SUPER_ADMIN)
       redirectTo('/dashboard/users');
 
@@ -30,7 +30,7 @@ export default function Redirecting() {
     } else if (data?.data.data.user_type === UserType.INSTRUCTOR) {
       redirectTo('/dashboard/evaluations');
     } else if (data?.data.data.user_type === UserType.STUDENT) {
-      redirectTo('/dashboard/modules');
+      redirectTo(`/dashboard/schedule`);
     }
 
     setUserNotAllowed(notAllowed && !isLoading);

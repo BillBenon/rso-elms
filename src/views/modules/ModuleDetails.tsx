@@ -12,9 +12,11 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import UpdateModuleForm from '../../components/Organisms/forms/modules/UpdateModuleForm';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
+import { authenticatorStore } from '../../store/administration';
 import { moduleStore } from '../../store/administration/modules.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { CommonCardDataType, Link, ParamType } from '../../types';
+import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import SubjectDetails from '../subjects/SubjectDetails';
 
@@ -27,6 +29,7 @@ export default function ModuleDetails() {
 
   const subjectData = subjectStore.getSubjectsByModule(id);
   const moduleData = moduleStore.getModuleById(id);
+  const authUser = authenticatorStore.authUser().data?.data.data;
 
   const tabs = [
     {
@@ -113,11 +116,13 @@ export default function ModuleDetails() {
                     </button>
                   </div>
 
-                  <div className="flex gap-3">
-                    <Button onClick={() => history.push(`${url}/add-subject`)}>
-                      Add new Subject
-                    </Button>
-                  </div>
+                  {authUser?.user_type !== UserType.STUDENT && (
+                    <div className="flex gap-3">
+                      <Button onClick={() => history.push(`${url}/add-subject`)}>
+                        Add new Subject
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </div>
               <TabNavigation tabs={tabs}>

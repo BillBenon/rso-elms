@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
-import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import TableHeader from '../../components/Molecules/table/TableHeader';
-import { authenticatorStore } from '../../store/administration';
-import { moduleStore } from '../../store/administration/modules.store';
-import { CommonCardDataType, Link } from '../../types';
+import intakeProgramStore from '../../store/administration/intake-program.store';
+import { CommonCardDataType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ModuleDetails from './ModuleDetails';
 
+interface Param {
+  level: string;
+}
+
 export default function Modules() {
-  const { data: userInfo } = authenticatorStore.authUser();
-  const { data, isLoading, isSuccess, isError } = moduleStore.getModulesByAcademy(
-    userInfo?.data.data.academy.id.toString() || '',
+  const { level } = useParams<Param>();
+  const { data, isLoading, isSuccess, isError } = intakeProgramStore.getModulesByLevel(
+    parseInt(level),
   );
-  const history = useHistory();
   const [modules, setModules] = useState<CommonCardDataType[]>([]);
   const { path } = useRouteMatch();
 
@@ -31,9 +31,9 @@ export default function Modules() {
             type: advancedTypeChecker(module.generic_status),
             text: module.generic_status.toString(),
           },
-          code: module.code,
-          title: module.name,
-          description: module.description,
+          code: module.module.code,
+          title: module.module.name,
+          description: module.module.description,
           id: module.id,
         });
       });
@@ -41,14 +41,6 @@ export default function Modules() {
       setModules(newModules);
     } else if (isError) toast.error('error occurred when loading modules');
   }, [data]);
-
-  function handleSearch() {}
-
-  const list: Link[] = [
-    { to: 'home', title: 'home' },
-    { to: 'modules', title: 'modules' },
-    { to: 'subjects', title: 'subjects' },
-  ];
 
   return (
     <>
@@ -66,7 +58,7 @@ export default function Modules() {
             render={() => {
               return (
                 <>
-                  <section>
+                  {/* <section>
                     <BreadCrumb list={list}></BreadCrumb>
                   </section>
                   <section className="">
@@ -74,21 +66,19 @@ export default function Modules() {
                       totalItems={modules.length + ' modules'}
                       title="Modules"
                       handleSearch={handleSearch}>
-                      {/* <Button onClick={() => history.push(`${path}/add`)}>
+                       <Button onClick={() => history.push(`${path}/add`)}>
                         Add Module
-                      </Button> */}
+                      </Button> 
                     </TableHeader>
-                  </section>
+                  </section> */}
                   <section className="flex flex-wrap justify-start gap-2 mt-2">
                     {isLoading ? (
                       <Loader />
                     ) : modules.length == 0 ? (
                       <NoDataAvailable
-                        icon="module"
-                        buttonLabel="Go to divisions"
-                        title={'No department available'}
-                        handleClick={() => history.push(`/dashboard/divisions`)}
-                        description="You should look the modules from the department they belong to"
+                        showButton={false}
+                        title={'No Modules available in this level'}
+                        description="This level has not received any planned modules to take. Please wait for the admin to add some"
                       />
                     ) : (
                       modules.map((course, index) => (
