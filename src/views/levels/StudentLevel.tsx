@@ -1,15 +1,13 @@
 import React from 'react';
 import { useRouteMatch } from 'react-router';
-import { Link } from 'react-router-dom';
 
-import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import { authenticatorStore } from '../../store/administration';
 import intakeProgramStore from '../../store/administration/intake-program.store';
-import IntakeLevelModule from '../intake-program/IntakeLevelModule';
+import Modules from '../modules';
 
 function StudentLevel() {
   const { url } = useRouteMatch();
@@ -44,19 +42,15 @@ function StudentLevel() {
         <section>
           <BreadCrumb list={list}></BreadCrumb>
         </section>
-        <section className="">
-          <TableHeader title="Levels" totalItems={levels?.length || 0}>
-            <Link to={`${url}/add`}>
-              <Button>Add Level</Button>
-            </Link>
-          </TableHeader>
+        <section>
+          <TableHeader title="Levels" totalItems={levels?.length || 0} />
         </section>
 
         {getLevels.isLoading ? (
           <Loader />
         ) : (
           <TabNavigation tabs={tabs}>
-            <IntakeLevelModule />
+            <Modules />
           </TabNavigation>
         )}
       </main>

@@ -66,7 +66,7 @@ function EnrollStudent() {
       <RightSidebar
         open={sidebarOpen}
         handleClose={() => setSidebarOpen(false)}
-        label="Add Students to class"
+        label="Enroll students to level"
         data={students}
         selectorActions={[
           {
@@ -74,6 +74,7 @@ function EnrollStudent() {
             handleAction: (data?: string[]) => add(data),
           },
         ]}
+        dataLabel={'Students in this program'}
       />
     </div>
   );

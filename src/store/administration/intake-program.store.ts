@@ -13,6 +13,17 @@ class IntakeProgramStore {
       intakeProgramService.getStudentsByIntakeProgramLevel(intakeProgramlevelId),
     );
   }
+  getInstructorsByIntakeProgram(programId: string, intakeId: string) {
+    return useQuery(['instructors/programId/intake', programId, intakeId], () =>
+      intakeProgramService.getInstructorsByIntakeProgram(programId, intakeId),
+    );
+  }
+  getInstructorsByIntakeProgramLevel(instructorId: string) {
+    return useQuery(['instructors/intakeprogram', instructorId], () =>
+      intakeProgramService.getInstructorsByIntakeProgramLevel(instructorId),
+    );
+  }
+
   getStudentsByAcademy(academyId: string) {
     return useQuery(['students/academyId', academyId], () =>
       intakeProgramService.getStudentsByAcademy(academyId),
@@ -69,6 +80,12 @@ class IntakeProgramStore {
   }
   enrollStudentsToLevel() {
     return useMutation(intakeProgramService.enrollStudentsToLevel);
+  }
+  enrollStudentToProgram() {
+    return useMutation(intakeProgramService.enrollStudentToProgram);
+  }
+  enrollInstructorToProgram() {
+    return useMutation(intakeProgramService.enrollInstructorToProgram);
   }
 }
 
