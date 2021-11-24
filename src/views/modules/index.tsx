@@ -34,7 +34,7 @@ export default function Modules() {
           code: module.module.code,
           title: module.module.name,
           description: module.module.description,
-          id: module.id,
+          id: module.module.id,
         });
       });
 
