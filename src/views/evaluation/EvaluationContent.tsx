@@ -1,18 +1,22 @@
+import { pick } from 'lodash';
 import moment from 'moment';
-import React from 'react';
-import { Route, useParams, useRouteMatch, Switch } from 'react-router-dom';
-
+import React, { useEffect, useState } from 'react';
+import { Route, useParams, useRouteMatch, Switch, useHistory } from 'react-router-dom';
+import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
 import Table from '../../components/Molecules/table/Table';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import { evaluationStore } from '../../store/administration/evaluation.store';
+import { markingStore } from '../../store/administration/marking.store';
 import { ParamType } from '../../types';
 import ContentSpan from './ContentSpan';
 import StudentAnswersMarking from './StudentAnswersMarking';
 
 export default function EvaluationContent() {
+  const history = useHistory();
   const { id } = useParams<ParamType>();
   const { url, path } = useRouteMatch();
+  const [submissions, setSubmissions] = useState([]);
   const evaluationQuestions = evaluationStore.getEvaluationQuestions(id).data?.data.data;
 
   const tabs = [
@@ -26,34 +30,46 @@ export default function EvaluationContent() {
     },
   ];
 
-  const data2 = [
+  const actions = [
     {
-      id: 1,
-      'Student code': '034909',
-      status: 'active',
-      score: '25',
-      code: 'Exam',
-      'time used': '24:50',
-    },
-    {
-      id: 2,
-      'Student code': '034909',
-      status: 'pending',
-      score: '25',
-      code: 'Exam',
-      'time used': '32:00',
-    },
-    {
-      id: 3,
-      'Student code': '034909',
-      status: 'inactive',
-      score: '25',
-      code: 'Exam',
-      'time used': '20:11',
+      name: 'Mark Answers',
+      handleAction: (id: string | number | undefined) => {
+        history.push({ pathname: `${url}/submissions/${id}` });
+      },
     },
   ];
 
+  useEffect(() => {
+    let formattedSubs: any = [];
+
+    if (studentEvaluations) {
+      const filteredInfo = studentEvaluations.map((submission: any) =>
+        pick(submission, [
+          'id',
+          'code',
+          'markingStatus',
+          'obtainedMark',
+          'totalMark',
+        ]),
+      );
+
+      filteredInfo?.map((submission: any) => {
+        let filteredData: any = {
+          id: submission.id.toString(),
+          'Student Code': submission.code,
+          'Obtained Marks': submission.obtainedMark,
+          'Total Marks': submission.totalMark,
+          status: submission.markingStatus,
+        };
+        formattedSubs.push(filteredData);
+      });
+
+      studentEvaluations && setSubmissions(formattedSubs);
+    }
+  })
+
   const { data: evaluationInfo } = evaluationStore.getEvaluationById(id).data?.data || {};
+  const studentEvaluations = markingStore.getEvaluationStudentEvaluations(id).data?.data.data || []
 
   return (
     <div className="block pr-24 pb-8 w-11/12">
@@ -65,13 +81,19 @@ export default function EvaluationContent() {
             exact
             path={`${path}/submissions`}
             render={() => (
+              <>
+              <div className="w-full flex justify-end mb-4">
+                <Button>Publish results</Button>
+              </div>
               <Table<any>
-                statusColumn="status"
-                data={data2}
+                statusColumn={"status"}
+                actions={actions}
+                data={submissions}
                 hide={['id']}
                 uniqueCol={'id'}
                 // actions={actions
               />
+              </>
             )}
           />
         </div>

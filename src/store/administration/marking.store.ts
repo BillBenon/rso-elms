@@ -18,7 +18,12 @@ getStudentEvaluationById(id: string) {
     return useQuery(['studentEvaluation', id], () => markingService.getStudentEvaluationById(id));
   }
 
+  getEvaluationStudentEvaluations(id: string) {
+    return useQuery(['evaluation/studentEvaluations', id], () => markingService.getAllStudentEvaluationsByEvaluation(id));
+  }
+
 }
+
 
 export const markingStore = new MarkingStore();
 

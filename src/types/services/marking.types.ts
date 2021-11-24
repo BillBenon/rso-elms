@@ -9,6 +9,16 @@
       answer_id: string;
       mark: number;
   }
+
+  export interface MarkingCorrection{
+    marked: boolean,
+    markScored: number,
+    answerId: string
+  }
+  export interface MarkAllEvaluationQuestions{
+      studentEvaluation: string;
+      correction: MarkingCorrection[];
+  }
   
   export interface StudentAnswerInfo{
       openAnswer: string;
