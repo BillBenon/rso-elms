@@ -1,29 +1,23 @@
 import '../../styles/components/Molecules/correction/marking.scss'
 import React, { useState,useEffect } from 'react';
 import toast from 'react-hot-toast';
-import { Route, useParams, Link, useRouteMatch, Switch } from 'react-router-dom';
+import { Route, useParams, Link, useRouteMatch,useHistory, Switch } from 'react-router-dom';
 import { CommonCardDataType, Link as LinkList } from '../../types';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import { ParamType } from '../../types';
 import Button from '../../components/Atoms/custom/Button';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import Icon from '../../components/Atoms/custom/Icon';
 import StudentAnswer from '../../components/Molecules/cards/correction/StudentAnswer';
 import Pagination from '../../components/Molecules/Pagination';
 import { markingStore } from '../../store/administration/marking.store';
-
-
-export interface MarkingCorrection{
-  marked: boolean,
-  mark_scored: number,
-  answer_id: string
-}
+import { MarkingCorrection } from '../../types/services/marking.types';
 
 export default function StudentAnswersMarking() {
     const { id } = useParams<ParamType>();
-    const { path } = useRouteMatch();
+    const history = useHistory();
     const studentAnswers = markingStore.getStudentEvaluationAnswers(id).data?.data.data;
-    const [totalMarks, setTotalMarks] = useState(0);
+    const studentEvaluation = markingStore.getStudentEvaluationById(id).data?.data.data;
+    const [totalMarks, setTotalMarks] = useState(studentEvaluation?.obtainedMark || 0);
     const [correction, setCorrection] = useState<Array<MarkingCorrection>>([]);
     const [rowsOnPage, setRowsOnPage] = useState(3);
     const [currentPage, setCurrentPage] = useState(1)
@@ -34,7 +28,11 @@ export default function StudentAnswersMarking() {
       );
     useEffect(() => {
         setCurrentRows(studentAnswers?.slice(indexOfFirstRow, indexOfLastRow));
-      }, [currentPage]);
+        setCorrection([]);
+        studentAnswers?.forEach(element => {
+          setCorrection([...correction, {markScored: element.mark_scored, answerId: element.answer_id, marked: element.marked}])
+        });
+      }, [studentAnswers,indexOfFirstRow,indexOfLastRow]);
     const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
     const list: LinkList[] = [
         { to: '/', title: 'Instructor' },
@@ -45,22 +43,22 @@ export default function StudentAnswersMarking() {
 
       const { mutate } = markingStore.finishMarking();
 
-      function updateQuestionPoints(answer_id: string, points: number){
+      function updateQuestionPoints(answer_id: string, points: number, marked: boolean){
 
         var flag: number = 0;
 
         correction.forEach(element => {
           
-          if(element.answer_id == answer_id){
+          if(element.answerId == answer_id){
             flag++;
             const newCorretion:MarkingCorrection[] = correction.map((item) => {
-              if (item.answer_id === answer_id) {
+              if (item.answerId === answer_id) {
                 const updatedItem:MarkingCorrection = {
                   ...item,
                   marked: true,
-                  mark_scored: points,
+                  markScored: points,
                 };
-                setTotalMarks(totalMarks-item.mark_scored+points);
+                setTotalMarks(totalMarks-item.markScored+points);
                 return updatedItem;
               }
         
@@ -71,32 +69,42 @@ export default function StudentAnswersMarking() {
           }
         })
         if(flag == 0){
-          setCorrection([...correction,{answer_id:answer_id,mark_scored: points, marked: true}]);
+          // if(marked){
+
+          //   const answer = studentAnswers?.find(data => data.answerId == answer_id);
+          //   setCorrection([...correction,{answerId:answer_id,markScored: points, marked: true}]);
+          //   setTotalMarks(totalMarks+points-(answer.mark_scored || 0));
+          // }
+          // else{
+          setCorrection([...correction,{answerId:answer_id,markScored: points, marked: true}]);
           setTotalMarks(totalMarks+points)
+        // }
         }
-        else{
-        
-      }
       }
 
       function submitMarking(){
-          mutate({mark: totalMarks, answer_id: 'e'}, {
+        if(correction.length == (studentAnswers?.length || 0)){
+          mutate({studentEvaluation: id, correction: correction}, {
             onSuccess: () => {
               toast.success('Marking finished', { duration: 5000 });
+              history.push('/dashboard/evaluations');
             },
             onError: (error) => {
               console.error(error);
               toast.error(error + '');
             },
           });
-          
+        }
+        else{
+        toast.error('Some Answers are not marked yet!')
+      }
       }
   return (
     <div className={`flex flex-col gap-4`}>
         <section>
                 <BreadCrumb list={list}></BreadCrumb>
         </section>
-        <TableHeader title="049423 submission" showBadge={false} showSearch={false}>
+        <TableHeader title={studentEvaluation?.code +' submission'} showBadge={false} showSearch={false}>
             <p className="text-gray-400">Marks obtained: <span className="text-green-300 font-semibold">{totalMarks}</span></p>
         </TableHeader>
         <section className="flex flex-wrap justify-start gap-4 mt-2">

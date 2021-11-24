@@ -44,7 +44,11 @@ export type Status =
   | 'retake'
   | 'expelled'
   | 'started'
-  | 'cancelled';
+  | 'cancelled'
+  | 'marked'
+  | 'to_mark'
+  | 'marking';
+
 
 export type Page =
   | 'personalDetails'

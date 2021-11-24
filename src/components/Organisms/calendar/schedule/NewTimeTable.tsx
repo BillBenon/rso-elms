@@ -1,12 +1,13 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { authenticatorStore } from '../../../../store/administration';
 import usersStore from '../../../../store/administration/users.store';
 import { eventStore } from '../../../../store/timetable/event.store';
 import { scheduleStore } from '../../../../store/timetable/schedule.store';
 import { venueStore } from '../../../../store/timetable/venue.store';
-import { SelectData, ValueType } from '../../../../types';
+import { ParamType, SelectData, ValueType } from '../../../../types';
 import {
   createRecurringSchedule,
   daysOfWeek,
@@ -27,9 +28,11 @@ interface IStepProps {
 }
 
 export default function NewTimeTable() {
+  const { id } = useParams<ParamType>();
+
   const [values, setvalues] = useState<ICreateClassTimeTable>({
     instructor: '',
-    intakeLevelClass: '',
+    intakeLevelClass: id,
     schedular: '',
     subjectAcademicYearPeriod: '',
     timetable: [],

@@ -30,6 +30,11 @@ class ClassService {
     return await adminstrationAxios.get(
       `/intakeLevelClasses/getIntakeLevelClassByIntakeLevel/${intakeLevelId}`,
     );
+  } 
+  public async getAllClasses(  ): Promise<AxiosResponse<Response<IClass[]>>> {
+    return await adminstrationAxios.get(
+      `/intakeLevelClasses/getIntakeLevelClasses`,
+    );
   }
   public async getStudentsByClass(
     classId: string,

@@ -22,7 +22,7 @@ interface TabsProps {
   headerComponent?: React.ReactNode;
 }
 
-type tabEventTypes = {
+export type tabEventTypes = {
   activeTabIndex: number;
   activeTabLabel: string;
   previousTabIndex: number;
