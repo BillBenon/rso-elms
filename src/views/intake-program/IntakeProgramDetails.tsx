@@ -200,12 +200,14 @@ function IntakeProgramDetails() {
                       label="Students in Cadette programs"
                       data={students}
                       totalUsers={students.length || 0}
+                      dataLabel={''}
                     />
                     <UsersPreview
                       title="Instructors"
                       label="Instructors in Cadette programs"
                       data={instructors}
-                      totalUsers={instructors.length || 0}>
+                      totalUsers={instructors.length || 0}
+                      dataLabel={''}>
                       <EnrollInstructorIntakeProgram />
                     </UsersPreview>
                   </div>
