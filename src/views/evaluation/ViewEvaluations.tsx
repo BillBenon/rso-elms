@@ -80,6 +80,7 @@ export default function ViewEvaluations({ subjectId, linkTo }: IEvaluationProps)
   }
 
   useEffect(() => {
+    setLocalStorageData('currentStep', 0);
     let formattedEvals: CommonCardDataType[] = [];
     data?.data.data.map((evaluation) => {
       let formattedEvaluations = {
