@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { authenticatorStore } from './store/administration';
-import intakeProgramStore from './store/administration/intake-program.store';
 import { UserType } from './types/services/user.types';
 import NotApproved from './views/NotApproved';
 
@@ -13,17 +12,6 @@ export default function Redirecting() {
   const [userNotAllowed, setUserNotAllowed] = useState(false);
   const { data, isLoading } = authenticatorStore.authUser();
   const history = useHistory();
-
-  const getStudent = intakeProgramStore.getStudentShipByUserId(
-    data?.data.data.id + '' || '',
-  ).data?.data.data[0];
-
-  const getPrograms = intakeProgramStore.getIntakeProgramsByStudent(
-    getStudent?.id + '' || '',
-  ).data?.data.data[0];
-
-  const getLevels =
-    intakeProgramStore.getStudentLevels(getPrograms?.id + '' || '').data?.data.data || [];
 
   useEffect(() => {
     const notAllowed =
@@ -40,10 +28,9 @@ export default function Redirecting() {
 
       redirectTo('/dashboard/users');
     } else if (data?.data.data.user_type === UserType.INSTRUCTOR) {
-      redirectTo('/dashboard/schedule');
+      redirectTo('/dashboard/evaluations');
     } else if (data?.data.data.user_type === UserType.STUDENT) {
-      getLevels.length > 0 &&
-        redirectTo(`/dashboard/student/levels/${getLevels[0].id || ''}`);
+      redirectTo(`/dashboard/schedule`);
     }
 
     setUserNotAllowed(notAllowed && !isLoading);

@@ -63,7 +63,7 @@ export default function Sidebar() {
             icon: 'level',
           }
         : {
-            title: '',
+            title: '...',
             to: '',
             icon: 'level',
           },
