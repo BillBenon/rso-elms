@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { classStore } from '../../store/administration/class.store';
@@ -6,7 +6,7 @@ import { classStore } from '../../store/administration/class.store';
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
+import { Tab, tabEventTypes, Tabs } from '../../components/Molecules/tabs/tabs';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 
 interface ParamType {
@@ -45,36 +45,40 @@ export default function ProgramLevelClasses() {
                 </span>
               </Link>
               <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6 mt-5">
-                {classes?.map((cl) => (
-                  <div
-                    key={cl.id}
-                    className="bg-main rounded-md p-4 border-1 border-transparent hover:border-primary-500 cursor-pointer">
-                    <Heading fontSize="sm" color="txt-secondary" fontWeight="semibold">
-                      {cl.class_group_type}
-                    </Heading>
-                    <Heading className="pt-6" fontSize="sm" fontWeight="bold">
-                      {cl.class_name}
-                    </Heading>
-                    <div className="py-2 mt-3">
-                      <Link
-                        className="outline-none"
-                        to={`/dashboard/schedule/calendar/${programInfo?.id}?class_id=${cl.id}`}>
-                        <span className="text-primary-500 font-medium">
-                          View Calendar
-                        </span>
-                      </Link>
+                {classes
+                  ?.filter(
+                    (lass) => lass.academic_year_program_intake_level.id === lvl.id,
+                  )
+                  .map((cl) => (
+                    <div
+                      key={cl.id}
+                      className="bg-main rounded-md p-4 border-1 border-transparent hover:border-primary-500 cursor-pointer">
+                      <Heading fontSize="sm" color="txt-secondary" fontWeight="semibold">
+                        {cl.class_group_type}
+                      </Heading>
+                      <Heading className="pt-6" fontSize="sm" fontWeight="bold">
+                        {cl.class_name}
+                      </Heading>
+                      <div className="py-2 mt-3">
+                        <Link
+                          className="outline-none"
+                          to={`/dashboard/schedule/calendar/${programInfo?.id}?class_id=${cl.id}`}>
+                          <span className="text-primary-500 font-medium">
+                            View Calendar
+                          </span>
+                        </Link>
+                      </div>
+                      <div className="">
+                        <Link
+                          className="outline-none"
+                          to={`/dashboard/schedule/timetable/${cl.id}`}>
+                          <span className="text-primary-500 font-medium">
+                            View Time table
+                          </span>
+                        </Link>
+                      </div>
                     </div>
-                    <div className="">
-                      <Link
-                        className="outline-none"
-                        to={`/dashboard/schedule/timetable/${cl.id}`}>
-                        <span className="text-primary-500 font-medium">
-                          View Time table
-                        </span>
-                      </Link>
-                    </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </>
           </Tab>

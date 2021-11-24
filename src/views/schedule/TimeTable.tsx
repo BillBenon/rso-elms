@@ -12,6 +12,7 @@ import Heading from '../../components/Atoms/Text/Heading';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewTimeTable from '../../components/Organisms/calendar/schedule/NewTimeTable';
+import { classStore } from '../../store/administration/class.store';
 import { ParamType } from '../../types';
 
 let timetable = [
@@ -75,13 +76,15 @@ export default function TimeTable() {
   const history = useHistory();
   const { url } = useRouteMatch();
 
+  const classInfo = classStore.getClassById(id).data?.data.data;
+
   const handleClose = () => {
     history.goBack();
   };
 
   return (
     <div>
-      <TableHeader showBadge={false} title={`Class A timetable`}>
+      <TableHeader showBadge={false} title={`${classInfo?.class_name} timetable`}>
         <Link to={`${url}/new-schedule`}>
           <Button>New timetable</Button>
         </Link>
