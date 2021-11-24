@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 
 import { UserView } from '../../../types/services/user.types';
 import Avatar from '../../Atoms/custom/Avatar';
@@ -13,10 +13,20 @@ type IUserPreview = {
   label: string;
   data: UserView[];
   totalUsers: number;
+  hasButton?: boolean;
+  linkLabel?: string;
   handleSelect?: (_selected: string[] | null) => void;
+  buttonAction?: () => void;
+  children?: ReactNode;
 };
 
-export default function UsersPreview({ title, label, data, totalUsers }: IUserPreview) {
+export default function UsersPreview({
+  title,
+  label,
+  data,
+  children,
+  totalUsers,
+}: IUserPreview) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <>
@@ -33,7 +43,7 @@ export default function UsersPreview({ title, label, data, totalUsers }: IUserPr
             </Heading>
           </div>
 
-          <div className="flex ">
+          <div className="flex">
             <div className="flex items-center">
               <div className="">
                 <Avatar
@@ -82,6 +92,7 @@ export default function UsersPreview({ title, label, data, totalUsers }: IUserPr
           </div>
         </div>
       </div>
+      {children && children}
       {sidebarOpen && (
         <RightSidebar
           open={sidebarOpen}

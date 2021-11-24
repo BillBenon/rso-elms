@@ -20,6 +20,7 @@ import { UserView } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from '../programs/AcademicPrograms';
 import AddLevelToProgram from '../programs/AddLevelToProgram';
+import EnrollInstructorIntakeProgram from './EnrollInstructorIntakeProgram';
 import IntakeProgramLevel from './IntakeProgramLevel';
 import IntakeProgramModules from './IntakeProgramModules';
 
@@ -30,12 +31,13 @@ function IntakeProgramDetails() {
 
   const studentsProgram = intakeProgramStore.getStudentsByIntakeProgram(intakeProg || '')
     .data?.data.data;
-  // const instructorsProgram = intakeProgramStore.getStudentsByIntakeProgram(
-  //   intakeProg || '',
-  // ).data?.data.data;
+  const instructorsProgram = intakeProgramStore.getInstructorsByIntakeProgram(
+    id,
+    intakeId,
+  ).data?.data.data;
 
   const [students, setStudents] = useState<UserView[]>([]);
-  // const [instructors, setInstructors] = useState<UserView[]>([]);
+  const [instructors, setInstructors] = useState<UserView[]>([]);
 
   useEffect(() => {
     let studentsView: UserView[] = [];
@@ -51,19 +53,19 @@ function IntakeProgramDetails() {
     setStudents(studentsView);
   }, [studentsProgram]);
 
-  // useEffect(() => {
-  //   instructorsProgram?.map((inst) =>
-  //     setInstructors([
-  //       ...instructors,
-  //       {
-  //         id: inst.id,
-  //         first_name: inst.first_name,
-  //         last_name: inst.last_name,
-  //         image_url: inst.image_url,
-  //       },
-  //     ]),
-  //   );
-  // }, [instructorsProgram]);
+  useEffect(() => {
+    instructorsProgram?.map((inst) =>
+      setInstructors([
+        ...instructors,
+        {
+          id: inst.id,
+          first_name: inst.instructor.user.first_name,
+          last_name: inst.instructor.user.last_name,
+          image_url: inst.instructor.user.image_url,
+        },
+      ]),
+    );
+  }, [instructorsProgram]);
 
   const program = programStore.getProgramById(id).data?.data.data;
 
@@ -199,12 +201,13 @@ function IntakeProgramDetails() {
                       data={students}
                       totalUsers={students.length || 0}
                     />
-                    {/* <UsersPreview
+                    <UsersPreview
                       title="Instructors"
                       label="Instructors in Cadette programs"
                       data={instructors}
-                      totalUsers={instructors.length || 0}
-                    /> */}
+                      totalUsers={instructors.length || 0}>
+                      <EnrollInstructorIntakeProgram />
+                    </UsersPreview>
                   </div>
                 </div>
               )}

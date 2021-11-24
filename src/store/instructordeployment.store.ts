@@ -8,6 +8,11 @@ class InstructorDeploymentStore {
       instructorDeployment.getInstructorsDeployedInAcademy(academyId),
     );
   }
+  getInstructorsRegisteredInAcademy(academyId: string) {
+    return useQuery(['instructor-deploy/academy', academyId], () =>
+      instructorDeployment.getInstructorsRegisteredInAcademy(academyId),
+    );
+  }
   getInstructorById(id: string) {
     return useQuery(['instructor/id', id], () =>
       instructorDeployment.getInstructorById(id),
@@ -15,6 +20,14 @@ class InstructorDeploymentStore {
   }
   getInstructors() {
     return useQuery(['instructors'], () => instructorDeployment.getInstructors());
+  }
+
+  enrollInstructorToProgram() {
+    return useMutation(instructorDeployment.enrollInstructorToProgram);
+  }
+
+  enrollInstructorToLevel() {
+    return useMutation(instructorDeployment.enrollInstructorToLevel);
   }
 
   deploy() {

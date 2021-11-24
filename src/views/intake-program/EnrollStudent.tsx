@@ -66,7 +66,7 @@ function EnrollStudent() {
       <RightSidebar
         open={sidebarOpen}
         handleClose={() => setSidebarOpen(false)}
-        label="Add Students to class"
+        label="enroll students to level"
         data={students}
         selectorActions={[
           {

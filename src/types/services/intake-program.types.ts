@@ -52,6 +52,20 @@ export interface EnrollStudents {
   intake_program_student_id: number;
   program_level_id: string;
 }
+
+export interface EnrollStudentToProgram {
+  completed_on: string;
+  employee_number: string;
+  enroled_on: string;
+  enrolment_mode: EnrollmentMode;
+  enrolment_status: EnrollmentStatus;
+  intake_program_id: string;
+  other_rank: string;
+  rank_id: string;
+  rank_institution: string;
+  student_id: string;
+  third_party_reg_number: string;
+}
 export interface LevelIntakeProgram extends Table {
   academic_year: IAcademicYearInfo;
   intake_program: IntakeProgramInfo;
@@ -168,6 +182,11 @@ export enum EnrollmentStatus {
   NEW,
   RETAKE = 'RETAKE',
   DISMISSED = 'DISMISSED',
+}
+
+export enum EnrollmentMode {
+  NEW = 'NEW',
+  RECURRING = 'RECURRING',
 }
 
 export enum PromotionStatus {
