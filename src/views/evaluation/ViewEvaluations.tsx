@@ -137,6 +137,7 @@ export default function ViewEvaluations({ subjectId, linkTo }: IEvaluationProps)
                     <div key={index}>
                       {linkTo ? (
                         <PopupMolecule
+                          closeOnClickOutSide={false}
                           open={confirm}
                           title="Do you want to continue?"
                           onClose={() => showConfirmation(false)}>
@@ -148,17 +149,11 @@ export default function ViewEvaluations({ subjectId, linkTo }: IEvaluationProps)
                             </p>
 
                             <div className="flex justify-starg">
-                              {/* <Button
-                                styleType="outline"
-                                onClick={() => showConfirmation(false)}>
-                                No
-                              </Button> */}
                               <Button
                                 disabled={loading}
                                 onClick={() =>
                                   generateStudentCode(info.id?.toString() || '')
-                                }
-                                type="submit">
+                                }>
                                 <span className="font-semibold">Start Evaluation</span>
                               </Button>
                             </div>
