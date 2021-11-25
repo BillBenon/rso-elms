@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, useParams, useRouteMatch, Switch, useHistory } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
+import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import { evaluationStore } from '../../store/administration/evaluation.store';
@@ -83,6 +84,8 @@ export default function EvaluationContent() {
               path={`${path}/submissions`}
               render={() => (
                 <>
+                {submissions.length > 0 ? (
+                  <>
                 <div className="w-full flex justify-end mb-4">
                 <Button>Publish results</Button>
                 </div>
@@ -91,8 +94,18 @@ export default function EvaluationContent() {
                   data={submissions}
                   hide={['id']}
                   uniqueCol={'id'}
-                  // actions={actions
+                  actions={actions}
                 />
+                </>
+                ):(
+                  <NoDataAvailable
+                    icon="evaluation"
+                    buttonLabel="Go back"
+                    title={'No submissions has been made so far!'}
+                    handleClick={() => history.push(`/dashboard/evaluations/${id}`)}
+                    description="And the web just isnt the same without you. Lets get you back online!"
+                  />
+                )}
                 </>
               )}
             />

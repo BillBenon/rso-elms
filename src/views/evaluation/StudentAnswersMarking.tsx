@@ -69,16 +69,16 @@ export default function StudentAnswersMarking() {
           }
         })
         if(flag == 0){
-          if(marked){
+          // if(marked){
 
-            const answer = studentAnswers?.find(data => data.answerId == answer_id);
-            setCorrection([...correction,{answerId:answer_id,markScored: points, marked: true}]);
-            setTotalMarks(totalMarks+points-(answer.mark_scored || 0));
-          }
-          else{
+          //   const answer = studentAnswers?.find(data => data.answerId == answer_id);
+          //   setCorrection([...correction,{answerId:answer_id,markScored: points, marked: true}]);
+          //   setTotalMarks(totalMarks+points-(answer.mark_scored || 0));
+          // }
+          // else{
           setCorrection([...correction,{answerId:answer_id,markScored: points, marked: true}]);
           setTotalMarks(totalMarks+points)
-        }
+        // }
         }
       }
 
