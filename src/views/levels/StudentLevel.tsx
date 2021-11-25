@@ -33,7 +33,7 @@ function StudentLevel() {
   const tabs =
     levels.map((level) => ({
       label: `${level.academic_year_program_level.academic_program_level.level.name}`,
-      href: `/dashboard/student/levels/${level.id}`,
+      href: `/dashboard/student/levels/${level.academic_year_program_level.id}`,
     })) || [];
 
   return (

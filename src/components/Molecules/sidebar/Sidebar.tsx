@@ -59,11 +59,13 @@ export default function Sidebar() {
       getLevels.length > 0
         ? {
             title: 'Levels',
-            to: `/dashboard/student/levels/${getLevels[0].id || ''}`,
+            to: `/dashboard/student/levels/${
+              getLevels[0].academic_year_program_level.id || ''
+            }`,
             icon: 'level',
           }
         : {
-            title: '...',
+            title: '-----',
             to: '',
             icon: 'level',
           },
