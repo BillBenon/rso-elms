@@ -16,6 +16,7 @@ import intakeProgramStore from '../../store/administration/intake-program.store'
 import programStore from '../../store/administration/program.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { ValueType } from '../../types';
+import { Instructor } from '../../types/services/instructor.types';
 import {
   CreateLevelIntakeProgram,
   IntakeProgParam,
@@ -43,10 +44,20 @@ export default function NewIntakeProgramLevel() {
     academicyearsStore.fetchAcademicYears(authUser?.academy.id.toString() || '').data
       ?.data.data || [];
 
-  const instructors =
+  const instructors_deployed =
     instructordeploymentStore.getInstructorsDeployedInAcademy(
       authUser?.academy.id.toString() || '',
     ).data?.data.data || [];
+
+  const all_instructors =
+    instructordeploymentStore.getInstructors().data?.data.data || [];
+
+  const instructors =
+    all_instructors?.filter(
+      (instr) =>
+        instr.id ===
+        instructors_deployed.find((dep) => dep.instructor_id == instr.id)?.instructor_id,
+    ) || [];
 
   const [values, setvalues] = useState<CreateLevelIntakeProgram>({
     academic_program_level_id: '',
@@ -54,7 +65,7 @@ export default function NewIntakeProgramLevel() {
     academic_year_program_intake_level_id: 0,
     actual_end_on: '',
     actual_start_on: '',
-    incharge_id: '70ee81f0-39ca-4282-9a0d-ff9bc4106f9d',
+    incharge_id: '',
     intake_program_id: intakeProgram?.id.toString() || '',
     planed_end_on: '',
     planed_start_on: '',
@@ -70,7 +81,6 @@ export default function NewIntakeProgramLevel() {
   function handleChange(e: ValueType) {
     setvalues({ ...values, [e.name]: e.value });
   }
-
   const handleCheck = (index: number, id: string) => {
     setvalues({ ...values, academic_program_level_id: id });
 
@@ -83,6 +93,7 @@ export default function NewIntakeProgramLevel() {
 
   async function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault(); // prevent page to reload:
+
     await mutateAsync(values, {
       onSuccess: (data) => {
         toast.success(data.data.message);
@@ -138,6 +149,9 @@ export default function NewIntakeProgramLevel() {
                     options={getDropDownOptions({
                       inputs: instructors,
                       labelName: ['first_name', 'last_name'],
+                      //@ts-ignore
+                      getOptionLabel: (instr: Instructor) =>
+                        instr.user.first_name + ' ' + instr.user.last_name,
                     })}
                     name="incharge_id"
                     handleChange={handleChange}>
