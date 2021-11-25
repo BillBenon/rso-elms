@@ -8,6 +8,10 @@ finishMarking() {
     return useMutation(markingService.finishMarking);
 }
 
+finalizaMarkingWithRemarks() {
+  return useMutation(markingService.finalizaMarkingWithRemarks);
+}
+
 publishResults() {
   return useMutation(markingService.publishResults);
 }

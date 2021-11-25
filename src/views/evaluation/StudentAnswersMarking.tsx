@@ -2,7 +2,7 @@ import '../../styles/components/Molecules/correction/marking.scss';
 
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router-dom';
+import {useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -13,16 +13,17 @@ import { markingStore } from '../../store/administration/marking.store';
 import { Link as LinkList } from '../../types';
 import { ParamType } from '../../types';
 import { MarkingCorrection } from '../../types/services/marking.types';
+import FinishMarking from '../../components/Organisms/forms/evaluation/FinishMarking';
 
 export default function StudentAnswersMarking() {
   const { id } = useParams<ParamType>();
-  const history = useHistory();
   const studentAnswers = markingStore.getStudentEvaluationAnswers(id).data?.data.data;
   const studentEvaluation = markingStore.getStudentEvaluationById(id).data?.data.data;
   const [totalMarks, setTotalMarks] = useState(0);
   const [correction, setCorrection] = useState<Array<MarkingCorrection>>([]);
   const [rowsOnPage] = useState(3);
   const [currentPage, setCurrentPage] = useState(1);
+  const [step, setStep] = useState(0);
   const indexOfLastRow = currentPage * rowsOnPage;
   const indexOfFirstRow = indexOfLastRow - rowsOnPage;
   const [currentRows, setCurrentRows] = useState(
@@ -83,13 +84,6 @@ export default function StudentAnswersMarking() {
       }
     });
     if (flag == 0) {
-      // if(marked){
-
-      //   const answer = studentAnswers?.find(data => data.answerId == answer_id);
-      //   setCorrection([...correction,{answerId:answer_id,markScored: points, marked: true}]);
-      //   setTotalMarks(totalMarks+points-(answer.mark_scored || 0));
-      // }
-      // else{
       setCorrection([
         ...correction,
         { answerId: answer_id, markScored: points, marked: true },
@@ -105,8 +99,8 @@ export default function StudentAnswersMarking() {
         { studentEvaluation: id, correction: correction },
         {
           onSuccess: () => {
-            toast.success('Marking finished', { duration: 5000 });
-            history.push('/dashboard/evaluations');
+            toast.success('Marks saved successfully', { duration: 3000 });
+            setStep(1);
           },
           onError: (error) => {
             console.error(error);
@@ -118,6 +112,7 @@ export default function StudentAnswersMarking() {
       toast.error('Some Answers are not marked yet!' + correction.length);
     }
   }
+  if(step == 0)
   return (
     <div className={`flex flex-col gap-4`}>
       <section>
@@ -160,4 +155,9 @@ export default function StudentAnswersMarking() {
       </section>
     </div>
   );
+
+  else
+  return(
+    <FinishMarking student_code={studentEvaluation?.code} obtained_marks={totalMarks} student_evaluation={id}/>
+  )
 }

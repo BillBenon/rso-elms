@@ -107,7 +107,7 @@ export default function EvaluationContent() {
 
       studentEvaluations && setSubmissions(formattedSubs);
     }
-  })
+  },[])
 
   const { data: evaluationInfo } = evaluationStore.getEvaluationById(id).data?.data || {};
   const studentEvaluations = markingStore.getEvaluationStudentEvaluations(id).data?.data.data || []
