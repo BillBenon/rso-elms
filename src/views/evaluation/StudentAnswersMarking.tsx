@@ -19,7 +19,7 @@ export default function StudentAnswersMarking() {
   const history = useHistory();
   const studentAnswers = markingStore.getStudentEvaluationAnswers(id).data?.data.data;
   const studentEvaluation = markingStore.getStudentEvaluationById(id).data?.data.data;
-  const [totalMarks, setTotalMarks] = useState(studentEvaluation?.obtainedMark || 0);
+  const [totalMarks, setTotalMarks] = useState(0);
   const [correction, setCorrection] = useState<Array<MarkingCorrection>>([]);
   const [rowsOnPage] = useState(3);
   const [currentPage, setCurrentPage] = useState(1);
@@ -51,7 +51,14 @@ export default function StudentAnswersMarking() {
   ];
 
   const { mutate } = markingStore.finishMarking();
-
+  function createCreateNewCorrection(answer_id: string, points: number, _marked: boolean){
+    setCorrection([
+      ...correction,
+      { answerId: answer_id, markScored: points, marked: true },
+    ]);
+    setTotalMarks(totalMarks+ points);
+    return { answerId: answer_id, markScored: points, marked: true };
+  }
   function updateQuestionPoints(answer_id: string, points: number, _marked: boolean) {
     var flag: number = 0;
 
@@ -135,6 +142,7 @@ export default function StudentAnswersMarking() {
               data={studentAnswer}
               totalMarks={totalMarks}
               setTotalMarks={setTotalMarks}
+              createCreateNewCorrection={createCreateNewCorrection}
             />
           );
         })}
