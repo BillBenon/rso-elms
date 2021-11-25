@@ -48,9 +48,9 @@ export default function EvaluationContent() {
         resultPublisher.mutate({studentEvaluationId: id},
           {
             onSuccess: () => {
-              toast.success('Result published', { duration: 3000 });
-              // history.push('/dashboard/evaluations');
-              history.push({ pathname: `${url}` });
+              toast.success('Result published. Applying changes', { duration: 3000 });
+              history.push('/dashboard/evaluations');
+              // history.push({ pathname: `${url}` });
             },
             onError: (error) => {
               console.error(error);
@@ -67,8 +67,8 @@ export default function EvaluationContent() {
         { evaluationId: id},
         {
           onSuccess: () => {
-            toast.success('Results published', { duration: 3000 });
-            // history.push('/dashboard/evaluations');
+            toast.success('Results published. Applying changes', { duration: 3000 });
+            history.push('/dashboard/evaluations');
           },
           onError: (error) => {
             console.error(error);
