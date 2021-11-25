@@ -39,20 +39,27 @@ class IntakeProgramStore {
       intakeProgramService.getIntakeLevelById(levelId),
     );
   }
-  getStudentLevels(studentId: string) {
-    return useQuery(['levels/student', studentId], () =>
-      intakeProgramService.getStudentLevels(studentId),
+  getStudentLevels(studentId: string, enabled = false) {
+    return useQuery(
+      ['levels/student', studentId],
+      () => intakeProgramService.getStudentLevels(studentId),
+      { enabled },
     );
   }
 
-  getStudentShipByUserId(userId: string) {
-    return useQuery(['studentShip/userId', userId], () =>
-      intakeProgramService.getStudentShipByUserId(userId),
+  getStudentShipByUserId(userId: string, enabled = false) {
+    return useQuery(
+      ['studentShip/userId', userId],
+      () => intakeProgramService.getStudentShipByUserId(userId),
+      { enabled },
     );
   }
+
   getIntakeProgramsByStudent(studentId: string) {
-    return useQuery(['intakeProgram/studentId', studentId], () =>
-      intakeProgramService.getIntakeProgramsByStudent(studentId),
+    return useQuery(
+      ['intakeProgram/studentId', studentId],
+      () => intakeProgramService.getIntakeProgramsByStudent(studentId),
+      { enabled: !!studentId },
     );
   }
 

@@ -33,9 +33,9 @@ function StudentInClass({ classId, label }: IStudentClass) {
         username: stud.student.user.username,
         'full name': stud.student.user.first_name + ' ' + stud.student.user.last_name,
         email: stud.student.user.email,
-        NID: stud.student.user.nid,
+        NID: stud.student.user.person.nid,
         academy: stud.student.user.academy.name,
-        status: stud.student.user.status,
+        status: stud.student.user.generic_status,
         user_type: stud.student.user.user_type,
       });
     });

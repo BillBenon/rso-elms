@@ -163,7 +163,7 @@ export type UserTypes = {
   username: string;
   'full name': string;
   email: string;
-  NID: string;
+  'ID Card': string;
   academy: string;
   status: GenericStatus;
   user_type: UserType;
