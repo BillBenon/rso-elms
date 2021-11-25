@@ -10,7 +10,6 @@ class MarkingService {
     markInfo: MarkAllEvaluationQuestions,
   ): Promise<AxiosResponse<Response<any>>> {
     const correction = markInfo.correction;
-    console.log(correction);
     return await evaluationAxios.put(`/student-answers/markStudentEvaluation/${markInfo.studentEvaluation}`, {correction});
   }
 
@@ -24,6 +23,12 @@ class MarkingService {
     data:{studentEvaluationId: any},
   ): Promise<AxiosResponse<Response<any>>> {
     return await evaluationAxios.put(`/studentEvaluations/studentEvaluation/${data.studentEvaluationId}/publish`);
+  }
+
+  public async finalizaMarkingWithRemarks(
+    data:{studentEvaluationId: any, body:any},
+  ): Promise<AxiosResponse<Response<any>>> {
+    return await evaluationAxios.post(`/studentEvaluations/studentEvaluation/${data.studentEvaluationId}/addRemark`,data.body);
   }
 
 
