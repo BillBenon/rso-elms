@@ -19,6 +19,14 @@ class EvaluationService {
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
     return await evaluationAxios.post('/evaluations/add', evaluationInfo);
   }
+  public async updateEvaluation(
+    evaluationInfo: IEvaluationCreate,
+  ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
+    return await evaluationAxios.put(
+      `/evaluations/modify/${evaluationInfo.id}`,
+      evaluationInfo,
+    );
+  }
 
   public async createEvaluationQuestion(
     questionsInfo: ICreateEvaluationQuestions[],

@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { evaluationStore } from '../../../../store/administration/evaluation.store';
@@ -6,14 +6,12 @@ import { ValueType } from '../../../../types';
 import {
   ICreateEvaluationQuestions,
   IEvaluationProps,
-  IMultipleChoice,
+  IEvaluationQuestionsInfo,
   IQuestionType,
 } from '../../../../types/services/evaluation.types';
 import { getLocalStorageData } from '../../../../utils/getLocalStorageItem';
 import Button from '../../../Atoms/custom/Button';
-import Icon from '../../../Atoms/custom/Icon';
 import Heading from '../../../Atoms/Text/Heading';
-import ILabel from '../../../Atoms/Text/ILabel';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
@@ -21,17 +19,24 @@ import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 export default function EvaluationQuestionComponent({
   handleGoBack,
   handleNext,
+  evaluationId,
 }: IEvaluationProps) {
-  const multipleChoiceContent: IMultipleChoice = {
-    answer_content: '',
-    correct: false,
-  };
+  // const multipleChoiceContent: IMultipleChoice = {
+  //   answer_content: '',
+  //   correct: false,
+  // };
+  let evaluationQuestions: IEvaluationQuestionsInfo[] | [] = [];
+  if (evaluationId) {
+    evaluationQuestions =
+      evaluationStore.getEvaluationQuestions(evaluationId).data?.data.data || [];
+  }
 
   const initialState: ICreateEvaluationQuestions = {
     evaluation_id: getLocalStorageData('evaluationId'),
     mark: 1,
     parent_question_id: '',
-    choices: [multipleChoiceContent],
+    choices: [],
+    id: '',
     question: '',
     question_type: IQuestionType.OPEN,
     sub_questions: [],
@@ -40,16 +45,34 @@ export default function EvaluationQuestionComponent({
 
   const [questions, setQuestions] = useState([initialState]);
 
+  useEffect(() => {
+    let allQuestions: any[] = [];
+    evaluationQuestions.map((question) => {
+      let questionData = { ...initialState };
+      questionData.choices = question.multipleChoiceAnswers;
+      questionData.evaluation_id = question.id;
+      questionData.mark = question.mark;
+      questionData.question = question.question;
+      questionData.question_type = question.questionType;
+      questionData.submitted = false;
+      questionData.id = question.id;
+      questionData.sub_questions = [];
+      allQuestions.push(questionData);
+    });
+    setQuestions(allQuestions);
+  }, [evaluationQuestions]);
+
   function handleAddQuestion() {
     let newQuestion = initialState;
     setQuestions([...questions, newQuestion]);
   }
 
-  function handleAddMultipleMultipleChoiceAnswer(index: number) {
-    let choices = questions[index];
-    choices.choices.push(multipleChoiceContent);
-    setQuestions([...questions, choices]);
-  }
+  //To be used after
+  // function handleAddMultipleMultipleChoiceAnswer(index: number) {
+  //   let choices = questions[index];
+  //   choices.choices.push(multipleChoiceContent);
+  //   setQuestions([...questions, choices]);
+  // }
 
   function handleChange(index: number, { name, value }: ValueType) {
     let questionInfo = [...questions];
@@ -57,37 +80,37 @@ export default function EvaluationQuestionComponent({
     setQuestions(questionInfo);
   }
 
-  function handleChoiceChange(
-    questionIndex: number,
-    choiceIndex: number,
-    { name, value }: ValueType,
-  ) {
-    let questionsClone = [...questions];
-    let question = questionsClone[questionIndex];
+  //To be used after
+  // function handleChoiceChange(
+  //   questionIndex: number,
+  //   choiceIndex: number,
+  //   { name, value }: ValueType,
+  // ) {
+  //   let questionsClone = [...questions];
+  //   let question = questionsClone[questionIndex];
 
-    let choiceToUpdate = question.choices[choiceIndex];
-    choiceToUpdate = { ...choiceToUpdate, [name]: value };
-    question.choices[choiceIndex] = choiceToUpdate;
-    questionsClone[questionIndex] = question;
+  //   let choiceToUpdate = question.choices[choiceIndex];
+  //   choiceToUpdate = { ...choiceToUpdate, [name]: value };
+  //   question.choices[choiceIndex] = choiceToUpdate;
+  //   questionsClone[questionIndex] = question;
 
-    setQuestions(questionsClone);
-  }
-
-  console.log(questions);
+  //   setQuestions(questionsClone);
+  // }
 
   const { mutate } = evaluationStore.createEvaluationQuestions();
 
-  function submitForm(index: number, e: FormEvent) {
+  function submitForm(e: FormEvent) {
     e.preventDefault();
 
-    mutate(questions[index], {
+    mutate(questions, {
       onSuccess: () => {
-        toast.success('Question added', { duration: 5000 });
+        toast.success('Questions added', { duration: 5000 });
 
         //first remove the button for submitted question
-        let questionInfo = [...questions];
-        questionInfo[index] = { ...questionInfo[index], submitted: true };
-        setQuestions(questionInfo);
+        // let questionInfo = [...questions];
+        // questionInfo[index] = { ...questionInfo[index], submitted: true };
+        // setQuestions(questionInfo);
+        handleNext();
       },
       onError: (error) => {
         console.log(error);
@@ -97,22 +120,22 @@ export default function EvaluationQuestionComponent({
   }
 
   return (
-    <>
+    <form className="flex flex-col" onSubmit={submitForm}>
       {questions.length > 0 ? (
         questions.map((question, index: number) => (
           <>
             <div
               className="flex justify-between w-2/3 bg-main px-6 py-10 mt-8"
               key={index}>
-              <form
-                className="flex flex-col"
-                onSubmit={(e: FormEvent) => submitForm(index, e)}>
+              <div className="flex flex-col">
                 <DropdownMolecule
                   disabled={question.submitted}
                   width="64"
                   name="question_type"
                   placeholder="Question type"
                   handleChange={() => {}}
+                  /*@ts-ignore*/
+                  defaultValue={evaluationQuestions[index]?.questionType}
                   options={[
                     { label: 'OPEN', value: IQuestionType.OPEN },
                     { label: 'MULTIPLE CHOICE', value: IQuestionType.MULTIPLE_CHOICE },
@@ -128,7 +151,7 @@ export default function EvaluationQuestionComponent({
                   Question {index + 1}
                 </TextAreaMolecule>
                 {/* multiple choice answers here */}
-                {question.choices.map((multipleQuestion, choiceIndex) => (
+                {/* {question.choices.map((multipleQuestion, choiceIndex) => (
                   <>
                     <TextAreaMolecule
                       key={multipleQuestion.answer_content}
@@ -142,8 +165,8 @@ export default function EvaluationQuestionComponent({
                       Answer choice {choiceIndex + 1}
                     </TextAreaMolecule>{' '}
                   </>
-                ))}
-                <div className="-mt-4 mb-1">
+                ))} */}
+                {/* <div className="-mt-4 mb-1">
                   <Button
                     className="flex items-center pl-0"
                     styleType="text"
@@ -158,7 +181,7 @@ export default function EvaluationQuestionComponent({
                       Add answer
                     </ILabel>
                   </Button>
-                </div>
+                </div> */}
                 <InputMolecule
                   readonly={question.submitted}
                   type="number"
@@ -169,16 +192,14 @@ export default function EvaluationQuestionComponent({
                   handleChange={(e: ValueType) => handleChange(index, e)}>
                   Question marks
                 </InputMolecule>
-                <div>
+                {/* <div>
                   {!question.submitted ? (
-                    <Button
-                      type="submit"
-                      onSubmit={(e: FormEvent) => submitForm(index, e)}>
+                    <Button type="submit" onSubmit={submitForm}>
                       save question
                     </Button>
                   ) : null}
-                </div>
-              </form>
+                </div> */}
+              </div>
 
               {/* <div className="pr-14">
                 <div className="flex items-center">
@@ -205,9 +226,9 @@ export default function EvaluationQuestionComponent({
         </div>
 
         <div>
-          <Button onClick={handleNext}>save</Button>
+          <Button onSubmit={submitForm}>save</Button>
         </div>
       </div>
-    </>
+    </form>
   );
 }

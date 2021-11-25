@@ -22,6 +22,7 @@ export interface IEvaluationProps {
   handleNext: () => void;
   handleGoBack: () => void;
   handleAddQuestion?: () => void;
+  evaluationId?: string | null;
 }
 
 export enum ISubmissionTypeEnum {
@@ -92,7 +93,7 @@ export interface IEvaluationCreate {
   marking_reminder_date: string;
   maximum_file_size: number | string;
   name: string;
-  id: '';
+  id: string;
   questionaire_type: IQuestionaireTypeEnum;
   submision_type: ISubmissionTypeEnum;
   time_limit: number;
@@ -104,6 +105,7 @@ export interface IEvaluationInfo {
   name: string;
   academy_id: string;
   subject_academic_year_period: string;
+  subject_id: string;
   access_type: IAccessTypeEnum;
   evaluation_type: IEvaluationTypeEnum;
   questionaire_type: IQuestionaireTypeEnum;
@@ -154,6 +156,7 @@ export interface IMultipleChoice {
 export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
   sub_questions: IEvaluationQuestion[];
   submitted: boolean;
+  id: string;
   choices: IMultipleChoice[];
 }
 
