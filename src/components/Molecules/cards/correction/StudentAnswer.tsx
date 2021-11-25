@@ -10,12 +10,13 @@ interface PropTypes<T> {
     correction: MarkingCorrection[];
     totalMarks: number;
     updateQuestionPoints: (answer_id: string, marks: number, marked: boolean) => void;
+    createCreateNewCorrection: (answer_id: string, marks: number, marked: boolean) => MarkingCorrection;
     setTotalMarks: Dispatch<SetStateAction<number>>;
     hoverStyle?: TextDecoration;
     className?: string;
   }
-export default function StudentAnswer<T>({updateQuestionPoints,data,correction}: PropTypes<T>) {
-    const correct:MarkingCorrection = correction.find(x => x.answerId === data?.id) || {answerId: data?.id, marked: data?.marked, markScored: data.mark_scored};
+export default function StudentAnswer<T>({updateQuestionPoints,data,correction,createCreateNewCorrection}: PropTypes<T>) {
+    const correct:MarkingCorrection = correction.find(x => x.answerId === data?.id) || createCreateNewCorrection(data?.id,data.mark_scored,data.marked);
   return (
         <div className={`answer-card-molecule bg-main p-6 rounded-lg `}>
             <div className="flex justify-between">

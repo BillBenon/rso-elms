@@ -14,6 +14,18 @@ class MarkingService {
     return await evaluationAxios.put(`/student-answers/markStudentEvaluation/${markInfo.studentEvaluation}`, {correction});
   }
 
+  public async publishResults(
+    data:{evaluationId: string},
+  ): Promise<AxiosResponse<Response<any>>> {
+    return await evaluationAxios.put(`/studentEvaluations/evaluation/${data.evaluationId}/publishResults`);
+  }
+
+  public async publishResult(
+    data:{studentEvaluationId: any},
+  ): Promise<AxiosResponse<Response<any>>> {
+    return await evaluationAxios.put(`/studentEvaluations/studentEvaluation/${data.studentEvaluationId}/publish`);
+  }
+
 
   // public async finishMarking(
   //   markInfo: MarkingRequired,
@@ -25,7 +37,7 @@ class MarkingService {
   public async getStudentEvaluationById(
     id: string,
   ): Promise<AxiosResponse<Response<any>>> {
-    return await evaluationAxios.get(`/studentEvaluation/getById/${id}`);
+    return await evaluationAxios.get(`/studentEvaluations/getById/${id}`);
   }
 
   public async getStudentEvaluationAnswers(
@@ -38,7 +50,7 @@ class MarkingService {
   public async getAllStudentEvaluationsByEvaluation(
     id: string,
   ): Promise<AxiosResponse<Response<any[]>>> {
-    return await evaluationAxios.get(`studentEvaluation/getByEvaluation/${id}`);
+    return await evaluationAxios.get(`studentEvaluations/getByEvaluation/${id}`);
 
   }
 }

@@ -1,6 +1,7 @@
 import { pick } from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-hot-toast';
 import { Route, useParams, useRouteMatch, Switch, useHistory } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -21,6 +22,8 @@ export default function EvaluationContent() {
   const [submissions, setSubmissions] = useState([]);
   const evaluationQuestions = evaluationStore.getEvaluationQuestions(id).data?.data.data;
 
+  const { mutate } = markingStore.publishResults();
+  const resultPublisher = markingStore.publishResult();
   const tabs = [
     {
       label: 'Overview evaluation',
@@ -39,7 +42,43 @@ export default function EvaluationContent() {
         history.push({ pathname: `${url}/submissions/${id}` });
       },
     },
+    {
+      name: 'Publish',
+      handleAction: (id: string | number | undefined) => {
+        resultPublisher.mutate({studentEvaluationId: id},
+          {
+            onSuccess: () => {
+              toast.success('Result published. Applying changes', { duration: 3000 });
+              history.push('/dashboard/evaluations');
+              // history.push({ pathname: `${url}` });
+            },
+            onError: (error) => {
+              console.error(error);
+              toast.error(error + '');
+            },
+          })
+      },
+    },
   ];
+
+
+  function publishEvaluationResults() {
+      mutate(
+        { evaluationId: id},
+        {
+          onSuccess: () => {
+            toast.success('Results published. Applying changes', { duration: 3000 });
+            history.push('/dashboard/evaluations');
+          },
+          onError: (error) => {
+            console.error(error);
+            toast.error(error + '');
+          },
+        },
+      );
+  }
+
+
 
   useEffect(() => {
     let formattedSubs: any = [];
@@ -87,7 +126,7 @@ export default function EvaluationContent() {
                 {submissions.length > 0 ? (
                   <>
                 <div className="w-full flex justify-end mb-4">
-                <Button>Publish results</Button>
+                <Button onClick={publishEvaluationResults}>Publish all results</Button>
                 </div>
                 <Table<any>
                   statusColumn="status"
