@@ -99,7 +99,7 @@ function NewClass() {
         toast.success('Academic year created');
         queryClient.invalidateQueries(['class/levelId']);
         history.push(
-          `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/modules/${levelId}/view-class`,
+          `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-class`,
         );
       },
       onError: (error) => {
