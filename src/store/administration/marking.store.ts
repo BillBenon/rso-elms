@@ -8,6 +8,14 @@ finishMarking() {
     return useMutation(markingService.finishMarking);
 }
 
+publishResults() {
+  return useMutation(markingService.publishResults);
+}
+
+publishResult() {
+  return useMutation(markingService.publishResult);
+}
+
 getStudentEvaluationAnswers(id: string) {
     return useQuery(['studentEvaluation/answers', id], () =>
     markingService.getStudentEvaluationAnswers(id),

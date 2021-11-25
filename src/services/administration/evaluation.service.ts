@@ -76,19 +76,19 @@ class EvaluationService {
 
   public async submitEvaluation(studentEvaluationId: string): Promise<void> {
     return await evaluationAxios.put(
-      `studentEvaluation/studentEvaluation/${studentEvaluationId}/submit`,
+      `studentEvaluations/studentEvaluation/${studentEvaluationId}/submit`,
     );
   }
   public async autoSubmitEvaluation(studentEvaluationId: string): Promise<void> {
     return await evaluationAxios.put(
-      `studentEvaluation/studentEvaluation/${studentEvaluationId}/auto_submit`,
+      `studentEvaluations/studentEvaluation/${studentEvaluationId}/auto_submit`,
     );
   }
 
   public async studentEvaluationStart(
     student: IStudentEvaluationStart,
   ): Promise<AxiosResponse<Response<IStudentEvaluationStartInfo>>> {
-    return await evaluationAxios.post('studentEvaluation/start', student);
+    return await evaluationAxios.post('studentEvaluations/start', student);
   }
 }
 
