@@ -87,7 +87,6 @@ export default function Users() {
       href: `${url}/admins`,
     });
   }
-
   return (
     <div>
       <div className="flex flex-wrap justify-start items-center pt-1">
@@ -130,10 +129,10 @@ export default function Users() {
                 <>
                   <TableHeader
                     totalItems={users.length}
+                    showBadge={false}
                     title={'users'}
                     showSearch={false}
                   />
-
                   <TabNavigation
                     tabs={tabs}
                     onTabChange={(event) => setUserType(event.activeTabLabel)}>
@@ -147,13 +146,11 @@ export default function Users() {
                       path={`${path}/instructors`}
                       render={() => <Instructors instructors={instructors} />}
                     />
-                    {authUser?.user_type === 'ADMIN' ? (
-                      <Route
-                        exact
-                        path={`${path}/admins`}
-                        render={() => <Admins admins={admins} />}
-                      />
-                    ) : null}
+                    <Route
+                      exact
+                      path={`${path}/admins`}
+                      render={() => <Admins admins={admins} />}
+                    />
                   </TabNavigation>
                 </>
               );
