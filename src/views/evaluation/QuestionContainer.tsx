@@ -17,6 +17,7 @@ interface IQuestionContainerProps {
   id: string;
   marks: number;
   isLast: boolean;
+  index: number;
   choices?: [];
   isMultipleChoice: boolean;
 }
@@ -25,6 +26,7 @@ export default function QuestionContainer({
   question,
   id,
   isLast,
+  index,
   marks,
   // choices,
   isMultipleChoice,
@@ -86,7 +88,7 @@ export default function QuestionContainer({
     <form onSubmit={(e) => submitForm(id, e)}>
       <div className="bg-main px-16 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5" id={id}>
         <div className="mt-7 flex justify-between">
-          <ContentSpan title="Question 1" className="gap-3">
+          <ContentSpan title={`Question ${index + 1}`} className="gap-3">
             {question}
           </ContentSpan>
 
