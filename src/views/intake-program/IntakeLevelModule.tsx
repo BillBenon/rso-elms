@@ -24,17 +24,17 @@ function IntakeLevelModule() {
   );
   useEffect(() => {
     let newModule: CommonCardDataType[] = [];
-    levelModuleStore?.data.data.forEach((module) => {
+    levelModuleStore?.data.data.forEach((mod) => {
       newModule.push({
         status: {
-          type: advancedTypeChecker(module.generic_status),
-          text: module.generic_status.toString(),
+          type: advancedTypeChecker(mod.generic_status),
+          text: mod.generic_status.toString(),
         },
-        id: module.id,
-        code: module.module.code,
-        title: module.module.name,
-        description: module.module.description,
-        subTitle: `total subject: ${module.module.total_num_subjects || 'None'}`,
+        id: mod.module.id,
+        code: mod.module.code,
+        title: mod.module.name,
+        description: mod.module.description,
+        subTitle: `total subject: ${mod.module.total_num_subjects || 'None'}`,
       });
     });
 

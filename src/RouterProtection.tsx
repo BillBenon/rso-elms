@@ -7,6 +7,7 @@ import { authenticatorStore } from './store/administration';
 import { UserInfo, UserType } from './types/services/user.types';
 import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';
+import StudentDashboard from './views/dashboard/StudentDashboard';
 import Divisions from './views/divisions/Divisions';
 import EvaluationTest from './views/evaluation/EvaluationTest';
 import ViewEvaluations from './views/evaluation/ViewEvaluations';
@@ -14,7 +15,6 @@ import NewInstitution from './views/insitution/NewInstitution';
 import UpdateInstitution from './views/insitution/UpdateInstitution';
 import IntakesView from './views/intakes/Intakes';
 import Levels from './views/levels/Levels';
-import StudentLevel from './views/levels/StudentLevel';
 import Modules from './views/modules';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicProgram from './views/programs/AcademicPrograms';
@@ -86,10 +86,10 @@ const RouterProtection = () => {
   const StudentRoutes = () => (
     <>
       {/* start of student pages */}
-      <Route path="/dashboard/evaluations/student" component={EvaluationTest} />
-      <Route exact path="/dashboard/student/levels/:level" component={StudentLevel} />
+      <Route path="/dashboard/student" component={StudentDashboard} />
       <Route path="/dashboard/modules" component={Modules} />
       <Route path="/dashboard/student/evaluations/" component={EvaluationTest} />
+      <Route path="/dashboard/evaluations/student" component={EvaluationTest} />
       {/* end of student pages */}
     </>
   );
