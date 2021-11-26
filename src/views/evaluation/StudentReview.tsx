@@ -14,14 +14,14 @@ import { Link as LinkList } from '../../types';
 import { ParamType } from '../../types';
 import { MarkingCorrection } from '../../types/services/marking.types';
 import FinishMarking from '../../components/Organisms/forms/evaluation/FinishMarking';
+import AnswerReview from '../../components/Molecules/cards/correction/AnswerReview';
 
 export default function StudentAnswersMarking() {
   const { id } = useParams<ParamType>();
   const studentAnswers = markingStore.getStudentEvaluationAnswers(id).data?.data.data;
   const studentEvaluation = markingStore.getStudentEvaluationById(id).data?.data.data;
   const [totalMarks, setTotalMarks] = useState(0);
-  const [correction, setCorrection] = useState<Array<MarkingCorrection>>([]);
-  const [rowsOnPage] = useState(3);
+  const [rowsOnPage] = useState(4);
   const [currentPage, setCurrentPage] = useState(1);
   const [step, setStep] = useState(0);
   const indexOfLastRow = currentPage * rowsOnPage;
@@ -31,17 +31,6 @@ export default function StudentAnswersMarking() {
   );
   useEffect(() => {
     setCurrentRows(studentAnswers?.slice(indexOfFirstRow, indexOfLastRow));
-    // setCorrection([]);
-    // studentAnswers?.forEach((element) => {
-    //   setCorrection([
-    //     ...correction,
-    //     {
-    //       markScored: element.mark_scored,
-    //       answerId: element.answer_id,
-    //       marked: element.marked,
-    //     },
-    //   ]);
-    // });
   }, [studentAnswers, indexOfFirstRow, indexOfLastRow]);
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   const list: LinkList[] = [
@@ -51,68 +40,7 @@ export default function StudentAnswersMarking() {
     { to: 'evaluations/evaluation_id/marking_studentEvaluation', title: 'Marking' },
   ];
 
-  const { mutate } = markingStore.finishMarking();
-  function createCreateNewCorrection(answer_id: string, points: number, marked: boolean){
-    setCorrection([
-      ...correction,
-      { answerId: answer_id, markScored: points, marked: marked || false },
-    ]);
-    setTotalMarks(totalMarks+ points);
-    return { answerId: answer_id, markScored: points, marked: marked || false};
-  }
-  function updateQuestionPoints(answer_id: string, points: number) {
-    var flag: number = 0;
-
-    correction.forEach((element) => {
-      if (element.answerId == answer_id) {
-        flag++;
-        const newCorretion: MarkingCorrection[] = correction.map((item) => {
-          if (item.answerId === answer_id) {
-            const updatedItem: MarkingCorrection = {
-              ...item,
-              marked: true,
-              markScored: points,
-            };
-            setTotalMarks(totalMarks - item.markScored + points);
-            return updatedItem;
-          }
-
-          return item;
-        });
-
-        setCorrection(newCorretion);
-      }
-    });
-    if (flag == 0) {
-      setCorrection([
-        ...correction,
-        { answerId: answer_id, markScored: points, marked: true },
-      ]);
-      setTotalMarks(totalMarks + points);
-      // }
-    }
-  }
-
-  function submitMarking() {
-    if (correction.length == (studentAnswers?.length || 0)) {
-      mutate(
-        { studentEvaluation: id, correction: correction },
-        {
-          onSuccess: () => {
-            toast.success('Marks saved successfully', { duration: 3000 });
-            setStep(1);
-          },
-          onError: (error) => {
-            console.error(error);
-            toast.error(error + '');
-          },
-        },
-      );
-    } else {
-      toast.error('Some Answers are not marked yet!' + correction.length);
-    }
-  }
-  if(step == 0)
+  
   return (
     <div className={`flex flex-col gap-4`}>
       <section>
@@ -130,14 +58,9 @@ export default function StudentAnswersMarking() {
       <section className="flex flex-wrap justify-start gap-4 mt-2">
         {currentRows?.map((studentAnswer) => {
           return (
-            <StudentAnswer
+            <AnswerReview
               key={studentAnswer.id}
-              correction={correction}
-              updateQuestionPoints={updateQuestionPoints}
               data={studentAnswer}
-              totalMarks={totalMarks}
-              setTotalMarks={setTotalMarks}
-              createCreateNewCorrection={createCreateNewCorrection}
             />
           );
         })}
@@ -150,14 +73,9 @@ export default function StudentAnswersMarking() {
           />
         </div>
         <div className="w-full flex justify-end">
-          <Button onClick={submitMarking}>Complete Marking</Button>
+          <Button onClick={()=>{}}>Finish Review</Button>
         </div>
       </section>
     </div>
-  );
-
-  else
-  return(
-    <FinishMarking student_code={studentEvaluation?.code} obtained_marks={totalMarks} student_evaluation={id}/>
   )
 }

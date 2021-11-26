@@ -1,4 +1,4 @@
-import React, { Dispatch, ReactNode, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { TextDecoration } from '../../../../types';
 import { MarkingCorrection } from '../../../../types/services/marking.types';
 import Icon from '../../../Atoms/custom/Icon';
@@ -9,7 +9,7 @@ interface PropTypes<T> {
     icon?: boolean;
     correction: MarkingCorrection[];
     totalMarks: number;
-    updateQuestionPoints: (answer_id: string, marks: number, marked: boolean) => void;
+    updateQuestionPoints: (answer_id: string, marks: number) => void;
     createCreateNewCorrection: (answer_id: string, marks: number, marked: boolean) => MarkingCorrection;
     setTotalMarks: Dispatch<SetStateAction<number>>;
     hoverStyle?: TextDecoration;
@@ -31,7 +31,7 @@ export default function StudentAnswer<T>({updateQuestionPoints,data,correction,c
                     {data?.open_answer}
                 </div>
                 <div className="flex gap-2 h-12 items-center">
-                    <button className={!correct?.marked ||correct?.markScored == 0 ? 'normal-button' : 'right-button'} onClick={()=>{updateQuestionPoints(data?.id,data?.evaluation_question?.mark, data?.marked)}}>
+                    <button className={!correct?.marked ||correct?.markScored == 0 ? 'normal-button' : 'right-button'} onClick={()=>{updateQuestionPoints(data?.id,data?.evaluation_question?.mark)}}>
                     <Icon
                         name={"tick"}
                         size={18}
@@ -40,7 +40,7 @@ export default function StudentAnswer<T>({updateQuestionPoints,data,correction,c
                     />
                     </button>
 
-                    <button className={!correct?.marked || correct?.markScored != 0 ? 'normal-button' : 'wrong-button'} onClick={()=>{updateQuestionPoints(data?.id,0, data?.marked)}}>
+                    <button className={!correct?.marked || correct?.markScored != 0 ? 'normal-button' : 'wrong-button'} onClick={()=>{updateQuestionPoints(data?.id,0)}}>
                     <Icon
                         name={"cross"}
                         size={18}
