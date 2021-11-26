@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useLocation, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import TableHeader from '../../components/Molecules/table/TableHeader';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { CommonCardDataType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ModuleDetails from './ModuleDetails';
 
-interface Param {
-  level: string;
-}
-
 export default function Modules() {
-  const { level } = useParams<Param>();
+  const { search } = useLocation();
+  const level = new URLSearchParams(search).get('levelId');
   const { data, isLoading, isSuccess, isError } = intakeProgramStore.getModulesByLevel(
-    parseInt(level),
+    parseInt(level || ''),
   );
   const [modules, setModules] = useState<CommonCardDataType[]>([]);
   const { path } = useRouteMatch();
@@ -25,16 +23,16 @@ export default function Modules() {
   useEffect(() => {
     if (isSuccess && data?.data) {
       let newModules: CommonCardDataType[] = [];
-      data?.data.data.forEach((module) => {
+      data?.data.data.forEach((mod) => {
         newModules.push({
           status: {
-            type: advancedTypeChecker(module.generic_status),
-            text: module.generic_status.toString(),
+            type: advancedTypeChecker(mod.generic_status),
+            text: mod.generic_status.toString(),
           },
-          code: module.module.code,
-          title: module.module.name,
-          description: module.module.description,
-          id: module.module.id,
+          code: mod.module.code,
+          title: mod.module.name,
+          description: mod.module.description,
+          id: mod.module.id,
         });
       });
 
@@ -71,7 +69,15 @@ export default function Modules() {
                       </Button> 
                     </TableHeader>
                   </section> */}
-                  <section className="flex flex-wrap justify-start gap-2 mt-2">
+                  <section>
+                    <TableHeader
+                      showSearch={false}
+                      showBadge={false}
+                      title="Enrolled Modules"
+                      totalItems={modules.length || 0}
+                    />
+                  </section>
+                  <section className="flex flex-wrap justify-start gap-2">
                     {isLoading ? (
                       <Loader />
                     ) : modules.length == 0 ? (

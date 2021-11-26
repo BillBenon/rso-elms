@@ -48,7 +48,7 @@ function StudentLevel() {
                 levels.map((level) => (
                   <Link
                     key={level.id}
-                    to={`/dashboard/modules/${level.academic_year_program_level.academic_program_level.id}`}>
+                    to={`/dashboard/modules?levelId=${level.academic_year_program_level.id}`}>
                     <Heading color="primary" fontSize="base" fontWeight="semibold">
                       {
                         level.academic_year_program_level.academic_program_level.level
