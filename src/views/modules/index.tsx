@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { Route, Switch, useLocation, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import TableHeader from '../../components/Molecules/table/TableHeader';
@@ -40,6 +41,12 @@ export default function Modules() {
     } else if (isError) toast.error('error occurred when loading modules');
   }, [data]);
 
+  const list = [
+    { to: '/dashboard/student', title: 'Dashboard' },
+    { to: `/dashboard/student`, title: 'Program' },
+    { to: `/dashboard/modules?levelId=${level}`, title: 'module' },
+  ];
+
   return (
     <>
       <main className="px-4">
@@ -56,27 +63,15 @@ export default function Modules() {
             render={() => {
               return (
                 <>
-                  {/* <section>
+                  <section>
                     <BreadCrumb list={list}></BreadCrumb>
                   </section>
-                  <section className="">
-                    <TableHeader
-                      totalItems={modules.length + ' modules'}
-                      title="Modules"
-                      handleSearch={handleSearch}>
-                       <Button onClick={() => history.push(`${path}/add`)}>
-                        Add Module
-                      </Button> 
-                    </TableHeader>
-                  </section> */}
-                  <section>
-                    <TableHeader
-                      showSearch={false}
-                      showBadge={false}
-                      title="Enrolled Modules"
-                      totalItems={modules.length || 0}
-                    />
-                  </section>
+                  <TableHeader
+                    showSearch={false}
+                    showBadge={false}
+                    title="Enrolled Modules"
+                    totalItems={modules.length || 0}
+                  />
                   <section className="flex flex-wrap justify-start gap-2">
                     {isLoading ? (
                       <Loader />

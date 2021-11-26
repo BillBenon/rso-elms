@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router';
 
 import Loader from '../../components/Atoms/custom/Loader';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import { authenticatorStore } from '../../store/administration';
@@ -41,6 +42,11 @@ function StudentDashboard() {
     programs.push(prog);
   });
 
+  const list = [
+    { to: '/dashboard/student', title: 'Dashboard' },
+    { to: `${url}`, title: 'Program' },
+  ];
+
   return (
     <Switch>
       <Route
@@ -48,6 +54,9 @@ function StudentDashboard() {
         path={`${path}`}
         render={() => (
           <>
+            <section>
+              <BreadCrumb list={list}></BreadCrumb>
+            </section>
             <section>
               <TableHeader
                 showSearch={false}
