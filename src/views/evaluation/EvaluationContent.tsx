@@ -154,19 +154,24 @@ export default function EvaluationContent() {
             render={() => (
               <>
                 <div className="flex justify-between items-center h-12">
-                  <Heading fontWeight="semibold" className="pt-8">
-                    Evaluation information
-                  </Heading>
+                  <div>
+                    <Heading fontWeight="semibold" className="pt-8">
+                      Evaluation information
+                    </Heading>
+                  </div>
+                  <div className="flex gap-4">
+                    <Button
+                      onClick={() =>
+                        history.push({
+                          pathname: `/dashboard/evaluations/new`,
+                          search: `?evaluation=${id}`,
+                        })
+                      }>
+                      Edit evaluation
+                    </Button>
 
-                  <Button
-                    onClick={() =>
-                      history.push({
-                        pathname: `/dashboard/evaluations/new`,
-                        search: `?evaluation=${id}`,
-                      })
-                    }>
-                    Edit evaluation
-                  </Button>
+                    <Button styleType="outline">Publish evaluation</Button>
+                  </div>
                 </div>
                 <div className="bg-main px-7 mt-7 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-3 pt-5">
                   <div>
