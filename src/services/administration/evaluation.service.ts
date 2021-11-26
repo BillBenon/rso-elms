@@ -31,7 +31,9 @@ class EvaluationService {
   public async createEvaluationQuestion(
     questionsInfo: ICreateEvaluationQuestions[],
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
-    return await evaluationAxios.post('/evaluationQuestions/add', questionsInfo);
+    return await evaluationAxios.post('/evaluationQuestions/add', {
+      questions: questionsInfo,
+    });
   }
 
   public async createEvaluationSettings(
