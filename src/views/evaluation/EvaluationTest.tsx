@@ -63,6 +63,7 @@ export default function EvaluationTest() {
       {questions && questions?.data.data.length > 0 ? (
         questions?.data.data.map((question, index: number) => (
           <QuestionContainer
+            index={index}
             id={question.id}
             key={question.id}
             isLast={questions.data.data.length - 1 === index}

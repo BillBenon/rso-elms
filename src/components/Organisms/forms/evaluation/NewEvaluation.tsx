@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router';
 
 import { Link as LinkList } from '../../../../types';
 import {
@@ -20,6 +21,8 @@ export default function NewEvaluation() {
   ];
 
   const [currentStep, setCurrentStep] = useState(getLocalStorageData('currentStep'));
+  const { search } = useLocation();
+  const [evaluationId] = useState(new URLSearchParams(search).get('evaluation'));
 
   function handleSubmit() {
     setCurrentStep(currentStep + 1);
@@ -49,9 +52,10 @@ export default function NewEvaluation() {
           width="w-64"
           isVertical={false}
           isInline={false}
-          navigateToStepHandler={() => console.log('submitted')}>
+          navigateToStepHandler={() => {}}>
           <div className="w-2/4">
             <EvaluationInfoComponent
+              evaluationId={evaluationId}
               handleNext={handleSubmit}
               handleGoBack={handleBack}
             />
@@ -61,6 +65,7 @@ export default function NewEvaluation() {
             <EvaluationQuestionComponent
               handleNext={handleSubmit}
               handleGoBack={handleBack}
+              evaluationId={evaluationId}
             />
           </div>
           <EvaluationSettings handleNext={handleSubmit} handleGoBack={handleBack} />
