@@ -173,11 +173,11 @@ export default function EvaluationContent() {
                       Edit evaluation
                     </Button>
 
-                    {published == false && (
+                    {published == false ? (
                       <Button
                       onClick={() =>
                        makeEvaluationPublic.mutate(
-                         id ,
+                        {evaluationId: id, status: "HIDDEN"},
                          {
                            onSuccess: () => {
                            toast.success('Evaluation is now public. Applying changes', { duration: 3000 });
@@ -192,7 +192,26 @@ export default function EvaluationContent() {
                      }
                      >Publish evaluation
                      </Button>
-                    )}
+                    ):
+                    <Button
+                      onClick={() =>
+                       makeEvaluationPublic.mutate(
+                         {evaluationId: id, status: "HIDDEN"} ,
+                         {
+                           onSuccess: () => {
+                           toast.success('Evaluation is unpublished. Applying changes', { duration: 3000 });
+                           setPublished(true);
+                         },
+                         onError: (error) => {
+                         console.error(error);
+                         toast.error(error + '');
+                         },
+                       },
+                       )
+                     }
+                     >Unpublish evaluation
+                     </Button>
+                     }
                   </div>
                 </div>
                 <div className="bg-main px-7 mt-7 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-3 pt-5">

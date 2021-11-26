@@ -95,9 +95,9 @@ class EvaluationService {
     );
   }
 
-  public async publishEvaluation(evaluationId: string): Promise<void> {
+  public async publishEvaluation(data:{evaluationId: string, status: string}): Promise<void> {
     return await evaluationAxios.put(
-      `evaluations/evaluation/${evaluationId}/PUBLIC`,
+      `evaluations/evaluation/${data.evaluationId}/${data.status}`,
     );
   }
 
