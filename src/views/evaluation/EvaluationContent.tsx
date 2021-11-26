@@ -24,6 +24,7 @@ export default function EvaluationContent() {
   const evaluationQuestions = evaluationStore.getEvaluationQuestions(id).data?.data.data;
 
   const { mutate } = markingStore.publishResults();
+  const makeEvaluationPublic = evaluationStore.publishEvaluation();
   const resultPublisher = markingStore.publishResult();
   const tabs = [
     {
@@ -107,6 +108,7 @@ export default function EvaluationContent() {
   }, []);
 
   const { data: evaluationInfo } = evaluationStore.getEvaluationById(id).data?.data || {};
+  const [published, setPublished] = useState(evaluationInfo?.available == "PUBLIC" || false);
 
   return (
     <div className="block pr-24 pb-8 w-11/12">
@@ -161,6 +163,7 @@ export default function EvaluationContent() {
                   </div>
                   <div className="flex gap-4">
                     <Button
+                     styleType="outline"
                       onClick={() =>
                         history.push({
                           pathname: `/dashboard/evaluations/new`,
@@ -170,7 +173,26 @@ export default function EvaluationContent() {
                       Edit evaluation
                     </Button>
 
-                    <Button styleType="outline">Publish evaluation</Button>
+                    {published == false && (
+                      <Button
+                      onClick={() =>
+                       makeEvaluationPublic.mutate(
+                         id ,
+                         {
+                           onSuccess: () => {
+                           toast.success('Evaluation is now public. Applying changes', { duration: 3000 });
+                           setPublished(true);
+                         },
+                         onError: (error) => {
+                         console.error(error);
+                         toast.error(error + '');
+                         },
+                       },
+                       )
+                     }
+                     >Publish evaluation
+                     </Button>
+                    )}
                   </div>
                 </div>
                 <div className="bg-main px-7 mt-7 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-3 pt-5">
