@@ -24,6 +24,13 @@ export interface ExtendedIntakeInfo extends Table, IntakeInfo {
   registration_control_id: string;
 }
 
+export interface CreateIntakeProgram {
+  description: '';
+  intake_id: string;
+  intake_program_id: '';
+  program_id: string;
+  status: GenericStatus;
+}
 export interface IntakeProgram {
   intake: IntakeInfo;
   program: ProgramInfo;
@@ -45,7 +52,7 @@ export interface IntakePrograms extends Table {
 export interface IntakeProgramsCreate {
   description: string;
   intak_id: string;
-  programs: IntakeProgram[];
+  programs: CreateIntakeProgram[];
 }
 
 // intake status enum
