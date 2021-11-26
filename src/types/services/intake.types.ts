@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { GenericStatus, Table } from '..';
+import { ProgramInfo } from './program.types';
 import { IRegistrationControlInfo } from './registrationControl.types';
 
 export interface IntakeInfo {
@@ -24,11 +25,9 @@ export interface ExtendedIntakeInfo extends Table, IntakeInfo {
 }
 
 export interface IntakeProgram {
+  intake: IntakeInfo;
+  program: ProgramInfo;
   description: string;
-  intake_id: string;
-  intake_program_id: string;
-  program_id: string;
-  status: GenericStatus;
 }
 
 export interface IntakeProgramsRes extends Table {
