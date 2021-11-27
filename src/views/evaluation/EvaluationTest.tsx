@@ -6,7 +6,9 @@ import { useHistory, useLocation } from 'react-router-dom';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import { evaluationService } from '../../services/administration/evaluation.service';
 import { evaluationStore } from '../../store/administration/evaluation.store';
+import { markingStore } from '../../store/administration/marking.store';
 import { getLocalStorageData } from '../../utils/getLocalStorageItem';
 import QuestionContainer from './QuestionContainer';
 
@@ -14,32 +16,62 @@ export default function EvaluationTest() {
   const { search } = useLocation();
   const history = useHistory();
   const [time, SetTime] = useState(0);
+  const [studentEvaluationId, setStudentEvaluationId] = useState('');
+  const [timeLimit, SetTimeLimit] = useState(0);
   const evaluationId = new URLSearchParams(search).get('evaluation') || '';
-  const { data: timeLimit } = evaluationStore.getEvaluationById(
-    evaluationId?.toString() || '',
+  const { data: evaluationData } = evaluationStore.getEvaluationById(
+    evaluationId?.toString(),
   );
   const {
     data: questions,
     isSuccess,
     isError,
   } = evaluationStore.getEvaluationQuestions(evaluationId.toString());
-  useEffect(() => {
-    timeLimit && SetTime(timeLimit?.data?.data?.time_limit * 60 * 1000);
-  }, [timeLimit]);
 
   const { mutate } = evaluationStore.submitEvaluation();
 
+  let previousAnswers =
+    markingStore.getStudentEvaluationAnswers(studentEvaluationId).data?.data.data || [];
+
+  let studentEvaluationData = markingStore.getStudentEvaluationById(studentEvaluationId);
+  let studentWorkTimer = evaluationStore.getEvaluationWorkTime(studentEvaluationId);
+
   function autoSubmit() {
-    mutate(getLocalStorageData('studentEvaluationId'), {
+    mutate(studentEvaluationId, {
       onSuccess: () => {
         toast.success('Evaluation submitted', { duration: 5000 });
-        history.push('/dashboard/modules');
+        history.goBack();
       },
       onError: (error) => {
         toast.error(error + '');
       },
     });
   }
+
+  async function updateWorkTime(value: any) {
+    let workTime = timeLimit * 60 * 1000 - time + (time - value.total);
+    await evaluationService.updateEvaluationWorkTime({
+      studentEvaluationId: studentEvaluationId,
+      currentTime: (workTime / 1000).toString(),
+    });
+  }
+
+  useEffect(() => {
+    setStudentEvaluationId(getLocalStorageData('studentEvaluationId'));
+
+    SetTimeLimit(evaluationData?.data?.data?.time_limit || 0);
+    SetTime(
+      ((evaluationData?.data?.data?.time_limit || 0) * 60 -
+        studentWorkTimer?.data?.data.data) *
+        1000,
+    );
+  }, [
+    studentEvaluationData.data?.data.data.workTime,
+    studentWorkTimer?.data?.data.data,
+    timeLimit,
+  ]);
+
+  console.log(time);
 
   return (
     <div>
@@ -53,8 +85,9 @@ export default function EvaluationTest() {
             <Countdown
               key={time}
               date={Date.now() + time}
-              onComplete={autoSubmit}
+              onComplete={() => autoSubmit()}
               renderer={Renderer}
+              onTick={(value) => updateWorkTime(value)}
             />
           </Heading>
         </div>
@@ -63,11 +96,13 @@ export default function EvaluationTest() {
       {questions && questions?.data.data.length > 0 ? (
         questions?.data.data.map((question, index: number) => (
           <QuestionContainer
+            index={index}
             id={question.id}
             key={question.id}
             isLast={questions.data.data.length - 1 === index}
             question={question.question}
             marks={question.mark}
+            previousAnswers={previousAnswers}
             isMultipleChoice={question.multipleChoiceAnswers.length > 0}
           />
         ))

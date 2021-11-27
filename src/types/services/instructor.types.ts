@@ -11,17 +11,6 @@ export interface DeployInstructor {
   instructor_id: string;
 }
 
-export interface EnrollInstructorProgram {
-  instructor_id: string;
-  intake_program_id: string;
-}
-
-export interface EnrollInstructorLevel {
-  academicProgramLevelId: string;
-  academicYearId: string;
-  intakeProgramInstructorId: number;
-}
-
 export interface InstructorProgram extends Table {
   instructor: Instructor;
   intake_program: IntakeProgram;

@@ -61,15 +61,15 @@ export default function ViewEvaluations({ subjectId, linkTo }: IEvaluationProps)
       student_id: authUser?.id.toString() || '',
     };
 
-    console.log('stud: ', studentEvaluationStart);
+    goToNext(studentEvaluationStart.evaluation_id);
     mutateAsync(studentEvaluationStart, {
       onSuccess: (studentInfo) => {
         setLocalStorageData('studentEvaluationId', studentInfo.data.data.id);
         toast.success('Generated evaluation code', { duration: 5000 });
         goToNext(studentEvaluationStart.evaluation_id);
       },
-      onError: (error) => {
-        toast.error(error + '');
+      onError: () => {
+        toast.error("The evaluation isn't already started!");
       },
     });
   }

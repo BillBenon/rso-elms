@@ -7,6 +7,23 @@ class EvaluationStore {
     return useMutation(evaluationService.createEvaluation);
   }
 
+  updateEvaluation() {
+    return useMutation(evaluationService.updateEvaluation);
+  }
+
+  getEvaluationWorkTime(studentEvaluationId: string) {
+    return useQuery(
+      ['workTime', studentEvaluationId],
+      () => evaluationService.getEvaluationWorkTime(studentEvaluationId),
+      {
+        enabled: !!studentEvaluationId,
+      },
+    );
+  }
+  updateEvaluationWorkTime() {
+    return useMutation(evaluationService.updateEvaluationWorkTime);
+  }
+
   createEvaluationQuestions() {
     return useMutation(evaluationService.createEvaluationQuestion);
   }
@@ -28,16 +45,24 @@ class EvaluationStore {
   }
 
   getEvaluationById(id: string) {
-    return useQuery(['evaluation', id], () => evaluationService.getEvaluationById(id));
+    return useQuery(['evaluation', id], () => evaluationService.getEvaluationById(id), {
+      enabled: !!id,
+    });
   }
   getEvaluationQuestions(id: string) {
-    return useQuery(['evaluation/questions', id], () =>
-      evaluationService.getEvaluationQuestions(id),
+    return useQuery(
+      ['evaluation/questions', id],
+      () => evaluationService.getEvaluationQuestions(id),
+      { enabled: !!id },
     );
   }
 
   addQuestionAnswer() {
     return useMutation(evaluationService.addQuestionAnswer);
+  }
+
+  publishEvaluation(){
+    return useMutation(evaluationService.publishEvaluation);
   }
 
   submitEvaluation() {
