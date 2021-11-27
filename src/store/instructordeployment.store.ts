@@ -18,16 +18,13 @@ class InstructorDeploymentStore {
       instructorDeployment.getInstructorById(id),
     );
   }
+  getInstructorByUserId(userId: string) {
+    return useQuery(['instructor/userId', userId], () =>
+      instructorDeployment.getInstructorByUserId(userId),
+    );
+  }
   getInstructors() {
     return useQuery(['instructors'], () => instructorDeployment.getInstructors());
-  }
-
-  enrollInstructorToProgram() {
-    return useMutation(instructorDeployment.enrollInstructorToProgram);
-  }
-
-  enrollInstructorToLevel() {
-    return useMutation(instructorDeployment.enrollInstructorToLevel);
   }
 
   deploy() {

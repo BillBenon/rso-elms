@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from 'react-query';
 
 import { intakeProgramService } from '../../services/administration/IntakeProgram.service';
+import { IntakeModuleStatus } from '../../types/services/intake-program.types';
 
 class IntakeProgramStore {
   getStudentsByIntakeProgram(intakeProgramId: string) {
@@ -21,6 +22,12 @@ class IntakeProgramStore {
   getInstructorsByIntakeProgramLevel(instructorId: string) {
     return useQuery(['instructors/intakeprogram', instructorId], () =>
       intakeProgramService.getInstructorsByIntakeProgramLevel(instructorId),
+    );
+  }
+
+  getModulesByInstructorAndStatus(instructorId: string, status: IntakeModuleStatus) {
+    return useQuery(['instructor/modules', instructorId], () =>
+      intakeProgramService.getModulesByInstructorAndStatus(instructorId, status),
     );
   }
 
@@ -78,15 +85,6 @@ class IntakeProgramStore {
   }
   addModuleToLevel() {
     return useMutation(intakeProgramService.addModuleToLevel);
-  }
-  enrollStudentsToLevel() {
-    return useMutation(intakeProgramService.enrollStudentsToLevel);
-  }
-  enrollStudentToProgram() {
-    return useMutation(intakeProgramService.enrollStudentToProgram);
-  }
-  enrollInstructorToProgram() {
-    return useMutation(intakeProgramService.enrollInstructorToProgram);
   }
 }
 

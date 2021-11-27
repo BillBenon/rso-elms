@@ -5,11 +5,10 @@ import { useParams } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import RightSidebar from '../../components/Organisms/RightSidebar';
 import { queryClient } from '../../plugins/react-query';
+import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
-import {
-  EnrollStudents,
-  IntakeLevelParam,
-} from '../../types/services/intake-program.types';
+import { EnrollStudents } from '../../types/services/enrollment.types';
+import { IntakeLevelParam } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 
 function EnrollStudent() {
@@ -36,7 +35,7 @@ function EnrollStudent() {
     setStudents(studentsView);
   }, [studentsProgram]);
 
-  const { mutate } = intakeProgramStore.enrollStudentsToLevel();
+  const { mutate } = enrollmentStore.enrollStudentsToLevel();
 
   function add(data?: string[]) {
     data?.map((st_id) => {

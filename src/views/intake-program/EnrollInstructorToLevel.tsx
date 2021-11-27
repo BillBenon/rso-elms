@@ -5,9 +5,9 @@ import { useParams } from 'react-router';
 import Button from '../../components/Atoms/custom/Button';
 import RightSidebar from '../../components/Organisms/RightSidebar';
 import { queryClient } from '../../plugins/react-query';
+import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
-import instructordeploymentStore from '../../store/instructordeployment.store';
-import { EnrollInstructorLevel } from '../../types/services/instructor.types';
+import { EnrollInstructorLevel } from '../../types/services/enrollment.types';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 
@@ -35,7 +35,7 @@ function EnrollInstructorToLevel() {
     setInstructors(instructorsView);
   }, [instructorsInProgram]);
 
-  const { mutate } = instructordeploymentStore.enrollInstructorToLevel();
+  const { mutate } = enrollmentStore.enrollInstructorToLevel();
 
   function add(data?: string[]) {
     data?.map((inst_id) => {
