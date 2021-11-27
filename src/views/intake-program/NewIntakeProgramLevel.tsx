@@ -206,8 +206,7 @@ export default function NewIntakeProgramLevel() {
       <Button
         className="mt-4"
         onClick={() =>
-          // history.push(`/dashboard/intakes/programs/${intakeProg}/${programId}/modules`)
-          history.goBack()
+          history.push(`/dashboard/intakes/programs/${intakeProg}/${programId}`)
         }>
         Finish
       </Button>

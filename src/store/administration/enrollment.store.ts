@@ -8,6 +8,13 @@ class EnrolmmentStore {
       enrollmentService.getInstructorLevel(instructorId),
     );
   }
+
+  getInstructorPrograms(instructorId: string) {
+    return useQuery(['instructor/program', instructorId], () =>
+      enrollmentService.getInstructorPrograms(instructorId),
+    );
+  }
+
   enrollStudentsToLevel() {
     return useMutation(enrollmentService.enrollStudentsToLevel);
   }

@@ -14,6 +14,7 @@ import {
   LevelIntakeProgram,
   StudentIntakeProgram,
 } from '../../types/services/intake-program.types';
+import { InstructorProgram } from './../../types/services/instructor.types';
 
 class EnrollmentService {
   public async getInstructorLevel(
@@ -21,6 +22,14 @@ class EnrollmentService {
   ): Promise<AxiosResponse<Response<EnrollInstructorLevelInfo[]>>> {
     return await adminstrationAxios.get(
       `instructorEnrolment/getInstructorEnrolmentLevelByInstructor/${instructorId}`,
+    );
+  }
+
+  public async getInstructorPrograms(
+    instructorId: string,
+  ): Promise<AxiosResponse<Response<InstructorProgram[]>>> {
+    return await adminstrationAxios.get(
+      `instructorEnrolment/getInstructorPrograms/${instructorId}`,
     );
   }
 
