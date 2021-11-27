@@ -25,7 +25,10 @@ import ILabel from '../../../Atoms/Text/ILabel';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import SwitchMolecule from '../../../Molecules/input/SwitchMolecule';
 
-export default function EvaluationSettings({ handleGoBack }: IEvaluationProps) {
+export default function EvaluationSettings({
+  handleGoBack,
+  evaluationId,
+}: IEvaluationProps) {
   const history = useHistory();
   const authUser = authenticatorStore.authUser().data?.data.data;
   const { data: inCharge } = usersStore.getUsersByAcademy(
@@ -40,7 +43,7 @@ export default function EvaluationSettings({ handleGoBack }: IEvaluationProps) {
     approver: '',
     evaluation: getLocalStorageData('evaluationId'),
     evaluation_approval_status: IEvaluationApprovalStatus.REVIEWING,
-    id: '',
+    id: evaluationId || '',
     preparer: authUser?.id.toString() || '',
     reviewer: '',
     to_be_approved: false,

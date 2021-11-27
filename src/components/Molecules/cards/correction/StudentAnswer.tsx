@@ -4,14 +4,18 @@ import { TextDecoration } from '../../../../types';
 import { MarkingCorrection } from '../../../../types/services/marking.types';
 import Icon from '../../../Atoms/custom/Icon';
 
-interface PropTypes<> {
+interface PropTypes {
   data: any;
   full?: boolean;
   icon?: boolean;
   correction: MarkingCorrection[];
   totalMarks: number;
-  updateQuestionPoints: () => void;
-  createCreateNewCorrection: () => MarkingCorrection;
+  updateQuestionPoints: (_answer_id: string, _marks: number) => void;
+  createCreateNewCorrection: (
+    _answer_id: string,
+    _marks: number,
+    _marked: boolean,
+  ) => MarkingCorrection;
   setTotalMarks: Dispatch<SetStateAction<number>>;
   hoverStyle?: TextDecoration;
   className?: string;
@@ -23,7 +27,8 @@ export default function StudentAnswer({
   createCreateNewCorrection,
 }: PropTypes) {
   const correct: MarkingCorrection =
-    correction.find((x) => x.answerId === data?.id) || createCreateNewCorrection();
+    correction.find((x) => x.answerId === data?.id) ||
+    createCreateNewCorrection(data?.id, data.mark_scored, data.marked);
   return (
     <div className={`answer-card-molecule bg-main p-6 rounded-lg `}>
       <div className="flex justify-between">
@@ -45,7 +50,7 @@ export default function StudentAnswer({
                 : 'right-button'
             }
             onClick={() => {
-              updateQuestionPoints();
+              updateQuestionPoints(data?.id, data?.evaluation_question?.mark);
             }}>
             <Icon
               name={'tick'}
@@ -62,7 +67,7 @@ export default function StudentAnswer({
                 : 'wrong-button'
             }
             onClick={() => {
-              updateQuestionPoints();
+              updateQuestionPoints(data?.id, 0);
             }}>
             <Icon
               name={'cross'}
