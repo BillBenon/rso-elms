@@ -52,6 +52,13 @@ export interface InputProps<T> extends CommonInputProps<T> {
   reference?: React.LegacyRef<HTMLInputElement>;
 }
 
+export interface DropdownProps2 extends commonInputProps {
+  isMulti?: boolean;
+  noOptionsMessage?: string;
+  width?: string;
+  hasError?: boolean;
+}
+
 export interface DropdownProps extends commonInputProps {
   isMulti?: boolean;
   getOptionLabel?: (_option: Object) => string;
