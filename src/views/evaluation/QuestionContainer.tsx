@@ -128,9 +128,7 @@ export default function QuestionContainer({
         <Input value={id} name="evaluationQuestion" handleChange={handleChange} hidden />
         <TextAreaMolecule
           style={{ height: '7rem' }}
-          value={
-            (previousAnswers && previousAnswers[index]?.open_answer) || answer?.openAnswer
-          }
+          value={previousAnswers[index]?.open_answer || answer?.openAnswer}
           placeholder="Type your answer here"
           onBlur={() => submitForm(previousAnswers[index]?.open_answer)}
           name="openAnswer"

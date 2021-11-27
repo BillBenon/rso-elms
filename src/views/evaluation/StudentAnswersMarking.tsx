@@ -64,7 +64,7 @@ export default function StudentAnswersMarking() {
     setTotalMarks(totalMarks + points);
     return { answerId: answer_id, markScored: points, marked: true };
   }
-  function updateQuestionPoints(answer_id: string, points: number, _marked: boolean) {
+  function updateQuestionPoints(answer_id: string, points: number) {
     var flag: number = 0;
 
     correction.forEach((element) => {
