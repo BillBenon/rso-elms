@@ -31,7 +31,9 @@ class EvaluationService {
   public async createEvaluationQuestion(
     questionsInfo: ICreateEvaluationQuestions[],
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
-    return await evaluationAxios.post('/evaluationQuestions/add', questionsInfo);
+    return await evaluationAxios.post('/evaluationQuestions/add', {
+      questions: questionsInfo,
+    });
   }
 
   public async createEvaluationSettings(
@@ -90,6 +92,12 @@ class EvaluationService {
   public async autoSubmitEvaluation(studentEvaluationId: string): Promise<void> {
     return await evaluationAxios.put(
       `studentEvaluations/studentEvaluation/${studentEvaluationId}/auto_submit`,
+    );
+  }
+
+  public async publishEvaluation(data:{evaluationId: string, status: string}): Promise<void> {
+    return await evaluationAxios.put(
+      `evaluations/evaluation/${data.evaluationId}/${data.status}`,
     );
   }
 

@@ -24,6 +24,7 @@ export default function EvaluationContent() {
   const evaluationQuestions = evaluationStore.getEvaluationQuestions(id).data?.data.data;
 
   const { mutate } = markingStore.publishResults();
+  const makeEvaluationPublic = evaluationStore.publishEvaluation();
   const resultPublisher = markingStore.publishResult();
   const tabs = [
     {
@@ -107,6 +108,7 @@ export default function EvaluationContent() {
   }, []);
 
   const { data: evaluationInfo } = evaluationStore.getEvaluationById(id).data?.data || {};
+  const [published, setPublished] = useState(evaluationInfo?.available == "PUBLIC" || false);
 
   return (
     <div className="block pr-24 pb-8 w-11/12">
@@ -154,19 +156,63 @@ export default function EvaluationContent() {
             render={() => (
               <>
                 <div className="flex justify-between items-center h-12">
-                  <Heading fontWeight="semibold" className="pt-8">
-                    Evaluation information
-                  </Heading>
+                  <div>
+                    <Heading fontWeight="semibold" className="pt-8">
+                      Evaluation information
+                    </Heading>
+                  </div>
+                  <div className="flex gap-4">
+                    <Button
+                     styleType="outline"
+                      onClick={() =>
+                        history.push({
+                          pathname: `/dashboard/evaluations/new`,
+                          search: `?evaluation=${id}`,
+                        })
+                      }>
+                      Edit evaluation
+                    </Button>
 
-                  <Button
-                    onClick={() =>
-                      history.push({
-                        pathname: `/dashboard/evaluations/new`,
-                        search: `?evaluation=${id}`,
-                      })
-                    }>
-                    Edit evaluation
-                  </Button>
+                    {published == false ? (
+                      <Button
+                      onClick={() =>
+                       makeEvaluationPublic.mutate(
+                        {evaluationId: id, status: "HIDDEN"},
+                         {
+                           onSuccess: () => {
+                           toast.success('Evaluation is now public. Applying changes', { duration: 3000 });
+                           setPublished(true);
+                         },
+                         onError: (error) => {
+                         console.error(error);
+                         toast.error(error + '');
+                         },
+                       },
+                       )
+                     }
+                     >Publish evaluation
+                     </Button>
+                    ):
+                    <Button
+                      onClick={() =>
+                       makeEvaluationPublic.mutate(
+                         {evaluationId: id, status: "HIDDEN"} ,
+                         {
+                           onSuccess: () => {
+                           toast.success('Evaluation is unpublished. Applying changes', { duration: 3000 });
+                           setPublished(true);
+                         },
+                         onError: (error) => {
+                         console.error(error);
+                         toast.error(error + '');
+                         },
+                       },
+                       )
+                     }
+                     >Unpublish evaluation
+                     </Button>
+                     }
+                  </div>
                 </div>
                 <div className="bg-main px-7 mt-7 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-3 pt-5">
                   <div>
