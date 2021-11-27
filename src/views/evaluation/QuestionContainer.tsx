@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useLocation } from 'react-router-dom';
 
@@ -20,6 +20,7 @@ interface IQuestionContainerProps {
   index: number;
   choices?: [];
   isMultipleChoice: boolean;
+  previousAnswers: any[];
 }
 
 export default function QuestionContainer({
@@ -28,6 +29,7 @@ export default function QuestionContainer({
   isLast,
   index,
   marks,
+  previousAnswers,
   // choices,
   isMultipleChoice,
 }: IQuestionContainerProps) {
@@ -45,6 +47,7 @@ export default function QuestionContainer({
 
   const history = useHistory();
   const [answer, setAnswer] = useState<IStudentAnswer>(initialState);
+  const [questionToSubmit, setQuestionToSubmit] = useState('');
 
   function handleChange({ name, value }: ValueType) {
     setAnswer((answer) => ({ ...answer, [name]: value }));
@@ -67,29 +70,35 @@ export default function QuestionContainer({
     });
   }
 
-  function submitForm(id: string, e: FormEvent) {
-    e.preventDefault();
-
-    mutateAsync(answer, {
-      onSuccess: () => {
-        toast.success('Question answered', { duration: 5000 });
-
-        //first remove the button for submitted question
-        let buttonToRemove = document.getElementById(id);
-        buttonToRemove?.remove();
-      },
-      onError: (error) => {
-        toast.error(error + '');
-      },
-    });
+  function submitForm(previousValue?: string) {
+    if (previousValue !== answer?.openAnswer) {
+      mutateAsync(answer, {
+        onSuccess: () => {
+          toast.success('submitted');
+          setQuestionToSubmit('');
+        },
+        onError: (error) => {
+          toast.error(error + '');
+        },
+      });
+    }
   }
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (questionToSubmit) submitForm();
+    }, 30000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [questionToSubmit]);
+
   return (
-    <form onSubmit={(e) => submitForm(id, e)}>
-      <div className="bg-main px-16 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5" id={id}>
+    <form>
+      <div className="bg-main px-16 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5">
         <div className="mt-7 flex justify-between">
           <ContentSpan title={`Question ${index + 1}`} className="gap-3">
-            {question}
+            {question || question}
           </ContentSpan>
 
           <Heading fontWeight="semibold" fontSize="sm">
@@ -119,16 +128,20 @@ export default function QuestionContainer({
         <Input value={id} name="evaluationQuestion" handleChange={handleChange} hidden />
         <TextAreaMolecule
           style={{ height: '7rem' }}
-          value={answer.openAnswer}
+          value={
+            (previousAnswers && previousAnswers[index]?.open_answer) || answer?.openAnswer
+          }
           placeholder="Type your answer here"
+          onBlur={() => submitForm(previousAnswers[index]?.open_answer)}
           name="openAnswer"
+          onFocus={() => setQuestionToSubmit(id)}
           handleChange={handleChange}
         />
-        <div className="py-7">
+        {/* <div className="py-7">
           <Button type="submit" onSubmit={(e: FormEvent) => submitForm(id, e)}>
             submit answer
           </Button>
-        </div>
+        </div> */}
       </div>
       {isLast ? (
         <div className="py-7">
