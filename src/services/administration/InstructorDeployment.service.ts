@@ -7,10 +7,6 @@ import {
   Instructor,
   InstructorDeployed,
 } from '../../types/services/instructor.types';
-import {
-  EnrollInstructorLevel,
-  EnrollInstructorProgram,
-} from './../../types/services/instructor.types';
 
 class InstructorDeployment {
   public async getInstructorsDeployedInAcademy(
@@ -35,23 +31,16 @@ class InstructorDeployment {
     return await adminstrationAxios.get(`instructorDeployments/getInstructorById/${id}`);
   }
 
-  public async getInstructors(): Promise<AxiosResponse<Response<Instructor[]>>> {
-    return await adminstrationAxios.get(`instructorDeployments/getInstructors`);
-  }
-
-  public async enrollInstructorToProgram(
-    instructor: EnrollInstructorProgram,
+  public async getInstructorByUserId(
+    userId: string,
   ): Promise<AxiosResponse<Response<Instructor>>> {
-    return await adminstrationAxios.post(
-      'instructorEnrolment/enroleInProgram',
-      instructor,
+    return await adminstrationAxios.get(
+      `instructorDeployments/getInstructorByUserId/${userId}`,
     );
   }
 
-  public async enrollInstructorToLevel(
-    instructor: EnrollInstructorLevel,
-  ): Promise<AxiosResponse<Response<Instructor>>> {
-    return await adminstrationAxios.post('instructorEnrolment/enroleInLevel', instructor);
+  public async getInstructors(): Promise<AxiosResponse<Response<Instructor[]>>> {
+    return await adminstrationAxios.get(`instructorDeployments/getInstructors`);
   }
 
   public async deploy(

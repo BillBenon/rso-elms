@@ -11,7 +11,10 @@ import { intakeStore } from '../../store/administration/intake.store';
 import programStore from '../../store/administration/program.store';
 import { GenericStatus, ValueType } from '../../types';
 import { DivisionInfo } from '../../types/services/division.types';
-import { IntakeProgram, IntakeProgramsCreate } from '../../types/services/intake.types';
+import {
+  CreateIntakeProgram,
+  IntakeProgramsCreate,
+} from '../../types/services/intake.types';
 import { ProgramInfo } from '../../types/services/program.types';
 import { getDropDownOptions } from '../../utils/getOption';
 
@@ -59,7 +62,7 @@ export default function AddAcademicProgramToIntake({ submited }: PropType) {
     };
 
     for (let i = 0; i < selectedPrograms.length; i++) {
-      const element: IntakeProgram = {
+      const element: CreateIntakeProgram = {
         description: '',
         intake_id: intakeId!,
         intake_program_id: '',

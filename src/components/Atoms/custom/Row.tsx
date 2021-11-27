@@ -50,7 +50,7 @@ const Row = ({ keys, data, uniqueCol, statusColumn, statusActions }: RowProps) =
           <td
             className={`px-4 py-2 ${key.toLowerCase() === statusColumn ? 'text-xs' : ''}`}
             key={key + Math.random() * 16}>
-            {statusActions ? (
+            {statusActions && key.toLowerCase() === statusColumn ? (
               <Tooltip
                 on="click"
                 trigger={

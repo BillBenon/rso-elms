@@ -6,9 +6,10 @@ import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import RightSidebar from '../../components/Organisms/RightSidebar';
 import { queryClient } from '../../plugins/react-query';
+import enrollmentStore from '../../store/administration/enrollment.store';
 import { intakeStore } from '../../store/administration/intake.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
-import { EnrollInstructorProgram } from '../../types/services/instructor.types';
+import { EnrollInstructorProgram } from '../../types/services/enrollment.types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 
@@ -45,7 +46,7 @@ function EnrollInstructorIntakeProgram() {
     setInstructors(instructorsView);
   }, [instructorsInAcademy]);
 
-  const { mutate } = instructordeploymentStore.enrollInstructorToProgram();
+  const { mutate } = enrollmentStore.enrollInstructorToProgram();
 
   function add(data?: string[]) {
     data?.map((st_id) => {
