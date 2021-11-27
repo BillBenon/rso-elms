@@ -2,6 +2,7 @@
 import { Table } from '..';
 import { IAcademicPeriodInfo } from './academicperiod.types';
 import { IAcademicYearInfo } from './academicyears.types';
+import { EnrollmentMode, EnrollmentStatus } from './enrollment.types';
 import { IntakeInfo, IntakeProgram, IntakeStatus } from './intake.types';
 import { ProgramLevel } from './levels.types';
 import { ModuleInfo } from './modules.types';
@@ -45,26 +46,6 @@ export interface IntakeProgramLevelPeriodInfo extends Table {
   academic_year_program_intake_level_id: string;
   academic_period_id: string;
   academic_program_intake_level: LevelIntakeProgram;
-}
-
-export interface EnrollStudents {
-  academic_year_id: string;
-  intake_program_student_id: number;
-  program_level_id: string;
-}
-
-export interface EnrollStudentToProgram {
-  completed_on: string;
-  employee_number: string;
-  enroled_on: string;
-  enrolment_mode: EnrollmentMode;
-  enrolment_status: EnrollmentStatus;
-  intake_program_id: string;
-  other_rank: string;
-  rank_id: string;
-  rank_institution: string;
-  student_id: string;
-  third_party_reg_number: string;
 }
 export interface LevelIntakeProgram extends Table {
   academic_year: IAcademicYearInfo;
@@ -175,18 +156,6 @@ export enum IntakeModuleStatus {
   SUSPENDED = 'SUSPENDED',
   COMPLETED = 'COMPLETED',
   VOIDED = 'VOIDED',
-}
-
-export enum EnrollmentStatus {
-  PENDING,
-  NEW,
-  RETAKE = 'RETAKE',
-  DISMISSED = 'DISMISSED',
-}
-
-export enum EnrollmentMode {
-  NEW = 'NEW',
-  RECURRING = 'RECURRING',
 }
 
 export enum PromotionStatus {

@@ -17,6 +17,7 @@ import intakeProgramStore from '../../store/administration/intake-program.store'
 import { moduleStore } from '../../store/administration/modules.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { ValueType } from '../../types';
+import { Instructor } from '../../types/services/instructor.types';
 import {
   AddLevelToModule,
   IntakeLevelParam,
@@ -31,7 +32,7 @@ function NewIntakeLevelModule() {
     actual_end_on: '',
     actual_start_on: '',
     credits: 0,
-    incharge_id: '70ee81f0-39ca-4282-9a0d-ff9bc4106f9d',
+    incharge_id: '',
     intake_status: IntakeModuleStatus.DRAFT,
     marks: 0,
     module_id: '',
@@ -62,10 +63,20 @@ function NewIntakeLevelModule() {
 
   const getAllModuleStore = moduleStore.getModulesByProgram(id).data?.data.data || [];
 
-  const instructors =
+  const instructors_deployed =
     instructordeploymentStore.getInstructorsDeployedInAcademy(
       authUser?.academy.id.toString() || '',
     ).data?.data.data || [];
+
+  const all_instructors =
+    instructordeploymentStore.getInstructors().data?.data.data || [];
+
+  const instructors =
+    all_instructors?.filter(
+      (instr) =>
+        instr.id ===
+        instructors_deployed.find((dep) => dep.instructor_id == instr.id)?.instructor_id,
+    ) || [];
 
   useEffect(() => {
     setvalues({ ...values, academic_year_program_intake_level_id: parseInt(levelId) });
@@ -133,6 +144,9 @@ function NewIntakeLevelModule() {
             options={getDropDownOptions({
               inputs: instructors,
               labelName: ['first_name', 'last_name'],
+              //@ts-ignore
+              getOptionLabel: (instr: Instructor) =>
+                instr.user.first_name + ' ' + instr.user.last_name,
             })}
             name="incharge_id"
             handleChange={handleChange}>

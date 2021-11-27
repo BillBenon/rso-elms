@@ -2,16 +2,11 @@ import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
-import {
-  EnrollInstructorProgram,
-  InstructorProgram,
-} from '../../types/services/instructor.types';
+import { InstructorProgram } from '../../types/services/instructor.types';
 import {
   AddIntakeProgramLevelPeriod,
   AddLevelToModule,
   CreateLevelIntakeProgram,
-  EnrollStudents,
-  EnrollStudentToProgram,
   IntakeLevelModule,
   IntakeProgramLevelPeriodInfo,
   LevelIntakeProgram,
@@ -50,6 +45,15 @@ class IntakeProgramService {
   ): Promise<AxiosResponse<Response<InstructorProgram[]>>> {
     return await adminstrationAxios.get(
       `/instructorEnrolment/getInstructorEnrolmentLevelByInstructor/${instructorId}`,
+    );
+  }
+
+  public async getModulesByInstructorAndStatus(
+    inchargeId: string,
+    status: string,
+  ): Promise<AxiosResponse<Response<ModuleInfo[]>>> {
+    return await adminstrationAxios.get(
+      `/academicProgramIntakeLevels/getModulesByInstructorInchargeAndStatus/${inchargeId}/${status}`,
     );
   }
 
@@ -129,29 +133,6 @@ class IntakeProgramService {
     return await adminstrationAxios.post(
       `academicProgramIntakeLevels/addAcademicProgramLevelToIntakeProgram`,
       newLevel,
-    );
-  }
-  public async enrollStudentsToLevel(
-    newStudent: EnrollStudents,
-  ): Promise<AxiosResponse<Response<LevelIntakeProgram>>> {
-    return await adminstrationAxios.post(`students/enrollStudentInLevel`, newStudent);
-  }
-
-  public async enrollStudentToProgram(
-    newStudent: EnrollStudentToProgram,
-  ): Promise<AxiosResponse<Response<StudentIntakeProgram>>> {
-    return await adminstrationAxios.post(
-      `students/enrolStudentInIntakeProgram`,
-      newStudent,
-    );
-  }
-
-  public async enrollInstructorToProgram(
-    newInstructor: EnrollInstructorProgram,
-  ): Promise<AxiosResponse<Response<StudentIntakeProgram>>> {
-    return await adminstrationAxios.post(
-      `instructorEnrolment/enroleInProgram`,
-      newInstructor,
     );
   }
 

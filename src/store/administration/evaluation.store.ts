@@ -61,6 +61,10 @@ class EvaluationStore {
     return useMutation(evaluationService.addQuestionAnswer);
   }
 
+  publishEvaluation(){
+    return useMutation(evaluationService.publishEvaluation);
+  }
+
   submitEvaluation() {
     return useMutation(evaluationService.submitEvaluation);
   }

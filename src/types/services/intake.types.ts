@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { GenericStatus, Table } from '..';
+import { ProgramInfo } from './program.types';
 import { IRegistrationControlInfo } from './registrationControl.types';
 
 export interface IntakeInfo {
@@ -23,12 +24,17 @@ export interface ExtendedIntakeInfo extends Table, IntakeInfo {
   registration_control_id: string;
 }
 
-export interface IntakeProgram {
-  description: string;
+export interface CreateIntakeProgram {
+  description: '';
   intake_id: string;
-  intake_program_id: string;
+  intake_program_id: '';
   program_id: string;
   status: GenericStatus;
+}
+export interface IntakeProgram {
+  intake: IntakeInfo;
+  program: ProgramInfo;
+  description: string;
 }
 
 export interface IntakeProgramsRes extends Table {
@@ -46,7 +52,7 @@ export interface IntakePrograms extends Table {
 export interface IntakeProgramsCreate {
   description: string;
   intak_id: string;
-  programs: IntakeProgram[];
+  programs: CreateIntakeProgram[];
 }
 
 // intake status enum

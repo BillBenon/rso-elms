@@ -122,6 +122,7 @@ export interface IEvaluationInfo {
   content_format: string;
   maximum_file_size: number;
   is_consider_on_report: boolean;
+  available: string;
   number_of_questions: string;
   subject_academic_year_period_id: string;
   group_evaluations: [];
