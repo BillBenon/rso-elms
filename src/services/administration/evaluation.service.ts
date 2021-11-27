@@ -78,6 +78,23 @@ class EvaluationService {
     });
   }
 
+  public async getEvaluationWorkTime(
+    studentEvaluationId: string,
+  ): Promise<AxiosResponse<Response<any>>> {
+    return await evaluationAxios.get(
+      `studentEvaluations/studentEvaluation/getWorkTime/${studentEvaluationId}`,
+    );
+  }
+
+  public async updateEvaluationWorkTime({
+    studentEvaluationId = '',
+    currentTime = '',
+  }): Promise<void> {
+    return await evaluationAxios.put(
+      `/studentEvaluations/studentEvaluation/${studentEvaluationId}/currentWorkTime/${currentTime}`,
+    );
+  }
+
   public async addQuestionAnswer(
     answer: IStudentAnswer,
   ): Promise<AxiosResponse<Response<IStudentAnswer>>> {
