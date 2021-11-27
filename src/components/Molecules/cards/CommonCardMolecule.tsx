@@ -40,8 +40,7 @@ export default function CommonCardMolecule({
   return (
     <div
       className={`course-card-molecule bg-main p-6 rounded-lg 
-      ${active && 'border-4 border-primary-500 border-solid'}
-      ${to && 'cursor-pointer'}
+      ${active && 'border-4 border-primary-500 border-solid'} cursor-pointer
       ${className}
       `}
       role="presentation"
@@ -50,7 +49,9 @@ export default function CommonCardMolecule({
       //   @ts-ignore
       onKeyPress={handlePress}>
       <div className="flex justify-between items-center">
-        <Heading fontWeight="semibold">{data.code}</Heading>
+        <Heading fontWeight="semibold" fontSize="base">
+          {data.code}
+        </Heading>
         {data.status && (
           <Badge badgecolor={data.status.type} className="capitalize">
             {data.status.text}
@@ -58,13 +59,15 @@ export default function CommonCardMolecule({
         )}
       </div>
       <div className="mt-6">
-        <Heading fontWeight="semibold">{data.title}</Heading>
+        <Heading fontSize="base" fontWeight="semibold">
+          {data.title}
+        </Heading>
         {data.subTitle && (
           <Heading fontSize="sm" className="pt-2" color="txt-secondary">
             {data.subTitle}
           </Heading>
         )}
-        <p className="course-card-description py-4 text-txt-secondary text-sm mt-4">
+        <p className="course-card-description py-4 text-txt-secondary text-sm">
           {data.description}
         </p>
 
