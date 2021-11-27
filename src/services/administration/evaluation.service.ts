@@ -19,11 +19,21 @@ class EvaluationService {
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
     return await evaluationAxios.post('/evaluations/add', evaluationInfo);
   }
+  public async updateEvaluation(
+    evaluationInfo: IEvaluationCreate,
+  ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
+    return await evaluationAxios.put(
+      `/evaluations/modify/${evaluationInfo.id}`,
+      evaluationInfo,
+    );
+  }
 
   public async createEvaluationQuestion(
-    questionsInfo: ICreateEvaluationQuestions,
+    questionsInfo: ICreateEvaluationQuestions[],
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
-    return await evaluationAxios.post('/evaluationQuestions/add', questionsInfo);
+    return await evaluationAxios.post('/evaluationQuestions/add', {
+      questions: questionsInfo,
+    });
   }
 
   public async createEvaluationSettings(
@@ -76,19 +86,25 @@ class EvaluationService {
 
   public async submitEvaluation(studentEvaluationId: string): Promise<void> {
     return await evaluationAxios.put(
-      `studentEvaluation/studentEvaluation/${studentEvaluationId}/submit`,
+      `studentEvaluations/studentEvaluation/${studentEvaluationId}/submit`,
     );
   }
   public async autoSubmitEvaluation(studentEvaluationId: string): Promise<void> {
     return await evaluationAxios.put(
-      `studentEvaluation/studentEvaluation/${studentEvaluationId}/auto_submit`,
+      `studentEvaluations/studentEvaluation/${studentEvaluationId}/auto_submit`,
+    );
+  }
+
+  public async publishEvaluation(data:{evaluationId: string, status: string}): Promise<void> {
+    return await evaluationAxios.put(
+      `evaluations/evaluation/${data.evaluationId}/${data.status}`,
     );
   }
 
   public async studentEvaluationStart(
     student: IStudentEvaluationStart,
   ): Promise<AxiosResponse<Response<IStudentEvaluationStartInfo>>> {
-    return await evaluationAxios.post('studentEvaluation/start', student);
+    return await evaluationAxios.post('studentEvaluations/start', student);
   }
 }
 

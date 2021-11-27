@@ -47,6 +47,7 @@ export type Status =
   | 'cancelled'
   | 'marked'
   | 'to_mark'
+  | 'published'
   | 'marking';
 
 

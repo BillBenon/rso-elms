@@ -1,9 +1,12 @@
 import { pick } from 'lodash';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
-import { Route, useParams, useRouteMatch, Switch, useHistory } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
+
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
+import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import { evaluationStore } from '../../store/administration/evaluation.store';
@@ -20,6 +23,9 @@ export default function EvaluationContent() {
   const [submissions, setSubmissions] = useState([]);
   const evaluationQuestions = evaluationStore.getEvaluationQuestions(id).data?.data.data;
 
+  const { mutate } = markingStore.publishResults();
+  const makeEvaluationPublic = evaluationStore.publishEvaluation();
+  const resultPublisher = markingStore.publishResult();
   const tabs = [
     {
       label: 'Overview evaluation',
@@ -38,20 +44,52 @@ export default function EvaluationContent() {
         history.push({ pathname: `${url}/submissions/${id}` });
       },
     },
+    {
+      name: 'Publish',
+      handleAction: (id: string | number | undefined) => {
+        resultPublisher.mutate(
+          { studentEvaluationId: id },
+          {
+            onSuccess: () => {
+              toast.success('Result published. Applying changes', { duration: 3000 });
+              history.push('/dashboard/evaluations');
+              // history.push({ pathname: `${url}` });
+            },
+            onError: (error) => {
+              console.error(error);
+              toast.error(error + '');
+            },
+          },
+        );
+      },
+    },
   ];
+
+  const studentEvaluations =
+    markingStore.getEvaluationStudentEvaluations(id).data?.data.data || [];
+
+  function publishEvaluationResults() {
+    mutate(
+      { evaluationId: id },
+      {
+        onSuccess: () => {
+          toast.success('Results published. Applying changes', { duration: 3000 });
+          history.push('/dashboard/evaluations');
+        },
+        onError: (error) => {
+          console.error(error);
+          toast.error(error + '');
+        },
+      },
+    );
+  }
 
   useEffect(() => {
     let formattedSubs: any = [];
 
     if (studentEvaluations) {
       const filteredInfo = studentEvaluations.map((submission: any) =>
-        pick(submission, [
-          'id',
-          'code',
-          'markingStatus',
-          'obtainedMark',
-          'totalMark',
-        ]),
+        pick(submission, ['id', 'code', 'markingStatus', 'obtainedMark', 'totalMark']),
       );
 
       filteredInfo?.map((submission: any) => {
@@ -67,10 +105,10 @@ export default function EvaluationContent() {
 
       studentEvaluations && setSubmissions(formattedSubs);
     }
-  })
+  }, []);
 
   const { data: evaluationInfo } = evaluationStore.getEvaluationById(id).data?.data || {};
-  const studentEvaluations = markingStore.getEvaluationStudentEvaluations(id).data?.data.data || []
+  const [published, setPublished] = useState(evaluationInfo?.available == "PUBLIC" || false);
 
   return (
     <div className="block pr-24 pb-8 w-11/12">
@@ -83,16 +121,30 @@ export default function EvaluationContent() {
               path={`${path}/submissions`}
               render={() => (
                 <>
-                <div className="w-full flex justify-end mb-4">
-                <Button>Publish results</Button>
-                </div>
-                <Table<any>
-                  statusColumn="status"
-                  data={submissions}
-                  hide={['id']}
-                  uniqueCol={'id'}
-                  // actions={actions
-                />
+                  {submissions.length > 0 ? (
+                    <>
+                      <div className="w-full flex justify-end mb-4">
+                        <Button onClick={publishEvaluationResults}>
+                          Publish all results
+                        </Button>
+                      </div>
+                      <Table<any>
+                        statusColumn="status"
+                        data={submissions}
+                        hide={['id']}
+                        uniqueCol={'id'}
+                        actions={actions}
+                      />
+                    </>
+                  ) : (
+                    <NoDataAvailable
+                      icon="evaluation"
+                      buttonLabel="Go back"
+                      title={'No submissions has been made so far!'}
+                      handleClick={() => history.push(`/dashboard/evaluations/${id}`)}
+                      description="And the web just isnt the same without you. Lets get you back online!"
+                    />
+                  )}
                 </>
               )}
             />
@@ -103,9 +155,65 @@ export default function EvaluationContent() {
             path={`${path}`}
             render={() => (
               <>
-                <Heading fontWeight="semibold" className="pt-8">
-                  Evaluation information
-                </Heading>
+                <div className="flex justify-between items-center h-12">
+                  <div>
+                    <Heading fontWeight="semibold" className="pt-8">
+                      Evaluation information
+                    </Heading>
+                  </div>
+                  <div className="flex gap-4">
+                    <Button
+                     styleType="outline"
+                      onClick={() =>
+                        history.push({
+                          pathname: `/dashboard/evaluations/new`,
+                          search: `?evaluation=${id}`,
+                        })
+                      }>
+                      Edit evaluation
+                    </Button>
+
+                    {published == false ? (
+                      <Button
+                      onClick={() =>
+                       makeEvaluationPublic.mutate(
+                        {evaluationId: id, status: "HIDDEN"},
+                         {
+                           onSuccess: () => {
+                           toast.success('Evaluation is now public. Applying changes', { duration: 3000 });
+                           setPublished(true);
+                         },
+                         onError: (error) => {
+                         console.error(error);
+                         toast.error(error + '');
+                         },
+                       },
+                       )
+                     }
+                     >Publish evaluation
+                     </Button>
+                    ):
+                    <Button
+                      onClick={() =>
+                       makeEvaluationPublic.mutate(
+                         {evaluationId: id, status: "HIDDEN"} ,
+                         {
+                           onSuccess: () => {
+                           toast.success('Evaluation is unpublished. Applying changes', { duration: 3000 });
+                           setPublished(true);
+                         },
+                         onError: (error) => {
+                         console.error(error);
+                         toast.error(error + '');
+                         },
+                       },
+                       )
+                     }
+                     >Unpublish evaluation
+                     </Button>
+                     }
+                  </div>
+                </div>
                 <div className="bg-main px-7 mt-7 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-3 pt-5">
                   <div>
                     {/* first column */}

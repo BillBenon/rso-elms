@@ -19,17 +19,17 @@ function IntakeProgramModules() {
 
   useEffect(() => {
     let newModules: CommonCardDataType[] = [];
-    getAllModuleStore.data?.data.data.forEach((module) => {
+    getAllModuleStore.data?.data.data.forEach((mod) => {
       newModules.push({
         status: {
-          type: advancedTypeChecker(module.generic_status),
-          text: module.generic_status.toString(),
+          type: advancedTypeChecker(mod.generic_status),
+          text: mod.generic_status.toString(),
         },
-        id: module.id,
-        code: module.code,
-        title: module.name,
-        description: module.description,
-        subTitle: `total subject: ${module.total_num_subjects || 'None'}`,
+        id: mod.id,
+        code: mod.code,
+        title: mod.name,
+        description: mod.description,
+        subTitle: `total subject: ${mod.total_num_subjects || 'None'}`,
       });
     });
 
