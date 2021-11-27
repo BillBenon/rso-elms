@@ -4,6 +4,11 @@ import { intakeProgramService } from '../../services/administration/IntakeProgra
 import { IntakeModuleStatus } from '../../types/services/intake-program.types';
 
 class IntakeProgramStore {
+  getStudentById(studentId: string) {
+    return useQuery(['student/id', studentId], () =>
+      intakeProgramService.getStudentById(studentId),
+    );
+  }
   getStudentsByIntakeProgram(intakeProgramId: string) {
     return useQuery(['students/intakeProgramId', intakeProgramId], () =>
       intakeProgramService.getStudentsByIntakeProgram(intakeProgramId),

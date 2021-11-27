@@ -17,6 +17,11 @@ import { Student } from '../../types/services/user.types';
 import { StudentIntakeProgramLevel } from './../../types/services/intake-program.types';
 
 class IntakeProgramService {
+  public async getStudentById(
+    studentId: string,
+  ): Promise<AxiosResponse<Response<Student>>> {
+    return await adminstrationAxios.get(`/students/getStudentById/${studentId}`);
+  }
   public async getStudentsByIntakeProgram(
     intakeProgramId: string,
   ): Promise<AxiosResponse<Response<StudentIntakeProgram[]>>> {
