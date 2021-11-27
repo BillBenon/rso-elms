@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Route, Switch, useLocation, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -12,14 +12,14 @@ import { CommonCardDataType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ModuleDetails from './ModuleDetails';
 
-export default function Modules() {
-  const { search } = useLocation();
-  const level = new URLSearchParams(search).get('levelId');
+export default function Modules({ level }: { level: string }) {
+  // const level = new URLSearchParams(search).get('levelId');
   const { data, isLoading, isSuccess, isError } = intakeProgramStore.getModulesByLevel(
     parseInt(level || ''),
   );
+
   const [modules, setModules] = useState<CommonCardDataType[]>([]);
-  const { path } = useRouteMatch();
+  const { path, url } = useRouteMatch();
 
   useEffect(() => {
     if (isSuccess && data?.data) {
@@ -43,8 +43,7 @@ export default function Modules() {
 
   const list = [
     { to: '/dashboard/student', title: 'Dashboard' },
-    { to: `/dashboard/student`, title: 'Program' },
-    { to: `/dashboard/modules?levelId=${level}`, title: 'module' },
+    { to: `${url}`, title: 'module' },
   ];
 
   return (
