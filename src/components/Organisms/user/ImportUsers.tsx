@@ -10,7 +10,7 @@ import Heading from '../../Atoms/Text/Heading';
 import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 
 interface IUser<K> extends CommonFormProps<K> {
-  userType: string;
+  userType: 'students' | 'instructors' | 'admins';
 }
 
 export default function ImportUsers<K>({ onSubmit, userType = 'students' }: IUser<K>) {
