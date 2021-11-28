@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, useRouteMatch } from 'react-router';
+import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 import { authenticatorStore } from '../../../store/administration';
@@ -7,8 +7,10 @@ import { GenericStatus, ValueType } from '../../../types';
 import { UserType, UserTypes } from '../../../types/services/user.types';
 import Button from '../../Atoms/custom/Button';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
+import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
+import ImportUsers from './ImportUsers';
 
 export default function Students({
   students,
@@ -87,6 +89,17 @@ export default function Students({
           )}
         </div>
       )}
+      <Switch>
+        <Route
+          exact
+          path={`${url}/import`}
+          render={() => (
+            <PopupMolecule title="Import students" open={true} onClose={history.goBack}>
+              <ImportUsers userType="students" />
+            </PopupMolecule>
+          )}
+        />
+      </Switch>
     </>
   );
 }
