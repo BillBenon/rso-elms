@@ -28,10 +28,17 @@ class EvaluationService {
     );
   }
 
+  // public async createEvaluationQuestion(
+  //   questionsInfo: ICreateEvaluationQuestions[],
+  // ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
+  //   return await evaluationAxios.post('/evaluationQuestions/add', {
+  //     questions: questionsInfo,
+  //   });
+  // }
   public async createEvaluationQuestion(
     questionsInfo: ICreateEvaluationQuestions[],
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
-    return await evaluationAxios.post('/evaluationQuestions/add', {
+    return await evaluationAxios.post('/evaluationQuestions/update-multiple', {
       questions: questionsInfo,
     });
   }

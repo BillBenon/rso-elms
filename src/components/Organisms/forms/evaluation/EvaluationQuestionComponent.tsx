@@ -25,11 +25,6 @@ export default function EvaluationQuestionComponent({
   //   answer_content: '',
   //   correct: false,
   // };
-  let evaluationQuestions: IEvaluationQuestionsInfo[] | [] = [];
-  if (evaluationId) {
-    evaluationQuestions =
-      evaluationStore.getEvaluationQuestions(evaluationId).data?.data.data || [];
-  }
 
   const initialState: ICreateEvaluationQuestions = {
     evaluation_id: getLocalStorageData('evaluationId'),
@@ -38,29 +33,42 @@ export default function EvaluationQuestionComponent({
     choices: [],
     id: '',
     question: '',
-    question_type: IQuestionType.OPEN,
+    questionType: IQuestionType.OPEN,
     sub_questions: [],
     submitted: false,
   };
+
+  let evaluationQuestions: IEvaluationQuestionsInfo[] | ICreateEvaluationQuestions[] = [];
+  if (evaluationId) {
+    evaluationQuestions =
+      evaluationStore.getEvaluationQuestions(evaluationId).data?.data.data || [];
+  }
+
+  console.log(initialState.evaluation_id);
 
   const [questions, setQuestions] = useState([initialState]);
 
   useEffect(() => {
     let allQuestions: any[] = [];
-    evaluationQuestions.map((question) => {
-      let questionData = { ...initialState };
-      questionData.choices = question.multipleChoiceAnswers;
-      questionData.evaluation_id = question.id;
-      questionData.mark = question.mark;
-      questionData.question = question.question;
-      questionData.question_type = question.questionType;
-      questionData.submitted = false;
-      questionData.id = question.id;
-      questionData.sub_questions = [];
-      allQuestions.push(questionData);
-    });
-    setQuestions(allQuestions);
-  }, [evaluationQuestions]);
+    if (evaluationQuestions.length > 0) {
+      evaluationQuestions.map((question) => {
+        let questionData = { ...initialState };
+        questionData.choices = question.multipleChoiceAnswers || [];
+        questionData.evaluation_id = question.evaluation_id;
+        questionData.mark = question.mark;
+        questionData.question = question.question;
+        questionData.questionType = question.questionType;
+        questionData.submitted = false;
+        questionData.id = question.id;
+        questionData.sub_questions = [];
+        allQuestions.push(questionData);
+      });
+      setQuestions(allQuestions);
+    } else {
+      setQuestions([initialState]);
+    }
+  }, []);
+  // console.log('i passed here', questions);
 
   function handleAddQuestion() {
     let newQuestion = initialState;
@@ -135,7 +143,7 @@ export default function EvaluationQuestionComponent({
                   placeholder="Question type"
                   handleChange={() => {}}
                   /*@ts-ignore*/
-                  defaultValue={evaluationQuestions[index]?.questionType}
+                  // defaultValue={evaluationQuestions[index]?.questionType || ''}
                   options={[
                     { label: 'OPEN', value: IQuestionType.OPEN },
                     { label: 'MULTIPLE CHOICE', value: IQuestionType.MULTIPLE_CHOICE },
