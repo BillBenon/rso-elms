@@ -1,8 +1,10 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory } from 'react-router';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { authenticatorStore } from '../../../../store/administration';
+import { classStore } from '../../../../store/administration/class.store';
+import { moduleStore } from '../../../../store/administration/modules.store';
+import { subjectStore } from '../../../../store/administration/subject.store';
 import usersStore from '../../../../store/administration/users.store';
 import { eventStore } from '../../../../store/timetable/event.store';
 import { scheduleStore } from '../../../../store/timetable/schedule.store';
@@ -13,6 +15,7 @@ import {
   daysOfWeek,
   ICreateClassTimeTable,
 } from '../../../../types/services/schedule.types';
+import { UserType } from '../../../../types/services/user.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import CheckboxMolecule from '../../../Molecules/input/CheckboxMolecule';
@@ -29,21 +32,21 @@ interface IStepProps {
 
 export default function NewTimeTable() {
   const { id } = useParams<ParamType>();
+  const history = useHistory();
 
+  //state varibales
+  const [currentStep, setcurrentStep] = useState(0);
   const [values, setvalues] = useState<ICreateClassTimeTable>({
     instructor: '',
     intakeLevelClass: id,
     schedular: '',
-    subjectAcademicYearPeriod: '',
+    subjectAcademicYearPeriod: '1',
     timetable: [],
     startHour: '',
     endHour: '',
-    repeatingDays: [],
+    repeatingDays: [daysOfWeek.MONDAY],
+    module: '',
   });
-
-  //state varibales
-  const [currentStep, setcurrentStep] = useState(0);
-  const history = useHistory();
 
   function handleChange(e: ValueType) {
     setvalues((val) => ({ ...val, [e.name]: e.value }));
@@ -101,10 +104,17 @@ export default function NewTimeTable() {
 }
 
 function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
-  const events = eventStore.getAllEvents().data?.data.data;
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { id } = useParams<ParamType>();
 
-  const users = usersStore.getUsersByAcademy(authUser?.academy.id + '').data?.data.data;
+  const authUser = authenticatorStore.authUser().data?.data.data;
+  const users = usersStore
+    .getUsersByAcademy(authUser?.academy.id + '')
+    .data?.data.data.filter((user) => user.user_type == UserType.INSTRUCTOR);
+
+  const modules = moduleStore.getAllModules().data?.data.data || [];
+  const subjects = subjectStore.getSubjectsByModule(values.module).data?.data.data || [];
+
+  const classInfo = classStore.getClassById(id).data?.data.data;
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -114,18 +124,14 @@ function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
   return (
     <div>
       <form onSubmit={handleSubmit} className="-mb-6">
-        <div className="pb-1">
-          <DropdownMolecule
-            name="intakeLevelClass"
-            handleChange={handleChange}
-            options={
-              events?.map((vn) => ({ label: vn.name, value: vn.id })) as SelectData[]
-            }
-            placeholder="Select event">
-            Level - class
-          </DropdownMolecule>
-        </div>
-        <div className="pb-1">
+        <InputMolecule
+          name=""
+          readOnly
+          disabled
+          value={`${classInfo?.academic_year_program_intake_level.academic_program_level.program.name} - ${classInfo?.academic_year_program_intake_level.academic_program_level.level.name} - ${classInfo?.class_name}`}>
+          Program - Level - class
+        </InputMolecule>
+        {/* <div className="pb-1">
           <DropdownMolecule
             name="subjectAcademicYearPeriod"
             handleChange={handleChange}
@@ -135,21 +141,39 @@ function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
             placeholder="Select event">
             Subject in academic period
           </DropdownMolecule>
+        </div> */}
+        <div className="pb-1">
+          <DropdownMolecule
+            name="module"
+            handleChange={handleChange}
+            options={
+              modules?.map((mod) => ({
+                label: `${mod.program.name} - ${mod.name}`,
+                value: mod.id,
+              })) as SelectData[]
+            }
+            placeholder="Select event">
+            Module
+          </DropdownMolecule>
         </div>
+
         <div className="pb-1">
           <DropdownMolecule
             name="schedular"
             handleChange={handleChange}
             options={
-              events?.map((vn) => ({ label: vn.name, value: vn.id })) as SelectData[]
+              subjects?.map((sb) => ({
+                label: sb.title,
+                value: sb.id,
+              })) as SelectData[]
             }
             placeholder="Select event">
-            Schedule
+            Subject
           </DropdownMolecule>
         </div>
         <div className="pb-4">
           <DropdownMolecule
-            name="user_in_charge"
+            name="instructor"
             handleChange={handleChange}
             options={
               users?.map((user) => ({

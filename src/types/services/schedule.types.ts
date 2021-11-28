@@ -121,6 +121,7 @@ export interface ICreateClassTimeTable {
   repeatingDays: string[];
   startHour: string;
   endHour: string;
+  module: string;
 }
 
 export interface ClassTimeTableInfo extends Table {
