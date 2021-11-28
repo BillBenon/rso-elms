@@ -107,6 +107,23 @@ export default function EvaluationContent() {
     }
   }, []);
 
+  const publishEvaluation = (status: string) =>{
+    makeEvaluationPublic.mutate(
+      {evaluationId: id, status: status},
+       {
+         onSuccess: () => {
+         toast.success('Evaluation is now public. Applying changes', { duration: 3000 });
+         setPublished(true);
+       },
+       onError: (error) => {
+       console.error(error);
+       toast.error(error + '');
+       },
+     })
+  }
+
+  
+
   const { data: evaluationInfo } = evaluationStore.getEvaluationById(id).data?.data || {};
   const [published, setPublished] = useState(evaluationInfo?.available == "PUBLIC" || false);
 
@@ -175,40 +192,12 @@ export default function EvaluationContent() {
 
                     {published == false ? (
                       <Button
-                      onClick={() =>
-                       makeEvaluationPublic.mutate(
-                        {evaluationId: id, status: "HIDDEN"},
-                         {
-                           onSuccess: () => {
-                           toast.success('Evaluation is now public. Applying changes', { duration: 3000 });
-                           setPublished(true);
-                         },
-                         onError: (error) => {
-                         console.error(error);
-                         toast.error(error + '');
-                         },
-                       },
-                       )
-                     }
+                      onClick={()=>publishEvaluation("PUBLIC")}
                      >Publish evaluation
                      </Button>
                     ):
                     <Button
-                      onClick={() =>
-                       makeEvaluationPublic.mutate(
-                         {evaluationId: id, status: "HIDDEN"} ,
-                         {
-                           onSuccess: () => {
-                           toast.success('Evaluation is unpublished. Applying changes', { duration: 3000 });
-                           setPublished(true);
-                         },
-                         onError: (error) => {
-                         console.error(error);
-                         toast.error(error + '');
-                         },
-                       },
-                       )
-                     }
+                      onClick={()=>publishEvaluation("HIDDEN")}
                      >Unpublish evaluation
                      </Button>
                      }

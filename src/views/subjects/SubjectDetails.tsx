@@ -64,7 +64,7 @@ export default function SubjectDetails() {
     },
     {
       label: 'Evaluations',
-      href: `${url}/evaluation`,
+      href: `${url}/evaluations`,
     },
   ];
 
@@ -138,7 +138,7 @@ export default function SubjectDetails() {
                 )}
               />
               <Route
-                path={`${url}/evaluation`}
+                path={`${url}/evaluations`}
                 render={() => (
                   <ViewEvaluations
                     {...{ subjectId }}

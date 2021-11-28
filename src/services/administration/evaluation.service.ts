@@ -117,7 +117,7 @@ class EvaluationService {
     status: string;
   }): Promise<void> {
     return await evaluationAxios.put(
-      `evaluations/evaluation/${data.evaluationId}/${data.status}`,
+      `/evaluations/evaluation/${data.evaluationId}/${data.status}`,
     );
   }
 

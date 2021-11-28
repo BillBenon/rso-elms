@@ -1,5 +1,4 @@
 import React, { Dispatch, SetStateAction } from 'react';
-
 import { TextDecoration } from '../../../../types';
 import { MarkingCorrection } from '../../../../types/services/marking.types';
 import Icon from '../../../Atoms/custom/Icon';

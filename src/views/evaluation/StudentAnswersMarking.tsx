@@ -55,14 +55,14 @@ export default function StudentAnswersMarking() {
   function createCreateNewCorrection(
     answer_id: string,
     points: number,
-    _marked: boolean,
+    marked: boolean,
   ) {
     setCorrection([
       ...correction,
-      { answerId: answer_id, markScored: points, marked: true },
+      { answerId: answer_id, markScored: points, marked: marked || false },
     ]);
     setTotalMarks(totalMarks + points);
-    return { answerId: answer_id, markScored: points, marked: true };
+    return { answerId: answer_id, markScored: points, marked: marked || false };
   }
   function updateQuestionPoints(answer_id: string, points: number) {
     var flag: number = 0;
