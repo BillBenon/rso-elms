@@ -28,7 +28,7 @@ function InstructorDashboard() {
   useEffect(() => setinstructor(instructorInfo), [instructorInfo]);
   const list = [
     { to: '/dashboard/instructor', title: 'Dashboard' },
-    { to: `${url}`, title: 'Level' },
+    { to: `${url}`, title: 'Program' },
   ];
 
   // const { data: instructorLevel } = enrollmentStore.getInstructorLevels(
@@ -152,7 +152,7 @@ function InstructorDashboard() {
           </>
         )}
       />
-      <Route exact path={`${path}/:id`} render={() => <ProgramIntakes />} />
+      <Route path={`${path}/:id`} render={() => <ProgramIntakes />} />
     </Switch>
   );
 }
