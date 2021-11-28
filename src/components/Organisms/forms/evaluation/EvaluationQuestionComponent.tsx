@@ -27,13 +27,13 @@ export default function EvaluationQuestionComponent({
   // };
 
   const initialState: ICreateEvaluationQuestions = {
-    evaluation_id: getLocalStorageData('evaluationId'),
+    evaluation_id: evaluationId,
     mark: 1,
     parent_question_id: '',
     choices: [],
     id: '',
     question: '',
-    questionType: IQuestionType.OPEN,
+    question_type: IQuestionType.OPEN,
     sub_questions: [],
     submitted: false,
   };
@@ -57,7 +57,7 @@ export default function EvaluationQuestionComponent({
         questionData.evaluation_id = question.evaluation_id;
         questionData.mark = question.mark;
         questionData.question = question.question;
-        questionData.questionType = question.questionType;
+        questionData.question_type = question.question_type;
         questionData.submitted = false;
         questionData.id = question.id;
         questionData.sub_questions = [];

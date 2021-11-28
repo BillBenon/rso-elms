@@ -41,7 +41,7 @@ export default function EvaluationSettings({
 
   const [settings, setSettings] = useState<IEvaluationApproval>({
     approver: '',
-    evaluation: getLocalStorageData('evaluationId'),
+    evaluation: evaluationId,
     evaluation_approval_status: IEvaluationApprovalStatus.REVIEWING,
     id: evaluationId || '',
     preparer: authUser?.id.toString() || '',
