@@ -27,13 +27,13 @@ export default function EvaluationQuestionComponent({
   // };
 
   const initialState: ICreateEvaluationQuestions = {
-    evaluation_id: evaluationId,
+    evaluation_id: getLocalStorageData('evaluationId'),
     mark: 1,
     parent_question_id: '',
     choices: [],
     id: '',
     question: '',
-    question_type: IQuestionType.OPEN,
+    questionType: IQuestionType.OPEN,
     sub_questions: [],
     submitted: false,
   };
@@ -44,25 +44,24 @@ export default function EvaluationQuestionComponent({
       evaluationStore.getEvaluationQuestions(evaluationId).data?.data.data || [];
   }
 
-  console.log(initialState.evaluation_id);
-
   const [questions, setQuestions] = useState([initialState]);
 
   useEffect(() => {
     let allQuestions: any[] = [];
     if (evaluationQuestions.length > 0) {
-      evaluationQuestions.map((question) => {
+      evaluationQuestions.forEach((question) => {
         let questionData = { ...initialState };
         questionData.choices = question.multipleChoiceAnswers || [];
         questionData.evaluation_id = question.evaluation_id;
         questionData.mark = question.mark;
         questionData.question = question.question;
-        questionData.question_type = question.question_type;
+        questionData.questionType = question.questionType;
         questionData.submitted = false;
         questionData.id = question.id;
         questionData.sub_questions = [];
         allQuestions.push(questionData);
       });
+      // console.log(evaluationQuestions);
       setQuestions(allQuestions);
     } else {
       setQuestions([initialState]);

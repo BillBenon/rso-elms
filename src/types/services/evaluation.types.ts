@@ -22,7 +22,7 @@ export interface IEvaluationProps {
   handleNext: () => void;
   handleGoBack: () => void;
   handleAddQuestion?: () => void;
-  evaluationId: string;
+  evaluationId: string | null;
 }
 
 export enum ISubmissionTypeEnum {
@@ -146,7 +146,7 @@ export interface IEvaluationQuestion {
   parent_question_id: string;
   question: string;
   submitted: boolean;
-  question_type: IQuestionType;
+  questionType: IQuestionType;
 }
 
 export interface IMultipleChoice {
@@ -157,7 +157,7 @@ export interface IMultipleChoice {
 export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
   sub_questions: IEvaluationQuestion[];
   submitted: boolean;
-  question_type: IQuestionType;
+  questionType: IQuestionType;
   id: string;
   choices: IMultipleChoice[];
 }
@@ -169,7 +169,7 @@ export interface IEvaluationQuestionsInfo {
   choices: IMultipleChoice[];
   mark: number;
   evaluationQuestions: [];
-  question_type: IQuestionType;
+  questionType: IQuestionType;
   multipleChoiceAnswers: [];
 }
 

@@ -13,10 +13,7 @@ import {
   IEvaluationProps,
 } from '../../../../types/services/evaluation.types';
 import { UserType } from '../../../../types/services/user.types';
-import {
-  getLocalStorageData,
-  setLocalStorageData,
-} from '../../../../utils/getLocalStorageItem';
+import { setLocalStorageData } from '../../../../utils/getLocalStorageItem';
 import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import Input from '../../../Atoms/Input/Input';
@@ -41,9 +38,9 @@ export default function EvaluationSettings({
 
   const [settings, setSettings] = useState<IEvaluationApproval>({
     approver: '',
-    evaluation: evaluationId,
+    evaluation: evaluationId || '',
     evaluation_approval_status: IEvaluationApprovalStatus.REVIEWING,
-    id: evaluationId || '',
+    id: '',
     preparer: authUser?.id.toString() || '',
     reviewer: '',
     to_be_approved: false,
