@@ -190,7 +190,7 @@ export default function Intakes() {
                         history.push(`${url}/${registrationControlId}/add-intake`);
                       else history.push('/dashboard/registration-control');
                     }}
-                    description="Oops! No data found"
+                    description="There haven't been any intakes added yet! try adding some from the button below."
                   />
                 )}
               </section>

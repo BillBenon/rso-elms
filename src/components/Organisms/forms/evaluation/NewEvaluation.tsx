@@ -68,7 +68,11 @@ export default function NewEvaluation() {
               evaluationId={evaluationId}
             />
           </div>
-          <EvaluationSettings handleNext={handleSubmit} handleGoBack={handleBack} />
+          <EvaluationSettings
+            handleNext={handleSubmit}
+            handleGoBack={handleBack}
+            evaluationId={evaluationId}
+          />
         </Stepper>
       </div>
     </div>

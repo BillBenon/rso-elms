@@ -2,18 +2,18 @@ import '../../styles/components/Molecules/correction/marking.scss';
 
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import {useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import StudentAnswer from '../../components/Molecules/cards/correction/StudentAnswer';
 import Pagination from '../../components/Molecules/Pagination';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import FinishMarking from '../../components/Organisms/forms/evaluation/FinishMarking';
 import { markingStore } from '../../store/administration/marking.store';
 import { Link as LinkList } from '../../types';
 import { ParamType } from '../../types';
 import { MarkingCorrection } from '../../types/services/marking.types';
-import FinishMarking from '../../components/Organisms/forms/evaluation/FinishMarking';
 
 export default function StudentAnswersMarking() {
   const { id } = useParams<ParamType>();
@@ -52,13 +52,17 @@ export default function StudentAnswersMarking() {
   ];
 
   const { mutate } = markingStore.finishMarking();
-  function createCreateNewCorrection(answer_id: string, points: number, marked: boolean){
+  function createCreateNewCorrection(
+    answer_id: string,
+    points: number,
+    marked: boolean,
+  ) {
     setCorrection([
       ...correction,
       { answerId: answer_id, markScored: points, marked: marked || false },
     ]);
-    setTotalMarks(totalMarks+ points);
-    return { answerId: answer_id, markScored: points, marked: marked || false};
+    setTotalMarks(totalMarks + points);
+    return { answerId: answer_id, markScored: points, marked: marked || false };
   }
   function updateQuestionPoints(answer_id: string, points: number) {
     var flag: number = 0;
@@ -112,52 +116,55 @@ export default function StudentAnswersMarking() {
       toast.error('Some Answers are not marked yet!' + correction.length);
     }
   }
-  if(step == 0)
-  return (
-    <div className={`flex flex-col gap-4`}>
-      <section>
-        <BreadCrumb list={list}></BreadCrumb>
-      </section>
-      <TableHeader
-        title={studentEvaluation?.code + ' submission'}
-        showBadge={false}
-        showSearch={false}>
-        <p className="text-gray-400">
-          Marks obtained:{' '}
-          <span className="text-green-300 font-semibold">{totalMarks}</span>
-        </p>
-      </TableHeader>
-      <section className="flex flex-wrap justify-start gap-4 mt-2">
-        {currentRows?.map((studentAnswer) => {
-          return (
-            <StudentAnswer
-              key={studentAnswer.id}
-              correction={correction}
-              updateQuestionPoints={updateQuestionPoints}
-              data={studentAnswer}
-              totalMarks={totalMarks}
-              setTotalMarks={setTotalMarks}
-              createCreateNewCorrection={createCreateNewCorrection}
+  if (step == 0)
+    return (
+      <div className={`flex flex-col gap-4`}>
+        <section>
+          <BreadCrumb list={list}></BreadCrumb>
+        </section>
+        <TableHeader
+          title={studentEvaluation?.code + ' submission'}
+          showBadge={false}
+          showSearch={false}>
+          <p className="text-gray-400">
+            Marks obtained:{' '}
+            <span className="text-green-300 font-semibold">{totalMarks}</span>
+          </p>
+        </TableHeader>
+        <section className="flex flex-wrap justify-start gap-4 mt-2">
+          {currentRows?.map((studentAnswer) => {
+            return (
+              <StudentAnswer
+                key={studentAnswer.id}
+                correction={correction}
+                updateQuestionPoints={updateQuestionPoints}
+                data={studentAnswer}
+                totalMarks={totalMarks}
+                setTotalMarks={setTotalMarks}
+                createCreateNewCorrection={createCreateNewCorrection}
+              />
+            );
+          })}
+          <div className="flex item-center mx-auto">
+            <Pagination
+              rowsPerPage={rowsOnPage}
+              totalRows={studentAnswers?.length || 0}
+              paginate={paginate}
+              currentPage={currentPage}
             />
-          );
-        })}
-        <div className="flex item-center mx-auto">
-          <Pagination
-            rowsPerPage={rowsOnPage}
-            totalRows={studentAnswers?.length || 0}
-            paginate={paginate}
-            currentPage={currentPage}
-          />
-        </div>
-        <div className="w-full flex justify-end">
-          <Button onClick={submitMarking}>Complete Marking</Button>
-        </div>
-      </section>
-    </div>
-  );
-
+          </div>
+          <div className="w-full flex justify-end">
+            <Button onClick={submitMarking}>Complete Marking</Button>
+          </div>
+        </section>
+      </div>
+    );
   else
-  return(
-    <FinishMarking student_code={studentEvaluation?.code} obtained_marks={totalMarks} student_evaluation={id}/>
-  )
+    return (
+      <FinishMarking
+        student_code={studentEvaluation?.code}
+        obtained_marks={totalMarks}
+        student_evaluation={id}
+      />
+    );
 }

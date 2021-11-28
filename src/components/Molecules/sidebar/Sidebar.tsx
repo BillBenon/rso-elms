@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
 import { authenticatorStore } from '../../../store/administration';
-import intakeProgramStore from '../../../store/administration/intake-program.store';
 import { UserInfo, UserType } from '../../../types/services/user.types';
 import SidebarLinks, { linkProps } from '../../Atoms/custom/SidebarLinks';
 import AcademyProfileCard from '../cards/AcademyProfileCard';
@@ -13,16 +12,6 @@ export default function Sidebar() {
   useEffect(() => {
     setAuthUser(data?.data.data);
   }, [data?.data.data]);
-
-  const getStudent = intakeProgramStore.getStudentShipByUserId(authUser?.id + '' || '')
-    .data?.data.data[0];
-
-  const getPrograms = intakeProgramStore.getIntakeProgramsByStudent(
-    getStudent?.id + '' || '',
-  ).data?.data.data[0];
-
-  const getLevels =
-    intakeProgramStore.getStudentLevels(getPrograms?.id + '' || '').data?.data.data || [];
 
   const defaultLinks = (): linkProps[] => {
     const routes: linkProps[] = [];
@@ -49,24 +38,15 @@ export default function Sidebar() {
     ];
 
     const instructorLinks: linkProps[] = [
+      { title: 'Dashboard', to: '/dashboard/instructor', icon: 'module' },
       { title: 'Evaluations', to: '/dashboard/evaluations', icon: 'evaluation' },
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
       { title: 'Events', to: '/dashboard/events', icon: 'calendar' },
     ];
 
     const studentLinks: linkProps[] = [
+      { title: 'Dashboard', to: '/dashboard/student', icon: 'module' },
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
-      getLevels.length > 0
-        ? {
-            title: 'Levels',
-            to: `/dashboard/student/levels/${getLevels[0].id || ''}`,
-            icon: 'level',
-          }
-        : {
-            title: '...',
-            to: '',
-            icon: 'level',
-          },
       // { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
     ];
 
