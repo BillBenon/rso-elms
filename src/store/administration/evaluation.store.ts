@@ -11,6 +11,19 @@ class EvaluationStore {
     return useMutation(evaluationService.updateEvaluation);
   }
 
+  getEvaluationWorkTime(studentEvaluationId: string) {
+    return useQuery(
+      ['workTime', studentEvaluationId],
+      () => evaluationService.getEvaluationWorkTime(studentEvaluationId),
+      {
+        enabled: !!studentEvaluationId,
+      },
+    );
+  }
+  updateEvaluationWorkTime() {
+    return useMutation(evaluationService.updateEvaluationWorkTime);
+  }
+
   createEvaluationQuestions() {
     return useMutation(evaluationService.createEvaluationQuestion);
   }
@@ -48,7 +61,7 @@ class EvaluationStore {
     return useMutation(evaluationService.addQuestionAnswer);
   }
 
-  publishEvaluation(){
+  publishEvaluation() {
     return useMutation(evaluationService.publishEvaluation);
   }
 
