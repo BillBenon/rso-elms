@@ -50,7 +50,6 @@ export type Status =
   | 'published'
   | 'marking';
 
-
 export type Page =
   | 'personalDetails'
   | 'familyDetails'
@@ -130,6 +129,7 @@ export interface SigninPropTypes extends CommonCardDataType {
 }
 
 export type IconType =
+  | 'dashboard'
   | 'academy'
   | 'add'
   | 'alert'
