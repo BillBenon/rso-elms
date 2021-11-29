@@ -3,21 +3,29 @@ import React from 'react';
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { authenticatorStore } from '../../store/administration';
-import intakeProgramStore from '../../store/administration/intake-program.store';
+import {
+  getIntakeProgramsByStudent,
+  getStudentLevels,
+  getStudentShipByUserId,
+} from '../../store/administration/intake-program.store';
 import { PromotionStatus } from '../../types/services/intake-program.types';
 import Modules from '../modules';
 
 function StudentDashboard() {
   const authUser = authenticatorStore.authUser().data?.data.data;
 
-  const getStudent = intakeProgramStore.getStudentShipByUserId(authUser?.id + '' || '')
-    .data?.data.data[0];
+  const getStudent = getStudentShipByUserId(authUser?.id + '' || '', !!authUser?.id).data
+    ?.data.data[0];
 
-  const { data: getPrograms, isLoading: progLoading } =
-    intakeProgramStore.getIntakeProgramsByStudent(getStudent?.id + '');
+  const { data: getPrograms, isLoading: progLoading } = getIntakeProgramsByStudent(
+    getStudent?.id + '',
+    !!getStudent?.id,
+  );
 
-  const { data: getLevels, isLoading: levelLoading } =
-    intakeProgramStore.getStudentLevels(getPrograms?.data.data[0].id + '');
+  const { data: getLevels, isLoading: levelLoading } = getStudentLevels(
+    getPrograms?.data.data[0].id + '',
+    !!getPrograms?.data.data[0].id,
+  );
 
   // let programs: CommonCardDataType[] = [];
 
