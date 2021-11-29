@@ -28,7 +28,7 @@ export default function Redirecting() {
 
       redirectTo('/dashboard/users');
     } else if (data?.data.data.user_type === UserType.INSTRUCTOR) {
-      redirectTo('/dashboard/evaluations');
+      redirectTo('/dashboard/instructor');
     } else if (data?.data.data.user_type === UserType.STUDENT) {
       redirectTo(`/dashboard/student`);
     }

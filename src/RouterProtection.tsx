@@ -17,6 +17,7 @@ import UpdateInstitution from './views/insitution/UpdateInstitution';
 import IntakesView from './views/intakes/Intakes';
 import Levels from './views/levels/Levels';
 import Modules from './views/modules';
+import InstrLevelModule from './views/modules/InstrLevelModule';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicProgram from './views/programs/AcademicPrograms';
 import Roles from './views/roles/Roles';
@@ -77,6 +78,8 @@ const RouterProtection = () => {
     <>
       {/* start of instructor pages */}
       <Route path="/dashboard/instructor" component={InstructorDashboard} />
+      <Route exact path={`/dashboard/inst-module`} component={InstrLevelModule} />
+
       <Route path="/dashboard/evaluations" component={ViewEvaluations} />
       <Route path="/dashboard/calendar" component={CalendarView} />
       <Route path="/dashboard/events" component={Events} />
