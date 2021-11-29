@@ -15,12 +15,11 @@ export default function Venues() {
     history.goBack();
   };
   const venues = venueStore.getAllVenues().data?.data.data;
-  console.log(venues);
 
   return (
     <div>
       <TableHeader totalItems={0} title={'Venues'} showBadge={false}>
-        <Link to={`${path}/venue/new`}>
+        <Link to={`${path}/new`}>
           <Button>New venue</Button>
         </Link>
       </TableHeader>
@@ -41,9 +40,9 @@ export default function Venues() {
       <Switch>
         <Route
           exact
-          path={`${path}/venue/new`}
+          path={`${path}/new`}
           render={() => (
-            <PopupMolecule title="New Event" open onClose={handleClose}>
+            <PopupMolecule title="New venue" open onClose={handleClose}>
               <NewVenue />
             </PopupMolecule>
           )}

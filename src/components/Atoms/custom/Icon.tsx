@@ -63,8 +63,8 @@ export default function Icon({
 }: IProps) {
   return (
     <div
-      className={`${bgColor && bgStyle[bgColor]}  ${
-        size > 16 && useheightandpadding ? 'w-12 h-12 p-4' : 'w-8 h-8 p-4'
+      className={`${bgColor && bgStyle[bgColor]} p-4 ${
+        size > 16 && useheightandpadding ? 'w-12 h-12' : 'w-8 h-8'
       } flex items-center justify-center rounded-lg ${className}`}>
       <StyledSVGIcon
         src={`/icons/${name}.svg`}
