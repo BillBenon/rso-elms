@@ -22,6 +22,7 @@ export type PanelProps = {
     type: GenericStatus | IntakeStatus | IEvaluationStatus | IntakeModuleStatus;
     text: string;
   };
+  width?: string;
   handleOpen?: (_index: number) => void;
 };
 
@@ -34,6 +35,7 @@ function Panel({
   className,
   bgColor = 'tertiary',
   badge,
+  width = 'w-80',
   handleOpen,
 }: PanelProps) {
   function toggleAccordion() {
@@ -41,7 +43,8 @@ function Panel({
   }
 
   return (
-    <div className={`bg-${bgColor} text-sm py-2 w-80 rounded-lg mb-4 px-4 ${className}`}>
+    <div
+      className={`bg-${bgColor} text-sm py-2 ${width} rounded-lg mb-4 px-4 ${className}`}>
       <div className="w-full mb-2" role="button" onClick={toggleAccordion}>
         <div className={`flex font-semibold justify-between items-center cursor-pointer`}>
           <div className="flex-col">

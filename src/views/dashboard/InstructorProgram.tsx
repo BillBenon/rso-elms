@@ -13,7 +13,7 @@ import { Instructor } from '../../types/services/instructor.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ProgramIntakes from '../intakes/ProgramIntakes';
 
-function InstructorDashboard() {
+function InstructorProgram() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
 
@@ -27,8 +27,8 @@ function InstructorDashboard() {
 
   useEffect(() => setinstructor(instructorInfo), [instructorInfo]);
   const list = [
-    { to: '/dashboard/instructor', title: 'Dashboard' },
-    { to: `${url}`, title: 'Level' },
+    { to: '/dashboard/inst-program', title: 'Dashboard' },
+    { to: `${url}`, title: 'Program' },
   ];
 
   // const { data: instructorLevel } = enrollmentStore.getInstructorLevels(
@@ -152,8 +152,8 @@ function InstructorDashboard() {
           </>
         )}
       />
-      <Route exact path={`${path}/:id`} render={() => <ProgramIntakes />} />
+      <Route path={`${path}/:id`} render={() => <ProgramIntakes />} />
     </Switch>
   );
 }
-export default InstructorDashboard;
+export default InstructorProgram;

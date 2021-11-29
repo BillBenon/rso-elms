@@ -4,6 +4,11 @@ import { intakeProgramService } from '../../services/administration/IntakeProgra
 import { IntakeModuleStatus } from '../../types/services/intake-program.types';
 
 class IntakeProgramStore {
+  getStudentById(studentId: string) {
+    return useQuery(['student/id', studentId], () =>
+      intakeProgramService.getStudentById(studentId),
+    );
+  }
   getStudentsByIntakeProgram(intakeProgramId: string) {
     return useQuery(['students/intakeProgramId', intakeProgramId], () =>
       intakeProgramService.getStudentsByIntakeProgram(intakeProgramId),
@@ -46,23 +51,6 @@ class IntakeProgramStore {
       intakeProgramService.getIntakeLevelById(levelId),
     );
   }
-  getStudentLevels(studentId: string) {
-    return useQuery(['levels/student', studentId], () =>
-      intakeProgramService.getStudentLevels(studentId),
-    );
-  }
-
-  getStudentShipByUserId(userId: string) {
-    return useQuery(['studentShip/userId', userId], () =>
-      intakeProgramService.getStudentShipByUserId(userId),
-    );
-  }
-
-  getIntakeProgramsByStudent(studentId: string) {
-    return useQuery(['intakeProgram/studentId', studentId], () =>
-      intakeProgramService.getIntakeProgramsByStudent(studentId),
-    );
-  }
 
   getPeriodsByLevel(levelId: number) {
     return useQuery(['levels/periods', levelId], () =>
@@ -86,6 +74,30 @@ class IntakeProgramStore {
   addModuleToLevel() {
     return useMutation(intakeProgramService.addModuleToLevel);
   }
+}
+
+export function getStudentShipByUserId(userId: string, enabled = false) {
+  return useQuery(
+    ['studentShip/userId', userId],
+    () => intakeProgramService.getStudentShipByUserId(userId),
+    { enabled },
+  );
+}
+
+export function getIntakeProgramsByStudent(studentId: string, enabled = false) {
+  return useQuery(
+    ['intakeProgram/studentId', studentId],
+    () => intakeProgramService.getIntakeProgramsByStudent(studentId),
+    { enabled },
+  );
+}
+
+export function getStudentLevels(studentId: string, enabled = false) {
+  return useQuery(
+    ['levels/student', studentId],
+    () => intakeProgramService.getStudentLevels(studentId),
+    { enabled },
+  );
 }
 
 export default new IntakeProgramStore();

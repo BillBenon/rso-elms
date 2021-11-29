@@ -36,14 +36,19 @@ export default function Sidebar() {
     ];
 
     const instructorLinks: linkProps[] = [
-      { title: 'Dashboard', to: '/dashboard/instructor', icon: 'module' },
+      {
+        title: 'Programs',
+        to: '/dashboard/inst-program',
+        icon: 'program',
+      },
+      { title: 'Modules', to: '/dashboard/inst-module', icon: 'module' },
       { title: 'Evaluations', to: '/dashboard/evaluations', icon: 'evaluation' },
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
       { title: 'Events', to: '/dashboard/events', icon: 'calendar' },
     ];
 
     const studentLinks: linkProps[] = [
-      { title: 'Dashboard', to: '/dashboard/student', icon: 'module' },
+      { title: 'Dashboard', to: '/dashboard/student', icon: 'dashboard', fill: false },
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
       // { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
     ];

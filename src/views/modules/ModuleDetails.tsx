@@ -33,8 +33,12 @@ export default function ModuleDetails() {
 
   const tabs = [
     {
-      label: 'Subjects',
+      label: 'Info',
       href: `${url}`,
+    },
+    {
+      label: 'Subjects',
+      href: `${url}/subject`,
     },
     {
       label: 'Preriquisites',
@@ -91,41 +95,104 @@ export default function ModuleDetails() {
     },
   ];
 
+  const getModuleData = () => {
+    let mod = moduleData.data?.data.data;
+    let modules: CommonCardDataType | undefined;
+    if (mod) {
+      modules = {
+        status: {
+          type: advancedTypeChecker(mod.generic_status),
+          text: mod.generic_status.toString(),
+        },
+        code: mod.name,
+        title: mod.code,
+        description: mod.description,
+      };
+    }
+
+    return modules;
+  };
+
+  const modules = getModuleData();
+
   return (
     <>
-      <Switch>
-        <Route path={`${path}/subjects/:subjectId`} component={SubjectDetails} />
-        <Route
-          path={`${path}`}
-          render={() => (
-            <main className="px-4">
-              <section>
-                <BreadCrumb list={list} />
-              </section>
-              <div className="mt-11 pb-6">
-                <div className="flex flex-wrap justify-between items-center">
-                  <div className="flex gap-2 items-center">
-                    <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
-                      {moduleData.data?.data.data.name} module
-                    </Heading>
-                  </div>
-                  <div className="flex flex-wrap justify-start items-center">
-                    <SearchMolecule handleChange={handleSearch} />
-                    <button className="border p-0 rounded-md mx-2">
-                      <Icon name="filter" />
-                    </button>
-                  </div>
+      <main className="px-4">
+        <section>
+          <BreadCrumb list={list} />
+        </section>
+        <div className="mt-11 pb-6">
+          <div className="flex flex-wrap justify-between items-center">
+            <div className="flex gap-2 items-center">
+              <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
+                {moduleData.data?.data.data.name} module
+              </Heading>
+            </div>
+            <div className="flex flex-wrap justify-start items-center">
+              <SearchMolecule handleChange={handleSearch} />
+              <button className="border p-0 rounded-md mx-2">
+                <Icon name="filter" />
+              </button>
+            </div>
 
-                  {authUser?.user_type !== UserType.STUDENT && (
-                    <div className="flex gap-3">
-                      <Button onClick={() => history.push(`${url}/add-subject`)}>
-                        Add new Subject
-                      </Button>
-                    </div>
-                  )}
-                </div>
+            {authUser?.user_type === UserType.ADMIN && (
+              <div className="flex gap-3">
+                <Button onClick={() => history.push(`${url}/add-subject`)}>
+                  Add new Subject
+                </Button>
               </div>
-              <TabNavigation tabs={tabs}>
+            )}
+          </div>
+        </div>
+        <TabNavigation tabs={tabs}>
+          <Switch>
+            <Route
+              exact
+              path={`${path}`}
+              render={() => (
+                <div className="flex py-9">
+                  <div className="mr-24">
+                    {modules && (
+                      <CommonCardMolecule data={modules}>
+                        <div className="flex flex-col mt-8 gap-7 pb-2">
+                          {/* <div className="flex items-center gap-2">
+                            <Avatar
+                              size="24"
+                              alt="user1 profile"
+                              className=" rounded-full  border-2 border-main transform hover:scale-125"
+                              src="https://randomuser.me/api/portraits/men/1.jpg"
+                            />
+                            <Heading fontSize="sm">{modules.subTitle}</Heading>
+                          </div> */}
+                        </div>
+                      </CommonCardMolecule>
+                    )}
+                    <div className="flex flex-col gap-8 z-0 pt-6 px-2">
+                      <Heading fontSize="base" fontWeight="semibold">
+                        Module materials (0)
+                      </Heading>
+                      {authUser?.user_type === UserType.INSTRUCTOR && (
+                        <Button
+                          styleType="outline"
+                          className="h-6 flex justify-center items-center">
+                          <span className="flex items-center">
+                            <Icon
+                              name="attach"
+                              useheightandpadding={false}
+                              fill="primary"
+                            />
+                            <span className="font-semibold">Upload module materials</span>
+                          </span>
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              )}
+            />
+            <Route
+              path={`${path}/subject`}
+              render={() => (
                 <>
                   {subjects.length < 1 && subjectData.isSuccess ? (
                     <NoDataAvailable
@@ -152,35 +219,37 @@ export default function ModuleDetails() {
                     </section>
                   )}
                 </>
-              </TabNavigation>
-              {/* add subject popup */}
-              <Route
-                exact
-                path={`${path}/add-subject`}
-                render={() => {
-                  return (
-                    <PopupMolecule title="New Subject" open onClose={handleClose}>
-                      <NewSubjectForm />
-                    </PopupMolecule>
-                  );
-                }}
-              />
-              {/* update module popup */}
-              <Route
-                exact
-                path={`${path}/edit/:moduleId`}
-                render={() => {
-                  return (
-                    <PopupMolecule title="Edit Module" open onClose={handleClose}>
-                      <UpdateModuleForm />
-                    </PopupMolecule>
-                  );
-                }}
-              />
-            </main>
-          )}
-        />
-      </Switch>
+              )}
+            />
+            {/* add subject popup */}
+            <Route
+              exact
+              path={`${path}/add-subject`}
+              render={() => {
+                return (
+                  <PopupMolecule title="New Subject" open onClose={handleClose}>
+                    <NewSubjectForm />
+                  </PopupMolecule>
+                );
+              }}
+            />
+            {/* update module popup */}
+            <Route
+              exact
+              path={`${path}/edit/:moduleId`}
+              render={() => {
+                return (
+                  <PopupMolecule title="Edit Module" open onClose={handleClose}>
+                    <UpdateModuleForm />
+                  </PopupMolecule>
+                );
+              }}
+            />
+            {/* show subject details */}
+            <Route path={`${path}/subjects/:subjectId`} component={SubjectDetails} />
+          </Switch>
+        </TabNavigation>
+      </main>
     </>
   );
 }

@@ -23,7 +23,7 @@ type RowProps = {
 
 const statusColors: statusStyleType = {
   pending: 'warning',
-  ongoing: 'warning',
+  ongoing: 'info',
   promoted: 'success',
   retake: 'warning',
   expelled: 'error',
