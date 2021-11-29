@@ -75,3 +75,10 @@ export function getWeekBorderDays() {
     sunday: formatDateToYyMmDd(sunday.toDateString()),
   };
 }
+
+export function getNextWeekDayDate(day: number) {
+  var d = new Date();
+  d.setDate(d.getDate() + ((day + 7 - d.getDay()) % 7 || 7));
+
+  return d;
+}
