@@ -126,7 +126,6 @@ export default function StudentViewEvaluations({ subjectId, linkTo }: IEvaluatio
   return (
     <div>
       <Switch>
-        <Route exact path={`${path}/new`} component={NewEvaluation} />
         <Route path={`${path}/:id`} component={EvaluationContent} />
         <Route
           exact
@@ -136,10 +135,10 @@ export default function StudentViewEvaluations({ subjectId, linkTo }: IEvaluatio
               <section className="flex flex-wrap justify-start gap-4 mt-2">
                 {isLoading && evaluations.length === 0 && <Loader />}
 
-                {isSuccess && evaluations.length === 0 ? (
+                {isSuccess && (evaluations.length === 0 && finished.length === 0 && ongoing.length === 0) ? (
                   <NoDataAvailable
                     icon="evaluation"
-                    buttonLabel="Add new evaluation"
+                    buttonLabel="Go back"
                     title={'No evaluations available'}
                     handleClick={() => history.push(`${path}`)}
                     description="And the web just isnt the same without you. Lets get you back online!"
