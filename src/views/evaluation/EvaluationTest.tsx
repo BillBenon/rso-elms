@@ -91,7 +91,7 @@ export default function EvaluationTest() {
         </div>
       </div>
 
-      {questions!.data.data.length > 0 ? (
+      {questions && questions.data.data.length > 0 ? (
         questions?.data.data.map((question, index: number) => (
           <QuestionContainer
             index={index}

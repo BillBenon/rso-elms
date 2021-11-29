@@ -134,6 +134,16 @@ export interface IEvaluationInfo {
   evaluation_comments: [];
 }
 
+export interface IEvaluationInfoCollected {
+  undoneEvaluations: IEvaluationInfoSingleEvaluation[];
+  ongoingEvaluations: IEvaluationInfoSingleEvaluation[];
+  finishedEvaluations: IEvaluationInfoSingleEvaluation;
+}
+export interface IEvaluationInfoSingleEvaluation {
+  code: string;
+  evaluation: IEvaluationInfo;
+}
+
 export interface IEvaluationChoices {
   answer_content: string;
   correct: boolean;
