@@ -1,4 +1,4 @@
-import { ScheduleInfo } from '../types/services/schedule.types';
+import { ClassTimeTableInfo, ScheduleInfo } from '../types/services/schedule.types';
 
 interface BigCalendarEvent {
   id: string | number;
@@ -6,7 +6,6 @@ interface BigCalendarEvent {
   start: Date;
   end: Date;
 }
-
 
 export function formatCalendarEvents(schedules: ScheduleInfo[] = []): BigCalendarEvent[] {
   let events: BigCalendarEvent[] = [];
@@ -35,4 +34,20 @@ export function formatCalendarEvents(schedules: ScheduleInfo[] = []): BigCalenda
   return events;
 }
 
-export function groupTimeTable() {}
+export function groupTimeTableByDay(arr: ClassTimeTableInfo[]): any {
+  let group = arr.reduce((r, a) => {
+    // @ts-ignore
+    r[a.day_of_week] = [...(r[a.day_of_week] || []), a];
+    return r;
+  }, {});
+
+  return group;
+}
+
+export const groupBy = <T, K extends keyof any>(list: T[], getKey: (item: T) => K) =>
+  list.reduce((previous, currentItem) => {
+    const group = getKey(currentItem);
+    if (!previous[group]) previous[group] = [];
+    previous[group].push(currentItem);
+    return previous;
+  }, {} as Record<K, T[]>);
