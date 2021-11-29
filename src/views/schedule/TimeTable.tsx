@@ -15,8 +15,7 @@ import NewTimeTable from '../../components/Organisms/calendar/schedule/NewTimeTa
 import { classStore } from '../../store/administration/class.store';
 import { scheduleStore } from '../../store/timetable/schedule.store';
 import { ParamType } from '../../types';
-import { ClassTimeTableInfo } from '../../types/services/schedule.types';
-import { groupBy } from '../../utils/calendar';
+import { groupTimeTableByDay } from '../../utils/calendar';
 
 export default function TimeTable() {
   const { id } = useParams<ParamType>();
@@ -29,9 +28,8 @@ export default function TimeTable() {
     history.goBack();
   };
 
-  const groupedTimeTable = groupBy<ClassTimeTableInfo, string>(
+  const groupedTimeTable = groupTimeTableByDay(
     scheduleStore.getClassTimetableByIntakeLevelClass(id).data?.data.data || [],
-    (i) => i.day_of_week,
   );
 
   return (
