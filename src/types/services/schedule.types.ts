@@ -114,22 +114,25 @@ export interface ScheduleInfo extends Table, CommonScheduleProperties {
 
 export interface ICreateClassTimeTable {
   instructor: string;
-  intakeLevelClass: string;
-  schedular: string;
-  subjectAcademicYearPeriod: string;
   timetable: createRecurringSchedule[];
   repeatingDays: string[];
   startHour: string;
   endHour: string;
-  module: string;
+  courseModule: string;
+  venue: string;
+  intakeLevelClass: string;
 }
 
+interface courseModule extends Table {
+  name: string;
+}
 export interface ClassTimeTableInfo extends Table {
+  course_module: courseModule;
   day_of_week: daysOfWeek;
   end_hour: Hour;
   instructor: Table;
   intake_level_class: Table;
   start_hour: Hour;
-  subject_academic_year_period: Table;
   timetable_status: ScheduleStatus;
+  venue: VenueInfo;
 }
