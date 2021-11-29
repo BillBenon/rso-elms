@@ -7,6 +7,7 @@ interface BigCalendarEvent {
   end: Date;
 }
 
+
 export function formatCalendarEvents(schedules: ScheduleInfo[] = []): BigCalendarEvent[] {
   let events: BigCalendarEvent[] = [];
 
@@ -33,3 +34,5 @@ export function formatCalendarEvents(schedules: ScheduleInfo[] = []): BigCalenda
   });
   return events;
 }
+
+export function groupTimeTable() {}
