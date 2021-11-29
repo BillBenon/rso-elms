@@ -50,6 +50,7 @@ export default function NewTimeTable() {
     repeatingDays: [daysOfWeek.MONDAY],
     courseModule: '',
     venue: '',
+    intakeLevelClass: id,
   });
 
   function handleChange(e: ValueType) {

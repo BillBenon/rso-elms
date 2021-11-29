@@ -120,6 +120,7 @@ export interface ICreateClassTimeTable {
   endHour: string;
   courseModule: string;
   venue: string;
+  intakeLevelClass: string;
 }
 
 interface courseModule extends Table {
