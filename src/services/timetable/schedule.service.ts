@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import { timetableAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
+  ClassTimeTableInfo,
   CreateEventSchedule,
   DateRange,
   ICreateClassTimeTable,
@@ -93,6 +94,12 @@ class ScheduleService {
     tt: ICreateClassTimeTable,
   ): Promise<AxiosResponse<Response<ScheduleInfo>>> {
     return await timetableAxios.post('/schedural/class-timetable', tt);
+  }
+
+  public async getClassTimetableByIntakeLevelClass(
+    intakeLevelClassId: string,
+  ): Promise<AxiosResponse<Response<ClassTimeTableInfo[]>>> {
+    return await timetableAxios.get(`/schedural/class-timetable/${intakeLevelClassId}`);
   }
 }
 
