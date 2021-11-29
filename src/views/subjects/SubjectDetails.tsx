@@ -19,12 +19,11 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
-import { authenticatorStore } from '../../store/administration';
+import { evaluationStore } from '../../store/administration/evaluation.store';
 import { lessonStore } from '../../store/administration/lesson.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { Link } from '../../types';
-import { UserType } from '../../types/services/user.types';
-import ViewEvaluations from '../evaluation/ViewEvaluations';
+import EvaluationCategories from '../evaluation/EvaluationCategories';
 
 interface ParamType {
   id: string;
@@ -38,7 +37,9 @@ export default function SubjectDetails() {
 
   const subjectData = subjectStore.getSubject(subjectId);
   const { data, isLoading } = lessonStore.getLessonsBySubject(subjectId);
-  const userInfo = authenticatorStore.authUser().data?.data.data.user_type;
+  const subjecEvaluations =
+    evaluationStore.getEvaluationsCollectionBySubject(subjectId).data?.data.data;
+
   const lessons = data?.data.data || [];
 
   const list: Link[] = [
@@ -64,7 +65,7 @@ export default function SubjectDetails() {
     },
     {
       label: 'Evaluations',
-      href: `${url}/evaluation`,
+      href: `${url}/evaluations`,
     },
   ];
 
@@ -138,16 +139,9 @@ export default function SubjectDetails() {
                 )}
               />
               <Route
-                path={`${url}/evaluation`}
+                path={`${url}/evaluations`}
                 render={() => (
-                  <ViewEvaluations
-                    {...{ subjectId }}
-                    linkTo={
-                      userInfo === UserType.STUDENT
-                        ? '/dashboard/student/evaluations/'
-                        : ''
-                    }
-                  />
+                  <EvaluationCategories subjecEvaluations={subjecEvaluations} />
                 )}
               />
             </Switch>

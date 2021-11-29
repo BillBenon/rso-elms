@@ -97,7 +97,7 @@ export default function Faculties({ fetchType }: IFaculties) {
   return (
     <main>
       <section>
-        {faculties && faculties?.length > 0 && (
+        {faculties?.length > 0 ? (
           <TableHeader
             title="Faculty"
             totalItems={faculties?.length || 0}
@@ -106,7 +106,7 @@ export default function Faculties({ fetchType }: IFaculties) {
               <Button>Add Faculty</Button>
             </Link>
           </TableHeader>
-        )}
+        ) : null}
       </section>
       <section>
         {isLoading && faculties.length === 0 && <Loader />}

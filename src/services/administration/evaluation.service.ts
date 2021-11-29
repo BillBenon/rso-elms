@@ -7,6 +7,7 @@ import {
   IEvaluationApproval,
   IEvaluationCreate,
   IEvaluationInfo,
+  IEvaluationInfoCollected,
   IEvaluationQuestionsInfo,
   IStudentAnswer,
   IStudentEvaluationStart,
@@ -28,10 +29,17 @@ class EvaluationService {
     );
   }
 
+  // public async createEvaluationQuestion(
+  //   questionsInfo: ICreateEvaluationQuestions[],
+  // ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
+  //   return await evaluationAxios.post('/evaluationQuestions/add', {
+  //     questions: questionsInfo,
+  //   });
+  // }
   public async createEvaluationQuestion(
     questionsInfo: ICreateEvaluationQuestions[],
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
-    return await evaluationAxios.post('/evaluationQuestions/add', {
+    return await evaluationAxios.post('/evaluationQuestions/update-multiple', {
       questions: questionsInfo,
     });
   }
@@ -57,6 +65,13 @@ class EvaluationService {
   ): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
     return await evaluationAxios.get(`/evaluations/getEvaluationsBySubject/${subject}`);
   }
+  public async fetchEvaluationsCollectionBySubject(
+    subject: string,
+  ): Promise<AxiosResponse<Response<IEvaluationInfoCollected>>> {
+    return await evaluationAxios.get(
+      `/evaluations/getEvaluationsBySubject/07e4467${subject}/studentNarrower`,
+    );
+  }
 
   public async getEvaluationById(
     id: string,
@@ -78,6 +93,23 @@ class EvaluationService {
     });
   }
 
+  public async getEvaluationWorkTime(
+    studentEvaluationId: string,
+  ): Promise<AxiosResponse<Response<any>>> {
+    return await evaluationAxios.get(
+      `studentEvaluations/studentEvaluation/getWorkTime/${studentEvaluationId}`,
+    );
+  }
+
+  public async updateEvaluationWorkTime({
+    studentEvaluationId = '',
+    currentTime = '',
+  }): Promise<void> {
+    return await evaluationAxios.put(
+      `/studentEvaluations/studentEvaluation/${studentEvaluationId}/currentWorkTime/${currentTime}`,
+    );
+  }
+
   public async addQuestionAnswer(
     answer: IStudentAnswer,
   ): Promise<AxiosResponse<Response<IStudentAnswer>>> {
@@ -95,9 +127,12 @@ class EvaluationService {
     );
   }
 
-  public async publishEvaluation(data:{evaluationId: string, status: string}): Promise<void> {
+  public async publishEvaluation(data: {
+    evaluationId: string;
+    status: string;
+  }): Promise<void> {
     return await evaluationAxios.put(
-      `evaluations/evaluation/${data.evaluationId}/${data.status}`,
+      `/evaluations/evaluation/${data.evaluationId}/${data.status}`,
     );
   }
 

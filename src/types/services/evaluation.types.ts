@@ -22,7 +22,7 @@ export interface IEvaluationProps {
   handleNext: () => void;
   handleGoBack: () => void;
   handleAddQuestion?: () => void;
-  evaluationId?: string | null;
+  evaluationId: string | null;
 }
 
 export enum ISubmissionTypeEnum {
@@ -134,6 +134,16 @@ export interface IEvaluationInfo {
   evaluation_comments: [];
 }
 
+export interface IEvaluationInfoCollected {
+  undoneEvaluations: IEvaluationInfoSingleEvaluation[];
+  ongoingEvaluations: IEvaluationInfoSingleEvaluation[];
+  finishedEvaluations: IEvaluationInfoSingleEvaluation;
+}
+export interface IEvaluationInfoSingleEvaluation {
+  code: string;
+  evaluation: IEvaluationInfo;
+}
+
 export interface IEvaluationChoices {
   answer_content: string;
   correct: boolean;
@@ -146,7 +156,7 @@ export interface IEvaluationQuestion {
   parent_question_id: string;
   question: string;
   submitted: boolean;
-  question_type: IQuestionType;
+  questionType: IQuestionType;
 }
 
 export interface IMultipleChoice {
@@ -157,6 +167,7 @@ export interface IMultipleChoice {
 export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
   sub_questions: IEvaluationQuestion[];
   submitted: boolean;
+  questionType: IQuestionType;
   id: string;
   choices: IMultipleChoice[];
 }
@@ -164,6 +175,8 @@ export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
 export interface IEvaluationQuestionsInfo {
   id: string;
   question: string;
+  evaluation_id: string;
+  choices: IMultipleChoice[];
   mark: number;
   evaluationQuestions: [];
   questionType: IQuestionType;

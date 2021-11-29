@@ -13,10 +13,7 @@ import {
   IEvaluationProps,
 } from '../../../../types/services/evaluation.types';
 import { UserType } from '../../../../types/services/user.types';
-import {
-  getLocalStorageData,
-  setLocalStorageData,
-} from '../../../../utils/getLocalStorageItem';
+import { setLocalStorageData } from '../../../../utils/getLocalStorageItem';
 import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import Input from '../../../Atoms/Input/Input';
@@ -25,7 +22,10 @@ import ILabel from '../../../Atoms/Text/ILabel';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import SwitchMolecule from '../../../Molecules/input/SwitchMolecule';
 
-export default function EvaluationSettings({ handleGoBack }: IEvaluationProps) {
+export default function EvaluationSettings({
+  handleGoBack,
+  evaluationId,
+}: IEvaluationProps) {
   const history = useHistory();
   const authUser = authenticatorStore.authUser().data?.data.data;
   const { data: inCharge } = usersStore.getUsersByAcademy(
@@ -38,7 +38,7 @@ export default function EvaluationSettings({ handleGoBack }: IEvaluationProps) {
 
   const [settings, setSettings] = useState<IEvaluationApproval>({
     approver: '',
-    evaluation: getLocalStorageData('evaluationId'),
+    evaluation: evaluationId || '',
     evaluation_approval_status: IEvaluationApprovalStatus.REVIEWING,
     id: '',
     preparer: authUser?.id.toString() || '',
