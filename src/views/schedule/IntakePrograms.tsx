@@ -56,10 +56,10 @@ export default function IntakePrograms() {
                 totalItems={`${programs.length} programs`}
                 title={intakeInfo?.title || '````````'}>
                 <div className="flex gap-4">
-                  <BrowserLink to={`${path}/event/new`}>
+                  <BrowserLink to={`/dashboard/schedule/events/new`}>
                     <Button>Add event</Button>
                   </BrowserLink>
-                  <BrowserLink to={`${path}/venue/new`}>
+                  <BrowserLink to={`/dashboard/schedule/venues/new`}>
                     <Button styleType="outline">Add Venue</Button>
                   </BrowserLink>
                 </div>
