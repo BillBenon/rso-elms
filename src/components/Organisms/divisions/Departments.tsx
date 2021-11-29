@@ -112,7 +112,7 @@ export default function Departments({ fetchType }: IDepartment) {
         path="*"
         render={() => (
           <main>
-            {departments && departments?.length > 0 && (
+            {departments?.length > 0 ? (
               <section>
                 <TableHeader
                   title={`${
@@ -127,7 +127,7 @@ export default function Departments({ fetchType }: IDepartment) {
                   }
                   handleSearch={() => {}}></TableHeader>
               </section>
-            )}
+            ) : null}
 
             <section>
               {isLoading && departments.length === 0 && <Loader />}
