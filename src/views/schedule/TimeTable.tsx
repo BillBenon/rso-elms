@@ -23,42 +23,42 @@ let timetable = [
       {
         start: '8am',
         end: '10am',
-        activity: 'Official opening',
+        activity: 'Mathematics',
         venue: 'Auditorium',
         officer: 'Manzi Gustave',
       },
       {
         start: '8am',
         end: '10am',
-        activity: 'Official opening',
+        activity: 'Mathematics',
         venue: 'Auditorium',
         officer: 'Manzi Gustave',
       },
       {
         start: '8am',
         end: '10am',
-        activity: 'Official opening',
+        activity: 'Mathematics',
         venue: 'Auditorium',
         officer: 'Manzi Gustave',
       },
       {
         start: '8am',
         end: '10am',
-        activity: 'Official opening',
+        activity: 'Mathematics',
         venue: 'Auditorium',
         officer: 'Manzi Gustave',
       },
       {
         start: '8am',
         end: '10am',
-        activity: 'Official opening',
+        activity: 'Mathematics',
         venue: 'Auditorium',
         officer: 'Manzi Gustave',
       },
       {
         start: '8am',
         end: '10am',
-        activity: 'Official opening',
+        activity: 'Mathematics',
         venue: 'Auditorium',
         officer: 'Manzi Gustave',
       },
@@ -84,7 +84,10 @@ export default function TimeTable() {
 
   return (
     <div>
-      <TableHeader showBadge={false} title={`${classInfo?.class_name} timetable`}>
+      <TableHeader
+        showBadge={false}
+        showSearch={false}
+        title={`${classInfo?.academic_year_program_intake_level.academic_program_level.program.name} - ${classInfo?.academic_year_program_intake_level.academic_program_level.level.name} - ${classInfo?.class_name}`}>
         <Link to={`${url}/new-schedule`}>
           <Button>New timetable</Button>
         </Link>
