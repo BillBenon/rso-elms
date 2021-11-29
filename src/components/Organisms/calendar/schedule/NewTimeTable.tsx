@@ -4,10 +4,7 @@ import { useHistory, useParams } from 'react-router-dom';
 import { authenticatorStore } from '../../../../store/administration';
 import { classStore } from '../../../../store/administration/class.store';
 import { moduleStore } from '../../../../store/administration/modules.store';
-import { subjectStore } from '../../../../store/administration/subject.store';
-import usersStore from '../../../../store/administration/users.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
-import { eventStore } from '../../../../store/timetable/event.store';
 import { scheduleStore } from '../../../../store/timetable/schedule.store';
 import { venueStore } from '../../../../store/timetable/venue.store';
 import { ParamType, SelectData, ValueType } from '../../../../types';
@@ -17,7 +14,6 @@ import {
   daysOfWeek,
   ICreateClassTimeTable,
 } from '../../../../types/services/schedule.types';
-import { UserType } from '../../../../types/services/user.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import CheckboxMolecule from '../../../Molecules/input/CheckboxMolecule';
@@ -118,10 +114,6 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
     authUser?.academy.id + '',
   ).data?.data.data;
 
-  console.log('====================================');
-  console.log(users);
-  console.log('====================================');
-
   const modules =
     moduleStore.getModulesByProgram(
       classInfo?.academic_year_program_intake_level.academic_program_level.program.id +
@@ -208,7 +200,7 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
       </InputMolecule>
       <CheckboxMolecule
         isFlex
-        options={getDropDownStatusOptions(daysOfWeek).slice(0, 6)}
+        options={getDropDownStatusOptions(daysOfWeek).slice(0, 5)}
         name="repeatingDays"
         placeholder="Repeat days:"
         handleChange={handleChange}

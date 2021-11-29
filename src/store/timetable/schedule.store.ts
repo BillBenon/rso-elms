@@ -26,6 +26,12 @@ class ScheduleStore {
     return useMutation(scheduleService.createClassTimetable);
   }
 
+  getClassTimetableByIntakeLevelClass(id: string) {
+    return useQuery(['schedules/tt/:id', id], () =>
+      scheduleService.getClassTimetableByIntakeLevelClass(id),
+    );
+  }
+
   getScheduleById(id: string) {
     return useQuery(['schedules/id', id], () => scheduleService.getScheduleById(id));
   }

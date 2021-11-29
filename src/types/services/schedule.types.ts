@@ -129,10 +129,10 @@ interface courseModule extends Table {
 export interface ClassTimeTableInfo extends Table {
   course_module: courseModule;
   day_of_week: daysOfWeek;
-  end_hour: Hour;
+  end_hour: string;
   instructor: Table;
   intake_level_class: Table;
-  start_hour: Hour;
+  start_hour: string;
   timetable_status: ScheduleStatus;
   venue: VenueInfo;
 }
