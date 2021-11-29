@@ -24,7 +24,7 @@ import { lessonStore } from '../../store/administration/lesson.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { Link } from '../../types';
 import { UserType } from '../../types/services/user.types';
-import ViewEvaluations from '../evaluation/ViewEvaluations';
+import StudentViewEvaluations from '../evaluation/StudentViewEvaluations';
 
 interface ParamType {
   id: string;
@@ -140,7 +140,7 @@ export default function SubjectDetails() {
               <Route
                 path={`${url}/evaluations`}
                 render={() => (
-                  <ViewEvaluations
+                  <StudentViewEvaluations
                     {...{ subjectId }}
                     linkTo={
                       userInfo === UserType.STUDENT

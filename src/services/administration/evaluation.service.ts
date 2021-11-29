@@ -9,6 +9,7 @@ import {
   IEvaluationInfo,
   IEvaluationQuestionsInfo,
   IStudentAnswer,
+  IStudentEvaluations,
   IStudentEvaluationStart,
   IStudentEvaluationStartInfo,
 } from '../../types/services/evaluation.types';
@@ -63,6 +64,14 @@ class EvaluationService {
     subject: string,
   ): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
     return await evaluationAxios.get(`/evaluations/getEvaluationsBySubject/${subject}`);
+  }
+
+  public async fetchEvaluationsByStudent(
+    subject: string,
+  ): Promise<AxiosResponse<Response<IStudentEvaluations[]>>> {
+    const data =  await evaluationAxios.get(`/evaluations/getEvaluationsBySubject/${subject}/studentNarrower`);
+    console.log(data);
+    return data;
   }
 
   public async getEvaluationById(

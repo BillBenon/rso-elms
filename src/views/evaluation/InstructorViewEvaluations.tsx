@@ -24,7 +24,7 @@ interface IEvaluationProps {
   linkTo: string;
 }
 
-export default function ViewEvaluations({ subjectId, linkTo }: IEvaluationProps) {
+export default function InstructorViewEvaluations({ subjectId, linkTo }: IEvaluationProps) {
   const [evaluations, setEvaluations] = useState<any>([]);
   const [confirm, showConfirmation] = useState(false);
   const history = useHistory();
