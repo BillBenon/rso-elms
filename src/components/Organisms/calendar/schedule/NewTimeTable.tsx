@@ -1,6 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
+import { queryClient } from '../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../store/administration';
 import { classStore } from '../../../../store/administration/class.store';
 import { moduleStore } from '../../../../store/administration/modules.store';
@@ -73,8 +74,7 @@ export default function NewTimeTable() {
     mutateAsync(data, {
       async onSuccess(_data) {
         toast.success('Timetable was created successfully');
-        //   queryClient.invalidateQueries(['schedules/level-intake/:id', id]);
-        //   queryClient.invalidateQueries(['schedules/program/:id', id]);
+        queryClient.invalidateQueries(['schedules/tt/:id', id]);
         history.goBack();
       },
       onError() {
