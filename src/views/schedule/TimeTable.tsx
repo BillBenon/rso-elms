@@ -147,7 +147,7 @@ export default function TimeTable() {
       <Switch>
         <Route
           exact
-          path={`${url}/new-schedule`}
+          path={`/dashboard/schedule/timetable/:id/new-schedule`}
           render={() => (
             <PopupMolecule title="Create timetable" open onClose={handleClose}>
               <NewTimeTable />

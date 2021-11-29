@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { classStore } from '../../store/administration/class.store';
@@ -6,7 +6,7 @@ import { classStore } from '../../store/administration/class.store';
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import { Tab, tabEventTypes, Tabs } from '../../components/Molecules/tabs/tabs';
+import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 
 interface ParamType {
@@ -14,7 +14,7 @@ interface ParamType {
   intakeProgramId: string;
 }
 
-export default function ProgramLevelClasses() {
+export default function PrograsmLevelClasses() {
   const { intakeProgramId } = useParams<ParamType>();
 
   const levelsInfo =
