@@ -63,7 +63,7 @@ export default function PrograsmLevelClasses() {
                         <Link
                           className="outline-none"
                           to={`/dashboard/schedule/calendar/${programInfo?.id}?class_id=${cl.id}`}>
-                          <span className="text-primary-500 font-medium">
+                          <span className="text-primary-500 text-sm font-medium">
                             View Calendar
                           </span>
                         </Link>
@@ -72,7 +72,7 @@ export default function PrograsmLevelClasses() {
                         <Link
                           className="outline-none"
                           to={`/dashboard/schedule/timetable/${cl.id}`}>
-                          <span className="text-primary-500 font-medium">
+                          <span className="text-primary-500 text-sm font-medium">
                             View Time table
                           </span>
                         </Link>
