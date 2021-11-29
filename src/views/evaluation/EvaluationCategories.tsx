@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Heading from '../../components/Atoms/Text/Heading';
+import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { authenticatorStore } from '../../store/administration';
 import { IEvaluationInfoCollected } from '../../types/services/evaluation.types';
 import { UserType } from '../../types/services/user.types';
@@ -44,6 +45,17 @@ export default function EvaluationCategories({
           />
         </div>
       ) : null}
+
+      {typeof subjecEvaluations?.finishedEvaluations &&
+        typeof subjecEvaluations?.ongoingEvaluations &&
+        typeof subjecEvaluations?.undoneEvaluations === 'undefined' && (
+          <NoDataAvailable
+            icon="evaluation"
+            showButton={false}
+            title={'No evaluations available'}
+            description="And the web just isnt the same without you. Lets get you back online!"
+          />
+        )}
     </div>
   );
 }
