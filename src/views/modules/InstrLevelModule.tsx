@@ -33,8 +33,15 @@ function InstrLevelModule() {
 
   useEffect(() => setinstructor(instructorInfo), [instructorInfo]);
 
-  const { data: levelModuleStore, isLoading } =
-    intakeProgramStore.getModulesByInstructorAndStatus(instructor?.id + '', modStatus);
+  const {
+    data: levelModuleStore,
+    isLoading,
+    refetch,
+  } = intakeProgramStore.getModulesByInstructorAndStatus(instructor?.id + '', modStatus);
+
+  useEffect(() => {
+    refetch();
+  }, [modStatus]);
 
   useEffect(() => {
     let newModule: CommonCardDataType[] = [];

@@ -112,7 +112,7 @@ export interface ValueType<T = Event> {
 
 export interface CommonCardDataType {
   id?: string | number;
-  status?: { type: 'success' | 'warning' | 'error'; text: string };
+  status?: { type: 'success' | 'warning' | 'error' | 'info'; text: string };
   title: string;
   code: string;
   subTitle?: string;

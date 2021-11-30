@@ -36,7 +36,11 @@ export default function Sidebar() {
     ];
 
     const instructorLinks: linkProps[] = [
-      { title: 'Dashboard', to: '/dashboard/instructor', icon: 'dashboard', fill: false },
+      {
+        title: 'Programs',
+        to: '/dashboard/inst-program',
+        icon: 'program',
+      },
       { title: 'Modules', to: '/dashboard/inst-module', icon: 'module' },
       { title: 'Evaluations', to: '/dashboard/evaluations', icon: 'evaluation' },
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },

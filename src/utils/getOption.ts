@@ -74,12 +74,14 @@ export function advancedTypeChecker(
     | IntakeModuleStatus
     | ModuleParticipation
     | EnrollmentStatus,
-): 'success' | 'warning' | 'error' {
+): 'success' | 'warning' | 'error' | 'info' {
   let successStatus = ['active', 'completed', 'opened', 'started'];
   let errorStatus = ['inactive', 'closed', 'voided', 'suspended'];
+  let infoStatus = ['ongoing'];
 
   if (successStatus.includes(status.toString().toLowerCase())) return 'success';
   else if (errorStatus.includes(status.toString().toLowerCase())) return 'error';
+  else if (infoStatus.includes(status.toString().toLowerCase())) return 'info';
   else return 'warning';
 }
 

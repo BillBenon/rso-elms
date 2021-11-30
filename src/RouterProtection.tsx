@@ -7,7 +7,7 @@ import { authenticatorStore } from './store/administration';
 import { UserInfo, UserType } from './types/services/user.types';
 import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';
-import InstructorDashboard from './views/dashboard/InstructorDashboard';
+import InstructorProgram from './views/dashboard/InstructorProgram';
 import StudentDashboard from './views/dashboard/StudentDashboard';
 import Divisions from './views/divisions/Divisions';
 import EvaluationTest from './views/evaluation/EvaluationTest';
@@ -77,7 +77,7 @@ const RouterProtection = () => {
   const InstructorRoutes = () => (
     <>
       {/* start of instructor pages */}
-      <Route path="/dashboard/instructor" component={InstructorDashboard} />
+      <Route path="/dashboard/inst-program" component={InstructorProgram} />
       <Route exact path={`/dashboard/inst-module`} component={InstrLevelModule} />
 
       <Route path="/dashboard/evaluations" component={ViewEvaluations} />
