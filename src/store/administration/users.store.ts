@@ -6,6 +6,10 @@ class UserStore {
   createUser() {
     return useMutation(userService.createUser);
   }
+
+  importUsers() {
+    return useMutation(userService.importUsers);
+  }
   fetchUsers() {
     return useQuery('users', userService.fetchUsers);
   }

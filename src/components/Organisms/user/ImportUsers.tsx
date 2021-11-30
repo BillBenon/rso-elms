@@ -1,5 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useHistory } from 'react-router-dom';
+import { queryClient } from '../../../plugins/react-query';
 
 import academyStore from '../../../store/administration/academy.store';
 import intakeProgramStore from '../../../store/administration/intake-program.store';
@@ -7,6 +9,7 @@ import {
   getIntakesByAcademy,
   getProgramsByIntake,
 } from '../../../store/administration/intake.store';
+import usersStore from '../../../store/administration/users.store';
 import { SelectData, ValueType } from '../../../types';
 import { IImportUser, UserType } from '../../../types/services/user.types';
 import { getDropDownOptions } from '../../../utils/getOption';
@@ -20,6 +23,7 @@ interface IProps {
 }
 
 export default function ImportUsers({ userType }: IProps) {
+  const history = useHistory();
   const [values, setValues] = useState<IImportUser>({
     academicProgramLevelId: '',
     academicYearId: '',
@@ -41,20 +45,35 @@ export default function ImportUsers({ userType }: IProps) {
     intakeProgramStore.getLevelsByIntakeProgram(values.intakeProgramId!).data?.data
       .data || [];
 
+  const { mutateAsync, isLoading } = usersStore.importUsers();
+
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
 
-    const data = {
-      ...values,
-      academicYearId: levels.find(
-        (l) => l.academic_program_level.id == values.academicProgramLevelId,
-      )?.academic_year.id,
-    };
+    if (values.file) {
+      let academicYearId =
+        levels.find((l) => l.academic_program_level.id == values.academicProgramLevelId)
+          ?.academic_year.id || '';
 
-    if (!data.file) {
-      toast.error('Please attach Excel file.');
-      return;
-    }
+      let formData = new FormData();
+      formData.append('file', values.file);
+      formData.append('academicProgramLevelId', values.academicProgramLevelId);
+      formData.append('academyId', values.academyId);
+      formData.append('intakeProgramId', values.intakeProgramId);
+      formData.append('userType', UserType.STUDENT);
+      formData.append('academicYearId', academicYearId?.toString());
+
+      await mutateAsync(formData, {
+        onSuccess(data) {
+          toast.success(data.data.message);
+          queryClient.invalidateQueries('users');
+          history.goBack();
+        },
+        onError() {
+          toast.error('An error occurred when importing users, please try again later');
+        },
+      });
+    } else toast.error('Please attach excel file.');
   }
 
   const handleUpload = (files: FileList | null) => {
@@ -117,7 +136,9 @@ export default function ImportUsers({ userType }: IProps) {
           </FileUploader>
         </div>
         <div className="py-2">
-          <Button type="submit">Save</Button>
+          <Button type="submit" disabled={isLoading}>
+            Save
+          </Button>
         </div>
       </form>
       <div className="pt-2">
