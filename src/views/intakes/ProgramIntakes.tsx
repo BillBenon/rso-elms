@@ -21,8 +21,8 @@ function ProgramIntakes() {
   const { url } = useRouteMatch();
 
   const list: Link[] = [
-    { to: '/dashboard/instructor', title: 'Dashboard' },
-    { to: '/dashboard/instructor', title: 'Programs' },
+    { to: '/dashboard/inst-program', title: 'Dashboard' },
+    { to: '/dashboard/inst-program', title: 'Programs' },
     { to: `${url}`, title: 'Intakes' },
   ];
 
