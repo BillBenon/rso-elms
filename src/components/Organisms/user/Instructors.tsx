@@ -83,7 +83,7 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
               title="Import instructors"
               open={true}
               onClose={history.goBack}>
-              <ImportUsers userType="instructors" />
+              <ImportUsers userType={UserType.INSTRUCTOR} />
             </PopupMolecule>
           )}
         />

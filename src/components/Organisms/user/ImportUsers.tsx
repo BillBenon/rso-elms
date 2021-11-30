@@ -60,7 +60,7 @@ export default function ImportUsers({ userType }: IProps) {
       formData.append('academicProgramLevelId', values.academicProgramLevelId);
       formData.append('academyId', values.academyId);
       formData.append('intakeProgramId', values.intakeProgramId);
-      formData.append('userType', UserType.STUDENT);
+      formData.append('userType', values.userType);
       formData.append('academicYearId', academicYearId?.toString());
 
       await mutateAsync(formData, {
