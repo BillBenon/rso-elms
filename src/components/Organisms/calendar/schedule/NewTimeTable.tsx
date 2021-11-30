@@ -6,7 +6,7 @@ import { authenticatorStore } from '../../../../store/administration';
 import { classStore } from '../../../../store/administration/class.store';
 import { moduleStore } from '../../../../store/administration/modules.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
-import { scheduleStore } from '../../../../store/timetable/schedule.store';
+import { timetableStore } from '../../../../store/timetable/timetable.store';
 import { venueStore } from '../../../../store/timetable/venue.store';
 import { ParamType, SelectData, ValueType } from '../../../../types';
 import { IClass } from '../../../../types/services/class.types';
@@ -54,7 +54,7 @@ export default function NewTimeTable() {
     setvalues((val) => ({ ...val, [e.name]: e.value }));
   }
 
-  const { mutateAsync } = scheduleStore.createClassTimetable();
+  const { mutateAsync } = timetableStore.createClassTimetable();
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();

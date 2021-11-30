@@ -15,12 +15,12 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewTimeTable from '../../components/Organisms/calendar/schedule/NewTimeTable';
 import { classStore } from '../../store/administration/class.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
-import { scheduleStore } from '../../store/timetable/schedule.store';
 import { ParamType } from '../../types';
 import { groupTimeTableByDay } from '../../utils/calendar';
 
 import '../../styles/components/Molecules/timetable/timetable.scss';
 import EditTimeTable from '../../components/Organisms/calendar/schedule/EditTimeTable';
+import { timetableStore } from '../../store/timetable/timetable.store';
 
 export default function TimeTable() {
   const { id } = useParams<ParamType>();
@@ -34,7 +34,7 @@ export default function TimeTable() {
   };
 
   const groupedTimeTable = groupTimeTableByDay(
-    scheduleStore.getClassTimetableByIntakeLevelClass(id).data?.data.data || [],
+    timetableStore.getClassTimetableByIntakeLevelClass(id).data?.data.data || [],
   );
 
   const instructors = instructordeploymentStore.getInstructors().data?.data.data;
