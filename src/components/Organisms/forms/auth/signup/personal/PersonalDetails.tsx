@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
+import locationStore from '../../../../../../store/administration/location.store';
 import usersStore from '../../../../../../store/administration/users.store';
-import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../types';
+import {
+  CommonFormProps,
+  CommonStepProps,
+  SelectData,
+  ValueType,
+} from '../../../../../../types';
+import { LocationInfo } from '../../../../../../types/services/location.types';
 import {
   BloodGroup,
   GenderStatus,
@@ -47,10 +54,30 @@ function PersonalDetails<E>({
     residence_location_id: 0,
     place_of_residence: '',
   });
+  const [locationLevel, setLocationLevel] = useState<number>(1);
+  const [location, setLocation] = useState<LocationInfo[]>();
+
+  const { data: country } = locationStore.getLocationsByLevel('1');
+  console.log(personalDetails);
+  const { data: dbLocations, refetch: refetchDbLocations } = locationStore.findByParent(
+    '0',
+    false,
+  );
 
   const handleChange = (e: ValueType) => {
     setPersonalDetails({ ...personalDetails, [e.name]: e.value });
   };
+
+  const handleLocationChange = (e: ValueType) => {
+    setPersonalDetails({ ...personalDetails, [e.name]: e.value });
+
+    refetchDbLocations();
+    setLocation(dbLocations?.data.data);
+    setLocationLevel((old) => old + 1);
+
+    setPersonalDetails({ ...personalDetails, [e.name]: e.value });
+  };
+
   const locations: [] = [];
 
   const moveForward = (e: any) => {
@@ -87,6 +114,10 @@ function PersonalDetails<E>({
         place_of_residence: personInfo.place_of_residence,
       });
   }, [user.data?.data.data.person]);
+
+  useEffect(() => {
+    setLocation(country?.data.data);
+  }, [country?.data]);
 
   return (
     <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
@@ -185,12 +216,14 @@ function PersonalDetails<E>({
             <DropdownMolecule
               placeholder="Select place of residence"
               name="residence_location_id"
-              defaultValue={getDropDownOptions({ inputs: locations }).find(
+              defaultValue={getDropDownOptions({ inputs: location! }).find(
                 (location) =>
-                  location.value === personalDetails.residence_location_id.toString(),
+                  location.value ===
+                  (personalDetails.residence_location_id &&
+                    personalDetails.residence_location_id.toString()),
               )}
-              handleChange={handleChange}
-              options={[]}>
+              handleChange={handleLocationChange}
+              options={getDropDownOptions({ inputs: location! })}>
               Place of residence
             </DropdownMolecule>
             <TextAreaMolecule

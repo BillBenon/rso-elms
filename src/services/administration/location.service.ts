@@ -5,18 +5,22 @@ import { Response } from '../../types';
 import { LocationInfo } from './../../types/services/location.types';
 
 class LocationService {
-  public async getLocations(): Promise<AxiosResponse<LocationInfo[]>> {
+  public async getLocations(): Promise<AxiosResponse<Response<LocationInfo[]>>> {
     return await adminstrationAxios.get('/locations');
   }
   public async getLocationsByLevel(
     levelId: string,
-  ): Promise<AxiosResponse<LocationInfo[]>> {
+  ): Promise<AxiosResponse<Response<LocationInfo[]>>> {
     return await adminstrationAxios.get(`/locations/findByLevel/${levelId}`);
   }
-  public async getAllChildreen(parentId: string): Promise<AxiosResponse<LocationInfo[]>> {
+  public async getAllChildreen(
+    parentId: string,
+  ): Promise<AxiosResponse<Response<LocationInfo[]>>> {
     return await adminstrationAxios.get(`/locations/getAllChildreen/${parentId}`);
   }
-  public async findByParent(parentId: string): Promise<AxiosResponse<LocationInfo[]>> {
+  public async findByParent(
+    parentId: string,
+  ): Promise<AxiosResponse<Response<LocationInfo[]>>> {
     return await adminstrationAxios.get(`/locations/findByParent/${parentId}`);
   }
   public async getLocationsById(
