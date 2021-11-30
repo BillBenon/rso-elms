@@ -200,7 +200,7 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
       </InputMolecule>
       <CheckboxMolecule
         isFlex
-        options={getDropDownStatusOptions(daysOfWeek).slice(0, 5)}
+        options={getDropDownStatusOptions(daysOfWeek).slice(0, 7)}
         name="repeatingDays"
         placeholder="Repeat days:"
         handleChange={handleChange}
