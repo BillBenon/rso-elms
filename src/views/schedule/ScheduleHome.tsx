@@ -48,9 +48,11 @@ export default function ScheduleHome() {
   const history = useHistory();
   const { path } = useRouteMatch();
 
-  const { data: userInfo } = authenticatorStore.authUser();
+  const userInfo = authenticatorStore.authUser().data?.data.data;
   const { data, isLoading } = getIntakesByAcademy(
-    userInfo?.data.data.academy.id.toString()!,
+    userInfo?.academy.id + '',
+    false,
+    userInfo?.academy.id != undefined,
   );
 
   let intakes: CommonCardDataType[] =

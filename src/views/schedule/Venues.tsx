@@ -19,7 +19,7 @@ export default function Venues() {
   return (
     <div>
       <TableHeader totalItems={0} title={'Venues'} showBadge={false}>
-        <Link to={`${path}/new`}>
+        <Link to={`/dashboard/schedule/venues/new`}>
           <Button>New venue</Button>
         </Link>
       </TableHeader>

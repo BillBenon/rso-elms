@@ -21,7 +21,7 @@ export default function Events() {
   return (
     <div>
       <TableHeader totalItems={0} title={'Events'} showBadge={false}>
-        <Link to={`${path}/new`}>
+        <Link to={`/dashboard/schedule/events/new`}>
           <Button>New Event</Button>
         </Link>
       </TableHeader>
