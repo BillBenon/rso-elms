@@ -1,58 +1,123 @@
 import React, { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import academyStore from '../../../store/administration/academy.store';
-import { CommonFormProps, ValueType } from '../../../types';
-import { AcademyInfo } from '../../../types/services/academy.types';
+import intakeProgramStore from '../../../store/administration/intake-program.store';
+import {
+  getIntakesByAcademy,
+  getProgramsByIntake,
+} from '../../../store/administration/intake.store';
+import { SelectData, ValueType } from '../../../types';
+import { IImportUser, UserType } from '../../../types/services/user.types';
 import { getDropDownOptions } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
+import FileUploader from '../../Atoms/Input/FileUploader';
 import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 
-interface IUser<K> extends CommonFormProps<K> {
-  userType: 'students' | 'instructors' | 'admins';
+interface IProps {
+  userType: UserType;
 }
 
-export default function ImportUsers<K>({ onSubmit, userType = 'students' }: IUser<K>) {
-  const academies: AcademyInfo[] | undefined =
-    academyStore.fetchAcademies().data?.data.data;
-  const programs: AcademyInfo[] | undefined =
-    academyStore.fetchAcademies().data?.data.data;
-
-  const [, setDetails] = useState({
-    academy: '',
-    program: '',
+export default function ImportUsers({ userType }: IProps) {
+  const [values, setValues] = useState<IImportUser>({
+    academicProgramLevelId: '',
+    academicYearId: '',
+    academyId: '',
+    intakeProgramId: '',
+    userType,
+    intake: '',
+    file: null,
   });
 
-  async function importStudents<T>(e: FormEvent<T>) {
+  const academies = academyStore.fetchAcademies().data?.data.data || [];
+  const intakes =
+    getIntakesByAcademy(values.academyId, false, values.academyId.length > 1).data?.data
+      .data || [];
+  const programs =
+    getProgramsByIntake(values.intake, values.intake.length > 1).data?.data.data || [];
+
+  const levels =
+    intakeProgramStore.getLevelsByIntakeProgram(values.intakeProgramId!).data?.data
+      .data || [];
+
+  async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
-    if (onSubmit) onSubmit(e);
+
+    const data = {
+      ...values,
+      academicYearId: levels.find(
+        (l) => l.academic_program_level.id == values.academicProgramLevelId,
+      )?.academic_year.id,
+    };
+
+    if (!data.file) {
+      toast.error('Please attach Excel file.');
+      return;
+    }
   }
 
+  const handleUpload = (files: FileList | null) => {
+    setValues({ ...values, file: files ? files[0] : null });
+  };
+
   function handleChange(e: ValueType) {
-    setDetails((details) => ({
-      ...details,
-      [e.name]: e.value,
-    }));
+    setValues({ ...values, [e.name]: e.value });
   }
   return (
     <>
-      <form onSubmit={importStudents}>
+      <form onSubmit={handleSubmit}>
         <DropdownMolecule
           options={getDropDownOptions({ inputs: academies || [] })}
-          name="academy"
+          name="academyId"
           placeholder={'Academy to be enrolled'}
           handleChange={handleChange}>
           Academy
         </DropdownMolecule>
         <DropdownMolecule
-          options={getDropDownOptions({ inputs: programs || [] })}
-          name="program"
+          options={
+            intakes?.map((intk) => ({ value: intk.id, label: intk.code })) as SelectData[]
+          }
+          name="intake"
+          handleChange={handleChange}>
+          Intake
+        </DropdownMolecule>
+        <DropdownMolecule
+          options={
+            programs.map((p) => ({ value: p.id, label: p.program.name })) as SelectData[]
+          }
+          name="intakeProgramId"
           placeholder={'Program'}
           handleChange={handleChange}>
           Program
         </DropdownMolecule>
+        <DropdownMolecule
+          options={
+            levels.map((lv) => ({
+              value: lv.academic_program_level.id,
+              label: lv.academic_program_level.level.name,
+            })) as SelectData[]
+          }
+          name="academicProgramLevelId"
+          placeholder={'Program'}
+          handleChange={handleChange}>
+          Level
+        </DropdownMolecule>
         <div className="py-2">
-          <Button type="submit">Import {userType}</Button>
+          <FileUploader
+            allowPreview={false}
+            handleUpload={handleUpload}
+            accept={'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}>
+            <Button styleType="outline" icon={true}>
+              <span className="flex items-center">
+                <Icon name={'attach'} fill="primary" />
+                <span className="pr-3">Attach file</span>
+              </span>
+            </Button>
+          </FileUploader>
+        </div>
+        <div className="py-2">
+          <Button type="submit">Save</Button>
         </div>
       </form>
       <div className="pt-2">
