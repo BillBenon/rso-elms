@@ -15,6 +15,7 @@ import {
 import { ModuleInfo } from '../../types/services/modules.types';
 import { Student } from '../../types/services/user.types';
 import { StudentIntakeProgramLevel } from './../../types/services/intake-program.types';
+import { InstructorModule } from './../../types/services/modules.types';
 
 class IntakeProgramService {
   public async getStudentById(
@@ -56,7 +57,7 @@ class IntakeProgramService {
   public async getModulesByInstructorAndStatus(
     inchargeId: string,
     status: string,
-  ): Promise<AxiosResponse<Response<ModuleInfo[]>>> {
+  ): Promise<AxiosResponse<Response<InstructorModule[]>>> {
     return await adminstrationAxios.get(
       `/academicProgramIntakeLevels/getModulesByInstructorInchargeAndStatus/${inchargeId}/${status}`,
     );

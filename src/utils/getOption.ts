@@ -4,6 +4,8 @@ import { IntakeStatus } from '../types/services/intake.types';
 import { IntakeModuleStatus } from '../types/services/intake-program.types';
 import { UserTypes } from '../types/services/user.types';
 import { GenericStatus } from './../types/services/common.types';
+import { EnrollmentStatus } from './../types/services/enrollment.types';
+import { ModuleParticipation } from './../types/services/intake-program.types';
 import { UserInfo } from './../types/services/user.types';
 
 interface GetDropDownOptionsProps {
@@ -65,7 +67,13 @@ export function getDropDownStatusOptions(status: any): SelectData[] {
 }
 
 export function advancedTypeChecker(
-  status: GenericStatus | IntakeStatus | IEvaluationStatus | IntakeModuleStatus,
+  status:
+    | GenericStatus
+    | IntakeStatus
+    | IEvaluationStatus
+    | IntakeModuleStatus
+    | ModuleParticipation
+    | EnrollmentStatus,
 ): 'success' | 'warning' | 'error' {
   let successStatus = ['active', 'completed', 'opened', 'started'];
   let errorStatus = ['inactive', 'closed', 'voided', 'suspended'];

@@ -41,14 +41,14 @@ function InstrLevelModule() {
     levelModuleStore?.data.data.forEach((mod) => {
       newModule.push({
         status: {
-          type: advancedTypeChecker(mod.generic_status),
-          text: mod.generic_status.toString(),
+          type: advancedTypeChecker(mod.intake_status),
+          text: mod.intake_status.toString(),
         },
-        id: mod.id,
-        code: mod.code,
-        title: mod.name,
-        description: mod.description,
-        subTitle: `total subject: ${mod.total_num_subjects || 'None'}`,
+        id: mod.module.id,
+        code: mod.module.code,
+        title: mod.module.name,
+        description: mod.module.description,
+        subTitle: `total subject: ${mod.module.total_num_subjects || 'None'}`,
       });
     });
 
@@ -56,6 +56,8 @@ function InstrLevelModule() {
   }, [levelModuleStore?.data.data]);
 
   function handleChange(e: ValueType) {
+    console.log(e.value);
+
     //@ts-ignore
     setModStatus(e.value);
   }
@@ -78,7 +80,7 @@ function InstrLevelModule() {
         <DropdownMolecule
           width="52"
           handleChange={handleChange}
-          name={modStatus}
+          name={'modStatus'}
           placeholder="module status"
           defaultValue={getDropDownStatusOptions(IntakeModuleStatus).find(
             (doc) => doc.value === modStatus,
