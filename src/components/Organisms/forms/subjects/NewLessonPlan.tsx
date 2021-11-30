@@ -1,0 +1,161 @@
+import React, { FormEvent, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+import { useParams } from 'react-router';
+
+import { queryClient } from '../../../../plugins/react-query';
+import { authenticatorStore } from '../../../../store/administration';
+import { lessonStore } from '../../../../store/administration/lesson.store';
+import { ParamType, ValueType } from '../../../../types';
+import { CreateLessonPlan } from '../../../../types/services/lesson.types';
+import Button from '../../../Atoms/custom/Button';
+import InputMolecule from '../../../Molecules/input/InputMolecule';
+import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
+import Stepper from '../../../Molecules/Stepper/Stepper';
+
+interface IProps {
+  lessonPlan: CreateLessonPlan;
+  display_label: string;
+  handleChange: (_e: ValueType) => any;
+  handleNext: <T>(_e: FormEvent<T>) => any;
+  handleProgramsChange?: (_e: ValueType) => any;
+}
+
+function NewLessonPlan() {
+  const { mutateAsync } = lessonStore.addLessonPlan();
+  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { id } = useParams<ParamType>();
+
+  const [lessonPlan, setlessonPlan] = useState<CreateLessonPlan>({
+    class_policy: '',
+    end_time: '',
+    grading: '',
+    instructor_id: '',
+    lesson_id: '',
+    lesson_objective: '',
+    lesson_requirements: '',
+    start_time: '',
+    text_books: '',
+  });
+
+  function handleChange(e: ValueType) {
+    setlessonPlan({ ...lessonPlan, [e.name]: e.value });
+  }
+
+  async function handleSubmit<T>(e: FormEvent<T>) {
+    e.preventDefault();
+    if (currentStep === 0) setCurrentStep(currentStep + 1);
+    else {
+      await mutateAsync(
+        { ...lessonPlan, lesson_id: id },
+        {
+          async onSuccess(data) {
+            toast.success(data.data.message);
+            queryClient.invalidateQueries(['lessonplan/lesson/id']);
+            history.go(-1);
+          },
+          onError() {
+            toast.error('error occurred please try again');
+          },
+        },
+      );
+    }
+  }
+
+  useEffect(() => {
+    setlessonPlan({ ...lessonPlan, instructor_id: authUser?.id + '' });
+  }, [authUser]);
+
+  const [currentStep, setCurrentStep] = useState(0);
+
+  return (
+    <div className="w-full">
+      <Stepper
+        currentStep={currentStep}
+        completeStep={currentStep}
+        width="w-64"
+        isVertical={false}
+        isInline={false}
+        navigateToStepHandler={() => console.log('submitted')}>
+        <LessonTimeComponent
+          display_label="info"
+          lessonPlan={lessonPlan}
+          handleChange={handleChange}
+          handleNext={handleSubmit}
+        />
+        <LessonTextArea
+          display_label="more"
+          lessonPlan={lessonPlan}
+          handleChange={handleChange}
+          handleNext={handleSubmit}
+        />
+      </Stepper>
+    </div>
+  );
+}
+
+function LessonTimeComponent({ lessonPlan, handleChange, handleNext }: IProps) {
+  return (
+    <form onSubmit={handleNext}>
+      <InputMolecule
+        value={lessonPlan.start_time}
+        name="start_time"
+        type="time"
+        handleChange={handleChange}>
+        Start time
+      </InputMolecule>
+      <InputMolecule
+        value={lessonPlan.end_time}
+        name="end_time"
+        type="time"
+        handleChange={handleChange}>
+        End time
+      </InputMolecule>
+      <InputMolecule
+        value={lessonPlan.grading}
+        name="grading"
+        type="number"
+        handleChange={handleChange}>
+        Grading
+      </InputMolecule>
+      <div className="mt-5">
+        <Button type="submit">Next</Button>
+      </div>
+    </form>
+  );
+}
+
+function LessonTextArea({ lessonPlan, handleChange, handleNext }: IProps) {
+  return (
+    <form onSubmit={handleNext}>
+      <TextAreaMolecule
+        name="lesson_objective"
+        value={lessonPlan.lesson_objective}
+        handleChange={handleChange}>
+        Lesson Objective
+      </TextAreaMolecule>
+      <TextAreaMolecule
+        name="lesson_requirements"
+        value={lessonPlan.lesson_requirements}
+        handleChange={handleChange}>
+        Lesson Requirements
+      </TextAreaMolecule>
+      <TextAreaMolecule
+        name="text_books"
+        value={lessonPlan.text_books}
+        handleChange={handleChange}>
+        Text Books
+      </TextAreaMolecule>
+      <TextAreaMolecule
+        name="class_policy"
+        value={lessonPlan.class_policy}
+        handleChange={handleChange}>
+        Class Policy
+      </TextAreaMolecule>
+      <div className="mt-5">
+        <Button type="submit">Save</Button>
+      </div>
+    </form>
+  );
+}
+
+export default NewLessonPlan;

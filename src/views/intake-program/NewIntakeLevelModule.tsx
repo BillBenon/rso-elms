@@ -12,10 +12,8 @@ import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule'
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
 import { queryClient } from '../../plugins/react-query';
-import { authenticatorStore } from '../../store/administration';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { moduleStore } from '../../store/administration/modules.store';
-import instructordeploymentStore from '../../store/instructordeployment.store';
 import { ValueType } from '../../types';
 import { Instructor } from '../../types/services/instructor.types';
 import {
@@ -48,7 +46,7 @@ function NewIntakeLevelModule() {
 
   const [totalModules, setTotalModules] = useState<AddLevelToModule[]>([]);
 
-  const { id, level: levelId, intakeProg } = useParams<IntakeLevelParam>();
+  const { id, level: levelId, intakeProg, intakeId } = useParams<IntakeLevelParam>();
 
   function handleChange(e: ValueType) {
     setvalues({ ...values, [e.name]: e.value });
@@ -59,24 +57,12 @@ function NewIntakeLevelModule() {
   const levels =
     intakeProgramStore.getLevelsByIntakeProgram(intakeProg).data?.data.data || [];
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
-
   const getAllModuleStore = moduleStore.getModulesByProgram(id).data?.data.data || [];
 
-  const instructors_deployed =
-    instructordeploymentStore.getInstructorsDeployedInAcademy(
-      authUser?.academy.id.toString() || '',
-    ).data?.data.data || [];
+  const instructorInPrograms =
+    intakeProgramStore.getInstructorsByIntakeProgram(id, intakeId).data?.data.data || [];
 
-  const all_instructors =
-    instructordeploymentStore.getInstructors().data?.data.data || [];
-
-  const instructors =
-    all_instructors?.filter(
-      (instr) =>
-        instr.id ===
-        instructors_deployed.find((dep) => dep.instructor_id == instr.id)?.instructor_id,
-    ) || [];
+  const instructors = instructorInPrograms.map((instr) => instr.instructor);
 
   useEffect(() => {
     setvalues({ ...values, academic_year_program_intake_level_id: parseInt(levelId) });

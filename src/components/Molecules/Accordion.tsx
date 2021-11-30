@@ -30,6 +30,7 @@ function Accordion({ children }: IProps) {
             title={panelProps.title}
             subtitle={panelProps.subtitle}
             className={panelProps.className}
+            width={panelProps.width}
             badge={
               panelProps.badge && {
                 type: panelProps.badge.type,

@@ -9,6 +9,12 @@ class EnrolmmentStore {
     );
   }
 
+  getInstructorEnrollmentLevelByLevelId(levelId: string) {
+    return useQuery(['instructor/levelId', levelId], () =>
+      enrollmentService.getInstructorEnrollmentLevelByLevelId(levelId),
+    );
+  }
+
   getInstructorPrograms(instructorId: string) {
     return useQuery(['instructor/program', instructorId], () =>
       enrollmentService.getInstructorPrograms(instructorId),

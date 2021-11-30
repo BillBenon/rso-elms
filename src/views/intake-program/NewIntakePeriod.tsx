@@ -77,12 +77,11 @@ export function NewIntakePeriod({ level_id, checked }: PeriodStep) {
 
   async function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault(); // prevent page to reload:
-
     await mutateAsync(
       {
         ...values,
         academic_period_id: document.getElementById('academic_period_id')?.title || '',
-        academic_program_intake_level_id: parseInt(level_id || ''),
+        academic_program_intake_level_id: parseInt(level_id ? level_id : levelId),
       },
       {
         onSuccess: (data) => {

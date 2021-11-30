@@ -28,22 +28,6 @@ class IntakeStore {
     );
   }
 
-  getProgramsByIntake(intakeId: string) {
-    return useQuery(['programsIntake/id', intakeId], () =>
-      intakeService.getProgramsByIntake(intakeId),
-    );
-  }
-
-  getIntakesByAcademy(id: string, fetchByReg = false) {
-    if (fetchByReg)
-      return useQuery(['intakes/registrationControl', id], () =>
-        intakeService.getIntakesPyRegistrationControl(id),
-      );
-    else
-      return useQuery(['intakes/academy', id], () =>
-        intakeService.getIntakesByAcademy(id),
-      );
-  }
   getIntakesByRegControl(regControlId: string) {
     return useQuery(['intakes/regcontrol', regControlId], () =>
       intakeService.getIntakesByRegControl(regControlId),
@@ -63,6 +47,27 @@ class IntakeStore {
       { enabled: false },
     );
   }
+}
+
+export function getIntakesByAcademy(id: string, fetchByReg = false, enabled = false) {
+  if (fetchByReg)
+    return useQuery(['intakes/registrationControl', id], () =>
+      intakeService.getIntakesPyRegistrationControl(id),
+    );
+  else
+    return useQuery(
+      ['intakes/academy', id],
+      () => intakeService.getIntakesByAcademy(id),
+      { enabled },
+    );
+}
+
+export function getProgramsByIntake(intakeId: string, enabled = true) {
+  return useQuery(
+    ['programsIntake/id', intakeId],
+    () => intakeService.getProgramsByIntake(intakeId),
+    { enabled },
+  );
 }
 
 export const intakeStore = new IntakeStore();

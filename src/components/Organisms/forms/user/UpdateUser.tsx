@@ -5,8 +5,11 @@ import { useHistory, useParams } from 'react-router';
 
 import { authenticatorStore } from '../../../../store/administration';
 import academyStore from '../../../../store/administration/academy.store';
-import { intakeStore } from '../../../../store/administration/intake.store';
-import programStore from '../../../../store/administration/program.store';
+import {
+  getIntakesByAcademy,
+  getProgramsByIntake,
+} from '../../../../store/administration/intake.store';
+import { getLevelsByAcademicProgram } from '../../../../store/administration/program.store';
 import usersStore from '../../../../store/administration/users.store';
 import { CommonFormProps, ParamType, ValueType } from '../../../../types';
 import { AcademyInfo } from '../../../../types/services/academy.types';
@@ -185,15 +188,14 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
     academyStore.fetchAcademies().data?.data.data;
 
   // get intakes based on selected academy
-  let intakes = intakeStore.getIntakesByAcademy(details.academy_id);
+  let intakes = getIntakesByAcademy(details.academy_id, false, !!details.academy_id);
 
   useEffect(() => {
     intakes.refetch();
   }, [details.academy_id]);
 
   // get programs based on selected intake
-  let programs = intakeStore.getProgramsByIntake(otherDetails.intake);
-
+  let programs = getProgramsByIntake(otherDetails.intake, !!otherDetails.intake);
   useEffect(() => {
     programs.refetch();
   }, [otherDetails.intake]);
@@ -202,8 +204,8 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
   let selectedProgram = programs.data?.data.data.find(
     (p) => p.id == details.intake_program_id,
   );
-  let programId = selectedProgram?.program.id.toString() || '';
-  let levels = programStore.getLevelsByAcademicProgram(programId);
+  let programId = selectedProgram?.program.id + '';
+  let levels = getLevelsByAcademicProgram(programId);
 
   useEffect(() => {
     levels.refetch();

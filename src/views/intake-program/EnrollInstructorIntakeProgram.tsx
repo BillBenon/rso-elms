@@ -7,7 +7,7 @@ import Icon from '../../components/Atoms/custom/Icon';
 import RightSidebar from '../../components/Organisms/RightSidebar';
 import { queryClient } from '../../plugins/react-query';
 import enrollmentStore from '../../store/administration/enrollment.store';
-import { intakeStore } from '../../store/administration/intake.store';
+import { getProgramsByIntake } from '../../store/administration/intake.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { EnrollInstructorProgram } from '../../types/services/enrollment.types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
@@ -27,7 +27,7 @@ function EnrollInstructorIntakeProgram() {
   const instructorsInAcademy =
     instructordeploymentStore.getInstructors().data?.data.data || [];
 
-  const programs = intakeStore.getProgramsByIntake(intakeId || '').data?.data.data;
+  const programs = getProgramsByIntake(intakeId).data?.data.data;
 
   const intakeProgram = programs?.find((pr) => pr.id === intakeProg);
 

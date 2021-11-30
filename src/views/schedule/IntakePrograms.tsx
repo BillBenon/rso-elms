@@ -12,7 +12,10 @@ import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import { intakeStore } from '../../store/administration/intake.store';
+import {
+  getProgramsByIntake,
+  intakeStore,
+} from '../../store/administration/intake.store';
 import { CommonCardDataType, ParamType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ProgramLevelClasses from './ProgramsLevelClases';
@@ -20,7 +23,7 @@ import ProgramLevelClasses from './ProgramsLevelClases';
 export default function IntakePrograms() {
   const { id } = useParams<ParamType>();
 
-  const { data, isLoading } = intakeStore.getProgramsByIntake(id);
+  const { data, isLoading } = getProgramsByIntake(id);
   const intakeInfo = intakeStore.getIntakeById(id).data?.data.data;
 
   const history = useHistory();

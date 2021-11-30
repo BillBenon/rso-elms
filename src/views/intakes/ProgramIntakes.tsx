@@ -2,12 +2,15 @@ import React from 'react';
 import { useParams, useRouteMatch } from 'react-router';
 
 import Loader from '../../components/Atoms/custom/Loader';
+import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import Tooltip from '../../components/Molecules/Tooltip';
 import { intakeStore } from '../../store/administration/intake.store';
 import { Link } from '../../types';
+import InstrLevel from '../levels/InstrLevel';
 
 interface Param {
   id: string;
@@ -18,8 +21,8 @@ function ProgramIntakes() {
   const { url } = useRouteMatch();
 
   const list: Link[] = [
-    { to: '/dashboard/instructor', title: 'Dashboard' },
-    { to: '/dashboard/instructor', title: 'Programs' },
+    { to: '/dashboard/inst-program', title: 'Dashboard' },
+    { to: '/dashboard/inst-program', title: 'Programs' },
     { to: `${url}`, title: 'Intakes' },
   ];
 
@@ -27,9 +30,9 @@ function ProgramIntakes() {
   const intakes = data?.data.data || [];
 
   return (
-    <div>
+    <>
       <BreadCrumb list={list} />
-      <TableHeader title="Intakes" totalItems={`${intakes.length}`} />
+      <TableHeader title="Intakes" totalItems={`${intakes.length}`} showSearch={false} />
 
       <section className="flex flex-wrap justify-start gap-4 mt-2">
         {isLoading ? (
@@ -44,17 +47,18 @@ function ProgramIntakes() {
         ) : (
           intakes.map((intake) => (
             <div key={intake.intake.code + Math.random() * 10} className="p-1 mt-3">
-              {/* <Tooltip
+              <Tooltip
                 key={intake.intake.code + Math.random() * 10}
-                trigger={ */}
-              <div className="p-1 mt-3">
-                <CommonCardMolecule className="cursor-pointer" data={intake.intake} />
-              </div>
-              {/* }
+                trigger={
+                  <div className="p-1 mt-3">
+                    <CommonCardMolecule className="cursor-pointer" data={intake.intake} />
+                  </div>
+                }
                 open>
                 <div className="w-96">
-                  <div className="flex flex-col gap-6">
-                    <div className="flex flex-col gap-2">
+                  <InstrLevel intakeProg={intake.id + ''} />
+                  <div className="flex flex-col gap-6 pt-4">
+                    <div className="flex gap-2">
                       <Heading color="txt-secondary" fontSize="sm">
                         Total Students Enrolled
                       </Heading>
@@ -64,12 +68,12 @@ function ProgramIntakes() {
                     </div>
                   </div>
                 </div>
-              </Tooltip> */}
+              </Tooltip>
             </div>
           ))
         )}
       </section>
-    </div>
+    </>
   );
 }
 
