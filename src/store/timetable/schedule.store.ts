@@ -26,6 +26,12 @@ class ScheduleStore {
     return useMutation(scheduleService.createClassTimetable);
   }
 
+  getClassTimetableByIntakeLevelClass(id: string) {
+    return useQuery(['schedules/tt/:id', id], () =>
+      scheduleService.getClassTimetableByIntakeLevelClass(id),
+    );
+  }
+
   getScheduleById(id: string) {
     return useQuery(['schedules/id', id], () => scheduleService.getScheduleById(id));
   }
@@ -33,9 +39,11 @@ class ScheduleStore {
   getAllSchedules() {
     return useQuery(['schedules'], scheduleService.getAll);
   }
-  getAllByAcademicProgramIntakeLevel(id: string) {
-    return useQuery(['schedules/level-intake/:id', id], () =>
-      scheduleService.getAllByAcademicProgramIntakeLevel(id),
+  getAllByAcademicProgramIntakeLevel(id: string, range: DateRange) {
+    return useQuery(
+      ['schedules/level-intake/:id', id],
+      () => scheduleService.getAllByAcademicProgramIntakeLevel(id, range),
+      { enabled: !!id },
     );
   }
   getAllByAcademicProgramIntakeLevelAndStatus(id: string, status: ScheduleStatus) {
@@ -48,9 +56,18 @@ class ScheduleStore {
       scheduleService.getAllByAcademicProgram(id, range),
     );
   }
+
   getAllByAcademicProgramAndStatus(id: string, status: ScheduleStatus) {
     return useQuery(['schedules/program/:id/:status', id, status], () =>
       scheduleService.getAllByAcademicProgramAndStatus(id, status),
+    );
+  }
+
+  getAllByIntakeLevelClass(id: string, range: DateRange) {
+    return useQuery(
+      ['schedules/intakeclass/:id', id],
+      () => scheduleService.getAllByIntakeLevelClass(id, range),
+      { enabled: !!id },
     );
   }
 
