@@ -44,7 +44,7 @@ export default function ModuleCard({ course }: IProps) {
             <BrowserLink className="outline-none" to={`/dashboard/modules/${course.id}`}>
               <Button styleType="outline">Start module</Button>
             </BrowserLink>
-          ) : (
+          ) : authUser?.user_type === UserType.ADMIN ? (
             <div className="py-2 flex justify-around gap-2">
               <BrowserLink
                 className="outline-none"
@@ -57,6 +57,8 @@ export default function ModuleCard({ course }: IProps) {
                 <Button styleType="outline">Edit</Button>
               </BrowserLink>
             </div>
+          ) : (
+            <></>
           )}
         </div>
       </Tooltip>
