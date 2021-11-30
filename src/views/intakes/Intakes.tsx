@@ -22,7 +22,7 @@ import Tooltip from '../../components/Molecules/Tooltip';
 import NewIntake from '../../components/Organisms/intake/NewIntake';
 import UpdateIntake from '../../components/Organisms/intake/UpdateIntake';
 import { authenticatorStore } from '../../store/administration';
-import { intakeStore } from '../../store/administration/intake.store';
+import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import registrationControlStore from '../../store/administration/registrationControl.store';
 import { CommonCardDataType, Link as LinkType, ValueType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
@@ -59,7 +59,7 @@ export default function Intakes() {
     data,
     isLoading,
     refetch: refetchIntakes,
-  } = intakeStore.getIntakesByAcademy(
+  } = getIntakesByAcademy(
     registrationControlId || userInfo?.data.data.academy.id.toString()!,
     !!registrationControlId,
   );

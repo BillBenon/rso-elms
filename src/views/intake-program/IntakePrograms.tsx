@@ -20,7 +20,10 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
-import { intakeStore } from '../../store/administration/intake.store';
+import {
+  getProgramsByIntake,
+  intakeStore,
+} from '../../store/administration/intake.store';
 import { Link as LinkList } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from '../programs/AcademicPrograms';
@@ -46,7 +49,7 @@ function IntakePrograms() {
     { to: `${url}`, title: 'Programs' },
   ];
 
-  const { data, refetch, isLoading } = intakeStore.getProgramsByIntake(intakeId);
+  const { data, refetch, isLoading } = getProgramsByIntake(intakeId);
 
   const programInfo = data?.data.data || [];
 
