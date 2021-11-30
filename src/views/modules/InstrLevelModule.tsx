@@ -25,8 +25,10 @@ function InstrLevelModule() {
   const [levelModules, setlevelModules] = useState<CommonCardDataType[]>([]);
   const authUser = authenticatorStore.authUser().data?.data.data;
 
+  const authUserId = authUser?.id;
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(
-    authUser?.id + '',
+    authUserId + '',
+    !!authUserId,
   ).data?.data.data;
 
   const [instructor, setinstructor] = useState<Instructor>();
@@ -68,7 +70,7 @@ function InstrLevelModule() {
   }
 
   const list: Link[] = [
-    { to: '/dashboard/instructor', title: 'Dashboard' },
+    { to: '/dashboard/inst-program', title: 'Dashboard' },
     { to: `${url}`, title: 'Modules' },
   ];
 

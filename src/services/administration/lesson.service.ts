@@ -2,7 +2,12 @@ import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
-import { CreateLessonPlan, Lesson, LessonInfo } from '../../types/services/lesson.types';
+import {
+  Lesson,
+  LessonInfo,
+  LessonPlan,
+  LessonPlanInfo,
+} from '../../types/services/lesson.types';
 
 class LessonService {
   public async addLesson(lesson: Lesson): Promise<AxiosResponse<Response<LessonInfo>>> {
@@ -27,14 +32,26 @@ class LessonService {
     return await adminstrationAxios.put('/lessons/modifyLesson', lesson);
   }
   public async addLessonPlan(
-    lessonPlan: CreateLessonPlan,
-  ): Promise<AxiosResponse<Response<CreateLessonPlan>>> {
+    lessonPlan: LessonPlan,
+  ): Promise<AxiosResponse<Response<LessonPlan>>> {
     return await adminstrationAxios.post('/lessonPlans/addLessonPlan', lessonPlan);
   }
 
-  public async getLessonsPlanByLesson(
+  public async modifyLessonPlan(
+    lessonPlan: LessonPlan,
+  ): Promise<AxiosResponse<Response<LessonInfo>>> {
+    return await adminstrationAxios.put('/lessonPlans/modifyLessonPlan', lessonPlan);
+  }
+
+  public async getLessonPlanById(
+    planId: string,
+  ): Promise<AxiosResponse<Response<LessonPlanInfo>>> {
+    return await adminstrationAxios.get(`/lessonPlans/getLessonPlanById/${planId}`);
+  }
+
+  public async getLessonPlanByLesson(
     lessonId: string,
-  ): Promise<AxiosResponse<Response<LessonInfo[]>>> {
+  ): Promise<AxiosResponse<Response<LessonPlanInfo[]>>> {
     return await adminstrationAxios.get(
       `/lessonPlans/getLessonPlansByLesson/${lessonId}`,
     );

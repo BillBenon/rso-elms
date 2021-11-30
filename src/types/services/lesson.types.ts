@@ -1,4 +1,5 @@
 import { Table } from '..';
+import { Instructor } from './instructor.types';
 
 export interface Lesson {
   content: string;
@@ -7,7 +8,8 @@ export interface Lesson {
   title: string;
 }
 
-export interface CreateLessonPlan {
+export interface LessonPlan {
+  id: string | number;
   class_policy: string;
   end_time: string;
   grading: string;
@@ -17,6 +19,11 @@ export interface CreateLessonPlan {
   lesson_requirements: string;
   start_time: string;
   text_books: string;
+}
+
+export interface LessonPlanInfo extends LessonPlan, Table {
+  instructor: Instructor;
+  lesson: Lesson;
 }
 
 export interface LessonInfo extends Lesson, Table {}

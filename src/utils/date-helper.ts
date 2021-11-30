@@ -1,5 +1,4 @@
 import moment from 'moment';
-import { frequencyType, ScheduleInfo } from '../types/services/schedule.types';
 
 export const monthNum: Record<number, string> = {
   1: 'January',

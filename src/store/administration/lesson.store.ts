@@ -26,9 +26,17 @@ class LessonStore {
   addLessonPlan() {
     return useMutation(lessonService.addLessonPlan);
   }
-  getLessonsPlanByLesson(lessonId: string) {
+  modifyLessonPlan() {
+    return useMutation(lessonService.modifyLessonPlan);
+  }
+  getLessonPlanById(planId: string) {
+    return useQuery(['lessonplan/id', planId], () =>
+      lessonService.getLessonPlanById(planId),
+    );
+  }
+  getLessonPlanByLesson(lessonId: string) {
     return useQuery(['lessonplan/lesson/id', lessonId], () =>
-      lessonService.getLessonsPlanByLesson(lessonId),
+      lessonService.getLessonPlanByLesson(lessonId),
     );
   }
 }
