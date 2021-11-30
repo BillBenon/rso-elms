@@ -7,9 +7,23 @@ class TimetableStore {
   }
 
   getClassTimetableByIntakeLevelClass(id: string) {
-    return useQuery(['schedules/tt/:id', id], () =>
+    return useQuery(['timetable/intakeclassid/:id', id], () =>
       timetableService.getClassTimetableByIntakeLevelClass(id),
     );
+  }
+
+  getClassTimetableById(id: string) {
+    return useQuery(['timetable/:id', id], () =>
+      timetableService.getClassTimetableById(id),
+    );
+  }
+
+  public async updateClassTimetableById() {
+    return useMutation(timetableService.updateClassTimetableById);
+  }
+
+  public async delete() {
+    return useMutation(timetableService.delete);
   }
 }
 
