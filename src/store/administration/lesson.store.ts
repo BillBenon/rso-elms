@@ -23,6 +23,22 @@ class LessonStore {
   modifyLesson() {
     return useMutation(lessonService.modifyLesson);
   }
+  addLessonPlan() {
+    return useMutation(lessonService.addLessonPlan);
+  }
+  modifyLessonPlan() {
+    return useMutation(lessonService.modifyLessonPlan);
+  }
+  getLessonPlanById(planId: string) {
+    return useQuery(['lessonplan/id', planId], () =>
+      lessonService.getLessonPlanById(planId),
+    );
+  }
+  getLessonPlanByLesson(lessonId: string) {
+    return useQuery(['lessonplan/lesson/id', lessonId], () =>
+      lessonService.getLessonPlanByLesson(lessonId),
+    );
+  }
 }
 
 export const lessonStore = new LessonStore();

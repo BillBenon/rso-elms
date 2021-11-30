@@ -13,7 +13,7 @@ import { authenticatorStore } from '../../store/administration';
 import academicyearsStore from '../../store/administration/academicyears.store';
 import { intakeStore } from '../../store/administration/intake.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
-import programStore from '../../store/administration/program.store';
+import { getLevelsByAcademicProgram } from '../../store/administration/program.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { ValueType } from '../../types';
 import { Instructor } from '../../types/services/instructor.types';
@@ -32,8 +32,7 @@ export default function NewIntakeProgramLevel() {
 
   const { id: programId, intakeProg } = useParams<IntakeProgParam>();
 
-  const programLevels =
-    programStore.getLevelsByAcademicProgram(programId).data?.data.data;
+  const programLevels = getLevelsByAcademicProgram(programId).data?.data.data;
 
   const authUser = authenticatorStore.authUser().data?.data.data;
   const intakes = intakeStore.getIntakesByProgram(programId).data?.data.data;

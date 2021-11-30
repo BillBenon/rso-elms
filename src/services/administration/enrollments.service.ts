@@ -24,6 +24,13 @@ class EnrollmentService {
       `instructorEnrolment/getInstructorEnrolmentLevelByInstructor/${instructorId}`,
     );
   }
+  public async getInstructorEnrollmentLevelByLevelId(
+    levelId: string,
+  ): Promise<AxiosResponse<Response<EnrollInstructorLevelInfo[]>>> {
+    return await adminstrationAxios.get(
+      `instructorEnrolment/getInstructorEnrolmentLevelByAcademicProgramLevel/${levelId}`,
+    );
+  }
 
   public async getInstructorPrograms(
     instructorId: string,

@@ -14,7 +14,6 @@ import Loader from '../../components/Atoms/custom/Loader';
 import Panel from '../../components/Atoms/custom/Panel';
 import Heading from '../../components/Atoms/Text/Heading';
 import Accordion from '../../components/Molecules/Accordion';
-import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
@@ -22,7 +21,6 @@ import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonFo
 import { evaluationStore } from '../../store/administration/evaluation.store';
 import { lessonStore } from '../../store/administration/lesson.store';
 import { subjectStore } from '../../store/administration/subject.store';
-import { Link } from '../../types';
 import EvaluationCategories from '../evaluation/EvaluationCategories';
 
 interface ParamType {
@@ -31,7 +29,7 @@ interface ParamType {
 }
 
 export default function SubjectDetails() {
-  const { id, subjectId } = useParams<ParamType>();
+  const { subjectId } = useParams<ParamType>();
   const { url } = useRouteMatch();
   const history = useHistory();
 
@@ -42,17 +40,17 @@ export default function SubjectDetails() {
 
   const lessons = data?.data.data || [];
 
-  const list: Link[] = [
-    { to: 'home', title: 'home' },
-    { to: 'programs', title: 'Programs' },
-    { to: 'modules', title: 'Modules' },
-    { to: id, title: 'Modules details' },
-    { to: '/', title: 'Subjects' },
-    {
-      to: subjectData.data?.data.data.id + '',
-      title: subjectData.data?.data.data.title + '',
-    },
-  ];
+  // const list: Link[] = [
+  //   { to: 'home', title: 'home' },
+  //   { to: 'programs', title: 'Programs' },
+  //   { to: 'modules', title: 'Modules' },
+  //   { to: id, title: 'Modules details' },
+  //   { to: '/', title: 'Subjects' },
+  //   {
+  //     to: subjectData.data?.data.data.id + '',
+  //     title: subjectData.data?.data.data.title + '',
+  //   },
+  // ];
 
   const goBack = () => {
     history.goBack();
@@ -71,9 +69,9 @@ export default function SubjectDetails() {
 
   return (
     <main className="px-4">
-      <section>
+      {/* <section>
         <BreadCrumb list={list} />
-      </section>
+      </section> */}
       <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 pt-4 md:pt-11">
         <div className="w-44">
           <button className="outline-none" onClick={goBack}>
@@ -122,11 +120,24 @@ export default function SubjectDetails() {
                           <Accordion>
                             {lessons.map((les) => {
                               return (
-                                <Panel bgColor="main" key={les.id} title={les.title}>
+                                <Panel
+                                  width="w-full"
+                                  bgColor="main"
+                                  key={les.id}
+                                  title={les.title}>
                                   <div className="md:w-10/12 lg:w-2/3">
-                                    <p className="font-medium text-gray-600 text-sm">
+                                    <p className="font-medium text-gray-600 text-sm pb-6">
                                       {les.content}
                                     </p>
+                                    <Button
+                                      styleType="outline"
+                                      onClick={() =>
+                                        history.push(
+                                          `/dashboard/modules/lesson-plan/${les.id}`,
+                                        )
+                                      }>
+                                      View lesson plan
+                                    </Button>
                                   </div>
                                 </Panel>
                               );

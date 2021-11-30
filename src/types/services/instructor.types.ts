@@ -23,5 +23,6 @@ export interface Instructor extends Table {
   academy: AcademyInfo;
   description: string;
 }
-
-export interface InstructorDeployed extends Table, DeployInstructor {}
+export interface InstructorDeployed extends Table, DeployInstructor {
+  instructor: Instructor;
+}

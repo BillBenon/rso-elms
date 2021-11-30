@@ -11,13 +11,10 @@ import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
-import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
-import NewEvent from '../../components/Organisms/calendar/NewEvent';
-import NewVenue from '../../components/Organisms/calendar/NewVenue';
 import { authenticatorStore } from '../../store/administration';
-import { intakeStore } from '../../store/administration/intake.store';
+import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import { CommonCardDataType, Link } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import CalendarView from './Calendar';
@@ -51,9 +48,11 @@ export default function ScheduleHome() {
   const history = useHistory();
   const { path } = useRouteMatch();
 
-  const { data: userInfo } = authenticatorStore.authUser();
-  const { data, isLoading } = intakeStore.getIntakesByAcademy(
-    userInfo?.data.data.academy.id.toString()!,
+  const userInfo = authenticatorStore.authUser().data?.data.data;
+  const { data, isLoading } = getIntakesByAcademy(
+    userInfo?.academy.id + '',
+    false,
+    userInfo?.academy.id != undefined,
   );
 
   let intakes: CommonCardDataType[] =
