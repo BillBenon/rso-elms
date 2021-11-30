@@ -51,7 +51,7 @@ export default function EvaluationContent() {
           { studentEvaluationId: id },
           {
             onSuccess: () => {
-              toast.success('Result published. Applying changes', { duration: 3000 });
+              toast.success('Result published', { duration: 3000 });
               history.push('/dashboard/evaluations');
               // history.push({ pathname: `${url}` });
             },
@@ -73,7 +73,7 @@ export default function EvaluationContent() {
       { evaluationId: id },
       {
         onSuccess: () => {
-          toast.success('Results published. Applying changes', { duration: 3000 });
+          toast.success('Results published', { duration: 3000 });
           history.push('/dashboard/evaluations');
         },
         onError: (error) => {
@@ -107,25 +107,25 @@ export default function EvaluationContent() {
     }
   }, []);
 
-  const publishEvaluation = (status: string) =>{
+  const publishEvaluation = (status: string) => {
     makeEvaluationPublic.mutate(
-      {evaluationId: id, status: status},
-       {
-         onSuccess: () => {
-         toast.success('Evaluation is now public. Applying changes', { duration: 3000 });
-         setPublished(true);
-       },
-       onError: (error) => {
-       console.error(error);
-       toast.error(error + '');
-       },
-     })
-  }
-
-  
+      { evaluationId: id, status: status },
+      {
+        onSuccess: () => {
+          toast.success('Availability status updated', { duration: 3000 });
+          setPublished(!published);
+        },
+        onError: (error: any) => {
+          toast.error(error.response.data.message);
+        },
+      },
+    );
+  };
 
   const { data: evaluationInfo } = evaluationStore.getEvaluationById(id).data?.data || {};
-  const [published, setPublished] = useState(evaluationInfo?.available == "PUBLIC" || false);
+  const [published, setPublished] = useState(
+    evaluationInfo?.available == 'PUBLIC' || false,
+  );
 
   return (
     <div className="block pr-24 pb-8 w-11/12">
@@ -180,7 +180,7 @@ export default function EvaluationContent() {
                   </div>
                   <div className="flex gap-4">
                     <Button
-                     styleType="outline"
+                      styleType="outline"
                       onClick={() =>
                         history.push({
                           pathname: `/dashboard/evaluations/new`,
@@ -191,16 +191,14 @@ export default function EvaluationContent() {
                     </Button>
 
                     {published == false ? (
-                      <Button
-                      onClick={()=>publishEvaluation("PUBLIC")}
-                     >Publish evaluation
-                     </Button>
-                    ):
-                    <Button
-                      onClick={()=>publishEvaluation("HIDDEN")}
-                     >Unpublish evaluation
-                     </Button>
-                     }
+                      <Button onClick={() => publishEvaluation('PUBLIC')}>
+                        Publish evaluation
+                      </Button>
+                    ) : (
+                      <Button onClick={() => publishEvaluation('HIDDEN')}>
+                        Unpublish evaluation
+                      </Button>
+                    )}
                   </div>
                 </div>
                 <div className="bg-main px-7 mt-7 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-3 pt-5">
@@ -257,10 +255,13 @@ export default function EvaluationContent() {
                       title="Due on"
                       subTitle={moment(evaluationInfo?.due_on).format('MM/DD/YYYY')}
                     />
-
                     <ContentSpan
                       title="Questionaire type"
                       subTitle={evaluationInfo?.questionaire_type}
+                    />{' '}
+                    <ContentSpan
+                      title="Total marks"
+                      subTitle={evaluationInfo?.total_mark.toString()}
                     />
                   </div>
 
@@ -287,7 +288,7 @@ export default function EvaluationContent() {
                 </Heading>
                 <div className="bg-main px-16 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5">
                   {evaluationQuestions?.map((question, index: number) =>
-                    question.multipleChoiceAnswers.length > 0 ? (
+                    question && question.multiple_choice_answers.length > 0 ? (
                       <>
                         <div className="mt-3 flex justify-between">
                           <ContentSpan title={`Question ${index + 1}`} className="gap-3">

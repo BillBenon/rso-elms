@@ -11,7 +11,7 @@ import InstructorDashboard from './views/dashboard/InstructorDashboard';
 import StudentDashboard from './views/dashboard/StudentDashboard';
 import Divisions from './views/divisions/Divisions';
 import EvaluationTest from './views/evaluation/EvaluationTest';
-import ViewEvaluations from './views/evaluation/ViewEvaluations';
+import InstructorViewEvaluations from './views/evaluation/InstructorViewEvaluations';
 import NewInstitution from './views/insitution/NewInstitution';
 import UpdateInstitution from './views/insitution/UpdateInstitution';
 import IntakesView from './views/intakes/Intakes';
@@ -77,7 +77,7 @@ const RouterProtection = () => {
     <>
       {/* start of instructor pages */}
       <Route path="/dashboard/instructor" component={InstructorDashboard} />
-      <Route path="/dashboard/evaluations" component={ViewEvaluations} />
+      <Route path="/dashboard/evaluations" component={InstructorViewEvaluations} />
       <Route path="/dashboard/calendar" component={CalendarView} />
       <Route path="/dashboard/events" component={Events} />
       <Route path="/dashboard/modules" component={Modules} />
@@ -90,8 +90,12 @@ const RouterProtection = () => {
       {/* start of student pages */}
       <Route path="/dashboard/student" component={StudentDashboard} />
       <Route path="/dashboard/modules" component={Modules} />
-      <Route path="/dashboard/student/evaluations/" component={EvaluationTest} />
-      <Route path="/dashboard/evaluations/student" component={EvaluationTest} />
+      {/* <Route path="/dashboard/student/evaluations/" component={EvaluationTest} /> */}
+      <Route
+        exact
+        path="/dashboard/evaluations/student-evaluation/:id"
+        component={EvaluationTest}
+      />
       {/* end of student pages */}
     </>
   );

@@ -3,10 +3,14 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { authenticatorStore } from '../../../../store/administration';
+import { classStore } from '../../../../store/administration/class.store';
+import enrollmentStore from '../../../../store/administration/enrollment.store';
 import { evaluationStore } from '../../../../store/administration/evaluation.store';
 import { moduleStore } from '../../../../store/administration/modules.store';
 import { subjectStore } from '../../../../store/administration/subject.store';
+import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { ValueType } from '../../../../types';
+import { EnrollInstructorLevelInfo } from '../../../../types/services/enrollment.types';
 import {
   IAccessTypeEnum,
   IContentFormatEnum,
@@ -36,27 +40,31 @@ import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 export default function EvaluationInfoComponent({
   handleNext,
   evaluationId,
+  evaluationInfo,
 }: IEvaluationProps) {
   const [moduleId, setModuleId] = useState('');
+  const [levelId, setLevelId] = useState('');
   // const { search } = useLocation();
   // const [evaluationId, setEvaluationId] = useState(
   //   new URLSearchParams(search).get('evaluation'),
   // );
   const authUser = authenticatorStore.authUser().data?.data.data;
   const { data } = moduleStore.getModulesByAcademy(authUser?.academy.id.toString() || '');
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
+    authUser?.id + '',
+  ).data?.data.data;
 
   const { data: subjects } = subjectStore.getSubjectsByModule(moduleId);
+  const { data: levels } = enrollmentStore.getInstructorLevels(instructorInfo?.id + '');
+  const { data: classes } = classStore.getClassByLevel(levelId + '');
 
-  let evaluationInfo;
-
-  if (evaluationId) {
-    evaluationInfo = evaluationStore.getEvaluationById(evaluationId).data?.data.data;
-  }
+  console.log(classes);
 
   const [details, setDetails] = useState<IEvaluationCreate>({
     access_type: evaluationInfo?.access_type || IAccessTypeEnum.PUBLIC,
     academy_id: authUser?.academy.id.toString() || '',
     instructor_id: authUser?.id.toString() || '',
+    intake_level_class: '',
     allow_submission_time: evaluationInfo?.allow_submission_time || '',
     class_ids: '',
     id: evaluationInfo?.id || '',
@@ -83,6 +91,7 @@ export default function EvaluationInfoComponent({
 
   function handleChange({ name, value }: ValueType) {
     if (name === 'module') setModuleId(value.toString());
+    if (name === 'levelId') setLevelId(value + '');
     else setDetails((details) => ({ ...details, [name]: value }));
   }
 
@@ -170,6 +179,34 @@ export default function EvaluationInfoComponent({
             labelName: ['title'],
           })}>
           Select subject
+        </DropdownMolecule>
+
+        <DropdownMolecule
+          width="64"
+          name="levelId"
+          placeholder="Select level"
+          handleChange={handleChange}
+          options={getDropDownOptions({
+            inputs: levels?.data.data || [],
+            //@ts-ignore
+            getOptionLabel: (lev: EnrollInstructorLevelInfo) =>
+              lev.academic_program_level.level.name,
+          })}>
+          Select Level
+        </DropdownMolecule>
+
+        <DropdownMolecule
+          width="64"
+          name="intake_level_class"
+          placeholder="Select level"
+          handleChange={handleChange}
+          options={getDropDownOptions({
+            inputs: levels?.data.data || [],
+            //@ts-ignore
+            getOptionLabel: (lev: EnrollInstructorLevelInfo) =>
+              lev.academic_program_level.level.name,
+          })}>
+          Select Level
         </DropdownMolecule>
         <RadioMolecule
           defaultValue={details.eligible_group}

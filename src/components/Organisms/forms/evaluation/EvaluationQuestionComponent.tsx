@@ -7,11 +7,17 @@ import {
   ICreateEvaluationQuestions,
   IEvaluationProps,
   IEvaluationQuestionsInfo,
-  IQuestionType,
+  IMultipleChoice,
+  Iquestion_type,
 } from '../../../../types/services/evaluation.types';
-import { getLocalStorageData } from '../../../../utils/getLocalStorageItem';
+import {
+  getLocalStorageData,
+  setLocalStorageData,
+} from '../../../../utils/getLocalStorageItem';
 import Button from '../../../Atoms/custom/Button';
+import Icon from '../../../Atoms/custom/Icon';
 import Heading from '../../../Atoms/Text/Heading';
+import ILabel from '../../../Atoms/Text/ILabel';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
@@ -21,19 +27,19 @@ export default function EvaluationQuestionComponent({
   handleNext,
   evaluationId,
 }: IEvaluationProps) {
-  // const multipleChoiceContent: IMultipleChoice = {
-  //   answer_content: '',
-  //   correct: false,
-  // };
+  const multipleChoiceContent: IMultipleChoice = {
+    answer_content: '',
+    correct: false,
+  };
 
   const initialState: ICreateEvaluationQuestions = {
-    evaluation_id: getLocalStorageData('evaluationId'),
-    mark: 1,
+    evaluation_id: evaluationId || getLocalStorageData('evaluationId'),
+    mark: 0,
     parent_question_id: '',
     choices: [],
     id: '',
     question: '',
-    questionType: IQuestionType.OPEN,
+    question_type: Iquestion_type.OPEN,
     sub_questions: [],
     submitted: false,
   };
@@ -51,17 +57,16 @@ export default function EvaluationQuestionComponent({
     if (evaluationQuestions.length > 0) {
       evaluationQuestions.forEach((question) => {
         let questionData = { ...initialState };
-        questionData.choices = question.multipleChoiceAnswers || [];
+        questionData.choices = question.multiple_choice_answers || [];
         questionData.evaluation_id = question.evaluation_id;
         questionData.mark = question.mark;
         questionData.question = question.question;
-        questionData.questionType = question.questionType;
+        questionData.question_type = question.question_type;
         questionData.submitted = false;
         questionData.id = question.id;
         questionData.sub_questions = [];
         allQuestions.push(questionData);
       });
-      // console.log(evaluationQuestions);
       setQuestions(allQuestions);
     } else {
       setQuestions([initialState]);
@@ -71,15 +76,17 @@ export default function EvaluationQuestionComponent({
 
   function handleAddQuestion() {
     let newQuestion = initialState;
-    setQuestions([...questions, newQuestion]);
+    let questionsClone = [...questions];
+    questionsClone.push(newQuestion);
+    setQuestions(questionsClone);
   }
 
   //To be used after
-  // function handleAddMultipleMultipleChoiceAnswer(index: number) {
-  //   let choices = questions[index];
-  //   choices.choices.push(multipleChoiceContent);
-  //   setQuestions([...questions, choices]);
-  // }
+  function handleAddMultipleMultipleChoiceAnswer(index: number) {
+    let choices = questions[index];
+    choices.choices.push(multipleChoiceContent);
+    setQuestions([...questions, choices]);
+  }
 
   function handleChange(index: number, { name, value }: ValueType) {
     let questionInfo = [...questions];
@@ -87,22 +94,21 @@ export default function EvaluationQuestionComponent({
     setQuestions(questionInfo);
   }
 
-  //To be used after
-  // function handleChoiceChange(
-  //   questionIndex: number,
-  //   choiceIndex: number,
-  //   { name, value }: ValueType,
-  // ) {
-  //   let questionsClone = [...questions];
-  //   let question = questionsClone[questionIndex];
+  function handleChoiceChange(
+    questionIndex: number,
+    choiceIndex: number,
+    { name, value }: ValueType,
+  ) {
+    let questionsClone = [...questions];
+    let question = questionsClone[questionIndex];
 
-  //   let choiceToUpdate = question.choices[choiceIndex];
-  //   choiceToUpdate = { ...choiceToUpdate, [name]: value };
-  //   question.choices[choiceIndex] = choiceToUpdate;
-  //   questionsClone[questionIndex] = question;
+    let choiceToUpdate = question.choices[choiceIndex];
+    choiceToUpdate = { ...choiceToUpdate, [name]: value };
+    question.choices[choiceIndex] = choiceToUpdate;
+    questionsClone[questionIndex] = question;
 
-  //   setQuestions(questionsClone);
-  // }
+    setQuestions(questionsClone);
+  }
 
   const { mutate } = evaluationStore.createEvaluationQuestions();
 
@@ -117,18 +123,19 @@ export default function EvaluationQuestionComponent({
         // let questionInfo = [...questions];
         // questionInfo[index] = { ...questionInfo[index], submitted: true };
         // setQuestions(questionInfo);
+        setLocalStorageData('currentStep', 2);
         handleNext();
       },
-      onError: (error) => {
+      onError: (error: any) => {
         console.log(error);
-        toast.error(error + '');
+        toast.error(error.response.data.message);
       },
     });
   }
 
   return (
     <form className="flex flex-col" onSubmit={submitForm}>
-      {questions.length > 0 ? (
+      {questions.length ? (
         questions.map((question, index: number) => (
           <>
             <div
@@ -142,10 +149,10 @@ export default function EvaluationQuestionComponent({
                   placeholder="Question type"
                   handleChange={() => {}}
                   /*@ts-ignore*/
-                  // defaultValue={evaluationQuestions[index]?.questionType || ''}
+                  // defaultValue={evaluationQuestions[index]?.question_type || ''}
                   options={[
-                    { label: 'OPEN', value: IQuestionType.OPEN },
-                    { label: 'MULTIPLE CHOICE', value: IQuestionType.MULTIPLE_CHOICE },
+                    { label: 'OPEN', value: Iquestion_type.OPEN },
+                    { label: 'MULTIPLE CHOICE', value: Iquestion_type.MULTIPLE_CHOICE },
                   ]}>
                   Question type
                 </DropdownMolecule>
@@ -158,7 +165,7 @@ export default function EvaluationQuestionComponent({
                   Question {index + 1}
                 </TextAreaMolecule>
                 {/* multiple choice answers here */}
-                {/* {question.choices.map((multipleQuestion, choiceIndex) => (
+                {question.choices.map((multipleQuestion, choiceIndex) => (
                   <>
                     <TextAreaMolecule
                       key={multipleQuestion.answer_content}
@@ -172,8 +179,8 @@ export default function EvaluationQuestionComponent({
                       Answer choice {choiceIndex + 1}
                     </TextAreaMolecule>{' '}
                   </>
-                ))} */}
-                {/* <div className="-mt-4 mb-1">
+                ))}
+                <div className="-mt-4 mb-1">
                   <Button
                     className="flex items-center pl-0"
                     styleType="text"
@@ -188,14 +195,14 @@ export default function EvaluationQuestionComponent({
                       Add answer
                     </ILabel>
                   </Button>
-                </div> */}
+                </div>
                 <InputMolecule
                   readonly={question.submitted}
                   type="number"
                   name={'mark'}
-                  min={0}
+                  min={1}
                   style={{ width: '6rem' }}
-                  value={question.mark}
+                  value={question.mark || 0}
                   handleChange={(e: ValueType) => handleChange(index, e)}>
                   Question marks
                 </InputMolecule>

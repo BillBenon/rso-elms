@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
 import toast from 'react-hot-toast';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -9,24 +9,22 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { evaluationService } from '../../services/administration/evaluation.service';
 import { evaluationStore } from '../../store/administration/evaluation.store';
 import { markingStore } from '../../store/administration/marking.store';
+import { ParamType } from '../../types';
 import { getLocalStorageData } from '../../utils/getLocalStorageItem';
 import QuestionContainer from './QuestionContainer';
 
 export default function EvaluationTest() {
-  const { search } = useLocation();
+  const { id } = useParams<ParamType>();
   const history = useHistory();
   const [time, SetTime] = useState(0);
   const [studentEvaluationId, setStudentEvaluationId] = useState('');
   const [timeLimit, SetTimeLimit] = useState(0);
-  const evaluationId = new URLSearchParams(search).get('evaluation') || '';
-  const { data: evaluationData } = evaluationStore.getEvaluationById(
-    evaluationId?.toString(),
-  );
+  const { data: evaluationData } = evaluationStore.getEvaluationById(id);
   const {
     data: questions,
     isSuccess,
     isError,
-  } = evaluationStore.getEvaluationQuestions(evaluationId.toString());
+  } = evaluationStore.getEvaluationQuestions(id);
 
   const { mutate } = evaluationStore.submitEvaluation();
 
@@ -40,7 +38,7 @@ export default function EvaluationTest() {
     mutate(studentEvaluationId, {
       onSuccess: () => {
         toast.success('Evaluation submitted', { duration: 5000 });
-        history.goBack();
+        history.push('/dashboard/student');
       },
       onError: (error) => {
         toast.error(error + '');
@@ -74,7 +72,7 @@ export default function EvaluationTest() {
   return (
     <div>
       <div className="flex justify-between">
-        <Heading fontWeight="semibold">Evaluation title</Heading>
+        <Heading fontWeight="semibold">{evaluationData?.data.data.name}</Heading>
         <div className="pr-28 flex justify-center items-center gap-2">
           <Heading color="txt-secondary" fontSize="base">
             Remaining time:
@@ -83,7 +81,7 @@ export default function EvaluationTest() {
             <Countdown
               key={time}
               date={Date.now() + time}
-              onComplete={() => autoSubmit()}
+              // onComplete={() => autoSubmit()}
               renderer={Renderer}
               onTick={(value) => updateWorkTime(value)}
             />
@@ -101,7 +99,7 @@ export default function EvaluationTest() {
             question={question.question}
             marks={question.mark}
             previousAnswers={previousAnswers}
-            isMultipleChoice={question.multipleChoiceAnswers.length > 0}
+            isMultipleChoice={question.multiple_choice_answers.length > 0}
           />
         ))
       ) : questions?.data.data.length === 0 && isSuccess ? (

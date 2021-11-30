@@ -40,7 +40,7 @@ export default function QuestionContainer({
     evaluation: new URLSearchParams(search).get('evaluation') || '',
     evaluationQuestion: '',
     markScored: 0,
-    multipleChoiceAnswer: '',
+    multiple_choice_answers: '',
     openAnswer: '',
     studentEvaluation: getLocalStorageData('studentEvaluationId'),
   };
@@ -62,7 +62,7 @@ export default function QuestionContainer({
         toast.success('Evaluation submitted', { duration: 5000 });
         localStorage.removeItem('studentEvaluationId');
 
-        history.push('/dashboard/modules');
+        history.push('/dashboard/student');
       },
       onError: () => {
         toast.error(error + '');
@@ -143,9 +143,7 @@ export default function QuestionContainer({
       </div>
       {isLast ? (
         <div className="py-7">
-          <Button type="submit" onClick={submitEvaluation}>
-            End evaluation
-          </Button>
+          <Button onClick={submitEvaluation}>End evaluation</Button>
         </div>
       ) : null}
     </form>
