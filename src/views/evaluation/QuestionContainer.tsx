@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Input from '../../components/Atoms/Input/Input';
@@ -45,7 +45,6 @@ export default function QuestionContainer({
     studentEvaluation: getLocalStorageData('studentEvaluationId'),
   };
 
-  const history = useHistory();
   const [answer, setAnswer] = useState<IStudentAnswer>(initialState);
   const [questionToSubmit, setQuestionToSubmit] = useState('');
 
@@ -62,7 +61,7 @@ export default function QuestionContainer({
         toast.success('Evaluation submitted', { duration: 5000 });
         localStorage.removeItem('studentEvaluationId');
 
-        history.push('/dashboard/student');
+        window.location.href = '/dashboard/student';
       },
       onError: () => {
         toast.error(error + '');
