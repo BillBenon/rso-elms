@@ -63,8 +63,6 @@ function InstrLevelModule() {
   }, [levelModuleStore?.data.data]);
 
   function handleChange(e: ValueType) {
-    console.log(e.value);
-
     //@ts-ignore
     setModStatus(e.value);
   }
