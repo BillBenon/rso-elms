@@ -129,9 +129,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     );
   }, [programs.data?.data.data]);
 
-  let levels = getLevelsByAcademicProgram(
-    selectedProgram?.id ? selectedProgram?.id + '' : '',
-  );
+  let levels = getLevelsByAcademicProgram(selectedProgram?.id + '');
 
   let nationalities: [] = [];
 

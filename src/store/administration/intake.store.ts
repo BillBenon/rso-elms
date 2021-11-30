@@ -62,7 +62,7 @@ export function getIntakesByAcademy(id: string, fetchByReg = false, enabled = fa
     );
 }
 
-export function getProgramsByIntake(intakeId: string, enabled = false) {
+export function getProgramsByIntake(intakeId: string, enabled = true) {
   return useQuery(
     ['programsIntake/id', intakeId],
     () => intakeService.getProgramsByIntake(intakeId),

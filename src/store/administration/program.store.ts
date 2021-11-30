@@ -37,7 +37,7 @@ export function getLevelsByAcademicProgram(academicProgramId: string) {
   return useQuery(
     ['levels/program_id', academicProgramId],
     () => programService.getLevelsByAcademicProgram(academicProgramId),
-    { enabled: !!academicProgramId },
+    // { enabled: !!academicProgramId },
   );
 }
 
