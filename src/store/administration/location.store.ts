@@ -19,11 +19,11 @@ class LocationStore {
       locationService.getAllChildreen(parentId),
     );
   }
-  findByParent(parentId: string, enabled = true) {
+  findByParent(parentId: string) {
     return useQuery({
       queryKey: ['locations/parent', parentId],
       queryFn: () => locationService.findByParent(parentId),
-      enabled,
+      enabled: !!parentId,
     });
   }
 }

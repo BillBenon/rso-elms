@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
-import { LocationInfo } from './../../types/services/location.types';
+import { LocationInfo, PagedLocationInfo } from './../../types/services/location.types';
 
 class LocationService {
   public async getLocations(): Promise<AxiosResponse<Response<LocationInfo[]>>> {
@@ -20,7 +20,7 @@ class LocationService {
   }
   public async findByParent(
     parentId: string,
-  ): Promise<AxiosResponse<Response<LocationInfo[]>>> {
+  ): Promise<AxiosResponse<Response<PagedLocationInfo>>> {
     return await adminstrationAxios.get(`/locations/findByParent/${parentId}`);
   }
   public async getLocationsById(

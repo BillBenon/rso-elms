@@ -60,8 +60,9 @@ function PersonalDetails<E>({
   const { data: country } = locationStore.getLocationsByLevel('1');
   console.log(personalDetails);
   const { data: dbLocations, refetch: refetchDbLocations } = locationStore.findByParent(
-    '0',
-    false,
+    personalDetails.residence_location_id
+      ? personalDetails.residence_location_id.toString()
+      : '',
   );
 
   const handleChange = (e: ValueType) => {
@@ -71,11 +72,11 @@ function PersonalDetails<E>({
   const handleLocationChange = (e: ValueType) => {
     setPersonalDetails({ ...personalDetails, [e.name]: e.value });
 
-    refetchDbLocations();
-    setLocation(dbLocations?.data.data);
+    // refetchDbLocations();
+
     setLocationLevel((old) => old + 1);
 
-    setPersonalDetails({ ...personalDetails, [e.name]: e.value });
+    console.log('input', e);
   };
 
   const locations: [] = [];
@@ -116,8 +117,12 @@ function PersonalDetails<E>({
   }, [user.data?.data.data.person]);
 
   useEffect(() => {
-    setLocation(country?.data.data);
+    country?.data.data && setLocation(country?.data.data);
   }, [country?.data]);
+
+  useEffect(() => {
+    dbLocations?.data.data && setLocation(dbLocations?.data.data.content);
+  }, [dbLocations?.data]);
 
   return (
     <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
