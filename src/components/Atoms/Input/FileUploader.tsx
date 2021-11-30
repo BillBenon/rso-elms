@@ -1,5 +1,4 @@
-import React, { useRef, useState } from 'react';
-import { ChangeEvent, ReactNode } from 'react-router/node_modules/@types/react';
+import React, { ChangeEvent, ReactNode, useRef, useState } from 'react';
 
 interface IProps {
   maxNumberOfFiles?: number;
