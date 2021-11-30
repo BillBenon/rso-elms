@@ -3,12 +3,10 @@ import toast from 'react-hot-toast';
 import { useParams } from 'react-router';
 
 import { queryClient } from '../../../../plugins/react-query';
-import { authenticatorStore } from '../../../../store/administration';
 import { lessonStore } from '../../../../store/administration/lesson.store';
-import instructordeploymentStore from '../../../../store/instructordeployment.store';
-import { ParamType, ValueType } from '../../../../types';
+import { ValueType } from '../../../../types';
 import { LessonPlan } from '../../../../types/services/lesson.types';
-import { formatDateToIso } from '../../../../utils/date-helper';
+import { formatDateToIso, formatDateToYyMmDd } from '../../../../utils/date-helper';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
@@ -20,18 +18,12 @@ interface IProps {
   handleChange: (_e: ValueType) => any;
   handleNext: <T>(_e: FormEvent<T>) => any;
 }
-
-function NewLessonPlan() {
-  const { mutateAsync } = lessonStore.addLessonPlan();
-  const authUser = authenticatorStore.authUser().data?.data.data;
-  const authUserId = authUser?.id;
-  const instructor = instructordeploymentStore.getInstructorByUserId(
-    authUserId + '',
-    !!authUserId,
-  ).data?.data.data;
-
-  const { id } = useParams<ParamType>();
-
+interface ParamType {
+  planId: string;
+}
+function UpdateLessonPlan() {
+  const { planId } = useParams<ParamType>();
+  const [currentStep, setCurrentStep] = useState(0);
   const [lessonPlan, setlessonPlan] = useState<LessonPlan>({
     id: '',
     class_policy: '',
@@ -49,6 +41,28 @@ function NewLessonPlan() {
     setlessonPlan({ ...lessonPlan, [e.name]: e.value });
   }
 
+  const { mutateAsync } = lessonStore.modifyLessonPlan();
+
+  const plan = lessonStore.getLessonPlanById(planId);
+
+  useEffect(() => {
+    if (plan.data) {
+      const _plan = plan?.data.data.data;
+      setlessonPlan({
+        id: _plan.id,
+        class_policy: _plan.class_policy,
+        end_time: _plan.end_time,
+        grading: _plan.grading,
+        instructor_id: _plan.instructor.id + '',
+        lesson_id: _plan.lesson.id + '',
+        lesson_objective: _plan.lesson_objective,
+        lesson_requirements: _plan.lesson_requirements,
+        start_time: _plan.start_time,
+        text_books: _plan.text_books,
+      });
+    }
+  }, [plan.isLoading]);
+
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
     if (currentStep === 0) setCurrentStep(currentStep + 1);
@@ -58,7 +72,6 @@ function NewLessonPlan() {
           ...lessonPlan,
           start_time: formatDateToIso(lessonPlan.start_time),
           end_time: formatDateToIso(lessonPlan.end_time),
-          lesson_id: id,
         },
         {
           async onSuccess(data) {
@@ -73,12 +86,6 @@ function NewLessonPlan() {
       );
     }
   }
-
-  useEffect(() => {
-    setlessonPlan({ ...lessonPlan, instructor_id: instructor?.id + '' });
-  }, [instructor?.id]);
-
-  const [currentStep, setCurrentStep] = useState(0);
 
   return (
     <div className="w-full">
@@ -110,14 +117,22 @@ function LessonTimeComponent({ lessonPlan, handleChange, handleNext }: IProps) {
   return (
     <form onSubmit={handleNext}>
       <InputMolecule
-        value={lessonPlan.start_time}
+        value={
+          lessonPlan.start_time
+            ? formatDateToYyMmDd(lessonPlan.start_time)
+            : lessonPlan.start_time
+        }
         name="start_time"
         type="date"
         handleChange={handleChange}>
         Start Date
       </InputMolecule>
       <InputMolecule
-        value={lessonPlan.end_time}
+        value={
+          lessonPlan.end_time
+            ? formatDateToYyMmDd(lessonPlan.end_time)
+            : lessonPlan.end_time
+        }
         name="end_time"
         type="date"
         handleChange={handleChange}>
@@ -170,5 +185,4 @@ function LessonTextArea({ lessonPlan, handleChange, handleNext }: IProps) {
     </form>
   );
 }
-
-export default NewLessonPlan;
+export default UpdateLessonPlan;

@@ -18,7 +18,6 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
-import NewLessonPlan from '../../components/Organisms/forms/subjects/NewLessonPlan';
 import { evaluationStore } from '../../store/administration/evaluation.store';
 import { lessonStore } from '../../store/administration/lesson.store';
 import { subjectStore } from '../../store/administration/subject.store';
@@ -133,9 +132,11 @@ export default function SubjectDetails() {
                                     <Button
                                       styleType="outline"
                                       onClick={() =>
-                                        history.push(`${url}/add-lesson-plan/${les.id}`)
+                                        history.push(
+                                          `/dashboard/modules/lesson-plan/${les.id}`,
+                                        )
                                       }>
-                                      Add lesson plan
+                                      View lesson plan
                                     </Button>
                                   </div>
                                 </Panel>
@@ -168,22 +169,6 @@ export default function SubjectDetails() {
             return (
               <PopupMolecule title="Add lesson" open onClose={goBack}>
                 <NewLessonForm />
-              </PopupMolecule>
-            );
-          }}
-        />
-        {/* add lesson plan form  */}
-        <Route
-          exact
-          path={`${url}/add-lesson-plan/:id`}
-          render={() => {
-            return (
-              <PopupMolecule
-                title="Add lesson plan"
-                open
-                onClose={goBack}
-                closeOnClickOutSide={false}>
-                <NewLessonPlan />
               </PopupMolecule>
             );
           }}
