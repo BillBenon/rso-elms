@@ -6,7 +6,7 @@ export enum IEvaluationTypeEnum {
   QUIZ = 'QUIZ',
 }
 
-export enum Iquestion_type {
+export enum IQuestionType {
   MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
   OPEN = 'OPEN',
 }
@@ -79,7 +79,7 @@ export enum IEvaluationApprovalStatus {
 export interface IEvaluationCreate {
   access_type: string;
   adm_intake_level_class_id: string;
-  intake_academic_year_period: string;
+  intake_academic_year_period: number;
   academy_id: string;
   instructor_id: string;
   allow_submission_time: string;
@@ -108,7 +108,7 @@ export interface IEvaluationInfo {
   name: string;
   academy_id: string;
   adm_intake_level_class_id: string;
-  intake_academic_year_period: string;
+  intake_academic_year_period: number;
   subject_academic_year_period: string;
   subject_id: string;
   access_type: IAccessTypeEnum;
@@ -162,7 +162,7 @@ export interface IEvaluationQuestion {
   parent_question_id: string;
   question: string;
   submitted: boolean;
-  question_type: Iquestion_type;
+  question_type: IQuestionType;
 }
 
 export interface IMultipleChoice {
@@ -173,7 +173,7 @@ export interface IMultipleChoice {
 export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
   sub_questions: IEvaluationQuestion[];
   submitted: boolean;
-  question_type: Iquestion_type;
+  question_type: IQuestionType;
   id: string;
   choices: IMultipleChoice[];
 }
@@ -185,7 +185,7 @@ export interface IEvaluationQuestionsInfo {
   choices: IMultipleChoice[];
   mark: number;
   evaluationQuestions: [];
-  question_type: Iquestion_type;
+  question_type: IQuestionType;
   multiple_choice_answers: [];
 }
 

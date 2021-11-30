@@ -64,7 +64,7 @@ export default function EvaluationInfoComponent({
     academy_id: authUser?.academy.id.toString() || '',
     instructor_id: authUser?.id.toString() || '',
     adm_intake_level_class_id: evaluationInfo?.adm_intake_level_class_id || '',
-    intake_academic_year_period: evaluationInfo?.intake_academic_year_period || '',
+    intake_academic_year_period: evaluationInfo?.intake_academic_year_period || 0,
     allow_submission_time: evaluationInfo?.allow_submission_time || '',
     class_ids: '',
     id: evaluationInfo?.id || '',
@@ -86,15 +86,16 @@ export default function EvaluationInfoComponent({
     total_mark: evaluationInfo?.total_mark || 0,
   });
 
-  // console.log(period);
-
   useEffect(() => {
     const period =
       classes?.data.data.find(
         (periodId) => periodId.id == details.adm_intake_level_class_id,
       )?.intake_academic_year_period_id + '';
 
-    setDetails((details) => ({ ...details, ['intake_academic_year_period']: period }));
+    setDetails((details) => ({
+      ...details,
+      ['intake_academic_year_period']: parseInt(period),
+    }));
   }, [classes?.data.data, details.adm_intake_level_class_id]);
 
   const { mutate } = evaluationStore.createEvaluation();

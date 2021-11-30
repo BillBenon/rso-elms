@@ -2,13 +2,13 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { evaluationStore } from '../../../../store/administration/evaluation.store';
-import { ValueType } from '../../../../types';
+import { SelectData, ValueType } from '../../../../types';
 import {
   ICreateEvaluationQuestions,
   IEvaluationProps,
   IEvaluationQuestionsInfo,
   IMultipleChoice,
-  Iquestion_type,
+  IQuestionType,
 } from '../../../../types/services/evaluation.types';
 import {
   getLocalStorageData,
@@ -28,7 +28,7 @@ export default function EvaluationQuestionComponent({
   evaluationId,
 }: IEvaluationProps) {
   const multipleChoiceContent: IMultipleChoice = {
-    answer_content: '',
+    answer_content: 'blessing',
     correct: false,
   };
 
@@ -39,7 +39,7 @@ export default function EvaluationQuestionComponent({
     choices: [],
     id: '',
     question: '',
-    question_type: Iquestion_type.OPEN,
+    question_type: IQuestionType.OPEN,
     sub_questions: [],
     submitted: false,
   };
@@ -72,7 +72,6 @@ export default function EvaluationQuestionComponent({
       setQuestions([initialState]);
     }
   }, []);
-  // console.log('i passed here', questions);
 
   function handleAddQuestion() {
     let newQuestion = initialState;
@@ -92,6 +91,18 @@ export default function EvaluationQuestionComponent({
     let questionInfo = [...questions];
     questionInfo[index] = { ...questionInfo[index], [name]: value };
     setQuestions(questionInfo);
+  }
+
+  function hancleCorrectAnswerCahnge(index: number, e: ValueType) {
+    let questionsClone = [...questions];
+    const question = questionsClone[index];
+    let choiceIndex = question.choices.findIndex(
+      (choice) => choice.answer_content === e.value,
+    );
+    question.choices.forEach((choice) => (choice.correct = false));
+    question.choices[choiceIndex].correct = true;
+
+    setQuestions(questionsClone);
   }
 
   function handleChoiceChange(
@@ -147,12 +158,12 @@ export default function EvaluationQuestionComponent({
                   width="64"
                   name="question_type"
                   placeholder="Question type"
-                  handleChange={() => {}}
+                  handleChange={(e: ValueType) => handleChange(index, e)}
                   /*@ts-ignore*/
                   // defaultValue={evaluationQuestions[index]?.question_type || ''}
                   options={[
-                    { label: 'OPEN', value: Iquestion_type.OPEN },
-                    { label: 'MULTIPLE CHOICE', value: Iquestion_type.MULTIPLE_CHOICE },
+                    { label: 'OPEN', value: IQuestionType.OPEN },
+                    { label: 'MULTIPLE CHOICE', value: IQuestionType.MULTIPLE_CHOICE },
                   ]}>
                   Question type
                 </DropdownMolecule>
@@ -180,22 +191,49 @@ export default function EvaluationQuestionComponent({
                     </TextAreaMolecule>{' '}
                   </>
                 ))}
-                <div className="-mt-4 mb-1">
-                  <Button
-                    className="flex items-center pl-0"
-                    styleType="text"
-                    onClick={() => handleAddMultipleMultipleChoiceAnswer(index)}>
-                    <Icon
-                      name="add"
-                      size={17}
-                      useheightandpadding={false}
-                      stroke="primary"
-                    />
-                    <ILabel size="sm" className="cursor-pointer">
-                      Add answer
-                    </ILabel>
-                  </Button>
-                </div>
+
+                {question.choices.length ? (
+                  <DropdownMolecule
+                    key={
+                      question?.choices[index]?.answer_content +
+                        Math.floor(Math.random() * 300) || index
+                    }
+                    disabled={question.submitted}
+                    width="64"
+                    name=""
+                    placeholder="Choose correct answer"
+                    handleChange={(e: ValueType) => hancleCorrectAnswerCahnge(index, e)}
+                    /*@ts-ignore*/
+                    // defaultValue={evaluationQuestions[index]?.question_type || ''}
+                    options={
+                      question.choices.map((ch) => ({
+                        label: ch.answer_content,
+                        value: ch.answer_content,
+                      })) as SelectData[]
+                    }>
+                    Correct answer
+                  </DropdownMolecule>
+                ) : null}
+
+                {question.question_type === IQuestionType.MULTIPLE_CHOICE ? (
+                  <div className="-mt-4 mb-1">
+                    <Button
+                      className="flex items-center pl-0"
+                      styleType="text"
+                      onClick={() => handleAddMultipleMultipleChoiceAnswer(index)}>
+                      <Icon
+                        name="add"
+                        size={17}
+                        useheightandpadding={false}
+                        stroke="primary"
+                      />
+                      <ILabel size="sm" className="cursor-pointer">
+                        Add answer
+                      </ILabel>
+                    </Button>
+                  </div>
+                ) : null}
+
                 <InputMolecule
                   readonly={question.submitted}
                   type="number"
