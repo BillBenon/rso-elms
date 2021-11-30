@@ -127,7 +127,7 @@ export default function ImportUsers({ userType }: IProps) {
             allowPreview={false}
             handleUpload={handleUpload}
             accept={'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}>
-            <Button styleType="outline" icon={true}>
+            <Button type="button" styleType="outline" icon={true}>
               <span className="flex items-center">
                 <Icon name={'attach'} fill="primary" />
                 <span className="pr-3">Attach file</span>
