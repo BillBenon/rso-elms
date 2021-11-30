@@ -21,7 +21,7 @@ export default function Events() {
   return (
     <div>
       <TableHeader totalItems={0} title={'Events'} showBadge={false}>
-        <Link to={`${path}/event/new`}>
+        <Link to={`/dashboard/schedule/events/new`}>
           <Button>New Event</Button>
         </Link>
       </TableHeader>
@@ -52,7 +52,7 @@ export default function Events() {
       <Switch>
         <Route
           exact
-          path={`${path}/event/new`}
+          path={`${path}/new`}
           render={() => (
             <PopupMolecule title="New Event" open onClose={handleClose}>
               <NewEvent />

@@ -7,6 +7,7 @@ import {
   IEvaluationApproval,
   IEvaluationCreate,
   IEvaluationInfo,
+  IEvaluationInfoCollected,
   IEvaluationQuestionsInfo,
   IStudentAnswer,
   IStudentEvaluationStart,
@@ -28,10 +29,17 @@ class EvaluationService {
     );
   }
 
+  // public async createEvaluationQuestion(
+  //   questionsInfo: ICreateEvaluationQuestions[],
+  // ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
+  //   return await evaluationAxios.post('/evaluationQuestions/add', {
+  //     questions: questionsInfo,
+  //   });
+  // }
   public async createEvaluationQuestion(
     questionsInfo: ICreateEvaluationQuestions[],
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
-    return await evaluationAxios.post('/evaluationQuestions/add', {
+    return await evaluationAxios.post('/evaluationQuestions/update-multiple', {
       questions: questionsInfo,
     });
   }
@@ -56,6 +64,13 @@ class EvaluationService {
     subject: string,
   ): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
     return await evaluationAxios.get(`/evaluations/getEvaluationsBySubject/${subject}`);
+  }
+  public async fetchEvaluationsCollectionBySubject(
+    subject: string,
+  ): Promise<AxiosResponse<Response<IEvaluationInfoCollected>>> {
+    return await evaluationAxios.get(
+      `/evaluations/getEvaluationsBySubject/07e4467${subject}/studentNarrower`,
+    );
   }
 
   public async getEvaluationById(
@@ -117,7 +132,7 @@ class EvaluationService {
     status: string;
   }): Promise<void> {
     return await evaluationAxios.put(
-      `evaluations/evaluation/${data.evaluationId}/${data.status}`,
+      `/evaluations/evaluation/${data.evaluationId}/${data.status}`,
     );
   }
 

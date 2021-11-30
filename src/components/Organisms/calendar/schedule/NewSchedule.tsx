@@ -4,6 +4,12 @@ import { useHistory, useParams } from 'react-router-dom';
 import { queryClient } from '../../../../plugins/react-query';
 
 import { authenticatorStore } from '../../../../store/administration';
+import { classStore } from '../../../../store/administration/class.store';
+import intakeProgramStore from '../../../../store/administration/intake-program.store';
+import {
+  getIntakesByAcademy,
+  getProgramsByIntake,
+} from '../../../../store/administration/intake.store';
 import { levelStore } from '../../../../store/administration/level.store';
 import programStore from '../../../../store/administration/program.store';
 import usersStore from '../../../../store/administration/users.store';
@@ -41,13 +47,17 @@ export default function NewSchedule() {
     event: '',
     methodOfInstruction: methodOfInstruction.LEC,
     period: 1,
-    repeatingDays: [],
     plannedEndHour: '',
     plannedScheduleStartDate: new Date().toLocaleDateString(),
     plannedScheduleEndDate: new Date().toLocaleDateString(),
     plannedStartHour: new Date().toLocaleTimeString(),
     venue: '',
     frequencyType: frequencyType.ONETIME,
+    //not to send to backend
+    repeatingDays: [],
+    intake: '',
+    program: '',
+    level: '',
   });
 
   //state varibales
@@ -131,6 +141,11 @@ function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
   };
   return (
     <form onSubmit={handleSubmit} className="-mb-6">
+      <div className="hidden">
+        <InputMolecule value={authUser?.academy.id} name={'academyId'}>
+          Academy id
+        </InputMolecule>
+      </div>
       <div className="pb-1">
         <DropdownMolecule
           name="event"
@@ -247,40 +262,89 @@ function SecondStep({ handleChange, setCurrentStep, values }: IStepProps) {
 }
 
 function ThirdStep({ values, handleChange, handleSubmit, setCurrentStep }: IStepProps) {
-  const programs = programStore.fetchPrograms().data?.data.data;
-  const levels = levelStore.getLevels().data?.data.data;
+  const authUser = authenticatorStore.authUser().data?.data.data;
+  let academyId = authUser?.academy.id + '';
+
+  const programs = (programStore.fetchPrograms().data?.data.data || []).map((pr) => ({
+    value: pr.id + '',
+    label: pr.name,
+  })) as SelectData[];
+
+  const intakes = getIntakesByAcademy(
+    academyId,
+    false,
+    academyId.length > 1,
+  ).data?.data.data.map((intake) => ({
+    value: intake.id,
+    label: intake.code,
+  })) as SelectData[];
+
+  const programIntakes = (
+    getProgramsByIntake(values.intake, values.intake.length > 1).data?.data.data || []
+  ).map((pi) => ({ value: pi.id, label: pi.program.name })) as SelectData[];
+
+  const levels = (
+    intakeProgramStore.getLevelsByIntakeProgram(values.program!).data?.data.data || []
+  ).map((lv) => ({
+    label: lv.academic_program_level.level.name,
+    value: lv.id,
+  })) as SelectData[];
+
+  const classes = (classStore.getAllClasses().data?.data.data || [])
+    .filter(
+      (cl) => cl.academic_year_program_intake_level.intake_program.id == values.program,
+    )
+    .map((cls) => ({
+      label: `${cls.academic_year_program_intake_level.academic_program_level.level.name} - ${cls.class_name}`,
+      value: cls.id,
+    })) as SelectData[];
 
   return (
     <form onSubmit={handleSubmit} className="max-w-sm -mb-6">
-      <div className="pb-1">
-        <DropdownMolecule
-          name="appliesTo"
-          handleChange={handleChange}
-          options={getDropDownStatusOptions(scheduleAppliesTo)}
-          placeholder="Select group">
-          Event concerns
-        </DropdownMolecule>
-      </div>
-      <div className="pb-1">
-        <DropdownMolecule
-          name="beneficiaries"
-          isMulti
-          handleChange={handleChange}
-          options={
-            (values.appliesTo == scheduleAppliesTo.APPLIES_TO_LEVEL
-              ? levels
-              : values.appliesTo == scheduleAppliesTo.APPLIES_TO_PROGRAM
-              ? programs
-              : []
-            )?.map((pr) => ({
-              value: pr.id + '',
-              label: pr.name,
-            })) as SelectData[]
-          }
-          placeholder="Select group">
-          {`Select beneficiaries`}
-        </DropdownMolecule>
-      </div>
+      <DropdownMolecule
+        name="appliesTo"
+        handleChange={handleChange}
+        options={getDropDownStatusOptions(scheduleAppliesTo)}
+        placeholder="Select group">
+        Event concerns
+      </DropdownMolecule>
+
+      {(values.appliesTo == scheduleAppliesTo.APPLIES_TO_LEVEL ||
+        values.appliesTo == scheduleAppliesTo.APPLIES_TO_CLASS) && (
+        <>
+          <DropdownMolecule
+            name="intake"
+            handleChange={handleChange}
+            options={intakes}
+            placeholder="Select intake">
+            Intake
+          </DropdownMolecule>
+          <DropdownMolecule
+            name="program"
+            handleChange={handleChange}
+            options={programIntakes}
+            placeholder="Select program">
+            Program
+          </DropdownMolecule>
+        </>
+      )}
+
+      <DropdownMolecule
+        name="beneficiaries"
+        isMulti
+        handleChange={handleChange}
+        options={
+          values.appliesTo == scheduleAppliesTo.APPLIES_TO_PROGRAM
+            ? programs
+            : values.appliesTo == scheduleAppliesTo.APPLIES_TO_LEVEL
+            ? levels
+            : values.appliesTo == scheduleAppliesTo.APPLIES_TO_CLASS
+            ? classes
+            : []
+        }
+        placeholder="Select group">
+        {`Select ${values.appliesTo?.split('_')[2]}`}
+      </DropdownMolecule>
       <RadioMolecule
         options={getDropDownStatusOptions(methodOfInstruction)}
         handleChange={handleChange}

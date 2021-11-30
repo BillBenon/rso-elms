@@ -15,8 +15,14 @@ import {
 import { ModuleInfo } from '../../types/services/modules.types';
 import { Student } from '../../types/services/user.types';
 import { StudentIntakeProgramLevel } from './../../types/services/intake-program.types';
+import { InstructorModule } from './../../types/services/modules.types';
 
 class IntakeProgramService {
+  public async getStudentById(
+    studentId: string,
+  ): Promise<AxiosResponse<Response<Student>>> {
+    return await adminstrationAxios.get(`/students/getStudentById/${studentId}`);
+  }
   public async getStudentsByIntakeProgram(
     intakeProgramId: string,
   ): Promise<AxiosResponse<Response<StudentIntakeProgram[]>>> {
@@ -51,7 +57,7 @@ class IntakeProgramService {
   public async getModulesByInstructorAndStatus(
     inchargeId: string,
     status: string,
-  ): Promise<AxiosResponse<Response<ModuleInfo[]>>> {
+  ): Promise<AxiosResponse<Response<InstructorModule[]>>> {
     return await adminstrationAxios.get(
       `/academicProgramIntakeLevels/getModulesByInstructorInchargeAndStatus/${inchargeId}/${status}`,
     );

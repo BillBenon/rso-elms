@@ -1,5 +1,4 @@
 import moment from 'moment';
-import { frequencyType, ScheduleInfo } from '../types/services/schedule.types';
 
 export const monthNum: Record<number, string> = {
   1: 'January',
@@ -74,4 +73,11 @@ export function getWeekBorderDays() {
     monday: formatDateToYyMmDd(monday.toDateString()),
     sunday: formatDateToYyMmDd(sunday.toDateString()),
   };
+}
+
+export function getNextWeekDayDate(day: number) {
+  var d = new Date();
+  d.setDate(d.getDate() + ((day + 7 - d.getDay()) % 7 || 7));
+
+  return d;
 }

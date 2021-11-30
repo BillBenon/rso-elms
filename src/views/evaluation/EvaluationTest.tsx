@@ -71,8 +71,6 @@ export default function EvaluationTest() {
     timeLimit,
   ]);
 
-  console.log(time);
-
   return (
     <div>
       <div className="flex justify-between">
@@ -93,7 +91,7 @@ export default function EvaluationTest() {
         </div>
       </div>
 
-      {questions && questions?.data.data.length > 0 ? (
+      {questions && questions.data.data.length > 0 ? (
         questions?.data.data.map((question, index: number) => (
           <QuestionContainer
             index={index}
@@ -136,5 +134,4 @@ function Renderer({ hours, minutes, seconds }: any) {
       {hours}:{minutes}:{seconds}
     </span>
   );
-  // }
 }

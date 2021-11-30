@@ -1,16 +1,21 @@
+import { resolveObjectURL } from 'buffer';
 import React from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import { authenticatorStore } from '../../../store/administration';
 import { ValueType } from '../../../types';
 import { UserType, UserTypes } from '../../../types/services/user.types';
 import Button from '../../Atoms/custom/Button';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
+import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
+import ImportUsers from './ImportUsers';
 
 export default function Instructors({ instructors }: { instructors: UserTypes[] }) {
   const history = useHistory();
+  const { url } = useRouteMatch();
+
   function handleSearch(_e: ValueType) {}
   const instructorActions = [
     { name: 'Add Role', handleAction: () => {} },
@@ -39,7 +44,7 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
         showSearch={instructors && instructors.length > 0}>
         {authUser?.user_type === UserType.SUPER_ADMIN && (
           <div className="flex gap-3">
-            <Link to={`/dashboard/users/import`}>
+            <Link to={`${url}/import`}>
               <Button styleType="outline">Import instructors</Button>
             </Link>
             <Link to={`/dashboard/users/add`}>
@@ -69,6 +74,20 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
           )}
         </div>
       )}
+      <Switch>
+        <Route
+          exact
+          path={`${url}/import`}
+          render={() => (
+            <PopupMolecule
+              title="Import instructors"
+              open={true}
+              onClose={history.goBack}>
+              <ImportUsers userType={UserType.INSTRUCTOR} />
+            </PopupMolecule>
+          )}
+        />
+      </Switch>
     </>
   );
 }

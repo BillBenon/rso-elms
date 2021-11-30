@@ -20,7 +20,6 @@ import UserDetails from './UserDetails';
 
 export default function Users() {
   const { url, path } = useRouteMatch();
-  const history = useHistory();
   const [userType, setUserType] = useState('Students');
 
   const { data, isSuccess, isLoading } = usersStore.fetchUsers();
@@ -103,60 +102,46 @@ export default function Users() {
           {userType}
         </ILabel>
       </div>
-      {isLoading && users.length === 0 && <Loader />}
+      {isLoading && <Loader />}
       <Switch>
-        <Route exact path={`${path}/add`} render={() => <NewUser />} />
-        <Route exact path={`${path}/:id/edit`} render={() => <UpdateUser />} />
+        <Route exact path={`${path}/add`} component={NewUser} />
+        <Route exact path={`${path}/:id/edit`} component={UpdateUser} />
         <Route exact path={`${path}/:id/profile`} component={UserDetails} />
 
         <Route
-          exact
-          path={`${path}/import`}
-          render={() => (
-            <PopupMolecule
-              title="Import instructors"
-              open={true}
-              onClose={history.goBack}>
-              <ImportUsers userType="instructors" />
-            </PopupMolecule>
-          )}
-        />
-        {isSuccess && (
-          <Route
-            path={`${path}`}
-            render={() => {
-              return (
-                <>
-                  <TableHeader
-                    totalItems={users.length}
-                    showBadge={false}
-                    title={'users'}
-                    showSearch={false}
-                  />
-                  <TabNavigation
-                    tabs={tabs}
-                    onTabChange={(event) => setUserType(event.activeTabLabel)}>
+          path={`${path}`}
+          render={() => {
+            return (
+              <>
+                <TableHeader
+                  totalItems={users.length}
+                  showBadge={false}
+                  title={'users'}
+                  showSearch={false}
+                />
+
+                <TabNavigation
+                  tabs={tabs}
+                  onTabChange={(event) => setUserType(event.activeTabLabel)}>
+                  <Switch>
                     <Route
-                      exact
-                      path={`${path}`}
-                      render={() => <Students students={students} />}
-                    />
-                    <Route
-                      exact
                       path={`${path}/instructors`}
                       render={() => <Instructors instructors={instructors} />}
                     />
                     <Route
-                      exact
                       path={`${path}/admins`}
                       render={() => <Admins admins={admins} />}
                     />
-                  </TabNavigation>
-                </>
-              );
-            }}
-          />
-        )}
+                    <Route
+                      path={`${path}`}
+                      render={() => <Students students={students} />}
+                    />
+                  </Switch>
+                </TabNavigation>
+              </>
+            );
+          }}
+        />
       </Switch>
     </div>
   );

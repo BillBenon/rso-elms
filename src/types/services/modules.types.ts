@@ -1,12 +1,35 @@
 import { GenericStatus } from '..';
 import { Table } from './common.types';
+import { EnrollmentStatus } from './enrollment.types';
+import { ModuleParticipation } from './intake-program.types';
 import { ProgramInfo } from './program.types';
+import { Incharge } from './user.types';
 
 export interface ModuleInfo extends CreateModuleInfo, Table {
   code: string;
   status: boolean;
   program: ProgramInfo;
   total_num_subjects: number;
+}
+
+export interface InstructorModule extends Table {
+  academic_year_program_intake_level_id: 2;
+  actual_end_on: string;
+  actual_start_on: string;
+  credits: number;
+  incharge: Incharge;
+  incharge_id: string;
+  intake_level_class_id: string;
+  intake_status: EnrollmentStatus;
+  last_status_change_reason: string;
+  marks: number;
+  module: ModuleInfo;
+  module_id: string;
+  module_participation: ModuleParticipation;
+  pass_mark: number;
+  planned_end_on: string;
+  planned_start_on: string;
+  weight: number;
 }
 
 export interface CreateModuleInfo {

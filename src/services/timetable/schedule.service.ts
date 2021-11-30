@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import { timetableAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
+  ClassTimeTableInfo,
   CreateEventSchedule,
   DateRange,
   ICreateClassTimeTable,
@@ -23,9 +24,11 @@ class ScheduleService {
 
   public async getAllByAcademicProgramIntakeLevel(
     academicProgramIntakeLevelId: string,
+    range: DateRange,
   ): Promise<AxiosResponse<Response<ScheduleInfo[]>>> {
-    return await timetableAxios.get(
+    return await timetableAxios.put(
       `/schedural/academic-program-intake-level/${academicProgramIntakeLevelId}`,
+      range,
     );
   }
   public async getAllByAcademicProgramIntakeLevelAndStatus(
@@ -51,6 +54,16 @@ class ScheduleService {
   ): Promise<AxiosResponse<Response<ScheduleInfo[]>>> {
     return await timetableAxios.get(
       `schedural/academic-program/${academicProgramId}/status/${status}`,
+    );
+  }
+
+  public async getAllByIntakeLevelClass(
+    intakeLevelClassId: string,
+    range: DateRange,
+  ): Promise<AxiosResponse<Response<ScheduleInfo[]>>> {
+    return await timetableAxios.put(
+      `/schedural/intake-level-class/${intakeLevelClassId}`,
+      range,
     );
   }
 
@@ -81,6 +94,12 @@ class ScheduleService {
     tt: ICreateClassTimeTable,
   ): Promise<AxiosResponse<Response<ScheduleInfo>>> {
     return await timetableAxios.post('/schedural/class-timetable', tt);
+  }
+
+  public async getClassTimetableByIntakeLevelClass(
+    intakeLevelClassId: string,
+  ): Promise<AxiosResponse<Response<ClassTimeTableInfo[]>>> {
+    return await timetableAxios.get(`/schedural/class-timetable/${intakeLevelClassId}`);
   }
 }
 
