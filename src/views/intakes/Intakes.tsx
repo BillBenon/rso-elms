@@ -62,6 +62,7 @@ export default function Intakes() {
   } = getIntakesByAcademy(
     registrationControlId || userInfo?.data.data.academy.id.toString()!,
     !!registrationControlId,
+    true,
   );
 
   useEffect(() => {
