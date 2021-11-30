@@ -64,10 +64,15 @@ export interface CreateEventSchedule extends CommonScheduleProperties {
   plannedEndHour: string;
   plannedScheduleStartDate: string | Date;
   plannedScheduleEndDate: string | Date;
-  repeatingDays: string[];
   recurringSchedule?: createRecurringSchedule[];
   plannedStartHour: string;
   venue: string;
+
+  // to help on frontend
+  repeatingDays: string[];
+  intake: string;
+  program: string;
+  level: string;
 }
 
 export interface createRecurringSchedule {
