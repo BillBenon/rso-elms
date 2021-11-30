@@ -5,12 +5,16 @@ import { useHistory } from 'react-router';
 
 import { authenticatorStore } from '../../../../store/administration';
 import academyStore from '../../../../store/administration/academy.store';
-import { intakeStore } from '../../../../store/administration/intake.store';
-import programStore from '../../../../store/administration/program.store';
+import {
+  getIntakesByAcademy,
+  getProgramsByIntake,
+} from '../../../../store/administration/intake.store';
+import { getLevelsByAcademicProgram } from '../../../../store/administration/program.store';
 import usersStore from '../../../../store/administration/users.store';
 import { CommonFormProps, ValueType } from '../../../../types';
 import { AcademyInfo } from '../../../../types/services/academy.types';
 import { IntakeProgramInfo } from '../../../../types/services/intake-program.types';
+import { ProgramInfo } from '../../../../types/services/program.types';
 import {
   CreateUserInfo,
   DocType,
@@ -78,6 +82,8 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     level: '',
   });
 
+  const [selectedProgram, setSelectedProgram] = useState<ProgramInfo>();
+
   function handleChange(e: ValueType) {
     setDetails((details) => ({
       ...details,
@@ -113,25 +119,19 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     academyStore.fetchAcademies().data?.data.data;
 
   // get intakes based on selected academy
-  let intakes = intakeStore.getIntakesByAcademy(details.academy_id);
-
-  useEffect(() => {
-    intakes.refetch();
-  }, [details.academy_id]);
-
+  const intakes = getIntakesByAcademy(details.academy_id, false, !!details.academy_id);
   // get programs based on selected intake
-  let programs = intakeStore.getProgramsByIntake(otherDetails.intake);
-
-  useEffect(() => {
-    programs.refetch();
-  }, [otherDetails.intake]);
-
+  const programs = getProgramsByIntake(otherDetails.intake, !!otherDetails.intake);
   //get levels based on selected program
-  let selectedProgram = programs.data?.data.data.find(
-    (p) => p.id == details.intake_program_id,
+  useEffect(() => {
+    setSelectedProgram(
+      programs.data?.data.data.find((p) => p.id == details.intake_program_id)?.program,
+    );
+  }, [programs.data?.data.data]);
+
+  let levels = getLevelsByAcademicProgram(
+    selectedProgram?.id ? selectedProgram?.id + '' : '',
   );
-  let programId = selectedProgram?.program.id.toString() || '';
-  let levels = programStore.getLevelsByAcademicProgram(programId);
 
   let nationalities: [] = [];
 

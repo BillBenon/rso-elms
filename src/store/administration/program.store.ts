@@ -16,12 +16,6 @@ class ProgramStore {
   getProgramById(id: string) {
     return useQuery(['programs/id', id], () => programService.getProgramById(id));
   }
-  getLevelsByAcademicProgram(academicProgramId: string) {
-    return useQuery(['levels/program_id', academicProgramId], () =>
-      programService.getLevelsByAcademicProgram(academicProgramId),
-    );
-  }
-
   getModulesByProgram(program_id: string) {
     return useQuery(['modules/program_id', program_id], () =>
       programService.getModulesByProgram(program_id),
@@ -37,6 +31,14 @@ class ProgramStore {
   modifyProgram() {
     return useMutation(programService.modifyProgram);
   }
+}
+
+export function getLevelsByAcademicProgram(academicProgramId: string) {
+  return useQuery(
+    ['levels/program_id', academicProgramId],
+    () => programService.getLevelsByAcademicProgram(academicProgramId),
+    { enabled: !!academicProgramId },
+  );
 }
 
 export default new ProgramStore();

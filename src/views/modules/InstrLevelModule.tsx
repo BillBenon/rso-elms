@@ -74,7 +74,7 @@ function InstrLevelModule() {
         showBadge={false}
         showSearch={false}
       />
-      <section className="mt-4 flex flex-wrap justify-start gap-4">
+      <div className="flex justify-center">
         <DropdownMolecule
           width="52"
           handleChange={handleChange}
@@ -84,8 +84,10 @@ function InstrLevelModule() {
             (doc) => doc.value === modStatus,
           )}
           options={getDropDownStatusOptions(IntakeModuleStatus)}>
-          Choose module status
+          <p className="text-center">Choose module status</p>
         </DropdownMolecule>
+      </div>
+      <section className="mt-4 flex flex-wrap justify-start gap-4">
         {isLoading ? (
           <Loader />
         ) : levelModules.length === 0 ? (
