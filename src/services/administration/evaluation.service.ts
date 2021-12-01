@@ -10,7 +10,6 @@ import {
   IEvaluationInfoCollected,
   IEvaluationQuestionsInfo,
   IStudentAnswer,
-  IStudentEvaluations,
   IStudentEvaluationStart,
   IStudentEvaluationStartInfo,
 } from '../../types/services/evaluation.types';
@@ -76,7 +75,7 @@ class EvaluationService {
 
   public async fetchEvaluationsByStudent(
     subject: string,
-  ): Promise<AxiosResponse<Response<IStudentEvaluations[]>>> {
+  ): Promise<AxiosResponse<Response<IStudentEvaluationStart[]>>> {
     return await evaluationAxios.get(
       `/evaluations/getEvaluationsBySubject/${subject}/studentNarrower`,
     );
@@ -86,6 +85,15 @@ class EvaluationService {
     id: string,
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
     return await evaluationAxios.get(`/evaluations/getById/${id}`);
+  }
+
+  public async getStudentEvaluationByStudentIdAndEvaluationId(
+    evaluationId: string,
+    studentId: string,
+  ): Promise<AxiosResponse<Response<any>>> {
+    return await evaluationAxios.get(
+      `/studentEvaluations/studentEvaluation/evaluation/${evaluationId}/student/${studentId}`,
+    );
   }
 
   public async getEvaluationQuestions(

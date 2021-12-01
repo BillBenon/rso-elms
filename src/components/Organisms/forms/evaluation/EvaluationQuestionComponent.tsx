@@ -76,8 +76,6 @@ export default function EvaluationQuestionComponent({
     }
   }, []);
 
-  console.log(questions);
-
   function handleAddQuestion() {
     let newQuestion = initialState;
     let questionsClone = [...questions];

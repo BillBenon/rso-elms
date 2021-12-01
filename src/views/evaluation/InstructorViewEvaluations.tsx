@@ -1,25 +1,17 @@
 /*@ts-ignore*/
 import React, { useEffect, useState } from 'react';
-import { toast } from 'react-hot-toast';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
-import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import { authenticatorStore } from '../../store/administration';
 import { evaluationStore } from '../../store/administration/evaluation.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
-import {
-  IEvaluationInfo,
-  IEvaluationInfoSingleEvaluation,
-  IStudentEvaluationStart,
-} from '../../types/services/evaluation.types';
 import {
   getLocalStorageData,
   setLocalStorageData,
@@ -27,19 +19,8 @@ import {
 import { advancedTypeChecker } from '../../utils/getOption';
 import EvaluationContent from './EvaluationContent';
 
-interface IEvaluationProps {
-  subjecEvaluations: IEvaluationInfoSingleEvaluation[] | IEvaluationInfo[];
-  isUndone?: boolean;
-  linkTo: string;
-}
-
-export default function ViewEvaluations({
-  subjecEvaluations = [],
-  linkTo,
-  isUndone = false,
-}: IEvaluationProps) {
+export default function InstructorViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
-  const [confirm, showConfirmation] = useState(false);
   const history = useHistory();
   const { path } = useRouteMatch();
   const authUser = authenticatorStore.authUser().data?.data.data;
@@ -53,38 +34,6 @@ export default function ViewEvaluations({
     { to: 'evaluations', title: 'evaluations' },
   ];
 
-  //function that moves user to next page according to his type
-  function goToNext(id: string) {
-    linkTo
-      ? history.push({
-          pathname: linkTo,
-          search: `?evaluation=${id}`,
-        })
-      : history.push(`${path}/${id}`);
-  }
-
-  const { mutateAsync, isLoading: loading } = evaluationStore.studentEvaluationStart();
-
-  function generateStudentCode(id: string) {
-    const studentEvaluationStart: IStudentEvaluationStart = {
-      attachment: '',
-      evaluation_id: id,
-      student_id: authUser?.id.toString() || '',
-    };
-
-    goToNext(studentEvaluationStart.evaluation_id);
-    mutateAsync(studentEvaluationStart, {
-      onSuccess: (studentInfo) => {
-        setLocalStorageData('studentEvaluationId', studentInfo.data.data.id);
-        toast.success('Generated evaluation code', { duration: 5000 });
-        goToNext(studentEvaluationStart.evaluation_id);
-      },
-      onError: () => {
-        toast.error("The evaluation isn't already started!");
-      },
-    });
-  }
-
   function goToNewEvaluation() {
     if (!getLocalStorageData('currentStep')) {
       setLocalStorageData('currentStep', 0);
@@ -95,78 +44,22 @@ export default function ViewEvaluations({
   useEffect(() => {
     setLocalStorageData('currentStep', 0);
 
-    function isSubjectEvaludations(
-      ev: IEvaluationInfo[] | IEvaluationInfoSingleEvaluation[],
-    ) {
-      return typeof (ev[0] as IEvaluationInfoSingleEvaluation).evaluation === 'undefined';
-    }
-
-    if (subjecEvaluations.length > 0) {
-      if (!isSubjectEvaludations(subjecEvaluations)) {
-        if (subjecEvaluations.length > 0 && !isUndone) {
-          let formattedEvals: CommonCardDataType[] = [];
-
-          (subjecEvaluations as IEvaluationInfoSingleEvaluation[]).forEach(
-            (singleEvaluation) => {
-              let formattedEvaluations = {
-                id: singleEvaluation.evaluation.id,
-                title: singleEvaluation.evaluation.name,
-                code: singleEvaluation.code,
-                description: `${singleEvaluation.evaluation.total_mark} marks`,
-                status: {
-                  type: advancedTypeChecker(
-                    singleEvaluation.evaluation.evaluation_status,
-                  ),
-                  text: singleEvaluation.evaluation.evaluation_status,
-                },
-              };
-              formattedEvals.push(formattedEvaluations);
-            },
-          );
-          setEvaluations(formattedEvals);
-        }
-      } else {
-        if (isUndone || subjecEvaluations.length === 0) {
-          let formattedEvals: CommonCardDataType[] = [];
-
-          if (isSubjectEvaludations(subjecEvaluations)) {
-            (subjecEvaluations as IEvaluationInfo[]).forEach((evaluation) => {
-              let formattedEvaluations = {
-                id: evaluation.id,
-                title: evaluation.name,
-                code: evaluation.evaluation_type,
-                description: `${evaluation.total_mark} marks`,
-                status: {
-                  type: advancedTypeChecker(evaluation.evaluation_status),
-                  text: evaluation.evaluation_status,
-                },
-              };
-              formattedEvals.push(formattedEvaluations);
-            });
-          }
-          setEvaluations(formattedEvals);
-        }
-      }
-    }
-
-    if (!subjecEvaluations.length) {
-      let formattedEvals: CommonCardDataType[] = [];
-      data?.data.data.forEach((evaluation) => {
-        let formattedEvaluations = {
-          id: evaluation.id,
-          title: evaluation.name,
-          code: evaluation.evaluation_type,
-          description: `${evaluation.total_mark} marks`,
-          status: {
-            type: advancedTypeChecker(evaluation.evaluation_status),
-            text: evaluation.evaluation_status,
-          },
-        };
-        formattedEvals.push(formattedEvaluations);
-      });
-      setEvaluations(formattedEvals);
-    }
-  }, [data?.data.data, subjecEvaluations]);
+    let formattedEvals: CommonCardDataType[] = [];
+    data?.data.data.forEach((evaluation) => {
+      let formattedEvaluations = {
+        id: evaluation.id,
+        title: evaluation.name,
+        code: evaluation.evaluation_type,
+        description: `${evaluation.total_mark} marks`,
+        status: {
+          type: advancedTypeChecker(evaluation.evaluation_status),
+          text: evaluation.evaluation_status,
+        },
+      };
+      formattedEvals.push(formattedEvaluations);
+    });
+    setEvaluations(formattedEvals);
+  }, [data?.data.data]);
 
   return (
     <div>
@@ -205,39 +98,10 @@ export default function ViewEvaluations({
                 ) : isSuccess && evaluations.length > 0 ? (
                   evaluations?.map((info: CommonCardDataType, index: number) => (
                     <div key={index}>
-                      {linkTo ? (
-                        <PopupMolecule
-                          closeOnClickOutSide={false}
-                          open={confirm}
-                          title="Do you want to continue?"
-                          onClose={() => showConfirmation(false)}>
-                          <div className="">
-                            <Heading fontWeight="semibold">{info.title}</Heading>
-                            <p className="course-card-description leading-5 pb-6 w-96 text-txt-secondary text-sm mt-4">
-                              You are about to attempt this {info.title} test. Are you
-                              sure you want to do it now ? This action is irreversible.
-                            </p>
-
-                            <div className="flex justify-starg">
-                              <Button
-                                disabled={loading}
-                                onClick={() =>
-                                  generateStudentCode(info.id?.toString() || '')
-                                }>
-                                <span className="font-semibold">Start Evaluation</span>
-                              </Button>
-                            </div>
-                          </div>
-                        </PopupMolecule>
-                      ) : null}
                       <CommonCardMolecule
                         className="cursor-pointer"
-                        handleClick={() =>
-                          linkTo
-                            ? showConfirmation(true)
-                            : goToNext(info.id?.toString() || '')
-                        }
                         data={info}
+                        handleClick={() => history.push(`${path}/${info.id}`)}
                       />
                     </div>
                   ))

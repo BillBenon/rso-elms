@@ -33,7 +33,7 @@ class EvaluationStore {
   }
 
   getEvaluations(academy: string, instructor: string) {
-    return useQuery('evaluations', () =>
+    return useQuery(['evaluationsByAcademyInstructor', instructor], () =>
       evaluationService.fetchEvaluationsByInstructorAndAcademy(academy, instructor),
     );
   }
@@ -52,6 +52,18 @@ class EvaluationStore {
   getEvaluationsByStudent(subject: string) {
     return useQuery(['evaluations/studentNarrower', subject], () =>
       evaluationService.fetchEvaluationsByStudent(subject),
+    );
+  }
+
+  getStudentEvaluationByStudentIdAndEvaluationId(
+    evaluationId: string,
+    studentId: string,
+  ) {
+    return useQuery(['studEvaluation', evaluationId], () =>
+      evaluationService.getStudentEvaluationByStudentIdAndEvaluationId(
+        evaluationId,
+        studentId,
+      ),
     );
   }
 
