@@ -20,7 +20,10 @@ import {
   IEvaluationInfoSingleEvaluation,
   IStudentEvaluationStart,
 } from '../../types/services/evaluation.types';
-import { setLocalStorageData } from '../../utils/getLocalStorageItem';
+import {
+  getLocalStorageData,
+  setLocalStorageData,
+} from '../../utils/getLocalStorageItem';
 import { advancedTypeChecker } from '../../utils/getOption';
 import EvaluationContent from './EvaluationContent';
 
@@ -83,7 +86,9 @@ export default function ViewEvaluations({
   }
 
   function goToNewEvaluation() {
-    setLocalStorageData('currentStep', 0);
+    if (!getLocalStorageData('currentStep')) {
+      setLocalStorageData('currentStep', 0);
+    }
     history.push(`${path}/new`);
   }
 

@@ -184,6 +184,13 @@ export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
   choices: IMultipleChoice[];
 }
 
+export interface IMultipleChoiceAnswers {
+  answerContent: string;
+  correct: boolean;
+  id: string;
+  mark: number;
+}
+
 export interface IEvaluationQuestionsInfo {
   id: string;
   question: string;
@@ -192,7 +199,7 @@ export interface IEvaluationQuestionsInfo {
   mark: number;
   evaluationQuestions: [];
   question_type: IQuestionType;
-  multiple_choice_answers: [];
+  multiple_choice_answers: IMultipleChoiceAnswers[];
 }
 
 export interface IEvaluationApproval {

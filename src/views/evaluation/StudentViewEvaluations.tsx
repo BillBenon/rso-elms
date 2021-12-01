@@ -158,7 +158,7 @@ export default function StudentViewEvaluations({
           path={path}
           render={() => (
             <>
-              <section className="grid grid-cols-2 mt-2 gap-10 w-full">
+              <section className="grid grid-cols-2 mt-2 gap-4 w-full">
                 {evaluations.length > 0 ? (
                   evaluations?.map((info: any, index: number) => (
                     <div key={index} className="w-full">

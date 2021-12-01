@@ -103,7 +103,7 @@ export default function EvaluationInfoComponent({
 
   function handleChange({ name, value }: ValueType) {
     if (name === 'module') setModuleId(value.toString());
-    if (name === 'levelId') setLevelId(value + '');
+    else if (name === 'levelId') setLevelId(value + '');
     else setDetails((details) => ({ ...details, [name]: value }));
   }
 
@@ -152,10 +152,10 @@ export default function EvaluationInfoComponent({
         </InputMolecule>
         <DropdownMolecule
           /*@ts-ignore */
-          defaultValue={details.evaluation_type}
+          // defaultValue={details.evaluation_type}
           width="64"
           name="evaluation_type"
-          placeholder="Evaluation Type"
+          placeholder={details.evaluation_type || 'Evaluation Type'}
           handleChange={handleChange}
           options={getDropDownStatusOptions(IEvaluationTypeEnum)}>
           Evaluation type

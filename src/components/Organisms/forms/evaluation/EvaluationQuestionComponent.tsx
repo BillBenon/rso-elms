@@ -28,7 +28,7 @@ export default function EvaluationQuestionComponent({
   evaluationId,
 }: IEvaluationProps) {
   const multipleChoiceContent: IMultipleChoice = {
-    answer_content: 'blessing',
+    answer_content: '',
     correct: false,
   };
 
@@ -54,9 +54,12 @@ export default function EvaluationQuestionComponent({
 
   useEffect(() => {
     let allQuestions: any[] = [];
-    if (evaluationQuestions.length > 0) {
+    if (evaluationQuestions?.length > 0) {
       evaluationQuestions.forEach((question) => {
+        console.log(question.question_type);
+
         let questionData = { ...initialState };
+        //@ts-ignore
         questionData.choices = question.multiple_choice_answers || [];
         questionData.evaluation_id = question.evaluation_id;
         questionData.mark = question.mark;
@@ -73,6 +76,8 @@ export default function EvaluationQuestionComponent({
     }
   }, []);
 
+  console.log(questions);
+
   function handleAddQuestion() {
     let newQuestion = initialState;
     let questionsClone = [...questions];
@@ -82,9 +87,10 @@ export default function EvaluationQuestionComponent({
 
   //To be used after
   function handleAddMultipleMultipleChoiceAnswer(index: number) {
-    let choices = questions[index];
-    choices.choices.push(multipleChoiceContent);
-    setQuestions([...questions, choices]);
+    let questionsClone = [...questions];
+    let questionChoices = questionsClone[index];
+    questionChoices.choices.push(multipleChoiceContent);
+    setQuestions(questionsClone);
   }
 
   function handleChange(index: number, { name, value }: ValueType) {
@@ -93,7 +99,7 @@ export default function EvaluationQuestionComponent({
     setQuestions(questionInfo);
   }
 
-  function hancleCorrectAnswerCahnge(index: number, e: ValueType) {
+  function handleCorrectAnswerCahnge(index: number, e: ValueType) {
     let questionsClone = [...questions];
     const question = questionsClone[index];
     let choiceIndex = question.choices.findIndex(
@@ -105,17 +111,14 @@ export default function EvaluationQuestionComponent({
     setQuestions(questionsClone);
   }
 
-  function handleChoiceChange(
-    questionIndex: number,
-    choiceIndex: number,
-    { name, value }: ValueType,
-  ) {
+  function handleChoiceChange(questionIndex: number, choiceIndex: number, e: ValueType) {
     let questionsClone = [...questions];
     let question = questionsClone[questionIndex];
 
     let choiceToUpdate = question.choices[choiceIndex];
-    choiceToUpdate = { ...choiceToUpdate, [name]: value };
+    choiceToUpdate = { ...choiceToUpdate, [e.name]: e.value };
     question.choices[choiceIndex] = choiceToUpdate;
+
     questionsClone[questionIndex] = question;
 
     setQuestions(questionsClone);
@@ -157,7 +160,7 @@ export default function EvaluationQuestionComponent({
                   disabled={question.submitted}
                   width="64"
                   name="question_type"
-                  placeholder="Question type"
+                  placeholder={question.question_type || 'Question type'}
                   handleChange={(e: ValueType) => handleChange(index, e)}
                   /*@ts-ignore*/
                   // defaultValue={evaluationQuestions[index]?.question_type || ''}
@@ -179,11 +182,12 @@ export default function EvaluationQuestionComponent({
                 {question.choices.map((multipleQuestion, choiceIndex) => (
                   <>
                     <TextAreaMolecule
-                      key={multipleQuestion.answer_content}
+                      key={choiceIndex}
                       readOnly={question.submitted}
-                      name={'choices'}
-                      value={multipleQuestion.answer_content}
-                      placeholder="Enter question"
+                      name={'answer_content'}
+                      //@ts-ignore
+                      value={multipleQuestion.answerContent}
+                      placeholder="Enter answer"
                       handleChange={(e: ValueType) =>
                         handleChoiceChange(index, choiceIndex, e)
                       }>
@@ -202,7 +206,7 @@ export default function EvaluationQuestionComponent({
                     width="64"
                     name=""
                     placeholder="Choose correct answer"
-                    handleChange={(e: ValueType) => hancleCorrectAnswerCahnge(index, e)}
+                    handleChange={(e: ValueType) => handleCorrectAnswerCahnge(index, e)}
                     /*@ts-ignore*/
                     // defaultValue={evaluationQuestions[index]?.question_type || ''}
                     options={
@@ -228,7 +232,7 @@ export default function EvaluationQuestionComponent({
                         stroke="primary"
                       />
                       <ILabel size="sm" className="cursor-pointer">
-                        Add answer
+                        Add choice
                       </ILabel>
                     </Button>
                   </div>

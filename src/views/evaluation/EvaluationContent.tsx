@@ -302,21 +302,23 @@ export default function EvaluationContent() {
                       <>
                         <div className="mt-3 flex justify-between">
                           <ContentSpan title={`Question ${index + 1}`} className="gap-3">
-                            What is the nervous system?
+                            {question.question}
                           </ContentSpan>
 
                           <Heading fontWeight="semibold" fontSize="sm">
                             5 marks
                           </Heading>
                         </div>
-                        <MultipleChoiceAnswer
-                          answer_content="This is the first answer"
-                          correct={true}
-                        />
-                        <MultipleChoiceAnswer
-                          answer_content="This is the second answer"
-                          correct={false}
-                        />
+
+                        {question.multiple_choice_answers.length
+                          ? question.multiple_choice_answers.map((choiceAnswer) => (
+                              <MultipleChoiceAnswer
+                                key={choiceAnswer.id}
+                                answer_content={choiceAnswer.answerContent}
+                                correct={choiceAnswer.correct}
+                              />
+                            ))
+                          : null}
                       </>
                     ) : (
                       <div className="mt-3 flex justify-between">
