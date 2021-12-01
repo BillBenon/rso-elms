@@ -28,7 +28,6 @@ export default function Redirecting() {
     if (data?.data.data.user_type === UserType.ADMIN) {
       let val = !data?.data.data.academy ? true : false;
       setHasNoAcademy(val && !isLoading);
-
       redirectTo('/dashboard/users');
     } else if (data?.data.data.user_type === UserType.INSTRUCTOR) {
       mutateAsync().then((resp) => {

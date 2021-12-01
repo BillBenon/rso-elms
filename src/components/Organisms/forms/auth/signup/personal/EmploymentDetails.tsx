@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
+import { rankStore } from '../../../../../../store/administration/rank.store';
 import usersStore from '../../../../../../store/administration/users.store';
 import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../types';
+import { RankRes } from '../../../../../../types/services/rank.types';
 import { EmploymentDetail } from '../../../../../../types/services/user.types';
 import { getLocalStorageData } from '../../../../../../utils/getLocalStorageItem';
+import { getDropDownOptions } from '../../../../../../utils/getOption';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DateMolecule from '../../../../../Molecules/input/DateMolecule';
@@ -36,6 +39,10 @@ function EmploymentDetails<E>({
   const handleChange = (e: ValueType) => {
     setEmploymentDetails({ ...employmentDetails, [e.name]: e.value });
   };
+
+  //get all ranks in an institution
+
+  const ranks: RankRes[] | undefined = rankStore.getRanks().data?.data.data;
 
   const moveForward = (e: any) => {
     e.preventDefault();
@@ -73,9 +80,8 @@ function EmploymentDetails<E>({
             <DropdownMolecule
               placeholder="Select current rank"
               name="current_rank_id"
-              className="w-72"
-              handleChange={handleChange}
-              options={[]}>
+              options={getDropDownOptions({ inputs: ranks || [] })}
+              handleChange={handleChange}>
               Current Rank
             </DropdownMolecule>
             <InputMolecule
