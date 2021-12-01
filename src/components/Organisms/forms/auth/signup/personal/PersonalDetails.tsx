@@ -174,6 +174,7 @@ function PersonalDetails<E>({
               handleChange={handleChange}
               options={[]}>
               Place of birth
+
             </DropdownMolecule>
             <TextAreaMolecule
               width="72 md:w-80"
