@@ -27,6 +27,7 @@ import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../../Molecules/input/InputMolecule';
+import LocationMolecule from '../../../../../Molecules/input/LocationMolecule';
 import TextAreaMolecule from '../../../../../Molecules/input/TextAreaMolecule';
 
 interface Personal<E> extends CommonStepProps, CommonFormProps<E> {}
@@ -266,6 +267,18 @@ function PersonalDetails<E>({
                 )}
               </div>
             </div>
+            <LocationMolecule
+              placeholder="Select place of residence"
+              name="residence_location_id"
+              defaultValue={getDropDownOptions({ inputs: location! }).find(
+                (location) =>
+                  location.value ===
+                  (personalDetails.residence_location_id &&
+                    personalDetails.residence_location_id.toString()),
+              )}
+              handleChange={handleLocationChange}>
+              Place of living
+            </LocationMolecule>
             <TextAreaMolecule
               width="72 md:w-80"
               name="place_of_residence"
