@@ -23,7 +23,6 @@ export default function LocationMolecule({
   const levels = ['country', 'province', 'district', 'sector', 'cell', 'village'];
 
   const [locationId, setLocationId] = useState<string>('');
-  const [isFirstSelectionMade, setIsFirstSelectionMade] = useState(false);
 
   const { data: country, isFetching: isFetchingCountry } =
     locationStore.getLocationsByLevel('1');
@@ -31,7 +30,6 @@ export default function LocationMolecule({
     locationStore.findByParent(locationId ? locationId.toString() : '');
 
   const handleLocationChange = (e: ValueType) => {
-    setIsFirstSelectionMade(true);
     handleChange(e);
     setLocationId(e.value.toString());
     setChoseResidenceLocations(
@@ -61,7 +59,7 @@ export default function LocationMolecule({
     <div>
       <DropdownMolecule
         {...attrs}
-        hasError={isFirstSelectionMade && residenceLocationLevel < 7}
+        hasError={residenceLocationLevel > 1 && residenceLocationLevel < 7}
         placeholder={placeholder}
         name={name}
         defaultValue={getDropDownOptions({ inputs: location! }).find(
@@ -71,7 +69,7 @@ export default function LocationMolecule({
         disabled={isFetchingCountry || isFetchingLocations}
         options={getDropDownOptions({ inputs: location! })}>
         {children}
-        {' ' + levels[residenceLocationLevel] && residenceLocationLevel < 7 && (
+        {residenceLocationLevel > 1 && residenceLocationLevel < 7 && (
           <span className="text-error-500">
             ( select {levels[residenceLocationLevel - 1]} )
           </span>
