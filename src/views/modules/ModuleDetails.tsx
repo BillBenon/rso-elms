@@ -18,7 +18,7 @@ import { subjectStore } from '../../store/administration/subject.store';
 import { CommonCardDataType, Link, ParamType } from '../../types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
-import SubjectDetails from '../subjects/SubjectDetails';
+import ModuleMaterials from '../module-material/ModuleMaterials';
 
 export default function ModuleDetails() {
   const [subjects, setSubjects] = useState<CommonCardDataType[]>([]);
@@ -35,6 +35,10 @@ export default function ModuleDetails() {
     {
       label: 'Info',
       href: `${url}`,
+    },
+    {
+      label: 'Materials',
+      href: `${url}/materials`,
     },
     {
       label: 'Subjects',
@@ -167,25 +171,6 @@ export default function ModuleDetails() {
                         </div>
                       </CommonCardMolecule>
                     )}
-                    <div className="flex flex-col gap-8 z-0 pt-6 px-2">
-                      <Heading fontSize="base" fontWeight="semibold">
-                        Module materials (0)
-                      </Heading>
-                      {authUser?.user_type === UserType.INSTRUCTOR && (
-                        <Button
-                          styleType="outline"
-                          className="h-6 flex justify-center items-center">
-                          <span className="flex items-center">
-                            <Icon
-                              name="attach"
-                              useheightandpadding={false}
-                              fill="primary"
-                            />
-                            <span className="font-semibold">Upload module materials</span>
-                          </span>
-                        </Button>
-                      )}
-                    </div>
                   </div>
                 </div>
               )}
@@ -196,7 +181,7 @@ export default function ModuleDetails() {
                 <>
                   {subjects.length < 1 && subjectData.isSuccess ? (
                     <NoDataAvailable
-                      icon="module"
+                      icon="subject"
                       title={'No subjects registered'}
                       description={
                         'The history object is mutable. Therefore it is recommended to access the location from the render props of <Route>, not from'
@@ -210,7 +195,7 @@ export default function ModuleDetails() {
                           <CommonCardMolecule
                             to={{
                               title: 'Subject details',
-                              to: `${url}/subjects/${subject.id}`,
+                              to: `/dashboard/modules/subjects/${subject.id}`,
                             }}
                             data={subject}
                           />
@@ -245,8 +230,13 @@ export default function ModuleDetails() {
                 );
               }}
             />
-            {/* show subject details */}
-            <Route path={`${path}/subjects/:subjectId`} component={SubjectDetails} />
+            {/* update module popup */}
+            <Route
+              path={`${path}/materials`}
+              render={() => {
+                return <ModuleMaterials />;
+              }}
+            />
           </Switch>
         </TabNavigation>
       </main>
