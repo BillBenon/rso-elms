@@ -31,7 +31,12 @@ export default function FileUploader(props: IProps) {
         onChange={changeHandler}
         accept={props.accept}
       />
-      <div onClick={() => fileInputField.current?.click()} className="inline-block">
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => fileInputField.current?.click()}
+        className="inline-block">
         {props.children}
       </div>
       {files && files[0] && (

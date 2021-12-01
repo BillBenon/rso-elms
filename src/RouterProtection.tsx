@@ -7,8 +7,6 @@ import { authenticatorStore } from './store/administration';
 import { UserInfo, UserType } from './types/services/user.types';
 import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';
-import InstructorProgram from './views/dashboard/InstructorProgram';
-import StudentDashboard from './views/dashboard/StudentDashboard';
 import Divisions from './views/divisions/Divisions';
 import EvaluationTest from './views/evaluation/EvaluationTest';
 import InstructorViewEvaluations from './views/evaluation/InstructorViewEvaluations';
@@ -19,8 +17,10 @@ import IntakesView from './views/intakes/Intakes';
 import Levels from './views/levels/Levels';
 import Modules from './views/modules';
 import InstrLevelModule from './views/modules/InstrLevelModule';
+import StudentModule from './views/modules/StudentModule';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicProgram from './views/programs/AcademicPrograms';
+import InstructorProgram from './views/programs/InstructorProgram';
 import Roles from './views/roles/Roles';
 import ViewRole from './views/roles/ViewRole';
 import CalendarView from './views/schedule/Calendar';
@@ -90,7 +90,7 @@ const RouterProtection = () => {
     <>
       {/* start of student pages */}
       <Route path="/dashboard/schedule" component={ScheduleHome} />
-      <Route path="/dashboard/student" component={StudentDashboard} />
+      <Route path="/dashboard/student" component={StudentModule} />
       <Route path="/dashboard/modules" component={Modules} />
       {/* <Route path="/dashboard/student/evaluations/" component={EvaluationTest} /> */}
       <Route
