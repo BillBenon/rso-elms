@@ -80,7 +80,7 @@ function PersonalDetails<E>({
 
     setResidenceLocationLevel((old) => old + 1);
 
-    console.log('input', e);
+    console.log('input', e, residenceLocationLevel);
   };
 
   const locations: [] = [];
@@ -100,7 +100,7 @@ function PersonalDetails<E>({
   const user = usersStore.getUserById(fetched_id.toString());
 
   function resetResidenceLocation() {
-    setResidenceLocationLevel(0);
+    setResidenceLocationLevel(1);
     country?.data.data && setLocation(country?.data.data);
     setChoseResidenceLocations('');
   }
