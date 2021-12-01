@@ -32,7 +32,7 @@ export default function DropdownMolecule(props: Props) {
           defaultValue={props.defaultValue}
           getOptionLabel={props.getOptionLabel}
           getOptionValue={props.getOptionValue}
-          hasError={props.error ? true : false}
+          hasError={props.hasError ? true : props.error ? true : false}
         />
       </div>
       <p className="pt-2">{props.error ? <Error>{props.error}</Error> : <></>}</p>

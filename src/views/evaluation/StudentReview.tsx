@@ -40,7 +40,7 @@ export default function StudentReview() {
       } else if (studentEvaluation?.markingStatus == 'MARKED') {
         toast.error('Your results has not yet been published.');
       } else if (studentEvaluation?.markingStatus == 'PUBLISHED') {
-        toast.error('Results has been published, you are now viewing the results.');
+        toast.success('Results has been published, you are now viewing the results.');
       }
       if (studentEvaluation?.markingStatus != 'PUBLISHED') {
         history.goBack();
