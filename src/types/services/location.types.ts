@@ -26,3 +26,30 @@ export interface LocationInfo {
   parent?: LocationInfo;
   level: LocationLevel;
 }
+
+interface Sort {
+  sorted: boolean;
+  unsorted: boolean;
+  empty: boolean;
+}
+interface Pageable {
+  sort: Sort;
+  pageNumber: number;
+  pageSize: number;
+  offset: number;
+  unpaged: boolean;
+  paged: boolean;
+}
+export interface PagedLocationInfo {
+  content: LocationInfo[];
+  empty: boolean;
+  first: boolean;
+  last: boolean;
+  number: number;
+  numberOfElements: number;
+  pageable: Pageable;
+  size: number;
+  sort: Sort;
+  totalElements: number;
+  totalPages: number;
+}

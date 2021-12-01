@@ -28,6 +28,7 @@ export function getDropDownOptions({
   value = 'id',
   getOptionLabel,
 }: GetDropDownOptionsProps): SelectData[] {
+  // console.log(inputs);
   let options: SelectData[] = [];
   if (labelName.length === 1) {
     inputs?.map((input) => {
