@@ -69,7 +69,7 @@ const interceptAdminResError = (error: Error | AxiosError<AxiosResponse<Response
 };
 
 adminstrationAxios.interceptors.request.use(interceptAdminReq);
-adminstrationAxios.interceptors.response.use((config) => config, interceptAdminResError);
+// adminstrationAxios.interceptors.response.use((config) => config, interceptAdminResError);
 
 evaluationAxios.interceptors.request.use(interceptAdminReq);
 // evaluationAxios.interceptors.response.use((config) => config, interceptAdminResError);

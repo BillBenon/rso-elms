@@ -106,6 +106,7 @@ export default function SubjectDetails() {
                         <Loader />
                       ) : lessons.length === 0 ? (
                         <NoDataAvailable
+                          icon="subject"
                           title={'No lessons available'}
                           description={
                             'A lesson or class is a structured period of time where learning is intended to occur. It involves one or more students being taught by a teacher or instructor.'

@@ -4,16 +4,14 @@ import { useHistory } from 'react-router-dom';
 
 import { authenticatorService } from '../../../../services';
 import academyStore from '../../../../store/administration/academy.store';
-import locationStore from '../../../../store/administration/location.store';
 import { CommonFormProps, ValueType } from '../../../../types';
 import { AcademyCreateInfo } from '../../../../types/services/academy.types';
-import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
 import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
-import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
+import LocationMolecule from '../../../Molecules/input/LocationMolecule';
 
 export default function NewAcademy<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
@@ -48,45 +46,7 @@ export default function NewAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     website_link: '',
   });
 
-  const [locations, setLocations] = useState({
-    province: '',
-    district: '',
-    sector: '',
-    cell: '',
-    village: '',
-  });
-
-  const provinces = locationStore.getLocationsByLevel('2').data?.data;
-  let districts = locationStore.findByParent(locations.province);
-  let sectors = locationStore.findByParent(locations.district);
-  let cells = locationStore.findByParent(locations.sector);
-  let villages = locationStore.findByParent(locations.cell);
-
-  useEffect(() => {
-    districts.refetch();
-  }, [locations.province]);
-
-  useEffect(() => {
-    sectors.refetch();
-  }, [locations.district]);
-  useEffect(() => {
-    cells.refetch();
-  }, [locations.sector]);
-  useEffect(() => {
-    villages.refetch();
-  }, [locations.cell]);
-
-  function locationChange(e: ValueType) {
-    setLocations((locations) => ({
-      ...locations,
-      [e.name]: e.value,
-    }));
-  }
   const { mutateAsync } = academyStore.createAcademy();
-  // const users = usersStore.fetchUsers();
-  // const admins = users.data?.data.data.filter(
-  //   (user) => user.user_type === UserType.ADMIN,
-  // );
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
@@ -137,133 +97,83 @@ export default function NewAcademy<E>({ onSubmit }: CommonFormProps<E>) {
         </div>
         <form onSubmit={createAcademy}>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2">
-            {/* first column */}
-            <div>
-              <InputMolecule
-                name="name"
-                placeholder="Type academy name"
-                value={details.name}
-                handleChange={(e) => handleChange(e)}>
-                academy name
-              </InputMolecule>
-              <InputMolecule
-                name="short_name"
-                placeholder="Type short name"
-                value={details.short_name}
-                handleChange={(e) => handleChange(e)}>
-                academy short name
-              </InputMolecule>
-              <InputMolecule
-                name="email"
-                type="email"
-                value={details.email}
-                placeholder="example@gmail.com"
-                handleChange={(e) => handleChange(e)}>
-                academy email
-              </InputMolecule>
-              <InputMolecule
-                name="phone_number"
-                type="tel"
-                value={details.phone_number}
-                placeholder="Type academy phone number"
-                handleChange={(e) => handleChange(e)}>
-                academy phone number
-              </InputMolecule>
-              <InputMolecule
-                name="fax_number"
-                value={details.fax_number}
-                handleChange={(e) => handleChange(e)}>
-                academy fax number
-              </InputMolecule>
-              <InputMolecule
-                name="website_link"
-                value={details.website_link}
-                placeholder="Type website url"
-                handleChange={(e) => handleChange(e)}>
-                academy website
-              </InputMolecule>
-              <InputMolecule
-                name="mission"
-                value={details.mission}
-                handleChange={(e) => handleChange(e)}>
-                academy mission
-              </InputMolecule>
-              <InputMolecule
-                name="moto"
-                value={details.moto}
-                handleChange={(e) => handleChange(e)}>
-                academy motto
-              </InputMolecule>
+            <InputMolecule
+              name="name"
+              placeholder="Type academy name"
+              value={details.name}
+              handleChange={(e) => handleChange(e)}>
+              academy name
+            </InputMolecule>
+            <InputMolecule
+              name="short_name"
+              placeholder="Type short name"
+              value={details.short_name}
+              handleChange={(e) => handleChange(e)}>
+              academy short name
+            </InputMolecule>
+            <InputMolecule
+              name="email"
+              type="email"
+              value={details.email}
+              placeholder="example@gmail.com"
+              handleChange={(e) => handleChange(e)}>
+              academy email
+            </InputMolecule>
+            <InputMolecule
+              name="phone_number"
+              type="tel"
+              value={details.phone_number}
+              placeholder="Type academy phone number"
+              handleChange={(e) => handleChange(e)}>
+              academy phone number
+            </InputMolecule>
+            <InputMolecule
+              name="fax_number"
+              value={details.fax_number}
+              handleChange={(e) => handleChange(e)}>
+              academy fax number
+            </InputMolecule>
+            <InputMolecule
+              name="website_link"
+              value={details.website_link}
+              placeholder="Type website url"
+              handleChange={(e) => handleChange(e)}>
+              academy website
+            </InputMolecule>
+            <InputMolecule
+              name="mission"
+              value={details.mission}
+              handleChange={(e) => handleChange(e)}>
+              academy mission
+            </InputMolecule>
+            <InputMolecule
+              name="moto"
+              value={details.moto}
+              handleChange={(e) => handleChange(e)}>
+              academy motto
+            </InputMolecule>
+            <LocationMolecule
+              placeholder="Select head office location"
+              name="head_office_location_id"
+              handleChange={handleChange}>
+              Head office location
+            </LocationMolecule>
+            <InputMolecule
+              className="w-60 md:w-80"
+              name="full_address"
+              value={details.full_address}
+              handleChange={(e) => handleChange(e)}>
+              academy physical address
+            </InputMolecule>
+          </div>
+          <div>
+            <div className="mb-3">
+              <ILabel weight="bold">academy logo</ILabel>
             </div>
-            {/* second column */}
-            <div className="w-80">
-              <Heading fontSize="base" fontWeight="semibold" className="py-2">
-                Choose head office location
-              </Heading>
-              <DropdownMolecule
-                width="60 md:w-80"
-                options={getDropDownOptions({ inputs: provinces || [] })}
-                name="province"
-                placeholder="Province"
-                handleChange={locationChange}>
-                Province
-              </DropdownMolecule>
-              <div className="grid grid-cols-1 md:grid-cols-2 py-2">
-                <DropdownMolecule
-                  className="pr-3"
-                  width="60 md:w-40"
-                  placeholder="District"
-                  options={getDropDownOptions({ inputs: districts.data?.data || [] })}
-                  name="district"
-                  handleChange={locationChange}>
-                  District
-                </DropdownMolecule>
-                <DropdownMolecule
-                  width="60 md:w-40"
-                  options={getDropDownOptions({ inputs: sectors.data?.data || [] })}
-                  name="sector"
-                  placeholder="Sector"
-                  handleChange={locationChange}>
-                  Sector
-                </DropdownMolecule>
-              </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 py-2">
-                <DropdownMolecule
-                  className="pr-3"
-                  width="60 md:w-40"
-                  placeholder="Cell"
-                  options={getDropDownOptions({ inputs: cells.data?.data || [] })}
-                  name="cell"
-                  handleChange={locationChange}>
-                  Cell
-                </DropdownMolecule>
-                <DropdownMolecule
-                  width="60 md:w-40"
-                  placeholder="Village"
-                  options={getDropDownOptions({ inputs: villages.data?.data || [] })}
-                  name="head_office_location_id"
-                  handleChange={handleChange}>
-                  Village
-                </DropdownMolecule>
-              </div>
-              <InputMolecule
-                className="w-60 md:w-80"
-                name="full_address"
-                value={details.full_address}
-                handleChange={(e) => handleChange(e)}>
-                academy physical address
-              </InputMolecule>
-
-              <div>
-                <div className="mb-3">
-                  <ILabel weight="bold">academy logo</ILabel>
-                </div>
-                <Button styleType="outline">upload logo</Button>
-              </div>
-              <div className="mt-5">
-                <Button type="submit">Save</Button>
-              </div>
-            </div>
+            <Button styleType="outline">upload logo</Button>
+          </div>
+          <div className="mt-5">
+            <Button type="submit">Save</Button>
           </div>
         </form>
       </div>

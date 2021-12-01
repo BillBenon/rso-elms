@@ -1,12 +1,16 @@
 import { Editor } from '@tiptap/react';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { authenticatorStore } from '../../../../store/administration';
+import { classStore } from '../../../../store/administration/class.store';
+import enrollmentStore from '../../../../store/administration/enrollment.store';
 import { evaluationStore } from '../../../../store/administration/evaluation.store';
 import { moduleStore } from '../../../../store/administration/modules.store';
 import { subjectStore } from '../../../../store/administration/subject.store';
+import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { ValueType } from '../../../../types';
+import { EnrollInstructorLevelInfo } from '../../../../types/services/enrollment.types';
 import {
   IAccessTypeEnum,
   IContentFormatEnum,
@@ -36,27 +40,31 @@ import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 export default function EvaluationInfoComponent({
   handleNext,
   evaluationId,
+  evaluationInfo,
 }: IEvaluationProps) {
   const [moduleId, setModuleId] = useState('');
+  const [levelId, setLevelId] = useState('');
+  // const [period, setPeriod] = useState('');
   // const { search } = useLocation();
   // const [evaluationId, setEvaluationId] = useState(
   //   new URLSearchParams(search).get('evaluation'),
   // );
   const authUser = authenticatorStore.authUser().data?.data.data;
   const { data } = moduleStore.getModulesByAcademy(authUser?.academy.id.toString() || '');
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
+    authUser?.id + '',
+  ).data?.data.data;
 
   const { data: subjects } = subjectStore.getSubjectsByModule(moduleId);
-
-  let evaluationInfo;
-
-  if (evaluationId) {
-    evaluationInfo = evaluationStore.getEvaluationById(evaluationId).data?.data.data;
-  }
+  const { data: levels } = enrollmentStore.getInstructorLevels(instructorInfo?.id + '');
+  const { data: classes } = classStore.getClassByLevel(levelId + '');
 
   const [details, setDetails] = useState<IEvaluationCreate>({
     access_type: evaluationInfo?.access_type || IAccessTypeEnum.PUBLIC,
     academy_id: authUser?.academy.id.toString() || '',
     instructor_id: authUser?.id.toString() || '',
+    adm_intake_level_class_id: evaluationInfo?.adm_intake_level_class_id || '',
+    intake_academic_year_period: evaluationInfo?.intake_academic_year_period || 0,
     allow_submission_time: evaluationInfo?.allow_submission_time || '',
     class_ids: '',
     id: evaluationInfo?.id || '',
@@ -74,20 +82,32 @@ export default function EvaluationInfoComponent({
     questionaire_type: evaluationInfo?.questionaire_type || IQuestionaireTypeEnum.OPEN,
     subject_academic_year_period_id: evaluationInfo?.subject_id || '',
     submision_type: evaluationInfo?.submision_type || ISubmissionTypeEnum.ONLINE_TEXT,
-    time_limit: evaluationInfo?.time_limit || 30,
-    total_mark: evaluationInfo?.total_mark || 10,
+    time_limit: evaluationInfo?.time_limit || 10,
+    total_mark: evaluationInfo?.total_mark || 0,
   });
+
+  useEffect(() => {
+    const period =
+      classes?.data.data.find(
+        (periodId) => periodId.id == details.adm_intake_level_class_id,
+      )?.intake_academic_year_period_id + '';
+
+    setDetails((details) => ({
+      ...details,
+      ['intake_academic_year_period']: parseInt(period),
+    }));
+  }, [classes?.data.data, details.adm_intake_level_class_id]);
 
   const { mutate } = evaluationStore.createEvaluation();
   const { mutateAsync } = evaluationStore.updateEvaluation();
 
   function handleChange({ name, value }: ValueType) {
     if (name === 'module') setModuleId(value.toString());
+    else if (name === 'levelId') setLevelId(value + '');
     else setDetails((details) => ({ ...details, [name]: value }));
   }
 
   function handleEditorChange(editor: Editor) {
-    // console.log(editor.getHTML());
     setDetails((details) => ({ ...details, exam_instruction: editor.getHTML() }));
   }
 
@@ -112,9 +132,8 @@ export default function EvaluationInfoComponent({
           setLocalStorageData('evaluationId', data.data.data.id);
           handleNext();
         },
-        onError: (error) => {
-          console.log(error);
-          toast.error(error + '');
+        onError: (error: any) => {
+          toast.error(error.response.data.data + '');
         },
       });
     }
@@ -133,10 +152,10 @@ export default function EvaluationInfoComponent({
         </InputMolecule>
         <DropdownMolecule
           /*@ts-ignore */
-          defaultValue={details.evaluation_type}
+          // defaultValue={details.evaluation_type}
           width="64"
           name="evaluation_type"
-          placeholder="Evaluation Type"
+          placeholder={details.evaluation_type || 'Evaluation Type'}
           handleChange={handleChange}
           options={getDropDownStatusOptions(IEvaluationTypeEnum)}>
           Evaluation type
@@ -171,7 +190,33 @@ export default function EvaluationInfoComponent({
           })}>
           Select subject
         </DropdownMolecule>
-        <RadioMolecule
+
+        <DropdownMolecule
+          width="64"
+          name="levelId"
+          placeholder="Select level"
+          handleChange={handleChange}
+          options={getDropDownOptions({
+            inputs: levels?.data.data || [],
+            //@ts-ignore
+            getOptionLabel: (lev: EnrollInstructorLevelInfo) =>
+              lev.academic_program_level.level.name,
+          })}>
+          Select Level
+        </DropdownMolecule>
+
+        <DropdownMolecule
+          width="64"
+          name="adm_intake_level_class_id"
+          placeholder="Select class"
+          handleChange={handleChange}
+          options={getDropDownOptions({
+            inputs: classes?.data.data || [],
+            labelName: ['class_name'],
+          })}>
+          Select Class
+        </DropdownMolecule>
+        {/* <RadioMolecule
           defaultValue={details.eligible_group}
           className="pb-4"
           value={details.eligible_group}
@@ -182,7 +227,7 @@ export default function EvaluationInfoComponent({
           ]}
           handleChange={handleChange}>
           Eligible Class
-        </RadioMolecule>
+        </RadioMolecule> */}
         <RadioMolecule
           defaultValue={details.access_type}
           className="pb-4"

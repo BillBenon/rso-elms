@@ -3,15 +3,18 @@ import React from 'react';
 interface IMultipleChoiceAnswerProps {
   answer_content: string;
   correct: boolean;
+  highlight?: boolean;
 }
 
 export default function MultipleChoiceAnswer({
   answer_content,
   correct,
+  highlight,
 }: IMultipleChoiceAnswerProps) {
-  const classes = correct
-    ? 'bg-lightblue text-primary-500 border-primary-500 text-primary-500'
-    : 'border-tertiary';
+  const classes =
+    correct || highlight
+      ? 'bg-lightblue text-primary-500 border-primary-500 text-primary-500'
+      : 'border-tertiary';
 
   return (
     <div className="flex flex-col mb-4">

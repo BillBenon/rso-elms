@@ -276,3 +276,9 @@ export interface IImportUser {
   userType: UserType;
   file: File | null;
 }
+
+export interface IImportUserRes {
+  failures: {
+    [index: string]: string;
+  };
+}
