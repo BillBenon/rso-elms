@@ -68,7 +68,7 @@ export default function LocationMolecule({
         disabled={isFetchingCountry || isFetchingLocations}
         options={getDropDownOptions({ inputs: location! })}>
         {children}
-        {' ' + levels[residenceLocationLevel] && (
+        {' ' + levels[residenceLocationLevel] && residenceLocationLevel < 7 && (
           <span className="text-error-500">
             ( select {levels[residenceLocationLevel - 1]} )
           </span>
