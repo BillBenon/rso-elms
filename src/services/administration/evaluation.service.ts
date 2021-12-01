@@ -70,7 +70,7 @@ class EvaluationService {
     subject: string,
   ): Promise<AxiosResponse<Response<IEvaluationInfoCollected>>> {
     return await evaluationAxios.get(
-      `/evaluations/getEvaluationsBySubject/07e4467${subject}/studentNarrower`,
+      `/evaluations/getEvaluationsBySubject/${subject}/studentNarrower`,
     );
   }
 

@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router';
 
+import { evaluationStore } from '../../../../store/administration/evaluation.store';
 import { Link as LinkList } from '../../../../types';
-import {
-  getLocalStorageData,
-  setLocalStorageData,
-} from '../../../../utils/getLocalStorageItem';
+import { setLocalStorageData } from '../../../../utils/getLocalStorageItem';
 import Heading from '../../../Atoms/Text/Heading';
 import BreadCrumb from '../../../Molecules/BreadCrumb';
 import Stepper from '../../../Molecules/Stepper/Stepper';
@@ -20,7 +18,7 @@ export default function NewEvaluation() {
     { to: 'new', title: 'new evaluation' },
   ];
 
-  const [currentStep, setCurrentStep] = useState(getLocalStorageData('currentStep'));
+  const [currentStep, setCurrentStep] = useState(1);
   const { search } = useLocation();
   const [evaluationId] = useState(new URLSearchParams(search).get('evaluation'));
 
@@ -34,6 +32,12 @@ export default function NewEvaluation() {
     setLocalStorageData('currentStep', currentStep);
   }
 
+  let evaluationInfo;
+
+  if (evaluationId) {
+    evaluationInfo = evaluationStore.getEvaluationById(evaluationId).data?.data.data;
+  }
+
   return (
     <div>
       <section>
@@ -44,7 +48,7 @@ export default function NewEvaluation() {
 
       <div className="w-full pt-9">
         <Heading fontWeight="semibold" fontSize="2xl" color="primary" className="pb-4">
-          New evaluation
+          {evaluationInfo?.name || 'New evaluation'}
         </Heading>
         <Stepper
           currentStep={currentStep}
@@ -56,6 +60,7 @@ export default function NewEvaluation() {
           <div className="w-2/4">
             <EvaluationInfoComponent
               evaluationId={evaluationId}
+              evaluationInfo={evaluationInfo}
               handleNext={handleSubmit}
               handleGoBack={handleBack}
             />

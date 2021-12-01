@@ -23,6 +23,7 @@ export interface IEvaluationProps {
   handleGoBack: () => void;
   handleAddQuestion?: () => void;
   evaluationId: string | null;
+  evaluationInfo?: IEvaluationInfo;
 }
 
 export enum ISubmissionTypeEnum {
@@ -77,6 +78,8 @@ export enum IEvaluationApprovalStatus {
 
 export interface IEvaluationCreate {
   access_type: string;
+  adm_intake_level_class_id: string;
+  intake_academic_year_period: number;
   academy_id: string;
   instructor_id: string;
   allow_submission_time: string;
@@ -110,6 +113,8 @@ export interface IEvaluationInfo {
   id: string;
   name: string;
   academy_id: string;
+  adm_intake_level_class_id: string;
+  intake_academic_year_period: number;
   subject_academic_year_period: string;
   subject_id: string;
   access_type: IAccessTypeEnum;
@@ -143,11 +148,12 @@ export interface IEvaluationInfo {
 export interface IEvaluationInfoCollected {
   undoneEvaluations: IEvaluationInfoSingleEvaluation[];
   ongoingEvaluations: IEvaluationInfoSingleEvaluation[];
-  finishedEvaluations: IEvaluationInfoSingleEvaluation;
+  finishedEvaluations: IEvaluationInfoSingleEvaluation[];
 }
 export interface IEvaluationInfoSingleEvaluation {
   code: string;
   evaluation: IEvaluationInfo;
+  id: string;
 }
 
 export interface IEvaluationChoices {
@@ -157,12 +163,12 @@ export interface IEvaluationChoices {
 
 export interface IEvaluationQuestion {
   evaluation_id: string;
-  multipleChoiceAnswers?: IMultipleChoice[];
+  multiple_choice_answers?: IMultipleChoice[];
   mark: number;
   parent_question_id: string;
   question: string;
   submitted: boolean;
-  questionType: IQuestionType;
+  question_type: IQuestionType;
 }
 
 export interface IMultipleChoice {
@@ -173,7 +179,7 @@ export interface IMultipleChoice {
 export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
   sub_questions: IEvaluationQuestion[];
   submitted: boolean;
-  questionType: IQuestionType;
+  question_type: IQuestionType;
   id: string;
   choices: IMultipleChoice[];
 }
@@ -185,8 +191,8 @@ export interface IEvaluationQuestionsInfo {
   choices: IMultipleChoice[];
   mark: number;
   evaluationQuestions: [];
-  questionType: IQuestionType;
-  multipleChoiceAnswers: [];
+  question_type: IQuestionType;
+  multiple_choice_answers: [];
 }
 
 export interface IEvaluationApproval {
@@ -205,7 +211,7 @@ export interface IStudentAnswer {
   evaluation: string;
   evaluationQuestion: string;
   markScored: number | null;
-  multipleChoiceAnswer: string;
+  multiple_choice_answers: string;
   openAnswer: string;
   studentEvaluation: string;
 }
