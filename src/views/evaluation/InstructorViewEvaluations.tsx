@@ -19,17 +19,7 @@ import {
 import { advancedTypeChecker } from '../../utils/getOption';
 import EvaluationContent from './EvaluationContent';
 
-<<<<<<< HEAD
 export default function InstructorViewEvaluations() {
-=======
-interface IEvaluationProps {
-  subjecEvaluations: IEvaluationInfoSingleEvaluation[] | IEvaluationInfo[];
-  isUndone?: boolean;
-  linkTo: string;
-}
-
-export default function ViewEvaluations({ linkTo }: IEvaluationProps) {
->>>>>>> d9d12de955ef7e8b00a6c8b22df18c6760ff0a7c
   const [evaluations, setEvaluations] = useState<any>([]);
   const history = useHistory();
   const { path } = useRouteMatch();
