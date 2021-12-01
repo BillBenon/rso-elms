@@ -12,14 +12,12 @@ import {
   getLocalStorageData,
   setLocalStorageData,
 } from '../../../../../../utils/getLocalStorageItem';
-import {
-  getDropDownOptions,
-  getDropDownStatusOptions,
-} from '../../../../../../utils/getOption';
+import { getDropDownStatusOptions } from '../../../../../../utils/getOption';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../../Molecules/input/InputMolecule';
+import LocationMolecule from '../../../../../Molecules/input/LocationMolecule';
 import TextAreaMolecule from '../../../../../Molecules/input/TextAreaMolecule';
 
 interface Personal<E> extends CommonStepProps, CommonFormProps<E> {}
@@ -51,7 +49,6 @@ function PersonalDetails<E>({
   const handleChange = (e: ValueType) => {
     setPersonalDetails({ ...personalDetails, [e.name]: e.value });
   };
-  const locations: [] = [];
 
   const moveForward = (e: any) => {
     e.preventDefault();
@@ -66,6 +63,7 @@ function PersonalDetails<E>({
     nextStep(true);
   };
   const user = usersStore.getUserById(fetched_id.toString());
+
   useEffect(() => {
     let personInfo = user.data?.data.data.person;
     personInfo &&
@@ -164,17 +162,12 @@ function PersonalDetails<E>({
             </InputMolecule>
           </div>
           <div>
-            <DropdownMolecule
+            <LocationMolecule
               placeholder="Select place of birth"
               name="place_of_birth"
-              defaultValue={getDropDownOptions({ inputs: locations }).find(
-                (location) =>
-                  location.value === personalDetails.place_of_birth.toString(),
-              )}
-              handleChange={handleChange}
-              options={[]}>
-              Place of birth
-            </DropdownMolecule>
+              handleChange={handleChange}>
+              Place of residence
+            </LocationMolecule>
             <TextAreaMolecule
               width="72 md:w-80"
               name="place_of_birth_description"
@@ -182,17 +175,13 @@ function PersonalDetails<E>({
               handleChange={handleChange}>
               Place of birth description (optional)
             </TextAreaMolecule>
-            <DropdownMolecule
+
+            <LocationMolecule
               placeholder="Select place of residence"
               name="residence_location_id"
-              defaultValue={getDropDownOptions({ inputs: locations }).find(
-                (location) =>
-                  location.value === personalDetails.residence_location_id.toString(),
-              )}
-              handleChange={handleChange}
-              options={[]}>
+              handleChange={handleChange}>
               Place of residence
-            </DropdownMolecule>
+            </LocationMolecule>
             <TextAreaMolecule
               width="72 md:w-80"
               name="place_of_residence"

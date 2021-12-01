@@ -48,9 +48,8 @@ export default function Sidebar() {
     ];
 
     const studentLinks: linkProps[] = [
-      { title: 'Dashboard', to: '/dashboard/student', icon: 'dashboard', fill: false },
+      { title: 'Module', to: '/dashboard/student', icon: 'module' },
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
-      // { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
     ];
 
     if (authUser?.user_type == UserType.SUPER_ADMIN)
