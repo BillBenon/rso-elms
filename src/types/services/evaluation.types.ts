@@ -104,7 +104,6 @@ export interface IStudentEvaluations {
   undoneEvaluations: IEvaluationInfo[];
   unfinishedEvaluations: any[];
   ongoingEvaluations: any[];
-
 }
 
 export interface IEvaluationInfo {

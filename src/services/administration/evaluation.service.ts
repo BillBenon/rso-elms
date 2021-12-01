@@ -77,9 +77,9 @@ class EvaluationService {
   public async fetchEvaluationsByStudent(
     subject: string,
   ): Promise<AxiosResponse<Response<IStudentEvaluations[]>>> {
-    const data =  await evaluationAxios.get(`/evaluations/getEvaluationsBySubject/${subject}/studentNarrower`);
-    console.log(data);
-    return data;
+    return await evaluationAxios.get(
+      `/evaluations/getEvaluationsBySubject/${subject}/studentNarrower`,
+    );
   }
 
   public async getEvaluationById(
