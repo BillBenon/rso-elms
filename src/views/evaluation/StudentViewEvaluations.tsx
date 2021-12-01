@@ -120,8 +120,12 @@ export default function StudentViewEvaluations({
                   evaluations?.map((info: CommonCardDataType) => (
                     <CommonCardMolecule
                       key={info.id}
-                      //@ts-ignore
-                      handleClick={() => handleClick(info.studentEvaluationId + '')}
+                      handleClick={() =>
+                        handleClick(
+                          //@ts-ignore
+                          isCompleted ? info.studentEvaluationId + '' : info.id + '',
+                        )
+                      }
                       data={info}
                     />
                   ))

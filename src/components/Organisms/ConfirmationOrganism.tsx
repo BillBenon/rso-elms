@@ -31,7 +31,7 @@ export default function ConfirmationOrganism({
     authUser?.id + '',
   ).data?.data.data;
 
-  const { mutateAsync, isLoading } = evaluationStore.studentEvaluationStart();
+  const { mutate, isLoading } = evaluationStore.studentEvaluationStart();
 
   function goToNext(id: string) {
     history.push(`/dashboard/evaluations/student-evaluation/${id}`);
@@ -48,7 +48,9 @@ export default function ConfirmationOrganism({
       setLocalStorageData('studentEvaluationId', studentEval);
       goToNext(studentEvaluationStart.evaluation_id);
     } else {
-      mutateAsync(studentEvaluationStart, {
+      console.log(studentEvaluationStart);
+
+      mutate(studentEvaluationStart, {
         onSuccess: (studentInfo) => {
           setLocalStorageData('studentEvaluationId', studentInfo.data.data.id);
           toast.success('Generated evaluation code', { duration: 5000 });
