@@ -12,7 +12,10 @@ import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvalua
 import { authenticatorStore } from '../../store/administration';
 import { evaluationStore } from '../../store/administration/evaluation.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
-import { setLocalStorageData } from '../../utils/getLocalStorageItem';
+import {
+  getLocalStorageData,
+  setLocalStorageData,
+} from '../../utils/getLocalStorageItem';
 import { advancedTypeChecker } from '../../utils/getOption';
 import EvaluationContent from './EvaluationContent';
 
@@ -32,7 +35,9 @@ export default function InstructorViewEvaluations() {
   ];
 
   function goToNewEvaluation() {
-    setLocalStorageData('currentStep', 0);
+    if (!getLocalStorageData('currentStep')) {
+      setLocalStorageData('currentStep', 0);
+    }
     history.push(`${path}/new`);
   }
 

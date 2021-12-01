@@ -3,7 +3,10 @@ import { useLocation } from 'react-router';
 
 import { evaluationStore } from '../../../../store/administration/evaluation.store';
 import { Link as LinkList } from '../../../../types';
-import { setLocalStorageData } from '../../../../utils/getLocalStorageItem';
+import {
+  getLocalStorageData,
+  setLocalStorageData,
+} from '../../../../utils/getLocalStorageItem';
 import Heading from '../../../Atoms/Text/Heading';
 import BreadCrumb from '../../../Molecules/BreadCrumb';
 import Stepper from '../../../Molecules/Stepper/Stepper';
@@ -18,7 +21,7 @@ export default function NewEvaluation() {
     { to: 'new', title: 'new evaluation' },
   ];
 
-  const [currentStep, setCurrentStep] = useState(1);
+  const [currentStep, setCurrentStep] = useState(getLocalStorageData('currentStep'));
   const { search } = useLocation();
   const [evaluationId] = useState(new URLSearchParams(search).get('evaluation'));
 
