@@ -47,6 +47,7 @@ export default function EvaluationCategories({
             Completed evaluations
           </Heading>
           <StudentViewEvaluations
+            isCompleted={true}
             subjecEvaluations={subjecEvaluations?.finishedEvaluations || []}
           />
         </div>

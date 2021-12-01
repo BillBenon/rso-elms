@@ -103,6 +103,12 @@ export interface IEvaluationCreate {
   total_mark: number;
 }
 
+export interface IStudentEvaluations {
+  undoneEvaluations: IEvaluationInfo[];
+  unfinishedEvaluations: any[];
+  ongoingEvaluations: any[];
+}
+
 export interface IEvaluationInfo {
   id: string;
   name: string;

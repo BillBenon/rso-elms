@@ -10,6 +10,7 @@ import {
   IEvaluationInfoCollected,
   IEvaluationQuestionsInfo,
   IStudentAnswer,
+  IStudentEvaluations,
   IStudentEvaluationStart,
   IStudentEvaluationStartInfo,
 } from '../../types/services/evaluation.types';
@@ -68,6 +69,14 @@ class EvaluationService {
   public async fetchEvaluationsCollectionBySubject(
     subject: string,
   ): Promise<AxiosResponse<Response<IEvaluationInfoCollected>>> {
+    return await evaluationAxios.get(
+      `/evaluations/getEvaluationsBySubject/${subject}/studentNarrower`,
+    );
+  }
+
+  public async fetchEvaluationsByStudent(
+    subject: string,
+  ): Promise<AxiosResponse<Response<IStudentEvaluations[]>>> {
     return await evaluationAxios.get(
       `/evaluations/getEvaluationsBySubject/${subject}/studentNarrower`,
     );

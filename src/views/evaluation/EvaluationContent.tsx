@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
@@ -65,8 +66,8 @@ export default function EvaluationContent() {
     },
   ];
 
-  const studentEvaluations =
-    markingStore.getEvaluationStudentEvaluations(id).data?.data.data || [];
+  const { data, isSuccess, isLoading, isError } =
+    markingStore.getEvaluationStudentEvaluations(id);
 
   function publishEvaluationResults() {
     mutate(
@@ -87,8 +88,8 @@ export default function EvaluationContent() {
   useEffect(() => {
     let formattedSubs: any = [];
 
-    if (studentEvaluations) {
-      const filteredInfo = studentEvaluations.map((submission: any) =>
+    if (isSuccess && data?.data.data) {
+      const filteredInfo = data?.data.data.map((submission: any) =>
         pick(submission, ['id', 'code', 'markingStatus', 'obtainedMark', 'totalMark']),
       );
 
@@ -103,7 +104,7 @@ export default function EvaluationContent() {
         formattedSubs.push(filteredData);
       });
 
-      studentEvaluations && setSubmissions(formattedSubs);
+      data?.data.data && setSubmissions(formattedSubs);
     }
   }, []);
 
@@ -138,8 +139,17 @@ export default function EvaluationContent() {
               path={`${path}/submissions`}
               render={() => (
                 <>
-                  {submissions.length > 0 ? (
-                    <>
+                  {isLoading && submissions.length === 0 && <Loader />}
+                  {isSuccess && submissions.length === 0 ? (
+                    <NoDataAvailable
+                      icon="evaluation"
+                      buttonLabel="Go back"
+                      title={'No submissions has been made so far!'}
+                      handleClick={() => history.push(`/dashboard/evaluations/${id}`)}
+                      description="And the web just isnt the same without you. Lets get you back online!"
+                    />
+                  ) : isSuccess && submissions.length > 0 ? (
+                    <div>
                       <div className="w-full flex justify-end mb-4">
                         <Button onClick={publishEvaluationResults}>
                           Publish all results
@@ -152,16 +162,16 @@ export default function EvaluationContent() {
                         uniqueCol={'id'}
                         actions={actions}
                       />
-                    </>
-                  ) : (
+                    </div>
+                  ) : isError ? (
                     <NoDataAvailable
                       icon="evaluation"
-                      buttonLabel="Go back"
-                      title={'No submissions has been made so far!'}
-                      handleClick={() => history.push(`/dashboard/evaluations/${id}`)}
+                      buttonLabel="Create Evaluation"
+                      title={'No evaluations available'}
+                      handleClick={() => history.push(`${path}/new`)}
                       description="And the web just isnt the same without you. Lets get you back online!"
                     />
-                  )}
+                  ) : null}
                 </>
               )}
             />
