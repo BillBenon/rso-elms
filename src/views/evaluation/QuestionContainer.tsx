@@ -57,21 +57,21 @@ IQuestionContainerProps) {
     setAnswer((answer) => ({ ...answer, [name]: value }));
   }
 
-  const { mutate, error } = evaluationStore.addQuestionAnswer();
+  const { mutate } = evaluationStore.addQuestionAnswer();
   const { mutateAsync } = evaluationStore.submitEvaluation();
 
   function submitEvaluation(e: FormEvent) {
     e.preventDefault();
     mutateAsync(answer.studentEvaluation, {
       onSuccess: () => {
-        toast.success('Evaluation submitted', { duration: 5000 });
+        // toast.success('Evaluation submitted', { duration: 5000 });
         localStorage.removeItem('studentEvaluationId');
 
         history.push('/dashboard/student');
       },
-      onError: () => {
-        toast.error(error + '');
-      },
+      // onError: () => {
+      //   toast.error(error + '');
+      // },
     });
   }
 
