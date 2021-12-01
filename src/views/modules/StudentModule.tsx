@@ -9,9 +9,9 @@ import {
   getStudentShipByUserId,
 } from '../../store/administration/intake-program.store';
 import { PromotionStatus } from '../../types/services/intake-program.types';
-import Modules from '../modules';
+import Modules from '.';
 
-function StudentDashboard() {
+function StudentModule() {
   const authUser = authenticatorStore.authUser().data?.data.data;
 
   const getStudent = getStudentShipByUserId(authUser?.id + '' || '', !!authUser?.id).data
@@ -72,4 +72,4 @@ function StudentDashboard() {
   );
 }
 
-export default StudentDashboard;
+export default StudentModule;
