@@ -125,7 +125,7 @@ function DateMolecule({
   };
 
   return (
-    <div className={`flex flex-col gap-2 pb-2 w-${width || 'full md:w80'}`}>
+    <div className={`flex flex-col gap-2 pb-3 w-${width || 'full md:w80'}`}>
       <ILabel size="sm" weight="medium">
         {children}
       </ILabel>

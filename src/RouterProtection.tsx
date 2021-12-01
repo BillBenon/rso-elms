@@ -7,10 +7,6 @@ import { authenticatorStore } from './store/administration';
 import { UserInfo, UserType } from './types/services/user.types';
 import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';
-import CalendarView from './views/schedule/Calendar';
-import ScheduleHome from './views/schedule/ScheduleHome';
-import Events from './views/schedule/Events';
-import Venues from './views/schedule/Venues';
 import Divisions from './views/divisions/Divisions';
 import EvaluationTest from './views/evaluation/EvaluationTest';
 import ViewEvaluations from './views/evaluation/ViewEvaluations';
@@ -21,8 +17,13 @@ import Levels from './views/levels/Levels';
 import Modules from './views/modules';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicProgram from './views/programs/AcademicPrograms';
+import Ranks from './views/ranks/Ranks';
 import Roles from './views/roles/Roles';
 import ViewRole from './views/roles/ViewRole';
+import CalendarView from './views/schedule/Calendar';
+import Events from './views/schedule/Events';
+import ScheduleHome from './views/schedule/ScheduleHome';
+import Venues from './views/schedule/Venues';
 import Subjects from './views/subjects';
 import Users from './views/users/Users';
 
@@ -40,6 +41,7 @@ const RouterProtection = () => {
       <Route path="/dashboard/role/:id/view" component={ViewRole} />
       <Route path="/dashboard/academies" component={Academies} />
       <Route path="/dashboard/calendar" component={CalendarView} />
+      <Route path="/dashboard/ranks" component={Ranks} />
       <Route path="/dashboard/roles" component={Roles} />
       <Route path="/dashboard/users" component={Users} />
 

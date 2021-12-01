@@ -27,7 +27,7 @@ const adminstrationAxios = axios.create(administrationModuleConfig);
 const evaluationAxios = axios.create(evalutationModuleConfig);
 const timetableAxios = axios.create(timetableModuleConfig);
 
-const authIgnore: string[] = ['/'];
+const authIgnore: string[] = ['/', '/complete-profile'];
 
 const interceptAdminReq = (config: AxiosRequestConfig) => {
   const token = cookie.getCookie('jwt_info');

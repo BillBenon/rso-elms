@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-d
 
 import ExperienceDetails from './components/Organisms/forms/auth/signup/experience/ExperienceDetails';
 import MoreInfo from './components/Organisms/forms/auth/signup/more-details/MoreInfo';
-import OtherDetails from './components/Organisms/forms/auth/signup/more-details/OtherDetails';
+import NextOfKinDetails from './components/Organisms/forms/auth/signup/more-details/NextOfKinDetails';
+import OtherDetails from './components/Organisms/forms/auth/signup/personal/OtherDetails';
 import { MainLayout } from './layout/MainLayout';
 import Redirecting from './Redirecting';
 import RouterProtection from './RouterProtection';

@@ -6,11 +6,14 @@ import Heading from '../../../../../Atoms/Text/Heading';
 import InputMolecule from '../../../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../../../Molecules/input/RadioMolecule';
 
-interface NextOfKin<E> extends CommonStepProps, CommonFormProps<E> {}
+interface NextOfKin<E> extends CommonStepProps, CommonFormProps<E> {
+  skip?: () => void;
+}
 
 function NextOfKinDetails<E>({
   display_label,
   isVertical,
+  skip,
   prevStep,
   nextStep,
   onSubmit,
@@ -23,6 +26,9 @@ function NextOfKinDetails<E>({
     gender: 'male',
     relationship: '',
   });
+  const jump = () => {
+    skip && skip();
+  };
   const moveBack = () => {
     prevStep && prevStep();
   };
@@ -104,6 +110,15 @@ function NextOfKinDetails<E>({
               color="txt-secondary"
               onClick={() => moveBack()}>
               Back
+            </Button>
+          )}
+          {skip && (
+            <Button
+              styleType="text"
+              hoverStyle="no-underline"
+              color="txt-secondary"
+              onClick={() => jump()}>
+              Skip
             </Button>
           )}
           <Button type="submit">Next</Button>

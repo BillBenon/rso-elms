@@ -163,6 +163,7 @@ export type IconType =
   | 'paragraph'
   | 'police-logo'
   | 'program'
+  | 'rank'
   | 'redo'
   | 'reg-control'
   | 'right-arrow'
