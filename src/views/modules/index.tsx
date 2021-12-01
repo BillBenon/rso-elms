@@ -10,7 +10,9 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { CommonCardDataType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
+import NewModuleMaterial from '../module-material/NewModuleMaterial';
 import LessonPlan from '../subjects/LessonPlan';
+import SubjectDetails from '../subjects/SubjectDetails';
 import ModuleDetails from './ModuleDetails';
 
 export default function Modules({ level }: { level: string }) {
@@ -85,7 +87,22 @@ export default function Modules({ level }: { level: string }) {
               );
             }}
           />
-
+          {/* show module details */}
+          <Route
+            exact
+            path={`${path}/:id/add-material`}
+            render={() => {
+              return (
+                // <PopupMolecule
+                //   title="Add Module Materials"
+                //   open
+                //   onClose={handleClose}
+                //   closeOnClickOutSide={false}>
+                <NewModuleMaterial />
+                // </PopupMolecule>
+              );
+            }}
+          />
           {/* view lesson plan form  */}
           <Route
             path={`${path}/lesson-plan/:id`}
@@ -93,6 +110,9 @@ export default function Modules({ level }: { level: string }) {
               return <LessonPlan />;
             }}
           />
+
+          {/* show subject details */}
+          <Route path={`${path}/subjects/:subjectId`} component={SubjectDetails} />
           <Route
             path={`${path}/:id`}
             render={() => {
