@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Input from '../../components/Atoms/Input/Input';
@@ -8,9 +8,13 @@ import Heading from '../../components/Atoms/Text/Heading';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
 import { evaluationStore } from '../../store/administration/evaluation.store';
 import { ValueType } from '../../types';
-import { IStudentAnswer } from '../../types/services/evaluation.types';
+import {
+  IMultipleChoiceAnswers,
+  IStudentAnswer,
+} from '../../types/services/evaluation.types';
 import { getLocalStorageData } from '../../utils/getLocalStorageItem';
 import ContentSpan from './ContentSpan';
+import MultipleChoiceAnswer from './MultipleChoiceAnswer';
 
 interface IQuestionContainerProps {
   question: string;
@@ -18,7 +22,7 @@ interface IQuestionContainerProps {
   marks: number;
   isLast: boolean;
   index: number;
-  choices?: [];
+  choices?: IMultipleChoiceAnswers[];
   isMultipleChoice: boolean;
   previousAnswers: any[];
 }
@@ -30,7 +34,7 @@ export default function QuestionContainer({
   index,
   marks,
   previousAnswers,
-  // choices,
+  choices,
   isMultipleChoice,
 }: IQuestionContainerProps) {
   const { search } = useLocation();
@@ -40,12 +44,11 @@ export default function QuestionContainer({
     evaluation: new URLSearchParams(search).get('evaluation') || '',
     evaluationQuestion: '',
     markScored: 0,
-    multipleChoiceAnswer: '',
+    multiple_choice_answers: '',
     openAnswer: '',
     studentEvaluation: getLocalStorageData('studentEvaluationId'),
   };
 
-  const history = useHistory();
   const [answer, setAnswer] = useState<IStudentAnswer>(initialState);
   const [questionToSubmit, setQuestionToSubmit] = useState('');
 
@@ -53,7 +56,7 @@ export default function QuestionContainer({
     setAnswer((answer) => ({ ...answer, [name]: value }));
   }
 
-  const { mutateAsync, error } = evaluationStore.addQuestionAnswer();
+  const { mutate, error } = evaluationStore.addQuestionAnswer();
   const { mutateAsync: endEvaluation } = evaluationStore.submitEvaluation();
 
   function submitEvaluation() {
@@ -62,7 +65,7 @@ export default function QuestionContainer({
         toast.success('Evaluation submitted', { duration: 5000 });
         localStorage.removeItem('studentEvaluationId');
 
-        history.push('/dashboard/modules');
+        window.location.href = '/dashboard/student';
       },
       onError: () => {
         toast.error(error + '');
@@ -72,7 +75,7 @@ export default function QuestionContainer({
 
   function submitForm(previousValue?: string) {
     if (previousValue !== answer?.openAnswer) {
-      mutateAsync(answer, {
+      mutate(answer, {
         onSuccess: () => {
           toast.success('submitted');
           setQuestionToSubmit('');
@@ -85,12 +88,14 @@ export default function QuestionContainer({
   }
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (questionToSubmit) submitForm();
-    }, 30000);
-    return () => {
-      clearInterval(interval);
-    };
+    if (question !== '') {
+      const interval = setInterval(() => {
+        if (questionToSubmit) submitForm();
+      }, 30000);
+      return () => {
+        clearInterval(interval);
+      };
+    }
   }, [questionToSubmit]);
 
   return (
@@ -105,26 +110,28 @@ export default function QuestionContainer({
             {marks} marks
           </Heading>
         </div>
-        {isMultipleChoice && (
+        {/* {isMultipleChoice && (
           <div className="flex flex-col gap-4">
-            <div className="flex">
-              <div className="w-14 h-14 bg-lightblue text-primary-500 border-primary-500 border-2 border-r-0 rounded-tl-md rounded-bl-md right-rounded-md flex items-center justify-center">
-                A
-              </div>
-              <div className="w-80 h-14 bg-lightblue text-primary-500 border-primary-500 border-2 rounded-tr-md rounded-br-md flex items-center px-4">
-                This is the first answer
-              </div>
-            </div>
-            <div className="flex">
+            {choices?.length
+              ? choices.map((choiceAnswer) => (
+                  <MultipleChoiceAnswer
+                    key={choiceAnswer.id}
+                    answer_content={choiceAnswer.answerContent}
+                    correct={choiceAnswer.correct}
+                  />
+                ))
+              : null} */}
+
+        {/* <div className="flex">
               <div className="w-14 h-14 border-primary-500 border-2 border-r-0 rounded-tl-md rounded-bl-md right-rounded-md flex items-center justify-center">
                 B
               </div>
               <div className="w-80 h-14 border-primary-500 border-2 rounded-tr-md rounded-br-md flex items-center px-4">
                 This is the second answer.
               </div>
-            </div>
-          </div>
-        )}
+            </div> */}
+        {/* </div> */}
+        {/* )} */}
         <Input value={id} name="evaluationQuestion" handleChange={handleChange} hidden />
         <TextAreaMolecule
           style={{ height: '7rem' }}
@@ -143,9 +150,7 @@ export default function QuestionContainer({
       </div>
       {isLast ? (
         <div className="py-7">
-          <Button type="submit" onClick={submitEvaluation}>
-            End evaluation
-          </Button>
+          <Button onClick={submitEvaluation}>End evaluation</Button>
         </div>
       ) : null}
     </form>

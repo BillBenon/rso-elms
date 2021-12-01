@@ -52,11 +52,7 @@ export default function StudentAnswersMarking() {
   ];
 
   const { mutate } = markingStore.finishMarking();
-  function createCreateNewCorrection(
-    answer_id: string,
-    points: number,
-    marked: boolean,
-  ) {
+  function createCreateNewCorrection(answer_id: string, points: number, marked: boolean) {
     setCorrection([
       ...correction,
       { answerId: answer_id, markScored: points, marked: marked || false },

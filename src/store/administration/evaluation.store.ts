@@ -49,6 +49,12 @@ class EvaluationStore {
     );
   }
 
+  getEvaluationsByStudent(subject: string) {
+    return useQuery(['evaluations/studentNarrower', subject], () =>
+      evaluationService.fetchEvaluationsByStudent(subject),
+    );
+  }
+
   getEvaluationById(id: string) {
     return useQuery(['evaluation', id], () => evaluationService.getEvaluationById(id), {
       enabled: !!id,
