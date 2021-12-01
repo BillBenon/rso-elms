@@ -6,6 +6,7 @@ import { UserTypes } from '../types/services/user.types';
 import { GenericStatus } from './../types/services/common.types';
 import { EnrollmentStatus } from './../types/services/enrollment.types';
 import { ModuleParticipation } from './../types/services/intake-program.types';
+import { MaterialType } from './../types/services/module-material.types';
 import { UserInfo } from './../types/services/user.types';
 
 interface GetDropDownOptionsProps {
@@ -74,11 +75,12 @@ export function advancedTypeChecker(
     | IEvaluationStatus
     | IntakeModuleStatus
     | ModuleParticipation
+    | MaterialType
     | EnrollmentStatus,
 ): 'success' | 'warning' | 'error' | 'info' {
   let successStatus = ['active', 'completed', 'opened', 'started'];
   let errorStatus = ['inactive', 'closed', 'voided', 'suspended'];
-  let infoStatus = ['ongoing'];
+  let infoStatus = ['ongoing', 'notes', 'exams', 'workshop', 'seminaries'];
 
   if (successStatus.includes(status.toString().toLowerCase())) return 'success';
   else if (errorStatus.includes(status.toString().toLowerCase())) return 'error';

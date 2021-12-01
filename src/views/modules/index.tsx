@@ -11,6 +11,7 @@ import intakeProgramStore from '../../store/administration/intake-program.store'
 import { CommonCardDataType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import LessonPlan from '../subjects/LessonPlan';
+import SubjectDetails from '../subjects/SubjectDetails';
 import ModuleDetails from './ModuleDetails';
 
 export default function Modules({ level }: { level: string }) {
@@ -85,7 +86,6 @@ export default function Modules({ level }: { level: string }) {
               );
             }}
           />
-
           {/* view lesson plan form  */}
           <Route
             path={`${path}/lesson-plan/:id`}
@@ -93,6 +93,9 @@ export default function Modules({ level }: { level: string }) {
               return <LessonPlan />;
             }}
           />
+
+          {/* show subject details */}
+          <Route path={`${path}/subjects/:subjectId`} component={SubjectDetails} />
           <Route
             path={`${path}/:id`}
             render={() => {

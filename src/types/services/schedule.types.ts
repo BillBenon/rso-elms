@@ -128,6 +128,17 @@ export interface ICreateClassTimeTable {
   intakeLevelClass: string;
 }
 
+export interface IUpdateClassTimetable {
+  id: string;
+  courseModule: string;
+  dayOfWeek: daysOfWeek;
+  endHour: string;
+  instructor: string;
+  intakeLevelClass: string;
+  startHour: string;
+  venue: string;
+}
+
 interface courseModule extends Table {
   name: string;
 }
