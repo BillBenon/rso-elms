@@ -6,6 +6,7 @@ import {
   MaterialInfo,
   ModuleMaterial,
   ModuleMaterialAttachment,
+  ModuleMaterialAttachmentInfo,
   ModuleMaterialInfo,
 } from './../../types/services/module-material.types';
 
@@ -21,17 +22,23 @@ class ModuleMaterialService {
   public async addFile(file: FormData): Promise<AxiosResponse<Response<MaterialInfo>>> {
     return await adminstrationAxios.post('/attachments/addFile', file);
   }
+  public async downloadFile(
+    attachmentId: string,
+  ): Promise<AxiosResponse<Response<MaterialInfo>>> {
+    return await adminstrationAxios.post(`/attachments/download/${attachmentId}`);
+  }
+
   public async addModuleMaterialAttachment(
     moduleMaterial: ModuleMaterialAttachment,
-  ): Promise<AxiosResponse<Response<ModuleMaterialAttachment>>> {
+  ): Promise<AxiosResponse<Response<ModuleMaterialAttachmentInfo>>> {
     return await adminstrationAxios.post(
       '/learningMaterials/addLearningMaterialAttachment',
       moduleMaterial,
     );
   }
-  public async getModuleMaterialAttachment(
+  public async getModuleMaterialAttachments(
     materialId: string,
-  ): Promise<AxiosResponse<Response<ModuleMaterialInfo[]>>> {
+  ): Promise<AxiosResponse<Response<ModuleMaterialAttachmentInfo[]>>> {
     return await adminstrationAxios.get(
       `learningMaterials/getLearningMaterialsAttachementsByLearningMaterialId/${materialId}`,
     );

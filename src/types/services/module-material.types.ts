@@ -23,6 +23,10 @@ export interface ModuleMaterialAttachment {
   learning_material_id: number;
 }
 
+export interface ModuleMaterialAttachmentInfo extends Table, ModuleMaterialAttachment {
+  learning_material: ModuleMaterial;
+}
+
 export enum MaterialType {
   NOTES = 'NOTES',
   EXAMS = 'EXAMS',

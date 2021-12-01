@@ -182,7 +182,11 @@ export type IconType =
   | 'tick'
   | 'undo'
   | 'loader'
-  | 'user';
+  | 'user'
+  | 'excel'
+  | 'pdf'
+  | 'word'
+  | 'png';
 
 export interface FormPropType {
   onSubmit?: <E>(_e: FormEvent<E>) => void;
