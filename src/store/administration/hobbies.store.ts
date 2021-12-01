@@ -19,7 +19,7 @@ class HobbyStore {
     return useMutation(hobbyService.UpdateHobby);
   }
 
-  getUserHobby(id: ((radix?: number) => string) | (() => string)) {
+  getUserHobby(id: string) {
     return useQuery(['person/hobby/id', id], () => hobbyService.getUserHobbies(id));
   }
 }

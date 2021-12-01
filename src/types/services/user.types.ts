@@ -141,7 +141,6 @@ export interface UpdateUserInfo {
   user_type: UserType;
   send_communication_msg: SendCommunicationMsg;
   username: string;
-  send_communication_msg: SendCommunicationMsg;
 }
 
 export interface CreateUserInfo {
