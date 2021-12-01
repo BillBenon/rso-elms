@@ -54,11 +54,12 @@ function PersonalDetails<E>({
     residence_location_id: 0,
     place_of_residence: '',
   });
-  const [locationLevel, setLocationLevel] = useState<number>(1);
+  const [residenceLocationLevel, setResidenceLocationLevel] = useState<number>(1);
   const [location, setLocation] = useState<LocationInfo[]>();
+  const [choseResidenceLocations, setChoseResidenceLocations] = useState<string>('');
+  const levels = ['country', 'province', 'district', 'sector', 'cell', 'village'];
 
   const { data: country } = locationStore.getLocationsByLevel('1');
-  console.log(personalDetails);
   const { data: dbLocations, refetch: refetchDbLocations } = locationStore.findByParent(
     personalDetails.residence_location_id
       ? personalDetails.residence_location_id.toString()
@@ -71,10 +72,13 @@ function PersonalDetails<E>({
 
   const handleLocationChange = (e: ValueType) => {
     setPersonalDetails({ ...personalDetails, [e.name]: e.value });
+    setChoseResidenceLocations(
+      (old) => `${old} ${old.length > 0 ? '-> ' : ''} ${e.label} `,
+    );
 
     // refetchDbLocations();
 
-    setLocationLevel((old) => old + 1);
+    setResidenceLocationLevel((old) => old + 1);
 
     console.log('input', e);
   };
@@ -94,6 +98,13 @@ function PersonalDetails<E>({
     nextStep(true);
   };
   const user = usersStore.getUserById(fetched_id.toString());
+
+  function resetResidenceLocation() {
+    setResidenceLocationLevel(0);
+    country?.data.data && setLocation(country?.data.data);
+    setChoseResidenceLocations('');
+  }
+
   useEffect(() => {
     let personInfo = user.data?.data.data.person;
     personInfo &&
@@ -218,19 +229,43 @@ function PersonalDetails<E>({
               handleChange={handleChange}>
               Place of birth description (optional)
             </TextAreaMolecule>
-            <DropdownMolecule
-              placeholder="Select place of residence"
-              name="residence_location_id"
-              defaultValue={getDropDownOptions({ inputs: location! }).find(
-                (location) =>
-                  location.value ===
-                  (personalDetails.residence_location_id &&
-                    personalDetails.residence_location_id.toString()),
-              )}
-              handleChange={handleLocationChange}
-              options={getDropDownOptions({ inputs: location! })}>
-              Place of residence
-            </DropdownMolecule>
+            <div>
+              <DropdownMolecule
+                placeholder="Select place of residence"
+                name="residence_location_id"
+                defaultValue={getDropDownOptions({ inputs: location! }).find(
+                  (location) =>
+                    location.value ===
+                    (personalDetails.residence_location_id &&
+                      personalDetails.residence_location_id.toString()),
+                )}
+                handleChange={handleLocationChange}
+                options={getDropDownOptions({ inputs: location! })}>
+                Place of residence
+                {' ' + levels[residenceLocationLevel] && (
+                  <span className="text-error-500">
+                    ( select {levels[residenceLocationLevel - 1]} )
+                  </span>
+                )}
+              </DropdownMolecule>
+              <div className="flex items-center mb-4">
+                <p className="text-sm text-success-500 ">{choseResidenceLocations}</p>
+                {choseResidenceLocations.length > 0 && (
+                  <button
+                    className="ml-4 hover:bg-lightblue"
+                    onClick={resetResidenceLocation}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 24 24"
+                      width="15"
+                      height="15">
+                      <path fill="none" d="M0 0h24v24H0z" />
+                      <path d="M5.463 4.433A9.961 9.961 0 0 1 12 2c5.523 0 10 4.477 10 10 0 2.136-.67 4.116-1.81 5.74L17 12h3A8 8 0 0 0 6.46 6.228l-.997-1.795zm13.074 15.134A9.961 9.961 0 0 1 12 22C6.477 22 2 17.523 2 12c0-2.136.67-4.116 1.81-5.74L7 12H4a8 8 0 0 0 13.54 5.772l.997 1.795z" />
+                    </svg>
+                  </button>
+                )}
+              </div>
+            </div>
             <TextAreaMolecule
               width="72 md:w-80"
               name="place_of_residence"
