@@ -9,6 +9,9 @@ class ModuleMaterialStore {
   addFile() {
     return useMutation(moduleMaterialService.addFile);
   }
+  downloadFile() {
+    return useMutation(moduleMaterialService.downloadFile);
+  }
   addModuleMaterialAttachment() {
     return useMutation(moduleMaterialService.addModuleMaterialAttachment);
   }
@@ -17,9 +20,9 @@ class ModuleMaterialStore {
       moduleMaterialService.getModuleMaterial(id),
     );
   }
-  getModuleMaterialAttachment(materialId: string) {
+  getModuleMaterialAttachments(materialId: string) {
     return useQuery(['material/attachment', materialId], () =>
-      moduleMaterialService.getModuleMaterialAttachment(materialId),
+      moduleMaterialService.getModuleMaterialAttachments(materialId),
     );
   }
   getModuleMaterialByModule(moduleId: string) {

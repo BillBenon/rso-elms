@@ -12,10 +12,7 @@ import {
   getLocalStorageData,
   setLocalStorageData,
 } from '../../../../../../utils/getLocalStorageItem';
-import {
-  getDropDownOptions,
-  getDropDownStatusOptions,
-} from '../../../../../../utils/getOption';
+import { getDropDownStatusOptions } from '../../../../../../utils/getOption';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
@@ -52,8 +49,6 @@ function PersonalDetails<E>({
   const handleChange = (e: ValueType) => {
     setPersonalDetails({ ...personalDetails, [e.name]: e.value });
   };
-
-  const locations: [] = [];
 
   const moveForward = (e: any) => {
     e.preventDefault();
