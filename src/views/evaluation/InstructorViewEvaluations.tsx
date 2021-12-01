@@ -33,11 +33,7 @@ interface IEvaluationProps {
   linkTo: string;
 }
 
-export default function ViewEvaluations({
-  subjecEvaluations = [],
-  linkTo,
-  isUndone = false,
-}: IEvaluationProps) {
+export default function ViewEvaluations({ linkTo }: IEvaluationProps) {
   const [evaluations, setEvaluations] = useState<any>([]);
   const [confirm, showConfirmation] = useState(false);
   const history = useHistory();
@@ -95,78 +91,22 @@ export default function ViewEvaluations({
   useEffect(() => {
     setLocalStorageData('currentStep', 0);
 
-    function isSubjectEvaludations(
-      ev: IEvaluationInfo[] | IEvaluationInfoSingleEvaluation[],
-    ) {
-      return typeof (ev[0] as IEvaluationInfoSingleEvaluation).evaluation === 'undefined';
-    }
-
-    if (subjecEvaluations.length > 0) {
-      if (!isSubjectEvaludations(subjecEvaluations)) {
-        if (subjecEvaluations.length > 0 && !isUndone) {
-          let formattedEvals: CommonCardDataType[] = [];
-
-          (subjecEvaluations as IEvaluationInfoSingleEvaluation[]).forEach(
-            (singleEvaluation) => {
-              let formattedEvaluations = {
-                id: singleEvaluation.evaluation.id,
-                title: singleEvaluation.evaluation.name,
-                code: singleEvaluation.code,
-                description: `${singleEvaluation.evaluation.total_mark} marks`,
-                status: {
-                  type: advancedTypeChecker(
-                    singleEvaluation.evaluation.evaluation_status,
-                  ),
-                  text: singleEvaluation.evaluation.evaluation_status,
-                },
-              };
-              formattedEvals.push(formattedEvaluations);
-            },
-          );
-          setEvaluations(formattedEvals);
-        }
-      } else {
-        if (isUndone || subjecEvaluations.length === 0) {
-          let formattedEvals: CommonCardDataType[] = [];
-
-          if (isSubjectEvaludations(subjecEvaluations)) {
-            (subjecEvaluations as IEvaluationInfo[]).forEach((evaluation) => {
-              let formattedEvaluations = {
-                id: evaluation.id,
-                title: evaluation.name,
-                code: evaluation.evaluation_type,
-                description: `${evaluation.total_mark} marks`,
-                status: {
-                  type: advancedTypeChecker(evaluation.evaluation_status),
-                  text: evaluation.evaluation_status,
-                },
-              };
-              formattedEvals.push(formattedEvaluations);
-            });
-          }
-          setEvaluations(formattedEvals);
-        }
-      }
-    }
-
-    if (!subjecEvaluations.length) {
-      let formattedEvals: CommonCardDataType[] = [];
-      data?.data.data.forEach((evaluation) => {
-        let formattedEvaluations = {
-          id: evaluation.id,
-          title: evaluation.name,
-          code: evaluation.evaluation_type,
-          description: `${evaluation.total_mark} marks`,
-          status: {
-            type: advancedTypeChecker(evaluation.evaluation_status),
-            text: evaluation.evaluation_status,
-          },
-        };
-        formattedEvals.push(formattedEvaluations);
-      });
-      setEvaluations(formattedEvals);
-    }
-  }, [data?.data.data, subjecEvaluations]);
+    let formattedEvals: CommonCardDataType[] = [];
+    data?.data.data.forEach((evaluation) => {
+      let formattedEvaluations = {
+        id: evaluation.id,
+        title: evaluation.name,
+        code: evaluation.evaluation_type,
+        description: `${evaluation.total_mark} marks`,
+        status: {
+          type: advancedTypeChecker(evaluation.evaluation_status),
+          text: evaluation.evaluation_status,
+        },
+      };
+      formattedEvals.push(formattedEvaluations);
+    });
+    setEvaluations(formattedEvals);
+  }, [data?.data.data]);
 
   return (
     <div>
