@@ -29,6 +29,13 @@ class ModuleMaterialService {
       moduleMaterial,
     );
   }
+  public async getModuleMaterialAttachment(
+    materialId: string,
+  ): Promise<AxiosResponse<Response<ModuleMaterialInfo[]>>> {
+    return await adminstrationAxios.get(
+      `learningMaterials/getLearningMaterialsAttachementsByLearningMaterialId/${materialId}`,
+    );
+  }
   public async getModuleMaterial(
     id: string,
   ): Promise<AxiosResponse<Response<ModuleMaterialInfo>>> {

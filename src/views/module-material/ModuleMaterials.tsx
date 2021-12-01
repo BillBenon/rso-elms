@@ -15,6 +15,7 @@ import { MaterialType } from '../../types/services/module-material.types';
 import { UserType } from '../../types/services/user.types';
 import NewModuleMaterial from './NewModuleMaterial';
 import NewModuleMaterialAttach from './NewModuleMaterialAttach';
+import ShowModuleMaterial from './ShowModuleMaterial';
 
 function ModuleMaterials() {
   const { id } = useParams<ParamType>();
@@ -95,6 +96,7 @@ function ModuleMaterials() {
                               }>
                               Add supporting files
                             </Button>
+                            <ShowModuleMaterial materialId={mat.id + ''} />
                           </Panel>
                         );
                       })}

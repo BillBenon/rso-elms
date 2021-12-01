@@ -17,6 +17,11 @@ class ModuleMaterialStore {
       moduleMaterialService.getModuleMaterial(id),
     );
   }
+  getModuleMaterialAttachment(materialId: string) {
+    return useQuery(['material/attachment', materialId], () =>
+      moduleMaterialService.getModuleMaterialAttachment(materialId),
+    );
+  }
   getModuleMaterialByModule(moduleId: string) {
     return useQuery(['material/moduleid', moduleId], () =>
       moduleMaterialService.getModuleMaterialByModule(moduleId),
