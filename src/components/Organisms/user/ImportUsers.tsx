@@ -1,14 +1,14 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
-import { queryClient } from '../../../plugins/react-query';
 
+import { queryClient } from '../../../plugins/react-query';
 import academyStore from '../../../store/administration/academy.store';
-import intakeProgramStore from '../../../store/administration/intake-program.store';
 import {
   getIntakesByAcademy,
   getProgramsByIntake,
 } from '../../../store/administration/intake.store';
+import intakeProgramStore from '../../../store/administration/intake-program.store';
 import usersStore from '../../../store/administration/users.store';
 import { SelectData, ValueType } from '../../../types';
 import { IImportUser, UserType } from '../../../types/services/user.types';
