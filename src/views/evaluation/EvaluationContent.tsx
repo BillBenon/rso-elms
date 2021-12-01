@@ -10,6 +10,7 @@ import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import { queryClient } from '../../plugins/react-query';
 import { evaluationStore } from '../../store/administration/evaluation.store';
 import { markingStore } from '../../store/administration/marking.store';
 import { ParamType } from '../../types';
@@ -114,6 +115,7 @@ export default function EvaluationContent() {
       {
         onSuccess: () => {
           toast.success('Availability status updated', { duration: 3000 });
+          queryClient.invalidateQueries(['evaluation']);
         },
         onError: (error: any) => {
           toast.error(error.response.data.message);

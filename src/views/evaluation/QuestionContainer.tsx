@@ -79,8 +79,6 @@ IQuestionContainerProps) {
     if (previousValue !== answer?.openAnswer) {
       mutate(answer, {
         onSuccess: () => {
-          console.log(answer);
-
           toast.success('submitted');
           setQuestionToSubmit('');
         },

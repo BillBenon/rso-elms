@@ -33,7 +33,7 @@ class EvaluationStore {
   }
 
   getEvaluations(academy: string, instructor: string) {
-    return useQuery('evaluations', () =>
+    return useQuery(['evaluationsByAcademyInstructor', instructor], () =>
       evaluationService.fetchEvaluationsByInstructorAndAcademy(academy, instructor),
     );
   }

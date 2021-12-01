@@ -25,7 +25,6 @@ export default function StudentReview() {
   const [currentRows, setCurrentRows] = useState(
     studentAnswers?.slice(indexOfFirstRow, indexOfLastRow),
   );
-
   const history = useHistory();
   function goBack(): void {
     history.push(`/dashboard/student`);
