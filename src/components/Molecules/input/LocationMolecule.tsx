@@ -23,6 +23,7 @@ export default function LocationMolecule({
   const levels = ['country', 'province', 'district', 'sector', 'cell', 'village'];
 
   const [locationId, setLocationId] = useState<string>('');
+  const [isFirstSelectionMade, setIsFirstSelectionMade] = useState(false);
 
   const { data: country, isFetching: isFetchingCountry } =
     locationStore.getLocationsByLevel('1');
@@ -30,6 +31,7 @@ export default function LocationMolecule({
     locationStore.findByParent(locationId ? locationId.toString() : '');
 
   const handleLocationChange = (e: ValueType) => {
+    setIsFirstSelectionMade(true);
     handleChange(e);
     setLocationId(e.value.toString());
     setChoseResidenceLocations(
@@ -59,6 +61,7 @@ export default function LocationMolecule({
     <div>
       <DropdownMolecule
         {...attrs}
+        hasError={isFirstSelectionMade && residenceLocationLevel < 7}
         placeholder={placeholder}
         name={name}
         defaultValue={getDropDownOptions({ inputs: location! }).find(
@@ -75,7 +78,7 @@ export default function LocationMolecule({
         )}
       </DropdownMolecule>
       <div className="flex items-center mb-4">
-        <p className="text-sm text-success-500 ">{choseResidenceLocations}</p>
+        <p className="text-sm text-primary-500 ">{choseResidenceLocations}</p>
         {choseResidenceLocations.length > 0 && (
           <button className="ml-4 hover:bg-lightblue" onClick={resetResidenceLocation}>
             <svg
