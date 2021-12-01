@@ -21,7 +21,6 @@ export default function EvaluationCategories({
           </Heading>
 
           <StudentViewEvaluations
-            usePopup
             isUndone
             subjecEvaluations={subjecEvaluations?.undoneEvaluations || []}
           />
@@ -34,8 +33,6 @@ export default function EvaluationCategories({
             Ongoing evaluations
           </Heading>
           <StudentViewEvaluations
-            usePopup
-            isOngoing
             subjecEvaluations={subjecEvaluations?.ongoingEvaluations || []}
           />
         </div>
@@ -47,7 +44,7 @@ export default function EvaluationCategories({
             Completed evaluations
           </Heading>
           <StudentViewEvaluations
-            isCompleted={true}
+            isCompleted
             subjecEvaluations={subjecEvaluations?.finishedEvaluations || []}
           />
         </div>

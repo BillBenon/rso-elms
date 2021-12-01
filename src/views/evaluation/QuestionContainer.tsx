@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Input from '../../components/Atoms/Input/Input';
 import Heading from '../../components/Atoms/Text/Heading';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
 import { evaluationStore } from '../../store/administration/evaluation.store';
-import { ValueType } from '../../types';
+import { ParamType, ValueType } from '../../types';
 import {
   IMultipleChoiceAnswers,
   IStudentAnswer,
 } from '../../types/services/evaluation.types';
 import { getLocalStorageData } from '../../utils/getLocalStorageItem';
 import ContentSpan from './ContentSpan';
-import MultipleChoiceAnswer from './MultipleChoiceAnswer';
+// import MultipleChoiceAnswer from './MultipleChoiceAnswer';
 
 interface IQuestionContainerProps {
   question: string;
@@ -34,15 +34,16 @@ export default function QuestionContainer({
   index,
   marks,
   previousAnswers,
-  choices,
-  isMultipleChoice,
-}: IQuestionContainerProps) {
-  const { search } = useLocation();
+}: // choices,
+// isMultipleChoice,
+IQuestionContainerProps) {
+  const history = useHistory();
+  const { id: evalId } = useParams<ParamType>();
 
   const initialState: IStudentAnswer = {
     answerAttachment: '',
-    evaluation: new URLSearchParams(search).get('evaluation') || '',
-    evaluationQuestion: '',
+    evaluation: evalId || '',
+    evaluationQuestion: id || '',
     markScored: 0,
     multiple_choice_answers: '',
     openAnswer: '',
@@ -57,15 +58,16 @@ export default function QuestionContainer({
   }
 
   const { mutate, error } = evaluationStore.addQuestionAnswer();
-  const { mutateAsync: endEvaluation } = evaluationStore.submitEvaluation();
+  const { mutateAsync } = evaluationStore.submitEvaluation();
 
-  function submitEvaluation() {
-    endEvaluation(answer.studentEvaluation, {
+  function submitEvaluation(e: FormEvent) {
+    e.preventDefault();
+    mutateAsync(answer.studentEvaluation, {
       onSuccess: () => {
         toast.success('Evaluation submitted', { duration: 5000 });
         localStorage.removeItem('studentEvaluationId');
 
-        window.location.href = '/dashboard/student';
+        history.push('/dashboard/student');
       },
       onError: () => {
         toast.error(error + '');
@@ -77,6 +79,8 @@ export default function QuestionContainer({
     if (previousValue !== answer?.openAnswer) {
       mutate(answer, {
         onSuccess: () => {
+          console.log(answer);
+
           toast.success('submitted');
           setQuestionToSubmit('');
         },
@@ -99,7 +103,7 @@ export default function QuestionContainer({
   }, [questionToSubmit]);
 
   return (
-    <form>
+    <form onSubmit={submitEvaluation}>
       <div className="bg-main px-16 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5">
         <div className="mt-7 flex justify-between">
           <ContentSpan title={`Question ${index + 1}`} className="gap-3">
@@ -150,7 +154,7 @@ export default function QuestionContainer({
       </div>
       {isLast ? (
         <div className="py-7">
-          <Button onClick={submitEvaluation}>End evaluation</Button>
+          <Button type="submit">End evaluation</Button>
         </div>
       ) : null}
     </form>

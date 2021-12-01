@@ -88,6 +88,15 @@ class EvaluationService {
     return await evaluationAxios.get(`/evaluations/getById/${id}`);
   }
 
+  public async getStudentEvaluationByStudentIdAndEvaluationId(
+    evaluationId: string,
+    studentId: string,
+  ): Promise<AxiosResponse<Response<any>>> {
+    return await evaluationAxios.get(
+      `/studentEvaluations/studentEvaluation/evaluation/${evaluationId}/student/${studentId}`,
+    );
+  }
+
   public async getEvaluationQuestions(
     id: string,
   ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>> {
