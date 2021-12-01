@@ -27,7 +27,7 @@ export default function StudentReview() {
   );
   const history = useHistory();
   function goBack(): void {
-    history.push(`/dashboard/evaluations`);
+    history.push(`/dashboard/student`);
   }
   useEffect(() => {
     setCurrentRows(studentAnswers?.slice(indexOfFirstRow, indexOfLastRow));

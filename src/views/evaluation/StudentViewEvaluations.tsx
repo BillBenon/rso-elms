@@ -97,52 +97,27 @@ export default function StudentViewEvaluations({
       return typeof (ev[0] as IEvaluationInfoSingleEvaluation).evaluation === 'undefined';
     }
 
-    if (subjecEvaluations.length > 0) {
-      if (!isSubjectEvaludations(subjecEvaluations)) {
-        if (subjecEvaluations.length > 0 && !isUndone) {
-          let formattedEvals: CommonCardDataType[] = [];
+    if (!isSubjectEvaludations(subjecEvaluations)) {
+      if (subjecEvaluations.length > 0 && !isUndone) {
+        let formattedEvals: CommonCardDataType[] = [];
 
-          (subjecEvaluations as IEvaluationInfoSingleEvaluation[]).forEach(
-            (singleEvaluation) => {
-              let formattedEvaluations = {
-                studentEvaluationId: singleEvaluation.id,
-                id: singleEvaluation.evaluation.id,
-                title: singleEvaluation.evaluation.name,
-                code: singleEvaluation.code,
-                description: `${singleEvaluation.evaluation.total_mark} marks`,
-                status: {
-                  type: advancedTypeChecker(
-                    singleEvaluation.evaluation.evaluation_status,
-                  ),
-                  text: singleEvaluation.evaluation.evaluation_status,
-                },
-              };
-              formattedEvals.push(formattedEvaluations);
-            },
-          );
-          setEvaluations(formattedEvals);
-        }
-      } else {
-        if (isUndone || subjecEvaluations.length === 0) {
-          let formattedEvals: CommonCardDataType[] = [];
-
-          if (isSubjectEvaludations(subjecEvaluations)) {
-            (subjecEvaluations as IEvaluationInfo[]).forEach((evaluation) => {
-              let formattedEvaluations = {
-                id: evaluation.id,
-                title: evaluation.name,
-                code: evaluation.evaluation_type,
-                description: `${evaluation.total_mark} marks`,
-                status: {
-                  type: advancedTypeChecker(evaluation.evaluation_status),
-                  text: evaluation.evaluation_status,
-                },
-              };
-              formattedEvals.push(formattedEvaluations);
-            });
-          }
-          setEvaluations(formattedEvals);
-        }
+        (subjecEvaluations as IEvaluationInfoSingleEvaluation[]).forEach(
+          (singleEvaluation) => {
+            let formattedEvaluations = {
+              studentEvaluationId: singleEvaluation.id,
+              id: singleEvaluation.evaluation.id,
+              title: singleEvaluation.evaluation.name,
+              code: singleEvaluation.code,
+              description: `${singleEvaluation.evaluation.total_mark} marks`,
+              status: {
+                type: advancedTypeChecker(singleEvaluation.evaluation.evaluation_status),
+                text: singleEvaluation.evaluation.evaluation_status,
+              },
+            };
+            formattedEvals.push(formattedEvaluations);
+          },
+        );
+        setEvaluations(formattedEvals);
       }
     }
   }, [subjecEvaluations]);
