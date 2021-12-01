@@ -1,3 +1,4 @@
+/*@ts-ignore*/
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
@@ -14,28 +15,35 @@ import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvalua
 import { authenticatorStore } from '../../store/administration';
 import { evaluationStore } from '../../store/administration/evaluation.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
-import { IStudentEvaluationStart } from '../../types/services/evaluation.types';
+import {
+  IEvaluationInfo,
+  IEvaluationInfoSingleEvaluation,
+  IStudentEvaluationStart,
+} from '../../types/services/evaluation.types';
 import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import { advancedTypeChecker } from '../../utils/getOption';
 import EvaluationContent from './EvaluationContent';
 
 interface IEvaluationProps {
-  subjectId: string;
+  subjecEvaluations: IEvaluationInfoSingleEvaluation[] | IEvaluationInfo[];
+  isUndone?: boolean;
   linkTo: string;
 }
 
-export default function InstructorViewEvaluations({ subjectId, linkTo }: IEvaluationProps) {
+export default function ViewEvaluations({
+  subjecEvaluations = [],
+  linkTo,
+  isUndone = false,
+}: IEvaluationProps) {
   const [evaluations, setEvaluations] = useState<any>([]);
   const [confirm, showConfirmation] = useState(false);
   const history = useHistory();
   const { path } = useRouteMatch();
   const authUser = authenticatorStore.authUser().data?.data.data;
-  const { data, isSuccess, isLoading, isError } = !subjectId
-    ? evaluationStore.getEvaluations(
-        authUser?.academy.id.toString() || '',
-        authUser?.id.toString() || '',
-      )
-    : evaluationStore.getEvaluationsBySubject(subjectId);
+  const { data, isSuccess, isLoading, isError } = evaluationStore.getEvaluations(
+    authUser?.academy.id.toString() || '',
+    authUser?.id.toString() || '',
+  );
 
   const list: LinkList[] = [
     { to: '/', title: 'home' },
@@ -81,22 +89,79 @@ export default function InstructorViewEvaluations({ subjectId, linkTo }: IEvalua
 
   useEffect(() => {
     setLocalStorageData('currentStep', 0);
-    let formattedEvals: CommonCardDataType[] = [];
-    data?.data.data.map((evaluation) => {
-      let formattedEvaluations = {
-        id: evaluation.id,
-        title: evaluation.name,
-        code: evaluation.evaluation_type,
-        description: `${evaluation.total_mark} marks`,
-        status: {
-          type: advancedTypeChecker(evaluation.evaluation_status),
-          text: evaluation.evaluation_status,
-        },
-      };
-      formattedEvals.push(formattedEvaluations);
-    });
-    setEvaluations(formattedEvals);
-  }, [data?.data.data]);
+
+    function isSubjectEvaludations(
+      ev: IEvaluationInfo[] | IEvaluationInfoSingleEvaluation[],
+    ) {
+      return typeof (ev[0] as IEvaluationInfoSingleEvaluation).evaluation === 'undefined';
+    }
+
+    if (subjecEvaluations.length > 0) {
+      if (!isSubjectEvaludations(subjecEvaluations)) {
+        if (subjecEvaluations.length > 0 && !isUndone) {
+          let formattedEvals: CommonCardDataType[] = [];
+
+          (subjecEvaluations as IEvaluationInfoSingleEvaluation[]).forEach(
+            (singleEvaluation) => {
+              let formattedEvaluations = {
+                id: singleEvaluation.evaluation.id,
+                title: singleEvaluation.evaluation.name,
+                code: singleEvaluation.code,
+                description: `${singleEvaluation.evaluation.total_mark} marks`,
+                status: {
+                  type: advancedTypeChecker(
+                    singleEvaluation.evaluation.evaluation_status,
+                  ),
+                  text: singleEvaluation.evaluation.evaluation_status,
+                },
+              };
+              formattedEvals.push(formattedEvaluations);
+            },
+          );
+          setEvaluations(formattedEvals);
+        }
+      } else {
+        if (isUndone || subjecEvaluations.length === 0) {
+          let formattedEvals: CommonCardDataType[] = [];
+
+          if (isSubjectEvaludations(subjecEvaluations)) {
+            (subjecEvaluations as IEvaluationInfo[]).forEach((evaluation) => {
+              let formattedEvaluations = {
+                id: evaluation.id,
+                title: evaluation.name,
+                code: evaluation.evaluation_type,
+                description: `${evaluation.total_mark} marks`,
+                status: {
+                  type: advancedTypeChecker(evaluation.evaluation_status),
+                  text: evaluation.evaluation_status,
+                },
+              };
+              formattedEvals.push(formattedEvaluations);
+            });
+          }
+          setEvaluations(formattedEvals);
+        }
+      }
+    }
+
+    if (!subjecEvaluations.length) {
+      let formattedEvals: CommonCardDataType[] = [];
+      data?.data.data.forEach((evaluation) => {
+        let formattedEvaluations = {
+          id: evaluation.id,
+          title: evaluation.name,
+          code: evaluation.evaluation_type,
+          description: `${evaluation.total_mark} marks`,
+          status: {
+            type: advancedTypeChecker(evaluation.evaluation_status),
+            text: evaluation.evaluation_status,
+          },
+        };
+        formattedEvals.push(formattedEvaluations);
+      });
+      setEvaluations(formattedEvals);
+    }
+  }, [data?.data.data, subjecEvaluations]);
 
   return (
     <div>

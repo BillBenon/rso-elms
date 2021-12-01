@@ -10,6 +10,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { CommonCardDataType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
+import LessonPlan from '../subjects/LessonPlan';
 import ModuleDetails from './ModuleDetails';
 
 export default function Modules({ level }: { level: string }) {
@@ -51,12 +52,6 @@ export default function Modules({ level }: { level: string }) {
       <main className="px-4">
         <Switch>
           <Route
-            path={`${path}/:id`}
-            render={() => {
-              return <ModuleDetails />;
-            }}
-          />
-          <Route
             exact
             path={`${path}`}
             render={() => {
@@ -88,6 +83,20 @@ export default function Modules({ level }: { level: string }) {
                   </section>
                 </>
               );
+            }}
+          />
+
+          {/* view lesson plan form  */}
+          <Route
+            path={`${path}/lesson-plan/:id`}
+            render={() => {
+              return <LessonPlan />;
+            }}
+          />
+          <Route
+            path={`${path}/:id`}
+            render={() => {
+              return <ModuleDetails />;
             }}
           />
         </Switch>

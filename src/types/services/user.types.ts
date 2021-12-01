@@ -266,3 +266,19 @@ export enum SendCommunicationMsg {
   SMS = 'SMS',
   BOTH = 'BOTH',
 }
+
+export interface IImportUser {
+  intake: string;
+  academicProgramLevelId: string;
+  academicYearId: string;
+  academyId: string;
+  intakeProgramId: string;
+  userType: UserType;
+  file: File | null;
+}
+
+export interface IImportUserRes {
+  failures: {
+    [index: string]: string;
+  };
+}

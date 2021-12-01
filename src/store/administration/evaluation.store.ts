@@ -43,6 +43,11 @@ class EvaluationStore {
       evaluationService.fetchEvaluationsBySubject(subject),
     );
   }
+  getEvaluationsCollectionBySubject(subject: string) {
+    return useQuery(['evaluationsCollection/subject', subject], () =>
+      evaluationService.fetchEvaluationsCollectionBySubject(subject),
+    );
+  }
 
   getEvaluationsByStudent(subject: string) {
     return useQuery(['evaluations/studentNarrower', subject], () =>

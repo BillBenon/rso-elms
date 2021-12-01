@@ -7,6 +7,7 @@ import {
   IEvaluationApproval,
   IEvaluationCreate,
   IEvaluationInfo,
+  IEvaluationInfoCollected,
   IEvaluationQuestionsInfo,
   IStudentAnswer,
   IStudentEvaluations,
@@ -64,6 +65,13 @@ class EvaluationService {
     subject: string,
   ): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
     return await evaluationAxios.get(`/evaluations/getEvaluationsBySubject/${subject}`);
+  }
+  public async fetchEvaluationsCollectionBySubject(
+    subject: string,
+  ): Promise<AxiosResponse<Response<IEvaluationInfoCollected>>> {
+    return await evaluationAxios.get(
+      `/evaluations/getEvaluationsBySubject/07e4467${subject}/studentNarrower`,
+    );
   }
 
   public async fetchEvaluationsByStudent(

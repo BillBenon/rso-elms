@@ -21,11 +21,14 @@ import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedule';
 import programStore from '../../store/administration/program.store';
-import { scheduleStore } from '../../store/timetable/schedule.store';
+import { scheduleStore } from '../../store/timetable/calendar.store';
 import { formatCalendarEvents } from '../../utils/calendar';
 import { DateRange } from '../../types/services/schedule.types';
 import { getWeekBorderDays } from '../../utils/date-helper';
 import { ParamType, ValueType } from '../../types';
+import { levelStore } from '../../store/administration/level.store';
+import intakeProgramStore from '../../store/administration/intake-program.store';
+import { classStore } from '../../store/administration/class.store';
 
 const localizer = momentLocalizer(moment);
 
@@ -33,6 +36,7 @@ export default function CalendarView() {
   const history = useHistory();
   const { search } = useLocation();
   const { path, url } = useRouteMatch();
+  const { id } = useParams<ParamType>();
 
   const [dateRange, setdateRange] = useState<DateRange>({
     start_date: getWeekBorderDays().monday,
@@ -43,13 +47,17 @@ export default function CalendarView() {
   const inLevelId = new URLSearchParams(search).get('in_level_id');
   const classId = new URLSearchParams(search).get('class_id');
 
-  const { id } = useParams<ParamType>();
   const programInfo = programStore.getProgramById(id).data?.data.data;
+  const levelInfo = intakeProgramStore.getIntakeLevelById(inLevelId + '').data?.data.data;
+  const classInfo = classStore.getClassById(classId + '').data?.data.data;
 
   // get events
   const events = formatCalendarEvents(
     (inLevelId
-      ? scheduleStore.getAllByAcademicProgramIntakeLevel(inLevelId).data?.data.data
+      ? scheduleStore.getAllByAcademicProgramIntakeLevel(inLevelId, dateRange).data?.data
+          .data
+      : classId
+      ? scheduleStore.getAllByIntakeLevelClass(classId, dateRange).data?.data.data
       : scheduleStore.getAllByAcademicProgram(id, dateRange).data?.data.data) || [],
   );
 
@@ -60,7 +68,11 @@ export default function CalendarView() {
   return (
     <div>
       <Heading fontSize="2xl" className="my-6" fontWeight="semibold">
-        {programInfo?.name}
+        {inLevelId
+          ? `${levelInfo?.academic_program_level.program.name} - ${levelInfo?.academic_program_level.level.name} `
+          : classId
+          ? `${classInfo?.academic_year_program_intake_level.academic_program_level.program.name} - ${classInfo?.academic_year_program_intake_level.academic_program_level.level.name} - ${classInfo?.class_name}`
+          : programInfo?.name}
       </Heading>
       <div className="my-5">
         <div className="flex flex-wrap justify-between items-center">

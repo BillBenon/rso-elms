@@ -27,8 +27,6 @@ export default function Sidebar() {
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
       { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
       { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
-      { title: 'Events', to: '/dashboard/events', icon: 'calendar' },
-      { title: 'Venues', to: '/dashboard/venues', icon: 'program' },
       {
         title: 'Registration Control',
         to: '/dashboard/registration-control',
@@ -38,14 +36,19 @@ export default function Sidebar() {
     ];
 
     const instructorLinks: linkProps[] = [
-      { title: 'Dashboard', to: '/dashboard/instructor', icon: 'module' },
+      {
+        title: 'Programs',
+        to: '/dashboard/inst-program',
+        icon: 'program',
+      },
+      { title: 'Modules', to: '/dashboard/inst-module', icon: 'module' },
       { title: 'Evaluations', to: '/dashboard/evaluations', icon: 'evaluation' },
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
       { title: 'Events', to: '/dashboard/events', icon: 'calendar' },
     ];
 
     const studentLinks: linkProps[] = [
-      { title: 'Dashboard', to: '/dashboard/student', icon: 'module' },
+      { title: 'Dashboard', to: '/dashboard/student', icon: 'dashboard', fill: false },
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
       // { title: 'Modules', to: '/dashboard/modules', icon: 'module' },
     ];

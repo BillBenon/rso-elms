@@ -50,7 +50,6 @@ export type Status =
   | 'published'
   | 'marking';
 
-
 export type Page =
   | 'personalDetails'
   | 'familyDetails'
@@ -113,7 +112,7 @@ export interface ValueType<T = Event> {
 
 export interface CommonCardDataType {
   id?: string | number;
-  status?: { type: 'success' | 'warning' | 'error'; text: string };
+  status?: { type: 'success' | 'warning' | 'error' | 'info'; text: string };
   title: string;
   code: string;
   subTitle?: string;
@@ -130,6 +129,7 @@ export interface SigninPropTypes extends CommonCardDataType {
 }
 
 export type IconType =
+  | 'dashboard'
   | 'academy'
   | 'add'
   | 'alert'
