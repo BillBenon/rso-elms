@@ -46,7 +46,7 @@ export function groupTimeTableByDay(arr: ClassTimeTableInfo[]): IDayTimeTable {
   let grouped: IDayTimeTable = {};
 
   Object.keys(daysOfWeek)
-    .slice(0, 5)
+    .slice(0, 7)
     .forEach((day) => {
       grouped[day] = [...arr.filter((tt) => tt.day_of_week == day)];
     });

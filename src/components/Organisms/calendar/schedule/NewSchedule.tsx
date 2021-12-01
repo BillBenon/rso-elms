@@ -14,7 +14,7 @@ import { levelStore } from '../../../../store/administration/level.store';
 import programStore from '../../../../store/administration/program.store';
 import usersStore from '../../../../store/administration/users.store';
 import { eventStore } from '../../../../store/timetable/event.store';
-import { scheduleStore } from '../../../../store/timetable/schedule.store';
+import { scheduleStore } from '../../../../store/timetable/calendar.store';
 import { venueStore } from '../../../../store/timetable/venue.store';
 import { ParamType, SelectData, ValueType } from '../../../../types';
 import {

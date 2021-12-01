@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
 
-import { scheduleService } from '../../services/timetable/schedule.service';
+import { calendarService } from '../../services/timetable/calendar.service';
 import {
   CreateEventSchedule,
   DateRange,
@@ -13,66 +13,56 @@ class ScheduleStore {
     return useMutation((schedule: CreateEventSchedule) => {
       switch (schedule.frequencyType) {
         case frequencyType.DATE_RANGE:
-          return scheduleService.createDateRangeEvents(schedule);
+          return calendarService.createDateRangeEvents(schedule);
         case frequencyType.RECURRING:
-          return scheduleService.createRecurringEvents(schedule);
+          return calendarService.createRecurringEvents(schedule);
         default:
-          return scheduleService.createOneTimeEvents(schedule);
+          return calendarService.createOneTimeEvents(schedule);
       }
     });
   }
 
-  createClassTimetable() {
-    return useMutation(scheduleService.createClassTimetable);
-  }
-
-  getClassTimetableByIntakeLevelClass(id: string) {
-    return useQuery(['schedules/tt/:id', id], () =>
-      scheduleService.getClassTimetableByIntakeLevelClass(id),
-    );
-  }
-
   getScheduleById(id: string) {
-    return useQuery(['schedules/id', id], () => scheduleService.getScheduleById(id));
+    return useQuery(['schedules/id', id], () => calendarService.getScheduleById(id));
   }
 
   getAllSchedules() {
-    return useQuery(['schedules'], scheduleService.getAll);
+    return useQuery(['schedules'], calendarService.getAll);
   }
   getAllByAcademicProgramIntakeLevel(id: string, range: DateRange) {
     return useQuery(
       ['schedules/level-intake/:id', id],
-      () => scheduleService.getAllByAcademicProgramIntakeLevel(id, range),
+      () => calendarService.getAllByAcademicProgramIntakeLevel(id, range),
       { enabled: !!id },
     );
   }
   getAllByAcademicProgramIntakeLevelAndStatus(id: string, status: ScheduleStatus) {
     return useQuery(['schedules/level-intake/:id/:status', id, status], () =>
-      scheduleService.getAllByAcademicProgramIntakeLevelAndStatus(id, status),
+      calendarService.getAllByAcademicProgramIntakeLevelAndStatus(id, status),
     );
   }
   getAllByAcademicProgram(id: string, range: DateRange) {
     return useQuery(['schedules/program/:id', id], () =>
-      scheduleService.getAllByAcademicProgram(id, range),
+      calendarService.getAllByAcademicProgram(id, range),
     );
   }
 
   getAllByAcademicProgramAndStatus(id: string, status: ScheduleStatus) {
     return useQuery(['schedules/program/:id/:status', id, status], () =>
-      scheduleService.getAllByAcademicProgramAndStatus(id, status),
+      calendarService.getAllByAcademicProgramAndStatus(id, status),
     );
   }
 
   getAllByIntakeLevelClass(id: string, range: DateRange) {
     return useQuery(
       ['schedules/intakeclass/:id', id],
-      () => scheduleService.getAllByIntakeLevelClass(id, range),
+      () => calendarService.getAllByIntakeLevelClass(id, range),
       { enabled: !!id },
     );
   }
 
   updateSchedule() {
-    return useMutation(scheduleService.modifySchedule);
+    return useMutation(calendarService.modifySchedule);
   }
 }
 
