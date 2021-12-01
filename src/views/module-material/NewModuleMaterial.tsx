@@ -61,7 +61,7 @@ function NewModuleMaterial() {
           handleSubmit();
         }}>
         <Heading fontWeight="semibold" fontSize="xl" className="py-4">
-          New module material
+          New learning material
         </Heading>
         <InputMolecule value={material.title} handleChange={handleChange} name={'title'}>
           Material Title
