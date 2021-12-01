@@ -32,7 +32,7 @@ class TimetableService {
   public async updateClassTimetableById(
     tt: IUpdateClassTimetable,
   ): Promise<AxiosResponse<Response<ClassTimeTableInfo>>> {
-    return await timetableAxios.put(`/class-timetable/${tt.id}`);
+    return await timetableAxios.put(`/class-timetable/${tt.id}`, tt);
   }
 
   public async delete(id: string): Promise<AxiosResponse<Response<ClassTimeTableInfo>>> {

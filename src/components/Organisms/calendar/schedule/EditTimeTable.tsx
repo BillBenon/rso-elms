@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 import { queryClient } from '../../../../plugins/react-query';
@@ -11,21 +11,21 @@ import { venueStore } from '../../../../store/timetable/venue.store';
 import { SelectData, ValueType } from '../../../../types';
 import { IClass } from '../../../../types/services/class.types';
 import {
-  createRecurringSchedule,
   daysOfWeek,
-  ICreateClassTimeTable,
+  IUpdateClassTimetable,
 } from '../../../../types/services/schedule.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import CheckboxMolecule from '../../../Molecules/input/CheckboxMolecule';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
+import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import Stepper from '../../../Molecules/Stepper/Stepper';
 
 interface IStepProps {
   handleChange: (_e: ValueType) => any;
   setCurrentStep: Function;
-  values: ICreateClassTimeTable;
+  values: IUpdateClassTimetable;
   handleSubmit?: (_e: FormEvent) => any;
   classInfo?: IClass;
 }
@@ -41,45 +41,45 @@ export default function EditTimeTable() {
 
   //state varibales
   const [currentStep, setcurrentStep] = useState(0);
-  const [values, setvalues] = useState<ICreateClassTimeTable>({
-    instructor: '',
-    timetable: [],
-    startHour: '',
-    endHour: '',
-    repeatingDays: [],
-    courseModule: '',
-    venue: '',
+  const [values, setvalues] = useState<IUpdateClassTimetable>({
+    id: itemId,
+    dayOfWeek: daysOfWeek.MONDAY,
     intakeLevelClass: classId,
+    courseModule: '',
+    endHour: '',
+    instructor: '',
+    startHour: '',
+    venue: '',
   });
 
   //classinfo
   const classInfo = classStore.getClassById(classId).data?.data.data;
+  const { data } = timetableStore.getClassTimetableById(itemId);
+
+  useEffect(() => {
+    setvalues({
+      ...values,
+      courseModule: data?.data.data.course_module.id + '',
+      endHour: data?.data.data.end_hour + '',
+      instructor: data?.data.data.instructor.id + '',
+      startHour: data?.data.data.start_hour + '',
+      venue: data?.data.data.venue.id + '',
+    });
+  }, [data?.data]);
 
   function handleChange(e: ValueType) {
     setvalues((val) => ({ ...val, [e.name]: e.value }));
   }
 
-  const { mutateAsync } = timetableStore.createClassTimetable();
+  const store = timetableStore.updateClassTimetableById();
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
-    let timetable = values.repeatingDays.map((d) => ({
-      dayOfWeek: d,
-      endHour: values.endHour,
-      startHour: values.startHour,
-    })) as createRecurringSchedule[];
 
-    let data: ICreateClassTimeTable = {
-      ...values,
-      timetable,
-    };
-
-    console.log(data);
-
-    mutateAsync(data, {
+    (await store).mutateAsync(values, {
       async onSuccess(_data) {
-        toast.success('Timetable was created successfully');
-        queryClient.invalidateQueries(['schedules/tt/:id', classId]);
+        toast.success('Timetable updated successfully');
+        queryClient.invalidateQueries(['timetable/intakeclassid/:id', classId]);
         history.goBack();
       },
       onError() {
@@ -178,17 +178,13 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
   const venues = venueStore.getAllVenues().data?.data.data;
   return (
     <form onSubmit={handleSubmit} className="max-w-sm -mb-6">
-      <div className="pb-1">
-        <DropdownMolecule
-          name="venue"
-          handleChange={handleChange}
-          options={
-            venues?.map((vn) => ({ label: vn.name, value: vn.id })) as SelectData[]
-          }
-          placeholder="Select venue">
-          Venue
-        </DropdownMolecule>
-      </div>
+      <DropdownMolecule
+        name="venue"
+        handleChange={handleChange}
+        options={venues?.map((vn) => ({ label: vn.name, value: vn.id })) as SelectData[]}
+        placeholder="Select venue">
+        Venue
+      </DropdownMolecule>
       <InputMolecule
         name="startHour"
         type="time"
@@ -203,13 +199,12 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
         handleChange={handleChange}>
         End hour
       </InputMolecule>
-      <CheckboxMolecule
-        isFlex
-        options={getDropDownStatusOptions(daysOfWeek).slice(0, 5)}
-        name="repeatingDays"
-        placeholder="Repeat days:"
+      <DropdownMolecule
+        options={getDropDownStatusOptions(daysOfWeek).slice(0, 7)}
+        name="dayOfWeek"
+        placeholder="Class date"
         handleChange={handleChange}
-        values={values.repeatingDays}
+        // value={values.dayOfWeek}
       />
       <div className="pt-4 flex justify-between w-80">
         <Button styleType="text" onClick={() => setCurrentStep(0)}>

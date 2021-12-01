@@ -74,7 +74,7 @@ export default function NewTimeTable() {
     mutateAsync(data, {
       async onSuccess(_data) {
         toast.success('Timetable was created successfully');
-        queryClient.invalidateQueries(['schedules/tt/:id', id]);
+        queryClient.invalidateQueries(['timetable/intakeclassid/:id', id]);
         history.goBack();
       },
       onError() {
