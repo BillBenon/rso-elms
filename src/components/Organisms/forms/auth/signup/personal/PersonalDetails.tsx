@@ -276,7 +276,7 @@ function PersonalDetails<E>({
                   (personalDetails.residence_location_id &&
                     personalDetails.residence_location_id.toString()),
               )}
-              handleChange={handleLocationChange}>
+              handleChange={handleChange}>
               Place of living
             </LocationMolecule>
             <TextAreaMolecule
