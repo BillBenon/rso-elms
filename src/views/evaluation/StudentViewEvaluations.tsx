@@ -24,6 +24,7 @@ interface IEvaluationProps {
   isUndone?: boolean;
   isOngoing?: boolean;
   usePopup?: boolean;
+  isCompleted?: boolean;
   linkTo?: string;
 }
 
@@ -33,6 +34,7 @@ export default function StudentViewEvaluations({
   usePopup = false,
   isOngoing = false,
   isUndone = false,
+  isCompleted = false,
 }: IEvaluationProps) {
   const [evaluations, setEvaluations] = useState<any>([]);
   const [confirm, showConfirmation] = useState(false);
@@ -51,6 +53,15 @@ export default function StudentViewEvaluations({
 
   const { mutateAsync, isLoading: loading } = evaluationStore.studentEvaluationStart();
 
+  function checkEvaluationType(id: any) {
+    if (isCompleted == true) {
+      console.log(path);
+      history.push(`/dashboard/evaluations/completed/student-evaluation/${id}/review`);
+    } else {
+      usePopup && showConfirmation(true);
+    }
+  }
+
   function generateStudentCode(id = '', studentEval: string) {
     const studentEvaluationStart: IStudentEvaluationStart = {
       attachment: '',
@@ -61,6 +72,8 @@ export default function StudentViewEvaluations({
     if (isOngoing) {
       setLocalStorageData('studentEvaluationId', studentEval);
       goToNext(studentEvaluationStart.evaluation_id);
+    } else if (isCompleted) {
+      history.push(`/dashboard/evaluations/completed/student-evaluation/${id}/review`);
     } else {
       mutateAsync(studentEvaluationStart, {
         onSuccess: (studentInfo) => {
@@ -139,6 +152,7 @@ export default function StudentViewEvaluations({
       <Switch>
         <Route exact path={`${path}/new`} component={NewEvaluation} />
         <Route path={`${path}/:id`} component={EvaluationContent} />
+        {/* <Route path={`${path}/completed/:id`} component={StudentReview} /> */}
         <Route
           exact
           path={path}
@@ -146,7 +160,7 @@ export default function StudentViewEvaluations({
             <>
               <section className="grid grid-cols-2 mt-2 gap-10 w-full">
                 {evaluations.length > 0 ? (
-                  evaluations?.map((info: CommonCardDataType, index: number) => (
+                  evaluations?.map((info: any, index: number) => (
                     <div key={index} className="w-full">
                       <ConfirmationOrganism
                         loading={loading}
@@ -164,7 +178,7 @@ export default function StudentViewEvaluations({
                       />
 
                       <CommonCardMolecule
-                        handleClick={() => usePopup && showConfirmation(true)}
+                        handleClick={() => checkEvaluationType(info.studentEvaluationId)}
                         data={info}
                       />
                     </div>

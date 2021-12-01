@@ -12,6 +12,7 @@ import StudentDashboard from './views/dashboard/StudentDashboard';
 import Divisions from './views/divisions/Divisions';
 import EvaluationTest from './views/evaluation/EvaluationTest';
 import InstructorViewEvaluations from './views/evaluation/InstructorViewEvaluations';
+import StudentReview from './views/evaluation/StudentReview';
 import NewInstitution from './views/insitution/NewInstitution';
 import UpdateInstitution from './views/insitution/UpdateInstitution';
 import IntakesView from './views/intakes/Intakes';
@@ -96,6 +97,11 @@ const RouterProtection = () => {
         exact
         path="/dashboard/evaluations/student-evaluation/:id"
         component={EvaluationTest}
+      />
+      <Route
+        exact
+        path="/dashboard/evaluations/completed/student-evaluation/:id/review"
+        component={StudentReview}
       />
       {/* end of student pages */}
     </>
