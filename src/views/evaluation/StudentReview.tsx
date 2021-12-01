@@ -18,7 +18,6 @@ export default function StudentReview() {
   const { id } = useParams<ParamType>();
   const studentAnswers = markingStore.getStudentEvaluationAnswers(id).data?.data.data;
   const studentEvaluation = markingStore.getStudentEvaluationById(id).data?.data.data;
-  const [totalMarks] = useState(0);
   const [rowsOnPage] = useState(4);
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastRow = currentPage * rowsOnPage;
@@ -67,7 +66,9 @@ export default function StudentReview() {
         showSearch={false}>
         <p className="text-gray-400">
           Marks obtained:{' '}
-          <span className="text-green-300 font-semibold">{totalMarks}</span>
+          <span className="text-green-300 font-semibold">
+            {studentEvaluation?.obtainedMark}
+          </span>
         </p>
       </TableHeader>
       <section className="flex flex-wrap justify-start gap-4 mt-2">
