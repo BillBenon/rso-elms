@@ -167,17 +167,6 @@ function PersonalDetails<E>({
             </InputMolecule>
           </div>
           <div>
-            <DropdownMolecule
-              placeholder="Select place of birth"
-              name="place_of_birth"
-              defaultValue={getDropDownOptions({ inputs: locations }).find(
-                (location) =>
-                  location.value === personalDetails.place_of_birth.toString(),
-              )}
-              handleChange={handleChange}
-              options={[]}>
-              Place of birth
-            </DropdownMolecule>
             <LocationMolecule
               placeholder="Select place of birth"
               name="place_of_birth"

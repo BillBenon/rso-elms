@@ -17,9 +17,9 @@ export default function LocationMolecule({
   placeholder = '',
   ...attrs
 }: Props) {
-  const [residenceLocationLevel, setResidenceLocationLevel] = useState<number>(1);
+  const [locationLevel, setLocationLevel] = useState<number>(1);
   const [location, setLocation] = useState<LocationInfo[]>();
-  const [choseResidenceLocations, setChoseResidenceLocations] = useState<string>('');
+  const [choseLocations, setChoseLocations] = useState<string>('');
   const levels = ['country', 'province', 'district', 'sector', 'cell', 'village'];
 
   const [locationId, setLocationId] = useState<string>('');
@@ -32,19 +32,17 @@ export default function LocationMolecule({
   const handleLocationChange = (e: ValueType) => {
     handleChange(e);
     setLocationId(e.value.toString());
-    setChoseResidenceLocations(
-      (old) => `${old} ${old.length > 0 ? '-> ' : ''} ${e.label} `,
-    );
+    setChoseLocations((old) => `${old} ${old.length > 0 ? '-> ' : ''} ${e.label} `);
 
     // refetchDbLocations();
 
-    setResidenceLocationLevel((old) => old + 1);
+    setLocationLevel((old) => old + 1);
   };
 
   function resetResidenceLocation() {
-    setResidenceLocationLevel(1);
+    setLocationLevel(1);
     country?.data.data && setLocation(country?.data.data);
-    setChoseResidenceLocations('');
+    setChoseLocations('');
   }
 
   useEffect(() => {
@@ -59,7 +57,7 @@ export default function LocationMolecule({
     <div>
       <DropdownMolecule
         {...attrs}
-        hasError={residenceLocationLevel > 1 && residenceLocationLevel < 7}
+        hasError={locationLevel > 1 && locationLevel < 7}
         placeholder={placeholder}
         name={name}
         defaultValue={getDropDownOptions({ inputs: location! }).find(
@@ -69,15 +67,13 @@ export default function LocationMolecule({
         disabled={isFetchingCountry || isFetchingLocations}
         options={getDropDownOptions({ inputs: location! })}>
         {children}
-        {residenceLocationLevel > 1 && residenceLocationLevel < 7 && (
-          <span className="text-error-500">
-            ( select {levels[residenceLocationLevel - 1]} )
-          </span>
+        {locationLevel > 1 && locationLevel < 7 && (
+          <span className="text-error-500">( select {levels[locationLevel - 1]} )</span>
         )}
       </DropdownMolecule>
       <div className="flex items-center mb-4">
-        <p className="text-sm text-primary-500 ">{choseResidenceLocations}</p>
-        {choseResidenceLocations.length > 0 && (
+        <p className="text-sm text-primary-500 ">{choseLocations}</p>
+        {choseLocations.length > 0 && (
           <button className="ml-4 hover:bg-lightblue" onClick={resetResidenceLocation}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
