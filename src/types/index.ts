@@ -130,6 +130,7 @@ export interface SigninPropTypes extends CommonCardDataType {
 
 export type IconType =
   | 'dashboard'
+  | 'subject'
   | 'academy'
   | 'add'
   | 'alert'

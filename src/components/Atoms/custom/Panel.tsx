@@ -6,6 +6,7 @@ import { Color, GenericStatus } from '../../../types';
 import { IEvaluationStatus } from '../../../types/services/evaluation.types';
 import { IntakeStatus } from '../../../types/services/intake.types';
 import { IntakeModuleStatus } from '../../../types/services/intake-program.types';
+import { MaterialType } from '../../../types/services/module-material.types';
 import { advancedTypeChecker } from '../../../utils/getOption';
 import Badge from './Badge';
 import Icon from './Icon';
@@ -19,7 +20,12 @@ export type PanelProps = {
   className?: string;
   bgColor?: Color;
   badge?: {
-    type: GenericStatus | IntakeStatus | IEvaluationStatus | IntakeModuleStatus;
+    type:
+      | GenericStatus
+      | IntakeStatus
+      | IEvaluationStatus
+      | IntakeModuleStatus
+      | MaterialType;
     text: string;
   };
   width?: string;

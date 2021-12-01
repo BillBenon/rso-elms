@@ -10,7 +10,6 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { CommonCardDataType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
-import NewModuleMaterial from '../module-material/NewModuleMaterial';
 import LessonPlan from '../subjects/LessonPlan';
 import SubjectDetails from '../subjects/SubjectDetails';
 import ModuleDetails from './ModuleDetails';
@@ -84,22 +83,6 @@ export default function Modules({ level }: { level: string }) {
                     )}
                   </section>
                 </>
-              );
-            }}
-          />
-          {/* show module details */}
-          <Route
-            exact
-            path={`${path}/:id/add-material`}
-            render={() => {
-              return (
-                // <PopupMolecule
-                //   title="Add Module Materials"
-                //   open
-                //   onClose={handleClose}
-                //   closeOnClickOutSide={false}>
-                <NewModuleMaterial />
-                // </PopupMolecule>
               );
             }}
           />

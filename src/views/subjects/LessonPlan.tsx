@@ -4,6 +4,7 @@ import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-route
 import Avatar from '../../components/Atoms/custom/Avatar';
 import Badge from '../../components/Atoms/custom/Badge';
 import Button from '../../components/Atoms/custom/Button';
+import Icon from '../../components/Atoms/custom/Icon';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -43,6 +44,7 @@ function LessonPlan() {
                 <Loader />
               ) : plan.length === 0 ? (
                 <NoDataAvailable
+                  icon="subject"
                   buttonLabel={'Create plan'}
                   title={'No lesson plan available'}
                   description={
@@ -52,9 +54,12 @@ function LessonPlan() {
                 />
               ) : (
                 <>
-                  <Heading className="mb-6" fontWeight="semibold">
-                    Lesson Plan
-                  </Heading>
+                  <div className="w-44 mb-6 flex items-center justify-center">
+                    <button className="outline-none" onClick={() => history.goBack()}>
+                      <Icon name={'back-arrow'} bgColor="gray" />
+                    </button>
+                    <Heading fontWeight="semibold">Lesson Plan</Heading>
+                  </div>
                   {plan.map((lp) => (
                     <div className="bg-main p-6 flex flex-col gap-4 w-96" key={lp.id}>
                       <Heading fontSize="base" className="py-4" fontWeight="semibold">
