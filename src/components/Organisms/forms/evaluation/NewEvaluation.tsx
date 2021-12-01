@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router';
 
+import { evaluationStore } from '../../../../store/administration/evaluation.store';
 import { Link as LinkList } from '../../../../types';
+import {
+  getLocalStorageData,
+  setLocalStorageData,
+} from '../../../../utils/getLocalStorageItem';
 import Heading from '../../../Atoms/Text/Heading';
 import BreadCrumb from '../../../Molecules/BreadCrumb';
 import Stepper from '../../../Molecules/Stepper/Stepper';
@@ -15,14 +21,24 @@ export default function NewEvaluation() {
     { to: 'new', title: 'new evaluation' },
   ];
 
-  const [currentStep, setCurrentStep] = useState(0);
+  const [currentStep, setCurrentStep] = useState(getLocalStorageData('currentStep'));
+  const { search } = useLocation();
+  const [evaluationId] = useState(new URLSearchParams(search).get('evaluation'));
 
   function handleSubmit() {
     setCurrentStep(currentStep + 1);
+    setLocalStorageData('currentStep', currentStep);
   }
 
   function handleBack() {
     if (currentStep >= 1) setCurrentStep(currentStep - 1);
+    setLocalStorageData('currentStep', currentStep);
+  }
+
+  let evaluationInfo;
+
+  if (evaluationId) {
+    evaluationInfo = evaluationStore.getEvaluationById(evaluationId).data?.data.data;
   }
 
   return (
@@ -35,7 +51,7 @@ export default function NewEvaluation() {
 
       <div className="w-full pt-9">
         <Heading fontWeight="semibold" fontSize="2xl" color="primary" className="pb-4">
-          New evaluation
+          {evaluationInfo?.name || 'New evaluation'}
         </Heading>
         <Stepper
           currentStep={currentStep}
@@ -43,9 +59,11 @@ export default function NewEvaluation() {
           width="w-64"
           isVertical={false}
           isInline={false}
-          navigateToStepHandler={() => console.log('submitted')}>
+          navigateToStepHandler={() => {}}>
           <div className="w-2/4">
             <EvaluationInfoComponent
+              evaluationId={evaluationId}
+              evaluationInfo={evaluationInfo}
               handleNext={handleSubmit}
               handleGoBack={handleBack}
             />
@@ -55,9 +73,14 @@ export default function NewEvaluation() {
             <EvaluationQuestionComponent
               handleNext={handleSubmit}
               handleGoBack={handleBack}
+              evaluationId={evaluationId}
             />
           </div>
-          <EvaluationSettings handleNext={handleSubmit} handleGoBack={handleBack} />
+          <EvaluationSettings
+            handleNext={handleSubmit}
+            handleGoBack={handleBack}
+            evaluationId={evaluationId}
+          />
         </Stepper>
       </div>
     </div>

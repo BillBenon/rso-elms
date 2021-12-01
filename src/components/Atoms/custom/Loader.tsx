@@ -6,30 +6,17 @@ export default function Loader() {
 
   const loading = [
     'LOOKING OUTSIDE FOR YOU... ONE SEC',
-    'Discovering new ways of making you wait',
     'Your time is very important to us. Please wait a little bit',
     'Still faster than Windows update',
-    'Bored of slow loading spinner?, buy more RAM!',
     'We will be back in 1/0 minutes.',
     "Don't panic, Just count to infinite.",
-    'Please wait, Your PC is not a superman!',
     'Swapping time and space...',
     'The architects are still drafting',
     "We're building the buildings as fast as we can",
-    "Don't worry - a few bits tried to escape, but we caught them",
-    'The bits are flowing slowly today',
     "It's still faster than you could draw it",
     'Just count to 10',
-    'Why so serious?',
     "It's not you. It's me.",
-    'Counting backwards from Infinity',
-    "Don't panic...",
-    'Do not run! We are your friends!',
-    "We're making you a cookie.",
-    "I swear it's almost done.",
-    'If you type Google into Google you can break the internet',
     'Hold on a minute.',
-    "We're working very Hard .... Really",
   ];
 
   useEffect(() => {

@@ -10,12 +10,15 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import UpdateModuleForm from '../../components/Organisms/forms/modules/UpdateModuleForm';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
+import { authenticatorStore } from '../../store/administration';
 import { moduleStore } from '../../store/administration/modules.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { CommonCardDataType, Link, ParamType } from '../../types';
+import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
-import SubjectDetails from '../subjects/SubjectDetails';
+import ModuleMaterials from '../module-material/ModuleMaterials';
 
 export default function ModuleDetails() {
   const [subjects, setSubjects] = useState<CommonCardDataType[]>([]);
@@ -26,11 +29,20 @@ export default function ModuleDetails() {
 
   const subjectData = subjectStore.getSubjectsByModule(id);
   const moduleData = moduleStore.getModuleById(id);
+  const authUser = authenticatorStore.authUser().data?.data.data;
 
   const tabs = [
     {
-      label: 'Subjects',
+      label: 'Info',
       href: `${url}`,
+    },
+    {
+      label: 'Materials',
+      href: `${url}/materials`,
+    },
+    {
+      label: 'Subjects',
+      href: `${url}/subject`,
     },
     {
       label: 'Preriquisites',
@@ -87,43 +99,89 @@ export default function ModuleDetails() {
     },
   ];
 
+  const getModuleData = () => {
+    let mod = moduleData.data?.data.data;
+    let modules: CommonCardDataType | undefined;
+    if (mod) {
+      modules = {
+        status: {
+          type: advancedTypeChecker(mod.generic_status),
+          text: mod.generic_status.toString(),
+        },
+        code: mod.name,
+        title: mod.code,
+        description: mod.description,
+      };
+    }
+
+    return modules;
+  };
+
+  const modules = getModuleData();
+
   return (
     <>
-      <Switch>
-        <Route path={`${path}/subjects/:subjectId`} component={SubjectDetails} />
-        <Route
-          path={`${path}`}
-          render={() => (
-            <main className="px-4">
-              <section>
-                <BreadCrumb list={list} />
-              </section>
-              <div className="mt-11 pb-6">
-                <div className="flex flex-wrap justify-between items-center">
-                  <div className="flex gap-2 items-center">
-                    <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
-                      {moduleData.data?.data.data.name} module
-                    </Heading>
-                  </div>
-                  <div className="flex flex-wrap justify-start items-center">
-                    <SearchMolecule handleChange={handleSearch} />
-                    <button className="border p-0 rounded-md mx-2">
-                      <Icon name="filter" />
-                    </button>
-                  </div>
+      <main className="px-4">
+        <section>
+          <BreadCrumb list={list} />
+        </section>
+        <div className="mt-11 pb-6">
+          <div className="flex flex-wrap justify-between items-center">
+            <div className="flex gap-2 items-center">
+              <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
+                {moduleData.data?.data.data.name} module
+              </Heading>
+            </div>
+            <div className="flex flex-wrap justify-start items-center">
+              <SearchMolecule handleChange={handleSearch} />
+              <button className="border p-0 rounded-md mx-2">
+                <Icon name="filter" />
+              </button>
+            </div>
 
-                  <div className="flex gap-3">
-                    <Button onClick={() => history.push(`${url}/add-subject`)}>
-                      Add new Subject
-                    </Button>
+            {authUser?.user_type === UserType.ADMIN && (
+              <div className="flex gap-3">
+                <Button onClick={() => history.push(`${url}/add-subject`)}>
+                  Add new Subject
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+        <TabNavigation tabs={tabs}>
+          <Switch>
+            <Route
+              exact
+              path={`${path}`}
+              render={() => (
+                <div className="flex py-9">
+                  <div className="mr-24">
+                    {modules && (
+                      <CommonCardMolecule data={modules}>
+                        <div className="flex flex-col mt-8 gap-7 pb-2">
+                          {/* <div className="flex items-center gap-2">
+                            <Avatar
+                              size="24"
+                              alt="user1 profile"
+                              className=" rounded-full  border-2 border-main transform hover:scale-125"
+                              src="https://randomuser.me/api/portraits/men/1.jpg"
+                            />
+                            <Heading fontSize="sm">{modules.subTitle}</Heading>
+                          </div> */}
+                        </div>
+                      </CommonCardMolecule>
+                    )}
                   </div>
                 </div>
-              </div>
-              <TabNavigation tabs={tabs}>
+              )}
+            />
+            <Route
+              path={`${path}/subject`}
+              render={() => (
                 <>
                   {subjects.length < 1 && subjectData.isSuccess ? (
                     <NoDataAvailable
-                      icon="module"
+                      icon="subject"
                       title={'No subjects registered'}
                       description={
                         'The history object is mutable. Therefore it is recommended to access the location from the render props of <Route>, not from'
@@ -137,7 +195,7 @@ export default function ModuleDetails() {
                           <CommonCardMolecule
                             to={{
                               title: 'Subject details',
-                              to: `${url}/subjects/${subject.id}`,
+                              to: `/dashboard/modules/subjects/${subject.id}`,
                             }}
                             data={subject}
                           />
@@ -146,23 +204,42 @@ export default function ModuleDetails() {
                     </section>
                   )}
                 </>
-              </TabNavigation>
-              {/* add subject popup */}
-              <Route
-                exact
-                path={`${path}/add-subject`}
-                render={() => {
-                  return (
-                    <PopupMolecule title="New Subject" open onClose={handleClose}>
-                      <NewSubjectForm />
-                    </PopupMolecule>
-                  );
-                }}
-              />
-            </main>
-          )}
-        />
-      </Switch>
+              )}
+            />
+            {/* add subject popup */}
+            <Route
+              exact
+              path={`${path}/add-subject`}
+              render={() => {
+                return (
+                  <PopupMolecule title="New Subject" open onClose={handleClose}>
+                    <NewSubjectForm />
+                  </PopupMolecule>
+                );
+              }}
+            />
+            {/* update module popup */}
+            <Route
+              exact
+              path={`${path}/edit/:moduleId`}
+              render={() => {
+                return (
+                  <PopupMolecule title="Edit Module" open onClose={handleClose}>
+                    <UpdateModuleForm />
+                  </PopupMolecule>
+                );
+              }}
+            />
+            {/* update module popup */}
+            <Route
+              path={`${path}/materials`}
+              render={() => {
+                return <ModuleMaterials />;
+              }}
+            />
+          </Switch>
+        </TabNavigation>
+      </main>
     </>
   );
 }

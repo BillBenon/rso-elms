@@ -2,7 +2,12 @@ import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
-import { CreateUserInfo, UserInfo } from '../../types/services/user.types';
+import {
+  CreateUserInfo,
+  IImportUser,
+  IImportUserRes,
+  UserInfo,
+} from '../../types/services/user.types';
 import { UpdateUserInfo } from './../../types/services/user.types';
 
 class UserService {
@@ -11,6 +16,13 @@ class UserService {
   ): Promise<AxiosResponse<Response<UserInfo>>> {
     return await adminstrationAxios.post('/users/registerNewUser', userInfo);
   }
+
+  public async importUsers(
+    userInfo: FormData,
+  ): Promise<AxiosResponse<Response<IImportUserRes>>> {
+    return await adminstrationAxios.post('/users/importUsers', userInfo);
+  }
+
   public async modifyUser(
     userInfo: UpdateUserInfo,
   ): Promise<AxiosResponse<Response<UserInfo>>> {

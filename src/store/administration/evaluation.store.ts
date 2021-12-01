@@ -7,6 +7,23 @@ class EvaluationStore {
     return useMutation(evaluationService.createEvaluation);
   }
 
+  updateEvaluation() {
+    return useMutation(evaluationService.updateEvaluation);
+  }
+
+  getEvaluationWorkTime(studentEvaluationId: string) {
+    return useQuery(
+      ['workTime', studentEvaluationId],
+      () => evaluationService.getEvaluationWorkTime(studentEvaluationId),
+      {
+        enabled: !!studentEvaluationId,
+      },
+    );
+  }
+  updateEvaluationWorkTime() {
+    return useMutation(evaluationService.updateEvaluationWorkTime);
+  }
+
   createEvaluationQuestions() {
     return useMutation(evaluationService.createEvaluationQuestion);
   }
@@ -16,7 +33,7 @@ class EvaluationStore {
   }
 
   getEvaluations(academy: string, instructor: string) {
-    return useQuery('evaluations', () =>
+    return useQuery(['evaluationsByAcademyInstructor', instructor], () =>
       evaluationService.fetchEvaluationsByInstructorAndAcademy(academy, instructor),
     );
   }
@@ -26,18 +43,49 @@ class EvaluationStore {
       evaluationService.fetchEvaluationsBySubject(subject),
     );
   }
+  getEvaluationsCollectionBySubject(subject: string) {
+    return useQuery(['evaluationsCollection/subject', subject], () =>
+      evaluationService.fetchEvaluationsCollectionBySubject(subject),
+    );
+  }
+
+  getEvaluationsByStudent(subject: string) {
+    return useQuery(['evaluations/studentNarrower', subject], () =>
+      evaluationService.fetchEvaluationsByStudent(subject),
+    );
+  }
+
+  getStudentEvaluationByStudentIdAndEvaluationId(
+    evaluationId: string,
+    studentId: string,
+  ) {
+    return useQuery(['studEvaluation', evaluationId], () =>
+      evaluationService.getStudentEvaluationByStudentIdAndEvaluationId(
+        evaluationId,
+        studentId,
+      ),
+    );
+  }
 
   getEvaluationById(id: string) {
-    return useQuery(['evaluation', id], () => evaluationService.getEvaluationById(id));
+    return useQuery(['evaluation', id], () => evaluationService.getEvaluationById(id), {
+      enabled: !!id,
+    });
   }
   getEvaluationQuestions(id: string) {
-    return useQuery(['evaluation/questions', id], () =>
-      evaluationService.getEvaluationQuestions(id),
+    return useQuery(
+      ['evaluation/questions', id],
+      () => evaluationService.getEvaluationQuestions(id),
+      { enabled: !!id },
     );
   }
 
   addQuestionAnswer() {
     return useMutation(evaluationService.addQuestionAnswer);
+  }
+
+  publishEvaluation() {
+    return useMutation(evaluationService.publishEvaluation);
   }
 
   submitEvaluation() {

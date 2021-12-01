@@ -6,19 +6,19 @@ import { useHistory, useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import academyStore from '../../../../store/administration/academy.store';
-import locationStore from '../../../../store/administration/location.store';
 import usersStore from '../../../../store/administration/users.store';
 import { CommonFormProps, ParamType, ValueType } from '../../../../types';
 import { AcademyCreateInfo } from '../../../../types/services/academy.types';
 import { LocationInfo } from '../../../../types/services/location.types';
 import { UserType } from '../../../../types/services/user.types';
-import { getDropDownOptions, getInchargeDropdown } from '../../../../utils/getOption';
+import { getInchargeDropdown } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
 import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
+import LocationMolecule from '../../../Molecules/input/LocationMolecule';
 
 export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
@@ -62,39 +62,6 @@ export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
     console.log(locationVillages);
   }, [data]);
 
-  const [locations, setLocations] = useState({
-    province: '',
-    district: '',
-    sector: '',
-    cell: '',
-    village: '',
-  });
-  const provinces = locationStore.getLocationsByLevel('2').data?.data;
-  let districts = locationStore.findByParent(locations.province);
-  let sectors = locationStore.findByParent(locations.district);
-  let cells = locationStore.findByParent(locations.sector);
-  let villages = locationStore.findByParent(locations.cell);
-
-  useEffect(() => {
-    districts.refetch();
-  }, [locations.province]);
-
-  useEffect(() => {
-    sectors.refetch();
-  }, [locations.district]);
-  useEffect(() => {
-    cells.refetch();
-  }, [locations.sector]);
-  useEffect(() => {
-    villages.refetch();
-  }, [locations.cell]);
-
-  function locationChange(e: ValueType) {
-    setLocations((locations) => ({
-      ...locations,
-      [e.name]: e.value,
-    }));
-  }
   function handleChange(e: ValueType) {
     setDetails((details) => ({
       ...details,
@@ -142,179 +109,104 @@ export default function UpdateAcademy<E>({ onSubmit }: CommonFormProps<E>) {
         </div>
         <form onSubmit={updateAcademy}>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2">
-            {/* first column */}
-            <div>
-              <InputMolecule
-                name="name"
-                placeholder="Type academy name"
-                value={details.name}
-                handleChange={(e) => handleChange(e)}>
-                academy name
-              </InputMolecule>
-              <InputMolecule
-                name="short_name"
-                placeholder="Type short name"
-                value={details.short_name}
-                handleChange={(e) => handleChange(e)}>
-                academy short name
-              </InputMolecule>
-              <InputMolecule
-                name="email"
-                type="email"
-                value={details.email}
-                placeholder="example@gmail.com"
-                handleChange={(e) => handleChange(e)}>
-                academy email
-              </InputMolecule>
-              <InputMolecule
-                name="phone_number"
-                type="tel"
-                value={details.phone_number}
-                placeholder="Type academy phone number"
-                handleChange={(e) => handleChange(e)}>
-                academy phone number
-              </InputMolecule>
-              <InputMolecule
-                name="fax_number"
-                value={details.fax_number}
-                handleChange={(e) => handleChange(e)}>
-                academy fax number
-              </InputMolecule>
-              <InputMolecule
-                name="full_address"
-                value={details.full_address}
-                handleChange={(e) => handleChange(e)}>
-                academy physical address
-              </InputMolecule>
-              <InputMolecule
-                name="website_link"
-                value={details.website_link}
-                placeholder="Type website url"
-                handleChange={(e) => handleChange(e)}>
-                academy website
-              </InputMolecule>
-              <InputMolecule
-                name="mission"
-                value={details.mission}
-                handleChange={(e) => handleChange(e)}>
-                academy mission
-              </InputMolecule>
-              <InputMolecule
-                name="moto"
-                value={details.moto}
-                handleChange={(e) => handleChange(e)}>
-                academy motto
-              </InputMolecule>
-            </div>
-            {/* second column */}
-            <div className="w-80">
-              <Heading fontSize="base" fontWeight="semibold" className="py-2">
-                Choose head office location
-              </Heading>
+            <InputMolecule
+              name="name"
+              placeholder="Type academy name"
+              value={details.name}
+              handleChange={(e) => handleChange(e)}>
+              academy name
+            </InputMolecule>
+            <InputMolecule
+              name="short_name"
+              placeholder="Type short name"
+              value={details.short_name}
+              handleChange={(e) => handleChange(e)}>
+              academy short name
+            </InputMolecule>
+            <InputMolecule
+              name="email"
+              type="email"
+              value={details.email}
+              placeholder="example@gmail.com"
+              handleChange={(e) => handleChange(e)}>
+              academy email
+            </InputMolecule>
+            <InputMolecule
+              name="phone_number"
+              type="tel"
+              value={details.phone_number}
+              placeholder="Type academy phone number"
+              handleChange={(e) => handleChange(e)}>
+              academy phone number
+            </InputMolecule>
+            <InputMolecule
+              name="fax_number"
+              value={details.fax_number}
+              handleChange={(e) => handleChange(e)}>
+              academy fax number
+            </InputMolecule>
+            <InputMolecule
+              name="full_address"
+              value={details.full_address}
+              handleChange={(e) => handleChange(e)}>
+              academy physical address
+            </InputMolecule>
+            <InputMolecule
+              name="website_link"
+              value={details.website_link}
+              placeholder="Type website url"
+              handleChange={(e) => handleChange(e)}>
+              academy website
+            </InputMolecule>
+            <InputMolecule
+              name="mission"
+              value={details.mission}
+              handleChange={(e) => handleChange(e)}>
+              academy mission
+            </InputMolecule>
+            <InputMolecule
+              name="moto"
+              value={details.moto}
+              handleChange={(e) => handleChange(e)}>
+              academy motto
+            </InputMolecule>
+            <LocationMolecule
+              placeholder="Select head office location"
+              name="head_office_location_id"
+              handleChange={handleChange}>
+              Head office location
+            </LocationMolecule>
+            <InputMolecule
+              className="w-60 md:w-80"
+              name="full_address"
+              value={details.full_address}
+              handleChange={(e) => handleChange(e)}>
+              academy physical address
+            </InputMolecule>
+            <div className="flex flex-col py-2">
               <DropdownMolecule
-                width="60 md:w-80"
-                defaultValue={getDropDownOptions({ inputs: provinces || [] }).find(
-                  (province) =>
-                    province.value ===
-                    locationVillages?.parent?.parent?.parent?.parent?.id.toString(),
+                defaultValue={getInchargeDropdown(admins).find(
+                  (incharge) => incharge.value === details.current_admin_id,
                 )}
-                options={getDropDownOptions({ inputs: provinces || [] })}
-                name="province"
-                placeholder="Province"
-                handleChange={locationChange}>
-                Province
+                width="60 md:w-80"
+                placeholder="Select admin"
+                options={getInchargeDropdown(admins)}
+                name="current_admin_id"
+                handleChange={handleChange}>
+                Add academy admin
               </DropdownMolecule>
-              <div className="grid grid-cols-1 md:grid-cols-2 py-2">
-                <DropdownMolecule
-                  className="pr-3"
-                  defaultValue={getDropDownOptions({
-                    inputs: districts.data?.data || [],
-                  }).find(
-                    (district) =>
-                      district.value ===
-                      locationVillages?.parent?.parent?.parent?.id.toString(),
-                  )}
-                  width="60 md:w-40"
-                  placeholder="District"
-                  options={getDropDownOptions({ inputs: districts.data?.data || [] })}
-                  name="district"
-                  handleChange={locationChange}>
-                  District
-                </DropdownMolecule>
-                <DropdownMolecule
-                  width="60 md:w-40"
-                  defaultValue={getDropDownOptions({
-                    inputs: sectors.data?.data || [],
-                  }).find(
-                    (sector) =>
-                      sector.value === locationVillages?.parent?.parent?.id.toString(),
-                  )}
-                  options={getDropDownOptions({ inputs: sectors.data?.data || [] })}
-                  name="sector"
-                  placeholder="Sector"
-                  handleChange={locationChange}>
-                  Sector
-                </DropdownMolecule>
+              <div className="text-primary-500 py-2 text-right w-60 md:w-80">
+                <Link to="/dashboard/users/add">Create new admin</Link>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 py-2">
-                <DropdownMolecule
-                  defaultValue={getDropDownOptions({
-                    inputs: cells.data?.data || [],
-                  }).find(
-                    (cell) => cell.value === locationVillages?.parent?.id.toString(),
-                  )}
-                  className="pr-3"
-                  width="60 md:w-40"
-                  placeholder="Cell"
-                  options={getDropDownOptions({ inputs: cells.data?.data || [] })}
-                  name="cell"
-                  handleChange={locationChange}>
-                  Cell
-                </DropdownMolecule>
-                <DropdownMolecule
-                  defaultValue={getDropDownOptions({
-                    inputs: villages.data?.data || [],
-                  }).find((village) => village.value === locationVillages?.id.toString())}
-                  width="60 md:w-40"
-                  placeholder="Village"
-                  options={getDropDownOptions({ inputs: villages.data?.data || [] })}
-                  name="head_office_location_id"
-                  handleChange={handleChange}>
-                  Village
-                </DropdownMolecule>
+            </div>
+            <div>
+              <div className="mb-3">
+                <ILabel weight="bold">academy logo</ILabel>
               </div>
-              <InputMolecule
-                className="w-60 md:w-80"
-                name="full_address"
-                value={details.full_address}
-                handleChange={(e) => handleChange(e)}>
-                academy physical address
-              </InputMolecule>
-              <div className="flex flex-col py-2">
-                <DropdownMolecule
-                  defaultValue={getInchargeDropdown(admins).find(
-                    (incharge) => incharge.value === details.current_admin_id,
-                  )}
-                  width="60 md:w-80"
-                  placeholder="Select admin"
-                  options={getInchargeDropdown(admins)}
-                  name="current_admin_id"
-                  handleChange={handleChange}>
-                  Add academy admin
-                </DropdownMolecule>
-                <div className="text-primary-500 py-2 text-right w-60 md:w-80">
-                  <Link to="/dashboard/users/add">Create new admin</Link>
-                </div>
-              </div>
-              <div>
-                <div className="mb-3">
-                  <ILabel weight="bold">academy logo</ILabel>
-                </div>
-                <Button styleType="outline">upload logo</Button>
-              </div>
-              <div className="mt-5">
-                <Button type="submit">Save</Button>
-              </div>
+              <Button styleType="outline">upload logo</Button>
+            </div>
+            <div className="mt-5">
+              <Button type="submit">Save</Button>
             </div>
           </div>
         </form>

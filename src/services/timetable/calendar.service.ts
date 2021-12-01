@@ -22,9 +22,11 @@ class ScheduleService {
 
   public async getAllByAcademicProgramIntakeLevel(
     academicProgramIntakeLevelId: string,
+    range: DateRange,
   ): Promise<AxiosResponse<Response<ScheduleInfo[]>>> {
-    return await timetableAxios.get(
+    return await timetableAxios.put(
       `/schedural/academic-program-intake-level/${academicProgramIntakeLevelId}`,
+      range,
     );
   }
   public async getAllByAcademicProgramIntakeLevelAndStatus(
@@ -53,6 +55,16 @@ class ScheduleService {
     );
   }
 
+  public async getAllByIntakeLevelClass(
+    intakeLevelClassId: string,
+    range: DateRange,
+  ): Promise<AxiosResponse<Response<ScheduleInfo[]>>> {
+    return await timetableAxios.put(
+      `/schedural/intake-level-class/${intakeLevelClassId}`,
+      range,
+    );
+  }
+
   public async createDateRangeEvents(
     schedule: CreateEventSchedule,
   ): Promise<AxiosResponse<Response<ScheduleInfo>>> {
@@ -77,4 +89,4 @@ class ScheduleService {
   }
 }
 
-export const scheduleService = new ScheduleService();
+export const calendarService = new ScheduleService();

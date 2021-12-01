@@ -28,6 +28,7 @@ export default function Redirecting() {
     if (data?.data.data.user_type === UserType.ADMIN) {
       let val = !data?.data.data.academy ? true : false;
       setHasNoAcademy(val && !isLoading);
+
       redirectTo('/dashboard/users');
     } else if (data?.data.data.user_type === UserType.INSTRUCTOR) {
       mutateAsync().then((resp) => {
@@ -40,7 +41,7 @@ export default function Redirecting() {
           }
         }
         if (!experienceFound) redirectTo('/complete-profile/experience');
-        else redirectTo('/dashboard/evaluations');
+        else redirectTo('/dashboard/inst-program');
       });
     } else if (data?.data.data.user_type === UserType.STUDENT) {
       mutateAsync().then((resp) => {
@@ -53,7 +54,7 @@ export default function Redirecting() {
           }
         }
         if (!experienceFound) redirectTo('/complete-profile/experience');
-        else redirectTo('/dashboard/modules');
+        else redirectTo('/dashboard/student');
       });
     }
 

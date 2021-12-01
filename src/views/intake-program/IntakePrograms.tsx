@@ -20,7 +20,10 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
-import { intakeStore } from '../../store/administration/intake.store';
+import {
+  getProgramsByIntake,
+  intakeStore,
+} from '../../store/administration/intake.store';
 import { Link as LinkList } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from '../programs/AcademicPrograms';
@@ -46,7 +49,7 @@ function IntakePrograms() {
     { to: `${url}`, title: 'Programs' },
   ];
 
-  const { data, refetch, isLoading } = intakeStore.getProgramsByIntake(intakeId);
+  const { data, refetch, isLoading } = getProgramsByIntake(intakeId);
 
   const programInfo = data?.data.data || [];
 
@@ -192,7 +195,13 @@ function IntakePrograms() {
                               {Common.description}
                             </Heading>
                           </div>
-                          <div className="mt-4 space-x-4">
+                          <div className="my-4">
+                            <Link
+                              to={`/dashboard/schedule/programs/${intakeId}/${Common.id}/edit`}>
+                              <Button styleType="text">View schedule</Button>
+                            </Link>
+                          </div>
+                          <div className="space-x-4">
                             <Link
                               to={`/dashboard/intakes/programs/${intakeId}/${Common.id}/edit`}>
                               <Button>Edit program</Button>

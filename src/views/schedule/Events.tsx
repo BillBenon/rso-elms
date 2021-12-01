@@ -21,11 +21,11 @@ export default function Events() {
   return (
     <div>
       <TableHeader totalItems={0} title={'Events'} showBadge={false}>
-        <Link to={`${path}/event/new`}>
+        <Link to={`/dashboard/schedule/events/new`}>
           <Button>New Event</Button>
         </Link>
       </TableHeader>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
         {events?.map((event) => (
           <div
             key={event.id}
@@ -52,7 +52,7 @@ export default function Events() {
       <Switch>
         <Route
           exact
-          path={`${path}/event/new`}
+          path={`${path}/new`}
           render={() => (
             <PopupMolecule title="New Event" open onClose={handleClose}>
               <NewEvent />

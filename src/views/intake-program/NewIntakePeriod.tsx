@@ -57,18 +57,6 @@ export function NewIntakePeriod({ level_id, checked }: PeriodStep) {
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
   };
 
-  useEffect(
-    () =>
-      setvalues({
-        ...values,
-        academic_program_intake_level_id: parseInt(
-          document.getElementById('academic_program_intake_level_id')?.title || '0',
-        ),
-        academic_period_id: document.getElementById('academic_period_id')?.title || '',
-      }),
-    [document.getElementById('academic_period_id')?.title],
-  );
-
   useEffect(() => {
     setLastStep(academicperiods.length);
   }, [academicperiods]);
@@ -89,17 +77,24 @@ export function NewIntakePeriod({ level_id, checked }: PeriodStep) {
 
   async function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault(); // prevent page to reload:
-    await mutateAsync(values, {
-      onSuccess: (data) => {
-        toast.success(data.data.message);
-        queryClient.invalidateQueries(['levels/periods']);
-        nextStep(true);
+    await mutateAsync(
+      {
+        ...values,
+        academic_period_id: document.getElementById('academic_period_id')?.title || '',
+        academic_program_intake_level_id: parseInt(level_id ? level_id : levelId),
       },
-      onError: (error) => {
-        console.log(error);
-        toast.error('something wrong happened while creating level');
+      {
+        onSuccess: (data) => {
+          toast.success(data.data.message);
+          queryClient.invalidateQueries(['levels/periods']);
+          nextStep(true);
+        },
+        onError: (error) => {
+          console.log(error);
+          toast.error('something wrong happened while creating level');
+        },
       },
-    });
+    );
   }
 
   return done !== checked ? (

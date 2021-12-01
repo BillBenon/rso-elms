@@ -64,10 +64,15 @@ export interface CreateEventSchedule extends CommonScheduleProperties {
   plannedEndHour: string;
   plannedScheduleStartDate: string | Date;
   plannedScheduleEndDate: string | Date;
-  repeatingDays: string[];
   recurringSchedule?: createRecurringSchedule[];
   plannedStartHour: string;
   venue: string;
+
+  // to help on frontend
+  repeatingDays: string[];
+  intake: string;
+  program: string;
+  level: string;
 }
 
 export interface createRecurringSchedule {
@@ -110,4 +115,40 @@ export interface ScheduleInfo extends Table, CommonScheduleProperties {
   frequency_type: frequencyType;
   applies_to: scheduleAppliesTo;
   period: 1;
+}
+
+export interface ICreateClassTimeTable {
+  instructor: string;
+  timetable: createRecurringSchedule[];
+  repeatingDays: string[];
+  startHour: string;
+  endHour: string;
+  courseModule: string;
+  venue: string;
+  intakeLevelClass: string;
+}
+
+export interface IUpdateClassTimetable {
+  id: string;
+  courseModule: string;
+  dayOfWeek: daysOfWeek;
+  endHour: string;
+  instructor: string;
+  intakeLevelClass: string;
+  startHour: string;
+  venue: string;
+}
+
+interface courseModule extends Table {
+  name: string;
+}
+export interface ClassTimeTableInfo extends Table {
+  course_module: courseModule;
+  day_of_week: daysOfWeek;
+  end_hour: string;
+  instructor: Table;
+  intake_level_class: Table;
+  start_hour: string;
+  timetable_status: ScheduleStatus;
+  venue: VenueInfo;
 }

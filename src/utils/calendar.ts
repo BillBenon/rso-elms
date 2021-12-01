@@ -1,4 +1,8 @@
-import { ScheduleInfo } from '../types/services/schedule.types';
+import {
+  ClassTimeTableInfo,
+  daysOfWeek,
+  ScheduleInfo,
+} from '../types/services/schedule.types';
 
 interface BigCalendarEvent {
   id: string | number;
@@ -32,4 +36,22 @@ export function formatCalendarEvents(schedules: ScheduleInfo[] = []): BigCalenda
     });
   });
   return events;
+}
+
+interface IDayTimeTable {
+  [index: string]: ClassTimeTableInfo[];
+}
+
+export function groupTimeTableByDay(arr: ClassTimeTableInfo[]): IDayTimeTable {
+  let grouped: IDayTimeTable = {};
+
+  Object.keys(daysOfWeek)
+    .slice(0, 7)
+    .forEach((day) => {
+      grouped[day] = [...arr.filter((tt) => tt.day_of_week == day)].sort(function (a, b) {
+        return a.start_hour.localeCompare(b.start_hour);
+      });
+    });
+
+  return grouped;
 }

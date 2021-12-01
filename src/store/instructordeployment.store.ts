@@ -8,9 +8,21 @@ class InstructorDeploymentStore {
       instructorDeployment.getInstructorsDeployedInAcademy(academyId),
     );
   }
+  getInstructorsRegisteredInAcademy(academyId: string) {
+    return useQuery(['instructor-deploy/academy', academyId], () =>
+      instructorDeployment.getInstructorsRegisteredInAcademy(academyId),
+    );
+  }
   getInstructorById(id: string) {
     return useQuery(['instructor/id', id], () =>
       instructorDeployment.getInstructorById(id),
+    );
+  }
+  getInstructorByUserId(userId: string, enabled = false) {
+    return useQuery(
+      ['instructor/userId', userId],
+      () => instructorDeployment.getInstructorByUserId(userId),
+      { enabled },
     );
   }
   getInstructors() {

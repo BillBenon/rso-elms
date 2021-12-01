@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
+import {
+  getLocalStorageData,
+  setLocalStorageData,
+} from '../../../../../../utils/getLocalStorageItem';
 import CompleteProfileHeader from '../../../../../Molecules/CompleteProfileHeader';
 import Stepper from '../../../../../Molecules/Stepper/Stepper';
 import KinAddressDetails from './KinAddressDetails';

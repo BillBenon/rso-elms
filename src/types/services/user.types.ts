@@ -141,6 +141,7 @@ export interface UpdateUserInfo {
   user_type: UserType;
   send_communication_msg: SendCommunicationMsg;
   username: string;
+  send_communication_msg: SendCommunicationMsg;
 }
 
 export interface CreateUserInfo {
@@ -188,7 +189,7 @@ export type UserTypes = {
   username: string;
   'full name': string;
   email: string;
-  NID: string;
+  'ID Card': string;
   academy: string;
   status: GenericStatus;
   user_type: UserType;
@@ -299,4 +300,20 @@ export enum SendCommunicationMsg {
   EMAIL = 'EMAIL',
   SMS = 'SMS',
   BOTH = 'BOTH',
+}
+
+export interface IImportUser {
+  intake: string;
+  academicProgramLevelId: string;
+  academicYearId: string;
+  academyId: string;
+  intakeProgramId: string;
+  userType: UserType;
+  file: File | null;
+}
+
+export interface IImportUserRes {
+  failures: {
+    [index: string]: string;
+  };
 }

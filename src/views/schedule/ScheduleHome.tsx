@@ -11,17 +11,17 @@ import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
-import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
-import NewEvent from '../../components/Organisms/calendar/NewEvent';
-import NewVenue from '../../components/Organisms/calendar/NewVenue';
-import programStore from '../../store/administration/program.store';
+import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
+import { authenticatorStore } from '../../store/administration';
+import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import { CommonCardDataType, Link } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import CalendarView from './Calendar';
-import ProgramLevelClasses from './ProgramsLevelClases';
+import Events from './Events';
+import IntakePrograms from './IntakePrograms';
 import TimeTable from './TimeTable';
+import Venues from './Venues';
 
 const list: Link[] = [
   { to: 'home', title: 'home' },
@@ -29,28 +29,43 @@ const list: Link[] = [
   { to: `calendar`, title: 'Schedule' },
 ];
 
+const tabs: TabType[] = [
+  {
+    label: 'Schedule',
+    href: '/dashboard/schedule',
+  },
+  {
+    label: 'Events',
+    href: '/dashboard/schedule/events',
+  },
+  {
+    label: 'Venues',
+    href: '/dashboard/schedule/venues',
+  },
+];
+
 export default function ScheduleHome() {
-  const { data, isLoading } = programStore.fetchPrograms();
   const history = useHistory();
   const { path } = useRouteMatch();
 
-  let programs: CommonCardDataType[] = [];
+  const userInfo = authenticatorStore.authUser().data?.data.data;
+  const { data, isLoading } = getIntakesByAcademy(
+    userInfo?.academy.id + '',
+    false,
+    userInfo?.academy.id != undefined,
+  );
 
-  data?.data.data.map((p) => {
-    let prog: CommonCardDataType = {
-      id: p.id,
+  let intakes: CommonCardDataType[] =
+    data?.data.data.map((intake) => ({
+      id: intake.id,
+      code: intake.code.toUpperCase(),
+      description: intake.description,
+      title: intake.title || `------`,
       status: {
-        type: advancedTypeChecker(p.generic_status),
-        text: p.generic_status.toString(),
+        type: advancedTypeChecker(intake.intake_status),
+        text: intake.intake_status.toString(),
       },
-      code: p.code,
-      title: p.name,
-      subTitle: p.type.replaceAll('_', ' '),
-      description: p.description,
-    };
-
-    programs.push(prog);
-  });
+    })) || [];
 
   const handleClose = () => {
     history.goBack();
@@ -60,61 +75,47 @@ export default function ScheduleHome() {
     <div>
       <BreadCrumb list={list} />
 
-      <Switch>
-        <Route exact path={`${path}/program/:id`} component={ProgramLevelClasses} />
-        <Route path={`${path}/calendar/:id`} component={CalendarView} />
-        <Route path={`${path}/timetable/:id`} component={TimeTable} />
-        <Route
-          path={`${path}`}
-          render={() => (
-            <>
-              <TableHeader totalItems={`${programs.length} programs`} title={'Schedule'}>
-                <div className="flex gap-4">
-                  <BrowserLink to={`${path}/event/new`}>
-                    <Button>Add event</Button>
-                  </BrowserLink>
-                  <BrowserLink to={`${path}/venue/new`}>
-                    <Button styleType="outline">Add Venue</Button>
-                  </BrowserLink>
+      <TabNavigation tabs={tabs}>
+        <Switch>
+          <Route path={`${path}/intake/:id`} component={IntakePrograms} />
+          <Route path={`${path}/calendar/:id`} component={CalendarView} />
+          <Route path={`${path}/timetable/:id`} component={TimeTable} />
+          <Route path={`${path}/events`} component={Events} />
+          <Route path={`${path}/venues`} component={Venues} />
+          <Route
+            path={`${path}`}
+            render={() => (
+              <>
+                <TableHeader totalItems={`${intakes.length} intakes`} title={'Schedule'}>
+                  <div className="flex gap-4">
+                    <BrowserLink to={`/dashboard/schedule/events/new`}>
+                      <Button>Add event</Button>
+                    </BrowserLink>
+                    <BrowserLink to={`/dashboard/schedule/venues/new`}>
+                      <Button styleType="outline">Add Venue</Button>
+                    </BrowserLink>
+                  </div>
+                </TableHeader>
+                <div className="mt-4 flex gap-4 flex-wrap">
+                  {intakes.length === 0 && isLoading ? (
+                    <Loader />
+                  ) : (
+                    intakes.map((intake) => (
+                      <CommonCardMolecule
+                        key={intake.id}
+                        data={intake}
+                        handleClick={() =>
+                          history.push(`/dashboard/schedule/intake/${intake.id}`)
+                        }
+                      />
+                    ))
+                  )}
                 </div>
-              </TableHeader>
-              <div className="mt-4 flex gap-4 flex-wrap">
-                {programs.length === 0 && isLoading ? (
-                  <Loader />
-                ) : (
-                  programs.map((program) => (
-                    <CommonCardMolecule
-                      key={program.id}
-                      data={program}
-                      handleClick={() =>
-                        history.push(`/dashboard/schedule/program/${program.id}`)
-                      }
-                    />
-                  ))
-                )}
-              </div>
-              <Route
-                exact
-                path={`${path}/event/new`}
-                render={() => (
-                  <PopupMolecule title="New Event" open onClose={handleClose}>
-                    <NewEvent />
-                  </PopupMolecule>
-                )}
-              />
-              <Route
-                exact
-                path={`${path}/venue/new`}
-                render={() => (
-                  <PopupMolecule title="New Venue" open onClose={handleClose}>
-                    <NewVenue />
-                  </PopupMolecule>
-                )}
-              />
-            </>
-          )}
-        />
-      </Switch>
+              </>
+            )}
+          />
+        </Switch>
+      </TabNavigation>
     </div>
   );
 }

@@ -15,24 +15,11 @@ import Instructors from '../../components/Organisms/user/Instructors';
 import Students from '../../components/Organisms/user/Students';
 import { authenticatorStore } from '../../store/administration';
 import usersStore from '../../store/administration/users.store';
-import { GenericStatus } from '../../types';
-import { UserType } from '../../types/services/user.types';
+import { UserType, UserTypes } from '../../types/services/user.types';
 import UserDetails from './UserDetails';
-
-export type UserTypes = {
-  id: string;
-  username: string;
-  'full name': string;
-  email: string;
-  NID: string;
-  academy: string;
-  status: GenericStatus;
-  user_type: UserType;
-};
 
 export default function Users() {
   const { url, path } = useRouteMatch();
-  const history = useHistory();
   const [userType, setUserType] = useState('Students');
 
   const { data, isSuccess, isLoading } = usersStore.fetchUsers();
@@ -61,7 +48,7 @@ export default function Users() {
         username: username,
         'full name': first_name + ' ' + last_name,
         email: email,
-        NID: person && person.nid,
+        'ID Card': person && person.nid,
         academy: academy && academy.name,
         status: generic_status,
         user_type: user_type,
@@ -99,7 +86,6 @@ export default function Users() {
       href: `${url}/admins`,
     });
   }
-
   return (
     <div>
       <div className="flex flex-wrap justify-start items-center pt-1">
@@ -116,62 +102,46 @@ export default function Users() {
           {userType}
         </ILabel>
       </div>
-      {isLoading && users.length === 0 && <Loader />}
+      {isLoading && <Loader />}
       <Switch>
-        <Route exact path={`${path}/add`} render={() => <NewUser />} />
-        <Route exact path={`${path}/:id/edit`} render={() => <UpdateUser />} />
+        <Route exact path={`${path}/add`} component={NewUser} />
+        <Route exact path={`${path}/:id/edit`} component={UpdateUser} />
         <Route exact path={`${path}/:id/profile`} component={UserDetails} />
 
         <Route
-          exact
-          path={`${path}/import`}
-          render={() => (
-            <PopupMolecule
-              title="Import instructors"
-              open={true}
-              onClose={history.goBack}>
-              <ImportUsers userType="instructors" />
-            </PopupMolecule>
-          )}
-        />
-        {isSuccess && (
-          <Route
-            path={`${path}`}
-            render={() => {
-              return (
-                <>
-                  <TableHeader
-                    totalItems={users.length}
-                    title={'users'}
-                    showSearch={false}
-                  />
+          path={`${path}`}
+          render={() => {
+            return (
+              <>
+                <TableHeader
+                  totalItems={users.length}
+                  showBadge={false}
+                  title={'users'}
+                  showSearch={false}
+                />
 
-                  <TabNavigation
-                    tabs={tabs}
-                    onTabChange={(event) => setUserType(event.activeTabLabel)}>
+                <TabNavigation
+                  tabs={tabs}
+                  onTabChange={(event) => setUserType(event.activeTabLabel)}>
+                  <Switch>
                     <Route
-                      exact
-                      path={`${path}`}
-                      render={() => <Students students={students} />}
-                    />
-                    <Route
-                      exact
                       path={`${path}/instructors`}
                       render={() => <Instructors instructors={instructors} />}
                     />
-                    {authUser?.user_type === 'ADMIN' ? (
-                      <Route
-                        exact
-                        path={`${path}/admins`}
-                        render={() => <Admins admins={admins} />}
-                      />
-                    ) : null}
-                  </TabNavigation>
-                </>
-              );
-            }}
-          />
-        )}
+                    <Route
+                      path={`${path}/admins`}
+                      render={() => <Admins admins={admins} />}
+                    />
+                    <Route
+                      path={`${path}`}
+                      render={() => <Students students={students} />}
+                    />
+                  </Switch>
+                </TabNavigation>
+              </>
+            );
+          }}
+        />
       </Switch>
     </div>
   );

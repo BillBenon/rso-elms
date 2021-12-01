@@ -11,8 +11,8 @@ import StudentInClass from './StudentInClass';
 function Classes() {
   const history = useHistory();
 
-  const { url, path } = useRouteMatch();
-  const { level: levelId } = useParams<IntakeLevelParam>();
+  const { path } = useRouteMatch();
+  const { level: levelId, intakeId, intakeProg, id } = useParams<IntakeLevelParam>();
 
   const { data: classes } = classStore.getClassByLevel(levelId);
   const classGroups = classes?.data.data || [];
@@ -30,7 +30,11 @@ function Classes() {
               icon="academy"
               fill={false}
               title={'No classes available in this level'}
-              handleClick={() => history.push(`${url}/add-class`)}
+              handleClick={() =>
+                history.push(
+                  `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/add-class`,
+                )
+              }
               description="There are no classes added yet, click on the below button to add some!"
             />
           ) : (

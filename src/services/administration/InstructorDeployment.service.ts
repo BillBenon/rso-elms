@@ -17,10 +17,26 @@ class InstructorDeployment {
     );
   }
 
+  public async getInstructorsRegisteredInAcademy(
+    academyId: string,
+  ): Promise<AxiosResponse<Response<Instructor[]>>> {
+    return await adminstrationAxios.get(
+      `instructorDeployments/getInstructorsRegisteredInAcademy/${academyId}`,
+    );
+  }
+
   public async getInstructorById(
     id: string,
   ): Promise<AxiosResponse<Response<Instructor[]>>> {
     return await adminstrationAxios.get(`instructorDeployments/getInstructorById/${id}`);
+  }
+
+  public async getInstructorByUserId(
+    userId: string,
+  ): Promise<AxiosResponse<Response<Instructor>>> {
+    return await adminstrationAxios.get(
+      `instructorDeployments/getInstructorByUserId/${userId}`,
+    );
   }
 
   public async getInstructors(): Promise<AxiosResponse<Response<Instructor[]>>> {

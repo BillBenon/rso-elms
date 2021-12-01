@@ -12,6 +12,9 @@ class ClassStore {
   modifyClass() {
     return useMutation(classService.modifyClass);
   }
+  getAllClasses() {
+    return useQuery(['classes'], classService.getAllClasses);
+  }
   getClassById(classId: string) {
     return useQuery(['class/id', classId], () => classService.getClassById(classId));
   }

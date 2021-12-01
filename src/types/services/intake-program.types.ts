@@ -2,6 +2,7 @@
 import { Table } from '..';
 import { IAcademicPeriodInfo } from './academicperiod.types';
 import { IAcademicYearInfo } from './academicyears.types';
+import { EnrollmentMode, EnrollmentStatus } from './enrollment.types';
 import { IntakeInfo, IntakeProgram, IntakeStatus } from './intake.types';
 import { ProgramLevel } from './levels.types';
 import { ModuleInfo } from './modules.types';
@@ -97,6 +98,15 @@ export interface AddLevelToModule {
   weight: number;
 }
 
+export interface StudentIntakeProgramLevel extends Table {
+  intake_program_student: StudentIntakeProgram;
+  academic_year_program_level: LevelIntakeProgram;
+  enrolment_status: EnrollmentStatus;
+  promotion_status: PromotionStatus;
+  position: number;
+  intake_program_student_id: number;
+  academic_year_program_level_id: number;
+}
 export interface StudentIntakeProgram extends Table {
   student: Student;
   intake_program: IntakeProgram;
@@ -148,9 +158,9 @@ export enum IntakeModuleStatus {
   VOIDED = 'VOIDED',
 }
 
-export enum EnrollmentStatus {
-  PENDING,
-  NEW,
+export enum PromotionStatus {
+  PROMOTED = 'PROMOTED',
   RETAKE = 'RETAKE',
   DISMISSED = 'DISMISSED',
+  PENDING = 'PENDING',
 }

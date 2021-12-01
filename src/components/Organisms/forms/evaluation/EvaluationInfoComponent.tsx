@@ -1,12 +1,16 @@
 import { Editor } from '@tiptap/react';
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { authenticatorStore } from '../../../../store/administration';
+import { classStore } from '../../../../store/administration/class.store';
+import enrollmentStore from '../../../../store/administration/enrollment.store';
 import { evaluationStore } from '../../../../store/administration/evaluation.store';
 import { moduleStore } from '../../../../store/administration/modules.store';
 import { subjectStore } from '../../../../store/administration/subject.store';
+import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { ValueType } from '../../../../types';
+import { EnrollInstructorLevelInfo } from '../../../../types/services/enrollment.types';
 import {
   IAccessTypeEnum,
   IContentFormatEnum,
@@ -19,6 +23,7 @@ import {
   IQuestionaireTypeEnum,
   ISubmissionTypeEnum,
 } from '../../../../types/services/evaluation.types';
+import { setLocalStorageData } from '../../../../utils/getLocalStorageItem';
 import {
   getDropDownOptions,
   getDropDownStatusOptions,
@@ -32,65 +37,106 @@ import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 // import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps) {
-  const [moduleId, setModuleId] = useState<string>('');
+export default function EvaluationInfoComponent({
+  handleNext,
+  evaluationId,
+  evaluationInfo,
+}: IEvaluationProps) {
+  const [moduleId, setModuleId] = useState('');
+  const [levelId, setLevelId] = useState('');
+  // const [period, setPeriod] = useState('');
+  // const { search } = useLocation();
+  // const [evaluationId, setEvaluationId] = useState(
+  //   new URLSearchParams(search).get('evaluation'),
+  // );
   const authUser = authenticatorStore.authUser().data?.data.data;
   const { data } = moduleStore.getModulesByAcademy(authUser?.academy.id.toString() || '');
-  let subjects;
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
+    authUser?.id + '',
+  ).data?.data.data;
 
-  ({ data: subjects } = subjectStore.getSubjectsByModule(moduleId));
+  const { data: subjects } = subjectStore.getSubjectsByModule(moduleId);
+  const { data: levels } = enrollmentStore.getInstructorLevels(instructorInfo?.id + '');
+  const { data: classes } = classStore.getClassByLevel(levelId + '');
 
   const [details, setDetails] = useState<IEvaluationCreate>({
-    access_type: IAccessTypeEnum.PUBLIC,
+    access_type: evaluationInfo?.access_type || IAccessTypeEnum.PUBLIC,
     academy_id: authUser?.academy.id.toString() || '',
     instructor_id: authUser?.id.toString() || '',
-    allow_submission_time: '',
+    adm_intake_level_class_id: evaluationInfo?.adm_intake_level_class_id || '',
+    intake_academic_year_period: evaluationInfo?.intake_academic_year_period || 0,
+    allow_submission_time: evaluationInfo?.allow_submission_time || '',
     class_ids: '',
-    id: '',
-    classification: IEvaluationClassification.MODULE,
-    content_format: IContentFormatEnum.DOC,
+    id: evaluationInfo?.id || '',
+    classification: evaluationInfo?.classification || IEvaluationClassification.MODULE,
+    content_format: evaluationInfo?.content_format || IContentFormatEnum.DOC,
     due_on: '',
     eligible_group: IEligibleClassEnum.MULTIPLE,
-    evaluation_status: IEvaluationStatus.PENDING,
-    evaluation_type: IEvaluationTypeEnum.CAT,
-    exam_instruction: '',
-    is_consider_on_report: true,
-    marking_reminder_date: '',
-    maximum_file_size: '',
-    name: '',
-    questionaire_type: IQuestionaireTypeEnum.OPEN,
-    subject_academic_year_period_id: '',
-    submision_type: ISubmissionTypeEnum.ONLINE_TEXT,
-    time_limit: 30,
-    total_mark: 10,
+    evaluation_status: evaluationInfo?.evaluation_status || IEvaluationStatus.PENDING,
+    evaluation_type: evaluationInfo?.evaluation_type || IEvaluationTypeEnum.CAT,
+    exam_instruction: evaluationInfo?.exam_instruction || '',
+    is_consider_on_report: evaluationInfo?.is_consider_on_report || true,
+    marking_reminder_date: evaluationInfo?.marking_reminder_date || '',
+    maximum_file_size: evaluationInfo?.maximum_file_size || '',
+    name: evaluationInfo?.name || '',
+    questionaire_type: evaluationInfo?.questionaire_type || IQuestionaireTypeEnum.OPEN,
+    subject_academic_year_period_id: evaluationInfo?.subject_id || '',
+    submision_type: evaluationInfo?.submision_type || ISubmissionTypeEnum.ONLINE_TEXT,
+    time_limit: evaluationInfo?.time_limit || 10,
+    total_mark: evaluationInfo?.total_mark || 0,
   });
 
+  useEffect(() => {
+    const period =
+      classes?.data.data.find(
+        (periodId) => periodId.id == details.adm_intake_level_class_id,
+      )?.intake_academic_year_period_id + '';
+
+    setDetails((details) => ({
+      ...details,
+      ['intake_academic_year_period']: parseInt(period),
+    }));
+  }, [classes?.data.data, details.adm_intake_level_class_id]);
+
   const { mutate } = evaluationStore.createEvaluation();
+  const { mutateAsync } = evaluationStore.updateEvaluation();
 
   function handleChange({ name, value }: ValueType) {
     if (name === 'module') setModuleId(value.toString());
+    else if (name === 'levelId') setLevelId(value + '');
     else setDetails((details) => ({ ...details, [name]: value }));
   }
 
   function handleEditorChange(editor: Editor) {
-    // console.log(editor.getHTML());
     setDetails((details) => ({ ...details, exam_instruction: editor.getHTML() }));
   }
 
   function submitForm(e: FormEvent) {
     e.preventDefault();
 
-    mutate(details, {
-      onSuccess: (data) => {
-        toast.success('Evaluation created', { duration: 5000 });
-        localStorage.setItem('evaluationId', JSON.stringify(data?.data.data.id));
-        handleNext();
-      },
-      onError: (error) => {
-        console.log(error);
-        toast.error(error + '');
-      },
-    });
+    if (evaluationId) {
+      mutateAsync(details, {
+        onSuccess: () => {
+          toast.success('Evaluation updated', { duration: 5000 });
+          handleNext();
+        },
+        onError: (error) => {
+          console.log(error);
+          toast.error('Failed to update');
+        },
+      });
+    } else {
+      mutate(details, {
+        onSuccess: (data) => {
+          toast.success('Evaluation created', { duration: 5000 });
+          setLocalStorageData('evaluationId', data.data.data.id);
+          handleNext();
+        },
+        onError: (error: any) => {
+          toast.error(error.response.data.data + '');
+        },
+      });
+    }
   }
 
   return (
@@ -105,9 +151,11 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
           Evaluation Name
         </InputMolecule>
         <DropdownMolecule
+          /*@ts-ignore */
+          // defaultValue={details.evaluation_type}
           width="64"
           name="evaluation_type"
-          placeholder="Evaluation Type"
+          placeholder={details.evaluation_type || 'Evaluation Type'}
           handleChange={handleChange}
           options={getDropDownStatusOptions(IEvaluationTypeEnum)}>
           Evaluation type
@@ -142,7 +190,34 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
           })}>
           Select subject
         </DropdownMolecule>
-        <RadioMolecule
+
+        <DropdownMolecule
+          width="64"
+          name="levelId"
+          placeholder="Select level"
+          handleChange={handleChange}
+          options={getDropDownOptions({
+            inputs: levels?.data.data || [],
+            //@ts-ignore
+            getOptionLabel: (lev: EnrollInstructorLevelInfo) =>
+              lev.academic_program_level.level.name,
+          })}>
+          Select Level
+        </DropdownMolecule>
+
+        <DropdownMolecule
+          width="64"
+          name="adm_intake_level_class_id"
+          placeholder="Select class"
+          handleChange={handleChange}
+          options={getDropDownOptions({
+            inputs: classes?.data.data || [],
+            labelName: ['class_name'],
+          })}>
+          Select Class
+        </DropdownMolecule>
+        {/* <RadioMolecule
+          defaultValue={details.eligible_group}
           className="pb-4"
           value={details.eligible_group}
           name="eligible_group"
@@ -152,8 +227,9 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
           ]}
           handleChange={handleChange}>
           Eligible Class
-        </RadioMolecule>
+        </RadioMolecule> */}
         <RadioMolecule
+          defaultValue={details.access_type}
           className="pb-4"
           value={details.access_type}
           name="access_type"
@@ -165,6 +241,7 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
           Accessibility
         </RadioMolecule>
         <RadioMolecule
+          defaultValue={details.questionaire_type}
           className="pb-4"
           value={details.questionaire_type}
           name="questionaire_type"
@@ -179,7 +256,7 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
         </RadioMolecule>
         {details.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
           <>
-            <DropdownMolecule
+            {/* <DropdownMolecule
               width="64"
               name="submision_type"
               placeholder="Select submission type"
@@ -189,10 +266,12 @@ export default function EvaluationInfoComponent({ handleNext }: IEvaluationProps
                 { label: 'Online text', value: ISubmissionTypeEnum.ONLINE_TEXT },
               ]}>
               Submission type
-            </DropdownMolecule>
+            </DropdownMolecule> */}
             {details.submision_type === ISubmissionTypeEnum.FILE && (
               <>
                 <DropdownMolecule
+                  /*@ts-ignore */
+                  defaultValue={details.content_format}
                   width="64"
                   name="submision_type"
                   placeholder="Select submission type"

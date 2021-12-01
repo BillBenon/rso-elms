@@ -1,40 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import { authenticatorStore } from '../../store/administration';
-import { moduleStore } from '../../store/administration/modules.store';
-import { CommonCardDataType, Link } from '../../types';
+import intakeProgramStore from '../../store/administration/intake-program.store';
+import { CommonCardDataType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
+import LessonPlan from '../subjects/LessonPlan';
+import SubjectDetails from '../subjects/SubjectDetails';
 import ModuleDetails from './ModuleDetails';
 
-export default function Modules() {
-  const { data: userInfo } = authenticatorStore.authUser();
-  const { data, isLoading, isSuccess, isError } = moduleStore.getModulesByAcademy(
-    userInfo?.data.data.academy.id.toString() || '',
+export default function Modules({ level }: { level: string }) {
+  // const level = new URLSearchParams(search).get('levelId');
+  const { data, isLoading, isSuccess, isError } = intakeProgramStore.getModulesByLevel(
+    parseInt(level || ''),
   );
-  const history = useHistory();
+
   const [modules, setModules] = useState<CommonCardDataType[]>([]);
-  const { path } = useRouteMatch();
+  const { path, url } = useRouteMatch();
 
   useEffect(() => {
     if (isSuccess && data?.data) {
       let newModules: CommonCardDataType[] = [];
-      data?.data.data.forEach((module) => {
+      data?.data.data.forEach((mod) => {
         newModules.push({
           status: {
-            type: advancedTypeChecker(module.generic_status),
-            text: module.generic_status.toString(),
+            type: advancedTypeChecker(mod.generic_status),
+            text: mod.generic_status.toString(),
           },
-          code: module.code,
-          title: module.name,
-          description: module.description,
-          id: module.id,
+          code: mod.module.code,
+          title: mod.module.name,
+          description: mod.module.description,
+          id: mod.module.id,
         });
       });
 
@@ -42,24 +43,15 @@ export default function Modules() {
     } else if (isError) toast.error('error occurred when loading modules');
   }, [data]);
 
-  function handleSearch() {}
-
-  const list: Link[] = [
-    { to: 'home', title: 'home' },
-    { to: 'modules', title: 'modules' },
-    { to: 'subjects', title: 'subjects' },
+  const list = [
+    { to: '/dashboard/student', title: 'Dashboard' },
+    { to: `${url}`, title: 'module' },
   ];
 
   return (
     <>
       <main className="px-4">
         <Switch>
-          <Route
-            path={`${path}/:id`}
-            render={() => {
-              return <ModuleDetails />;
-            }}
-          />
           <Route
             exact
             path={`${path}`}
@@ -69,26 +61,20 @@ export default function Modules() {
                   <section>
                     <BreadCrumb list={list}></BreadCrumb>
                   </section>
-                  <section className="">
-                    <TableHeader
-                      totalItems={modules.length + ' modules'}
-                      title="Modules"
-                      handleSearch={handleSearch}>
-                      {/* <Button onClick={() => history.push(`${path}/add`)}>
-                        Add Module
-                      </Button> */}
-                    </TableHeader>
-                  </section>
-                  <section className="flex flex-wrap justify-start gap-2 mt-2">
+                  <TableHeader
+                    showSearch={false}
+                    showBadge={false}
+                    title="Enrolled Modules"
+                    totalItems={modules.length || 0}
+                  />
+                  <section className="flex flex-wrap justify-start gap-2">
                     {isLoading ? (
                       <Loader />
                     ) : modules.length == 0 ? (
                       <NoDataAvailable
-                        icon="module"
-                        buttonLabel="Go to divisions"
-                        title={'No department available'}
-                        handleClick={() => history.push(`/dashboard/divisions`)}
-                        description="You should look the modules from the department they belong to"
+                        showButton={false}
+                        title={'No Modules available in this level'}
+                        description="This level has not received any planned modules to take. Please wait for the admin to add some"
                       />
                     ) : (
                       modules.map((course, index) => (
@@ -98,6 +84,22 @@ export default function Modules() {
                   </section>
                 </>
               );
+            }}
+          />
+          {/* view lesson plan form  */}
+          <Route
+            path={`${path}/lesson-plan/:id`}
+            render={() => {
+              return <LessonPlan />;
+            }}
+          />
+
+          {/* show subject details */}
+          <Route path={`${path}/subjects/:subjectId`} component={SubjectDetails} />
+          <Route
+            path={`${path}/:id`}
+            render={() => {
+              return <ModuleDetails />;
             }}
           />
         </Switch>

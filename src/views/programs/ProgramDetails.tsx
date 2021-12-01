@@ -18,7 +18,9 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
-import programStore from '../../store/administration/program.store';
+import programStore, {
+  getLevelsByAcademicProgram,
+} from '../../store/administration/program.store';
 import { Link as Links, ParamType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ProgramModules from '../modules/ProgramModules';
@@ -31,7 +33,7 @@ export default function ProgramDetailsMolecule() {
   const { id } = useParams<ParamType>();
 
   const program = programStore.getProgramById(id).data?.data.data;
-  const programLevels = programStore.getLevelsByAcademicProgram(id).data?.data.data;
+  const programLevels = getLevelsByAcademicProgram(id).data?.data.data;
 
   const getProgramData = () => {
     let programData: IProgramData | undefined;
@@ -229,7 +231,7 @@ export default function ProgramDetailsMolecule() {
                 );
               }}
             />
-            \{/* add prerequesite popup */}
+            {/* add prerequesite popup */}
             <Route
               exact
               path={`${path}/modules/:moduleId/add-prereq`}

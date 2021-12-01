@@ -11,6 +11,7 @@ import TableHeader from '../../Molecules/table/TableHeader';
 export default function Admins({ admins }: { admins: UserTypes[] }) {
   const history = useHistory();
   function handleSearch(_e: ValueType) {}
+
   const adminActions = [
     { name: 'Add Role', handleAction: () => {} },
     {
@@ -35,9 +36,6 @@ export default function Admins({ admins }: { admins: UserTypes[] }) {
         showSearch={admins && admins.length > 0}>
         <div className="flex gap-3">
           <div className="flex gap-3">
-            <Link to={`/dashboard/users/import`}>
-              <Button styleType="outline">Import admins</Button>
-            </Link>
             <Link to={`/dashboard/users/add`}>
               <Button>New admin</Button>
             </Link>

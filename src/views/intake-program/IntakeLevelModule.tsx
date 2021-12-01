@@ -11,28 +11,30 @@ import intakeProgramStore from '../../store/administration/intake-program.store'
 import { CommonCardDataType } from '../../types';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
+import EnrollInstructorToLevel from './EnrollInstructorToLevel';
+import EnrollStudent from './EnrollStudent';
 
 function IntakeLevelModule() {
   const history = useHistory();
   const { id, intakeId, intakeProg, level } = useParams<IntakeLevelParam>();
+
   const [levelModules, setlevelModules] = useState<CommonCardDataType[]>([]);
   const { data: levelModuleStore, isLoading } = intakeProgramStore.getModulesByLevel(
     parseInt(level),
   );
-
   useEffect(() => {
     let newModule: CommonCardDataType[] = [];
-    levelModuleStore?.data.data.forEach((module) => {
+    levelModuleStore?.data.data.forEach((mod) => {
       newModule.push({
         status: {
-          type: advancedTypeChecker(module.generic_status),
-          text: module.generic_status.toString(),
+          type: advancedTypeChecker(mod.generic_status),
+          text: mod.generic_status.toString(),
         },
-        id: module.id,
-        code: module.module.code,
-        title: module.module.name,
-        description: module.module.description,
-        subTitle: `total subject: ${module.module.total_num_subjects || 'None'}`,
+        id: mod.module.id,
+        code: mod.module.code,
+        title: mod.module.name,
+        description: mod.module.description,
+        subTitle: `total subject: ${mod.module.total_num_subjects || 'None'}`,
       });
     });
 
@@ -42,7 +44,6 @@ function IntakeLevelModule() {
   const { data, isLoading: loadPeriod } = intakeProgramStore.getPeriodsByLevel(
     parseInt(level),
   );
-
   return (
     <>
       <TableHeader usePadding={false} showBadge={false} showSearch={false}>
@@ -57,6 +58,8 @@ function IntakeLevelModule() {
             Add academic periods to level
           </Button>
         )}
+        <EnrollInstructorToLevel />
+        <EnrollStudent />
         <Button
           styleType="outline"
           onClick={() =>

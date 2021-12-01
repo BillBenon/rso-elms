@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
+import { queryClient } from '../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../store/administration';
 import { evaluationStore } from '../../../../store/administration/evaluation.store';
 import usersStore from '../../../../store/administration/users.store';
@@ -12,7 +13,10 @@ import {
   IEvaluationProps,
 } from '../../../../types/services/evaluation.types';
 import { UserType } from '../../../../types/services/user.types';
-import { getLocalStorageData } from '../../../../utils/getLocalStorageItem';
+import {
+  getLocalStorageData,
+  setLocalStorageData,
+} from '../../../../utils/getLocalStorageItem';
 import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import Input from '../../../Atoms/Input/Input';
@@ -21,7 +25,10 @@ import ILabel from '../../../Atoms/Text/ILabel';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import SwitchMolecule from '../../../Molecules/input/SwitchMolecule';
 
-export default function EvaluationSettings({ handleGoBack }: IEvaluationProps) {
+export default function EvaluationSettings({
+  handleGoBack,
+  evaluationId,
+}: IEvaluationProps) {
   const history = useHistory();
   const authUser = authenticatorStore.authUser().data?.data.data;
   const { data: inCharge } = usersStore.getUsersByAcademy(
@@ -34,7 +41,7 @@ export default function EvaluationSettings({ handleGoBack }: IEvaluationProps) {
 
   const [settings, setSettings] = useState<IEvaluationApproval>({
     approver: '',
-    evaluation: getLocalStorageData('evaluationId'),
+    evaluation: evaluationId || getLocalStorageData('evaluationId'),
     evaluation_approval_status: IEvaluationApprovalStatus.REVIEWING,
     id: '',
     preparer: authUser?.id.toString() || '',
@@ -79,6 +86,8 @@ export default function EvaluationSettings({ handleGoBack }: IEvaluationProps) {
       onSuccess: () => {
         toast.success('Settings added', { duration: 5000 });
         localStorage.removeItem('evaluationId');
+        setLocalStorageData('currentStep', 0);
+        queryClient.invalidateQueries(['evaluations']);
         history.push('/dashboard/evaluations');
       },
       onError: (error) => {

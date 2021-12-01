@@ -1,8 +1,14 @@
 import { useMutation, useQuery } from 'react-query';
 
 import { intakeProgramService } from '../../services/administration/IntakeProgram.service';
+import { IntakeModuleStatus } from '../../types/services/intake-program.types';
 
 class IntakeProgramStore {
+  getStudentById(studentId: string) {
+    return useQuery(['student/id', studentId], () =>
+      intakeProgramService.getStudentById(studentId),
+    );
+  }
   getStudentsByIntakeProgram(intakeProgramId: string) {
     return useQuery(['students/intakeProgramId', intakeProgramId], () =>
       intakeProgramService.getStudentsByIntakeProgram(intakeProgramId),
@@ -13,6 +19,23 @@ class IntakeProgramStore {
       intakeProgramService.getStudentsByIntakeProgramLevel(intakeProgramlevelId),
     );
   }
+  getInstructorsByIntakeProgram(programId: string, intakeId: string) {
+    return useQuery(['instructors/programId/intake', programId, intakeId], () =>
+      intakeProgramService.getInstructorsByIntakeProgram(programId, intakeId),
+    );
+  }
+  getInstructorsByIntakeProgramLevel(instructorId: string) {
+    return useQuery(['instructors/intakeprogram', instructorId], () =>
+      intakeProgramService.getInstructorsByIntakeProgramLevel(instructorId),
+    );
+  }
+
+  getModulesByInstructorAndStatus(instructorId: string, status: IntakeModuleStatus) {
+    return useQuery(['instructor/modules', instructorId], () =>
+      intakeProgramService.getModulesByInstructorAndStatus(instructorId, status),
+    );
+  }
+
   getStudentsByAcademy(academyId: string) {
     return useQuery(['students/academyId', academyId], () =>
       intakeProgramService.getStudentsByAcademy(academyId),
@@ -28,6 +51,7 @@ class IntakeProgramStore {
       intakeProgramService.getIntakeLevelById(levelId),
     );
   }
+
   getPeriodsByLevel(levelId: number) {
     return useQuery(['levels/periods', levelId], () =>
       intakeProgramService.getPeriodsByIntakeAcademicYearLevelId(levelId),
@@ -50,6 +74,30 @@ class IntakeProgramStore {
   addModuleToLevel() {
     return useMutation(intakeProgramService.addModuleToLevel);
   }
+}
+
+export function getStudentShipByUserId(userId: string, enabled = false) {
+  return useQuery(
+    ['studentShip/userId', userId],
+    () => intakeProgramService.getStudentShipByUserId(userId),
+    { enabled },
+  );
+}
+
+export function getIntakeProgramsByStudent(studentId: string, enabled = false) {
+  return useQuery(
+    ['intakeProgram/studentId', studentId],
+    () => intakeProgramService.getIntakeProgramsByStudent(studentId),
+    { enabled },
+  );
+}
+
+export function getStudentLevels(studentId: string, enabled = false) {
+  return useQuery(
+    ['levels/student', studentId],
+    () => intakeProgramService.getStudentLevels(studentId),
+    { enabled },
+  );
 }
 
 export default new IntakeProgramStore();

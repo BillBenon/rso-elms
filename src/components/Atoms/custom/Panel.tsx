@@ -6,6 +6,7 @@ import { Color, GenericStatus } from '../../../types';
 import { IEvaluationStatus } from '../../../types/services/evaluation.types';
 import { IntakeStatus } from '../../../types/services/intake.types';
 import { IntakeModuleStatus } from '../../../types/services/intake-program.types';
+import { MaterialType } from '../../../types/services/module-material.types';
 import { advancedTypeChecker } from '../../../utils/getOption';
 import Badge from './Badge';
 import Icon from './Icon';
@@ -19,9 +20,15 @@ export type PanelProps = {
   className?: string;
   bgColor?: Color;
   badge?: {
-    type: GenericStatus | IntakeStatus | IEvaluationStatus | IntakeModuleStatus;
+    type:
+      | GenericStatus
+      | IntakeStatus
+      | IEvaluationStatus
+      | IntakeModuleStatus
+      | MaterialType;
     text: string;
   };
+  width?: string;
   handleOpen?: (_index: number) => void;
 };
 
@@ -34,6 +41,7 @@ function Panel({
   className,
   bgColor = 'tertiary',
   badge,
+  width = 'w-80',
   handleOpen,
 }: PanelProps) {
   function toggleAccordion() {
@@ -41,7 +49,8 @@ function Panel({
   }
 
   return (
-    <div className={`bg-${bgColor} text-sm py-2 w-80 rounded-lg mb-4 px-4 ${className}`}>
+    <div
+      className={`bg-${bgColor} text-sm py-2 ${width} rounded-lg mb-4 px-4 ${className}`}>
       <div className="w-full mb-2" role="button" onClick={toggleAccordion}>
         <div className={`flex font-semibold justify-between items-center cursor-pointer`}>
           <div className="flex-col">

@@ -15,8 +15,10 @@ class ModuleStore {
   }
 
   getModulesByAcademy(academyId: string) {
-    return useQuery(['modules/academy/id', academyId], () =>
-      moduleService.getModulesByAcademy(academyId),
+    return useQuery(
+      ['modules/academy/id', academyId],
+      () => moduleService.getModulesByAcademy(academyId),
+      { enabled: !!academyId },
     );
   }
 

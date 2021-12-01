@@ -9,6 +9,7 @@ interface ITextareaMolecule<T> extends InputProps<T> {
   name: string;
   value: string | undefined;
   handleChange?: (_e: ValueType) => void;
+  className?: string;
   children?: React.ReactNode;
   error?: string;
   placeholder?: string;
@@ -23,11 +24,12 @@ export default function TextAreaMolecule<T>({
   error = '',
   readOnly = false,
   placeholder = '',
+  className = '',
   type = 'text',
   ...attrs
 }: ITextareaMolecule<T>) {
   return (
-    <div className="flex flex-col gap-3 mt-2 mb-2">
+    <div className={`flex flex-col gap-3 mb-2 ${className}`}>
       {children ? (
         <ILabel size="sm" weight="medium">
           {children}

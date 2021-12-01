@@ -1,7 +1,9 @@
 import React from 'react';
 import { Link as BrowserLink } from 'react-router-dom';
 
+import { authenticatorStore } from '../../../../store/administration';
 import { CommonCardDataType } from '../../../../types';
+import { UserType } from '../../../../types/services/user.types';
 import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
 import Tooltip from '../../Tooltip';
@@ -12,6 +14,8 @@ interface IProps {
 }
 
 export default function ModuleCard({ course }: IProps) {
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
   return (
     <div className="p-2 mt-3">
       <Tooltip
@@ -36,14 +40,26 @@ export default function ModuleCard({ course }: IProps) {
               <Button styleType="text">View details</Button>
             </BrowserLink>
           </p>
-          <div className="py-2 flex justify-around gap-2">
-            <BrowserLink
-              className="outline-none"
-              to={`/dashboard/modules/${course.id}/add-subject`}>
-              <Button>Add subject</Button>
+          {authUser?.user_type === UserType.STUDENT ? (
+            <BrowserLink className="outline-none" to={`/dashboard/modules/${course.id}`}>
+              <Button styleType="outline">Start module</Button>
             </BrowserLink>
-            <Button styleType="outline">Edit</Button>
-          </div>
+          ) : authUser?.user_type === UserType.ADMIN ? (
+            <div className="py-2 flex justify-around gap-2">
+              <BrowserLink
+                className="outline-none"
+                to={`/dashboard/modules/${course.id}/add-subject`}>
+                <Button>Add subject</Button>
+              </BrowserLink>
+              <BrowserLink
+                className="outline-none"
+                to={`/dashboard/modules/${course.id}/edit/${course.id}`}>
+                <Button styleType="outline">Edit</Button>
+              </BrowserLink>
+            </div>
+          ) : (
+            <></>
+          )}
         </div>
       </Tooltip>
     </div>

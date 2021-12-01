@@ -44,7 +44,11 @@ export type Status =
   | 'retake'
   | 'expelled'
   | 'started'
-  | 'cancelled';
+  | 'cancelled'
+  | 'marked'
+  | 'to_mark'
+  | 'published'
+  | 'marking';
 
 export type Page =
   | 'personalDetails'
@@ -103,12 +107,13 @@ export interface SelectData {
 export interface ValueType<T = Event> {
   name: string;
   value: string | number | boolean | string[];
+  label?: string;
   event?: FormEvent<T>;
 }
 
 export interface CommonCardDataType {
   id?: string | number;
-  status?: { type: 'success' | 'warning' | 'error'; text: string };
+  status?: { type: 'success' | 'warning' | 'error' | 'info'; text: string };
   title: string;
   code: string;
   subTitle?: string;
@@ -125,6 +130,8 @@ export interface SigninPropTypes extends CommonCardDataType {
 }
 
 export type IconType =
+  | 'dashboard'
+  | 'subject'
   | 'academy'
   | 'add'
   | 'alert'
@@ -177,7 +184,11 @@ export type IconType =
   | 'tick'
   | 'undo'
   | 'loader'
-  | 'user';
+  | 'user'
+  | 'excel'
+  | 'pdf'
+  | 'word'
+  | 'png';
 
 export interface FormPropType {
   onSubmit?: <E>(_e: FormEvent<E>) => void;

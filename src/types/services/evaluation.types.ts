@@ -22,6 +22,8 @@ export interface IEvaluationProps {
   handleNext: () => void;
   handleGoBack: () => void;
   handleAddQuestion?: () => void;
+  evaluationId: string | null;
+  evaluationInfo?: IEvaluationInfo;
 }
 
 export enum ISubmissionTypeEnum {
@@ -76,6 +78,8 @@ export enum IEvaluationApprovalStatus {
 
 export interface IEvaluationCreate {
   access_type: string;
+  adm_intake_level_class_id: string;
+  intake_academic_year_period: number;
   academy_id: string;
   instructor_id: string;
   allow_submission_time: string;
@@ -92,18 +96,27 @@ export interface IEvaluationCreate {
   marking_reminder_date: string;
   maximum_file_size: number | string;
   name: string;
-  id: '';
+  id: string;
   questionaire_type: IQuestionaireTypeEnum;
   submision_type: ISubmissionTypeEnum;
   time_limit: number;
   total_mark: number;
 }
 
+export interface IStudentEvaluations {
+  undoneEvaluations: IEvaluationInfo[];
+  unfinishedEvaluations: any[];
+  ongoingEvaluations: any[];
+}
+
 export interface IEvaluationInfo {
   id: string;
   name: string;
   academy_id: string;
+  adm_intake_level_class_id: string;
+  intake_academic_year_period: number;
   subject_academic_year_period: string;
+  subject_id: string;
   access_type: IAccessTypeEnum;
   evaluation_type: IEvaluationTypeEnum;
   questionaire_type: IQuestionaireTypeEnum;
@@ -120,6 +133,7 @@ export interface IEvaluationInfo {
   content_format: string;
   maximum_file_size: number;
   is_consider_on_report: boolean;
+  available: string;
   number_of_questions: string;
   subject_academic_year_period_id: string;
   group_evaluations: [];
@@ -131,6 +145,17 @@ export interface IEvaluationInfo {
   evaluation_comments: [];
 }
 
+export interface IEvaluationInfoCollected {
+  undoneEvaluations: IEvaluationInfoSingleEvaluation[];
+  ongoingEvaluations: IEvaluationInfoSingleEvaluation[];
+  finishedEvaluations: IEvaluationInfoSingleEvaluation[];
+}
+export interface IEvaluationInfoSingleEvaluation {
+  code: string;
+  evaluation: IEvaluationInfo;
+  id: string;
+}
+
 export interface IEvaluationChoices {
   answer_content: string;
   correct: boolean;
@@ -138,6 +163,7 @@ export interface IEvaluationChoices {
 
 export interface IEvaluationQuestion {
   evaluation_id: string;
+  multiple_choice_answers?: IMultipleChoice[];
   mark: number;
   parent_question_id: string;
   question: string;
@@ -145,18 +171,35 @@ export interface IEvaluationQuestion {
   question_type: IQuestionType;
 }
 
+export interface IMultipleChoice {
+  answer_content: string;
+  correct: boolean;
+}
+
 export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
   sub_questions: IEvaluationQuestion[];
   submitted: boolean;
+  question_type: IQuestionType;
+  id: string;
+  choices: IMultipleChoice[];
+}
+
+export interface IMultipleChoiceAnswers {
+  answerContent: string;
+  correct: boolean;
+  id: string;
+  mark: number;
 }
 
 export interface IEvaluationQuestionsInfo {
   id: string;
   question: string;
+  evaluation_id: string;
+  choices: IMultipleChoice[];
   mark: number;
   evaluationQuestions: [];
-  questionType: IQuestionType;
-  multipleChoiceAnswers: [];
+  question_type: IQuestionType;
+  multiple_choice_answers: IMultipleChoiceAnswers[];
 }
 
 export interface IEvaluationApproval {
@@ -175,7 +218,7 @@ export interface IStudentAnswer {
   evaluation: string;
   evaluationQuestion: string;
   markScored: number | null;
-  multipleChoiceAnswer: string;
+  multiple_choice_answers: string;
   openAnswer: string;
   studentEvaluation: string;
 }

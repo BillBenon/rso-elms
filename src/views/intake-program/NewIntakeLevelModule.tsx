@@ -12,11 +12,10 @@ import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule'
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
 import { queryClient } from '../../plugins/react-query';
-import { authenticatorStore } from '../../store/administration';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { moduleStore } from '../../store/administration/modules.store';
-import instructordeploymentStore from '../../store/instructordeployment.store';
 import { ValueType } from '../../types';
+import { Instructor } from '../../types/services/instructor.types';
 import {
   AddLevelToModule,
   IntakeLevelParam,
@@ -31,7 +30,7 @@ function NewIntakeLevelModule() {
     actual_end_on: '',
     actual_start_on: '',
     credits: 0,
-    incharge_id: '70ee81f0-39ca-4282-9a0d-ff9bc4106f9d',
+    incharge_id: '',
     intake_status: IntakeModuleStatus.DRAFT,
     marks: 0,
     module_id: '',
@@ -47,7 +46,7 @@ function NewIntakeLevelModule() {
 
   const [totalModules, setTotalModules] = useState<AddLevelToModule[]>([]);
 
-  const { id, level: levelId, intakeProg } = useParams<IntakeLevelParam>();
+  const { id, level: levelId, intakeProg, intakeId } = useParams<IntakeLevelParam>();
 
   function handleChange(e: ValueType) {
     setvalues({ ...values, [e.name]: e.value });
@@ -58,14 +57,12 @@ function NewIntakeLevelModule() {
   const levels =
     intakeProgramStore.getLevelsByIntakeProgram(intakeProg).data?.data.data || [];
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
-
   const getAllModuleStore = moduleStore.getModulesByProgram(id).data?.data.data || [];
 
-  const instructors =
-    instructordeploymentStore.getInstructorsDeployedInAcademy(
-      authUser?.academy.id.toString() || '',
-    ).data?.data.data || [];
+  const instructorInPrograms =
+    intakeProgramStore.getInstructorsByIntakeProgram(id, intakeId).data?.data.data || [];
+
+  const instructors = instructorInPrograms.map((instr) => instr.instructor);
 
   useEffect(() => {
     setvalues({ ...values, academic_year_program_intake_level_id: parseInt(levelId) });
@@ -133,6 +130,9 @@ function NewIntakeLevelModule() {
             options={getDropDownOptions({
               inputs: instructors,
               labelName: ['first_name', 'last_name'],
+              //@ts-ignore
+              getOptionLabel: (instr: Instructor) =>
+                instr.user.first_name + ' ' + instr.user.last_name,
             })}
             name="incharge_id"
             handleChange={handleChange}>
