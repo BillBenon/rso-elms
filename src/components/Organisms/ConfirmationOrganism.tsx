@@ -1,42 +1,85 @@
 import React from 'react';
+import toast from 'react-hot-toast';
+import { useHistory, useParams } from 'react-router-dom';
 
+import { authenticatorStore } from '../../store/administration/authenticator.store';
+import { evaluationStore } from '../../store/administration/evaluation.store';
+import { ParamType } from '../../types';
+import {
+  IEvaluationStatus,
+  IStudentEvaluationStart,
+} from '../../types/services/evaluation.types';
+import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import Button from '../Atoms/custom/Button';
 import Heading from '../Atoms/Text/Heading';
 import PopupMolecule from '../Molecules/Popup';
 
 interface IConfirmationProps {
-  onProceed: (_input: string) => void;
   onConfirmationClose: () => void;
-  loading?: boolean;
-  title: string;
-  open: boolean;
-  id: any;
 }
 
 export default function ConfirmationOrganism({
-  onProceed,
-  loading,
-  title,
-  open = false,
   onConfirmationClose,
-  id,
 }: IConfirmationProps) {
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
+  const { id } = useParams<ParamType>();
+  const history = useHistory();
+  const evaluation = evaluationStore.getEvaluationById(id).data?.data.data;
+  const studentEval = evaluationStore.getStudentEvaluationByStudentIdAndEvaluationId(
+    id,
+    authUser?.id + '',
+  ).data?.data.data;
+
+  const { mutateAsync, isLoading } = evaluationStore.studentEvaluationStart();
+
+  function goToNext(id: string) {
+    history.push(`/dashboard/evaluations/student-evaluation/${id}`);
+  }
+
+  function generateStudentCode() {
+    const studentEvaluationStart: IStudentEvaluationStart = {
+      attachment: '',
+      evaluation_id: id,
+      student_id: authUser?.id.toString() || '',
+    };
+
+    if (evaluation?.evaluation_status == IEvaluationStatus.ON_GOING) {
+      setLocalStorageData('studentEvaluationId', studentEval);
+      goToNext(studentEvaluationStart.evaluation_id);
+    } else {
+      mutateAsync(studentEvaluationStart, {
+        onSuccess: (studentInfo) => {
+          setLocalStorageData('studentEvaluationId', studentInfo.data.data.id);
+          toast.success('Generated evaluation code', { duration: 5000 });
+          goToNext(studentEvaluationStart.evaluation_id);
+        },
+        onError: () => {
+          toast.error("The evaluation isn't already started!");
+        },
+      });
+    }
+  }
   return (
     <PopupMolecule
       closeOnClickOutSide={false}
-      open={open}
+      open
       title="Do you want to continue?"
       onClose={onConfirmationClose}>
       <div>
-        <Heading fontWeight="semibold">{title}</Heading>
+        <Heading fontWeight="semibold">{evaluation?.name || ''}</Heading>
         <p className="course-card-description leading-5 pb-6 w-96 text-txt-secondary text-sm mt-4">
-          You are about to attempt this {title} test. Are you sure you want to do it now ?
-          This action is irreversible.
+          You are about to attempt this {evaluation?.name || ''} test. Are you sure you
+          want to do it now ? This action is irreversible.
         </p>
 
         <div className="flex justify-starg">
-          <Button disabled={loading} onClick={() => onProceed(id)}>
-            <span className="font-semibold">Start Evaluation</span>
+          <Button disabled={isLoading} onClick={generateStudentCode}>
+            <span className="font-semibold">
+              {evaluation?.evaluation_status == IEvaluationStatus.ON_GOING
+                ? 'Continue evaluation'
+                : 'Start Evaluation'}{' '}
+            </span>
           </Button>
         </div>
       </div>

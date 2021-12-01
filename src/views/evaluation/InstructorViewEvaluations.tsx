@@ -1,25 +1,17 @@
 /*@ts-ignore*/
 import React, { useEffect, useState } from 'react';
-import { toast } from 'react-hot-toast';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
-import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import { authenticatorStore } from '../../store/administration';
 import { evaluationStore } from '../../store/administration/evaluation.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
-import {
-  IEvaluationInfo,
-  IEvaluationInfoSingleEvaluation,
-  IStudentEvaluationStart,
-} from '../../types/services/evaluation.types';
 import {
   getLocalStorageData,
   setLocalStorageData,
@@ -27,15 +19,8 @@ import {
 import { advancedTypeChecker } from '../../utils/getOption';
 import EvaluationContent from './EvaluationContent';
 
-interface IEvaluationProps {
-  subjecEvaluations: IEvaluationInfoSingleEvaluation[] | IEvaluationInfo[];
-  isUndone?: boolean;
-  linkTo: string;
-}
-
-export default function ViewEvaluations({ linkTo }: IEvaluationProps) {
+export default function InstructorViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
-  const [confirm, showConfirmation] = useState(false);
   const history = useHistory();
   const { path } = useRouteMatch();
   const authUser = authenticatorStore.authUser().data?.data.data;
@@ -48,38 +33,6 @@ export default function ViewEvaluations({ linkTo }: IEvaluationProps) {
     { to: '/', title: 'home' },
     { to: 'evaluations', title: 'evaluations' },
   ];
-
-  //function that moves user to next page according to his type
-  function goToNext(id: string) {
-    linkTo
-      ? history.push({
-          pathname: linkTo,
-          search: `?evaluation=${id}`,
-        })
-      : history.push(`${path}/${id}`);
-  }
-
-  const { mutateAsync, isLoading: loading } = evaluationStore.studentEvaluationStart();
-
-  function generateStudentCode(id: string) {
-    const studentEvaluationStart: IStudentEvaluationStart = {
-      attachment: '',
-      evaluation_id: id,
-      student_id: authUser?.id.toString() || '',
-    };
-
-    goToNext(studentEvaluationStart.evaluation_id);
-    mutateAsync(studentEvaluationStart, {
-      onSuccess: (studentInfo) => {
-        setLocalStorageData('studentEvaluationId', studentInfo.data.data.id);
-        toast.success('Generated evaluation code', { duration: 5000 });
-        goToNext(studentEvaluationStart.evaluation_id);
-      },
-      onError: () => {
-        toast.error("The evaluation isn't already started!");
-      },
-    });
-  }
 
   function goToNewEvaluation() {
     if (!getLocalStorageData('currentStep')) {
@@ -145,39 +98,10 @@ export default function ViewEvaluations({ linkTo }: IEvaluationProps) {
                 ) : isSuccess && evaluations.length > 0 ? (
                   evaluations?.map((info: CommonCardDataType, index: number) => (
                     <div key={index}>
-                      {linkTo ? (
-                        <PopupMolecule
-                          closeOnClickOutSide={false}
-                          open={confirm}
-                          title="Do you want to continue?"
-                          onClose={() => showConfirmation(false)}>
-                          <div className="">
-                            <Heading fontWeight="semibold">{info.title}</Heading>
-                            <p className="course-card-description leading-5 pb-6 w-96 text-txt-secondary text-sm mt-4">
-                              You are about to attempt this {info.title} test. Are you
-                              sure you want to do it now ? This action is irreversible.
-                            </p>
-
-                            <div className="flex justify-starg">
-                              <Button
-                                disabled={loading}
-                                onClick={() =>
-                                  generateStudentCode(info.id?.toString() || '')
-                                }>
-                                <span className="font-semibold">Start Evaluation</span>
-                              </Button>
-                            </div>
-                          </div>
-                        </PopupMolecule>
-                      ) : null}
                       <CommonCardMolecule
                         className="cursor-pointer"
-                        handleClick={() =>
-                          linkTo
-                            ? showConfirmation(true)
-                            : goToNext(info.id?.toString() || '')
-                        }
                         data={info}
+                        handleClick={() => history.push(`${path}/${info.id}`)}
                       />
                     </div>
                   ))

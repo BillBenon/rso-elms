@@ -55,6 +55,18 @@ class EvaluationStore {
     );
   }
 
+  getStudentEvaluationByStudentIdAndEvaluationId(
+    evaluationId: string,
+    studentId: string,
+  ) {
+    return useQuery(['studEvaluation', evaluationId], () =>
+      evaluationService.getStudentEvaluationByStudentIdAndEvaluationId(
+        evaluationId,
+        studentId,
+      ),
+    );
+  }
+
   getEvaluationById(id: string) {
     return useQuery(['evaluation', id], () => evaluationService.getEvaluationById(id), {
       enabled: !!id,

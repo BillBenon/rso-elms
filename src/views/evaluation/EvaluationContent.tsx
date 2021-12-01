@@ -106,7 +106,7 @@ export default function EvaluationContent() {
 
       data?.data.data && setSubmissions(formattedSubs);
     }
-  }, []);
+  }, [data?.data.data]);
 
   const publishEvaluation = (status: string) => {
     makeEvaluationPublic.mutate(
@@ -114,7 +114,6 @@ export default function EvaluationContent() {
       {
         onSuccess: () => {
           toast.success('Availability status updated', { duration: 3000 });
-          setPublished(!published);
         },
         onError: (error: any) => {
           toast.error(error.response.data.message);
@@ -124,9 +123,6 @@ export default function EvaluationContent() {
   };
 
   const { data: evaluationInfo } = evaluationStore.getEvaluationById(id).data?.data || {};
-  const [published, setPublished] = useState(
-    evaluationInfo?.available == 'PUBLIC' || false,
-  );
 
   return (
     <div className="block pr-24 pb-8 w-11/12">
@@ -139,7 +135,7 @@ export default function EvaluationContent() {
               path={`${path}/submissions`}
               render={() => (
                 <>
-                  {isLoading && submissions.length === 0 && <Loader />}
+                  {isLoading && <Loader />}
                   {isSuccess && submissions.length === 0 ? (
                     <NoDataAvailable
                       icon="evaluation"
@@ -200,7 +196,7 @@ export default function EvaluationContent() {
                       Edit evaluation
                     </Button>
 
-                    {published == false ? (
+                    {evaluationInfo?.available === 'HIDDEN' ? (
                       <Button onClick={() => publishEvaluation('PUBLIC')}>
                         Publish evaluation
                       </Button>
