@@ -8,7 +8,6 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
-import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -48,7 +47,7 @@ export default function ProgramDetailsMolecule() {
         subTitle: program.type,
         description: program.description,
         department: program.department,
-        incharge: program.incharge && program.incharge.user.username,
+        // incharge: program.incharge && program.incharge.user.username,
       };
     }
 
@@ -118,7 +117,7 @@ export default function ProgramDetailsMolecule() {
                           <Heading fontSize="sm">
                             {programData.subTitle?.replaceAll('_', ' ')}
                           </Heading>
-
+                          {/* 
                           <div className="flex items-center gap-2">
                             <Avatar
                               size="24"
@@ -127,7 +126,7 @@ export default function ProgramDetailsMolecule() {
                               src="https://randomuser.me/api/portraits/men/1.jpg"
                             />
                             <Heading fontSize="sm">{programData.incharge}</Heading>
-                          </div>
+                          </div> */}
                         </div>
                         <div className="mt-4 flex space-x-4">
                           <Button onClick={() => history.push(`${url}/edit`)}>

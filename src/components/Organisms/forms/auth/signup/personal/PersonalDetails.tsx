@@ -37,7 +37,7 @@ function PersonalDetails<E>({
     place_of_birth_description: '',
     birth_date: '',
     religion: '',
-    blood_group: '',
+    blood_group: BloodGroup['A+'],
     father_names: '',
     mother_names: '',
     marital_status: MaritalStatus.SINGLE,

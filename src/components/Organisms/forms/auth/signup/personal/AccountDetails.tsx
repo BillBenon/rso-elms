@@ -27,7 +27,7 @@ function AccountDetails<E>({
 }: Account<E>) {
   const [accountDetails, setAccountDetails] = useState<AccountDetail>({
     username: '',
-    pin: '',
+    pin: 0,
     password: '',
     confirm_password: '',
     send_communication_msg: SendCommunicationMsg.EMAIL,

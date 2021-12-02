@@ -1,16 +1,22 @@
 import React from 'react';
 
-import Avatar from '../../../components/Atoms/custom/Avatar';
+import Badge from '../../../components/Atoms/custom/Badge';
 import Heading from '../../../components/Atoms/Text/Heading';
-import ILabel from '../../../components/Atoms/Text/ILabel';
 
 function NextOfKinCard() {
   return (
-    <div className="max-w-sm py-4 px-6 bg-main rounded-md h-80 overflow-auto">
+    <div className="max-w-sm py-4 px-6 bg-main rounded-md max-h-80 overflow-auto">
       <Heading fontWeight="semibold" fontSize="base" className="pt-6 pb-7">
         Next of Kin
       </Heading>
-      <div className="flex justify-evenly h-16 w-full items-center mb-6">
+      <Badge
+        fontWeight="medium"
+        badgecolor="secondary"
+        badgetxtcolor="txt-secondary"
+        className="mx-2 text-sm">
+        The next of kins for this user are currently not specificied
+      </Badge>
+      {/* <div className="flex justify-evenly h-16 w-full items-center mb-6">
         <Avatar
           src="https://static.thenounproject.com/png/2643367-200.png"
           alt="person logo"
@@ -53,7 +59,7 @@ function NextOfKinCard() {
           </ILabel>
           <p className="text-txt-primary font-semibold py-2 text-sm">0743000343</p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

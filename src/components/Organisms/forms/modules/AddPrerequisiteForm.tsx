@@ -39,7 +39,7 @@ export default function AddPrerequesitesForm() {
 
   let modules =
     moduleStore
-      .getModulesByAcademy((authUser?.academy_id || authUser?.academy.id) + '')
+      .getModulesByAcademy(authUser?.academy.id + '')
       .data?.data.data.filter((module) => module.id != moduleId) || [];
 
   const handleSubmit = async () => {

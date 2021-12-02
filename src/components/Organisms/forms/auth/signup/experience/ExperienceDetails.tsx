@@ -4,6 +4,7 @@ import { useHistory } from 'react-router';
 import { ExperienceTypeStatus } from '../../../../../../types/services/experience.types';
 import CompleteProfileHeader from '../../../../../Molecules/CompleteProfileHeader';
 import Stepper from '../../../../../Molecules/Stepper/Stepper';
+import OtherDetails from '../personal/OtherDetails';
 import ExperienceStep from './ExperienceStep';
 
 function ExperienceDetails() {
@@ -32,11 +33,14 @@ function ExperienceDetails() {
 
   async function finishSteps(isComplete: boolean) {
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
-    history.push('/dashboard/divisions');
+    history.push('/complete_profile/more');
   }
   return (
     <div className="bg-main p-8 md:px-20">
-      <CompleteProfileHeader />
+      <CompleteProfileHeader
+        title={'Add your experiences'}
+        details={'Fill in the form with all your experiences'}
+      />
       <Stepper
         isVertical
         currentStep={currentStep}
@@ -83,7 +87,15 @@ function ExperienceDetails() {
           display_label={'Training'}
           nextStep={finishSteps}
           prevStep={back}
+          skip={skip}
           fetched_id={''}
+        />
+        <OtherDetails
+          fetched_id={''}
+          display_label="Other details"
+          isVertical
+          nextStep={finishSteps}
+          prevStep={back}
         />
       </Stepper>
     </div>

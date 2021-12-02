@@ -12,14 +12,17 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import NewLessonPlan from '../../components/Organisms/forms/subjects/NewLessonPlan';
 import UpdateLessonPlan from '../../components/Organisms/forms/subjects/UpdateLessonPlan';
+import { authenticatorStore } from '../../store/administration';
 import { lessonStore } from '../../store/administration/lesson.store';
 import { Link, ParamType } from '../../types';
+import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker, titleCase } from '../../utils/getOption';
 
 function LessonPlan() {
   const history = useHistory();
 
   const { id } = useParams<ParamType>();
+  const authUser = authenticatorStore.authUser().data?.data.data;
   const { data, isLoading } = lessonStore.getLessonPlanByLesson(id);
   const plan = data?.data.data || [];
   const { url } = useRouteMatch();
@@ -46,6 +49,7 @@ function LessonPlan() {
                 <NoDataAvailable
                   icon="subject"
                   buttonLabel={'Create plan'}
+                  showButton={authUser?.user_type === UserType.INSTRUCTOR}
                   title={'No lesson plan available'}
                   description={
                     'You have not created a lesson plan for this lesson. You can add one from the button below'
@@ -135,20 +139,22 @@ function LessonPlan() {
                           </Heading>
                         </div>
                       </div>
-                      <div className="flex space-x-4 pt-4">
-                        <Button
-                          styleType="outline"
-                          onClick={() =>
-                            history.push(`${url}/edit-lesson-plan/${lp.id}`)
-                          }>
-                          Edit Plan
-                        </Button>
-                        {/* <Button
+                      {authUser?.user_type === UserType.INSTRUCTOR && (
+                        <div className="flex space-x-4 pt-4">
+                          <Button
+                            styleType="outline"
+                            onClick={() =>
+                              history.push(`${url}/edit-lesson-plan/${lp.id}`)
+                            }>
+                            Edit Plan
+                          </Button>
+                          {/* <Button
                           styleType="outline"
                           onClick={() => history.push(`${url}/add-lesson-plan`)}>
                           Create New Plan
                         </Button> */}
-                      </div>
+                        </div>
+                      )}
                     </div>
                   ))}
                 </>
