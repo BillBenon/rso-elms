@@ -320,6 +320,7 @@ export default function EvaluationInfoComponent({
           style={{ width: '6rem' }}
           type="number"
           name="total_mark"
+          step=".01"
           value={details.total_mark}
           handleChange={handleChange}>
           Evaluation marks
@@ -328,7 +329,8 @@ export default function EvaluationInfoComponent({
           <>
             <InputMolecule
               style={{ width: '6rem' }}
-              type="text"
+              type="number"
+              step=".01"
               name="time_limit"
               value={details.time_limit}
               handleChange={handleChange}>
