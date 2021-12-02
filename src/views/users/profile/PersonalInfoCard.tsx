@@ -4,10 +4,13 @@ import React from 'react';
 import Avatar from '../../../components/Atoms/custom/Avatar';
 import Badge from '../../../components/Atoms/custom/Badge';
 import Heading from '../../../components/Atoms/Text/Heading';
+import hobbiesStore from '../../../store/administration/hobbies.store';
 import { UserInfo } from '../../../types/services/user.types';
 import { advancedTypeChecker, titleCase } from '../../../utils/getOption';
 
 function PersonalInfoCard({ user }: { user: UserInfo }) {
+  const hobbies = hobbiesStore.getUserHobby(user.id + '').data?.data.data || [];
+
   return (
     <div className="max-w-sm py-4 px-6 bg-main rounded-md">
       <div className="flex flex-col items-end mb-20">
@@ -71,61 +74,57 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
         </div>
       </div>
       <div className="other-information bg-secondary py-5">
-        <Heading fontWeight="semibold" fontSize="base" className="p-5">
+        <Heading fontWeight="semibold" fontSize="base" className="px-5 py-2">
           Languages
         </Heading>
         <div>
-          <Badge badgecolor="main" badgetxtcolor="txt-secondary" className="mx-2">
-            French
-          </Badge>
-          <Badge badgecolor="main" badgetxtcolor="txt-secondary" className="mx-2">
-            English
-          </Badge>
-          <Badge badgecolor="main" badgetxtcolor="txt-secondary" className="mx-2">
-            Kiswahili
-          </Badge>
-          <Badge badgecolor="main" badgetxtcolor="txt-secondary" className="mx-2">
-            Kinyarwanda
-          </Badge>
-          <Badge badgecolor="main" badgetxtcolor="txt-secondary" className="mx-2">
-            Spanish
+          <Badge
+            fontWeight="medium"
+            badgecolor="main"
+            badgetxtcolor="txt-secondary"
+            className="mx-2 text-sm">
+            Languages are currently not specificied
           </Badge>
         </div>
-        <div className="other-information bg-secondary py-5">
-          <Heading fontWeight="semibold" fontSize="base" className="p-5">
-            Hobbies
-          </Heading>
-          <div>
-            <Badge badgecolor="main" badgetxtcolor="txt-secondary" className="mx-2">
-              Football
+      </div>
+      <div className="other-information bg-secondary pb-5">
+        <Heading fontWeight="semibold" fontSize="base" className="px-5 py-2">
+          Hobbies
+        </Heading>
+        <div>
+          {hobbies?.length === 0 ? (
+            <Badge
+              fontWeight="medium"
+              badgecolor="main"
+              badgetxtcolor="txt-secondary"
+              className="mx-2 text-sm">
+              Hobbies are currently not specificied
             </Badge>
-            <Badge badgecolor="main" badgetxtcolor="txt-secondary" className="mx-2">
-              Reading
-            </Badge>
-            <Badge badgecolor="main" badgetxtcolor="txt-secondary" className="mx-2">
-              Jumping
-            </Badge>
-            <Badge badgecolor="main" badgetxtcolor="txt-secondary" className="mx-2">
-              Basketball
-            </Badge>
-            <Badge badgecolor="main" badgetxtcolor="txt-secondary" className="mx-2">
-              Writing
-            </Badge>
-          </div>
+          ) : (
+            hobbies?.map((hobby) => (
+              <Badge
+                key={hobby.id}
+                badgecolor="main"
+                badgetxtcolor="txt-secondary"
+                className="mx-2">
+                {hobby.name}
+              </Badge>
+            ))
+          )}
         </div>
-        <div className="other-information bg-secondary py-5">
-          <Heading fontWeight="semibold" fontSize="base" className="p-5">
-            Chronic Disease
-          </Heading>
-          <div>
-            <Badge badgecolor="main" badgetxtcolor="txt-secondary" className="mx-2">
-              HIV / AIDS
-            </Badge>
-            <p className="text-txt-secondary text-sm font-medium p-5">
-              I usually take medicine every after amonth and hence makes me take some
-              regumes
-            </p>
-          </div>
+      </div>
+      <div className="other-information bg-secondary pb-3">
+        <Heading fontWeight="semibold" fontSize="base" className="px-5 py-2">
+          Chronic Disease
+        </Heading>
+        <div>
+          <Badge
+            fontWeight="medium"
+            badgecolor="main"
+            badgetxtcolor="txt-secondary"
+            className="mx-2 text-sm">
+            Chronic diseases are currently not specificied
+          </Badge>
         </div>
       </div>
     </div>
