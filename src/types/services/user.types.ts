@@ -25,7 +25,7 @@ export interface UserInfo extends Table {
   institution_name: string;
   is_otp_active: boolean | null;
   last_name: string;
-  level: null;
+  level: EducationLevel;
   login_try: number;
   otp: string;
   password: string;
@@ -39,6 +39,7 @@ export interface UserInfo extends Table {
   token: string;
   user_type: UserType;
   username: string;
+  marital_status: MaritalStatus;
 }
 
 export interface Incharge extends Table {
@@ -128,7 +129,6 @@ export interface UpdateUserInfo {
   last_name: string;
   marital_status: MaritalStatus;
   mother_names: string;
-  next_of_keen_proculation_reason: string;
   nid: string;
   other_rank: string;
   password: string;
@@ -141,7 +141,6 @@ export interface UpdateUserInfo {
   place_of_residence: string;
   profile_status: ProfileStatus;
   rank_depart: string;
-  relationship_with_next_of_ken: string;
   reset_date: string;
   residence_location_id: number;
   sex: GenderStatus;

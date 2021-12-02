@@ -21,10 +21,8 @@ function CompleteProfile() {
     activation_key: '',
     id: '',
     intake_program_id: '',
-    next_of_keen_proculation_reason: '',
     password_reset_period_in_days: 0,
     person_id: '',
-    relationship_with_next_of_ken: '',
     reset_date: '',
     profile_status: ProfileStatus.INCOMPLETE,
     residence_location_id: 0,
@@ -48,21 +46,19 @@ function CompleteProfile() {
     const userInfo = user.data?.data.data;
     userInfo &&
       setPersonalInfo({
-        academic_program_level_id: userInfo.academic_program_level_id,
-        academy_id: userInfo.academy_id,
-        activation_key: userInfo.activation_key,
-        id: userInfo.id.toString(),
-        intake_program_id: userInfo.intake_program_id,
-        next_of_keen_proculation_reason: userInfo.next_of_keen_proculation_reason,
+        academic_program_level_id: '',
+        academy_id: '',
+        activation_key: '',
+        intake_program_id: '',
+        id: userInfo.id + '',
         password_reset_period_in_days: userInfo.password_reset_period_in_days,
-        person_id: userInfo.person_id,
-        relationship_with_next_of_ken: userInfo.relationship_with_next_of_ken,
+        person_id: userInfo.person.id + '',
         reset_date: userInfo.reset_date,
         profile_status:
           userInfo.profile_status == null
             ? ProfileStatus.INCOMPLETE
             : userInfo.profile_status,
-        residence_location_id: userInfo.residence_location_id,
+        residence_location_id: userInfo.person.residence_location_id,
         user_type: userInfo.user_type,
         nid: userInfo.person.nid,
         phone: userInfo.person.phone_number,
