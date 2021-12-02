@@ -14,7 +14,6 @@ import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import ActionableList from '../../components/Molecules/ActionableList';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
-import Tiptap from '../../components/Molecules/editor/Tiptap';
 import PopupMolecule from '../../components/Molecules/Popup';
 import AddPrivileges from '../../components/Organisms/forms/roles/AddPrivileges';
 import { queryClient } from '../../plugins/react-query';

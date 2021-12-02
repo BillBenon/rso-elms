@@ -9,8 +9,18 @@ class ModuleMaterialStore {
   addFile() {
     return useMutation(moduleMaterialService.addFile);
   }
-  downloadFile() {
-    return useMutation(moduleMaterialService.downloadFile);
+
+  downloadFile(materialId: string, enabled = true) {
+    return useQuery(
+      ['download/material', materialId],
+      () => moduleMaterialService.downloadFile(materialId),
+      { enabled },
+    );
+  }
+  getFileById(materialId: string) {
+    return useQuery(['attachment/id', materialId], () =>
+      moduleMaterialService.getFileById(materialId),
+    );
   }
   addModuleMaterialAttachment() {
     return useMutation(moduleMaterialService.addModuleMaterialAttachment);

@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
-import { ExperienceInfo } from './../../types/services/experience.types';
+import { ExperienceInfo, Experiences } from './../../types/services/experience.types';
 
 class ExperienceService {
   public async create(
@@ -11,13 +11,13 @@ class ExperienceService {
     return await adminstrationAxios.post('/experiences/addExperience', experience);
   }
 
-  public async fetchAll(): Promise<AxiosResponse<Response<ExperienceInfo[]>>> {
+  public async fetchAll(): Promise<AxiosResponse<Response<Experiences[]>>> {
     return await adminstrationAxios.get('/experiences/getExperiences');
   }
 
   public async getExperienceById(
     id: string,
-  ): Promise<AxiosResponse<Response<ExperienceInfo>>> {
+  ): Promise<AxiosResponse<Response<Experiences>>> {
     return await adminstrationAxios.get(`/experiences/getExperienceById/${id}`);
   }
   public async update(
@@ -29,7 +29,7 @@ class ExperienceService {
   }
   public async findPersonExperiences(
     personId: string,
-  ): Promise<AxiosResponse<Response<ExperienceInfo[]>>> {
+  ): Promise<AxiosResponse<Response<Experiences[]>>> {
     return await adminstrationAxios.get(`/experiences/findPersonExperiences/${personId}`);
   }
 }

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -82,7 +81,7 @@ function IntakeProgramDetails() {
         subTitle: program.type,
         description: program.description,
         department: program.department,
-        incharge: program.current_admin_names,
+        // incharge: program.current_admin_names,
       };
     }
 
@@ -169,15 +168,15 @@ function IntakeProgramDetails() {
                             {programData.subTitle?.replaceAll('_', ' ')}
                           </Heading>
 
-                          <div className="flex items-center gap-2">
+                          {/* <div className="flex items-center gap-2">
                             <Avatar
                               size="24"
                               alt="user1 profile"
                               className=" rounded-full  border-2 border-main transform hover:scale-125"
-                              src="https://randomuser.me/api/portraits/men/1.jpg"
+                              src="https://static.thenounproject.com/png/2643367-200.png"
                             />
                             <Heading fontSize="sm">{programData.incharge}</Heading>
-                          </div>
+                          </div> */}
                         </div>
                         <div className="mt-4 flex space-x-4">
                           <Button

@@ -17,6 +17,7 @@ export default function Sidebar() {
     const routes: linkProps[] = [];
     const institutionAdminLinks: linkProps[] = [
       { title: 'Users', to: '/dashboard/users', icon: 'user' },
+      { title: 'Ranks', to: '/dashboard/ranks', icon: 'rank' },
       { title: 'Roles', to: '/dashboard/roles', icon: 'role' },
       { title: 'Academies', to: '/dashboard/academies', icon: 'academy', fill: false },
       { title: 'Privileges', to: '/dashboard/privileges', icon: 'module' },

@@ -98,9 +98,11 @@ export default function SubjectDetails() {
           <TabNavigation
             tabs={tabs}
             headerComponent={
-              <BrowserLink to={`${url}/add-lesson`}>
-                <Button>New lesson</Button>
-              </BrowserLink>
+              authUser?.user_type === UserType.INSTRUCTOR && (
+                <BrowserLink to={`${url}/add-lesson`}>
+                  <Button>New lesson</Button>
+                </BrowserLink>
+              )
             }
             className="pt-6">
             <Switch>

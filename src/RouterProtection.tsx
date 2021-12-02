@@ -20,9 +20,11 @@ import InstrLevelModule from './views/modules/InstrLevelModule';
 import StudentModule from './views/modules/StudentModule';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicProgram from './views/programs/AcademicPrograms';
+import Ranks from './views/ranks/Ranks';
 import InstructorProgram from './views/programs/InstructorProgram';
 import Roles from './views/roles/Roles';
 import ViewRole from './views/roles/ViewRole';
+import Venues from './views/schedule/Venues';
 import CalendarView from './views/schedule/Calendar';
 import Events from './views/schedule/Events';
 import ScheduleHome from './views/schedule/ScheduleHome';
@@ -43,6 +45,7 @@ const RouterProtection = () => {
       <Route path="/dashboard/role/:id/view" component={ViewRole} />
       <Route path="/dashboard/academies" component={Academies} />
       <Route path="/dashboard/calendar" component={CalendarView} />
+      <Route path="/dashboard/ranks" component={Ranks} />
       <Route path="/dashboard/roles" component={Roles} />
       <Route path="/dashboard/users" component={Users} />
 

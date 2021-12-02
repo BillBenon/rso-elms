@@ -170,6 +170,7 @@ export type IconType =
   | 'paragraph'
   | 'police-logo'
   | 'program'
+  | 'rank'
   | 'redo'
   | 'reg-control'
   | 'right-arrow'
@@ -187,7 +188,9 @@ export type IconType =
   | 'excel'
   | 'pdf'
   | 'word'
-  | 'png';
+  | 'png'
+  | 'powerpoint'
+  | 'text-file';
 
 export interface FormPropType {
   onSubmit?: <E>(_e: FormEvent<E>) => void;

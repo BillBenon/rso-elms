@@ -1,14 +1,22 @@
 import React from 'react';
 
+import Badge from '../../../components/Atoms/custom/Badge';
 import Heading from '../../../components/Atoms/Text/Heading';
 
 function RankEnrollmentCard() {
   return (
-    <div className="max-w-sm py-4 px-6 bg-main rounded-md h-80 overflow-auto">
+    <div className="max-w-sm py-4 px-6 bg-main rounded-md max-h-80 overflow-auto">
       <Heading fontWeight="semibold" fontSize="base" className="pt-6 pb-7">
-        Rank Enrollment
+        Rank Enrollments
       </Heading>
-      <div className="flex flex-col gap-3 w-full pb-9">
+      <Badge
+        fontWeight="medium"
+        badgecolor="secondary"
+        badgetxtcolor="txt-secondary"
+        className="mx-2 text-sm">
+        Ranks are currently not specificied
+      </Badge>
+      {/* <div className="flex flex-col gap-3 w-full pb-9">
         <div className="flex flex-col text-sm">
           <p className="text-txt-secondary">Current rank</p>
           <p className="text-txt-primary pt-2">Officer Cadette</p>
@@ -39,7 +47,7 @@ function RankEnrollmentCard() {
           <p className="text-txt-secondary pr-1">To: </p>
           <p className="text-txt-primary px-2">Now</p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
