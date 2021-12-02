@@ -1,3 +1,6 @@
+import { Table } from '..';
+import { MaterialInfo } from './module-material.types';
+
 /* eslint-disable no-unused-vars */
 export interface ExperienceInfo {
   attachment_id: string;
@@ -10,6 +13,10 @@ export interface ExperienceInfo {
   proof: string;
   start_date: string;
   type: ExperienceTypeStatus;
+}
+
+export interface Experiences extends Table, ExperienceInfo {
+  attachment: MaterialInfo;
 }
 
 export enum ExperienceTypeStatus {

@@ -38,6 +38,7 @@ function ShowAttachment({ attach }: { attach: ModuleMaterialAttachmentInfo }) {
 
     // eslint-disable-next-line no-undef
     var binaryData: BlobPart[] = [];
+    //@ts-ignore
     binaryData.push(file);
 
     const url = window.URL.createObjectURL(

@@ -176,7 +176,6 @@ function ExperienceForm<E>({
                 handleChange={handleChange}>
                 Education Level
                 <span className="text-txt-secondary normal-case">
-                  {' '}
                   (Write in full abbreviation)
                 </span>
               </InputMolecule>

@@ -26,7 +26,7 @@ function EmploymentDetails<E>({
     current_rank_id: '',
     other_rank: '',
     rank_depart: '',
-    emp_no: '',
+    empNo: '',
     date_of_commission: '',
     date_of_last_promotion: '',
     place_of_issue: '',
@@ -63,7 +63,7 @@ function EmploymentDetails<E>({
         current_rank_id: personInfo.current_rank_id,
         other_rank: personInfo.other_rank,
         rank_depart: personInfo.rank_depart,
-        emp_no: personInfo.emp_no,
+        empNo: personInfo.empNo,
         date_of_commission: personInfo.date_of_commission,
         date_of_last_promotion: personInfo.date_of_last_promotion,
         place_of_issue: personInfo.place_of_issue,
@@ -95,9 +95,9 @@ function EmploymentDetails<E>({
           </div>
           <div className="flex flex-col gap-4">
             <InputMolecule
-              name="emp_no"
+              name="empNo"
               placeholder="Service number"
-              value={employmentDetails.emp_no}
+              value={employmentDetails.empNo}
               handleChange={handleChange}>
               Service / Employment number
             </InputMolecule>
