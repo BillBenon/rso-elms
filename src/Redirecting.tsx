@@ -34,7 +34,6 @@ export default function Redirecting() {
       mutateAsync().then((resp) => {
         let experienceFound = false;
         for (const i in resp.data.data) {
-          // @ts-ignore
           if (resp.data.data[i].person_id == data?.data.data.person.id) {
             experienceFound = true;
             break;
