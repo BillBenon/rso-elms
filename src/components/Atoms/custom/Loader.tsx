@@ -7,13 +7,8 @@ export default function Loader() {
   const loading = [
     'LOOKING OUTSIDE FOR YOU... ONE SEC',
     'Your time is very important to us. Please wait a little bit',
-    'Still faster than Windows update',
     'We will be back in 1/0 minutes.',
-    "Don't panic, Just count to infinite.",
-    'Swapping time and space...',
-    'The architects are still drafting',
     "We're building the buildings as fast as we can",
-    "It's still faster than you could draw it",
     'Just count to 10',
     "It's not you. It's me.",
     'Hold on a minute.',

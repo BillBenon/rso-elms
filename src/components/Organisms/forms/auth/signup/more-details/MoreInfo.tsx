@@ -1,28 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import {
-  getLocalStorageData,
-  setLocalStorageData,
-} from '../../../../../../utils/getLocalStorageItem';
 import CompleteProfileHeader from '../../../../../Molecules/CompleteProfileHeader';
 import Stepper from '../../../../../Molecules/Stepper/Stepper';
 import KinAddressDetails from './KinAddressDetails';
 import NextOfKinDetails from './NextOfKinDetails';
 
 function MoreInfo(props: any) {
-  const [moreInfo, setMoreInfo] = useState({
-    first_name: '',
-    last_name: '',
-    email: '',
-    phone: '',
-    gender: 'male',
-    relationship: '',
-    country: '',
-    location: '',
-    other_location: '',
-  });
-
   const [currentStep, setCurrentStep] = useState(0);
   const [completeStep, setCompleteStep] = useState(0);
   const history = useHistory();
@@ -32,17 +16,8 @@ function MoreInfo(props: any) {
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
   };
 
-  useEffect(() => setMoreInfo(getLocalStorageData('moreInfo')), []);
-
-  useEffect(() => setLocalStorageData('moreInfo', moreInfo), [moreInfo]);
-
-  async function saveInfo() {
-    if (moreInfo) {
-      history.push('/complete-profile/other');
-    }
-  }
-  const handleSubmit = (e: any, data: any) => {
-    setMoreInfo({ ...moreInfo, ...data });
+  const skip = () => {
+    setCurrentStep((currentStep) => currentStep + 1);
   };
 
   const prevStep = () => {
@@ -54,26 +29,36 @@ function MoreInfo(props: any) {
       setCurrentStep(index);
     }
   };
+  async function finishSteps(isComplete: boolean) {
+    if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
+    history.push('/dashboard/modules');
+  }
 
   return (
     <div className="bg-main p-8 md:px-20 md:py-14">
-      <CompleteProfileHeader />
+      <CompleteProfileHeader
+        title={'Add your Next of Kin'}
+        details={'Fill in the form with all your next of kin information'}
+      />
       <Stepper
+        isDisabled={false}
+        isInline
         currentStep={currentStep}
         completeStep={completeStep}
         navigateToStepHandler={navigateToStepHandler}>
         <NextOfKinDetails
           fetched_id={props.location.state.detail.person_id}
           display_label="Next of kin details"
-          onSubmit={handleSubmit}
+          isVertical
           nextStep={nextStep}
+          skip={skip}
         />
         <KinAddressDetails
           fetched_id={props.location.state.detail.person_id}
           display_label="Next of kin address details"
-          onSubmit={handleSubmit}
+          isVertical
+          nextStep={finishSteps}
           prevStep={prevStep}
-          nextStep={saveInfo}
         />
       </Stepper>
     </div>

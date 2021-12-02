@@ -76,8 +76,6 @@ export default function EvaluationQuestionComponent({
     }
   }, []);
 
-  console.log(questions);
-
   function handleAddQuestion() {
     let newQuestion = initialState;
     let questionsClone = [...questions];
@@ -141,7 +139,6 @@ export default function EvaluationQuestionComponent({
         handleNext();
       },
       onError: (error: any) => {
-        console.log(error);
         toast.error(error.response.data.message);
       },
     });
@@ -241,6 +238,7 @@ export default function EvaluationQuestionComponent({
                 <InputMolecule
                   readonly={question.submitted}
                   type="number"
+                  step=".01"
                   name={'mark'}
                   min={1}
                   style={{ width: '6rem' }}

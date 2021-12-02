@@ -58,6 +58,7 @@ function ModuleMaterials() {
                 <Loader />
               ) : moduleMaterials.length === 0 ? (
                 <NoDataAvailable
+                  showButton={authUser?.user_type === UserType.ADMIN}
                   icon="subject"
                   title={'No learning materials available'}
                   description={
@@ -79,7 +80,7 @@ function ModuleMaterials() {
                             text: mat.type,
                             type: MaterialType[mat.type],
                           }}>
-                          <div className="font-medium text-gray-600 text-sm pt-4 pb-6">
+                          <div className="font-medium text-gray-600 text-sm py-4">
                             <Tiptap
                               editable={false}
                               viewMenu={false}
@@ -87,12 +88,16 @@ function ModuleMaterials() {
                               content={mat.content}
                             />
                           </div>
-                          <Button
-                            className="mt-2 mb-4 mx-20"
-                            styleType="outline"
-                            onClick={() => history.push(`${url}/add-material/${mat.id}`)}>
-                            Add supporting files
-                          </Button>
+                          {authUser?.user_type === UserType.INSTRUCTOR && (
+                            <Button
+                              className="mt-2 mb-4 mx-20"
+                              styleType="outline"
+                              onClick={() =>
+                                history.push(`${url}/add-material/${mat.id}`)
+                              }>
+                              Add supporting files
+                            </Button>
+                          )}
                           <ShowModuleMaterial materialId={mat.id + ''} />
                         </Panel>
                       );

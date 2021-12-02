@@ -25,14 +25,12 @@ export default function StudentReview() {
   const [currentRows, setCurrentRows] = useState(
     studentAnswers?.slice(indexOfFirstRow, indexOfLastRow),
   );
-
   const history = useHistory();
   function goBack(): void {
     history.push(`/dashboard/student`);
   }
   useEffect(() => {
     setCurrentRows(studentAnswers?.slice(indexOfFirstRow, indexOfLastRow));
-    console.log(studentEvaluation);
     if (studentEvaluation?.markingStatus) {
       if (studentEvaluation?.markingStatus == 'TO_MARK') {
         toast.error('Your answers are yet to be marked by Instructor');
