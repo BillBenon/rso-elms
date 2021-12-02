@@ -57,6 +57,7 @@ export default function Redirecting() {
         // });
       }
     }
+
     setUserNotAllowed(notAllowed && !isLoading);
   }, [authUser?.data.data, isLoading]);
 
