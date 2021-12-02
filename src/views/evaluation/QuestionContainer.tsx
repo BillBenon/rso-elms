@@ -64,14 +64,14 @@ IQuestionContainerProps) {
     e.preventDefault();
     mutateAsync(answer.studentEvaluation, {
       onSuccess: () => {
-        // toast.success('Evaluation submitted', { duration: 5000 });
+        toast.success('Evaluation submitted', { duration: 5000 });
         localStorage.removeItem('studentEvaluationId');
 
         history.push('/dashboard/student');
       },
-      // onError: () => {
-      //   toast.error(error + '');
-      // },
+      onError: (error) => {
+        toast.error(error + '');
+      },
     });
   }
 
@@ -79,7 +79,6 @@ IQuestionContainerProps) {
     if (previousValue !== answer?.openAnswer) {
       mutate(answer, {
         onSuccess: () => {
-          toast.success('submitted');
           setQuestionToSubmit('');
         },
         onError: (error) => {
