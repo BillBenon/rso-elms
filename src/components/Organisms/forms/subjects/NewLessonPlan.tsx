@@ -25,10 +25,8 @@ function NewLessonPlan() {
   const { mutateAsync } = lessonStore.addLessonPlan();
   const authUser = authenticatorStore.authUser().data?.data.data;
   const authUserId = authUser?.id;
-  const instructor = instructordeploymentStore.getInstructorByUserId(
-    authUserId + '',
-    !!authUserId,
-  ).data?.data.data;
+  const instructor = instructordeploymentStore.getInstructorByUserId(authUserId + '').data
+    ?.data.data;
 
   const { id } = useParams<ParamType>();
 
