@@ -18,9 +18,11 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
+import { authenticatorStore } from '../../store/administration';
 import { evaluationStore } from '../../store/administration/evaluation.store';
 import { lessonStore } from '../../store/administration/lesson.store';
 import { subjectStore } from '../../store/administration/subject.store';
+import { UserType } from '../../types/services/user.types';
 import EvaluationCategories from '../evaluation/EvaluationCategories';
 
 interface ParamType {
@@ -33,6 +35,7 @@ export default function SubjectDetails() {
   const { url } = useRouteMatch();
   const history = useHistory();
 
+  const authUser = authenticatorStore.authUser().data?.data.data;
   const subjectData = subjectStore.getSubject(subjectId);
   const { data, isLoading } = lessonStore.getLessonsBySubject(subjectId);
   const subjecEvaluations =
@@ -90,9 +93,11 @@ export default function SubjectDetails() {
           <TabNavigation
             tabs={tabs}
             headerComponent={
-              <BrowserLink to={`${url}/add-lesson`}>
-                <Button>New lesson</Button>
-              </BrowserLink>
+              authUser?.user_type === UserType.INSTRUCTOR && (
+                <BrowserLink to={`${url}/add-lesson`}>
+                  <Button>New lesson</Button>
+                </BrowserLink>
+              )
             }
             className="pt-6">
             <Switch>
