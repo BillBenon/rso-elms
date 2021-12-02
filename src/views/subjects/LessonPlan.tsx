@@ -25,7 +25,7 @@ function LessonPlan() {
   const authUser = authenticatorStore.authUser().data?.data.data;
   const { data, isLoading } = lessonStore.getLessonPlanByLesson(id);
   const plan = data?.data.data || [];
-  const { url } = useRouteMatch();
+  const { path, url } = useRouteMatch();
   const list: Link[] = [
     { to: '/dashboard/inst-program', title: 'Dashboard' },
     { to: `/dashboard/inst-module`, title: 'Modules' },
@@ -51,9 +51,7 @@ function LessonPlan() {
                   buttonLabel={'Create plan'}
                   showButton={authUser?.user_type === UserType.INSTRUCTOR}
                   title={'No lesson plan available'}
-                  description={
-                    'You have not created a lesson plan for this lesson. You can add one from the button below'
-                  }
+                  description={'There is no lesson plan for this lesson.'}
                   handleClick={() => history.push(`${url}/add-lesson-plan`)}
                 />
               ) : (
@@ -165,7 +163,7 @@ function LessonPlan() {
         {/* add lesson plan form  */}
         <Route
           exact
-          path={`${url}/add-lesson-plan`}
+          path={`${path}/add-lesson-plan`}
           render={() => {
             return (
               <PopupMolecule
@@ -181,7 +179,7 @@ function LessonPlan() {
         {/* edit lesson plan form  */}
         <Route
           exact
-          path={`${url}/edit-lesson-plan/:planId`}
+          path={`${path}/edit-lesson-plan/:planId`}
           render={() => {
             return (
               <PopupMolecule
