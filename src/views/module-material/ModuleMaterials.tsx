@@ -58,6 +58,7 @@ function ModuleMaterials() {
                 <Loader />
               ) : moduleMaterials.length === 0 ? (
                 <NoDataAvailable
+                  showButton={authUser?.user_type === UserType.ADMIN}
                   icon="subject"
                   title={'No learning materials available'}
                   description={
