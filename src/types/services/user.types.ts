@@ -76,30 +76,30 @@ export interface PersonInfo extends Table {
   spouse_name: string;
   //to be added
   religion: string;
-  residence_location_id: string;
+  residence_location_id: number;
   place_of_residence: string;
   nationality: string;
 }
-export interface ExperienceInfo{
+export interface ExperienceInfo {
   attachment_id: string;
-  description:	string;
-  end_date:	string;
-  id:	number;
-  level:	string;
-  location:	string;
+  description: string;
+  end_date: string;
+  id: number;
+  level: string;
+  location: string;
   occupation: string;
   person_id: string;
   proof: string;
   start_date: string;
   type: string;
 }
-export interface UpdateExperienceInfo{
+export interface UpdateExperienceInfo {
   attachment_id: string;
-  description:	string;
-  end_date:	string;
-  id:	number;
-  level:	string;
-  location:	string;
+  description: string;
+  end_date: string;
+  id: number;
+  level: string;
+  location: string;
   occupation: string;
   person_id: string;
   proof: string;
@@ -276,13 +276,12 @@ export enum DocType {
   OTHER = 'OTHER',
 }
 export enum ExperienceType {
-  GENERAL_EDUCATION=  'GENERAL_EDUCATION',
-  CURRIER_COURSE_EDUCATION = "CURRIER_COURSE_EDUCATION",
-  EMPLOYMENT = "EMPLOYMENT",
-  INTERNATIONAL_CERTIFICATION = "INTERNATIONAL_CERTIFICATION",
-  INTERNATIONAL_MISSION = "INTERNATIONAL_MISSION",
-  TRAINING = "TRAINING",
-  
+  GENERAL_EDUCATION = 'GENERAL_EDUCATION',
+  CURRIER_COURSE_EDUCATION = 'CURRIER_COURSE_EDUCATION',
+  EMPLOYMENT = 'EMPLOYMENT',
+  INTERNATIONAL_CERTIFICATION = 'INTERNATIONAL_CERTIFICATION',
+  INTERNATIONAL_MISSION = 'INTERNATIONAL_MISSION',
+  TRAINING = 'TRAINING',
 }
 
 export enum BloodGroup {
