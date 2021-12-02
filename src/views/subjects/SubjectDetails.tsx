@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Link as BrowserLink,
   Route,
@@ -22,8 +22,9 @@ import { authenticatorStore } from '../../store/administration';
 import { evaluationStore } from '../../store/administration/evaluation.store';
 import { lessonStore } from '../../store/administration/lesson.store';
 import { subjectStore } from '../../store/administration/subject.store';
-import { UserType } from '../../types/services/user.types';
+import { UserInfo, UserType } from '../../types/services/user.types';
 import EvaluationCategories from '../evaluation/EvaluationCategories';
+import SubjectInstructorView from '../evaluation/SubjectInstructorView';
 
 interface ParamType {
   id: string;
@@ -31,15 +32,21 @@ interface ParamType {
 }
 
 export default function SubjectDetails() {
+  const [authUser, setAuthUser] = useState<UserInfo>();
+  const userData = authenticatorStore.authUser();
+  useEffect(() => {
+    setAuthUser(userData.data?.data.data);
+  }, [userData.data?.data.data]);
   const { subjectId } = useParams<ParamType>();
   const { url } = useRouteMatch();
   const history = useHistory();
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
   const subjectData = subjectStore.getSubject(subjectId);
   const { data, isLoading } = lessonStore.getLessonsBySubject(subjectId);
   const subjecEvaluations =
     evaluationStore.getEvaluationsCollectionBySubject(subjectId).data?.data.data;
+  const instructorEvaluations =
+    evaluationStore.getEvaluationsBySubject(subjectId).data?.data.data;
 
   const lessons = data?.data.data || [];
 
@@ -155,12 +162,19 @@ export default function SubjectDetails() {
                   </>
                 )}
               />
-              <Route
-                path={`${url}/evaluations`}
-                render={() => (
-                  <EvaluationCategories subjecEvaluations={subjecEvaluations} />
-                )}
-              />
+              {authUser?.user_type === UserType.INSTRUCTOR ? (
+                <Route
+                  path={`${url}/evaluations`}
+                  render={() => <SubjectInstructorView data={instructorEvaluations} />}
+                />
+              ) : (
+                <Route
+                  path={`${url}/evaluations`}
+                  render={() => (
+                    <EvaluationCategories subjecEvaluations={subjecEvaluations} />
+                  )}
+                />
+              )}
             </Switch>
           </TabNavigation>
         </div>
