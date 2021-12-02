@@ -59,7 +59,7 @@ function NewModuleMaterialAttach() {
             {
               async onSuccess(data) {
                 toast.success(data.data.message);
-                queryClient.invalidateQueries(['material/moduleid']);
+                queryClient.invalidateQueries(['material/attachment']);
                 history.push(`/dashboard/modules/${id}`);
               },
               onError() {

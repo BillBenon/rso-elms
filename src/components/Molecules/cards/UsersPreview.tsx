@@ -47,32 +47,21 @@ export default function UsersPreview({
 
           <div className="flex">
             <div className="flex items-center">
-              <div className="">
-                <Avatar
-                  size="24"
-                  alt="user1 profile"
-                  className=" rounded-full  border-2 border-main transform hover:scale-125"
-                  src="https://randomuser.me/api/portraits/men/1.jpg"
-                />
-              </div>
-
-              <div className="-m-1">
-                <Avatar
-                  size="24"
-                  alt="user2 profile"
-                  className=" rounded-full  border-2 border-main transform hover:scale-125"
-                  src="https://randomuser.me/api/portraits/women/2.jpg"
-                />
-              </div>
-
-              <div className="-m-1">
-                <Avatar
-                  size="24"
-                  alt="user 3 profile"
-                  className=" rounded-full  border-2 border-main transform hover:scale-125"
-                  src="https://randomuser.me/api/portraits/men/3.jpg"
-                />
-              </div>
+              {Array(totalUsers)
+                .fill(0)
+                .map(
+                  (_, i) =>
+                    i < 3 && (
+                      <div key={i}>
+                        <Avatar
+                          size="24"
+                          alt="user1 profile"
+                          className="rounded-full border-2 border-main transform hover:scale-125"
+                          src="https://static.thenounproject.com/png/2643367-200.png"
+                        />
+                      </div>
+                    ),
+                )}
             </div>
 
             <div className="flex items-center">
