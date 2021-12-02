@@ -181,11 +181,10 @@ export default function ModuleDetails() {
                 <>
                   {subjects.length < 1 && subjectData.isSuccess ? (
                     <NoDataAvailable
+                      showButton={authUser?.user_type === UserType.ADMIN}
                       icon="subject"
                       title={'No subjects registered'}
-                      description={
-                        'The history object is mutable. Therefore it is recommended to access the location from the render props of <Route>, not from'
-                      }
+                      description={'There are no subjects available yet'}
                       handleClick={() => history.push(`${url}/add-subject`)}
                     />
                   ) : (

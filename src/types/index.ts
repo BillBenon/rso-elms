@@ -188,7 +188,9 @@ export type IconType =
   | 'excel'
   | 'pdf'
   | 'word'
-  | 'png';
+  | 'png'
+  | 'powerpoint'
+  | 'text-file';
 
 export interface FormPropType {
   onSubmit?: <E>(_e: FormEvent<E>) => void;
