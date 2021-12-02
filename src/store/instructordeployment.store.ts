@@ -18,11 +18,9 @@ class InstructorDeploymentStore {
       instructorDeployment.getInstructorById(id),
     );
   }
-  getInstructorByUserId(userId: string, enabled = false) {
-    return useQuery(
-      ['instructor/userId', userId],
-      () => instructorDeployment.getInstructorByUserId(userId),
-      { enabled },
+  getInstructorByUserId(userId: string) {
+    return useQuery(['instructor/userId', userId], () =>
+      instructorDeployment.getInstructorByUserId(userId),
     );
   }
   getInstructors() {
