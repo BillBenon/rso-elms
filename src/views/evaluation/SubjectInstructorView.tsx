@@ -2,26 +2,29 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
+import Loader from '../../components/Atoms/custom/Loader';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
+import { evaluationStore } from '../../store/administration/evaluation.store';
 import { CommonCardDataType } from '../../types';
-import { IEvaluationInfo } from '../../types/services/evaluation.types';
 import { advancedTypeChecker } from '../../utils/getOption';
-import EvaluationContent from './EvaluationContent';
 
 interface IEvaluationProps {
-  data: IEvaluationInfo[] | undefined;
+  subjectId: string;
 }
 
-export default function SubjectInstructorView({ data }: IEvaluationProps) {
+export default function SubjectInstructorView({ subjectId }: IEvaluationProps) {
   const [evaluations, setEvaluations] = useState<any>([]);
   const history = useHistory();
   const { path } = useRouteMatch();
 
+  const { data, isSuccess, isLoading, isError } =
+    evaluationStore.getEvaluationsBySubject(subjectId);
+
   useEffect(() => {
     let formattedEvals: CommonCardDataType[] = [];
-    data?.forEach((evaluation: any) => {
+    data?.data.data.forEach((evaluation) => {
       let formattedEvaluations = {
         id: evaluation.id,
         title: evaluation.name,
@@ -35,28 +38,29 @@ export default function SubjectInstructorView({ data }: IEvaluationProps) {
       formattedEvals.push(formattedEvaluations);
     });
     setEvaluations(formattedEvals);
-  }, [data]);
+  }, [data?.data.data]);
 
   return (
     <div>
       <Switch>
         <Route exact path={`/dashboard/evaluations/new`} component={NewEvaluation} />
-        <Route path={`${path}/:id`} component={EvaluationContent} />
         <Route
           exact
           path={path}
           render={() => (
             <>
               <section className="flex flex-wrap justify-start gap-4 mt-2">
-                {evaluations.length === 0 ? (
+                {isLoading && evaluations.length === 0 && <Loader />}
+
+                {isSuccess && evaluations.length === 0 ? (
                   <NoDataAvailable
                     icon="evaluation"
                     buttonLabel="Add new evaluation"
                     title={'No evaluations available'}
-                    handleClick={() => history.push(`/dashboard/evaluations/new`)}
+                    handleClick={() => history.push(`${path}/new`)}
                     description="And the web just isnt the same without you. Lets get you back online!"
                   />
-                ) : evaluations.length > 0 ? (
+                ) : isSuccess && evaluations.length > 0 ? (
                   evaluations?.map((info: CommonCardDataType, index: number) => (
                     <div key={index}>
                       <CommonCardMolecule
@@ -68,6 +72,14 @@ export default function SubjectInstructorView({ data }: IEvaluationProps) {
                       />
                     </div>
                   ))
+                ) : isError ? (
+                  <NoDataAvailable
+                    icon="evaluation"
+                    buttonLabel="Create Evaluation"
+                    title={'No evaluations available'}
+                    handleClick={() => history.push(`/dashboard/evaluations/new`)}
+                    description="And the web just isnt the same without you. Lets get you back online!"
+                  />
                 ) : null}
               </section>
             </>
