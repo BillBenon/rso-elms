@@ -92,7 +92,7 @@ function CompleteProfile() {
         onSuccess() {
           toast.success('personal information successfully updated', { duration: 1200 });
           setTimeout(() => {
-            history.push('/login');
+            history.push('/complete-profile/experience');
           }, 900);
         },
         onError() {

@@ -9,7 +9,8 @@ import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';
 import Divisions from './views/divisions/Divisions';
 import EvaluationTest from './views/evaluation/EvaluationTest';
-import ViewEvaluations from './views/evaluation/ViewEvaluations';
+import InstructorViewEvaluations from './views/evaluation/InstructorViewEvaluations';
+import StudentReview from './views/evaluation/StudentReview';
 import NewInstitution from './views/insitution/NewInstitution';
 import UpdateInstitution from './views/insitution/UpdateInstitution';
 import IntakesView from './views/intakes/Intakes';
@@ -19,9 +20,11 @@ import InstrLevelModule from './views/modules/InstrLevelModule';
 import StudentModule from './views/modules/StudentModule';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicProgram from './views/programs/AcademicPrograms';
+import Ranks from './views/ranks/Ranks';
 import InstructorProgram from './views/programs/InstructorProgram';
 import Roles from './views/roles/Roles';
 import ViewRole from './views/roles/ViewRole';
+import Venues from './views/schedule/Venues';
 import CalendarView from './views/schedule/Calendar';
 import Events from './views/schedule/Events';
 import ScheduleHome from './views/schedule/ScheduleHome';
@@ -42,6 +45,7 @@ const RouterProtection = () => {
       <Route path="/dashboard/role/:id/view" component={ViewRole} />
       <Route path="/dashboard/academies" component={Academies} />
       <Route path="/dashboard/calendar" component={CalendarView} />
+      <Route path="/dashboard/ranks" component={Ranks} />
       <Route path="/dashboard/roles" component={Roles} />
       <Route path="/dashboard/users" component={Users} />
 
@@ -73,10 +77,11 @@ const RouterProtection = () => {
   const InstructorRoutes = () => (
     <>
       {/* start of instructor pages */}
+      <Route path="/dashboard/evaluations" component={InstructorViewEvaluations} />
+      <Route path="/dashboard/calendar" component={CalendarView} />
       <Route path="/dashboard/inst-program" component={InstructorProgram} />
       <Route exact path={`/dashboard/inst-module`} component={InstrLevelModule} />
 
-      <Route path="/dashboard/evaluations" component={ViewEvaluations} />
       <Route path="/dashboard/schedule" component={ScheduleHome} />
       <Route path="/dashboard/events" component={Events} />
       <Route path="/dashboard/modules" component={Modules} />
@@ -90,8 +95,17 @@ const RouterProtection = () => {
       <Route path="/dashboard/schedule" component={ScheduleHome} />
       <Route path="/dashboard/student" component={StudentModule} />
       <Route path="/dashboard/modules" component={Modules} />
-      <Route path="/dashboard/student/evaluations/" component={EvaluationTest} />
-      <Route path="/dashboard/evaluations/student" component={EvaluationTest} />
+      {/* <Route path="/dashboard/student/evaluations/" component={EvaluationTest} /> */}
+      <Route
+        exact
+        path="/dashboard/evaluations/student-evaluation/:id"
+        component={EvaluationTest}
+      />
+      <Route
+        exact
+        path="/dashboard/evaluations/completed/student-evaluation/:id/review"
+        component={StudentReview}
+      />
       {/* end of student pages */}
     </>
   );

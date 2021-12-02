@@ -80,7 +80,32 @@ export interface PersonInfo extends Table {
   place_of_residence: string;
   nationality: string;
 }
-
+export interface ExperienceInfo{
+  attachment_id: string;
+  description:	string;
+  end_date:	string;
+  id:	number;
+  level:	string;
+  location:	string;
+  occupation: string;
+  person_id: string;
+  proof: string;
+  start_date: string;
+  type: string;
+}
+export interface UpdateExperienceInfo{
+  attachment_id: string;
+  description:	string;
+  end_date:	string;
+  id:	number;
+  level:	string;
+  location:	string;
+  occupation: string;
+  person_id: string;
+  proof: string;
+  start_date: string;
+  type: string;
+}
 export interface UpdateUserInfo {
   academic_program_level_id: string;
   academy_id: string;
@@ -122,6 +147,7 @@ export interface UpdateUserInfo {
   sex: GenderStatus;
   spouse_name: string;
   user_type: UserType;
+  send_communication_msg: SendCommunicationMsg;
   username: string;
   send_communication_msg: SendCommunicationMsg;
 }
@@ -247,6 +273,15 @@ export enum DocType {
   NISS_CARD = 'NISS_CARD',
   RCS_CARD = 'RCS_CARD',
   OTHER = 'OTHER',
+}
+export enum ExperienceType {
+  GENERAL_EDUCATION=  'GENERAL_EDUCATION',
+  CURRIER_COURSE_EDUCATION = "CURRIER_COURSE_EDUCATION",
+  EMPLOYMENT = "EMPLOYMENT",
+  INTERNATIONAL_CERTIFICATION = "INTERNATIONAL_CERTIFICATION",
+  INTERNATIONAL_MISSION = "INTERNATIONAL_MISSION",
+  TRAINING = "TRAINING",
+  
 }
 
 export enum BloodGroup {

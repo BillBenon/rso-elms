@@ -5,10 +5,12 @@ import toast from 'react-hot-toast';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import { queryClient } from '../../plugins/react-query';
 import { evaluationStore } from '../../store/administration/evaluation.store';
 import { markingStore } from '../../store/administration/marking.store';
 import { ParamType } from '../../types';
@@ -51,7 +53,7 @@ export default function EvaluationContent() {
           { studentEvaluationId: id },
           {
             onSuccess: () => {
-              toast.success('Result published. Applying changes', { duration: 3000 });
+              toast.success('Result published', { duration: 3000 });
               history.push('/dashboard/evaluations');
               // history.push({ pathname: `${url}` });
             },
@@ -65,15 +67,15 @@ export default function EvaluationContent() {
     },
   ];
 
-  const studentEvaluations =
-    markingStore.getEvaluationStudentEvaluations(id).data?.data.data || [];
+  const { data, isSuccess, isLoading, isError } =
+    markingStore.getEvaluationStudentEvaluations(id);
 
   function publishEvaluationResults() {
     mutate(
       { evaluationId: id },
       {
         onSuccess: () => {
-          toast.success('Results published. Applying changes', { duration: 3000 });
+          toast.success('Results published', { duration: 3000 });
           history.push('/dashboard/evaluations');
         },
         onError: (error) => {
@@ -87,8 +89,8 @@ export default function EvaluationContent() {
   useEffect(() => {
     let formattedSubs: any = [];
 
-    if (studentEvaluations) {
-      const filteredInfo = studentEvaluations.map((submission: any) =>
+    if (isSuccess && data?.data.data) {
+      const filteredInfo = data?.data.data.map((submission: any) =>
         pick(submission, ['id', 'code', 'markingStatus', 'obtainedMark', 'totalMark']),
       );
 
@@ -103,29 +105,26 @@ export default function EvaluationContent() {
         formattedSubs.push(filteredData);
       });
 
-      studentEvaluations && setSubmissions(formattedSubs);
+      data?.data.data && setSubmissions(formattedSubs);
     }
-  }, []);
+  }, [data?.data.data]);
 
-  const publishEvaluation = (status: string) =>{
+  const publishEvaluation = (status: string) => {
     makeEvaluationPublic.mutate(
-      {evaluationId: id, status: status},
-       {
-         onSuccess: () => {
-         toast.success('Evaluation is now public. Applying changes', { duration: 3000 });
-         setPublished(true);
-       },
-       onError: (error) => {
-       console.error(error);
-       toast.error(error + '');
-       },
-     })
-  }
-
-  
+      { evaluationId: id, status: status },
+      {
+        onSuccess: () => {
+          toast.success('Availability status updated', { duration: 3000 });
+          queryClient.invalidateQueries(['evaluation']);
+        },
+        onError: (error: any) => {
+          toast.error(error.response.data.message);
+        },
+      },
+    );
+  };
 
   const { data: evaluationInfo } = evaluationStore.getEvaluationById(id).data?.data || {};
-  const [published, setPublished] = useState(evaluationInfo?.available == "PUBLIC" || false);
 
   return (
     <div className="block pr-24 pb-8 w-11/12">
@@ -138,8 +137,17 @@ export default function EvaluationContent() {
               path={`${path}/submissions`}
               render={() => (
                 <>
-                  {submissions.length > 0 ? (
-                    <>
+                  {isLoading && <Loader />}
+                  {isSuccess && submissions.length === 0 ? (
+                    <NoDataAvailable
+                      icon="evaluation"
+                      buttonLabel="Go back"
+                      title={'No submissions has been made so far!'}
+                      handleClick={() => history.push(`/dashboard/evaluations/${id}`)}
+                      description="And the web just isnt the same without you. Lets get you back online!"
+                    />
+                  ) : isSuccess && submissions.length > 0 ? (
+                    <div>
                       <div className="w-full flex justify-end mb-4">
                         <Button onClick={publishEvaluationResults}>
                           Publish all results
@@ -152,16 +160,16 @@ export default function EvaluationContent() {
                         uniqueCol={'id'}
                         actions={actions}
                       />
-                    </>
-                  ) : (
+                    </div>
+                  ) : isError ? (
                     <NoDataAvailable
                       icon="evaluation"
-                      buttonLabel="Go back"
-                      title={'No submissions has been made so far!'}
-                      handleClick={() => history.push(`/dashboard/evaluations/${id}`)}
+                      buttonLabel="Create Evaluation"
+                      title={'No evaluations available'}
+                      handleClick={() => history.push(`${path}/new`)}
                       description="And the web just isnt the same without you. Lets get you back online!"
                     />
-                  )}
+                  ) : null}
                 </>
               )}
             />
@@ -180,7 +188,7 @@ export default function EvaluationContent() {
                   </div>
                   <div className="flex gap-4">
                     <Button
-                     styleType="outline"
+                      styleType="outline"
                       onClick={() =>
                         history.push({
                           pathname: `/dashboard/evaluations/new`,
@@ -190,17 +198,15 @@ export default function EvaluationContent() {
                       Edit evaluation
                     </Button>
 
-                    {published == false ? (
-                      <Button
-                      onClick={()=>publishEvaluation("PUBLIC")}
-                     >Publish evaluation
-                     </Button>
-                    ):
-                    <Button
-                      onClick={()=>publishEvaluation("HIDDEN")}
-                     >Unpublish evaluation
-                     </Button>
-                     }
+                    {evaluationInfo?.available === 'HIDDEN' ? (
+                      <Button onClick={() => publishEvaluation('PUBLIC')}>
+                        Publish evaluation
+                      </Button>
+                    ) : (
+                      <Button onClick={() => publishEvaluation('HIDDEN')}>
+                        Unpublish evaluation
+                      </Button>
+                    )}
                   </div>
                 </div>
                 <div className="bg-main px-7 mt-7 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-3 pt-5">
@@ -257,10 +263,13 @@ export default function EvaluationContent() {
                       title="Due on"
                       subTitle={moment(evaluationInfo?.due_on).format('MM/DD/YYYY')}
                     />
-
                     <ContentSpan
                       title="Questionaire type"
                       subTitle={evaluationInfo?.questionaire_type}
+                    />{' '}
+                    <ContentSpan
+                      title="Total marks"
+                      subTitle={evaluationInfo?.total_mark.toString()}
                     />
                   </div>
 
@@ -287,25 +296,27 @@ export default function EvaluationContent() {
                 </Heading>
                 <div className="bg-main px-16 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5">
                   {evaluationQuestions?.map((question, index: number) =>
-                    question.multipleChoiceAnswers.length > 0 ? (
+                    question && question.multiple_choice_answers.length > 0 ? (
                       <>
                         <div className="mt-3 flex justify-between">
                           <ContentSpan title={`Question ${index + 1}`} className="gap-3">
-                            What is the nervous system?
+                            {question.question}
                           </ContentSpan>
 
                           <Heading fontWeight="semibold" fontSize="sm">
                             5 marks
                           </Heading>
                         </div>
-                        <MultipleChoiceAnswer
-                          answer_content="This is the first answer"
-                          correct={true}
-                        />
-                        <MultipleChoiceAnswer
-                          answer_content="This is the second answer"
-                          correct={false}
-                        />
+
+                        {question.multiple_choice_answers.length
+                          ? question.multiple_choice_answers.map((choiceAnswer) => (
+                              <MultipleChoiceAnswer
+                                key={choiceAnswer.id}
+                                answer_content={choiceAnswer.answerContent}
+                                correct={choiceAnswer.correct}
+                              />
+                            ))
+                          : null}
                       </>
                     ) : (
                       <div className="mt-3 flex justify-between">

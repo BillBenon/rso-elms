@@ -27,7 +27,7 @@ const adminstrationAxios = axios.create(administrationModuleConfig);
 const evaluationAxios = axios.create(evalutationModuleConfig);
 const timetableAxios = axios.create(timetableModuleConfig);
 
-const authIgnore: string[] = ['/'];
+const authIgnore: string[] = ['/', '/complete-profile'];
 
 const interceptAdminReq = (config: AxiosRequestConfig) => {
   const token = cookie.getCookie('jwt_info');
@@ -69,7 +69,7 @@ const interceptAdminResError = (error: Error | AxiosError<AxiosResponse<Response
 };
 
 adminstrationAxios.interceptors.request.use(interceptAdminReq);
-adminstrationAxios.interceptors.response.use((config) => config, interceptAdminResError);
+// adminstrationAxios.interceptors.response.use((config) => config, interceptAdminResError);
 
 evaluationAxios.interceptors.request.use(interceptAdminReq);
 // evaluationAxios.interceptors.response.use((config) => config, interceptAdminResError);

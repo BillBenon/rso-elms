@@ -69,7 +69,15 @@ class EvaluationService {
     subject: string,
   ): Promise<AxiosResponse<Response<IEvaluationInfoCollected>>> {
     return await evaluationAxios.get(
-      `/evaluations/getEvaluationsBySubject/07e4467${subject}/studentNarrower`,
+      `/evaluations/getEvaluationsBySubject/${subject}/studentNarrower`,
+    );
+  }
+
+  public async fetchEvaluationsByStudent(
+    subject: string,
+  ): Promise<AxiosResponse<Response<IStudentEvaluationStart[]>>> {
+    return await evaluationAxios.get(
+      `/evaluations/getEvaluationsBySubject/${subject}/studentNarrower`,
     );
   }
 
@@ -77,6 +85,15 @@ class EvaluationService {
     id: string,
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
     return await evaluationAxios.get(`/evaluations/getById/${id}`);
+  }
+
+  public async getStudentEvaluationByStudentIdAndEvaluationId(
+    evaluationId: string,
+    studentId: string,
+  ): Promise<AxiosResponse<Response<any>>> {
+    return await evaluationAxios.get(
+      `/studentEvaluations/studentEvaluation/evaluation/${evaluationId}/student/${studentId}`,
+    );
   }
 
   public async getEvaluationQuestions(

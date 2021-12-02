@@ -36,8 +36,7 @@ function NewLevel({ onSubmit, academy_id }: IDivisionsAcademyType) {
         queryClient.invalidateQueries(['levels/academy']);
         history.goBack();
       },
-      onError: (error) => {
-        console.log(error);
+      onError: () => {
         toast.error('something wrong happened while creating level');
       },
     });
