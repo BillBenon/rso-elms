@@ -33,7 +33,7 @@ function ExperienceDetails() {
 
   async function finishSteps(isComplete: boolean) {
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
-    history.push('/complete_profile/more');
+    history.push('/dashboard/inst-program');
   }
   return (
     <div className="bg-main p-8 md:px-20">
