@@ -39,7 +39,6 @@ export default function UpdateRank({ onSubmit }: FormPropType) {
           ...data?.data.data,
           institution_id:
             user.data.data.institution_id || 'b832407f-fb77-4a75-8679-73bf7794f207',
-          current_admin_id: user.data.data.id + '',
         });
     };
     getUser();
