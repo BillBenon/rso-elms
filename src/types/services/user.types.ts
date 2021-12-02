@@ -10,27 +10,36 @@ export interface Student extends Table {
   registered_on: string;
 }
 
-export interface UserInfo extends CreateUserInfo, Table {
-  pin: string;
-  age_range: string;
-  token: string;
-  person: PersonInfo;
+export interface UserInfo extends Table {
   academy: AcademyInfo;
-  institution_id: string;
-  institution_name?: string;
+  acdemic_year_id: string;
   activated: boolean;
   active_session: boolean;
-  image_url: string;
-  password_reset_period_in_days: number;
-  reset_date: string;
-  level: ILevel;
-  status: GenericStatus;
-  login_try: number;
-  enabled: boolean;
-  profile_status: ProfileStatus;
+  age_range: string;
   authorities: [];
+  email: string;
+  enabled: boolean;
+  first_name: string;
+  image_url: string;
+  institution_id: string;
+  institution_name: string;
+  is_otp_active: boolean | null;
+  last_name: string;
+  level: EducationLevel;
+  login_try: number;
   otp: string;
-  is_otp_active: boolean;
+  password: string;
+  password_reset_period_in_days: number;
+  person: PersonInfo;
+  phone: number;
+  pin: number;
+  profile_status: ProfileStatus | null;
+  reset_date: string;
+  send_communication_msg: SendCommunicationMsg | null;
+  token: string;
+  user_type: UserType;
+  username: string;
+  marital_status: MaritalStatus;
 }
 
 export interface Incharge extends Table {
@@ -42,37 +51,62 @@ export interface Incharge extends Table {
 }
 
 export interface PersonInfo extends Table {
-  first_name: string;
-  father_names: string;
-  mother_names: string;
-  last_name: string;
-  phone_number: string;
   birth_date: string;
-  doc_type: DocType;
-  marital_status: MaritalStatus;
-  sex: GenderStatus;
-  place_of_birth: string;
-  emp_no: string;
-  ///////////////////
-  nationality: string;
-  spouse_name: string;
-  place_of_birth_description: string;
-  blood_group: string;
-  religion: string;
-  place_of_issue: string;
-  date_of_issue: string;
-  place_of_residence: string;
-  residence_location_id: number;
+  blood_group: BloodGroup;
+  current_rank: string;
   current_rank_id: string;
-  other_rank: string;
-  rank_depart: string;
   date_of_commission: string;
+  date_of_issue: string;
   date_of_last_promotion: string;
-  ///////////////////
-  nid: string;
+  doc_type: DocType;
   document_expire_on: string;
+  empNo: string;
+  father_names: string;
+  first_name: string;
+  last_name: string;
+  marital_status: MaritalStatus;
+  mother_names: string;
+  nid: string;
+  other_rank: string;
+  phone_number: string;
+  place_of_birth: string;
+  place_of_birth_description: string;
+  place_of_issue: string;
+  rank_depart: string;
+  sex: GenderStatus;
+  spouse_name: string;
+  //to be added
+  religion: string;
+  residence_location_id: number;
+  place_of_residence: string;
+  nationality: string;
 }
-
+export interface ExperienceInfo {
+  attachment_id: string;
+  description: string;
+  end_date: string;
+  id: number;
+  level: string;
+  location: string;
+  occupation: string;
+  person_id: string;
+  proof: string;
+  start_date: string;
+  type: string;
+}
+export interface UpdateExperienceInfo {
+  attachment_id: string;
+  description: string;
+  end_date: string;
+  id: number;
+  level: string;
+  location: string;
+  occupation: string;
+  person_id: string;
+  proof: string;
+  start_date: string;
+  type: string;
+}
 export interface UpdateUserInfo {
   academic_program_level_id: string;
   academy_id: string;
@@ -95,7 +129,6 @@ export interface UpdateUserInfo {
   last_name: string;
   marital_status: MaritalStatus;
   mother_names: string;
-  next_of_keen_proculation_reason: string;
   nid: string;
   other_rank: string;
   password: string;
@@ -108,14 +141,13 @@ export interface UpdateUserInfo {
   place_of_residence: string;
   profile_status: ProfileStatus;
   rank_depart: string;
-  relationship_with_next_of_ken: string;
   reset_date: string;
   residence_location_id: number;
   sex: GenderStatus;
   spouse_name: string;
   user_type: UserType;
-  username: string;
   send_communication_msg: SendCommunicationMsg;
+  username: string;
 }
 
 export interface CreateUserInfo {
@@ -191,7 +223,7 @@ export interface PersonDetail
 export interface EmploymentDetail
   extends Pick<
     PersonInfo,
-    | 'emp_no'
+    | 'empNo'
     | 'current_rank_id'
     | 'other_rank'
     | 'rank_depart'
@@ -202,7 +234,7 @@ export interface EmploymentDetail
   > {}
 
 export interface AccountDetail
-  extends Pick<UserInfo, 'username' | 'pin' | 'password' | 'send_communication_msg'> {
+  extends Pick<UserInfo, 'username' | 'pin' | 'send_communication_msg' | 'password'> {
   confirm_password: string;
 }
 
@@ -239,6 +271,14 @@ export enum DocType {
   NISS_CARD = 'NISS_CARD',
   RCS_CARD = 'RCS_CARD',
   OTHER = 'OTHER',
+}
+export enum ExperienceType {
+  GENERAL_EDUCATION = 'GENERAL_EDUCATION',
+  CURRIER_COURSE_EDUCATION = 'CURRIER_COURSE_EDUCATION',
+  EMPLOYMENT = 'EMPLOYMENT',
+  INTERNATIONAL_CERTIFICATION = 'INTERNATIONAL_CERTIFICATION',
+  INTERNATIONAL_MISSION = 'INTERNATIONAL_MISSION',
+  TRAINING = 'TRAINING',
 }
 
 export enum BloodGroup {

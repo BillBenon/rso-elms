@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+import { Blob } from 'buffer';
 
 import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
@@ -22,10 +23,14 @@ class ModuleMaterialService {
   public async addFile(file: FormData): Promise<AxiosResponse<Response<MaterialInfo>>> {
     return await adminstrationAxios.post('/attachments/addFile', file);
   }
-  public async downloadFile(
+  public async downloadFile(attachmentId: string): Promise<AxiosResponse<Blob>> {
+    return await adminstrationAxios.get(`/attachments/download/${attachmentId}`);
+  }
+
+  public async getFileById(
     attachmentId: string,
   ): Promise<AxiosResponse<Response<MaterialInfo>>> {
-    return await adminstrationAxios.post(`/attachments/download/${attachmentId}`);
+    return await adminstrationAxios.get(`/attachments/getById/${attachmentId}`);
   }
 
   public async addModuleMaterialAttachment(

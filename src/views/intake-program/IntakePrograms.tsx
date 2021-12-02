@@ -9,7 +9,6 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
-import Avatar from '../../components/Atoms/custom/Avatar';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -76,7 +75,7 @@ function IntakePrograms() {
       subTitle: prog.type.replaceAll('_', ' '),
       description: prog.description,
       department: prog.department,
-      incharge: prog.incharge && prog.incharge.user.username,
+      // incharge: prog.incharge && prog.incharge.user.username,
     };
 
     programs.push(program);
@@ -166,7 +165,7 @@ function IntakePrograms() {
                                 {Common.subTitle}
                               </Heading>
                             </div>
-                            <div className="flex flex-col gap-2">
+                            {/* <div className="flex flex-col gap-2">
                               <Heading color="txt-secondary" fontSize="sm">
                                 Instructor in charge
                               </Heading>
@@ -183,7 +182,7 @@ function IntakePrograms() {
                                   {Common.incharge}
                                 </Heading>
                               </div>
-                            </div>
+                            </div> */}
                           </div>
 
                           {/* remarks section */}

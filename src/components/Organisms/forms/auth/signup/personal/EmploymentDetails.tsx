@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 
+import { rankStore } from '../../../../../../store/administration/rank.store';
 import usersStore from '../../../../../../store/administration/users.store';
 import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../types';
+import { RankRes } from '../../../../../../types/services/rank.types';
 import { EmploymentDetail } from '../../../../../../types/services/user.types';
-import {
-  getLocalStorageData,
-  setLocalStorageData,
-} from '../../../../../../utils/getLocalStorageItem';
+import { getLocalStorageData } from '../../../../../../utils/getLocalStorageItem';
+import { getDropDownOptions } from '../../../../../../utils/getOption';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DateMolecule from '../../../../../Molecules/input/DateMolecule';
@@ -26,7 +26,7 @@ function EmploymentDetails<E>({
     current_rank_id: '',
     other_rank: '',
     rank_depart: '',
-    emp_no: '',
+    empNo: '',
     date_of_commission: '',
     date_of_last_promotion: '',
     place_of_issue: '',
@@ -40,6 +40,10 @@ function EmploymentDetails<E>({
     setEmploymentDetails({ ...employmentDetails, [e.name]: e.value });
   };
 
+  //get all ranks in an institution
+
+  const ranks: RankRes[] | undefined = rankStore.getRanks().data?.data.data;
+
   const moveForward = (e: any) => {
     e.preventDefault();
     let data: any = getLocalStorageData('user');
@@ -48,7 +52,7 @@ function EmploymentDetails<E>({
       //@ts-ignore
       if (!newObj[val]) newObj[val] = '';
     });
-    setLocalStorageData('user', newObj);
+    localStorage.setItem('user', JSON.stringify(newObj));
     nextStep(true);
   };
   const user = usersStore.getUserById(fetched_id.toString());
@@ -59,7 +63,7 @@ function EmploymentDetails<E>({
         current_rank_id: personInfo.current_rank_id,
         other_rank: personInfo.other_rank,
         rank_depart: personInfo.rank_depart,
-        emp_no: personInfo.emp_no,
+        empNo: personInfo.empNo,
         date_of_commission: personInfo.date_of_commission,
         date_of_last_promotion: personInfo.date_of_last_promotion,
         place_of_issue: personInfo.place_of_issue,
@@ -76,9 +80,8 @@ function EmploymentDetails<E>({
             <DropdownMolecule
               placeholder="Select current rank"
               name="current_rank_id"
-              className="w-72"
-              handleChange={handleChange}
-              options={[]}>
+              options={getDropDownOptions({ inputs: ranks || [] })}
+              handleChange={handleChange}>
               Current Rank
             </DropdownMolecule>
             <InputMolecule
@@ -92,9 +95,9 @@ function EmploymentDetails<E>({
           </div>
           <div className="flex flex-col gap-4">
             <InputMolecule
-              name="emp_no"
+              name="empNo"
               placeholder="Service number"
-              value={employmentDetails.emp_no}
+              value={employmentDetails.empNo}
               handleChange={handleChange}>
               Service / Employment number
             </InputMolecule>
