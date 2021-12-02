@@ -10,11 +10,13 @@ import { evaluationStore } from '../../store/administration/evaluation.store';
 import { CommonCardDataType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 
-interface IEvaluationProps {
+interface InstructorSubjectViewerProps {
   subjectId: string;
 }
 
-export default function SubjectInstructorView({ subjectId }: IEvaluationProps) {
+export default function SubjectInstructorView({
+  subjectId,
+}: InstructorSubjectViewerProps) {
   const [evaluations, setEvaluations] = useState<any>([]);
   const history = useHistory();
   const { path } = useRouteMatch();
