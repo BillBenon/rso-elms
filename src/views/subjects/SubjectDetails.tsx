@@ -45,8 +45,6 @@ export default function SubjectDetails() {
   const { data, isLoading } = lessonStore.getLessonsBySubject(subjectId);
   const subjecEvaluations =
     evaluationStore.getEvaluationsCollectionBySubject(subjectId).data?.data.data;
-  const instructorEvaluations =
-    evaluationStore.getEvaluationsBySubject(subjectId).data?.data.data;
 
   const lessons = data?.data.data || [];
 
@@ -165,7 +163,7 @@ export default function SubjectDetails() {
               {authUser?.user_type === UserType.INSTRUCTOR ? (
                 <Route
                   path={`${url}/evaluations`}
-                  render={() => <SubjectInstructorView data={instructorEvaluations} />}
+                  render={() => <SubjectInstructorView subjectId={subjectId} />}
                 />
               ) : (
                 <Route
