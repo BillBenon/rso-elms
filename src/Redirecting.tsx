@@ -35,7 +35,7 @@ export default function Redirecting() {
         let experienceFound = false;
         for (const i in resp.data.data) {
           // @ts-ignore
-          if (resp.data.data[i].person_id == data?.data.data.person_id) {
+          if (resp.data.data[i].person_id == data?.data.data.person.id) {
             experienceFound = true;
             break;
           }
