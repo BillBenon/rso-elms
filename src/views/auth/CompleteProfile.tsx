@@ -37,13 +37,12 @@ function CompleteProfile() {
   const [completeStep, setCompleteStep] = useState(0);
   const history = useHistory();
 
-  let foundUser: UserInfo = getLocalStorageData('user');
-
+  let foundUser: UserInfo = getLocalStorageData('foundUser');
   if (!foundUser.id) {
     history.push('/login/search');
+    return <></>;
   }
-
-  const user = usersStore.getUserById(foundUser.id + '');
+  const user = usersStore.getUserById(foundUser.id.toString());
   useEffect(() => {
     const userInfo = user.data?.data.data;
     userInfo &&
@@ -126,8 +125,6 @@ function CompleteProfile() {
       setCurrentStep(index);
     }
   };
-
-  console.log(foundUser);
 
   return (
     <div className="bg-main p-8 md:px-24 md:py-14">
