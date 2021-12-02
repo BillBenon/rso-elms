@@ -42,7 +42,7 @@ function NewModuleMaterial() {
       {
         async onSuccess(data) {
           toast.success(data.data.message);
-          queryClient.invalidateQueries(['subjects/moduleId']);
+          queryClient.invalidateQueries(['material/moduleid']);
           history.goBack();
         },
         onError() {

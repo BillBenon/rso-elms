@@ -38,9 +38,7 @@ function ModuleMaterials() {
                 Learning materials ({moduleMaterial?.data.data.length || 0})
               </Heading>
               {authUser?.user_type === UserType.INSTRUCTOR && (
-                <Button
-                  styleType="outline"
-                  onClick={() => history.push(`${url}/add-material`)}>
+                <Button onClick={() => history.push(`${url}/add-material`)}>
                   <span className="flex items-center">
                     {/* <Icon
                               name="add"
@@ -58,7 +56,7 @@ function ModuleMaterials() {
                 <Loader />
               ) : moduleMaterials.length === 0 ? (
                 <NoDataAvailable
-                  showButton={authUser?.user_type === UserType.ADMIN}
+                  showButton={authUser?.user_type === UserType.INSTRUCTOR}
                   icon="subject"
                   title={'No learning materials available'}
                   description={
