@@ -22,7 +22,8 @@ export default function EvaluationContent() {
   const { id } = useParams<ParamType>();
   const { url, path } = useRouteMatch();
   const [submissions, setSubmissions] = useState([]);
-  const evaluationQuestions = evaluationStore.getEvaluationQuestions(id).data?.data.data;
+  const { data: evaluationQuestions, isLoading: loading } =
+    evaluationStore.getEvaluationQuestions(id);
 
   const { mutate } = markingStore.publishResults();
   const makeEvaluationPublic = evaluationStore.publishEvaluation();
@@ -296,42 +297,52 @@ export default function EvaluationContent() {
                 <Heading fontWeight="semibold" fontSize="base" className="pt-6">
                   Evaluation questions
                 </Heading>
-                <div className="bg-main px-16 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5">
-                  {evaluationQuestions?.map((question, index: number) =>
-                    question && question.multiple_choice_answers.length > 0 ? (
-                      <>
-                        <div className="mt-3 flex justify-between">
-                          <ContentSpan title={`Question ${index + 1}`} className="gap-3">
-                            {question.question}
-                          </ContentSpan>
+                {loading && <Loader />}
+                <div
+                  className={`${
+                    !loading && 'bg-main'
+                  }  px-16 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
+                  {evaluationQuestions?.data.data.length
+                    ? evaluationQuestions?.data.data.map((question, index: number) =>
+                        question && question.multiple_choice_answers.length > 0 ? (
+                          <>
+                            <div className="mt-3 flex justify-between">
+                              <ContentSpan
+                                title={`Question ${index + 1}`}
+                                className="gap-3">
+                                {question.question}
+                              </ContentSpan>
 
-                          <Heading fontWeight="semibold" fontSize="sm">
-                            5 marks
-                          </Heading>
-                        </div>
+                              <Heading fontWeight="semibold" fontSize="sm">
+                                5 marks
+                              </Heading>
+                            </div>
 
-                        {question.multiple_choice_answers.length
-                          ? question.multiple_choice_answers.map((choiceAnswer) => (
-                              <MultipleChoiceAnswer
-                                key={choiceAnswer.id}
-                                answer_content={choiceAnswer.answerContent}
-                                correct={choiceAnswer.correct}
-                              />
-                            ))
-                          : null}
-                      </>
-                    ) : (
-                      <div className="mt-3 flex justify-between">
-                        <ContentSpan title={`Question ${index + 1}`} className="gap-3">
-                          {question.question}
-                        </ContentSpan>
+                            {question.multiple_choice_answers.length
+                              ? question.multiple_choice_answers.map((choiceAnswer) => (
+                                  <MultipleChoiceAnswer
+                                    key={choiceAnswer.id}
+                                    answer_content={choiceAnswer.answerContent}
+                                    correct={choiceAnswer.correct}
+                                  />
+                                ))
+                              : null}
+                          </>
+                        ) : (
+                          <div className="mt-3 flex justify-between">
+                            <ContentSpan
+                              title={`Question ${index + 1}`}
+                              className="gap-3">
+                              {question.question}
+                            </ContentSpan>
 
-                        <Heading fontWeight="semibold" fontSize="sm">
-                          {question.mark} marks
-                        </Heading>
-                      </div>
-                    ),
-                  )}
+                            <Heading fontWeight="semibold" fontSize="sm">
+                              {question.mark} marks
+                            </Heading>
+                          </div>
+                        ),
+                      )
+                    : null}
                 </div>
               </>
             )}
