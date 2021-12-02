@@ -87,7 +87,7 @@ export default function EvaluationSettings({
         toast.success('Settings added', { duration: 5000 });
         localStorage.removeItem('evaluationId');
         setLocalStorageData('currentStep', 0);
-        queryClient.invalidateQueries(['evaluations']);
+        queryClient.invalidateQueries(['evaluationsByAcademyInstructor']);
         history.push('/dashboard/evaluations');
       },
       onError: (error) => {
