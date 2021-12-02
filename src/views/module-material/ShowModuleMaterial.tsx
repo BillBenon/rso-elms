@@ -3,6 +3,7 @@
 import React from 'react';
 
 import Icon from '../../components/Atoms/custom/Icon';
+import Heading from '../../components/Atoms/Text/Heading';
 import { moduleMaterialService } from '../../services/administration/module-material.service';
 import { moduleMaterialStore } from '../../store/administration/module-material.store';
 import { ModuleMaterialAttachmentInfo } from '../../types/services/module-material.types';
@@ -14,6 +15,9 @@ function ShowModuleMaterial({ materialId }: { materialId: string }) {
 
   return (
     <>
+      <Heading fontSize="sm" color="txt-secondary" className="p-4 underline">
+        ({attachments?.length}) Supporting files
+      </Heading>
       {attachments?.map((attach) => (
         <ShowAttachment attach={attach} key={attach.id} />
       ))}
