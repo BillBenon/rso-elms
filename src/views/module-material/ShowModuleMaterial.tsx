@@ -51,8 +51,9 @@ function ShowAttachment({ attach }: { attach: ModuleMaterialAttachmentInfo }) {
 
     document.getElementById('downloadme')?.appendChild(a);
     a.click();
+    a.remove();
 
-    a.setAttribute('disabled', 'true');
+    setTimeout(() => URL.revokeObjectURL(a.href), 7000);
     a.parentNode?.removeChild(a);
   }
 

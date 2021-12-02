@@ -10,27 +10,35 @@ export interface Student extends Table {
   registered_on: string;
 }
 
-export interface UserInfo extends CreateUserInfo, Table {
-  pin: string;
-  age_range: string;
-  token: string;
-  person: PersonInfo;
+export interface UserInfo extends Table {
   academy: AcademyInfo;
-  institution_id: string;
-  institution_name?: string;
+  acdemic_year_id: string;
   activated: boolean;
   active_session: boolean;
-  image_url: string;
-  password_reset_period_in_days: number;
-  reset_date: string;
-  level: ILevel;
-  status: GenericStatus;
-  login_try: number;
-  enabled: boolean;
-  profile_status: ProfileStatus;
+  age_range: string;
   authorities: [];
+  email: string;
+  enabled: boolean;
+  first_name: string;
+  image_url: string;
+  institution_id: string;
+  institution_name: string;
+  is_otp_active: boolean | null;
+  last_name: string;
+  level: null;
+  login_try: number;
   otp: string;
-  is_otp_active: boolean;
+  password: string;
+  password_reset_period_in_days: number;
+  person: PersonInfo;
+  phone: number;
+  pin: number;
+  profile_status: ProfileStatus | null;
+  reset_date: string;
+  send_communication_msg: SendCommunicationMsg | null;
+  token: string;
+  user_type: UserType;
+  username: string;
 }
 
 export interface Incharge extends Table {
@@ -42,35 +50,35 @@ export interface Incharge extends Table {
 }
 
 export interface PersonInfo extends Table {
-  first_name: string;
-  father_names: string;
-  mother_names: string;
-  last_name: string;
-  phone_number: string;
   birth_date: string;
-  doc_type: DocType;
-  marital_status: MaritalStatus;
-  sex: GenderStatus;
-  place_of_birth: string;
-  emp_no: string;
-  ///////////////////
-  nationality: string;
-  spouse_name: string;
-  place_of_birth_description: string;
-  blood_group: string;
-  religion: string;
-  place_of_issue: string;
-  date_of_issue: string;
-  place_of_residence: string;
-  residence_location_id: number;
+  blood_group: BloodGroup;
+  current_rank: string;
   current_rank_id: string;
-  other_rank: string;
-  rank_depart: string;
   date_of_commission: string;
+  date_of_issue: string;
   date_of_last_promotion: string;
-  ///////////////////
-  nid: string;
+  doc_type: DocType;
   document_expire_on: string;
+  empNo: string;
+  father_names: string;
+  first_name: string;
+  last_name: string;
+  marital_status: MaritalStatus;
+  mother_names: string;
+  nid: string;
+  other_rank: string;
+  phone_number: string;
+  place_of_birth: string;
+  place_of_birth_description: string;
+  place_of_issue: string;
+  rank_depart: string;
+  sex: GenderStatus;
+  spouse_name: string;
+  //to be added
+  religion: string;
+  residence_location_id: string;
+  place_of_residence: string;
+  nationality: string;
 }
 
 export interface UpdateUserInfo {
@@ -191,7 +199,7 @@ export interface PersonDetail
 export interface EmploymentDetail
   extends Pick<
     PersonInfo,
-    | 'emp_no'
+    | 'empNo'
     | 'current_rank_id'
     | 'other_rank'
     | 'rank_depart'
@@ -202,7 +210,7 @@ export interface EmploymentDetail
   > {}
 
 export interface AccountDetail
-  extends Pick<UserInfo, 'username' | 'pin' | 'password' | 'send_communication_msg'> {
+  extends Pick<UserInfo, 'username' | 'pin' | 'send_communication_msg' | 'password'> {
   confirm_password: string;
 }
 

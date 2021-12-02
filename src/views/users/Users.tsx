@@ -1,16 +1,14 @@
 import React, { useState } from 'react';
-import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import Icon from '../../components/Atoms/custom/Icon';
 import Loader from '../../components/Atoms/custom/Loader';
 import ILabel from '../../components/Atoms/Text/ILabel';
-import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewUser from '../../components/Organisms/forms/user/NewUser';
 import UpdateUser from '../../components/Organisms/forms/user/UpdateUser';
 import Admins from '../../components/Organisms/user/Admins';
-import ImportUsers from '../../components/Organisms/user/ImportUsers';
 import Instructors from '../../components/Organisms/user/Instructors';
 import Students from '../../components/Organisms/user/Students';
 import { authenticatorStore } from '../../store/administration';
