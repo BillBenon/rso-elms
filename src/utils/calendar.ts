@@ -48,7 +48,9 @@ export function groupTimeTableByDay(arr: ClassTimeTableInfo[]): IDayTimeTable {
   Object.keys(daysOfWeek)
     .slice(0, 7)
     .forEach((day) => {
-      grouped[day] = [...arr.filter((tt) => tt.day_of_week == day)];
+      grouped[day] = [...arr.filter((tt) => tt.day_of_week == day)].sort(function (a, b) {
+        return a.start_hour.localeCompare(b.start_hour);
+      });
     });
 
   return grouped;

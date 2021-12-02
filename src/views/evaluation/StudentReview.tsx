@@ -18,7 +18,6 @@ export default function StudentReview() {
   const { id } = useParams<ParamType>();
   const studentAnswers = markingStore.getStudentEvaluationAnswers(id).data?.data.data;
   const studentEvaluation = markingStore.getStudentEvaluationById(id).data?.data.data;
-  const [totalMarks] = useState(0);
   const [rowsOnPage] = useState(4);
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastRow = currentPage * rowsOnPage;
@@ -28,11 +27,10 @@ export default function StudentReview() {
   );
   const history = useHistory();
   function goBack(): void {
-    history.push(`/dashboard/evaluations`);
+    history.push(`/dashboard/student`);
   }
   useEffect(() => {
     setCurrentRows(studentAnswers?.slice(indexOfFirstRow, indexOfLastRow));
-    console.log(studentEvaluation);
     if (studentEvaluation?.markingStatus) {
       if (studentEvaluation?.markingStatus == 'TO_MARK') {
         toast.error('Your answers are yet to be marked by Instructor');
@@ -41,7 +39,7 @@ export default function StudentReview() {
       } else if (studentEvaluation?.markingStatus == 'MARKED') {
         toast.error('Your results has not yet been published.');
       } else if (studentEvaluation?.markingStatus == 'PUBLISHED') {
-        toast.error('Results has been published, you are now viewing the results.');
+        toast.success('Results has been published, you are now viewing the results.');
       }
       if (studentEvaluation?.markingStatus != 'PUBLISHED') {
         history.goBack();
@@ -67,7 +65,9 @@ export default function StudentReview() {
         showSearch={false}>
         <p className="text-gray-400">
           Marks obtained:{' '}
-          <span className="text-green-300 font-semibold">{totalMarks}</span>
+          <span className="text-green-300 font-semibold">
+            {studentEvaluation?.obtainedMark}
+          </span>
         </p>
       </TableHeader>
       <section className="flex flex-wrap justify-start gap-4 mt-2">

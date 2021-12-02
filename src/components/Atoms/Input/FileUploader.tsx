@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useRef, useState } from 'react';
-import { ChangeEvent, ReactNode } from 'react-router/node_modules/@types/react';
+import React, { ChangeEvent, ReactNode, useRef, useState } from 'react';
 
 interface IProps {
   maxNumberOfFiles?: number;

@@ -76,8 +76,6 @@ export default function EvaluationQuestionComponent({
     }
   }, []);
 
-  console.log(questions);
-
   function handleAddQuestion() {
     let newQuestion = initialState;
     let questionsClone = [...questions];
@@ -141,7 +139,6 @@ export default function EvaluationQuestionComponent({
         handleNext();
       },
       onError: (error: any) => {
-        console.log(error);
         toast.error(error.response.data.message);
       },
     });

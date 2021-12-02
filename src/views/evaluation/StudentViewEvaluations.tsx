@@ -1,19 +1,14 @@
-/*@ts-ignore*/
 import React, { useEffect, useState } from 'react';
-import { toast } from 'react-hot-toast';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import ConfirmationOrganism from '../../components/Organisms/ConfirmationOrganism';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
-import { authenticatorStore } from '../../store/administration';
-import { evaluationStore } from '../../store/administration/evaluation.store';
 import { CommonCardDataType } from '../../types';
 import {
   IEvaluationInfo,
   IEvaluationInfoSingleEvaluation,
-  IStudentEvaluationStart,
 } from '../../types/services/evaluation.types';
 import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import { advancedTypeChecker } from '../../utils/getOption';
@@ -21,72 +16,21 @@ import EvaluationContent from './EvaluationContent';
 
 interface IEvaluationProps {
   subjecEvaluations: IEvaluationInfoSingleEvaluation[] | IEvaluationInfo[];
-  isUndone?: boolean;
-  isOngoing?: boolean;
-  usePopup?: boolean;
   isCompleted?: boolean;
+  isUndone?: boolean;
   linkTo?: string;
 }
 
 export default function StudentViewEvaluations({
   subjecEvaluations = [],
-  linkTo = '',
-  usePopup = false,
-  isOngoing = false,
-  isUndone = false,
   isCompleted = false,
+  isUndone = false,
 }: IEvaluationProps) {
-  const [evaluations, setEvaluations] = useState<any>([]);
-  const [confirm, showConfirmation] = useState(false);
+  const [evaluations, setEvaluations] = useState<any[]>([]);
   const history = useHistory();
-  const { path } = useRouteMatch();
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { path, url } = useRouteMatch();
 
   //function that moves a student to next page after generating student code
-  function goToNext(id: string) {
-    if (linkTo) {
-      history.push(linkTo);
-    } else {
-      history.push(`/dashboard/evaluations/student-evaluation/${id}`);
-    }
-  }
-
-  const { mutateAsync, isLoading: loading } = evaluationStore.studentEvaluationStart();
-
-  function checkEvaluationType(id: any) {
-    if (isCompleted == true) {
-      console.log(path);
-      history.push(`/dashboard/evaluations/completed/student-evaluation/${id}/review`);
-    } else {
-      usePopup && showConfirmation(true);
-    }
-  }
-
-  function generateStudentCode(id = '', studentEval: string) {
-    const studentEvaluationStart: IStudentEvaluationStart = {
-      attachment: '',
-      evaluation_id: id,
-      student_id: authUser?.id.toString() || '',
-    };
-
-    if (isOngoing) {
-      setLocalStorageData('studentEvaluationId', studentEval);
-      goToNext(studentEvaluationStart.evaluation_id);
-    } else if (isCompleted) {
-      history.push(`/dashboard/evaluations/completed/student-evaluation/${id}/review`);
-    } else {
-      mutateAsync(studentEvaluationStart, {
-        onSuccess: (studentInfo) => {
-          setLocalStorageData('studentEvaluationId', studentInfo.data.data.id);
-          toast.success('Generated evaluation code', { duration: 5000 });
-          goToNext(studentEvaluationStart.evaluation_id);
-        },
-        onError: () => {
-          toast.error("The evaluation isn't already started!");
-        },
-      });
-    }
-  }
 
   useEffect(() => {
     setLocalStorageData('currentStep', 0);
@@ -147,41 +91,43 @@ export default function StudentViewEvaluations({
     }
   }, [subjecEvaluations]);
 
+  function handleClick(id: string) {
+    if (!isCompleted) {
+      history.push(`${url}/attempt/${id}`);
+    } else {
+      history.push(`/dashboard/evaluations/completed/student-evaluation/${id}/review`);
+    }
+  }
+
   return (
     <div>
       <Switch>
-        <Route exact path={`${path}/new`} component={NewEvaluation} />
-        <Route path={`${path}/:id`} component={EvaluationContent} />
-        {/* <Route path={`${path}/completed/:id`} component={StudentReview} /> */}
+        <Route exact path={`${path}/new`} component={NewEvaluation} />{' '}
         <Route
           exact
+          path={`${path}/attempt/:id`}
+          render={() => (
+            <ConfirmationOrganism onConfirmationClose={() => history.goBack()} />
+          )}
+        />
+        <Route path={`${path}/:id`} component={EvaluationContent} />
+        <Route
           path={path}
           render={() => (
             <>
-              <section className="grid grid-cols-2 mt-2 gap-4 w-full">
+              <section className="grid grid-cols-2 mt-2 gap-10 w-full">
                 {evaluations.length > 0 ? (
-                  evaluations?.map((info: any, index: number) => (
-                    <div key={index} className="w-full">
-                      <ConfirmationOrganism
-                        loading={loading}
-                        open={confirm}
-                        onProceed={() =>
-                          generateStudentCode(
-                            info.id?.toString(),
-                            /*@ts-ignore*/
-                            info.studentEvaluationId,
-                          )
-                        }
-                        title={info.title}
-                        id={info.id || ''}
-                        onConfirmationClose={() => showConfirmation(false)}
-                      />
-
-                      <CommonCardMolecule
-                        handleClick={() => checkEvaluationType(info.studentEvaluationId)}
-                        data={info}
-                      />
-                    </div>
+                  evaluations?.map((info: CommonCardDataType) => (
+                    <CommonCardMolecule
+                      key={info.id}
+                      handleClick={() =>
+                        handleClick(
+                          //@ts-ignore
+                          isCompleted ? info.studentEvaluationId + '' : info.id + '',
+                        )
+                      }
+                      data={info}
+                    />
                   ))
                 ) : (
                   <NoDataAvailable
