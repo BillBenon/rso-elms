@@ -238,7 +238,7 @@ export default function EvaluationQuestionComponent({
                 <InputMolecule
                   readonly={question.submitted}
                   type="number"
-                  step=".01"
+                  // step=".01"
                   name={'mark'}
                   min={1}
                   style={{ width: '6rem' }}
