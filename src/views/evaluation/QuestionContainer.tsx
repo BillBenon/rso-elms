@@ -1,13 +1,13 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Input from '../../components/Atoms/Input/Input';
 import Heading from '../../components/Atoms/Text/Heading';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
 import { evaluationStore } from '../../store/administration/evaluation.store';
-import { ParamType, ValueType } from '../../types';
+import { ValueType } from '../../types';
 import {
   IMultipleChoiceAnswers,
   IStudentAnswer,
@@ -15,7 +15,6 @@ import {
 import { getLocalStorageData } from '../../utils/getLocalStorageItem';
 import ContentSpan from './ContentSpan';
 import MultipleChoiceAnswer from './MultipleChoiceAnswer';
-// import MultipleChoiceAnswer from './MultipleChoiceAnswer';
 
 interface IQuestionContainerProps {
   question: string;
@@ -23,6 +22,7 @@ interface IQuestionContainerProps {
   marks: number;
   isLast: boolean;
   index: number;
+  showCorrectAnswer: boolean;
   choices?: IMultipleChoiceAnswers[];
   isMultipleChoice: boolean;
   previousAnswers: any[];
@@ -39,20 +39,19 @@ export default function QuestionContainer({
   isMultipleChoice,
 }: IQuestionContainerProps) {
   const history = useHistory();
-  const { id: evalId } = useParams<ParamType>();
 
   const initialState: IStudentAnswer = {
-    answerAttachment: '',
-    evaluation: evalId || '',
-    evaluationQuestion: id || '',
-    markScored: 0,
-    multiple_choice_answers: '',
-    openAnswer: '',
-    studentEvaluation: getLocalStorageData('studentEvaluationId'),
+    answer_attachment: '',
+    evaluation_question: id || '',
+    mark_scored: 0,
+    multiple_choice_answer: '',
+    open_answer: '',
+    student_evaluation: getLocalStorageData('studentEvaluationId'),
   };
 
   const [answer, setAnswer] = useState<IStudentAnswer>(initialState);
   const [questionToSubmit, setQuestionToSubmit] = useState('');
+  const [questionChoices, setChoices] = useState(choices);
 
   function handleChange({ name, value }: ValueType) {
     setAnswer((answer) => ({ ...answer, [name]: value }));
@@ -62,28 +61,50 @@ export default function QuestionContainer({
   const { mutateAsync } = evaluationStore.submitEvaluation();
 
   function submitEvaluation(e: FormEvent) {
-    e.preventDefault();
-    mutateAsync(answer.studentEvaluation, {
+    e?.preventDefault();
+    mutateAsync(answer.student_evaluation, {
       onSuccess: () => {
-        // toast.success('Evaluation submitted', { duration: 5000 });
+        toast.success('Evaluation submitted', { duration: 5000 });
         localStorage.removeItem('studentEvaluationId');
 
         history.push('/dashboard/student');
       },
-      // onError: () => {
-      //   toast.error(error + '');
-      // },
+      onError: (error) => {
+        toast.error(error + '');
+      },
     });
   }
 
-  function submitForm(previousValue?: string) {
-    if (previousValue !== answer?.openAnswer) {
+  function handleChoiceSelect(choice: string, index: number) {
+    let choicesClone = [...(questionChoices || [])];
+    choicesClone[index].highlight = true;
+    choicesClone.forEach((ch) => {
+      if (ch.id !== choice) {
+        ch.highlight = false;
+      }
+    });
+    setChoices(choicesClone);
+
+    setAnswer((answer) => ({ ...answer, ['multiple_choice_answer']: choice }));
+    submitForm();
+  }
+
+  function disableCopyPaste(e: any) {
+    e.preventDefault();
+    return false;
+  }
+
+  function submitForm(previousValue?: string, choiceId?: string) {
+    if (
+      previousValue !== answer?.open_answer ||
+      answer.multiple_choice_answer !== choiceId
+    ) {
       mutate(answer, {
         onSuccess: () => {
-          toast.success('submitted');
+          // toast.success('submitted');
           setQuestionToSubmit('');
         },
-        onError: (error) => {
+        onError: () => {
           // toast.error(error + '');
         },
       });
@@ -115,32 +136,37 @@ export default function QuestionContainer({
         </div>
         {isMultipleChoice && (
           <div className="flex flex-col gap-4">
-            {choices?.length
-              ? choices.map((choiceAnswer) => (
-                  <MultipleChoiceAnswer
-                    key={choiceAnswer.id}
-                    answer_content={choiceAnswer.answerContent}
-                    correct={choiceAnswer.correct}
-                  />
-                ))
-              : null}
+            {questionChoices && questionChoices?.length > 0 ? (
+              questionChoices?.map((choiceAnswer, index) => (
+                <MultipleChoiceAnswer
+                  key={choiceAnswer.id}
+                  choiceId={choiceAnswer.id}
+                  handleChoiceSelect={() => handleChoiceSelect(choiceAnswer.id, index)}
+                  answer_content={choiceAnswer.answer_content}
+                  highlight={
+                    choiceAnswer?.id ===
+                    (previousAnswers[index]?.multiple_choice_answer.id ||
+                      answer?.multiple_choice_answer)
+                  }
+                />
+              ))
+            ) : (
+              <TextAreaMolecule
+                onPaste={(e: any) => disableCopyPaste(e)}
+                onCopy={(e: any) => disableCopyPaste(e)}
+                autoComplete="off"
+                style={{ height: '7rem' }}
+                value={previousAnswers[index]?.open_answer || answer?.open_answer}
+                placeholder="Type your answer here"
+                onBlur={() => submitForm(previousAnswers[index]?.open_answer)}
+                name="openAnswer"
+                onFocus={() => setQuestionToSubmit(id)}
+                handleChange={handleChange}
+              />
+            )}
           </div>
         )}
         <Input value={id} name="evaluationQuestion" handleChange={handleChange} hidden />
-        <TextAreaMolecule
-          onPaste={(e: any) => {
-            e.preventDefault();
-            return false;
-          }}
-          autoComplete="off"
-          style={{ height: '7rem' }}
-          value={previousAnswers[index]?.open_answer || answer?.openAnswer}
-          placeholder="Type your answer here"
-          onBlur={() => submitForm(previousAnswers[index]?.open_answer)}
-          name="openAnswer"
-          onFocus={() => setQuestionToSubmit(id)}
-          handleChange={handleChange}
-        />
         {/* <div className="py-7">
           <Button type="submit" onSubmit={(e: FormEvent) => submitForm(id, e)}>
             submit answer
