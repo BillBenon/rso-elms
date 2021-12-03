@@ -15,8 +15,6 @@ export default function EvaluationCategories({
   subjecEvaluations,
   loading = false,
 }: IEvaluationCategoriesProps) {
-  console.log(subjecEvaluations);
-
   return (
     <div>
       {loading && <Loader />}
@@ -41,6 +39,7 @@ export default function EvaluationCategories({
             Ongoing evaluations
           </Heading>
           <StudentViewEvaluations
+            isOngoing
             subjecEvaluations={subjecEvaluations?.ongoing_evaluations || []}
           />
         </div>
@@ -67,7 +66,7 @@ export default function EvaluationCategories({
             icon="evaluation"
             showButton={false}
             title={'No evaluations available'}
-            description="And the web just isnt the same without you. Lets get you back online!"
+            description="Oops! It looks like you have no available evaluations!"
           />
         )}
     </div>

@@ -17,6 +17,7 @@ import EvaluationContent from './EvaluationContent';
 interface IEvaluationProps {
   subjecEvaluations: IEvaluationInfoSingleEvaluation[] | IEvaluationInfo[];
   isCompleted?: boolean;
+  isOngoing?: boolean;
   isUndone?: boolean;
   linkTo?: string;
 }
@@ -24,6 +25,7 @@ interface IEvaluationProps {
 export default function StudentViewEvaluations({
   subjecEvaluations = [],
   isCompleted = false,
+  isOngoing = false,
   isUndone = false,
 }: IEvaluationProps) {
   const [evaluations, setEvaluations] = useState<any[]>([]);
@@ -89,11 +91,18 @@ export default function StudentViewEvaluations({
     }
   }, [subjecEvaluations]);
 
-  function handleClick(id: string) {
-    if (!isCompleted) {
-      history.push(`${url}/attempt/${id}`);
-    } else {
+  function handleClick(id = '', studEvaluation = '') {
+    if (isCompleted) {
       history.push(`/dashboard/evaluations/completed/student-evaluation/${id}/review`);
+    }
+
+    if (isOngoing) {
+      history.push({
+        pathname: `${url}/attempt/${id}`,
+        search: `?studentEval=${studEvaluation}`,
+      });
+    } else {
+      history.push(`${url}/attempt/${id}`);
     }
   }
 
@@ -120,8 +129,9 @@ export default function StudentViewEvaluations({
                       key={info.id}
                       handleClick={() =>
                         handleClick(
+                          info.id + '',
                           //@ts-ignore
-                          isCompleted ? info.studentEvaluationId + '' : info.id + '',
+                          info.studentEvaluationId,
                         )
                       }
                       data={info}
