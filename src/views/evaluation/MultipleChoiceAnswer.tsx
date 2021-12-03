@@ -20,11 +20,11 @@ export default function MultipleChoiceAnswer({
     <div className="flex flex-col mb-4">
       <div className="flex">
         <div
-          className={`w-14 h-14 ${classes} border-primary-500' border-2 border-r-0 rounded-tl-md rounded-bl-md right-rounded-md flex items-center justify-center`}>
+          className={`w-14 h-12 ${classes} border-primary-500' border-2 border-r-0 rounded-tl-md rounded-bl-md right-rounded-md flex items-center justify-center`}>
           A
         </div>
         <div
-          className={`w-80 h-14 ${classes} border-2 rounded-tr-md rounded-br-md flex items-center px-4`}>
+          className={`w-80 h-12 ${classes} border-2 rounded-tr-md rounded-br-md flex items-center px-4`}>
           {answer_content}
         </div>
       </div>

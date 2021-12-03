@@ -18,6 +18,15 @@ html {
   border-bottom-width: 3px;
 }
 
+//a class that disables copy of text
+.unselectable {
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 .css-1rhbuit-multiValue {
   background: #ffffff !important;
   border-radius: 25px !important;

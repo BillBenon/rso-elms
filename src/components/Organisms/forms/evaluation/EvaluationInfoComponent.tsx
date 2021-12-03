@@ -120,9 +120,8 @@ export default function EvaluationInfoComponent({
           toast.success('Evaluation updated', { duration: 5000 });
           handleNext();
         },
-        onError: (error) => {
-          console.log(error);
-          toast.error('Failed to update');
+        onError: (error: any) => {
+          toast.error(error.response.data.data.message);
         },
       });
     } else {
