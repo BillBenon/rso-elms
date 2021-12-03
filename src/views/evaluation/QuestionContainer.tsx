@@ -7,6 +7,7 @@ import Input from '../../components/Atoms/Input/Input';
 import Heading from '../../components/Atoms/Text/Heading';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
 import { evaluationStore } from '../../store/administration/evaluation.store';
+import { markingStore } from '../../store/administration/marking.store';
 import { ValueType } from '../../types';
 import {
   IMultipleChoiceAnswers,
@@ -25,7 +26,6 @@ interface IQuestionContainerProps {
   showCorrectAnswer: boolean;
   choices?: IMultipleChoiceAnswers[];
   isMultipleChoice: boolean;
-  previousAnswers: any[];
 }
 
 export default function QuestionContainer({
@@ -34,24 +34,27 @@ export default function QuestionContainer({
   isLast,
   index,
   marks,
-  previousAnswers,
   choices,
   isMultipleChoice,
 }: IQuestionContainerProps) {
   const history = useHistory();
 
+  const [studentEvaluationId, setStudentEvaluationId] = useState('');
+  let previousAnswers =
+    markingStore.getStudentEvaluationAnswers(studentEvaluationId).data?.data.data || [];
+
   const initialState: IStudentAnswer = {
     answer_attachment: '',
     evaluation_question: id || '',
     mark_scored: 0,
-    multiple_choice_answer: '',
+    multiple_choice_answer: previousAnswers[index]?.multiple_choice_answer.id,
     open_answer: '',
     student_evaluation: getLocalStorageData('studentEvaluationId'),
   };
 
-  const [answer, setAnswer] = useState<IStudentAnswer>(initialState);
   const [questionToSubmit, setQuestionToSubmit] = useState('');
   const [questionChoices, setChoices] = useState(choices);
+  const [answer, setAnswer] = useState(initialState);
 
   function handleChange({ name, value }: ValueType) {
     setAnswer((answer) => ({ ...answer, [name]: value }));
@@ -75,19 +78,14 @@ export default function QuestionContainer({
     });
   }
 
-  function handleChoiceSelect(choice: string, index: number) {
-    let choicesClone = [...(questionChoices || [])];
-    choicesClone[index].highlight = true;
-    choicesClone.forEach((ch) => {
-      if (ch.id !== choice) {
-        ch.highlight = false;
-      }
-    });
-    setChoices(choicesClone);
-
-    setAnswer((answer) => ({ ...answer, ['multiple_choice_answer']: choice }));
-    submitForm();
-  }
+  useEffect(() => {
+    setStudentEvaluationId(getLocalStorageData('studentEvaluationId'));
+    setAnswer(initialState);
+    setAnswer((answer) => ({
+      ...answer,
+      ['multiple_choice_answer']: previousAnswers[index]?.multiple_choice_answer.id,
+    }));
+  }, [previousAnswers]);
 
   function disableCopyPaste(e: any) {
     e.preventDefault();
@@ -109,6 +107,28 @@ export default function QuestionContainer({
         },
       });
     }
+  }
+
+  function handleChoiceSelect(choice: string, index: number) {
+    let choicesClone = [...(questionChoices || [])];
+    choicesClone[index].highlight = true;
+    choicesClone.forEach((ch) => {
+      if (ch.id !== choice) {
+        ch.highlight = false;
+      }
+    });
+
+    setChoices(choicesClone);
+
+    let choosenAnswer = { ...initialState };
+    choosenAnswer.multiple_choice_answer = choice;
+
+    setAnswer(choosenAnswer);
+    mutate(choosenAnswer, {
+      onSuccess: () => {
+        setQuestionToSubmit('');
+      },
+    });
   }
 
   useEffect(() => {
@@ -143,11 +163,7 @@ export default function QuestionContainer({
                   choiceId={choiceAnswer.id}
                   handleChoiceSelect={() => handleChoiceSelect(choiceAnswer.id, index)}
                   answer_content={choiceAnswer.answer_content}
-                  highlight={
-                    choiceAnswer?.id ===
-                    (previousAnswers[index]?.multiple_choice_answer.id ||
-                      answer?.multiple_choice_answer)
-                  }
+                  highlight={answer?.multiple_choice_answer === choiceAnswer.id}
                 />
               ))
             ) : (
@@ -159,14 +175,14 @@ export default function QuestionContainer({
                 value={previousAnswers[index]?.open_answer || answer?.open_answer}
                 placeholder="Type your answer here"
                 onBlur={() => submitForm(previousAnswers[index]?.open_answer)}
-                name="openAnswer"
+                name="open_answer"
                 onFocus={() => setQuestionToSubmit(id)}
                 handleChange={handleChange}
               />
             )}
           </div>
         )}
-        <Input value={id} name="evaluationQuestion" handleChange={handleChange} hidden />
+        <Input value={id} name="evaluation_question" handleChange={handleChange} hidden />
         {/* <div className="py-7">
           <Button type="submit" onSubmit={(e: FormEvent) => submitForm(id, e)}>
             submit answer

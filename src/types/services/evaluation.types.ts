@@ -56,6 +56,8 @@ export enum IContentFormatEnum {
 export enum IEvaluationStatus {
   PENDING = 'PENDING',
   ON_GOING = 'ON_GOING',
+  ONGOING = 'ONGOING',
+  SUBMITTED = 'SUBMITTED',
   UNMARKED = 'UNMARKED',
   MARKING = 'MARKING',
   MARKED = 'MARKED',
@@ -124,6 +126,7 @@ export interface IEvaluationInfo {
   submision_type: ISubmissionTypeEnum;
   total_mark: number;
   evaluation_status: IEvaluationStatus;
+  submission_status?: IEvaluationStatus;
   eligible_group: IEligibleGroup;
   classification: IEvaluationClassification;
   allow_submission_time: string;

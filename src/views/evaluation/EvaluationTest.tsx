@@ -28,9 +28,6 @@ export default function EvaluationTest() {
 
   const { mutate } = evaluationStore.submitEvaluation();
 
-  let previousAnswers =
-    markingStore.getStudentEvaluationAnswers(studentEvaluationId).data?.data.data || [];
-
   let studentEvaluationData = markingStore.getStudentEvaluationById(studentEvaluationId);
   let studentWorkTimer = evaluationStore.getEvaluationWorkTime(studentEvaluationId);
 
@@ -78,13 +75,15 @@ export default function EvaluationTest() {
             Remaining time:
           </Heading>
           <Heading>
-            <Countdown
-              key={time}
-              date={Date.now() + time}
-              onComplete={autoSubmit}
-              renderer={Renderer}
-              onTick={(value) => updateWorkTime(value)}
-            />
+            {time ? (
+              <Countdown
+                key={time}
+                date={Date.now() + time}
+                onComplete={() => autoSubmit()}
+                renderer={Renderer}
+                onTick={(value) => updateWorkTime(value)}
+              />
+            ) : null}
           </Heading>
         </div>
       </div>
@@ -99,9 +98,12 @@ export default function EvaluationTest() {
             isLast={questions.data.data.length - 1 === index}
             question={question.question}
             marks={question.mark}
-            previousAnswers={previousAnswers}
+            // previousAnswers={previousAnswers}
             choices={question.multiple_choice_answers}
-            isMultipleChoice={question.multiple_choice_answers.length > 0}
+            isMultipleChoice={
+              question.multiple_choice_answers &&
+              question.multiple_choice_answers.length > 0
+            }
           />
         ))
       ) : questions?.data.data.length === 0 && isSuccess ? (
