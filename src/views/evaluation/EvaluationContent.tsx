@@ -295,7 +295,7 @@ export default function EvaluationContent() {
                 <Heading fontWeight="semibold" fontSize="base" className="pt-6">
                   Evaluation questions
                 </Heading>
-                {loading && <Loader />}
+
                 <div
                   className={`${
                     !loading && 'bg-main'
@@ -320,7 +320,8 @@ export default function EvaluationContent() {
                             ? question.multiple_choice_answers.map((choiceAnswer) => (
                                 <MultipleChoiceAnswer
                                   key={choiceAnswer.id}
-                                  answer_content={choiceAnswer.answerContent}
+                                  choiceId={choiceAnswer.id}
+                                  answer_content={choiceAnswer.answer_content}
                                   correct={choiceAnswer.correct}
                                 />
                               ))
@@ -338,9 +339,9 @@ export default function EvaluationContent() {
                         </div>
                       ),
                     )
-                  ) : (
+                  ) : evaluationQuestions?.data.data.length === 0 ? (
                     <Heading>No questions attached</Heading>
-                  )}
+                  ) : null}
                 </div>
               </>
             )}

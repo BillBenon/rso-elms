@@ -77,11 +77,15 @@ const SignInForm = () => {
       <form onSubmit={login}>
         <div className="flex flex-col gap-2">
           <InputMolecule
+            onCopy={(e: any) => {
+              e.preventDefault();
+              return false;
+            }}
             name="username"
             placeholder="Enter your username"
             value={details.username}
             handleChange={handleChange}>
-            Username
+            Usernames
           </InputMolecule>
           <InputMolecule
             type="password"

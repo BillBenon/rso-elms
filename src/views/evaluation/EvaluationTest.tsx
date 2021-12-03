@@ -81,7 +81,7 @@ export default function EvaluationTest() {
             <Countdown
               key={time}
               date={Date.now() + time}
-              onComplete={() => autoSubmit()}
+              onComplete={autoSubmit}
               renderer={Renderer}
               onTick={(value) => updateWorkTime(value)}
             />
@@ -92,6 +92,7 @@ export default function EvaluationTest() {
       {questions && questions.data.data.length > 0 ? (
         questions?.data.data.map((question, index: number) => (
           <QuestionContainer
+            showCorrectAnswer={false}
             index={index}
             id={question.id}
             key={question.id}
@@ -99,6 +100,7 @@ export default function EvaluationTest() {
             question={question.question}
             marks={question.mark}
             previousAnswers={previousAnswers}
+            choices={question.multiple_choice_answers}
             isMultipleChoice={question.multiple_choice_answers.length > 0}
           />
         ))

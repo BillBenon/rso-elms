@@ -30,8 +30,6 @@ export default function StudentViewEvaluations({
   const history = useHistory();
   const { path, url } = useRouteMatch();
 
-  //function that moves a student to next page after generating student code
-
   useEffect(() => {
     setLocalStorageData('currentStep', 0);
 
