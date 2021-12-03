@@ -1,5 +1,6 @@
 import React from 'react';
 
+import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { IEvaluationInfoCollected } from '../../types/services/evaluation.types';
@@ -7,14 +8,18 @@ import StudentViewEvaluations from './StudentViewEvaluations';
 
 interface IEvaluationCategoriesProps {
   subjecEvaluations: IEvaluationInfoCollected | undefined;
+  loading: boolean;
 }
 
 export default function EvaluationCategories({
   subjecEvaluations,
+  loading = false,
 }: IEvaluationCategoriesProps) {
   return (
     <div>
-      {subjecEvaluations && subjecEvaluations?.undoneEvaluations.length > 0 ? (
+      {loading && <Loader />}
+      {subjecEvaluations?.undone_evaluations &&
+      subjecEvaluations?.undone_evaluations.length > 0 ? (
         <div className="flex flex-col gap-4 mt-8">
           <Heading fontSize="base" fontWeight="bold">
             Undone evaluations
@@ -22,42 +27,46 @@ export default function EvaluationCategories({
 
           <StudentViewEvaluations
             isUndone
-            subjecEvaluations={subjecEvaluations?.undoneEvaluations || []}
+            subjecEvaluations={subjecEvaluations?.undone_evaluations || []}
           />
         </div>
       ) : null}
 
-      {subjecEvaluations && subjecEvaluations?.ongoingEvaluations.length > 0 ? (
+      {subjecEvaluations?.ongoing_evaluations &&
+      subjecEvaluations?.ongoing_evaluations.length > 0 ? (
         <div className="flex flex-col gap-4 mt-8">
           <Heading fontSize="base" fontWeight="bold">
             Ongoing evaluations
           </Heading>
           <StudentViewEvaluations
-            subjecEvaluations={subjecEvaluations?.ongoingEvaluations || []}
+            isOngoing
+            subjecEvaluations={subjecEvaluations?.ongoing_evaluations || []}
           />
         </div>
       ) : null}
 
-      {subjecEvaluations && subjecEvaluations?.finishedEvaluations.length > 0 ? (
+      {subjecEvaluations?.finished_evaluations &&
+      subjecEvaluations?.finished_evaluations.length > 0 ? (
         <div className="flex flex-col gap-4 mt-8">
           <Heading fontSize="base" fontWeight="bold">
             Completed evaluations
           </Heading>
           <StudentViewEvaluations
             isCompleted
-            subjecEvaluations={subjecEvaluations?.finishedEvaluations || []}
+            subjecEvaluations={subjecEvaluations?.finished_evaluations || []}
           />
         </div>
       ) : null}
 
-      {typeof subjecEvaluations?.finishedEvaluations &&
-        typeof subjecEvaluations?.ongoingEvaluations &&
-        typeof subjecEvaluations?.undoneEvaluations === 'undefined' && (
+      {!loading &&
+        typeof subjecEvaluations?.finished_evaluations.length &&
+        typeof subjecEvaluations?.ongoing_evaluations.length &&
+        typeof subjecEvaluations?.undone_evaluations.length === 'undefined' && (
           <NoDataAvailable
             icon="evaluation"
             showButton={false}
             title={'No evaluations available'}
-            description="And the web just isnt the same without you. Lets get you back online!"
+            description="Oops! It looks like you have no available evaluations!"
           />
         )}
     </div>

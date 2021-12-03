@@ -295,38 +295,15 @@ export default function EvaluationContent() {
                 <Heading fontWeight="semibold" fontSize="base" className="pt-6">
                   Evaluation questions
                 </Heading>
-                {loading && <Loader />}
+
                 <div
                   className={`${
                     !loading && 'bg-main'
                   }  px-16 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
-                  {evaluationQuestions?.data.data.length
-                    ? evaluationQuestions?.data.data.map((question, index: number) =>
-                        question && question.multiple_choice_answers.length > 0 ? (
-                          <>
-                            <div className="mt-3 flex justify-between">
-                              <ContentSpan
-                                title={`Question ${index + 1}`}
-                                className="gap-3">
-                                {question.question}
-                              </ContentSpan>
-
-                              <Heading fontWeight="semibold" fontSize="sm">
-                                5 marks
-                              </Heading>
-                            </div>
-
-                            {question.multiple_choice_answers.length
-                              ? question.multiple_choice_answers.map((choiceAnswer) => (
-                                  <MultipleChoiceAnswer
-                                    key={choiceAnswer.id}
-                                    answer_content={choiceAnswer.answerContent}
-                                    correct={choiceAnswer.correct}
-                                  />
-                                ))
-                              : null}
-                          </>
-                        ) : (
+                  {evaluationQuestions?.data.data.length ? (
+                    evaluationQuestions?.data.data.map((question, index: number) =>
+                      question && question.multiple_choice_answers.length > 0 ? (
+                        <>
                           <div className="mt-3 flex justify-between">
                             <ContentSpan
                               title={`Question ${index + 1}`}
@@ -338,9 +315,33 @@ export default function EvaluationContent() {
                               {question.mark} marks
                             </Heading>
                           </div>
-                        ),
-                      )
-                    : null}
+
+                          {question.multiple_choice_answers.length
+                            ? question.multiple_choice_answers.map((choiceAnswer) => (
+                                <MultipleChoiceAnswer
+                                  key={choiceAnswer.id}
+                                  choiceId={choiceAnswer.id}
+                                  answer_content={choiceAnswer.answer_content}
+                                  correct={choiceAnswer.correct}
+                                />
+                              ))
+                            : null}
+                        </>
+                      ) : (
+                        <div className="mt-3 flex justify-between">
+                          <ContentSpan title={`Question ${index + 1}`} className="gap-3">
+                            {question.question}
+                          </ContentSpan>
+
+                          <Heading fontWeight="semibold" fontSize="sm">
+                            {question.mark} marks
+                          </Heading>
+                        </div>
+                      ),
+                    )
+                  ) : evaluationQuestions?.data.data.length === 0 ? (
+                    <Heading>No questions attached</Heading>
+                  ) : null}
                 </div>
               </>
             )}

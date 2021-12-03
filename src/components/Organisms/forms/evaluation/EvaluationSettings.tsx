@@ -1,6 +1,5 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory } from 'react-router-dom';
 
 import { queryClient } from '../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../store/administration';
@@ -29,7 +28,6 @@ export default function EvaluationSettings({
   handleGoBack,
   evaluationId,
 }: IEvaluationProps) {
-  const history = useHistory();
   const authUser = authenticatorStore.authUser().data?.data.data;
   const { data: inCharge } = usersStore.getUsersByAcademy(
     authUser?.academy.id.toString() || '',
@@ -85,10 +83,11 @@ export default function EvaluationSettings({
     mutate(settings, {
       onSuccess: () => {
         toast.success('Settings added', { duration: 5000 });
+        queryClient.invalidateQueries(['evaluationsByAcademyInstructor']);
         localStorage.removeItem('evaluationId');
         setLocalStorageData('currentStep', 0);
-        queryClient.invalidateQueries(['evaluationsByAcademyInstructor']);
-        history.push('/dashboard/evaluations');
+        // history.push('/dashboard/evaluations');
+        window.location.href = '/dashboard/evaluations';
       },
       onError: (error) => {
         console.log(error);

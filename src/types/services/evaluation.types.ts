@@ -56,6 +56,8 @@ export enum IContentFormatEnum {
 export enum IEvaluationStatus {
   PENDING = 'PENDING',
   ON_GOING = 'ON_GOING',
+  ONGOING = 'ONGOING',
+  SUBMITTED = 'SUBMITTED',
   UNMARKED = 'UNMARKED',
   MARKING = 'MARKING',
   MARKED = 'MARKED',
@@ -124,6 +126,7 @@ export interface IEvaluationInfo {
   submision_type: ISubmissionTypeEnum;
   total_mark: number;
   evaluation_status: IEvaluationStatus;
+  submission_status?: IEvaluationStatus;
   eligible_group: IEligibleGroup;
   classification: IEvaluationClassification;
   allow_submission_time: string;
@@ -146,9 +149,9 @@ export interface IEvaluationInfo {
 }
 
 export interface IEvaluationInfoCollected {
-  undoneEvaluations: IEvaluationInfoSingleEvaluation[];
-  ongoingEvaluations: IEvaluationInfoSingleEvaluation[];
-  finishedEvaluations: IEvaluationInfoSingleEvaluation[];
+  undone_evaluations: IEvaluationInfoSingleEvaluation[];
+  ongoing_evaluations: IEvaluationInfoSingleEvaluation[];
+  finished_evaluations: IEvaluationInfoSingleEvaluation[];
 }
 export interface IEvaluationInfoSingleEvaluation {
   code: string;
@@ -185,8 +188,9 @@ export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
 }
 
 export interface IMultipleChoiceAnswers {
-  answerContent: string;
+  answer_content: string;
   correct: boolean;
+  highlight?: boolean;
   id: string;
   mark: number;
 }
@@ -214,13 +218,12 @@ export interface IEvaluationApproval {
 }
 
 export interface IStudentAnswer {
-  answerAttachment: string;
-  evaluation: string;
-  evaluationQuestion: string;
-  markScored: number | null;
-  multiple_choice_answers: string;
-  openAnswer: string;
-  studentEvaluation: string;
+  answer_attachment: string;
+  evaluation_question: string;
+  mark_scored: number | null;
+  multiple_choice_answer: string;
+  open_answer: string;
+  student_evaluation: string;
 }
 
 export interface IStudentEvaluationStart {
