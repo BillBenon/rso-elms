@@ -37,7 +37,8 @@ function CompleteProfile() {
   const [completeStep, setCompleteStep] = useState(0);
   const history = useHistory();
 
-  let foundUser: UserInfo = getLocalStorageData('foundUser');
+  let foundUser: UserInfo = getLocalStorageData('user');
+  
   if (!foundUser.id) {
     history.push('/login/search');
     return <></>;
