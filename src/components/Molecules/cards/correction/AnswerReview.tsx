@@ -46,9 +46,7 @@ export default function AnswerReview({ data }: PropTypes) {
             </div>
           )}
         </div>
-        <div className="rounded-md border-2 border-primary-500 px-2 py-2 answer-box text-primary-500">
-          {data?.open_answer}
-        </div>
+
         <div className="flex gap-2 h-12 items-center">
           {data.mark_scored != 0 ? (
             <button

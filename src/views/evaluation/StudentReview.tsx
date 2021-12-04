@@ -1,11 +1,11 @@
 import '../../styles/components/Molecules/correction/marking.scss';
 
 import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import AnswerReview from '../../components/Molecules/cards/correction/AnswerReview';
@@ -18,7 +18,11 @@ import { ParamType } from '../../types';
 export default function StudentReview() {
   const { id } = useParams<ParamType>();
   const studentAnswers = markingStore.getStudentEvaluationAnswers(id).data?.data.data;
-  const studentEvaluation = markingStore.getStudentEvaluationById(id).data?.data.data;
+  const {
+    data: studentEvaluation,
+    isLoading,
+    isSuccess,
+  } = markingStore.getStudentEvaluationById(id);
   const [rowsOnPage] = useState(4);
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastRow = currentPage * rowsOnPage;
@@ -32,21 +36,8 @@ export default function StudentReview() {
   }
   useEffect(() => {
     setCurrentRows(studentAnswers?.slice(indexOfFirstRow, indexOfLastRow));
-    if (studentEvaluation?.markingStatus) {
-      if (studentEvaluation?.markingStatus == 'TO_MARK') {
-        toast.error('Your answers are yet to be marked by Instructor');
-      } else if (studentEvaluation?.markingStatus == 'MARKING') {
-        toast.error('Your answers are in marking process.');
-      } else if (studentEvaluation?.markingStatus == 'MARKED') {
-        toast.error('Your results has not yet been published.');
-      } else if (studentEvaluation?.markingStatus == 'PUBLISHED') {
-        toast.success('Results has been published, you are now viewing the results.');
-      }
-      if (studentEvaluation?.markingStatus != 'PUBLISHED') {
-        history.goBack();
-      }
-    }
   }, [studentAnswers, indexOfFirstRow, indexOfLastRow]);
+
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   const list: LinkList[] = [
     { to: '/', title: 'Instructor' },
@@ -57,19 +48,20 @@ export default function StudentReview() {
 
   return (
     <>
-      {studentEvaluation.markingStatus == 'PUBLISHED' ? (
+      {isLoading && <Loader />}
+      {isSuccess && studentEvaluation?.data.data.marking_status == 'PUBLISHED' ? (
         <div className={`flex flex-col gap-4`}>
           <section>
             <BreadCrumb list={list}></BreadCrumb>
           </section>
           <TableHeader
-            title={studentEvaluation?.code + ' submission'}
+            title={studentEvaluation?.data.data.code + ' submission'}
             showBadge={false}
             showSearch={false}>
             <p className="text-gray-400">
               Marks obtained:{' '}
               <span className="text-green-300 font-semibold">
-                {studentEvaluation?.obtainedMark}
+                {studentEvaluation?.data.data.obtained_mark}
               </span>
             </p>
           </TableHeader>
@@ -90,11 +82,11 @@ export default function StudentReview() {
             </div>
           </section>
         </div>
-      ) : (
+      ) : isSuccess && studentEvaluation?.data.data.marking_status != 'PUBLISHED' ? (
         <div>
           <Heading>Your answers has not yet been published</Heading>
         </div>
-      )}
+      ) : null}
     </>
   );
 }
