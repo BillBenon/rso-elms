@@ -81,7 +81,7 @@ export default function EvaluationTest() {
                 date={Date.now() + time}
                 onComplete={() => autoSubmit()}
                 renderer={Renderer}
-                // onTick={(value) => updateWorkTime(value)}
+                onTick={(value) => updateWorkTime(value)}
               />
             ) : null}
           </Heading>
@@ -98,7 +98,6 @@ export default function EvaluationTest() {
             isLast={questions.data.data.length - 1 === index}
             question={question.question}
             marks={question.mark}
-            // previousAnswers={previousAnswers}
             choices={question.multiple_choice_answers}
             isMultipleChoice={
               question.multiple_choice_answers &&
