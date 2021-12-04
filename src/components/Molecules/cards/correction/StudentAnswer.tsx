@@ -43,8 +43,8 @@ export default function StudentAnswer({
         <div className="">
           {data.evaluation_question?.question_type == 'MULTIPLE_CHOICE' ? (
             <div>
-              <p className="font-semibold flex rounded-md border-green-500  border-2">
-                <span className="py-3 px-6 border-r-2 border-green-500">A</span>{' '}
+              <p className="font-semibold flex rounded-md border-primary-500  border-2">
+                <span className="py-3 px-6 border-r-2 border-primary-500">A</span>{' '}
                 <span className="py-3 px-6">
                   {data?.multiple_choice_answer?.answer_content}
                 </span>
