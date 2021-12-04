@@ -39,6 +39,7 @@ function CompleteProfile() {
 
   let foundUser: UserInfo = getLocalStorageData('user');
 
+
   if (!foundUser.id) {
     history.push('/login/search');
   }
