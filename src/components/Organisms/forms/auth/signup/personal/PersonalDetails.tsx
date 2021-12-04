@@ -166,7 +166,7 @@ function PersonalDetails<E>({
               placeholder="Select place of birth"
               name="place_of_birth"
               handleChange={handleChange}>
-              Place of residence
+              Place of birth
             </LocationMolecule>
             <TextAreaMolecule
               width="72 md:w-80"

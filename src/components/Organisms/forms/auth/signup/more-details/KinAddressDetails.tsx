@@ -5,12 +5,16 @@ import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../../Molecules/input/InputMolecule';
+import LocationMolecule from '../../../../../Molecules/input/LocationMolecule';
 
-interface KinAddress<E> extends CommonStepProps, CommonFormProps<E> {}
+interface KinAddress<E> extends CommonStepProps, CommonFormProps<E> {
+  skip?: () => void;
+}
 
 function KinAddressDetails<E>({
   display_label,
   isVertical,
+  skip,
   prevStep,
   nextStep,
   onSubmit,
@@ -20,6 +24,9 @@ function KinAddressDetails<E>({
     location: '',
     other_location: '',
   });
+  const jump = () => {
+    skip && skip();
+  };
   const moveBack = () => {
     prevStep && prevStep();
   };
@@ -42,24 +49,15 @@ function KinAddressDetails<E>({
       )}
       <form onSubmit={moveForward}>
         <div className="flex flex-col gap-4">
-          <DropdownMolecule
-            width="60 md:w-80"
-            name="country"
-            // @ts-ignore
-            defaultValue={details.country}
-            handleChange={handleChange}
-            options={[]}>
+          <LocationMolecule width="72 md:w-80" name="country" handleChange={handleChange}>
             Country
-          </DropdownMolecule>
-          <DropdownMolecule
-            width="60 md:w-80"
+          </LocationMolecule>
+          <LocationMolecule
+            width="72 md:w-80"
             name="location"
-            // @ts-ignore
-            defaultValue={details.location}
-            handleChange={handleChange}
-            options={[]}>
+            handleChange={handleChange}>
             Location
-          </DropdownMolecule>
+          </LocationMolecule>
         </div>
         <div className="flex flex-col gap-4">
           <InputMolecule
@@ -78,6 +76,15 @@ function KinAddressDetails<E>({
               color="txt-secondary"
               onClick={() => moveBack()}>
               Back
+            </Button>
+          )}
+          {skip && (
+            <Button
+              styleType="text"
+              hoverStyle="no-underline"
+              color="txt-secondary"
+              onClick={() => jump()}>
+              Skip
             </Button>
           )}
           <Button type="submit">Save</Button>
