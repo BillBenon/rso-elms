@@ -91,17 +91,26 @@ export default function EvaluationContent() {
     let formattedSubs: any = [];
 
     if (isSuccess && data?.data.data) {
+      console.log(data?.data.data);
       const filteredInfo = data?.data.data.map((submission: any) =>
-        pick(submission, ['id', 'code', 'markingStatus', 'obtainedMark', 'totalMark']),
+        pick(submission, [
+          'id',
+          'code',
+          'marking_status',
+          'obtained_mark',
+          'total_mark',
+          'work_time',
+        ]),
       );
 
       filteredInfo?.map((submission: any) => {
         let filteredData: any = {
           id: submission.id.toString(),
           'Student Code': submission.code,
-          'Obtained Marks': submission.obtainedMark,
-          'Total Marks': submission.totalMark,
-          status: submission.markingStatus,
+          'Obtained Marks': submission.obtained_mark || 'N/A',
+          'Total Marks': submission.total_mark,
+          // 'Time Used': `${submission.work_time / 60} mins`,
+          status: submission.marking_status,
         };
         formattedSubs.push(filteredData);
       });
@@ -295,38 +304,15 @@ export default function EvaluationContent() {
                 <Heading fontWeight="semibold" fontSize="base" className="pt-6">
                   Evaluation questions
                 </Heading>
-                {loading && <Loader />}
+
                 <div
                   className={`${
                     !loading && 'bg-main'
                   }  px-16 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
-                  {evaluationQuestions?.data.data.length
-                    ? evaluationQuestions?.data.data.map((question, index: number) =>
-                        question && question.multiple_choice_answers.length > 0 ? (
-                          <>
-                            <div className="mt-3 flex justify-between">
-                              <ContentSpan
-                                title={`Question ${index + 1}`}
-                                className="gap-3">
-                                {question.question}
-                              </ContentSpan>
-
-                              <Heading fontWeight="semibold" fontSize="sm">
-                                5 marks
-                              </Heading>
-                            </div>
-
-                            {question.multiple_choice_answers.length
-                              ? question.multiple_choice_answers.map((choiceAnswer) => (
-                                  <MultipleChoiceAnswer
-                                    key={choiceAnswer.id}
-                                    answer_content={choiceAnswer.answerContent}
-                                    correct={choiceAnswer.correct}
-                                  />
-                                ))
-                              : null}
-                          </>
-                        ) : (
+                  {evaluationQuestions?.data.data.length ? (
+                    evaluationQuestions?.data.data.map((question, index: number) =>
+                      question && question.multiple_choice_answers.length > 0 ? (
+                        <>
                           <div className="mt-3 flex justify-between">
                             <ContentSpan
                               title={`Question ${index + 1}`}
@@ -338,9 +324,33 @@ export default function EvaluationContent() {
                               {question.mark} marks
                             </Heading>
                           </div>
-                        ),
-                      )
-                    : null}
+
+                          {question.multiple_choice_answers.length
+                            ? question.multiple_choice_answers.map((choiceAnswer) => (
+                                <MultipleChoiceAnswer
+                                  key={choiceAnswer.id}
+                                  choiceId={choiceAnswer.id}
+                                  answer_content={choiceAnswer.answer_content}
+                                  correct={choiceAnswer.correct}
+                                />
+                              ))
+                            : null}
+                        </>
+                      ) : (
+                        <div className="mt-3 flex justify-between">
+                          <ContentSpan title={`Question ${index + 1}`} className="gap-3">
+                            {question.question}
+                          </ContentSpan>
+
+                          <Heading fontWeight="semibold" fontSize="sm">
+                            {question.mark} marks
+                          </Heading>
+                        </div>
+                      ),
+                    )
+                  ) : evaluationQuestions?.data.data.length === 0 ? (
+                    <Heading>No questions attached</Heading>
+                  ) : null}
                 </div>
               </>
             )}

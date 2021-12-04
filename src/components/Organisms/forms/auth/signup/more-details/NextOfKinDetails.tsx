@@ -4,16 +4,14 @@ import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../t
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import InputMolecule from '../../../../../Molecules/input/InputMolecule';
+import LocationMolecule from '../../../../../Molecules/input/LocationMolecule';
 import RadioMolecule from '../../../../../Molecules/input/RadioMolecule';
 
-interface NextOfKin<E> extends CommonStepProps, CommonFormProps<E> {
-  skip?: () => void;
-}
+interface NextOfKin<E> extends CommonStepProps, CommonFormProps<E> {}
 
 function NextOfKinDetails<E>({
   display_label,
   isVertical,
-  skip,
   prevStep,
   nextStep,
   onSubmit,
@@ -25,10 +23,10 @@ function NextOfKinDetails<E>({
     phone: '',
     gender: 'male',
     relationship: '',
+    country: '',
+    location: '',
+    other_location: '',
   });
-  const jump = () => {
-    skip && skip();
-  };
   const moveBack = () => {
     prevStep && prevStep();
   };
@@ -43,9 +41,9 @@ function NextOfKinDetails<E>({
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-2 ">
       <form onSubmit={moveForward}>
-        <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2">
           {!isVertical && (
             <Heading fontSize="base" fontWeight="semibold">
               {display_label}
@@ -67,7 +65,7 @@ function NextOfKinDetails<E>({
             Last Name
           </InputMolecule>
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 ">
           <InputMolecule
             name="email"
             value={details.email}
@@ -84,7 +82,7 @@ function NextOfKinDetails<E>({
             Phone number
           </InputMolecule>
         </div>
-        <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2">
           <RadioMolecule
             options={[
               { value: 'male', label: 'Male' },
@@ -102,6 +100,21 @@ function NextOfKinDetails<E>({
             RelationShip
           </InputMolecule>
         </div>
+        <div className="grid grid-cols-1 md:grid-cols-2">
+          <LocationMolecule
+            width="72 md:w-80"
+            name="location"
+            handleChange={handleChange}>
+            Location
+          </LocationMolecule>
+          <InputMolecule
+            name="other_location"
+            value={details.other_location}
+            handleChange={handleChange}>
+            Other Location
+            <span className="text-txt-secondary"> (State / Region)</span>
+          </InputMolecule>
+        </div>
         <div className="flex justify-between w-80">
           {prevStep && (
             <Button
@@ -112,16 +125,7 @@ function NextOfKinDetails<E>({
               Back
             </Button>
           )}
-          {skip && (
-            <Button
-              styleType="text"
-              hoverStyle="no-underline"
-              color="txt-secondary"
-              onClick={() => jump()}>
-              Skip
-            </Button>
-          )}
-          <Button type="submit">Next</Button>
+          <Button type="submit">Save</Button>
         </div>
       </form>
     </div>

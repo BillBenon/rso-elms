@@ -42,7 +42,12 @@ export default function SubjectDetails() {
   const history = useHistory();
 
   const subjectData = subjectStore.getSubject(subjectId);
-  const { data, isLoading: loading } = lessonStore.getLessonsBySubject(subjectId);
+  const {
+    data,
+    isLoading: lessonsLoading,
+    isSuccess,
+  } = lessonStore.getLessonsBySubject(subjectId);
+
   const { data: subjecEvaluations, isLoading } =
     evaluationStore.getEvaluationsCollectionBySubject(subjectId);
 
@@ -112,7 +117,7 @@ export default function SubjectDetails() {
                 render={() => (
                   <>
                     <div className="pt-6 w-full">
-                      {isLoading ? (
+                      {lessonsLoading ? (
                         <Loader />
                       ) : lessons.length === 0 ? (
                         <NoDataAvailable
@@ -171,10 +176,14 @@ export default function SubjectDetails() {
                   path={`${url}/evaluations`}
                   render={() => (
                     <>
-                      {loading && <Loader />}
-                      <EvaluationCategories
-                        subjecEvaluations={subjecEvaluations?.data.data}
-                      />
+                      {isLoading && !isSuccess ? (
+                        <Loader />
+                      ) : (
+                        <EvaluationCategories
+                          loading={isLoading}
+                          subjecEvaluations={subjecEvaluations?.data.data}
+                        />
+                      )}
                     </>
                   )}
                 />

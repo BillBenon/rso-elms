@@ -120,9 +120,8 @@ export default function EvaluationInfoComponent({
           toast.success('Evaluation updated', { duration: 5000 });
           handleNext();
         },
-        onError: (error) => {
-          console.log(error);
-          toast.error('Failed to update');
+        onError: (error: any) => {
+          toast.error(error.response.data.data.message);
         },
       });
     } else {
@@ -130,6 +129,7 @@ export default function EvaluationInfoComponent({
         onSuccess: (data) => {
           toast.success('Evaluation created', { duration: 5000 });
           setLocalStorageData('evaluationId', data.data.data.id);
+          setLocalStorageData('currentStep', 1);
           handleNext();
         },
         onError: (error: any) => {

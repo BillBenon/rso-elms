@@ -32,6 +32,16 @@ export interface EnrollStudents {
   program_level_id: string;
 }
 
+export interface EnrollModuleSubject {
+  description: string;
+  enrolmed_on: string;
+  intake_academic_level_enrolment_id: number;
+  intake_academic_year_level_period_id: number;
+  intake_program_module_level_id: number;
+  marks_obtained: number;
+  module_enrolment_status: ModuleEnrollStatus;
+}
+
 export interface EnrollStudentToProgram {
   completed_on: string;
   employee_number: string;
@@ -50,4 +60,12 @@ export interface EnrollInstructorLevelInfo extends Table {
   intake_program_instructor: InstructorProgram;
   academic_program_level: AcademicProgramLevel;
   academic_year: IAcademicYearInfo;
+}
+
+export enum ModuleEnrollStatus {
+  PENDING = 'PENDING',
+  ONGOING = 'ONGOING',
+  COMPLETED = 'COMPLETED',
+  SUSPENDED = 'SUSPENDED',
+  DROPOUT = 'DROPOUT',
 }

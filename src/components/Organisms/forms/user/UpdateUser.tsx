@@ -42,6 +42,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
   const authUser = authenticatorStore.authUser();
 
   const [details, setDetails] = useState<UpdateUserInfo>({
+    person: '',
     academic_program_level_id: '',
     academy_id: '',
     activation_key: '',
@@ -92,11 +93,11 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
 
     selectedUser &&
       setDetails({
-        academic_program_level_id: '',
-        academy_id: '',
-        activation_key: '',
-        intake_program_id: '',
-        birth_date: selectedUser.person.birth_date,
+        person: selectedUser.person,
+        academic_program_level_id: selectedUser.academic_program_level_id,
+        academy_id: selectedUser.academy_id,
+        activation_key: selectedUser.activation_key,
+        birth_date: selectedUser.birth_date,
         blood_group: selectedUser.person.blood_group,
         current_rank_id: selectedUser.person.current_rank_id,
         date_of_commission: selectedUser.person.date_of_commission,
@@ -104,32 +105,33 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
         date_of_last_promotion: selectedUser.person.date_of_last_promotion,
         doc_type: selectedUser.person.doc_type,
         document_expire_on: selectedUser.person.document_expire_on,
-        education_level: selectedUser.level,
+        education_level: selectedUser.education_level,
         email: selectedUser.email,
-        emp_no: selectedUser.person.empNo,
-        father_names: selectedUser.person.father_names,
+        emp_no: selectedUser.person.emp_no,
+        father_names: selectedUser.father_names,
         first_name: selectedUser.first_name,
         id: id,
+        intake_program_id: selectedUser.intake_program_id,
         last_name: selectedUser.last_name,
         marital_status: selectedUser.marital_status,
-        mother_names: selectedUser.person.mother_names,
+        mother_names: selectedUser.mother_names,
         nid: selectedUser.person.nid,
         other_rank: selectedUser.person.other_rank,
         password: selectedUser.password,
         password_reset_period_in_days: selectedUser.password_reset_period_in_days,
-        person_id: selectedUser.person.id + '',
-        phone: selectedUser.person.phone_number,
-        place_of_birth: selectedUser.person.place_of_birth,
+        person_id: selectedUser.person_id,
+        phone: selectedUser.phone.toString(),
+        place_of_birth: selectedUser.place_of_birth,
         place_of_birth_description: selectedUser.person.place_of_birth_description,
         place_of_issue: selectedUser.person.place_of_issue,
-        place_of_residence: selectedUser.person.place_of_residence,
+        place_of_residence: selectedUser.place_of_residence,
         profile_status: selectedUser.profile_status
           ? selectedUser.profile_status
           : ProfileStatus.INCOMPLETE,
         rank_depart: selectedUser.person.rank_depart,
         reset_date: selectedUser.reset_date,
-        residence_location_id: selectedUser.person.residence_location_id,
-        sex: selectedUser.person.sex,
+        residence_location_id: selectedUser.residence_location_id,
+        sex: selectedUser.sex,
         spouse_name: selectedUser.person.spouse_name,
         user_type: selectedUser.user_type,
         send_communication_msg: selectedUser.send_communication_msg
@@ -174,8 +176,8 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
         toast.success(data.data.message);
         history.goBack();
       },
-      onError() {
-        toast.error('An error occurred when editing user, please try again later');
+      onError(error: any) {
+        toast.error(error.response.data.message);
       },
     });
   }
