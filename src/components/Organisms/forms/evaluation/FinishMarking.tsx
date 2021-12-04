@@ -6,21 +6,20 @@ import { markingStore } from '../../../../store/administration/marking.store';
 import { Link as LinkList, ValueType } from '../../../../types';
 import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
-import ILabel from '../../../Atoms/Text/ILabel';
 import BreadCrumb from '../../../Molecules/BreadCrumb';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-interface FinishMarks<T> {
+interface FinishMarks {
   student_code: string;
   obtained_marks: number;
   student_evaluation: string;
 }
 
-export default function FinishMarking<T>({
+export default function FinishMarking({
   student_evaluation,
   student_code,
   obtained_marks,
-}: FinishMarks<T>) {
+}: FinishMarks) {
   const list: LinkList[] = [
     { to: '/', title: 'Instructor' },
     { to: 'evaluations', title: 'evaluations' },
@@ -54,20 +53,6 @@ export default function FinishMarking<T>({
         },
       },
     );
-    // mutate(questions[index], {
-    //   onSuccess: () => {
-    //     toast.success('Question added', { duration: 5000 });
-
-    //     //first remove the button for submitted question
-    //     let questionInfo = [...questions];
-    //     questionInfo[index] = { ...questionInfo[index], submitted: true };
-    //     setQuestions(questionInfo);
-    //   },
-    //   onError: (error) => {
-    //     console.log(error);
-    //     toast.error(error + '');
-    //   },
-    // });
   }
 
   return (
@@ -85,7 +70,7 @@ export default function FinishMarking<T>({
 
         <div className="p-2 m-2">
           <Heading fontSize="xs" color="txt-secondary">
-            Student Code
+            Student Marks
           </Heading>
           <Heading color="success">{obtained_marks}</Heading>
         </div>
