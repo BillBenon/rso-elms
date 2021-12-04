@@ -72,8 +72,8 @@ function NewAcademicPeriod() {
         queryClient.invalidateQueries(['academicyears']);
         history.push(`/dashboard/academic-years`);
       },
-      onError() {
-        toast.error('An error occurred please try again');
+      onError(error: any) {
+        toast.error(error.response.data.message);
       },
     });
   }

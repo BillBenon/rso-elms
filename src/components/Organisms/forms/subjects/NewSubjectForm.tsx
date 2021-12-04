@@ -40,8 +40,8 @@ export default function NewSubjectForm() {
         //   `/dashboard/modules/${module?.id}/subjects/${data.data.data.id}/add-lesson`,
         // );
       },
-      onError() {
-        toast.error('error occurred please try again');
+      onError(error: any) {
+        toast.error(error.response.data.message);
       },
     });
   };

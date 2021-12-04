@@ -73,8 +73,8 @@ export default function AddLevelToProgram() {
         queryClient.invalidateQueries(['levels/program_id']);
         history.push(`/dashboard/programs/${progId}`);
       },
-      onError() {
-        toast.error('An error occurred please try again');
+      onError(error: any) {
+        toast.error(error.response.data.message);
       },
     });
   }

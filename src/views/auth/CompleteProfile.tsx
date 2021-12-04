@@ -105,8 +105,8 @@ function CompleteProfile() {
               history.push('/complete-profile/experience');
             }, 900);
           },
-          onError() {
-            toast.error('An error occurred please try again later');
+          onError(error: any) {
+            toast.error(error.response.data.message);
           },
         },
       );

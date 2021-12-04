@@ -59,8 +59,8 @@ export default function UpdateDepartment({ onSubmit }: IDivisionsAcademyType) {
 
         history.goBack();
       },
-      onError: () => {
-        toast.error('something wrong happened while updating department');
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
       },
     });
     if (onSubmit) onSubmit(e);

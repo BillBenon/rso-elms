@@ -44,8 +44,8 @@ export default function UpdateLevel({ onSubmit, academy_id }: IDivisionsAcademyT
         toast.success('Level updated');
         history.goBack();
       },
-      onError: () => {
-        toast.error('something wrong happened while creating role');
+      onError: (error: any) => {
+        toast.error(error.response.data.message.split(':')[1]);
       },
     });
     if (onSubmit) onSubmit(e);
