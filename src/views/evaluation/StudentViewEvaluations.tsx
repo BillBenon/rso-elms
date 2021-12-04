@@ -93,10 +93,10 @@ export default function StudentViewEvaluations({
 
   function handleClick(id = '', studEvaluation = '') {
     if (isCompleted) {
-      history.push(`/dashboard/evaluations/completed/student-evaluation/${id}/review`);
-    }
-
-    if (isOngoing) {
+      history.push(
+        `/dashboard/evaluations/completed/student-evaluation/${studEvaluation}/review`,
+      );
+    } else if (isOngoing) {
       history.push({
         pathname: `${url}/attempt/${id}`,
         search: `?studentEval=${studEvaluation}`,
@@ -109,7 +109,7 @@ export default function StudentViewEvaluations({
   return (
     <div>
       <Switch>
-        <Route exact path={`${path}/new`} component={NewEvaluation} />{' '}
+        <Route exact path={`${path}/new`} component={NewEvaluation} />
         <Route
           exact
           path={`${path}/attempt/:id`}
@@ -117,6 +117,7 @@ export default function StudentViewEvaluations({
             <ConfirmationOrganism onConfirmationClose={() => history.goBack()} />
           )}
         />
+
         <Route path={`${path}/:id`} component={EvaluationContent} />
         <Route
           path={path}
