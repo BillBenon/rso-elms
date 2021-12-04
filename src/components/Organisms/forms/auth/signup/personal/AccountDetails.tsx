@@ -29,6 +29,7 @@ function AccountDetails<E>({
     username: '',
     pin: '',
     password: '',
+    doc_type: '',
     confirm_password: '',
     send_communication_msg: SendCommunicationMsg.EMAIL,
   });
@@ -53,6 +54,8 @@ function AccountDetails<E>({
   const user = usersStore.getUserById(fetched_id.toString());
   useEffect(() => {
     let personInfo = user.data?.data.data;
+    console.log('personal', personInfo);
+
     personInfo &&
       setAccountDetails({
         username: personInfo.username,
@@ -60,6 +63,7 @@ function AccountDetails<E>({
         password: personInfo.password,
         confirm_password: personInfo.password,
         send_communication_msg: personInfo.send_communication_msg,
+        doc_type: personInfo.person.doc_type,
       });
   }, [user.data?.data.data]);
 

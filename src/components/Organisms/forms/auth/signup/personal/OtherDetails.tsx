@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 
+import diseasesStore from '../../../../../../store/administration/diseases.store';
 import hobbiesStore from '../../../../../../store/administration/hobbies.store';
+import languagesStore from '../../../../../../store/administration/languages.store';
 import {
   CommonFormProps,
   CommonStepProps,
@@ -47,17 +49,14 @@ function OtherDetails<O>({ display_label, isVertical, prevStep, nextStep }: Othe
     .getHobbies()
     .data?.data.data.map((hb) => ({ label: hb.name, value: hb.id })) as SelectData[];
 
-  // const userDetails = hobbyStore.getUserHobby(fetched_id.toString);
-  // useEffect(() => {
-  //   let detailsInfo = userDetails.data?.data.data.person;
-  //   detailsInfo &&
-  //     setOtherDetails({
-  //       hobbies: detailsInfo.hobbies,
-  //       chronic_disease: detailsInfo.chronic_disease,
-  //       chronic_disease_description: detailsInfo.chronic_disease_description,
-  //       languages: detailsInfo.languages,
-  //     });
-  // }, [userDetails.data?.data.data.person_id]);
+  const diseases = diseasesStore
+    .getDiseases()
+    .data?.data.data.map((hb) => ({ label: hb.name, value: hb.id })) as SelectData[];
+
+  const languages = languagesStore
+    .getAllLanguages()
+    .data?.data.data.map((hb) => ({ label: hb.name, value: hb.id })) as SelectData[];
+
   return (
     <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
       {!isVertical && <Heading fontWeight="semibold">{display_label}</Heading>}
@@ -80,7 +79,7 @@ function OtherDetails<O>({ display_label, isVertical, prevStep, nextStep }: Othe
               // @ts-ignore
               defaultValue={otherDetails.chronic_disease}
               handleChange={handleChange}
-              options={[]}>
+              options={diseases}>
               Chronic diseases
             </DropdownMolecule>
             <TextAreaMolecule
@@ -94,10 +93,7 @@ function OtherDetails<O>({ display_label, isVertical, prevStep, nextStep }: Othe
               placeholder="Languages"
               handleChange={handleChange}
               name="languages"
-              options={[
-                { label: 'Kinyarwanda', value: 'kiny' },
-                { label: 'English', value: 'en' },
-              ]}
+              options={languages}
               values={[]}
             />
             <div className="flex w-4/5 my-6 justify-between">

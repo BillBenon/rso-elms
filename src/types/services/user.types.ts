@@ -99,6 +99,7 @@ export interface UpdateExperienceInfo{
   type: string;
 }
 export interface UpdateUserInfo {
+  person: any;
   academic_program_level_id: string;
   academy_id: string;
   activation_key: string;
@@ -229,6 +230,7 @@ export interface EmploymentDetail
 export interface AccountDetail
   extends Pick<UserInfo, 'username' | 'pin' | 'password' | 'send_communication_msg'> {
   confirm_password: string;
+  doc_type:string;
 }
 
 export enum GenderStatus {

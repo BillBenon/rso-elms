@@ -33,7 +33,7 @@ function ExperienceDetails() {
 
   async function finishSteps(isComplete: boolean) {
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
-    history.push('/complete_profile/more');
+    history.push('/complete-profile/more');
   }
   return (
     <div className="bg-main p-8 md:px-20">
@@ -76,7 +76,7 @@ function ExperienceDetails() {
           type={ExperienceTypeStatus.INTERNATIONAL_MISSION}
           isVertical
           display_label={'International Mission'}
-          nextStep={finishSteps}
+          nextStep={nextStep}
           prevStep={back}
           skip={skip}
           fetched_id={''}
@@ -85,7 +85,7 @@ function ExperienceDetails() {
           type={ExperienceTypeStatus.TRAINING}
           isVertical
           display_label={'Training'}
-          nextStep={finishSteps}
+          nextStep={nextStep}
           prevStep={back}
           skip={skip}
           fetched_id={''}
