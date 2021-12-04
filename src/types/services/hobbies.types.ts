@@ -1,4 +1,4 @@
-import { Table } from './common.types';
+import { Table } from '..';
 
 export interface HobbiesTypes {
   description: string;

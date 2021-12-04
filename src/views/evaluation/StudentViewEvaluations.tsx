@@ -17,6 +17,7 @@ import EvaluationContent from './EvaluationContent';
 interface IEvaluationProps {
   subjecEvaluations: IEvaluationInfoSingleEvaluation[] | IEvaluationInfo[];
   isCompleted?: boolean;
+  isOngoing?: boolean;
   isUndone?: boolean;
   linkTo?: string;
 }
@@ -24,13 +25,12 @@ interface IEvaluationProps {
 export default function StudentViewEvaluations({
   subjecEvaluations = [],
   isCompleted = false,
+  isOngoing = false,
   isUndone = false,
 }: IEvaluationProps) {
   const [evaluations, setEvaluations] = useState<any[]>([]);
   const history = useHistory();
   const { path, url } = useRouteMatch();
-
-  //function that moves a student to next page after generating student code
 
   useEffect(() => {
     setLocalStorageData('currentStep', 0);
@@ -91,18 +91,25 @@ export default function StudentViewEvaluations({
     }
   }, [subjecEvaluations]);
 
-  function handleClick(id: string) {
-    if (!isCompleted) {
-      history.push(`${url}/attempt/${id}`);
+  function handleClick(id = '', studEvaluation = '') {
+    if (isCompleted) {
+      history.push(
+        `/dashboard/evaluations/completed/student-evaluation/${studEvaluation}/review`,
+      );
+    } else if (isOngoing) {
+      history.push({
+        pathname: `${url}/attempt/${id}`,
+        search: `?studentEval=${studEvaluation}`,
+      });
     } else {
-      history.push(`/dashboard/evaluations/completed/student-evaluation/${id}/review`);
+      history.push(`${url}/attempt/${id}`);
     }
   }
 
   return (
     <div>
       <Switch>
-        <Route exact path={`${path}/new`} component={NewEvaluation} />{' '}
+        <Route exact path={`${path}/new`} component={NewEvaluation} />
         <Route
           exact
           path={`${path}/attempt/:id`}
@@ -110,6 +117,7 @@ export default function StudentViewEvaluations({
             <ConfirmationOrganism onConfirmationClose={() => history.goBack()} />
           )}
         />
+
         <Route path={`${path}/:id`} component={EvaluationContent} />
         <Route
           path={path}
@@ -122,8 +130,9 @@ export default function StudentViewEvaluations({
                       key={info.id}
                       handleClick={() =>
                         handleClick(
+                          info.id + '',
                           //@ts-ignore
-                          isCompleted ? info.studentEvaluationId + '' : info.id + '',
+                          info.studentEvaluationId,
                         )
                       }
                       data={info}

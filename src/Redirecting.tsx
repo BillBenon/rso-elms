@@ -4,62 +4,62 @@ import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { authenticatorStore } from './store/administration';
-import { experienceStore } from './store/administration/experience.store';
-import { UserType } from './types/services/user.types';
+import { ProfileStatus, UserType } from './types/services/user.types';
 import NotApproved from './views/NotApproved';
 
 export default function Redirecting() {
   const [hasNoAcademy, setHasNoAcademy] = useState(false);
   const [userNotAllowed, setUserNotAllowed] = useState(false);
-  const { data, isLoading } = authenticatorStore.authUser();
-  // const moreData = experienceStore.getAll();
-  const { mutateAsync } = experienceStore.getAll();
+  const { data: authUser, isLoading } = authenticatorStore.authUser();
+  //const { mutateAsync } = experienceStore.getAll();
   const history = useHistory();
   useEffect(() => {
     const notAllowed =
-      data?.data.data.user_type === UserType.SUPER_ADMIN ||
-      data?.data.data.user_type === UserType.ADMIN ||
-      data?.data.data.user_type === UserType.INSTRUCTOR
+      authUser?.data.data.user_type === UserType.SUPER_ADMIN ||
+      authUser?.data.data.user_type === UserType.ADMIN ||
+      authUser?.data.data.user_type === UserType.INSTRUCTOR
         ? false
         : true;
-    if (data?.data.data.user_type === UserType.SUPER_ADMIN)
-      redirectTo('/dashboard/users');
+    if (authUser?.data.data) {
+      // setLocalStorageData('user', authUser.data.data);
+      localStorage.setItem('user', JSON.stringify(authUser.data.data));
 
-    if (data?.data.data.user_type === UserType.ADMIN) {
-      let val = !data?.data.data.academy ? true : false;
-      setHasNoAcademy(val && !isLoading);
+      if (authUser.data.data.user_type === UserType.SUPER_ADMIN) {
+        redirectTo('/dashboard/users');
+      } else if (authUser.data.data.profile_status !== ProfileStatus.COMPLETD) {
+        redirectTo('/complete-profile');
+        //approach number 1
+        // mutateAsync().then((resp) => {
+        //   let experienceFound = resp.data.data.length > 0;
+        //   if (!experienceFound) redirectTo('/complete-profile/experience');
+        // });
+      } else if (authUser.data.data.user_type === UserType.ADMIN) {
+        let val = !authUser.data.data.academy ? true : false;
+        setHasNoAcademy(val && !isLoading);
 
-      redirectTo('/dashboard/users');
-    } else if (data?.data.data.user_type === UserType.INSTRUCTOR) {
-      mutateAsync().then((resp) => {
-        let experienceFound = false;
-        for (const i in resp.data.data) {
-          // @ts-ignore
-          if (resp.data.data[i].person_id == data?.data.data.person.id) {
-            experienceFound = true;
-            break;
-          }
-        }
-        if (!experienceFound) redirectTo('/complete-profile/experience');
-        else redirectTo('/dashboard/inst-program');
-      });
-    } else if (data?.data.data.user_type === UserType.STUDENT) {
-      mutateAsync().then((resp) => {
-        let experienceFound = false;
-        for (const i in resp.data.data) {
-          // @ts-ignore
-          if (resp.data.data[i].person_id == data?.data.data.person_id) {
-            experienceFound = true;
-            break;
-          }
-        }
-        if (!experienceFound) redirectTo('/complete-profile/experience');
-        else redirectTo('/dashboard/student');
-      });
+        redirectTo('/dashboard/users');
+      } else if (authUser.data.data.user_type === UserType.INSTRUCTOR) {
+        redirectTo('/dashboard/inst-program');
+      } else if (authUser.data.data.user_type === UserType.STUDENT) {
+        redirectTo('/dashboard/student');
+        //approach number 2
+        // mutateAsync().then((resp) => {
+        //   let experienceFound = false;
+        //   for (const i in resp.data.data) {
+        //     // @ts-ignore
+        //     if (resp.data.data[i].person_id == data?.data.data.person_id) {
+        //       experienceFound = true;
+        //       break;
+        //     }
+        //   }
+        //   else if (!experienceFound) redirectTo('/complete-profile/experience');
+        // redirectTo('/dashboard/student');
+        // });
+      }
     }
 
     setUserNotAllowed(notAllowed && !isLoading);
-  }, [data?.data.data, isLoading]);
+  }, [authUser?.data.data, isLoading]);
 
   const redirectTo = (path: string) => {
     history.push(path);

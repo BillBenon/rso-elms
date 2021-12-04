@@ -1,6 +1,6 @@
 import React from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import { authenticatorStore } from '../../store/administration/authenticator.store';
 import { evaluationStore } from '../../store/administration/evaluation.store';
@@ -25,11 +25,10 @@ export default function ConfirmationOrganism({
 
   const { id } = useParams<ParamType>();
   const history = useHistory();
+  const { search } = useLocation();
+
   const evaluation = evaluationStore.getEvaluationById(id).data?.data.data;
-  const studentEval = evaluationStore.getStudentEvaluationByStudentIdAndEvaluationId(
-    id,
-    authUser?.id + '',
-  ).data?.data.data;
+  const studentEval = new URLSearchParams(search).get('studentEval');
 
   const { mutate, isLoading } = evaluationStore.studentEvaluationStart();
 
@@ -44,12 +43,11 @@ export default function ConfirmationOrganism({
       student_id: authUser?.id.toString() || '',
     };
 
-    if (evaluation?.evaluation_status == IEvaluationStatus.ON_GOING) {
+    if (studentEval) {
       setLocalStorageData('studentEvaluationId', studentEval);
+      toast.success('Recovered evaluation code', { duration: 5000 });
       goToNext(studentEvaluationStart.evaluation_id);
     } else {
-      console.log(studentEvaluationStart);
-
       mutate(studentEvaluationStart, {
         onSuccess: (studentInfo) => {
           setLocalStorageData('studentEvaluationId', studentInfo.data.data.id);

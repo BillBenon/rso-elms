@@ -129,6 +129,8 @@ export default function EvaluationQuestionComponent({
 
     mutate(questions, {
       onSuccess: () => {
+        console.log(questions);
+
         toast.success('Questions added', { duration: 5000 });
 
         //first remove the button for submitted question
@@ -182,8 +184,7 @@ export default function EvaluationQuestionComponent({
                       key={choiceIndex}
                       readOnly={question.submitted}
                       name={'answer_content'}
-                      //@ts-ignore
-                      value={multipleQuestion.answerContent}
+                      value={multipleQuestion.answer_content}
                       placeholder="Enter answer"
                       handleChange={(e: ValueType) =>
                         handleChoiceChange(index, choiceIndex, e)

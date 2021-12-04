@@ -27,6 +27,7 @@ function CompleteProfile() {
     profile_status: ProfileStatus.INCOMPLETE,
     residence_location_id: 0,
     user_type: '',
+    doc_type: '',
     nid: '',
     phone: '',
     email: '',
@@ -46,20 +47,21 @@ function CompleteProfile() {
     const userInfo = user.data?.data.data;
     userInfo &&
       setPersonalInfo({
-        academic_program_level_id: '',
-        academy_id: '',
-        activation_key: '',
-        intake_program_id: '',
-        id: userInfo.id + '',
+        academic_program_level_id: userInfo.academic_program_level_id,
+        academy_id: userInfo.academy_id,
+        activation_key: userInfo.activation_key,
+        id: userInfo.id.toString(),
+        intake_program_id: userInfo.intake_program_id,
         password_reset_period_in_days: userInfo.password_reset_period_in_days,
-        person_id: userInfo.person.id + '',
+        person_id: userInfo.person_id,
         reset_date: userInfo.reset_date,
         profile_status:
           userInfo.profile_status == null
             ? ProfileStatus.INCOMPLETE
             : userInfo.profile_status,
-        residence_location_id: userInfo.person.residence_location_id,
+        residence_location_id: userInfo.residence_location_id,
         user_type: userInfo.user_type,
+        doc_type: userInfo.person.doc_type,
         nid: userInfo.person.nid,
         phone: userInfo.person.phone_number,
         email: userInfo.email,
@@ -75,7 +77,7 @@ function CompleteProfile() {
       if (!person[val]) person[val] = '';
     });
 
-    setLocalStorageData('user', { ...data, ...person });
+    setLocalStorageData('user', { ...data, person });
   }, [personalInfo]);
 
   const { mutateAsync } = usersStore.updateUser();
@@ -84,17 +86,29 @@ function CompleteProfile() {
     let userFromLocalStorage: UpdateUserInfo = getLocalStorageData('user');
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
     if (personalInfo) {
-      await mutateAsync(userFromLocalStorage, {
-        onSuccess() {
-          toast.success('personal information successfully updated', { duration: 1200 });
-          setTimeout(() => {
-            history.push('/complete-profile/experience');
-          }, 900);
+      await mutateAsync(
+        {
+          ...userFromLocalStorage,
+          profile_status: ProfileStatus.COMPLETD,
+          //@ts-ignore
+          doc_type: userFromLocalStorage.doc_type,
+          nid: userFromLocalStorage.person.id,
         },
-        onError() {
-          toast.error('An error occurred please try again later');
+        {
+          onSuccess() {
+            toast.success('personal information successfully updated', {
+              duration: 1200,
+            });
+            setTimeout(() => {
+              localStorage.clear();
+              history.push('/complete-profile/experience');
+            }, 900);
+          },
+          onError() {
+            toast.error('An error occurred please try again later');
+          },
         },
-      });
+      );
     }
   }
   const nextStep = (isComplete: boolean) => {
