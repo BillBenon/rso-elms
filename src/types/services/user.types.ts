@@ -11,6 +11,21 @@ export interface Student extends Table {
 }
 
 export interface UserInfo extends Table {
+  academic_program_level_id: string;
+  academy_id: string;
+  activation_key: string;
+  birth_date: string;
+  education_level: EducationLevel;
+  father_names: string;
+  intake_program_id: string;
+  mother_names: string;
+  next_of_keen_proculation_reason: any;
+  person_id: string;
+  place_of_birth: string;
+  place_of_residence: string;
+  relationship_with_next_of_ken: any;
+  residence_location_id: number;
+  sex: GenderStatus;
   academy: AcademyInfo;
   acdemic_year_id: string;
   activated: boolean;
@@ -51,6 +66,7 @@ export interface Incharge extends Table {
 }
 
 export interface PersonInfo extends Table {
+  emp_no: string;
   birth_date: string;
   blood_group: BloodGroup;
   current_rank: string;
@@ -108,6 +124,7 @@ export interface UpdateExperienceInfo {
   type: string;
 }
 export interface UpdateUserInfo {
+  person: any;
   academic_program_level_id: string;
   academy_id: string;
   activation_key: string;
@@ -236,6 +253,7 @@ export interface EmploymentDetail
 export interface AccountDetail
   extends Pick<UserInfo, 'username' | 'pin' | 'send_communication_msg' | 'password'> {
   confirm_password: string;
+  doc_type:string;
 }
 
 export enum GenderStatus {

@@ -13,7 +13,6 @@ function NextOfKinStep<E>({
   prevStep,
   display_label,
   type,
-  skip,
 }: INextOfKinStep<E>) {
   return (
     <NextOfKinDetails
@@ -22,7 +21,6 @@ function NextOfKinStep<E>({
       display_label={display_label}
       nextStep={nextStep}
       prevStep={prevStep}
-      skip={skip}
       fetched_id={''}
     />
   );
