@@ -102,9 +102,8 @@ function NewClass() {
           `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-class`,
         );
       },
-      onError: (error) => {
-        console.log(error);
-        toast.error('something wrong happened while creating level');
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
       },
     });
   }

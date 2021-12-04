@@ -34,8 +34,8 @@ export default function NewFaculty({ onSubmit, academy_id }: IDivisionsAcademyTy
         queryClient.invalidateQueries(['divisions/type']);
         history.push('/dashboard/divisions');
       },
-      onError: () => {
-        toast.error('something wrong happened while creating faculty');
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
       },
     });
     if (onSubmit) onSubmit(e);

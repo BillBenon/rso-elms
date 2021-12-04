@@ -51,8 +51,8 @@ function EnrollInstructorToLevel() {
           queryClient.invalidateQueries(['instructors/intakeprogram']);
           setSidebarOpen(false);
         },
-        onError: () => {
-          toast.error('something wrong happened while enrolling student to level');
+        onError: (error: any) => {
+          toast.error(error.response.data.message);
         },
       });
     });
