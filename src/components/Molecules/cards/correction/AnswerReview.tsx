@@ -21,6 +21,31 @@ export default function AnswerReview({ data }: PropTypes) {
         <p className="font-semibold">{data?.evaluation_question?.question}</p>
       </div>
       <div className="flex gap-4 mt-2">
+        <div className="">
+          {data.evaluation_question?.question_type == 'MULTIPLE_CHOICE' ? (
+            <div>
+              <p className="font-semibold flex rounded-md border-green-500  border-2">
+                <span className="py-3 px-6 border-r-2 border-green-500">A</span>{' '}
+                <span className="py-3 px-6">
+                  {data?.multiple_choice_answer?.answer_content}
+                </span>
+              </p>
+              {data.evaluation_question?.multiple_choice_answers?.map(
+                (choice: any, id: string) =>
+                  choice.id != data?.multiple_choice_answer?.id && (
+                    <p key={id} className="flex rounded-md border-2 my-2">
+                      <span className="py-3 px-6 border-r-2">B</span>{' '}
+                      <span className="py-3 px-6">{choice.answer_content}</span>
+                    </p>
+                  ),
+              )}
+            </div>
+          ) : (
+            <div className="rounded-md border-2 border-primary-500 px-2 py-2 answer-box text-primary-500">
+              {data?.open_answer}
+            </div>
+          )}
+        </div>
         <div className="rounded-md border-2 border-primary-500 px-2 py-2 answer-box text-primary-500">
           {data?.open_answer}
         </div>
