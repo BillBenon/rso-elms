@@ -37,7 +37,8 @@ function CompleteProfile() {
   const [completeStep, setCompleteStep] = useState(0);
   const history = useHistory();
 
-  let foundUser: UserInfo = getLocalStorageData('foundUser');
+  let foundUser: UserInfo = getLocalStorageData('user');
+  
   if (!foundUser.id) {
     history.push('/login/search');
     return <></>;
@@ -104,8 +105,8 @@ function CompleteProfile() {
               history.push('/complete-profile/experience');
             }, 900);
           },
-          onError() {
-            toast.error('An error occurred please try again later');
+          onError(error: any) {
+            toast.error(error.response.data.message);
           },
         },
       );

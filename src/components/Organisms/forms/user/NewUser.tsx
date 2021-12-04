@@ -3,6 +3,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
 
+import { queryClient } from '../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../store/administration';
 import academyStore from '../../../../store/administration/academy.store';
 import {
@@ -107,10 +108,11 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     await mutateAsync(details, {
       onSuccess(data) {
         toast.success(data.data.message);
+        queryClient.invalidateQueries(['users/institution']);
         history.goBack();
       },
-      onError() {
-        toast.error('An error occurred when creating user, please try again later');
+      onError(error: any) {
+        toast.error(error.response.data.message.split(':')[2]);
       },
     });
   }
@@ -135,7 +137,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
 
   useEffect(() => {
     levels.refetch();
-  }, [details.intake_program_id]);
+  }, [selectedProgram?.id]);
 
   return (
     <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">

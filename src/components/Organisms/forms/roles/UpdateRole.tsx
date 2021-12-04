@@ -32,8 +32,8 @@ export default function UpdateRole({ onSubmit }: FormPropType) {
         toast.success('Role updated');
         history.goBack();
       },
-      onError: () => {
-        toast.error('something wrong happened while creating role');
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
       },
     });
     if (onSubmit) onSubmit(e);

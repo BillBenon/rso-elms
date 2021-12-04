@@ -55,8 +55,8 @@ function AddStudents({ classId }: IAddStudent) {
         toast.success(data.data.message);
         queryClient.invalidateQueries(['class/students']);
       },
-      onError: () => {
-        toast.error('something wrong happened while creating faculty');
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
       },
     });
   }

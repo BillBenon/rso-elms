@@ -71,8 +71,8 @@ export default function UpdateInstitution() {
           history.goBack();
         }, 900);
       },
-      onError() {
-        toast.error('An error occurred please try again later');
+      onError(error: any) {
+        toast.error(error.response.data.message);
       },
     });
   }

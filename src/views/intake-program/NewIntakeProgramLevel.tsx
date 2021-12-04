@@ -100,9 +100,8 @@ export default function NewIntakeProgramLevel() {
         setSuccess(true);
         setIntakeprogramlevelId(data.data.data.id.toString());
       },
-      onError: (error) => {
-        console.log(error);
-        toast.error('something wrong happened while creating level');
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
       },
     });
   }

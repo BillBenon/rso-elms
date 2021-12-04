@@ -46,8 +46,8 @@ export default function NewRank({ onSubmit }: FormPropType) {
         toast.success('Rank created');
         history.goBack();
       },
-      onError: () => {
-        toast.error('something wrong happened while creating rank');
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
       },
     });
     if (onSubmit) onSubmit(e);
