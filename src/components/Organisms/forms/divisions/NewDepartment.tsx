@@ -44,8 +44,8 @@ export default function NewDepartment({ onSubmit, academy_id }: IDivisionsAcadem
           });
         }
       },
-      onError: () => {
-        toast.error('something wrong happened while creating department');
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
       },
     });
     if (onSubmit) onSubmit(e);

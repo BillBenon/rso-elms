@@ -108,7 +108,7 @@ export default function Academy() {
                     )}
                   </div>
                 </>
-              ) : isSuccess && academies.length === 0 ? (
+              ) : academies.length === 0 ? (
                 <NoDataAvailable
                   icon="academy"
                   fill={false}

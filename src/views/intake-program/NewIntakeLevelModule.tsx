@@ -78,9 +78,8 @@ function NewIntakeLevelModule() {
         toast.success('module added to level');
         queryClient.invalidateQueries(['levels/modules']);
       },
-      onError: (error) => {
-        console.log(error);
-        toast.error('something wrong happened while adding module to level');
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
       },
     });
     setTotalModules([...totalModules, values]);
@@ -99,9 +98,8 @@ function NewIntakeLevelModule() {
         queryClient.invalidateQueries(['levels/modules']);
         history.goBack();
       },
-      onError: (error) => {
-        console.log(error);
-        toast.error('something wrong happened while adding module to level');
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
       },
     });
     setvalues(initialState);

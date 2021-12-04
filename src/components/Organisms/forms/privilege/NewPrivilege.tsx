@@ -11,7 +11,6 @@ import {
   SelectData,
   ValueType,
 } from '../../../../types';
-import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
@@ -58,8 +57,8 @@ export default function NewPrivilege({ onSubmit }: PropType) {
         history.goBack();
         // TODO: @liberi to fix this function which is not reachable
       },
-      onError: () => {
-        toast.error('something wrong happened while updating privilage');
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
       },
     });
     onSubmit(e);

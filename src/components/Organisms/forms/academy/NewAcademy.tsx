@@ -67,8 +67,8 @@ export default function NewAcademy<E>({ onSubmit }: CommonFormProps<E>) {
           history.goBack();
         }, 900);
       },
-      onError() {
-        toast.error('An error occurred please try again later');
+      onError(error: any) {
+        toast.error(error.response.data.message);
       },
     });
   }
