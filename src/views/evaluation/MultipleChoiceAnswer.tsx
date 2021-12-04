@@ -31,7 +31,8 @@ export default function MultipleChoiceAnswer({
           *
         </div>
         <div
-          className={`w-80 h-12 ${classes} border-2 rounded-tr-md rounded-br-md flex items-center px-4`}>
+          className={`w-auto h-12 ${classes} border-2 rounded-tr-md rounded-br-md flex items-center px-4`}
+          style={{ minWidth: '20rem' }}>
           {answer_content}
         </div>
       </div>

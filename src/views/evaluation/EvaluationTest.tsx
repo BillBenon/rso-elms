@@ -81,7 +81,7 @@ export default function EvaluationTest() {
                 date={Date.now() + time}
                 onComplete={() => autoSubmit()}
                 renderer={Renderer}
-                onTick={(value) => updateWorkTime(value)}
+                // onTick={(value) => updateWorkTime(value)}
               />
             ) : null}
           </Heading>

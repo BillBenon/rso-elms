@@ -129,6 +129,7 @@ export default function EvaluationInfoComponent({
         onSuccess: (data) => {
           toast.success('Evaluation created', { duration: 5000 });
           setLocalStorageData('evaluationId', data.data.data.id);
+          setLocalStorageData('currentStep', 1);
           handleNext();
         },
         onError: (error: any) => {
