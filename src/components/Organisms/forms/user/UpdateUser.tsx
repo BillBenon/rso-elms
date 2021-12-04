@@ -42,6 +42,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
   const authUser = authenticatorStore.authUser();
 
   const [details, setDetails] = useState<UpdateUserInfo>({
+    person: '',
     academic_program_level_id: '',
     academy_id: '',
     activation_key: '',
@@ -94,6 +95,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
 
     selectedUser &&
       setDetails({
+        person: selectedUser.person,
         academic_program_level_id: selectedUser.academic_program_level_id,
         academy_id: selectedUser.academy_id,
         activation_key: selectedUser.activation_key,
