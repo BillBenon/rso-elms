@@ -91,17 +91,26 @@ export default function EvaluationContent() {
     let formattedSubs: any = [];
 
     if (isSuccess && data?.data.data) {
+      console.log(data?.data.data);
       const filteredInfo = data?.data.data.map((submission: any) =>
-        pick(submission, ['id', 'code', 'markingStatus', 'obtainedMark', 'totalMark']),
+        pick(submission, [
+          'id',
+          'code',
+          'marking_status',
+          'obtained_mark',
+          'total_mark',
+          'work_time',
+        ]),
       );
 
       filteredInfo?.map((submission: any) => {
         let filteredData: any = {
           id: submission.id.toString(),
           'Student Code': submission.code,
-          'Obtained Marks': submission.obtainedMark,
-          'Total Marks': submission.totalMark,
-          status: submission.markingStatus,
+          'Obtained Marks': submission.obtained_mark || 'N/A',
+          'Total Marks': submission.total_mark,
+          // 'Time Used': `${submission.work_time / 60} mins`,
+          status: submission.marking_status,
         };
         formattedSubs.push(filteredData);
       });

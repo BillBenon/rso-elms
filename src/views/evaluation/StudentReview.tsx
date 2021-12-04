@@ -6,6 +6,7 @@ import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import AnswerReview from '../../components/Molecules/cards/correction/AnswerReview';
 import Pagination from '../../components/Molecules/Pagination';
@@ -55,37 +56,45 @@ export default function StudentReview() {
   ];
 
   return (
-    <div className={`flex flex-col gap-4`}>
-      <section>
-        <BreadCrumb list={list}></BreadCrumb>
-      </section>
-      <TableHeader
-        title={studentEvaluation?.code + ' submission'}
-        showBadge={false}
-        showSearch={false}>
-        <p className="text-gray-400">
-          Marks obtained:{' '}
-          <span className="text-green-300 font-semibold">
-            {studentEvaluation?.obtainedMark}
-          </span>
-        </p>
-      </TableHeader>
-      <section className="flex flex-wrap justify-start gap-4 mt-2">
-        {currentRows?.map((studentAnswer) => {
-          return <AnswerReview key={studentAnswer.id} data={studentAnswer} />;
-        })}
-        <div className="flex item-center mx-auto">
-          <Pagination
-            rowsPerPage={rowsOnPage}
-            totalRows={studentAnswers?.length || 0}
-            paginate={paginate}
-            currentPage={currentPage}
-          />
+    <>
+      {studentEvaluation.markingStatus == 'PUBLISHED' ? (
+        <div className={`flex flex-col gap-4`}>
+          <section>
+            <BreadCrumb list={list}></BreadCrumb>
+          </section>
+          <TableHeader
+            title={studentEvaluation?.code + ' submission'}
+            showBadge={false}
+            showSearch={false}>
+            <p className="text-gray-400">
+              Marks obtained:{' '}
+              <span className="text-green-300 font-semibold">
+                {studentEvaluation?.obtainedMark}
+              </span>
+            </p>
+          </TableHeader>
+          <section className="flex flex-wrap justify-start gap-4 mt-2">
+            {currentRows?.map((studentAnswer) => {
+              return <AnswerReview key={studentAnswer.id} data={studentAnswer} />;
+            })}
+            <div className="flex item-center mx-auto">
+              <Pagination
+                rowsPerPage={rowsOnPage}
+                totalRows={studentAnswers?.length || 0}
+                paginate={paginate}
+                currentPage={currentPage}
+              />
+            </div>
+            <div className="w-full flex justify-end">
+              <Button onClick={goBack}>Finish Review</Button>
+            </div>
+          </section>
         </div>
-        <div className="w-full flex justify-end">
-          <Button onClick={goBack}>Finish Review</Button>
+      ) : (
+        <div>
+          <Heading>Your answers has not yet been published</Heading>
         </div>
-      </section>
-    </div>
+      )}
+    </>
   );
 }
