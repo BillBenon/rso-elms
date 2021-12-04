@@ -3,14 +3,14 @@ import React from 'react';
 import { TextDecoration } from '../../../../types';
 import Icon from '../../../Atoms/custom/Icon';
 
-interface PropTypes<T> {
+interface PropTypes {
   data: any;
   full?: boolean;
   icon?: boolean;
   hoverStyle?: TextDecoration;
   className?: string;
 }
-export default function AnswerReview<T>({ data }: PropTypes<T>) {
+export default function AnswerReview({ data }: PropTypes) {
   return (
     <div className={`answer-card-molecule bg-main p-6 rounded-lg `}>
       <div className="flex justify-between">
