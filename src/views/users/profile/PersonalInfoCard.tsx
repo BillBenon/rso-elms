@@ -9,7 +9,7 @@ import { UserInfo } from '../../../types/services/user.types';
 import { advancedTypeChecker, titleCase } from '../../../utils/getOption';
 
 function PersonalInfoCard({ user }: { user: UserInfo }) {
-  const hobbies = hobbiesStore.getUserHobby(user.id + '').data?.data.data || [];
+  const hobbies = hobbiesStore.getUserHobby(user.person.id + '').data?.data.data || [];
 
   return (
     <div className="max-w-sm py-4 px-6 bg-main rounded-md">
@@ -27,7 +27,7 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
         />
         <div className="flex flex-col justify-center items-center py-7">
           <Heading fontSize="lg" fontWeight="semibold">
-            Florin Pop
+            {user.first_name + ' ' + user.last_name}
           </Heading>
           <p className="py-2 font-normal text-sm border-b-2 text-txt-secondary">
             {titleCase(user.user_type)}
