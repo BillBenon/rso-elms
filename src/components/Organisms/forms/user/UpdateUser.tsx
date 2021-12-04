@@ -176,8 +176,8 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
         toast.success(data.data.message);
         history.goBack();
       },
-      onError() {
-        toast.error('An error occurred when editing user, please try again later');
+      onError(error: any) {
+        toast.error(error.response.data.message);
       },
     });
   }

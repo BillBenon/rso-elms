@@ -62,16 +62,14 @@ function NewModuleMaterialAttach() {
                 queryClient.invalidateQueries(['material/attachment']);
                 history.push(`/dashboard/modules/${id}`);
               },
-              onError() {
-                toast.error(
-                  'An error occurred when attaching file, please try again later',
-                );
+              onError(error: any) {
+                toast.error(error.response.data.message);
               },
             },
           );
         },
-        onError() {
-          toast.error('An error occurred when attaching file, please try again later');
+        onError(error: any) {
+          toast.error(error.response.data.message);
         },
       });
     } else {
