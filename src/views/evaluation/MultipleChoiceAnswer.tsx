@@ -21,7 +21,10 @@ export default function MultipleChoiceAnswer({
       : 'border-tertiary';
 
   return (
-    <button className="flex flex-col mb-4" onClick={() => handleChoiceSelect(choiceId)}>
+    <button
+      type="button"
+      className="flex flex-col mb-4"
+      onClick={() => handleChoiceSelect(choiceId)}>
       <div className="flex">
         <div
           className={`w-14 h-12 ${classes} text-lg h-2 w-2 border-primary-500' border-2 border-r-0 rounded-tl-md rounded-bl-md right-rounded-md flex items-center justify-center`}>
