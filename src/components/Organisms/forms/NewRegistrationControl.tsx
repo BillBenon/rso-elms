@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
 
+import { queryClient } from '../../../plugins/react-query';
 import { authenticatorStore } from '../../../store/administration';
 import registrationControlStore from '../../../store/administration/registrationControl.store';
 import { CommonFormProps, ValueType } from '../../../types';
@@ -34,10 +35,11 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
     mutateAsync(regControl, {
       onSuccess: () => {
         toast.success('Registration control created');
+        queryClient.invalidateQueries(['regControl/academyId']);
         history.goBack();
       },
-      onError: () => {
-        toast.error('something wrong happened while creating control');
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
       },
     });
 

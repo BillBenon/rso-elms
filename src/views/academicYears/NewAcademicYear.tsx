@@ -49,9 +49,8 @@ export default function NewAcademicYear() {
         queryClient.invalidateQueries(['academicyears']);
         history.push(`/dashboard/academic-years/${year.data.data.id}/period/add`);
       },
-      onError: (error) => {
-        console.log(error);
-        toast.error('something wrong happened while creating level');
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
       },
     });
   }

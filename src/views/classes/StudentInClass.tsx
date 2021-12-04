@@ -49,6 +49,13 @@ function StudentInClass({ classId, label }: IStudentClass) {
           <Button
             styleType="outline"
             onClick={() =>
+              history.push(`/dashboard/intakes/peformance/${levelId}/${classId}`)
+            }>
+            View performance
+          </Button>
+          <Button
+            styleType="outline"
+            onClick={() =>
               history.push(
                 `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/add-class`,
               )

@@ -69,8 +69,8 @@ export default function ImportUsers({ userType }: IProps) {
           queryClient.invalidateQueries('users');
           history.goBack();
         },
-        onError() {
-          toast.error('An error occurred when importing users, please try again later');
+        onError(error: any) {
+          toast.error(error.response.data.message);
         },
       });
     } else toast.error('Please attach excel file.');

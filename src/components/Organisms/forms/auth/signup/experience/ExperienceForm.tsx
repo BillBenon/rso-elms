@@ -79,8 +79,8 @@ function ExperienceForm<E>({
           });
           isSuccess = true;
         },
-        onError() {
-          toast.error('An error occurred please try again later');
+        onError(error: any) {
+          toast.error(error.response.data.message);
           isSuccess = false;
         },
       });
@@ -129,8 +129,8 @@ function ExperienceForm<E>({
             },
           );
         },
-        onError() {
-          toast.error('An error occurred please try again later');
+        onError(error: any) {
+          toast.error(error.response.data.message);
         },
       });
     }

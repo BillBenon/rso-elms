@@ -70,8 +70,8 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
         toast.success('Program created');
         history.push(`/dashboard/programs/${newData.data.data.id}/level/add`);
       },
-      onError() {
-        toast.error('An error occurred please try again later');
+      onError(error: any) {
+        toast.error(error.response.data.message);
       },
     });
   }

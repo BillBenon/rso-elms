@@ -47,7 +47,10 @@ export default function QuestionContainer({
     answer_attachment: '',
     evaluation_question: id || '',
     mark_scored: 0,
-    multiple_choice_answer: previousAnswers[index]?.multiple_choice_answer.id,
+    multiple_choice_answer:
+      (previousAnswers[index]?.multiple_choice_answer &&
+        previousAnswers[index]?.multiple_choice_answer.id) ||
+      '',
     open_answer: '',
     student_evaluation: getLocalStorageData('studentEvaluationId'),
   };
@@ -81,10 +84,12 @@ export default function QuestionContainer({
   useEffect(() => {
     setStudentEvaluationId(getLocalStorageData('studentEvaluationId'));
     setAnswer(initialState);
-    setAnswer((answer) => ({
-      ...answer,
-      ['multiple_choice_answer']: previousAnswers[index]?.multiple_choice_answer.id,
-    }));
+    if (previousAnswers[index]?.multiple_choice_answer) {
+      setAnswer((answer) => ({
+        ...answer,
+        ['multiple_choice_answer']: previousAnswers[index]?.multiple_choice_answer.id,
+      }));
+    }
   }, [previousAnswers]);
 
   function disableCopyPaste(e: any) {
@@ -154,33 +159,33 @@ export default function QuestionContainer({
             {marks} marks
           </Heading>
         </div>
-        {isMultipleChoice && (
+        {isMultipleChoice ? (
           <div className="flex flex-col gap-4">
-            {questionChoices && questionChoices?.length > 0 ? (
-              questionChoices?.map((choiceAnswer, index) => (
-                <MultipleChoiceAnswer
-                  key={choiceAnswer.id}
-                  choiceId={choiceAnswer.id}
-                  handleChoiceSelect={() => handleChoiceSelect(choiceAnswer.id, index)}
-                  answer_content={choiceAnswer.answer_content}
-                  highlight={answer?.multiple_choice_answer === choiceAnswer.id}
-                />
-              ))
-            ) : (
-              <TextAreaMolecule
-                onPaste={(e: any) => disableCopyPaste(e)}
-                onCopy={(e: any) => disableCopyPaste(e)}
-                autoComplete="off"
-                style={{ height: '7rem' }}
-                value={previousAnswers[index]?.open_answer || answer?.open_answer}
-                placeholder="Type your answer here"
-                onBlur={() => submitForm(previousAnswers[index]?.open_answer)}
-                name="open_answer"
-                onFocus={() => setQuestionToSubmit(id)}
-                handleChange={handleChange}
-              />
-            )}
+            {questionChoices && questionChoices?.length > 0
+              ? questionChoices?.map((choiceAnswer) => (
+                  <MultipleChoiceAnswer
+                    key={choiceAnswer.id}
+                    choiceId={choiceAnswer.id}
+                    handleChoiceSelect={() => handleChoiceSelect(choiceAnswer.id, index)}
+                    answer_content={choiceAnswer.answer_content}
+                    highlight={answer.multiple_choice_answer === choiceAnswer.id}
+                  />
+                ))
+              : null}
           </div>
+        ) : (
+          <TextAreaMolecule
+            onPaste={(e: any) => disableCopyPaste(e)}
+            onCopy={(e: any) => disableCopyPaste(e)}
+            autoComplete="off"
+            style={{ height: '7rem' }}
+            value={previousAnswers[index]?.open_answer || answer?.open_answer}
+            placeholder="Type your answer here"
+            onBlur={() => submitForm(previousAnswers[index]?.open_answer)}
+            name="open_answer"
+            onFocus={() => setQuestionToSubmit(id)}
+            handleChange={handleChange}
+          />
         )}
         <Input value={id} name="evaluation_question" handleChange={handleChange} hidden />
         {/* <div className="py-7">

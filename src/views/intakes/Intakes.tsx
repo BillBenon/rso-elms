@@ -27,6 +27,7 @@ import registrationControlStore from '../../store/administration/registrationCon
 import { CommonCardDataType, Link as LinkType, ValueType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import IntakePrograms from '../intake-program/IntakePrograms';
+import LevelPerformance from '../performance/LevelPerformance';
 
 const list: LinkType[] = [
   { to: 'home', title: 'Institution Admin' },
@@ -107,6 +108,12 @@ export default function Intakes() {
         path={`${path}/programs/:intakeId`}
         render={() => {
           return <IntakePrograms />;
+        }}
+      />
+      <Route
+        path={`${path}/peformance/:levelId`}
+        render={() => {
+          return <LevelPerformance />;
         }}
       />
       <Route
