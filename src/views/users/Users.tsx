@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Icon from '../../components/Atoms/custom/Icon';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -22,6 +22,7 @@ export default function Users() {
 
   const { data, isSuccess, isLoading } = usersStore.fetchUsers();
   const authUser = authenticatorStore.authUser().data?.data.data;
+  const history = useHistory();
 
   const userInfo = data?.data.data;
 
@@ -84,6 +85,22 @@ export default function Users() {
       href: `${url}/admins`,
     });
   }
+  const studentActions = [
+    { name: 'Add Role', handleAction: () => {} },
+    {
+      name: 'Edit student',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`/dashboard/users/${id}/edit`); // go to edit user
+      },
+    },
+    {
+      name: 'View Student',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`${url}/${id}/profile`); // go to view user profile
+      },
+    },
+  ];
+
   return (
     <div>
       <div className="flex flex-wrap justify-start items-center pt-1">
@@ -132,7 +149,14 @@ export default function Users() {
                     />
                     <Route
                       path={`${path}`}
-                      render={() => <Students students={students} />}
+                      render={() => (
+                        <Students
+                          students={students}
+                          handleStatusAction={() => {}}
+                          studentActions={studentActions}
+                          enumtype={'UserTypes'}
+                        />
+                      )}
                     />
                   </Switch>
                 </TabNavigation>

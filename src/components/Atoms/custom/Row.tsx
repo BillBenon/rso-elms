@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { GenericStatus, Status, statusStyleType } from '../../../types';
+import { StudentApproval } from '../../../types/services/enrollment.types';
 import { IEvaluationStatus } from '../../../types/services/evaluation.types';
 import { IntakeStatus } from '../../../types/services/intake.types';
 import { IntakeModuleStatus } from '../../../types/services/intake-program.types';
@@ -16,7 +17,12 @@ type RowProps = {
   statusColumn?: string;
   statusActions?: {
     name: string;
-    type: GenericStatus | IntakeStatus | IEvaluationStatus | IntakeModuleStatus;
+    type:
+      | GenericStatus
+      | IntakeStatus
+      | IEvaluationStatus
+      | IntakeModuleStatus
+      | StudentApproval;
     handleStatusAction: (_data?: Record<string, any>[any]) => void;
   }[];
 };

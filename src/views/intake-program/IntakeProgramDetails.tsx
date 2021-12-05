@@ -19,6 +19,7 @@ import { UserView } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from '../programs/AcademicPrograms';
 import AddLevelToProgram from '../programs/AddLevelToProgram';
+import ApproveStudent from '../users/ApproveStudent';
 import EnrollInstructorIntakeProgram from './EnrollInstructorIntakeProgram';
 import IntakeProgramLevel from './IntakeProgramLevel';
 import IntakeProgramModules from './IntakeProgramModules';
@@ -104,6 +105,10 @@ function IntakeProgramDetails() {
     {
       label: 'Program levels',
       href: `${url}/levels/${getLevels[0]?.id || ''}`,
+    },
+    {
+      label: 'Approve students',
+      href: `${url}/approve`,
     },
   ];
 
@@ -192,7 +197,6 @@ function IntakeProgramDetails() {
                       </CommonCardMolecule>
                     )}
                   </div>
-
                   <div className="flex flex-col gap-8 z-0">
                     <UsersPreview
                       title="Students"
@@ -248,6 +252,7 @@ function IntakeProgramDetails() {
               render={() => <IntakeProgramModules />}
             />
             <Route path={`${path}/levels`} render={() => <IntakeProgramLevel />} />
+            <Route exact path={`${path}/approve`} render={() => <ApproveStudent />} />
           </Switch>
         </TabNavigation>
       </div>

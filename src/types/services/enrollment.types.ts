@@ -62,6 +62,17 @@ export interface EnrollInstructorLevelInfo extends Table {
   academic_year: IAcademicYearInfo;
 }
 
+export interface ApproveStudents {
+  intake_program_student_id: number;
+  status: StudentApproval;
+}
+
+export enum StudentApproval {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+}
+
 export enum ModuleEnrollStatus {
   PENDING = 'PENDING',
   ONGOING = 'ONGOING',

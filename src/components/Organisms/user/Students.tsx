@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 
 import { authenticatorStore } from '../../../store/administration';
 import { GenericStatus, ValueType } from '../../../types';
-import { UserType, UserTypes } from '../../../types/services/user.types';
+import { StudentApproval } from '../../../types/services/enrollment.types';
+import { AcademyUserType, UserType, UserTypes } from '../../../types/services/user.types';
 import Button from '../../Atoms/custom/Button';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../Molecules/Popup';
@@ -15,37 +16,40 @@ import ImportUsers from './ImportUsers';
 export default function Students({
   students,
   showTableHeader = true,
+  handleStatusAction,
+  studentActions,
+  enumtype,
+  selectorActions,
 }: {
-  students: UserTypes[];
+  students: UserTypes[] | AcademyUserType[];
   showTableHeader?: boolean;
+  handleStatusAction: () => void;
+  studentActions: {
+    name: string;
+    handleAction: (_id: string | number | undefined) => void;
+  }[];
+  selectorActions?: { name: string; handleAction: (_data?: string[]) => void }[];
+  enumtype: string;
 }) {
   const { url } = useRouteMatch();
   const history = useHistory();
 
   function handleSearch(_e: ValueType) {}
-  const studentActions = [
-    { name: 'Add Role', handleAction: () => {} },
-    {
-      name: 'Edit student',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/users/${id}/edit`); // go to edit user
-      },
-    },
-    {
-      name: 'View Student',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${url}/${id}/profile`); // go to view user profile
-      },
-    },
-  ];
-
-  const studentStatActions = Object.keys(GenericStatus).map((stat) => ({
-    name: stat,
-    type: stat as GenericStatus,
-    handleStatusAction: () => {},
-  }));
 
   const authUser = authenticatorStore.authUser().data?.data.data;
+
+  const studentStatActions =
+    enumtype === 'UserTypes'
+      ? Object.keys(GenericStatus).map((stat) => ({
+          name: stat,
+          type: stat as GenericStatus,
+          handleStatusAction: handleStatusAction,
+        }))
+      : Object.keys(StudentApproval).map((stat) => ({
+          name: stat,
+          type: stat as StudentApproval,
+          handleStatusAction: handleStatusAction,
+        }));
 
   return (
     <>
@@ -78,12 +82,13 @@ export default function Students({
               description="And the web just isnt the same without you. Lets get you back online!"
             />
           ) : (
-            <Table<UserTypes>
+            <Table<UserTypes | AcademyUserType>
               statusColumn="status"
               data={students}
               actions={studentActions}
               statusActions={studentStatActions}
               hide={['id', 'user_type']}
+              selectorActions={selectorActions}
               uniqueCol="id"
             />
           )}

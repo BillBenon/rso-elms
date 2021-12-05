@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
+  ApproveStudents,
   EnrollInstructorLevel,
   EnrollInstructorLevelInfo,
   EnrollInstructorProgram,
@@ -68,6 +69,15 @@ class EnrollmentService {
     instructor: EnrollInstructorLevel,
   ): Promise<AxiosResponse<Response<Instructor>>> {
     return await adminstrationAxios.post('instructorEnrolment/enroleInLevel', instructor);
+  }
+
+  public async approveStudent(
+    student: ApproveStudents,
+  ): Promise<AxiosResponse<Response<StudentIntakeProgram>>> {
+    return await adminstrationAxios.put(
+      'students/changeIntakeProgramStudentEnrolmentStatus',
+      student,
+    );
   }
 }
 

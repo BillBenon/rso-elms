@@ -33,6 +33,9 @@ class EnrolmmentStore {
   enrollInstructorToLevel() {
     return useMutation(enrollmentService.enrollInstructorToLevel);
   }
+  approveStudent() {
+    return useMutation(enrollmentService.approveStudent);
+  }
 }
 
 export default new EnrolmmentStore();

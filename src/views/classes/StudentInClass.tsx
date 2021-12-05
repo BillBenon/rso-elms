@@ -77,7 +77,13 @@ function StudentInClass({ classId, label }: IStudentClass) {
               description="This class has not received any students. you can add one from the button on the top left."
             />
           ) : (
-            <Students students={students} showTableHeader={false} />
+            <Students
+              students={students}
+              showTableHeader={false}
+              handleStatusAction={() => {}}
+              studentActions={[]}
+              enumtype={'UserTypes'}
+            />
           )}
         </section>
       </div>

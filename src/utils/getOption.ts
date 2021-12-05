@@ -4,7 +4,7 @@ import { IntakeStatus } from '../types/services/intake.types';
 import { IntakeModuleStatus } from '../types/services/intake-program.types';
 import { UserTypes } from '../types/services/user.types';
 import { GenericStatus } from './../types/services/common.types';
-import { EnrollmentStatus } from './../types/services/enrollment.types';
+import { EnrollmentStatus, StudentApproval } from './../types/services/enrollment.types';
 import { ModuleParticipation } from './../types/services/intake-program.types';
 import { MaterialType } from './../types/services/module-material.types';
 import { UserInfo } from './../types/services/user.types';
@@ -76,7 +76,8 @@ export function advancedTypeChecker(
     | IntakeModuleStatus
     | ModuleParticipation
     | MaterialType
-    | EnrollmentStatus,
+    | EnrollmentStatus
+    | StudentApproval,
 ): 'success' | 'warning' | 'error' | 'info' {
   let successStatus = ['active', 'completed', 'opened', 'started'];
   let errorStatus = ['inactive', 'closed', 'voided', 'suspended'];

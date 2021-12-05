@@ -1,3 +1,4 @@
+import { EnrollmentStatus } from './enrollment.types';
 import { GenericStatus } from '..';
 /* eslint-disable no-unused-vars */
 import { Table } from '..';
@@ -207,16 +208,19 @@ export interface UserView
   selected?: boolean;
 }
 
-export type UserTypes = {
+export interface AcademyUserType {
   id: string;
   username: string;
   'full name': string;
   email: string;
   'ID Card': string;
-  academy: string;
-  status: GenericStatus;
+  status: EnrollmentStatus | GenericStatus;
   user_type: UserType;
-};
+}
+
+export interface UserTypes extends AcademyUserType {
+  academy: string;
+}
 
 export interface PersonDetail
   extends Pick<
@@ -253,7 +257,7 @@ export interface EmploymentDetail
 export interface AccountDetail
   extends Pick<UserInfo, 'username' | 'pin' | 'send_communication_msg' | 'password'> {
   confirm_password: string;
-  doc_type:string;
+  doc_type: string;
 }
 
 export enum GenderStatus {

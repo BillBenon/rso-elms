@@ -7,6 +7,7 @@ import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 
 import { GenericStatus, ValueType } from '../../../types';
+import { StudentApproval } from '../../../types/services/enrollment.types';
 import { IEvaluationStatus } from '../../../types/services/evaluation.types';
 import { IntakeStatus } from '../../../types/services/intake.types';
 import { IntakeModuleStatus } from '../../../types/services/intake-program.types';
@@ -29,7 +30,12 @@ interface TableProps<T> {
   actions?: { name: string; handleAction: (_data?: T[keyof T]) => void }[];
   statusActions?: {
     name: string;
-    type: GenericStatus | IntakeStatus | IEvaluationStatus | IntakeModuleStatus;
+    type:
+      | GenericStatus
+      | IntakeStatus
+      | IEvaluationStatus
+      | IntakeModuleStatus
+      | StudentApproval;
     handleStatusAction: (_data?: T[keyof T]) => void;
   }[];
   selectorActions?: { name: string; handleAction: (_data?: string[]) => void }[];
