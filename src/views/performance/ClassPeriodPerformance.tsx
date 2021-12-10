@@ -25,7 +25,7 @@ const data = [
     status: GenericStatus.ACTIVE,
   },
   {
-    id: 2,
+    id: 1,
     fullName: 'Ineza Lora',
     'Critical thinking': '0',
     'Test module': '0',
