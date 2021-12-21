@@ -24,9 +24,10 @@ export default function Switch({
   useEffect(() => setActive(value), []);
 
   function handleClick(e: any) {
+    handleChange({ value: !active, name, event: e });
     setActive(!active);
-    handleChange({ value: active, name, event: e });
   }
+
   return (
     <div className="my-switch" {...attrs}>
       <div className="holder">
