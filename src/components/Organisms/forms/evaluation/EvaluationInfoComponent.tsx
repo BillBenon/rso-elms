@@ -1,13 +1,12 @@
-import { Editor } from '@tiptap/react';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { authenticatorStore } from '../../../../store/administration';
 import { classStore } from '../../../../store/administration/class.store';
 import enrollmentStore from '../../../../store/administration/enrollment.store';
-import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { moduleStore } from '../../../../store/administration/modules.store';
 import { subjectStore } from '../../../../store/administration/subject.store';
+import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { ValueType } from '../../../../types';
 import { EnrollInstructorLevelInfo } from '../../../../types/services/enrollment.types';
@@ -30,11 +29,11 @@ import {
 } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import ILabel from '../../../Atoms/Text/ILabel';
-import Tiptap from '../../../Molecules/editor/Tiptap';
 import DateMolecule from '../../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
+import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 // import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function EvaluationInfoComponent({
@@ -45,10 +44,7 @@ export default function EvaluationInfoComponent({
   const [moduleId, setModuleId] = useState('');
   const [levelId, setLevelId] = useState('');
   // const [period, setPeriod] = useState('');
-  // const { search } = useLocation();
-  // const [evaluationId, setEvaluationId] = useState(
-  //   new URLSearchParams(search).get('evaluation'),
-  // );
+
   const authUser = authenticatorStore.authUser().data?.data.data;
   const { data } = moduleStore.getModulesByAcademy(authUser?.academy.id.toString() || '');
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(
@@ -107,9 +103,9 @@ export default function EvaluationInfoComponent({
     else setDetails((details) => ({ ...details, [name]: value }));
   }
 
-  function handleEditorChange(editor: Editor) {
-    setDetails((details) => ({ ...details, exam_instruction: editor.getHTML() }));
-  }
+  // function handleEditorChange(editor: Editor) {
+  //   setDetails((details) => ({ ...details, exam_instruction: editor.getHTML() }));
+  // }
 
   function submitForm(e: FormEvent) {
     e.preventDefault();
@@ -304,18 +300,18 @@ export default function EvaluationInfoComponent({
           handleChange={handleChange}>
           Shuffle evaluation questions
         </SwitchMolecule> */}
-        {/* <TextAreaMolecule
+        <TextAreaMolecule
           name={'exam_instruction'}
           value={details.exam_instruction}
           handleChange={handleChange}>
-          
-        </TextAreaMolecule> */}
-        <div className="my-2">
+          <ILabel size="sm">Evaluation instructions</ILabel>
+        </TextAreaMolecule>
+        {/* <div className="my-2">
           <div className="my-1">
             <ILabel size="sm">Evaluation instructions</ILabel>
           </div>
           <Tiptap content={details.exam_instruction} handleChange={handleEditorChange} />
-        </div>
+        </div> */}
         <InputMolecule
           style={{ width: '6rem' }}
           type="number"
