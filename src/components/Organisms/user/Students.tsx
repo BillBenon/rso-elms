@@ -94,7 +94,11 @@ export default function Students({
           exact
           path={`${url}/import`}
           render={() => (
-            <PopupMolecule title="Import students" open={true} onClose={history.goBack}>
+            <PopupMolecule
+              closeOnClickOutSide={false}
+              title="Import students"
+              open={true}
+              onClose={history.goBack}>
               <ImportUsers userType={UserType.STUDENT} />
             </PopupMolecule>
           )}
