@@ -42,6 +42,7 @@ interface TableProps<T> {
   handleClick?: () => void;
   statusColumn?: string;
   handleSelect?: (_selected: string[] | null) => void;
+  unselectAll?: boolean;
 }
 
 export function Table<T>({
@@ -53,6 +54,7 @@ export function Table<T>({
   selectorActions,
   statusColumn,
   handleSelect,
+  unselectAll = false,
 }: TableProps<T>) {
   const countsToDisplay = [
     { label: '25', value: '25' },
@@ -147,6 +149,10 @@ export function Table<T>({
     });
     setCurrentRows(cr);
   }
+
+  useEffect(() => {
+    unSelectAll();
+  }, [unselectAll]);
 
   function handleCountSelect(e: ValueType) {
     e.value && setRowsOnPage(+e.value);
@@ -256,7 +262,7 @@ export function Table<T>({
               <strong>{selected.size}</strong> rows selected
             </p>
           </div>
-          <div className="px-4">
+          <div className="px-4 flex gap-2">
             {selectorActions?.map((action) => (
               <Button
                 key={action.name + Math.random()}

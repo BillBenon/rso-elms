@@ -1,4 +1,4 @@
-import { EnrollmentStatus } from './enrollment.types';
+import { EnrollmentStatus, StudentApproval } from './enrollment.types';
 import { GenericStatus } from '..';
 /* eslint-disable no-unused-vars */
 import { Table } from '..';
@@ -209,12 +209,12 @@ export interface UserView
 }
 
 export interface AcademyUserType {
-  id: string;
+  id: string | number;
   username: string;
   'full name': string;
   email: string;
   'ID Card': string;
-  status: EnrollmentStatus | GenericStatus;
+  status: StudentApproval | GenericStatus;
   user_type: UserType;
 }
 

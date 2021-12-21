@@ -2,7 +2,7 @@
 import { Table } from '..';
 import { IAcademicPeriodInfo } from './academicperiod.types';
 import { IAcademicYearInfo } from './academicyears.types';
-import { EnrollmentMode, EnrollmentStatus } from './enrollment.types';
+import { EnrollmentMode, EnrollmentStatus, StudentApproval } from './enrollment.types';
 import { IntakeInfo, IntakeProgram, IntakeStatus } from './intake.types';
 import { ProgramLevel } from './levels.types';
 import { ModuleInfo } from './modules.types';
@@ -110,7 +110,7 @@ export interface StudentIntakeProgramLevel extends Table {
 export interface StudentIntakeProgram extends Table {
   student: Student;
   intake_program: IntakeProgram;
-  enrolment_status: EnrollmentStatus;
+  enrolment_status: StudentApproval;
   enrolment_mode: string;
   rank: string;
   rank_institution: string;
