@@ -38,7 +38,7 @@ function CompleteProfile() {
   const history = useHistory();
 
   let foundUser: UserInfo = getLocalStorageData('user');
-  
+
   if (!foundUser.id) {
     history.push('/login/search');
     return <></>;
@@ -46,6 +46,8 @@ function CompleteProfile() {
   const user = usersStore.getUserById(foundUser.id.toString());
   useEffect(() => {
     const userInfo = user.data?.data.data;
+    console.log(userInfo);
+
     userInfo &&
       setPersonalInfo({
         academic_program_level_id: userInfo.academic_program_level_id,
@@ -87,6 +89,8 @@ function CompleteProfile() {
     let userFromLocalStorage: UpdateUserInfo = getLocalStorageData('user');
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
     if (personalInfo) {
+      console.log(userFromLocalStorage.doc_type);
+
       await mutateAsync(
         {
           ...userFromLocalStorage,

@@ -4,6 +4,10 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Checkbox from '../../components/Atoms/Input/CheckBox';
+import Input from '../../components/Atoms/Input/Input';
+import Radio from '../../components/Atoms/Input/Radio';
+import CheckboxMolecule from '../../components/Molecules/input/CheckboxMolecule';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import { queryClient } from '../../plugins/react-query';
 import { authenticatorStore } from '../../store/administration';
@@ -79,27 +83,46 @@ export default function AddLevelToProgram() {
     });
   }
 
+  const [hasonelevel, sethasonelevel] = useState(false);
+
+  function handleOneChange(e: ValueType) {
+    setLevelFlows((levels.index(10)) => ({
+      ...flows,
+      [e.name]: e.value,
+    }));
+  }
   return (
     <form onSubmit={addLevelToProg}>
       <>
-        <DropdownMolecule
-          options={getDropDownOptions({ inputs: levels || [], value: 'flow' })}
-          name="starting_flow"
-          placeholder="Starting flow"
-          handleChange={handleChange}>
-          Start level
-        </DropdownMolecule>
+        <input
+          type="checkbox"
+          name="Has one Level"
+          onChange={(event) => sethasonelevel(event.currentTarget.checked)}
+        />
 
-        <DropdownMolecule
-          placeholder="Ending flow"
-          options={getDropDownOptions({
-            inputs: filteredLevelFlows,
-            value: 'flow',
-          })}
-          name="endg_flow"
-          handleChange={handleChange}>
-          End level
-        </DropdownMolecule>
+        {!hasonelevel ? (
+          <>
+            <DropdownMolecule
+              options={getDropDownOptions({ inputs: levels || [], value: 'flow' })}
+              name="starting_flow"
+              placeholder="Starting flow"
+              handleChange={handleChange}>
+              Start level
+            </DropdownMolecule>
+            <DropdownMolecule
+              placeholder="Ending flow"
+              options={getDropDownOptions({
+                inputs: filteredLevelFlows,
+                value: 'flow',
+              })}
+              name="endg_flow"
+              handleChange={handleChange}>
+              End level
+            </DropdownMolecule>
+          </>
+        ) : (
+          ''
+        )}
       </>
       <div className="mt-5">
         <Button type="submit">Save</Button>
