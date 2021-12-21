@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { Tabs, Tab, tabEventTypes } from '../../components/Molecules/tabs/tabs';
-import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
 import academicperiodStore from '../../store/administration/academicperiod.store';
 import { classStore } from '../../store/administration/class.store';
 import Loader from '../../components/Atoms/custom/Loader';
 import { GenericStatus } from '../../types';
 import Table from '../../components/Molecules/table/Table';
+import { getClassTermlyOverallReport } from '../../store/evaluation/school-report.store';
 
 interface ParamType {
   levelId: string;
@@ -38,14 +38,19 @@ const data = [
 export default function ClassPeriodPerformance() {
   const history = useHistory();
   const { url, path } = useRouteMatch();
+  const [activePeriod, setactivePeriod] = useState('');
 
   const { levelId, classId } = useParams<ParamType>();
   const { data: classInfo } = classStore.getClassById(classId);
 
-  const [activePeriod, setactivePeriod] = useState('');
-
   const { data: periods, isLoading: periodsLoading } =
     academicperiodStore.getPeriodsByIntakeLevelId(levelId);
+
+  const { data: students, isLoading: studentsLoading } = getClassTermlyOverallReport(
+    classId,
+    activePeriod,
+    activePeriod.length > 0,
+  );
 
   useEffect(() => {
     setactivePeriod(periods?.data.data['0'].id + '' || '');
@@ -87,7 +92,6 @@ export default function ClassPeriodPerformance() {
                 statusColumn="status"
                 data={data}
                 actions={studentActions}
-                //   statusActions={studentStatActions}
                 hide={['id']}
                 uniqueCol="id"
               />
