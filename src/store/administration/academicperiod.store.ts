@@ -21,6 +21,12 @@ class AcademyPeriodStore {
     );
   }
 
+  getPeriodsByIntakeLevelId(id: string) {
+    return useQuery(['academicPeriod/ilevel/id', id], () =>
+      academicPeriodService.getPeriodsByIntakeLevelId(id),
+    );
+  }
+
   getAcademicPeriodById(id: string) {
     return useQuery(['academicPeriod/id', id], () =>
       academicPeriodService.getAcademicPeriodById(id),
