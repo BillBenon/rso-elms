@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
 
-import { evaluationService } from '../../services/administration/evaluation.service';
+import { evaluationService } from '../../services/evaluation/evaluation.service';
 
 class EvaluationStore {
   createEvaluation() {

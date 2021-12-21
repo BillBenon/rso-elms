@@ -11,7 +11,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import { queryClient } from '../../plugins/react-query';
-import { evaluationStore } from '../../store/administration/evaluation.store';
+import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { markingStore } from '../../store/administration/marking.store';
 import { ParamType } from '../../types';
 import ContentSpan from './ContentSpan';

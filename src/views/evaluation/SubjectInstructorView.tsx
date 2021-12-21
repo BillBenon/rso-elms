@@ -6,7 +6,7 @@ import Loader from '../../components/Atoms/custom/Loader';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
-import { evaluationStore } from '../../store/administration/evaluation.store';
+import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { CommonCardDataType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 

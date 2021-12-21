@@ -1,7 +1,7 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
-import { evaluationStore } from '../../../../store/administration/evaluation.store';
+import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { SelectData, ValueType } from '../../../../types';
 import {
   ICreateEvaluationQuestions,

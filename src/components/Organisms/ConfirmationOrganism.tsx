@@ -3,7 +3,7 @@ import toast from 'react-hot-toast';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import { authenticatorStore } from '../../store/administration/authenticator.store';
-import { evaluationStore } from '../../store/administration/evaluation.store';
+import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
 import {
   IEvaluationStatus,

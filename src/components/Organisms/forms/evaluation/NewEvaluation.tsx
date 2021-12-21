@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router';
 
-import { evaluationStore } from '../../../../store/administration/evaluation.store';
+import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { Link as LinkList } from '../../../../types';
 import {
   getLocalStorageData,
