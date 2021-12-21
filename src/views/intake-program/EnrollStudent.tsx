@@ -7,7 +7,7 @@ import RightSidebar from '../../components/Organisms/RightSidebar';
 import { queryClient } from '../../plugins/react-query';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
-import { EnrollStudents } from '../../types/services/enrollment.types';
+import { EnrollStudents, StudentApproval } from '../../types/services/enrollment.types';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 
@@ -15,8 +15,10 @@ function EnrollStudent() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { intakeProg, level: levelId } = useParams<IntakeLevelParam>();
 
-  const studentsProgram = intakeProgramStore.getStudentsByIntakeProgram(intakeProg || '')
-    .data?.data.data;
+  const studentsProgram = intakeProgramStore.getStudentsByIntakeProgramByStatus(
+    intakeProg,
+    StudentApproval.APPROVED,
+  ).data?.data.data;
 
   const level = intakeProgramStore.getIntakeLevelById(levelId || '').data?.data.data;
 

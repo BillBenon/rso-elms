@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
+import { StudentApproval } from '../../types/services/enrollment.types';
 import { InstructorProgram } from '../../types/services/instructor.types';
 import {
   AddIntakeProgramLevelPeriod,
@@ -30,6 +31,16 @@ class IntakeProgramService {
       `/students/getStudentsByIntakeProgram/${intakeProgramId}`,
     );
   }
+
+  public async getStudentsByIntakeProgramByStatus(
+    intakeProgram: string,
+    status: StudentApproval,
+  ): Promise<AxiosResponse<Response<StudentIntakeProgram[]>>> {
+    return await adminstrationAxios.get(
+      `/students/getStudentsOnProgramAndEnrolmentStatus/${intakeProgram}/${status}`,
+    );
+  }
+
   public async getStudentsByIntakeProgramLevel(
     intakeProgramlevelId: string,
   ): Promise<AxiosResponse<Response<StudentIntakeProgramLevel[]>>> {

@@ -14,6 +14,7 @@ import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleFor
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import programStore from '../../store/administration/program.store';
 import { Link as Links } from '../../types';
+import { StudentApproval } from '../../types/services/enrollment.types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
@@ -29,8 +30,10 @@ function IntakeProgramDetails() {
   const { path, url } = useRouteMatch();
   const { id, intakeId, intakeProg } = useParams<IntakeProgParam>();
 
-  const studentsProgram = intakeProgramStore.getStudentsByIntakeProgram(intakeProg || '')
-    .data?.data.data;
+  const studentsProgram = intakeProgramStore.getStudentsByIntakeProgramByStatus(
+    intakeProg,
+    StudentApproval.APPROVED,
+  ).data?.data.data;
   const instructorsProgram = intakeProgramStore.getInstructorsByIntakeProgram(
     id,
     intakeId,
