@@ -45,9 +45,7 @@ export default function ClassPeriodPerformance() {
   const [activePeriod, setactivePeriod] = useState('');
 
   const { data: periods, isLoading: periodsLoading } =
-    academicperiodStore.getAcademicPeriodsByAcademicYear(
-      classInfo?.data.data.academic_year_program_intake_level.academic_year.id + '',
-    );
+    academicperiodStore.getPeriodsByIntakeLevelId(levelId);
 
   useEffect(() => {
     setactivePeriod(periods?.data.data['0'].id + '' || '');
@@ -84,7 +82,7 @@ export default function ClassPeriodPerformance() {
       ) : (
         <Tabs onTabChange={handleTabChange}>
           {(periods?.data.data || []).map((p) => (
-            <Tab label={p.name} key={p.id} className="py-3">
+            <Tab label={p.academic_period.name} key={p.id} className="py-3">
               <Table
                 statusColumn="status"
                 data={data}
