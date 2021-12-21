@@ -1,8 +1,9 @@
 import { IStudent } from './class.types';
+import { IclassWorkGroupInfo } from './evaluation.types';
 
 interface ISubjectReport {
   adminId: 'string';
-  classWorkGroups: Object;
+  classWorkGroups: IclassWorkGroupInfo[];
   id: string;
   title: string;
 }
