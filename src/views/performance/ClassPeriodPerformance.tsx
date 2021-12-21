@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
-import { Tabs, Tab } from '../../components/Molecules/tabs/tabs';
+import { Tabs, Tab, tabEventTypes } from '../../components/Molecules/tabs/tabs';
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
 import academicperiodStore from '../../store/administration/academicperiod.store';
@@ -36,11 +36,11 @@ const data = [
 ];
 
 export default function ClassPeriodPerformance() {
-  const { levelId, classId } = useParams<ParamType>();
-  const { data: classInfo, isLoading } = classStore.getClassById(classId);
   const history = useHistory();
-
   const { url, path } = useRouteMatch();
+
+  const { levelId, classId } = useParams<ParamType>();
+  const { data: classInfo } = classStore.getClassById(classId);
 
   const [activePeriod, setactivePeriod] = useState('');
 
@@ -53,11 +53,17 @@ export default function ClassPeriodPerformance() {
     setactivePeriod(periods?.data.data['0'].id + '' || '');
   }, [periods?.data]);
 
+  const handleTabChange = (e: tabEventTypes) => {
+    setactivePeriod(periods?.data.data[e.activeTabIndex].id + '');
+  };
+
+  console.log(`active period: ${activePeriod}`);
+
   const studentActions = [
     {
       name: 'View report',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${url}/${id}/profile`); // go to view user profile
+        history.push(`${url}/report/${id}`); // go to view user profile
       },
     },
     {
@@ -76,7 +82,7 @@ export default function ClassPeriodPerformance() {
       {periodsLoading ? (
         <Loader />
       ) : (
-        <Tabs>
+        <Tabs onTabChange={handleTabChange}>
           {(periods?.data.data || []).map((p) => (
             <Tab label={p.name} key={p.id} className="py-3">
               <Table
