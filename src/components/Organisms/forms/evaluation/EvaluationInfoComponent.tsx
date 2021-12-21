@@ -5,7 +5,7 @@ import toast from 'react-hot-toast';
 import { authenticatorStore } from '../../../../store/administration';
 import { classStore } from '../../../../store/administration/class.store';
 import enrollmentStore from '../../../../store/administration/enrollment.store';
-import { evaluationStore } from '../../../../store/administration/evaluation.store';
+import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { moduleStore } from '../../../../store/administration/modules.store';
 import { subjectStore } from '../../../../store/administration/subject.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';

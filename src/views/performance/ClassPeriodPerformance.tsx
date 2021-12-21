@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
-import { Tabs, Tab } from '../../components/Molecules/tabs/tabs';
-import Button from '../../components/Atoms/custom/Button';
+import { Tabs, Tab, tabEventTypes } from '../../components/Molecules/tabs/tabs';
 import Heading from '../../components/Atoms/Text/Heading';
 import academicperiodStore from '../../store/administration/academicperiod.store';
 import { classStore } from '../../store/administration/class.store';
 import Loader from '../../components/Atoms/custom/Loader';
 import { GenericStatus } from '../../types';
 import Table from '../../components/Molecules/table/Table';
+import { getClassTermlyOverallReport } from '../../store/evaluation/school-report.store';
 
 interface ParamType {
   levelId: string;
@@ -36,28 +36,37 @@ const data = [
 ];
 
 export default function ClassPeriodPerformance() {
-  const { levelId, classId } = useParams<ParamType>();
-  const { data: classInfo, isLoading } = classStore.getClassById(classId);
   const history = useHistory();
-
   const { url, path } = useRouteMatch();
-
   const [activePeriod, setactivePeriod] = useState('');
 
+  const { levelId, classId } = useParams<ParamType>();
+  const { data: classInfo } = classStore.getClassById(classId);
+
   const { data: periods, isLoading: periodsLoading } =
-    academicperiodStore.getAcademicPeriodsByAcademicYear(
-      classInfo?.data.data.academic_year_program_intake_level.academic_year.id + '',
-    );
+    academicperiodStore.getPeriodsByIntakeLevelId(levelId);
+
+  const { data: students, isLoading: studentsLoading } = getClassTermlyOverallReport(
+    classId,
+    activePeriod,
+    activePeriod.length > 0,
+  );
 
   useEffect(() => {
     setactivePeriod(periods?.data.data['0'].id + '' || '');
   }, [periods?.data]);
 
+  const handleTabChange = (e: tabEventTypes) => {
+    setactivePeriod(periods?.data.data[e.activeTabIndex].id + '');
+  };
+
+  console.log(`active period: ${activePeriod}`);
+
   const studentActions = [
     {
       name: 'View report',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${url}/${id}/profile`); // go to view user profile
+        history.push(`${url}/report/${id}`); // go to view user profile
       },
     },
     {
@@ -76,14 +85,13 @@ export default function ClassPeriodPerformance() {
       {periodsLoading ? (
         <Loader />
       ) : (
-        <Tabs>
+        <Tabs onTabChange={handleTabChange}>
           {(periods?.data.data || []).map((p) => (
-            <Tab label={p.name} key={p.id} className="py-3">
+            <Tab label={p.academic_period.name} key={p.id} className="py-3">
               <Table
                 statusColumn="status"
                 data={data}
                 actions={studentActions}
-                //   statusActions={studentStatActions}
                 hide={['id']}
                 uniqueCol="id"
               />
