@@ -160,17 +160,18 @@ export default function ImportUsers({ userType }: IProps) {
       </div>
 
       <PopupMolecule
-        title="Import report"
+        closeOnClickOutSide={false}
+        title="Feedback on import"
         open={importReport ? true : false}
         onClose={history.goBack}>
-        <div className="w-64">
+        <div className="w-96">
           <Heading fontWeight="medium" fontSize="lg" color="success">
             File scanned sucessfully.
           </Heading>
           <div className="my-6">
             {importReport &&
               Object.keys(importReport.failures).map((key) => (
-                <p className="my-2 bg-gray-50 text-error-500 p-2 text-sm rounded-sm ">
+                <p className="text-error-500 p-2 text-sm rounded-sm">
                   {`On row ${key}: ${importReport.failures[key]}`}
                 </p>
               ))}
