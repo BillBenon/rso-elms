@@ -19,7 +19,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
 import { authenticatorStore } from '../../store/administration';
-import { evaluationStore } from '../../store/administration/evaluation.store';
+import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { lessonStore } from '../../store/administration/lesson.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { UserInfo, UserType } from '../../types/services/user.types';

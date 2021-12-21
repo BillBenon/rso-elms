@@ -11,12 +11,18 @@ import {
 import intakeProgramStore from '../../../store/administration/intake-program.store';
 import usersStore from '../../../store/administration/users.store';
 import { SelectData, ValueType } from '../../../types';
-import { IImportUser, UserType } from '../../../types/services/user.types';
+import {
+  IImportUser,
+  IImportUserRes,
+  UserType,
+} from '../../../types/services/user.types';
 import { getDropDownOptions } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import FileUploader from '../../Atoms/Input/FileUploader';
 import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
+import PopupMolecule from '../../Molecules/Popup';
+import Heading from '../../Atoms/Text/Heading';
 
 interface IProps {
   userType: UserType;
@@ -33,6 +39,8 @@ export default function ImportUsers({ userType }: IProps) {
     intake: '',
     file: null,
   });
+
+  const [importReport, setimportReport] = useState<IImportUserRes | undefined>(undefined);
 
   const academies = academyStore.fetchAcademies().data?.data.data || [];
   const intakes =
@@ -65,9 +73,8 @@ export default function ImportUsers({ userType }: IProps) {
 
       await mutateAsync(formData, {
         onSuccess(data) {
-          toast.success(data.data.message);
           queryClient.invalidateQueries('users');
-          history.goBack();
+          setimportReport(data.data.data);
         },
         onError(error: any) {
           toast.error(error.response.data.message);
@@ -151,6 +158,33 @@ export default function ImportUsers({ userType }: IProps) {
           <span> Download template</span>
         </a>
       </div>
+
+      <PopupMolecule
+        closeOnClickOutSide={false}
+        title="Feedback on import"
+        open={importReport ? true : false}
+        onClose={history.goBack}>
+        <div className="w-96">
+          <Heading fontWeight="medium" fontSize="lg" color="success">
+            File scanned sucessfully.
+          </Heading>
+          <div className="my-6">
+            {importReport &&
+              Object.keys(importReport.failures).map((key) => (
+                <p className="text-error-500 p-2 text-sm rounded-sm">
+                  {`On row ${key}: ${importReport.failures[key]}`}
+                </p>
+              ))}
+          </div>
+
+          <Button
+            onClick={() => {
+              history.goBack();
+            }}>
+            Close
+          </Button>
+        </div>
+      </PopupMolecule>
     </>
   );
 }

@@ -1,5 +1,8 @@
 /* eslint-disable no-unused-vars */
+import { GenericStatus } from '..';
+import { AcademyInfo } from './academy.types';
 import { Table } from './common.types';
+import { InstitutionInfo } from './institution.types';
 import { Instructor } from './instructor.types';
 import { IntakeProgramLevelPeriodInfo, LevelIntakeProgram } from './intake-program.types';
 import { Student } from './user.types';
@@ -13,6 +16,18 @@ export interface ICreateClass {
   instructor_class_in_charge_id: string;
   intake_academic_year_period_id: number;
   intake_level_id: number;
+}
+
+export interface IStudent {
+  academy: AcademyInfo;
+  academyId: string;
+  adminId: string;
+  id: string;
+  institution: InstitutionInfo;
+  institutionId: 'string';
+  passwordResetPeriodInDays: 0;
+  status: GenericStatus;
+  username: 'string';
 }
 
 export interface IClassStudent {

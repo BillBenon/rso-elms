@@ -1,7 +1,7 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
-import { evaluationStore } from '../../../../store/administration/evaluation.store';
+import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { SelectData, ValueType } from '../../../../types';
 import {
   ICreateEvaluationQuestions,
@@ -194,19 +194,13 @@ export default function EvaluationQuestionComponent({
                   </>
                 ))}
 
-                {question.choices.length ? (
+                {question.choices.length > 0 ? (
                   <DropdownMolecule
-                    key={
-                      question?.choices[index]?.answer_content +
-                        Math.floor(Math.random() * 300) || index
-                    }
-                    disabled={question.submitted}
+                    // disabled={question.submitted}
                     width="64"
-                    name=""
+                    name="correct_answer"
                     placeholder="Choose correct answer"
                     handleChange={(e: ValueType) => handleCorrectAnswerCahnge(index, e)}
-                    /*@ts-ignore*/
-                    // defaultValue={evaluationQuestions[index]?.question_type || ''}
                     options={
                       question.choices.map((ch) => ({
                         label: ch.answer_content,

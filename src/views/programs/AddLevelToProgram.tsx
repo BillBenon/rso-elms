@@ -27,7 +27,7 @@ export default function AddLevelToProgram() {
   ); // fetch levels
 
   const { mutateAsync } = programStore.addProgramToLevel();
-  const [filteredLevelFlows, setFilteredLevelFlows] = useState<FilteredLevels[]>([]);
+  // const [filteredLevelFlows, setFilteredLevelFlows] = useState<FilteredLevels[]>([]);
 
   useEffect(() => {
     setLevelFlows((flows) => ({ ...flows, program_id: progId }));
@@ -55,14 +55,14 @@ export default function AddLevelToProgram() {
     }));
   }
 
-  useEffect(() => {
-    let newLevelFlow =
-      levels?.filter(
-        (flow) =>
-          flow.flow > levelFlows.starting_flow && flow.flow !== levelFlows.starting_flow,
-      ) || [];
-    setFilteredLevelFlows(newLevelFlow);
-  }, [levelFlows.starting_flow]);
+  // useEffect(() => {
+  //   let newLevelFlow =
+  //     levels?.filter(
+  //       (flow) =>
+  //         flow.flow > levelFlows.starting_flow && flow.flow !== levelFlows.starting_flow,
+  //     ) || [];
+  //   setFilteredLevelFlows(newLevelFlow);
+  // }, [levelFlows.starting_flow]);
 
   function addLevelToProg<T>(e: FormEvent<T>) {
     e.preventDefault();
@@ -93,7 +93,7 @@ export default function AddLevelToProgram() {
         <DropdownMolecule
           placeholder="Ending flow"
           options={getDropDownOptions({
-            inputs: filteredLevelFlows,
+            inputs: levels || [],
             value: 'flow',
           })}
           name="endg_flow"
