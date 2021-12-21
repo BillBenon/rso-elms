@@ -20,15 +20,14 @@ import Heading from '../../components/Atoms/Text/Heading';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedule';
+import { classStore } from '../../store/administration/class.store';
+import intakeProgramStore from '../../store/administration/intake-program.store';
 import programStore from '../../store/administration/program.store';
 import { scheduleStore } from '../../store/timetable/calendar.store';
-import { formatCalendarEvents } from '../../utils/calendar';
-import { DateRange } from '../../types/services/schedule.types';
-import { getWeekBorderDays } from '../../utils/date-helper';
 import { ParamType, ValueType } from '../../types';
-import { levelStore } from '../../store/administration/level.store';
-import intakeProgramStore from '../../store/administration/intake-program.store';
-import { classStore } from '../../store/administration/class.store';
+import { DateRange } from '../../types/services/schedule.types';
+import { formatCalendarEvents } from '../../utils/calendar';
+import { getWeekBorderDays } from '../../utils/date-helper';
 
 const localizer = momentLocalizer(moment);
 
