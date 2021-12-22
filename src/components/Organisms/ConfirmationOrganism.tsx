@@ -3,7 +3,6 @@ import toast from 'react-hot-toast';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import { authenticatorStore } from '../../store/administration/authenticator.store';
-import { getStudentShipByUserId } from '../../store/administration/intake-program.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
 import {
@@ -23,9 +22,6 @@ export default function ConfirmationOrganism({
   onConfirmationClose,
 }: IConfirmationProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
-  const studentId = getStudentShipByUserId(authUser?.id + '', !!authUser?.id).data?.data
-    .data[0];
-
   const { id } = useParams<ParamType>();
   const history = useHistory();
   const { search } = useLocation();
@@ -43,7 +39,7 @@ export default function ConfirmationOrganism({
     const studentEvaluationStart: IStudentEvaluationStart = {
       attachment: '',
       evaluation_id: id,
-      student_id: studentId?.id + '',
+      student_id: authUser?.id + '',
     };
 
     if (studentEval) {
@@ -57,8 +53,8 @@ export default function ConfirmationOrganism({
           toast.success('Generated evaluation code', { duration: 5000 });
           goToNext(studentEvaluationStart.evaluation_id);
         },
-        onError: () => {
-          toast.error("The evaluation isn't already started!");
+        onError: (error: any) => {
+          toast.error(error.response.data.message);
         },
       });
     }
