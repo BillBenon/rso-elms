@@ -216,6 +216,7 @@ export interface IEvaluationApproval {
   id: string;
   preparer: string;
   reviewer: string;
+  marker: string;
   to_be_approved: boolean;
   to_be_reviewed: boolean;
 }
