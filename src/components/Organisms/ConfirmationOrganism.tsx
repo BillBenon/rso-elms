@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import { authenticatorStore } from '../../store/administration/authenticator.store';
+import { getStudentShipByUserId } from '../../store/administration/intake-program.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
 import {
@@ -22,6 +23,8 @@ export default function ConfirmationOrganism({
   onConfirmationClose,
 }: IConfirmationProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
+  const studentId = getStudentShipByUserId(authUser?.id + '', !!authUser?.id).data?.data
+    .data[0];
 
   const { id } = useParams<ParamType>();
   const history = useHistory();
@@ -40,7 +43,7 @@ export default function ConfirmationOrganism({
     const studentEvaluationStart: IStudentEvaluationStart = {
       attachment: '',
       evaluation_id: id,
-      student_id: authUser?.id.toString() || '',
+      student_id: studentId?.id + '',
     };
 
     if (studentEval) {
