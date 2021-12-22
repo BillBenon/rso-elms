@@ -58,7 +58,6 @@ const RouterProtection = () => {
 
       <Route path={`${path}/privileges`} component={PrivilegesView} />
       <Route exact path={`${path}/institution/:id/edit`} component={UpdateInstitution} />
-      <Route component={NotFound} />
       {/* end of institution admin page */}
     </>
   );
@@ -76,7 +75,6 @@ const RouterProtection = () => {
       <Route path={`${path}/levels`} component={Levels} />
       <Route path={`${path}/intakes`} component={IntakesView} />
       <Route path={`${path}/modules`} component={Modules} />
-      <Route component={NotFound} />
       {/* <Route exact path={`${path}/intakes/:id`} component={IntakeModulesView} /> */}
 
       {/* end of academic admin pages */}
@@ -94,7 +92,6 @@ const RouterProtection = () => {
       <Route path={`${path}/schedule`} component={ScheduleHome} />
       <Route path={`${path}/events`} component={Events} />
       <Route path={`${path}/modules`} component={Modules} />
-      <Route component={NotFound} />
       {/* end of instructor pages */}
     </>
   );
@@ -116,7 +113,6 @@ const RouterProtection = () => {
         path={`${path}/evaluations/completed/student-evaluation/:id/review`}
         component={StudentReview}
       />
-      <Route component={NotFound} />
       {/* end of student pages */}
     </>
   );
