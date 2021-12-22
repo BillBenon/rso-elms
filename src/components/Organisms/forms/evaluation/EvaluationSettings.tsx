@@ -44,7 +44,6 @@ export default function EvaluationSettings({
     id: '',
     preparer: authUser?.id.toString() || '',
     reviewer: '',
-    marker: '',
     to_be_approved: false,
     to_be_reviewed: false,
   });
@@ -202,7 +201,7 @@ export default function EvaluationSettings({
             inputs: instructors || [],
             labelName: ['first_name', 'last_name'],
           })}
-          name="marker"
+          name="approver"
           handleChange={handleChange}>
           To be marked by
         </DropdownMolecule>
