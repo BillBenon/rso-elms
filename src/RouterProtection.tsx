@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Route } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
+import Button from './components/Atoms/custom/Button';
+import Loader from './components/Atoms/custom/Loader';
 
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import Dashboard from './layout/Dashboard';
 import { authenticatorStore } from './store/administration';
 import { UserInfo, UserType } from './types/services/user.types';
+import cookie from './utils/cookie';
 import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';
 import Divisions from './views/divisions/Divisions';
@@ -32,7 +35,9 @@ import Users from './views/users/Users';
 
 const RouterProtection = () => {
   const [authUser, setAuthUser] = useState<UserInfo>();
-  const { data } = authenticatorStore.authUser();
+  const { data, isLoading } = authenticatorStore.authUser();
+
+  let token = cookie.getCookie('jwt_info');
 
   useEffect(() => {
     setAuthUser(data?.data.data);
@@ -47,6 +52,7 @@ const RouterProtection = () => {
       <Route path="/dashboard/ranks" component={Ranks} />
       <Route path="/dashboard/roles" component={Roles} />
       <Route path="/dashboard/users" component={Users} />
+      <Route exact path="/institution/new" component={NewInstitution} />
 
       <Route path="/dashboard/privileges" component={PrivilegesView} />
       <Route exact path="/dashboard/institution/:id/edit" component={UpdateInstitution} />
@@ -108,21 +114,29 @@ const RouterProtection = () => {
       {/* end of student pages */}
     </>
   );
-  return (
-    <>
-      {(authUser?.user_type == UserType.SUPER_ADMIN || import.meta.env.DEV) && (
-        <Route exact path="/institution/new" component={NewInstitution} />
-      )}
-      <Dashboard>
-        {authUser?.user_type === UserType.SUPER_ADMIN && InstitutionAdminRoutes()}
-        {authUser?.user_type === UserType.ADMIN && AcademicAdminRoutes()}
-        {authUser?.user_type === UserType.INSTRUCTOR && InstructorRoutes()}
-        {authUser?.user_type === UserType.STUDENT && StudentRoutes()}
-      </Dashboard>
-      {/* protected routes  */}
 
-      {/* end of protected routes */}
-    </>
+  return !token ? (
+    <Redirect to="/login" />
+  ) : isLoading ? (
+    <div className="h-screen">
+      <Loader />
+    </div>
+  ) : authUser ? (
+    <Dashboard>
+      {authUser?.user_type === UserType.SUPER_ADMIN && InstitutionAdminRoutes()}
+      {authUser?.user_type === UserType.ADMIN && AcademicAdminRoutes()}
+      {authUser?.user_type === UserType.INSTRUCTOR && InstructorRoutes()}
+      {authUser?.user_type === UserType.STUDENT && StudentRoutes()}
+    </Dashboard>
+  ) : (
+    <div>
+      <h2 className="text-error-500 py-2 mb-3 font-medium tracking-widest">
+        That was an error! try again in some moments.
+      </h2>
+      <Button styleType="outline" onClick={() => window.location.reload()}>
+        Reload
+      </Button>
+    </div>
   );
 };
 
