@@ -8,7 +8,7 @@ import { moduleStore } from '../../../../store/administration/modules.store';
 import { subjectStore } from '../../../../store/administration/subject.store';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
-import { ValueType } from '../../../../types';
+import { SelectData, ValueType } from '../../../../types';
 import { EnrollInstructorLevelInfo } from '../../../../types/services/enrollment.types';
 import {
   IAccessTypeEnum,
@@ -81,6 +81,10 @@ export default function EvaluationInfoComponent({
     time_limit: evaluationInfo?.time_limit || 10,
     total_mark: evaluationInfo?.total_mark || 0,
   });
+
+  const { data: classStudent, isLoading } = classStore.getStudentsByClass(
+    details.adm_intake_level_class_id,
+  );
 
   useEffect(() => {
     const period =
@@ -224,7 +228,7 @@ export default function EvaluationInfoComponent({
           handleChange={handleChange}>
           Eligible Class
         </RadioMolecule> */}
-        <RadioMolecule
+        {/* <RadioMolecule
           defaultValue={details.access_type}
           className="pb-4"
           value={details.access_type}
@@ -235,7 +239,7 @@ export default function EvaluationInfoComponent({
           ]}
           handleChange={handleChange}>
           Accessibility
-        </RadioMolecule>
+        </RadioMolecule> */}
         <RadioMolecule
           defaultValue={details.questionaire_type}
           className="pb-4"
@@ -248,6 +252,22 @@ export default function EvaluationInfoComponent({
             { label: 'Field', value: IQuestionaireTypeEnum.FIELD },
           ]}
           handleChange={handleChange}>
+          {details.access_type === IAccessTypeEnum.PRIVATE && (
+            <DropdownMolecule
+              isMulti
+              width="64"
+              name="private"
+              placeholder={isLoading ? 'Loading students' : 'Select private'}
+              handleChange={handleChange}
+              options={
+                classStudent?.data.data.map((h) => ({
+                  value: h.student.id,
+                  label: `${h.student.user.first_name} ${h.student.user.last_name}`,
+                })) as SelectData[]
+              }>
+              Select Attendee
+            </DropdownMolecule>
+          )}
           Questionaire type
         </RadioMolecule>
         {details.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
