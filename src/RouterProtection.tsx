@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Redirect, Route } from 'react-router-dom';
+import { Redirect, Route, useRouteMatch } from 'react-router-dom';
 import Button from './components/Atoms/custom/Button';
 import Loader from './components/Atoms/custom/Loader';
 
@@ -37,6 +37,7 @@ import Users from './views/users/Users';
 const RouterProtection = () => {
   const [authUser, setAuthUser] = useState<UserInfo>();
   const { data, isLoading } = authenticatorStore.authUser();
+  const { path } = useRouteMatch();
 
   let token = cookie.getCookie('jwt_info');
 
@@ -47,17 +48,17 @@ const RouterProtection = () => {
   const InstitutionAdminRoutes = () => (
     <>
       {/*start of institution admin */}
-      <Route path="/dashboard/role/:id/view" component={ViewRole} />
-      <Route path="/dashboard/academies" component={Academies} />
-      <Route path="/dashboard/calendar" component={CalendarView} />
-      <Route path="/dashboard/ranks" component={Ranks} />
-      <Route path="/dashboard/roles" component={Roles} />
-      <Route path="/dashboard/users" component={Users} />
-      <Route exact path="/institution/new" component={NewInstitution} />
+      <Route path={`${path}/role/:id/view`} component={ViewRole} />
+      <Route path={`${path}/academies`} component={Academies} />
+      <Route path={`${path}/calendar`} component={CalendarView} />
+      <Route path={`${path}/ranks`} component={Ranks} />
+      <Route path={`${path}/roles`} component={Roles} />
+      <Route path={`${path}/users`} component={Users} />
+      <Route exact path={`/institution/new`} component={NewInstitution} />
 
-      <Route path="/dashboard/privileges" component={PrivilegesView} />
-      <Route exact path="/dashboard/institution/:id/edit" component={UpdateInstitution} />
-      <Route path="*" component={NotFound} />
+      <Route path={`${path}/privileges`} component={PrivilegesView} />
+      <Route exact path={`${path}/institution/:id/edit`} component={UpdateInstitution} />
+      <Route component={NotFound} />
       {/* end of institution admin page */}
     </>
   );
@@ -65,18 +66,18 @@ const RouterProtection = () => {
   const AcademicAdminRoutes = () => (
     <>
       {/* start of academic admin pages */}
-      <Route path="/dashboard/subjects" component={Subjects} />
-      <Route path="/dashboard/schedule" component={ScheduleHome} />
-      <Route path="/dashboard/registration-control" component={RegistrationControl} />
-      <Route path="/dashboard/divisions" component={Divisions} />
-      <Route path="/dashboard/academic-years" component={AcademicYears} />
-      <Route path="/dashboard/programs" component={AcademicProgram} />
-      <Route path="/dashboard/users" component={Users} />
-      <Route path="/dashboard/levels" component={Levels} />
-      <Route path="/dashboard/intakes" component={IntakesView} />
-      <Route path="/dashboard/modules" component={Modules} />
-      <Route path="*" component={NotFound} />
-      {/* <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} /> */}
+      <Route path={`${path}/subjects`} component={Subjects} />
+      <Route path={`${path}/schedule`} component={ScheduleHome} />
+      <Route path={`${path}/registration-control`} component={RegistrationControl} />
+      <Route path={`${path}/divisions`} component={Divisions} />
+      <Route path={`${path}/academic-years`} component={AcademicYears} />
+      <Route path={`${path}/programs`} component={AcademicProgram} />
+      <Route path={`${path}/users`} component={Users} />
+      <Route path={`${path}/levels`} component={Levels} />
+      <Route path={`${path}/intakes`} component={IntakesView} />
+      <Route path={`${path}/modules`} component={Modules} />
+      <Route component={NotFound} />
+      {/* <Route exact path={`${path}/intakes/:id`} component={IntakeModulesView} /> */}
 
       {/* end of academic admin pages */}
     </>
@@ -85,15 +86,15 @@ const RouterProtection = () => {
   const InstructorRoutes = () => (
     <>
       {/* start of instructor pages */}
-      <Route path="/dashboard/evaluations" component={InstructorViewEvaluations} />
-      <Route path="/dashboard/calendar" component={CalendarView} />
-      <Route path="/dashboard/inst-program" component={InstructorProgram} />
-      <Route exact path={`/dashboard/inst-module`} component={InstrLevelModule} />
+      <Route path={`${path}/evaluations`} component={InstructorViewEvaluations} />
+      <Route path={`${path}/calendar`} component={CalendarView} />
+      <Route path={`${path}/inst-program`} component={InstructorProgram} />
+      <Route exact path={`${path}/inst-module`} component={InstrLevelModule} />
 
-      <Route path="/dashboard/schedule" component={ScheduleHome} />
-      <Route path="/dashboard/events" component={Events} />
-      <Route path="/dashboard/modules" component={Modules} />
-      <Route path="*" component={NotFound} />
+      <Route path={`${path}/schedule`} component={ScheduleHome} />
+      <Route path={`${path}/events`} component={Events} />
+      <Route path={`${path}/modules`} component={Modules} />
+      <Route component={NotFound} />
       {/* end of instructor pages */}
     </>
   );
@@ -101,21 +102,21 @@ const RouterProtection = () => {
   const StudentRoutes = () => (
     <>
       {/* start of student pages */}
-      <Route path="/dashboard/schedule" component={ScheduleHome} />
-      <Route path="/dashboard/student" component={StudentModule} />
-      <Route path="/dashboard/modules" component={Modules} />
-      {/* <Route path="/dashboard/student/evaluations/" component={EvaluationTest} /> */}
+      <Route path={`${path}/schedule`} component={ScheduleHome} />
+      <Route path={`${path}/student`} component={StudentModule} />
+      <Route path={`${path}/modules`} component={Modules} />
+      {/* <Route path={`${path}/student/evaluations/`} component={EvaluationTest} /> */}
       <Route
         exact
-        path="/dashboard/evaluations/student-evaluation/:id"
+        path={`${path}/evaluations/student-evaluation/:id`}
         component={EvaluationTest}
       />
       <Route
         exact
-        path="/dashboard/evaluations/completed/student-evaluation/:id/review"
+        path={`${path}/evaluations/completed/student-evaluation/:id/review`}
         component={StudentReview}
       />
-      <Route path="*" component={NotFound} />
+      <Route component={NotFound} />
       {/* end of student pages */}
     </>
   );

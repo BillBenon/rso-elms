@@ -31,7 +31,7 @@ const NotFound = () => {
               </p>
             </div>
             <div className="py-10 px-5 flex flex-wrap gap-3">
-              <Button onClick={() => goTohome()}>Go back home</Button>
+              <Button onClick={() => goTohome()}>Go back</Button>
               <Button styleType="outline" onClick={() => history.push('/')}>
                 Contact support
               </Button>
