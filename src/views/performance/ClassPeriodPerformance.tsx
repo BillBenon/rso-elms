@@ -5,52 +5,50 @@ import Heading from '../../components/Atoms/Text/Heading';
 import academicperiodStore from '../../store/administration/academicperiod.store';
 import { classStore } from '../../store/administration/class.store';
 import Loader from '../../components/Atoms/custom/Loader';
-import { GenericStatus } from '../../types';
 import Table from '../../components/Molecules/table/Table';
 import { getClassTermlyOverallReport } from '../../store/evaluation/school-report.store';
+import Button from '../../components/Atoms/custom/Button';
 
-interface ParamType {
+interface IParamType {
   levelId: string;
   classId: string;
 }
 
-const data = [
-  {
-    id: 1,
-    fullName: 'Ineza Lora',
-    'Critical thinking': '0',
-    'Test module': '0',
-    Total: '0',
-    position: 1,
-    status: GenericStatus.ACTIVE,
-  },
-  {
-    id: 1,
-    fullName: 'Ineza Lora',
-    'Critical thinking': '0',
-    'Test module': '0',
-    Total: '0',
-    position: 1,
-    status: GenericStatus.ACTIVE,
-  },
-];
+interface IPerformanceTable {
+  id: string;
+  full_name: string;
+  [index: string]: string;
+}
 
 export default function ClassPeriodPerformance() {
   const history = useHistory();
-  const { url, path } = useRouteMatch();
+  const { url } = useRouteMatch();
   const [activePeriod, setactivePeriod] = useState('');
 
-  const { levelId, classId } = useParams<ParamType>();
+  const { levelId, classId } = useParams<IParamType>();
   const { data: classInfo } = classStore.getClassById(classId);
 
   const { data: periods, isLoading: periodsLoading } =
     academicperiodStore.getPeriodsByIntakeLevelId(levelId);
 
-  const { data: students, isLoading: studentsLoading } = getClassTermlyOverallReport(
-    classId,
-    activePeriod,
-    activePeriod.length > 0,
-  );
+  const {
+    data: performance,
+    isLoading: studentsLoading,
+    isError,
+  } = getClassTermlyOverallReport(classId, activePeriod, activePeriod.length > 0);
+
+  let data: IPerformanceTable[] = [];
+
+  performance?.data.data.forEach((record) => {
+    let processed: IPerformanceTable = {
+      full_name: record.student.username,
+      id: record.id,
+    };
+
+    record.subject_marks.forEach((mark) => {
+      processed[mark.subject.title] = mark.obtained_marks.toString();
+    });
+  });
 
   useEffect(() => {
     setactivePeriod(periods?.data.data['0'].id + '' || '');
@@ -59,8 +57,6 @@ export default function ClassPeriodPerformance() {
   const handleTabChange = (e: tabEventTypes) => {
     setactivePeriod(periods?.data.data[e.activeTabIndex].id + '');
   };
-
-  console.log(`active period: ${activePeriod}`);
 
   const studentActions = [
     {
@@ -88,13 +84,27 @@ export default function ClassPeriodPerformance() {
         <Tabs onTabChange={handleTabChange}>
           {(periods?.data.data || []).map((p) => (
             <Tab label={p.academic_period.name} key={p.id} className="py-3">
-              <Table
-                statusColumn="status"
-                data={data}
-                actions={studentActions}
-                hide={['id']}
-                uniqueCol="id"
-              />
+              {studentsLoading ? (
+                <Loader />
+              ) : isError ? (
+                <div>
+                  <h2 className="text-error-500 py-2 mb-3 font-medium tracking-widest">
+                    That was an error! May be this class has no students or no assignments
+                    done het!
+                  </h2>
+                  <Button styleType="outline" onClick={() => window.location.reload()}>
+                    Reload
+                  </Button>
+                </div>
+              ) : (
+                <Table
+                  // statusColumn="status"
+                  data={data}
+                  actions={studentActions}
+                  hide={['id']}
+                  uniqueCol="id"
+                />
+              )}
             </Tab>
           ))}
         </Tabs>
