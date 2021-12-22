@@ -47,7 +47,7 @@ export interface EnrollStudentToProgram {
   employee_number: string;
   enroled_on: string;
   enrolment_mode: EnrollmentMode;
-  enrolment_status: EnrollmentStatus;
+  enrolment_status: StudentApproval;
   intake_program_id: string;
   other_rank: string;
   rank_id: string;

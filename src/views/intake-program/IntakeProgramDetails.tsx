@@ -22,6 +22,7 @@ import { IProgramData } from '../programs/AcademicPrograms';
 import AddLevelToProgram from '../programs/AddLevelToProgram';
 import ApproveStudent from '../users/ApproveStudent';
 import EnrollInstructorIntakeProgram from './EnrollInstructorIntakeProgram';
+import EnrollStudentIntakeProgram from './EnrollStudentIntakeProgram';
 import IntakeProgramLevel from './IntakeProgramLevel';
 import IntakeProgramModules from './IntakeProgramModules';
 
@@ -85,7 +86,6 @@ function IntakeProgramDetails() {
         subTitle: program.type,
         description: program.description,
         department: program.department,
-        // incharge: program.current_admin_names,
       };
     }
 
@@ -175,16 +175,6 @@ function IntakeProgramDetails() {
                           <Heading fontSize="sm">
                             {programData.subTitle?.replaceAll('_', ' ')}
                           </Heading>
-
-                          {/* <div className="flex items-center gap-2">
-                            <Avatar
-                              size="24"
-                              alt="user1 profile"
-                              className=" rounded-full  border-2 border-main transform hover:scale-125"
-                              src="https://static.thenounproject.com/png/2643367-200.png"
-                            />
-                            <Heading fontSize="sm">{programData.incharge}</Heading>
-                          </div> */}
                         </div>
                         <div className="mt-4 flex space-x-4">
                           <Button
@@ -206,8 +196,10 @@ function IntakeProgramDetails() {
                       label="Students in Cadette programs"
                       data={students}
                       totalUsers={students.length || 0}
-                      dataLabel={''}
-                    />
+                      dataLabel={''}>
+                      <EnrollStudentIntakeProgram />
+                    </UsersPreview>
+
                     <UsersPreview
                       title="Instructors"
                       label="Instructors in Cadette programs"

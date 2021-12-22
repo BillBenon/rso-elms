@@ -17,13 +17,6 @@ function EnrollInstructorIntakeProgram() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { intakeProg, intakeId } = useParams<IntakeProgParam>();
 
-  //   const authUser = authenticatorStore.authUser().data?.data.data;
-
-  //   const instructorsInAcademy =
-  //     instructordeploymentStore.getInstructorsRegisteredInAcademy(
-  //       authUser?.academy.id + '' || '',
-  //     ).data?.data.data;
-
   const instructorsInAcademy =
     instructordeploymentStore.getInstructors().data?.data.data || [];
 
@@ -74,7 +67,7 @@ function EnrollInstructorIntakeProgram() {
         onClick={() => setSidebarOpen(true)}
         className="flex -mt-6 items-center justify-end text-primary-500">
         <Icon name="add" size={12} fill="primary" />
-        Enroll instructor
+        Enroll instructors
       </Button>
       <RightSidebar
         open={sidebarOpen}

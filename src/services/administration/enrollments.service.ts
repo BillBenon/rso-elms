@@ -15,6 +15,7 @@ import {
   LevelIntakeProgram,
   StudentIntakeProgram,
 } from '../../types/services/intake-program.types';
+import { Student } from '../../types/services/user.types';
 import { InstructorProgram } from './../../types/services/instructor.types';
 
 class EnrollmentService {
@@ -39,6 +40,12 @@ class EnrollmentService {
     return await adminstrationAxios.get(
       `instructorEnrolment/getInstructorPrograms/${instructorId}`,
     );
+  }
+
+  public async getStudentAcademy(
+    academyId: string,
+  ): Promise<AxiosResponse<Response<Student[]>>> {
+    return await adminstrationAxios.get(`students/getAccademyStudents/${academyId}`);
   }
 
   public async enrollStudentsToLevel(

@@ -4,6 +4,7 @@ import { GenericStatus } from '..';
 import { Table } from '..';
 import { AcademyInfo } from './academy.types';
 import { ILevel } from './levels.types';
+import { RankRes } from './rank.types';
 export interface Student extends Table {
   reg_number: string;
   user: UserInfo;
@@ -70,7 +71,7 @@ export interface PersonInfo extends Table {
   emp_no: string;
   birth_date: string;
   blood_group: BloodGroup;
-  current_rank: string;
+  current_rank: RankRes;
   current_rank_id: string;
   date_of_commission: string;
   date_of_issue: string;

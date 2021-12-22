@@ -41,25 +41,21 @@ function IntakeLevelModule() {
     setlevelModules(newModule);
   }, [levelModuleStore?.data.data]);
 
-  const { data, isLoading: loadPeriod } = intakeProgramStore.getPeriodsByLevel(
-    parseInt(level),
-  );
+  const { data } = intakeProgramStore.getPeriodsByLevel(parseInt(level));
   return (
     <>
       <TableHeader usePadding={false} showBadge={false} showSearch={false}>
-        {data?.data.data.length === 0 && !loadPeriod && (
-          <Button
-            styleType="text"
-            onClick={() =>
-              history.push(
-                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/add-period`,
-              )
-            }>
-            Add academic periods to level
-          </Button>
-        )}
         <EnrollInstructorToLevel />
         <EnrollStudent />
+        <Button
+          styleType="outline"
+          onClick={() =>
+            history.push(
+              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period`,
+            )
+          }>
+          View periods
+        </Button>
         <Button
           styleType="outline"
           onClick={() =>
@@ -69,15 +65,19 @@ function IntakeLevelModule() {
           }>
           View classes
         </Button>
-        <Button
-          styleType="outline"
-          onClick={() =>
-            history.push(
-              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/add-class`,
-            )
-          }>
-          Add class
-        </Button>
+        {data?.data.data.length !== 0 ? (
+          <Button
+            styleType="outline"
+            onClick={() =>
+              history.push(
+                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/add-class`,
+              )
+            }>
+            Add class
+          </Button>
+        ) : (
+          <></>
+        )}
       </TableHeader>
       <section className="mt-4 flex flex-wrap justify-start gap-4">
         {isLoading ? (
