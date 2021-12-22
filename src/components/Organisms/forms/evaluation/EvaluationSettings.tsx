@@ -3,8 +3,8 @@ import toast from 'react-hot-toast';
 
 import { queryClient } from '../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../store/administration';
-import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import usersStore from '../../../../store/administration/users.store';
+import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { ValueType } from '../../../../types';
 import {
   IEvaluationApproval,

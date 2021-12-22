@@ -6,8 +6,8 @@ import Button from '../../components/Atoms/custom/Button';
 import Input from '../../components/Atoms/Input/Input';
 import Heading from '../../components/Atoms/Text/Heading';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
-import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { markingStore } from '../../store/administration/marking.store';
+import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ValueType } from '../../types';
 import {
   IMultipleChoiceAnswers,

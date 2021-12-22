@@ -109,7 +109,7 @@ export default function NewTimeTable() {
   );
 }
 
-function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepProps) {
+function FirstStep({ handleChange, setCurrentStep, classInfo }: IStepProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
   const users = instructordeploymentStore.getInstructorsDeployedInAcademy(
     authUser?.academy.id + '',

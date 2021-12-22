@@ -168,7 +168,7 @@ export default function ImportUsers({ userType }: IProps) {
           <Heading fontWeight="medium" fontSize="lg" color="success">
             File scanned sucessfully.
           </Heading>
-          <div className="my-6">
+          <div className="my-6 overflow-y-auto overflow-x-hidden max-h-60">
             {importReport &&
               Object.keys(importReport.failures).map((key) => (
                 <p className="text-error-500 p-2 text-sm rounded-sm">

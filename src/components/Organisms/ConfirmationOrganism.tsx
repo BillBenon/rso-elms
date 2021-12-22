@@ -22,7 +22,6 @@ export default function ConfirmationOrganism({
   onConfirmationClose,
 }: IConfirmationProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
-
   const { id } = useParams<ParamType>();
   const history = useHistory();
   const { search } = useLocation();
@@ -40,7 +39,7 @@ export default function ConfirmationOrganism({
     const studentEvaluationStart: IStudentEvaluationStart = {
       attachment: '',
       evaluation_id: id,
-      student_id: authUser?.id.toString() || '',
+      student_id: authUser?.id + '',
     };
 
     if (studentEval) {
@@ -54,8 +53,8 @@ export default function ConfirmationOrganism({
           toast.success('Generated evaluation code', { duration: 5000 });
           goToNext(studentEvaluationStart.evaluation_id);
         },
-        onError: () => {
-          toast.error("The evaluation isn't already started!");
+        onError: (error: any) => {
+          toast.error(error.response.data.message);
         },
       });
     }

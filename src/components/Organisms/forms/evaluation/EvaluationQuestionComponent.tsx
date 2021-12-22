@@ -83,7 +83,35 @@ export default function EvaluationQuestionComponent({
     setQuestions(questionsClone);
   }
 
-  //To be used after
+  function handleRemoveQuestion(questionIndex: number) {
+    let questionsClone = [...questions];
+
+    if (questionsClone.length === 1) {
+      toast.error('You must add at least one question');
+    }
+    if (questionIndex > -1 && questionsClone.length > 1) {
+      questionsClone.splice(questionIndex, 1);
+      setQuestions(questionsClone);
+    }
+  }
+
+  function handleRemoveChoice(questionIndex: number, choiceIndex: number) {
+    let questionsClone = [...questions];
+    let question = questionsClone[questionIndex];
+
+    if (question.choices.length === 2) {
+      toast.error('Multiple choice must have at least two choices');
+    }
+
+    if (choiceIndex > -1 && question.choices.length > 2) {
+      question.choices.splice(choiceIndex, 1);
+
+      questionsClone[questionIndex] = question;
+
+      setQuestions(questionsClone);
+    }
+  }
+
   function handleAddMultipleMultipleChoiceAnswer(index: number) {
     let questionsClone = [...questions];
     let questionChoices = questionsClone[index];
@@ -189,10 +217,37 @@ export default function EvaluationQuestionComponent({
                       handleChange={(e: ValueType) =>
                         handleChoiceChange(index, choiceIndex, e)
                       }>
-                      Answer choice {choiceIndex + 1}
-                    </TextAreaMolecule>{' '}
+                      <div className="flex items-center justify-between">
+                        Answer choice {choiceIndex + 1}
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveChoice(index, choiceIndex)}>
+                          <Icon name="close" size={12} />
+                        </button>
+                      </div>
+                    </TextAreaMolecule>
                   </>
                 ))}
+
+                {question.question_type === IQuestionType.MULTIPLE_CHOICE ? (
+                  <div className="-mt-4 mb-1">
+                    <Button
+                      type="button"
+                      className="flex items-center pl-0"
+                      styleType="text"
+                      onClick={() => handleAddMultipleMultipleChoiceAnswer(index)}>
+                      <Icon
+                        name="add"
+                        size={17}
+                        useheightandpadding={false}
+                        stroke="primary"
+                      />
+                      <ILabel size="sm" className="cursor-pointer">
+                        Add choice
+                      </ILabel>
+                    </Button>
+                  </div>
+                ) : null}
 
                 {question.choices.length > 0 ? (
                   <DropdownMolecule
@@ -209,25 +264,6 @@ export default function EvaluationQuestionComponent({
                     }>
                     Correct answer
                   </DropdownMolecule>
-                ) : null}
-
-                {question.question_type === IQuestionType.MULTIPLE_CHOICE ? (
-                  <div className="-mt-4 mb-1">
-                    <Button
-                      className="flex items-center pl-0"
-                      styleType="text"
-                      onClick={() => handleAddMultipleMultipleChoiceAnswer(index)}>
-                      <Icon
-                        name="add"
-                        size={17}
-                        useheightandpadding={false}
-                        stroke="primary"
-                      />
-                      <ILabel size="sm" className="cursor-pointer">
-                        Add choice
-                      </ILabel>
-                    </Button>
-                  </div>
                 ) : null}
 
                 <InputMolecule
@@ -248,6 +284,16 @@ export default function EvaluationQuestionComponent({
                     </Button>
                   ) : null}
                 </div> */}
+
+                <Button
+                  type="button"
+                  onClick={() => handleRemoveQuestion(index)}
+                  styleType="text"
+                  className="self-start flex justify-center items-center"
+                  icon>
+                  <Icon name="close" size={12} fill="primary" />
+                  Remove question
+                </Button>
               </div>
 
               {/* <div className="pr-14">
@@ -264,18 +310,24 @@ export default function EvaluationQuestionComponent({
       ) : (
         <Heading>No questions created for this evaluation</Heading>
       )}
-      <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
-        Back
-      </Button>
-      <div className="pt-6 flex flex-col">
-        <div className="pb-6">
-          <Button styleType="outline" title="test" onClick={handleAddQuestion}>
-            Add question
-          </Button>
-        </div>
+      <div>
+        <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
+          Back
+        </Button>
+        <div className="pt-6 flex flex-col">
+          <div className="pb-6">
+            <Button
+              styleType="outline"
+              type="button"
+              title="test"
+              onClick={handleAddQuestion}>
+              Add question
+            </Button>
+          </div>
 
-        <div>
-          <Button onSubmit={submitForm}>save</Button>
+          <div>
+            <Button onSubmit={submitForm}>save</Button>
+          </div>
         </div>
       </div>
     </form>
