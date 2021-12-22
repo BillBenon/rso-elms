@@ -21,6 +21,7 @@ import Levels from './views/levels/Levels';
 import Modules from './views/modules';
 import InstrLevelModule from './views/modules/InstrLevelModule';
 import StudentModule from './views/modules/StudentModule';
+import NotFound from './views/NotFound';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicProgram from './views/programs/AcademicPrograms';
 import InstructorProgram from './views/programs/InstructorProgram';
@@ -56,6 +57,7 @@ const RouterProtection = () => {
 
       <Route path="/dashboard/privileges" component={PrivilegesView} />
       <Route exact path="/dashboard/institution/:id/edit" component={UpdateInstitution} />
+      <Route path="*" component={NotFound} />
       {/* end of institution admin page */}
     </>
   );
@@ -73,6 +75,7 @@ const RouterProtection = () => {
       <Route path="/dashboard/levels" component={Levels} />
       <Route path="/dashboard/intakes" component={IntakesView} />
       <Route path="/dashboard/modules" component={Modules} />
+      <Route path="*" component={NotFound} />
       {/* <Route exact path="/dashboard/intakes/:id" component={IntakeModulesView} /> */}
 
       {/* end of academic admin pages */}
@@ -90,6 +93,7 @@ const RouterProtection = () => {
       <Route path="/dashboard/schedule" component={ScheduleHome} />
       <Route path="/dashboard/events" component={Events} />
       <Route path="/dashboard/modules" component={Modules} />
+      <Route path="*" component={NotFound} />
       {/* end of instructor pages */}
     </>
   );
@@ -111,6 +115,7 @@ const RouterProtection = () => {
         path="/dashboard/evaluations/completed/student-evaluation/:id/review"
         component={StudentReview}
       />
+      <Route path="*" component={NotFound} />
       {/* end of student pages */}
     </>
   );

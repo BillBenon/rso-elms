@@ -1,21 +1,19 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 
 import Button from '../components/Atoms/custom/Button';
-import { authenticatorStore } from '../store/administration/authenticator.store';
 
 const NotFound = () => {
   const history = useHistory();
-  const { data } = authenticatorStore.authUser();
 
-  useEffect(() => {
-    if (data?.data.data.user_type == 'SUPER_ADMIN') redirectTo('/dashboard/users');
-    if (data?.data.data.user_type == 'ADMIN') redirectTo('/dashboard/divisions');
-  }, [data?.data.data]);
+  function goTohome() {
+    try {
+      history.goBack();
+    } catch (error) {
+      history.push('/dashboard');
+    }
+  }
 
-  const redirectTo = (path: string) => {
-    history.push(path);
-  };
   return (
     <div className="w-full h-screen flex items-center">
       <div className="w-full md:w-10/12 lg:w-7/12 mx-auto px-6">
@@ -33,8 +31,8 @@ const NotFound = () => {
               </p>
             </div>
             <div className="py-10 px-5 flex flex-wrap gap-3">
-              <Button onClick={() => redirectTo('/')}>Go back home</Button>
-              <Button styleType="outline" onClick={() => redirectTo('/support')}>
+              <Button onClick={() => goTohome()}>Go back home</Button>
+              <Button styleType="outline" onClick={() => history.push('/')}>
                 Contact support
               </Button>
             </div>
