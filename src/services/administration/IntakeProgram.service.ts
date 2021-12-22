@@ -15,8 +15,12 @@ import {
 } from '../../types/services/intake-program.types';
 import { ModuleInfo } from '../../types/services/modules.types';
 import { Student } from '../../types/services/user.types';
-import { StudentIntakeProgramLevel } from './../../types/services/intake-program.types';
+import {
+  AddSubjectPeriod,
+  StudentIntakeProgramLevel,
+} from './../../types/services/intake-program.types';
 import { InstructorModule } from './../../types/services/modules.types';
+import { SubjectPeriodInfo } from './../../types/services/subject.types';
 
 class IntakeProgramService {
   public async getStudentById(
@@ -168,6 +172,23 @@ class IntakeProgramService {
     return await adminstrationAxios.post(
       `academicProgramIntakeLevels/addModulesToIntakeProgramLevel`,
       newModule,
+    );
+  }
+
+  public async addSubjectToPeriod(
+    newSubject: AddSubjectPeriod,
+  ): Promise<AxiosResponse<Response<SubjectPeriodInfo>>> {
+    return await adminstrationAxios.post(
+      `subjectAcademicYearPeriods/addSubjectAcademicYearPeriod`,
+      newSubject,
+    );
+  }
+
+  public async getPeriodSubjects(
+    periodId: string,
+  ): Promise<AxiosResponse<Response<SubjectPeriodInfo[]>>> {
+    return await adminstrationAxios.get(
+      `subjectAcademicYearPeriods/getAllSubjectAcademicYearPeriodsByIntakeAcademicYearPeriod/${periodId}`,
     );
   }
 }

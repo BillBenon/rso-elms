@@ -1,6 +1,7 @@
 import { Table } from '..';
 import { IAcademicYearInfo } from './academicyears.types';
 import { InstructorProgram } from './instructor.types';
+import { PromotionStatus } from './intake-program.types';
 import { AcademicProgramLevel } from './program.types';
 /* eslint-disable no-unused-vars */
 export enum EnrollmentStatus {
@@ -26,10 +27,15 @@ export interface EnrollInstructorLevel {
   intakeProgramInstructorId: number;
 }
 
-export interface EnrollStudents {
-  academic_year_id: string;
+export interface EnrollStudentToLevel {
+  academic_year_program_level_id: number;
+  completed_on: string;
+  enroled_on: string;
+  enrolment_mode: EnrollmentMode;
+  enrolment_status: EnrollmentStatus;
   intake_program_student_id: number;
-  program_level_id: string;
+  position: number;
+  promotion_status: PromotionStatus;
 }
 
 export interface EnrollModuleSubject {

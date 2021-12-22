@@ -1,13 +1,16 @@
 import React from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
 
+import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
 import Classes from '../classes/Classes';
+import LevelPeriod from '../classes/LevelPeriod';
 import NewClass from '../classes/NewClass';
+import AddSubjectToPeriod from '../subjects/AddSubjectToPeriod';
 import EnrollStudent from './EnrollStudent';
 import IntakeLevelModule from './IntakeLevelModule';
 import { NewIntakePeriod } from './NewIntakePeriod';
@@ -17,17 +20,22 @@ function IntakeProgramLevel() {
   const { path, url } = useRouteMatch();
   const { intakeProg, intakeId, id } = useParams<IntakeProgParam>();
 
-  const getLevels =
-    intakeProgramStore.getLevelsByIntakeProgram(intakeProg).data?.data.data || [];
+  const { data: getLevels, isLoading } =
+    intakeProgramStore.getLevelsByIntakeProgram(intakeProg);
 
-  const tabs = getLevels.map((level) => ({
-    label: `${level.academic_program_level.level.name}`,
-    href: `${url}/${level.id}`,
-  }));
+  const tabs =
+    (getLevels &&
+      getLevels.data.data.map((level) => ({
+        label: `${level.academic_program_level.level.name}`,
+        href: `${url}/${level.id}`,
+      }))) ||
+    [];
 
   return (
     <>
-      {getLevels.length === 0 ? (
+      {isLoading ? (
+        <Loader />
+      ) : getLevels?.data.data.length === 0 ? (
         <NoDataAvailable
           buttonLabel="Add new level"
           icon="level"
@@ -49,6 +57,8 @@ function IntakeProgramLevel() {
               path={`${path}/:level/enroll-students`}
               render={() => <EnrollStudent />}
             />
+            {/* add module to intake program level */}
+            <Route path={`${path}/:level/view-period`} render={() => <LevelPeriod />} />
             {/* add module to intake program level */}
             <Route path={`${path}/:level/view-class`} render={() => <Classes />} />
             {/* add classes to intake program level */}
@@ -76,6 +86,20 @@ function IntakeProgramLevel() {
                   open
                   onClose={history.goBack}>
                   <NewIntakePeriod checked={0} />
+                </PopupMolecule>
+              )}
+            />
+            {/* add subject to period */}
+            <Route
+              exact
+              path={`${path}/:level/add-subject/:period`}
+              render={() => (
+                <PopupMolecule
+                  title="Add subject to period"
+                  closeOnClickOutSide={false}
+                  open
+                  onClose={history.goBack}>
+                  <AddSubjectToPeriod />
                 </PopupMolecule>
               )}
             />

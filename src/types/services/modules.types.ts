@@ -1,9 +1,9 @@
 import { GenericStatus } from '..';
 import { Table } from './common.types';
 import { EnrollmentStatus } from './enrollment.types';
+import { Instructor } from './instructor.types';
 import { ModuleParticipation } from './intake-program.types';
 import { ProgramInfo } from './program.types';
-import { Incharge } from './user.types';
 
 export interface ModuleInfo extends CreateModuleInfo, Table {
   code: string;
@@ -17,7 +17,7 @@ export interface InstructorModule extends Table {
   actual_end_on: string;
   actual_start_on: string;
   credits: number;
-  incharge: Incharge;
+  incharge: Instructor;
   incharge_id: string;
   intake_level_class_id: string;
   intake_status: EnrollmentStatus;

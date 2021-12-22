@@ -59,14 +59,6 @@ export interface UserInfo extends Table {
   marital_status: MaritalStatus;
 }
 
-export interface Incharge extends Table {
-  institution_id: string;
-  since_on: string;
-  user: UserInfo;
-  academy: AcademyInfo;
-  description: string;
-}
-
 export interface PersonInfo extends Table {
   emp_no: string;
   birth_date: string;
