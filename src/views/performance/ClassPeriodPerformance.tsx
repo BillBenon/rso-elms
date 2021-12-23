@@ -35,7 +35,6 @@ export default function ClassPeriodPerformance() {
     data: performance,
     isLoading: studentsLoading,
     isError,
-    error,
   } = getClassTermlyOverallReport(classId, activePeriod, activePeriod.length > 0);
 
   let data: IPerformanceTable[] = [];
@@ -73,10 +72,6 @@ export default function ClassPeriodPerformance() {
       },
     },
   ];
-
-  console.log('====================================');
-  console.log('error', error);
-  console.log('====================================');
 
   return (
     <div>
