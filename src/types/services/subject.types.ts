@@ -7,11 +7,10 @@ import {
 } from './intake-program.types';
 import { ModuleInfo } from './modules.types';
 
-export interface SubjectInfo extends Table {
+export interface SubjectInfo {
   content: string;
   module_id: string;
   title: string;
-  module: ModuleInfo;
 }
 
 export interface ExtendedSubjectInfo extends Table, SubjectInfo {
@@ -28,5 +27,5 @@ export interface SubjectPeriodInfo extends Table {
   planned_end_on: string;
   planned_start_on: string;
   satus: IntakeModuleStatus;
-  subject: SubjectInfo;
+  subject: ExtendedSubjectInfo;
 }

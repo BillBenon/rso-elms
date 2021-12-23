@@ -21,7 +21,6 @@ export default function NewSubjectForm() {
 
   const [subject, setsubject] = useState<SubjectInfo>({
     content: '',
-    id: '',
     module_id: id,
     title: '',
   });
