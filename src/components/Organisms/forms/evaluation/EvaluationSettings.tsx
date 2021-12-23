@@ -3,8 +3,8 @@ import toast from 'react-hot-toast';
 
 import { queryClient } from '../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../store/administration';
-import { evaluationStore } from '../../../../store/administration/evaluation.store';
 import usersStore from '../../../../store/administration/users.store';
+import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { ValueType } from '../../../../types';
 import {
   IEvaluationApproval,
@@ -18,7 +18,6 @@ import {
 } from '../../../../utils/getLocalStorageItem';
 import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
-import Input from '../../../Atoms/Input/Input';
 import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
@@ -40,36 +39,14 @@ export default function EvaluationSettings({
   const [settings, setSettings] = useState<IEvaluationApproval>({
     approver: '',
     evaluation: evaluationId || getLocalStorageData('evaluationId'),
-    evaluation_approval_status: IEvaluationApprovalStatus.REVIEWING,
+    evaluation_approval_status: IEvaluationApprovalStatus.DRAFT,
     id: '',
     preparer: authUser?.id.toString() || '',
     reviewer: '',
+    marker: '',
     to_be_approved: false,
     to_be_reviewed: false,
   });
-
-  const statuses = [
-    {
-      label: IEvaluationApprovalStatus.REVIEWING,
-      value: IEvaluationApprovalStatus.REVIEWING,
-    },
-    {
-      label: IEvaluationApprovalStatus.DRAFT,
-      value: IEvaluationApprovalStatus.DRAFT,
-    },
-    {
-      label: IEvaluationApprovalStatus.APPROVING,
-      value: IEvaluationApprovalStatus.APPROVING,
-    },
-    {
-      label: IEvaluationApprovalStatus.RETURNED,
-      value: IEvaluationApprovalStatus.RETURNED,
-    },
-    {
-      label: 'REVIEWED TO APPROVE',
-      value: IEvaluationApprovalStatus.REVIEWED_TO_APPROVE,
-    },
-  ];
 
   function handleChange({ name, value }: ValueType) {
     setSettings((settings) => ({ ...settings, [name]: value }));
@@ -98,41 +75,12 @@ export default function EvaluationSettings({
 
   return (
     <form onSubmit={handleSubmit}>
-      <Heading fontSize="base" fontWeight="medium">
+      <Heading fontSize="base" fontWeight="semibold">
         Evaluation Settings
       </Heading>
-      <div className="flex gap-6 items-center mt-12">
-        <Heading fontSize="sm" fontWeight="medium">
-          Prepared by
-        </Heading>
-        <Input
-          readonly
-          style={{ width: '15rem' }}
-          name="preparer"
-          value=""
-          placeholder={`${authUser?.first_name} ${authUser?.last_name}`}
-        />
-      </div>
+
       <div className="pt-6 flex-col">
-        {/* <ILabel>Shuffle evaluation questions</ILabel>
-        <SwitchMolecule
-          loading={false}
-          name="shuffle"
-          value={false}
-          handleChange={handleChange}>
-          True
-        </SwitchMolecule> */}
-      </div>{' '}
-      <div className="pt-6 flex-col">
-        <DropdownMolecule
-          width="60"
-          placeholder="Reviewer"
-          options={statuses}
-          name="evaluation_approval_status"
-          handleChange={handleChange}>
-          Evaluation Reviewing status
-        </DropdownMolecule>
-        {/* <ILabel>Evaluation Reviewing status</ILabel> */}
+        <ILabel>Evaluation Reviewing status</ILabel>
         <SwitchMolecule
           loading={false}
           name="to_be_reviewed"
@@ -201,7 +149,7 @@ export default function EvaluationSettings({
             inputs: instructors || [],
             labelName: ['first_name', 'last_name'],
           })}
-          name="approver"
+          name="marker"
           handleChange={handleChange}>
           To be marked by
         </DropdownMolecule>

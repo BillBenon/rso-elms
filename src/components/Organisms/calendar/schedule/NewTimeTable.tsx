@@ -1,6 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
+
 import { queryClient } from '../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../store/administration';
 import { classStore } from '../../../../store/administration/class.store';
@@ -108,7 +109,7 @@ export default function NewTimeTable() {
   );
 }
 
-function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepProps) {
+function FirstStep({ handleChange, setCurrentStep, classInfo }: IStepProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
   const users = instructordeploymentStore.getInstructorsDeployedInAcademy(
     authUser?.academy.id + '',

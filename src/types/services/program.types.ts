@@ -14,7 +14,7 @@ export interface ProgramInfo extends CreateProgramInfo, Table {
 
 export interface CreateProgramInfo {
   code: string;
-  current_admin_id: string;
+  in_charge_id: string;
   department_id: string;
   description: string;
   name: string;

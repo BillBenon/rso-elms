@@ -10,7 +10,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import { authenticatorStore } from '../../store/administration';
-import { evaluationStore } from '../../store/administration/evaluation.store';
+import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
 import {
   getLocalStorageData,

@@ -1,3 +1,6 @@
+import { Table } from '..';
+import { IClass, IClassStudent } from './class.types';
+
 /* eslint-disable no-unused-vars */
 export enum IEvaluationTypeEnum {
   EXAM = 'EXAM',
@@ -213,6 +216,7 @@ export interface IEvaluationApproval {
   id: string;
   preparer: string;
   reviewer: string;
+  marker: string;
   to_be_approved: boolean;
   to_be_reviewed: boolean;
 }
@@ -234,4 +238,18 @@ export interface IStudentEvaluationStart {
 export interface IStudentEvaluationStartInfo {
   id: string;
   evaluation: IEvaluationInfo;
+}
+
+export interface IEvaluationsReport extends Table {
+  evaluation: IEvaluationInfo;
+}
+
+export interface IclassWorkGroupInfo extends Table {
+  evaluations: IEvaluationsReport;
+  group_members: IClassStudent[];
+  intake_level_class: IClass;
+  intake_level_class_id: string;
+  subject_id: string;
+  team_leader: IClassStudent;
+  team_leader_id: string;
 }
