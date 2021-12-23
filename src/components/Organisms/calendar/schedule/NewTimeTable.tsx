@@ -91,7 +91,7 @@ export default function NewTimeTable() {
       width="w-64"
       isVertical={false}
       isInline={false}
-      navigateToStepHandler={() => console.log('submitted')}>
+      navigateToStepHandler={() => {}}>
       <FirstStep
         values={values}
         handleChange={handleChange}
