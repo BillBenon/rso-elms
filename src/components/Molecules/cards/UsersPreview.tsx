@@ -19,6 +19,7 @@ type IUserPreview = {
   buttonAction?: () => void;
   children?: ReactNode;
   dataLabel: string;
+  isLoading: boolean;
 };
 
 export default function UsersPreview({
@@ -28,6 +29,7 @@ export default function UsersPreview({
   children,
   totalUsers,
   dataLabel = '',
+  isLoading,
 }: IUserPreview) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
@@ -99,6 +101,7 @@ export default function UsersPreview({
             },
           ]}
           dataLabel={dataLabel}
+          isLoading={isLoading}
         />
       )}
     </>

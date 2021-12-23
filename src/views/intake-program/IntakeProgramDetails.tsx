@@ -3,6 +3,7 @@ import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-route
 import { Link } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
@@ -31,21 +32,20 @@ function IntakeProgramDetails() {
   const { path, url } = useRouteMatch();
   const { id, intakeId, intakeProg } = useParams<IntakeProgParam>();
 
-  const studentsProgram = intakeProgramStore.getStudentsByIntakeProgramByStatus(
-    intakeProg,
-    StudentApproval.APPROVED,
-  ).data?.data.data;
-  const instructorsProgram = intakeProgramStore.getInstructorsByIntakeProgram(
-    id,
-    intakeId,
-  ).data?.data.data;
+  const { data: studentsProgram, isLoading: studLoading } =
+    intakeProgramStore.getStudentsByIntakeProgramByStatus(
+      intakeProg,
+      StudentApproval.APPROVED,
+    );
+  const { data: instructorsProgram, isLoading: instLoading } =
+    intakeProgramStore.getInstructorsByIntakeProgram(id, intakeId);
 
   const [students, setStudents] = useState<UserView[]>([]);
   const [instructors, setInstructors] = useState<UserView[]>([]);
 
   useEffect(() => {
     let studentsView: UserView[] = [];
-    studentsProgram?.forEach((stud) => {
+    studentsProgram?.data.data.forEach((stud) => {
       let studentView: UserView = {
         id: stud.id,
         first_name: stud.student.user.first_name,
@@ -58,7 +58,7 @@ function IntakeProgramDetails() {
   }, [studentsProgram]);
 
   useEffect(() => {
-    instructorsProgram?.map((inst) =>
+    instructorsProgram?.data.data.map((inst) =>
       setInstructors([
         ...instructors,
         {
@@ -71,7 +71,8 @@ function IntakeProgramDetails() {
     );
   }, [instructorsProgram]);
 
-  const program = programStore.getProgramById(id).data?.data.data;
+  const { data: programs, isLoading } = programStore.getProgramById(id);
+  const program = programs?.data.data;
 
   const getProgramData = () => {
     let programData: IProgramData | undefined;
@@ -166,28 +167,32 @@ function IntakeProgramDetails() {
               render={() => (
                 <div className="flex py-9">
                   <div className="mr-24">
-                    {programData && (
-                      <CommonCardMolecule data={programData}>
-                        <div className="flex flex-col mt-8 gap-7 pb-2">
-                          <Heading color="txt-secondary" fontSize="sm">
-                            Program Type
-                          </Heading>
-                          <Heading fontSize="sm">
-                            {programData.subTitle?.replaceAll('_', ' ')}
-                          </Heading>
-                        </div>
-                        <div className="mt-4 flex space-x-4">
-                          <Button
-                            onClick={() =>
-                              history.push(
-                                `/dashboard/intakes/programs/${intakeId}/${id}/edit`,
-                              )
-                            }>
-                            Edit program
-                          </Button>
-                          <Button styleType="outline">Change Status</Button>
-                        </div>
-                      </CommonCardMolecule>
+                    {isLoading ? (
+                      <Loader />
+                    ) : (
+                      programData && (
+                        <CommonCardMolecule data={programData}>
+                          <div className="flex flex-col mt-8 gap-7 pb-2">
+                            <Heading color="txt-secondary" fontSize="sm">
+                              Program Type
+                            </Heading>
+                            <Heading fontSize="sm">
+                              {programData.subTitle?.replaceAll('_', ' ')}
+                            </Heading>
+                          </div>
+                          <div className="mt-4 flex space-x-4">
+                            <Button
+                              onClick={() =>
+                                history.push(
+                                  `/dashboard/intakes/programs/${intakeId}/${id}/edit`,
+                                )
+                              }>
+                              Edit program
+                            </Button>
+                            <Button styleType="outline">Change Status</Button>
+                          </div>
+                        </CommonCardMolecule>
+                      )
                     )}
                   </div>
                   <div className="flex flex-col gap-8 z-0">
@@ -196,7 +201,8 @@ function IntakeProgramDetails() {
                       label="Students in Cadette programs"
                       data={students}
                       totalUsers={students.length || 0}
-                      dataLabel={''}>
+                      dataLabel={''}
+                      isLoading={studLoading}>
                       <EnrollStudentIntakeProgram />
                     </UsersPreview>
 
@@ -205,7 +211,8 @@ function IntakeProgramDetails() {
                       label="Instructors in Cadette programs"
                       data={instructors}
                       totalUsers={instructors.length || 0}
-                      dataLabel={''}>
+                      dataLabel={''}
+                      isLoading={instLoading}>
                       <EnrollInstructorIntakeProgram />
                     </UsersPreview>
                   </div>
