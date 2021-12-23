@@ -6,6 +6,7 @@ import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import RightSidebar from '../../components/Organisms/RightSidebar';
 import { queryClient } from '../../plugins/react-query';
+import { authenticatorStore } from '../../store/administration';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { getProgramsByIntake } from '../../store/administration/intake.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
@@ -17,8 +18,10 @@ function EnrollInstructorIntakeProgram() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { intakeProg, intakeId } = useParams<IntakeProgParam>();
 
-  const instructorsInAcademy =
-    instructordeploymentStore.getInstructors().data?.data.data || [];
+  const { data: instructorsInAcademy, isLoading } =
+    instructordeploymentStore.getInstructors();
+
+  const { data: authUser } = authenticatorStore.authUser();
 
   const programs = getProgramsByIntake(intakeId).data?.data.data;
 
@@ -27,15 +30,17 @@ function EnrollInstructorIntakeProgram() {
   const [instructors, setInstructors] = useState<UserView[]>([]);
   useEffect(() => {
     let instructorsView: UserView[] = [];
-    instructorsInAcademy?.forEach((inst) => {
-      let instructorView: UserView = {
-        id: inst.id,
-        first_name: inst.user.first_name,
-        last_name: inst.user.last_name,
-        image_url: inst.user.image_url,
-      };
-      instructorsView.push(instructorView);
-    });
+    instructorsInAcademy?.data.data
+      .filter((inst) => inst.user.academy.id === authUser?.data.data.academy.id)
+      .forEach((inst) => {
+        let instructorView: UserView = {
+          id: inst.id,
+          first_name: inst.user.first_name,
+          last_name: inst.user.last_name,
+          image_url: inst.user.image_url,
+        };
+        instructorsView.push(instructorView);
+      });
     setInstructors(instructorsView);
   }, [instructorsInAcademy]);
 
@@ -81,6 +86,7 @@ function EnrollInstructorIntakeProgram() {
           },
         ]}
         dataLabel={'Instructors in this academy'}
+        isLoading={isLoading}
       />
     </div>
   );

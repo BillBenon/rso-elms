@@ -40,8 +40,6 @@ function IntakeLevelModule() {
 
     setlevelModules(newModule);
   }, [levelModuleStore?.data.data]);
-
-  const { data } = intakeProgramStore.getPeriodsByLevel(parseInt(level));
   return (
     <>
       <TableHeader usePadding={false} showBadge={false} showSearch={false}>
@@ -56,28 +54,6 @@ function IntakeLevelModule() {
           }>
           View periods
         </Button>
-        <Button
-          styleType="outline"
-          onClick={() =>
-            history.push(
-              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-class`,
-            )
-          }>
-          View classes
-        </Button>
-        {data?.data.data.length !== 0 ? (
-          <Button
-            styleType="outline"
-            onClick={() =>
-              history.push(
-                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/add-class`,
-              )
-            }>
-            Add class
-          </Button>
-        ) : (
-          <></>
-        )}
       </TableHeader>
       <section className="mt-4 flex flex-wrap justify-start gap-4">
         {isLoading ? (

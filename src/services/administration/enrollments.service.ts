@@ -7,7 +7,7 @@ import {
   EnrollInstructorLevel,
   EnrollInstructorLevelInfo,
   EnrollInstructorProgram,
-  EnrollStudents,
+  EnrollStudentToLevel,
   EnrollStudentToProgram,
 } from '../../types/services/enrollment.types';
 import { Instructor } from '../../types/services/instructor.types';
@@ -49,9 +49,12 @@ class EnrollmentService {
   }
 
   public async enrollStudentsToLevel(
-    newStudent: EnrollStudents,
+    newStudent: EnrollStudentToLevel,
   ): Promise<AxiosResponse<Response<LevelIntakeProgram>>> {
-    return await adminstrationAxios.post(`students/enrollStudentInLevel`, newStudent);
+    return await adminstrationAxios.post(
+      `students/enrolStudentInIntakeProgramLevel`,
+      newStudent,
+    );
   }
 
   public async enrollStudentToProgram(
@@ -65,7 +68,7 @@ class EnrollmentService {
 
   public async enrollInstructorToProgram(
     instructor: EnrollInstructorProgram,
-  ): Promise<AxiosResponse<Response<Instructor>>> {
+  ): Promise<AxiosResponse<Response<InstructorProgram>>> {
     return await adminstrationAxios.post(
       'instructorEnrolment/enroleInProgram',
       instructor,

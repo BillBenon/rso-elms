@@ -23,9 +23,9 @@ function EnrollStudentIntakeProgram() {
 
   const { data: authUser } = authenticatorStore.authUser();
 
-  const studentsInAcademy =
-    enrollmentStore.getStudentsAcademy(authUser?.data.data.academy.id + '').data?.data
-      .data || [];
+  const { data: studentsInAcademy, isLoading } = enrollmentStore.getStudentsAcademy(
+    authUser?.data.data.academy.id + '',
+  );
 
   const programs = getProgramsByIntake(intakeId).data?.data.data;
 
@@ -35,7 +35,7 @@ function EnrollStudentIntakeProgram() {
 
   useEffect(() => {
     let studentsView: UserView[] = [];
-    studentsInAcademy?.forEach((stud) => {
+    studentsInAcademy?.data.data.forEach((stud) => {
       let studentView: UserView = {
         id: stud.id,
         first_name: stud.user.first_name,
@@ -45,39 +45,42 @@ function EnrollStudentIntakeProgram() {
       studentsView.push(studentView);
     });
     setStudents(studentsView);
-  }, [studentsInAcademy]);
+  }, [studentsInAcademy?.data.data]);
 
   const { mutate } = enrollmentStore.enrollStudentToProgram();
 
   function add(data?: string[]) {
     data?.map((stud_id) => {
-      let emp_no = studentsInAcademy.find((st) => st.id === stud_id)?.user.person.empNo;
-      let other_rank = studentsInAcademy.find((st) => st.id === stud_id)?.user.person
-        .other_rank;
-      let rank_id = studentsInAcademy.find((st) => st.id === stud_id)?.user.person
-        .current_rank.id;
-      let rank_depart = studentsInAcademy.find((st) => st.id === stud_id)?.user.person
-        .rank_depart;
-      let reg_no = studentsInAcademy.find((st) => st.id === stud_id)?.reg_number;
+      let emp_no = studentsInAcademy?.data.data.find((st) => st.id === stud_id)?.user
+        .person.empNo;
+      let other_rank = studentsInAcademy?.data.data.find((st) => st.id === stud_id)?.user
+        .person.other_rank;
+      let rank_id = studentsInAcademy?.data.data.find((st) => st.id === stud_id)?.user
+        .person.current_rank;
+      let rank_depart = studentsInAcademy?.data.data.find((st) => st.id === stud_id)?.user
+        .person.rank_depart;
+      let reg_no = studentsInAcademy?.data.data.find(
+        (st) => st.id === stud_id,
+      )?.reg_number;
 
       let newStudent: EnrollStudentToProgram = {
         completed_on: '',
-        employee_number: emp_no + '',
+        employee_number: emp_no || '',
         enroled_on: '',
         enrolment_mode: EnrollmentMode.NEW,
         enrolment_status: StudentApproval.APPROVED,
-        intake_program_id: intakeProgram?.id + '',
-        other_rank: other_rank + '',
-        rank_id: rank_id + '',
-        rank_institution: rank_depart + '',
+        intake_program_id: intakeProgram?.id.toString() || '',
+        other_rank: other_rank || '',
+        rank_id: rank_id?.id.toString() || '',
+        rank_institution: rank_depart || '',
         student_id: stud_id,
-        third_party_reg_number: reg_no + '',
+        third_party_reg_number: reg_no || '',
       };
 
       mutate(newStudent, {
         onSuccess: (data) => {
           toast.success(data.data.message);
-          queryClient.invalidateQueries(['instructors/programId/intake']);
+          queryClient.invalidateQueries(['students/intakeProgramId/status']);
           setSidebarOpen(false);
         },
         onError: (error: any) => {
@@ -107,6 +110,7 @@ function EnrollStudentIntakeProgram() {
           },
         ]}
         dataLabel={'Students in this academy'}
+        isLoading={isLoading}
       />
     </div>
   );

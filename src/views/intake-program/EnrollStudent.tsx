@@ -7,25 +7,34 @@ import RightSidebar from '../../components/Organisms/RightSidebar';
 import { queryClient } from '../../plugins/react-query';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
-import { EnrollStudents, StudentApproval } from '../../types/services/enrollment.types';
-import { IntakeLevelParam } from '../../types/services/intake-program.types';
+import {
+  EnrollmentMode,
+  EnrollmentStatus,
+  EnrollStudentToLevel,
+  StudentApproval,
+} from '../../types/services/enrollment.types';
+import {
+  IntakeLevelParam,
+  PromotionStatus,
+} from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 
 function EnrollStudent() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { intakeProg, level: levelId } = useParams<IntakeLevelParam>();
 
-  const studentsProgram = intakeProgramStore.getStudentsByIntakeProgramByStatus(
-    intakeProg,
-    StudentApproval.APPROVED,
-  ).data?.data.data;
+  const { data: studentsProgram, isLoading } =
+    intakeProgramStore.getStudentsByIntakeProgramByStatus(
+      intakeProg,
+      StudentApproval.APPROVED,
+    );
 
   const level = intakeProgramStore.getIntakeLevelById(levelId || '').data?.data.data;
 
   const [students, setStudents] = useState<UserView[]>([]);
   useEffect(() => {
     let studentsView: UserView[] = [];
-    studentsProgram?.forEach((stud) => {
+    studentsProgram?.data.data.forEach((stud) => {
       let studentView: UserView = {
         id: stud.id,
         first_name: stud.student.user.first_name,
@@ -41,10 +50,15 @@ function EnrollStudent() {
 
   function add(data?: string[]) {
     data?.map((st_id) => {
-      let newStudent: EnrollStudents = {
-        academic_year_id: level?.academic_year.id.toString() || '',
+      let newStudent: EnrollStudentToLevel = {
+        academic_year_program_level_id: parseInt(level?.id + ''),
+        completed_on: '',
+        enroled_on: '',
+        enrolment_mode: EnrollmentMode.NEW,
+        enrolment_status: EnrollmentStatus.NEW,
         intake_program_student_id: parseInt(st_id),
-        program_level_id: level?.academic_program_level.id.toString() || '',
+        position: 0,
+        promotion_status: PromotionStatus.PENDING,
       };
 
       mutate(newStudent, {
@@ -76,6 +90,7 @@ function EnrollStudent() {
           },
         ]}
         dataLabel={'Students in this program'}
+        isLoading={isLoading}
       />
     </div>
   );
