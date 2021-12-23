@@ -1,7 +1,11 @@
 import { Table } from '..';
 import { IAcademicYearInfo } from './academicyears.types';
 import { InstructorProgram } from './instructor.types';
-import { PromotionStatus } from './intake-program.types';
+import {
+  LevelIntakeProgram,
+  PromotionStatus,
+  StudentIntakeProgram,
+} from './intake-program.types';
 import { AcademicProgramLevel } from './program.types';
 /* eslint-disable no-unused-vars */
 export enum EnrollmentStatus {
@@ -36,6 +40,11 @@ export interface EnrollStudentToLevel {
   intake_program_student_id: number;
   position: number;
   promotion_status: PromotionStatus;
+}
+
+export interface StudentLevel extends Table, EnrollInstructorLevel {
+  academic_year_program_level: LevelIntakeProgram;
+  intake_program_student: StudentIntakeProgram;
 }
 
 export interface EnrollModuleSubject {
