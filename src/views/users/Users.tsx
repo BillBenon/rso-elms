@@ -26,7 +26,7 @@ export default function Users() {
   const { data, isSuccess, isLoading } =
     authUser?.user_type === UserType.SUPER_ADMIN
       ? usersStore.fetchUsers()
-      : usersStore.getUsersByAcademy(authUser?.academy.id || '');
+      : usersStore.getUsersByAcademy(authUser?.academy.id.toString() || '');
 
   const userInfo = data?.data.data;
 
