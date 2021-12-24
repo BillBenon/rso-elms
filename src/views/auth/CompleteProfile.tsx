@@ -64,9 +64,9 @@ function CompleteProfile() {
             : userInfo.profile_status,
         residence_location_id: userInfo.residence_location_id,
         user_type: userInfo.user_type,
-        doc_type: userInfo.person.doc_type,
-        nid: userInfo.person.nid,
-        phone: userInfo.person.phone_number,
+        doc_type: userInfo.person ? userInfo.person.doc_type : '',
+        nid: userInfo.person ? userInfo.person.nid : '',
+        phone: userInfo.person ? userInfo.person.phone_number : '',
         email: userInfo.email,
       });
   }, [user.data]);
@@ -87,6 +87,16 @@ function CompleteProfile() {
 
   async function saveInfo(isComplete: boolean) {
     let userFromLocalStorage: UpdateUserInfo = getLocalStorageData('user');
+    console.log(
+      {
+        ...userFromLocalStorage,
+        profile_status: ProfileStatus.COMPLETD,
+        //@ts-ignore
+        doc_type: userFromLocalStorage.doc_type,
+        nid: userFromLocalStorage.person.id,
+      },
+      'SAVING',
+    );
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
     if (personalInfo) {
       console.log(userFromLocalStorage.doc_type);

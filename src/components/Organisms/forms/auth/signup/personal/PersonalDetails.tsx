@@ -92,16 +92,20 @@ function PersonalDetails<E>({
       <form onSubmit={moveForward}>
         <div className="grid grid-cols-1 md:grid-cols-2">
           <InputMolecule
-            readOnly={personalDetails.first_name !== ''}
+            readOnly={
+              user.data?.data.data.person ? personalDetails.first_name !== '' : false
+            }
             name="first_name"
-            placeholder="eg: John"
+            placeholder="Your First Name"
             value={personalDetails.first_name}
             handleChange={handleChange}
           />
           <InputMolecule
-            readOnly={personalDetails.last_name !== ''}
+            readOnly={
+              user.data?.data.data.person ? personalDetails.last_name !== '' : false
+            }
             name="last_name"
-            placeholder="eg: Doe"
+            placeholder="Your Last Name"
             value={personalDetails.last_name}
             handleChange={handleChange}
           />
