@@ -103,7 +103,7 @@ export default function AcademicProgram() {
                     totalItems={`${programs.length} programs`}
                     title="Programs"
                     showSearch={false}>
-                    <Link to={`/dashboard/programs/add`}>
+                    <Link to={`/dashboard/programs/add?dp=${dp}`}>
                       <Button>Add New Program</Button>
                     </Link>
                   </TableHeader>
@@ -205,7 +205,7 @@ export default function AcademicProgram() {
                     <NoDataAvailable
                       buttonLabel="Add new program"
                       title={'No program available'}
-                      handleClick={() => history.push(`/dashboard/programs/add`)}
+                      handleClick={() => history.push(`/dashboard/programs/add?dp=${dp}`)}
                       description="There are no programs added yet, click on the below button to add some!"
                     />
                   )}
