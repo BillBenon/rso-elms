@@ -35,7 +35,9 @@ export default function DropDown(props: DropdownProps) {
         defaultValue={props.defaultValue || null}
         getOptionLabel={props.getOptionLabel}
         getOptionValue={props.getOptionValue}
-        noOptionsMessage={(_query: any) => `No options avalaible`}
+        noOptionsMessage={(_query: any) =>
+          props.loading ? 'loading ...' : `No options avalaible`
+        }
         closeMenuOnSelect={!props.isMulti}
         menuPlacement="auto"
         styles={{

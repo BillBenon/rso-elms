@@ -24,7 +24,6 @@ function StudentInClass({ classId, label }: IStudentClass) {
   const history = useHistory();
 
   const studentsData = data?.data.data || [];
-
   useEffect(() => {
     let tempStuds: UserTypes[] = [];
     studentsData.forEach((stud) => {
@@ -49,7 +48,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
           <Button
             styleType="outline"
             onClick={() =>
-              history.push(`/dashboard/intakes/peformance/${levelId}/${classId}`)
+              (window.location.href = `/dashboard/intakes/peformance/${levelId}/${classId}`)
             }>
             View performance
           </Button>

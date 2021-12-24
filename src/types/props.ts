@@ -71,6 +71,7 @@ export interface DropdownProps extends commonInputProps {
   hasError?: boolean;
   height?: number;
   padding?: number;
+  loading?: boolean;
 }
 
 //common form props that will be used on all reusable form components
