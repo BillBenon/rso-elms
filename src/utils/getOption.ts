@@ -4,7 +4,11 @@ import { IntakeStatus } from '../types/services/intake.types';
 import { IntakeModuleStatus } from '../types/services/intake-program.types';
 import { UserTypes } from '../types/services/user.types';
 import { GenericStatus } from './../types/services/common.types';
-import { EnrollmentStatus } from './../types/services/enrollment.types';
+import {
+  EnrollInstructorLevelInfo,
+  EnrollmentStatus,
+  StudentApproval,
+} from './../types/services/enrollment.types';
 import { ModuleParticipation } from './../types/services/intake-program.types';
 import { MaterialType } from './../types/services/module-material.types';
 import { UserInfo } from './../types/services/user.types';
@@ -76,7 +80,8 @@ export function advancedTypeChecker(
     | IntakeModuleStatus
     | ModuleParticipation
     | MaterialType
-    | EnrollmentStatus,
+    | EnrollmentStatus
+    | StudentApproval,
 ): 'success' | 'warning' | 'error' | 'info' {
   let successStatus = ['active', 'completed', 'opened', 'started'];
   let errorStatus = ['inactive', 'closed', 'voided', 'suspended'];
@@ -95,6 +100,21 @@ export const getInchargeDropdown = (users?: UserInfo[]): SelectData[] => {
     options.push({
       label: `${user.first_name} ${user.last_name}`,
       value: user.id.toString(),
+    });
+  });
+
+  return options;
+};
+
+export const getInstructorIncharge = (
+  instr?: EnrollInstructorLevelInfo[],
+): SelectData[] => {
+  let options: SelectData[] = [];
+
+  instr?.map((ins) => {
+    options.push({
+      label: `${ins.intake_program_instructor.instructor.user.first_name} ${ins.intake_program_instructor.instructor.user.last_name}`,
+      value: ins.intake_program_instructor.instructor.id.toString(),
     });
   });
 

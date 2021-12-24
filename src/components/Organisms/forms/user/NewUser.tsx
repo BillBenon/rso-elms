@@ -109,6 +109,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
       onSuccess(data) {
         toast.success(data.data.message);
         queryClient.invalidateQueries(['users/institution']);
+        queryClient.invalidateQueries(['users']);
         history.goBack();
       },
       onError(error: any) {
@@ -129,15 +130,11 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     setSelectedProgram(
       programs.data?.data.data.find((p) => p.id == details.intake_program_id)?.program,
     );
-  }, [programs.data?.data.data]);
+  }, [programs.data?.data.data, details.intake_program_id]);
 
   let levels = getLevelsByAcademicProgram(selectedProgram?.id + '');
 
   let nationalities: [] = [];
-
-  useEffect(() => {
-    levels.refetch();
-  }, [selectedProgram?.id]);
 
   return (
     <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
@@ -322,7 +319,9 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
                 labelName: ['code'],
               })}
               name="intake"
-              placeholder={'intake to be enrolled in'}
+              placeholder={
+                intakes.isLoading ? 'Loading intakes..' : 'intake to be enrolled in'
+              }
               handleChange={otherhandleChange}>
               Intake
             </DropdownMolecule>
@@ -334,7 +333,9 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
                 getOptionLabel: (prog: IntakeProgramInfo) => prog.program.name,
               })}
               name="intake_program_id"
-              placeholder={'Program to be enrolled in'}
+              placeholder={
+                programs.isLoading ? 'Loading programs..' : 'Program to be enrolled in'
+              }
               handleChange={handleChange}>
               Programs
             </DropdownMolecule>
@@ -345,7 +346,9 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
                 getOptionLabel: (level) => level.level && level.level.name,
               })}
               name="academic_program_level_id"
-              placeholder={'Program to be enrolled in'}
+              placeholder={
+                levels.isLoading ? 'Loading levels..' : 'Level to be enrolled in'
+              }
               handleChange={handleChange}>
               Levels
             </DropdownMolecule>

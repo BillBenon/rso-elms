@@ -8,8 +8,10 @@ import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import AssignAdminToAcademy from '../../components/Organisms/forms/academy/AssignAdminToAcademy';
 import NewAcademy from '../../components/Organisms/forms/academy/NewAcademy';
 import UpdateAcademy from '../../components/Organisms/forms/academy/UpdateAcademy';
 import { authenticatorStore } from '../../store/administration';
@@ -68,7 +70,12 @@ export default function Academy() {
         history.push(`${path}/${id}/edit`); // go to edit academy
       },
     },
-    { name: 'View', handleAction: () => {} },
+    {
+      name: 'Assign incharge',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`${path}/${id}/assign`); // go to assign admin
+      },
+    },
     { name: 'View Users', handleAction: () => {} },
   ];
 
@@ -83,32 +90,19 @@ export default function Academy() {
               <section>
                 <BreadCrumb list={list}></BreadCrumb>
               </section>
-              {isLoading && academies.length === 0 && <Loader />}
-              {academies.length > 0 && isSuccess ? (
-                <>
-                  <div className="py-4">
-                    <TableHeader
-                      title="Academy"
-                      totalItems={academies.length}
-                      handleSearch={handleSearch}>
-                      <Link to={`${url}/add`}>
-                        <Button>New academy</Button>
-                      </Link>
-                    </TableHeader>
-                  </div>
+              <div className="py-4">
+                <TableHeader
+                  title="Academy"
+                  totalItems={academies.length}
+                  handleSearch={handleSearch}>
+                  <Link to={`${url}/add`}>
+                    <Button>New academy</Button>
+                  </Link>
+                </TableHeader>
+              </div>
 
-                  <div className="mt-14">
-                    {academyInfo && (
-                      <Table<AcademyTypes>
-                        statusColumn="status"
-                        data={academies}
-                        actions={academyActions}
-                        hide={['id']}
-                        uniqueCol="id"
-                      />
-                    )}
-                  </div>
-                </>
+              {isLoading ? (
+                <Loader />
               ) : academies.length === 0 ? (
                 <NoDataAvailable
                   icon="academy"
@@ -118,7 +112,19 @@ export default function Academy() {
                   handleClick={() => history.push(`${url}/add`)}
                   description="the academies are not yet created, click below to create new ones"
                 />
-              ) : null}
+              ) : (
+                <div className="mt-14">
+                  {academyInfo && (
+                    <Table<AcademyTypes>
+                      statusColumn="status"
+                      data={academies}
+                      actions={academyActions}
+                      hide={['id']}
+                      uniqueCol="id"
+                    />
+                  )}
+                </div>
+              )}
             </>
           )}
         />
@@ -127,6 +133,21 @@ export default function Academy() {
 
         {/* modify academy */}
         <Route exact path={`${path}/:id/edit`} render={() => <UpdateAcademy />} />
+
+        {/* assign admin to academy */}
+        <Route
+          exact
+          path={`${path}/:id/assign`}
+          render={() => (
+            <PopupMolecule
+              closeOnClickOutSide={false}
+              title="Assign incharge of academy"
+              open
+              onClose={history.goBack}>
+              <AssignAdminToAcademy />
+            </PopupMolecule>
+          )}
+        />
       </Switch>
     </>
   );

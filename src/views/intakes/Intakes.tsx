@@ -179,27 +179,31 @@ export default function Intakes() {
                   </div>
                 ))}
 
-                {isLoading && <Loader />}
-
-                {!isLoading && intakes && intakes.length <= 0 && (
-                  <NoDataAvailable
-                    fill={false}
-                    icon="academy"
-                    buttonLabel={
-                      registrationControlId ? 'Add Intake ' : 'Go to registration control'
-                    }
-                    title={
-                      registrationControlId
-                        ? 'No intake available in this reg Control'
-                        : 'No intake available'
-                    }
-                    handleClick={() => {
-                      if (registrationControlId)
-                        history.push(`${url}/${registrationControlId}/add-intake`);
-                      else history.push('/dashboard/registration-control');
-                    }}
-                    description="There haven't been any intakes added yet! try adding some from the button below."
-                  />
+                {isLoading ? (
+                  <Loader />
+                ) : (
+                  intakes.length <= 0 && (
+                    <NoDataAvailable
+                      fill={false}
+                      icon="academy"
+                      buttonLabel={
+                        registrationControlId
+                          ? 'Add Intake '
+                          : 'Go to registration control'
+                      }
+                      title={
+                        registrationControlId
+                          ? 'No intake available in this reg Control'
+                          : 'No intake available'
+                      }
+                      handleClick={() => {
+                        if (registrationControlId)
+                          history.push(`${url}/${registrationControlId}/add-intake`);
+                        else history.push('/dashboard/registration-control');
+                      }}
+                      description="There haven't been any intakes added yet! try adding some from the button below."
+                    />
+                  )
                 )}
               </section>
 

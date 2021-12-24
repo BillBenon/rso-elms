@@ -1,13 +1,14 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
+
 import { queryClient } from '../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../store/administration';
 import { classStore } from '../../../../store/administration/class.store';
 import { moduleStore } from '../../../../store/administration/modules.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { timetableStore } from '../../../../store/timetable/timetable.store';
-import { venueStore } from '../../../../store/timetable/venue.store';
+import { getAllVenues } from '../../../../store/timetable/venue.store';
 import { SelectData, ValueType } from '../../../../types';
 import { IClass } from '../../../../types/services/class.types';
 import {
@@ -16,10 +17,8 @@ import {
 } from '../../../../types/services/schedule.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
-import CheckboxMolecule from '../../../Molecules/input/CheckboxMolecule';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
-import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import Stepper from '../../../Molecules/Stepper/Stepper';
 
 interface IStepProps {
@@ -95,7 +94,7 @@ export default function EditTimeTable() {
       width="w-64"
       isVertical={false}
       isInline={false}
-      navigateToStepHandler={() => console.log('submitted')}>
+      navigateToStepHandler={() => {}}>
       <FirstStep
         values={values}
         handleChange={handleChange}
@@ -175,7 +174,9 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
 }
 
 function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: IStepProps) {
-  const venues = venueStore.getAllVenues().data?.data.data;
+  const authUser = authenticatorStore.authUser().data?.data.data;
+  const venues = getAllVenues(authUser?.academy.id + '').data?.data.data;
+
   return (
     <form onSubmit={handleSubmit} className="max-w-sm -mb-6">
       <DropdownMolecule

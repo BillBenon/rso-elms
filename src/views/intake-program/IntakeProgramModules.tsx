@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
+import Loader from '../../components/Atoms/custom/Loader';
 import AddCard from '../../components/Molecules/cards/AddCard';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -38,26 +39,30 @@ function IntakeProgramModules() {
 
   return (
     <>
-      <section className="mt-4 flex flex-wrap justify-start gap-4">
-        {programModules.length <= 0 ? (
-          <NoDataAvailable
-            buttonLabel="Add new modules"
-            title={'No Modules available in this program'}
-            handleClick={() => history.push(`${url}/add`)}
-            description="And the web just isnt the same without you. Lets get you back online!"
-          />
-        ) : (
-          <>
-            <AddCard
-              title={'Add new module'}
-              onClick={() => history.push(`${url}/add`)}
+      {getAllModuleStore.isLoading ? (
+        <Loader />
+      ) : (
+        <section className="mt-4 flex flex-wrap justify-start gap-4">
+          {programModules.length <= 0 ? (
+            <NoDataAvailable
+              buttonLabel="Add new modules"
+              title={'No Modules available in this program'}
+              handleClick={() => history.push(`${url}/add`)}
+              description="And the web just isnt the same without you. Lets get you back online!"
             />
-            {programModules?.map((module, index) => (
-              <ModuleCard course={module} key={index} />
-            ))}
-          </>
-        )}
-      </section>
+          ) : (
+            <>
+              <AddCard
+                title={'Add new module'}
+                onClick={() => history.push(`${url}/add`)}
+              />
+              {programModules?.map((module, index) => (
+                <ModuleCard course={module} key={index} />
+              ))}
+            </>
+          )}
+        </section>
+      )}
     </>
   );
 }

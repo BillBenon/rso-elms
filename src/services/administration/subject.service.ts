@@ -7,7 +7,7 @@ import { ExtendedSubjectInfo, SubjectInfo } from '../../types/services/subject.t
 class SubjectService {
   public async addSubject(
     subject: SubjectInfo,
-  ): Promise<AxiosResponse<Response<SubjectInfo>>> {
+  ): Promise<AxiosResponse<Response<ExtendedSubjectInfo>>> {
     return await adminstrationAxios.post('/subjects/addSubject', subject);
   }
 
@@ -29,7 +29,7 @@ class SubjectService {
 
   public async modifySubject(
     subject: SubjectInfo,
-  ): Promise<AxiosResponse<Response<SubjectInfo>>> {
+  ): Promise<AxiosResponse<Response<ExtendedSubjectInfo>>> {
     return await adminstrationAxios.put('/subjects/modifySubject', subject);
   }
 }

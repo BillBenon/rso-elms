@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars */
 import { Table } from '..';
 import { DivisionInfo } from './division.types';
+import { Instructor } from './instructor.types';
 import { ILevel } from './levels.types';
-import { Incharge, UserInfo } from './user.types';
+import { UserInfo } from './user.types';
 
 export interface ProgramInfo extends CreateProgramInfo, Table {
   department: DivisionInfo;
-  incharge: Incharge;
+  incharge: Instructor;
   current_admin_names: string;
   total_num_modules: number;
 }
@@ -36,6 +37,7 @@ export interface CreateAcademicProgramLevel {
   endg_flow: number;
   level_id?: number;
   program_id: string;
+  useSingleLevel: false;
   starting_flow: number;
 }
 
