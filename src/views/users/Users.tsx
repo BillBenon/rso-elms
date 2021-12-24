@@ -123,7 +123,7 @@ export default function Users() {
       </div>
       {isLoading && <Loader />}
       <Switch>
-        <Route exact path={`${path}/add`} component={NewUser} />
+        <Route exact path={`${path}/add/:userType`} component={NewUser} />
         <Route exact path={`${path}/:id/edit`} component={UpdateUser} />
         <Route exact path={`${path}/:id/profile`} component={UserDetails} />
 
@@ -135,7 +135,7 @@ export default function Users() {
                 <TableHeader
                   totalItems={users.length}
                   showBadge={false}
-                  title={'users'}
+                  title={'Users'}
                   showSearch={false}
                 />
 
