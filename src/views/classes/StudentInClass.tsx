@@ -30,7 +30,6 @@ function StudentInClass({ classId, label }: IStudentClass) {
   const history = useHistory();
 
   const studentsData = data?.data.data || [];
-
   useEffect(() => {
     let tempStuds: UserTypes[] = [];
     studentsData.forEach((stud) => {
