@@ -1,8 +1,10 @@
+import { EnrollmentStatus, StudentApproval } from './enrollment.types';
 import { GenericStatus } from '..';
 /* eslint-disable no-unused-vars */
 import { Table } from '..';
 import { AcademyInfo } from './academy.types';
 import { ILevel } from './levels.types';
+import { RankRes } from './rank.types';
 export interface Student extends Table {
   reg_number: string;
   user: UserInfo;
@@ -57,19 +59,11 @@ export interface UserInfo extends Table {
   marital_status: MaritalStatus;
 }
 
-export interface Incharge extends Table {
-  institution_id: string;
-  since_on: string;
-  user: UserInfo;
-  academy: AcademyInfo;
-  description: string;
-}
-
 export interface PersonInfo extends Table {
   emp_no: string;
   birth_date: string;
   blood_group: BloodGroup;
-  current_rank: string;
+  current_rank: RankRes;
   current_rank_id: string;
   date_of_commission: string;
   date_of_issue: string;
@@ -207,16 +201,19 @@ export interface UserView
   selected?: boolean;
 }
 
-export type UserTypes = {
-  id: string;
+export interface AcademyUserType {
+  id: string | number;
   username: string;
   'full name': string;
   email: string;
   'ID Card': string;
-  academy: string;
-  status: GenericStatus;
+  status: StudentApproval | GenericStatus;
   user_type: UserType;
-};
+}
+
+export interface UserTypes extends AcademyUserType {
+  academy: string;
+}
 
 export interface PersonDetail
   extends Pick<
@@ -253,7 +250,7 @@ export interface EmploymentDetail
 export interface AccountDetail
   extends Pick<UserInfo, 'username' | 'pin' | 'send_communication_msg' | 'password'> {
   confirm_password: string;
-  doc_type:string;
+  doc_type: string;
 }
 
 export enum GenderStatus {

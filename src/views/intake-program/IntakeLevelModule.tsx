@@ -41,43 +41,28 @@ function IntakeLevelModule() {
     setlevelModules(newModule);
   }, [levelModuleStore?.data.data]);
 
-  const { data, isLoading: loadPeriod } = intakeProgramStore.getPeriodsByLevel(
+  const { data: periods, isLoading: prdLoading } = intakeProgramStore.getPeriodsByLevel(
     parseInt(level),
   );
+
   return (
     <>
       <TableHeader usePadding={false} showBadge={false} showSearch={false}>
-        {data?.data.data.length === 0 && !loadPeriod && (
-          <Button
-            styleType="text"
-            onClick={() =>
-              history.push(
-                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/add-period`,
-              )
-            }>
-            Add academic periods to level
-          </Button>
-        )}
         <EnrollInstructorToLevel />
         <EnrollStudent />
-        <Button
-          styleType="outline"
-          onClick={() =>
-            history.push(
-              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-class`,
-            )
-          }>
-          View classes
-        </Button>
-        <Button
-          styleType="outline"
-          onClick={() =>
-            history.push(
-              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/add-class`,
-            )
-          }>
-          Add class
-        </Button>
+        {prdLoading ? (
+          <></>
+        ) : (
+          <Button
+            styleType="outline"
+            onClick={() =>
+              history.push(
+                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${periods?.data.data[0].id}`,
+              )
+            }>
+            View periods
+          </Button>
+        )}
       </TableHeader>
       <section className="mt-4 flex flex-wrap justify-start gap-4">
         {isLoading ? (
@@ -111,7 +96,6 @@ function IntakeLevelModule() {
         )}
       </section>
     </>
-    // </Tab>
   );
 }
 

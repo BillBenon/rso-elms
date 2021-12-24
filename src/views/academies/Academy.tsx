@@ -8,8 +8,10 @@ import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import AssignAdminToAcademy from '../../components/Organisms/forms/academy/AssignAdminToAcademy';
 import NewAcademy from '../../components/Organisms/forms/academy/NewAcademy';
 import UpdateAcademy from '../../components/Organisms/forms/academy/UpdateAcademy';
 import { authenticatorStore } from '../../store/administration';
@@ -68,7 +70,13 @@ export default function Academy() {
         history.push(`${path}/${id}/edit`); // go to edit academy
       },
     },
-    { name: 'View', handleAction: () => {} },
+    {
+      name: 'Assign incharge',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`${path}/${id}/assign`); // go to assign admin
+      },
+    },
+    { name: 'View Users', handleAction: () => {} },
   ];
 
   return (
@@ -125,6 +133,21 @@ export default function Academy() {
 
         {/* modify academy */}
         <Route exact path={`${path}/:id/edit`} render={() => <UpdateAcademy />} />
+
+        {/* assign admin to academy */}
+        <Route
+          exact
+          path={`${path}/:id/assign`}
+          render={() => (
+            <PopupMolecule
+              closeOnClickOutSide={false}
+              title="Assign incharge of academy"
+              open
+              onClose={history.goBack}>
+              <AssignAdminToAcademy />
+            </PopupMolecule>
+          )}
+        />
       </Switch>
     </>
   );

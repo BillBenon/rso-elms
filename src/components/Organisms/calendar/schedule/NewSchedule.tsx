@@ -1,28 +1,28 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
-import { queryClient } from '../../../../plugins/react-query';
 
+import { queryClient } from '../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../store/administration';
 import { classStore } from '../../../../store/administration/class.store';
-import intakeProgramStore from '../../../../store/administration/intake-program.store';
 import {
   getIntakesByAcademy,
   getProgramsByIntake,
 } from '../../../../store/administration/intake.store';
+import { getAllEvents } from '../../../../store/timetable/event.store';
+import { getAllVenues } from '../../../../store/timetable/venue.store';
+import intakeProgramStore from '../../../../store/administration/intake-program.store';
 import programStore from '../../../../store/administration/program.store';
 import usersStore from '../../../../store/administration/users.store';
-import { getAllEvents } from '../../../../store/timetable/event.store';
 import { scheduleStore } from '../../../../store/timetable/calendar.store';
-import { getAllVenues } from '../../../../store/timetable/venue.store';
 import { ParamType, SelectData, ValueType } from '../../../../types';
 import {
   CreateEventSchedule,
+  createRecurringSchedule,
+  daysOfWeek,
   frequencyType,
   methodOfInstruction,
-  daysOfWeek,
   scheduleAppliesTo,
-  createRecurringSchedule,
 } from '../../../../types/services/schedule.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
@@ -105,7 +105,7 @@ export default function NewSchedule() {
         width="w-32"
         isVertical={false}
         isInline={false}
-        navigateToStepHandler={() => console.log('submitted')}>
+        navigateToStepHandler={() => {}}>
         <FirstStep
           values={values}
           handleChange={handleChange}

@@ -1,6 +1,7 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
+
 import { queryClient } from '../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../store/administration';
 import { classStore } from '../../../../store/administration/class.store';
@@ -95,7 +96,7 @@ export default function EditTimeTable() {
       width="w-64"
       isVertical={false}
       isInline={false}
-      navigateToStepHandler={() => console.log('submitted')}>
+      navigateToStepHandler={() => {}}>
       <FirstStep
         values={values}
         handleChange={handleChange}

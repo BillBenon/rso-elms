@@ -2,13 +2,13 @@
 import { Table } from '..';
 import { IAcademicPeriodInfo } from './academicperiod.types';
 import { IAcademicYearInfo } from './academicyears.types';
-import { EnrollmentMode, EnrollmentStatus } from './enrollment.types';
+import { EnrollmentMode, EnrollmentStatus, StudentApproval } from './enrollment.types';
+import { Instructor } from './instructor.types';
 import { IntakeInfo, IntakeProgram, IntakeStatus } from './intake.types';
 import { ProgramLevel } from './levels.types';
 import { ModuleInfo } from './modules.types';
 import { AcademicProgramLevel, ProgramInfo } from './program.types';
 import { Student, UserInfo } from './user.types';
-import { Incharge } from './user.types';
 
 export interface IntakeProgParam {
   id: string;
@@ -17,6 +17,10 @@ export interface IntakeProgParam {
 }
 export interface IntakeLevelParam extends IntakeProgParam {
   level: string;
+}
+
+export interface IntakePeriodParam extends IntakeLevelParam {
+  period: string;
 }
 
 export interface IntakeProgramInfo extends Table {
@@ -51,7 +55,7 @@ export interface LevelIntakeProgram extends Table {
   academic_year: IAcademicYearInfo;
   intake_program: IntakeProgramInfo;
   academic_program_level: ProgramLevel;
-  incharge: Incharge;
+  incharge: Instructor;
   planed_start_on: string;
   planed_end_on: string;
   actual_start_on: string;
@@ -64,8 +68,8 @@ export interface LevelIntakeProgram extends Table {
 }
 
 export interface IntakeLevelModule extends Table, AddLevelToModule {
-  academic_year_program_intake_level: AcademicProgramLevel;
-  incharge: Incharge;
+  // academic_year_program_intake_level: AcademicProgramLevel;
+  incharge: Instructor;
   module: ModuleInfo;
 }
 
@@ -80,6 +84,19 @@ export interface CreateLevelIntakeProgram {
   planed_end_on: string;
   planed_start_on: string;
   progress_status: ProgressStatus;
+}
+
+export interface AddSubjectPeriod {
+  actualEndOn: string;
+  actualStartOn: string;
+  inchargeId: string;
+  intakeAcademicYearPeriodId: number;
+  intakeProgramModuleLevelId: number;
+  marks: number;
+  plannedEndOn: string;
+  plannedStartOn: string;
+  satus: IntakeModuleStatus;
+  subjectId: string;
 }
 
 export interface AddLevelToModule {
@@ -98,19 +115,10 @@ export interface AddLevelToModule {
   weight: number;
 }
 
-export interface StudentIntakeProgramLevel extends Table {
-  intake_program_student: StudentIntakeProgram;
-  academic_year_program_level: LevelIntakeProgram;
-  enrolment_status: EnrollmentStatus;
-  promotion_status: PromotionStatus;
-  position: number;
-  intake_program_student_id: number;
-  academic_year_program_level_id: number;
-}
 export interface StudentIntakeProgram extends Table {
   student: Student;
   intake_program: IntakeProgram;
-  enrolment_status: EnrollmentStatus;
+  enrolment_status: StudentApproval;
   enrolment_mode: string;
   rank: string;
   rank_institution: string;

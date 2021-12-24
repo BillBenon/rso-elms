@@ -1,6 +1,7 @@
 import React from 'react';
 import { useParams } from 'react-router';
 
+import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
@@ -10,11 +11,13 @@ import ProfileOverview from './profile/ProfileOverview';
 
 export default function UserDetails() {
   const { id } = useParams<ParamType>();
-  const { data: user } = usersStore.getUserById(id);
+  const { data: user, isLoading } = usersStore.getUserById(id);
 
   return (
     <>
-      {user?.data.data ? (
+      {isLoading ? (
+        <Loader />
+      ) : user?.data.data ? (
         <>
           <Heading className="py-3" fontWeight="bold" fontSize="2xl">
             {user?.data.data.first_name + ' ' + user?.data.data.last_name} Profile
@@ -47,6 +50,7 @@ export default function UserDetails() {
         </>
       ) : (
         <NoDataAvailable
+          showButton={false}
           icon="user"
           title={'User not available'}
           description={'Sorry this user is currently not available in the system'}

@@ -15,15 +15,15 @@ function EnrollInstructorToLevel() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { id, intakeId, level: levelId } = useParams<IntakeLevelParam>();
 
-  const instructorsInProgram =
-    intakeProgramStore.getInstructorsByIntakeProgram(id, intakeId).data?.data.data || [];
+  const { data: instructorsInProgram, isLoading } =
+    intakeProgramStore.getInstructorsByIntakeProgram(id, intakeId);
 
   const level = intakeProgramStore.getIntakeLevelById(levelId).data?.data.data;
 
   const [instructors, setInstructors] = useState<UserView[]>([]);
   useEffect(() => {
     let instructorsView: UserView[] = [];
-    instructorsInProgram?.forEach((inst) => {
+    instructorsInProgram?.data.data.forEach((inst) => {
       let instructorView: UserView = {
         id: inst.id,
         first_name: inst.instructor.user.first_name,
@@ -74,6 +74,7 @@ function EnrollInstructorToLevel() {
           },
         ]}
         dataLabel={'Instructors in this program'}
+        isLoading={isLoading}
       />
     </div>
   );
