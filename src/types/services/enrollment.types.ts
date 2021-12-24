@@ -42,7 +42,7 @@ export interface EnrollStudentToLevel {
   promotion_status: PromotionStatus;
 }
 
-export interface StudentLevel extends Table, EnrollInstructorLevel {
+export interface StudentLevel extends Table, EnrollStudentToLevel {
   academic_year_program_level: LevelIntakeProgram;
   intake_program_student: StudentIntakeProgram;
 }
