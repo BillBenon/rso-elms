@@ -10,15 +10,15 @@ import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
 import { authenticatorStore } from '../../store/administration';
-import { divisionStore } from '../../store/administration/divisions.store';
+// import { divisionStore } from '../../store/administration/divisions.store';
 import programStore from '../../store/administration/program.store';
 import usersStore from '../../store/administration/users.store';
 import { Link as LinkList } from '../../types';
 import { CommonFormProps, ParamType, ValueType } from '../../types';
 import {
-  CreateProgramInfo,
   ProgramStatus,
   ProgramType,
+  UpdateProgramInfo,
 } from '../../types/services/program.types';
 import { UserType } from '../../types/services/user.types';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
@@ -39,10 +39,11 @@ export default function UpdateAcademicProgram<E>({
 
   const { data } = programStore.getProgramById(id);
 
-  const departments = divisionStore.getDivisionByType('DEPARTMENT').data?.data.data;
+  // const departments = divisionStore.getDivisionByType('DEPARTMENT').data?.data.data;
 
-  const [details, setDetails] = useState<CreateProgramInfo>({
+  const [details, setDetails] = useState<UpdateProgramInfo>({
     code: '',
+    id: '',
     in_charge_id: '',
     department_id: '',
     description: '',
@@ -54,6 +55,13 @@ export default function UpdateAcademicProgram<E>({
 
   useEffect(() => {
     data?.data.data && setDetails({ ...data?.data.data });
+    data?.data.data &&
+      setDetails({
+        ...details,
+        department_id: data?.data.data.department.id.toString(),
+        id: data?.data.data.id,
+      });
+    console.log(details);
   }, [data]);
 
   function handleChange(e: ValueType) {
@@ -142,14 +150,14 @@ export default function UpdateAcademicProgram<E>({
             handleChange={(e: ValueType) => handleChange(e)}>
             Incharge
           </DropdownMolecule>
-          <DropdownMolecule
+          {/* <DropdownMolecule
             width="64"
             placeholder="Select department"
             options={getDropDownOptions({ inputs: departments || [] })}
             name="department_id"
             handleChange={(e: ValueType) => handleChange(e)}>
             Department
-          </DropdownMolecule>
+          </DropdownMolecule> */}
           <RadioMolecule
             value={details.status}
             name="status"
