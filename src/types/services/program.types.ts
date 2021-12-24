@@ -13,7 +13,7 @@ export interface ProgramInfo extends CreateProgramInfo, Table {
 
 export interface CreateProgramInfo {
   code: string;
-  current_admin_id: string;
+  inChargeId: string;
   department_id: string;
   description: string;
   name: string;
