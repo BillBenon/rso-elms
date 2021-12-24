@@ -69,6 +69,7 @@ export default function Academy() {
       },
     },
     { name: 'View', handleAction: () => {} },
+    { name: 'View Users', handleAction: () => {} },
   ];
 
   return (

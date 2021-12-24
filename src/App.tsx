@@ -31,9 +31,8 @@ const App = () => {
             <Route exact path="/complete-profile/other" component={OtherDetails} />
             <Route exact path="/new-institution" component={NewInstitution} />
             <Route path="/login" component={Signin} />
-            <Redirect exact from="/" to="/login" />
-            <RouterProtection />
-            <Route path="*" component={NotFound} />
+            <Route path="/dashboard" component={RouterProtection} />
+            <Route component={NotFound} />
           </Switch>
         </Router>
       </MainLayout>
