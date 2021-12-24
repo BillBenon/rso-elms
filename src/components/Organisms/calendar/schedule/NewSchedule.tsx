@@ -10,12 +10,11 @@ import {
   getIntakesByAcademy,
   getProgramsByIntake,
 } from '../../../../store/administration/intake.store';
-import { levelStore } from '../../../../store/administration/level.store';
 import programStore from '../../../../store/administration/program.store';
 import usersStore from '../../../../store/administration/users.store';
-import { eventStore } from '../../../../store/timetable/event.store';
+import { getAllEvents } from '../../../../store/timetable/event.store';
 import { scheduleStore } from '../../../../store/timetable/calendar.store';
-import { venueStore } from '../../../../store/timetable/venue.store';
+import { getAllVenues } from '../../../../store/timetable/venue.store';
 import { ParamType, SelectData, ValueType } from '../../../../types';
 import {
   CreateEventSchedule,
@@ -130,9 +129,10 @@ export default function NewSchedule() {
 }
 
 function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
-  const events = eventStore.getAllEvents().data?.data.data;
-  const venues = venueStore.getAllVenues().data?.data.data;
   const authUser = authenticatorStore.authUser().data?.data.data;
+
+  const events = getAllEvents(authUser?.academy.id + '').data?.data.data;
+  const venues = getAllVenues(authUser?.academy.id + '').data?.data.data;
 
   const users = usersStore.getUsersByAcademy(authUser?.academy.id + '').data?.data.data;
   const handleSubmit = (e: FormEvent) => {
