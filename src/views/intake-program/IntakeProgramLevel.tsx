@@ -7,10 +7,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
-import Classes from '../classes/Classes';
 import LevelPeriod from '../classes/LevelPeriod';
-import NewClass from '../classes/NewClass';
-import AddSubjectToPeriod from '../subjects/AddSubjectToPeriod';
 import EnrollStudent from './EnrollStudent';
 import IntakeLevelModule from './IntakeLevelModule';
 import { NewIntakePeriod } from './NewIntakePeriod';
@@ -58,23 +55,11 @@ function IntakeProgramLevel() {
               render={() => <EnrollStudent />}
             />
             {/* add module to intake program level */}
-            <Route path={`${path}/:level/view-period`} render={() => <LevelPeriod />} />
-            {/* add module to intake program level */}
-            <Route path={`${path}/:level/view-class`} render={() => <Classes />} />
-            {/* add classes to intake program level */}
             <Route
-              exact
-              path={`${path}/:level/add-class`}
-              render={() => (
-                <PopupMolecule
-                  title="New Class"
-                  closeOnClickOutSide={false}
-                  open
-                  onClose={history.goBack}>
-                  <NewClass />
-                </PopupMolecule>
-              )}
+              path={`${path}/:level/view-period/:period`}
+              render={() => <LevelPeriod />}
             />
+
             {/* add periods to intake level */}
             <Route
               exact
@@ -86,20 +71,6 @@ function IntakeProgramLevel() {
                   open
                   onClose={history.goBack}>
                   <NewIntakePeriod checked={0} />
-                </PopupMolecule>
-              )}
-            />
-            {/* add subject to period */}
-            <Route
-              exact
-              path={`${path}/:level/add-subject/:period`}
-              render={() => (
-                <PopupMolecule
-                  title="Add subject to period"
-                  closeOnClickOutSide={false}
-                  open
-                  onClose={history.goBack}>
-                  <AddSubjectToPeriod />
                 </PopupMolecule>
               )}
             />

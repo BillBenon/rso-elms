@@ -7,14 +7,14 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { CommonCardDataType } from '../../types';
-import { IntakeLevelParam } from '../../types/services/intake-program.types';
+import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 
-function SubjectPeriod({ periodId }: { periodId: string }) {
-  const { data: subjects, isLoading } = intakeProgramStore.getPeriodSubjects(periodId);
+function SubjectPeriod() {
+  const { intakeId, id, intakeProg, level, period } = useParams<IntakePeriodParam>();
+  const { data: subjects, isLoading } = intakeProgramStore.getPeriodSubjects(period);
   const [subj, setsubj] = useState<CommonCardDataType[]>();
   const history = useHistory();
-  const { intakeId, id, intakeProg, level } = useParams<IntakeLevelParam>();
 
   useEffect(() => {
     if (subjects?.data.data) {
@@ -48,7 +48,7 @@ function SubjectPeriod({ periodId }: { periodId: string }) {
           title={'No subjects available in this period'}
           handleClick={() =>
             history.push(
-              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/add-subject/${periodId}`,
+              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${period}/add-subject`,
             )
           }
           description="There are no subjects assigned to this period, click on the below button to add them!"
@@ -59,7 +59,7 @@ function SubjectPeriod({ periodId }: { periodId: string }) {
             title={'Add new subject'}
             onClick={() =>
               history.push(
-                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/add-subject/${periodId}`,
+                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${period}/add-subject`,
               )
             }
           />

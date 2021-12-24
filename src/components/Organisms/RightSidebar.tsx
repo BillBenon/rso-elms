@@ -128,8 +128,8 @@ function RightSidebar({
             showButton={false}
           />
         ) : (
-          data.map((user) => (
-            <div className="flex w-full items-center pb-6 gap-4" key={user.id}>
+          data.map((user, i) => (
+            <div className="flex w-full items-center pb-6 gap-4" key={i}>
               <Checkbox
                 checked={user.selected}
                 handleChange={_handleSelect}

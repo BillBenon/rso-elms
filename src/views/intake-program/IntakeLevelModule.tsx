@@ -40,20 +40,29 @@ function IntakeLevelModule() {
 
     setlevelModules(newModule);
   }, [levelModuleStore?.data.data]);
+
+  const { data: periods, isLoading: prdLoading } = intakeProgramStore.getPeriodsByLevel(
+    parseInt(level),
+  );
+
   return (
     <>
       <TableHeader usePadding={false} showBadge={false} showSearch={false}>
         <EnrollInstructorToLevel />
         <EnrollStudent />
-        <Button
-          styleType="outline"
-          onClick={() =>
-            history.push(
-              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period`,
-            )
-          }>
-          View periods
-        </Button>
+        {prdLoading ? (
+          <></>
+        ) : (
+          <Button
+            styleType="outline"
+            onClick={() =>
+              history.push(
+                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${periods?.data.data[0].id}`,
+              )
+            }>
+            View periods
+          </Button>
+        )}
       </TableHeader>
       <section className="mt-4 flex flex-wrap justify-start gap-4">
         {isLoading ? (
@@ -87,7 +96,6 @@ function IntakeLevelModule() {
         )}
       </section>
     </>
-    // </Tab>
   );
 }
 

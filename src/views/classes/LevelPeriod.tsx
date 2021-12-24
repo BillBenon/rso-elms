@@ -2,87 +2,116 @@ import React from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
+import PopupMolecule from '../../components/Molecules/Popup';
+import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import intakeProgramStore from '../../store/administration/intake-program.store';
-import { IntakeLevelParam } from '../../types/services/intake-program.types';
+import { IntakePeriodParam } from '../../types/services/intake-program.types';
+import AddSubjectToPeriod from '../subjects/AddSubjectToPeriod';
 import SubjectPeriod from '../subjects/SubjectPeriod';
+import Classes from './Classes';
+import NewClass from './NewClass';
 
 function LevelPeriod() {
-  const { level, intakeId, intakeProg, id } = useParams<IntakeLevelParam>();
-  const prds = intakeProgramStore.getPeriodsByLevel(parseInt(level)).data?.data.data;
+  const { level, intakeId, intakeProg, id, period } = useParams<IntakePeriodParam>();
+  const { data: periods, isLoading } = intakeProgramStore.getPeriodsByLevel(
+    parseInt(level),
+  );
   const history = useHistory();
   const { path } = useRouteMatch();
 
+  const prds = periods?.data.data || [];
+
+  const tabs = prds.map((prd) => ({
+    label: `${prd.academic_period.name}`,
+    href: `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${prd.id}`,
+  }));
+
   return (
-    <Switch>
-      <Route
-        exact
-        path={`${path}`}
-        render={() => {
-          return (
-            <>
-              {prds ? (
-                prds.length === 0 ? (
-                  <NoDataAvailable
-                    buttonLabel="Add new period"
-                    icon="academy"
-                    fill={false}
-                    title={'No periods available in this level'}
-                    handleClick={() =>
-                      history.push(
-                        `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/add-period`,
-                      )
-                    }
-                    description="There are no periods assigned to this level, click on the below button to add them!"
-                  />
-                ) : (
-                  <Tabs
-                    headerComponent={
-                      <div className="space-x-4">
-                        <Button
-                          styleType="outline"
-                          onClick={() =>
-                            history.push(
-                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-class`,
-                            )
-                          }>
-                          View classes
-                        </Button>
-                        {prds.length !== 0 ? (
-                          <Button
-                            styleType="outline"
-                            onClick={() =>
-                              history.push(
-                                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/add-class`,
-                              )
-                            }>
-                            Add class
-                          </Button>
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                    }>
-                    {prds.map((term) => (
-                      <Tab key={term.id} label={term.academic_period.name}>
-                        <Heading fontWeight="semibold" className="py-2">
-                          Subjects
-                        </Heading>
-                        <SubjectPeriod periodId={term.id + ''} />
-                      </Tab>
-                    ))}
-                  </Tabs>
-                )
-              ) : (
-                <></>
+    <>
+      {isLoading ? (
+        <Loader />
+      ) : prds.length === 0 ? (
+        <NoDataAvailable
+          buttonLabel="Add new period"
+          icon="academy"
+          fill={false}
+          title={'No periods available in this level'}
+          handleClick={() =>
+            history.push(
+              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/add-period`,
+            )
+          }
+          description="There are no periods assigned to this level, click on the below button to add them!"
+        />
+      ) : (
+        <TabNavigation tabs={tabs}>
+          <Switch>
+            <Route
+              exact
+              path={`${path}`}
+              render={() => {
+                return (
+                  <>
+                    <div className="flex justify-between space-x-4">
+                      <Heading fontWeight="semibold" fontSize="xl" className="py-2">
+                        Subjects
+                      </Heading>
+                      <Button
+                        styleType="outline"
+                        onClick={() =>
+                          history.push(
+                            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${period}/view-class`,
+                          )
+                        }>
+                        View classes
+                      </Button>
+                    </div>
+                    <SubjectPeriod />
+                  </>
+                );
+              }}
+            />
+
+            {/* add classes to intake program period */}
+            <Route path={`${path}/view-class`} render={() => <Classes />} />
+            {/* add classes to intake program level */}
+            <Route
+              exact
+              path={`${path}/add-class`}
+              render={() => (
+                <PopupMolecule
+                  title="New Class"
+                  closeOnClickOutSide={false}
+                  open
+                  onClose={history.goBack}>
+                  <NewClass />
+                </PopupMolecule>
               )}
-            </>
-          );
-        }}
-      />
-    </Switch>
+            />
+            {/* add subject to period */}
+            <Route
+              exact
+              path={`${path}/add-subject`}
+              render={() => (
+                <PopupMolecule
+                  title="Add subject to period"
+                  closeOnClickOutSide={false}
+                  open
+                  onClose={history.goBack}>
+                  <AddSubjectToPeriod />
+                </PopupMolecule>
+              )}
+            />
+          </Switch>
+          {/* </Tab>
+            ))}
+          </Tabs> */}
+        </TabNavigation>
+      )}
+    </>
   );
 }
 
