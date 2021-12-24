@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
+import SwitchMolecule from '../../components/Molecules/input/SwitchMolecule';
 import { queryClient } from '../../plugins/react-query';
 import { authenticatorStore } from '../../store/administration';
 import { levelStore } from '../../store/administration/level.store';
@@ -35,6 +36,7 @@ export default function AddLevelToProgram() {
 
   const [levelFlows, setLevelFlows] = useState<CreateAcademicProgramLevel>({
     endg_flow: 0,
+    useSingleLevel: false,
     program_id: progId,
     starting_flow: 0,
   });
@@ -55,14 +57,14 @@ export default function AddLevelToProgram() {
     }));
   }
 
-  // useEffect(() => {
-  //   let newLevelFlow =
-  //     levels?.filter(
-  //       (flow) =>
-  //         flow.flow > levelFlows.starting_flow && flow.flow !== levelFlows.starting_flow,
-  //     ) || [];
-  //   setFilteredLevelFlows(newLevelFlow);
-  // }, [levelFlows.starting_flow]);
+  useEffect(() => {
+    if (levelFlows.useSingleLevel) {
+      setLevelFlows((flows) => ({
+        ...flows,
+        ['endg_flow']: levelFlows.starting_flow,
+      }));
+    }
+  }, [levelFlows.useSingleLevel, levelFlows.starting_flow]);
 
   function addLevelToProg<T>(e: FormEvent<T>) {
     e.preventDefault();
@@ -90,16 +92,32 @@ export default function AddLevelToProgram() {
           Start level
         </DropdownMolecule>
 
-        <DropdownMolecule
-          placeholder="Ending flow"
-          options={getDropDownOptions({
-            inputs: levels || [],
-            value: 'flow',
-          })}
-          name="endg_flow"
-          handleChange={handleChange}>
-          End level
-        </DropdownMolecule>
+        <div className="pb-4">
+          <SwitchMolecule
+            loading={false}
+            name="useSingleLevel"
+            value={levelFlows.useSingleLevel}
+            handleChange={handleChange}>
+            Use a single level
+          </SwitchMolecule>
+        </div>
+
+        {!levelFlows.useSingleLevel && (
+          <DropdownMolecule
+            placeholder="Ending flow"
+            options={getDropDownOptions({
+              inputs: levels || [],
+              value: 'flow',
+            })}
+            defaultValue={getDropDownOptions({
+              inputs: levels || [],
+              value: 'flow',
+            }).find((level) => level.value == levelFlows.endg_flow + '')}
+            name="endg_flow"
+            handleChange={handleChange}>
+            End level
+          </DropdownMolecule>
+        )}
       </>
       <div className="mt-5">
         <Button type="submit">Save</Button>

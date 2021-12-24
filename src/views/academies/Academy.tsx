@@ -72,13 +72,13 @@ export default function Academy() {
         history.push(`${path}/${id}/edit`); // go to edit academy
       },
     },
-    { name: 'View', handleAction: () => {} },
     {
       name: 'Assign incharge',
       handleAction: (id: string | number | undefined) => {
         history.push(`${path}/${id}/assign`); // go to assign admin
       },
     },
+    { name: 'View Users', handleAction: () => {} },
   ];
 
   return (
@@ -92,33 +92,19 @@ export default function Academy() {
               <section>
                 <BreadCrumb list={list}></BreadCrumb>
               </section>
+              <div className="py-4">
+                <TableHeader
+                  title="Academy"
+                  totalItems={academies.length}
+                  handleSearch={handleSearch}>
+                  <Link to={`${url}/add`}>
+                    <Button>New academy</Button>
+                  </Link>
+                </TableHeader>
+              </div>
+
               {isLoading ? (
                 <Loader />
-              ) : academies.length > 0 && isSuccess ? (
-                <>
-                  <div className="py-4">
-                    <TableHeader
-                      title="Academy"
-                      totalItems={academies.length}
-                      handleSearch={handleSearch}>
-                      <Link to={`${url}/add`}>
-                        <Button>New academy</Button>
-                      </Link>
-                    </TableHeader>
-                  </div>
-
-                  <div className="mt-14">
-                    {academyInfo && (
-                      <Table<AcademyTypes>
-                        statusColumn="status"
-                        data={academies}
-                        actions={academyActions}
-                        hide={['id']}
-                        uniqueCol="id"
-                      />
-                    )}
-                  </div>
-                </>
               ) : academies.length === 0 ? (
                 <NoDataAvailable
                   icon="academy"
@@ -128,7 +114,19 @@ export default function Academy() {
                   handleClick={() => history.push(`${url}/add`)}
                   description="the academies are not yet created, click below to create new ones"
                 />
-              ) : null}
+              ) : (
+                <div className="mt-14">
+                  {academyInfo && (
+                    <Table<AcademyTypes>
+                      statusColumn="status"
+                      data={academies}
+                      actions={academyActions}
+                      hide={['id']}
+                      uniqueCol="id"
+                    />
+                  )}
+                </div>
+              )}
             </>
           )}
         />

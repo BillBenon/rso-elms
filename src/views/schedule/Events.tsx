@@ -7,10 +7,14 @@ import Heading from '../../components/Atoms/Text/Heading';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewEvent from '../../components/Organisms/calendar/NewEvent';
-import { eventStore } from '../../store/timetable/event.store';
+import { authenticatorStore } from '../../store/administration';
+import { getAllEvents } from '../../store/timetable/event.store';
 
 export default function Events() {
-  const events = eventStore.getAllEvents().data?.data.data;
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
+  const events = getAllEvents(authUser?.academy.id + '').data?.data.data;
+
   const history = useHistory();
   const { path } = useRouteMatch();
 

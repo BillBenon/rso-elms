@@ -100,35 +100,47 @@ export default function ImportUsers({ userType }: IProps) {
           handleChange={handleChange}>
           Academy
         </DropdownMolecule>
-        <DropdownMolecule
-          options={
-            intakes?.map((intk) => ({ value: intk.id, label: intk.code })) as SelectData[]
-          }
-          name="intake"
-          handleChange={handleChange}>
-          Intake
-        </DropdownMolecule>
-        <DropdownMolecule
-          options={
-            programs.map((p) => ({ value: p.id, label: p.program.name })) as SelectData[]
-          }
-          name="intakeProgramId"
-          placeholder={'Program'}
-          handleChange={handleChange}>
-          Program
-        </DropdownMolecule>
-        <DropdownMolecule
-          options={
-            levels.map((lv) => ({
-              value: lv.academic_program_level.id,
-              label: lv.academic_program_level.level.name,
-            })) as SelectData[]
-          }
-          name="academicProgramLevelId"
-          placeholder={'Program'}
-          handleChange={handleChange}>
-          Level
-        </DropdownMolecule>
+        {userType === UserType.STUDENT ? (
+          <div>
+            <DropdownMolecule
+              options={
+                intakes?.map((intk) => ({
+                  value: intk.id,
+                  label: intk.code,
+                })) as SelectData[]
+              }
+              name="intake"
+              handleChange={handleChange}>
+              Intake
+            </DropdownMolecule>
+            <DropdownMolecule
+              options={
+                programs.map((p) => ({
+                  value: p.id,
+                  label: p.program.name,
+                })) as SelectData[]
+              }
+              name="intakeProgramId"
+              placeholder={'Program'}
+              handleChange={handleChange}>
+              Program
+            </DropdownMolecule>
+            <DropdownMolecule
+              options={
+                levels.map((lv) => ({
+                  value: lv.academic_program_level.id,
+                  label: lv.academic_program_level.level.name,
+                })) as SelectData[]
+              }
+              name="academicProgramLevelId"
+              placeholder={'Program'}
+              handleChange={handleChange}>
+              Level
+            </DropdownMolecule>
+          </div>
+        ) : (
+          <></>
+        )}
         <div className="py-2">
           <FileUploader
             allowPreview={false}
