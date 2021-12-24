@@ -8,7 +8,7 @@ import { classStore } from '../../../../store/administration/class.store';
 import { moduleStore } from '../../../../store/administration/modules.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { timetableStore } from '../../../../store/timetable/timetable.store';
-import { venueStore } from '../../../../store/timetable/venue.store';
+import { getAllVenues } from '../../../../store/timetable/venue.store';
 import { ParamType, SelectData, ValueType } from '../../../../types';
 import { IClass } from '../../../../types/services/class.types';
 import {
@@ -171,7 +171,9 @@ function FirstStep({ handleChange, setCurrentStep, classInfo }: IStepProps) {
 }
 
 function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: IStepProps) {
-  const venues = venueStore.getAllVenues().data?.data.data;
+  const authUser = authenticatorStore.authUser().data?.data.data;
+  const venues = getAllVenues(authUser?.academy.id + '').data?.data.data;
+
   return (
     <form onSubmit={handleSubmit} className="max-w-sm -mb-6">
       <div className="pb-1">
