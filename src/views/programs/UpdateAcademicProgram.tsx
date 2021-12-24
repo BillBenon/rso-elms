@@ -8,6 +8,7 @@ import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule'
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
+import { authenticatorStore } from '../../store/administration';
 import { divisionStore } from '../../store/administration/divisions.store';
 import programStore from '../../store/administration/program.store';
 import usersStore from '../../store/administration/users.store';
@@ -27,7 +28,9 @@ export default function UpdateAcademicProgram<E>({
   const history = useHistory();
   const { id } = useParams<ParamType>();
 
-  const users = usersStore.fetchUsers().data;
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
+  const users = usersStore.getUsersByAcademy(authUser?.academy.id || '').data;
   const instructors = users?.data.data.filter(
     (user) => user.user_type === UserType.INSTRUCTOR || user.user_type === UserType.ADMIN,
   );
