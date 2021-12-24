@@ -38,7 +38,11 @@ export default function UpdateAcademicProgram<E>({
 
   const [details, setDetails] = useState<CreateProgramInfo>({
     code: '',
+<<<<<<< HEAD
     inChargeId: '',
+=======
+    in_charge_id: '',
+>>>>>>> 20448ad67efc22160e543323eb4b494f360f80e9
     department_id: '',
     description: '',
     name: '',
@@ -121,7 +125,11 @@ export default function UpdateAcademicProgram<E>({
             inputs: instructors || [],
             labelName: ['first_name', 'last_name'],
           })}
+<<<<<<< HEAD
           name="inChargeId"
+=======
+          name="in_charge_id"
+>>>>>>> 20448ad67efc22160e543323eb4b494f360f80e9
           handleChange={(e: ValueType) => handleChange(e)}>
           Incharge
         </DropdownMolecule>
