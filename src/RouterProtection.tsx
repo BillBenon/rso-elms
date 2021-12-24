@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect, Route, useRouteMatch } from 'react-router-dom';
+
 import Button from './components/Atoms/custom/Button';
 import Loader from './components/Atoms/custom/Loader';
-
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import Dashboard from './layout/Dashboard';
 import { authenticatorStore } from './store/administration';
@@ -21,7 +21,8 @@ import Levels from './views/levels/Levels';
 import Modules from './views/modules';
 import InstrLevelModule from './views/modules/InstrLevelModule';
 import StudentModule from './views/modules/StudentModule';
-import NotFound from './views/NotFound';
+// import NotApproved from './views/NotApproved';
+// import NotFound from './views/NotFound';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicProgram from './views/programs/AcademicPrograms';
 import InstructorProgram from './views/programs/InstructorProgram';

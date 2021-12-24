@@ -24,7 +24,7 @@ function Levels() {
   const { data: userInfo } = authenticatorStore.authUser();
   const [levels, setLevels] = useState<FilteredLevels[]>();
 
-  const { data, isLoading } = levelStore.getLevelsByAcademy(
+  const { data, isLoading, isSuccess } = levelStore.getLevelsByAcademy(
     userInfo?.data.data.academy.id.toString() || '',
   ); // fetch levels
 
@@ -69,23 +69,26 @@ function Levels() {
 
       <section>
         {isLoading && <Loader />}
-
-        {levels && levels?.length > 0 ? (
-          <Table<FilteredLevels>
-            statusColumn="status"
-            data={levels}
-            uniqueCol={'id'}
-            hide={['id']}
-            actions={actions}
-          />
-        ) : (
-          <NoDataAvailable
-            icon="level"
-            buttonLabel="Add new level"
-            title={'No levels available'}
-            handleClick={() => history.push(`${url}/add`)}
-            description="No levels have been added yet."
-          />
+        {isSuccess && (
+          <>
+            {levels && levels?.length > 0 ? (
+              <Table<FilteredLevels>
+                statusColumn="status"
+                data={levels}
+                uniqueCol={'id'}
+                hide={['id']}
+                actions={actions}
+              />
+            ) : (
+              <NoDataAvailable
+                icon="level"
+                buttonLabel="Add new level"
+                title={'No levels available'}
+                handleClick={() => history.push(`${url}/add`)}
+                description="No levels have been added yet."
+              />
+            )}
+          </>
         )}
       </section>
 
