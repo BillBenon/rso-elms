@@ -20,9 +20,13 @@ export default function Users() {
   const { url, path } = useRouteMatch();
   const [userType, setUserType] = useState('Students');
 
-  const { data, isSuccess, isLoading } = usersStore.fetchUsers();
   const authUser = authenticatorStore.authUser().data?.data.data;
   const history = useHistory();
+
+  const { data, isSuccess, isLoading } =
+    authUser?.user_type === UserType.SUPER_ADMIN
+      ? usersStore.fetchUsers()
+      : usersStore.getUsersByAcademy(authUser?.academy.id || '');
 
   const userInfo = data?.data.data;
 

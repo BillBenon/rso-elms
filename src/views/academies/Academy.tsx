@@ -70,13 +70,13 @@ export default function Academy() {
         history.push(`${path}/${id}/edit`); // go to edit academy
       },
     },
-    { name: 'View', handleAction: () => {} },
     {
       name: 'Assign incharge',
       handleAction: (id: string | number | undefined) => {
         history.push(`${path}/${id}/assign`); // go to assign admin
       },
     },
+    { name: 'View Users', handleAction: () => {} },
   ];
 
   return (

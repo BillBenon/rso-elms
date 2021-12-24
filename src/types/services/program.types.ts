@@ -22,10 +22,22 @@ export interface CreateProgramInfo {
   status: ProgramStatus;
 }
 
+export interface UpdateProgramInfo {
+  code: string;
+  in_charge_id: string;
+  department_id: string;
+  description: string;
+  name: string;
+  id: string | number;
+  type: ProgramType;
+  status: ProgramStatus;
+}
+
 export interface CreateAcademicProgramLevel {
   endg_flow: number;
   level_id?: number;
   program_id: string;
+  useSingleLevel: false;
   starting_flow: number;
 }
 

@@ -35,7 +35,7 @@ export default function TableHeader({
     <div className={`pt-4 ${usePadding && 'pb-6'}`}>
       <div className="flex flex-wrap justify-between items-center">
         <div className="flex gap-2 items-center">
-          <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
+          <Heading fontSize="2xl" fontWeight="bold">
             {title}
           </Heading>
 

@@ -203,7 +203,7 @@ export default function AcademicProgram() {
                       buttonLabel="Add new program"
                       showButton={false}
                       title={'No program available'}
-                      handleClick={() => history.push(`/dashboard/programs/add`)}
+                      handleClick={() => history.push(`/dashboard/programs/add?dp=${dp}`)}
                       description="There are no programs added yet, click on the below button to add some!"
                     />
                   )}
