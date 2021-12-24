@@ -109,6 +109,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
       onSuccess(data) {
         toast.success(data.data.message);
         queryClient.invalidateQueries(['users/institution']);
+        queryClient.invalidateQueries(['users']);
         history.goBack();
       },
       onError(error: any) {
