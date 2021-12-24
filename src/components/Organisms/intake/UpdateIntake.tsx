@@ -114,7 +114,7 @@ export default function UpdateIntake(props: CProps) {
         width="w-64"
         isVertical={false}
         isInline={false}
-        navigateToStepHandler={() => console.log('submitted')}>
+        navigateToStepHandler={() => {}}>
         <IntakeInfoComponent
           display_label="info"
           values={values}

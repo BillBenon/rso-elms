@@ -102,11 +102,8 @@ export default function AcademicProgram() {
                   <TableHeader
                     totalItems={`${programs.length} programs`}
                     title="Programs"
-                    showSearch={false}>
-                    <Link to={`/dashboard/programs/add?dp=${dp}`}>
-                      <Button>Add New Program</Button>
-                    </Link>
-                  </TableHeader>
+                    showSearch={false}
+                  />
                 </section>
                 <section className="flex flex-wrap justify-start gap-2 mt-2">
                   {programs.length === 0 && isLoading ? (
@@ -204,6 +201,7 @@ export default function AcademicProgram() {
                   ) : (
                     <NoDataAvailable
                       buttonLabel="Add new program"
+                      showButton={false}
                       title={'No program available'}
                       handleClick={() => history.push(`/dashboard/programs/add?dp=${dp}`)}
                       description="There are no programs added yet, click on the below button to add some!"

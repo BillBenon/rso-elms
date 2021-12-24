@@ -3,10 +3,11 @@ import { AxiosResponse } from 'axios';
 import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
+  ApproveStudents,
   EnrollInstructorLevel,
   EnrollInstructorLevelInfo,
   EnrollInstructorProgram,
-  EnrollStudents,
+  EnrollStudentToLevel,
   EnrollStudentToProgram,
 } from '../../types/services/enrollment.types';
 import { Instructor } from '../../types/services/instructor.types';
@@ -14,6 +15,7 @@ import {
   LevelIntakeProgram,
   StudentIntakeProgram,
 } from '../../types/services/intake-program.types';
+import { Student } from '../../types/services/user.types';
 import { InstructorProgram } from './../../types/services/instructor.types';
 
 class EnrollmentService {
@@ -40,10 +42,19 @@ class EnrollmentService {
     );
   }
 
+  public async getStudentAcademy(
+    academyId: string,
+  ): Promise<AxiosResponse<Response<Student[]>>> {
+    return await adminstrationAxios.get(`students/getAccademyStudents/${academyId}`);
+  }
+
   public async enrollStudentsToLevel(
-    newStudent: EnrollStudents,
+    newStudent: EnrollStudentToLevel,
   ): Promise<AxiosResponse<Response<LevelIntakeProgram>>> {
-    return await adminstrationAxios.post(`students/enrollStudentInLevel`, newStudent);
+    return await adminstrationAxios.post(
+      `students/enrolStudentInIntakeProgramLevel`,
+      newStudent,
+    );
   }
 
   public async enrollStudentToProgram(
@@ -57,7 +68,7 @@ class EnrollmentService {
 
   public async enrollInstructorToProgram(
     instructor: EnrollInstructorProgram,
-  ): Promise<AxiosResponse<Response<Instructor>>> {
+  ): Promise<AxiosResponse<Response<InstructorProgram>>> {
     return await adminstrationAxios.post(
       'instructorEnrolment/enroleInProgram',
       instructor,
@@ -68,6 +79,15 @@ class EnrollmentService {
     instructor: EnrollInstructorLevel,
   ): Promise<AxiosResponse<Response<Instructor>>> {
     return await adminstrationAxios.post('instructorEnrolment/enroleInLevel', instructor);
+  }
+
+  public async approveStudent(
+    student: ApproveStudents,
+  ): Promise<AxiosResponse<Response<StudentIntakeProgram>>> {
+    return await adminstrationAxios.put(
+      'students/changeIntakeProgramStudentEnrolmentStatus',
+      student,
+    );
   }
 }
 

@@ -18,9 +18,9 @@ class ClassStore {
   getClassById(classId: string) {
     return useQuery(['class/id', classId], () => classService.getClassById(classId));
   }
-  getClassByLevel(levelId: string) {
-    return useQuery(['class/levelId', levelId], () =>
-      classService.getClassByLevel(levelId),
+  getClassByPeriod(periodId: string) {
+    return useQuery(['class/periodId', periodId], () =>
+      classService.getClassByPeriod(periodId),
     );
   }
   getStudentsByClass(classId: string) {

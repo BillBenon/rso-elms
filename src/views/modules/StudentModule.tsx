@@ -61,12 +61,7 @@ function StudentModule() {
           level={getLevels.data.data[0].academic_year_program_level.id.toString()}
         />
       ) : (
-        <NoDataAvailable
-          icon="level"
-          showButton={false}
-          title={'You are not allowed to study in any level.'}
-          description="Sorry, it looks like you currently haven't been promoted to study in any level at this academy. Please contact the admin for support."
-        />
+        <></>
       )}
     </>
   );

@@ -53,7 +53,7 @@ export default function EvaluationInfoComponent({
 
   const { data: subjects } = subjectStore.getSubjectsByModule(moduleId);
   const { data: levels } = enrollmentStore.getInstructorLevels(instructorInfo?.id + '');
-  const { data: classes } = classStore.getClassByLevel(levelId + '');
+  const { data: classes } = classStore.getClassByPeriod(levelId + '');
 
   const [details, setDetails] = useState<IEvaluationCreate>({
     access_type: evaluationInfo?.access_type || IAccessTypeEnum.PUBLIC,
