@@ -34,7 +34,7 @@ export default function UpdateAcademicProgram<E>({
 
   const { data } = programStore.getProgramById(id);
 
-  const departments = divisionStore.getDivisionByType('DEPARTMENT').data?.data.data;
+  const { data: departments, isLoading } = divisionStore.getDivisionByType('DEPARTMENT');
 
   const [details, setDetails] = useState<CreateProgramInfo>({
     code: '',
@@ -127,8 +127,8 @@ export default function UpdateAcademicProgram<E>({
         </DropdownMolecule>
         <DropdownMolecule
           width="64"
-          placeholder="Select department"
-          options={getDropDownOptions({ inputs: departments || [] })}
+          placeholder={isLoading ? 'Loading departments' : 'Select department'}
+          options={getDropDownOptions({ inputs: departments?.data.data || [] })}
           name="department_id"
           handleChange={(e: ValueType) => handleChange(e)}>
           Department
