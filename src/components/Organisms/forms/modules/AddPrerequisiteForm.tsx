@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { authenticatorStore } from '../../../../store/administration';
 import { moduleStore } from '../../../../store/administration/modules.store';
 import { GenericStatus, ValueType } from '../../../../types';
-import {
-  CreatePrerequisites,
-  ModuleInfo,
-} from '../../../../types/services/modules.types';
+import { CreatePrerequisites } from '../../../../types/services/modules.types';
 import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';

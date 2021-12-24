@@ -33,7 +33,7 @@ export default function Academy() {
   const history = useHistory();
 
   const authUser = authenticatorStore.authUser().data?.data.data;
-  const { data, isLoading, isSuccess } = academyStore.getAcademiesByInstitution(
+  const { data, isLoading } = academyStore.getAcademiesByInstitution(
     authUser?.institution_id || '',
   );
   const list: LinkList[] = [

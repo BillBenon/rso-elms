@@ -320,7 +320,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
               })}
               name="intake"
               placeholder={
-                intakes.isLoading ? 'Loading intakes..' : 'intake to be enrolled in'
+                intakes.isLoading ? 'Loading intakes..' : 'Intake to be enrolled in'
               }
               handleChange={otherhandleChange}>
               Intake
@@ -334,7 +334,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
               })}
               name="intake_program_id"
               placeholder={
-                programs.isLoading ? 'Loading programs..' : 'Program to be enrolled in'
+                programs.isLoading ? 'Loading programs..' : 'Programs to be enrolled in'
               }
               handleChange={handleChange}>
               Programs
