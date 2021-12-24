@@ -82,32 +82,19 @@ export default function Academy() {
               <section>
                 <BreadCrumb list={list}></BreadCrumb>
               </section>
-              {isLoading && academies.length === 0 && <Loader />}
-              {academies.length > 0 && isSuccess ? (
-                <>
-                  <div className="py-4">
-                    <TableHeader
-                      title="Academy"
-                      totalItems={academies.length}
-                      handleSearch={handleSearch}>
-                      <Link to={`${url}/add`}>
-                        <Button>New academy</Button>
-                      </Link>
-                    </TableHeader>
-                  </div>
+              <div className="py-4">
+                <TableHeader
+                  title="Academy"
+                  totalItems={academies.length}
+                  handleSearch={handleSearch}>
+                  <Link to={`${url}/add`}>
+                    <Button>New academy</Button>
+                  </Link>
+                </TableHeader>
+              </div>
 
-                  <div className="mt-14">
-                    {academyInfo && (
-                      <Table<AcademyTypes>
-                        statusColumn="status"
-                        data={academies}
-                        actions={academyActions}
-                        hide={['id']}
-                        uniqueCol="id"
-                      />
-                    )}
-                  </div>
-                </>
+              {isLoading ? (
+                <Loader />
               ) : academies.length === 0 ? (
                 <NoDataAvailable
                   icon="academy"
@@ -117,7 +104,19 @@ export default function Academy() {
                   handleClick={() => history.push(`${url}/add`)}
                   description="the academies are not yet created, click below to create new ones"
                 />
-              ) : null}
+              ) : (
+                <div className="mt-14">
+                  {academyInfo && (
+                    <Table<AcademyTypes>
+                      statusColumn="status"
+                      data={academies}
+                      actions={academyActions}
+                      hide={['id']}
+                      uniqueCol="id"
+                    />
+                  )}
+                </div>
+              )}
             </>
           )}
         />
