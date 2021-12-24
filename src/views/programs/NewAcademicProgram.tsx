@@ -66,9 +66,9 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
 
     if (onSubmit) onSubmit(e);
     await mutateAsync(details, {
-      onSuccess(newData) {
+      onSuccess(newProgram) {
         toast.success('Program created');
-        history.push(`/dashboard/programs/${newData.data.data.id}/level/add`);
+        history.push(`/dashboard/programs/${newProgram.data.data.id}/level/add`);
       },
       onError(error: any) {
         toast.error(error.response.data.message);

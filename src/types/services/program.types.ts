@@ -25,6 +25,7 @@ export interface CreateAcademicProgramLevel {
   endg_flow: number;
   level_id?: number;
   program_id: string;
+  useSingleLevel: false;
   starting_flow: number;
 }
 

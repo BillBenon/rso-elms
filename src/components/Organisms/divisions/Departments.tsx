@@ -117,14 +117,10 @@ export default function Departments({ fetchType }: IDepartment) {
                 <TableHeader
                   title={`${
                     facultyData?.data.data.name
-                      ? `${facultyData?.data.data.name} / Department`
-                      : 'department'
+                      ? `Departments in ${facultyData?.data.data.name}`
+                      : 'Department'
                   }`}
-                  totalItems={
-                    facultyData?.data.data.name
-                      ? `${departments?.length} departments`
-                      : departments?.length
-                  }
+                  totalItems={departments?.length}
                   handleSearch={() => {}}></TableHeader>
               </section>
             ) : null}

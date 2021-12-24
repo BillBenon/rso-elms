@@ -1,4 +1,3 @@
-import { values } from 'lodash';
 import React from 'react';
 
 import { commonInputProps, ValueType } from '../../../types';
