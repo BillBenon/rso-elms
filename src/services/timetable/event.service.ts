@@ -5,8 +5,10 @@ import { Response } from '../../types';
 import { CreateEvent, EventInfo } from '../../types/services/event.types';
 
 class EventService {
-  public async getAllEvents(): Promise<AxiosResponse<Response<EventInfo[]>>> {
-    return await timetableAxios.get('/events');
+  public async getAllEvents(
+    academyId: string,
+  ): Promise<AxiosResponse<Response<EventInfo[]>>> {
+    return await timetableAxios.get(`/events/academy/${academyId}`);
   }
 
   public async getEvent(id: string): Promise<AxiosResponse<Response<EventInfo>>> {
