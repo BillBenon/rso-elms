@@ -23,6 +23,7 @@ import ModuleMaterials from '../module-material/ModuleMaterials';
 
 export default function ModuleDetails() {
   const [subjects, setSubjects] = useState<CommonCardDataType[]>([]);
+  const [route, setCurrentPage] = useState('');
 
   const { id } = useParams<ParamType>();
   const { path, url } = useRouteMatch();
@@ -41,7 +42,6 @@ export default function ModuleDetails() {
       label: 'Materials',
       href: `${url}/materials`,
     },
-
     {
       label: 'Preriquisites',
       href: `${url}/prereqs`,
@@ -52,13 +52,15 @@ export default function ModuleDetails() {
     },
     {
       label: 'Evaluation',
-      href: `${url}/evaluation`,
+      href: `${url}/evaluations`,
     },
     {
       label: 'Performance',
-      href: `${url}/performance`,
+      href: `${url}/performances`,
     },
   ];
+
+  var lastUrl: string = location.href;
 
   useEffect(() => {
     if (subjectData.data?.data) {
@@ -79,7 +81,31 @@ export default function ModuleDetails() {
 
       setSubjects(loadedSubjects);
     }
+    new MutationObserver(() => {
+      const url = location.href;
+      if (url !== lastUrl) {
+        lastUrl = url;
+        console.log(lastUrl);
+        if (lastUrl.endsWith('subjects')) {
+          setCurrentPage('SUBJECTS');
+        } else if (lastUrl.endsWith('materials')) {
+          setCurrentPage('MATERIALS');
+        } else if (lastUrl.endsWith('prereqs')) {
+          setCurrentPage('PREREQS');
+        } else if (lastUrl.endsWith('syllabus')) {
+          setCurrentPage('SYLLABUS');
+        } else if (lastUrl.endsWith('evaluations')) {
+          setCurrentPage('EVALUATIONS');
+        } else {
+          setCurrentPage('');
+        }
+      }
+    }).observe(document, { subtree: true, childList: true });
   }, [subjectData.data]);
+
+  // function onUrlChange() {
+  //   alert('new-loc' + location.href);
+  // }
 
   function handleSearch() {}
   function handleClose() {
@@ -118,11 +144,43 @@ export default function ModuleDetails() {
             </div>
 
             {authUser?.user_type === UserType.ADMIN && (
-              <div className="flex gap-3">
-                <Button onClick={() => history.push(`${url}/add-subject`)}>
-                  Add new Subject
-                </Button>
-              </div>
+              <>
+                {route == 'SUBJECTS' ? (
+                  <div className="flex gap-3">
+                    <Button
+                      onClick={() => {
+                        history.push(`${url}/add-subject`);
+                      }}>
+                      Add new Subject
+                    </Button>
+                  </div>
+                ) : route == 'MATERIALS' ? (
+                  <div className="flex gap-3">
+                    <Button onClick={() => history.push(`${url}/add-material`)}>
+                      Add new Material
+                    </Button>
+                  </div>
+                ) : route == 'SYLLABUS' ? (
+                  <div className="flex gap-3">
+                    <Button onClick={() => history.push(`${url}/add-syllabus`)}>
+                      Add new Syllabus
+                    </Button>
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </>
+            )}
+            {authUser?.user_type === UserType.INSTRUCTOR && route == 'EVALUATIONS' ? (
+              <>
+                <div className="flex gap-3">
+                  <Button onClick={() => history.push(`/evaluation/new`)}>
+                    Add new Evaluation
+                  </Button>
+                </div>
+              </>
+            ) : (
+              <></>
             )}
           </div>
         </div>
