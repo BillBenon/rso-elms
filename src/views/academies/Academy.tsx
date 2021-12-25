@@ -78,7 +78,6 @@ export default function Academy() {
         history.push(`${path}/${id}/assign`); // go to assign admin
       },
     },
-    { name: 'View Users', handleAction: () => {} },
   ];
 
   return (
