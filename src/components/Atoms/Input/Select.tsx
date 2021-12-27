@@ -117,7 +117,7 @@ export default function Select({
             ))}
 
             {filtered.length === 0 && (
-              <p className="py-2 text-left px-4 text-base text-gray-500 font-medium capitalize">
+              <p className="py-2 text-left px-4 text-base text-gray-500 font-medium">
                 No options available
               </p>
             )}
