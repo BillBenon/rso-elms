@@ -209,7 +209,8 @@ export type IconType =
   | 'word'
   | 'png'
   | 'powerpoint'
-  | 'text-file';
+  | 'text-file'
+  | 'chevron-down';
 
 export interface FormPropType {
   onSubmit?: <E>(_e: FormEvent<E>) => void;
