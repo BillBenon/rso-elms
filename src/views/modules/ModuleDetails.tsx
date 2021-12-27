@@ -23,7 +23,7 @@ import ModuleMaterials from '../module-material/ModuleMaterials';
 
 export default function ModuleDetails() {
   const [subjects, setSubjects] = useState<CommonCardDataType[]>([]);
-  const [route, setCurrentPage] = useState('');
+  const [route, setCurrentPage] = useState('SUBJECTS');
 
   const { id } = useParams<ParamType>();
   const { path, url } = useRouteMatch();
@@ -36,7 +36,7 @@ export default function ModuleDetails() {
   const tabs = [
     {
       label: 'Subjects',
-      href: `${url}/subject`,
+      href: `${url}/subjects`,
     },
     {
       label: 'Materials',
@@ -154,12 +154,6 @@ export default function ModuleDetails() {
                       Add new Subject
                     </Button>
                   </div>
-                ) : route == 'MATERIALS' ? (
-                  <div className="flex gap-3">
-                    <Button onClick={() => history.push(`${url}/add-material`)}>
-                      Add new Material
-                    </Button>
-                  </div>
                 ) : route == 'SYLLABUS' ? (
                   <div className="flex gap-3">
                     <Button onClick={() => history.push(`${url}/add-syllabus`)}>
@@ -171,7 +165,7 @@ export default function ModuleDetails() {
                 )}
               </>
             )}
-            {authUser?.user_type === UserType.INSTRUCTOR && route == 'EVALUATIONS' ? (
+            {authUser?.user_type === UserType.INSTRUCTOR && route == 'EVALUATIONS' && (
               <>
                 <div className="flex gap-3">
                   <Button onClick={() => history.push(`/evaluation/new`)}>
@@ -179,8 +173,13 @@ export default function ModuleDetails() {
                   </Button>
                 </div>
               </>
-            ) : (
-              <></>
+            )}
+            {authUser?.user_type === UserType.INSTRUCTOR && route == 'MATERIALS' && (
+              <div className="flex gap-3">
+                <Button onClick={() => history.push(`${url}/add-material`)}>
+                  Add new Material
+                </Button>
+              </div>
             )}
           </div>
         </div>
@@ -188,7 +187,7 @@ export default function ModuleDetails() {
           <Switch>
             <Route
               exact
-              path={`${path}/subject`}
+              path={`${path}/subjects`}
               render={() => (
                 <>
                   {subjectData.isLoading ? (
