@@ -5,9 +5,9 @@ import Icon from '../custom/Icon';
 export default function Select({
   handleChange,
   name,
-  options,
-  className = '',
   placeholder,
+  options = [],
+  className = '',
   disabled = false,
   required = true,
   loading = false,
@@ -68,6 +68,7 @@ export default function Select({
           name={name}
           value={internalValue}
           required={required}
+          onChange={(e) => {}}
           onFocus={() => input.current?.focus()}
           className="border-none focus:outline-none absolute w-full top-0 text-white h-0"
           style={{ zIndex: -10 }}
@@ -80,7 +81,9 @@ export default function Select({
           placeholder={_placeholder}
           onChange={handleSearch}
           onBlur={() => setisMenuOpen(false)}
-          className="block w-full placeholder-gray-700 h-12 text-base border-2 border-tertiary rounded-md px-4 focus:border-blue-500 focus:outline-none font-medium cursor-pointer"
+          className={`block w-full placeholder-gray-700 h-12 text-base border-2 border-${
+            hasError ? 'error-500' : 'tertiary'
+          }  rounded-md px-4 focus:border-primary-500 focus:outline-none font-medium cursor-pointer`}
         />
         <button
           type="button"
@@ -106,7 +109,7 @@ export default function Select({
                 onMouseDown={() => handleSelect(op.value)}
                 className={`py-2 cursor-pointer ${
                   value == op.value
-                    ? 'bg-blue-500 text-white'
+                    ? 'bg-primary-500 text-white'
                     : 'bg-main text-black hover:bg-blue-100'
                 } rounded-none text-left px-4 text-base font-medium capitalize`}>
                 {op.label}
