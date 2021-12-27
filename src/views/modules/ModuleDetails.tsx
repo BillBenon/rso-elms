@@ -3,6 +3,7 @@ import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-route
 
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
+import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
@@ -34,16 +35,12 @@ export default function ModuleDetails() {
 
   const tabs = [
     {
-      label: 'Info',
-      href: `${url}`,
+      label: 'Subjects',
+      href: `${url}/subject`,
     },
     {
       label: 'Materials',
       href: `${url}/materials`,
-    },
-    {
-      label: 'Subjects',
-      href: `${url}/subjects`,
     },
     {
       label: 'Preriquisites',
@@ -125,29 +122,6 @@ export default function ModuleDetails() {
       title: moduleData.data?.data.data.name + '',
     },
   ];
-  // const updateRoute = (route: string, state: string) => {
-  //   setCurrentRoute(state);
-  //   history.push(route);
-  // };
-  const getModuleData = () => {
-    let mod = moduleData.data?.data.data;
-    let modules: CommonCardDataType | undefined;
-    if (mod) {
-      modules = {
-        status: {
-          type: advancedTypeChecker(mod.generic_status),
-          text: mod.generic_status.toString(),
-        },
-        code: mod.name,
-        title: mod.code,
-        description: mod.description,
-      };
-    }
-
-    return modules;
-  };
-
-  const modules = getModuleData();
 
   return (
     <>
@@ -214,34 +188,12 @@ export default function ModuleDetails() {
           <Switch>
             <Route
               exact
-              path={`${path}`}
-              render={() => (
-                <div className="flex py-9">
-                  <div className="mr-24">
-                    {modules && (
-                      <CommonCardMolecule data={modules}>
-                        <div className="flex flex-col mt-8 gap-7 pb-2">
-                          {/* <div className="flex items-center gap-2">
-                            <Avatar
-                              size="24"
-                              alt="user1 profile"
-                              className=" rounded-full  border-2 border-main transform hover:scale-125"
-                              src="https://randomuser.me/api/portraits/men/1.jpg"
-                            />
-                            <Heading fontSize="sm">{modules.subTitle}</Heading>
-                          </div> */}
-                        </div>
-                      </CommonCardMolecule>
-                    )}
-                  </div>
-                </div>
-              )}
-            />
-            <Route
               path={`${path}/subject`}
               render={() => (
                 <>
-                  {subjects.length < 1 && subjectData.isSuccess ? (
+                  {subjectData.isLoading ? (
+                    <Loader />
+                  ) : subjects.length === 0 && subjectData.isSuccess ? (
                     <NoDataAvailable
                       showButton={authUser?.user_type === UserType.ADMIN}
                       icon="subject"
@@ -282,7 +234,7 @@ export default function ModuleDetails() {
             {/* update module popup */}
             <Route
               exact
-              path={`${path}/edit/:moduleId`}
+              path={`${path}/edit`}
               render={() => {
                 return (
                   <PopupMolecule title="Edit Module" open onClose={handleClose}>

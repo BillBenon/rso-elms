@@ -48,13 +48,15 @@ export default function Academy() {
 
     let academy: AcademyTypes = {
       id: id,
-      'academy admin':
-        users.data?.data.data.find((admin) => admin.id === current_admin_id)?.first_name +
-          ' ' +
-          users.data?.data.data.find((admin) => admin.id === current_admin_id)
-            ?.last_name || '',
       'academy name': name,
       'phone number': phone_number,
+      'academy admin': current_admin_id
+        ? users.data?.data.data.find((admin) => admin.id === current_admin_id)
+            ?.first_name +
+            ' ' +
+            users.data?.data.data.find((admin) => admin.id === current_admin_id)
+              ?.last_name || ''
+        : '',
       status: generic_status,
     };
 
@@ -76,7 +78,6 @@ export default function Academy() {
         history.push(`${path}/${id}/assign`); // go to assign admin
       },
     },
-    { name: 'View Users', handleAction: () => {} },
   ];
 
   return (

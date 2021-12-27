@@ -29,9 +29,9 @@ export default function NewFaculty({ onSubmit, academy_id }: IDivisionsAcademyTy
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
     mutateAsync(division, {
-      onSuccess: () => {
-        toast.success('Faculty created');
-        queryClient.invalidateQueries(['divisions/type']);
+      onSuccess: (data) => {
+        toast.success(data.data.message);
+        queryClient.invalidateQueries(['faculties/academy']);
         history.push('/dashboard/divisions');
       },
       onError: (error: any) => {
