@@ -149,14 +149,14 @@ export default function ModuleDetails() {
                   <div className="flex gap-3">
                     <Button
                       onClick={() => {
-                        history.push(`${url}/add-subject`);
+                        history.push(`${url}/subjects/add-subject`);
                       }}>
                       Add new Subject
                     </Button>
                   </div>
                 ) : route == 'SYLLABUS' ? (
                   <div className="flex gap-3">
-                    <Button onClick={() => history.push(`${url}/add-syllabus`)}>
+                    <Button onClick={() => history.push(`${url}/syllabus/add-syllabus`)}>
                       Add new Syllabus
                     </Button>
                   </div>
@@ -176,7 +176,7 @@ export default function ModuleDetails() {
             )}
             {authUser?.user_type === UserType.INSTRUCTOR && route == 'MATERIALS' && (
               <div className="flex gap-3">
-                <Button onClick={() => history.push(`${url}/add-material`)}>
+                <Button onClick={() => history.push(`${url}/materials/add-material`)}>
                   Add new Material
                 </Button>
               </div>
