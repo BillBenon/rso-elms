@@ -131,10 +131,11 @@ export default function StudentAnswersMarking() {
             </p>
           </TableHeader>
           <section className="flex flex-wrap justify-start gap-4 mt-2">
-            {currentRows?.map((studentAnswer) => {
+            {currentRows?.map((studentAnswer, index: number) => {
               return (
                 <StudentAnswer
-                  key={studentAnswer.id}
+                  key={index}
+                  index={index}
                   correction={correction}
                   updateQuestionPoints={updateQuestionPoints}
                   data={studentAnswer}
