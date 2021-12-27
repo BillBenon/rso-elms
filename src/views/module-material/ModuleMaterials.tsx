@@ -37,19 +37,6 @@ function ModuleMaterials() {
               <Heading fontSize="base" fontWeight="semibold">
                 Learning materials ({moduleMaterial?.data.data.length || 0})
               </Heading>
-              {authUser?.user_type === UserType.INSTRUCTOR && (
-                <Button onClick={() => history.push(`${url}/add-material`)}>
-                  <span className="flex items-center">
-                    {/* <Icon
-                              name="add"
-                              size={12}
-                              useheightandpadding={false}
-                              fill="primary"
-                            /> */}
-                    <span className="font-semibold">New learning materials</span>
-                  </span>
-                </Button>
-              )}
             </div>
             <>
               {isLoading ? (
