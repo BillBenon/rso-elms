@@ -23,9 +23,7 @@ export default function Select({
 
   const input = useRef<HTMLInputElement>(null);
 
-  const [_placeholder, setPlaceholder] = useState(
-    loading ? 'loading...' : placeholder || `Select ${name}`,
-  );
+  const [_placeholder, setPlaceholder] = useState(placeholder || `Select ${name}`);
 
   useEffect(() => {
     setPlaceholder(
@@ -118,7 +116,7 @@ export default function Select({
 
             {filtered.length === 0 && (
               <p className="py-2 text-left px-4 text-base text-gray-500 font-medium">
-                No options available
+                {loading ? 'loading...' : 'No options available'}
               </p>
             )}
           </div>
