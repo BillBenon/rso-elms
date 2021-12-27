@@ -23,7 +23,7 @@ export default function ModuleCard({ course }: IProps) {
         trigger={
           <CommonCardMolecule
             data={course}
-            to={{ title: 'module', to: `/dashboard/modules/${course.id}/subject` }}>
+            to={{ title: 'module', to: `/dashboard/modules/${course.id}/subjects` }}>
             <p className="pt-3">
               Total subjects:
               <span className="px-1 text-primary-500">{'None'}</span>
