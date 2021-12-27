@@ -12,12 +12,8 @@ class EvaluationStore {
   }
 
   getEvaluationWorkTime(studentEvaluationId: string) {
-    return useQuery(
-      ['workTime', studentEvaluationId],
-      () => evaluationService.getEvaluationWorkTime(studentEvaluationId),
-      {
-        enabled: !!studentEvaluationId,
-      },
+    return useQuery(['workTime', studentEvaluationId], () =>
+      evaluationService.getEvaluationWorkTime(studentEvaluationId),
     );
   }
   updateEvaluationWorkTime() {
@@ -35,6 +31,12 @@ class EvaluationStore {
   getEvaluations(academy: string, instructor: string) {
     return useQuery(['evaluationsByAcademyInstructor'], () =>
       evaluationService.fetchEvaluationsByInstructorAndAcademy(academy, instructor),
+    );
+  }
+
+  getModuleEvaluations(module: string) {
+    return useQuery(['evaluationsByAcademyInstructor'], () =>
+      evaluationService.fetchEvaluationsByModule(module),
     );
   }
 
