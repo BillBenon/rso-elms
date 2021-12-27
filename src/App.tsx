@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import ExperienceDetails from './components/Organisms/forms/auth/signup/experience/ExperienceDetails';
 import MoreInfo from './components/Organisms/forms/auth/signup/more-details/MoreInfo';
