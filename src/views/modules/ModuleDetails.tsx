@@ -3,6 +3,7 @@ import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-route
 
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
+import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
@@ -23,6 +24,7 @@ import ModuleMaterials from '../module-material/ModuleMaterials';
 
 export default function ModuleDetails() {
   const [subjects, setSubjects] = useState<CommonCardDataType[]>([]);
+  const [route, setCurrentPage] = useState('SUBJECTS');
 
   const { id } = useParams<ParamType>();
   const { path, url } = useRouteMatch();
@@ -34,16 +36,12 @@ export default function ModuleDetails() {
 
   const tabs = [
     {
-      label: 'Info',
-      href: `${url}`,
+      label: 'Subjects',
+      href: `${url}/subjects`,
     },
     {
       label: 'Materials',
       href: `${url}/materials`,
-    },
-    {
-      label: 'Subjects',
-      href: `${url}/subject`,
     },
     {
       label: 'Preriquisites',
@@ -55,13 +53,15 @@ export default function ModuleDetails() {
     },
     {
       label: 'Evaluation',
-      href: `${url}/evaluation`,
+      href: `${url}/evaluations`,
     },
     {
       label: 'Performance',
-      href: `${url}/performance`,
+      href: `${url}/performances`,
     },
   ];
+
+  var lastUrl: string = location.href;
 
   useEffect(() => {
     if (subjectData.data?.data) {
@@ -82,7 +82,31 @@ export default function ModuleDetails() {
 
       setSubjects(loadedSubjects);
     }
+    new MutationObserver(() => {
+      const url = location.href;
+      if (url !== lastUrl) {
+        lastUrl = url;
+        console.log(lastUrl);
+        if (lastUrl.endsWith('subjects')) {
+          setCurrentPage('SUBJECTS');
+        } else if (lastUrl.endsWith('materials')) {
+          setCurrentPage('MATERIALS');
+        } else if (lastUrl.endsWith('prereqs')) {
+          setCurrentPage('PREREQS');
+        } else if (lastUrl.endsWith('syllabus')) {
+          setCurrentPage('SYLLABUS');
+        } else if (lastUrl.endsWith('evaluations')) {
+          setCurrentPage('EVALUATIONS');
+        } else {
+          setCurrentPage('');
+        }
+      }
+    }).observe(document, { subtree: true, childList: true });
   }, [subjectData.data]);
+
+  // function onUrlChange() {
+  //   alert('new-loc' + location.href);
+  // }
 
   function handleSearch() {}
   function handleClose() {
@@ -99,26 +123,6 @@ export default function ModuleDetails() {
       title: moduleData.data?.data.data.name + '',
     },
   ];
-
-  const getModuleData = () => {
-    let mod = moduleData.data?.data.data;
-    let modules: CommonCardDataType | undefined;
-    if (mod) {
-      modules = {
-        status: {
-          type: advancedTypeChecker(mod.generic_status),
-          text: mod.generic_status.toString(),
-        },
-        code: mod.name,
-        title: mod.code,
-        description: mod.description,
-      };
-    }
-
-    return modules;
-  };
-
-  const modules = getModuleData();
 
   return (
     <>
@@ -141,9 +145,40 @@ export default function ModuleDetails() {
             </div>
 
             {authUser?.user_type === UserType.ADMIN && (
+              <>
+                {route == 'SUBJECTS' ? (
+                  <div className="flex gap-3">
+                    <Button
+                      onClick={() => {
+                        history.push(`${url}/subjects/add-subject`);
+                      }}>
+                      Add new Subject
+                    </Button>
+                  </div>
+                ) : route == 'SYLLABUS' ? (
+                  <div className="flex gap-3">
+                    <Button onClick={() => history.push(`${url}/syllabus/add-syllabus`)}>
+                      Add new Syllabus
+                    </Button>
+                  </div>
+                ) : (
+                  <></>
+                )}
+              </>
+            )}
+            {authUser?.user_type === UserType.INSTRUCTOR && route == 'EVALUATIONS' && (
+              <>
+                <div className="flex gap-3">
+                  <Button onClick={() => history.push(`/evaluation/new`)}>
+                    Add new Evaluation
+                  </Button>
+                </div>
+              </>
+            )}
+            {authUser?.user_type === UserType.INSTRUCTOR && route == 'MATERIALS' && (
               <div className="flex gap-3">
-                <Button onClick={() => history.push(`${url}/add-subject`)}>
-                  Add new Subject
+                <Button onClick={() => history.push(`${url}/materials/add-material`)}>
+                  Add new Material
                 </Button>
               </div>
             )}
@@ -153,34 +188,12 @@ export default function ModuleDetails() {
           <Switch>
             <Route
               exact
-              path={`${path}`}
-              render={() => (
-                <div className="flex py-9">
-                  <div className="mr-24">
-                    {modules && (
-                      <CommonCardMolecule data={modules}>
-                        <div className="flex flex-col mt-8 gap-7 pb-2">
-                          {/* <div className="flex items-center gap-2">
-                            <Avatar
-                              size="24"
-                              alt="user1 profile"
-                              className=" rounded-full  border-2 border-main transform hover:scale-125"
-                              src="https://randomuser.me/api/portraits/men/1.jpg"
-                            />
-                            <Heading fontSize="sm">{modules.subTitle}</Heading>
-                          </div> */}
-                        </div>
-                      </CommonCardMolecule>
-                    )}
-                  </div>
-                </div>
-              )}
-            />
-            <Route
-              path={`${path}/subject`}
+              path={`${path}/subjects`}
               render={() => (
                 <>
-                  {subjects.length < 1 && subjectData.isSuccess ? (
+                  {subjectData.isLoading ? (
+                    <Loader />
+                  ) : subjects.length === 0 && subjectData.isSuccess ? (
                     <NoDataAvailable
                       showButton={authUser?.user_type === UserType.ADMIN}
                       icon="subject"
@@ -223,7 +236,7 @@ export default function ModuleDetails() {
             {/* update module popup */}
             <Route
               exact
-              path={`${path}/edit/:moduleId`}
+              path={`${path}/edit`}
               render={() => {
                 return (
                   <PopupMolecule title="Edit Module" open onClose={handleClose}>

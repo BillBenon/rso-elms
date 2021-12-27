@@ -2,12 +2,13 @@
   "name": "rso-elms",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "npm run prepare && vite",
     "build": "tsc && vite build",
     "serve": "HOST=$(grep HOST .env.production | cut -d '=' -f2) npm run start-prod",
     "start-prod": "vite preview  --host $HOST",
     "serve-win": "vite preview",
-    "lint": "eslint --fix ."
+    "lint": "eslint --fix .",
+    "prepare": "husky install"
   },
   "resolutions": {
     "@types/react": "17.0.26"
@@ -17,6 +18,7 @@
     "@tiptap/starter-kit": "^2.0.0-beta.132",
     "axios": "0.22.0",
     "lodash": "4.17.21",
+    "materialui-daterange-picker": "^1.1.92",
     "moment": "^2.29.1",
     "react": "17.0.2",
     "react-big-calendar": "^0.38.0",

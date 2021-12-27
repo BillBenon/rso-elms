@@ -33,7 +33,7 @@ export default function Academy() {
   const history = useHistory();
 
   const authUser = authenticatorStore.authUser().data?.data.data;
-  const { data, isLoading, isSuccess } = academyStore.getAcademiesByInstitution(
+  const { data, isLoading } = academyStore.getAcademiesByInstitution(
     authUser?.institution_id || '',
   );
   const list: LinkList[] = [
@@ -48,13 +48,15 @@ export default function Academy() {
 
     let academy: AcademyTypes = {
       id: id,
-      'academy admin':
-        users.data?.data.data.find((admin) => admin.id === current_admin_id)?.first_name +
-          ' ' +
-          users.data?.data.data.find((admin) => admin.id === current_admin_id)
-            ?.last_name || '',
       'academy name': name,
       'phone number': phone_number,
+      'academy admin': current_admin_id
+        ? users.data?.data.data.find((admin) => admin.id === current_admin_id)
+            ?.first_name +
+            ' ' +
+            users.data?.data.data.find((admin) => admin.id === current_admin_id)
+              ?.last_name || ''
+        : '',
       status: generic_status,
     };
 
@@ -76,7 +78,6 @@ export default function Academy() {
         history.push(`${path}/${id}/assign`); // go to assign admin
       },
     },
-    { name: 'View Users', handleAction: () => {} },
   ];
 
   return (
@@ -90,33 +91,19 @@ export default function Academy() {
               <section>
                 <BreadCrumb list={list}></BreadCrumb>
               </section>
+              <div className="py-4">
+                <TableHeader
+                  title="Academy"
+                  totalItems={academies.length}
+                  handleSearch={handleSearch}>
+                  <Link to={`${url}/add`}>
+                    <Button>New academy</Button>
+                  </Link>
+                </TableHeader>
+              </div>
+
               {isLoading ? (
                 <Loader />
-              ) : academies.length > 0 && isSuccess ? (
-                <>
-                  <div className="py-4">
-                    <TableHeader
-                      title="Academy"
-                      totalItems={academies.length}
-                      handleSearch={handleSearch}>
-                      <Link to={`${url}/add`}>
-                        <Button>New academy</Button>
-                      </Link>
-                    </TableHeader>
-                  </div>
-
-                  <div className="mt-14">
-                    {academyInfo && (
-                      <Table<AcademyTypes>
-                        statusColumn="status"
-                        data={academies}
-                        actions={academyActions}
-                        hide={['id']}
-                        uniqueCol="id"
-                      />
-                    )}
-                  </div>
-                </>
               ) : academies.length === 0 ? (
                 <NoDataAvailable
                   icon="academy"
@@ -126,7 +113,19 @@ export default function Academy() {
                   handleClick={() => history.push(`${url}/add`)}
                   description="the academies are not yet created, click below to create new ones"
                 />
-              ) : null}
+              ) : (
+                <div className="mt-14">
+                  {academyInfo && (
+                    <Table<AcademyTypes>
+                      statusColumn="status"
+                      data={academies}
+                      actions={academyActions}
+                      hide={['id']}
+                      uniqueCol="id"
+                    />
+                  )}
+                </div>
+              )}
             </>
           )}
         />

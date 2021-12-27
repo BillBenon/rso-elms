@@ -6,16 +6,19 @@ import Heading from '../../components/Atoms/Text/Heading';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewVenue from '../../components/Organisms/calendar/NewVenue';
-import { venueStore } from '../../store/timetable/venue.store';
+import { authenticatorStore } from '../../store/administration';
+import { getAllVenues } from '../../store/timetable/venue.store';
 
 export default function Venues() {
   const history = useHistory();
   const { path } = useRouteMatch();
 
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
   const handleClose = () => {
     history.goBack();
   };
-  const venues = venueStore.getAllVenues().data?.data.data;
+  const venues = getAllVenues(authUser?.academy.id + '').data?.data.data;
 
   return (
     <div>

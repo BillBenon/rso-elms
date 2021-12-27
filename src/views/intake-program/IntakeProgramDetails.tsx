@@ -165,58 +165,60 @@ function IntakeProgramDetails() {
               exact
               path={`${path}`}
               render={() => (
-                <div className="flex py-9">
-                  <div className="mr-24">
-                    {isLoading ? (
-                      <Loader />
-                    ) : (
-                      programData && (
-                        <CommonCardMolecule data={programData}>
-                          <div className="flex flex-col mt-8 gap-7 pb-2">
-                            <Heading color="txt-secondary" fontSize="sm">
-                              Program Type
-                            </Heading>
-                            <Heading fontSize="sm">
-                              {programData.subTitle?.replaceAll('_', ' ')}
-                            </Heading>
-                          </div>
-                          <div className="mt-4 flex space-x-4">
-                            <Button
-                              onClick={() =>
-                                history.push(
-                                  `/dashboard/intakes/programs/${intakeId}/${id}/edit`,
-                                )
-                              }>
-                              Edit program
-                            </Button>
-                            <Button styleType="outline">Change Status</Button>
-                          </div>
-                        </CommonCardMolecule>
-                      )
-                    )}
-                  </div>
-                  <div className="flex flex-col gap-8 z-0">
-                    <UsersPreview
-                      title="Students"
-                      label="Students in Cadette programs"
-                      data={students}
-                      totalUsers={students.length || 0}
-                      dataLabel={''}
-                      isLoading={studLoading}>
-                      <EnrollStudentIntakeProgram />
-                    </UsersPreview>
+                <>
+                  {isLoading ? (
+                    <Loader />
+                  ) : (
+                    programData && (
+                      <div className="flex py-9">
+                        <div className="mr-24">
+                          <CommonCardMolecule data={programData}>
+                            <div className="flex flex-col mt-8 gap-7 pb-2">
+                              <Heading color="txt-secondary" fontSize="sm">
+                                Program Type
+                              </Heading>
+                              <Heading fontSize="sm">
+                                {programData.subTitle?.replaceAll('_', ' ')}
+                              </Heading>
+                            </div>
+                            <div className="mt-4 flex space-x-4">
+                              <Button
+                                onClick={() =>
+                                  history.push(
+                                    `/dashboard/intakes/programs/${intakeId}/${id}/edit`,
+                                  )
+                                }>
+                                Edit program
+                              </Button>
+                              <Button styleType="outline">Change Status</Button>
+                            </div>
+                          </CommonCardMolecule>
+                        </div>
+                        <div className="flex flex-col gap-8 z-0">
+                          <UsersPreview
+                            title="Students"
+                            label="Students in Cadette programs"
+                            data={students}
+                            totalUsers={students.length || 0}
+                            dataLabel={''}
+                            isLoading={studLoading}>
+                            <EnrollStudentIntakeProgram />
+                          </UsersPreview>
 
-                    <UsersPreview
-                      title="Instructors"
-                      label="Instructors in Cadette programs"
-                      data={instructors}
-                      totalUsers={instructors.length || 0}
-                      dataLabel={''}
-                      isLoading={instLoading}>
-                      <EnrollInstructorIntakeProgram />
-                    </UsersPreview>
-                  </div>
-                </div>
+                          <UsersPreview
+                            title="Instructors"
+                            label="Instructors in Cadette programs"
+                            data={instructors}
+                            totalUsers={instructors.length || 0}
+                            dataLabel={''}
+                            isLoading={instLoading}>
+                            <EnrollInstructorIntakeProgram />
+                          </UsersPreview>
+                        </div>
+                      </div>
+                    )
+                  )}
+                </>
               )}
             />
 

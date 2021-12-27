@@ -8,7 +8,7 @@ import { classStore } from '../../../../store/administration/class.store';
 import { moduleStore } from '../../../../store/administration/modules.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { timetableStore } from '../../../../store/timetable/timetable.store';
-import { venueStore } from '../../../../store/timetable/venue.store';
+import { getAllVenues } from '../../../../store/timetable/venue.store';
 import { SelectData, ValueType } from '../../../../types';
 import { IClass } from '../../../../types/services/class.types';
 import {
@@ -17,10 +17,8 @@ import {
 } from '../../../../types/services/schedule.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
-import CheckboxMolecule from '../../../Molecules/input/CheckboxMolecule';
-import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
-import RadioMolecule from '../../../Molecules/input/RadioMolecule';
+import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import Stepper from '../../../Molecules/Stepper/Stepper';
 
 interface IStepProps {
@@ -59,7 +57,9 @@ export default function EditTimeTable() {
 
   useEffect(() => {
     setvalues({
-      ...values,
+      id: itemId,
+      dayOfWeek: data?.data.data.day_of_week as daysOfWeek,
+      intakeLevelClass: classId,
       courseModule: data?.data.data.course_module.id + '',
       endHour: data?.data.data.end_hour + '',
       instructor: data?.data.data.instructor.id + '',
@@ -142,7 +142,7 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
           Program - Level - class
         </InputMolecule>
         <div className="pb-1">
-          <DropdownMolecule
+          <SelectMolecule
             name="courseModule"
             handleChange={handleChange}
             options={
@@ -151,12 +151,13 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
                 value: mod.id,
               })) as SelectData[]
             }
-            placeholder="Select module">
+            placeholder="Select module"
+            value={values.courseModule}>
             Module
-          </DropdownMolecule>
+          </SelectMolecule>
         </div>
         <div className="pb-4">
-          <DropdownMolecule
+          <SelectMolecule
             name="instructor"
             handleChange={handleChange}
             options={
@@ -165,9 +166,10 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
                 value: user.instructor.id,
               })) as SelectData[]
             }
+            value={values.instructor}
             placeholder="Select someone">
             Instructor
-          </DropdownMolecule>
+          </SelectMolecule>
         </div>
         <Button type="submit">Next</Button>
       </form>
@@ -176,16 +178,19 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
 }
 
 function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: IStepProps) {
-  const venues = venueStore.getAllVenues().data?.data.data;
+  const authUser = authenticatorStore.authUser().data?.data.data;
+  const venues = getAllVenues(authUser?.academy.id + '').data?.data.data;
+
   return (
     <form onSubmit={handleSubmit} className="max-w-sm -mb-6">
-      <DropdownMolecule
+      <SelectMolecule
         name="venue"
+        value={values.venue}
         handleChange={handleChange}
         options={venues?.map((vn) => ({ label: vn.name, value: vn.id })) as SelectData[]}
         placeholder="Select venue">
         Venue
-      </DropdownMolecule>
+      </SelectMolecule>
       <InputMolecule
         name="startHour"
         type="time"
@@ -200,12 +205,12 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
         handleChange={handleChange}>
         End hour
       </InputMolecule>
-      <DropdownMolecule
+      <SelectMolecule
         options={getDropDownStatusOptions(daysOfWeek).slice(0, 7)}
         name="dayOfWeek"
         placeholder="Class date"
         handleChange={handleChange}
-        // value={values.dayOfWeek}
+        value={values.dayOfWeek}
       />
       <div className="pt-4 flex justify-between w-80">
         <Button styleType="text" onClick={() => setCurrentStep(0)}>

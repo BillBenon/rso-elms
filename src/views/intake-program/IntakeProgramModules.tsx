@@ -56,7 +56,7 @@ function IntakeProgramModules() {
                 title={'Add new module'}
                 onClick={() => history.push(`${url}/add`)}
               />
-              {programModules?.map((module, index) => (
+              {programModules.map((module, index) => (
                 <ModuleCard course={module} key={index} />
               ))}
             </>

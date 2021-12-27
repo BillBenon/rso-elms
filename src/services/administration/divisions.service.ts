@@ -11,8 +11,10 @@ class DivisionService {
     return await adminstrationAxios.post('/divisions/addDivision', division);
   }
 
-  public async getDivision(id: string): Promise<AxiosResponse<Response<DivisionInfo[]>>> {
-    return await adminstrationAxios.get(`/divisions/getDivisionsByType/${id}`);
+  public async getDivision(
+    type: string,
+  ): Promise<AxiosResponse<Response<DivisionInfo[]>>> {
+    return await adminstrationAxios.get(`/divisions/getDivisionsByType/${type}`);
   }
 
   public async getDivisionById(

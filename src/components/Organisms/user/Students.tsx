@@ -64,7 +64,7 @@ export default function Students({
               <Link to={`${url}/import`}>
                 <Button styleType="outline">Import students</Button>
               </Link>
-              <Link to={`${url}/add`}>
+              <Link to={`${url}/add/${UserType.STUDENT}`}>
                 <Button>New student</Button>
               </Link>
             </div>

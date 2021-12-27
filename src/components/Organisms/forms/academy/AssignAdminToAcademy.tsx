@@ -81,7 +81,7 @@ function AssignAdminToAcademy() {
       </p>
       <DropdownMolecule
         width="full"
-        placeholder="select academy admin"
+        placeholder={users.isLoading ? 'Loading admins' : 'select academy admin'}
         defaultValue={getInchargeDropdown(admins).find(
           (ad) => ad.value === data?.data.data.current_admin_id,
         )}

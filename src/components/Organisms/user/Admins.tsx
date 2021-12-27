@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
 import { ValueType } from '../../../types';
-import { UserTypes } from '../../../types/services/user.types';
+import { UserType, UserTypes } from '../../../types/services/user.types';
 import Button from '../../Atoms/custom/Button';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import Table from '../../Molecules/table/Table';
@@ -36,7 +36,7 @@ export default function Admins({ admins }: { admins: UserTypes[] }) {
         showSearch={admins && admins.length > 0}>
         <div className="flex gap-3">
           <div className="flex gap-3">
-            <Link to={`/dashboard/users/add`}>
+            <Link to={`/dashboard/users/add/${UserType.ADMIN}`}>
               <Button>New admin</Button>
             </Link>
           </div>
