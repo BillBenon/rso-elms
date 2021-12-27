@@ -30,6 +30,7 @@ import UpdateAcademicProgram from './UpdateAcademicProgram';
 
 export interface IProgramData extends CommonCardDataType {
   department: DivisionInfo;
+  total_num_modules: number;
   // incharge: string;
 }
 
@@ -76,6 +77,7 @@ export default function AcademicProgram() {
       subTitle: prog.type.replaceAll('_', ' '),
       description: prog.description,
       department: prog.department,
+      total_num_modules: prog.total_num_modules,
       // incharge: prog.incharge && prog.incharge.user.username,
     };
 
@@ -100,7 +102,7 @@ export default function AcademicProgram() {
                 </section>
                 <section>
                   <TableHeader
-                    totalItems={`${programs.length} programs`}
+                    totalItems={programs.length}
                     title="Programs"
                     showSearch={false}
                   />
@@ -148,7 +150,7 @@ export default function AcademicProgram() {
                                 Modules
                               </Heading>
                               <Heading fontSize="sm" fontWeight="semibold">
-                                30
+                                {Common.total_num_modules || 0}
                               </Heading>
                             </div>
 

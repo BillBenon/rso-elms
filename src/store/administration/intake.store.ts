@@ -49,17 +49,13 @@ class IntakeStore {
   }
 }
 
-export function getIntakesByAcademy(id: string, fetchByReg = false, enabled = false) {
+export function getIntakesByAcademy(id: string, fetchByReg = false) {
   if (fetchByReg)
     return useQuery(['intakes/registrationControl', id], () =>
       intakeService.getIntakesPyRegistrationControl(id),
     );
   else
-    return useQuery(
-      ['intakes/academy', id],
-      () => intakeService.getIntakesByAcademy(id),
-      { enabled },
-    );
+    return useQuery(['intakes/academy', id], () => intakeService.getIntakesByAcademy(id));
 }
 
 export function getProgramsByIntake(intakeId: string, enabled = true) {
