@@ -47,8 +47,8 @@ export interface Hour {
 }
 
 export interface DateRange {
-  end_date: string;
-  start_date: string;
+  endDate: string;
+  startDate: string;
 }
 
 interface CommonScheduleProperties {
