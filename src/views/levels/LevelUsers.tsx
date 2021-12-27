@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
-import Icon from '../../components/Atoms/custom/Icon';
 import Loader from '../../components/Atoms/custom/Loader';
-import ILabel from '../../components/Atoms/Text/ILabel';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewUser from '../../components/Organisms/forms/user/NewUser';
@@ -12,21 +11,26 @@ import Admins from '../../components/Organisms/user/Admins';
 import Instructors from '../../components/Organisms/user/Instructors';
 import Students from '../../components/Organisms/user/Students';
 import { authenticatorStore } from '../../store/administration';
+import { levelStore } from '../../store/administration/level.store';
 import usersStore from '../../store/administration/users.store';
+import { ParamType } from '../../types';
 import { UserType, UserTypes } from '../../types/services/user.types';
-import UserDetails from './UserDetails';
+import UserDetails from '../users/UserDetails';
 
-export default function Users() {
+export default function LevelUsers() {
   const { url, path } = useRouteMatch();
+  const { id } = useParams<ParamType>();
+  // eslint-disable-next-line no-unused-vars
   const [userType, setUserType] = useState('Students');
 
   const authUser = authenticatorStore.authUser().data?.data.data;
+  // eslint-disable-next-line no-unused-vars
+  const level = levelStore.getLevelById(id).data?.data.data;
   const history = useHistory();
 
-  const { data, isSuccess, isLoading } =
-    authUser?.user_type === UserType.SUPER_ADMIN
-      ? usersStore.fetchUsers()
-      : usersStore.getUsersByAcademy(authUser?.academy.id.toString() || '');
+  const { data, isSuccess, isLoading } = usersStore.getUsersByAcademy(
+    authUser?.academy.id || '',
+  );
 
   const userInfo = data?.data.data;
 
@@ -72,6 +76,13 @@ export default function Users() {
     );
   }
 
+  const list = [
+    { to: '', title: 'Home' },
+    { to: 'levels', title: 'Levels' },
+    { to: 'levels/12', title: 'Level Details' },
+    { to: 'levels/12/users', title: 'Levels Users' },
+  ];
+
   const tabs = [
     {
       label: 'Students',
@@ -107,23 +118,13 @@ export default function Users() {
 
   return (
     <div>
-      <div className="flex flex-wrap justify-start items-center pt-1">
-        <ILabel size="sm" color="gray" weight="medium">
-          Institution Admin
-        </ILabel>
-        <Icon name="chevron-right" />
+      <section>
+        <BreadCrumb list={list}></BreadCrumb>
+      </section>
 
-        <ILabel size="sm" color="gray" weight="medium">
-          Users
-        </ILabel>
-        <Icon name="chevron-right" fill="gray" />
-        <ILabel size="sm" color="primary" weight="medium">
-          {userType}
-        </ILabel>
-      </div>
       {isLoading && <Loader />}
       <Switch>
-        <Route exact path={`${path}/add/:userType`} component={NewUser} />
+        <Route exact path={`${path}/add`} component={NewUser} />
         <Route exact path={`${path}/:id/edit`} component={UpdateUser} />
         <Route exact path={`${path}/:id/profile`} component={UserDetails} />
 
@@ -135,7 +136,7 @@ export default function Users() {
                 <TableHeader
                   totalItems={users.length}
                   showBadge={false}
-                  title={'Users'}
+                  title={'Level Users'}
                   showSearch={false}
                 />
 

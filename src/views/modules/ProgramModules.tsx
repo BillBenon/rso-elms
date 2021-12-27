@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router';
 import { useParams } from 'react-router-dom';
 
+import Loader from '../../components/Atoms/custom/Loader';
 import AddCard from '../../components/Molecules/cards/AddCard';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -37,26 +38,32 @@ function ProgramModules() {
   }, [getAllModuleStore.data?.data.data, id]);
 
   return (
-    <section className="mt-4 flex flex-wrap justify-start gap-4">
-      {programModules.length <= 0 ? (
-        <NoDataAvailable
-          buttonLabel="Add new modules"
-          title={'No Modules available in this program'}
-          handleClick={() => history.push(`${url}/add`)}
-          description="And the web just isnt the same without you. Lets get you back online!"
-        />
+    <>
+      {getAllModuleStore.isLoading ? (
+        <Loader />
       ) : (
-        <>
-          <AddCard
-            title={'Add new module'}
-            onClick={() => history.push(`/dashboard/programs/${id}/modules/add`)}
-          />
-          {programModules?.map((module) => (
-            <ModuleCard course={module} key={module.code} />
-          ))}
-        </>
+        <section className="mt-4 flex flex-wrap justify-start gap-4">
+          {programModules.length <= 0 ? (
+            <NoDataAvailable
+              buttonLabel="Add new modules"
+              title={'No Modules available in this program'}
+              handleClick={() => history.push(`${url}/add`)}
+              description="And the web just isnt the same without you. Lets get you back online!"
+            />
+          ) : (
+            <>
+              <AddCard
+                title={'Add new module'}
+                onClick={() => history.push(`/dashboard/programs/${id}/modules/add`)}
+              />
+              {programModules?.map((module) => (
+                <ModuleCard course={module} key={module.code} />
+              ))}
+            </>
+          )}
+        </section>
       )}
-    </section>
+    </>
   );
 }
 

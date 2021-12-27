@@ -23,7 +23,7 @@ export default function ModuleCard({ course }: IProps) {
         trigger={
           <CommonCardMolecule
             data={course}
-            to={{ title: 'module', to: `/dashboard/modules/${course.id}` }}>
+            to={{ title: 'module', to: `/dashboard/modules/${course.id}/subjects` }}>
             <p className="pt-3">
               Total subjects:
               <span className="px-1 text-primary-500">{'None'}</span>
@@ -35,13 +35,10 @@ export default function ModuleCard({ course }: IProps) {
           <p className="pt-4 pb-2 text-txt-secondary text-sm mt-4">
             {course.description}
           </p>
-          <p>
-            <BrowserLink className="outline-none" to={`/dashboard/modules/${course.id}`}>
-              <Button styleType="text">View details</Button>
-            </BrowserLink>
-          </p>
           {authUser?.user_type === UserType.STUDENT ? (
-            <BrowserLink className="outline-none" to={`/dashboard/modules/${course.id}`}>
+            <BrowserLink
+              className="outline-none"
+              to={`/dashboard/modules/${course.id}/subject`}>
               <Button styleType="outline">Start module</Button>
             </BrowserLink>
           ) : authUser?.user_type === UserType.ADMIN ? (
@@ -53,7 +50,7 @@ export default function ModuleCard({ course }: IProps) {
               </BrowserLink>
               <BrowserLink
                 className="outline-none"
-                to={`/dashboard/modules/${course.id}/edit/${course.id}`}>
+                to={`/dashboard/modules/${course.id}/edit`}>
                 <Button styleType="outline">Edit</Button>
               </BrowserLink>
             </div>
