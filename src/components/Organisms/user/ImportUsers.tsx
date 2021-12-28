@@ -20,9 +20,9 @@ import { getDropDownOptions } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import FileUploader from '../../Atoms/Input/FileUploader';
+import Heading from '../../Atoms/Text/Heading';
 import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 import PopupMolecule from '../../Molecules/Popup';
-import Heading from '../../Atoms/Text/Heading';
 
 interface IProps {
   userType: UserType;
@@ -74,6 +74,7 @@ export default function ImportUsers({ userType }: IProps) {
       await mutateAsync(formData, {
         onSuccess(data) {
           queryClient.invalidateQueries('users');
+          queryClient.invalidateQueries(['users/institution']);
           setimportReport(data.data.data);
         },
         onError(error: any) {
@@ -183,7 +184,7 @@ export default function ImportUsers({ userType }: IProps) {
           <div className="my-6 overflow-y-auto overflow-x-hidden max-h-60">
             {importReport &&
               Object.keys(importReport.failures).map((key) => (
-                <p className="text-error-500 p-2 text-sm rounded-sm">
+                <p key={key} className="text-error-500 p-2 text-sm rounded-sm">
                   {`On row ${key}: ${importReport.failures[key]}`}
                 </p>
               ))}
