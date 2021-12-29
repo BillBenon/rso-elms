@@ -28,7 +28,7 @@ export default function Users() {
       ? usersStore.fetchUsers()
       : usersStore.getUsersByAcademy(authUser?.academy.id.toString() || '');
 
-  const userInfo = data?.data.data;
+  const userInfo = data?.data.data || [];
 
   let users: UserTypes[] = [];
 
