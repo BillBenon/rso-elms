@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+
 import { SelectProps } from '../../../types';
 import Icon from '../custom/Icon';
 
@@ -79,7 +80,7 @@ export default function Select({
           placeholder={_placeholder}
           onChange={handleSearch}
           onBlur={() => setisMenuOpen(false)}
-          className={`block w-full placeholder-gray-700 h-12 text-base border-2 border-${
+          className={`block w-full hover:border-gray-400 placeholder-gray-700 h-12 text-base border-2 border-${
             hasError ? 'error-500' : 'tertiary'
           }  rounded-md px-4 focus:border-primary-500 focus:outline-none font-medium cursor-pointer`}
         />
@@ -102,6 +103,7 @@ export default function Select({
           aria-labelledby="menu-button">
           <div className="static">
             {filtered.map((op) => (
+              // eslint-disable-next-line jsx-a11y/no-static-element-interactions
               <div
                 key={op.value}
                 onMouseDown={() => handleSelect(op.value)}
