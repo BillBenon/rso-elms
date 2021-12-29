@@ -10,18 +10,17 @@ const commonConfig: AxiosRequestConfig = {};
 
 const administrationModuleConfig: AxiosRequestConfig = {
   ...commonConfig,
-  // baseURL: 'http://197.243.110.147:8080/administration-service/api',
-  baseURL: 'http://192.168.1.112:8090/administration-service/api',
+  baseURL: 'http://197.243.110.147:8080/administration-service/api',
 };
 
 const evalutationModuleConfig: AxiosRequestConfig = {
   ...commonConfig,
-  baseURL: 'http://192.168.1.112:8090/evaluation-service/api',
+  baseURL: 'http://197.243.110.147:8080/evaluation-service/api',
 };
 
 const timetableModuleConfig: AxiosRequestConfig = {
   ...commonConfig,
-  baseURL: 'http://192.168.1.112:8090/timetable-service/api',
+  baseURL: 'http://197.243.110.147:8080/timetable-service/api',
 };
 
 const adminstrationAxios = axios.create(administrationModuleConfig);

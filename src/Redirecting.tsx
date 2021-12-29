@@ -24,16 +24,8 @@ export default function Redirecting() {
       // setLocalStorageData('user', authUser.data.data);
       localStorage.setItem('user', JSON.stringify(authUser.data.data));
 
-      if (authUser.data.data.user_type === UserType.SUPER_ADMIN) {
-        // redirectTo('/complete-profile');
-        redirectTo('/dashboard/users');
-      } else if (authUser.data.data.profile_status !== ProfileStatus.COMPLETD) {
+      if (authUser.data.data.profile_status !== ProfileStatus.COMPLETD) {
         redirectTo('/complete-profile');
-        //approach number 1
-        // mutateAsync().then((resp) => {
-        //   let experienceFound = resp.data.data.length > 0;
-        //   if (!experienceFound) redirectTo('/complete-profile/experience');
-        // });
       } else if (authUser.data.data.user_type === UserType.ADMIN) {
         let val = !authUser.data.data.academy ? true : false;
         setHasNoAcademy(val && !isLoading);
@@ -43,19 +35,8 @@ export default function Redirecting() {
         redirectTo('/dashboard/inst-program');
       } else if (authUser.data.data.user_type === UserType.STUDENT) {
         redirectTo('/dashboard/student');
-        //approach number 2
-        // mutateAsync().then((resp) => {
-        //   let experienceFound = false;
-        //   for (const i in resp.data.data) {
-        //     // @ts-ignore
-        //     if (resp.data.data[i].person_id == data?.data.data.person_id) {
-        //       experienceFound = true;
-        //       break;
-        //     }
-        //   }
-        //   else if (!experienceFound) redirectTo('/complete-profile/experience');
-        // redirectTo('/dashboard/student');
-        // });
+      } else if (authUser.data.data.user_type === UserType.SUPER_ADMIN) {
+        redirectTo('/dashboard/users');
       }
     }
 

@@ -69,6 +69,8 @@ export interface PersonInfo extends Table {
   date_of_issue: string;
   date_of_last_promotion: string;
   doc_type: DocType;
+  deployment_number: string;
+  deployed_on: string;
   document_expire_on: string;
   empNo: string;
   father_names: string;
@@ -89,6 +91,7 @@ export interface PersonInfo extends Table {
   religion: string;
   residence_location_id: number;
   place_of_residence: string;
+  place_of_birth_id: string;
   nationality: string;
 }
 export interface ExperienceInfo {
@@ -118,6 +121,8 @@ export interface UpdateExperienceInfo {
   type: string;
 }
 export interface UpdateUserInfo {
+  place_of_residence: string | number | undefined;
+  send_communication_msg: any;
   person: any;
   academic_program_level_id: string;
   academy_id: string;
@@ -138,6 +143,31 @@ export interface UpdateUserInfo {
   sex: GenderStatus;
   user_type: UserType;
   username: string;
+  profile_status: ProfileStatus,
+  acdemic_year_id: string,
+  activation_key: string,
+  blood_group: string,
+  current_rank_id: string,
+  date_of_commission: string,
+  date_of_issue: string,
+  date_of_last_promotion: string,
+  deployed_on: string,
+  deployment_number: string,
+  document_expire_on: string,
+  emp_no: string,
+  father_names: string,
+  institution_id: string,
+  mother_names: string,
+  other_rank: string,
+  password_reset_period_in_days: number,
+  place_of_birth: string,
+  place_of_birth_description: string,
+  place_of_birth_id: string,
+  place_of_issue: string,
+  rank_depart: string,
+  reset_date: string,
+  residence_location_id: number,
+  spouse_name: string,
 }
 
 export interface CreateUserInfo {
