@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 
 import { queryClient } from '../../../plugins/react-query';
@@ -40,11 +41,16 @@ export default function Navigation() {
   function handleSearch(_e: ValueType) {}
 
   function logout() {
-    logoutFn.refetch().then(() => {
-      queryClient.clear();
-      cookie.eraseCookie('jwt_info');
-      history.push('/login');
-    });
+    let toastId = toast.loading('Signing you out ...');
+    logoutFn
+      .refetch()
+      .then(() => {
+        queryClient.clear();
+        cookie.eraseCookie('jwt_info');
+        history.push('/login');
+        toast.success('You are now logged out.', { id: toastId });
+      })
+      .catch(() => toast.error('Signout failed. try again latter.', { id: toastId }));
   }
   return (
     <nav className="bg-main">
@@ -121,10 +127,11 @@ export default function Navigation() {
                         Settings
                       </a>
                       <button
+                        disabled={logoutFn.isLoading}
                         onClick={() => logout()}
                         className="block px-4 box-border text-left py-2 text-sm text-txt-primary hover:bg-gray-100 w-full"
                         role="menuitem">
-                        Sign out
+                        {logoutFn.isLoading ? 'Signing out ....' : 'Sign out'}
                       </button>
                     </div>
                   </div>
