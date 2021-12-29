@@ -27,9 +27,13 @@ class UserStore {
     );
   }
 
-  getUsersByAcademyAndUserType(academyId: string, usertype: UserType) {
+  getUsersByAcademyAndUserType(
+    academyId: string,
+    usertype: UserType,
+    queryParams?: FilterOptions,
+  ) {
     return useQuery(['users/academy', academyId], () =>
-      userService.getUsersByAcademyAndUserType(academyId, usertype),
+      userService.getUsersByAcademyAndUserType(academyId, usertype, queryParams),
     );
   }
 
