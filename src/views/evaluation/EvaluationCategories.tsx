@@ -59,16 +59,16 @@ export default function EvaluationCategories({
       ) : null}
 
       {!loading &&
-        typeof subjecEvaluations?.finished_evaluations.length &&
-        typeof subjecEvaluations?.ongoing_evaluations.length &&
-        typeof subjecEvaluations?.undone_evaluations.length === 'undefined' && (
-          <NoDataAvailable
-            icon="evaluation"
-            showButton={false}
-            title={'No evaluations available'}
-            description="Oops! It looks like you have no available evaluations!"
-          />
-        )}
+      subjecEvaluations?.finished_evaluations.length == 0 &&
+      subjecEvaluations?.ongoing_evaluations.length == 0 &&
+      subjecEvaluations?.undone_evaluations.length === 0 ? (
+        <NoDataAvailable
+          icon="evaluation"
+          showButton={false}
+          title={'No evaluations available'}
+          description="Oops! It looks like you have no available evaluations!"
+        />
+      ) : null}
     </div>
   );
 }

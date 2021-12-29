@@ -30,7 +30,7 @@ import UpdateAcademicProgram from './UpdateAcademicProgram';
 
 export interface IProgramData extends CommonCardDataType {
   department: DivisionInfo;
-  // incharge: string;
+  total_num_modules?: number;
 }
 
 export default function AcademicProgram() {
@@ -76,6 +76,7 @@ export default function AcademicProgram() {
       subTitle: prog.type.replaceAll('_', ' '),
       description: prog.description,
       department: prog.department,
+      total_num_modules: prog.total_num_modules,
       // incharge: prog.incharge && prog.incharge.user.username,
     };
 
@@ -100,13 +101,10 @@ export default function AcademicProgram() {
                 </section>
                 <section>
                   <TableHeader
-                    totalItems={`${programs.length} programs`}
+                    totalItems={programs.length}
                     title="Programs"
-                    showSearch={false}>
-                    <Link to={`/dashboard/programs/add`}>
-                      <Button>Add New Program</Button>
-                    </Link>
-                  </TableHeader>
+                    showSearch={false}
+                  />
                 </section>
                 <section className="flex flex-wrap justify-start gap-2 mt-2">
                   {programs.length === 0 && isLoading ? (
@@ -151,7 +149,7 @@ export default function AcademicProgram() {
                                 Modules
                               </Heading>
                               <Heading fontSize="sm" fontWeight="semibold">
-                                30
+                                {Common.total_num_modules || 0}
                               </Heading>
                             </div>
 
@@ -204,8 +202,9 @@ export default function AcademicProgram() {
                   ) : (
                     <NoDataAvailable
                       buttonLabel="Add new program"
+                      showButton={false}
                       title={'No program available'}
-                      handleClick={() => history.push(`/dashboard/programs/add`)}
+                      handleClick={() => history.push(`/dashboard/programs/add?dp=${dp}`)}
                       description="There are no programs added yet, click on the below button to add some!"
                     />
                   )}

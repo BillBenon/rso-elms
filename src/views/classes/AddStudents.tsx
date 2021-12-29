@@ -82,6 +82,7 @@ function AddStudents({ classId }: IAddStudent) {
             },
           ]}
           dataLabel={'Students in this level'}
+          isLoading={studentsProgram.isLoading}
         />
       ) : (
         <PopupMolecule open={true}>

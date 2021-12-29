@@ -3,6 +3,7 @@ import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-route
 import { Link } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
@@ -14,12 +15,15 @@ import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleFor
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import programStore from '../../store/administration/program.store';
 import { Link as Links } from '../../types';
+import { StudentApproval } from '../../types/services/enrollment.types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from '../programs/AcademicPrograms';
 import AddLevelToProgram from '../programs/AddLevelToProgram';
+import ApproveStudent from '../users/ApproveStudent';
 import EnrollInstructorIntakeProgram from './EnrollInstructorIntakeProgram';
+import EnrollStudentIntakeProgram from './EnrollStudentIntakeProgram';
 import IntakeProgramLevel from './IntakeProgramLevel';
 import IntakeProgramModules from './IntakeProgramModules';
 
@@ -28,19 +32,20 @@ function IntakeProgramDetails() {
   const { path, url } = useRouteMatch();
   const { id, intakeId, intakeProg } = useParams<IntakeProgParam>();
 
-  const studentsProgram = intakeProgramStore.getStudentsByIntakeProgram(intakeProg || '')
-    .data?.data.data;
-  const instructorsProgram = intakeProgramStore.getInstructorsByIntakeProgram(
-    id,
-    intakeId,
-  ).data?.data.data;
+  const { data: studentsProgram, isLoading: studLoading } =
+    intakeProgramStore.getStudentsByIntakeProgramByStatus(
+      intakeProg,
+      StudentApproval.APPROVED,
+    );
+  const { data: instructorsProgram, isLoading: instLoading } =
+    intakeProgramStore.getInstructorsByIntakeProgram(id, intakeId);
 
   const [students, setStudents] = useState<UserView[]>([]);
   const [instructors, setInstructors] = useState<UserView[]>([]);
 
   useEffect(() => {
     let studentsView: UserView[] = [];
-    studentsProgram?.forEach((stud) => {
+    studentsProgram?.data.data.forEach((stud) => {
       let studentView: UserView = {
         id: stud.id,
         first_name: stud.student.user.first_name,
@@ -53,7 +58,7 @@ function IntakeProgramDetails() {
   }, [studentsProgram]);
 
   useEffect(() => {
-    instructorsProgram?.map((inst) =>
+    instructorsProgram?.data.data.map((inst) =>
       setInstructors([
         ...instructors,
         {
@@ -66,7 +71,8 @@ function IntakeProgramDetails() {
     );
   }, [instructorsProgram]);
 
-  const program = programStore.getProgramById(id).data?.data.data;
+  const { data: programs, isLoading } = programStore.getProgramById(id);
+  const program = programs?.data.data;
 
   const getProgramData = () => {
     let programData: IProgramData | undefined;
@@ -76,12 +82,12 @@ function IntakeProgramDetails() {
           type: advancedTypeChecker(program.generic_status),
           text: program.generic_status.toString(),
         },
+        total_num_modules: program.total_num_modules,
         code: program.code,
         title: program.name,
         subTitle: program.type,
         description: program.description,
         department: program.department,
-        // incharge: program.current_admin_names,
       };
     }
 
@@ -104,6 +110,10 @@ function IntakeProgramDetails() {
     {
       label: 'Program levels',
       href: `${url}/levels/${getLevels[0]?.id || ''}`,
+    },
+    {
+      label: 'Approve students',
+      href: `${url}/approve`,
     },
   ];
 
@@ -156,61 +166,60 @@ function IntakeProgramDetails() {
               exact
               path={`${path}`}
               render={() => (
-                <div className="flex py-9">
-                  <div className="mr-24">
-                    {programData && (
-                      <CommonCardMolecule data={programData}>
-                        <div className="flex flex-col mt-8 gap-7 pb-2">
-                          <Heading color="txt-secondary" fontSize="sm">
-                            Program Type
-                          </Heading>
-                          <Heading fontSize="sm">
-                            {programData.subTitle?.replaceAll('_', ' ')}
-                          </Heading>
-
-                          {/* <div className="flex items-center gap-2">
-                            <Avatar
-                              size="24"
-                              alt="user1 profile"
-                              className=" rounded-full  border-2 border-main transform hover:scale-125"
-                              src="https://static.thenounproject.com/png/2643367-200.png"
-                            />
-                            <Heading fontSize="sm">{programData.incharge}</Heading>
-                          </div> */}
+                <>
+                  {isLoading ? (
+                    <Loader />
+                  ) : (
+                    programData && (
+                      <div className="flex py-9">
+                        <div className="mr-24">
+                          <CommonCardMolecule data={programData}>
+                            <div className="flex flex-col mt-8 gap-7 pb-2">
+                              <Heading color="txt-secondary" fontSize="sm">
+                                Program Type
+                              </Heading>
+                              <Heading fontSize="sm">
+                                {programData.subTitle?.replaceAll('_', ' ')}
+                              </Heading>
+                            </div>
+                            <div className="mt-4 flex space-x-4">
+                              <Button
+                                onClick={() =>
+                                  history.push(
+                                    `/dashboard/intakes/programs/${intakeId}/${id}/edit`,
+                                  )
+                                }>
+                                Edit program
+                              </Button>
+                              <Button styleType="outline">Change Status</Button>
+                            </div>
+                          </CommonCardMolecule>
                         </div>
-                        <div className="mt-4 flex space-x-4">
-                          <Button
-                            onClick={() =>
-                              history.push(
-                                `/dashboard/intakes/programs/${intakeId}/${id}/edit`,
-                              )
-                            }>
-                            Edit program
-                          </Button>
-                          <Button styleType="outline">Change Status</Button>
-                        </div>
-                      </CommonCardMolecule>
-                    )}
-                  </div>
+                        <div className="flex flex-col gap-8 z-0">
+                          <UsersPreview
+                            title="Students"
+                            label="Students in Cadette programs"
+                            data={students}
+                            totalUsers={students.length || 0}
+                            dataLabel={''}
+                            isLoading={studLoading}>
+                            <EnrollStudentIntakeProgram />
+                          </UsersPreview>
 
-                  <div className="flex flex-col gap-8 z-0">
-                    <UsersPreview
-                      title="Students"
-                      label="Students in Cadette programs"
-                      data={students}
-                      totalUsers={students.length || 0}
-                      dataLabel={''}
-                    />
-                    <UsersPreview
-                      title="Instructors"
-                      label="Instructors in Cadette programs"
-                      data={instructors}
-                      totalUsers={instructors.length || 0}
-                      dataLabel={''}>
-                      <EnrollInstructorIntakeProgram />
-                    </UsersPreview>
-                  </div>
-                </div>
+                          <UsersPreview
+                            title="Instructors"
+                            label="Instructors in Cadette programs"
+                            data={instructors}
+                            totalUsers={instructors.length || 0}
+                            dataLabel={''}
+                            isLoading={instLoading}>
+                            <EnrollInstructorIntakeProgram />
+                          </UsersPreview>
+                        </div>
+                      </div>
+                    )
+                  )}
+                </>
               )}
             />
 
@@ -248,6 +257,7 @@ function IntakeProgramDetails() {
               render={() => <IntakeProgramModules />}
             />
             <Route path={`${path}/levels`} render={() => <IntakeProgramLevel />} />
+            <Route exact path={`${path}/approve`} render={() => <ApproveStudent />} />
           </Switch>
         </TabNavigation>
       </div>

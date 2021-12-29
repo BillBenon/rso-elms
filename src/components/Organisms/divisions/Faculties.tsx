@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
@@ -33,14 +32,14 @@ export default function Faculties({ fetchType }: IFaculties) {
   const [faculties, setFaculties] = useState<FilteredData[]>([]);
   const { data: userInfo } = authenticatorStore.authUser();
 
-  const { data, isSuccess, isLoading, isError } = divisionStore.getDivisionsByAcademy(
-    fetchType.toUpperCase(),
+  const { data, isLoading } = divisionStore.getDivisionsByAcademy(
+    fetchType.toUpperCase() || 'FACULTY',
     userInfo?.data.data.academy.id.toString() || '',
   );
 
   useEffect(() => {
     let formattedFaculties: any = [];
-    if (isSuccess && data?.data) {
+    if (data?.data) {
       const filteredFaculties = data?.data.data.map((faculty: DivisionInfo) =>
         _.pick(faculty, [
           'id',
@@ -63,7 +62,7 @@ export default function Faculties({ fetchType }: IFaculties) {
       });
 
       data?.data.data && setFaculties(formattedFaculties);
-    } else if (isError) toast.error('error occurred when loading faculties');
+    }
   }, [data]);
 
   function handleClose() {
@@ -97,7 +96,7 @@ export default function Faculties({ fetchType }: IFaculties) {
   return (
     <main>
       <section>
-        {faculties?.length > 0 ? (
+        {faculties.length > 0 ? (
           <TableHeader
             title="Faculty"
             totalItems={faculties?.length || 0}
@@ -106,12 +105,22 @@ export default function Faculties({ fetchType }: IFaculties) {
               <Button>Add Faculty</Button>
             </Link>
           </TableHeader>
-        ) : null}
+        ) : (
+          <></>
+        )}
       </section>
       <section>
-        {isLoading && faculties.length === 0 && <Loader />}
-
-        {isSuccess && faculties?.length > 0 ? (
+        {isLoading ? (
+          <Loader />
+        ) : faculties.length === 0 ? (
+          <NoDataAvailable
+            icon="faculty"
+            buttonLabel="Add new faculty"
+            title={'No faculty available'}
+            handleClick={() => history.push(`/dashboard/divisions/new`)}
+            description="And the web just isnt the same without you. Lets get you back online!"
+          />
+        ) : (
           <Table<FilteredData>
             handleSelect={() => {}}
             statusColumn="status"
@@ -120,15 +129,7 @@ export default function Faculties({ fetchType }: IFaculties) {
             hide={['id']}
             actions={actions}
           />
-        ) : isSuccess && faculties.length === 0 ? (
-          <NoDataAvailable
-            icon="faculty"
-            buttonLabel="Add new faculty"
-            title={'No faculty available'}
-            handleClick={() => history.push(`/dashboard/divisions/new`)}
-            description="And the web just isnt the same without you. Lets get you back online!"
-          />
-        ) : null}
+        )}
       </section>
 
       <Switch>

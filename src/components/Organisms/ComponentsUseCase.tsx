@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import Button from '../Atoms/custom/Button';
 
 import Checkbox from '../Atoms/Input/CheckBox';
 import DropDown from '../Atoms/Input/Dropdown';
 import Input from '../Atoms/Input/Input';
+import Select from '../Atoms/Input/Select';
 import CheckboxMolecule from '../Molecules/input/CheckboxMolecule';
 import DropdownMolecule from '../Molecules/input/DropdownMolecule';
 import { Tab, Tabs } from '../Molecules/tabs/tabs';
@@ -30,6 +32,20 @@ export default function CreatedBySandberg() {
         <h2 className="font-bold text-primary-500 text-2xl py-10">
           Created by Sandberg.
         </h2>
+        <form className="py-10">
+          <Select
+            handleChange={(_e: object) => {
+              console.log('called');
+            }}
+            placeholder="Choose language"
+            name={'language'}
+            required
+            options={options}
+          />
+          <div className="pt-4">
+            <Button type="submit">Submit</Button>
+          </div>
+        </form>
         <Checkbox
           name="language"
           value="en"

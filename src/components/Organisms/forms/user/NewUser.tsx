@@ -6,7 +6,7 @@ import {
   RegionDropdown,
 } from 'react-country-region-selector';
 import toast from 'react-hot-toast';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 
 import { queryClient } from '../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../store/administration';
@@ -41,11 +41,16 @@ import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 
+interface ParamType {
+  userType: UserType;
+}
+
 export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
   const newUserType = pick(UserType, ['ADMIN', 'INSTRUCTOR', 'STUDENT']);
   const newUserTypeWithSuper = { ...newUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
   const authUser = authenticatorStore.authUser();
+  const { userType } = useParams<ParamType>();
 
   const [details, setDetails] = useState<CreateUserInfo>({
     activation_key: '',
@@ -109,6 +114,10 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     }));
   }
 
+  useEffect(() => {
+    setDetails({ ...details, user_type: userType });
+  }, [userType]);
+
   const { mutateAsync } = usersStore.createUser();
   async function addUser<T>(e: FormEvent<T>) {
     e.preventDefault();
@@ -119,6 +128,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
       onSuccess(data) {
         toast.success(data.data.message);
         queryClient.invalidateQueries(['users/institution']);
+        queryClient.invalidateQueries(['users']);
         history.goBack();
       },
       onError(error: any) {
@@ -139,36 +149,34 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     setSelectedProgram(
       programs.data?.data.data.find((p) => p.id == details.intake_program_id)?.program,
     );
-  }, [programs.data?.data.data]);
+  }, [programs.data?.data.data, details.intake_program_id]);
 
   let levels = getLevelsByAcademicProgram(selectedProgram?.id + '');
 
   // let nationalities: [] = [];
 
+<<<<<<< HEAD
   useEffect(() => {
     levels.refetch();
   }, [selectedProgram?.id]);
+=======
+>>>>>>> cfe4726d8b38fa3d9a95fde0d1fa4291fd0603b8
   return (
     <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
       <div className="py-5 mb-3 capitalize">
         <Heading color="txt-primary" fontWeight="bold">
-          New User
+          New {userType.toLowerCase()}
         </Heading>
       </div>
       <form onSubmit={addUser}>
         <DropdownMolecule
-          defaultValue={getDropDownStatusOptions(
-            authUser.data?.data.data.user_type === UserType.SUPER_ADMIN
-              ? newUserTypeWithSuper
-              : newUserType,
-          ).find((type) => type.value === details.user_type)}
           options={getDropDownStatusOptions(
             authUser.data?.data.data.user_type === UserType.SUPER_ADMIN
               ? newUserTypeWithSuper
               : newUserType,
           )}
           name="user_type"
-          placeholder={'Select user type'}
+          placeholder={details.user_type || 'Select user type'}
           handleChange={handleChange}>
           User type
         </DropdownMolecule>
@@ -341,7 +349,9 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
                 labelName: ['code'],
               })}
               name="intake"
-              placeholder={'intake to be enrolled in'}
+              placeholder={
+                intakes.isLoading ? 'Loading intakes..' : 'Intake to be enrolled in'
+              }
               handleChange={otherhandleChange}>
               Intake
             </DropdownMolecule>
@@ -353,7 +363,9 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
                 getOptionLabel: (prog: IntakeProgramInfo) => prog.program.name,
               })}
               name="intake_program_id"
-              placeholder={'Program to be enrolled in'}
+              placeholder={
+                programs.isLoading ? 'Loading programs..' : 'Programs to be enrolled in'
+              }
               handleChange={handleChange}>
               Programs
             </DropdownMolecule>
@@ -364,7 +376,9 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
                 getOptionLabel: (level) => level.level && level.level.name,
               })}
               name="academic_program_level_id"
-              placeholder={'Program to be enrolled in'}
+              placeholder={
+                levels.isLoading ? 'Loading levels..' : 'Level to be enrolled in'
+              }
               handleChange={handleChange}>
               Levels
             </DropdownMolecule>

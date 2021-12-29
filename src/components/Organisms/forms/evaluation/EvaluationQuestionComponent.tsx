@@ -209,7 +209,7 @@ export default function EvaluationQuestionComponent({
                 {question.choices.map((multipleQuestion, choiceIndex) => (
                   <>
                     <TextAreaMolecule
-                      key={choiceIndex}
+                      key={choiceIndex + Math.random()}
                       readOnly={question.submitted}
                       name={'answer_content'}
                       value={multipleQuestion.answer_content}

@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 import { queryClient } from '../../../plugins/react-query';
+import { authenticatorStore } from '../../../store/administration';
 
 import { venueStore } from '../../../store/timetable/venue.store';
 import { GenericStatus, ValueType } from '../../../types';
@@ -13,11 +14,13 @@ import InputMolecule from '../../Molecules/input/InputMolecule';
 
 export default function NewVenue() {
   const history = useHistory();
+  const authUser = authenticatorStore.authUser().data?.data.data;
 
   const [values, setvalues] = useState<CreateVenue>({
     venueType: venueType.CLASS,
     name: '',
     status: GenericStatus.ACTIVE,
+    academyId: authUser?.academy.id + '',
   });
 
   function handleChange(e: ValueType) {

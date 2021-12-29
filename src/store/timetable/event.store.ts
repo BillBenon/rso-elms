@@ -10,13 +10,16 @@ class EventStore {
   getEventById(id: string) {
     return useQuery(['events/id', id], () => eventService.getEvent(id));
   }
-  getAllEvents() {
-    return useQuery(['events'], eventService.getAllEvents);
-  }
 
   updateEvent() {
     return useMutation(eventService.modifyEvent);
   }
+}
+
+export function getAllEvents(academyId: string) {
+  return useQuery(['events'], () => eventService.getAllEvents(academyId), {
+    enabled: academyId.length > 0,
+  });
 }
 
 export const eventStore = new EventStore();

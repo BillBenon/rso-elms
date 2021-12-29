@@ -7,8 +7,10 @@ import { UserView } from '../../types/services/user.types';
 import Avatar from '../Atoms/custom/Avatar';
 import Button from '../Atoms/custom/Button';
 import Icon from '../Atoms/custom/Icon';
+import Loader from '../Atoms/custom/Loader';
 import Checkbox from '../Atoms/Input/CheckBox';
 import Heading from '../Atoms/Text/Heading';
+import NoDataAvailable from '../Molecules/cards/NoDataAvailable';
 import SearchMolecule from '../Molecules/input/SearchMolecule';
 
 interface IRightSidebar {
@@ -18,6 +20,7 @@ interface IRightSidebar {
   data: UserView[];
   selectorActions?: { name: string; handleAction: (_data?: string[]) => void }[];
   dataLabel: string;
+  isLoading: boolean;
 }
 
 function RightSidebar({
@@ -26,6 +29,7 @@ function RightSidebar({
   handleClose,
   selectorActions,
   data,
+  isLoading,
   dataLabel = '',
 }: IRightSidebar) {
   const handleSearch = () => {};
@@ -114,26 +118,38 @@ function RightSidebar({
           {dataLabel}
         </Heading>
 
-        {data.map((user) => (
-          <div className="flex w-full items-center pb-6 gap-4" key={user.id}>
-            <Checkbox
-              checked={user.selected}
-              handleChange={_handleSelect}
-              name={'user'}
-              value={user.id.toString()}
-            />
-            <Avatar
-              src={
-                user.image_url || 'https://static.thenounproject.com/png/2643367-200.png'
-              }
-              size="48"
-              alt=""
-            />
-            <Heading fontSize="sm" fontWeight="semibold" className="text-center">
-              {user.first_name} {user.last_name}
-            </Heading>
-          </div>
-        ))}
+        {isLoading ? (
+          <Loader />
+        ) : data.length === 0 ? (
+          <NoDataAvailable
+            title={'No data available'}
+            icon="user"
+            description={'Please add some data first'}
+            showButton={false}
+          />
+        ) : (
+          data.map((user, i) => (
+            <div className="flex w-full items-center pb-6 gap-4" key={i}>
+              <Checkbox
+                checked={user.selected}
+                handleChange={_handleSelect}
+                name={'user'}
+                value={user.id.toString()}
+              />
+              <Avatar
+                src={
+                  user.image_url ||
+                  'https://static.thenounproject.com/png/2643367-200.png'
+                }
+                size="48"
+                alt=""
+              />
+              <Heading fontSize="sm" fontWeight="semibold" className="text-center">
+                {user.first_name} {user.last_name}
+              </Heading>
+            </div>
+          ))
+        )}
       </div>
     </div>
   );

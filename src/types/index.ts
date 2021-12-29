@@ -1,6 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { FormEvent, ReactNode } from 'react';
 
+import { GenericStatus } from './services/common.types';
+import { StudentApproval } from './services/enrollment.types';
+import { IEvaluationStatus } from './services/evaluation.types';
+import { IntakeStatus } from './services/intake.types';
+import { IntakeModuleStatus } from './services/intake-program.types';
+
 export type Color =
   | 'primary'
   | 'secondary'
@@ -48,7 +54,9 @@ export type Status =
   | 'marked'
   | 'to_mark'
   | 'published'
-  | 'marking';
+  | 'marking'
+  | 'approved'
+  | 'rejected';
 
 export type Page =
   | 'personalDetails'
@@ -99,6 +107,17 @@ export interface SelectData {
   value: string;
   label: string;
   subLabel?: string;
+}
+
+export interface StatusActions {
+  name: string;
+  type:
+    | GenericStatus
+    | IntakeStatus
+    | IEvaluationStatus
+    | IntakeModuleStatus
+    | StudentApproval;
+  handleStatusAction: (_data?: any[]) => void;
 }
 
 /**
@@ -190,7 +209,8 @@ export type IconType =
   | 'word'
   | 'png'
   | 'powerpoint'
-  | 'text-file';
+  | 'text-file'
+  | 'chevron-down';
 
 export interface FormPropType {
   onSubmit?: <E>(_e: FormEvent<E>) => void;

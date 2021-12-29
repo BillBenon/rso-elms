@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Redirect, Route, useRouteMatch } from 'react-router-dom';
+
 import Button from './components/Atoms/custom/Button';
 import Loader from './components/Atoms/custom/Loader';
-
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import Dashboard from './layout/Dashboard';
 import { authenticatorStore } from './store/administration';
@@ -21,7 +21,6 @@ import Levels from './views/levels/Levels';
 import Modules from './views/modules';
 import InstrLevelModule from './views/modules/InstrLevelModule';
 import StudentModule from './views/modules/StudentModule';
-import NotFound from './views/NotFound';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicProgram from './views/programs/AcademicPrograms';
 import InstructorProgram from './views/programs/InstructorProgram';
@@ -36,7 +35,7 @@ import Users from './views/users/Users';
 
 const RouterProtection = () => {
   const [authUser, setAuthUser] = useState<UserInfo>();
-  const { data, isLoading } = authenticatorStore.authUser();
+  const { data, isLoading, isError } = authenticatorStore.authUser();
   const { path } = useRouteMatch();
 
   let token = cookie.getCookie('jwt_info');
@@ -130,15 +129,17 @@ const RouterProtection = () => {
       {authUser?.user_type === UserType.INSTRUCTOR && InstructorRoutes()}
       {authUser?.user_type === UserType.STUDENT && StudentRoutes()}
     </Dashboard>
-  ) : (
+  ) : isError ? (
     <div>
       <h2 className="text-error-500 py-2 mb-3 font-medium tracking-widest">
-        That was an error! try again in some moments.
+        That was an error! try again after a few minutes.
       </h2>
       <Button styleType="outline" onClick={() => window.location.reload()}>
         Reload
       </Button>
     </div>
+  ) : (
+    <div></div>
   );
 };
 

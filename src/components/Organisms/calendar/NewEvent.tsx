@@ -2,6 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
 import { queryClient } from '../../../plugins/react-query';
+import { authenticatorStore } from '../../../store/administration';
 
 import { eventStore } from '../../../store/timetable/event.store';
 import { GenericStatus, ValueType } from '../../../types';
@@ -16,12 +17,15 @@ import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
 export default function NewEvent() {
   const history = useHistory();
 
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
   const [values, setvalues] = useState<CreateEvent>({
     code: randomString(8).toUpperCase(),
     description: '',
     eventCategory: eventCategory.VISIT,
     name: '',
     status: GenericStatus.ACTIVE,
+    academyId: authUser?.academy.id + '',
   });
 
   const { mutateAsync, isLoading } = eventStore.createEvent();

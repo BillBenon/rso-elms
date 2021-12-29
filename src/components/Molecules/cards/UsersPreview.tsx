@@ -19,6 +19,7 @@ type IUserPreview = {
   buttonAction?: () => void;
   children?: ReactNode;
   dataLabel: string;
+  isLoading: boolean;
 };
 
 export default function UsersPreview({
@@ -28,6 +29,7 @@ export default function UsersPreview({
   children,
   totalUsers,
   dataLabel = '',
+  isLoading,
 }: IUserPreview) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
@@ -93,12 +95,13 @@ export default function UsersPreview({
           selectorActions={[
             {
               name: 'Change Status',
-              handleAction: (data?: string[]) => {
-                alert(`changing status ${data}`);
+              handleAction: (_data?: string[]) => {
+                // alert(`changing status ${data}`);
               },
             },
           ]}
           dataLabel={dataLabel}
+          isLoading={isLoading}
         />
       )}
     </>

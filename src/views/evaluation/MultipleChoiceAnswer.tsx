@@ -27,7 +27,7 @@ export default function MultipleChoiceAnswer({
       onClick={() => handleChoiceSelect(choiceId)}>
       <div className="flex">
         <div
-          className={`w-14 h-12 ${classes} text-lg h-2 w-2 border-primary-500' border-2 border-r-0 rounded-tl-md rounded-bl-md right-rounded-md flex items-center justify-center`}>
+          className={`w-14 h-12 ${classes} text-lg border-primary-500' border-2 border-r-0 rounded-tl-md rounded-bl-md right-rounded-md flex items-center justify-center`}>
           *
         </div>
         <div

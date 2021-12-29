@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 
 import { authenticatorStore } from '../../../store/administration';
@@ -31,7 +30,7 @@ export default function Departments({ fetchType }: IDepartment) {
   const { search } = useLocation();
   const facultyId = new URLSearchParams(search).get('fac');
   const { data: userInfo } = authenticatorStore.authUser();
-  let { data, isSuccess, isLoading, isError } = facultyId
+  let { data, isLoading } = facultyId
     ? divisionStore.getDepartmentsInFaculty(facultyId)
     : divisionStore.getDivisionsByAcademy(
         fetchType.toUpperCase(),
@@ -41,14 +40,14 @@ export default function Departments({ fetchType }: IDepartment) {
   let facultyData: any;
 
   if (facultyId) {
-    ({ data: facultyData, isSuccess } = divisionStore.getDivision(facultyId));
+    ({ data: facultyData } = divisionStore.getDivision(facultyId));
   }
 
   useEffect(() => {
     // extract department data to display
     let formattedDeparts: any = [];
 
-    if (isSuccess && data?.data) {
+    if (data?.data) {
       const filteredInfo = data?.data.data.map((department: DivisionInfo) =>
         _.pick(department, [
           'id',
@@ -71,7 +70,7 @@ export default function Departments({ fetchType }: IDepartment) {
       });
 
       data?.data.data && setDepartments(formattedDeparts);
-    } else if (isError) toast.error('error occurred when loading departments');
+    }
   }, [data]);
 
   function handleClose() {
@@ -112,35 +111,23 @@ export default function Departments({ fetchType }: IDepartment) {
         path="*"
         render={() => (
           <main>
-            {departments?.length > 0 ? (
+            {departments.length > 0 ? (
               <section>
                 <TableHeader
                   title={`${
                     facultyData?.data.data.name
-                      ? `${facultyData?.data.data.name} / Department`
-                      : 'department'
+                      ? `Departments in ${facultyData?.data.data.name}`
+                      : 'Department'
                   }`}
-                  totalItems={
-                    facultyData?.data.data.name
-                      ? `${departments?.length} departments`
-                      : departments?.length
-                  }
+                  totalItems={departments?.length}
                   handleSearch={() => {}}></TableHeader>
               </section>
             ) : null}
 
             <section>
-              {isLoading && departments.length === 0 && <Loader />}
-              {isSuccess && departments?.length > 0 ? (
-                <Table<FilteredData>
-                  handleSelect={() => {}}
-                  statusColumn="status"
-                  data={departments}
-                  uniqueCol={'id'}
-                  hide={['id']}
-                  actions={actions}
-                />
-              ) : isSuccess && departments.length === 0 ? (
+              {isLoading ? (
+                <Loader />
+              ) : departments.length === 0 ? (
                 <NoDataAvailable
                   icon="faculty"
                   showButton={false}
@@ -149,7 +136,16 @@ export default function Departments({ fetchType }: IDepartment) {
                   handleClick={() => history.push(`/dashboard/divisions/departments/new`)}
                   description="And the web just isnt the same without you. Lets get you back online!"
                 />
-              ) : null}
+              ) : (
+                <Table<FilteredData>
+                  handleSelect={() => {}}
+                  statusColumn="status"
+                  data={departments}
+                  uniqueCol={'id'}
+                  hide={['id']}
+                  actions={actions}
+                />
+              )}
             </section>
 
             {/* modify department */}

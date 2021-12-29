@@ -60,6 +60,12 @@ class EvaluationService {
       `/evaluations/getEvaluationsByAcademy/${academy}/narrowByInstructor/${instructor}`,
     );
   }
+
+  public async fetchEvaluationsByModule(
+    module: string,
+  ): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
+    return await evaluationAxios.get(`/evaluations/getEvaluationsByModule/${module}`);
+  }
   public async fetchEvaluationsBySubject(
     subject: string,
   ): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {

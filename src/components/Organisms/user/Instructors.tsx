@@ -1,4 +1,3 @@
-import { resolveObjectURL } from 'buffer';
 import React from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
@@ -47,7 +46,7 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
             <Link to={`${url}/import`}>
               <Button styleType="outline">Import instructors</Button>
             </Link>
-            <Link to={`/dashboard/users/add`}>
+            <Link to={`/dashboard/users/add/${UserType.INSTRUCTOR}`}>
               <Button>New instructor</Button>
             </Link>
           </div>

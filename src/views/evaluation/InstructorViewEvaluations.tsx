@@ -1,4 +1,3 @@
-/*@ts-ignore*/
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 

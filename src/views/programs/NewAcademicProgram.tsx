@@ -6,6 +6,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
@@ -14,6 +15,7 @@ import { authenticatorStore } from '../../store/administration';
 import { divisionStore } from '../../store/administration/divisions.store';
 import programStore from '../../store/administration/program.store';
 import usersStore from '../../store/administration/users.store';
+import { Link as LinkList } from '../../types';
 import { CommonFormProps, ValueType } from '../../types';
 import {
   CreateProgramInfo,
@@ -61,14 +63,21 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
     }));
   }
 
+  const list: LinkList[] = [
+    { to: '/', title: 'Home' },
+    { to: 'dashboard/divisions', title: 'Divisions' },
+    { to: '/dashboard/divisions/departments', title: 'Departments' },
+    { to: '/', title: 'New Program' },
+  ];
+
   async function createProgram<T>(e: FormEvent<T>) {
     e.preventDefault();
 
     if (onSubmit) onSubmit(e);
     await mutateAsync(details, {
-      onSuccess(newData) {
+      onSuccess(newProgram) {
         toast.success('Program created');
-        history.push(`/dashboard/programs/${newData.data.data.id}/level/add`);
+        history.push(`/dashboard/programs/${newProgram.data.data.id}/level/add`);
       },
       onError(error: any) {
         toast.error(error.response.data.message);
@@ -78,6 +87,9 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
 
   return (
     <>
+      <section>
+        <BreadCrumb list={list}></BreadCrumb>
+      </section>
       <form onSubmit={createProgram}>
         <div className="p-6 w-auto lg:w-5/12 pl-8 gap-3 rounded-lg bg-main mt-8 flex-col">
           <div className="py-5 mb-3 capitalize">
