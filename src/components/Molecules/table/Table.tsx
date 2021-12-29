@@ -1,8 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-
-import '../../../styles/components/Molecules/table/table.scss';
-
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 
@@ -43,9 +38,15 @@ interface TableProps<T> {
   statusColumn?: string;
   handleSelect?: (_selected: string[] | null) => void;
   unselectAll?: boolean;
+
+  //pagination
+  totalPages?: number;
+  currentPage?: number;
+  onPaginate?: (_page: number) => void;
+  onChangePageSize?: (_size: number) => void;
 }
 
-export function Table<T>({
+export default function Table2<T>({
   uniqueCol,
   hide = [],
   data,
@@ -55,36 +56,31 @@ export function Table<T>({
   statusColumn,
   handleSelect,
   unselectAll = false,
+  totalPages = 1,
+  currentPage = 0,
+  onPaginate,
+  onChangePageSize,
 }: TableProps<T>) {
   const countsToDisplay = [
     { label: '25', value: '25' },
     { label: '50', value: '50' },
     { label: '100', value: '100' },
   ];
-  const [rowsOnPage, setRowsOnPage] = useState(parseInt(countsToDisplay[0].value));
-  const [currentPage, setCurrentPage] = useState(1);
 
-  //Get current rows
-  const indexOfLastRow = currentPage * rowsOnPage;
-  const indexOfFirstRow = indexOfLastRow - rowsOnPage;
-  const [currentRows, setCurrentRows] = useState(
-    data.slice(indexOfFirstRow, indexOfLastRow),
-  );
+  const [currentRows, setCurrentRows] = useState(data);
   const [selected, setSelected] = useState(new Set(''));
 
   const rowsToHide: (keyof (T & Selected))[] = ['selected'];
   hide.length > 0 && rowsToHide.push(...hide); // add unique col to elements that gonna be hidden
 
   useEffect(() => {
-    setCurrentRows(data.slice(indexOfFirstRow, indexOfLastRow));
-  }, [currentPage, data]);
-
-  useEffect(() => {
     selected.forEach((sel) => changeSelect(sel, true));
   }, [data]);
 
-  // Change page
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  // handle paginate
+  const paginate = (pageNumber: number) => {
+    if (onPaginate) onPaginate(pageNumber);
+  };
 
   // handle select all
   function _handleSelectAll() {
@@ -155,7 +151,7 @@ export function Table<T>({
   }, [unselectAll]);
 
   function handleCountSelect(e: ValueType) {
-    e.value && setRowsOnPage(+e.value);
+    if (onChangePageSize) onChangePageSize(parseInt(e.value + ''));
   }
 
   const getKeys = () => {
@@ -226,9 +222,9 @@ export function Table<T>({
             <Tooltip
               on="click"
               trigger={
-                <span onClick={() => {}}>
+                <button type="button" onClick={() => {}}>
                   <Icon name="more" stroke={'txt-secondary'} fill={'txt-secondary'} />
-                </span>
+                </button>
               }
               open>
               <ul>
@@ -298,14 +294,12 @@ export function Table<T>({
           <span>Entries</span>
         </div>
         <Pagination
-          rowsPerPage={rowsOnPage}
-          totalRows={data.length}
+          totalElements={data.length}
           paginate={paginate}
           currentPage={currentPage}
+          totalPages={totalPages}
         />
       </div>
     </div>
   );
 }
-
-export default Table;
