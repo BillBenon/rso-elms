@@ -66,7 +66,7 @@ function LevelPeriod() {
                             `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${period}/view-class`,
                           )
                         }>
-                        View classes
+                        Add Evaluation
                       </Button>
                     </div>
                     <SubjectPeriod />

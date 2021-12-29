@@ -1,13 +1,14 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
-import { Tabs, Tab, tabEventTypes } from '../../components/Molecules/tabs/tabs';
+
+import Button from '../../components/Atoms/custom/Button';
+import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
+import Table from '../../components/Molecules/table/Table';
+import { Tab, tabEventTypes, Tabs } from '../../components/Molecules/tabs/tabs';
 import academicperiodStore from '../../store/administration/academicperiod.store';
 import { classStore } from '../../store/administration/class.store';
-import Loader from '../../components/Atoms/custom/Loader';
-import Table from '../../components/Molecules/table/Table';
 import { getClassTermlyOverallReport } from '../../store/evaluation/school-report.store';
-import Button from '../../components/Atoms/custom/Button';
 
 interface IParamType {
   levelId: string;

@@ -1,12 +1,18 @@
 import React from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
+import { Link } from 'react-router-dom';
 
+import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import { authenticatorStore } from '../../store/administration';
+import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
+import instructordeploymentStore from '../../store/instructordeployment.store';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
+import { UserType } from '../../types/services/user.types';
 import LevelPeriod from '../classes/LevelPeriod';
 import EnrollStudent from './EnrollStudent';
 import IntakeLevelModule from './IntakeLevelModule';
@@ -17,16 +23,39 @@ function IntakeProgramLevel() {
   const { path, url } = useRouteMatch();
   const { intakeProg, intakeId, id } = useParams<IntakeProgParam>();
 
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
+  const authUserId = authUser?.id;
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(authUserId + '')
+    .data?.data.data;
+
   const { data: getLevels, isLoading } =
     intakeProgramStore.getLevelsByIntakeProgram(intakeProg);
 
+  const { data: instructorLevels } = enrollmentStore.getInstructorLevels(
+    instructorInfo?.id + '',
+  );
+
+  const instructorProgLevels = getLevels?.data.data.filter((inst) =>
+    instructorLevels?.data.data.filter(
+      (lv) => lv.academic_program_level.id === inst.academic_program_level.id,
+    ),
+  );
+
   const tabs =
-    (getLevels &&
-      getLevels.data.data.map((level) => ({
-        label: `${level.academic_program_level.level.name}`,
-        href: `${url}/${level.id}`,
-      }))) ||
-    [];
+    authUser?.user_type === UserType.INSTRUCTOR
+      ? (instructorProgLevels &&
+          instructorProgLevels.map((level) => ({
+            label: `${level.academic_program_level.level.name}`,
+            href: `${url}/${level.id}`,
+          }))) ||
+        []
+      : (getLevels &&
+          getLevels.data.data.map((level) => ({
+            label: `${level.academic_program_level.level.name}`,
+            href: `${url}/${level.id}`,
+          }))) ||
+        [];
 
   return (
     <>
@@ -45,37 +74,45 @@ function IntakeProgramLevel() {
           description="There are no levels available yet! you can add the from the button below"
         />
       ) : (
-        <TabNavigation tabs={tabs}>
-          <Switch>
-            <Route exact path={`${path}/:level`} render={() => <IntakeLevelModule />} />
-            {/* enroll student to intake program level */}
-            <Route
-              exact
-              path={`${path}/:level/enroll-students`}
-              render={() => <EnrollStudent />}
-            />
-            {/* add module to intake program level */}
-            <Route
-              path={`${path}/:level/view-period/:period`}
-              render={() => <LevelPeriod />}
-            />
+        <>
+          <div className="text-right">
+            <Link
+              to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
+              <Button>Add Level</Button>
+            </Link>
+          </div>
+          <TabNavigation tabs={tabs}>
+            <Switch>
+              <Route exact path={`${path}/:level`} render={() => <IntakeLevelModule />} />
+              {/* enroll student to intake program level */}
+              <Route
+                exact
+                path={`${path}/:level/enroll-students`}
+                render={() => <EnrollStudent />}
+              />
+              {/* add module to intake program level */}
+              <Route
+                path={`${path}/:level/view-period/:period`}
+                render={() => <LevelPeriod />}
+              />
 
-            {/* add periods to intake level */}
-            <Route
-              exact
-              path={`${path}/:level/add-period`}
-              render={() => (
-                <PopupMolecule
-                  title="Add period to level"
-                  closeOnClickOutSide={false}
-                  open
-                  onClose={history.goBack}>
-                  <NewIntakePeriod checked={0} />
-                </PopupMolecule>
-              )}
-            />
-          </Switch>
-        </TabNavigation>
+              {/* add periods to intake level */}
+              <Route
+                exact
+                path={`${path}/:level/add-period`}
+                render={() => (
+                  <PopupMolecule
+                    title="Add period to level"
+                    closeOnClickOutSide={false}
+                    open
+                    onClose={history.goBack}>
+                    <NewIntakePeriod checked={0} />
+                  </PopupMolecule>
+                )}
+              />
+            </Switch>
+          </TabNavigation>
+        </>
       )}
     </>
   );

@@ -57,12 +57,23 @@ function NewIntakeLevelModule() {
   const levels =
     intakeProgramStore.getLevelsByIntakeProgram(intakeProg).data?.data.data || [];
 
-  const getAllModuleStore = moduleStore.getModulesByProgram(id).data?.data.data || [];
+  const { data: getAllModuleStore, isLoading: mLoading } =
+    moduleStore.getModulesByProgram(id);
+  const { data: levelModuleStore, isLoading: lmLoading } =
+    intakeProgramStore.getModulesByLevel(parseInt(levelId));
 
-  const instructorInPrograms =
-    intakeProgramStore.getInstructorsByIntakeProgram(id, intakeId).data?.data.data || [];
+  const modules =
+    getAllModuleStore?.data.data.filter(
+      (md) => md.id !== levelModuleStore?.data.data.find((m) => m)?.module.id,
+    ) || [];
 
-  const instructors = instructorInPrograms.map((instr) => instr.instructor);
+  const instructorInPrograms = intakeProgramStore.getInstructorsByIntakeProgram(
+    id,
+    intakeId,
+  );
+
+  const instructors =
+    instructorInPrograms.data?.data.data.map((instr) => instr.instructor) || [];
 
   useEffect(() => {
     setvalues({ ...values, academic_year_program_intake_level_id: parseInt(levelId) });
@@ -119,12 +130,16 @@ function NewIntakeLevelModule() {
           <DropdownMolecule
             handleChange={handleChange}
             name="module_id"
-            placeholder="Select modules"
-            options={getDropDownOptions({ inputs: getAllModuleStore })}>
+            placeholder={mLoading || lmLoading ? 'Loading modules' : 'Select modules'}
+            options={getDropDownOptions({
+              inputs: modules,
+            })}>
             <p className="font-medium">Modules</p>
           </DropdownMolecule>
           <DropdownMolecule
-            placeholder="Select incharge"
+            placeholder={
+              instructorInPrograms.isLoading ? 'Loading incharge' : 'Select incharge'
+            }
             options={getDropDownOptions({
               inputs: instructors,
               labelName: ['first_name', 'last_name'],
@@ -235,8 +250,7 @@ function NewIntakeLevelModule() {
               <Panel
                 key={mod.module_id}
                 title={
-                  getAllModuleStore.find((module) => module.id === mod.module_id)?.name ||
-                  'Module'
+                  modules.find((module) => module.id === mod.module_id)?.name || 'Module'
                 }
                 badge={{ type: mod.intake_status, text: mod.intake_status }}
                 className="bg-main"

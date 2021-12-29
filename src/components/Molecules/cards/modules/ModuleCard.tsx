@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as BrowserLink } from 'react-router-dom';
+import { Link as BrowserLink, useHistory } from 'react-router-dom';
 
 import { authenticatorStore } from '../../../../store/administration';
 import { CommonCardDataType } from '../../../../types';
@@ -11,11 +11,13 @@ import CommonCardMolecule from '../CommonCardMolecule';
 
 interface IProps {
   course: CommonCardDataType;
+  showMenus?: boolean;
 }
 
-export default function ModuleCard({ course }: IProps) {
+export default function ModuleCard({ course, showMenus = true }: IProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
 
+  const history = useHistory();
   return (
     <div className="p-2 mt-3">
       <Tooltip
@@ -23,7 +25,12 @@ export default function ModuleCard({ course }: IProps) {
         trigger={
           <CommonCardMolecule
             data={course}
-            to={{ title: 'module', to: `/dashboard/modules/${course.id}/subjects` }}>
+            handleClick={() =>
+              history.push({
+                pathname: `/dashboard/modules/${course.id}/subjects`,
+                search: `?showMenus=${showMenus}`,
+              })
+            }>
             <p className="pt-3">
               Total subjects:
               <span className="px-1 text-primary-500">{'None'}</span>
@@ -38,7 +45,7 @@ export default function ModuleCard({ course }: IProps) {
           {authUser?.user_type === UserType.STUDENT ? (
             <BrowserLink
               className="outline-none"
-              to={`/dashboard/modules/${course.id}/subject`}>
+              to={`/dashboard/modules/${course.id}/subjects`}>
               <Button styleType="outline">Start module</Button>
             </BrowserLink>
           ) : authUser?.user_type === UserType.ADMIN ? (

@@ -56,6 +56,7 @@ export type Status =
   | 'published'
   | 'marking'
   | 'approved'
+  | 'deleted'
   | 'rejected';
 
 export type Page =

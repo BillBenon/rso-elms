@@ -7,7 +7,7 @@ class InstitutionStore {
     return useMutation(institutionService.create);
   }
   getAll() {
-    return useMutation('institutions', institutionService.fetchAll);
+    return useQuery('institutions', institutionService.fetchAll);
   }
   getInstitutionById(id: string) {
     return useQuery(['insitution/id', id], () =>

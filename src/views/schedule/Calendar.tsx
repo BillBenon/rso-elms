@@ -2,8 +2,8 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../../styles/components/Molecules/calendar.scss';
 
 import moment from 'moment';
-import React, { useState } from 'react';
-import { Calendar, Event, momentLocalizer } from 'react-big-calendar';
+import React, { useEffect, useState } from 'react';
+import { Calendar, momentLocalizer } from 'react-big-calendar';
 import {
   Link as BrowserLink,
   Route,
@@ -17,6 +17,7 @@ import {
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
+import Picker from '../../components/Molecules/input/DateRangePicker';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedule';
@@ -27,22 +28,23 @@ import { scheduleStore } from '../../store/timetable/calendar.store';
 import { ParamType, ValueType } from '../../types';
 import { DateRange } from '../../types/services/schedule.types';
 import { formatCalendarEvents } from '../../utils/calendar';
-import { getWeekBorderDays } from '../../utils/date-helper';
+import { formatDateToYyMmDd, getWeekBorderDays } from '../../utils/date-helper';
 
 const localizer = momentLocalizer(moment);
 
 export default function CalendarView() {
   const history = useHistory();
+
   const { search } = useLocation();
   const { path, url } = useRouteMatch();
   const { id } = useParams<ParamType>();
 
-  const [dateRange] = useState<DateRange>({
-    startDate: getWeekBorderDays().monday,
-    endDate: getWeekBorderDays().sunday,
+  const [dateRange, setdateRange] = useState<DateRange>({
+    start_date: getWeekBorderDays().monday,
+    end_date: getWeekBorderDays().sunday,
   });
 
-  // const [isChangeRangeOpen, setisChangeRangeOpen] = useState(false);
+  const [isChangeRangeOpen, setisChangeRangeOpen] = useState(false);
 
   // query parameters
   const inLevelId = new URLSearchParams(search).get('in_level_id');
@@ -53,23 +55,26 @@ export default function CalendarView() {
   const classInfo = classStore.getClassById(classId + '').data?.data.data;
 
   // get events
-  const events = formatCalendarEvents(
-    (inLevelId
-      ? scheduleStore.getAllByAcademicProgramIntakeLevel(inLevelId, dateRange).data?.data
-          .data
-      : classId
-      ? scheduleStore.getAllByIntakeLevelClass(classId, dateRange).data?.data.data
-      : scheduleStore.getAllByAcademicProgram(id, dateRange).data?.data.data) || [],
-  );
+  const { data, refetch } = inLevelId
+    ? scheduleStore.getAllByAcademicProgramIntakeLevel(inLevelId, dateRange)
+    : classId
+    ? scheduleStore.getAllByIntakeLevelClass(classId, dateRange)
+    : scheduleStore.getAllByAcademicProgram(id, dateRange);
+
+  const events = formatCalendarEvents(data?.data.data || []);
 
   const handleClose = () => {
     history.goBack();
   };
 
-  // const handleDateRangeChange = (r: DateRange) => {
-  //   setisChangeRangeOpen(false);
-  //   setdateRange({ startDate: r.startDate, endDate: r.endDate });
-  // };
+  useEffect(() => {
+    refetch();
+  }, [dateRange]);
+
+  const handleDateRangeChange = (r: DateRange) => {
+    setisChangeRangeOpen(false);
+    setdateRange({ start_date: r.start_date, end_date: r.end_date });
+  };
 
   return (
     <div>
@@ -81,15 +86,15 @@ export default function CalendarView() {
           : programInfo?.name}
       </Heading>
       <Heading fontSize="lg" fontWeight="semibold">
-        {`${dateRange.startDate} to ${dateRange.endDate}`}
+        {`${dateRange.start_date} to ${dateRange.end_date}`}
       </Heading>
       <div className="my-5">
         <div className="flex flex-wrap justify-between items-center">
-          {/* <div>
+          <div>
             <Button styleType="outline" onClick={() => setisChangeRangeOpen(true)}>
               Change date range
             </Button>
-          </div> */}
+          </div>
           <div className="flex flex-wrap justify-start items-center">
             <SearchMolecule handleChange={(_e: ValueType) => {}} />
             <button className="border p-0 rounded-md mx-2">
@@ -104,21 +109,21 @@ export default function CalendarView() {
           </div>
         </div>
       </div>
-      {/* 
+
       <PopupMolecule open={isChangeRangeOpen} title="Change date range">
         <Picker
           open
           onChange={(r) =>
             handleDateRangeChange({
-              startDate: formatDateToYyMmDd(r.startDate?.toDateString() + ''),
-              endDate: formatDateToYyMmDd(r.endDate?.toDateString() + ''),
+              start_date: formatDateToYyMmDd(r.startDate?.toDateString() + ''),
+              end_date: formatDateToYyMmDd(r.endDate?.toDateString() + ''),
             } as DateRange)
           }
           handleToggle={function (): void {
             throw new Error('Function not implemented.');
           }}
         />
-      </PopupMolecule> */}
+      </PopupMolecule>
 
       <Calendar
         localizer={localizer}
@@ -134,7 +139,7 @@ export default function CalendarView() {
         style={{ height: 900 }}
         min={new Date(2017, 10, 0, 4, 0, 0)}
         max={new Date(2017, 10, 0, 23, 59, 59)}
-        date={dateRange.startDate}
+        date={dateRange.start_date}
         // onSelectEvent={(event) => history.push(`${path}/event/${event.id}`)}
       />
       <Switch>
@@ -150,12 +155,4 @@ export default function CalendarView() {
       </Switch>
     </div>
   );
-}
-
-interface Iprops {
-  event: Event;
-}
-
-export function CustomEvent({ event }: Iprops) {
-  return <div className="py-3 px-1 rounded bg-primary-500 text-white">{event.title}</div>;
 }

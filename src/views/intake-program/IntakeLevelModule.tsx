@@ -7,9 +7,11 @@ import AddCard from '../../components/Molecules/cards/AddCard';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import { authenticatorStore } from '../../store/administration';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { CommonCardDataType } from '../../types';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
+import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import EnrollInstructorToLevel from './EnrollInstructorToLevel';
 import EnrollStudent from './EnrollStudent';
@@ -19,6 +21,8 @@ function IntakeLevelModule() {
   const { id, intakeId, intakeProg, level } = useParams<IntakeLevelParam>();
 
   const [levelModules, setlevelModules] = useState<CommonCardDataType[]>([]);
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
   const { data: levelModuleStore, isLoading } = intakeProgramStore.getModulesByLevel(
     parseInt(level),
   );
@@ -48,8 +52,13 @@ function IntakeLevelModule() {
   return (
     <>
       <TableHeader usePadding={false} showBadge={false} showSearch={false}>
-        <EnrollInstructorToLevel />
-        <EnrollStudent />
+        {authUser?.user_type === UserType.ADMIN && (
+          <>
+            <EnrollInstructorToLevel />
+            <EnrollStudent />
+          </>
+        )}
+
         {prdLoading ? (
           <></>
         ) : (

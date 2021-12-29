@@ -32,7 +32,7 @@ export default function Redirecting() {
 
         redirectTo('/dashboard/users');
       } else if (authUser.data.data.user_type === UserType.INSTRUCTOR) {
-        redirectTo('/dashboard/inst-program');
+        redirectTo('/dashboard/inst-module');
       } else if (authUser.data.data.user_type === UserType.STUDENT) {
         redirectTo('/dashboard/student');
       } else if (authUser.data.data.user_type === UserType.SUPER_ADMIN) {

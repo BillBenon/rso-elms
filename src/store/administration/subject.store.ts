@@ -15,10 +15,8 @@ class SubjectStore {
   }
 
   getSubjectsByModule(moduleId: string) {
-    return useQuery(
-      ['subjects/moduleId', moduleId],
-      () => subjectService.getSubjectsByModule(moduleId),
-      { enabled: !!moduleId },
+    return useQuery(['subjects/moduleId', moduleId], () =>
+      subjectService.getSubjectsByModule(moduleId),
     );
   }
 
