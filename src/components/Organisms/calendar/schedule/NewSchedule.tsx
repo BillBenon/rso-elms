@@ -9,12 +9,12 @@ import {
   getIntakesByAcademy,
   getProgramsByIntake,
 } from '../../../../store/administration/intake.store';
-import { getAllEvents } from '../../../../store/timetable/event.store';
-import { getAllVenues } from '../../../../store/timetable/venue.store';
 import intakeProgramStore from '../../../../store/administration/intake-program.store';
 import programStore from '../../../../store/administration/program.store';
 import usersStore from '../../../../store/administration/users.store';
 import { scheduleStore } from '../../../../store/timetable/calendar.store';
+import { getAllEvents } from '../../../../store/timetable/event.store';
+import { getAllVenues } from '../../../../store/timetable/venue.store';
 import { ParamType, SelectData, ValueType } from '../../../../types';
 import {
   CreateEventSchedule,

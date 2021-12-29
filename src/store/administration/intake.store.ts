@@ -49,10 +49,12 @@ class IntakeStore {
   }
 }
 
-export function getIntakesByAcademy(id: string, fetchByReg = false) {
+export function getIntakesByAcademy(id: string, fetchByReg = false, enabled = false) {
   if (fetchByReg)
-    return useQuery(['intakes/registrationControl', id], () =>
-      intakeService.getIntakesPyRegistrationControl(id),
+    return useQuery(
+      ['intakes/registrationControl', id],
+      () => intakeService.getIntakesPyRegistrationControl(id),
+      { enabled },
     );
   else
     return useQuery(['intakes/academy', id], () => intakeService.getIntakesByAcademy(id));

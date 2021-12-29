@@ -30,8 +30,7 @@ import UpdateAcademicProgram from './UpdateAcademicProgram';
 
 export interface IProgramData extends CommonCardDataType {
   department: DivisionInfo;
-  total_num_modules: number;
-  // incharge: string;
+  total_num_modules?: number;
 }
 
 export default function AcademicProgram() {
