@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as BrowserLink } from 'react-router-dom';
+import { Link as BrowserLink, useHistory } from 'react-router-dom';
 
 import { authenticatorStore } from '../../../../store/administration';
 import { CommonCardDataType } from '../../../../types';
@@ -11,11 +11,13 @@ import CommonCardMolecule from '../CommonCardMolecule';
 
 interface IProps {
   course: CommonCardDataType;
+  showMenus?: boolean;
 }
 
-export default function ModuleCard({ course }: IProps) {
+export default function ModuleCard({ course, showMenus = true }: IProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
 
+  const history = useHistory();
   return (
     <div className="p-2 mt-3">
       <Tooltip
@@ -23,6 +25,12 @@ export default function ModuleCard({ course }: IProps) {
         trigger={
           <CommonCardMolecule
             data={course}
+            handleClick={() =>
+              history.push({
+                pathname: `/dashboard/modules/${course.id}/subject`,
+                search: `?showMenus=${showMenus}`,
+              })
+            }
             to={{ title: 'module', to: `/dashboard/modules/${course.id}/subject` }}>
             <p className="pt-3">
               Total subjects:

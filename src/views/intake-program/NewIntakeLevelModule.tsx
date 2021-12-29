@@ -250,9 +250,7 @@ function NewIntakeLevelModule() {
               <Panel
                 key={mod.module_id}
                 title={
-                  getAllModuleStore?.data.data.find(
-                    (module) => module.id === mod.module_id,
-                  )?.name || 'Module'
+                  modules.find((module) => module.id === mod.module_id)?.name || 'Module'
                 }
                 badge={{ type: mod.intake_status, text: mod.intake_status }}
                 className="bg-main"

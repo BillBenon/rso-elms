@@ -53,7 +53,7 @@ export function Tabs({
       <div className="flex flex-wrap justify-start">
         {children.map((tab, i) => {
           const tProps: any = tab.props;
-          return (
+          return tProps.label && tProps.label.length > 0 ? (
             <button
               key={i}
               className={`pr-5 pl-3 py-4 ${
@@ -65,7 +65,7 @@ export function Tabs({
               onClick={() => slideTo(i)}>
               {tProps.label}
             </button>
-          );
+          ) : null;
         })}
       </div>
     );
@@ -123,6 +123,8 @@ export function RoundedTabs({
       </div>
     );
   };
+
+  console.log(children);
 
   return (
     <div className={`tabs ${className}`}>

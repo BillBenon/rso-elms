@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
+import {
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+  useParams,
+  useRouteMatch,
+} from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
@@ -10,7 +17,7 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
-import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import UpdateModuleForm from '../../components/Organisms/forms/modules/UpdateModuleForm';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
 import { authenticatorStore } from '../../store/administration';
@@ -27,13 +34,14 @@ export default function ModuleDetails() {
 
   const { id } = useParams<ParamType>();
   const { path, url } = useRouteMatch();
+  const { search } = useLocation();
+  const showMenu = new URLSearchParams(search).get('showMenus');
   const history = useHistory();
-
   const subjectData = subjectStore.getSubjectsByModule(id);
   const moduleData = moduleStore.getModuleById(id);
   const authUser = authenticatorStore.authUser().data?.data.data;
 
-  const tabs = [
+  let tabs: TabType[] = [
     {
       label: 'Subjects',
       href: `${url}/subject`,
@@ -46,19 +54,24 @@ export default function ModuleDetails() {
       label: 'Preriquisites',
       href: `${url}/prereqs`,
     },
-    {
-      label: 'Syllabus',
-      href: `${url}/syllabus`,
-    },
-    {
-      label: 'Evaluation',
-      href: `${url}/evaluations`,
-    },
-    {
-      label: 'Performance',
-      href: `${url}/performances`,
-    },
   ];
+
+  if (showMenu) {
+    tabs.push(
+      {
+        label: 'Syllabus',
+        href: `${url}/syllabus`,
+      },
+      {
+        label: 'Evaluation',
+        href: `${url}/evaluations`,
+      },
+      {
+        label: 'Performance',
+        href: `${url}/performances`,
+      },
+    );
+  }
 
   var lastUrl: string = location.href;
 
@@ -85,7 +98,6 @@ export default function ModuleDetails() {
       const url = location.href;
       if (url !== lastUrl) {
         lastUrl = url;
-        console.log(lastUrl);
         if (lastUrl.endsWith('subjects')) {
           setCurrentPage('SUBJECTS');
         } else if (lastUrl.endsWith('materials')) {

@@ -72,7 +72,7 @@ function Levels() {
 
         {levels && levels?.length > 0 ? (
           <Table<FilteredLevels>
-            statusColumn="status"
+            statusColumn="generic_status"
             data={levels}
             uniqueCol={'id'}
             hide={['id']}
