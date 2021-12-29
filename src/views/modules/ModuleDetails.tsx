@@ -45,31 +45,31 @@ export default function ModuleDetails() {
   let tabs: TabType[] = [
     {
       label: 'Subjects',
-      href: `${url}/subjects`,
+      href: `${url}/subjects?showMenus=${showMenu}`,
     },
     {
       label: 'Materials',
-      href: `${url}/materials`,
+      href: `${url}/materials?showMenus=${showMenu}`,
     },
     {
       label: 'Preriquisites',
-      href: `${url}/prereqs`,
+      href: `${url}/prereqs?showMenus=${showMenu}`,
     },
   ];
 
-  if (showMenu) {
+  if (showMenu && showMenu == 'true') {
     tabs.push(
       {
         label: 'Syllabus',
-        href: `${url}/syllabus`,
+        href: `${url}/syllabus?showMenus=${showMenu}`,
       },
       {
         label: 'Evaluation',
-        href: `${url}/evaluations`,
+        href: `${url}/evaluations?showMenus=${showMenu}`,
       },
       {
         label: 'Performance',
-        href: `${url}/performances`,
+        href: `${url}/performances?showMenus=${showMenu}`,
       },
     );
   }
@@ -114,7 +114,7 @@ export default function ModuleDetails() {
         }
       }
     }).observe(document, { subtree: true, childList: true });
-  }, [subjectData.data]);
+  }, [subjectData.data?.data.data]);
 
   // function onUrlChange() {
   //   alert('new-loc' + location.href);

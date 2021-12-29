@@ -27,11 +27,10 @@ export default function ModuleCard({ course, showMenus = true }: IProps) {
             data={course}
             handleClick={() =>
               history.push({
-                pathname: `/dashboard/modules/${course.id}/subject`,
+                pathname: `/dashboard/modules/${course.id}/subjects`,
                 search: `?showMenus=${showMenus}`,
               })
-            }
-            to={{ title: 'module', to: `/dashboard/modules/${course.id}/subject` }}>
+            }>
             <p className="pt-3">
               Total subjects:
               <span className="px-1 text-primary-500">{'None'}</span>
@@ -46,7 +45,7 @@ export default function ModuleCard({ course, showMenus = true }: IProps) {
           {authUser?.user_type === UserType.STUDENT ? (
             <BrowserLink
               className="outline-none"
-              to={`/dashboard/modules/${course.id}/subject`}>
+              to={`/dashboard/modules/${course.id}/subjects`}>
               <Button styleType="outline">Start module</Button>
             </BrowserLink>
           ) : authUser?.user_type === UserType.ADMIN ? (

@@ -46,7 +46,9 @@ function TabHeadings({ tabs, onTabChange }: TabsImportantProps) {
   const history = useHistory();
   const location = useLocation();
 
-  let activeTabIndex = tabs.findIndex((tab) => tab.href === location.pathname);
+  let activeTabIndex = tabs.findIndex(
+    (tab) => tab.href.split('?')[0] === location.pathname.split('?')[0],
+  );
   if (activeTabIndex === -1) {
     let competitotors = tabs.filter((tab) => location.pathname.startsWith(tab.href));
     const arrays = competitotors.map((tab) => tab.href.split('/'));
@@ -57,7 +59,11 @@ function TabHeadings({ tabs, onTabChange }: TabsImportantProps) {
       if (arrays[i].length) maxIndex = i;
     }
 
-    activeTabIndex = tabs.findIndex((tab) => tab.href === arrays[maxIndex].join('/'));
+    try {
+      activeTabIndex = tabs.findIndex((tab) => tab.href === arrays[maxIndex].join('/'));
+    } catch (error) {
+      activeTabIndex = 0;
+    }
   }
 
   const slideTo = (index: number, href: string, label: string) => {
