@@ -51,10 +51,10 @@ export default function Academy() {
       'academy name': name,
       'phone number': phone_number,
       'academy admin': current_admin_id
-        ? users.data?.data.data.find((admin) => admin.id === current_admin_id)
+        ? users.data?.data.data.content.find((admin) => admin.id === current_admin_id)
             ?.first_name +
             ' ' +
-            users.data?.data.data.find((admin) => admin.id === current_admin_id)
+            users.data?.data.data.content.find((admin) => admin.id === current_admin_id)
               ?.last_name || ''
         : '',
       status: generic_status,
