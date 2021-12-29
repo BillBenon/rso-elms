@@ -4,13 +4,13 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 
 import { queryClient } from '../../../plugins/react-query';
 import { authenticatorStore } from '../../../store/administration';
-import { ValueType } from '../../../types';
+// import { ValueType } from '../../../types';
 import { UserInfo, UserType } from '../../../types/services/user.types';
 import cookie from '../../../utils/cookie';
 import Avatar from '../../Atoms/custom/Avatar';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
-import SearchMolecule from '../input/SearchMolecule';
+// import SearchMolecule from '../input/SearchMolecule';
 
 export default function Navigation() {
   const history = useHistory();
@@ -37,7 +37,7 @@ export default function Navigation() {
   const activeClass = 'text-white bg-gray-900';
   const inactiveClass = 'text-gray-300 hover:text-white hover:bg-gray-700';
 
-  function handleSearch(_e: ValueType) {}
+  //  function handleSearch(_e: ValueType) {}
 
   function logout() {
     logoutFn.refetch().then(() => {
@@ -49,12 +49,14 @@ export default function Navigation() {
   return (
     <nav className="bg-main">
       <div className=" mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-24">
-          <div className="flex items-center">
-            <div className="flex-shrink-0">
+        <div className="flex items-center justify-end h-24">
+          {/* Disabled Global search just for the while its not functioning css will be justify-center 
+          will replace justify-endwhen the search is added in this div */}
+          {/* <div className="flex items-center">
+            <div className="flex-shrink-0 ">
               <SearchMolecule handleChange={handleSearch} />
             </div>
-          </div>
+          </div> */}
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
               {authUser?.user_type === UserType.SUPER_ADMIN && (

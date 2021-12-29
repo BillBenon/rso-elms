@@ -25,8 +25,8 @@ export default function Redirecting() {
       localStorage.setItem('user', JSON.stringify(authUser.data.data));
 
       if (authUser.data.data.user_type === UserType.SUPER_ADMIN) {
-        redirectTo('/complete-profile');
-        // redirectTo('/dashboard/users');
+        // redirectTo('/complete-profile');
+        redirectTo('/dashboard/users');
       } else if (authUser.data.data.profile_status !== ProfileStatus.COMPLETD) {
         redirectTo('/complete-profile');
         //approach number 1
