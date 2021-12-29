@@ -1,21 +1,22 @@
 import React from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
-import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
-import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
-import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
+import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
-import { IntakePeriodParam } from '../../types/services/intake-program.types';
-import AddSubjectToPeriod from '../subjects/AddSubjectToPeriod';
-import SubjectPeriod from '../subjects/SubjectPeriod';
+import { IClass } from '../../types/services/class.types';
+import {
+  IntakeLevelParam,
+  IntakeProgramLevelPeriodInfo,
+} from '../../types/services/intake-program.types';
 import Classes from './Classes';
 import NewClass from './NewClass';
 
 function LevelPeriod() {
-  const { level, intakeId, intakeProg, id, period } = useParams<IntakePeriodParam>();
+  const { level, intakeId, intakeProg, id } = useParams<IntakeLevelParam>();
   const { data: periods, isLoading } = intakeProgramStore.getPeriodsByLevel(
     parseInt(level),
   );
@@ -24,10 +25,25 @@ function LevelPeriod() {
 
   const prds = periods?.data.data || [];
 
-  const tabs = prds.map((prd) => ({
-    label: `${prd.academic_period.name}`,
-    href: `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${prd.id}`,
-  }));
+  let prdClass: { prd: IntakeProgramLevelPeriodInfo; class?: IClass[] }[] = [];
+
+  prds.forEach((prd) => {
+    const { data } = classStore.getClassByPeriod(prd.id.toString());
+    prdClass.push({ prd: prd, class: data?.data.data });
+  });
+
+  const tabs: TabType[] = [];
+
+  prdClass.map((prd) => {
+    if (prd.class) {
+      tabs.push({
+        label: `${prd.prd.academic_period.name}`,
+        href: `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${
+          prd.prd.id
+        }/view-class/${prd.class[0].id || ''}`,
+      });
+    }
+  });
 
   return (
     <>
@@ -49,34 +65,8 @@ function LevelPeriod() {
       ) : (
         <TabNavigation tabs={tabs}>
           <Switch>
-            <Route
-              exact
-              path={`${path}`}
-              render={() => {
-                return (
-                  <>
-                    <div className="flex justify-between space-x-4">
-                      <Heading fontWeight="semibold" fontSize="xl" className="py-2">
-                        Subjects
-                      </Heading>
-                      <Button
-                        styleType="outline"
-                        onClick={() =>
-                          history.push(
-                            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${period}/view-class`,
-                          )
-                        }>
-                        Add Evaluation
-                      </Button>
-                    </div>
-                    <SubjectPeriod />
-                  </>
-                );
-              }}
-            />
-
             {/* add classes to intake program period */}
-            <Route path={`${path}/view-class`} render={() => <Classes />} />
+            <Route path={`${path}/view-class/:classId`} render={() => <Classes />} />
             {/* add classes to intake program level */}
             <Route
               exact
@@ -88,20 +78,6 @@ function LevelPeriod() {
                   open
                   onClose={history.goBack}>
                   <NewClass />
-                </PopupMolecule>
-              )}
-            />
-            {/* add subject to period */}
-            <Route
-              exact
-              path={`${path}/add-subject`}
-              render={() => (
-                <PopupMolecule
-                  title="Add subject to period"
-                  closeOnClickOutSide={false}
-                  open
-                  onClose={history.goBack}>
-                  <AddSubjectToPeriod />
                 </PopupMolecule>
               )}
             />

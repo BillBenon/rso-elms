@@ -37,8 +37,6 @@ export default function CommonCardMolecule({
     if (e.key === 'Enter') handleAction(e);
   }
 
-  console.log(data);
-
   return (
     <div
       className={`course-card-molecule bg-main p-6 rounded-lg 
