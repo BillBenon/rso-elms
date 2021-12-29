@@ -41,3 +41,10 @@ export interface SortedContent<T = unknown> {
   first: boolean;
   empty: boolean;
 }
+
+export interface FilterOptions {
+  page?: number;
+  pageSize?: number;
+  userType?: string;
+  sortyBy?: string;
+}
