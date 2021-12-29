@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory, useRouteMatch } from 'react-router-dom';
+import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import ImportUsers from '../../components/Organisms/user/ImportUsers';
 import { authenticatorStore } from '../../store/administration';
 import usersStore from '../../store/administration/users.store';
 import { ValueType } from '../../types';
@@ -100,6 +102,21 @@ export default function StudentsView() {
             onPaginate={(page) => setcurrentPage(page)}
             onChangePageSize={(size) => setPageSize(size)}
           />
+          <Switch>
+            <Route
+              exact
+              path={`${url}/import`}
+              render={() => (
+                <PopupMolecule
+                  closeOnClickOutSide={false}
+                  title="Import students"
+                  open={true}
+                  onClose={history.goBack}>
+                  <ImportUsers userType={UserType.STUDENT} />
+                </PopupMolecule>
+              )}
+            />
+          </Switch>
         </>
       )}
     </div>
