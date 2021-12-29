@@ -107,8 +107,8 @@ export default function QuestionContainer({
           // toast.success('submitted');
           setQuestionToSubmit('');
         },
-        onError: () => {
-          // toast.error(error + '');
+        onError: (error: any) => {
+          toast.error(error.response.data.message.split(':')[1] + '');
         },
       });
     }

@@ -7,8 +7,8 @@ import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { evaluationService } from '../../services/evaluation/evaluation.service';
-import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { markingStore } from '../../store/administration/marking.store';
+import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
 import { getLocalStorageData } from '../../utils/getLocalStorageItem';
 import QuestionContainer from './QuestionContainer';
@@ -61,7 +61,7 @@ export default function EvaluationTest() {
         1000,
     );
   }, [
-    studentEvaluationData.data?.data.data.workTime,
+    studentEvaluationData.data?.data.data,
     studentWorkTimer?.data?.data.data,
     timeLimit,
   ]);

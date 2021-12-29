@@ -38,7 +38,7 @@ function CompleteProfile() {
   const history = useHistory();
 
   let foundUser: UserInfo = getLocalStorageData('user');
-  
+
   if (!foundUser.id) {
     history.push('/login/search');
     return <></>;
@@ -90,8 +90,6 @@ function CompleteProfile() {
       await mutateAsync(
         {
           ...userFromLocalStorage,
-          profile_status: ProfileStatus.COMPLETD,
-          //@ts-ignore
           doc_type: userFromLocalStorage.doc_type,
           nid: userFromLocalStorage.person.id,
         },

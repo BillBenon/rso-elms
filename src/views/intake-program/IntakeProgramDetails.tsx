@@ -82,6 +82,7 @@ function IntakeProgramDetails() {
           type: advancedTypeChecker(program.generic_status),
           text: program.generic_status.toString(),
         },
+        total_num_modules: program.total_num_modules,
         code: program.code,
         title: program.name,
         subTitle: program.type,

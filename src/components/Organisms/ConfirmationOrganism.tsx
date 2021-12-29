@@ -50,7 +50,7 @@ export default function ConfirmationOrganism({
       mutate(studentEvaluationStart, {
         onSuccess: (studentInfo) => {
           setLocalStorageData('studentEvaluationId', studentInfo.data.data.id);
-          toast.success('Generated evaluation code', { duration: 5000 });
+          toast.success('Started evaluation', { duration: 5000 });
           goToNext(studentEvaluationStart.evaluation_id);
         },
         onError: (error: any) => {

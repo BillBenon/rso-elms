@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import StudentAnswer from '../../components/Molecules/cards/correction/StudentAnswer';
 import Pagination from '../../components/Molecules/Pagination';
@@ -18,7 +19,8 @@ import { MarkingCorrection } from '../../types/services/marking.types';
 export default function StudentAnswersMarking() {
   const { id } = useParams<ParamType>();
   const studentAnswers = markingStore.getStudentEvaluationAnswers(id).data?.data.data;
-  const studentEvaluation = markingStore.getStudentEvaluationById(id).data?.data.data;
+  const { data: studentEvaluation, isLoading } =
+    markingStore.getStudentEvaluationById(id);
   const [totalMarks, setTotalMarks] = useState(0);
   const [correction, setCorrection] = useState<Array<MarkingCorrection>>([]);
   const [rowsOnPage] = useState(3);
@@ -113,52 +115,55 @@ export default function StudentAnswersMarking() {
     }
   }
   if (step == 0)
-    return (
-      <div className={`flex flex-col gap-4`}>
-        <section>
-          <BreadCrumb list={list}></BreadCrumb>
-        </section>
-        <TableHeader
-          title={studentEvaluation?.code + ' submission'}
-          showBadge={false}
-          showSearch={false}>
-          <p className="text-gray-400">
-            Marks obtained:{' '}
-            <span className="text-green-300 font-semibold">{totalMarks}</span>
-          </p>
-        </TableHeader>
-        <section className="flex flex-wrap justify-start gap-4 mt-2">
-          {currentRows?.map((studentAnswer) => {
-            return (
-              <StudentAnswer
-                key={studentAnswer.id}
-                correction={correction}
-                updateQuestionPoints={updateQuestionPoints}
-                data={studentAnswer}
-                totalMarks={totalMarks}
-                setTotalMarks={setTotalMarks}
-                createCreateNewCorrection={createCreateNewCorrection}
+    if (!isLoading)
+      return (
+        <div className={`flex flex-col gap-4`}>
+          <section>
+            <BreadCrumb list={list}></BreadCrumb>
+          </section>
+          <TableHeader
+            title={studentEvaluation?.data.data.code + ' submission'}
+            showBadge={false}
+            showSearch={false}>
+            <p className="text-gray-400">
+              Marks obtained:{' '}
+              <span className="text-green-300 font-semibold">{totalMarks}</span>
+            </p>
+          </TableHeader>
+          <section className="flex flex-wrap justify-start gap-4 mt-2">
+            {currentRows?.map((studentAnswer, index: number) => {
+              return (
+                <StudentAnswer
+                  key={index}
+                  index={index}
+                  correction={correction}
+                  updateQuestionPoints={updateQuestionPoints}
+                  data={studentAnswer}
+                  totalMarks={totalMarks}
+                  setTotalMarks={setTotalMarks}
+                  createCreateNewCorrection={createCreateNewCorrection}
+                />
+              );
+            })}
+            <div className="flex item-center mx-auto">
+              <Pagination
+                rowsPerPage={rowsOnPage}
+                totalRows={studentAnswers?.length || 0}
+                paginate={paginate}
+                currentPage={currentPage}
               />
-            );
-          })}
-          <div className="flex item-center mx-auto">
-            <Pagination
-              rowsPerPage={rowsOnPage}
-              totalRows={studentAnswers?.length || 0}
-              paginate={paginate}
-              currentPage={currentPage}
-            />
-          </div>
-          <div className="w-full flex justify-end">
-            <Button onClick={submitMarking}>Complete Marking</Button>
-          </div>
-        </section>
-      </div>
-    );
+            </div>
+            <div className="w-full flex justify-end">
+              <Button onClick={submitMarking}>Complete Marking</Button>
+            </div>
+          </section>
+        </div>
+      );
+    else return <Loader />;
   else
     return (
       <FinishMarking
-        student_code={studentEvaluation?.code}
+        student_code={studentEvaluation?.data.data.code}
         obtained_marks={totalMarks}
         student_evaluation={id}
       />
