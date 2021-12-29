@@ -1,13 +1,18 @@
 import React from 'react';
 
-// interface IProps {
-//   open: boolean;
-//   initialDateRange?: DateRange;
-//   onChange: (_dateRange: DateRange) => void;
-//   handleToggle: () => void;
-// }
+interface DateRange {
+  startDate: Date;
+  endDate: Date;
+}
 
-export default function Picker() {
+interface IProps {
+  open: boolean;
+  initialDateRange?: DateRange;
+  onChange: (_dateRange: DateRange) => void;
+  handleToggle: () => void;
+}
+
+export default function Picker(props: IProps) {
   return (
     // <DateRangePicker
     //   open={open}
