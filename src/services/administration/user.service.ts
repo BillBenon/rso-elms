@@ -6,6 +6,7 @@ import {
   CreateUserInfo,
   IImportUserRes,
   UserInfo,
+  UserType,
 } from '../../types/services/user.types';
 import { formatQueryParameters } from '../../utils/query';
 import { UpdateUserInfo } from './../../types/services/user.types';
@@ -53,6 +54,15 @@ class UserService {
   ): Promise<AxiosResponse<Response<UserInfo[]>>> {
     return await adminstrationAxios.get(`users/getUsersByAcademy/${academyId}`);
   }
+  public async getUsersByAcademyAndUserType(
+    academyId: string,
+    userType: UserType,
+  ): Promise<AxiosResponse<Response<SortedContent<UserInfo[]>>>> {
+    return await adminstrationAxios.get(
+      `/users/getUsersByAcademyAndType/${academyId}/${userType}`,
+    );
+  }
+
   public async getUserAccountByNid(
     nid: string,
   ): Promise<AxiosResponse<Response<UserInfo[]>>> {
