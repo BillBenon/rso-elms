@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -11,12 +12,13 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
+import { authenticatorStore } from '../../store/administration';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import programStore from '../../store/administration/program.store';
 import { Link as Links } from '../../types';
 import { StudentApproval } from '../../types/services/enrollment.types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
-import { UserView } from '../../types/services/user.types';
+import { UserType, UserView } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from '../programs/AcademicPrograms';
 import AddLevelToProgram from '../programs/AddLevelToProgram';
@@ -38,6 +40,8 @@ function IntakeProgramDetails() {
     );
   const { data: instructorsProgram, isLoading: instLoading } =
     intakeProgramStore.getInstructorsByIntakeProgram(id, intakeId);
+
+  const authUser = authenticatorStore.authUser().data?.data.data;
 
   const [students, setStudents] = useState<UserView[]>([]);
   const [instructors, setInstructors] = useState<UserView[]>([]);
@@ -97,7 +101,7 @@ function IntakeProgramDetails() {
     intakeProgramStore.getLevelsByIntakeProgram(intakeProg).data?.data.data || [];
 
   const programData = getProgramData();
-  const tabs: TabType[] = [
+  let tabs: TabType[] = [
     {
       label: 'Program info',
       href: `${url}`,
@@ -110,11 +114,14 @@ function IntakeProgramDetails() {
       label: 'Program levels',
       href: `${url}/levels/${getLevels[0]?.id || ''}`,
     },
-    {
+  ];
+
+  if (authUser?.user_type === UserType.ADMIN) {
+    tabs.push({
       label: 'Approve students',
       href: `${url}/approve`,
-    },
-  ];
+    });
+  }
 
   const handleClose = () => {
     history.goBack();
@@ -135,7 +142,18 @@ function IntakeProgramDetails() {
         <Heading className="pb-5" fontWeight="semibold" fontSize="xl">
           {program?.name}
         </Heading>
-        <TabNavigation tabs={tabs}>
+        <TabNavigation
+          tabs={tabs}
+          headerComponent={
+            authUser?.user_type === UserType.ADMIN ? (
+              <div className="flex justify-end">
+                <Link
+                  to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
+                  <Button>Add Level</Button>
+                </Link>
+              </div>
+            ) : null
+          }>
           <Switch>
             <Route
               exact
@@ -172,17 +190,19 @@ function IntakeProgramDetails() {
                                 {programData.subTitle?.replaceAll('_', ' ')}
                               </Heading>
                             </div>
-                            <div className="mt-4 flex space-x-4">
-                              <Button
-                                onClick={() =>
-                                  history.push(
-                                    `/dashboard/intakes/programs/${intakeId}/${id}/edit`,
-                                  )
-                                }>
-                                Edit program
-                              </Button>
-                              <Button styleType="outline">Change Status</Button>
-                            </div>
+                            {authUser?.user_type === UserType.ADMIN ? (
+                              <div className="mt-4 flex space-x-4">
+                                <Button
+                                  onClick={() =>
+                                    history.push(
+                                      `/dashboard/intakes/programs/${intakeId}/${id}/edit`,
+                                    )
+                                  }>
+                                  Edit program
+                                </Button>
+                                <Button styleType="outline">Change Status</Button>
+                              </div>
+                            ) : null}
                           </CommonCardMolecule>
                         </div>
                         <div className="flex flex-col gap-8 z-0">
@@ -192,8 +212,11 @@ function IntakeProgramDetails() {
                             data={students}
                             totalUsers={students.length || 0}
                             dataLabel={''}
+                            userType={authUser?.user_type}
                             isLoading={studLoading}>
-                            <EnrollStudentIntakeProgram />
+                            {authUser?.user_type === UserType.ADMIN ? (
+                              <EnrollStudentIntakeProgram />
+                            ) : null}
                           </UsersPreview>
 
                           <UsersPreview
@@ -202,8 +225,11 @@ function IntakeProgramDetails() {
                             data={instructors}
                             totalUsers={instructors.length || 0}
                             dataLabel={''}
+                            userType={authUser?.user_type}
                             isLoading={instLoading}>
-                            <EnrollInstructorIntakeProgram />
+                            {authUser?.user_type === UserType.ADMIN ? (
+                              <EnrollInstructorIntakeProgram />
+                            ) : null}
                           </UsersPreview>
                         </div>
                       </div>

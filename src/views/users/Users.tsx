@@ -90,14 +90,11 @@ export default function Users() {
       label: 'Instructors',
       href: `${url}/instructors`,
     },
-  ];
-
-  if (authUser?.user_type === UserType.SUPER_ADMIN) {
-    tabs.push({
+    {
       label: 'Admins',
       href: `${url}/admins`,
-    });
-  }
+    },
+  ];
   const studentActions = [
     { name: 'Add Role', handleAction: () => {} },
     {

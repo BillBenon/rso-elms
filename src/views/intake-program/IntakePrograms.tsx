@@ -100,7 +100,7 @@ function IntakePrograms() {
                 </section>
                 <section>
                   <TableHeader
-                    totalItems={`${programs.length} programs`}
+                    totalItems={programs.length}
                     title={`${intakeId ? intake?.data?.data.data.title : 'Programs'}`}
                     showSearch={false}>
                     <Link to={`${url}/add-program-to-intake?intakeId=${intakeId}`}>

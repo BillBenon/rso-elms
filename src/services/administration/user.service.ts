@@ -4,7 +4,6 @@ import { adminstrationAxios } from '../../plugins/axios';
 import { Response, SortedContent } from '../../types';
 import {
   CreateUserInfo,
-  IImportUser,
   IImportUserRes,
   UserInfo,
 } from '../../types/services/user.types';

@@ -65,6 +65,8 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
       </TextAreaMolecule>
       <DateMolecule
         defaultValue={regControl.expected_start_date}
+        startYear={new Date().getFullYear()}
+        endYear={new Date().getFullYear() + 15}
         padding={3}
         handleChange={handleChange}
         name={'expected_start_date'}>
@@ -74,6 +76,7 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
       <DateMolecule
         handleChange={handleChange}
         padding={3}
+        startYear={new Date(regControl.expected_start_date).getFullYear()}
         endYear={new Date().getFullYear() + 15}
         defaultValue={regControl.expected_end_date}
         name={'expected_end_date'}>

@@ -23,6 +23,7 @@ import {
   ISubmissionTypeEnum,
 } from '../../../../types/services/evaluation.types';
 import { IntakeModuleStatus } from '../../../../types/services/intake-program.types';
+import { InstructorModule } from '../../../../types/services/modules.types';
 import { setLocalStorageData } from '../../../../utils/getLocalStorageItem';
 import {
   getDropDownOptions,
@@ -42,7 +43,7 @@ export default function EvaluationInfoComponent({
   evaluationId,
   evaluationInfo,
 }: IEvaluationProps) {
-  const [moduleId, setModuleId] = useState('');
+  const [moduleId, setModuleId] = useState(0);
   const [levelId, setLevelId] = useState('');
   // const [period, setPeriod] = useState('');
 
@@ -58,7 +59,12 @@ export default function EvaluationInfoComponent({
       IntakeModuleStatus.ONGOING,
     );
 
-  const { data: subjects } = subjectStore.getSubjectsByModule(moduleId);
+  let selectedModule: InstructorModule | undefined =
+    instrucotrModules?.data.data.find((mod) => mod.id === moduleId) || undefined;
+
+  const { data: subjects } = subjectStore.getSubjectsByModule(
+    selectedModule?.module.id + '',
+  );
   const { data: levels } = enrollmentStore.getInstructorLevels(instructorInfo?.id + '');
   const { data: classes } = classStore.getClassByPeriod(levelId + '');
 
@@ -109,7 +115,7 @@ export default function EvaluationInfoComponent({
   const { mutateAsync } = evaluationStore.updateEvaluation();
 
   function handleChange({ name, value }: ValueType) {
-    if (name === 'module') setModuleId(value.toString());
+    if (name === 'module') setModuleId(parseInt(value + ''));
     else if (name === 'levelId') setLevelId(value + '');
     else setDetails((details) => ({ ...details, [name]: value }));
   }
@@ -183,7 +189,11 @@ export default function EvaluationInfoComponent({
           name="module"
           placeholder={moduleLoader ? 'Loading...' : 'Select module'}
           handleChange={handleChange}
-          options={getDropDownOptions({ inputs: instrucotrModules?.data.data || [] })}>
+          options={getDropDownOptions({
+            inputs: instrucotrModules?.data.data || [],
+            //@ts-ignore
+            getOptionLabel: (mod: InstructorModule) => mod.module.name,
+          })}>
           Select module
         </DropdownMolecule>
         <DropdownMolecule
