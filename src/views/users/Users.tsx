@@ -13,8 +13,17 @@ import Instructors from '../../components/Organisms/user/Instructors';
 import Students from '../../components/Organisms/user/Students';
 import { authenticatorStore } from '../../store/administration';
 import usersStore from '../../store/administration/users.store';
-import { UserType, UserTypes } from '../../types/services/user.types';
+import { SortedContent } from '../../types';
+import { UserInfo, UserType, UserTypes } from '../../types/services/user.types';
 import UserDetails from './UserDetails';
+
+function getData(resp?: UserInfo[] | SortedContent<UserInfo[]>) {
+  if (resp) {
+    let d = resp as SortedContent<UserInfo[]>;
+    if (d.content) return d.content;
+    else return resp as UserInfo[];
+  } else return [];
+}
 
 export default function Users() {
   const { url, path } = useRouteMatch();
@@ -28,7 +37,7 @@ export default function Users() {
       ? usersStore.fetchUsers()
       : usersStore.getUsersByAcademy(authUser?.academy.id.toString() || '');
 
-  const userInfo = data?.data.data || [];
+  const userInfo = getData(data?.data.data);
 
   let users: UserTypes[] = [];
 
