@@ -24,3 +24,20 @@ export enum GenericStatus {
   INACTIVE = 'INACTIVE',
   RESET = 'RESET',
 }
+
+export interface SortedContent<T = unknown> {
+  content: T;
+  totalPages: number;
+  totalElements: number;
+  last: false;
+  size: number;
+  number: number;
+  sort: {
+    sorted: boolean;
+    unsorted: boolean;
+    empty: boolean;
+  };
+  numberOfElements: number;
+  first: boolean;
+  empty: boolean;
+}
