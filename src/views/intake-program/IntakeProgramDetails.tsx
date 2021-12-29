@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
-import { Link } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -136,16 +135,7 @@ function IntakeProgramDetails() {
         <Heading className="pb-5" fontWeight="semibold" fontSize="xl">
           {program?.name}
         </Heading>
-        <TabNavigation
-          tabs={tabs}
-          headerComponent={
-            <div className="flex justify-end">
-              <Link
-                to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
-                <Button>Add Level</Button>
-              </Link>
-            </div>
-          }>
+        <TabNavigation tabs={tabs}>
           <Switch>
             <Route
               exact
