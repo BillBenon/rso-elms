@@ -5,8 +5,12 @@ import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import { authenticatorStore } from '../../store/administration';
+import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
+import instructordeploymentStore from '../../store/instructordeployment.store';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
+import { UserType } from '../../types/services/user.types';
 import LevelPeriod from '../classes/LevelPeriod';
 import EnrollStudent from './EnrollStudent';
 import IntakeLevelModule from './IntakeLevelModule';
@@ -17,16 +21,39 @@ function IntakeProgramLevel() {
   const { path, url } = useRouteMatch();
   const { intakeProg, intakeId, id } = useParams<IntakeProgParam>();
 
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
+  const authUserId = authUser?.id;
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(authUserId + '')
+    .data?.data.data;
+
   const { data: getLevels, isLoading } =
     intakeProgramStore.getLevelsByIntakeProgram(intakeProg);
 
+  const { data: instructorLevels } = enrollmentStore.getInstructorLevels(
+    instructorInfo?.id + '',
+  );
+
+  const instructorProgLevels = getLevels?.data.data.filter((inst) =>
+    instructorLevels?.data.data.filter(
+      (lv) => lv.academic_program_level.id === inst.academic_program_level.id,
+    ),
+  );
+
   const tabs =
-    (getLevels &&
-      getLevels.data.data.map((level) => ({
-        label: `${level.academic_program_level.level.name}`,
-        href: `${url}/${level.id}`,
-      }))) ||
-    [];
+    authUser?.user_type === UserType.INSTRUCTOR
+      ? (instructorProgLevels &&
+          instructorProgLevels.map((level) => ({
+            label: `${level.academic_program_level.level.name}`,
+            href: `${url}/${level.id}`,
+          }))) ||
+        []
+      : (getLevels &&
+          getLevels.data.data.map((level) => ({
+            label: `${level.academic_program_level.level.name}`,
+            href: `${url}/${level.id}`,
+          }))) ||
+        [];
 
   return (
     <>

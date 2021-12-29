@@ -23,7 +23,6 @@ import InstrLevelModule from './views/modules/InstrLevelModule';
 import StudentModule from './views/modules/StudentModule';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicProgram from './views/programs/AcademicPrograms';
-import InstructorProgram from './views/programs/InstructorProgram';
 import Ranks from './views/ranks/Ranks';
 import Roles from './views/roles/Roles';
 import ViewRole from './views/roles/ViewRole';
@@ -85,7 +84,7 @@ const RouterProtection = () => {
       {/* start of instructor pages */}
       <Route path={`${path}/evaluations`} component={InstructorViewEvaluations} />
       <Route path={`${path}/calendar`} component={CalendarView} />
-      <Route path={`${path}/inst-program`} component={InstructorProgram} />
+      <Route path={`${path}/intakes`} component={IntakesView} />
       <Route exact path={`${path}/inst-module`} component={InstrLevelModule} />
 
       <Route path={`${path}/schedule`} component={ScheduleHome} />
