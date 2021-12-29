@@ -1,6 +1,8 @@
 import React from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
+import { Link } from 'react-router-dom';
 
+import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
@@ -45,37 +47,45 @@ function IntakeProgramLevel() {
           description="There are no levels available yet! you can add the from the button below"
         />
       ) : (
-        <TabNavigation tabs={tabs}>
-          <Switch>
-            <Route exact path={`${path}/:level`} render={() => <IntakeLevelModule />} />
-            {/* enroll student to intake program level */}
-            <Route
-              exact
-              path={`${path}/:level/enroll-students`}
-              render={() => <EnrollStudent />}
-            />
-            {/* add module to intake program level */}
-            <Route
-              path={`${path}/:level/view-period/:period`}
-              render={() => <LevelPeriod />}
-            />
+        <>
+          <div className="text-right">
+            <Link
+              to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
+              <Button>Add Level</Button>
+            </Link>
+          </div>
+          <TabNavigation tabs={tabs}>
+            <Switch>
+              <Route exact path={`${path}/:level`} render={() => <IntakeLevelModule />} />
+              {/* enroll student to intake program level */}
+              <Route
+                exact
+                path={`${path}/:level/enroll-students`}
+                render={() => <EnrollStudent />}
+              />
+              {/* add module to intake program level */}
+              <Route
+                path={`${path}/:level/view-period/:period`}
+                render={() => <LevelPeriod />}
+              />
 
-            {/* add periods to intake level */}
-            <Route
-              exact
-              path={`${path}/:level/add-period`}
-              render={() => (
-                <PopupMolecule
-                  title="Add period to level"
-                  closeOnClickOutSide={false}
-                  open
-                  onClose={history.goBack}>
-                  <NewIntakePeriod checked={0} />
-                </PopupMolecule>
-              )}
-            />
-          </Switch>
-        </TabNavigation>
+              {/* add periods to intake level */}
+              <Route
+                exact
+                path={`${path}/:level/add-period`}
+                render={() => (
+                  <PopupMolecule
+                    title="Add period to level"
+                    closeOnClickOutSide={false}
+                    open
+                    onClose={history.goBack}>
+                    <NewIntakePeriod checked={0} />
+                  </PopupMolecule>
+                )}
+              />
+            </Switch>
+          </TabNavigation>
+        </>
       )}
     </>
   );
