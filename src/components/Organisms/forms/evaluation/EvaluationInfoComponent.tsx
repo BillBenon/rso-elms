@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import { authenticatorStore } from '../../../../store/administration';
 import { classStore } from '../../../../store/administration/class.store';
 import enrollmentStore from '../../../../store/administration/enrollment.store';
-import { moduleStore } from '../../../../store/administration/modules.store';
+import intakeProgramStore from '../../../../store/administration/intake-program.store';
 import { subjectStore } from '../../../../store/administration/subject.store';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
@@ -22,6 +22,7 @@ import {
   IQuestionaireTypeEnum,
   ISubmissionTypeEnum,
 } from '../../../../types/services/evaluation.types';
+import { IntakeModuleStatus } from '../../../../types/services/intake-program.types';
 import { setLocalStorageData } from '../../../../utils/getLocalStorageItem';
 import {
   getDropDownOptions,
@@ -46,10 +47,16 @@ export default function EvaluationInfoComponent({
   // const [period, setPeriod] = useState('');
 
   const authUser = authenticatorStore.authUser().data?.data.data;
-  const { data } = moduleStore.getModulesByAcademy(authUser?.academy.id.toString() || '');
+
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(
     authUser?.id + '',
   ).data?.data.data;
+
+  const { data: instrucotrModules, isLoading: moduleLoader } =
+    intakeProgramStore.getModulesByInstructorAndStatus(
+      instructorInfo?.id + '',
+      IntakeModuleStatus.ONGOING,
+    );
 
   const { data: subjects } = subjectStore.getSubjectsByModule(moduleId);
   const { data: levels } = enrollmentStore.getInstructorLevels(instructorInfo?.id + '');
@@ -174,9 +181,9 @@ export default function EvaluationInfoComponent({
         <DropdownMolecule
           width="64"
           name="module"
-          placeholder="Select module"
+          placeholder={moduleLoader ? 'Loading...' : 'Select module'}
           handleChange={handleChange}
-          options={getDropDownOptions({ inputs: data?.data.data || [] })}>
+          options={getDropDownOptions({ inputs: instrucotrModules?.data.data || [] })}>
           Select module
         </DropdownMolecule>
         <DropdownMolecule

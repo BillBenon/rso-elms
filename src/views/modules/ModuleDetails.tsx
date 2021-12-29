@@ -26,6 +26,7 @@ import { subjectStore } from '../../store/administration/subject.store';
 import { CommonCardDataType, Link, ParamType } from '../../types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
+import ModuleEvaluations from '../evaluation/ModuleEvaluations';
 import ModuleMaterials from '../module-material/ModuleMaterials';
 
 export default function ModuleDetails() {
@@ -230,6 +231,8 @@ export default function ModuleDetails() {
                 </>
               )}
             />
+
+            <Route path={`${path}/evaluation`} render={() => <ModuleEvaluations />} />
             {/* add subject popup */}
             <Route
               exact

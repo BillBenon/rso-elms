@@ -25,10 +25,9 @@ import intakeProgramStore from '../../store/administration/intake-program.store'
 import programStore from '../../store/administration/program.store';
 import { scheduleStore } from '../../store/timetable/calendar.store';
 import { ParamType, ValueType } from '../../types';
-import { formatCalendarEvents } from '../../utils/calendar';
-import { formatDateToYyMmDd, getWeekBorderDays } from '../../utils/date-helper';
-import Picker from '../../components/Molecules/input/DateRangePicker';
 import { DateRange } from '../../types/services/schedule.types';
+import { formatCalendarEvents } from '../../utils/calendar';
+import { getWeekBorderDays } from '../../utils/date-helper';
 
 const localizer = momentLocalizer(moment);
 
@@ -38,12 +37,12 @@ export default function CalendarView() {
   const { path, url } = useRouteMatch();
   const { id } = useParams<ParamType>();
 
-  const [dateRange, setdateRange] = useState<DateRange>({
+  const [dateRange] = useState<DateRange>({
     startDate: getWeekBorderDays().monday,
     endDate: getWeekBorderDays().sunday,
   });
 
-  const [isChangeRangeOpen, setisChangeRangeOpen] = useState(false);
+  // const [isChangeRangeOpen, setisChangeRangeOpen] = useState(false);
 
   // query parameters
   const inLevelId = new URLSearchParams(search).get('in_level_id');
@@ -67,10 +66,10 @@ export default function CalendarView() {
     history.goBack();
   };
 
-  const handleDateRangeChange = (r: DateRange) => {
-    setisChangeRangeOpen(false);
-    setdateRange({ startDate: r.startDate, endDate: r.endDate });
-  };
+  // const handleDateRangeChange = (r: DateRange) => {
+  //   setisChangeRangeOpen(false);
+  //   setdateRange({ startDate: r.startDate, endDate: r.endDate });
+  // };
 
   return (
     <div>
@@ -86,11 +85,11 @@ export default function CalendarView() {
       </Heading>
       <div className="my-5">
         <div className="flex flex-wrap justify-between items-center">
-          <div>
+          {/* <div>
             <Button styleType="outline" onClick={() => setisChangeRangeOpen(true)}>
               Change date range
             </Button>
-          </div>
+          </div> */}
           <div className="flex flex-wrap justify-start items-center">
             <SearchMolecule handleChange={(_e: ValueType) => {}} />
             <button className="border p-0 rounded-md mx-2">
@@ -105,7 +104,7 @@ export default function CalendarView() {
           </div>
         </div>
       </div>
-
+      {/* 
       <PopupMolecule open={isChangeRangeOpen} title="Change date range">
         <Picker
           open
@@ -119,7 +118,7 @@ export default function CalendarView() {
             throw new Error('Function not implemented.');
           }}
         />
-      </PopupMolecule>
+      </PopupMolecule> */}
 
       <Calendar
         localizer={localizer}

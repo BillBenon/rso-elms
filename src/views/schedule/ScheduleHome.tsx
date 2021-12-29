@@ -49,11 +49,7 @@ export default function ScheduleHome() {
   const { path } = useRouteMatch();
 
   const userInfo = authenticatorStore.authUser().data?.data.data;
-  const { data, isLoading } = getIntakesByAcademy(
-    userInfo?.academy.id + '',
-    false,
-    userInfo?.academy.id != undefined,
-  );
+  const { data, isLoading } = getIntakesByAcademy(userInfo?.academy.id + '', false);
 
   let intakes: CommonCardDataType[] =
     data?.data.data.map((intake) => ({
@@ -66,10 +62,6 @@ export default function ScheduleHome() {
         text: intake.intake_status.toString(),
       },
     })) || [];
-
-  const handleClose = () => {
-    history.goBack();
-  };
 
   return (
     <div>

@@ -61,7 +61,7 @@ export default function EvaluationTest() {
         1000,
     );
   }, [
-    studentEvaluationData.data?.data.data.workTime,
+    studentEvaluationData.data?.data.data,
     studentWorkTimer?.data?.data.data,
     timeLimit,
   ]);

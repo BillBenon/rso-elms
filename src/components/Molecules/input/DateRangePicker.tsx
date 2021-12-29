@@ -1,25 +1,21 @@
 import React from 'react';
-import { DateRangePicker, DateRange } from 'materialui-daterange-picker';
 
-interface IProps {
-  open: boolean;
-  initialDateRange?: DateRange;
-  onChange: (dateRange: DateRange) => void;
-  handleToggle: () => void;
-}
+// interface IProps {
+//   open: boolean;
+//   initialDateRange?: DateRange;
+//   onChange: (_dateRange: DateRange) => void;
+//   handleToggle: () => void;
+// }
 
-export default function Picker({
-  open = false,
-  initialDateRange,
-  onChange,
-  handleToggle,
-}: IProps) {
+export default function Picker() {
   return (
-    <DateRangePicker
-      open={open}
-      initialDateRange={initialDateRange}
-      toggle={handleToggle}
-      onChange={onChange}
-    />
+    // <DateRangePicker
+    //   open={open}
+    //   initialDateRange={initialDateRange}
+    //   toggle={handleToggle}
+    //   onChange={onChange}
+    // />
+
+    <h2>Not working</h2>
   );
 }
