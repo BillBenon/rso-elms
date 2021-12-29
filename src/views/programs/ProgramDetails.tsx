@@ -180,16 +180,14 @@ export default function ProgramDetailsMolecule() {
                             </Heading>
                           )}
                         </div>
-                        {programLevels && programLevels?.length === 0 && (
-                          <div className="text-primary-500 py-2 text-sm mr-3">
-                            <Link
-                              to={`${url}/level/add`}
-                              className="flex items-center justify-end">
-                              <Icon name="add" size={12} fill="primary" />
-                              Add levels
-                            </Link>
-                          </div>
-                        )}
+                        <div className="text-primary-500 py-2 text-sm mr-3">
+                          <Link
+                            to={`${url}/level/add`}
+                            className="flex items-center justify-end">
+                            <Icon name="add" size={12} fill="primary" />
+                            Add levels
+                          </Link>
+                        </div>
                       </div>
 
                       {/* intakes */}
