@@ -7,9 +7,12 @@ import AddCard from '../../components/Molecules/cards/AddCard';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import { authenticatorStore } from '../../store/administration';
+import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { CommonCardDataType } from '../../types';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
+import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import EnrollInstructorToLevel from './EnrollInstructorToLevel';
 import EnrollStudent from './EnrollStudent';
@@ -19,6 +22,8 @@ function IntakeLevelModule() {
   const { id, intakeId, intakeProg, level } = useParams<IntakeLevelParam>();
 
   const [levelModules, setlevelModules] = useState<CommonCardDataType[]>([]);
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
   const { data: levelModuleStore, isLoading } = intakeProgramStore.getModulesByLevel(
     parseInt(level),
   );
@@ -45,19 +50,28 @@ function IntakeLevelModule() {
     parseInt(level),
   );
 
+  const { data: classes, isLoading: clLoading } = classStore.getClassByPeriod(
+    periods?.data.data[0].id + '',
+  );
+
   return (
     <>
       <TableHeader usePadding={false} showBadge={false} showSearch={false}>
-        <EnrollInstructorToLevel />
-        <EnrollStudent />
-        {prdLoading ? (
+        {authUser?.user_type === UserType.ADMIN && (
+          <>
+            <EnrollInstructorToLevel />
+            <EnrollStudent />
+          </>
+        )}
+
+        {prdLoading || clLoading ? (
           <></>
         ) : (
           <Button
             styleType="outline"
             onClick={() =>
               history.push(
-                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${periods?.data.data[0].id}`,
+                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${periods?.data.data[0].id}/view-class/${classes?.data.data[0].id}`,
               )
             }>
             View periods

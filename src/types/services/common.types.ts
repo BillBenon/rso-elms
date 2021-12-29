@@ -23,6 +23,7 @@ export enum GenericStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
   RESET = 'RESET',
+  DELETED = 'DELETED',
 }
 
 export interface SortedContent<T = unknown> {
