@@ -23,4 +23,5 @@ export enum GenericStatus {
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
   RESET = 'RESET',
+  DELETED = 'DELETED',
 }
