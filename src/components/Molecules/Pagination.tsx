@@ -6,30 +6,16 @@ import Indicator from '../Atoms/custom/Indicator';
 type PaginationProps = {
   totalElements: number;
   paginate: (_pnber: number) => void;
-  totalPages: number;
   currentPage: number;
-  rowsPerPage: number;
+  rowsPerPage?: number;
+  totalPages?: number;
 };
-const Pagination = ({
-  rowsPerPage,
-  totalPages = 1,
-  totalElements,
-  paginate,
-  currentPage = 0,
-}: PaginationProps) => {
+const Pagination = ({ totalPages = 1, paginate, currentPage = 0 }: PaginationProps) => {
   const pageNumbers = [1];
-
-  // if (totalElements > rowsPerPage) {
-  //   for (let i = 1; i <= Math.ceil(totalElements / rowsPerPage); i++) {
-  //     pageNumbers.push(i);
-  //   }
-  // }
 
   for (let i = 1; i < totalPages; i++) {
     pageNumbers.push(i + 1);
   }
-
-  console.log(pageNumbers);
 
   const onNext = () => {
     paginate(currentPage + 1);
