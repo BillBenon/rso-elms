@@ -64,10 +64,10 @@ export function getWeekBorderDays() {
   let dayOfToday = new Date().getDay();
 
   let monday = new Date();
-  monday.setDate(new Date().getDate() - dayOfToday + 1);
+  monday.setDate(new Date().getDate() - dayOfToday);
 
   let sunday = new Date();
-  sunday.setDate(new Date().getDate() + 7 - dayOfToday);
+  sunday.setDate(new Date().getDate() + 6 - dayOfToday);
 
   return {
     monday: formatDateToYyMmDd(monday.toDateString()),

@@ -6,10 +6,12 @@ export interface CreateEvent {
   eventCategory: eventCategory;
   name: string;
   status: GenericStatus;
+  academyId: string;
 }
 
 export interface EventInfo extends CreateEvent, Table {
   event_category: eventCategory;
+  academy_id: string;
 }
 
 export enum eventCategory {
@@ -30,8 +32,10 @@ export interface CreateVenue {
   name: string;
   status: GenericStatus;
   venueType: venueType;
+  academyId: string;
 }
 
 export interface VenueInfo extends CreateVenue, Table {
   venue_type: string;
+  academy_id: string;
 }

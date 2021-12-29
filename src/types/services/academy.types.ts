@@ -3,6 +3,7 @@ import { InstitutionInfo } from './institution.types';
 import { LocationInfo } from './location.types';
 
 export interface AcademyInfo extends AcademyCreateInfo, Table {
+  id: string;
   institution: InstitutionInfo;
   village: LocationInfo;
   post_code: string;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import ExperienceDetails from './components/Organisms/forms/auth/signup/experience/ExperienceDetails';
 import MoreInfo from './components/Organisms/forms/auth/signup/more-details/MoreInfo';
@@ -31,9 +31,8 @@ const App = () => {
             <Route exact path="/complete-profile/other" component={OtherDetails} />
             <Route exact path="/new-institution" component={NewInstitution} />
             <Route path="/login" component={Signin} />
-            <Redirect exact from="/" to="/login" />
-            <RouterProtection />
-            <Route path="*" component={NotFound} />
+            <Route path="/dashboard" component={RouterProtection} />
+            <Route component={NotFound} />
           </Switch>
         </Router>
       </MainLayout>

@@ -66,8 +66,10 @@ export default function StudentReview() {
             </p>
           </TableHeader>
           <section className="flex flex-wrap justify-start gap-4 mt-2">
-            {currentRows?.map((studentAnswer) => {
-              return <AnswerReview key={studentAnswer.id} data={studentAnswer} />;
+            {currentRows?.map((studentAnswer, index: number) => {
+              return (
+                <AnswerReview index={index} key={studentAnswer.id} data={studentAnswer} />
+              );
             })}
             <div className="flex item-center mx-auto">
               <Pagination

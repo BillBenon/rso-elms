@@ -1,4 +1,3 @@
-import { values } from 'lodash';
 import React from 'react';
 
 import { commonInputProps, ValueType } from '../../../types';
@@ -16,7 +15,7 @@ export default function CheckboxMolecule(props: IProps) {
     if (!props.values.includes(e.value as string)) selected.push(e.value as string);
     else selected = [...selected.filter((el) => el != e.value)];
 
-    props.handleChange({ name: props.name, value: selected, event: e });
+    props.handleChange({ name: props.name, value: selected });
   };
   return (
     <div className="py-2">

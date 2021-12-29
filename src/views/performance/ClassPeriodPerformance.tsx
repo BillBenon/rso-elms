@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
-import { Tabs, Tab, tabEventTypes } from '../../components/Molecules/tabs/tabs';
+
+import Button from '../../components/Atoms/custom/Button';
+import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
+import Table from '../../components/Molecules/table/Table';
+import { Tab, tabEventTypes, Tabs } from '../../components/Molecules/tabs/tabs';
 import academicperiodStore from '../../store/administration/academicperiod.store';
 import { classStore } from '../../store/administration/class.store';
-import Loader from '../../components/Atoms/custom/Loader';
-import Table from '../../components/Molecules/table/Table';
 import { getClassTermlyOverallReport } from '../../store/evaluation/school-report.store';
-import Button from '../../components/Atoms/custom/Button';
 
 interface IParamType {
   levelId: string;
@@ -76,7 +77,10 @@ export default function ClassPeriodPerformance() {
   return (
     <div>
       <Heading fontSize="lg" fontWeight="bold" className="py-2">
-        {classInfo?.data.data.academic_year_program_intake_level.academic_year.name}
+        {`${classInfo?.data.data.academic_year_program_intake_level.academic_program_level.program.name} - 
+        ${classInfo?.data.data.academic_year_program_intake_level.academic_program_level.level.name} 
+        ${classInfo?.data.data.class_name} -
+        ${classInfo?.data.data.academic_year_program_intake_level.academic_year.name}`}
       </Heading>
       {periodsLoading ? (
         <Loader />

@@ -52,7 +52,7 @@ function AddStudents({ classId }: IAddStudent) {
 
     mutate(newStudent, {
       onSuccess: (data) => {
-        toast.success(data.data.message);
+        toast.success('Students added successfully.');
         queryClient.invalidateQueries(['class/students']);
       },
       onError: (error: any) => {
@@ -82,6 +82,7 @@ function AddStudents({ classId }: IAddStudent) {
             },
           ]}
           dataLabel={'Students in this level'}
+          isLoading={studentsProgram.isLoading}
         />
       ) : (
         <PopupMolecule open={true}>

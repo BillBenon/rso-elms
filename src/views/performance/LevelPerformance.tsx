@@ -1,13 +1,14 @@
 import React from 'react';
 import { useParams } from 'react-router';
+import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+
+import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import { classStore } from '../../store/administration/class.store';
 import { CommonCardDataType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
-import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import ClassPeriodPerformance from './ClassPeriodPerformance';
-import Loader from '../../components/Atoms/custom/Loader';
 
 interface ParamType {
   levelId: string;
@@ -24,7 +25,7 @@ export default function LevelPerformance() {
   const history = useHistory();
   const { url, path } = useRouteMatch();
 
-  const { data, isLoading } = classStore.getClassByLevel(levelId);
+  const { data, isLoading } = classStore.getClassByPeriod(levelId);
 
   const classes: CommonCardDataType[] =
     data?.data.data.map((clas) => ({
@@ -53,6 +54,7 @@ export default function LevelPerformance() {
               <section className="flex flex-wrap justify-start gap-4 mt-2">
                 {classes.map((cl) => (
                   <CommonCardMolecule
+                    key={cl.id}
                     data={cl}
                     handleClick={() => history.push(`${url}/${cl.id}`)}
                   />

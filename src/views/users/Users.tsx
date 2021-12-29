@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Icon from '../../components/Atoms/custom/Icon';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -13,17 +13,31 @@ import Instructors from '../../components/Organisms/user/Instructors';
 import Students from '../../components/Organisms/user/Students';
 import { authenticatorStore } from '../../store/administration';
 import usersStore from '../../store/administration/users.store';
-import { UserType, UserTypes } from '../../types/services/user.types';
+import { SortedContent } from '../../types';
+import { UserInfo, UserType, UserTypes } from '../../types/services/user.types';
 import UserDetails from './UserDetails';
+
+function getData(resp?: UserInfo[] | SortedContent<UserInfo[]>) {
+  if (resp) {
+    let d = resp as SortedContent<UserInfo[]>;
+    if (d.content) return d.content;
+    else return resp as UserInfo[];
+  } else return [];
+}
 
 export default function Users() {
   const { url, path } = useRouteMatch();
   const [userType, setUserType] = useState('Students');
 
-  const { data, isSuccess, isLoading } = usersStore.fetchUsers();
   const authUser = authenticatorStore.authUser().data?.data.data;
+  const history = useHistory();
 
-  const userInfo = data?.data.data;
+  const { data, isSuccess, isLoading } =
+    authUser?.user_type === UserType.SUPER_ADMIN
+      ? usersStore.fetchUsers()
+      : usersStore.getUsersByAcademy(authUser?.academy.id.toString() || '');
+
+  const userInfo = getData(data?.data.data);
 
   let users: UserTypes[] = [];
 
@@ -84,6 +98,22 @@ export default function Users() {
       href: `${url}/admins`,
     });
   }
+  const studentActions = [
+    { name: 'Add Role', handleAction: () => {} },
+    {
+      name: 'Edit student',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`/dashboard/users/${id}/edit`); // go to edit user
+      },
+    },
+    {
+      name: 'View Student',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`${url}/${id}/profile`); // go to view user profile
+      },
+    },
+  ];
+
   return (
     <div>
       <div className="flex flex-wrap justify-start items-center pt-1">
@@ -102,7 +132,7 @@ export default function Users() {
       </div>
       {isLoading && <Loader />}
       <Switch>
-        <Route exact path={`${path}/add`} component={NewUser} />
+        <Route exact path={`${path}/add/:userType`} component={NewUser} />
         <Route exact path={`${path}/:id/edit`} component={UpdateUser} />
         <Route exact path={`${path}/:id/profile`} component={UserDetails} />
 
@@ -114,7 +144,7 @@ export default function Users() {
                 <TableHeader
                   totalItems={users.length}
                   showBadge={false}
-                  title={'users'}
+                  title={'Users'}
                   showSearch={false}
                 />
 
@@ -132,7 +162,14 @@ export default function Users() {
                     />
                     <Route
                       path={`${path}`}
-                      render={() => <Students students={students} />}
+                      render={() => (
+                        <Students
+                          students={students}
+                          handleStatusAction={() => {}}
+                          studentActions={studentActions}
+                          enumtype={'UserTypes'}
+                        />
+                      )}
                     />
                   </Switch>
                 </TabNavigation>

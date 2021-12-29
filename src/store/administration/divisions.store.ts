@@ -19,7 +19,7 @@ class DivisionStore {
     );
   }
   getDivisionsByAcademy(divisionType: string, academyId: string) {
-    return useQuery(['faculties/academy', divisionType, academyId], () =>
+    return useQuery(['faculties/academy'], () =>
       divisionService.getDivisionsByAcademy(divisionType, academyId),
     );
   }

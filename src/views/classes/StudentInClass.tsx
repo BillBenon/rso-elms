@@ -8,7 +8,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { Tab } from '../../components/Molecules/tabs/tabs';
 import Students from '../../components/Organisms/user/Students';
 import { classStore } from '../../store/administration/class.store';
-import { IntakeLevelParam } from '../../types/services/intake-program.types';
+import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import { UserTypes } from '../../types/services/user.types';
 import AddStudents from './AddStudents';
 
@@ -18,13 +18,18 @@ type IStudentClass = {
 };
 
 function StudentInClass({ classId, label }: IStudentClass) {
-  const { level: levelId, intakeId, intakeProg, id } = useParams<IntakeLevelParam>();
+  const {
+    level: levelId,
+    intakeId,
+    intakeProg,
+    id,
+    period,
+  } = useParams<IntakePeriodParam>();
   const [students, setStudents] = useState<UserTypes[]>([]);
   const { data, isLoading } = classStore.getStudentsByClass(classId);
   const history = useHistory();
 
   const studentsData = data?.data.data || [];
-
   useEffect(() => {
     let tempStuds: UserTypes[] = [];
     studentsData.forEach((stud) => {
@@ -49,18 +54,18 @@ function StudentInClass({ classId, label }: IStudentClass) {
           <Button
             styleType="outline"
             onClick={() =>
-              history.push(`/dashboard/intakes/peformance/${levelId}/${classId}`)
+              history.push(
+                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
+              )
             }>
-            View performance
+            Add class
           </Button>
           <Button
             styleType="outline"
             onClick={() =>
-              history.push(
-                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/add-class`,
-              )
+              history.push(`/dashboard/intakes/peformance/${levelId}/${classId}`)
             }>
-            Add class
+            View performance
           </Button>
           <AddStudents classId={parseInt(classId)} />
         </div>
@@ -77,7 +82,13 @@ function StudentInClass({ classId, label }: IStudentClass) {
               description="This class has not received any students. you can add one from the button on the top left."
             />
           ) : (
-            <Students students={students} showTableHeader={false} />
+            <Students
+              students={students}
+              showTableHeader={false}
+              handleStatusAction={() => {}}
+              studentActions={[]}
+              enumtype={'UserTypes'}
+            />
           )}
         </section>
       </div>

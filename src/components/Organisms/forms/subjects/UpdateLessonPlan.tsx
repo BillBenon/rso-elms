@@ -95,7 +95,7 @@ function UpdateLessonPlan() {
         width="w-64"
         isVertical={false}
         isInline={false}
-        navigateToStepHandler={() => console.log('submitted')}>
+        navigateToStepHandler={() => {}}>
         <LessonTimeComponent
           display_label="info"
           lessonPlan={lessonPlan}

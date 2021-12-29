@@ -78,16 +78,7 @@ export default function EvaluationSettings({
       <Heading fontSize="base" fontWeight="semibold">
         Evaluation Settings
       </Heading>
-      <div className="pt-6 flex-col">
-        {/* <ILabel>Shuffle evaluation questions</ILabel>
-        <SwitchMolecule
-          loading={false}
-          name="shuffle"
-          value={false}
-          handleChange={handleChange}>
-          True
-        </SwitchMolecule> */}
-      </div>{' '}
+
       <div className="pt-6 flex-col">
         <ILabel>Evaluation Reviewing status</ILabel>
         <SwitchMolecule

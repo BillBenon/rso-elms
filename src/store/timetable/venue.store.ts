@@ -10,13 +10,16 @@ class VenueStore {
   getVenueById(id: string) {
     return useQuery(['venues/id', id], () => venueService.getVenue(id));
   }
-  getAllVenues() {
-    return useQuery(['venues'], venueService.getAllVenues);
-  }
 
   updateVenue() {
     return useMutation(venueService.modifyVenue);
   }
+}
+
+export function getAllVenues(academyId: string) {
+  return useQuery(['venues'], () => venueService.getAllVenues(academyId), {
+    enabled: academyId?.length > 0,
+  });
 }
 
 export const venueStore = new VenueStore();

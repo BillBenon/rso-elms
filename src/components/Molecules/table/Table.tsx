@@ -7,6 +7,7 @@ import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 
 import { GenericStatus, ValueType } from '../../../types';
+import { StudentApproval } from '../../../types/services/enrollment.types';
 import { IEvaluationStatus } from '../../../types/services/evaluation.types';
 import { IntakeStatus } from '../../../types/services/intake.types';
 import { IntakeModuleStatus } from '../../../types/services/intake-program.types';
@@ -29,13 +30,19 @@ interface TableProps<T> {
   actions?: { name: string; handleAction: (_data?: T[keyof T]) => void }[];
   statusActions?: {
     name: string;
-    type: GenericStatus | IntakeStatus | IEvaluationStatus | IntakeModuleStatus;
+    type:
+      | GenericStatus
+      | IntakeStatus
+      | IEvaluationStatus
+      | IntakeModuleStatus
+      | StudentApproval;
     handleStatusAction: (_data?: T[keyof T]) => void;
   }[];
   selectorActions?: { name: string; handleAction: (_data?: string[]) => void }[];
   handleClick?: () => void;
   statusColumn?: string;
   handleSelect?: (_selected: string[] | null) => void;
+  unselectAll?: boolean;
 }
 
 export function Table<T>({
@@ -47,6 +54,7 @@ export function Table<T>({
   selectorActions,
   statusColumn,
   handleSelect,
+  unselectAll = false,
 }: TableProps<T>) {
   const countsToDisplay = [
     { label: '25', value: '25' },
@@ -141,6 +149,10 @@ export function Table<T>({
     });
     setCurrentRows(cr);
   }
+
+  useEffect(() => {
+    unSelectAll();
+  }, [unselectAll]);
 
   function handleCountSelect(e: ValueType) {
     e.value && setRowsOnPage(+e.value);
@@ -250,7 +262,7 @@ export function Table<T>({
               <strong>{selected.size}</strong> rows selected
             </p>
           </div>
-          <div className="px-4">
+          <div className="px-4 flex gap-2">
             {selectorActions?.map((action) => (
               <Button
                 key={action.name + Math.random()}

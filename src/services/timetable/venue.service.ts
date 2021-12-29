@@ -5,8 +5,10 @@ import { Response } from '../../types';
 import { CreateVenue, VenueInfo } from '../../types/services/event.types';
 
 class VenueService {
-  public async getAllVenues(): Promise<AxiosResponse<Response<VenueInfo[]>>> {
-    return await timetableAxios.get('/venues');
+  public async getAllVenues(
+    academyId: string,
+  ): Promise<AxiosResponse<Response<VenueInfo[]>>> {
+    return await timetableAxios.get(`/venues/academy/${academyId}`);
   }
 
   public async getVenue(id: string): Promise<AxiosResponse<Response<VenueInfo>>> {

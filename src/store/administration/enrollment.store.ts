@@ -21,6 +21,11 @@ class EnrolmmentStore {
     );
   }
 
+  getStudentsAcademy(academyId: string) {
+    return useQuery(['student/academy', academyId], () =>
+      enrollmentService.getStudentAcademy(academyId),
+    );
+  }
   enrollStudentsToLevel() {
     return useMutation(enrollmentService.enrollStudentsToLevel);
   }
@@ -32,6 +37,9 @@ class EnrolmmentStore {
   }
   enrollInstructorToLevel() {
     return useMutation(enrollmentService.enrollInstructorToLevel);
+  }
+  approveStudent() {
+    return useMutation(enrollmentService.approveStudent);
   }
 }
 
