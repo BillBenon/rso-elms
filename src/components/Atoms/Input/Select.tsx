@@ -24,7 +24,9 @@ export default function Select({
 
   const input = useRef<HTMLInputElement>(null);
 
-  const [_placeholder, setPlaceholder] = useState(placeholder || `Select ${name}`);
+  const [_placeholder, setPlaceholder] = useState(
+    placeholder || `Select ${name.replace('_', ' ').toLocaleLowerCase()}`,
+  );
 
   useEffect(() => {
     setPlaceholder(
@@ -58,6 +60,14 @@ export default function Select({
     );
   };
 
+  const handleArrowClick = () => {
+    if (document.activeElement === input.current) {
+      input.current?.blur();
+    } else {
+      input.current?.focus();
+    }
+  };
+
   return (
     <div className={`w-${width || 'full'} ${className}`}>
       <div>
@@ -68,7 +78,7 @@ export default function Select({
             name={name}
             value={internalValue}
             required={required}
-            onChange={(e) => {}}
+            onChange={(_e) => {}}
             onFocus={() => input.current?.focus()}
             className="border-none focus:outline-none absolute w-full top-0 text-white h-0"
             style={{ zIndex: -10 }}
@@ -81,13 +91,13 @@ export default function Select({
             placeholder={_placeholder}
             onChange={handleSearch}
             onBlur={() => setisMenuOpen(false)}
-            className={`block w-full hover:border-gray-400 placeholder-gray-700 h-12 text-base border-2 border-${
+            className={`block w-full hover:border-primary-400 placeholder-txt-secondary h-12 text-base border-2 border-${
               hasError ? 'error-500' : 'tertiary'
             }  rounded-md px-4 focus:border-primary-500 focus:outline-none font-medium cursor-pointer`}
           />
           <button
             type="button"
-            onClick={() => setisMenuOpen(!isMenuOpen)}
+            onMouseDown={handleArrowClick}
             className="inline absolute top-0 right-0 cursor-pointer">
             <Icon name={'chevron-down'} />
           </button>
