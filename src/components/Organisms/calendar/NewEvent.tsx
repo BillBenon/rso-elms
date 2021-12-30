@@ -58,6 +58,13 @@ export default function NewEvent() {
           handleChange={handleChange}>
           Event title
         </InputMolecule>
+        <InputMolecule
+          name="code"
+          placeholder="Event code"
+          value={values.code}
+          handleChange={handleChange}>
+          Event code
+        </InputMolecule>
         <div className="pb-4">
           <DropdownMolecule
             name="eventCategory"
