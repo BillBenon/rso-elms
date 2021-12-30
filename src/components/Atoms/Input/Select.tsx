@@ -1,4 +1,5 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
+
 import { SelectProps } from '../../../types';
 import Icon from '../custom/Icon';
 
@@ -13,7 +14,7 @@ export default function Select({
   loading = false,
   value = '',
   hasError = false,
-  width = '62',
+  width = '80',
 }: SelectProps) {
   const [isMenuOpen, setisMenuOpen] = useState(false);
   const [internalValue, setInternalValue] = useState(value);
@@ -23,7 +24,9 @@ export default function Select({
 
   const input = useRef<HTMLInputElement>(null);
 
-  const [_placeholder, setPlaceholder] = useState(placeholder || `Select ${name}`);
+  const [_placeholder, setPlaceholder] = useState(
+    placeholder || `Select ${name.replace('_', ' ').toLocaleLowerCase()}`,
+  );
 
   useEffect(() => {
     setPlaceholder(
@@ -57,68 +60,79 @@ export default function Select({
     );
   };
 
-  return (
-    <div className={`w-${width || 'full'}`}>
-      <div className="relative">
-        {/* hidden input */}
-        <input
-          type="text"
-          name={name}
-          value={internalValue}
-          required={required}
-          onChange={(e) => {}}
-          onFocus={() => input.current?.focus()}
-          className="border-none focus:outline-none absolute w-full top-0 text-white h-0"
-          style={{ zIndex: -10 }}
-        />
-        {/* input with placeholder */}
-        <input
-          ref={input}
-          value={searchQuery}
-          onFocus={() => setisMenuOpen(true)}
-          placeholder={_placeholder}
-          onChange={handleSearch}
-          onBlur={() => setisMenuOpen(false)}
-          className={`block w-full placeholder-gray-700 h-12 text-base border-2 border-${
-            hasError ? 'error-500' : 'tertiary'
-          }  rounded-md px-4 focus:border-primary-500 focus:outline-none font-medium cursor-pointer`}
-        />
-        <button
-          type="button"
-          onClick={() => setisMenuOpen(!isMenuOpen)}
-          className="inline absolute top-0 right-0 cursor-pointer">
-          <Icon name={'chevron-down'} />
-        </button>
-      </div>
-      {/* Dropdown menu */}
-      <div
-        className={`${
-          isMenuOpen ? 'relative' : 'hidden'
-        } w-full p-0 m-0 pt-2 bg-white z-10`}>
-        <div
-          className="py-1 origin-top absolute w-full rounded-md shadow-xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none p-0 m-0"
-          role="menu"
-          aria-orientation="vertical"
-          aria-labelledby="menu-button">
-          <div className="static">
-            {filtered.map((op) => (
-              <div
-                key={op.value}
-                onMouseDown={() => handleSelect(op.value)}
-                className={`py-2 cursor-pointer ${
-                  value == op.value
-                    ? 'bg-primary-500 text-white'
-                    : 'bg-main text-black hover:bg-blue-100'
-                } rounded-none text-left px-4 text-base font-medium capitalize`}>
-                {op.label}
-              </div>
-            ))}
+  const handleArrowClick = () => {
+    if (document.activeElement === input.current) {
+      input.current?.blur();
+    } else {
+      input.current?.focus();
+    }
+  };
 
-            {filtered.length === 0 && (
-              <p className="py-2 text-left px-4 text-base text-gray-500 font-medium">
-                {loading ? 'loading...' : 'No options available'}
-              </p>
-            )}
+  return (
+    <div className={`w-${width || 'full'} ${className}`}>
+      <div>
+        <div className="relative">
+          {/* hidden input */}
+          <input
+            type="text"
+            name={name}
+            value={internalValue}
+            required={required}
+            onChange={(_e) => {}}
+            onFocus={() => input.current?.focus()}
+            className="border-none focus:outline-none absolute w-full top-0 text-white h-0"
+            style={{ zIndex: -10 }}
+          />
+          {/* input with placeholder */}
+          <input
+            ref={input}
+            value={searchQuery}
+            onFocus={() => setisMenuOpen(true)}
+            placeholder={_placeholder}
+            onChange={handleSearch}
+            onBlur={() => setisMenuOpen(false)}
+            className={`block w-full hover:border-primary-400 placeholder-txt-secondary h-12 text-base border-2 border-${
+              hasError ? 'error-500' : 'tertiary'
+            }  rounded-md px-4 focus:border-primary-500 focus:outline-none font-medium cursor-pointer`}
+          />
+          <button
+            type="button"
+            onMouseDown={handleArrowClick}
+            className="inline absolute top-0 right-0 cursor-pointer">
+            <Icon name={'chevron-down'} />
+          </button>
+        </div>
+        {/* Dropdown menu */}
+        <div
+          className={`${
+            isMenuOpen ? 'relative' : 'hidden'
+          } w-full p-0 m-0 pt-2 bg-white z-10`}>
+          <div
+            className="py-1 origin-top absolute w-full rounded-md shadow-xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none p-0 m-0"
+            role="menu"
+            aria-orientation="vertical"
+            aria-labelledby="menu-button">
+            <div className="static">
+              {filtered.map((op) => (
+                // eslint-disable-next-line jsx-a11y/no-static-element-interactions
+                <div
+                  key={op.value}
+                  onMouseDown={() => handleSelect(op.value)}
+                  className={`py-2 cursor-pointer ${
+                    value == op.value
+                      ? 'bg-primary-500 text-white'
+                      : 'bg-main text-black hover:bg-blue-100'
+                  } rounded-none text-left px-4 text-base font-medium capitalize`}>
+                  {op.label}
+                </div>
+              ))}
+
+              {filtered.length === 0 && (
+                <p className="py-2 text-left px-4 text-base text-gray-500 font-medium">
+                  {loading ? 'loading...' : 'No options available'}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>

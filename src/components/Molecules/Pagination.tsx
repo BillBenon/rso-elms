@@ -4,24 +4,19 @@ import Icon from '../Atoms/custom/Icon';
 import Indicator from '../Atoms/custom/Indicator';
 
 type PaginationProps = {
-  rowsPerPage: number;
-  totalRows: number;
+  totalElements: number;
   paginate: (_pnber: number) => void;
   currentPage: number;
+  rowsPerPage?: number;
+  totalPages?: number;
 };
-const Pagination = ({
-  rowsPerPage,
-  totalRows,
-  paginate,
-  currentPage,
-}: PaginationProps) => {
-  const pageNumbers = [];
+const Pagination = ({ totalPages = 1, paginate, currentPage = 0 }: PaginationProps) => {
+  const pageNumbers = [1];
 
-  if (totalRows > rowsPerPage) {
-    for (let i = 1; i <= Math.ceil(totalRows / rowsPerPage); i++) {
-      pageNumbers.push(i);
-    }
+  for (let i = 1; i < totalPages; i++) {
+    pageNumbers.push(i + 1);
   }
+
   const onNext = () => {
     paginate(currentPage + 1);
   };
@@ -32,7 +27,7 @@ const Pagination = ({
 
   let lastPage = pageNumbers.length;
 
-  return totalRows > rowsPerPage ? (
+  return totalPages > 1 ? (
     <div className="py-2">
       <nav className="my-2 flex justify-end">
         <ul className="flex pl-0 rounded list-none flex-wrap justify-center">
@@ -44,10 +39,10 @@ const Pagination = ({
               <Indicator
                 key={number}
                 isCircular={false}
-                isActive={currentPage === number}
+                isActive={currentPage + 1 === number}
                 hasError={false}
                 isComplete={false}
-                clicked={() => paginate(number)}>
+                clicked={() => paginate(number - 1)}>
                 {number}
               </Indicator>
             ))}

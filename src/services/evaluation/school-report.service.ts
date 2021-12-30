@@ -13,6 +13,14 @@ class SchoolReportService {
       `/reports/overall-report/class/${classId}/academic-year-period/${academicYearPeriodId}`,
     );
   }
+
+  public async getStudentFullReport(
+    studentId: string,
+  ): Promise<AxiosResponse<Response<IOverallStudentPerformance[]>>> {
+    return await evaluationAxios.get(
+      `/studentReport/getThreeTermSchoolReport/${studentId}`,
+    );
+  }
 }
 
 export const reportService = new SchoolReportService();

@@ -35,6 +35,7 @@ import DateMolecule from '../../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
+import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 
 interface ParamType {
   userType: UserType;
@@ -75,7 +76,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     reset_date: '',
     residence_location_id: 0,
     sex: GenderStatus.MALE,
-    user_type: UserType.STUDENT,
+    user_type: userType,
     username: '',
     intake_id: '',
     nationality: '',
@@ -153,17 +154,19 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         </Heading>
       </div>
       <form onSubmit={addUser}>
-        <DropdownMolecule
+        <SelectMolecule
           options={getDropDownStatusOptions(
             authUser.data?.data.data.user_type === UserType.SUPER_ADMIN
               ? newUserTypeWithSuper
               : newUserType,
           )}
           name="user_type"
-          placeholder={details.user_type || 'Select user type'}
+          width="80"
+          // placeholder={details.user_type || 'Select user type'}
+          value={details.user_type}
           handleChange={handleChange}>
           User type
-        </DropdownMolecule>
+        </SelectMolecule>
         {details.user_type === UserType.INSTRUCTOR ? (
           <>
             <DateMolecule
