@@ -45,11 +45,11 @@ export default function SupAdminProfile<E>({
 
   const [details, setDetails] = useState<UpdateUserInfo>({
     place_of_residence: '',
-    send_communication_msg: '',
+    send_communication_msg: SendCommunicationMsg.EMAIL,
     person: '',
     academic_program_level_id: '',
     academy_id: '',
-    academy_name: '',
+    // academy_name: '',
     birth_date: '',
     doc_type: DocType.NID,
     education_level: EducationLevel.BACHELOR,
@@ -67,25 +67,25 @@ export default function SupAdminProfile<E>({
     user_type: UserType.STUDENT,
     username: '',
     profile_status: ProfileStatus.COMPLETD,
-    acdemic_year_id: '',
+    // acdemic_year_id: '',
     activation_key: '',
     blood_group: '',
     current_rank_id: '',
     date_of_commission: '',
     date_of_issue: '',
     date_of_last_promotion: '',
-    deployed_on: '',
-    deployment_number: '',
+    // deployed_on: '',
+    // deployment_number: '',
     document_expire_on: '',
     emp_no: '',
     father_names: '',
-    institution_id: '',
+    // institution_id: '',
     mother_names: '',
     other_rank: '',
     password_reset_period_in_days: 0,
     place_of_birth: '',
     place_of_birth_description: '',
-    place_of_birth_id: '',
+    // place_of_birth_id: '',
     place_of_issue: '',
     rank_depart: '',
     reset_date: '',
@@ -114,7 +114,8 @@ export default function SupAdminProfile<E>({
       ...details,
       id: auth?.id.toString() || '',
       username: auth?.username.toString() || '',
-      password: auth?.password.toString() || '',
+      password: auth?.password || '',
+      user_type: auth?.user_type || UserType.STUDENT,
     });
   }, [auth]);
 
@@ -144,7 +145,8 @@ export default function SupAdminProfile<E>({
         // history.goBack();
       },
       onError(error: any) {
-        toast.error(error.response.data.message);
+        const msg = toast.error(error.response.data.message);
+        console.log(msg);
       },
     });
     moveForward();
