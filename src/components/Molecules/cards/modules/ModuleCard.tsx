@@ -11,9 +11,10 @@ import CommonCardMolecule from '../CommonCardMolecule';
 
 interface IProps {
   course: CommonCardDataType;
+  intakeProgram: string;
 }
 
-export default function ModuleCard({ course }: IProps) {
+export default function ModuleCard({ course,intakeProgram }: IProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
 
   return (
@@ -23,7 +24,7 @@ export default function ModuleCard({ course }: IProps) {
         trigger={
           <CommonCardMolecule
             data={course}
-            to={{ title: 'module', to: `/dashboard/modules/${course.id}/subjects` }}>
+            to={{ title: 'module', to: `/dashboard/modules/${intakeProgram}/${course.id}` }}>
             <p className="pt-3">
               Total subjects:
               <span className="px-1 text-primary-500">{'None'}</span>

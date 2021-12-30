@@ -14,7 +14,7 @@ function IntakeProgramModules() {
   const history = useHistory();
   const { url } = useRouteMatch();
   const [programModules, setProgramModules] = useState<CommonCardDataType[]>([]);
-  const { id } = useParams<IntakeProgParam>();
+  const { id, intakeProg } = useParams<IntakeProgParam>();
 
   const getAllModuleStore = moduleStore.getModulesByProgram(id);
 
@@ -57,7 +57,7 @@ function IntakeProgramModules() {
                 onClick={() => history.push(`${url}/add`)}
               />
               {programModules.map((module, index) => (
-                <ModuleCard course={module} key={index} />
+                <ModuleCard intakeProgram={intakeProg} course={module} key={index} />
               ))}
             </>
           )}

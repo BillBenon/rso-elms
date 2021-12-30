@@ -13,6 +13,8 @@ import { IntakeLevelParam } from '../../types/services/intake-program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import EnrollInstructorToLevel from './EnrollInstructorToLevel';
 import EnrollStudent from './EnrollStudent';
+import LevelInstrctors from './LevelInstructors';
+import LevelStudents from './LevelStudents';
 
 function IntakeLevelModule() {
   const history = useHistory();
@@ -48,7 +50,13 @@ function IntakeLevelModule() {
   return (
     <>
       <TableHeader usePadding={false} showBadge={false} showSearch={false}>
+        {/* <Button styleType="outline">Enrolled Students</Button>
+        <Button styleType="outline">Enrolled Instructors</Button> */}
+        {/* <div className='py-2.5 border px-4 rounded-lg border-primary-500 text-primary-500 font-semibold text-sm'>Enrolled Students</div>
+        <div className='py-2.5 border px-4 rounded-lg border-primary-500 text-primary-500 font-semibold text-sm'>Enrolled Instructors</div> */}
+        <LevelInstrctors/>
         <EnrollInstructorToLevel />
+        <LevelStudents/>
         <EnrollStudent />
         {prdLoading ? (
           <></>
