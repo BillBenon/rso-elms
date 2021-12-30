@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link as BrowserLink } from 'react-router-dom';
+import { Link as BrowserLink, useHistory } from 'react-router-dom';
 
 import { authenticatorStore } from '../../../../store/administration';
 import { CommonCardDataType } from '../../../../types';
@@ -12,11 +12,13 @@ import CommonCardMolecule from '../CommonCardMolecule';
 interface IProps {
   course: CommonCardDataType;
   intakeProgram: string;
+  showMenus: true;
 }
 
-export default function ModuleCard({ course,intakeProgram }: IProps) {
+export default function ModuleCard({ course, intakeProgram,showMenus = true }: IProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
 
+  const history = useHistory();
   return (
     <div className="p-2 mt-3">
       <Tooltip
@@ -24,12 +26,24 @@ export default function ModuleCard({ course,intakeProgram }: IProps) {
         trigger={
           <CommonCardMolecule
             data={course}
-            to={{ title: 'module', to: `/dashboard/modules/${intakeProgram}/${course.id}` }}>
+            handleClick={() =>{
+              authUser?.user_type === UserType.ADMIN ?
+              history.push({
+                pathname: `/dashboard/modules/${intakeProgram}/${course.id}`,
+                search: ``,
+              }) : 
+              history.push({
+                pathname: `/dashboard/modules/${course.id}`,
+                search: ``,
+              })
+            }
+            }>
             <p className="pt-3">
               Total subjects:
               <span className="px-1 text-primary-500">{'None'}</span>
             </p>
           </CommonCardMolecule>
+          
         }>
         <div className="w-96 p-4">
           <Heading fontWeight="semibold">{course.title}</Heading>
@@ -39,19 +53,19 @@ export default function ModuleCard({ course,intakeProgram }: IProps) {
           {authUser?.user_type === UserType.STUDENT ? (
             <BrowserLink
               className="outline-none"
-              to={`/dashboard/modules/${course.id}/subject`}>
+              to={`/dashboard/modules/${course.id}/subjects`}>
               <Button styleType="outline">Start module</Button>
             </BrowserLink>
           ) : authUser?.user_type === UserType.ADMIN ? (
             <div className="py-2 flex justify-around gap-2">
               <BrowserLink
                 className="outline-none"
-                to={`/dashboard/modules/${course.id}/add-subject`}>
+                to={`/dashboard/modules/${intakeProgram}/${course.id}/add-subject`}>
                 <Button>Add subject</Button>
               </BrowserLink>
               <BrowserLink
                 className="outline-none"
-                to={`/dashboard/modules/${course.id}/edit`}>
+                to={`/dashboard/modules/${intakeProgram}/${course.id}/edit`}>
                 <Button styleType="outline">Edit</Button>
               </BrowserLink>
             </div>

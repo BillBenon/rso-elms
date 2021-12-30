@@ -15,9 +15,9 @@ class EnrolmmentStore {
     );
   }
 
-  getInstructorPrograms(instructorId: string) {
+  getInstructorIntakePrograms(instructorId: string) {
     return useQuery(['instructor/program', instructorId], () =>
-      enrollmentService.getInstructorPrograms(instructorId),
+      enrollmentService.getInstructorIntakePrograms(instructorId),
     );
   }
 

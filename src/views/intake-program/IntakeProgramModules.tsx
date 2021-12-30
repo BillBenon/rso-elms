@@ -5,9 +5,11 @@ import Loader from '../../components/Atoms/custom/Loader';
 import AddCard from '../../components/Molecules/cards/AddCard';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import { authenticatorStore } from '../../store/administration';
 import { moduleStore } from '../../store/administration/modules.store';
 import { CommonCardDataType } from '../../types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
+import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 
 function IntakeProgramModules() {
@@ -37,6 +39,8 @@ function IntakeProgramModules() {
     setProgramModules(newModules);
   }, [getAllModuleStore.data?.data.data, id]);
 
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
   return (
     <>
       {getAllModuleStore.isLoading ? (
@@ -52,10 +56,12 @@ function IntakeProgramModules() {
             />
           ) : (
             <>
-              <AddCard
-                title={'Add new module'}
-                onClick={() => history.push(`${url}/add`)}
-              />
+              {authUser?.user_type === UserType.ADMIN ? (
+                <AddCard
+                  title={'Add new module'}
+                  onClick={() => history.push(`${url}/add`)}
+                />
+              ) : null}
               {programModules.map((module, index) => (
                 <ModuleCard intakeProgram={intakeProg} course={module} key={index} />
               ))}

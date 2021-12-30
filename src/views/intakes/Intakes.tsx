@@ -22,9 +22,14 @@ import Tooltip from '../../components/Molecules/Tooltip';
 import NewIntake from '../../components/Organisms/intake/NewIntake';
 import UpdateIntake from '../../components/Organisms/intake/UpdateIntake';
 import { authenticatorStore } from '../../store/administration';
+import enrollmentStore from '../../store/administration/enrollment.store';
 import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import registrationControlStore from '../../store/administration/registrationControl.store';
+import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Link as LinkType, ValueType } from '../../types';
+import { InstructorProgram } from '../../types/services/instructor.types';
+import { ExtendedIntakeInfo } from '../../types/services/intake.types';
+import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import IntakePrograms from '../intake-program/IntakePrograms';
 import LevelPerformance from '../performance/LevelPerformance';
@@ -54,32 +59,58 @@ export default function Intakes() {
 
   if (registrationControlId && !regSuccess && !regLoading) refetch();
 
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
+  const authUserId = authUser?.id;
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(authUserId + '')
+    .data?.data.data;
+
   const {
     isSuccess,
     isError,
     data,
     isLoading,
     refetch: refetchIntakes,
-  } = getIntakesByAcademy(
-    registrationControlId || userInfo?.data.data.academy.id.toString()!,
-    !!registrationControlId,
-    true,
-  );
+  } = authUser?.user_type === UserType.INSTRUCTOR
+    ? enrollmentStore.getInstructorIntakePrograms(instructorInfo?.id + '')
+    : getIntakesByAcademy(
+        registrationControlId || userInfo?.data.data.academy.id.toString()!,
+        !!registrationControlId,
+        true,
+      );
 
   useEffect(() => {
     if (isSuccess && data?.data) {
       let loadedIntakes: CommonCardDataType[] = [];
-      data?.data.data.forEach((intake) => {
-        let cardData: CommonCardDataType = {
-          code: intake.code.toUpperCase(),
-          description: intake.description,
-          title: intake.title || `------`,
-          status: {
-            type: advancedTypeChecker(intake.intake_status),
-            text: intake.intake_status.toString(),
-          },
-        };
-        loadedIntakes.push(cardData);
+      data?.data.data.forEach((intk) => {
+        if (authUser?.user_type === UserType.INSTRUCTOR) {
+          let intake = intk as InstructorProgram;
+          let prog: CommonCardDataType = {
+            id: intake.intake_program.intake.id,
+            status: {
+              type: advancedTypeChecker(intake.intake_program.intake.intake_status),
+              text: intake.intake_program.intake.intake_status.toString(),
+            },
+            code: intake.intake_program.intake.code,
+            title: intake.intake_program.intake.title,
+            description: intake.intake_program.intake.description,
+          };
+
+          loadedIntakes.push(prog);
+        } else {
+          let intake = intk as ExtendedIntakeInfo;
+          let cardData: CommonCardDataType = {
+            id: intake.id,
+            code: intake.code.toUpperCase(),
+            description: intake.description,
+            title: intake.title || `------`,
+            status: {
+              type: advancedTypeChecker(intake.intake_status),
+              text: intake.intake_status.toString(),
+            },
+          };
+          loadedIntakes.push(cardData);
+        }
       });
 
       setIntakes(loadedIntakes);
@@ -155,7 +186,10 @@ export default function Intakes() {
                               Total Students Enroled
                             </Heading>
                             <Heading fontSize="sm" fontWeight="semibold">
-                              {data?.data.data[index].total_num_students || 0}
+                              {
+                                //@ts-ignore
+                                data?.data.data[index].total_num_students || 0
+                              }
                             </Heading>
                           </div>
                         </div>
@@ -163,13 +197,12 @@ export default function Intakes() {
                         <div>
                           <Link
                             className="outline-none"
-                            to={`${url}/programs/${data?.data.data[index].id}`}>
+                            to={`${url}/programs/${intake.id}`}>
                             <Button styleType="text">View programs</Button>
                           </Link>
                         </div>
                         <div className="mt-4 space-x-4">
-                          <Link
-                            to={`${url}/${data?.data.data[index].id}/edit/${registrationControlId}`}>
+                          <Link to={`${url}/${intake.id}/edit/${registrationControlId}`}>
                             <Button>Edit Intake</Button>
                           </Link>
                           <Button styleType="outline">Change Status</Button>
@@ -196,6 +229,7 @@ export default function Intakes() {
                           ? 'No intake available in this reg Control'
                           : 'No intake available'
                       }
+                      showButton={authUser?.user_type === UserType.ADMIN}
                       handleClick={() => {
                         if (registrationControlId)
                           history.push(`${url}/${registrationControlId}/add-intake`);

@@ -4,6 +4,7 @@ import { useHistory, useParams } from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
+import FileUploader from '../../components/Atoms/Input/FileUploader';
 import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
@@ -158,12 +159,19 @@ export default function UpdateInstitution() {
         <div className="py-4 col-span-2">
           <ILabel className="block pb-2">Institution logo</ILabel>
 
-          <Button type="button" styleType="outline">
-            <span className="flex items-center">
-              <Icon name="attach" useheightandpadding={false} fill="primary" />
-              <span className="">Upload logo</span>
-            </span>
-          </Button>
+          <FileUploader
+            allowPreview
+            accept={'image/jpeg, image/png'}
+            handleUpload={function (_files: FileList | null) {
+              throw new Error('Function not implemented.');
+            }}>
+            <Button type="button" styleType="outline">
+              <span className="flex items-center">
+                <Icon name="attach" useheightandpadding={false} fill="primary" />
+                <span className="">Upload logo</span>
+              </span>
+            </Button>
+          </FileUploader>
         </div>
         <div className="py-4 col-span-2">
           <Button onClick={() => handleSubmit} type="submit">

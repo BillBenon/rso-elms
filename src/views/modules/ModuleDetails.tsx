@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
+import {
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+  useParams,
+  useRouteMatch,
+} from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
@@ -11,7 +18,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import UsersPreview from '../../components/Molecules/cards/UsersPreview';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
-import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import UpdateModuleForm from '../../components/Organisms/forms/modules/UpdateModuleForm';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
 import { authenticatorStore } from '../../store/administration';
@@ -19,60 +26,64 @@ import enrollmentStore from '../../store/administration/enrollment.store';
 import { moduleStore } from '../../store/administration/modules.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { CommonCardDataType, Link, ParamType } from '../../types';
-import { ModuleDetailsParam } from '../../types/services/intake-program.types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ModuleEvaluations from '../evaluation/ModuleEvaluations';
 import ModuleMaterials from '../module-material/ModuleMaterials';
 import { IProgramData } from '../programs/AcademicPrograms';
-import InstructorModuleAssignment from './InstructorModuleAssignment';
 
 export default function ModuleDetails() {
   const [subjects, setSubjects] = useState<CommonCardDataType[]>([]);
   const [route, setCurrentPage] = useState('SUBJECTS');
 
-  const { intakeProgram,moduleId } = useParams<ModuleDetailsParam>();
+  const { id } = useParams<ParamType>();
   const { path, url } = useRouteMatch();
+  const { search } = useLocation();
+  const showMenu = new URLSearchParams(search).get('showMenus');
   const history = useHistory();
-
-  const subjectData = subjectStore.getSubjectsByModule(moduleId);
-  const module = moduleStore.getModuleById(moduleId).data?.data.data;
+  const subjectData = subjectStore.getSubjectsByModule(id);
+  let moduleData: IProgramData | undefined;
+  const module = moduleStore.getModuleById(id).data?.data.data;
   const authUser = authenticatorStore.authUser().data?.data.data;
-  const { data: assignedInstructors } = enrollmentStore.getInstructorsonModule(moduleId);
+  const { data: assignedInstructors } = enrollmentStore.getInstructorsonModule(id);
 
-  const tabs = [
+  let tabs: TabType[] = [
     {
       label: 'Module Info',
       href: `${url}`,
     },
     {
       label: 'Subjects',
-      href: `${url}/subjects`,
+      href: `${url}/subjects?showMenus=${showMenu}`,
     },
     {
       label: 'Materials',
-      href: `${url}/materials`,
+      href: `${url}/materials?showMenus=${showMenu}`,
     },
     {
       label: 'Preriquisites',
-      href: `${url}/prereqs`,
-    },
-    {
-      label: 'Syllabus',
-      href: `${url}/syllabus`,
-    },
-    {
-      label: 'Evaluation',
-      href: `${url}/evaluations`,
-    },
-    {
-      label: 'Performance',
-      href: `${url}/performances`,
+      href: `${url}/prereqs?showMenus=${showMenu}`,
     },
   ];
 
+  if (showMenu && showMenu == 'true') {
+    tabs.push(
+      {
+        label: 'Syllabus',
+        href: `${url}/syllabus?showMenus=${showMenu}`,
+      },
+      {
+        label: 'Evaluation',
+        href: `${url}/evaluations?showMenus=${showMenu}`,
+      },
+      {
+        label: 'Performance',
+        href: `${url}/performances?showMenus=${showMenu}`,
+      },
+    );
+  }
+
   var lastUrl: string = location.href;
-  let moduleData: IProgramData | undefined;
 
   if (module) {
     moduleData = {
@@ -89,6 +100,7 @@ export default function ModuleDetails() {
       // incharge: program.incharge && program.incharge.user.username,
     };
   }
+
 
   useEffect(() => {
     if (subjectData.data?.data) {
@@ -112,6 +124,7 @@ export default function ModuleDetails() {
     new MutationObserver(() => {
       const url = location.href;
       if (url !== lastUrl) {
+        lastUrl = url;
         if (lastUrl.endsWith('subjects')) {
           setCurrentPage('SUBJECTS');
         } else if (lastUrl.endsWith('materials')) {
@@ -127,7 +140,7 @@ export default function ModuleDetails() {
         }
       }
     }).observe(document, { subtree: true, childList: true });
-  }, [subjectData.data]);
+  }, [subjectData.data?.data.data]);
 
   // function onUrlChange() {
   //   alert('new-loc' + location.href);
@@ -144,8 +157,8 @@ export default function ModuleDetails() {
     { to: 'subjects', title: 'Programs' },
     { to: 'modules', title: 'Modules' },
     {
-      to: module?.id + '',
-      title: module?.name + '',
+      to: moduleData.data?.data.data.id + '',
+      title: moduleData.data?.data.data.name + '',
     },
   ];
 
@@ -159,7 +172,7 @@ export default function ModuleDetails() {
           <div className="flex flex-wrap justify-between items-center">
             <div className="flex gap-2 items-center">
               <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
-                {module?.name} module
+                {moduleData.data?.data.data.name} module
               </Heading>
             </div>
             <div className="flex flex-wrap justify-start items-center">
@@ -258,7 +271,6 @@ export default function ModuleDetails() {
                             totalUsers={assignedInstructors?.data.data.length || 0}
                             dataLabel={''}
                             isLoading={false}>
-                            <InstructorModuleAssignment module_id={module?.id || ''} intake_program_id={intakeProgram}/>
                           </UsersPreview>
                           </div>
                     </div>

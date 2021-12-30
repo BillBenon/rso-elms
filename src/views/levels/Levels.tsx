@@ -13,6 +13,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import UpdateLevel from '../../components/Organisms/forms/level/UpdateLevel';
 import { authenticatorStore } from '../../store/administration';
 import { levelStore } from '../../store/administration/level.store';
+import { GenericStatus } from '../../types';
 import { ILevel } from '../../types/services/levels.types';
 import LevelUsers from './LevelUsers';
 
@@ -61,6 +62,13 @@ function Levels() {
       },
     },
   ];
+
+  const levStatActions = Object.keys(GenericStatus).map((stat) => ({
+    name: stat,
+    type: stat as GenericStatus,
+    handleStatusAction: () => {},
+  }));
+
   return (
     <Switch>
       {/* update level popup */}
@@ -87,7 +95,8 @@ function Levels() {
                   <>
                     {levels && levels?.length > 0 ? (
                       <Table<FilteredLevels>
-                        statusColumn="status"
+                        statusColumn="generic_status"
+                        statusActions={levStatActions}
                         data={levels}
                         uniqueCol={'id'}
                         hide={['id']}

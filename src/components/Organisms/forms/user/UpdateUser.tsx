@@ -33,6 +33,7 @@ import DateMolecule from '../../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
+import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 
 export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
@@ -171,12 +172,8 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
         </Heading>
       </div>
       <form onSubmit={addUser}>
-        <DropdownMolecule
-          defaultValue={getDropDownStatusOptions(
-            authUser.data?.data.data.user_type === UserType.SUPER_ADMIN
-              ? updateUserTypeWithSuper
-              : updateUserType,
-          ).find((type) => type.label === details.user_type)}
+        <SelectMolecule
+          value={details.user_type}
           options={getDropDownStatusOptions(
             authUser.data?.data.data.user_type === UserType.SUPER_ADMIN
               ? updateUserTypeWithSuper
@@ -186,7 +183,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           placeholder={authUser.data?.data.data.user_type || 'Select user type'}
           handleChange={handleChange}>
           User type
-        </DropdownMolecule>
+        </SelectMolecule>
         <InputMolecule
           name="first_name"
           placeholder="eg: Kabera"
@@ -250,16 +247,14 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           Gender
         </RadioMolecule>
 
-        <DropdownMolecule
-          placeholder={details.doc_type || 'Select your reference'}
+        <SelectMolecule
+          placeholder={'Select your reference'}
+          value={details.doc_type}
           handleChange={handleChange}
           name="doc_type"
-          defaultValue={getDropDownStatusOptions(DocType).find(
-            (doc) => doc.label === details.doc_type,
-          )}
           options={getDropDownStatusOptions(DocType)}>
           Reference Number
-        </DropdownMolecule>
+        </SelectMolecule>
         <InputMolecule
           name="nid"
           type="text"
@@ -268,48 +263,44 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           {details.doc_type.replaceAll('_', ' ')}
         </InputMolecule>
-        <DropdownMolecule
-          defaultValue={getDropDownStatusOptions(MaritalStatus).find(
-            (marital_status) => marital_status.label === details.marital_status,
-          )}
+        <SelectMolecule
           options={getDropDownStatusOptions(MaritalStatus)}
           name="marital_status"
-          placeholder={details.marital_status || 'Select your marital status'}
+          value={details.marital_status}
           handleChange={handleChange}>
           Marital Status
-        </DropdownMolecule>
-        <DropdownMolecule
-          defaultValue={getDropDownStatusOptions(EducationLevel).find(
-            (level) => level.label === details.education_level,
-          )}
+        </SelectMolecule>
+        <SelectMolecule
           options={getDropDownStatusOptions(EducationLevel)}
           name="education_level"
-          placeholder={details.education_level || 'Select your education level'}
+          value={details.education_level}
           handleChange={handleChange}>
           Education level
-        </DropdownMolecule>
+        </SelectMolecule>
         {![UserType.SUPER_ADMIN].includes(details.user_type) && (
-          <DropdownMolecule
+          <SelectMolecule
             options={getDropDownOptions({ inputs: academies || [] })}
             name="academy_id"
-            placeholder={details?.academy_name || 'Academy to be enrolled in'}
+            value={details?.academy_id}
+            placeholder={'Academy to be enrolled in'}
             handleChange={handleChange}>
             Academy
-          </DropdownMolecule>
+          </SelectMolecule>
         )}
         {details.user_type === 'STUDENT' && (
           <>
-            <DropdownMolecule
+            <SelectMolecule
               options={getDropDownOptions({
                 inputs: intakes.data?.data.data || [],
                 labelName: ['code'],
               })}
               name="intake"
+              value={otherDetails.intake}
               placeholder={'intake to be enrolled in'}
               handleChange={otherhandleChange}>
               Intake
-            </DropdownMolecule>
-            <DropdownMolecule
+            </SelectMolecule>
+            <SelectMolecule
               options={getDropDownOptions({
                 inputs: programs.data?.data.data || [],
                 labelName: ['name'],
@@ -317,11 +308,12 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
                 getOptionLabel: (prog: IntakeProgramInfo) => prog.program.code,
               })}
               name="intake_program_id"
+              value={details.intake_program_id}
               placeholder={'Program to be enrolled in'}
               handleChange={handleChange}>
               Programs
-            </DropdownMolecule>
-            <DropdownMolecule
+            </SelectMolecule>
+            <SelectMolecule
               options={getDropDownOptions({
                 inputs: levels.data?.data.data || [],
                 labelName: ['name'], //@ts-ignore
@@ -329,9 +321,10 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
               })}
               name="academic_program_level_id"
               placeholder={'Program to be enrolled in'}
+              value={details.academic_program_level_id}
               handleChange={handleChange}>
               Levels
-            </DropdownMolecule>
+            </SelectMolecule>
           </>
         )}
         <Button type="submit">Update</Button>

@@ -52,11 +52,11 @@ class EnrollmentService {
     );
   }
 
-  public async getInstructorPrograms(
+  public async getInstructorIntakePrograms(
     instructorId: string,
   ): Promise<AxiosResponse<Response<InstructorProgram[]>>> {
     return await adminstrationAxios.get(
-      `instructorEnrolment/getInstructorPrograms/${instructorId}`,
+      `instructorEnrolment/getInstructorIntakePrograms/${instructorId}`,
     );
   }
 

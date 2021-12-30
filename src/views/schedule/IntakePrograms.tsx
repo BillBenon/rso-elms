@@ -57,7 +57,7 @@ export default function IntakePrograms() {
             <>
               <TableHeader
                 totalItems={`${programs.length} programs`}
-                title={isLoading ? '-----' : intakeInfo?.title || ''}>
+                title={isLoading ? 'loading....' : intakeInfo?.title || ''}>
                 <div className="flex gap-4">
                   <BrowserLink to={`/dashboard/schedule/events/new`}>
                     <Button>Add event</Button>
