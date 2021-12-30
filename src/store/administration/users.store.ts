@@ -3,6 +3,7 @@ import { useMutation, useQuery } from 'react-query';
 import { userService } from '../../services/administration/user.service';
 import { FilterOptions } from '../../types';
 import { UserType } from '../../types/services/user.types';
+import { formatQueryParameters } from '../../utils/query';
 
 class UserStore {
   createUser() {
@@ -13,7 +14,9 @@ class UserStore {
     return useMutation(userService.importUsers);
   }
   fetchUsers(queryParams?: FilterOptions) {
-    return useQuery('users', () => userService.fetchUsers(queryParams));
+    return useQuery(['users', formatQueryParameters(queryParams)], () =>
+      userService.fetchUsers(queryParams),
+    );
   }
   getUsersByInstitution(institutionId: string) {
     return useQuery(['users/institution', institutionId], () =>
@@ -32,7 +35,7 @@ class UserStore {
     usertype: UserType,
     queryParams?: FilterOptions,
   ) {
-    return useQuery(['users/academy', academyId], () =>
+    return useQuery(['users/academy/:type', academyId, usertype], () =>
       userService.getUsersByAcademyAndUserType(academyId, usertype, queryParams),
     );
   }
