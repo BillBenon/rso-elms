@@ -150,15 +150,15 @@ export default function CalendarView() {
         step={60}
         startAccessor="start"
         endAccessor="end"
-        view="week"
+        defaultView="week"
+        // view="week"
         showMultiDayTimes={false}
-        views={['day', 'week']}
-        defaultDate={new Date()}
         timeslots={1}
         style={{ height: 900 }}
         min={new Date(2017, 10, 0, 4, 0, 0)}
         max={new Date(2017, 10, 0, 23, 59, 59)}
-        date={dateRange.start_date}
+        date={new Date(dateRange.start_date)}
+        onNavigate={(_newDate, _view, _action) => {}}
       />
       <Switch>
         <Route
