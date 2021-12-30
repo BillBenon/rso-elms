@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from 'react-router';
+import { Route, Switch, useHistory, useRouteMatch } from 'react-router';
 import { useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
+import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { Tab } from '../../components/Molecules/tabs/tabs';
 import Students from '../../components/Organisms/user/Students';
 import { classStore } from '../../store/administration/class.store';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import { UserTypes } from '../../types/services/user.types';
+import SubjectPeriod from '../subjects/SubjectPeriod';
 import AddStudents from './AddStudents';
 
 type IStudentClass = {
@@ -47,50 +49,123 @@ function StudentInClass({ classId, label }: IStudentClass) {
     setStudents(tempStuds);
   }, [studentsData]);
 
+  const { path } = useRouteMatch();
+
   return (
     <Tab label={label}>
       <div className="flex flex-col">
-        <div className="flex gap-4 self-end">
-          <Button
-            styleType="outline"
-            onClick={() =>
-              history.push(
-                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
-              )
-            }>
-            Add class
-          </Button>
-          <Button
-            styleType="outline"
-            onClick={() =>
-              history.push(`/dashboard/intakes/peformance/${levelId}/${classId}`)
-            }>
-            View performance
-          </Button>
-          <AddStudents classId={parseInt(classId)} />
-        </div>
-        <section>
-          {isLoading ? (
-            <Loader />
-          ) : studentsData.length <= 0 ? (
-            <NoDataAvailable
-              showButton={false}
-              icon="user"
-              buttonLabel="Add new students"
-              title={'No students available in this class'}
-              handleClick={() => history.push(``)}
-              description="This class has not received any students. you can add one from the button on the top left."
-            />
-          ) : (
-            <Students
-              students={students}
-              showTableHeader={false}
-              handleStatusAction={() => {}}
-              studentActions={[]}
-              enumtype={'UserTypes'}
-            />
-          )}
-        </section>
+        <Switch>
+          <Route
+            exact
+            path={`${path}`}
+            render={() => {
+              return (
+                <>
+                  <div className="flex gap-4 self-end">
+                    <Button
+                      styleType="outline"
+                      onClick={() =>
+                        history.push(
+                          `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
+                        )
+                      }>
+                      Add class
+                    </Button>
+
+                    <Button
+                      styleType="outline"
+                      onClick={() =>
+                        history.push(
+                          `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/view-class/${classId}/subject`,
+                        )
+                      }>
+                      View subjects
+                    </Button>
+                    <Button
+                      styleType="outline"
+                      onClick={() =>
+                        history.push(
+                          `/dashboard/intakes/peformance/${levelId}/${classId}`,
+                        )
+                      }>
+                      View performance
+                    </Button>
+                    <AddStudents classId={parseInt(classId)} />
+                  </div>
+                  <section>
+                    {isLoading ? (
+                      <Loader />
+                    ) : studentsData.length <= 0 ? (
+                      <NoDataAvailable
+                        showButton={false}
+                        icon="user"
+                        buttonLabel="Add new students"
+                        title={'No students available in this class'}
+                        handleClick={() => history.push(``)}
+                        description="This class has not received any students. you can add one from the button on the top left."
+                      />
+                    ) : (
+                      <Students
+                        students={students}
+                        showTableHeader={false}
+                        handleStatusAction={() => {}}
+                        studentActions={[]}
+                        enumtype={'UserTypes'}
+                      />
+                    )}
+                  </section>
+                </>
+              );
+            }}
+          />
+          <Route
+            exact
+            path={`${path}/subject`}
+            render={() => {
+              return (
+                <>
+                  <div className="flex gap-4 self-end">
+                    <Button
+                      styleType="outline"
+                      onClick={() =>
+                        history.push(
+                          `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
+                        )
+                      }>
+                      Add class
+                    </Button>
+
+                    <Button
+                      styleType="outline"
+                      onClick={() =>
+                        history.push(
+                          `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/view-class/${classId}`,
+                        )
+                      }>
+                      View classes
+                    </Button>
+                    <Button
+                      styleType="outline"
+                      onClick={() =>
+                        history.push(
+                          `/dashboard/intakes/peformance/${levelId}/${classId}`,
+                        )
+                      }>
+                      View performance
+                    </Button>
+                    <AddStudents classId={parseInt(classId)} />
+                  </div>
+                  <div className="flex justify-between space-x-4">
+                    <Heading fontWeight="semibold" fontSize="xl" className="py-2">
+                      Subjects
+                    </Heading>
+                  </div>
+                  <SubjectPeriod />
+                </>
+              );
+            }}
+          />
+        </Switch>
       </div>
     </Tab>
   );
