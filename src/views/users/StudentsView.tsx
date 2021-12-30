@@ -76,7 +76,7 @@ export default function StudentsView() {
         <>
           <TableHeader
             title="Students"
-            totalItems={data?.data.data.numberOfElements || 0}
+            totalItems={data?.data.data.totalElements || 0}
             handleSearch={handleSearch}>
             {authUser?.user_type === UserType.SUPER_ADMIN && (
               <div className="flex gap-3">
