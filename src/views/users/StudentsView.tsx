@@ -85,7 +85,7 @@ export default function StudentsView() {
           icon="user"
           buttonLabel="Add new student"
           title={'No students available'}
-          handleClick={() => history.push(`/dashboard/users/add`)}
+          handleClick={() => history.push(`/dashboard/users/add/STUDENT`)}
           description="And the web just isnt the same without you. Lets get you back online!"
         />
       ) : (

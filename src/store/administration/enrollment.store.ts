@@ -21,12 +21,28 @@ class EnrolmmentStore {
     );
   }
 
+  getInstructorIntakeProgramsById(instructorId: string) {
+    return useQuery(['instructor/intakeprogram', instructorId], () =>
+      enrollmentService.getInstructorIntakeProgramsById(instructorId),
+    );
+  }
+
+  getModulesByInstructorId(instructorId: string) {
+    return useQuery(['instructor/modules', instructorId], () =>
+      enrollmentService.getModulesByInstructorId(instructorId),
+    );
+  }
+
+  getInstructorsByModule(moduleId: string) {
+    return useQuery(['instructors/module', moduleId], () =>
+      enrollmentService.getInstructorsByModuleId(moduleId),
+    );
+  }
   getInstructorsInProgram(intakeProgram: string | number) {
     return useQuery(['instructorsInIntakeprogram/IntakeProgram', intakeProgram], () =>
       enrollmentService.getInstructorsInProgram(intakeProgram),
     );
   }
-
 
   getStudentsInProgramLevel(levelId: number) {
     return useQuery(['students/levelsEnrolled', levelId], () =>
@@ -55,10 +71,9 @@ class EnrolmmentStore {
   enrollInstructorToProgram() {
     return useMutation(enrollmentService.enrollInstructorToProgram);
   }
-  enrollInstructorToModule(){
+  enrollInstructorToModule() {
     return useMutation(enrollmentService.enrollInstructorToModule);
   }
-
 
   enrollInstructorToLevel() {
     return useMutation(enrollmentService.enrollInstructorToLevel);

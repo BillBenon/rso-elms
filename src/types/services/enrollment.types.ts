@@ -1,12 +1,12 @@
 import { Table } from '..';
-import { IAcademicYearInfo } from './academicyears.types';
+import { AcademyInfo } from './academy.types';
 import { InstructorProgram } from './instructor.types';
 import {
   LevelIntakeProgram,
   PromotionStatus,
   StudentIntakeProgram,
 } from './intake-program.types';
-import { AcademicProgramLevel } from './program.types';
+import { UserInfo } from './user.types';
 /* eslint-disable no-unused-vars */
 export enum EnrollmentStatus {
   PENDING,
@@ -31,9 +31,8 @@ export interface InstructorAssignModule {
 }
 
 export interface EnrollInstructorLevel {
-  academicProgramLevelId: string;
-  academicYearId: string;
-  intakeProgramInstructorId: number;
+  academic_year_program_intake_level_id: number;
+  intake_program_instructor_id: number;
 }
 
 export interface EnrollStudentToLevel {
@@ -76,10 +75,26 @@ export interface EnrollStudentToProgram {
   third_party_reg_number: string;
 }
 
+export interface EnrollInstructorToModule {
+  course_module_id: string;
+  intake_program_instructor_id: number;
+}
+
+export interface EnrollInstructorToModuleInfo extends Table, EnrollInstructorToModule {}
+
+export interface ModuleInstructors extends Table {
+  institution_id: string;
+  since_on: string;
+  user: UserInfo;
+  academy: AcademyInfo;
+  description: string;
+}
+
 export interface EnrollInstructorLevelInfo extends Table {
   intake_program_instructor: InstructorProgram;
-  academic_program_level: AcademicProgramLevel;
-  academic_year: IAcademicYearInfo;
+  academic_year_program_intake_level: LevelIntakeProgram;
+  // academic_program_level: AcademicProgramLevel;
+  // academic_year: IAcademicYearInfo;
 }
 
 export interface ApproveStudents {

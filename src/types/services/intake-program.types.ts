@@ -2,13 +2,13 @@
 import { Table } from '..';
 import { IAcademicPeriodInfo } from './academicperiod.types';
 import { IAcademicYearInfo } from './academicyears.types';
-import { EnrollmentMode, EnrollmentStatus, StudentApproval } from './enrollment.types';
+import { StudentApproval } from './enrollment.types';
 import { Instructor } from './instructor.types';
-import { IntakeInfo, IntakeProgram, IntakeStatus } from './intake.types';
+import { IntakeInfo, IntakeProgram } from './intake.types';
 import { ProgramLevel } from './levels.types';
 import { ModuleInfo } from './modules.types';
-import { AcademicProgramLevel, ProgramInfo } from './program.types';
-import { Student, UserInfo } from './user.types';
+import { ProgramInfo } from './program.types';
+import { Student } from './user.types';
 
 export interface IntakeProgParam {
   id: string;
@@ -16,7 +16,7 @@ export interface IntakeProgParam {
   intakeProg: string;
 }
 
-export interface ModuleDetailsParam{
+export interface ModuleDetailsParam {
   intakeProgram: string;
   moduleId: string;
 }
@@ -26,6 +26,10 @@ export interface IntakeLevelParam extends IntakeProgParam {
 
 export interface IntakePeriodParam extends IntakeLevelParam {
   period: string;
+}
+
+export interface IntakeClassParam extends IntakePeriodParam {
+  classId: string;
 }
 
 export interface IntakeProgramInfo extends Table {
@@ -96,6 +100,7 @@ export interface AddSubjectPeriod {
   actualStartOn: string;
   inchargeId: string;
   intakeAcademicYearPeriodId: number;
+  intakeLevelClassId: number;
   intakeProgramModuleLevelId: number;
   marks: number;
   plannedEndOn: string;

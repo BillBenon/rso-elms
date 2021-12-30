@@ -11,10 +11,11 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
-import enrollmentStore from '../../store/administration/enrollment.store';
 import { authenticatorStore } from '../../store/administration';
+import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import programStore from '../../store/administration/program.store';
+import instructordeploymentStore from '../../store/instructordeployment.store';
 import { Link as Links } from '../../types';
 import { StudentApproval } from '../../types/services/enrollment.types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
@@ -38,7 +39,8 @@ function IntakeProgramDetails() {
       intakeProg,
       StudentApproval.APPROVED,
     );
-  const { data: instructorsProgram, isLoading: instLoading } = enrollmentStore.getInstructorsInProgram(intakeProg);
+  const { data: instructorsProgram, isLoading: instLoading } =
+    intakeProgramStore.getInstructorsByIntakeProgram(intakeProg);
 
   const authUser = authenticatorStore.authUser().data?.data.data;
 
@@ -99,6 +101,10 @@ function IntakeProgramDetails() {
   const getLevels =
     intakeProgramStore.getLevelsByIntakeProgram(intakeProg).data?.data.data || [];
 
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
+    authUser?.id + '',
+  ).data?.data.data;
+
   const programData = getProgramData();
   let tabs: TabType[] = [
     {
@@ -109,17 +115,41 @@ function IntakeProgramDetails() {
       label: 'Program modules',
       href: `${url}/modules`,
     },
-    {
-      label: 'Program levels',
-      href: `${url}/levels/${getLevels[0]?.id || ''}`,
-    },
   ];
+
+  if (authUser?.user_type === UserType.INSTRUCTOR) {
+    let { data: instructorLevels } = enrollmentStore.getInstructorLevels(
+      instructorInfo?.id + '',
+    );
+
+    const programLevelsIds = getLevels.map((lvl) => lvl.academic_program_level.id);
+
+    const instrLevels = instructorLevels?.data.data.filter((level) =>
+      programLevelsIds.includes(
+        level.academic_year_program_intake_level?.academic_program_level.id,
+      ),
+    );
+
+    if (instrLevels && instrLevels?.length > 0) {
+      tabs.push({
+        label: 'Program levels',
+        href: `${url}/levels/${instrLevels[0]?.id || ''}`,
+      });
+    }
+  }
 
   if (authUser?.user_type === UserType.ADMIN) {
     tabs.push({
       label: 'Approve students',
       href: `${url}/approve`,
     });
+
+    if (getLevels && getLevels?.length > 0) {
+      tabs.push({
+        label: 'Program levels',
+        href: `${url}/levels/${getLevels[0]?.id || ''}`,
+      });
+    }
   }
 
   const handleClose = () => {

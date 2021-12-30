@@ -7,12 +7,10 @@ import AddCard from '../../components/Molecules/cards/AddCard';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import { authenticatorStore } from '../../store/administration';
 import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { CommonCardDataType } from '../../types';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
-import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import EnrollInstructorToLevel from './EnrollInstructorToLevel';
 import EnrollStudent from './EnrollStudent';
@@ -24,7 +22,6 @@ function IntakeLevelModule() {
   const { id, intakeId, intakeProg, level } = useParams<IntakeLevelParam>();
 
   const [levelModules, setlevelModules] = useState<CommonCardDataType[]>([]);
-  const authUser = authenticatorStore.authUser().data?.data.data;
 
   const { data: levelModuleStore, isLoading } = intakeProgramStore.getModulesByLevel(
     parseInt(level),
@@ -52,9 +49,7 @@ function IntakeLevelModule() {
     parseInt(level),
   );
 
-  const { data: classes, isLoading: clLoading } = classStore.getClassByPeriod(
-    periods?.data.data[0].id + '',
-  );
+  const { data: classes } = classStore.getClassByPeriod(periods?.data.data[0].id + '');
 
   return (
     <>
@@ -63,9 +58,9 @@ function IntakeLevelModule() {
         <Button styleType="outline">Enrolled Instructors</Button> */}
         {/* <div className='py-2.5 border px-4 rounded-lg border-primary-500 text-primary-500 font-semibold text-sm'>Enrolled Students</div>
         <div className='py-2.5 border px-4 rounded-lg border-primary-500 text-primary-500 font-semibold text-sm'>Enrolled Instructors</div> */}
-        <LevelInstrctors/>
+        <LevelInstrctors />
         <EnrollInstructorToLevel />
-        <LevelStudents/>
+        <LevelStudents />
         <EnrollStudent />
         {prdLoading ? (
           <></>
@@ -107,7 +102,12 @@ function IntakeLevelModule() {
             />
             {levelModules &&
               levelModules.map((module, index) => (
-                <ModuleCard showMenus={true} course={module} key={index} intakeProgram={''} />
+                <ModuleCard
+                  showMenus={true}
+                  course={module}
+                  key={index}
+                  intakeProg={''}
+                />
               ))}
           </>
         )}

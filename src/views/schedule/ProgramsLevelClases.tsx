@@ -34,13 +34,21 @@ export default function PrograsmLevelClasses() {
 
   return (
     <div>
-      <TableHeader showBadge={false} title={programInfo?.name || 'loading...'}>
+      <TableHeader
+        showBadge={false}
+        title={programInfo?.name || levelsLoading ? 'loading...' : 'Program levels'}>
         <Link to={`/dashboard/schedule/calendar/${programInfo?.id}`}>
           <Button styleType="outline">Program calendar</Button>
         </Link>
       </TableHeader>
       {levelsLoading ? (
         <Loader />
+      ) : levels?.data.data.length === 0 ? (
+        <NoDataAvailable
+          title={'No intake levels available'}
+          description="There are no levels available yet! you can add the from the button below"
+          showButton={false}
+        />
       ) : (
         <Tabs>
           {(levels?.data.data || [])?.map((lvl) => (

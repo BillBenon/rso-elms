@@ -66,6 +66,7 @@ export default function EvaluationInfoComponent({
     selectedModule?.module.id + '',
   );
   const { data: levels } = enrollmentStore.getInstructorLevels(instructorInfo?.id + '');
+
   const { data: classes } = classStore.getClassByPeriod(levelId + '');
 
   const [details, setDetails] = useState<IEvaluationCreate>({
@@ -217,7 +218,7 @@ export default function EvaluationInfoComponent({
             inputs: levels?.data.data || [],
             //@ts-ignore
             getOptionLabel: (lev: EnrollInstructorLevelInfo) =>
-              lev.academic_program_level.level.name,
+              lev.academic_year_program_intake_level.academic_program_level.level.name,
           })}>
           Select Level
         </DropdownMolecule>
