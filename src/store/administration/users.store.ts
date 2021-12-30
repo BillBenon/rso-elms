@@ -24,9 +24,9 @@ class UserStore {
     );
   }
 
-  getUsersByAcademy(academyId: string) {
-    return useQuery(['users/academy', academyId], () =>
-      userService.getUsersByAcademy(academyId),
+  getUsersByAcademy(academyId: string,queryParams?: FilterOptions,) {
+    return useQuery(['users/academy', academyId,formatQueryParameters(queryParams)], () =>
+      userService.getUsersByAcademy(academyId,queryParams),
     );
   }
 

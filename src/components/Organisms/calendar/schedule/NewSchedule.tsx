@@ -134,7 +134,10 @@ function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
   const events = getAllEvents(authUser?.academy.id + '').data?.data.data;
   const venues = getAllVenues(authUser?.academy.id + '').data?.data.data;
 
-  const users = usersStore.getUsersByAcademy(authUser?.academy.id + '').data?.data.data;
+  const { data:users, isLoading, refetch } =usersStore.getUsersByAcademy(
+    authUser?.academy.id|| '',
+    { page: 0, pageSize:1000, sortyBy: 'username' },
+  );
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setCurrentStep(1);
@@ -173,7 +176,7 @@ function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
           name="user_in_charge"
           handleChange={handleChange}
           options={
-            users?.map((user) => ({
+            users?.data.data.content?.map((user) => ({
               label: `${user.person.first_name} ${user.person.last_name}`,
               value: user.id,
             })) as SelectData[]

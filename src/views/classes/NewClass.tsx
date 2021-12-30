@@ -77,8 +77,14 @@ function NewClass() {
     intakeProgramStore.getStudentsByIntakeProgramLevel(levelId).data?.data.data || [];
   const users =
     usersStore
-      .getUsersByAcademy(authUser?.academy.id.toString() || '')
-      .data?.data.data.filter((stud) => stud.user_type === UserType.STUDENT) || [];
+      .getUsersByAcademyAndUserType(
+        authUser?.academy.id.toString() || '',
+        UserType.STUDENT,
+        { page: 0, pageSize:1000, sortyBy: 'username' },
+      )
+      .data?.data.data.content.filter((stud) => stud.user_type === UserType.STUDENT) || [];
+
+
 
   const studentsInProgram = users.filter((us) =>
     students.some((st) => st.intake_program_student.student.user.id === us.id),
