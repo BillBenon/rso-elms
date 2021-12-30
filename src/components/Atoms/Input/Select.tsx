@@ -91,7 +91,9 @@ export default function Select({
             placeholder={_placeholder}
             onChange={handleSearch}
             onBlur={() => setisMenuOpen(false)}
-            className={`block w-full hover:border-primary-400 placeholder-txt-secondary h-12 text-base border-2 border-${
+            className={`block w-full hover:border-primary-400 placeholder-${
+              internalValue ? 'black' : 'txt-secondary'
+            } h-12 text-sm border-2 border-${
               hasError ? 'error-500' : 'tertiary'
             }  rounded-md px-4 focus:border-primary-500 focus:outline-none font-medium cursor-pointer`}
           />
