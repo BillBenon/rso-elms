@@ -28,13 +28,15 @@ export default function EvaluationSettings({
   evaluationId,
 }: IEvaluationProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
-  const { data: inCharge } = usersStore.getUsersByAcademy(
+
+
+  const { data:inCharge, isLoading, refetch } =usersStore.getUsersByAcademyAndUserType(
     authUser?.academy.id.toString() || '',
+    UserType.INSTRUCTOR,
+    { page: 0, pageSize:1000, sortyBy: 'username' },
   );
 
-  const instructors = inCharge?.data.data.filter(
-    (user) => user.user_type === UserType.INSTRUCTOR,
-  );
+  const instructors = inCharge?.data.data.content
 
   const [settings, setSettings] = useState<IEvaluationApproval>({
     approver: '',
