@@ -11,8 +11,10 @@ import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
+import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
+import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedule';
 import { authenticatorStore } from '../../store/administration';
 import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import { CommonCardDataType, Link } from '../../types';
@@ -63,6 +65,10 @@ export default function ScheduleHome() {
       },
     })) || [];
 
+  const handleNewScheduleClose = () => {
+    history.goBack();
+  };
+
   return (
     <div>
       <BreadCrumb list={list} />
@@ -74,19 +80,15 @@ export default function ScheduleHome() {
           <Route path={`${path}/timetable/:id`} component={TimeTable} />
           <Route path={`${path}/events`} component={Events} />
           <Route path={`${path}/venues`} component={Venues} />
+
           <Route
             path={`${path}`}
             render={() => (
               <>
                 <TableHeader totalItems={`${intakes.length} intakes`} title={'Schedule'}>
-                  <div className="flex gap-4">
-                    <BrowserLink to={`/dashboard/schedule/events/new`}>
-                      <Button>Add event</Button>
-                    </BrowserLink>
-                    <BrowserLink to={`/dashboard/schedule/venues/new`}>
-                      <Button styleType="outline">Add Venue</Button>
-                    </BrowserLink>
-                  </div>
+                  <BrowserLink to={`${path}/schedule/new`}>
+                    <Button>New Schedule</Button>
+                  </BrowserLink>
                 </TableHeader>
                 <div className="mt-4 flex gap-4 flex-wrap">
                   {intakes.length === 0 && isLoading ? (
@@ -103,6 +105,17 @@ export default function ScheduleHome() {
                     ))
                   )}
                 </div>
+                <Route
+                  path={`${path}/schedule/new`}
+                  render={() => (
+                    <PopupMolecule
+                      title="New Schedule"
+                      open
+                      onClose={handleNewScheduleClose}>
+                      <NewSchedule />
+                    </PopupMolecule>
+                  )}
+                />
               </>
             )}
           />

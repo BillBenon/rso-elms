@@ -24,6 +24,7 @@ import {
   methodOfInstruction,
   scheduleAppliesTo,
 } from '../../../../types/services/schedule.types';
+import { UserType } from '../../../../types/services/user.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import CheckboxMolecule from '../../../Molecules/input/CheckboxMolecule';
@@ -134,7 +135,10 @@ function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
   const events = getAllEvents(authUser?.academy.id + '').data?.data.data;
   const venues = getAllVenues(authUser?.academy.id + '').data?.data.data;
 
-  const users = usersStore.getUsersByAcademy(authUser?.academy.id + '').data?.data.data;
+  const users = usersStore.getUsersByAcademyAndUserType(
+    authUser?.academy.id + '',
+    UserType.SYSTEM,
+  ).data?.data.data.content;
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     setCurrentStep(1);

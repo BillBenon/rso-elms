@@ -41,6 +41,11 @@ export default function PrograsmLevelClasses() {
       </TableHeader>
       {levelsLoading ? (
         <Loader />
+      ) : levels?.data.data.length === 0 ? (
+        <NoDataAvailable
+          title={'No levels available'}
+          description="There are no levels available yet! you can add the from the button below"
+        />
       ) : (
         <Tabs>
           {(levels?.data.data || [])?.map((lvl) => (
