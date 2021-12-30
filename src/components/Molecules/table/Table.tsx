@@ -11,6 +11,7 @@ import Icon from '../../Atoms/custom/Icon';
 import Row from '../../Atoms/custom/Row';
 import Checkbox from '../../Atoms/Input/CheckBox';
 import DropDown from '../../Atoms/Input/Dropdown';
+import Select from '../../Atoms/Input/Select';
 import Pagination from '../Pagination';
 import Tooltip from '../Tooltip';
 
@@ -40,6 +41,7 @@ interface TableProps<T> {
   unselectAll?: boolean;
 
   //pagination
+  rowsPerPage?: number;
   totalPages?: number;
   currentPage?: number;
   onPaginate?: (_page: number) => void;
@@ -56,6 +58,8 @@ export default function Table2<T>({
   statusColumn,
   handleSelect,
   unselectAll = false,
+  //pagination
+  rowsPerPage = 25,
   totalPages = 1,
   currentPage = 0,
   onPaginate,
@@ -283,14 +287,15 @@ export default function Table2<T>({
       <div className="flex justify-between mt-4 mb-5">
         <div className="flex items-center py-2">
           <span>Show</span>
-          <DropDown
+
+          <Select
             className="px-3"
             width="32"
             // height={30}
-            defaultValue={countsToDisplay[0]}
+            value={rowsPerPage.toString()}
             handleChange={handleCountSelect}
             name="rowstoDisplay"
-            options={countsToDisplay}></DropDown>
+            options={countsToDisplay}></Select>
           <span>Entries</span>
         </div>
         <Pagination

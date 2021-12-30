@@ -89,6 +89,7 @@ export default function AdminsView() {
             hide={['id', 'user_type']}
             selectorActions={[]}
             uniqueCol="id"
+            rowsPerPage={pageSize}
             totalPages={data?.data.data.totalPages || 1}
             currentPage={currentPage}
             onPaginate={(page) => setcurrentPage(page)}
