@@ -6,11 +6,12 @@ import { useHistory } from 'react-router-dom';
 import { CommonCardDataType, Link } from '../../../types';
 import Badge from '../../Atoms/custom/Badge';
 import Heading from '../../Atoms/Text/Heading';
+import { IProgramData } from '../../../views/programs/AcademicPrograms';
 
 type PropType = {
   active?: boolean;
   to?: Link;
-  data: CommonCardDataType;
+  data: CommonCardDataType | IProgramData | undefined;
   className?: string;
   children?: ReactNode;
   handleClick?: (_e: Event) => void;
@@ -50,25 +51,25 @@ export default function CommonCardMolecule({
       onKeyPress={handlePress}>
       <div className="flex justify-between items-center">
         <Heading fontWeight="semibold" fontSize="base">
-          {data.code}
+          {data?.code}
         </Heading>
-        {data.status && (
-          <Badge badgecolor={data.status.type} className="capitalize">
-            {data.status.text}
+        {data?.status && (
+          <Badge badgecolor={data?.status.type || 'info'} className="capitalize">
+            {data?.status.text}
           </Badge>
         )}
       </div>
       <div className="mt-6">
         <Heading fontSize="base" fontWeight="semibold">
-          {data.title}
+          {data?.title}
         </Heading>
-        {data.subTitle && (
+        {data?.subTitle && (
           <Heading fontSize="sm" className="pt-2" color="txt-secondary">
             {data.subTitle}
           </Heading>
         )}
         <p className="course-card-description py-4 text-txt-secondary text-sm">
-          {data.description}
+          {data?.description}
         </p>
 
         {/* footer */}
