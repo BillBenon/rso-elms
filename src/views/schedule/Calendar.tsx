@@ -2,7 +2,7 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../../styles/components/Molecules/calendar.scss';
 
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import {
   Link as BrowserLink,
@@ -17,7 +17,7 @@ import {
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
-import Picker from '../../components/Molecules/input/DateRangePicker';
+import DateMolecule from '../../components/Molecules/input/DateMolecule';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedule';
@@ -63,17 +63,13 @@ export default function CalendarView() {
 
   const events = formatCalendarEvents(data?.data.data || []);
 
-  const handleClose = () => {
+  const handleNewScheduleClose = () => {
     history.goBack();
   };
 
-  useEffect(() => {
+  const handleApplyDateRange = () => {
     refetch();
-  }, [dateRange]);
-
-  const handleDateRangeChange = (r: DateRange) => {
     setisChangeRangeOpen(false);
-    setdateRange({ start_date: r.start_date, end_date: r.end_date });
   };
 
   return (
@@ -110,19 +106,42 @@ export default function CalendarView() {
         </div>
       </div>
 
-      <PopupMolecule open={isChangeRangeOpen} title="Change date range">
-        <Picker
-          open
-          onChange={(r) =>
-            handleDateRangeChange({
-              start_date: formatDateToYyMmDd(r.startDate?.toDateString() + ''),
-              end_date: formatDateToYyMmDd(r.endDate?.toDateString() + ''),
-            } as DateRange)
-          }
-          handleToggle={function (): void {
-            throw new Error('Function not implemented.');
-          }}
-        />
+      <PopupMolecule
+        open={isChangeRangeOpen}
+        closeOnClickOutSide={false}
+        onClose={() => setisChangeRangeOpen(false)}
+        title="Change date range">
+        <div>
+          <DateMolecule
+            showTime={false}
+            startYear={2020}
+            endYear={new Date().getFullYear() + 3}
+            handleChange={(e) =>
+              setdateRange({
+                ...dateRange,
+                start_date: formatDateToYyMmDd(e.value.toString()),
+              })
+            }
+            name={'expected_start_date'}>
+            From:
+          </DateMolecule>
+          <div className="py-2">
+            <DateMolecule
+              showTime={false}
+              startYear={2020}
+              endYear={new Date().getFullYear() + 3}
+              handleChange={(e) =>
+                setdateRange({
+                  ...dateRange,
+                  end_date: formatDateToYyMmDd(e.value.toString()),
+                })
+              }
+              name={'expected_end_date'}>
+              To:
+            </DateMolecule>
+          </div>
+          <Button onClick={handleApplyDateRange}>Apply</Button>
+        </div>
       </PopupMolecule>
 
       <Calendar
@@ -131,23 +150,22 @@ export default function CalendarView() {
         step={60}
         startAccessor="start"
         endAccessor="end"
-        view="week"
+        defaultView="week"
+        // view="week"
         showMultiDayTimes={false}
-        views={['day', 'week']}
-        defaultDate={new Date()}
         timeslots={1}
         style={{ height: 900 }}
         min={new Date(2017, 10, 0, 4, 0, 0)}
         max={new Date(2017, 10, 0, 23, 59, 59)}
-        date={dateRange.start_date}
-        // onSelectEvent={(event) => history.push(`${path}/event/${event.id}`)}
+        date={new Date(dateRange.start_date)}
+        onNavigate={(_newDate, _view, _action) => {}}
       />
       <Switch>
         <Route
           exact
           path={`${path}/new-schedule`}
           render={() => (
-            <PopupMolecule title="New Schedule" open onClose={handleClose}>
+            <PopupMolecule title="New Schedule" open onClose={handleNewScheduleClose}>
               <NewSchedule />
             </PopupMolecule>
           )}

@@ -40,6 +40,7 @@ import DateMolecule from '../../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
+import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 
 export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
@@ -156,22 +157,19 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         </Heading>
       </div>
       <form onSubmit={addUser}>
-        <DropdownMolecule
-          defaultValue={getDropDownStatusOptions(
-            authUser.data?.data.data.user_type === UserType.SUPER_ADMIN
-              ? newUserTypeWithSuper
-              : newUserType,
-          ).find((type) => type.value === details.user_type)}
+        <SelectMolecule
           options={getDropDownStatusOptions(
             authUser.data?.data.data.user_type === UserType.SUPER_ADMIN
               ? newUserTypeWithSuper
               : newUserType,
           )}
           name="user_type"
-          placeholder={'Select user type'}
+          width="80"
+          // placeholder={details.user_type || 'Select user type'}
+          value={details.user_type}
           handleChange={handleChange}>
           User type
-        </DropdownMolecule>
+        </SelectMolecule>
         {details.user_type === UserType.INSTRUCTOR ? (
           <>
             <DateMolecule
