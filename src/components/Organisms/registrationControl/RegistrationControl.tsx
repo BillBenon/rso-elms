@@ -110,7 +110,7 @@ export default function RegistrationControl() {
         </Heading>
       </div>
       <TableHeader
-        title="registration control"
+        title="Registration control"
         totalItems={RegistrationControls.length}
         handleSearch={handleSearch}>
         <Link to={`${url}/add`}>

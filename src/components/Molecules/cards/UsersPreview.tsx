@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { ReactNode, useState } from 'react';
 
-import { UserView } from '../../../types/services/user.types';
+import { UserType, UserView } from '../../../types/services/user.types';
 import Avatar from '../../Atoms/custom/Avatar';
 import Icon from '../../Atoms/custom/Icon';
 import Heading from '../../Atoms/Text/Heading';
@@ -20,6 +20,7 @@ type IUserPreview = {
   children?: ReactNode;
   dataLabel: string;
   isLoading: boolean;
+  userType?: UserType;
 };
 
 export default function UsersPreview({
@@ -30,6 +31,7 @@ export default function UsersPreview({
   totalUsers,
   dataLabel = '',
   isLoading,
+  userType,
 }: IUserPreview) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
@@ -92,14 +94,18 @@ export default function UsersPreview({
           handleClose={() => setSidebarOpen(false)}
           label={label}
           data={data}
-          selectorActions={[
-            {
-              name: 'Change Status',
-              handleAction: (_data?: string[]) => {
-                // alert(`changing status ${data}`);
-              },
-            },
-          ]}
+          selectorActions={
+            userType !== UserType.INSTRUCTOR
+              ? [
+                  {
+                    name: 'Change Status',
+                    handleAction: (_data?: string[]) => {
+                      // alert(`changing status ${data}`);
+                    },
+                  },
+                ]
+              : undefined
+          }
           dataLabel={dataLabel}
           isLoading={isLoading}
         />
