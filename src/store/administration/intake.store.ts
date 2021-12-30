@@ -60,6 +60,14 @@ export function getIntakesByAcademy(id: string, fetchByReg = false, enabled = fa
     return useQuery(['intakes/academy', id], () => intakeService.getIntakesByAcademy(id));
 }
 
+export function getInstructorsInInProgram(programId: string, enabled = true) {
+  return useQuery(
+    ['programsIntake/id', programId],
+    () => intakeService.getProgramsByIntake(programId),
+    { enabled },
+  );
+}
+
 export function getProgramsByIntake(intakeId: string, enabled = true) {
   return useQuery(
     ['programsIntake/id', intakeId],
@@ -67,5 +75,6 @@ export function getProgramsByIntake(intakeId: string, enabled = true) {
     { enabled },
   );
 }
+
 
 export const intakeStore = new IntakeStore();

@@ -57,7 +57,7 @@ function ProgramModules() {
                 onClick={() => history.push(`/dashboard/programs/${id}/modules/add`)}
               />
               {programModules?.map((module) => (
-                <ModuleCard course={module} key={module.code} showMenus={false} />
+                <ModuleCard course={module} key={module.code} showMenus={false} intakeProgram={''} />
               ))}
             </>
           )}

@@ -57,7 +57,7 @@ function EnrollInstructorIntakeProgram() {
       mutate(newInstructor, {
         onSuccess: (data) => {
           toast.success(data.data.message);
-          queryClient.invalidateQueries(['instructors/programId/intake']);
+          queryClient.invalidateQueries(['instructorsInIntakeprogram/IntakeProgram']);
           setSidebarOpen(false);
         },
         onError: (error: any) => {
