@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, useHistory, useRouteMatch } from 'react-router';
-import { useParams } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router';
+import { Route, Switch, useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import PopupMolecule from '../../components/Molecules/Popup';
 import { Tab } from '../../components/Molecules/tabs/tabs';
 import Students from '../../components/Organisms/user/Students';
-import { authenticatorStore } from '../../store/administration';
 import { classStore } from '../../store/administration/class.store';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
-import { UserType, UserTypes } from '../../types/services/user.types';
+import { UserTypes } from '../../types/services/user.types';
+import AddSubjectToPeriod from '../subjects/AddSubjectToPeriod';
 import SubjectPeriod from '../subjects/SubjectPeriod';
 import AddStudents from './AddStudents';
 
@@ -28,9 +29,9 @@ function StudentInClass({ classId, label }: IStudentClass) {
     id,
     period,
   } = useParams<IntakePeriodParam>();
+  const { path } = useRouteMatch();
   const [students, setStudents] = useState<UserTypes[]>([]);
   const { data, isLoading } = classStore.getStudentsByClass(classId);
-  const { data: authUser } = authenticatorStore.authUser();
   const history = useHistory();
 
   const studentsData = data?.data.data || [];
@@ -51,8 +52,6 @@ function StudentInClass({ classId, label }: IStudentClass) {
     setStudents(tempStuds);
   }, [studentsData]);
 
-  const { path } = useRouteMatch();
-
   return (
     <Tab label={label}>
       <div className="flex flex-col">
@@ -64,18 +63,6 @@ function StudentInClass({ classId, label }: IStudentClass) {
               return (
                 <>
                   <div className="flex gap-4 self-end">
-                    {authUser?.data.data.user_type === UserType.INSTRUCTOR && (
-                      <Button
-                        styleType="outline"
-                        onClick={() =>
-                          history.push(
-                            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
-                          )
-                        }>
-                        Create evaluation
-                      </Button>
-                    )}
-
                     <Button
                       styleType="outline"
                       onClick={() =>
@@ -156,7 +143,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
                           `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/view-class/${classId}`,
                         )
                       }>
-                      View classes
+                      View students
                     </Button>
                   </div>
                   <div className="flex justify-between space-x-4">
@@ -168,6 +155,20 @@ function StudentInClass({ classId, label }: IStudentClass) {
                 </>
               );
             }}
+          />
+          {/* add subject to period */}
+          <Route
+            exact
+            path={`${path}/add-subject`}
+            render={() => (
+              <PopupMolecule
+                title="Add subject to period"
+                closeOnClickOutSide={false}
+                open
+                onClose={history.goBack}>
+                <AddSubjectToPeriod />
+              </PopupMolecule>
+            )}
           />
         </Switch>
       </div>

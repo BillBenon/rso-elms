@@ -23,7 +23,7 @@ import {
   getProgramsByIntake,
   intakeStore,
 } from '../../store/administration/intake.store';
-import { Link as LinkList } from '../../types';
+import { IntakeParamType, Link as LinkList } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from '../programs/AcademicPrograms';
 import AddAcademicProgramToIntake from '../programs/AddAcademicProgramToIntake';
@@ -33,14 +33,10 @@ import IntakeProgramDetails from './IntakeProgramDetails';
 import NewIntakeLevelModule from './NewIntakeLevelModule';
 import NewIntakeProgramLevel from './NewIntakeProgramLevel';
 
-export interface ParamType {
-  intakeId: string;
-}
-
 function IntakePrograms() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
-  const { intakeId } = useParams<ParamType>();
+  const { intakeId } = useParams<IntakeParamType>();
   const location = useLocation();
   const list: LinkList[] = [
     { to: 'home', title: 'home' },

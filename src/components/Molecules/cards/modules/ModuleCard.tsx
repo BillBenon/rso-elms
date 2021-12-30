@@ -11,11 +11,15 @@ import CommonCardMolecule from '../CommonCardMolecule';
 
 interface IProps {
   course: CommonCardDataType;
-  intakeProgram: string;
-  showMenus: boolean;
+  showMenus?: boolean;
+  intakeProg?: string;
 }
 
-export default function ModuleCard({ course, intakeProgram }: IProps) {
+export default function ModuleCard({
+  course,
+  showMenus = true,
+  intakeProg = '',
+}: IProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
 
   const history = useHistory();
@@ -26,17 +30,12 @@ export default function ModuleCard({ course, intakeProgram }: IProps) {
         trigger={
           <CommonCardMolecule
             data={course}
-            handleClick={() => {
-              authUser?.user_type === UserType.ADMIN
-                ? history.push({
-                    pathname: `/dashboard/modules/${intakeProgram}/${course.id}`,
-                    search: ``,
-                  })
-                : history.push({
-                    pathname: `/dashboard/modules/${course.id}`,
-                    search: ``,
-                  });
-            }}>
+            handleClick={() =>
+              history.push({
+                pathname: `/dashboard/modules/${course.id}/subjects`,
+                search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
+              })
+            }>
             <p className="pt-3">
               Total subjects:
               <span className="px-1 text-primary-500">{'None'}</span>
@@ -58,12 +57,12 @@ export default function ModuleCard({ course, intakeProgram }: IProps) {
             <div className="py-2 flex justify-around gap-2">
               <BrowserLink
                 className="outline-none"
-                to={`/dashboard/modules/${intakeProgram}/${course.id}/add-subject`}>
+                to={`/dashboard/modules/${course.id}/add-subject`}>
                 <Button>Add subject</Button>
               </BrowserLink>
               <BrowserLink
                 className="outline-none"
-                to={`/dashboard/modules/${intakeProgram}/${course.id}/edit`}>
+                to={`/dashboard/modules/${course.id}/edit`}>
                 <Button styleType="outline">Edit</Button>
               </BrowserLink>
             </div>

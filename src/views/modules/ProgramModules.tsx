@@ -61,7 +61,7 @@ function ProgramModules() {
                   course={module}
                   key={module.code}
                   showMenus={false}
-                  intakeProgram={id}
+                  intakeProg={id}
                 />
               ))}
             </>
