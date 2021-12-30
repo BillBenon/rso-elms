@@ -101,7 +101,10 @@ export default function StudentsView() {
             totalPages={data?.data.data.totalPages || 1}
             currentPage={currentPage}
             onPaginate={(page) => setcurrentPage(page)}
-            onChangePageSize={(size) => setPageSize(size)}
+            onChangePageSize={(size) => {
+              setcurrentPage(0);
+              setPageSize(size);
+            }}
           />
           <Switch>
             <Route
