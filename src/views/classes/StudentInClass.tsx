@@ -144,16 +144,6 @@ function StudentInClass({ classId, label }: IStudentClass) {
                       }>
                       View classes
                     </Button>
-                    <Button
-                      styleType="outline"
-                      onClick={() =>
-                        history.push(
-                          `/dashboard/intakes/peformance/${levelId}/${classId}`,
-                        )
-                      }>
-                      View performance
-                    </Button>
-                    <AddStudents classId={parseInt(classId)} />
                   </div>
                   <div className="flex justify-between space-x-4">
                     <Heading fontWeight="semibold" fontSize="xl" className="py-2">
