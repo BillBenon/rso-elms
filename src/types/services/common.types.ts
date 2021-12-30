@@ -1,3 +1,5 @@
+import { UserType } from './user.types';
+
 /* eslint-disable no-unused-vars */
 export interface Response<T = unknown> {
   data: T;
@@ -46,6 +48,6 @@ export interface SortedContent<T = unknown> {
 export interface FilterOptions {
   page?: number;
   pageSize?: number;
-  userType?: string;
+  userType?: UserType;
   sortyBy?: string;
 }
