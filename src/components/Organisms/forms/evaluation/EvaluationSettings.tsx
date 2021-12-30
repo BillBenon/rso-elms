@@ -45,7 +45,7 @@ export default function EvaluationSettings({
     id: '',
     preparer: authUser?.id.toString() || '',
     reviewer: '',
-    marker: '',
+    marker: authUser?.id.toString() || '',
     to_be_approved: false,
     to_be_reviewed: false,
   });
@@ -143,19 +143,19 @@ export default function EvaluationSettings({
           True
         </SwitchMolecule>
       </div> */}
-      <div className="pt-6">
-        <DropdownMolecule
-          width="60"
-          placeholder="marker"
-          options={getDropDownOptions({
-            inputs: instructors || [],
-            labelName: ['first_name', 'last_name'],
-          })}
-          name="marker"
-          handleChange={handleChange}>
-          To be marked by
-        </DropdownMolecule>
-      </div>
+      // <div className="pt-6">
+      //   <DropdownMolecule
+      //     width="60"
+      //     placeholder="marker"
+      //     options={getDropDownOptions({
+      //       inputs: instructors || [],
+      //       labelName: ['first_name', 'last_name'],
+      //     })}
+      //     name="marker"
+      //     handleChange={handleChange}>
+      //     To be marked by
+      //   </DropdownMolecule>
+      // </div>
       {/* <div className="flex flex-col"> */}
       <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
         Back
