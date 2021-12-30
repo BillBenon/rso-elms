@@ -74,6 +74,7 @@ export default function ImportUsers({ userType }: IProps) {
       await mutateAsync(formData, {
         onSuccess(data) {
           queryClient.invalidateQueries('users');
+          queryClient.invalidateQueries(['users/institution']);
           setimportReport(data.data.data);
         },
         onError(error: any) {

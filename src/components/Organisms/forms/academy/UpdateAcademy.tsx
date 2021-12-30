@@ -10,6 +10,7 @@ import academyStore from '../../../../store/administration/academy.store';
 import { Link, ParamType, ValueType } from '../../../../types';
 import { AcademyCreateInfo } from '../../../../types/services/academy.types';
 import Button from '../../../Atoms/custom/Button';
+import FileUploader from '../../../Atoms/Input/FileUploader';
 import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
 import BreadCrumb from '../../../Molecules/BreadCrumb';
@@ -151,7 +152,13 @@ function AcademyInfoComponent({ details, handleChange, handleNext }: IProps) {
         <div className="mb-3">
           <ILabel weight="bold">academy logo</ILabel>
         </div>
-        <Button styleType="outline">upload logo</Button>
+        <FileUploader
+          accept={'image/jpeg, image/png'}
+          handleUpload={function (_files: FileList | null) {
+            throw new Error('Function not implemented.');
+          }}>
+          <Button styleType="outline">upload logo</Button>
+        </FileUploader>
       </div>
       <div className="pt-3">
         <Button type="submit" onClick={() => handleNext}>

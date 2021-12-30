@@ -54,6 +54,7 @@ export default function LevelPerformance() {
               <section className="flex flex-wrap justify-start gap-4 mt-2">
                 {classes.map((cl) => (
                   <CommonCardMolecule
+                    key={cl.id}
                     data={cl}
                     handleClick={() => history.push(`${url}/${cl.id}`)}
                   />

@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
-import { Response } from '../../types';
+import { Response, SortedContent } from '../../types';
 import {
   CreateUserInfo,
   IImportUserRes,
@@ -32,7 +32,7 @@ class UserService {
   ): Promise<AxiosResponse<Response<UserInfo>>> {
     return await adminstrationAxios.put('/users/updateProfile', userInfo);
   }
-  public async fetchUsers(): Promise<AxiosResponse<Response<UserInfo[]>>> {
+  public async fetchUsers(): Promise<AxiosResponse<Response<SortedContent<UserInfo[]>>>> {
     return await adminstrationAxios.get('/users/getUsers');
   }
   public async getUserByid(id: string): Promise<AxiosResponse<Response<UserInfo>>> {
