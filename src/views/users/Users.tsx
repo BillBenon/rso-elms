@@ -6,6 +6,8 @@ import ILabel from '../../components/Atoms/Text/ILabel';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewUser from '../../components/Organisms/forms/user/NewUser';
 import UpdateUser from '../../components/Organisms/forms/user/UpdateUser';
+import AdminsView from './AdminsView';
+import InstructorsView from './InstructorsView';
 import StudentsView from './StudentsView';
 import UserDetails from './UserDetails';
 
@@ -57,14 +59,11 @@ export default function Users() {
                 tabs={tabs}
                 onTabChange={(event) => setUserType(event.activeTabLabel)}>
                 <Switch>
-                  {/* <Route
-                    path={`${path}/instructors`}
-                    render={() => <Instructors instructors={instructors} />}
-                  />
                   <Route
-                    path={`${path}/admins`}
-                    render={() => <Admins admins={admins} />}
-                  /> */}
+                    path={`${path}/instructors`}
+                    render={() => <InstructorsView />}
+                  />
+                  <Route path={`${path}/admins`} render={() => <AdminsView />} />
                   <Route path={`${path}`} render={() => <StudentsView />} />
                 </Switch>
               </TabNavigation>

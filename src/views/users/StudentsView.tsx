@@ -25,7 +25,7 @@ export default function StudentsView() {
   const { data, isLoading, refetch } =
     authUser?.user_type === UserType.SUPER_ADMIN
       ? usersStore.fetchUsers({
-          userType: 'STUDENT',
+          userType: UserType.STUDENT,
           page: currentPage,
           pageSize,
           sortyBy: 'username',
