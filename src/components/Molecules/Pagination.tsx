@@ -39,10 +39,10 @@ const Pagination = ({ totalPages = 1, paginate, currentPage = 0 }: PaginationPro
               <Indicator
                 key={number}
                 isCircular={false}
-                isActive={currentPage === number}
+                isActive={currentPage + 1 === number}
                 hasError={false}
                 isComplete={false}
-                clicked={() => paginate(number)}>
+                clicked={() => paginate(number - 1)}>
                 {number}
               </Indicator>
             ))}
