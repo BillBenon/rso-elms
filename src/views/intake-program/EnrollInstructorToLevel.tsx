@@ -13,10 +13,10 @@ import { UserView } from '../../types/services/user.types';
 
 function EnrollInstructorToLevel() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { id, intakeId, level: levelId } = useParams<IntakeLevelParam>();
+  const { intakeProg, level: levelId } = useParams<IntakeLevelParam>();
 
   const { data: instructorsInProgram, isLoading } =
-    intakeProgramStore.getInstructorsByIntakeProgram(id, intakeId);
+    enrollmentStore.getInstructorsInProgram(intakeProg);
 
   const level = intakeProgramStore.getIntakeLevelById(levelId).data?.data.data;
 
