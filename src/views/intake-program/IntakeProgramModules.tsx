@@ -63,7 +63,7 @@ function IntakeProgramModules() {
                 />
               ) : null}
               {programModules.map((module, index) => (
-                <ModuleCard intakeProgram={intakeProg} course={module} key={index} />
+                <ModuleCard intakeProgram={intakeProg} course={module} showMenus={true} key={index} />
               ))}
             </>
           )}
