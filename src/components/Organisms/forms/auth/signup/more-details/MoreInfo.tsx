@@ -6,7 +6,9 @@ import NextOfKinDetails from './NextOfKinDetails';
 
 function MoreInfo(props: any) {
   // eslint-disable-next-line no-empty-pattern
-  const [] = useState(0);
+  const [nextKinInfo, setNextKinInfo] = useState({
+    
+  });
   const [, setCompleteStep] = useState(0);
   const history = useHistory();
 

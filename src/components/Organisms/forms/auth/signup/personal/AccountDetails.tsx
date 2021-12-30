@@ -63,7 +63,7 @@ function AccountDetails<E>({
         password: personInfo.password,
         confirm_password: personInfo.password,
         send_communication_msg: personInfo.send_communication_msg,
-        doc_type: personInfo.person.doc_type,
+        doc_type: personInfo.person ? personInfo.person.doc_type : '',
       });
   }, [user.data?.data.data]);
 
