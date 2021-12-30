@@ -54,19 +54,23 @@ export default function ModuleDetails() {
     },
     {
       label: 'Subjects',
-      href: `${url}/subjects?showMenus=${showMenu}`,
+      href: `${url}/subjects`,
     },
     {
       label: 'Materials',
-      href: `${url}/materials?showMenus=${showMenu}`,
+      href: `${url}/materials`,
     },
     {
       label: 'Preriquisites',
-      href: `${url}/prereqs?showMenus=${showMenu}`,
+      href: `${url}/prereqs`,
     },
   ];
 
   if (showMenu && showMenu == 'true') {
+    // for (let index = 0; index < tabs.length; index++) {
+    //   tabs[index].href.concat('?showMenu=true');
+      
+    // }
     tabs.push(
       {
         label: 'Syllabus',
