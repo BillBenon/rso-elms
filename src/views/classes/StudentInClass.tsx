@@ -8,9 +8,10 @@ import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { Tab } from '../../components/Molecules/tabs/tabs';
 import Students from '../../components/Organisms/user/Students';
+import { authenticatorStore } from '../../store/administration';
 import { classStore } from '../../store/administration/class.store';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
-import { UserTypes } from '../../types/services/user.types';
+import { UserType, UserTypes } from '../../types/services/user.types';
 import SubjectPeriod from '../subjects/SubjectPeriod';
 import AddStudents from './AddStudents';
 
@@ -29,6 +30,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
   } = useParams<IntakePeriodParam>();
   const [students, setStudents] = useState<UserTypes[]>([]);
   const { data, isLoading } = classStore.getStudentsByClass(classId);
+  const { data: authUser } = authenticatorStore.authUser();
   const history = useHistory();
 
   const studentsData = data?.data.data || [];
@@ -62,6 +64,18 @@ function StudentInClass({ classId, label }: IStudentClass) {
               return (
                 <>
                   <div className="flex gap-4 self-end">
+                    {authUser?.data.data.user_type === UserType.INSTRUCTOR && (
+                      <Button
+                        styleType="outline"
+                        onClick={() =>
+                          history.push(
+                            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
+                          )
+                        }>
+                        Create evaluation
+                      </Button>
+                    )}
+
                     <Button
                       styleType="outline"
                       onClick={() =>
