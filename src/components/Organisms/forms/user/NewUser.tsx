@@ -1,12 +1,8 @@
 import { pick } from 'lodash';
-import React, { FormEvent, useEffect, useState } from 'react';
-// import {
-//   CountryDropdown,
-//   CountryRegionData,
-//   RegionDropdown,
-// } from 'react-country-region-selector';
+import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
+import countryList from 'react-select-country-list';
 
 import { queryClient } from '../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../store/administration';
@@ -89,6 +85,8 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     level: '',
   });
 
+  const options = useMemo(() => countryList().getData(), []);
+
   // const [nationalities, setNationalitites] = useState({
   //   country: '',
   //   region: '',
@@ -144,11 +142,11 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
 
   let levels = getLevelsByAcademicProgram(selectedProgram?.id + '');
 
-  let nationalities: [] = [];
+  // let nationalities: [] = [];
 
-  // useEffect(() => {
-  //   levels.refetch();
-  // }, [selectedProgram?.id]);
+  useEffect(() => {
+    levels.refetch();
+  }, [selectedProgram?.id]);
   return (
     <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
       <div className="py-5 mb-3 capitalize">
@@ -252,24 +250,14 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           name="sex">
           Gender
         </RadioMolecule>
-        {/* <DropdownMolecule
-          width="60 md:w-80"
-          name="nationality"
-          defaultValue={getDropDownOptions({ inputs: country }).find(
-            (national) => national.value === details.nationality,
-          )}
-          handleChange={handleChange}
-          options={[]}>
-          Nationality
-        </DropdownMolecule> */}
         <DropdownMolecule
           width="60 md:w-80"
           name="nationality"
-          defaultValue={getDropDownOptions({ inputs: nationalities }).find(
+          defaultValue={options.find(
             (national) => national.value === details.nationality,
           )}
           handleChange={handleChange}
-          options={[]}>
+          options={options}>
           Nationality
         </DropdownMolecule>
         <DropdownMolecule
