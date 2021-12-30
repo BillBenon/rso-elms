@@ -157,8 +157,8 @@ export default function ModuleDetails() {
     { to: 'subjects', title: 'Programs' },
     { to: 'modules', title: 'Modules' },
     {
-      to: moduleData.data?.data.data.id + '',
-      title: moduleData.data?.data.data.name + '',
+      to: moduleData?.id + '',
+      title: moduleData?.title + '',
     },
   ];
 
@@ -172,7 +172,7 @@ export default function ModuleDetails() {
           <div className="flex flex-wrap justify-between items-center">
             <div className="flex gap-2 items-center">
               <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
-                {moduleData.data?.data.data.name} module
+                {moduleData?.title} module
               </Heading>
             </div>
             <div className="flex flex-wrap justify-start items-center">

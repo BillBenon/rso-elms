@@ -32,10 +32,15 @@ export default function UpdateAcademicProgram<E>({
 
   const authUser = authenticatorStore.authUser().data?.data.data;
 
-  const users = usersStore.getUsersByAcademy(authUser?.academy.id.toString() || '').data;
-  const instructors = users?.data.data.filter(
-    (user) => user.user_type === UserType.INSTRUCTOR || user.user_type === UserType.ADMIN,
+
+  const { data:users, isLoading, refetch } =usersStore.getUsersByAcademyAndUserType(
+    authUser?.academy.id.toString() || '',
+    UserType.INSTRUCTOR,
+    { page: 0, pageSize:1000, sortyBy: 'username' },
   );
+
+const instructors = users?.data.data.content
+
 
   const { data } = programStore.getProgramById(id);
 

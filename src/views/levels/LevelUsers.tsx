@@ -32,7 +32,7 @@ export default function LevelUsers() {
     authUser?.academy.id || '',
   );
 
-  const userInfo = data?.data.data;
+  const userInfo = data?.data.data.content;
 
   let users: UserTypes[] = [];
 

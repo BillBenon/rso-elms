@@ -12,7 +12,7 @@ import CommonCardMolecule from '../CommonCardMolecule';
 interface IProps {
   course: CommonCardDataType;
   intakeProgram: string;
-  showMenus: true;
+  showMenus: boolean;
 }
 
 export default function ModuleCard({ course, intakeProgram,showMenus = true }: IProps) {

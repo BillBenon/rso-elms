@@ -51,8 +51,11 @@ class UserService {
   }
   public async getUsersByAcademy(
     academyId: string,
-  ): Promise<AxiosResponse<Response<UserInfo[]>>> {
-    return await adminstrationAxios.get(`users/getUsersByAcademy/${academyId}`);
+    queryParams?: FilterOptions,
+  ): Promise<AxiosResponse<Response<SortedContent<UserInfo[]>>>> {
+    return await adminstrationAxios.get(`users/getUsersByAcademy/${academyId}?${formatQueryParameters(
+      queryParams,
+    )}`);
   }
   public async getUsersByAcademyAndUserType(
     academyId: string,
