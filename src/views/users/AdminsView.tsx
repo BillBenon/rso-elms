@@ -59,6 +59,16 @@ export default function AdminsView() {
 
   return (
     <div>
+      <TableHeader
+        title="Admins"
+        totalItems={data?.data.data.totalElements || 0}
+        handleSearch={handleSearch}>
+        {authUser?.user_type === UserType.SUPER_ADMIN && (
+          <Link to={`/dashboard/users/add/${UserType.ADMIN}`}>
+            <Button>New admin</Button>
+          </Link>
+        )}
+      </TableHeader>
       {isLoading ? (
         <Loader />
       ) : users.length <= 0 ? (
@@ -71,16 +81,6 @@ export default function AdminsView() {
         />
       ) : (
         <>
-          <TableHeader
-            title="Admins"
-            totalItems={data?.data.data.totalElements || 0}
-            handleSearch={handleSearch}>
-            {authUser?.user_type === UserType.SUPER_ADMIN && (
-              <Link to={`/dashboard/users/add/${UserType.ADMIN}`}>
-                <Button>New admin</Button>
-              </Link>
-            )}
-          </TableHeader>
           <Table<UserTypes | AcademyUserType>
             statusColumn="status"
             data={users}

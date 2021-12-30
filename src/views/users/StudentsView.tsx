@@ -62,6 +62,22 @@ export default function StudentsView() {
 
   return (
     <div>
+      <TableHeader
+        title="Students"
+        totalItems={data?.data.data.totalElements || 0}
+        handleSearch={handleSearch}>
+        {authUser?.user_type === UserType.SUPER_ADMIN && (
+          <div className="flex gap-3">
+            <Link to={`${url}/import`}>
+              <Button styleType="outline">Import students</Button>
+            </Link>
+            <Link to={`${url}/add/${UserType.STUDENT}`}>
+              <Button>New student</Button>
+            </Link>
+          </div>
+        )}
+      </TableHeader>
+
       {isLoading ? (
         <Loader />
       ) : users.length <= 0 ? (
@@ -73,56 +89,40 @@ export default function StudentsView() {
           description="And the web just isnt the same without you. Lets get you back online!"
         />
       ) : (
-        <>
-          <TableHeader
-            title="Students"
-            totalItems={data?.data.data.totalElements || 0}
-            handleSearch={handleSearch}>
-            {authUser?.user_type === UserType.SUPER_ADMIN && (
-              <div className="flex gap-3">
-                <Link to={`${url}/import`}>
-                  <Button styleType="outline">Import students</Button>
-                </Link>
-                <Link to={`${url}/add/${UserType.STUDENT}`}>
-                  <Button>New student</Button>
-                </Link>
-              </div>
-            )}
-          </TableHeader>
-          <Table<UserTypes | AcademyUserType>
-            statusColumn="status"
-            data={users}
-            actions={studentActions}
-            statusActions={[]}
-            hide={['id', 'user_type']}
-            selectorActions={[]}
-            uniqueCol="id"
-            rowsPerPage={pageSize}
-            totalPages={data?.data.data.totalPages || 1}
-            currentPage={currentPage}
-            onPaginate={(page) => setcurrentPage(page)}
-            onChangePageSize={(size) => {
-              setcurrentPage(0);
-              setPageSize(size);
-            }}
-          />
-          <Switch>
-            <Route
-              exact
-              path={`${url}/import`}
-              render={() => (
-                <PopupMolecule
-                  closeOnClickOutSide={false}
-                  title="Import students"
-                  open={true}
-                  onClose={history.goBack}>
-                  <ImportUsers userType={UserType.STUDENT} />
-                </PopupMolecule>
-              )}
-            />
-          </Switch>
-        </>
+        <Table<UserTypes | AcademyUserType>
+          statusColumn="status"
+          data={users}
+          actions={studentActions}
+          statusActions={[]}
+          hide={['id', 'user_type']}
+          selectorActions={[]}
+          uniqueCol="id"
+          rowsPerPage={pageSize}
+          totalPages={data?.data.data.totalPages || 1}
+          currentPage={currentPage}
+          onPaginate={(page) => setcurrentPage(page)}
+          onChangePageSize={(size) => {
+            setcurrentPage(0);
+            setPageSize(size);
+          }}
+        />
       )}
+
+      <Switch>
+        <Route
+          exact
+          path={`${url}/import`}
+          render={() => (
+            <PopupMolecule
+              closeOnClickOutSide={false}
+              title="Import students"
+              open={true}
+              onClose={history.goBack}>
+              <ImportUsers userType={UserType.STUDENT} />
+            </PopupMolecule>
+          )}
+        />
+      </Switch>
     </div>
   );
 }
