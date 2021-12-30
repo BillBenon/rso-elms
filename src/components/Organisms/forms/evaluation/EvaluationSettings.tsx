@@ -142,27 +142,27 @@ export default function EvaluationSettings({
           True
         </SwitchMolecule>
       </div> */}
-      // <div className="pt-6">
-      //   <DropdownMolecule
-      //     width="60"
-      //     placeholder="marker"
-      //     options={getDropDownOptions({
-      //       inputs: instructors || [],
-      //       labelName: ['first_name', 'last_name'],
-      //     })}
-      //     name="marker"
-      //     handleChange={handleChange}>
-      //     To be marked by
-      //   </DropdownMolecule>
-      // </div>
-      {/* <div className="flex flex-col"> */}
-      <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
-        Back
-      </Button>
-      <div className="pt-4">
-        <Button type="submit">Finish</Button>
+      <div className="pt-6">
+        <DropdownMolecule
+          width="60"
+          placeholder="marker"
+          options={getDropDownOptions({
+            inputs: instructors || [],
+            labelName: ['first_name', 'last_name'],
+          })}
+          name="marker"
+          handleChange={handleChange}>
+          To be marked by
+        </DropdownMolecule>
       </div>
-      {/* </div> */}
+      <div className="flex flex-col">
+        <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
+          Back
+        </Button>
+        <div className="pt-4">
+          <Button type="submit">Finish</Button>
+        </div>
+      </div>
       {/* <SwitchMolecule
         loading={false}
         name="shuffle"
