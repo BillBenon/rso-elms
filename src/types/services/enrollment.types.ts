@@ -73,8 +73,9 @@ export interface EnrollStudentToProgram {
 
 export interface EnrollInstructorLevelInfo extends Table {
   intake_program_instructor: InstructorProgram;
-  academic_program_level: AcademicProgramLevel;
-  academic_year: IAcademicYearInfo;
+  academic_year_program_level: LevelIntakeProgram;
+  // academic_program_level: AcademicProgramLevel;
+  // academic_year: IAcademicYearInfo;
 }
 
 export interface ApproveStudents {
