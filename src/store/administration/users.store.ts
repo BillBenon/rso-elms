@@ -35,8 +35,9 @@ class UserStore {
     usertype: UserType,
     queryParams?: FilterOptions,
   ) {
-    return useQuery(['users/academy/:type', academyId, usertype], () =>
-      userService.getUsersByAcademyAndUserType(academyId, usertype, queryParams),
+    return useQuery(
+      ['users/academy/type', academyId, usertype, formatQueryParameters(queryParams)],
+      () => userService.getUsersByAcademyAndUserType(academyId, usertype, queryParams),
     );
   }
 
