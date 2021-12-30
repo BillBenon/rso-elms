@@ -74,9 +74,10 @@ export default function StudentReview() {
             <div className="flex item-center mx-auto">
               <Pagination
                 rowsPerPage={rowsOnPage}
-                totalRows={studentAnswers?.length || 0}
+                totalElements={studentAnswers?.length || 0}
                 paginate={paginate}
                 currentPage={currentPage}
+                totalPages={1}
               />
             </div>
             <div className="w-full flex justify-end">
