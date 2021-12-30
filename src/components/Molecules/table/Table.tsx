@@ -10,7 +10,6 @@ import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import Row from '../../Atoms/custom/Row';
 import Checkbox from '../../Atoms/Input/CheckBox';
-import DropDown from '../../Atoms/Input/Dropdown';
 import Select from '../../Atoms/Input/Select';
 import Pagination from '../Pagination';
 import Tooltip from '../Tooltip';
@@ -66,6 +65,7 @@ export default function Table2<T>({
   onChangePageSize,
 }: TableProps<T>) {
   const countsToDisplay = [
+    { label: '5', value: '5' },
     { label: '25', value: '25' },
     { label: '50', value: '50' },
     { label: '100', value: '100' },
@@ -74,11 +74,12 @@ export default function Table2<T>({
   const [currentRows, setCurrentRows] = useState(data);
   const [selected, setSelected] = useState(new Set(''));
 
-  const rowsToHide: (keyof (T & Selected))[] = ['selected'];
-  hide.length > 0 && rowsToHide.push(...hide); // add unique col to elements that gonna be hidden
+  const colsToHide: (keyof (T & Selected))[] = ['selected'];
+  hide.length > 0 && colsToHide.push(...hide); // add unique col to elements that gonna be hidden
 
   useEffect(() => {
     selected.forEach((sel) => changeSelect(sel, true));
+    setCurrentRows(data);
   }, [data]);
 
   // handle paginate
@@ -160,7 +161,7 @@ export default function Table2<T>({
 
   const getKeys = () => {
     const keys = Object.keys(currentRows[0]) as (keyof (T & Selected))[];
-    return keys.filter((item) => !rowsToHide.includes(item));
+    return keys.filter((item) => !colsToHide.includes(item));
   };
 
   const getHeader = () => {
@@ -184,7 +185,7 @@ export default function Table2<T>({
      * show dynamic headers, but exclude keys that are marked as to be hidden, in @link row
      */
     const dynamicHeaders = keys.map((key) =>
-      !rowsToHide.includes(key) ? (
+      !colsToHide.includes(key) ? (
         <th className="px-4 py-5 capitalize" key={key as string}>
           {key.toString().replaceAll('_', ' ')}
         </th>
