@@ -5,6 +5,7 @@ import { Table } from '..';
 import { AcademyInfo } from './academy.types';
 import { ILevel } from './levels.types';
 import { RankRes } from './rank.types';
+import { StudentIntakeProgram } from './intake-program.types';
 export interface Student extends Table {
   reg_number: string;
   user: UserInfo;
@@ -57,6 +58,14 @@ export interface UserInfo extends Table {
   user_type: UserType;
   username: string;
   marital_status: MaritalStatus;
+}
+
+export interface IntakeLevelProgramInfo extends Table{
+  student: Student,
+}
+export interface StudentLevel {
+  id: number;
+  intake_program_student: StudentIntakeProgram
 }
 
 export interface PersonInfo extends Table {

@@ -25,6 +25,11 @@ export interface EnrollInstructorProgram {
   intake_program_id: string;
 }
 
+export interface InstructorAssignModule {
+  course_module_id: string | number;
+  intake_program_instructor_id: number;
+}
+
 export interface EnrollInstructorLevel {
   academicProgramLevelId: string;
   academicYearId: string;
@@ -73,8 +78,9 @@ export interface EnrollStudentToProgram {
 
 export interface EnrollInstructorLevelInfo extends Table {
   intake_program_instructor: InstructorProgram;
-  academic_program_level: AcademicProgramLevel;
-  academic_year: IAcademicYearInfo;
+  academic_year_program_level: LevelIntakeProgram;
+  // academic_program_level: AcademicProgramLevel;
+  // academic_year: IAcademicYearInfo;
 }
 
 export interface ApproveStudents {

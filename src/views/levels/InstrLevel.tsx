@@ -21,8 +21,8 @@ function InstructorLevel({
     (level) =>
       level.academic_program_level.id ===
       levels.find(
-        (lev) => lev.academic_program_level.id === level.academic_program_level.id,
-      )?.academic_program_level.id,
+        (lev) => lev.academic_year_program_level.academic_program_level.id === level.academic_program_level.id,
+      )?.academic_year_program_level.academic_program_level.id,
   );
 
   return (

@@ -11,10 +11,11 @@ import CommonCardMolecule from '../CommonCardMolecule';
 
 interface IProps {
   course: CommonCardDataType;
-  showMenus?: boolean;
+  intakeProgram: string;
+  showMenus: boolean;
 }
 
-export default function ModuleCard({ course, showMenus = true }: IProps) {
+export default function ModuleCard({ course, intakeProgram,showMenus = true }: IProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
 
   const history = useHistory();
@@ -25,17 +26,24 @@ export default function ModuleCard({ course, showMenus = true }: IProps) {
         trigger={
           <CommonCardMolecule
             data={course}
-            handleClick={() =>
+            handleClick={() =>{
+              authUser?.user_type === UserType.ADMIN ?
               history.push({
-                pathname: `/dashboard/modules/${course.id}/subjects`,
-                search: `?showMenus=${showMenus}`,
+                pathname: `/dashboard/modules/${intakeProgram}/${course.id}`,
+                search: ``,
+              }) : 
+              history.push({
+                pathname: `/dashboard/modules/${course.id}`,
+                search: ``,
               })
+            }
             }>
             <p className="pt-3">
               Total subjects:
               <span className="px-1 text-primary-500">{'None'}</span>
             </p>
           </CommonCardMolecule>
+          
         }>
         <div className="w-96 p-4">
           <Heading fontWeight="semibold">{course.title}</Heading>
@@ -52,12 +60,12 @@ export default function ModuleCard({ course, showMenus = true }: IProps) {
             <div className="py-2 flex justify-around gap-2">
               <BrowserLink
                 className="outline-none"
-                to={`/dashboard/modules/${course.id}/add-subject`}>
+                to={`/dashboard/modules/${intakeProgram}/${course.id}/add-subject`}>
                 <Button>Add subject</Button>
               </BrowserLink>
               <BrowserLink
                 className="outline-none"
-                to={`/dashboard/modules/${course.id}/edit`}>
+                to={`/dashboard/modules/${intakeProgram}/${course.id}/edit`}>
                 <Button styleType="outline">Edit</Button>
               </BrowserLink>
             </div>
