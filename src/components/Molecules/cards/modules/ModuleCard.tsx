@@ -15,7 +15,7 @@ interface IProps {
   showMenus: boolean;
 }
 
-export default function ModuleCard({ course, intakeProgram,showMenus = true }: IProps) {
+export default function ModuleCard({ course, intakeProgram }: IProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
 
   const history = useHistory();
@@ -26,24 +26,22 @@ export default function ModuleCard({ course, intakeProgram,showMenus = true }: I
         trigger={
           <CommonCardMolecule
             data={course}
-            handleClick={() =>{
-              authUser?.user_type === UserType.ADMIN ?
-              history.push({
-                pathname: `/dashboard/modules/${intakeProgram}/${course.id}`,
-                search: ``,
-              }) : 
-              history.push({
-                pathname: `/dashboard/modules/${course.id}`,
-                search: ``,
-              })
-            }
-            }>
+            handleClick={() => {
+              authUser?.user_type === UserType.ADMIN
+                ? history.push({
+                    pathname: `/dashboard/modules/${intakeProgram}/${course.id}`,
+                    search: ``,
+                  })
+                : history.push({
+                    pathname: `/dashboard/modules/${course.id}`,
+                    search: ``,
+                  });
+            }}>
             <p className="pt-3">
               Total subjects:
               <span className="px-1 text-primary-500">{'None'}</span>
             </p>
           </CommonCardMolecule>
-          
         }>
         <div className="w-96 p-4">
           <Heading fontWeight="semibold">{course.title}</Heading>

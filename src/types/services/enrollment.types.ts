@@ -1,12 +1,10 @@
 import { Table } from '..';
-import { IAcademicYearInfo } from './academicyears.types';
 import { InstructorProgram } from './instructor.types';
 import {
   LevelIntakeProgram,
   PromotionStatus,
   StudentIntakeProgram,
 } from './intake-program.types';
-import { AcademicProgramLevel } from './program.types';
 /* eslint-disable no-unused-vars */
 export enum EnrollmentStatus {
   PENDING,
@@ -78,7 +76,7 @@ export interface EnrollStudentToProgram {
 
 export interface EnrollInstructorLevelInfo extends Table {
   intake_program_instructor: InstructorProgram;
-  academic_year_program_level: LevelIntakeProgram;
+  academic_year_program_intake_level: LevelIntakeProgram;
   // academic_program_level: AcademicProgramLevel;
   // academic_year: IAcademicYearInfo;
 }
