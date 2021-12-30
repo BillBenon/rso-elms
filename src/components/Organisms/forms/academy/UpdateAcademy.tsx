@@ -157,7 +157,9 @@ function AcademyInfoComponent({ details, handleChange, handleNext }: IProps) {
           handleUpload={function (_files: FileList | null) {
             throw new Error('Function not implemented.');
           }}>
-          <Button styleType="outline">upload logo</Button>
+          <Button styleType="outline" type="button">
+            upload logo
+          </Button>
         </FileUploader>
       </div>
       <div className="pt-3">

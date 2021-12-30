@@ -39,6 +39,7 @@ class InstructorDeployment {
     );
   }
 
+
   public async getInstructors(): Promise<AxiosResponse<Response<Instructor[]>>> {
     return await adminstrationAxios.get(`instructorDeployments/getInstructors`);
   }

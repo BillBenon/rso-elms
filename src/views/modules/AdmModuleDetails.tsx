@@ -26,26 +26,28 @@ import enrollmentStore from '../../store/administration/enrollment.store';
 import { moduleStore } from '../../store/administration/modules.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { CommonCardDataType, Link, ParamType } from '../../types';
+import { ModuleDetailsParam } from '../../types/services/intake-program.types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ModuleEvaluations from '../evaluation/ModuleEvaluations';
 import ModuleMaterials from '../module-material/ModuleMaterials';
 import { IProgramData } from '../programs/AcademicPrograms';
+import InstructorModuleAssignment from './InstructorModuleAssignment';
 
-export default function ModuleDetails() {
+export default function AdmModuleDetails() {
   const [subjects, setSubjects] = useState<CommonCardDataType[]>([]);
   const [route, setCurrentPage] = useState('SUBJECTS');
 
-  const { id } = useParams<ParamType>();
+  const { intakeProgram,moduleId } = useParams<ModuleDetailsParam>();
   const { path, url } = useRouteMatch();
   const { search } = useLocation();
   const showMenu = new URLSearchParams(search).get('showMenus');
   const history = useHistory();
-  const subjectData = subjectStore.getSubjectsByModule(id);
-  let moduleData: IProgramData | undefined;
-  const module = moduleStore.getModuleById(id).data?.data.data;
+
+  const subjectData = subjectStore.getSubjectsByModule(moduleId);
+  const module = moduleStore.getModuleById(moduleId).data?.data.data;
   const authUser = authenticatorStore.authUser().data?.data.data;
-  const { data: assignedInstructors } = enrollmentStore.getInstructorsonModule(id);
+  const { data: assignedInstructors } = enrollmentStore.getInstructorsonModule(moduleId);
 
   let tabs: TabType[] = [
     {
@@ -84,6 +86,7 @@ export default function ModuleDetails() {
   }
 
   var lastUrl: string = location.href;
+  let moduleData: IProgramData | undefined;
 
   if (module) {
     moduleData = {
@@ -100,7 +103,6 @@ export default function ModuleDetails() {
       // incharge: program.incharge && program.incharge.user.username,
     };
   }
-
 
   useEffect(() => {
     if (subjectData.data?.data) {
@@ -124,7 +126,6 @@ export default function ModuleDetails() {
     new MutationObserver(() => {
       const url = location.href;
       if (url !== lastUrl) {
-        lastUrl = url;
         if (lastUrl.endsWith('subjects')) {
           setCurrentPage('SUBJECTS');
         } else if (lastUrl.endsWith('materials')) {
@@ -157,8 +158,8 @@ export default function ModuleDetails() {
     { to: 'subjects', title: 'Programs' },
     { to: 'modules', title: 'Modules' },
     {
-      to: moduleData?.id + '',
-      title: moduleData?.title + '',
+      to: module?.id + '',
+      title: module?.name + '',
     },
   ];
 
@@ -172,7 +173,7 @@ export default function ModuleDetails() {
           <div className="flex flex-wrap justify-between items-center">
             <div className="flex gap-2 items-center">
               <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
-                {moduleData?.title} module
+                {module?.name} module
               </Heading>
             </div>
             <div className="flex flex-wrap justify-start items-center">
@@ -271,6 +272,7 @@ export default function ModuleDetails() {
                             totalUsers={assignedInstructors?.data.data.length || 0}
                             dataLabel={''}
                             isLoading={false}>
+                            <InstructorModuleAssignment module_id={module?.id || ''} intake_program_id={intakeProgram}/>
                           </UsersPreview>
                           </div>
                     </div>

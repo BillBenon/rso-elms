@@ -24,6 +24,11 @@ export interface EnrollInstructorProgram {
   intake_program_id: string;
 }
 
+export interface InstructorAssignModule {
+  course_module_id: string | number;
+  intake_program_instructor_id: number;
+}
+
 export interface EnrollInstructorLevel {
   academicProgramLevelId: string;
   academicYearId: string;

@@ -78,7 +78,7 @@ export default function Modules({ level }: { level: string }) {
                       />
                     ) : (
                       modules.map((course, index) => (
-                        <ModuleCard course={course} key={index} />
+                        <ModuleCard course={course} key={index} intakeProgram={''} showMenus={true} />
                       ))
                     )}
                   </section>

@@ -15,6 +15,11 @@ export interface IntakeProgParam {
   intakeId: string;
   intakeProg: string;
 }
+
+export interface ModuleDetailsParam{
+  intakeProgram: string;
+  moduleId: string;
+}
 export interface IntakeLevelParam extends IntakeProgParam {
   level: string;
 }
