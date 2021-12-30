@@ -1,5 +1,4 @@
 import { Table } from '..';
-import { IAcademicYearInfo } from './academicyears.types';
 import { InstructorProgram } from './instructor.types';
 import {
   LevelIntakeProgram,
@@ -30,9 +29,8 @@ export interface InstructorAssignModule {
 }
 
 export interface EnrollInstructorLevel {
-  academicProgramLevelId: string;
-  academicYearId: string;
-  intakeProgramInstructorId: number;
+  academic_year_program_intake_level_id: number;
+  intake_program_instructor_id: number;
 }
 
 export interface EnrollStudentToLevel {
@@ -78,7 +76,8 @@ export interface EnrollStudentToProgram {
 export interface EnrollInstructorLevelInfo extends Table {
   intake_program_instructor: InstructorProgram;
   academic_year_program_intake_level: LevelIntakeProgram;
-  academic_year: IAcademicYearInfo;
+  // academic_program_level: AcademicProgramLevel;
+  // academic_year: IAcademicYearInfo;
 }
 
 export interface ApproveStudents {

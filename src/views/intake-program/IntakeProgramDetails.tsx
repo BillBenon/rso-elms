@@ -11,7 +11,6 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
-import enrollmentStore from '../../store/administration/enrollment.store';
 import { authenticatorStore } from '../../store/administration';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
@@ -40,7 +39,8 @@ function IntakeProgramDetails() {
       intakeProg,
       StudentApproval.APPROVED,
     );
-  const { data: instructorsProgram, isLoading: instLoading } = enrollmentStore.getInstructorsInProgram(intakeProg);
+  const { data: instructorsProgram, isLoading: instLoading } =
+    enrollmentStore.getInstructorsInProgram(intakeProg);
 
   const authUser = authenticatorStore.authUser().data?.data.data;
 
