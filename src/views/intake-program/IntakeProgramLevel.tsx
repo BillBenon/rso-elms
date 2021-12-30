@@ -75,12 +75,14 @@ function IntakeProgramLevel() {
         />
       ) : (
         <>
-          <div className="text-right">
-            <Link
-              to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
-              <Button>Add Level</Button>
-            </Link>
-          </div>
+          {authUser?.user_type === UserType.ADMIN ? (
+            <div className="text-right">
+              <Link
+                to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
+                <Button>Add Level</Button>
+              </Link>
+            </div>
+          ) : null}
           <TabNavigation tabs={tabs}>
             <Switch>
               <Route exact path={`${path}/:level`} render={() => <IntakeLevelModule />} />

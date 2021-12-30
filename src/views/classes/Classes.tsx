@@ -3,10 +3,12 @@ import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-route
 
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import PopupMolecule from '../../components/Molecules/Popup';
 import { Tabs } from '../../components/Molecules/tabs/tabs';
 import { classStore } from '../../store/administration/class.store';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import ViewStudentReports from '../reports/ViewStudentReports';
+import AddSubjectToPeriod from '../subjects/AddSubjectToPeriod';
 import StudentInClass from './StudentInClass';
 
 function Classes() {
@@ -28,7 +30,6 @@ function Classes() {
     <Switch>
       <Route path={`${path}/reports`} component={ViewStudentReports} />
       <Route
-        exact
         path={`${path}`}
         render={() => {
           return (
@@ -62,6 +63,20 @@ function Classes() {
             </>
           );
         }}
+      />
+      {/* add subject to period */}
+      <Route
+        exact
+        path={`${path}/add-subject`}
+        render={() => (
+          <PopupMolecule
+            title="Add subject to period"
+            closeOnClickOutSide={false}
+            open
+            onClose={history.goBack}>
+            <AddSubjectToPeriod />
+          </PopupMolecule>
+        )}
       />
     </Switch>
   );

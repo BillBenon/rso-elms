@@ -8,6 +8,7 @@ import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import { authenticatorStore } from '../../store/administration';
+import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { CommonCardDataType } from '../../types';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
@@ -49,6 +50,10 @@ function IntakeLevelModule() {
     parseInt(level),
   );
 
+  const { data: classes, isLoading: clLoading } = classStore.getClassByPeriod(
+    periods?.data.data[0].id + '',
+  );
+
   return (
     <>
       <TableHeader usePadding={false} showBadge={false} showSearch={false}>
@@ -59,14 +64,14 @@ function IntakeLevelModule() {
           </>
         )}
 
-        {prdLoading ? (
+        {prdLoading || clLoading ? (
           <></>
         ) : (
           <Button
             styleType="outline"
             onClick={() =>
               history.push(
-                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${periods?.data.data[0].id}`,
+                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${periods?.data.data[0].id}/view-class/${classes?.data.data[0].id}`,
               )
             }>
             View periods

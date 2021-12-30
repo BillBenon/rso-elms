@@ -96,11 +96,11 @@ function NewClass() {
     mutate(
       { ...form, intake_academic_year_period_id: parseInt(period) },
       {
-        onSuccess: () => {
-          toast.success('Academic year created');
+        onSuccess: (data) => {
+          toast.success(data.data.message);
           queryClient.invalidateQueries(['class/levelId']);
           history.push(
-            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-class`,
+            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-class/${data.data.data.id}`,
           );
         },
         onError: (error: any) => {
