@@ -19,8 +19,6 @@ import UpdateInstitution from './views/insitution/UpdateInstitution';
 import IntakesView from './views/intakes/Intakes';
 import Levels from './views/levels/Levels';
 import Modules from './views/modules';
-import ModuleDetails from './views/modules/AdmModuleDetails';
-import AdmModuleDetails from './views/modules/AdmModuleDetails';
 import InstrLevelModule from './views/modules/InstrLevelModule';
 import StudentModule from './views/modules/StudentModule';
 import PrivilegesView from './views/privileges/Privileges';
@@ -74,10 +72,11 @@ const RouterProtection = () => {
       <Route path={`${path}/users`} component={Users} />
       <Route path={`${path}/levels`} component={Levels} />
       <Route path={`${path}/intakes`} component={IntakesView} />
-      <Route
+      {/* <Route
         path={`${path}/modules/:intakeProgram/:moduleId`}
         component={AdmModuleDetails}
-      />
+      /> */}
+      <Route path={`${path}/modules`} component={Modules} />
       {/* <Route exact path={`${path}/intakes/:id`} component={IntakeModulesView} /> */}
 
       {/* end of academic admin pages */}

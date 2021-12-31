@@ -23,7 +23,7 @@ import {
   getProgramsByIntake,
   intakeStore,
 } from '../../store/administration/intake.store';
-import { Link as LinkList } from '../../types';
+import { IntakeParamType, Link as LinkList } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from '../programs/AcademicPrograms';
 import AddAcademicProgramToIntake from '../programs/AddAcademicProgramToIntake';
@@ -33,14 +33,10 @@ import IntakeProgramDetails from './IntakeProgramDetails';
 import NewIntakeLevelModule from './NewIntakeLevelModule';
 import NewIntakeProgramLevel from './NewIntakeProgramLevel';
 
-export interface ParamType {
-  intakeId: string;
-}
-
 function IntakePrograms() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
-  const { intakeId } = useParams<ParamType>();
+  const { intakeId } = useParams<IntakeParamType>();
   const location = useLocation();
   const list: LinkList[] = [
     { to: 'home', title: 'home' },
@@ -75,6 +71,7 @@ function IntakePrograms() {
       subTitle: prog.type.replaceAll('_', ' '),
       description: prog.description,
       department: prog.department,
+      total_num_modules: prog.total_num_modules,
       // incharge: prog.incharge && prog.incharge.user.username,
     };
 
@@ -153,7 +150,7 @@ function IntakePrograms() {
                                 Modules
                               </Heading>
                               <Heading fontSize="sm" fontWeight="semibold">
-                                30
+                                {Common.total_num_modules || 0}
                               </Heading>
                             </div>
 

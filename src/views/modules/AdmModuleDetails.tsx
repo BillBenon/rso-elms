@@ -25,7 +25,7 @@ import { authenticatorStore } from '../../store/administration';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { moduleStore } from '../../store/administration/modules.store';
 import { subjectStore } from '../../store/administration/subject.store';
-import { CommonCardDataType, Link, ParamType } from '../../types';
+import { CommonCardDataType, Link } from '../../types';
 import { ModuleDetailsParam } from '../../types/services/intake-program.types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
@@ -38,14 +38,14 @@ export default function AdmModuleDetails() {
   const [subjects, setSubjects] = useState<CommonCardDataType[]>([]);
   const [route, setCurrentPage] = useState('SUBJECTS');
 
-  const { intakeProgram,moduleId } = useParams<ModuleDetailsParam>();
+  const { intakeProgram, moduleId } = useParams<ModuleDetailsParam>();
   const { path, url } = useRouteMatch();
   const { search } = useLocation();
   const showMenu = new URLSearchParams(search).get('showMenus');
   const history = useHistory();
 
   const subjectData = subjectStore.getSubjectsByModule(moduleId);
-  const module = moduleStore.getModuleById(moduleId).data?.data.data;
+  const {data:modularData, isLoading} = moduleStore.getModuleById(moduleId);
   const authUser = authenticatorStore.authUser().data?.data.data;
   const { data: assignedInstructors } = enrollmentStore.getInstructorsonModule(moduleId);
 
@@ -88,7 +88,8 @@ export default function AdmModuleDetails() {
   var lastUrl: string = location.href;
   let moduleData: IProgramData | undefined;
 
-  if (module) {
+  if (modularData?.data.data) {
+    let module = modularData?.data.data;
     moduleData = {
       status: {
         type: advancedTypeChecker(module.generic_status),
@@ -158,13 +159,14 @@ export default function AdmModuleDetails() {
     { to: 'subjects', title: 'Programs' },
     { to: 'modules', title: 'Modules' },
     {
-      to: module?.id + '',
-      title: module?.name + '',
+      to: modularData?.data.data?.id + '',
+      title: modularData?.data.data?.name + '',
     },
   ];
 
   return (
     <>
+    {isLoading ? (<Loader/>):(
       <main className="px-4">
         <section>
           <BreadCrumb list={list} />
@@ -173,7 +175,7 @@ export default function AdmModuleDetails() {
           <div className="flex flex-wrap justify-between items-center">
             <div className="flex gap-2 items-center">
               <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
-                {module?.name} module
+                {modularData?.data.data?.name} module
               </Heading>
             </div>
             <div className="flex flex-wrap justify-start items-center">
@@ -225,13 +227,13 @@ export default function AdmModuleDetails() {
         </div>
         <TabNavigation tabs={tabs}>
           <Switch>
-          <Route
+            <Route
               exact
               path={`${path}`}
               render={() => (
                 <div className="flex py-9">
                   <div className="mr-24">
-                    {module && (
+                    {modularData?.data.data && (
                       <CommonCardMolecule data={moduleData}>
                         <div className="flex flex-col mt-8 gap-7 pb-2">
                           <Heading color="txt-secondary" fontSize="sm">
@@ -240,16 +242,6 @@ export default function AdmModuleDetails() {
                           <Heading fontSize="sm">
                             {moduleData?.subTitle?.replaceAll('_', ' ')}
                           </Heading>
-                          {/* 
-                          <div className="flex items-center gap-2">
-                            <Avatar
-                              size="24"
-                              alt="user1 profile"
-                              className=" rounded-full  border-2 border-main transform hover:scale-125"
-                              src="https://randomuser.me/api/portraits/men/1.jpg"
-                            />
-                            <Heading fontSize="sm">{programData.incharge}</Heading>
-                          </div> */}
                         </div>
                         <div className="mt-4 flex space-x-4">
                           <Button onClick={() => history.push(`${url}/edit`)}>
@@ -264,17 +256,20 @@ export default function AdmModuleDetails() {
                   <div className="flex flex-col gap-8 z-0">
                     <div className="flex gap-8">
                       {/* levels */}
-                        <div className="flex flex-col gap-8 z-0">
-                          <UsersPreview
-                            title="Instructors"
-                            label="Instructors in intakeProgram"
-                            data={[]}
-                            totalUsers={assignedInstructors?.data.data.length || 0}
-                            dataLabel={''}
-                            isLoading={false}>
-                            <InstructorModuleAssignment module_id={module?.id || ''} intake_program_id={intakeProgram}/>
-                          </UsersPreview>
-                          </div>
+                      <div className="flex flex-col gap-8 z-0">
+                        <UsersPreview
+                          title="Instructors"
+                          label="Instructors in intakeProgram"
+                          data={[]}
+                          totalUsers={assignedInstructors?.data.data.length || 0}
+                          dataLabel={''}
+                          isLoading={false}>
+                          <InstructorModuleAssignment
+                            module_id={module?.id || ''}
+                            intake_program_id={intakeProgram}
+                          />
+                        </UsersPreview>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -349,6 +344,7 @@ export default function AdmModuleDetails() {
           </Switch>
         </TabNavigation>
       </main>
+      )}
     </>
   );
 }

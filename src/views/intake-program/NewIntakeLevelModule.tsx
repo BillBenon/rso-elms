@@ -46,7 +46,7 @@ function NewIntakeLevelModule() {
 
   const [totalModules, setTotalModules] = useState<AddLevelToModule[]>([]);
 
-  const { id, level: levelId, intakeProg, intakeId } = useParams<IntakeLevelParam>();
+  const { id, level: levelId, intakeProg } = useParams<IntakeLevelParam>();
 
   function handleChange(e: ValueType) {
     setvalues({ ...values, [e.name]: e.value });
@@ -67,10 +67,8 @@ function NewIntakeLevelModule() {
       (md) => md.id !== levelModuleStore?.data.data.find((m) => m)?.module.id,
     ) || [];
 
-  const instructorInPrograms = intakeProgramStore.getInstructorsByIntakeProgram(
-    id,
-    intakeId,
-  );
+  const instructorInPrograms =
+    intakeProgramStore.getInstructorsByIntakeProgram(intakeProg);
 
   const instructors =
     instructorInPrograms.data?.data.data.map((instr) => instr.instructor) || [];
