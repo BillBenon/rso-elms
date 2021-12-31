@@ -34,9 +34,7 @@ export default function PrograsmLevelClasses() {
 
   return (
     <div>
-      <TableHeader
-        showBadge={false}
-        title={programInfo?.name || levelsLoading ? 'loading...' : 'Program levels'}>
+      <TableHeader showBadge={false} title={programInfo?.name || 'Program levels'}>
         <Link to={`/dashboard/schedule/calendar/${programInfo?.id}`}>
           <Button styleType="outline">Program calendar</Button>
         </Link>
