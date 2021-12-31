@@ -10,6 +10,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import { Tab } from '../../components/Molecules/tabs/tabs';
 import Students from '../../components/Organisms/user/Students';
 import { classStore } from '../../store/administration/class.store';
+import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import { UserTypes } from '../../types/services/user.types';
 import AddSubjectToPeriod from '../subjects/AddSubjectToPeriod';

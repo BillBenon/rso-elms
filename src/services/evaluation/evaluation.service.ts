@@ -43,7 +43,6 @@ class EvaluationService {
       questions: questionsInfo,
     });
   }
-
   public async createEvaluationSettings(
     settings: IEvaluationApproval,
   ): Promise<AxiosResponse<Response<IEvaluationApproval>>> {
@@ -91,6 +90,12 @@ class EvaluationService {
     id: string,
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
     return await evaluationAxios.get(`/evaluations/getById/${id}`);
+  }
+
+  public async getStudentReport(
+    studentId: string,
+  ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
+    return await evaluationAxios.get(`/getThreeTermSchoolReport/${studentId}`);
   }
 
   public async getStudentEvaluationByStudentIdAndEvaluationId(
