@@ -7,10 +7,11 @@ import AddCard from '../../components/Molecules/cards/AddCard';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import { classStore } from '../../store/administration/class.store';
+import { authenticatorStore } from '../../store/administration';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { CommonCardDataType } from '../../types';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
+import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import EnrollInstructorToLevel from './EnrollInstructorToLevel';
 import EnrollStudent from './EnrollStudent';
@@ -49,7 +50,8 @@ function IntakeLevelModule() {
     parseInt(level),
   );
 
-  const { data: classes } = classStore.getClassByPeriod(periods?.data.data[0].id + '');
+  // const { data: classes } = classStore.getClassByPeriod(periods?.data.data[0].id + '');
+  const authUser = authenticatorStore.authUser().data?.data.data;
 
   return (
     <>
@@ -58,18 +60,34 @@ function IntakeLevelModule() {
         <Button styleType="outline">Enrolled Instructors</Button> */}
         {/* <div className='py-2.5 border px-4 rounded-lg border-primary-500 text-primary-500 font-semibold text-sm'>Enrolled Students</div>
         <div className='py-2.5 border px-4 rounded-lg border-primary-500 text-primary-500 font-semibold text-sm'>Enrolled Instructors</div> */}
-        <LevelInstrctors />
-        <EnrollInstructorToLevel />
-        <LevelStudents />
-        <EnrollStudent />
+        {authUser?.user_type === UserType.ADMIN && (
+          <>
+            <LevelInstrctors />
+            <EnrollInstructorToLevel />
+            <LevelStudents />
+            <EnrollStudent />
+          </>
+        )}
         {prdLoading ? (
           <></>
+        ) : periods?.data.data.length === 0 ? (
+          authUser?.user_type === UserType.ADMIN && (
+            <Button
+              styleType="outline"
+              onClick={() =>
+                history.push(
+                  `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/add-period`,
+                )
+              }>
+              Add period
+            </Button>
+          )
         ) : (
           <Button
             styleType="outline"
             onClick={() =>
               history.push(
-                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${periods?.data.data[0].id}/view-class/${classes?.data.data[0].id}`,
+                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${periods?.data.data[0].id}/view-class`,
               )
             }>
             View periods
@@ -81,6 +99,7 @@ function IntakeLevelModule() {
           <Loader />
         ) : levelModules.length <= 0 ? (
           <NoDataAvailable
+            showButton={authUser?.user_type === UserType.ADMIN}
             buttonLabel="Add new modules"
             title={'No Modules available in this level'}
             handleClick={() =>
@@ -92,14 +111,16 @@ function IntakeLevelModule() {
           />
         ) : (
           <>
-            <AddCard
-              title={'Add new module'}
-              onClick={() =>
-                history.push(
-                  `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/${level}/add-module`,
-                )
-              }
-            />
+            {authUser?.user_type === UserType.ADMIN && (
+              <AddCard
+                title={'Add new module'}
+                onClick={() =>
+                  history.push(
+                    `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/${level}/add-module`,
+                  )
+                }
+              />
+            )}
             {levelModules &&
               levelModules.map((module, index) => (
                 <ModuleCard
