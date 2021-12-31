@@ -106,7 +106,7 @@ function InstrLevelModule() {
         ) : (
           levelModules &&
           levelModules.map((module, index) => (
-            <ModuleCard course={module} key={index} intakeProgram={''} showMenus={true} />
+            <ModuleCard course={module} key={index} intakeProg={''} showMenus={true} />
           ))
         )}
       </section>
