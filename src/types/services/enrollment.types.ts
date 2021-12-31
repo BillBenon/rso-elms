@@ -31,6 +31,7 @@ export interface InstructorAssignModule {
   intake_program_instructor_id: number;
 }
 
+
 export interface EnrollInstructorLevel {
   academic_year_program_intake_level_id: number;
   intake_program_instructor_id: number;

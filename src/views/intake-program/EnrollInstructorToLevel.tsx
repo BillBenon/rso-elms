@@ -25,6 +25,8 @@ function EnrollInstructorToLevel<T>({existing}:ProgramEnrollmentProps<T>) {
 
   const level = intakeProgramStore.getIntakeLevelById(levelId).data?.data.data;
 
+  console.log(level);
+
   const [instructors, setInstructors] = useState<UserView[]>([]);
   useEffect(() => {
     let instructor_ids:string[] = [];
