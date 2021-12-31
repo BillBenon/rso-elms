@@ -4,8 +4,10 @@ import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-route
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { Tabs } from '../../components/Molecules/tabs/tabs';
+import { authenticatorStore } from '../../store/administration';
 import { classStore } from '../../store/administration/class.store';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
+import { UserType } from '../../types/services/user.types';
 import ViewStudentReports from '../reports/ViewStudentReports';
 import StudentInClass from './StudentInClass';
 
@@ -24,6 +26,8 @@ function Classes() {
   const { data: classes, isLoading } = classStore.getClassByPeriod(period);
   const classGroups = classes?.data.data || [];
 
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
   return (
     <Switch>
       <Route path={`${path}/reports`} component={ViewStudentReports} />
@@ -36,10 +40,11 @@ function Classes() {
                 <Loader />
               ) : classGroups.length <= 0 ? (
                 <NoDataAvailable
+                  showButton={authUser?.user_type === UserType.ADMIN}
                   buttonLabel="Add new class"
                   icon="academy"
                   fill={false}
-                  title={'No classes available in this level'}
+                  title={'No classes available in this period'}
                   handleClick={() =>
                     history.push(
                       `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
