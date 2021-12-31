@@ -10,7 +10,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Tiptap from '../../components/Molecules/editor/Tiptap';
 import { authenticatorStore } from '../../store/administration';
 import { moduleMaterialStore } from '../../store/administration/module-material.store';
-import { ParamType } from '../../types';
+import { ModuleDetailsParam } from '../../types/services/intake-program.types';
 import { MaterialType } from '../../types/services/module-material.types';
 import { UserType } from '../../types/services/user.types';
 import NewModuleMaterial from './NewModuleMaterial';
@@ -18,11 +18,11 @@ import NewModuleMaterialAttach from './NewModuleMaterialAttach';
 import ShowModuleMaterial from './ShowModuleMaterial';
 
 function ModuleMaterials() {
-  const { id } = useParams<ParamType>();
+  const { moduleId } = useParams<ModuleDetailsParam>();
   const history = useHistory();
   const { path, url } = useRouteMatch();
   const { data: moduleMaterial, isLoading } =
-    moduleMaterialStore.getModuleMaterialByModule(id);
+    moduleMaterialStore.getModuleMaterialByModule(moduleId);
   const moduleMaterials = moduleMaterial?.data.data || [];
   const authUser = authenticatorStore.authUser().data?.data.data;
 
