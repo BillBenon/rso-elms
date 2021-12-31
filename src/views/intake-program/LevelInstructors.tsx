@@ -4,35 +4,38 @@ import { useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import RightSidebar from '../../components/Organisms/RightSidebar';
+import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import {
   IntakeLevelParam,
 } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 
-function LevelInstrctors() {
+function LevelInstructors() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const {level: levelId } = useParams<IntakeLevelParam>();
 
-  const { data: studentsProgram, isLoading } =
-    intakeProgramStore.getStudentsByIntakeProgramLevel(
+  const { data: instructorProgramLevel, isLoading } =
+    enrollmentStore.getInstructorsInProgramLevel(
         levelId
     );
 
   const [students, setStudents] = useState<UserView[]>([]);
   useEffect(() => {
     let studentsView: UserView[] = [];
-    // studentsProgram?.data.data.forEach((stud) => {
-    //   let studentView: UserView = {
-    //     id: stud.id,
-    //     first_name: stud.intake_program_student.student.user.first_name,
-    //     last_name: stud.intake_program_student.student.user.last_name,
-    //     image_url: stud.intake_program_student.student.user.image_url,
-    //   };
-    //   studentsView.push(studentView);
-    // });
-    // setStudents(studentsView);
-  }, [studentsProgram]);
+    console.log(instructorProgramLevel?.data.data.length)
+    instructorProgramLevel?.data.data.forEach((stud) => {
+      let studentView: UserView = {
+        id: stud.id,
+        first_name: stud.intake_program_instructor.instructor.user.first_name,
+        last_name: stud.intake_program_instructor.instructor.user.last_name,
+        image_url: stud.intake_program_instructor.instructor.user.image_url,
+      };
+      studentsView.push(studentView);
+    });
+    setStudents(studentsView);
+    // console.log(students.length)
+  }, [instructorProgramLevel]);
   return (
     <div className="flex flex-col cursor-pointer">
       <Button styleType="outline" onClick={() => setSidebarOpen(true)}>
@@ -56,4 +59,4 @@ function LevelInstrctors() {
   );
 }
 
-export default LevelInstrctors;
+export default LevelInstructors;

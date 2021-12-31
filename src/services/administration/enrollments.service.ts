@@ -48,7 +48,7 @@ class EnrollmentService {
     levelId: string,
   ): Promise<AxiosResponse<Response<EnrollInstructorLevelInfo[]>>> {
     return await adminstrationAxios.get(
-      `instructorEnrolment/getInstructorEnrolmentLevelByAcademicProgramLevel/${levelId}`,
+      `instructorEnrolment/getInstructorEnrolmentLevelByAcademicYearProgramIntakeLevel/${levelId}`,
     );
   }
 
@@ -57,6 +57,14 @@ class EnrollmentService {
   ): Promise<AxiosResponse<Response<InstructorProgram[]>>> {
     return await adminstrationAxios.get(
       `instructorEnrolment/getInstructorIntakePrograms/${instructorId}`,
+    );
+  }
+
+  public async getInstructorLevelID(
+    levelId: string,
+  ): Promise<AxiosResponse<Response<EnrollInstructorLevelInfo[]>>> {
+    return await adminstrationAxios.get(
+      `instructorEnrolment/getInstructorEnrolmentLevelByAcademicYearProgramIntakeLevel/${levelId}`,
     );
   }
 

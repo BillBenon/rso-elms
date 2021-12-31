@@ -38,7 +38,7 @@ function IntakeProgramLevel() {
 
   const instructorProgLevels = getLevels?.data.data.filter((inst) =>
     instructorLevels?.data.data.filter(
-      (lv) => lv.academic_program_level.id === inst.academic_program_level.id,
+      (lv) => lv.academic_year_program_intake_level.id === inst.academic_program_level.id,
     ),
   );
 
