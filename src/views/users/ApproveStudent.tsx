@@ -103,7 +103,7 @@ function ApproveStudent() {
             {isLoading ? (
               <Loader />
             ) : (
-              <div className="pt-8">
+              <div className="pt-2">
                 {(stud === StudentApproval.PENDING
                   ? pendingStud.length
                   : stud === StudentApproval.APPROVED

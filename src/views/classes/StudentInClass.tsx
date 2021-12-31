@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, useHistory, useRouteMatch } from 'react-router';
-import { useParams } from 'react-router-dom';
+import { useHistory, useRouteMatch } from 'react-router';
+import { Route, Switch, useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -29,6 +29,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
     id,
     period,
   } = useParams<IntakePeriodParam>();
+  const { path } = useRouteMatch();
   const [students, setStudents] = useState<UserTypes[]>([]);
   const { data, isLoading } = classStore.getStudentsByClass(classId);
   const history = useHistory();
@@ -38,7 +39,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
     let tempStuds: UserTypes[] = [];
     studentsData.forEach((stud) => {
       tempStuds.push({
-        id: stud.id.toString(),
+        id: stud.student.id.toString(),
         username: stud.student.user.username,
         'full name': stud.student.user.first_name + ' ' + stud.student.user.last_name,
         email: stud.student.user.email,
@@ -51,7 +52,21 @@ function StudentInClass({ classId, label }: IStudentClass) {
     setStudents(tempStuds);
   }, [studentsData]);
 
-  const { path } = useRouteMatch();
+  const studentActions = [
+    {
+      name: 'View report',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`/dashboard/intakes/peformance/${levelId}/${classId}/report/${id}`);
+      },
+    },
+    {
+      name: 'Edit student',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`/dashboard/users/${id}/edit`); // go to edit user
+      },
+    },
+    { name: 'Set as representaive', handleAction: () => {} },
+  ];
 
   return (
     <Tab label={label}>
@@ -111,7 +126,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
                         students={students}
                         showTableHeader={false}
                         handleStatusAction={() => {}}
-                        studentActions={[]}
+                        studentActions={studentActions}
                         enumtype={'UserTypes'}
                       />
                     )}

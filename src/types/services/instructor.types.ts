@@ -12,8 +12,15 @@ export interface DeployInstructor {
 }
 
 export interface InstructorProgram extends Table {
+  id: string;
   instructor: Instructor;
   intake_program: IntakeProgram;
+}
+
+export interface InstructorModuleAssignment extends Table {
+  id: string;
+  intake_program_instructor_id: string;
+  course_module_id: string;
 }
 
 export interface Instructor extends Table {

@@ -38,12 +38,30 @@ class EnrolmmentStore {
       enrollmentService.getInstructorsByModuleId(moduleId),
     );
   }
+  getInstructorsInProgram(intakeProgram: string | number) {
+    return useQuery(['instructorsInIntakeprogram/IntakeProgram', intakeProgram], () =>
+      enrollmentService.getInstructorsInProgram(intakeProgram),
+    );
+  }
+
+  getStudentsInProgramLevel(levelId: number) {
+    return useQuery(['students/levelsEnrolled', levelId], () =>
+      enrollmentService.getStudentLevelEnrollments(levelId),
+    );
+  }
 
   getStudentsAcademy(academyId: string) {
     return useQuery(['student/academy', academyId], () =>
       enrollmentService.getStudentAcademy(academyId),
     );
   }
+
+  getInstructorsonModule(courseId: string | number) {
+    return useQuery(['instructorsinModule/ModuleId', courseId], () =>
+      enrollmentService.getInstructorAssignedmodule(courseId),
+    );
+  }
+
   enrollStudentsToLevel() {
     return useMutation(enrollmentService.enrollStudentsToLevel);
   }
@@ -53,11 +71,12 @@ class EnrolmmentStore {
   enrollInstructorToProgram() {
     return useMutation(enrollmentService.enrollInstructorToProgram);
   }
-  enrollInstructorToLevel() {
-    return useMutation(enrollmentService.enrollInstructorToLevel);
-  }
   enrollInstructorToModule() {
     return useMutation(enrollmentService.enrollInstructorToModule);
+  }
+
+  enrollInstructorToLevel() {
+    return useMutation(enrollmentService.enrollInstructorToLevel);
   }
   approveStudent() {
     return useMutation(enrollmentService.approveStudent);

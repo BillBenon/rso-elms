@@ -217,7 +217,7 @@ export default function EvaluationInfoComponent({
             inputs: levels?.data.data || [],
             //@ts-ignore
             getOptionLabel: (lev: EnrollInstructorLevelInfo) =>
-              lev.academic_program_level.level.name,
+              lev.academic_year_program_level.academic_program_level.level.name,
           })}>
           Select Level
         </DropdownMolecule>

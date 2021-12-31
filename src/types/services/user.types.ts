@@ -5,6 +5,7 @@ import { Table } from '..';
 import { AcademyInfo } from './academy.types';
 import { ILevel } from './levels.types';
 import { RankRes } from './rank.types';
+import { StudentIntakeProgram } from './intake-program.types';
 export interface Student extends Table {
   reg_number: string;
   user: UserInfo;
@@ -59,6 +60,14 @@ export interface UserInfo extends Table {
   marital_status: MaritalStatus;
 }
 
+export interface IntakeLevelProgramInfo extends Table{
+  student: Student,
+}
+export interface StudentLevel {
+  id: number;
+  intake_program_student: StudentIntakeProgram
+}
+
 export interface PersonInfo extends Table {
   emp_no: string;
   birth_date: string;
@@ -69,6 +78,8 @@ export interface PersonInfo extends Table {
   date_of_issue: string;
   date_of_last_promotion: string;
   doc_type: DocType;
+  deployment_number: string;
+  deployed_on: string;
   document_expire_on: string;
   empNo: string;
   father_names: string;
@@ -89,6 +100,7 @@ export interface PersonInfo extends Table {
   religion: string;
   residence_location_id: number;
   place_of_residence: string;
+  place_of_birth_id: string;
   nationality: string;
 }
 export interface ExperienceInfo {
@@ -121,23 +133,45 @@ export interface UpdateUserInfo {
   person: any;
   academic_program_level_id: string;
   academy_id: string;
-  academy_name: string;
+  activation_key: string;
   birth_date: string;
+  blood_group: string;
+  current_rank_id: string;
+  date_of_commission: string;
+  date_of_issue: string;
+  date_of_last_promotion: string;
   doc_type: DocType;
+  document_expire_on: string;
   education_level: EducationLevel;
   email: string;
+  emp_no: string;
+  father_names: string;
   first_name: string;
   id: string;
   intake_program_id: string;
   last_name: string;
   marital_status: MaritalStatus;
+  mother_names: string;
   nid: string;
+  other_rank: string;
   password: string;
+  password_reset_period_in_days: number;
   person_id: string;
   phone: string;
+  place_of_birth: string;
+  place_of_birth_description: string;
+  place_of_issue: string;
+  place_of_residence: string;
+  profile_status: ProfileStatus;
+  rank_depart: string;
+  reset_date: string;
+  residence_location_id: number;
   sex: GenderStatus;
+  spouse_name: string;
   user_type: UserType;
+  send_communication_msg: SendCommunicationMsg;
   username: string;
+
 }
 
 export interface CreateUserInfo {

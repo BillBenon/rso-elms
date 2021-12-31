@@ -33,13 +33,14 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
   const facultyId = new URLSearchParams(search).get('dp');
 
   const { data: userInfo } = authenticatorStore.authUser();
-  const { data: inCharge } = usersStore.getUsersByAcademy(
-    userInfo?.data.data.academy.id.toString() || '',
-  );
 
-  const instructors = inCharge?.data.data.filter(
-    (user) => user.user_type === UserType.INSTRUCTOR,
-  );
+  const { data:inCharge, isLoading, refetch } =usersStore.getUsersByAcademyAndUserType(
+        userInfo?.data.data.academy.id.toString() || '',
+        UserType.INSTRUCTOR,
+        { page: 0, pageSize:1000, sortyBy: 'username' },
+      );
+ 
+  const instructors = inCharge?.data.data.content
 
   const departments = divisionStore.getDivisionByType('DEPARTMENT').data?.data.data;
   // const { data: levelsInfo } = levelStore.getLevels(); // fetch levels

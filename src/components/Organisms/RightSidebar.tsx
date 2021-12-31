@@ -130,12 +130,13 @@ function RightSidebar({
         ) : (
           data.map((user, i) => (
             <div className="flex w-full items-center pb-6 gap-4" key={i}>
-              <Checkbox
+                <Checkbox
                 checked={user.selected}
                 handleChange={_handleSelect}
                 name={'user'}
                 value={user.id.toString()}
               />
+              
               <Avatar
                 src={
                   user.image_url ||

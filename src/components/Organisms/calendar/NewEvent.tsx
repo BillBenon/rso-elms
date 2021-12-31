@@ -1,9 +1,9 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
+
 import { queryClient } from '../../../plugins/react-query';
 import { authenticatorStore } from '../../../store/administration';
-
 import { eventStore } from '../../../store/timetable/event.store';
 import { GenericStatus, ValueType } from '../../../types';
 import { CreateEvent, eventCategory } from '../../../types/services/event.types';
@@ -56,7 +56,14 @@ export default function NewEvent() {
           placeholder="Event title"
           value={values.name}
           handleChange={handleChange}>
-          Intake title
+          Event title
+        </InputMolecule>
+        <InputMolecule
+          name="code"
+          placeholder="Event code"
+          value={values.code}
+          handleChange={handleChange}>
+          Event code
         </InputMolecule>
         <div className="pb-4">
           <DropdownMolecule

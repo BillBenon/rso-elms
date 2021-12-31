@@ -28,13 +28,15 @@ export default function EvaluationSettings({
   evaluationId,
 }: IEvaluationProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
-  const { data: inCharge } = usersStore.getUsersByAcademy(
+
+
+  const { data:inCharge, isLoading, refetch } =usersStore.getUsersByAcademyAndUserType(
     authUser?.academy.id.toString() || '',
+    UserType.INSTRUCTOR,
+    { page: 0, pageSize:1000, sortyBy: 'username' },
   );
 
-  const instructors = inCharge?.data.data.filter(
-    (user) => user.user_type === UserType.INSTRUCTOR,
-  );
+  const instructors = inCharge?.data.data.content
 
   const [settings, setSettings] = useState<IEvaluationApproval>({
     approver: '',
@@ -43,7 +45,7 @@ export default function EvaluationSettings({
     id: '',
     preparer: authUser?.id.toString() || '',
     reviewer: '',
-    marker: '',
+    marker: authUser?.id.toString() || '',
     to_be_approved: false,
     to_be_reviewed: false,
   });
@@ -141,19 +143,19 @@ export default function EvaluationSettings({
           True
         </SwitchMolecule>
       </div> */}
-      <div className="pt-6">
-        <DropdownMolecule
-          width="60"
-          placeholder="marker"
-          options={getDropDownOptions({
-            inputs: instructors || [],
-            labelName: ['first_name', 'last_name'],
-          })}
-          name="marker"
-          handleChange={handleChange}>
-          To be marked by
-        </DropdownMolecule>
-      </div>
+      // <div className="pt-6">
+      //   <DropdownMolecule
+      //     width="60"
+      //     placeholder="marker"
+      //     options={getDropDownOptions({
+      //       inputs: instructors || [],
+      //       labelName: ['first_name', 'last_name'],
+      //     })}
+      //     name="marker"
+      //     handleChange={handleChange}>
+      //     To be marked by
+      //   </DropdownMolecule>
+      // </div>
       {/* <div className="flex flex-col"> */}
       <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
         Back
