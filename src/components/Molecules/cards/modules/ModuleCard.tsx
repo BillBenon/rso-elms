@@ -12,9 +12,14 @@ import CommonCardMolecule from '../CommonCardMolecule';
 interface IProps {
   course: CommonCardDataType;
   showMenus?: boolean;
+  intakeProg?: string;
 }
 
-export default function ModuleCard({ course, showMenus = true }: IProps) {
+export default function ModuleCard({
+  course,
+  showMenus = true,
+  intakeProg = '',
+}: IProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
 
   const history = useHistory();
@@ -28,7 +33,7 @@ export default function ModuleCard({ course, showMenus = true }: IProps) {
             handleClick={() =>
               history.push({
                 pathname: `/dashboard/modules/${course.id}/subjects`,
-                search: `?showMenus=${showMenus}`,
+                search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
               })
             }>
             <p className="pt-3">
