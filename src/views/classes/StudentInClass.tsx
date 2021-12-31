@@ -39,7 +39,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
     let tempStuds: UserTypes[] = [];
     studentsData.forEach((stud) => {
       tempStuds.push({
-        id: stud.student.id.toString(),
+        id: stud.id.toString(),
         username: stud.student.user.username,
         'full name': stud.student.user.first_name + ' ' + stud.student.user.last_name,
         email: stud.student.user.email,
@@ -51,22 +51,6 @@ function StudentInClass({ classId, label }: IStudentClass) {
     });
     setStudents(tempStuds);
   }, [studentsData]);
-
-  const studentActions = [
-    {
-      name: 'View report',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/intakes/peformance/${levelId}/${classId}/report/${id}`);
-      },
-    },
-    {
-      name: 'Edit student',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/users/${id}/edit`); // go to edit user
-      },
-    },
-    { name: 'Set as representaive', handleAction: () => {} },
-  ];
 
   return (
     <Tab label={label}>
@@ -126,7 +110,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
                         students={students}
                         showTableHeader={false}
                         handleStatusAction={() => {}}
-                        studentActions={studentActions}
+                        studentActions={[]}
                         enumtype={'UserTypes'}
                       />
                     )}

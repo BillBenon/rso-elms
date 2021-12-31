@@ -71,6 +71,7 @@ function IntakePrograms() {
       subTitle: prog.type.replaceAll('_', ' '),
       description: prog.description,
       department: prog.department,
+      total_num_modules: prog.total_num_modules,
       // incharge: prog.incharge && prog.incharge.user.username,
     };
 
@@ -149,7 +150,7 @@ function IntakePrograms() {
                                 Modules
                               </Heading>
                               <Heading fontSize="sm" fontWeight="semibold">
-                                30
+                                {Common.total_num_modules || 0}
                               </Heading>
                             </div>
 
