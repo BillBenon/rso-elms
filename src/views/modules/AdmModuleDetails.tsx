@@ -25,7 +25,7 @@ import { authenticatorStore } from '../../store/administration';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { moduleStore } from '../../store/administration/modules.store';
 import { subjectStore } from '../../store/administration/subject.store';
-import { CommonCardDataType, Link, ParamType } from '../../types';
+import { CommonCardDataType, Link } from '../../types';
 import { ModuleDetailsParam } from '../../types/services/intake-program.types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
@@ -38,7 +38,7 @@ export default function AdmModuleDetails() {
   const [subjects, setSubjects] = useState<CommonCardDataType[]>([]);
   const [route, setCurrentPage] = useState('SUBJECTS');
 
-  const { intakeProgram,moduleId } = useParams<ModuleDetailsParam>();
+  const { intakeProgram, moduleId } = useParams<ModuleDetailsParam>();
   const { path, url } = useRouteMatch();
   const { search } = useLocation();
   const showMenu = new URLSearchParams(search).get('showMenus');
@@ -227,7 +227,7 @@ export default function AdmModuleDetails() {
         </div>
         <TabNavigation tabs={tabs}>
           <Switch>
-          <Route
+            <Route
               exact
               path={`${path}`}
               render={() => (
@@ -256,17 +256,20 @@ export default function AdmModuleDetails() {
                   <div className="flex flex-col gap-8 z-0">
                     <div className="flex gap-8">
                       {/* levels */}
-                        <div className="flex flex-col gap-8 z-0">
-                          <UsersPreview
-                            title="Instructors"
-                            label="Instructors in intakeProgram"
-                            data={[]}
-                            totalUsers={assignedInstructors?.data.data.length || 0}
-                            dataLabel={''}
-                            isLoading={false}>
-                            <InstructorModuleAssignment module_id={modularData?.data.data?.id || ''} intake_program_id={intakeProgram}/>
-                          </UsersPreview>
-                          </div>
+                      <div className="flex flex-col gap-8 z-0">
+                        <UsersPreview
+                          title="Instructors"
+                          label="Instructors in intakeProgram"
+                          data={[]}
+                          totalUsers={assignedInstructors?.data.data.length || 0}
+                          dataLabel={''}
+                          isLoading={false}>
+                          <InstructorModuleAssignment
+                            module_id={module?.id || ''}
+                            intake_program_id={intakeProgram}
+                          />
+                        </UsersPreview>
+                      </div>
                     </div>
                   </div>
                 </div>

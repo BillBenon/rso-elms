@@ -66,6 +66,7 @@ export default function EvaluationInfoComponent({
     selectedModule?.module.id + '',
   );
   const { data: levels } = enrollmentStore.getInstructorLevels(instructorInfo?.id + '');
+
   const { data: classes } = classStore.getClassByPeriod(levelId + '');
 
   const [details, setDetails] = useState<IEvaluationCreate>({

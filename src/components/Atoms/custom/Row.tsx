@@ -65,6 +65,7 @@ const Row = ({ keys, data, uniqueCol, statusColumn, statusActions }: RowProps) =
                 trigger={
                   key.toLowerCase() === statusColumn ? (
                     <Badge
+                      className="cursor-pointer"
                       badgecolor={val && statusColors[val.toLowerCase() as Status]}
                       badgetxtcolor={val && statusColors[val.toLowerCase() as Status]}>
                       {val || '----'}

@@ -51,11 +51,10 @@ class IntakeProgramService {
   }
 
   public async getInstructorsByIntakeProgram(
-    programId: string,
-    intakeId: string,
+    intakeProgramId: string,
   ): Promise<AxiosResponse<Response<InstructorProgram[]>>> {
     return await adminstrationAxios.get(
-      `/instructorEnrolment/getInstructorProgramsOnProgramAndIntake/${programId}/${intakeId}`,
+      `instructorEnrolment/getInstructorIntakeProgramsByIntakeProgram/${intakeProgramId}`,
     );
   }
   public async getInstructorsByIntakeProgramLevel(

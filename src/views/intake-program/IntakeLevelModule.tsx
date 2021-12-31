@@ -49,9 +49,7 @@ function IntakeLevelModule() {
     parseInt(level),
   );
 
-  const { data: classes, isLoading: clLoading } = classStore.getClassByPeriod(
-    periods?.data.data[0].id + '',
-  );
+  const { data: classes } = classStore.getClassByPeriod(periods?.data.data[0].id + '');
 
   return (
     <>
@@ -60,9 +58,9 @@ function IntakeLevelModule() {
         <Button styleType="outline">Enrolled Instructors</Button> */}
         {/* <div className='py-2.5 border px-4 rounded-lg border-primary-500 text-primary-500 font-semibold text-sm'>Enrolled Students</div>
         <div className='py-2.5 border px-4 rounded-lg border-primary-500 text-primary-500 font-semibold text-sm'>Enrolled Instructors</div> */}
-        <LevelInstrctors/>
+        <LevelInstrctors />
         <EnrollInstructorToLevel />
-        <LevelStudents/>
+        <LevelStudents />
         <EnrollStudent />
         {prdLoading ? (
           <></>
@@ -104,7 +102,12 @@ function IntakeLevelModule() {
             />
             {levelModules &&
               levelModules.map((module, index) => (
-                <ModuleCard showMenus={true} course={module} key={index} intakeProgram={intakeProg} />
+                <ModuleCard
+                  showMenus={true}
+                  course={module}
+                  key={index}
+                  intakeProg={''}
+                />
               ))}
           </>
         )}
