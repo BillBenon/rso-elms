@@ -233,7 +233,7 @@ function IntakeProgramDetails() {
                             userType={authUser?.user_type}
                             isLoading={studLoading}>
                             {authUser?.user_type === UserType.ADMIN ? (
-                              <EnrollStudentIntakeProgram />
+                              <EnrollStudentIntakeProgram existing={studentsProgram?.data.data || []}/>
                             ) : null}
                           </UsersPreview>
 
@@ -246,7 +246,7 @@ function IntakeProgramDetails() {
                             userType={authUser?.user_type}
                             isLoading={instLoading}>
                             {authUser?.user_type === UserType.ADMIN ? (
-                              <EnrollInstructorIntakeProgram />
+                              <EnrollInstructorIntakeProgram existing={instructorsProgram?.data.data || []} />
                             ) : null}
                           </UsersPreview>
                         </div>

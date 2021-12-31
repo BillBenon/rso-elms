@@ -54,7 +54,7 @@ function EnrollStudent() {
     }
     });
     setStudents(studentsView);
-  }, [studentsProgram]);
+  }, [studentsProgram,enrolledStudentsLevel]);
 
   const { mutate } = enrollmentStore.enrollStudentsToLevel();
 

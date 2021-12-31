@@ -14,10 +14,14 @@ import {
   EnrollStudentToProgram,
   StudentApproval,
 } from '../../types/services/enrollment.types';
-import { IntakeProgParam } from '../../types/services/intake-program.types';
+import { IntakeProgParam, StudentIntakeProgram } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 
-function EnrollStudentIntakeProgram() {
+interface ProgramEnrollmentProps<T>{
+  existing: StudentIntakeProgram[]
+}
+
+function EnrollStudentIntakeProgram<T>({existing}:ProgramEnrollmentProps<T>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { intakeProg, intakeId } = useParams<IntakeProgParam>();
 
@@ -34,8 +38,14 @@ function EnrollStudentIntakeProgram() {
   const [students, setStudents] = useState<UserView[]>([]);
 
   useEffect(() => {
+    let existing_ids:string[] = [];
+    for (let index = 0; index < existing.length; index++) {
+      existing_ids.push(existing[index].student.id+'');
+      
+    }
     let studentsView: UserView[] = [];
     studentsInAcademy?.data.data.forEach((stud) => {
+      if(!existing_ids.includes(stud.id+'')){
       let studentView: UserView = {
         id: stud.id,
         first_name: stud.user.first_name,
@@ -43,6 +53,7 @@ function EnrollStudentIntakeProgram() {
         image_url: stud.user.image_url,
       };
       studentsView.push(studentView);
+    }
     });
     setStudents(studentsView);
   }, [studentsInAcademy?.data.data]);
