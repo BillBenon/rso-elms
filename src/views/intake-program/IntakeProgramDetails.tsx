@@ -122,18 +122,26 @@ function IntakeProgramDetails() {
       instructorInfo?.id + '',
     );
 
-    const programLevelsIds = getLevels.map((lvl) => lvl.academic_program_level.id);
-
-    const instrLevels = instructorLevels?.data.data.filter((level) =>
-      programLevelsIds.includes(
-        level.academic_year_program_intake_level?.academic_program_level.id,
-      ),
+    let instructorLevelsIds = instructorLevels?.data.data.map(
+      (instLvl) => instLvl.academic_year_program_intake_level.id,
     );
 
-    if (instrLevels && instrLevels?.length > 0) {
+    const instructorProgLevels = getLevels?.filter((level) =>
+      instructorLevelsIds?.includes(level.id),
+    );
+
+    // const programLevelsIds = getLevels.map((lvl) => lvl.academic_program_level.id);
+
+    // const instrLevels = instructorLevels?.data.data.filter((level) =>
+    //   programLevelsIds.includes(
+    //     level.academic_year_program_intake_level?.academic_program_level.id,
+    //   ),
+    // );
+
+    if (instructorProgLevels && instructorProgLevels?.length > 0) {
       tabs.push({
         label: 'Program levels',
-        href: `${url}/levels/${instrLevels[0]?.id || ''}`,
+        href: `${url}/levels/${instructorProgLevels[0]?.id || ''}`,
       });
     }
   }

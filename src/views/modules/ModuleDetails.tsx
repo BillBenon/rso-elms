@@ -320,7 +320,7 @@ export default function ModuleDetails() {
               )}
             />
 
-            <Route path={`${path}/evaluation`} render={() => <ModuleEvaluations />} />
+            <Route path={`${path}/evaluations`} render={() => <ModuleEvaluations />} />
             {/* add subject popup */}
             <Route
               exact
