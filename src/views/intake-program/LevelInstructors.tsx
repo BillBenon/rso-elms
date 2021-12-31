@@ -5,25 +5,27 @@ import { useParams } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import RightSidebar from '../../components/Organisms/RightSidebar';
 import enrollmentStore from '../../store/administration/enrollment.store';
+import { EnrollInstructorLevelInfo } from '../../types/services/enrollment.types';
 import {
   IntakeLevelParam,
 } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 
-function LevelInstructors() {
+interface ProgramEnrollmentProps<T>{
+  instructorsData: EnrollInstructorLevelInfo[]
+  isLoading: boolean;
+}
+
+function LevelInstructors<T>({instructorsData,isLoading}:ProgramEnrollmentProps<T>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const {level: levelId } = useParams<IntakeLevelParam>();
 
-  const { data: instructorProgramLevel, isLoading } =
-    enrollmentStore.getInstructorsInProgramLevel(
-        levelId
-  );
+  
 
   const [instructors, setInstructors] = useState<UserView[]>([]);
   useEffect(() => {
     let instructorView: UserView[] = [];
-    console.log(instructorProgramLevel?.data.data.length)
-    instructorProgramLevel?.data.data.forEach((stud) => {
+    instructorsData.forEach((stud) => {
       let studentView: UserView = {
         id: stud.id,
         first_name: stud.intake_program_instructor.instructor.user.first_name,
@@ -34,11 +36,11 @@ function LevelInstructors() {
     });
     setInstructors(instructorView);
     // console.log(students.length)
-  }, [instructorProgramLevel]);
+  }, [instructorsData]);
   return (
     <div className="flex flex-col cursor-pointer">
       <Button styleType="outline" onClick={() => setSidebarOpen(true)}>
-        Enrolled instructors
+        View instructors
       </Button>
       <RightSidebar
         open={sidebarOpen}

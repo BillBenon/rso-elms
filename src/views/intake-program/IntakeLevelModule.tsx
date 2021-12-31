@@ -8,6 +8,7 @@ import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import { authenticatorStore } from '../../store/administration';
+import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { CommonCardDataType } from '../../types';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
@@ -24,6 +25,10 @@ function IntakeLevelModule() {
 
   const [levelModules, setlevelModules] = useState<CommonCardDataType[]>([]);
 
+  const { data: instructorProgramLevel, isLoading:instructorsLoading } =
+    enrollmentStore.getInstructorsInProgramLevel(
+      level
+  );
   const { data: levelModuleStore, isLoading } = intakeProgramStore.getModulesByLevel(
     parseInt(level),
   );
@@ -56,16 +61,17 @@ function IntakeLevelModule() {
   return (
     <>
       <TableHeader usePadding={false} showBadge={false} showSearch={false}>
+        
         {/* <Button styleType="outline">Enrolled Students</Button>
         <Button styleType="outline">Enrolled Instructors</Button> */}
         {/* <div className='py-2.5 border px-4 rounded-lg border-primary-500 text-primary-500 font-semibold text-sm'>Enrolled Students</div>
         <div className='py-2.5 border px-4 rounded-lg border-primary-500 text-primary-500 font-semibold text-sm'>Enrolled Instructors</div> */}
         {authUser?.user_type === UserType.ADMIN && (
           <>
-            <LevelInstrctors />
-            <EnrollInstructorToLevel />
-            <LevelStudents />
-            <EnrollStudent />
+        <LevelInstrctors isLoading={instructorsLoading} instructorsData={instructorProgramLevel?.data.data || []}/>
+        <EnrollInstructorToLevel existing={instructorProgramLevel?.data.data || []} />
+        <LevelStudents />
+        <EnrollStudent />
           </>
         )}
         {prdLoading ? (

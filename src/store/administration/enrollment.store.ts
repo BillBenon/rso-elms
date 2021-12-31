@@ -32,6 +32,13 @@ class EnrolmmentStore {
       enrollmentService.getInstructorsByModuleId(moduleId),
     );
   }
+
+  getInstructorsBySubject(subjectId: string) {
+    return useQuery(['instructors/subject', subjectId], () =>
+      enrollmentService.getInstructorsBySubjectId(subjectId),
+    );
+  }
+
   getInstructorsInProgram(intakeProgram: string | number) {
     return useQuery(['instructorsInIntakeprogram/IntakeProgram', intakeProgram], () =>
       enrollmentService.getInstructorsInProgram(intakeProgram),
@@ -45,7 +52,7 @@ class EnrolmmentStore {
   }
 
   getInstructorsInProgramLevel(levelId: string) {
-    return useQuery(['instructos/levelsEnrolled', levelId], () =>
+    return useQuery(['instructors/levelsEnrolled', levelId], () =>
       enrollmentService.getInstructorEnrollmentLevelByLevelId(levelId),
     );
   }
@@ -73,6 +80,10 @@ class EnrolmmentStore {
   }
   enrollInstructorToModule() {
     return useMutation(enrollmentService.enrollInstructorToModule);
+  }
+
+  enrollInstructorToSubject() {
+    return useMutation(enrollmentService.enrollInstructorToSubject);
   }
 
   enrollInstructorToLevel() {

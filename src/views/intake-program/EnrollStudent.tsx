@@ -54,7 +54,7 @@ function EnrollStudent() {
     }
     });
     setStudents(studentsView);
-  }, [studentsProgram]);
+  }, [studentsProgram,enrolledStudentsLevel]);
 
   const { mutate } = enrollmentStore.enrollStudentsToLevel();
 
@@ -74,7 +74,7 @@ function EnrollStudent() {
       mutate(newStudent, {
         onSuccess: (data) => {
           toast.success(data.data.message);
-          queryClient.invalidateQueries(['students/intakeProgramlevelId']);
+          queryClient.invalidateQueries(['students/intakeProgramlevelId',levelId]);
           setSidebarOpen(false);
         },
         onError: (error: any) => {

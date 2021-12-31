@@ -7,28 +7,28 @@ import RightSidebar from '../../components/Organisms/RightSidebar';
 import { queryClient } from '../../plugins/react-query';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
-import { EnrollInstructorLevel } from '../../types/services/enrollment.types';
+import { EnrollInstructorLevel, EnrollInstructorLevelInfo } from '../../types/services/enrollment.types';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 
-function EnrollInstructorToLevel() {
+interface ProgramEnrollmentProps<T>{
+  existing: EnrollInstructorLevelInfo[]
+}
+
+function EnrollInstructorToLevel<T>({existing}:ProgramEnrollmentProps<T>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { intakeProg, level: levelId } = useParams<IntakeLevelParam>();
 
   const { data: instructorsInProgram, isLoading } =
   enrollmentStore.getInstructorsInProgram(intakeProg);
 
-  const { data: instructorProgramLevel} =
-    enrollmentStore.getInstructorsInProgramLevel(
-        levelId
-  );
 
   const level = intakeProgramStore.getIntakeLevelById(levelId).data?.data.data;
 
   const [instructors, setInstructors] = useState<UserView[]>([]);
   useEffect(() => {
     let instructor_ids:string[] = [];
-    instructorProgramLevel?.data.data.forEach(insLevel=>{
+    existing.forEach(insLevel=>{
       instructor_ids.push(insLevel.intake_program_instructor.id);
     })
     let instructorsView: UserView[] = [];
@@ -44,7 +44,7 @@ function EnrollInstructorToLevel() {
       }
     });
     setInstructors(instructorsView);
-  }, [instructorsInProgram]);
+  }, [instructorsInProgram, existing]);
 
   const { mutate } = enrollmentStore.enrollInstructorToLevel();
 
@@ -58,7 +58,7 @@ function EnrollInstructorToLevel() {
       mutate(newInstructor, {
         onSuccess: (data) => {
           toast.success(data.data.message);
-          queryClient.invalidateQueries(['instructors/intakeprogram']);
+          queryClient.invalidateQueries(['instructors/levelsEnrolled',levelId]);
           setSidebarOpen(false);
         },
         onError: (error: any) => {
