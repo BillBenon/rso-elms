@@ -6,9 +6,11 @@ import Button from '../../components/Atoms/custom/Button';
 import DateMolecule from '../../components/Molecules/input/DateMolecule';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import { queryClient } from '../../plugins/react-query';
+import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { ValueType } from '../../types';
+import { ModuleInstructors } from '../../types/services/enrollment.types';
 import {
   AddSubjectPeriod,
   IntakeClassParam,
@@ -53,8 +55,8 @@ function AddSubjectToPeriod() {
     pickedModule?.module.id + '',
   );
 
-  // const { data: instructors, isLoading: instLoading } =
-  //   enrollmentStore.getInstructorsByModule(pickedModule?.module.id + '');
+  const { data: instructors, isLoading: instLoading } =
+    enrollmentStore.getInstructorsByModule(pickedModule?.module.id + '');
 
   async function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault(); // prevent page to reload:
@@ -108,20 +110,18 @@ function AddSubjectToPeriod() {
         type="number">
         Marks
       </InputMolecule> */}
-      {/* <DropdownMolecule
+      <DropdownMolecule
         handleChange={handleChange}
         name="inchargeId"
         placeholder={instLoading ? 'Loading instructors' : 'select incharge'}
         options={getDropDownOptions({
           inputs: instructors?.data.data || [],
           //@ts-ignore
-          getOptionLabel: (inst: EnrollInstructorToModuleInfo) =>
-            inst.intake_program_instructor.instructor.user.first_name +
-            ' ' +
-            inst.intake_program_instructor.instructor.user.last_name,
+          getOptionLabel: (inst: ModuleInstructors) =>
+            inst.user.first_name + ' ' + inst.user.last_name,
         })}>
         Incharge
-      </DropdownMolecule> */}
+      </DropdownMolecule>
       <DateMolecule
         startYear={new Date(pickedModule?.planned_start_on + '').getFullYear()}
         endYear={new Date(pickedModule?.planned_end_on + '').getFullYear()}

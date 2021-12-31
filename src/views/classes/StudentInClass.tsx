@@ -9,10 +9,10 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import { Tab } from '../../components/Molecules/tabs/tabs';
 import Students from '../../components/Organisms/user/Students';
+import { authenticatorStore } from '../../store/administration';
 import { classStore } from '../../store/administration/class.store';
-import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
-import { UserTypes } from '../../types/services/user.types';
+import { UserType, UserTypes } from '../../types/services/user.types';
 import AddSubjectToPeriod from '../subjects/AddSubjectToPeriod';
 import SubjectPeriod from '../subjects/SubjectPeriod';
 import AddStudents from './AddStudents';
@@ -53,6 +53,8 @@ function StudentInClass({ classId, label }: IStudentClass) {
     setStudents(tempStuds);
   }, [studentsData]);
 
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
   return (
     <Tab label={label}>
       <div className="flex flex-col">
@@ -64,15 +66,17 @@ function StudentInClass({ classId, label }: IStudentClass) {
               return (
                 <>
                   <div className="flex gap-4 self-end">
-                    <Button
-                      styleType="outline"
-                      onClick={() =>
-                        history.push(
-                          `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
-                        )
-                      }>
-                      Add class
-                    </Button>
+                    {authUser?.user_type === UserType.ADMIN && (
+                      <Button
+                        styleType="outline"
+                        onClick={() =>
+                          history.push(
+                            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
+                          )
+                        }>
+                        Add class
+                      </Button>
+                    )}
 
                     <Button
                       styleType="outline"
@@ -122,26 +126,28 @@ function StudentInClass({ classId, label }: IStudentClass) {
           />
           <Route
             exact
-            path={`${path}/subject`}
+            path={`${path}/:classId/subject`}
             render={() => {
               return (
                 <>
                   <div className="flex gap-4 self-end">
-                    <Button
-                      styleType="outline"
-                      onClick={() =>
-                        history.push(
-                          `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
-                        )
-                      }>
-                      Add class
-                    </Button>
+                    {authUser?.user_type === UserType.ADMIN && (
+                      <Button
+                        styleType="outline"
+                        onClick={() =>
+                          history.push(
+                            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
+                          )
+                        }>
+                        Add class
+                      </Button>
+                    )}
 
                     <Button
                       styleType="outline"
                       onClick={() =>
                         history.push(
-                          `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/view-class/${classId}`,
+                          `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/view-class`,
                         )
                       }>
                       View students

@@ -80,11 +80,10 @@ function NewClass() {
       .getUsersByAcademyAndUserType(
         authUser?.academy.id.toString() || '',
         UserType.STUDENT,
-        { page: 0, pageSize:1000, sortyBy: 'username' },
+        { page: 0, pageSize: 1000, sortyBy: 'username' },
       )
-      .data?.data.data.content.filter((stud) => stud.user_type === UserType.STUDENT) || [];
-
-
+      .data?.data.data.content.filter((stud) => stud.user_type === UserType.STUDENT) ||
+    [];
 
   const studentsInProgram = users.filter((us) =>
     students.some((st) => st.intake_program_student.student.user.id === us.id),
@@ -106,7 +105,7 @@ function NewClass() {
           toast.success(data.data.message);
           queryClient.invalidateQueries(['class/levelId']);
           history.push(
-            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-class/${data.data.data.id}`,
+            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-class`,
           );
         },
         onError: (error: any) => {
