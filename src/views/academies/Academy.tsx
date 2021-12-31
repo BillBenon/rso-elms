@@ -23,7 +23,7 @@ import { GenericStatus, ValueType } from '../../types';
 type AcademyTypes = {
   id: number | string | undefined;
   'academy name': string;
-  'academy admin': string;
+  'academy incharge': string | undefined;
   'phone number': string;
   status: GenericStatus;
 };
@@ -42,24 +42,23 @@ export default function Academy() {
   ];
   const academyInfo = data?.data.data;
   let academies: AcademyTypes[] = [];
-  const users = usersStore.fetchUsers();
+  const users = usersStore.getUsersByInstitution(authUser?.institution_id + '');
+
   academyInfo?.map((obj) => {
     let { id, name, current_admin_id, phone_number, generic_status } = obj;
-
     let academy: AcademyTypes = {
       id: id,
       'academy name': name,
-      'phone number': phone_number,
-      'academy admin': current_admin_id
-        ? users.data?.data.data.content.find((admin) => admin.id === current_admin_id)
+      'academy incharge': current_admin_id
+        ? users.data?.data.data.find((admin) => admin.id === current_admin_id)
             ?.first_name +
             ' ' +
-            users.data?.data.data.content.find((admin) => admin.id === current_admin_id)
+            users.data?.data.data.find((admin) => admin.id === current_admin_id)
               ?.last_name || ''
-        : '',
+        : undefined,
+      'phone number': phone_number,
       status: generic_status,
     };
-
     academies.push(academy);
   });
 
