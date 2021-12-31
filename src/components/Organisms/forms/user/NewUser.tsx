@@ -1,11 +1,9 @@
-import { pick } from 'lodash';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 import countryList from 'react-select-country-list';
 
 import { queryClient } from '../../../../plugins/react-query';
-import { authenticatorStore } from '../../../../store/administration';
 import academyStore from '../../../../store/administration/academy.store';
 import {
   getIntakesByAcademy,
@@ -36,13 +34,19 @@ import DateMolecule from '../../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
-import SelectMolecule from '../../../Molecules/input/SelectMolecule';
+// import SelectMolecule from '../../../Molecules/input/SelectMolecule';
+
+interface IParams {
+  userType: UserType;
+}
 
 export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
-  const newUserType = pick(UserType, ['ADMIN', 'INSTRUCTOR', 'STUDENT']);
-  const newUserTypeWithSuper = { ...newUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
-  const authUser = authenticatorStore.authUser();
+  // const newUserType = pick(UserType, ['ADMIN', 'INSTRUCTOR', 'STUDENT']);
+  // const newUserTypeWithSuper = { ...newUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
+  // const authUser = authenticatorStore.authUser();
+
+  let { userType } = useParams<IParams>();
 
   const [details, setDetails] = useState<CreateUserInfo>({
     activation_key: '',
@@ -72,7 +76,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     reset_date: '',
     residence_location_id: 0,
     sex: GenderStatus.MALE,
-    user_type: UserType.STUDENT,
+    user_type: userType,
     username: '',
     intake_id: '',
     nationality: '',
@@ -151,23 +155,10 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
       <div className="py-5 mb-3 capitalize">
         <Heading color="txt-primary" fontWeight="bold">
-          New User
+          New {userType.toLowerCase()}
         </Heading>
       </div>
       <form onSubmit={addUser}>
-        <SelectMolecule
-          options={getDropDownStatusOptions(
-            authUser.data?.data.data.user_type === UserType.SUPER_ADMIN
-              ? newUserTypeWithSuper
-              : newUserType,
-          )}
-          name="user_type"
-          width="80"
-          // placeholder={details.user_type || 'Select user type'}
-          value={details.user_type}
-          handleChange={handleChange}>
-          User type
-        </SelectMolecule>
         {details.user_type === UserType.INSTRUCTOR ? (
           <>
             <DateMolecule
