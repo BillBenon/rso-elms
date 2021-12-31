@@ -21,7 +21,7 @@ function NewLevel({ onSubmit, academy_id }: IDivisionsAcademyType) {
   });
 
   const history = useHistory();
-  const { mutateAsync } = levelStore.addLevel();
+  const { mutateAsync, isLoading } = levelStore.addLevel();
 
   function handleChange(e: ValueType) {
     setLevel({ ...level, [e.name]: e.value });
@@ -73,7 +73,9 @@ function NewLevel({ onSubmit, academy_id }: IDivisionsAcademyType) {
         Flow
       </InputMolecule>
 
-      <Button>Save</Button>
+      <Button disabled={isLoading} type="submit">
+        Save
+      </Button>
     </form>
   );
 }

@@ -10,6 +10,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewVenue from '../../components/Organisms/calendar/NewVenue';
 import { authenticatorStore } from '../../store/administration';
 import { getAllVenues } from '../../store/timetable/venue.store';
+import { UserType } from '../../types/services/user.types';
 
 export default function Venues() {
   const history = useHistory();
@@ -27,9 +28,11 @@ export default function Venues() {
   return (
     <div>
       <TableHeader totalItems={0} title={'Venues'} showBadge={false}>
-        <Link to={`/dashboard/schedule/venues/new`}>
-          <Button>New venue</Button>
-        </Link>
+        {authUser?.user_type != UserType.STUDENT && (
+          <Link to={`/dashboard/schedule/venues/new`}>
+            <Button>New venue</Button>
+          </Link>
+        )}
       </TableHeader>
       {isLoading ? (
         <Loader />
