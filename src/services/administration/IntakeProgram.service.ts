@@ -180,11 +180,12 @@ class IntakeProgramService {
     );
   }
 
-  public async getPeriodSubjects(
+  public async getClassSubjects(
+    classId: string,
     periodId: string,
   ): Promise<AxiosResponse<Response<SubjectPeriodInfo[]>>> {
     return await adminstrationAxios.get(
-      `subjectAcademicYearPeriods/getAllSubjectAcademicYearPeriodsByIntakeAcademicYearPeriod/${periodId}`,
+      `subjectAcademicYearPeriods/getSubjectAcademicYearPeriodByClassAndPeriod/${classId}/${periodId}`,
     );
   }
 }

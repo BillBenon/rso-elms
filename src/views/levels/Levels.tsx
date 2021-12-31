@@ -9,13 +9,11 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-// import NewLevel from '../../components/Organisms/forms/level/NewLevel';
+import NewLevel from '../../components/Organisms/forms/level/NewLevel';
 import UpdateLevel from '../../components/Organisms/forms/level/UpdateLevel';
 import { authenticatorStore } from '../../store/administration';
 import { levelStore } from '../../store/administration/level.store';
-import { GenericStatus } from '../../types';
 import { ILevel } from '../../types/services/levels.types';
-import LevelUsers from './LevelUsers';
 
 interface FilteredLevels
   extends Pick<ILevel, 'id' | 'name' | 'description' | 'generic_status'> {}
@@ -26,7 +24,7 @@ function Levels() {
   const { data: userInfo } = authenticatorStore.authUser();
   const [levels, setLevels] = useState<FilteredLevels[]>();
 
-  const { data, isLoading, isSuccess } = levelStore.getLevelsByAcademy(
+  const { data, isLoading } = levelStore.getLevelsByAcademy(
     userInfo?.data.data.academy.id.toString() || '',
   ); // fetch levels
 
@@ -55,91 +53,70 @@ function Levels() {
         history.push(`${path}/${id}/edit`); // go to edit level
       },
     },
-    {
-      name: 'View Users',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/users`); // go to edit level
-      },
-    },
   ];
-
-  const levStatActions = Object.keys(GenericStatus).map((stat) => ({
-    name: stat,
-    type: stat as GenericStatus,
-    handleStatusAction: () => {},
-  }));
-
   return (
-    <Switch>
-      {/* update level popup */}
-      <Route
-        exact
-        path={`${path}`}
-        render={() => {
-          return (
-            <main className="px-4">
-              <section>
-                <BreadCrumb list={list}></BreadCrumb>
-              </section>
-              <section className="">
-                <TableHeader title="Levels" totalItems={levels?.length || 0}>
-                  <Link to={`${url}/add`}>
-                    <Button>Add Level</Button>
-                  </Link>
-                </TableHeader>
-              </section>
+    <main className="px-4">
+      <section>
+        <BreadCrumb list={list}></BreadCrumb>
+      </section>
+      <section className="">
+        <TableHeader title="Levels" totalItems={levels?.length || 0}>
+          <Link to={`${url}/add`}>
+            <Button>Add Level</Button>
+          </Link>
+        </TableHeader>
+      </section>
 
-              <section>
-                {isLoading && <Loader />}
-                {isSuccess && (
-                  <>
-                    {levels && levels?.length > 0 ? (
-                      <Table<FilteredLevels>
-                        statusColumn="generic_status"
-                        statusActions={levStatActions}
-                        data={levels}
-                        uniqueCol={'id'}
-                        hide={['id']}
-                        actions={actions}
-                      />
-                    ) : (
-                      <NoDataAvailable
-                        icon="level"
-                        buttonLabel="Add new level"
-                        title={'No levels available'}
-                        handleClick={() => history.push(`${url}/add`)}
-                        description="No levels have been added yet."
-                      />
-                    )}
-                  </>
-                )}
-              </section>
-            </main>
-          );
-        }}
-      />
+      <section>
+        {isLoading && <Loader />}
 
-      {/* update level popup */}
-      <Route
-        exact
-        path={`${path}/:id/edit`}
-        render={() => {
-          return (
-            <PopupMolecule title="Update Level" open onClose={history.goBack}>
-              <UpdateLevel academy_id={userInfo?.data.data.academy.id.toString()} />
-            </PopupMolecule>
-          );
-        }}
-      />
+        {levels && levels?.length > 0 ? (
+          <Table<FilteredLevels>
+            statusColumn="status"
+            data={levels}
+            uniqueCol={'id'}
+            hide={['id']}
+            actions={actions}
+          />
+        ) : (
+          <NoDataAvailable
+            icon="level"
+            buttonLabel="Add new level"
+            title={'No levels available'}
+            handleClick={() => history.push(`${url}/add`)}
+            description="No levels have been added yet."
+          />
+        )}
+      </section>
 
-      {/* add new level popup */}
-      <Route
-        path={`${path}/:id/users`}
-        render={() => {
-          return <LevelUsers />;
-        }}
-      />
-    </Switch>
+      <Switch>
+        {/* update level popup */}
+        <Route
+          exact
+          path={`${path}/:id/edit`}
+          render={() => {
+            return (
+              <PopupMolecule title="Update Level" open onClose={history.goBack}>
+                <UpdateLevel academy_id={userInfo?.data.data.academy.id.toString()} />
+              </PopupMolecule>
+            );
+          }}
+        />
+
+        {/* add new level popup */}
+        <Route
+          exact
+          path={`${path}/add`}
+          render={() => {
+            return (
+              <PopupMolecule title="New Level" open onClose={history.goBack}>
+                <NewLevel academy_id={userInfo?.data.data.academy.id.toString()} />
+              </PopupMolecule>
+            );
+          }}
+        />
+      </Switch>
+    </main>
   );
 }
 

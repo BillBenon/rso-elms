@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -122,18 +123,26 @@ function IntakeProgramDetails() {
       instructorInfo?.id + '',
     );
 
-    const programLevelsIds = getLevels.map((lvl) => lvl.academic_program_level.id);
-
-    const instrLevels = instructorLevels?.data.data.filter((level) =>
-      programLevelsIds.includes(
-        level.academic_year_program_intake_level?.academic_program_level.id,
-      ),
+    let instructorLevelsIds = instructorLevels?.data.data.map(
+      (instLvl) => instLvl.academic_year_program_intake_level.id,
     );
 
-    if (instrLevels && instrLevels?.length > 0) {
+    const instructorProgLevels = getLevels?.filter((level) =>
+      instructorLevelsIds?.includes(level.id),
+    );
+
+    // const programLevelsIds = getLevels.map((lvl) => lvl.academic_program_level.id);
+
+    // const instrLevels = instructorLevels?.data.data.filter((level) =>
+    //   programLevelsIds.includes(
+    //     level.academic_year_program_intake_level?.academic_program_level.id,
+    //   ),
+    // );
+
+    if (instructorProgLevels && instructorProgLevels?.length > 0) {
       tabs.push({
         label: 'Program levels',
-        href: `${url}/levels/${instrLevels[0]?.id || ''}`,
+        href: `${url}/levels/${instructorProgLevels[0]?.id || ''}`,
       });
     }
   }
@@ -171,7 +180,20 @@ function IntakeProgramDetails() {
         <Heading className="pb-5" fontWeight="semibold" fontSize="xl">
           {program?.name}
         </Heading>
-        <TabNavigation tabs={tabs}>
+        <TabNavigation
+          tabs={tabs}
+          headerComponent={
+            authUser?.user_type === UserType.ADMIN && getLevels.length === 0 ? (
+              <div className="text-right">
+                <Link
+                  to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
+                  <Button>Add level to program</Button>
+                </Link>
+              </div>
+            ) : (
+              <></>
+            )
+          }>
           <Switch>
             <Route
               exact

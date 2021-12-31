@@ -75,6 +75,7 @@ export default function Students({
         <div className="pt-8">
           {students.length <= 0 ? (
             <NoDataAvailable
+              showButton={authUser?.user_type === UserType.ADMIN}
               icon="user"
               buttonLabel="Add new student"
               title={'No students available'}

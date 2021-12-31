@@ -11,6 +11,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewEvent from '../../components/Organisms/calendar/NewEvent';
 import { authenticatorStore } from '../../store/administration';
 import { getAllEvents } from '../../store/timetable/event.store';
+import { UserType } from '../../types/services/user.types';
 
 export default function Events() {
   const authUser = authenticatorStore.authUser().data?.data.data;
@@ -28,9 +29,11 @@ export default function Events() {
   return (
     <div>
       <TableHeader totalItems={0} title={'Events'} showBadge={false}>
-        <Link to={`/dashboard/schedule/events/new`}>
-          <Button>New Event</Button>
-        </Link>
+        {authUser?.user_type != UserType.STUDENT && (
+          <Link to={`/dashboard/schedule/events/new`}>
+            <Button>New Event</Button>
+          </Link>
+        )}
       </TableHeader>
       {isLoading ? (
         <Loader />

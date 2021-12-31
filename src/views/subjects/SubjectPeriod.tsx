@@ -5,15 +5,20 @@ import Loader from '../../components/Atoms/custom/Loader';
 import AddCard from '../../components/Molecules/cards/AddCard';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import { authenticatorStore } from '../../store/administration';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { CommonCardDataType } from '../../types';
 import { IntakeClassParam } from '../../types/services/intake-program.types';
+import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 
 function SubjectPeriod() {
   const { intakeId, id, intakeProg, level, period, classId } =
     useParams<IntakeClassParam>();
-  const { data: subjects, isLoading } = intakeProgramStore.getPeriodSubjects(period);
+  const { data: subjects, isLoading } = intakeProgramStore.getClassSubjects(
+    classId,
+    period,
+  );
   const [subj, setsubj] = useState<CommonCardDataType[]>();
   const history = useHistory();
 
@@ -38,12 +43,15 @@ function SubjectPeriod() {
     }
   }, [subjects?.data.data]);
 
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
   return (
     <div>
       {isLoading ? (
         <Loader />
       ) : subj?.length === 0 ? (
         <NoDataAvailable
+          showButton={authUser?.user_type === UserType.ADMIN}
           buttonLabel="Add new subject"
           icon="subject"
           title={'No subjects available in this period'}
@@ -56,14 +64,16 @@ function SubjectPeriod() {
         />
       ) : (
         <section className="mt-4 flex flex-wrap justify-start gap-4">
-          <AddCard
-            title={'Add new subject'}
-            onClick={() =>
-              history.push(
-                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${period}/view-class/${classId}/add-subject`,
-              )
-            }
-          />
+          {authUser?.user_type === UserType.ADMIN && (
+            <AddCard
+              title={'Add new subject'}
+              onClick={() =>
+                history.push(
+                  `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${period}/view-class/${classId}/add-subject`,
+                )
+              }
+            />
+          )}
           {subj?.map((sub) => (
             <div className="p-1 mt-3" key={sub.id}>
               <CommonCardMolecule
