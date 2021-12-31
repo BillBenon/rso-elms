@@ -36,7 +36,7 @@ function LevelStudents() {
   return (
     <div className="flex flex-col cursor-pointer">
       <Button styleType="outline" onClick={() => setSidebarOpen(true)}>
-        Enrolled students
+        View students
       </Button>
       <RightSidebar
         open={sidebarOpen}

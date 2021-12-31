@@ -40,7 +40,7 @@ function LevelInstructors<T>({instructorsData,isLoading}:ProgramEnrollmentProps<
   return (
     <div className="flex flex-col cursor-pointer">
       <Button styleType="outline" onClick={() => setSidebarOpen(true)}>
-        Enrolled instructors
+        View instructors
       </Button>
       <RightSidebar
         open={sidebarOpen}

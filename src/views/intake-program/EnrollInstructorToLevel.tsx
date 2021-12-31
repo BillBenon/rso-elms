@@ -32,11 +32,8 @@ function EnrollInstructorToLevel<T>({existing}:ProgramEnrollmentProps<T>) {
       instructor_ids.push(insLevel.intake_program_instructor.id);
     })
     let instructorsView: UserView[] = [];
-    console.log(instructor_ids.length);
-    console.log(instructorsInProgram?.data.data.length)
     instructorsInProgram?.data.data.forEach((inst) => {
       if(!instructor_ids.includes(inst.id)){
-        console.log("adding");
         let instructorView: UserView = {
           id: inst.id,
           first_name: inst.instructor.user.first_name,
