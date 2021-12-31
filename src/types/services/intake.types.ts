@@ -31,7 +31,7 @@ export interface CreateIntakeProgram {
   program_id: string;
   status: GenericStatus;
 }
-export interface IntakeProgram {
+export interface IntakeProgram extends Table {
   intake: IntakeInfo;
   program: ProgramInfo;
   description: string;
