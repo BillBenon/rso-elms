@@ -61,7 +61,7 @@ function EnrollInstructorToLevel<T>({existing}:ProgramEnrollmentProps<T>) {
       mutate(newInstructor, {
         onSuccess: (data) => {
           toast.success(data.data.message);
-          queryClient.invalidateQueries(['instructors/intakeprogram']);
+          queryClient.invalidateQueries(['instructors/levelsEnrolled',levelId]);
           setSidebarOpen(false);
         },
         onError: (error: any) => {

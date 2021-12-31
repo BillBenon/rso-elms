@@ -25,6 +25,7 @@ import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { UserInfo, UserType } from '../../types/services/user.types';
 import EvaluationCategories from '../evaluation/EvaluationCategories';
 import SubjectInstructorView from '../evaluation/SubjectInstructorView';
+import SubjectInstructors from './SubjectInstructors';
 
 interface ParamType {
   id: string;
@@ -78,6 +79,10 @@ export default function SubjectDetails() {
       label: 'Evaluations',
       href: `${url}/evaluations`,
     },
+    {
+      label: 'Instructors',
+      href: `${url}/instructors`,
+    }
   ];
 
   return (
@@ -165,6 +170,13 @@ export default function SubjectDetails() {
                     </div>
                   </>
                 )}
+              />
+
+              <Route
+                path={`${url}/instructors`}
+                render={() => {
+                  return <SubjectInstructors subjectId={subjectId} />;
+                }}
               />
               {authUser?.user_type === UserType.INSTRUCTOR ? (
                 <Route
