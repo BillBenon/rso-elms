@@ -166,7 +166,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
           {/* add subject to period */}
           <Route
             exact
-            path={`${path}/add-subject`}
+            path={`${path}/:classId/add-subject`}
             render={() => (
               <PopupMolecule
                 title="Add subject to period"

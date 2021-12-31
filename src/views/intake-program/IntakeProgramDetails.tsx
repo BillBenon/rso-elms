@@ -124,7 +124,7 @@ function IntakeProgramDetails() {
     );
 
     let instructorLevelsIds = instructorLevels?.data.data.map(
-      (instLvl) => instLvl.academic_year_program_intake_level.id,
+      (instLvl) => instLvl.academic_year_program_intake_level?.id,
     );
 
     const instructorProgLevels = getLevels?.filter((level) =>
@@ -255,7 +255,9 @@ function IntakeProgramDetails() {
                             userType={authUser?.user_type}
                             isLoading={studLoading}>
                             {authUser?.user_type === UserType.ADMIN ? (
-                              <EnrollStudentIntakeProgram existing={studentsProgram?.data.data || []}/>
+                              <EnrollStudentIntakeProgram
+                                existing={studentsProgram?.data.data || []}
+                              />
                             ) : null}
                           </UsersPreview>
 
@@ -268,7 +270,9 @@ function IntakeProgramDetails() {
                             userType={authUser?.user_type}
                             isLoading={instLoading}>
                             {authUser?.user_type === UserType.ADMIN ? (
-                              <EnrollInstructorIntakeProgram existing={instructorsProgram?.data.data || []} />
+                              <EnrollInstructorIntakeProgram
+                                existing={instructorsProgram?.data.data || []}
+                              />
                             ) : null}
                           </UsersPreview>
                         </div>
