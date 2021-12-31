@@ -9,12 +9,6 @@ class EnrolmmentStore {
     );
   }
 
-  getInstructorEnrollmentLevelByLevelId(levelId: string) {
-    return useQuery(['instructor/levelId', levelId], () =>
-      enrollmentService.getInstructorEnrollmentLevelByLevelId(levelId),
-    );
-  }
-
   getInstructorIntakePrograms(instructorId: string) {
     return useQuery(['instructor/program', instructorId], () =>
       enrollmentService.getInstructorIntakePrograms(instructorId),
@@ -47,6 +41,12 @@ class EnrolmmentStore {
   getStudentsInProgramLevel(levelId: number) {
     return useQuery(['students/levelsEnrolled', levelId], () =>
       enrollmentService.getStudentLevelEnrollments(levelId),
+    );
+  }
+
+  getInstructorsInProgramLevel(levelId: string) {
+    return useQuery(['instructos/levelsEnrolled', levelId], () =>
+      enrollmentService.getInstructorEnrollmentLevelByLevelId(levelId),
     );
   }
 
