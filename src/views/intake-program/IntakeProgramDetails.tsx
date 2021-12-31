@@ -38,7 +38,7 @@ function IntakeProgramDetails() {
       StudentApproval.APPROVED,
     );
   const { data: instructorsProgram, isLoading: instLoading } =
-    intakeProgramStore.getInstructorsByIntakeProgram(id, intakeId);
+    intakeProgramStore.getInstructorsByIntakeProgram(intakeProg);
 
   const authUser = authenticatorStore.authUser().data?.data.data;
 

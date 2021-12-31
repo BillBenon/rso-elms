@@ -6,11 +6,13 @@ import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import PopupMolecule from '../../components/Molecules/Popup';
 import { Tab } from '../../components/Molecules/tabs/tabs';
 import Students from '../../components/Organisms/user/Students';
 import { classStore } from '../../store/administration/class.store';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import { UserTypes } from '../../types/services/user.types';
+import AddSubjectToPeriod from '../subjects/AddSubjectToPeriod';
 import SubjectPeriod from '../subjects/SubjectPeriod';
 import AddStudents from './AddStudents';
 
@@ -142,7 +144,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
                           `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/view-class/${classId}`,
                         )
                       }>
-                      View classes
+                      View students
                     </Button>
                   </div>
                   <div className="flex justify-between space-x-4">
@@ -154,6 +156,20 @@ function StudentInClass({ classId, label }: IStudentClass) {
                 </>
               );
             }}
+          />
+          {/* add subject to period */}
+          <Route
+            exact
+            path={`${path}/add-subject`}
+            render={() => (
+              <PopupMolecule
+                title="Add subject to period"
+                closeOnClickOutSide={false}
+                open
+                onClose={history.goBack}>
+                <AddSubjectToPeriod />
+              </PopupMolecule>
+            )}
           />
         </Switch>
       </div>

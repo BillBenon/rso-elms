@@ -23,6 +23,10 @@ export interface IntakePeriodParam extends IntakeLevelParam {
   period: string;
 }
 
+export interface IntakeClassParam extends IntakePeriodParam {
+  classId: string;
+}
+
 export interface IntakeProgramInfo extends Table {
   intake: IntakeInfo;
   program: ProgramInfo;
@@ -91,6 +95,7 @@ export interface AddSubjectPeriod {
   actualStartOn: string;
   inchargeId: string;
   intakeAcademicYearPeriodId: number;
+  intakeLevelClassId: number;
   intakeProgramModuleLevelId: number;
   marks: number;
   plannedEndOn: string;
