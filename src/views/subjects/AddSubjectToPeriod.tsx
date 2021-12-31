@@ -10,26 +10,19 @@ import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { ValueType } from '../../types';
+import { ModuleInstructors } from '../../types/services/enrollment.types';
 import {
   AddSubjectPeriod,
+  IntakeClassParam,
   IntakeLevelModule,
-  IntakeLevelParam,
   IntakeModuleStatus,
 } from '../../types/services/intake-program.types';
 import { ExtendedSubjectInfo } from '../../types/services/subject.types';
-import {
-  getDropDownOptions,
-  getDropDownStatusOptions,
-  getInstructorIncharge,
-} from '../../utils/getOption';
-
-interface IntakePeriodParam extends IntakeLevelParam {
-  period: string;
-}
+import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
 
 function AddSubjectToPeriod() {
   const history = useHistory();
-  const { level, period } = useParams<IntakePeriodParam>();
+  const { level, period, classId } = useParams<IntakeClassParam>();
 
   const { data: levelModuleStore, isLoading: LevelLoading } =
     intakeProgramStore.getModulesByLevel(parseInt(level));
@@ -39,6 +32,7 @@ function AddSubjectToPeriod() {
     actualStartOn: '',
     inchargeId: '',
     intakeAcademicYearPeriodId: 0,
+    intakeLevelClassId: 0,
     intakeProgramModuleLevelId: 0,
     marks: 0,
     plannedEndOn: '',
@@ -61,18 +55,15 @@ function AddSubjectToPeriod() {
     pickedModule?.module.id + '',
   );
 
-  const { data: intakeLevel } = intakeProgramStore.getIntakeLevelById(level);
-
   const { data: instructors, isLoading: instLoading } =
-    enrollmentStore.getInstructorEnrollmentLevelByLevelId(
-      intakeLevel?.data.data.academic_program_level.id + '',
-    );
+    enrollmentStore.getInstructorsByModule(pickedModule?.module.id + '');
 
   async function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault(); // prevent page to reload:
     await mutateAsync(
       {
         ...subjectPrd,
+        intakeLevelClassId: parseInt(classId),
         intakeAcademicYearPeriodId: parseInt(period),
       },
       {
@@ -123,7 +114,12 @@ function AddSubjectToPeriod() {
         handleChange={handleChange}
         name="inchargeId"
         placeholder={instLoading ? 'Loading instructors' : 'select incharge'}
-        options={getInstructorIncharge(instructors?.data.data)}>
+        options={getDropDownOptions({
+          inputs: instructors?.data.data || [],
+          //@ts-ignore
+          getOptionLabel: (inst: ModuleInstructors) =>
+            inst.user.first_name + ' ' + inst.user.last_name,
+        })}>
         Incharge
       </DropdownMolecule>
       <DateMolecule

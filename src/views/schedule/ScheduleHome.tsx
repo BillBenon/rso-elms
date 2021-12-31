@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   Link as BrowserLink,
+  Redirect,
   Route,
   Switch,
   useHistory,
@@ -11,11 +12,18 @@ import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
+import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
+import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedule';
 import { authenticatorStore } from '../../store/administration';
 import { getIntakesByAcademy } from '../../store/administration/intake.store';
+import {
+  getIntakeProgramsByStudent,
+  getStudentShipByUserId,
+} from '../../store/administration/intake-program.store';
 import { CommonCardDataType, Link } from '../../types';
+import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import CalendarView from './Calendar';
 import Events from './Events';
@@ -63,6 +71,10 @@ export default function ScheduleHome() {
       },
     })) || [];
 
+  const handleNewScheduleClose = () => {
+    history.goBack();
+  };
+
   return (
     <div>
       <BreadCrumb list={list} />
@@ -74,40 +86,80 @@ export default function ScheduleHome() {
           <Route path={`${path}/timetable/:id`} component={TimeTable} />
           <Route path={`${path}/events`} component={Events} />
           <Route path={`${path}/venues`} component={Venues} />
+
           <Route
             path={`${path}`}
-            render={() => (
-              <>
-                <TableHeader totalItems={`${intakes.length} intakes`} title={'Schedule'}>
-                  <div className="flex gap-4">
-                    <BrowserLink to={`/dashboard/schedule/events/new`}>
-                      <Button>Add event</Button>
+            render={() =>
+              userInfo?.user_type === UserType.STUDENT ? (
+                <RedirectStudent userId={userInfo.id + ''} />
+              ) : (
+                <>
+                  <TableHeader
+                    totalItems={`${intakes.length} intakes`}
+                    title={'Schedule'}>
+                    <BrowserLink to={`${path}/schedule/new`}>
+                      <Button>New Schedule</Button>
                     </BrowserLink>
-                    <BrowserLink to={`/dashboard/schedule/venues/new`}>
-                      <Button styleType="outline">Add Venue</Button>
-                    </BrowserLink>
+                  </TableHeader>
+                  <div className="mt-4 flex gap-4 flex-wrap">
+                    {intakes.length === 0 && isLoading ? (
+                      <Loader />
+                    ) : (
+                      intakes.map((intake) => (
+                        <CommonCardMolecule
+                          key={intake.id}
+                          data={intake}
+                          handleClick={() =>
+                            history.push(`/dashboard/schedule/intake/${intake.id}`)
+                          }
+                        />
+                      ))
+                    )}
                   </div>
-                </TableHeader>
-                <div className="mt-4 flex gap-4 flex-wrap">
-                  {intakes.length === 0 && isLoading ? (
-                    <Loader />
-                  ) : (
-                    intakes.map((intake) => (
-                      <CommonCardMolecule
-                        key={intake.id}
-                        data={intake}
-                        handleClick={() =>
-                          history.push(`/dashboard/schedule/intake/${intake.id}`)
-                        }
-                      />
-                    ))
-                  )}
-                </div>
-              </>
-            )}
+                  <Route
+                    path={`${path}/schedule/new`}
+                    render={() => (
+                      <PopupMolecule
+                        title="New Schedule"
+                        open
+                        onClose={handleNewScheduleClose}>
+                        <NewSchedule />
+                      </PopupMolecule>
+                    )}
+                  />
+                </>
+              )
+            }
           />
         </Switch>
       </TabNavigation>
+    </div>
+  );
+}
+
+interface IProps {
+  userId?: string;
+}
+
+function RedirectStudent({ userId }: IProps) {
+  const studentInfo = getStudentShipByUserId(userId || '', !!userId).data?.data.data[0];
+
+  const { data, isLoading, isIdle } = getIntakeProgramsByStudent(
+    studentInfo?.id + '',
+    !!studentInfo?.id,
+  );
+
+  data?.data.data[0].intake_program.intake.id;
+
+  return (
+    <div>
+      {isLoading || isIdle ? (
+        <Loader />
+      ) : (
+        <Redirect
+          to={`/dashboard/schedule/intake/${data?.data.data[0].intake_program.intake.id}/${data?.data.data[0].intake_program.id}`}
+        />
+      )}
     </div>
   );
 }

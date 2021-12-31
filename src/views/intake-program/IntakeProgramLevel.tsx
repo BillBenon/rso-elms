@@ -36,10 +36,12 @@ function IntakeProgramLevel() {
     instructorInfo?.id + '',
   );
 
+  let instructorLevelsIds = instructorLevels?.data.data.map(
+    (instLvl) => instLvl.academic_year_program_intake_level.id,
+  );
+
   const instructorProgLevels = getLevels?.data.data.filter((inst) =>
-    instructorLevels?.data.data.filter(
-      (lv) => lv.academic_year_program_level.academic_program_level.id === inst.academic_program_level.id,
-    ),
+    instructorLevelsIds?.includes(inst.id),
   );
 
   const tabs =
@@ -79,7 +81,7 @@ function IntakeProgramLevel() {
             <div className="text-right">
               <Link
                 to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
-                <Button>Add Level</Button>
+                <Button>Add level to program</Button>
               </Link>
             </div>
           ) : null}

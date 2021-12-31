@@ -191,7 +191,7 @@ export default function AcademicProgram() {
                             </Heading>
                           </div>
                           <div className="mt-4 space-x-4">
-                            <Link to={`/dashboard/intakes/programs/${Common.id}/edit`}>
+                            <Link to={`/dashboard/programs/${Common.id}/edit`}>
                               <Button>Edit program</Button>
                             </Link>
                             <Button styleType="outline">Change Status</Button>

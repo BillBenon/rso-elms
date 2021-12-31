@@ -20,7 +20,6 @@ import IntakesView from './views/intakes/Intakes';
 import Levels from './views/levels/Levels';
 import Modules from './views/modules';
 import InstrLevelModule from './views/modules/InstrLevelModule';
-import ModuleDetails from './views/modules/AdmModuleDetails';
 import StudentModule from './views/modules/StudentModule';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicProgram from './views/programs/AcademicPrograms';
@@ -32,7 +31,6 @@ import Events from './views/schedule/Events';
 import ScheduleHome from './views/schedule/ScheduleHome';
 import Subjects from './views/subjects';
 import Users from './views/users/Users';
-import AdmModuleDetails from './views/modules/AdmModuleDetails';
 
 const RouterProtection = () => {
   const [authUser, setAuthUser] = useState<UserInfo>();
@@ -74,7 +72,11 @@ const RouterProtection = () => {
       <Route path={`${path}/users`} component={Users} />
       <Route path={`${path}/levels`} component={Levels} />
       <Route path={`${path}/intakes`} component={IntakesView} />
-      <Route path={`${path}/modules/:intakeProgram/:moduleId`} component={AdmModuleDetails} />
+      {/* <Route
+        path={`${path}/modules/:intakeProgram/:moduleId`}
+        component={AdmModuleDetails}
+      /> */}
+      <Route path={`${path}/modules`} component={Modules} />
       {/* <Route exact path={`${path}/intakes/:id`} component={IntakeModulesView} /> */}
 
       {/* end of academic admin pages */}

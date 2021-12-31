@@ -51,11 +51,10 @@ class IntakeProgramService {
   }
 
   public async getInstructorsByIntakeProgram(
-    programId: string,
-    intakeId: string,
+    intakeProgramId: string,
   ): Promise<AxiosResponse<Response<InstructorProgram[]>>> {
     return await adminstrationAxios.get(
-      `/instructorEnrolment/getInstructorProgramsOnProgramAndIntake/${programId}/${intakeId}`,
+      `instructorEnrolment/getInstructorIntakeProgramsByIntakeProgram/${intakeProgramId}`,
     );
   }
   public async getInstructorsByIntakeProgramLevel(
@@ -181,11 +180,12 @@ class IntakeProgramService {
     );
   }
 
-  public async getPeriodSubjects(
+  public async getClassSubjects(
+    classId: string,
     periodId: string,
   ): Promise<AxiosResponse<Response<SubjectPeriodInfo[]>>> {
     return await adminstrationAxios.get(
-      `subjectAcademicYearPeriods/getAllSubjectAcademicYearPeriodsByIntakeAcademicYearPeriod/${periodId}`,
+      `subjectAcademicYearPeriods/getSubjectAcademicYearPeriodByClassAndPeriod/${classId}/${periodId}`,
     );
   }
 }

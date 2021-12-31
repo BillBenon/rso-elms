@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -11,10 +12,11 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
-import enrollmentStore from '../../store/administration/enrollment.store';
 import { authenticatorStore } from '../../store/administration';
+import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import programStore from '../../store/administration/program.store';
+import instructordeploymentStore from '../../store/instructordeployment.store';
 import { Link as Links } from '../../types';
 import { StudentApproval } from '../../types/services/enrollment.types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
@@ -38,7 +40,8 @@ function IntakeProgramDetails() {
       intakeProg,
       StudentApproval.APPROVED,
     );
-  const { data: instructorsProgram, isLoading: instLoading } = enrollmentStore.getInstructorsInProgram(intakeProg);
+  const { data: instructorsProgram, isLoading: instLoading } =
+    intakeProgramStore.getInstructorsByIntakeProgram(intakeProg);
 
   const authUser = authenticatorStore.authUser().data?.data.data;
 
@@ -99,6 +102,10 @@ function IntakeProgramDetails() {
   const getLevels =
     intakeProgramStore.getLevelsByIntakeProgram(intakeProg).data?.data.data || [];
 
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
+    authUser?.id + '',
+  ).data?.data.data;
+
   const programData = getProgramData();
   let tabs: TabType[] = [
     {
@@ -109,17 +116,49 @@ function IntakeProgramDetails() {
       label: 'Program modules',
       href: `${url}/modules`,
     },
-    {
-      label: 'Program levels',
-      href: `${url}/levels/${getLevels[0]?.id || ''}`,
-    },
   ];
+
+  if (authUser?.user_type === UserType.INSTRUCTOR) {
+    let { data: instructorLevels } = enrollmentStore.getInstructorLevels(
+      instructorInfo?.id + '',
+    );
+
+    let instructorLevelsIds = instructorLevels?.data.data.map(
+      (instLvl) => instLvl.academic_year_program_intake_level.id,
+    );
+
+    const instructorProgLevels = getLevels?.filter((level) =>
+      instructorLevelsIds?.includes(level.id),
+    );
+
+    // const programLevelsIds = getLevels.map((lvl) => lvl.academic_program_level.id);
+
+    // const instrLevels = instructorLevels?.data.data.filter((level) =>
+    //   programLevelsIds.includes(
+    //     level.academic_year_program_intake_level?.academic_program_level.id,
+    //   ),
+    // );
+
+    if (instructorProgLevels && instructorProgLevels?.length > 0) {
+      tabs.push({
+        label: 'Program levels',
+        href: `${url}/levels/${instructorProgLevels[0]?.id || ''}`,
+      });
+    }
+  }
 
   if (authUser?.user_type === UserType.ADMIN) {
     tabs.push({
       label: 'Approve students',
       href: `${url}/approve`,
     });
+
+    if (getLevels && getLevels?.length > 0) {
+      tabs.push({
+        label: 'Program levels',
+        href: `${url}/levels/${getLevels[0]?.id || ''}`,
+      });
+    }
   }
 
   const handleClose = () => {
@@ -141,7 +180,20 @@ function IntakeProgramDetails() {
         <Heading className="pb-5" fontWeight="semibold" fontSize="xl">
           {program?.name}
         </Heading>
-        <TabNavigation tabs={tabs}>
+        <TabNavigation
+          tabs={tabs}
+          headerComponent={
+            authUser?.user_type === UserType.ADMIN && getLevels.length === 0 ? (
+              <div className="text-right">
+                <Link
+                  to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
+                  <Button>Add level to program</Button>
+                </Link>
+              </div>
+            ) : (
+              <></>
+            )
+          }>
           <Switch>
             <Route
               exact
@@ -203,7 +255,7 @@ function IntakeProgramDetails() {
                             userType={authUser?.user_type}
                             isLoading={studLoading}>
                             {authUser?.user_type === UserType.ADMIN ? (
-                              <EnrollStudentIntakeProgram />
+                              <EnrollStudentIntakeProgram existing={studentsProgram?.data.data || []}/>
                             ) : null}
                           </UsersPreview>
 
@@ -216,7 +268,7 @@ function IntakeProgramDetails() {
                             userType={authUser?.user_type}
                             isLoading={instLoading}>
                             {authUser?.user_type === UserType.ADMIN ? (
-                              <EnrollInstructorIntakeProgram />
+                              <EnrollInstructorIntakeProgram existing={instructorsProgram?.data.data || []} />
                             ) : null}
                           </UsersPreview>
                         </div>

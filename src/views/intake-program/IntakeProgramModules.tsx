@@ -5,8 +5,10 @@ import Loader from '../../components/Atoms/custom/Loader';
 import AddCard from '../../components/Molecules/cards/AddCard';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import useInstructorModules from '../../hooks/getInstructorModules';
 import { authenticatorStore } from '../../store/administration';
 import { moduleStore } from '../../store/administration/modules.store';
+import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType } from '../../types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
 import { UserType } from '../../types/services/user.types';
@@ -16,30 +18,38 @@ function IntakeProgramModules() {
   const history = useHistory();
   const { url } = useRouteMatch();
   const [programModules, setProgramModules] = useState<CommonCardDataType[]>([]);
+  const [instModules, setInstModules] = useState<CommonCardDataType[]>([]);
   const { id, intakeProg } = useParams<IntakeProgParam>();
+  const authUser = authenticatorStore.authUser().data?.data.data;
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
+    authUser?.id + '',
+  ).data?.data.data;
 
   const getAllModuleStore = moduleStore.getModulesByProgram(id);
 
+  let newInstModules = useInstructorModules(id, instructorInfo?.id + '');
+
   useEffect(() => {
     let newModules: CommonCardDataType[] = [];
-    getAllModuleStore.data?.data.data.forEach((mod) => {
-      newModules.push({
-        status: {
-          type: advancedTypeChecker(mod.generic_status),
-          text: mod.generic_status.toString(),
-        },
-        id: mod.id,
-        code: mod.code,
-        title: mod.name,
-        description: mod.description,
-        subTitle: `total subject: ${mod.total_num_subjects || 'None'}`,
-      });
-    });
 
+    setInstModules(newInstModules),
+      authUser?.user_type === UserType.INSTRUCTOR
+        ? (newModules = instModules)
+        : getAllModuleStore.data?.data.data.forEach((mod) =>
+            newModules.push({
+              status: {
+                type: advancedTypeChecker(mod.generic_status),
+                text: mod.generic_status.toString(),
+              },
+              id: mod.id,
+              code: mod.code,
+              title: mod.name,
+              description: mod.description,
+              subTitle: `total subject: ${mod.total_num_subjects || 'None'}`,
+            }),
+          );
     setProgramModules(newModules);
-  }, [getAllModuleStore.data?.data.data, id]);
-
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  }, [getAllModuleStore.data?.data.data, id, instModules, newInstModules]);
 
   return (
     <>
@@ -49,10 +59,11 @@ function IntakeProgramModules() {
         <section className="mt-4 flex flex-wrap justify-start gap-4">
           {programModules.length <= 0 ? (
             <NoDataAvailable
+              showButton={authUser?.user_type === UserType.ADMIN}
               buttonLabel="Add new modules"
-              title={'No Modules available in this program'}
+              title={'No modules available in this program'}
               handleClick={() => history.push(`${url}/add`)}
-              description="And the web just isnt the same without you. Lets get you back online!"
+              description="Looks like there are no modules assigned to this intake program yet!"
             />
           ) : (
             <>
@@ -63,7 +74,12 @@ function IntakeProgramModules() {
                 />
               ) : null}
               {programModules.map((module, index) => (
-                <ModuleCard intakeProgram={intakeProg} course={module} showMenus={true} key={index} />
+                <ModuleCard
+                  intakeProg={intakeProg}
+                  course={module}
+                  showMenus={true}
+                  key={index}
+                />
               ))}
             </>
           )}

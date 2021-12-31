@@ -1,22 +1,31 @@
 import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
-import { Response } from '../../types';
+import { Response, SortedContent } from '../../types';
 import {
   ApproveStudents,
   EnrollInstructorLevel,
   EnrollInstructorLevelInfo,
   EnrollInstructorProgram,
+  EnrollInstructorToSubject,
   EnrollStudentToLevel,
   EnrollStudentToProgram,
   InstructorAssignModule,
+  SubjectInstructors,
 } from '../../types/services/enrollment.types';
-import { Instructor, InstructorModuleAssignment } from '../../types/services/instructor.types';
+import {
+  Instructor,
+  InstructorModuleAssignment,
+} from '../../types/services/instructor.types';
 import {
   LevelIntakeProgram,
   StudentIntakeProgram,
 } from '../../types/services/intake-program.types';
 import { IntakeLevelProgramInfo, Student } from '../../types/services/user.types';
+import {
+  EnrollInstructorToModuleInfo,
+  ModuleInstructors,
+} from './../../types/services/enrollment.types';
 import { InstructorProgram } from './../../types/services/instructor.types';
 
 class EnrollmentService {
@@ -48,7 +57,7 @@ class EnrollmentService {
     levelId: string,
   ): Promise<AxiosResponse<Response<EnrollInstructorLevelInfo[]>>> {
     return await adminstrationAxios.get(
-      `instructorEnrolment/getInstructorEnrolmentLevelByAcademicProgramLevel/${levelId}`,
+      `instructorEnrolment/getInstructorEnrolmentLevelByAcademicYearProgramIntakeLevel/${levelId}`,
     );
   }
 
@@ -60,6 +69,21 @@ class EnrollmentService {
     );
   }
 
+  public async getInstructorLevelID(
+    levelId: string,
+  ): Promise<AxiosResponse<Response<EnrollInstructorLevelInfo[]>>> {
+    return await adminstrationAxios.get(
+      `instructorEnrolment/getInstructorEnrolmentLevelByAcademicYearProgramIntakeLevel/${levelId}`,
+    );
+  }
+
+  public async getInstructorIntakeProgramsById(
+    intakeProgramInstructorId: string,
+  ): Promise<AxiosResponse<Response<InstructorProgram>>> {
+    return await adminstrationAxios.get(
+      `instructorEnrolment/getInstructorIntakeProgramsById/${intakeProgramInstructorId}`,
+    );
+  }
   public async getInstructorAssignedmodule(
     courseModuleId: string | number,
   ): Promise<AxiosResponse<Response<InstructorModuleAssignment[]>>> {
@@ -102,8 +126,17 @@ class EnrollmentService {
   }
 
   public async enrollInstructorToModule(
-    instructor: InstructorAssignModule
-    ): Promise<AxiosResponse<Response<InstructorProgram>>>{
+    instructor: InstructorAssignModule,
+  ): Promise<AxiosResponse<Response<InstructorProgram>>> {
+    return await adminstrationAxios.post(
+      'instructorModuleAssignment/assignInstructorOnModule',
+      instructor,
+    );
+  }
+
+  public async enrollInstructorToSubject(
+    instructor: EnrollInstructorToSubject,
+  ): Promise<AxiosResponse<Response<SubjectInstructors>>> {
     return await adminstrationAxios.post(
       'instructorModuleAssignment/assignInstructorOnModule',
       instructor,
@@ -114,6 +147,30 @@ class EnrollmentService {
     instructor: EnrollInstructorLevel,
   ): Promise<AxiosResponse<Response<Instructor>>> {
     return await adminstrationAxios.post('instructorEnrolment/enroleInLevel', instructor);
+  }
+
+  public async getModulesByInstructorId(
+    instructorId: string,
+  ): Promise<AxiosResponse<Response<EnrollInstructorToModuleInfo[]>>> {
+    return await adminstrationAxios.get(
+      `instructorModuleAssignment/getAllByInstructor/${instructorId}`,
+    );
+  }
+
+  public async getInstructorsByModuleId(
+    moduleId: string,
+  ): Promise<AxiosResponse<Response<ModuleInstructors[]>>> {
+    return await adminstrationAxios.get(
+      `instructorModuleAssignment/getAllInstructorsAssignedOnModule/${moduleId}`,
+    );
+  }
+
+  public async getInstructorsBySubjectId(
+    subjectId: string,
+  ): Promise<AxiosResponse<Response<SortedContent<EnrollInstructorToSubject[]>>>> {
+    return await adminstrationAxios.get(
+      `instructorSubjectAssignment/getAll`,
+    );
   }
 
   public async approveStudent(

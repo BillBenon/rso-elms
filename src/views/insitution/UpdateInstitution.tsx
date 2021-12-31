@@ -79,7 +79,7 @@ export default function UpdateInstitution() {
   }
 
   return (
-    <div className="py-8 md:py-12 lg:py-16 px-6">
+    <div className="py-8 lg:py-8 px-8">
       <Heading color="primary" fontWeight="semibold" fontSize="3xl">
         Edit a new institution
       </Heading>
@@ -87,7 +87,7 @@ export default function UpdateInstitution() {
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2">
           <>
-            <div className="py-4">
+            <div className="py-2">
               <InputMolecule
                 name="name"
                 value={values.name}
@@ -96,7 +96,7 @@ export default function UpdateInstitution() {
                 Institution name
               </InputMolecule>
             </div>
-            <div className="py-4">
+            <div className="py-2">
               <InputMolecule
                 name="short_name"
                 value={values.short_name}
@@ -105,7 +105,7 @@ export default function UpdateInstitution() {
                 Institution short name (abbreviations)
               </InputMolecule>
             </div>
-            <div className="py-4">
+            <div className="py-2">
               <InputMolecule
                 name="email"
                 value={values.email}
@@ -114,7 +114,7 @@ export default function UpdateInstitution() {
                 Institution email
               </InputMolecule>
             </div>
-            <div className="py-4">
+            <div className="py-2">
               <InputMolecule
                 name="phone_number"
                 value={values.phone_number}
@@ -125,7 +125,7 @@ export default function UpdateInstitution() {
             </div>
           </>
           <>
-            <div className="py-4">
+            <div className="py-2">
               <InputMolecule
                 name="website_link"
                 required={false}
@@ -135,7 +135,7 @@ export default function UpdateInstitution() {
                 Institution website(optional)
               </InputMolecule>
             </div>
-            <div className="py-4">
+            <div className="py-2">
               <TextAreaMolecule
                 name="moto"
                 value={values.moto}
@@ -144,7 +144,7 @@ export default function UpdateInstitution() {
                 Institution motto
               </TextAreaMolecule>
             </div>
-            <div className="py-4">
+            <div className="py-2">
               <TextAreaMolecule
                 name="mission"
                 value={values.mission}
@@ -153,10 +153,28 @@ export default function UpdateInstitution() {
                 Institution mission
               </TextAreaMolecule>
             </div>
+            <div className="py-2">
+              <TextAreaMolecule
+                name="fax number"
+                value={values.fax_number}
+                placeholder="Fax number"
+                handleChange={(e) => handleChange(e)}>
+                Fax Number
+              </TextAreaMolecule>
+            </div>
+            <div className="py-2">
+              <TextAreaMolecule
+                name="postal code"
+                value={values.postal_code}
+                placeholder="Postal Cide"
+                handleChange={(e) => handleChange(e)}>
+                Postal Code
+              </TextAreaMolecule>
+            </div>
           </>
         </div>
 
-        <div className="py-4 col-span-2">
+        <div className="py-2 col-span-2">
           <ILabel className="block pb-2">Institution logo</ILabel>
 
           <FileUploader

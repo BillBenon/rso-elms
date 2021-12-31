@@ -31,6 +31,7 @@ import { advancedTypeChecker } from '../../utils/getOption';
 import ModuleEvaluations from '../evaluation/ModuleEvaluations';
 import ModuleMaterials from '../module-material/ModuleMaterials';
 import { IProgramData } from '../programs/AcademicPrograms';
+import InstructorsOnModule from '../users/InstructorsOnModule';
 
 export default function ModuleDetails() {
   const [subjects, setSubjects] = useState<CommonCardDataType[]>([]);
@@ -40,6 +41,7 @@ export default function ModuleDetails() {
   const { path, url } = useRouteMatch();
   const { search } = useLocation();
   const showMenu = new URLSearchParams(search).get('showMenus');
+  const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
   const history = useHistory();
   const subjectData = subjectStore.getSubjectsByModule(id);
   let moduleData: IProgramData | undefined;
@@ -48,37 +50,45 @@ export default function ModuleDetails() {
   const { data: assignedInstructors } = enrollmentStore.getInstructorsonModule(id);
 
   let tabs: TabType[] = [
-    {
-      label: 'Module Info',
-      href: `${url}`,
-    },
+    // {
+    //   label: 'Module Info',
+    //   href: `${url}`,
+    // },
     {
       label: 'Subjects',
-      href: `${url}/subjects?showMenus=${showMenu}`,
+      href: `${url}/subjects?showMenus=${showMenu}&intkPrg=${intakeProg}`,
     },
     {
       label: 'Materials',
-      href: `${url}/materials?showMenus=${showMenu}`,
+      href: `${url}/materials?showMenus=${showMenu}&intkPrg=${intakeProg}`,
     },
     {
       label: 'Preriquisites',
-      href: `${url}/prereqs?showMenus=${showMenu}`,
+      href: `${url}/prereqs?showMenus=${showMenu}&intkPrg=${intakeProg}`,
     },
   ];
 
   if (showMenu && showMenu == 'true') {
+    // for (let index = 0; index < tabs.length; index++) {
+    //   tabs[index].href.concat('?showMenu=true');
+      
+    // }
     tabs.push(
       {
+        label: 'Instructors',
+        href: `${url}/instructors?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+      },
+      {
         label: 'Syllabus',
-        href: `${url}/syllabus?showMenus=${showMenu}`,
+        href: `${url}/syllabus?showMenus=${showMenu}&intkPrg=${intakeProg}`,
       },
       {
         label: 'Evaluation',
-        href: `${url}/evaluations?showMenus=${showMenu}`,
+        href: `${url}/evaluations?showMenus=${showMenu}&intkPrg=${intakeProg}`,
       },
       {
         label: 'Performance',
-        href: `${url}/performances?showMenus=${showMenu}`,
+        href: `${url}/performances?showMenus=${showMenu}&intkPrg=${intakeProg}`,
       },
     );
   }
@@ -100,7 +110,6 @@ export default function ModuleDetails() {
       // incharge: program.incharge && program.incharge.user.username,
     };
   }
-
 
   useEffect(() => {
     if (subjectData.data?.data) {
@@ -224,60 +233,6 @@ export default function ModuleDetails() {
         </div>
         <TabNavigation tabs={tabs}>
           <Switch>
-          <Route
-              exact
-              path={`${path}`}
-              render={() => (
-                <div className="flex py-9">
-                  <div className="mr-24">
-                    {module && (
-                      <CommonCardMolecule data={moduleData}>
-                        <div className="flex flex-col mt-8 gap-7 pb-2">
-                          <Heading color="txt-secondary" fontSize="sm">
-                            Module Type
-                          </Heading>
-                          <Heading fontSize="sm">
-                            {moduleData?.subTitle?.replaceAll('_', ' ')}
-                          </Heading>
-                          {/* 
-                          <div className="flex items-center gap-2">
-                            <Avatar
-                              size="24"
-                              alt="user1 profile"
-                              className=" rounded-full  border-2 border-main transform hover:scale-125"
-                              src="https://randomuser.me/api/portraits/men/1.jpg"
-                            />
-                            <Heading fontSize="sm">{programData.incharge}</Heading>
-                          </div> */}
-                        </div>
-                        <div className="mt-4 flex space-x-4">
-                          <Button onClick={() => history.push(`${url}/edit`)}>
-                            Edit Module
-                          </Button>
-                          <Button styleType="outline">Change Status</Button>
-                        </div>
-                      </CommonCardMolecule>
-                    )}
-                  </div>
-
-                  <div className="flex flex-col gap-8 z-0">
-                    <div className="flex gap-8">
-                      {/* levels */}
-                        <div className="flex flex-col gap-8 z-0">
-                          <UsersPreview
-                            title="Instructors"
-                            label="Instructors in intakeProgram"
-                            data={[]}
-                            totalUsers={assignedInstructors?.data.data.length || 0}
-                            dataLabel={''}
-                            isLoading={false}>
-                          </UsersPreview>
-                          </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            />
             <Route
               exact
               path={`${path}/subjects`}
@@ -312,7 +267,7 @@ export default function ModuleDetails() {
               )}
             />
 
-            <Route path={`${path}/evaluation`} render={() => <ModuleEvaluations />} />
+            <Route path={`${path}/evaluations`} render={() => <ModuleEvaluations />} />
             {/* add subject popup */}
             <Route
               exact
@@ -337,11 +292,16 @@ export default function ModuleDetails() {
                 );
               }}
             />
-            {/* update module popup */}
             <Route
               path={`${path}/materials`}
               render={() => {
                 return <ModuleMaterials />;
+              }}
+            />
+            <Route
+              path={`${path}/instructors`}
+              render={() => {
+                return <InstructorsOnModule />;
               }}
             />
           </Switch>

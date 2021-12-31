@@ -9,15 +9,33 @@ class EnrolmmentStore {
     );
   }
 
-  getInstructorEnrollmentLevelByLevelId(levelId: string) {
-    return useQuery(['instructor/levelId', levelId], () =>
-      enrollmentService.getInstructorEnrollmentLevelByLevelId(levelId),
-    );
-  }
-
   getInstructorIntakePrograms(instructorId: string) {
     return useQuery(['instructor/program', instructorId], () =>
       enrollmentService.getInstructorIntakePrograms(instructorId),
+    );
+  }
+
+  getInstructorIntakeProgramsById(instructorId: string) {
+    return useQuery(['instructor/intakeprogram', instructorId], () =>
+      enrollmentService.getInstructorIntakeProgramsById(instructorId),
+    );
+  }
+
+  getModulesByInstructorId(instructorId: string) {
+    return useQuery(['instructor/modules', instructorId], () =>
+      enrollmentService.getModulesByInstructorId(instructorId),
+    );
+  }
+
+  getInstructorsByModule(moduleId: string) {
+    return useQuery(['instructors/module', moduleId], () =>
+      enrollmentService.getInstructorsByModuleId(moduleId),
+    );
+  }
+
+  getInstructorsBySubject(subjectId: string) {
+    return useQuery(['instructors/subject', subjectId], () =>
+      enrollmentService.getInstructorsBySubjectId(subjectId),
     );
   }
 
@@ -27,10 +45,15 @@ class EnrolmmentStore {
     );
   }
 
-
   getStudentsInProgramLevel(levelId: number) {
     return useQuery(['students/levelsEnrolled', levelId], () =>
       enrollmentService.getStudentLevelEnrollments(levelId),
+    );
+  }
+
+  getInstructorsInProgramLevel(levelId: string) {
+    return useQuery(['instructors/levelsEnrolled', levelId], () =>
+      enrollmentService.getInstructorEnrollmentLevelByLevelId(levelId),
     );
   }
 
@@ -55,10 +78,13 @@ class EnrolmmentStore {
   enrollInstructorToProgram() {
     return useMutation(enrollmentService.enrollInstructorToProgram);
   }
-  enrollInstructorToModule(){
+  enrollInstructorToModule() {
     return useMutation(enrollmentService.enrollInstructorToModule);
   }
 
+  enrollInstructorToSubject() {
+    return useMutation(enrollmentService.enrollInstructorToSubject);
+  }
 
   enrollInstructorToLevel() {
     return useMutation(enrollmentService.enrollInstructorToLevel);

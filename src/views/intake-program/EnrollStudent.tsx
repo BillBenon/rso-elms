@@ -29,12 +29,21 @@ function EnrollStudent() {
       StudentApproval.APPROVED,
     );
 
+  const { data: enrolledStudentsLevel} =
+    intakeProgramStore.getStudentsByIntakeProgramLevel(
+        levelId
+  );
   const level = intakeProgramStore.getIntakeLevelById(levelId || '').data?.data.data;
 
   const [students, setStudents] = useState<UserView[]>([]);
   useEffect(() => {
+    let student_ids:string[] = [];
+    enrolledStudentsLevel?.data.data.forEach(studLevel=>{
+      student_ids.push(studLevel.intake_program_student.id+'');
+    })
     let studentsView: UserView[] = [];
     studentsProgram?.data.data.forEach((stud) => {
+      if(student_ids.includes(stud.id+'')){
       let studentView: UserView = {
         id: stud.id,
         first_name: stud.student.user.first_name,
@@ -42,9 +51,10 @@ function EnrollStudent() {
         image_url: stud.student.user.image_url,
       };
       studentsView.push(studentView);
+    }
     });
     setStudents(studentsView);
-  }, [studentsProgram]);
+  }, [studentsProgram,enrolledStudentsLevel]);
 
   const { mutate } = enrollmentStore.enrollStudentsToLevel();
 
@@ -64,7 +74,7 @@ function EnrollStudent() {
       mutate(newStudent, {
         onSuccess: (data) => {
           toast.success(data.data.message);
-          queryClient.invalidateQueries(['students/intakeProgramlevelId']);
+          queryClient.invalidateQueries(['students/intakeProgramlevelId',levelId]);
           setSidebarOpen(false);
         },
         onError: (error: any) => {

@@ -4,45 +4,49 @@ import { useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import RightSidebar from '../../components/Organisms/RightSidebar';
-import intakeProgramStore from '../../store/administration/intake-program.store';
+import enrollmentStore from '../../store/administration/enrollment.store';
+import { EnrollInstructorLevelInfo } from '../../types/services/enrollment.types';
 import {
   IntakeLevelParam,
 } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 
-function LevelInstrctors() {
+interface ProgramEnrollmentProps<T>{
+  instructorsData: EnrollInstructorLevelInfo[]
+  isLoading: boolean;
+}
+
+function LevelInstructors<T>({instructorsData,isLoading}:ProgramEnrollmentProps<T>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const {level: levelId } = useParams<IntakeLevelParam>();
 
-  const { data: studentsProgram, isLoading } =
-    intakeProgramStore.getStudentsByIntakeProgramLevel(
-        levelId
-    );
+  
 
-  const [students, setStudents] = useState<UserView[]>([]);
+  const [instructors, setInstructors] = useState<UserView[]>([]);
   useEffect(() => {
-    let studentsView: UserView[] = [];
-    // studentsProgram?.data.data.forEach((stud) => {
-    //   let studentView: UserView = {
-    //     id: stud.id,
-    //     first_name: stud.intake_program_student.student.user.first_name,
-    //     last_name: stud.intake_program_student.student.user.last_name,
-    //     image_url: stud.intake_program_student.student.user.image_url,
-    //   };
-    //   studentsView.push(studentView);
-    // });
-    // setStudents(studentsView);
-  }, [studentsProgram]);
+    let instructorView: UserView[] = [];
+    instructorsData.forEach((stud) => {
+      let studentView: UserView = {
+        id: stud.id,
+        first_name: stud.intake_program_instructor.instructor.user.first_name,
+        last_name: stud.intake_program_instructor.instructor.user.last_name,
+        image_url: stud.intake_program_instructor.instructor.user.image_url,
+      };
+      instructorView.push(studentView);
+    });
+    setInstructors(instructorView);
+    // console.log(students.length)
+  }, [instructorsData]);
   return (
     <div className="flex flex-col cursor-pointer">
       <Button styleType="outline" onClick={() => setSidebarOpen(true)}>
-        Enrolled instructors
+        View instructors
       </Button>
       <RightSidebar
         open={sidebarOpen}
         handleClose={() => setSidebarOpen(false)}
         label="All Level Instructors"
-        data={students}
+        data={instructors}
         selectorActions={[
           {
             name: 'No action',
@@ -56,4 +60,4 @@ function LevelInstrctors() {
   );
 }
 
-export default LevelInstrctors;
+export default LevelInstructors;
