@@ -21,6 +21,24 @@ class EnrolmmentStore {
     );
   }
 
+  getInstructorIntakeProgramsById(instructorId: string) {
+    return useQuery(['instructor/intakeprogram', instructorId], () =>
+      enrollmentService.getInstructorIntakeProgramsById(instructorId),
+    );
+  }
+
+  getModulesByInstructorId(instructorId: string) {
+    return useQuery(['instructor/modules', instructorId], () =>
+      enrollmentService.getModulesByInstructorId(instructorId),
+    );
+  }
+
+  getInstructorsByModule(moduleId: string) {
+    return useQuery(['instructors/module', moduleId], () =>
+      enrollmentService.getInstructorsByModuleId(moduleId),
+    );
+  }
+
   getStudentsAcademy(academyId: string) {
     return useQuery(['student/academy', academyId], () =>
       enrollmentService.getStudentAcademy(academyId),
@@ -37,6 +55,9 @@ class EnrolmmentStore {
   }
   enrollInstructorToLevel() {
     return useMutation(enrollmentService.enrollInstructorToLevel);
+  }
+  enrollInstructorToModule() {
+    return useMutation(enrollmentService.enrollInstructorToModule);
   }
   approveStudent() {
     return useMutation(enrollmentService.approveStudent);

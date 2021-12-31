@@ -13,10 +13,10 @@ import { UserView } from '../../types/services/user.types';
 
 function EnrollInstructorToLevel() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { id, intakeId, level: levelId } = useParams<IntakeLevelParam>();
+  const { intakeProg, level: levelId } = useParams<IntakeLevelParam>();
 
   const { data: instructorsInProgram, isLoading } =
-    intakeProgramStore.getInstructorsByIntakeProgram(id, intakeId);
+    intakeProgramStore.getInstructorsByIntakeProgram(intakeProg);
 
   const level = intakeProgramStore.getIntakeLevelById(levelId).data?.data.data;
 
@@ -40,9 +40,8 @@ function EnrollInstructorToLevel() {
   function add(data?: string[]) {
     data?.map((inst_id) => {
       let newInstructor: EnrollInstructorLevel = {
-        academicProgramLevelId: level?.academic_program_level.id + '',
-        academicYearId: level?.academic_year.id + '',
-        intakeProgramInstructorId: parseInt(inst_id),
+        intake_program_instructor_id: parseInt(inst_id),
+        academic_year_program_intake_level_id: parseInt(level?.id + ''),
       };
 
       mutate(newInstructor, {
