@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import RightSidebar from '../../components/Organisms/RightSidebar';
 import enrollmentStore from '../../store/administration/enrollment.store';
-import intakeProgramStore from '../../store/administration/intake-program.store';
 import {
   IntakeLevelParam,
 } from '../../types/services/intake-program.types';
@@ -18,11 +17,11 @@ function LevelInstructors() {
   const { data: instructorProgramLevel, isLoading } =
     enrollmentStore.getInstructorsInProgramLevel(
         levelId
-    );
+  );
 
-  const [students, setStudents] = useState<UserView[]>([]);
+  const [instructors, setInstructors] = useState<UserView[]>([]);
   useEffect(() => {
-    let studentsView: UserView[] = [];
+    let instructorView: UserView[] = [];
     console.log(instructorProgramLevel?.data.data.length)
     instructorProgramLevel?.data.data.forEach((stud) => {
       let studentView: UserView = {
@@ -31,9 +30,9 @@ function LevelInstructors() {
         last_name: stud.intake_program_instructor.instructor.user.last_name,
         image_url: stud.intake_program_instructor.instructor.user.image_url,
       };
-      studentsView.push(studentView);
+      instructorView.push(studentView);
     });
-    setStudents(studentsView);
+    setInstructors(instructorView);
     // console.log(students.length)
   }, [instructorProgramLevel]);
   return (
@@ -45,7 +44,7 @@ function LevelInstructors() {
         open={sidebarOpen}
         handleClose={() => setSidebarOpen(false)}
         label="All Level Instructors"
-        data={students}
+        data={instructors}
         selectorActions={[
           {
             name: 'No action',
