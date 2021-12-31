@@ -11,7 +11,6 @@ import { Tab } from '../../components/Molecules/tabs/tabs';
 import Students from '../../components/Organisms/user/Students';
 import { authenticatorStore } from '../../store/administration';
 import { classStore } from '../../store/administration/class.store';
-import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import { UserType, UserTypes } from '../../types/services/user.types';
 import AddSubjectToPeriod from '../subjects/AddSubjectToPeriod';
@@ -127,7 +126,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
           />
           <Route
             exact
-            path={`${path}/subject`}
+            path={`${path}/:classId/subject`}
             render={() => {
               return (
                 <>
@@ -148,7 +147,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
                       styleType="outline"
                       onClick={() =>
                         history.push(
-                          `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/view-class/${classId}`,
+                          `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/view-class`,
                         )
                       }>
                       View students
