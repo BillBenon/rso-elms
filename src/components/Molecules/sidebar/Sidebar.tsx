@@ -69,7 +69,9 @@ export default function Sidebar() {
         <AcademyProfileCard src="/images/nisslogo.png" alt="academy logo">
           {authUser?.academy
             ? authUser.academy.name
-            : 'National Intelligence and Security Service'}
+            : authUser?.institution_name
+            ? authUser.institution_name
+            : '-----'}
         </AcademyProfileCard>
       </div>
       <SidebarLinks links={defaultLinks()} />
