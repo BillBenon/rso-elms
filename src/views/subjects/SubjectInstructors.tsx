@@ -20,37 +20,39 @@ function SubjectInstructors({
   }: SubjectViewerProps) {
   const { path } = useRouteMatch();
   const {data:subjectData} = subjectStore.getSubject(subjectId);
+  console.log(subjectData?.data.data.module.program.id);
+//   const{data:instructorProgram} = 
   const { data: instructorInfos, isLoading } = enrollmentStore.getInstructorsBySubject(subjectId);
 
   let instrs: UserTypes[] = [];
 
-  instructorInfos?.data.data.content.map((obj) => {
-      console.log(instructorInfos?.data.data.content);
-    let {
-      id,
-      username,
-      first_name,
-      last_name,
-      email,
-      person,
-      academy,
-      generic_status,
-      user_type,
-    } = obj.module_instructor.user;
+//   instructorInfos?.data.data.content.map((obj) => {
+    //   console.log(instructorInfos?.data.data.content);
+    // let {
+    //   id,
+    //   username,
+    //   first_name,
+    //   last_name,
+    //   email,
+    //   person,
+    //   academy,
+    //   generic_status,
+    //   user_type,
+    // } = obj.module_instructor.user;
 
-    let user: UserTypes = {
-      id: id,
-      username: username,
-      'full name': first_name + ' ' + last_name,
-      email: email,
-      'ID Card': person && person.nid,
-      academy: academy && academy.name,
-      status: generic_status,
-      user_type: user_type,
-    };
+    // let user: UserTypes = {
+    //   id: id,
+    //   username: username,
+    //   'full name': first_name + ' ' + last_name,
+    //   email: email,
+    //   'ID Card': person && person.nid,
+    //   academy: academy && academy.name,
+    //   status: generic_status,
+    //   user_type: user_type,
+    // };
 
-    instrs.push(user);
-  });
+    // instrs.push(user);
+//   });
 
   const authUser = authenticatorStore.authUser().data?.data.data;
 
@@ -63,16 +65,18 @@ function SubjectInstructors({
           <div className="flex flex-col gap-4 z-0 pt-6">
             <div className="flex justify-between items-center">
               <Heading fontSize="base" fontWeight="semibold">
-                Instructors ({instructorInfos?.data.data.content.length || 0})
+                Instructors ({0})
               </Heading>
               {authUser?.user_type === UserType.ADMIN && (
                 <EnrollInstructorToSubjectAssignment module_id={subjectData?.data.data.module.id+''} subject_id={subjectId}/>
               )}
             </div>
             <>
-              {isLoading ? (
-                <Loader />
-              ) : instructorInfos?.data.data.content.length === 0 ? (
+              {
+            //   isLoading ? (
+            //     <Loader />
+            //   ) : 
+            instrs.length === 0 ? (
                 <NoDataAvailable
                   showButton={false}
                   icon="user"
@@ -87,7 +91,7 @@ function SubjectInstructors({
                   statusColumn="status"
                   data={instrs}
                   selectorActions={[
-                    { name: 'Remove instructors from module', handleAction: () => {} },
+                    { name: 'Remove instructors from subject', handleAction: () => {} },
                   ]}
                   hide={['id', 'user_type']}
                   uniqueCol="id"
