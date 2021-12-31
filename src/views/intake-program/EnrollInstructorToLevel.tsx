@@ -16,21 +16,32 @@ function EnrollInstructorToLevel() {
   const { intakeProg, level: levelId } = useParams<IntakeLevelParam>();
 
   const { data: instructorsInProgram, isLoading } =
-    intakeProgramStore.getInstructorsByIntakeProgram(intakeProg);
+  enrollmentStore.getInstructorsInProgram(intakeProg);
+
+  const { data: instructorProgramLevel} =
+    enrollmentStore.getInstructorsInProgramLevel(
+        levelId
+  );
 
   const level = intakeProgramStore.getIntakeLevelById(levelId).data?.data.data;
 
   const [instructors, setInstructors] = useState<UserView[]>([]);
   useEffect(() => {
+    let instructor_ids:string[] = [];
+    instructorProgramLevel?.data.data.forEach(insLevel=>{
+      instructor_ids.push(insLevel.intake_program_instructor.id);
+    })
     let instructorsView: UserView[] = [];
     instructorsInProgram?.data.data.forEach((inst) => {
-      let instructorView: UserView = {
-        id: inst.id,
-        first_name: inst.instructor.user.first_name,
-        last_name: inst.instructor.user.last_name,
-        image_url: inst.instructor.user.image_url,
-      };
-      instructorsView.push(instructorView);
+      if(!instructor_ids.includes(inst.id)){
+        let instructorView: UserView = {
+          id: inst.id,
+          first_name: inst.instructor.user.first_name,
+          last_name: inst.instructor.user.last_name,
+          image_url: inst.instructor.user.image_url,
+        };
+        instructorsView.push(instructorView);
+      }
     });
     setInstructors(instructorsView);
   }, [instructorsInProgram]);
