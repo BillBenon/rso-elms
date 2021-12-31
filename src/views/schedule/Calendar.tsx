@@ -21,12 +21,14 @@ import DateMolecule from '../../components/Molecules/input/DateMolecule';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedule';
+import { authenticatorStore } from '../../store/administration/authenticator.store';
 import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import programStore from '../../store/administration/program.store';
 import { scheduleStore } from '../../store/timetable/calendar.store';
 import { ParamType, ValueType } from '../../types';
 import { DateRange } from '../../types/services/schedule.types';
+import { UserType } from '../../types/services/user.types';
 import { formatCalendarEvents } from '../../utils/calendar';
 import { formatDateToYyMmDd, getWeekBorderDays } from '../../utils/date-helper';
 
@@ -53,6 +55,9 @@ export default function CalendarView() {
   const programInfo = programStore.getProgramById(id).data?.data.data;
   const levelInfo = intakeProgramStore.getIntakeLevelById(inLevelId + '').data?.data.data;
   const classInfo = classStore.getClassById(classId + '').data?.data.data;
+
+  // auth info
+  const authUser = authenticatorStore.authUser().data?.data.data;
 
   // get events
   const { data, refetch } = inLevelId
@@ -99,9 +104,11 @@ export default function CalendarView() {
           </div>
 
           <div className="flex gap-3">
-            <BrowserLink to={`${url}/new-schedule`}>
-              <Button>New schedule</Button>
-            </BrowserLink>
+            {authUser?.user_type != UserType.STUDENT && (
+              <BrowserLink to={`${url}/new-schedule`}>
+                <Button>New schedule</Button>
+              </BrowserLink>
+            )}
           </div>
         </div>
       </div>
