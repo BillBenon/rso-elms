@@ -33,6 +33,7 @@ import ScheduleHome from './views/schedule/ScheduleHome';
 import Subjects from './views/subjects';
 import Users from './views/users/Users';
 import AdmModuleDetails from './views/modules/AdmModuleDetails';
+import StudentReport from './views/evaluation/StudentReport';
 
 const RouterProtection = () => {
   const [authUser, setAuthUser] = useState<UserInfo>();
@@ -75,6 +76,7 @@ const RouterProtection = () => {
       <Route path={`${path}/levels`} component={Levels} />
       <Route path={`${path}/intakes`} component={IntakesView} />
       <Route path={`${path}/modules/:intakeProgram/:moduleId`} component={AdmModuleDetails} />
+      <Route path={`${path}/perfomances/intake/:levelId/:classId/report/:id`} component={StudentReport} />
       {/* <Route exact path={`${path}/intakes/:id`} component={IntakeModulesView} /> */}
 
       {/* end of academic admin pages */}

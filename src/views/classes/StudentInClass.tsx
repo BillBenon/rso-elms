@@ -8,6 +8,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { Tab } from '../../components/Molecules/tabs/tabs';
 import Students from '../../components/Organisms/user/Students';
 import { classStore } from '../../store/administration/class.store';
+import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import { UserTypes } from '../../types/services/user.types';
 import AddStudents from './AddStudents';
@@ -51,7 +52,8 @@ function StudentInClass({ classId, label }: IStudentClass) {
     {
       name: 'View report',
       handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/intakes/peformance/${levelId}/${classId}/report/${id}`);
+        // getStudentReport(id+'');
+        history.push(`/dashboard/peformance/intakes/${levelId}/${classId}/report/${id}`);
       },
     },
     {
