@@ -47,7 +47,6 @@ function EnrollInstructorIntakeProgram() {
   const { mutate } = enrollmentStore.enrollInstructorToProgram();
 
   function add(data?: string[]) {
-    alert('function to add ');
     data?.map((st_id) => {
       let newInstructor: EnrollInstructorProgram = {
         instructor_id: st_id,

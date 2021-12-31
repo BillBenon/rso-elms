@@ -1,10 +1,12 @@
 import { Table } from '..';
+import { AcademyInfo } from './academy.types';
 import { InstructorProgram } from './instructor.types';
 import {
   LevelIntakeProgram,
   PromotionStatus,
   StudentIntakeProgram,
 } from './intake-program.types';
+import { UserInfo } from './user.types';
 /* eslint-disable no-unused-vars */
 export enum EnrollmentStatus {
   PENDING,
@@ -79,6 +81,14 @@ export interface EnrollInstructorToModule {
 }
 
 export interface EnrollInstructorToModuleInfo extends Table, EnrollInstructorToModule {}
+
+export interface ModuleInstructors extends Table {
+  institution_id: string;
+  since_on: string;
+  user: UserInfo;
+  academy: AcademyInfo;
+  description: string;
+}
 
 export interface EnrollInstructorLevelInfo extends Table {
   intake_program_instructor: InstructorProgram;

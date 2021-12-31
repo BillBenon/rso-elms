@@ -20,7 +20,10 @@ import {
   StudentIntakeProgram,
 } from '../../types/services/intake-program.types';
 import { IntakeLevelProgramInfo, Student } from '../../types/services/user.types';
-import { EnrollInstructorToModuleInfo } from './../../types/services/enrollment.types';
+import {
+  EnrollInstructorToModuleInfo,
+  ModuleInstructors,
+} from './../../types/services/enrollment.types';
 import { InstructorProgram } from './../../types/services/instructor.types';
 
 class EnrollmentService {
@@ -137,9 +140,9 @@ class EnrollmentService {
 
   public async getInstructorsByModuleId(
     moduleId: string,
-  ): Promise<AxiosResponse<Response<EnrollInstructorToModuleInfo[]>>> {
+  ): Promise<AxiosResponse<Response<ModuleInstructors[]>>> {
     return await adminstrationAxios.get(
-      `instructorModuleAssignment/getAllByCourseModule/${moduleId}`,
+      `instructorModuleAssignment/getAllInstructorsAssignedOnModule/${moduleId}`,
     );
   }
 

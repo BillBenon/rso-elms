@@ -50,10 +50,10 @@ export default function ModuleDetails() {
   const { data: assignedInstructors } = enrollmentStore.getInstructorsonModule(id);
 
   let tabs: TabType[] = [
-    {
-      label: 'Module Info',
-      href: `${url}`,
-    },
+    // {
+    //   label: 'Module Info',
+    //   href: `${url}`,
+    // },
     {
       label: 'Subjects',
       href: `${url}/subjects?showMenus=${showMenu}&intkPrg=${intakeProg}`,
@@ -271,7 +271,7 @@ export default function ModuleDetails() {
                       <div className="flex flex-col gap-8 z-0">
                         <UsersPreview
                           title="Instructors"
-                          label="Instructors in intakeProgram"
+                          label="Instructors in intake program"
                           data={[]}
                           totalUsers={assignedInstructors?.data.data.length || 0}
                           dataLabel={''}

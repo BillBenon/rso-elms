@@ -79,7 +79,7 @@ function IntakeProgramModules() {
             <NoDataAvailable
               showButton={authUser?.user_type === UserType.ADMIN}
               buttonLabel="Add new modules"
-              title={'No Modules available in this program'}
+              title={'No modules available in this program'}
               handleClick={() => history.push(`${url}/add`)}
               description="Looks like there are no modules assigned to this intake program yet!"
             />
@@ -93,7 +93,7 @@ function IntakeProgramModules() {
               ) : null}
               {programModules.map((module, index) => (
                 <ModuleCard
-                  intakeProgram={intakeProg}
+                  intakeProg={intakeProg}
                   course={module}
                   showMenus={true}
                   key={index}
