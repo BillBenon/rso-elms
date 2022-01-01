@@ -9,21 +9,30 @@ import { queryClient } from '../../plugins/react-query';
 import { authenticatorStore } from '../../store/administration';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { getProgramsByIntake } from '../../store/administration/intake.store';
+import intakeProgramStore from '../../store/administration/intake-program.store';
 import {
   EnrollmentMode,
   EnrollStudentToProgram,
   StudentApproval,
 } from '../../types/services/enrollment.types';
-import { IntakeProgParam } from '../../types/services/intake-program.types';
+import {
+  IntakeProgParam,
+  StudentIntakeProgram,
+} from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 
-function EnrollStudentIntakeProgram() {
+// eslint-disable-next-line no-unused-vars
+interface ProgramEnrollmentProps<T> {
+  existing: StudentIntakeProgram[];
+}
+
+function EnrollStudentIntakeProgram<T>({ existing }: ProgramEnrollmentProps<T>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { intakeProg, intakeId } = useParams<IntakeProgParam>();
 
   const { data: authUser } = authenticatorStore.authUser();
 
-  const { data: studentsInAcademy, isLoading } = enrollmentStore.getStudentsAcademy(
+  const { data: studentsInAcademy, isLoading } = intakeProgramStore.getStudentsByAcademy(
     authUser?.data.data.academy.id + '',
   );
 
@@ -34,15 +43,22 @@ function EnrollStudentIntakeProgram() {
   const [students, setStudents] = useState<UserView[]>([]);
 
   useEffect(() => {
+    let existing_ids: string[] = [];
+
+    for (let index = 0; index < existing.length; index++) {
+      existing_ids.push(existing[index].student.id + '');
+    }
     let studentsView: UserView[] = [];
     studentsInAcademy?.data.data.forEach((stud) => {
-      let studentView: UserView = {
-        id: stud.id,
-        first_name: stud.user.first_name,
-        last_name: stud.user.last_name,
-        image_url: stud.user.image_url,
-      };
-      studentsView.push(studentView);
+      if (!existing_ids.includes(stud.id + '')) {
+        let studentView: UserView = {
+          id: stud.id,
+          first_name: stud.user.first_name,
+          last_name: stud.user.last_name,
+          image_url: stud.user.image_url,
+        };
+        studentsView.push(studentView);
+      }
     });
     setStudents(studentsView);
   }, [studentsInAcademy?.data.data]);

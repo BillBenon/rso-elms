@@ -1,3 +1,4 @@
+import { forEach } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router';
@@ -11,10 +12,14 @@ import enrollmentStore from '../../store/administration/enrollment.store';
 import { getProgramsByIntake } from '../../store/administration/intake.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { EnrollInstructorProgram } from '../../types/services/enrollment.types';
+import { InstructorProgram } from '../../types/services/instructor.types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 
-function EnrollInstructorIntakeProgram() {
+interface ProgramEnrollmentProps<T>{
+  existing: InstructorProgram[]
+}
+function EnrollInstructorIntakeProgram<T>({existing}:ProgramEnrollmentProps<T>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { intakeProg, intakeId } = useParams<IntakeProgParam>();
 
@@ -29,17 +34,24 @@ function EnrollInstructorIntakeProgram() {
 
   const [instructors, setInstructors] = useState<UserView[]>([]);
   useEffect(() => {
+    let existing_ids:string[] = [];
+    for (let index = 0; index < existing.length; index++) {
+      existing_ids.push(existing[index].instructor.id+'');
+      
+    }
     let instructorsView: UserView[] = [];
     instructorsInAcademy?.data.data
       .filter((inst) => inst.user.academy.id === authUser?.data.data.academy.id)
       .forEach((inst) => {
-        let instructorView: UserView = {
-          id: inst.id,
-          first_name: inst.user.first_name,
-          last_name: inst.user.last_name,
-          image_url: inst.user.image_url,
-        };
-        instructorsView.push(instructorView);
+        if(!existing_ids.includes(inst.id+'')){
+          let instructorView: UserView = {
+            id: inst.id,
+            first_name: inst.user.first_name,
+            last_name: inst.user.last_name,
+            image_url: inst.user.image_url,
+          };
+          instructorsView.push(instructorView);
+        }
       });
     setInstructors(instructorsView);
   }, [instructorsInAcademy]);

@@ -1,15 +1,17 @@
 import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
-import { Response } from '../../types';
+import { Response, SortedContent } from '../../types';
 import {
   ApproveStudents,
   EnrollInstructorLevel,
   EnrollInstructorLevelInfo,
   EnrollInstructorProgram,
+  EnrollInstructorToSubject,
   EnrollStudentToLevel,
   EnrollStudentToProgram,
   InstructorAssignModule,
+  SubjectInstructors,
 } from '../../types/services/enrollment.types';
 import {
   Instructor,
@@ -132,6 +134,15 @@ class EnrollmentService {
     );
   }
 
+  public async enrollInstructorToSubject(
+    instructor: EnrollInstructorToSubject,
+  ): Promise<AxiosResponse<Response<SubjectInstructors>>> {
+    return await adminstrationAxios.post(
+      'instructorModuleAssignment/assignInstructorOnModule',
+      instructor,
+    );
+  }
+
   public async enrollInstructorToLevel(
     instructor: EnrollInstructorLevel,
   ): Promise<AxiosResponse<Response<Instructor>>> {
@@ -151,6 +162,14 @@ class EnrollmentService {
   ): Promise<AxiosResponse<Response<ModuleInstructors[]>>> {
     return await adminstrationAxios.get(
       `instructorModuleAssignment/getAllInstructorsAssignedOnModule/${moduleId}`,
+    );
+  }
+
+  public async getInstructorsBySubjectId(
+    subjectId: string,
+  ): Promise<AxiosResponse<Response<SortedContent<EnrollInstructorToSubject[]>>>> {
+    return await adminstrationAxios.get(
+      `instructorSubjectAssignment/getAll`,
     );
   }
 

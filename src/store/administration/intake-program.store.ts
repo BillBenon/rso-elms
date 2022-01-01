@@ -69,9 +69,9 @@ class IntakeProgramStore {
     );
   }
 
-  getPeriodSubjects(periodId: string) {
-    return useQuery(['subjects/period', periodId], () =>
-      intakeProgramService.getPeriodSubjects(periodId),
+  getClassSubjects(classId: string, periodId: string) {
+    return useQuery(['subjects/period/class', classId, periodId], () =>
+      intakeProgramService.getClassSubjects(classId, periodId),
     );
   }
 

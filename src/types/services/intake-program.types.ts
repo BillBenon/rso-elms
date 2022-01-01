@@ -8,6 +8,7 @@ import { IntakeInfo, IntakeProgram } from './intake.types';
 import { ProgramLevel } from './levels.types';
 import { ModuleInfo } from './modules.types';
 import { ProgramInfo } from './program.types';
+import { UserInfo } from './user.types';
 import { Student } from './user.types';
 
 export interface IntakeProgParam {
