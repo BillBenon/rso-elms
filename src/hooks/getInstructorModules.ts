@@ -46,7 +46,9 @@ export default function useInstructorModules(programId: string, instructorId: st
         subTitle: `total subject: ${mod.total_num_subjects || 'None'}`,
       }),
     );
-    setModules(newModules);
+
+    const uniqueArray = [...new Set(newModules)];
+    setModules(uniqueArray);
   }, [instProgModules]);
 
   return modules;
