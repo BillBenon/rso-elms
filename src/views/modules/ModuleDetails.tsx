@@ -15,14 +15,12 @@ import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import UsersPreview from '../../components/Molecules/cards/UsersPreview';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import UpdateModuleForm from '../../components/Organisms/forms/modules/UpdateModuleForm';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
 import { authenticatorStore } from '../../store/administration';
-import enrollmentStore from '../../store/administration/enrollment.store';
 import { moduleStore } from '../../store/administration/modules.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { CommonCardDataType, Link, ParamType } from '../../types';
@@ -47,7 +45,6 @@ export default function ModuleDetails() {
   let moduleData: IProgramData | undefined;
   const module = moduleStore.getModuleById(id).data?.data.data;
   const authUser = authenticatorStore.authUser().data?.data.data;
-  const { data: assignedInstructors } = enrollmentStore.getInstructorsonModule(id);
 
   let tabs: TabType[] = [
     // {

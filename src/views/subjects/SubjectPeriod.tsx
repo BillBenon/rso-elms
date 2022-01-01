@@ -21,7 +21,7 @@ function SubjectPeriod() {
   );
   const [subj, setsubj] = useState<CommonCardDataType[]>();
   const history = useHistory();
-  const { data: authUser } = authenticatorStore.authUser();
+  const authUser = authenticatorStore.authUser().data?.data.data;
 
   useEffect(() => {
     if (subjects?.data.data) {
@@ -44,8 +44,6 @@ function SubjectPeriod() {
     }
   }, [subjects?.data.data]);
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
-
   return (
     <div>
       {isLoading ? (
@@ -54,7 +52,6 @@ function SubjectPeriod() {
         <NoDataAvailable
           showButton={authUser?.user_type === UserType.ADMIN}
           buttonLabel="Add new subject"
-          showButton={authUser?.data.data.user_type === UserType.ADMIN}
           icon="subject"
           title={'No subjects available in this period'}
           handleClick={() =>
