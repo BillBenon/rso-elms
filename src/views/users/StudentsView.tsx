@@ -66,7 +66,8 @@ export default function StudentsView() {
         title="Students"
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
-        {authUser?.user_type === UserType.SUPER_ADMIN && (
+        {(authUser?.user_type === UserType.SUPER_ADMIN ||
+          authUser?.user_type === UserType.ADMIN) && (
           <div className="flex gap-3">
             <Link to={`${url}/import`}>
               <Button styleType="outline">Import students</Button>
