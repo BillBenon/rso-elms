@@ -124,7 +124,7 @@ function IntakeProgramDetails() {
     );
 
     let instructorLevelsIds = instructorLevels?.data.data.map(
-      (instLvl) => instLvl.academic_year_program_intake_level.id,
+      (instLvl) => instLvl.academic_year_program_intake_level?.id,
     );
 
     const instructorProgLevels = getLevels?.filter((level) =>

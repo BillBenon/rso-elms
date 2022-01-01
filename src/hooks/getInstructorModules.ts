@@ -19,13 +19,19 @@ export default function useInstructorModules(programId: string, instructorId: st
     setModuleIds(
       instructorModules.data?.data.data.map((md) => md.course_module_id) || [],
     );
-    let newModules: CommonCardDataType[] = [];
+  }, [instructorModules.data?.data.data]);
 
-    setinstProgModules(
+  useEffect(() => {
+    let newInstProgModule =
       getAllModuleStore.data?.data.data.filter((inst) =>
         moduleIds?.includes(inst.id + ''),
-      ) || [],
-    );
+      ) || [];
+
+    setinstProgModules((prev: ModuleInfo[]) => [...prev, ...newInstProgModule]);
+  }, [getAllModuleStore.data?.data.data, moduleIds]);
+
+  useEffect(() => {
+    let newModules: CommonCardDataType[] = [];
 
     instProgModules.forEach((mod) =>
       newModules.push({
@@ -41,11 +47,7 @@ export default function useInstructorModules(programId: string, instructorId: st
       }),
     );
     setModules(newModules);
-  }, [
-    getAllModuleStore.data?.data.data,
-    instructorModules.data?.data.data,
-    instProgModules,
-  ]);
+  }, [instProgModules]);
 
   return modules;
 }
