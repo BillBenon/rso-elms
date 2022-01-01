@@ -6,7 +6,6 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { CommonCardDataType, ParamType } from '../../types';
-import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import { advancedTypeChecker } from '../../utils/getOption';
 
 export default function ModuleEvaluations() {
@@ -19,8 +18,6 @@ export default function ModuleEvaluations() {
   );
 
   useEffect(() => {
-    setLocalStorageData('currentStep', 0);
-
     let formattedEvals: CommonCardDataType[] = [];
     data?.data.data.forEach((evaluation) => {
       let formattedEvaluations = {

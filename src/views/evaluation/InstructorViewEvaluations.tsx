@@ -41,7 +41,9 @@ export default function InstructorViewEvaluations() {
   }
 
   useEffect(() => {
-    setLocalStorageData('currentStep', 0);
+    if (!getLocalStorageData('currentStep')) {
+      setLocalStorageData('currentStep', 0);
+    }
 
     let formattedEvals: CommonCardDataType[] = [];
     data?.data.data.forEach((evaluation) => {
