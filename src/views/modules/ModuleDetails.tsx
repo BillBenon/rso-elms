@@ -69,10 +69,6 @@ export default function ModuleDetails() {
   ];
 
   if (showMenu && showMenu == 'true') {
-    // for (let index = 0; index < tabs.length; index++) {
-    //   tabs[index].href.concat('?showMenu=true');
-      
-    // }
     tabs.push(
       {
         label: 'Instructors',

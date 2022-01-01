@@ -9,10 +9,10 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import { Tab } from '../../components/Molecules/tabs/tabs';
 import Students from '../../components/Organisms/user/Students';
+import { authenticatorStore } from '../../store/administration';
 import { classStore } from '../../store/administration/class.store';
-import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
-import { UserTypes } from '../../types/services/user.types';
+import { UserType, UserTypes } from '../../types/services/user.types';
 import AddSubjectToPeriod from '../subjects/AddSubjectToPeriod';
 import SubjectPeriod from '../subjects/SubjectPeriod';
 import AddStudents from './AddStudents';
@@ -33,6 +33,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
   const { path } = useRouteMatch();
   const [students, setStudents] = useState<UserTypes[]>([]);
   const { data, isLoading } = classStore.getStudentsByClass(classId);
+  const { data: authUser } = authenticatorStore.authUser();
   const history = useHistory();
 
   const studentsData = data?.data.data || [];
@@ -146,6 +147,18 @@ function StudentInClass({ classId, label }: IStudentClass) {
                       }>
                       View students
                     </Button>
+
+                    {authUser?.data.data.user_type === UserType.INSTRUCTOR && (
+                      <Button
+                        styleType="outline"
+                        onClick={() =>
+                          history.push(
+                            `/dashboard/evaluations/new?intkProg=${intakeProg}&prog=${id}&user=${authUser.data.data.id}&lvl=${levelId}&prd=${period}`,
+                          )
+                        }>
+                        Add evaluation
+                      </Button>
+                    )}
                   </div>
                   <div className="flex justify-between space-x-4">
                     <Heading fontWeight="semibold" fontSize="xl" className="py-2">

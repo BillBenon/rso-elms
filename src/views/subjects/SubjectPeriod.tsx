@@ -5,9 +5,11 @@ import Loader from '../../components/Atoms/custom/Loader';
 import AddCard from '../../components/Molecules/cards/AddCard';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import { authenticatorStore } from '../../store/administration';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { CommonCardDataType } from '../../types';
 import { IntakeClassParam } from '../../types/services/intake-program.types';
+import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 
 function SubjectPeriod() {
@@ -16,6 +18,7 @@ function SubjectPeriod() {
   const { data: subjects, isLoading } = intakeProgramStore.getPeriodSubjects(period);
   const [subj, setsubj] = useState<CommonCardDataType[]>();
   const history = useHistory();
+  const { data: authUser } = authenticatorStore.authUser();
 
   useEffect(() => {
     if (subjects?.data.data) {
@@ -45,6 +48,7 @@ function SubjectPeriod() {
       ) : subj?.length === 0 ? (
         <NoDataAvailable
           buttonLabel="Add new subject"
+          showButton={authUser?.data.data.user_type === UserType.ADMIN}
           icon="subject"
           title={'No subjects available in this period'}
           handleClick={() =>
