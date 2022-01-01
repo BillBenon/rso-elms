@@ -5,6 +5,7 @@ import countryList from 'react-select-country-list';
 
 import { queryClient } from '../../../../plugins/react-query';
 import academyStore from '../../../../store/administration/academy.store';
+import { authenticatorStore } from '../../../../store/administration/authenticator.store';
 import {
   getIntakesByAcademy,
   getProgramsByIntake,
@@ -44,13 +45,17 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
   // const newUserType = pick(UserType, ['ADMIN', 'INSTRUCTOR', 'STUDENT']);
   // const newUserTypeWithSuper = { ...newUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
-  // const authUser = authenticatorStore.authUser();
+  const authUser = authenticatorStore.authUser().data?.data.data;
 
   let { userType } = useParams<IParams>();
 
+  // get all academies in an institution
+  const academies: AcademyInfo[] | undefined =
+    academyStore.fetchAcademies().data?.data.data;
+
   const [details, setDetails] = useState<CreateUserInfo>({
     activation_key: '',
-    academy_id: '',
+    academy_id: authUser?.academy.id + '',
     deployed_on: '',
     deployment_number: `DEP-${parseInt(Math.random() * 10000 + '')}`,
     birth_date: '',
@@ -129,9 +134,6 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
       },
     });
   }
-  // get all academies in an institution
-  const academies: AcademyInfo[] | undefined =
-    academyStore.fetchAcademies().data?.data.data;
 
   // get intakes based on selected academy
   const intakes = getIntakesByAcademy(details.academy_id, false, !!details.academy_id);
@@ -301,7 +303,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Education level
         </DropdownMolecule>
-        {![UserType.SUPER_ADMIN].includes(details.user_type) && (
+        {authUser?.user_type === UserType.SUPER_ADMIN && (
           <DropdownMolecule
             options={getDropDownOptions({ inputs: academies || [] })}
             name="academy_id"
