@@ -117,20 +117,21 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     }));
   }
 
-  const { mutateAsync } = usersStore.createUser();
+  const { mutateAsync, isLoading } = usersStore.createUser();
   async function addUser<T>(e: FormEvent<T>) {
     e.preventDefault();
-
     if (onSubmit) onSubmit(e);
+
+    let toastId = toast.loading(`Saving new ${userType.toLowerCase()}`);
 
     await mutateAsync(details, {
       onSuccess(data) {
-        toast.success(data.data.message);
-        queryClient.invalidateQueries(['users/institution']);
+        toast.success(data.data.message, { id: toastId });
+        queryClient.invalidateQueries(['users', 'users/academy', 'users/academy/type']);
         history.goBack();
       },
       onError(error: any) {
-        toast.error(error.response.data.message.split(':')[2]);
+        toast.error(error.response.data.message.split(':')[2], { id: toastId });
       },
     });
   }
@@ -349,7 +350,9 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
             </DropdownMolecule>
           </>
         )}
-        <Button type="submit">Create</Button>
+        <Button type="submit" disabled={isLoading}>
+          Create
+        </Button>
       </form>
     </div>
   );
