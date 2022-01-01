@@ -77,7 +77,7 @@ function IntakeProgramLevel() {
             <div className="text-right">
               <Link
                 to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
-                <Button>Add Level</Button>
+                <Button>Add level to program</Button>
               </Link>
             </div>
           ) : null}

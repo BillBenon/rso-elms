@@ -9,6 +9,7 @@ import {
 } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 
+
 function LevelStudents() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { level: levelId } = useParams<IntakeLevelParam>();
@@ -35,7 +36,7 @@ function LevelStudents() {
   return (
     <div className="flex flex-col cursor-pointer">
       <Button styleType="outline" onClick={() => setSidebarOpen(true)}>
-        Enrolled students
+        View students
       </Button>
       <RightSidebar
         open={sidebarOpen}

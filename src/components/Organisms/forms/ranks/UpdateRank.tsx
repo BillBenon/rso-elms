@@ -9,8 +9,8 @@ import { FormPropType, ParamType, ValueType } from '../../../../types';
 import { CreateRankReq, RankCategory } from '../../../../types/services/rank.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
-import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
+import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function UpdateRank({ onSubmit }: FormPropType) {
@@ -64,16 +64,14 @@ export default function UpdateRank({ onSubmit }: FormPropType) {
   return (
     <form onSubmit={submitForm}>
       {/* model category */}
-      <DropdownMolecule
-        defaultValue={getDropDownStatusOptions(RankCategory).find(
-          (categ) => categ.label === form.category,
-        )}
+      <SelectMolecule
+        value={form.category}
         options={getDropDownStatusOptions(RankCategory)}
         name="category"
         placeholder={'Select the Rank Category'}
         handleChange={handleChange}>
         Rank Category
-      </DropdownMolecule>
+      </SelectMolecule>
       {/* model name */}
       <InputMolecule
         required

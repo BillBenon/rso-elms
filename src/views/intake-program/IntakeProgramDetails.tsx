@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
+import { Link } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -123,7 +124,7 @@ function IntakeProgramDetails() {
     );
 
     let instructorLevelsIds = instructorLevels?.data.data.map(
-      (instLvl) => instLvl.academic_year_program_intake_level.id,
+      (instLvl) => instLvl.academic_year_program_intake_level?.id,
     );
 
     const instructorProgLevels = getLevels?.filter((level) =>
@@ -179,7 +180,20 @@ function IntakeProgramDetails() {
         <Heading className="pb-5" fontWeight="semibold" fontSize="xl">
           {program?.name}
         </Heading>
-        <TabNavigation tabs={tabs}>
+        <TabNavigation
+          tabs={tabs}
+          headerComponent={
+            authUser?.user_type === UserType.ADMIN && getLevels.length === 0 ? (
+              <div className="text-right">
+                <Link
+                  to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
+                  <Button>Add level to program</Button>
+                </Link>
+              </div>
+            ) : (
+              <></>
+            )
+          }>
           <Switch>
             <Route
               exact
@@ -241,7 +255,9 @@ function IntakeProgramDetails() {
                             userType={authUser?.user_type}
                             isLoading={studLoading}>
                             {authUser?.user_type === UserType.ADMIN ? (
-                              <EnrollStudentIntakeProgram />
+                              <EnrollStudentIntakeProgram
+                                existing={studentsProgram?.data.data || []}
+                              />
                             ) : null}
                           </UsersPreview>
 
@@ -254,7 +270,9 @@ function IntakeProgramDetails() {
                             userType={authUser?.user_type}
                             isLoading={instLoading}>
                             {authUser?.user_type === UserType.ADMIN ? (
-                              <EnrollInstructorIntakeProgram />
+                              <EnrollInstructorIntakeProgram
+                                existing={instructorsProgram?.data.data || []}
+                              />
                             ) : null}
                           </UsersPreview>
                         </div>

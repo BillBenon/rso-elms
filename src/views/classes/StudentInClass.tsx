@@ -54,6 +54,8 @@ function StudentInClass({ classId, label }: IStudentClass) {
     setStudents(tempStuds);
   }, [studentsData]);
 
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
   return (
     <Tab label={label}>
       <div className="flex flex-col">
@@ -65,15 +67,17 @@ function StudentInClass({ classId, label }: IStudentClass) {
               return (
                 <>
                   <div className="flex gap-4 self-end">
-                    <Button
-                      styleType="outline"
-                      onClick={() =>
-                        history.push(
-                          `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
-                        )
-                      }>
-                      Add class
-                    </Button>
+                    {authUser?.user_type === UserType.ADMIN && (
+                      <Button
+                        styleType="outline"
+                        onClick={() =>
+                          history.push(
+                            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
+                          )
+                        }>
+                        Add class
+                      </Button>
+                    )}
 
                     <Button
                       styleType="outline"
@@ -123,26 +127,28 @@ function StudentInClass({ classId, label }: IStudentClass) {
           />
           <Route
             exact
-            path={`${path}/subject`}
+            path={`${path}/:classId/subject`}
             render={() => {
               return (
                 <>
                   <div className="flex gap-4 self-end">
-                    <Button
-                      styleType="outline"
-                      onClick={() =>
-                        history.push(
-                          `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
-                        )
-                      }>
-                      Add class
-                    </Button>
+                    {authUser?.user_type === UserType.ADMIN && (
+                      <Button
+                        styleType="outline"
+                        onClick={() =>
+                          history.push(
+                            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
+                          )
+                        }>
+                        Add class
+                      </Button>
+                    )}
 
                     <Button
                       styleType="outline"
                       onClick={() =>
                         history.push(
-                          `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/view-class/${classId}`,
+                          `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/view-class`,
                         )
                       }>
                       View students
@@ -173,7 +179,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
           {/* add subject to period */}
           <Route
             exact
-            path={`${path}/add-subject`}
+            path={`${path}/:classId/add-subject`}
             render={() => (
               <PopupMolecule
                 title="Add subject to period"

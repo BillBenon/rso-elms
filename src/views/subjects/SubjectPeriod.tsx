@@ -15,7 +15,10 @@ import { advancedTypeChecker } from '../../utils/getOption';
 function SubjectPeriod() {
   const { intakeId, id, intakeProg, level, period, classId } =
     useParams<IntakeClassParam>();
-  const { data: subjects, isLoading } = intakeProgramStore.getPeriodSubjects(period);
+  const { data: subjects, isLoading } = intakeProgramStore.getClassSubjects(
+    classId,
+    period,
+  );
   const [subj, setsubj] = useState<CommonCardDataType[]>();
   const history = useHistory();
   const { data: authUser } = authenticatorStore.authUser();
@@ -41,12 +44,15 @@ function SubjectPeriod() {
     }
   }, [subjects?.data.data]);
 
+  const authUser = authenticatorStore.authUser().data?.data.data;
+
   return (
     <div>
       {isLoading ? (
         <Loader />
       ) : subj?.length === 0 ? (
         <NoDataAvailable
+          showButton={authUser?.user_type === UserType.ADMIN}
           buttonLabel="Add new subject"
           showButton={authUser?.data.data.user_type === UserType.ADMIN}
           icon="subject"
@@ -60,14 +66,16 @@ function SubjectPeriod() {
         />
       ) : (
         <section className="mt-4 flex flex-wrap justify-start gap-4">
-          <AddCard
-            title={'Add new subject'}
-            onClick={() =>
-              history.push(
-                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${period}/view-class/${classId}/add-subject`,
-              )
-            }
-          />
+          {authUser?.user_type === UserType.ADMIN && (
+            <AddCard
+              title={'Add new subject'}
+              onClick={() =>
+                history.push(
+                  `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${period}/view-class/${classId}/add-subject`,
+                )
+              }
+            />
+          )}
           {subj?.map((sub) => (
             <div className="p-1 mt-3" key={sub.id}>
               <CommonCardMolecule

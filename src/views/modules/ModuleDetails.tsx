@@ -231,59 +231,6 @@ export default function ModuleDetails() {
           <Switch>
             <Route
               exact
-              path={`${path}`}
-              render={() => (
-                <div className="flex py-9">
-                  <div className="mr-24">
-                    {module && (
-                      <CommonCardMolecule data={moduleData}>
-                        <div className="flex flex-col mt-8 gap-7 pb-2">
-                          <Heading color="txt-secondary" fontSize="sm">
-                            Module Type
-                          </Heading>
-                          <Heading fontSize="sm">
-                            {moduleData?.subTitle?.replaceAll('_', ' ')}
-                          </Heading>
-                          {/* 
-                          <div className="flex items-center gap-2">
-                            <Avatar
-                              size="24"
-                              alt="user1 profile"
-                              className=" rounded-full  border-2 border-main transform hover:scale-125"
-                              src="https://randomuser.me/api/portraits/men/1.jpg"
-                            />
-                            <Heading fontSize="sm">{programData.incharge}</Heading>
-                          </div> */}
-                        </div>
-                        <div className="mt-4 flex space-x-4">
-                          <Button onClick={() => history.push(`${url}/edit`)}>
-                            Edit Module
-                          </Button>
-                          <Button styleType="outline">Change Status</Button>
-                        </div>
-                      </CommonCardMolecule>
-                    )}
-                  </div>
-
-                  <div className="flex flex-col gap-8 z-0">
-                    <div className="flex gap-8">
-                      {/* levels */}
-                      <div className="flex flex-col gap-8 z-0">
-                        <UsersPreview
-                          title="Instructors"
-                          label="Instructors in intake program"
-                          data={[]}
-                          totalUsers={assignedInstructors?.data.data.length || 0}
-                          dataLabel={''}
-                          isLoading={false}></UsersPreview>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            />
-            <Route
-              exact
               path={`${path}/subjects`}
               render={() => (
                 <>
