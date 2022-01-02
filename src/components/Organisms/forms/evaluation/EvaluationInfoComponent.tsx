@@ -58,7 +58,9 @@ export default function EvaluationInfoComponent({
 
   let selectedModule = instrucotrModules?.find((mod) => mod.id === moduleId)?.id;
 
-  const { data: subjects } = subjectStore.getSubjectsByModule(selectedModule + '');
+  const { data: subjects, isLoading: subjLoading } = subjectStore.getSubjectsByModule(
+    selectedModule + '',
+  );
   const { data: levels } = enrollmentStore.getInstructorLevels(instructorInfo?.id + '');
 
   const { data: classes } = classStore.getClassByPeriod(intakePeriodId + '');
@@ -68,9 +70,9 @@ export default function EvaluationInfoComponent({
     academy_id: authUser?.academy.id.toString() || '',
     instructor_id: authUser?.id.toString() || '',
     adm_intake_level_class_id: evaluationInfo?.adm_intake_level_class_id || '',
-    intake_academic_year_period: evaluationInfo?.intake_academic_year_period || 0,
+    intake_academic_year_period: evaluationInfo?.intake_academic_year_period || '',
     allow_submission_time: evaluationInfo?.allow_submission_time || '',
-    class_ids: '',
+    class_ids: evaluationInfo?.class_ids || '',
     id: evaluationInfo?.id || '',
     classification: evaluationInfo?.classification || IEvaluationClassification.MODULE,
     content_format: evaluationInfo?.content_format || IContentFormatEnum.DOC,
@@ -95,22 +97,29 @@ export default function EvaluationInfoComponent({
   );
 
   useEffect(() => {
-    const period =
-      classes?.data.data.find(
-        (periodId) => periodId.id == details.adm_intake_level_class_id,
-      )?.intake_academic_year_period_id + '';
+    const classIds = details.class_ids.split(',');
 
-    setDetails((details) => ({
-      ...details,
-      ['intake_academic_year_period']: parseInt(period),
-    }));
-  }, [classes?.data.data, details.adm_intake_level_class_id]);
+    if (classIds.length <= 1) {
+      const period =
+        classes?.data.data.find((periodId) => periodId.id == details.class_ids)
+          ?.intake_academic_year_period_id + '';
+
+      setDetails((details) => ({
+        ...details,
+        ['intake_academic_year_period']: period,
+      }));
+    }
+
+    console.log(details.intake_academic_year_period);
+  }, [classes?.data.data, details.class_ids]);
 
   const { mutate } = evaluationStore.createEvaluation();
   const { mutateAsync } = evaluationStore.updateEvaluation();
 
   function handleChange({ name, value }: ValueType) {
     if (name === 'module') setModuleId(value + '');
+    else if (name === 'class_ids')
+      setDetails((details) => ({ ...details, class_ids: value.toString() }));
     else setDetails((details) => ({ ...details, [name]: value }));
   }
 
@@ -193,7 +202,7 @@ export default function EvaluationInfoComponent({
         <DropdownMolecule
           width="64"
           name="subject_academic_year_period_id"
-          placeholder="Select subject"
+          placeholder={subjLoading ? 'Loading' : 'Select subject'}
           handleChange={handleChange}
           options={getDropDownOptions({
             inputs: subjects?.data.data || [],
@@ -233,7 +242,7 @@ export default function EvaluationInfoComponent({
         <DropdownMolecule
           isMulti={details.eligible_group === IEligibleClassEnum.MULTIPLE}
           width="64"
-          name="adm_intake_level_class_id"
+          name="class_ids"
           placeholder="Select class"
           handleChange={handleChange}
           options={getDropDownOptions({
