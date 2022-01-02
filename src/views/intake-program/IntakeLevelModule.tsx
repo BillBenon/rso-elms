@@ -25,10 +25,8 @@ function IntakeLevelModule() {
 
   const [levelModules, setlevelModules] = useState<CommonCardDataType[]>([]);
 
-  const { data: instructorProgramLevel, isLoading:instructorsLoading } =
-    enrollmentStore.getInstructorsInProgramLevel(
-      level
-  );
+  const { data: instructorProgramLevel, isLoading: instructorsLoading } =
+    enrollmentStore.getInstructorsInProgramLevel(level);
   const { data: levelModuleStore, isLoading } = intakeProgramStore.getModulesByLevel(
     parseInt(level),
   );
@@ -61,17 +59,19 @@ function IntakeLevelModule() {
   return (
     <>
       <TableHeader usePadding={false} showBadge={false} showSearch={false}>
-        
         {/* <Button styleType="outline">Enrolled Students</Button>
         <Button styleType="outline">Enrolled Instructors</Button> */}
         {/* <div className='py-2.5 border px-4 rounded-lg border-primary-500 text-primary-500 font-semibold text-sm'>Enrolled Students</div>
         <div className='py-2.5 border px-4 rounded-lg border-primary-500 text-primary-500 font-semibold text-sm'>Enrolled Instructors</div> */}
         {authUser?.user_type === UserType.ADMIN && (
           <>
-        <LevelInstrctors isLoading={instructorsLoading} instructorsData={instructorProgramLevel?.data.data || []}/>
-        <EnrollInstructorToLevel existing={instructorProgramLevel?.data.data || []} />
-        <LevelStudents />
-        <EnrollStudent />
+            <LevelInstrctors
+              isLoading={instructorsLoading}
+              instructorsData={instructorProgramLevel?.data.data || []}
+            />
+            <EnrollInstructorToLevel existing={instructorProgramLevel?.data.data || []} />
+            <LevelStudents />
+            <EnrollStudent />
           </>
         )}
         {prdLoading ? (
@@ -107,7 +107,7 @@ function IntakeLevelModule() {
           <NoDataAvailable
             showButton={authUser?.user_type === UserType.ADMIN}
             buttonLabel="Add new modules"
-            title={'No Modules available in this level'}
+            title={'No modules available in this level'}
             handleClick={() =>
               history.push(
                 `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/${level}/add-module`,

@@ -27,7 +27,7 @@ export default function useInstructorModules(programId: string, instructorId: st
         moduleIds?.includes(inst.id + ''),
       ) || [];
 
-    setinstProgModules((prev: ModuleInfo[]) => [...prev, ...newInstProgModule]);
+    setinstProgModules(newInstProgModule);
   }, [getAllModuleStore.data?.data.data, moduleIds]);
 
   useEffect(() => {

@@ -40,6 +40,14 @@ function EnrollStudentIntakeProgram<T>({ existing }: ProgramEnrollmentProps<T>) 
 
   const intakeProgram = programs?.find((pr) => pr.id === intakeProg);
 
+  // let intakeStudents = programs?.map(
+  //   (prg) => intakeProgramStore.getStudentsByIntakeProgram(prg.id + '').data?.data.data,
+  // );
+
+  // let approvedStudents = intakeStudents?.find((intk) =>
+  //   intk?.filter((stud) => stud.enrolment_status === StudentApproval.APPROVED),
+  // );
+
   const [students, setStudents] = useState<UserView[]>([]);
 
   useEffect(() => {

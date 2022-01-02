@@ -6,6 +6,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { Tabs } from '../../components/Molecules/tabs/tabs';
 import { authenticatorStore } from '../../store/administration';
 import { classStore } from '../../store/administration/class.store';
+import { getStudentShipByUserId } from '../../store/administration/intake-program.store';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import { UserType } from '../../types/services/user.types';
 import ViewStudentReports from '../reports/ViewStudentReports';
@@ -23,10 +24,20 @@ function Classes() {
     period,
   } = useParams<IntakePeriodParam>();
 
+  const authUser = authenticatorStore.authUser().data?.data.data;
+  const studentInfo = getStudentShipByUserId(authUser?.id + '' || '', !!authUser?.id).data
+    ?.data.data[0];
+  const { data: studClasses, isLoading: studLoad } = classStore.getClassByStudentAndLevel(
+    studentInfo?.id + '',
+    levelId,
+  );
+
   const { data: classes, isLoading } = classStore.getClassByPeriod(period);
   const classGroups = classes?.data.data || [];
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const studentClassIds = studClasses?.data.data.map((std) => std.id);
+
+  const studentClasses = classGroups.filter((cl) => studentClassIds?.includes(cl.id));
 
   return (
     <Switch>
@@ -36,9 +47,37 @@ function Classes() {
         render={() => {
           return (
             <>
-              {isLoading ? (
+              {authUser?.user_type === UserType.STUDENT ? (
+                studLoad ? (
+                  <Loader />
+                ) : studentClasses.length === 0 ? (
+                  <NoDataAvailable
+                    showButton={false}
+                    buttonLabel="Add new class"
+                    icon="academy"
+                    fill={false}
+                    title={'No classes available in this period'}
+                    handleClick={() =>
+                      history.push(
+                        `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
+                      )
+                    }
+                    description={`There are no classes added yet`}
+                  />
+                ) : (
+                  <Tabs>
+                    {studentClasses.map((cl) => (
+                      <StudentInClass
+                        key={cl.id}
+                        classId={cl.id.toString()}
+                        label={cl.class_name}
+                      />
+                    ))}
+                  </Tabs>
+                )
+              ) : isLoading ? (
                 <Loader />
-              ) : classGroups.length <= 0 ? (
+              ) : classGroups.length === 0 ? (
                 <NoDataAvailable
                   showButton={authUser?.user_type === UserType.ADMIN}
                   buttonLabel="Add new class"
@@ -50,7 +89,11 @@ function Classes() {
                       `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
                     )
                   }
-                  description="There are no classes added yet, click on the below button to add some!"
+                  description={`There are no classes added yet,${
+                    authUser?.user_type === UserType.ADMIN
+                      ? 'click on the below button to add some!'
+                      : ''
+                  }  `}
                 />
               ) : (
                 <Tabs>

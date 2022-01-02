@@ -24,11 +24,16 @@ import UpdateIntake from '../../components/Organisms/intake/UpdateIntake';
 import { authenticatorStore } from '../../store/administration';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { getIntakesByAcademy } from '../../store/administration/intake.store';
+import {
+  getIntakeProgramsByStudent,
+  getStudentShipByUserId,
+} from '../../store/administration/intake-program.store';
 import registrationControlStore from '../../store/administration/registrationControl.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Link as LinkType, ValueType } from '../../types';
 import { InstructorProgram } from '../../types/services/instructor.types';
 import { ExtendedIntakeInfo } from '../../types/services/intake.types';
+import { StudentIntakeProgram } from '../../types/services/intake-program.types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import IntakePrograms from '../intake-program/IntakePrograms';
@@ -65,13 +70,24 @@ export default function Intakes() {
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(authUserId + '')
     .data?.data.data;
 
+  const studentInfo =
+    getStudentShipByUserId(
+      authUserId + '',
+      !!authUserId && authUser?.user_type === UserType.STUDENT,
+    ).data?.data.data || [];
+
   const {
     isSuccess,
     isError,
     data,
     isLoading,
     refetch: refetchIntakes,
-  } = authUser?.user_type === UserType.INSTRUCTOR
+  } = authUser?.user_type === UserType.STUDENT
+    ? getIntakeProgramsByStudent(
+        studentInfo[0]?.id.toString() || '',
+        !!studentInfo[0]?.id,
+      )
+    : authUser?.user_type === UserType.INSTRUCTOR
     ? enrollmentStore.getInstructorIntakePrograms(instructorInfo?.id + '')
     : getIntakesByAcademy(
         registrationControlId || userInfo?.data.data.academy.id.toString()!,
@@ -83,7 +99,22 @@ export default function Intakes() {
     if (isSuccess && data?.data) {
       let loadedIntakes: CommonCardDataType[] = [];
       data?.data.data.forEach((intk) => {
-        if (authUser?.user_type === UserType.INSTRUCTOR) {
+        if (authUser?.user_type === UserType.STUDENT) {
+          let intake = intk as StudentIntakeProgram;
+          let prog: CommonCardDataType = {
+            id: intake.intake_program.intake.id,
+            status: {
+              type: advancedTypeChecker(intake.intake_program.intake.intake_status),
+              text: intake.intake_program.intake.intake_status.toString(),
+            },
+            code: intake.intake_program.intake.code,
+            title: intake.intake_program.intake.title,
+            description: intake.intake_program.intake.description,
+          };
+          if (!loadedIntakes.find((pg) => pg.id === prog.id)?.id) {
+            loadedIntakes.push(prog);
+          }
+        } else if (authUser?.user_type === UserType.INSTRUCTOR) {
           let intake = intk as InstructorProgram;
           let prog: CommonCardDataType = {
             id: intake.intake_program.intake.id,
@@ -95,8 +126,9 @@ export default function Intakes() {
             title: intake.intake_program.intake.title,
             description: intake.intake_program.intake.description,
           };
-
-          loadedIntakes.push(prog);
+          if (!loadedIntakes.find((pg) => pg.id === prog.id)?.id) {
+            loadedIntakes.push(prog);
+          }
         } else {
           let intake = intk as ExtendedIntakeInfo;
           let cardData: CommonCardDataType = {
