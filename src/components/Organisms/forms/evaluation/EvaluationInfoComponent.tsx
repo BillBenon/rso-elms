@@ -53,7 +53,7 @@ export default function EvaluationInfoComponent({
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(
     authUser?.id + '',
-  ).data?.data.data;
+  ).data?.data.data[0];
 
   const instrucotrModules = useInstructorModules(progId + '', instructorInfo?.id + '');
 
