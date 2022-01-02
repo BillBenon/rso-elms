@@ -167,9 +167,9 @@ class EnrollmentService {
 
   public async getInstructorsBySubjectId(
     subjectId: string,
-  ): Promise<AxiosResponse<Response<SortedContent<EnrollInstructorToSubject[]>>>> {
+  ): Promise<AxiosResponse<Response<ModuleInstructors[]>>> {
     return await adminstrationAxios.get(
-      `instructorSubjectAssignment/getAll`,
+      `instructorSubjectAssignment/getAllInstructorsAssignedOnSubject/${subjectId}`,
     );
   }
 
