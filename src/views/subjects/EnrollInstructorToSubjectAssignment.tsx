@@ -14,7 +14,7 @@ interface AssignSubjectType<T>{
     module_id: string;
     subject_id: string;
     intakeProg: string;
-    subInstructors: ModuleInstructors[] | undefined;
+    subInstructors: ModuleInstructors[];
 }
 
 export default function EnrollInstructorToSubjectComponent<T>({module_id,subject_id, intakeProg, subInstructors}:AssignSubjectType<T>) {
@@ -27,8 +27,13 @@ export default function EnrollInstructorToSubjectComponent<T>({module_id,subject
   const [instructors, setInstructors] = useState<UserView[]>([]);
 
   useEffect(() => {
+    let ids:string[] = [];
+    for(let i = 0; i < subInstructors?.length; i++){
+      ids.push(subInstructors[i].id+'');
+    }
     let instructorsView: UserView[] = [];
     instructorInfos?.data.data.forEach((inst) => {
+      if(!ids.includes(inst.id+'')){
       let instructorView: UserView = {
         id: inst.id,
         first_name: inst.user.first_name,
@@ -36,9 +41,10 @@ export default function EnrollInstructorToSubjectComponent<T>({module_id,subject
         image_url: inst.user.image_url,
       };
       instructorsView.push(instructorView);
+    }
     });
     setInstructors(instructorsView);
-  }, [instructorInfos,instructorsInProgram]);
+  }, [instructorInfos,instructorsInProgram,subInstructors]);
 
 
   const { mutate } = enrollmentStore.enrollInstructorToSubject();
