@@ -63,17 +63,17 @@ function IntakeProgramDetails() {
   }, [studentsProgram]);
 
   useEffect(() => {
-    instructorsProgram?.data.data.map((inst) =>
-      setInstructors([
-        ...instructors,
-        {
+    let demoInstructors: UserView[] = [];
+    instructorsProgram?.data.data.map((inst) =>{
+      demoInstructors.push({
           id: inst.id,
           first_name: inst.instructor.user.first_name,
           last_name: inst.instructor.user.last_name,
           image_url: inst.instructor.user.image_url,
-        },
-      ]),
+        })
+      }
     );
+    setInstructors(demoInstructors);
   }, [instructorsProgram]);
 
   const { data: programs, isLoading } = programStore.getProgramById(id);
