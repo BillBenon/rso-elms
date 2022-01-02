@@ -13,7 +13,6 @@ import Icon from '../../components/Atoms/custom/Icon';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
-import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import SubjectCard from '../../components/Molecules/cards/modules/SubjectCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
@@ -244,13 +243,9 @@ export default function ModuleDetails() {
                     />
                   ) : (
                     <section className="flex flex-wrap justify-start gap-4 mt-2">
-                      {subjects.map((subject, i) => (
-                        <div key={i} className="p-1 mt-3">
-                          <SubjectCard
-                            subject={subject}
-                            key={i}
-                            intakeProg={intakeProg}
-                          />
+                      {subjects.map((subject) => (
+                        <div key={subject.id} className="p-1 mt-3">
+                          <SubjectCard subject={subject} intakeProg={intakeProg} />
                         </div>
                       ))}
                     </section>
