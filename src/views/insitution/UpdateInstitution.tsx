@@ -8,6 +8,7 @@ import FileUploader from '../../components/Atoms/Input/FileUploader';
 import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
+import LocationMolecule from '../../components/Molecules/input/LocationMolecule';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
 import { institutionStore } from '../../store/administration/institution.store';
 import { GenericStatus, ParamType, ValueType } from '../../types';
@@ -35,6 +36,8 @@ export default function UpdateInstitution() {
     id: '',
   });
 
+  const [logoFile, setlogoFile] = useState<File | null>(null);
+
   useEffect(() => {
     const institution = data?.data.data;
 
@@ -50,7 +53,7 @@ export default function UpdateInstitution() {
         moto: institution.moto,
         name: institution.name,
         phone_number: institution.phone_number,
-        postal_code: institution.postal_code || '',
+        postal_code: institution.postal_code || 'x',
         short_name: institution.short_name,
         website_link: institution.website_link,
         id: id,
@@ -61,21 +64,48 @@ export default function UpdateInstitution() {
     setValues({ ...values, [e.name]: e.value });
   };
 
+  const handleUpload = (files: FileList | null) => {
+    setlogoFile(files ? files[0] : null);
+  };
+
   const { mutateAsync } = institutionStore.updateInstitution();
+  const { mutateAsync: mutateAddLogo } = institutionStore.addLogo();
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
+    let toastId = toast.loading('Updating insitution');
     await mutateAsync(values, {
       onSuccess(data) {
-        toast.success(data.data.message, { duration: 1200 });
-        setTimeout(() => {
-          history.goBack();
-        }, 900);
+        toast.success(data.data.message, { duration: 1200, id: toastId });
+        addLogo(data.data.data.id + '');
+        history.goBack();
       },
       onError(error: any) {
-        toast.error(error.response.data.message);
+        toast.error(error.response.data.message, { id: toastId });
       },
     });
+  }
+
+  async function addLogo(institutionId: string) {
+    if (logoFile) {
+      let data = new FormData();
+
+      data.append('description', `${values.name}'s public logo`);
+      data.append('purpose', 'Add a design identifier for academy');
+      data.append('logoFile', logoFile);
+
+      await mutateAddLogo(
+        { id: institutionId, info: data },
+        {
+          onSuccess(_data) {
+            toast.success('Logo added successfully');
+          },
+          onError(error: any) {
+            toast.error(error.response.data.message || 'error occurred');
+          },
+        },
+      );
+    }
   }
 
   return (
@@ -154,22 +184,21 @@ export default function UpdateInstitution() {
               </TextAreaMolecule>
             </div>
             <div className="py-2">
-              <TextAreaMolecule
+              <InputMolecule
                 name="fax number"
                 value={values.fax_number}
                 placeholder="Fax number"
                 handleChange={(e) => handleChange(e)}>
                 Fax Number
-              </TextAreaMolecule>
+              </InputMolecule>
             </div>
             <div className="py-2">
-              <TextAreaMolecule
-                name="postal code"
-                value={values.postal_code}
-                placeholder="Postal Cide"
+              <LocationMolecule
+                name="full_address"
+                value={values.full_address}
                 handleChange={(e) => handleChange(e)}>
-                Postal Code
-              </TextAreaMolecule>
+                Head Office Location
+              </LocationMolecule>
             </div>
           </>
         </div>
@@ -178,11 +207,9 @@ export default function UpdateInstitution() {
           <ILabel className="block pb-2">Institution logo</ILabel>
 
           <FileUploader
-            allowPreview
-            accept={'image/jpeg, image/png'}
-            handleUpload={function (_files: FileList | null) {
-              throw new Error('Function not implemented.');
-            }}>
+            allowPreview={false}
+            handleUpload={handleUpload}
+            accept={'image/jpeg, image/png'}>
             <Button type="button" styleType="outline">
               <span className="flex items-center">
                 <Icon name="attach" useheightandpadding={false} fill="primary" />

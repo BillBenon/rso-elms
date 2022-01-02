@@ -5,6 +5,7 @@ import countryList from 'react-select-country-list';
 
 import { queryClient } from '../../../../plugins/react-query';
 import academyStore from '../../../../store/administration/academy.store';
+import { authenticatorStore } from '../../../../store/administration/authenticator.store';
 import {
   getIntakesByAcademy,
   getProgramsByIntake,
@@ -44,13 +45,17 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
   // const newUserType = pick(UserType, ['ADMIN', 'INSTRUCTOR', 'STUDENT']);
   // const newUserTypeWithSuper = { ...newUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
-  // const authUser = authenticatorStore.authUser();
+  const authUser = authenticatorStore.authUser().data?.data.data;
 
   let { userType } = useParams<IParams>();
 
+  // get all academies in an institution
+  const academies: AcademyInfo[] | undefined =
+    academyStore.fetchAcademies().data?.data.data;
+
   const [details, setDetails] = useState<CreateUserInfo>({
     activation_key: '',
-    academy_id: '',
+    academy_id: authUser?.academy.id + '',
     deployed_on: '',
     deployment_number: `DEP-${parseInt(Math.random() * 10000 + '')}`,
     birth_date: '',
@@ -112,26 +117,24 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     }));
   }
 
-  const { mutateAsync } = usersStore.createUser();
+  const { mutateAsync, isLoading } = usersStore.createUser();
   async function addUser<T>(e: FormEvent<T>) {
     e.preventDefault();
-
     if (onSubmit) onSubmit(e);
+
+    let toastId = toast.loading(`Saving new ${userType.toLowerCase()}`);
 
     await mutateAsync(details, {
       onSuccess(data) {
-        toast.success(data.data.message);
-        queryClient.invalidateQueries(['users/institution']);
+        toast.success(data.data.message, { id: toastId });
+        queryClient.invalidateQueries(['users', 'users/academy', 'users/academy/type']);
         history.goBack();
       },
       onError(error: any) {
-        toast.error(error.response.data.message.split(':')[2]);
+        toast.error(error.response.data.message.split(':')[2], { id: toastId });
       },
     });
   }
-  // get all academies in an institution
-  const academies: AcademyInfo[] | undefined =
-    academyStore.fetchAcademies().data?.data.data;
 
   // get intakes based on selected academy
   const intakes = getIntakesByAcademy(details.academy_id, false, !!details.academy_id);
@@ -301,7 +304,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Education level
         </DropdownMolecule>
-        {![UserType.SUPER_ADMIN].includes(details.user_type) && (
+        {authUser?.user_type === UserType.SUPER_ADMIN && (
           <DropdownMolecule
             options={getDropDownOptions({ inputs: academies || [] })}
             name="academy_id"
@@ -347,7 +350,9 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
             </DropdownMolecule>
           </>
         )}
-        <Button type="submit">Create</Button>
+        <Button type="submit" disabled={isLoading}>
+          Create
+        </Button>
       </form>
     </div>
   );
