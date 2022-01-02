@@ -59,7 +59,7 @@ export default function EnrollInstructorToSubjectComponent<T>({module_id,subject
       // let instructorModule = await enrollmentStore.getModuleAssignmentByIntakeProgramAndModule({module_id, intakeProg: inst_id});
       let newInstructor: EnrollInstructorToSubject = {
         subject_id: subject_id,
-        instructor_module_assignment_id: found?.id+'',
+        intake_program_instructor_id: found?.id+'',
       };
 
       mutate(newInstructor, {
