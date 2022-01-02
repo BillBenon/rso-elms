@@ -57,8 +57,6 @@ export default function EvaluationQuestionComponent({
     let allQuestions: any[] = [];
     if (evaluationQuestions?.length > 0) {
       evaluationQuestions.forEach((question) => {
-        console.log(question.question_type);
-
         let questionData = { ...initialState };
         //@ts-ignore
         questionData.choices = question.multiple_choice_answers || [];
@@ -157,9 +155,7 @@ export default function EvaluationQuestionComponent({
     e.preventDefault();
 
     mutate(questions, {
-      onSuccess: (newData) => {
-        console.log(newData);
-
+      onSuccess: () => {
         toast.success('Questions added', { duration: 5000 });
 
         //first remove the button for submitted question
