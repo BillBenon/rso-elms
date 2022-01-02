@@ -75,13 +75,15 @@ class EvaluationStore {
     });
   }
 
-
   getStudentReport(studentId: string) {
-    return useQuery(['studentReport', studentId], () => evaluationService.getStudentReport(studentId), {
-      enabled: !!studentId,
-    });
+    return useQuery(
+      ['studentReport', studentId],
+      () => evaluationService.getStudentReport(studentId),
+      {
+        enabled: !!studentId,
+      },
+    );
   }
-
 
   getEvaluationQuestions(id: string) {
     return useQuery(

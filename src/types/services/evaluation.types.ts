@@ -83,7 +83,6 @@ export enum IEvaluationApprovalStatus {
 
 export interface IEvaluationCreate {
   access_type: string;
-  adm_intake_level_class_id: string;
   intake_academic_year_period: string;
   academy_id: string;
   instructor_id: string;
@@ -118,7 +117,6 @@ export interface IEvaluationInfo {
   id: string;
   name: string;
   academy_id: string;
-  adm_intake_level_class_id: string;
   class_ids: string;
   intake_academic_year_period: string;
   subject_academic_year_period: string;

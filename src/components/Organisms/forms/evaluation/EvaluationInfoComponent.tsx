@@ -10,7 +10,7 @@ import enrollmentStore from '../../../../store/administration/enrollment.store';
 import { subjectStore } from '../../../../store/administration/subject.store';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
-import { CommonCardDataType, SelectData, ValueType } from '../../../../types';
+import { CommonCardDataType, ValueType } from '../../../../types';
 import { EnrollInstructorLevelInfo } from '../../../../types/services/enrollment.types';
 import {
   IAccessTypeEnum,
@@ -36,6 +36,7 @@ import DateMolecule from '../../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
+import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 
 export default function EvaluationInfoComponent({
   handleNext,
@@ -69,7 +70,6 @@ export default function EvaluationInfoComponent({
     access_type: evaluationInfo?.access_type || IAccessTypeEnum.PUBLIC,
     academy_id: authUser?.academy.id.toString() || '',
     instructor_id: authUser?.id.toString() || '',
-    adm_intake_level_class_id: evaluationInfo?.adm_intake_level_class_id || '',
     intake_academic_year_period: evaluationInfo?.intake_academic_year_period || '',
     allow_submission_time: evaluationInfo?.allow_submission_time || '',
     class_ids: evaluationInfo?.class_ids || '',
@@ -92,10 +92,6 @@ export default function EvaluationInfoComponent({
     total_mark: evaluationInfo?.total_mark || 0,
   });
 
-  const { data: classStudent, isLoading } = classStore.getStudentsByClass(
-    details.adm_intake_level_class_id,
-  );
-
   useEffect(() => {
     const classIds = details.class_ids.split(',');
 
@@ -109,8 +105,6 @@ export default function EvaluationInfoComponent({
         ['intake_academic_year_period']: period,
       }));
     }
-
-    console.log(details.intake_academic_year_period);
   }, [classes?.data.data, details.class_ids]);
 
   const { mutate } = evaluationStore.createEvaluation();
@@ -154,6 +148,8 @@ export default function EvaluationInfoComponent({
       });
     }
   }
+
+  console.log(evaluationInfo?.intake_academic_year_period);
 
   return (
     <div>
@@ -199,8 +195,9 @@ export default function EvaluationInfoComponent({
           })}>
           Select module
         </DropdownMolecule>
-        <DropdownMolecule
+        <SelectMolecule
           width="64"
+          value={details.subject_academic_year_period_id}
           name="subject_academic_year_period_id"
           placeholder={subjLoading ? 'Loading' : 'Select subject'}
           handleChange={handleChange}
@@ -209,9 +206,10 @@ export default function EvaluationInfoComponent({
             labelName: ['title'],
           })}>
           Select subject
-        </DropdownMolecule>
+        </SelectMolecule>
 
-        <DropdownMolecule
+        <SelectMolecule
+          value={details.intake_academic_year_period}
           width="64"
           name="levelId"
           placeholder="Select level"
@@ -224,7 +222,7 @@ export default function EvaluationInfoComponent({
               '',
           })}>
           Select Level
-        </DropdownMolecule>
+        </SelectMolecule>
 
         <RadioMolecule
           defaultValue={details.eligible_group}
@@ -275,22 +273,6 @@ export default function EvaluationInfoComponent({
             { label: 'Field', value: IQuestionaireTypeEnum.FIELD },
           ]}
           handleChange={handleChange}>
-          {details.access_type === IAccessTypeEnum.PRIVATE && (
-            <DropdownMolecule
-              isMulti
-              width="64"
-              name="private"
-              placeholder={isLoading ? 'Loading students' : 'Select private'}
-              handleChange={handleChange}
-              options={
-                classStudent?.data.data.map((h) => ({
-                  value: h.student.id,
-                  label: `${h.student.user.first_name} ${h.student.user.last_name}`,
-                })) as SelectData[]
-              }>
-              Select Attendee
-            </DropdownMolecule>
-          )}
           Questionaire type
         </RadioMolecule>
         {details.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
@@ -308,9 +290,9 @@ export default function EvaluationInfoComponent({
             </DropdownMolecule> */}
             {details.submision_type === ISubmissionTypeEnum.FILE && (
               <>
-                <DropdownMolecule
+                <SelectMolecule
                   /*@ts-ignore */
-                  defaultValue={details.content_format}
+                  value={details.content_format}
                   width="64"
                   name="submision_type"
                   placeholder="Select submission type"
@@ -322,7 +304,7 @@ export default function EvaluationInfoComponent({
                     { label: 'PNG', value: IContentFormatEnum.PNG },
                   ]}>
                   Content format
-                </DropdownMolecule>
+                </SelectMolecule>
 
                 <InputMolecule
                   width="24"
