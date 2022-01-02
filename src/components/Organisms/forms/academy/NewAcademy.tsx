@@ -8,6 +8,7 @@ import academyStore from '../../../../store/administration/academy.store';
 import { Link, ValueType } from '../../../../types';
 import { AcademyCreateInfo } from '../../../../types/services/academy.types';
 import Button from '../../../Atoms/custom/Button';
+import FileUploader from '../../../Atoms/Input/FileUploader';
 import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
 import BreadCrumb from '../../../Molecules/BreadCrumb';
@@ -20,6 +21,7 @@ interface IProps {
   display_label: string;
   handleChange: (_e: ValueType) => any;
   handleNext: <T>(_e: FormEvent<T>) => any;
+  handleUpload: (_files: FileList | null) => void;
 }
 
 export default function NewAcademy() {
@@ -56,7 +58,10 @@ export default function NewAcademy() {
     website_link: '',
   });
 
+  const [logoFile, setlogoFile] = useState<File | null>(null);
+
   const { mutateAsync } = academyStore.createAcademy();
+  const { mutateAsync: mutateAddLogo } = academyStore.addLogo();
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
@@ -64,6 +69,10 @@ export default function NewAcademy() {
       [e.name]: e.value,
     }));
   }
+
+  const handleUpload = (files: FileList | null) => {
+    setlogoFile(files ? files[0] : null);
+  };
 
   const list: Link[] = [
     { to: '', title: 'Institution admin' },
@@ -75,16 +84,40 @@ export default function NewAcademy() {
     e.preventDefault();
     if (currentStep === 0) setCurrentStep(currentStep + 1);
     else {
+      let toastId = toast.loading('Creating academy');
       await mutateAsync(details, {
         onSuccess(data) {
-          toast.success(data.data.message);
+          toast.success(data.data.message, { id: toastId });
           queryClient.invalidateQueries(['academies/instutionId']);
+          addLogo(data.data.data.id);
           history.goBack();
         },
         onError(error: any) {
-          toast.error(error.response.data.message);
+          toast.error(error.response.data.message, { id: toastId });
         },
       });
+    }
+  }
+
+  async function addLogo(academyId: string) {
+    if (logoFile) {
+      let data = new FormData();
+
+      data.append('description', `${details.name} s public logo`);
+      data.append('purpose', 'Add a design identifier for academy');
+      data.append('logoFile', logoFile);
+
+      await mutateAddLogo(
+        { id: academyId, info: data },
+        {
+          onSuccess(data) {
+            toast.success(data.data.message);
+          },
+          onError(error: any) {
+            toast.error(error.response.data.message);
+          },
+        },
+      );
     }
   }
 
@@ -109,12 +142,14 @@ export default function NewAcademy() {
             details={details}
             handleChange={handleChange}
             handleNext={handleSubmit}
+            handleUpload={handleUpload}
           />
           <AcademyLocationComponent
             display_label=""
             details={details}
             handleChange={handleChange}
             handleNext={handleSubmit}
+            handleUpload={handleUpload}
           />
         </Stepper>
       </div>
@@ -122,7 +157,12 @@ export default function NewAcademy() {
   );
 }
 
-function AcademyInfoComponent({ details, handleChange, handleNext }: IProps) {
+function AcademyInfoComponent({
+  details,
+  handleChange,
+  handleNext,
+  handleUpload,
+}: IProps) {
   return (
     <form onSubmit={handleNext}>
       <InputMolecule
@@ -155,7 +195,14 @@ function AcademyInfoComponent({ details, handleChange, handleNext }: IProps) {
         <div className="mb-3">
           <ILabel weight="bold">academy logo</ILabel>
         </div>
-        <Button styleType="outline">upload logo</Button>
+        <FileUploader
+          allowPreview={false}
+          handleUpload={handleUpload}
+          accept={'image/jpeg, image/png'}>
+          <Button styleType="outline" type="button">
+            upload logo
+          </Button>
+        </FileUploader>
       </div>
       <div className="pt-3">
         <Button type="submit" onClick={() => handleNext}>
