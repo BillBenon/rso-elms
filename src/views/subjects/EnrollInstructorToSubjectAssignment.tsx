@@ -6,19 +6,23 @@ import Button from '../../components/Atoms/custom/Button';
 import RightSidebar from '../../components/Organisms/RightSidebar';
 import { queryClient } from '../../plugins/react-query';
 import enrollmentStore from '../../store/administration/enrollment.store';
-import { EnrollInstructorToSubject } from '../../types/services/enrollment.types';
+import { subjectStore } from '../../store/administration/subject.store';
+import { EnrollInstructorToSubject, ModuleInstructors } from '../../types/services/enrollment.types';
 import { UserView } from '../../types/services/user.types';
 
 interface AssignSubjectType<T>{
     module_id: string;
     subject_id: string;
+    intakeProg: string;
+    subInstructors: ModuleInstructors[] | undefined;
 }
 
-export default function <T>({module_id,subject_id}:AssignSubjectType<T>) {
+export default function EnrollInstructorToSubjectComponent<T>({module_id,subject_id, intakeProg, subInstructors}:AssignSubjectType<T>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const { data: instructorInfos, isLoading:instructorLoading } = enrollmentStore.getInstructorsByModule(module_id);
-
+  const { data: instructorsInProgram, isLoading:instructorProgram } =
+    enrollmentStore.getInstructorsInProgram(intakeProg + '');
 
   const [instructors, setInstructors] = useState<UserView[]>([]);
 
@@ -34,15 +38,22 @@ export default function <T>({module_id,subject_id}:AssignSubjectType<T>) {
       instructorsView.push(instructorView);
     });
     setInstructors(instructorsView);
-  }, [instructorInfos]);
+  }, [instructorInfos,instructorsInProgram]);
+
 
   const { mutate } = enrollmentStore.enrollInstructorToSubject();
 
-  function add(data?: string[]) {
-    data?.map((inst_id) => {
+  async function add(data?: string[]) {
+    data?.map(async (inst_id) => {
+      let found = instructorsInProgram?.data.data.find((instructor, index)=>{
+        if(instructor.instructor.id == inst_id)
+        return true;
+      })
+      console.log(found);
+      // let instructorModule = await enrollmentStore.getModuleAssignmentByIntakeProgramAndModule({module_id, intakeProg: inst_id});
       let newInstructor: EnrollInstructorToSubject = {
         subject_id: subject_id,
-        instructor_module_assignment_id: inst_id,
+        instructor_module_assignment_id: found?.id+'',
       };
 
       mutate(newInstructor, {
@@ -66,7 +77,7 @@ export default function <T>({module_id,subject_id}:AssignSubjectType<T>) {
         open={sidebarOpen}
         handleClose={() => setSidebarOpen(false)}
         label="Enroll instructor to this module"
-        data={instructors}
+        data={instructors || []}
         selectorActions={[
           {
             name: 'enroll instructors',

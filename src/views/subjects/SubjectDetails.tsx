@@ -4,6 +4,7 @@ import {
   Route,
   Switch,
   useHistory,
+  useLocation,
   useParams,
   useRouteMatch,
 } from 'react-router-dom';
@@ -19,6 +20,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
 import { authenticatorStore } from '../../store/administration';
+import enrollmentStore from '../../store/administration/enrollment.store';
 import { lessonStore } from '../../store/administration/lesson.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
@@ -33,6 +35,8 @@ interface ParamType {
 }
 
 export default function SubjectDetails() {
+  const { search } = useLocation();
+  const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
   const [authUser, setAuthUser] = useState<UserInfo>();
   const userData = authenticatorStore.authUser();
   useEffect(() => {
@@ -49,7 +53,7 @@ export default function SubjectDetails() {
     isSuccess,
   } = lessonStore.getLessonsBySubject(subjectId);
 
-  const { data: subjecEvaluations, isLoading } =
+  const { data: subjectEvaluations, isLoading } =
     evaluationStore.getEvaluationsCollectionBySubject(subjectId);
 
   const lessons = data?.data.data || [];
@@ -70,18 +74,22 @@ export default function SubjectDetails() {
     history.goBack();
   };
 
+  if(intakeProg == ''){
+    goBack();
+  }
+  console.log(intakeProg);
   const tabs = [
     {
       label: `Lessons(${lessons.length})`,
-      href: `${url}`,
+      href: `${url}?intkPrg=${intakeProg}`,
     },
     {
       label: 'Evaluations',
-      href: `${url}/evaluations`,
+      href: `${url}/evaluations?intkPrg=${intakeProg}`,
     },
     {
       label: 'Instructors',
-      href: `${url}/instructors`,
+      href: `${url}/instructors?intkPrg=${intakeProg}`,
     },
   ];
 
@@ -193,7 +201,7 @@ export default function SubjectDetails() {
                       ) : (
                         <EvaluationCategories
                           loading={isLoading}
-                          subjecEvaluations={subjecEvaluations?.data.data}
+                          subjecEvaluations={subjectEvaluations?.data.data}
                         />
                       )}
                     </>
