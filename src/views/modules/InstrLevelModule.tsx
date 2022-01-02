@@ -27,7 +27,7 @@ function InstrLevelModule() {
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(
     authUser?.id + '',
-  ).data?.data.data;
+  ).data?.data.data[0];
 
   const [instructor, setinstructor] = useState<Instructor>();
 
