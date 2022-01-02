@@ -45,7 +45,7 @@ export default function AdmModuleDetails() {
   const history = useHistory();
 
   const subjectData = subjectStore.getSubjectsByModule(moduleId);
-  const {data:modularData, isLoading} = moduleStore.getModuleById(moduleId);
+  const { data: modularData, isLoading } = moduleStore.getModuleById(moduleId);
   const authUser = authenticatorStore.authUser().data?.data.data;
   const { data: assignedInstructors } = enrollmentStore.getInstructorsonModule(moduleId);
 
@@ -166,184 +166,187 @@ export default function AdmModuleDetails() {
 
   return (
     <>
-    {isLoading ? (<Loader/>):(
-      <main className="px-4">
-        <section>
-          <BreadCrumb list={list} />
-        </section>
-        <div className="mt-11 pb-6">
-          <div className="flex flex-wrap justify-between items-center">
-            <div className="flex gap-2 items-center">
-              <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
-                {modularData?.data.data?.name} module
-              </Heading>
-            </div>
-            <div className="flex flex-wrap justify-start items-center">
-              <SearchMolecule handleChange={handleSearch} />
-              <button className="border p-0 rounded-md mx-2">
-                <Icon name="filter" />
-              </button>
-            </div>
-
-            {authUser?.user_type === UserType.ADMIN && (
-              <>
-                {route == 'SUBJECTS' ? (
-                  <div className="flex gap-3">
-                    <Button
-                      onClick={() => {
-                        history.push(`${url}/subjects/add-subject`);
-                      }}>
-                      Add new Subject
-                    </Button>
-                  </div>
-                ) : route == 'SYLLABUS' ? (
-                  <div className="flex gap-3">
-                    <Button onClick={() => history.push(`${url}/syllabus/add-syllabus`)}>
-                      Add new Syllabus
-                    </Button>
-                  </div>
-                ) : (
-                  <></>
-                )}
-              </>
-            )}
-            {authUser?.user_type === UserType.INSTRUCTOR && route == 'EVALUATIONS' && (
-              <>
-                <div className="flex gap-3">
-                  <Button onClick={() => history.push(`/evaluation/new`)}>
-                    Add new Evaluation
-                  </Button>
-                </div>
-              </>
-            )}
-            {authUser?.user_type === UserType.INSTRUCTOR && route == 'MATERIALS' && (
-              <div className="flex gap-3">
-                <Button onClick={() => history.push(`${url}/materials/add-material`)}>
-                  Add new Material
-                </Button>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <main className="px-4">
+          <section>
+            <BreadCrumb list={list} />
+          </section>
+          <div className="mt-11 pb-6">
+            <div className="flex flex-wrap justify-between items-center">
+              <div className="flex gap-2 items-center">
+                <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
+                  {modularData?.data.data?.name} module
+                </Heading>
               </div>
-            )}
-          </div>
-        </div>
-        <TabNavigation tabs={tabs}>
-          <Switch>
-            <Route
-              exact
-              path={`${path}`}
-              render={() => (
-                <div className="flex py-9">
-                  <div className="mr-24">
-                    {modularData?.data.data && (
-                      <CommonCardMolecule data={moduleData}>
-                        <div className="flex flex-col mt-8 gap-7 pb-2">
-                          <Heading color="txt-secondary" fontSize="sm">
-                            Module Type
-                          </Heading>
-                          <Heading fontSize="sm">
-                            {moduleData?.subTitle?.replaceAll('_', ' ')}
-                          </Heading>
-                        </div>
-                        <div className="mt-4 flex space-x-4">
-                          <Button onClick={() => history.push(`${url}/edit`)}>
-                            Edit Module
-                          </Button>
-                          <Button styleType="outline">Change Status</Button>
-                        </div>
-                      </CommonCardMolecule>
-                    )}
-                  </div>
+              <div className="flex flex-wrap justify-start items-center">
+                <SearchMolecule handleChange={handleSearch} />
+                <button className="border p-0 rounded-md mx-2">
+                  <Icon name="filter" />
+                </button>
+              </div>
 
-                  <div className="flex flex-col gap-8 z-0">
-                    <div className="flex gap-8">
-                      {/* levels */}
-                      <div className="flex flex-col gap-8 z-0">
-                        <UsersPreview
-                          title="Instructors"
-                          label="Instructors in intakeProgram"
-                          data={[]}
-                          totalUsers={assignedInstructors?.data.data.length || 0}
-                          dataLabel={''}
-                          isLoading={false}>
-                          <InstructorModuleAssignment
-                            module_id={module?.id || ''}
-                            intake_program_id={intakeProgram}
-                          />
-                        </UsersPreview>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-            />
-            <Route
-              exact
-              path={`${path}/subjects`}
-              render={() => (
+              {authUser?.user_type === UserType.ADMIN && (
                 <>
-                  {subjectData.isLoading ? (
-                    <Loader />
-                  ) : subjects.length === 0 && subjectData.isSuccess ? (
-                    <NoDataAvailable
-                      showButton={authUser?.user_type === UserType.ADMIN}
-                      icon="subject"
-                      title={'No subjects registered'}
-                      description={'There are no subjects available yet'}
-                      handleClick={() => history.push(`${url}/add-subject`)}
-                    />
+                  {route == 'SUBJECTS' ? (
+                    <div className="flex gap-3">
+                      <Button
+                        onClick={() => {
+                          history.push(`${url}/subjects/add-subject`);
+                        }}>
+                        Add new Subject
+                      </Button>
+                    </div>
+                  ) : route == 'SYLLABUS' ? (
+                    <div className="flex gap-3">
+                      <Button
+                        onClick={() => history.push(`${url}/syllabus/add-syllabus`)}>
+                        Add new Syllabus
+                      </Button>
+                    </div>
                   ) : (
-                    <section className="flex flex-wrap justify-start gap-4 mt-2">
-                      {subjects.map((subject, i) => (
-                        <div key={i} className="p-1 mt-3">
-                          <CommonCardMolecule
-                            to={{
-                              title: 'Subject details',
-                              to: `/dashboard/modules/subjects/${subject.id}`,
-                            }}
-                            data={subject}
-                          />
-                        </div>
-                      ))}
-                    </section>
+                    <></>
                   )}
                 </>
               )}
-            />
+              {authUser?.user_type === UserType.INSTRUCTOR && route == 'EVALUATIONS' && (
+                <>
+                  <div className="flex gap-3">
+                    <Button onClick={() => history.push(`/evaluation/new`)}>
+                      Add new Evaluation
+                    </Button>
+                  </div>
+                </>
+              )}
+              {authUser?.user_type === UserType.INSTRUCTOR && route == 'MATERIALS' && (
+                <div className="flex gap-3">
+                  <Button onClick={() => history.push(`${url}/materials/add-material`)}>
+                    Add new Material
+                  </Button>
+                </div>
+              )}
+            </div>
+          </div>
+          <TabNavigation tabs={tabs}>
+            <Switch>
+              <Route
+                exact
+                path={`${path}`}
+                render={() => (
+                  <div className="flex py-9">
+                    <div className="mr-24">
+                      {modularData?.data.data && (
+                        <CommonCardMolecule data={moduleData}>
+                          <div className="flex flex-col mt-8 gap-7 pb-2">
+                            <Heading color="txt-secondary" fontSize="sm">
+                              Module Type
+                            </Heading>
+                            <Heading fontSize="sm">
+                              {moduleData?.subTitle?.replaceAll('_', ' ')}
+                            </Heading>
+                          </div>
+                          <div className="mt-4 flex space-x-4">
+                            <Button onClick={() => history.push(`${url}/edit`)}>
+                              Edit Module
+                            </Button>
+                            <Button styleType="outline">Change Status</Button>
+                          </div>
+                        </CommonCardMolecule>
+                      )}
+                    </div>
 
-            <Route path={`${path}/evaluation`} render={() => <ModuleEvaluations />} />
-            {/* add subject popup */}
-            <Route
-              exact
-              path={`${path}/add-subject`}
-              render={() => {
-                return (
-                  <PopupMolecule title="New Subject" open onClose={handleClose}>
-                    <NewSubjectForm />
-                  </PopupMolecule>
-                );
-              }}
-            />
-            {/* update module popup */}
-            <Route
-              exact
-              path={`${path}/edit`}
-              render={() => {
-                return (
-                  <PopupMolecule title="Edit Module" open onClose={handleClose}>
-                    <UpdateModuleForm />
-                  </PopupMolecule>
-                );
-              }}
-            />
-            {/* update module popup */}
-            <Route
-              path={`${path}/materials`}
-              render={() => {
-                return <ModuleMaterials />;
-              }}
-            />
-          </Switch>
-        </TabNavigation>
-      </main>
+                    <div className="flex flex-col gap-8 z-0">
+                      <div className="flex gap-8">
+                        {/* levels */}
+                        <div className="flex flex-col gap-8 z-0">
+                          <UsersPreview
+                            title="Instructors"
+                            label="Instructors in intakeProgram"
+                            data={[]}
+                            totalUsers={assignedInstructors?.data.data.length || 0}
+                            dataLabel={''}
+                            isLoading={false}>
+                            <InstructorModuleAssignment
+                              module_id={module?.id || ''}
+                              intake_program_id={intakeProgram}
+                            />
+                          </UsersPreview>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              />
+              <Route
+                exact
+                path={`${path}/subjects`}
+                render={() => (
+                  <>
+                    {subjectData.isLoading ? (
+                      <Loader />
+                    ) : subjects.length === 0 && subjectData.isSuccess ? (
+                      <NoDataAvailable
+                        showButton={authUser?.user_type === UserType.ADMIN}
+                        icon="subject"
+                        title={'No subjects registered'}
+                        description={'There are no subjects available yet'}
+                        handleClick={() => history.push(`${url}/add-subject`)}
+                      />
+                    ) : (
+                      <section className="flex flex-wrap justify-start gap-4 mt-2">
+                        {subjects.map((subject, i) => (
+                          <div key={i} className="p-1 mt-3">
+                            <CommonCardMolecule
+                              to={{
+                                title: 'Subject details',
+                                to: `/dashboard/modules/subjects/${subject.id}`,
+                              }}
+                              data={subject}
+                            />
+                          </div>
+                        ))}
+                      </section>
+                    )}
+                  </>
+                )}
+              />
+
+              <Route path={`${path}/evaluation`} render={() => <ModuleEvaluations />} />
+              {/* add subject popup */}
+              <Route
+                exact
+                path={`${path}/add-subject`}
+                render={() => {
+                  return (
+                    <PopupMolecule title="New Subject" open onClose={handleClose}>
+                      <NewSubjectForm />
+                    </PopupMolecule>
+                  );
+                }}
+              />
+              {/* update module popup */}
+              <Route
+                exact
+                path={`${path}/edit`}
+                render={() => {
+                  return (
+                    <PopupMolecule title="Edit Module" open onClose={handleClose}>
+                      <UpdateModuleForm />
+                    </PopupMolecule>
+                  );
+                }}
+              />
+              {/* update module popup */}
+              <Route
+                path={`${path}/materials`}
+                render={() => {
+                  return <ModuleMaterials />;
+                }}
+              />
+            </Switch>
+          </TabNavigation>
+        </main>
       )}
     </>
   );

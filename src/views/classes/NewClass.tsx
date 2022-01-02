@@ -8,9 +8,9 @@ import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import { queryClient } from '../../plugins/react-query';
 import { authenticatorStore } from '../../store/administration';
 import { classStore } from '../../store/administration/class.store';
+import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import usersStore from '../../store/administration/users.store';
-import instructordeploymentStore from '../../store/instructordeployment.store';
 import { ValueType } from '../../types';
 import { ClassGroupType, ICreateClass } from '../../types/services/class.types';
 import { Instructor } from '../../types/services/instructor.types';
@@ -59,18 +59,12 @@ function NewClass() {
     });
   }, [form.class_representative_one_id]);
 
-  const instructors_deployed =
-    instructordeploymentStore.getInstructorsDeployedInAcademy(
-      authUser?.academy.id.toString() || '',
-    ).data?.data.data || [];
+  const { data: levelInstructors, isLoading: instLoading } =
+    enrollmentStore.getInstructorsInProgramLevel(levelId);
 
-  const all_instructors = instructordeploymentStore.getInstructors().data?.data.data;
-
-  const instructors_in_academy =
-    all_instructors?.filter(
-      (instr) =>
-        instr.id ===
-        instructors_deployed.find((dep) => dep.instructor_id == instr.id)?.instructor_id,
+  const instructors =
+    levelInstructors?.data.data.map(
+      (inst) => inst.intake_program_instructor.instructor,
     ) || [];
 
   const students =
@@ -146,13 +140,17 @@ function NewClass() {
           name="instructor_class_in_charge_id"
           handleChange={handleChange}
           options={getDropDownOptions({
-            inputs: instructors_in_academy,
+            inputs: instructors,
             labelName: ['first_name', 'last_name'],
             //@ts-ignore
             getOptionLabel: (inst: Instructor) =>
               inst.user.first_name + ' ' + inst.user.last_name,
           })}
-          placeholder="Choose instructor representative">
+          placeholder={
+            instLoading
+              ? 'Loading instructor representatives...'
+              : 'Choose instructor representative'
+          }>
           Instructor representative
         </DropdownMolecule>
 

@@ -20,7 +20,6 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
 import { authenticatorStore } from '../../store/administration';
-import enrollmentStore from '../../store/administration/enrollment.store';
 import { lessonStore } from '../../store/administration/lesson.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
@@ -74,11 +73,7 @@ export default function SubjectDetails() {
     history.goBack();
   };
 
-  if(intakeProg == ''){
-    goBack();
-  }
-  console.log(intakeProg);
-  const tabs = [
+  let tabs = [
     {
       label: `Lessons(${lessons.length})`,
       href: `${url}?intkPrg=${intakeProg}`,
@@ -87,11 +82,13 @@ export default function SubjectDetails() {
       label: 'Evaluations',
       href: `${url}/evaluations?intkPrg=${intakeProg}`,
     },
-    {
+  ];
+  if (intakeProg) {
+    tabs.push({
       label: 'Instructors',
       href: `${url}/instructors?intkPrg=${intakeProg}`,
-    },
-  ];
+    });
+  }
 
   return (
     <main className="px-4">
