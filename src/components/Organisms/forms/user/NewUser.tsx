@@ -337,7 +337,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
               handleChange={handleChange}>
               Programs
             </DropdownMolecule>
-            <DropdownMolecule
+            {/* <DropdownMolecule
               options={getDropDownOptions({
                 inputs: levels.data?.data.data || [],
                 labelName: ['name'], //@ts-ignore
@@ -347,7 +347,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
               placeholder={'Program to be enrolled in'}
               handleChange={handleChange}>
               Levels
-            </DropdownMolecule>
+            </DropdownMolecule> */}
           </>
         )}
         <Button type="submit" disabled={isLoading}>
