@@ -11,48 +11,46 @@ import { subjectStore } from '../../store/administration/subject.store';
 import { UserType, UserTypes } from '../../types/services/user.types';
 import EnrollInstructorToSubjectAssignment from './EnrollInstructorToSubjectAssignment';
 interface SubjectViewerProps {
-    subjectId: string;
+  subjectId: string;
 }
 
-
-function SubjectInstructors({
-    subjectId,
-  }: SubjectViewerProps) {
+function SubjectInstructors({ subjectId }: SubjectViewerProps) {
   const { path } = useRouteMatch();
-  const {data:subjectData} = subjectStore.getSubject(subjectId);
+  const { data: subjectData } = subjectStore.getSubject(subjectId);
   console.log(subjectData?.data.data.module.program.id);
-//   const{data:instructorProgram} = 
-  const { data: instructorInfos, isLoading } = enrollmentStore.getInstructorsBySubject(subjectId);
+  //   const{data:instructorProgram} =
+  const { data: instructorInfos, isLoading } =
+    enrollmentStore.getInstructorsBySubject(subjectId);
 
   let instrs: UserTypes[] = [];
 
-//   instructorInfos?.data.data.content.map((obj) => {
-    //   console.log(instructorInfos?.data.data.content);
-    // let {
-    //   id,
-    //   username,
-    //   first_name,
-    //   last_name,
-    //   email,
-    //   person,
-    //   academy,
-    //   generic_status,
-    //   user_type,
-    // } = obj.module_instructor.user;
+  //   instructorInfos?.data.data.content.map((obj) => {
+  //   console.log(instructorInfos?.data.data.content);
+  // let {
+  //   id,
+  //   username,
+  //   first_name,
+  //   last_name,
+  //   email,
+  //   person,
+  //   academy,
+  //   generic_status,
+  //   user_type,
+  // } = obj.module_instructor.user;
 
-    // let user: UserTypes = {
-    //   id: id,
-    //   username: username,
-    //   'full name': first_name + ' ' + last_name,
-    //   email: email,
-    //   'ID Card': person && person.nid,
-    //   academy: academy && academy.name,
-    //   status: generic_status,
-    //   user_type: user_type,
-    // };
+  // let user: UserTypes = {
+  //   id: id,
+  //   username: username,
+  //   'full name': first_name + ' ' + last_name,
+  //   email: email,
+  //   'ID Card': person && person.nid,
+  //   academy: academy && academy.name,
+  //   status: generic_status,
+  //   user_type: user_type,
+  // };
 
-    // instrs.push(user);
-//   });
+  // instrs.push(user);
+  //   });
 
   const authUser = authenticatorStore.authUser().data?.data.data;
 
@@ -68,35 +66,44 @@ function SubjectInstructors({
                 Instructors ({0})
               </Heading>
               {authUser?.user_type === UserType.ADMIN && (
-                <EnrollInstructorToSubjectAssignment module_id={subjectData?.data.data.module.id+''} subject_id={subjectId}/>
+                <EnrollInstructorToSubjectAssignment
+                  module_id={subjectData?.data.data.module.id + ''}
+                  subject_id={subjectId}
+                />
               )}
             </div>
             <>
               {
-            //   isLoading ? (
-            //     <Loader />
-            //   ) : 
-            instrs.length === 0 ? (
-                <NoDataAvailable
-                  showButton={false}
-                  icon="user"
-                  title={'No instructors available'}
-                  description={
-                    'There are no instructors currently assigned to this module'
-                  }
-                  handleClick={() => <EnrollInstructorToSubjectAssignment module_id={subjectData?.data.data.module.id+''} subject_id={subjectId} />}
-                />
-              ) : (
-                <Table<UserTypes>
-                  statusColumn="status"
-                  data={instrs}
-                  selectorActions={[
-                    { name: 'Remove instructors from subject', handleAction: () => {} },
-                  ]}
-                  hide={['id', 'user_type']}
-                  uniqueCol="id"
-                />
-              )}
+                //   isLoading ? (
+                //     <Loader />
+                //   ) :
+                instrs.length === 0 ? (
+                  <NoDataAvailable
+                    showButton={false}
+                    icon="user"
+                    title={'No instructors available'}
+                    description={
+                      'There are no instructors currently assigned to this module'
+                    }
+                    handleClick={() => (
+                      <EnrollInstructorToSubjectAssignment
+                        module_id={subjectData?.data.data.module.id + ''}
+                        subject_id={subjectId}
+                      />
+                    )}
+                  />
+                ) : (
+                  <Table<UserTypes>
+                    statusColumn="status"
+                    data={instrs}
+                    selectorActions={[
+                      { name: 'Remove instructors from subject', handleAction: () => {} },
+                    ]}
+                    hide={['id', 'user_type']}
+                    uniqueCol="id"
+                  />
+                )
+              }
             </>
           </div>
         )}
