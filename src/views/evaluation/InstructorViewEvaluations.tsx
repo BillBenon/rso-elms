@@ -14,7 +14,7 @@ import {
   setLocalStorageData,
 } from '../../utils/getLocalStorageItem';
 import { advancedTypeChecker } from '../../utils/getOption';
-import EvaluationContent from './EvaluationContent';
+import EvaluationDetails from './EvaluationDetails';
 
 export default function InstructorViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
@@ -57,7 +57,7 @@ export default function InstructorViewEvaluations() {
     <div>
       <Switch>
         <Route exact path={`${path}/new`} component={NewEvaluation} />
-        <Route path={`${path}/:id`} component={EvaluationContent} />
+        <Route path={`${path}/:id`} component={EvaluationDetails} />
         <Route
           exact
           path={path}
