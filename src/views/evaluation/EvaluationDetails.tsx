@@ -13,6 +13,8 @@ import { queryClient } from '../../plugins/react-query';
 import { markingStore } from '../../store/administration/marking.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
+import ApproveEvaluation from './ApproveEvaluation';
+import ReviewEvaluation from './ReviewEvaluation';
 import StudentAnswersMarking from './StudentAnswersMarking';
 
 export default function EvaluationDetails() {
@@ -136,6 +138,16 @@ export default function EvaluationDetails() {
     <div className="block pr-24 pb-8 w-11/12">
       <Switch>
         <Route path={`${path}/submissions/:id`} component={StudentAnswersMarking} />
+        <Route
+          exact
+          path={`${path}/review`}
+          render={() => <ReviewEvaluation evaluationId={id} />}
+        />
+        <Route
+          exact
+          path={`${path}/approve`}
+          render={() => <ApproveEvaluation evaluationId={id} />}
+        />
         <TabNavigation tabs={tabs}>
           <div className="pt-8">
             <Route
