@@ -67,8 +67,7 @@ export default function EvaluationSettings({
         // history.push('/dashboard/evaluations');
         window.location.href = '/dashboard/evaluations';
       },
-      onError: (error) => {
-        console.log(error);
+      onError: (error: any) => {
         toast.error(error + '');
       },
     });
@@ -163,6 +162,14 @@ export default function EvaluationSettings({
           <Button type="submit">Finish</Button>
         </div>
       </div>
+      {/* <div className="flex flex-col">
+        <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
+          Back
+        </Button>
+        <div className="pt-4">
+          <Button type="submit">Finish</Button>
+        </div>
+      </div> */}
       {/* <SwitchMolecule
         loading={false}
         name="shuffle"

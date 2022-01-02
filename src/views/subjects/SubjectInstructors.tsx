@@ -11,18 +11,16 @@ import { subjectStore } from '../../store/administration/subject.store';
 import { UserType, UserTypes } from '../../types/services/user.types';
 import EnrollInstructorToSubjectAssignment from './EnrollInstructorToSubjectAssignment';
 interface SubjectViewerProps {
-    subjectId: string;
+  subjectId: string;
 }
 
-
-function SubjectInstructors({
-    subjectId,
-  }: SubjectViewerProps) {
+function SubjectInstructors({ subjectId }: SubjectViewerProps) {
   const { path } = useRouteMatch();
-  const {data:subjectData} = subjectStore.getSubject(subjectId);
+  const { data: subjectData } = subjectStore.getSubject(subjectId);
   console.log(subjectData?.data.data.module.program.id);
-//   const{data:instructorProgram} = 
-  const { data: instructorInfos, isLoading } = enrollmentStore.getInstructorsBySubject(subjectId);
+  //   const{data:instructorProgram} =
+  const { data: instructorInfos, isLoading } =
+    enrollmentStore.getInstructorsBySubject(subjectId);
 
   let instrs: UserTypes[] = [];
 
@@ -68,7 +66,10 @@ function SubjectInstructors({
                 Instructors ({0})
               </Heading>
               {authUser?.user_type === UserType.ADMIN && (
-                <EnrollInstructorToSubjectAssignment module_id={subjectData?.data.data.module.id+''} subject_id={subjectId}/>
+                <EnrollInstructorToSubjectAssignment
+                  module_id={subjectData?.data.data.module.id + ''}
+                  subject_id={subjectId}
+                />
               )}
             </div>
             <>

@@ -9,7 +9,7 @@ import { StudentIntakeProgram } from './intake-program.types';
 export interface Student extends Table {
   reg_number: string;
   user: UserInfo;
-  academy: AcademyInfo;
+  academy_id: string;
   registered_on: string;
 }
 
@@ -60,12 +60,12 @@ export interface UserInfo extends Table {
   marital_status: MaritalStatus;
 }
 
-export interface IntakeLevelProgramInfo extends Table{
-  student: Student,
+export interface IntakeLevelProgramInfo extends Table {
+  student: Student;
 }
 export interface StudentLevel {
   id: number;
-  intake_program_student: StudentIntakeProgram
+  intake_program_student: StudentIntakeProgram;
 }
 
 export interface PersonInfo extends Table {
@@ -171,7 +171,6 @@ export interface UpdateUserInfo {
   user_type: UserType;
   send_communication_msg: SendCommunicationMsg;
   username: string;
-
 }
 
 export interface CreateUserInfo {

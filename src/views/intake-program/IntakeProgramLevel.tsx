@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
@@ -7,11 +7,14 @@ import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import useInstructorLevels from '../../hooks/getInstructorLevels';
 import { authenticatorStore } from '../../store/administration';
-import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
-import { IntakeProgParam } from '../../types/services/intake-program.types';
+import {
+  IntakeProgParam,
+  LevelIntakeProgram,
+} from '../../types/services/intake-program.types';
 import { UserType } from '../../types/services/user.types';
 import LevelPeriod from '../classes/LevelPeriod';
 import EnrollStudent from './EnrollStudent';
@@ -22,6 +25,7 @@ function IntakeProgramLevel() {
   const history = useHistory();
   const { path, url } = useRouteMatch();
   const { intakeProg, intakeId, id } = useParams<IntakeProgParam>();
+  const [instLevels, setInstLevels] = useState<LevelIntakeProgram[]>([]);
 
   const authUser = authenticatorStore.authUser().data?.data.data;
 
@@ -32,26 +36,18 @@ function IntakeProgramLevel() {
   const { data: getLevels, isLoading } =
     intakeProgramStore.getLevelsByIntakeProgram(intakeProg);
 
-  const { data: instructorLevels } = enrollmentStore.getInstructorLevels(
-    instructorInfo?.id + '',
-  );
+  const instructorProgLevels = useInstructorLevels(instructorInfo?.id + '', intakeProg);
 
-  let instructorLevelsIds = instructorLevels?.data.data.map(
-    (instLvl) => instLvl.academic_year_program_intake_level.id,
-  );
-
-  const instructorProgLevels = getLevels?.data.data.filter((inst) =>
-    instructorLevelsIds?.includes(inst.id),
-  );
+  useEffect(() => {
+    setInstLevels(instructorProgLevels);
+  }, [instructorProgLevels]);
 
   const tabs =
     authUser?.user_type === UserType.INSTRUCTOR
-      ? (instructorProgLevels &&
-          instructorProgLevels.map((level) => ({
-            label: `${level.academic_program_level.level.name}`,
-            href: `${url}/${level.id}`,
-          }))) ||
-        []
+      ? instLevels.map((level) => ({
+          label: `${level.academic_program_level.level.name}`,
+          href: `${url}/${level.id}`,
+        })) || []
       : (getLevels &&
           getLevels.data.data.map((level) => ({
             label: `${level.academic_program_level.level.name}`,

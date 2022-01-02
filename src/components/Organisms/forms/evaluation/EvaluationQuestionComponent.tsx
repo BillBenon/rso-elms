@@ -30,6 +30,7 @@ export default function EvaluationQuestionComponent({
   const multipleChoiceContent: IMultipleChoice = {
     answer_content: '',
     correct: false,
+    id: '',
   };
 
   const initialState: ICreateEvaluationQuestions = {
@@ -156,8 +157,8 @@ export default function EvaluationQuestionComponent({
     e.preventDefault();
 
     mutate(questions, {
-      onSuccess: () => {
-        console.log(questions);
+      onSuccess: (newData) => {
+        console.log(newData);
 
         toast.success('Questions added', { duration: 5000 });
 
@@ -209,7 +210,7 @@ export default function EvaluationQuestionComponent({
                 {question.choices.map((multipleQuestion, choiceIndex) => (
                   <>
                     <TextAreaMolecule
-                      key={choiceIndex + Math.random()}
+                      key={`${choiceIndex}`}
                       readOnly={question.submitted}
                       name={'answer_content'}
                       value={multipleQuestion.answer_content}
