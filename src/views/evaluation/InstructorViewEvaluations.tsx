@@ -78,7 +78,7 @@ export default function InstructorViewEvaluations() {
         break;
 
       default:
-        history.push(`${path}/${id}/submissions`);
+        history.push(`${path}/${id}`);
         break;
     }
   };
