@@ -68,7 +68,7 @@ function IntakeProgramDetails() {
 
   useEffect(() => {
     let demoInstructors: UserView[] = [];
-    instructorsProgram?.data?.data?.map((inst) =>{
+    instructorsProgram?.data.data.map((inst) => {
       demoInstructors.push({
         id: inst.id,
         first_name: inst.instructor.user.first_name,
@@ -107,7 +107,7 @@ function IntakeProgramDetails() {
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(
     authUser?.id + '',
-  ).data?.data.data;
+  ).data?.data.data[0];
 
   const studentInfo = getStudentShipByUserId(authUser?.id + '' || '', !!authUser?.id).data
     ?.data.data[0];

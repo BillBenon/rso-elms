@@ -35,7 +35,7 @@ function IntakeProgramLevel() {
 
   const authUserId = authUser?.id;
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(authUserId + '')
-    .data?.data.data;
+    .data?.data.data[0];
 
   const { data: getLevels, isLoading } =
     intakeProgramStore.getLevelsByIntakeProgram(intakeProg);

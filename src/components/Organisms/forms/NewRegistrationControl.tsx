@@ -58,7 +58,6 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
       <DateMolecule
         startYear={new Date().getFullYear()}
         endYear={new Date().getFullYear() + 15}
-        padding={3}
         reverse={false}
         handleChange={handleChange}
         name={'expected_start_date'}>
@@ -69,7 +68,6 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
         handleChange={handleChange}
         startYear={new Date(regControl.expected_start_date).getFullYear()}
         endYear={new Date().getFullYear() + 15}
-        padding={3}
         reverse={false}
         name={'expected_end_date'}>
         End Date

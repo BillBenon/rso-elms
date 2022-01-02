@@ -23,7 +23,7 @@ function IntakeProgramModules() {
   const authUser = authenticatorStore.authUser().data?.data.data;
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(
     authUser?.id + '',
-  ).data?.data.data;
+  ).data?.data.data[0];
 
   const getAllModuleStore = moduleStore.getModulesByProgram(id);
 

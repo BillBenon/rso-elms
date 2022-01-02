@@ -17,33 +17,33 @@ export default function Sidebar() {
     const routes: linkProps[] = [];
     const institutionAdminLinks: linkProps[] = [
       { title: 'Users', to: '/dashboard/users', icon: 'user' },
+      { title: 'Academies', to: '/dashboard/academies', icon: 'academy', fill: false },
       { title: 'Ranks', to: '/dashboard/ranks', icon: 'rank' },
       { title: 'Roles', to: '/dashboard/roles', icon: 'role' },
-      { title: 'Academies', to: '/dashboard/academies', icon: 'academy', fill: false },
       { title: 'Privileges', to: '/dashboard/privileges', icon: 'module' },
     ];
     const academicAdminLinks: linkProps[] = [
       { title: 'Users', to: '/dashboard/users', icon: 'user' },
-      { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
-      { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
-      { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
       { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
+      { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
+      { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
+      { title: 'Academic years', to: '/dashboard/academic-years', icon: 'program' },
       {
         title: 'Registration Control',
         to: '/dashboard/registration-control',
         icon: 'reg-control',
       },
-      { title: 'Academic years', to: '/dashboard/academic-years', icon: 'program' },
+      { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
     ];
 
     const instructorLinks: linkProps[] = [
+      { title: 'Modules', to: '/dashboard/inst-module', icon: 'module' },
       {
         title: 'Intakes',
         to: '/dashboard/intakes',
         icon: 'academy',
         fill: false,
       },
-      { title: 'Modules', to: '/dashboard/inst-module', icon: 'module' },
       { title: 'Evaluations', to: '/dashboard/evaluations', icon: 'evaluation' },
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
       { title: 'Events', to: '/dashboard/events', icon: 'calendar' },

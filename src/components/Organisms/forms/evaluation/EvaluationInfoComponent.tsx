@@ -36,6 +36,7 @@ import DateMolecule from '../../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
+import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 
 export default function EvaluationInfoComponent({
   handleNext,
@@ -52,7 +53,7 @@ export default function EvaluationInfoComponent({
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(
     authUser?.id + '',
-  ).data?.data.data;
+  ).data?.data.data[0];
 
   const instrucotrModules = useInstructorModules(progId + '', instructorInfo?.id + '');
 
@@ -378,7 +379,6 @@ export default function EvaluationInfoComponent({
             <DateMolecule
               startYear={new Date().getFullYear()}
               endYear={new Date().getFullYear() + 100}
-              padding={3}
               reverse={false}
               showTime
               breakToNextLine
@@ -390,7 +390,6 @@ export default function EvaluationInfoComponent({
               handleChange={handleChange}
               startYear={new Date().getFullYear()}
               endYear={new Date().getFullYear() + 100}
-              padding={3}
               showTime
               breakToNextLine
               reverse={false}
@@ -403,7 +402,6 @@ export default function EvaluationInfoComponent({
           handleChange={handleChange}
           startYear={new Date().getFullYear()}
           endYear={new Date().getFullYear() + 100}
-          padding={3}
           reverse={false}
           name={'marking_reminder_date'}>
           Marking reminder date

@@ -37,7 +37,6 @@ type IProp = {
   minuteDisabled?: boolean;
   defaultValue?: string;
   reverse?: boolean;
-  padding?: number;
   date_time_type?: boolean;
   breakToNextLine?: boolean;
 };
@@ -69,7 +68,6 @@ function DateMolecule({
   minuteWidth = '28',
   hourDisabled = false,
   minuteDisabled = false,
-  padding,
   defaultValue,
   date_time_type = true,
   breakToNextLine = false,
@@ -143,7 +141,6 @@ function DateMolecule({
               end={endYear}
               className={yearClassName}
               disabled={yearDisabled}
-              padding={padding}
               // placeholder={dateState.Year.toString()}
             />
             <MonthSelect
@@ -158,7 +155,6 @@ function DateMolecule({
               numeric={monthNumeric}
               className={monthClassName}
               disabled={monthDisabled}
-              padding={padding}
               // placeholder={dateState.Month.toString()}
             />
             <DaySelect
@@ -171,7 +167,6 @@ function DateMolecule({
               className={dayClassName}
               width={dayWidth}
               disabled={dayDisabled}
-              padding={padding}
             />
           </div>
         )}
@@ -185,7 +180,6 @@ function DateMolecule({
               placeholder={hourPlaceholder}
               width={hourWidth}
               disabled={hourDisabled}
-              padding={padding}
             />
             <MinuteSelect
               defaultValue={dateState.Minutes.toString()}
@@ -195,7 +189,6 @@ function DateMolecule({
               placeholder="mins"
               width={minuteWidth}
               disabled={minuteDisabled}
-              padding={padding}
             />
           </div>
         )}

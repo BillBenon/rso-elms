@@ -168,7 +168,6 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
               handleChange={handleChange}
               startYear={new Date().getFullYear()}
               endYear={new Date().getFullYear() + 100}
-              padding={3}
               reverse={false}
               name="deployed_on"
               width="60 md:w-80">
@@ -224,7 +223,6 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}
           name="birth_date"
           width="60 md:w-80"
-          padding={3}
           date_time_type={false}>
           Date of Birth
         </DateMolecule>
@@ -337,7 +335,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
               handleChange={handleChange}>
               Programs
             </DropdownMolecule>
-            <DropdownMolecule
+            {/* <DropdownMolecule
               options={getDropDownOptions({
                 inputs: levels.data?.data.data || [],
                 labelName: ['name'], //@ts-ignore
@@ -347,7 +345,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
               placeholder={'Program to be enrolled in'}
               handleChange={handleChange}>
               Levels
-            </DropdownMolecule>
+            </DropdownMolecule> */}
           </>
         )}
         <Button type="submit" disabled={isLoading}>
