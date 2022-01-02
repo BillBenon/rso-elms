@@ -188,7 +188,7 @@ export default function EvaluationInfoComponent({
           handleChange={handleChange}>
           Evaluation classification
         </RadioMolecule> */}
-        <SelectMolecule
+        <DropdownMolecule
           width="64"
           name="module"
           placeholder={'Select module'}
@@ -199,7 +199,7 @@ export default function EvaluationInfoComponent({
             getOptionLabel: (mod: CommonCardDataType) => mod.title,
           })}>
           Select module
-        </SelectMolecule>
+        </DropdownMolecule>
         <DropdownMolecule
           width="64"
           name="subject_academic_year_period_id"
