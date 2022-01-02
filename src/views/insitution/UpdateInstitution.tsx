@@ -36,6 +36,8 @@ export default function UpdateInstitution() {
     id: '',
   });
 
+  const [logoFile, setlogoFile] = useState<File | null>(null);
+
   useEffect(() => {
     const institution = data?.data.data;
 
@@ -62,21 +64,48 @@ export default function UpdateInstitution() {
     setValues({ ...values, [e.name]: e.value });
   };
 
+  const handleUpload = (files: FileList | null) => {
+    setlogoFile(files ? files[0] : null);
+  };
+
   const { mutateAsync } = institutionStore.updateInstitution();
+  const { mutateAsync: mutateAddLogo } = institutionStore.addLogo();
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
+    let toastId = toast.loading('Updating insitution');
     await mutateAsync(values, {
       onSuccess(data) {
-        toast.success(data.data.message, { duration: 1200 });
-        setTimeout(() => {
-          history.goBack();
-        }, 900);
+        toast.success(data.data.message, { duration: 1200, id: toastId });
+        addLogo(data.data.data.id + '');
+        history.goBack();
       },
       onError(error: any) {
-        toast.error(error.response.data.message);
+        toast.error(error.response.data.message, { id: toastId });
       },
     });
+  }
+
+  async function addLogo(institutionId: string) {
+    if (logoFile) {
+      let data = new FormData();
+
+      data.append('description', `${values.name}'s public logo`);
+      data.append('purpose', 'Add a design identifier for academy');
+      data.append('logoFile', logoFile);
+
+      await mutateAddLogo(
+        { id: institutionId, info: data },
+        {
+          onSuccess(_data) {
+            toast.success('Logo added successfully');
+          },
+          onError(error: any) {
+            toast.error(error.response.data.message || 'error occurred');
+          },
+        },
+      );
+    }
   }
 
   return (
@@ -178,11 +207,9 @@ export default function UpdateInstitution() {
           <ILabel className="block pb-2">Institution logo</ILabel>
 
           <FileUploader
-            allowPreview
-            accept={'image/jpeg, image/png'}
-            handleUpload={function (_files: FileList | null) {
-              throw new Error('Function not implemented.');
-            }}>
+            allowPreview={false}
+            handleUpload={handleUpload}
+            accept={'image/jpeg, image/png'}>
             <Button type="button" styleType="outline">
               <span className="flex items-center">
                 <Icon name="attach" useheightandpadding={false} fill="primary" />
