@@ -32,12 +32,12 @@ function EnrollInstructorIntakeProgram<T>({existing}:ProgramEnrollmentProps<T>) 
 
   const intakeProgram = programs?.find((pr) => pr.id === intakeProg);
 
+
   const [instructors, setInstructors] = useState<UserView[]>([]);
   useEffect(() => {
     let existing_ids:string[] = [];
     for (let index = 0; index < existing.length; index++) {
-      existing_ids.push(existing[index].instructor.id+'');
-      
+      existing_ids.push(existing[index].instructor.id+''); 
     }
     let instructorsView: UserView[] = [];
     instructorsInAcademy?.data.data
@@ -54,7 +54,7 @@ function EnrollInstructorIntakeProgram<T>({existing}:ProgramEnrollmentProps<T>) 
         }
       });
     setInstructors(instructorsView);
-  }, [instructorsInAcademy]);
+  }, [instructorsInAcademy,existing]);
 
   const { mutate } = enrollmentStore.enrollInstructorToProgram();
 
@@ -68,7 +68,7 @@ function EnrollInstructorIntakeProgram<T>({existing}:ProgramEnrollmentProps<T>) 
       mutate(newInstructor, {
         onSuccess: (data) => {
           toast.success(data.data.message);
-          queryClient.invalidateQueries(['instructorsInIntakeprogram/IntakeProgram']);
+          queryClient.invalidateQueries(['instructors/intakeprogramId', intakeProg]);
           setSidebarOpen(false);
         },
         onError: (error: any) => {
