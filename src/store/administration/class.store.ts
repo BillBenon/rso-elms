@@ -23,6 +23,11 @@ class ClassStore {
       classService.getClassByPeriod(periodId),
     );
   }
+  getClassByStudentAndLevel(studentId: string, levelId: string) {
+    return useQuery(['class/studentId/levelId', studentId, levelId], () =>
+      classService.getClassByStudentAndLevel(studentId, levelId),
+    );
+  }
   getStudentsByClass(classId: string) {
     return useQuery(['class/students', classId], () =>
       classService.getStudentsByClass(classId),

@@ -63,7 +63,6 @@ export default function NewAcademicYear() {
       <DateMolecule
         startYear={new Date().getFullYear()}
         endYear={new Date().getFullYear() + 100}
-        padding={3}
         reverse={false}
         handleChange={handleChange}
         name={'plannedStartOn'}>
@@ -74,7 +73,6 @@ export default function NewAcademicYear() {
         handleChange={handleChange}
         startYear={new Date(years.plannedStartOn).getFullYear()}
         endYear={new Date().getFullYear() + 100}
-        padding={3}
         reverse={false}
         name={'plannedEndOn'}>
         End Date

@@ -19,11 +19,24 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
+import { authenticatorStore } from '../../store/administration';
+import enrollmentStore from '../../store/administration/enrollment.store';
 import {
   getProgramsByIntake,
   intakeStore,
 } from '../../store/administration/intake.store';
+import {
+  getIntakeProgramsByStudent,
+  getStudentShipByUserId,
+} from '../../store/administration/intake-program.store';
+import instructordeploymentStore from '../../store/instructordeployment.store';
 import { IntakeParamType, Link as LinkList } from '../../types';
+import { InstructorProgram } from '../../types/services/instructor.types';
+import {
+  IntakeProgramInfo,
+  StudentIntakeProgram,
+} from '../../types/services/intake-program.types';
+import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from '../programs/AcademicPrograms';
 import AddAcademicProgramToIntake from '../programs/AddAcademicProgramToIntake';
@@ -43,9 +56,28 @@ function IntakePrograms() {
     { to: 'intakes', title: 'intakes' },
     { to: `${url}`, title: 'Programs' },
   ];
+  const authUser = authenticatorStore.authUser().data?.data.data;
 
-  const { data, refetch, isLoading } = getProgramsByIntake(intakeId);
+  const authUserId = authUser?.id;
+  const instructorInfo =
+    instructordeploymentStore.getInstructorByUserId(authUserId + '').data?.data.data ||
+    [];
 
+  const studentInfo =
+    getStudentShipByUserId(
+      authUserId + '',
+      !!authUserId && authUser?.user_type === UserType.STUDENT,
+    ).data?.data.data || [];
+
+  const { data, isLoading, refetch } =
+    authUser?.user_type === UserType.STUDENT
+      ? getIntakeProgramsByStudent(
+          studentInfo[0]?.id.toString() || '',
+          !!studentInfo[0]?.id,
+        )
+      : authUser?.user_type === UserType.INSTRUCTOR
+      ? enrollmentStore.getInstructorIntakePrograms(instructorInfo[0]?.id + '')
+      : getProgramsByIntake(intakeId);
   const programInfo = data?.data.data || [];
 
   const intake = intakeId ? intakeStore.getIntakeById(intakeId!, true) : null;
@@ -58,24 +90,69 @@ function IntakePrograms() {
 
   let programs: IProgramData[] = [];
 
-  programInfo?.map((pg) => {
-    let prog = pg.program;
-    let program: IProgramData = {
-      id: prog.id,
-      status: {
-        type: advancedTypeChecker(prog.generic_status),
-        text: prog.generic_status.toString(),
-      },
-      code: prog.code,
-      title: prog.name,
-      subTitle: prog.type.replaceAll('_', ' '),
-      description: prog.description,
-      department: prog.department,
-      total_num_modules: prog.total_num_modules,
-      // incharge: prog.incharge && prog.incharge.user.username,
-    };
+  programInfo?.map((p) => {
+    if (authUser?.user_type === UserType.STUDENT) {
+      let pg = p as StudentIntakeProgram;
 
-    programs.push(program);
+      let showProgram = pg.intake_program.intake.id === intakeId;
+
+      if (showProgram) {
+        let prog: IProgramData = {
+          id: pg.intake_program.program.id,
+          status: {
+            type: advancedTypeChecker(pg.intake_program.program.generic_status),
+            text: pg.intake_program.program.generic_status.toString(),
+          },
+          code: pg.intake_program.program.code,
+          title: pg.intake_program.program.name,
+          description: pg.intake_program.program.description,
+          department: pg.intake_program.program.department,
+          total_num_modules: pg.intake_program.program.total_num_modules,
+        };
+
+        if (!programs.find((pg) => pg.id === prog.id)?.id) {
+          programs.push(prog);
+        }
+      }
+    } else if (authUser?.user_type === UserType.INSTRUCTOR) {
+      let pg = p as InstructorProgram;
+      const showProgram = pg.intake_program.intake.id === intakeId;
+      if (showProgram) {
+        let prog: IProgramData = {
+          id: pg.intake_program.program.id,
+          status: {
+            type: advancedTypeChecker(pg.intake_program.program.generic_status),
+            text: pg.intake_program.program.generic_status.toString(),
+          },
+          code: pg.intake_program.program.code,
+          title: pg.intake_program.program.name,
+          description: pg.intake_program.program.description,
+          department: pg.intake_program.program.department,
+          total_num_modules: pg.intake_program.program.total_num_modules,
+        };
+        if (!programs.find((pg) => pg.id === prog.id)?.id) {
+          programs.push(prog);
+        }
+      }
+    } else {
+      let pg = p as IntakeProgramInfo;
+
+      let prog: IProgramData = {
+        id: pg.program.id,
+        status: {
+          type: advancedTypeChecker(pg.program.generic_status),
+          text: pg.program.generic_status.toString(),
+        },
+        code: pg.program.code,
+        title: pg.program.name,
+        subTitle: pg.program.type.replaceAll('_', ' '),
+        description: pg.program.description,
+        department: pg.program.department,
+        total_num_modules: pg.program.total_num_modules,
+      };
+
+      programs.push(prog);
+    }
   });
 
   function submited() {
@@ -109,60 +186,70 @@ function IntakePrograms() {
                   {programs.length === 0 && isLoading ? (
                     <Loader />
                   ) : programs.length > 0 ? (
-                    programs.map((Common, index: number) => (
-                      <Tooltip
-                        key={Common.code}
-                        trigger={
-                          <div className="p-1 mt-3">
-                            <CommonCardMolecule
-                              className="cursor-pointer"
-                              data={Common}
-                              handleClick={() =>
-                                history.push(
-                                  `${url}/${Common.id}/${programInfo[index].id}`,
-                                )
-                              }
+                    programs.map((Common, index: number) => {
+                      let intakeProg = programInfo[index];
+                      return (
+                        <Tooltip
+                          key={Common.code}
+                          trigger={
+                            <div className="p-1 mt-3">
+                              <CommonCardMolecule
+                                className="cursor-pointer"
+                                data={Common}
+                                handleClick={() =>
+                                  authUser?.user_type === UserType.STUDENT
+                                    ? ((intakeProg = intakeProg as StudentIntakeProgram),
+                                      history.push(
+                                        `${url}/${Common.id}/${intakeProg.intake_program.id}`,
+                                      ))
+                                    : authUser?.user_type === UserType.INSTRUCTOR
+                                    ? ((intakeProg = intakeProg as InstructorProgram),
+                                      history.push(
+                                        `${url}/${Common.id}/${intakeProg.intake_program.id}`,
+                                      ))
+                                    : history.push(`${url}/${Common.id}/${intakeProg.id}`)
+                                }
+                              />
+                            </div>
+                          }
+                          open>
+                          <div className="w-96">
+                            <CardHeadMolecule
+                              title={Common.title}
+                              code={Common.code}
+                              status={Common.status}
+                              description={''}
                             />
-                          </div>
-                        }
-                        open>
-                        <div className="w-96">
-                          <CardHeadMolecule
-                            title={Common.title}
-                            code={Common.code}
-                            status={Common.status}
-                            description={''}
-                          />
 
-                          {/* first column */}
+                            {/* first column */}
 
-                          <div className="flex flex-col gap-6">
-                            <div className="flex flex-col gap-2">
-                              <Heading color="txt-secondary" fontSize="sm">
-                                {Common.department.division_type}
-                              </Heading>
-                              <Heading fontSize="sm" fontWeight="semibold">
-                                {Common.department.name}
-                              </Heading>
-                            </div>
-                            <div className="flex flex-col gap-2">
-                              <Heading color="txt-secondary" fontSize="sm">
-                                Modules
-                              </Heading>
-                              <Heading fontSize="sm" fontWeight="semibold">
-                                {Common.total_num_modules || 0}
-                              </Heading>
-                            </div>
+                            <div className="flex flex-col gap-6">
+                              <div className="flex flex-col gap-2">
+                                <Heading color="txt-secondary" fontSize="sm">
+                                  {Common.department.division_type}
+                                </Heading>
+                                <Heading fontSize="sm" fontWeight="semibold">
+                                  {Common.department.name}
+                                </Heading>
+                              </div>
+                              <div className="flex flex-col gap-2">
+                                <Heading color="txt-secondary" fontSize="sm">
+                                  Modules
+                                </Heading>
+                                <Heading fontSize="sm" fontWeight="semibold">
+                                  {Common.total_num_modules || 0}
+                                </Heading>
+                              </div>
 
-                            <div className="flex flex-col gap-2">
-                              <Heading color="txt-secondary" fontSize="sm">
-                                Program Type
-                              </Heading>
-                              <Heading fontSize="sm" fontWeight="semibold">
-                                {Common.subTitle}
-                              </Heading>
-                            </div>
-                            {/* <div className="flex flex-col gap-2">
+                              <div className="flex flex-col gap-2">
+                                <Heading color="txt-secondary" fontSize="sm">
+                                  Program Type
+                                </Heading>
+                                <Heading fontSize="sm" fontWeight="semibold">
+                                  {Common.subTitle}
+                                </Heading>
+                              </div>
+                              {/* <div className="flex flex-col gap-2">
                               <Heading color="txt-secondary" fontSize="sm">
                                 Instructor in charge
                               </Heading>
@@ -180,33 +267,34 @@ function IntakePrograms() {
                                 </Heading>
                               </div>
                             </div> */}
-                          </div>
+                            </div>
 
-                          {/* remarks section */}
-                          <div className="flex flex-col mt-8 gap-4">
-                            <Heading fontSize="sm" fontWeight="semibold">
-                              Remarks
-                            </Heading>
-                            <Heading fontSize="sm" color="txt-secondary">
-                              {Common.description}
-                            </Heading>
+                            {/* remarks section */}
+                            <div className="flex flex-col mt-8 gap-4">
+                              <Heading fontSize="sm" fontWeight="semibold">
+                                Remarks
+                              </Heading>
+                              <Heading fontSize="sm" color="txt-secondary">
+                                {Common.description}
+                              </Heading>
+                            </div>
+                            <div className="my-4">
+                              <Link
+                                to={`/dashboard/schedule/programs/${intakeId}/${Common.id}/edit`}>
+                                <Button styleType="text">View schedule</Button>
+                              </Link>
+                            </div>
+                            <div className="space-x-4">
+                              <Link
+                                to={`/dashboard/intakes/programs/${intakeId}/${Common.id}/edit`}>
+                                <Button>Edit program</Button>
+                              </Link>
+                              <Button styleType="outline">Change Status</Button>
+                            </div>
                           </div>
-                          <div className="my-4">
-                            <Link
-                              to={`/dashboard/schedule/programs/${intakeId}/${Common.id}/edit`}>
-                              <Button styleType="text">View schedule</Button>
-                            </Link>
-                          </div>
-                          <div className="space-x-4">
-                            <Link
-                              to={`/dashboard/intakes/programs/${intakeId}/${Common.id}/edit`}>
-                              <Button>Edit program</Button>
-                            </Link>
-                            <Button styleType="outline">Change Status</Button>
-                          </div>
-                        </div>
-                      </Tooltip>
-                    ))
+                        </Tooltip>
+                      );
+                    })
                   ) : (
                     <NoDataAvailable
                       icon="program"

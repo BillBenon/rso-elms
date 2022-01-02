@@ -33,12 +33,11 @@ class InstructorDeployment {
 
   public async getInstructorByUserId(
     userId: string,
-  ): Promise<AxiosResponse<Response<Instructor>>> {
+  ): Promise<AxiosResponse<Response<Instructor[]>>> {
     return await adminstrationAxios.get(
       `instructorDeployments/getInstructorByUserId/${userId}`,
     );
   }
-
 
   public async getInstructors(): Promise<AxiosResponse<Response<Instructor[]>>> {
     return await adminstrationAxios.get(`instructorDeployments/getInstructors`);

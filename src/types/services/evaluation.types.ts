@@ -34,6 +34,13 @@ export enum ISubmissionTypeEnum {
   ONLINE_TEXT = 'ONLINE_TEXT',
 }
 
+export enum IEvaluationOwnership {
+  CREATED_BY_ME = 'CREATED_BY_ME',
+  APPROVED_BY_ME = 'APPROVED_BY_ME',
+  MARKED_BY_ME = 'MARKED_BY_ME',
+  REVIEWD_BY_ME = 'REVIEWD_BY_ME',
+}
+
 export enum IEvaluationClassification {
   MODULE = 'MODULE',
   SUBJECT = 'SUBJECT',

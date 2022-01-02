@@ -94,7 +94,9 @@ function StudentInClass({ classId, label }: IStudentClass) {
                       }>
                       View performance
                     </Button>
-                    <AddStudents classId={parseInt(classId)} />
+                    {authUser?.user_type === UserType.ADMIN && (
+                      <AddStudents classId={parseInt(classId)} />
+                    )}
                   </div>
                   <section>
                     {isLoading ? (

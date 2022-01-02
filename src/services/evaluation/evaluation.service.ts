@@ -8,6 +8,7 @@ import {
   IEvaluationCreate,
   IEvaluationInfo,
   IEvaluationInfoCollected,
+  IEvaluationOwnership,
   IEvaluationQuestionsInfo,
   IStudentAnswer,
   IStudentEvaluationStart,
@@ -51,6 +52,16 @@ class EvaluationService {
       settings,
     );
   }
+
+  public async getEvaluationsByInstructorAndCategory(
+    evaluationCategory: IEvaluationOwnership,
+    instructorId: string,
+  ): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
+    return await evaluationAxios.get(
+      `/evaluations/getEvaluationsByInstructorAndCategory/instructor/${instructorId}?category=${evaluationCategory}`,
+    );
+  }
+
   public async fetchEvaluationsByInstructorAndAcademy(
     academy: string,
     instructor: string,

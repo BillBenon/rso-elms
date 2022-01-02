@@ -77,12 +77,23 @@ export interface EnrollStudentToProgram {
   third_party_reg_number: string;
 }
 
+export interface ModuleAssignmentType{
+  module_id: string;
+  intakeProg: string;
+}
+
 export interface EnrollInstructorToModule {
   course_module_id: string;
   intake_program_instructor_id: number;
 }
 
 export interface EnrollInstructorToSubject {
+  subject_id: string;
+  intake_program_instructor_id: string;
+}
+
+export interface EnrollInstructorToSubjectInfo {
+  id: string;
   subject_id: string;
   instructor_module_assignment_id: string;
 }

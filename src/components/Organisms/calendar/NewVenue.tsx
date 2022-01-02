@@ -1,9 +1,9 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
+
 import { queryClient } from '../../../plugins/react-query';
 import { authenticatorStore } from '../../../store/administration';
-
 import { venueStore } from '../../../store/timetable/venue.store';
 import { GenericStatus, ValueType } from '../../../types';
 import { CreateVenue, venueType } from '../../../types/services/event.types';

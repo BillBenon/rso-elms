@@ -6,6 +6,9 @@ class InstitutionStore {
   create() {
     return useMutation(institutionService.create);
   }
+  addLogo() {
+    return useMutation(institutionService.addLogo);
+  }
   getAll() {
     return useQuery('institutions', institutionService.fetchAll);
   }

@@ -53,7 +53,7 @@ export default function EvaluationInfoComponent({
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(
     authUser?.id + '',
-  ).data?.data.data;
+  ).data?.data.data[0];
 
   const instrucotrModules = useInstructorModules(progId + '', instructorInfo?.id + '');
 
@@ -167,7 +167,7 @@ export default function EvaluationInfoComponent({
           // defaultValue={details.evaluation_type}
           width="64"
           name="evaluation_type"
-          placeholder={details.evaluation_type || 'Evaluation Type'}
+          placeholder="Evaluation Type"
           handleChange={handleChange}
           options={getDropDownStatusOptions(IEvaluationTypeEnum)}>
           Evaluation type
@@ -360,7 +360,6 @@ export default function EvaluationInfoComponent({
             <DateMolecule
               startYear={new Date().getFullYear()}
               endYear={new Date().getFullYear() + 100}
-              padding={3}
               reverse={false}
               showTime
               breakToNextLine
@@ -372,7 +371,6 @@ export default function EvaluationInfoComponent({
               handleChange={handleChange}
               startYear={new Date().getFullYear()}
               endYear={new Date().getFullYear() + 100}
-              padding={3}
               showTime
               breakToNextLine
               reverse={false}
@@ -385,7 +383,6 @@ export default function EvaluationInfoComponent({
           handleChange={handleChange}
           startYear={new Date().getFullYear()}
           endYear={new Date().getFullYear() + 100}
-          padding={3}
           reverse={false}
           name={'marking_reminder_date'}>
           Marking reminder date

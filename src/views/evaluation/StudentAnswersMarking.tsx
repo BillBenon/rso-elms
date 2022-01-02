@@ -23,16 +23,16 @@ export default function StudentAnswersMarking() {
     markingStore.getStudentEvaluationById(id);
   const [totalMarks, setTotalMarks] = useState(0);
   const [correction, setCorrection] = useState<Array<MarkingCorrection>>([]);
-  const [rowsOnPage] = useState(3);
-  const [currentPage, setCurrentPage] = useState(1);
+  // const [rowsOnPage] = useState(3);
+  // const [currentPage, setCurrentPage] = useState(1);
   const [step, setStep] = useState(0);
-  const indexOfLastRow = currentPage * rowsOnPage;
-  const indexOfFirstRow = indexOfLastRow - rowsOnPage;
-  const [currentRows, setCurrentRows] = useState(
-    studentAnswers?.slice(indexOfFirstRow, indexOfLastRow),
-  );
-  useEffect(() => {
-    setCurrentRows(studentAnswers?.slice(indexOfFirstRow, indexOfLastRow));
+  // const indexOfLastRow = currentPage * rowsOnPage;
+  // const indexOfFirstRow = indexOfLastRow - rowsOnPage;
+  // const [currentRows, setCurrentRows] = useState(
+  //   studentAnswers?.slice(indexOfFirstRow, indexOfLastRow),
+  // );
+  // useEffect(() => {
+    // setCurrentRows(studentAnswers?.slice(indexOfFirstRow, indexOfLastRow));
     // setCorrection([]);
     // studentAnswers?.forEach((element) => {
     //   setCorrection([
@@ -44,8 +44,9 @@ export default function StudentAnswersMarking() {
     //     },
     //   ]);
     // });
-  }, [studentAnswers, indexOfFirstRow, indexOfLastRow]);
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+    // console.log(studentAnswers?.length);
+  // }, [studentAnswers, indexOfFirstRow, indexOfLastRow]);
+  // const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   const list: LinkList[] = [
     { to: '/', title: 'Instructor' },
     { to: 'evaluations', title: 'evaluations' },
@@ -131,7 +132,7 @@ export default function StudentAnswersMarking() {
             </p>
           </TableHeader>
           <section className="flex flex-wrap justify-start gap-4 mt-2">
-            {currentRows?.map((studentAnswer, index: number) => {
+            {studentAnswers?.map((studentAnswer, index: number) => {
               return (
                 <StudentAnswer
                   key={index}
@@ -145,15 +146,15 @@ export default function StudentAnswersMarking() {
                 />
               );
             })}
-            <div className="flex item-center mx-auto">
+            {/* <div className="flex item-center mx-auto">
               <Pagination
                 rowsPerPage={rowsOnPage}
-                totalElements={studentAnswers?.length || 0}
+                totalElements={studentAnswers?.length || 5}
                 paginate={paginate}
                 currentPage={currentPage}
                 totalPages={1}
               />
-            </div>
+            </div> */}
             <div className="w-full flex justify-end">
               <Button onClick={submitMarking}>Complete Marking</Button>
             </div>

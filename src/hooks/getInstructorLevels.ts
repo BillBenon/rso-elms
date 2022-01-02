@@ -11,7 +11,7 @@ export default function useInstructorLevels(instructorId: string, intakeProgId: 
   const { data: instructorLevels } = enrollmentStore.getInstructorLevels(instructorId);
 
   let instructorLevelsIds = instructorLevels?.data.data.map(
-    (instLvl) => instLvl.academic_year_program_intake_level.id,
+    (instLvl) => instLvl.academic_year_program_intake_level?.id,
   );
 
   useEffect(() => {

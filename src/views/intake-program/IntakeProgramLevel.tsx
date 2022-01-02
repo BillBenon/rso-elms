@@ -9,7 +9,11 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import useInstructorLevels from '../../hooks/getInstructorLevels';
 import { authenticatorStore } from '../../store/administration';
-import intakeProgramStore from '../../store/administration/intake-program.store';
+import intakeProgramStore, {
+  getIntakeProgramsByStudent,
+  getStudentLevels,
+  getStudentShipByUserId,
+} from '../../store/administration/intake-program.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import {
   IntakeProgParam,
@@ -31,7 +35,7 @@ function IntakeProgramLevel() {
 
   const authUserId = authUser?.id;
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(authUserId + '')
-    .data?.data.data;
+    .data?.data.data[0];
 
   const { data: getLevels, isLoading } =
     intakeProgramStore.getLevelsByIntakeProgram(intakeProg);
@@ -42,8 +46,27 @@ function IntakeProgramLevel() {
     setInstLevels(instructorProgLevels);
   }, [instructorProgLevels]);
 
+  const studentInfo = getStudentShipByUserId(authUser?.id + '' || '', !!authUser?.id).data
+    ?.data.data[0];
+  const studPrograms = getIntakeProgramsByStudent(studentInfo?.id + '', !!studentInfo?.id)
+    .data?.data.data;
+
+  let studIntkProgstud = studPrograms?.find(
+    (prg) => prg.intake_program.id === intakeProg,
+  );
+
+  let { data: studentLevels } = getStudentLevels(
+    studIntkProgstud?.id + '',
+    !!studIntkProgstud?.id,
+  );
+
   const tabs =
-    authUser?.user_type === UserType.INSTRUCTOR
+    authUser?.user_type === UserType.STUDENT
+      ? studentLevels?.data.data.map((level) => ({
+          label: `${level.academic_year_program_level.academic_program_level.level.name}`,
+          href: `${url}/${level.academic_year_program_level.id}`,
+        })) || []
+      : authUser?.user_type === UserType.INSTRUCTOR
       ? instLevels.map((level) => ({
           label: `${level.academic_program_level.level.name}`,
           href: `${url}/${level.id}`,

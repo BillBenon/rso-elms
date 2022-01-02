@@ -55,7 +55,7 @@ export default function Academy() {
             ' ' +
             users.data?.data.data.find((admin) => admin.id === current_admin_id)
               ?.last_name || ''
-        : undefined,
+        : 'None 😶',
       'phone number': phone_number,
       status: generic_status,
     };
