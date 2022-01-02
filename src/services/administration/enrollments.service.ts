@@ -8,9 +8,11 @@ import {
   EnrollInstructorLevelInfo,
   EnrollInstructorProgram,
   EnrollInstructorToSubject,
+  EnrollInstructorToSubjectInfo,
   EnrollStudentToLevel,
   EnrollStudentToProgram,
   InstructorAssignModule,
+  ModuleAssignmentType,
   SubjectInstructors,
 } from '../../types/services/enrollment.types';
 import {
@@ -136,9 +138,9 @@ class EnrollmentService {
 
   public async enrollInstructorToSubject(
     instructor: EnrollInstructorToSubject,
-  ): Promise<AxiosResponse<Response<SubjectInstructors>>> {
+  ): Promise<AxiosResponse<Response<EnrollInstructorToSubjectInfo>>> {
     return await adminstrationAxios.post(
-      'instructorModuleAssignment/assignInstructorOnModule',
+      'instructorSubjectAssignment/assignInstructorOnSubject',
       instructor,
     );
   }
@@ -165,11 +167,19 @@ class EnrollmentService {
     );
   }
 
+  public async getModuleAssignmentByIntakeProgramAndModule(
+    data: ModuleAssignmentType,
+  ): Promise<AxiosResponse<Response<EnrollInstructorToSubjectInfo>>> {
+    return await adminstrationAxios.get(
+      `instructorModuleAssignment/getByIntakeProgramInstructorAndCourseModule/${data.intakeProg}/${data.module_id}`,
+    );
+  }
+
   public async getInstructorsBySubjectId(
     subjectId: string,
-  ): Promise<AxiosResponse<Response<SortedContent<EnrollInstructorToSubject[]>>>> {
+  ): Promise<AxiosResponse<Response<ModuleInstructors[]>>> {
     return await adminstrationAxios.get(
-      `instructorSubjectAssignment/getAll`,
+      `instructorSubjectAssignment/getAllInstructorsAssignedOnSubject/${subjectId}`,
     );
   }
 

@@ -23,22 +23,23 @@ export default function StudentReview() {
     isLoading,
     isSuccess,
   } = markingStore.getStudentEvaluationById(id);
-  const [rowsOnPage] = useState(4);
-  const [currentPage, setCurrentPage] = useState(1);
-  const indexOfLastRow = currentPage * rowsOnPage;
-  const indexOfFirstRow = indexOfLastRow - rowsOnPage;
-  const [currentRows, setCurrentRows] = useState(
-    studentAnswers?.slice(indexOfFirstRow, indexOfLastRow),
-  );
+  // const [rowsOnPage] = useState(4);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const indexOfLastRow = currentPage * rowsOnPage;
+  // const indexOfFirstRow = indexOfLastRow - rowsOnPage;
+  // const [currentRows, setCurrentRows] = useState(
+  //   studentAnswers?.slice(indexOfFirstRow, indexOfLastRow),
+  // );
+  console.log(studentEvaluation?.data.data)
   const history = useHistory();
   function goBack(): void {
     history.push(`/dashboard/student`);
   }
-  useEffect(() => {
-    setCurrentRows(studentAnswers?.slice(indexOfFirstRow, indexOfLastRow));
-  }, [studentAnswers, indexOfFirstRow, indexOfLastRow]);
+  // useEffect(() => {
+  //   setCurrentRows(studentAnswers?.slice(indexOfFirstRow, indexOfLastRow));
+  // }, [studentAnswers, indexOfFirstRow, indexOfLastRow]);
 
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  // const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   const list: LinkList[] = [
     { to: '/', title: 'Instructor' },
     { to: 'evaluations', title: 'evaluations' },
@@ -66,12 +67,16 @@ export default function StudentReview() {
             </p>
           </TableHeader>
           <section className="flex flex-wrap justify-start gap-4 mt-2">
-            {currentRows?.map((studentAnswer, index: number) => {
+            {studentAnswers?.map((studentAnswer, index: number) => {
               return (
                 <AnswerReview index={index} key={studentAnswer.id} data={studentAnswer} />
               );
             })}
-            <div className="flex item-center mx-auto">
+            <div className='bg-main p-4 w-full rounded items-center'>
+              <Heading>Instructor's remarks</Heading>
+              <p className='text-md'>-&gt;{' '+studentEvaluation.data.data.remark}</p>
+            </div>
+            {/* <div className="flex item-center mx-auto">
               <Pagination
                 rowsPerPage={rowsOnPage}
                 totalElements={studentAnswers?.length || 0}
@@ -79,7 +84,7 @@ export default function StudentReview() {
                 currentPage={currentPage}
                 totalPages={1}
               />
-            </div>
+            </div> */}
             <div className="w-full flex justify-end">
               <Button onClick={goBack}>Finish Review</Button>
             </div>
