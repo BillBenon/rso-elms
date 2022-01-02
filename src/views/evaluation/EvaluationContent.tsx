@@ -91,7 +91,6 @@ export default function EvaluationContent() {
     let formattedSubs: any = [];
 
     if (isSuccess && data?.data.data) {
-      console.log(data?.data.data);
       const filteredInfo = data?.data.data.map((submission: any) =>
         pick(submission, [
           'id',
