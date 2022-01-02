@@ -17,7 +17,6 @@ type DProp = {
   required?: boolean;
   disabled?: boolean;
   className?: string;
-  padding?: number;
 };
 
 const DaySelect = (dprop: DProp) => {
@@ -35,17 +34,13 @@ const DaySelect = (dprop: DProp) => {
   };
 
   let days = renderDateOptions();
-  let newDefaultValue = days.find(
-    (date) => parseInt(date.value) === parseInt(dprop.defaultValue + ''),
-  );
 
   return (
     <DropDown
-      defaultValue={newDefaultValue}
+      value={dprop.defaultValue}
       disabled={dprop.disabled}
       name={dprop.name}
       placeholder={dprop.placeholder}
-      padding={dprop.padding}
       width={dprop.width}
       className={dprop.className}
       options={days}
