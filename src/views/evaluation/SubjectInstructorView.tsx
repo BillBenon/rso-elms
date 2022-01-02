@@ -1,11 +1,9 @@
-/*@ts-ignore*/
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { CommonCardDataType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
@@ -45,7 +43,6 @@ export default function SubjectInstructorView({
   return (
     <div>
       <Switch>
-        <Route exact path={`/dashboard/evaluations/new`} component={NewEvaluation} />
         <Route
           exact
           path={path}
@@ -57,10 +54,9 @@ export default function SubjectInstructorView({
                 {isSuccess && evaluations.length === 0 ? (
                   <NoDataAvailable
                     icon="evaluation"
-                    buttonLabel="Add new evaluation"
+                    showButton={false}
                     title={'No evaluations available'}
-                    handleClick={() => history.push(`${path}/new`)}
-                    description="And the web just isnt the same without you. Lets get you back online!"
+                    description="Consider adding some evaluation to see them here!"
                   />
                 ) : isSuccess && evaluations.length > 0 ? (
                   evaluations?.map((info: CommonCardDataType, index: number) => (

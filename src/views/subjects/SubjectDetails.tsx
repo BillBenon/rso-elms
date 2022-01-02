@@ -82,7 +82,7 @@ export default function SubjectDetails() {
     {
       label: 'Instructors',
       href: `${url}/instructors`,
-    }
+    },
   ];
 
   return (

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
-import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import { authenticatorStore } from '../../store/administration';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
@@ -32,13 +30,6 @@ export default function InstructorViewEvaluations() {
     { to: '/', title: 'home' },
     { to: 'evaluations', title: 'evaluations' },
   ];
-
-  function goToNewEvaluation() {
-    if (!getLocalStorageData('currentStep')) {
-      setLocalStorageData('currentStep', 0);
-    }
-    history.push(`${path}/new`);
-  }
 
   useEffect(() => {
     if (!getLocalStorageData('currentStep')) {
@@ -77,11 +68,6 @@ export default function InstructorViewEvaluations() {
                   <section>
                     <BreadCrumb list={list}></BreadCrumb>
                   </section>
-                  {isSuccess ? (
-                    <TableHeader title="Evaluations" showBadge={false} showSearch={false}>
-                      <Button onClick={goToNewEvaluation}>New Evaluation</Button>
-                    </TableHeader>
-                  ) : null}
                 </>
               ) : null}
 
@@ -91,10 +77,9 @@ export default function InstructorViewEvaluations() {
                 {isSuccess && evaluations.length === 0 ? (
                   <NoDataAvailable
                     icon="evaluation"
-                    buttonLabel="Add new evaluation"
+                    showButton={false}
                     title={'No evaluations available'}
-                    handleClick={() => history.push(`${path}/new`)}
-                    description="And the web just isnt the same without you. Lets get you back online!"
+                    description="Consider adding some evaluation to see them here!"
                   />
                 ) : isSuccess && evaluations.length > 0 ? (
                   evaluations?.map((info: CommonCardDataType, index: number) => (
@@ -109,10 +94,9 @@ export default function InstructorViewEvaluations() {
                 ) : isError ? (
                   <NoDataAvailable
                     icon="evaluation"
-                    buttonLabel="Create Evaluation"
+                    showButton={false}
                     title={'No evaluations available'}
-                    handleClick={() => history.push(`${path}/new`)}
-                    description="And the web just isnt the same without you. Lets get you back online!"
+                    description="Consider adding some evaluation to see them here!"
                   />
                 ) : null}
               </section>
