@@ -89,7 +89,7 @@ export interface EnrollInstructorToModule {
 
 export interface EnrollInstructorToSubject {
   subject_id: string;
-  instructor_module_assignment_id: string;
+  intake_program_instructor_id: string;
 }
 
 export interface EnrollInstructorToSubjectInfo {
