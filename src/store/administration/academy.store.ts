@@ -6,6 +6,10 @@ class AcademyStore {
   createAcademy() {
     return useMutation(academyService.createAcademy);
   }
+
+  addLogo() {
+    return useMutation(academyService.addAcademyLogo);
+  }
   fetchAcademies() {
     return useQuery('academies', academyService.fetchAcademies);
   }
