@@ -25,3 +25,8 @@ export interface InstitutionInfo extends Table, BasicInstitutionInfo {
   villages: LocationInfo;
   village_id: string;
 }
+
+export interface AddInstitutionLogo {
+  id: string;
+  info: FormData;
+}

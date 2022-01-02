@@ -23,6 +23,8 @@ export interface AcademyCreateInfo {
   // students	[...]
   // users:	[...]
   current_admin_id: string;
+  logo_attachment_id: string | null;
+  logo_attachment_file_name: string | null;
   email: string;
   fax_number: string;
   full_address: string;
