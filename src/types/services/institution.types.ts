@@ -24,6 +24,9 @@ export interface InstitutionInfo extends Table, BasicInstitutionInfo {
   academies: AcademyInfo[];
   villages: LocationInfo;
   village_id: string;
+
+  logo_attachment_file_name: string | null;
+  logo_attachment_id: string | null;
 }
 
 export interface AddInstitutionLogo {
