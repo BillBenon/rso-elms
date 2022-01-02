@@ -379,7 +379,6 @@ export default function EvaluationInfoComponent({
             <DateMolecule
               startYear={new Date().getFullYear()}
               endYear={new Date().getFullYear() + 100}
-              padding={3}
               reverse={false}
               showTime
               breakToNextLine
@@ -391,7 +390,6 @@ export default function EvaluationInfoComponent({
               handleChange={handleChange}
               startYear={new Date().getFullYear()}
               endYear={new Date().getFullYear() + 100}
-              padding={3}
               showTime
               breakToNextLine
               reverse={false}
@@ -404,7 +402,6 @@ export default function EvaluationInfoComponent({
           handleChange={handleChange}
           startYear={new Date().getFullYear()}
           endYear={new Date().getFullYear() + 100}
-          padding={3}
           reverse={false}
           name={'marking_reminder_date'}>
           Marking reminder date

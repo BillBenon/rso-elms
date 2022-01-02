@@ -68,7 +68,7 @@ function IntakeProgramDetails() {
 
   useEffect(() => {
     let demoInstructors: UserView[] = [];
-    instructorsProgram?.data?.data?.map((inst) => {
+    instructorsProgram?.data.data.map((inst) => {
       demoInstructors.push({
         id: inst.id,
         first_name: inst.instructor.user.first_name,

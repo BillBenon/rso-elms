@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { ValueType } from '../../../../types';
-import DropDown from '../Dropdown';
+import Select from '../Select';
 
 type MProp = {
   value: number;
@@ -14,7 +14,6 @@ type MProp = {
   placeholder?: string;
   width?: string;
   className?: string;
-  padding?: number;
 };
 
 const HourSelect = (mprops: MProp) => {
@@ -30,16 +29,12 @@ const HourSelect = (mprops: MProp) => {
     return hrOptions;
   };
 
-  let hours = renderHourOptions();
-  let newDefaultValue = hours.find((hour) => hour.value === mprops.defaultValue);
-
   return (
-    <DropDown
-      defaultValue={newDefaultValue}
+    <Select
+      value={mprops.defaultValue}
       disabled={mprops.disabled}
       name={mprops.name}
       placeholder={mprops.placeholder}
-      padding={mprops.padding}
       width={mprops.width}
       className={mprops.className}
       options={renderHourOptions()}
