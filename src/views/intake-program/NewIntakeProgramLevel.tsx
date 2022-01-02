@@ -14,7 +14,6 @@ import academicyearsStore from '../../store/administration/academicyears.store';
 import { intakeStore } from '../../store/administration/intake.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { getLevelsByAcademicProgram } from '../../store/administration/program.store';
-import instructordeploymentStore from '../../store/instructordeployment.store';
 import { ValueType } from '../../types';
 import { Instructor } from '../../types/services/instructor.types';
 import {
@@ -43,20 +42,10 @@ export default function NewIntakeProgramLevel() {
     academicyearsStore.fetchAcademicYears(authUser?.academy.id.toString() || '').data
       ?.data.data || [];
 
-  const instructors_deployed =
-    instructordeploymentStore.getInstructorsDeployedInAcademy(
-      authUser?.academy.id.toString() || '',
-    ).data?.data.data || [];
+  const { data: instructorsProgram, isLoading: instLoading } =
+    intakeProgramStore.getInstructorsByIntakeProgram(intakeProg);
 
-  const all_instructors =
-    instructordeploymentStore.getInstructors().data?.data.data || [];
-
-  const instructors =
-    all_instructors?.filter(
-      (instr) =>
-        instr.id ===
-        instructors_deployed.find((dep) => dep.instructor_id == instr.id)?.instructor_id,
-    ) || [];
+  const instructors = instructorsProgram?.data.data.map((inst) => inst.instructor) || [];
 
   const [values, setvalues] = useState<CreateLevelIntakeProgram>({
     academic_program_level_id: '',
@@ -143,7 +132,7 @@ export default function NewIntakeProgramLevel() {
                 <form onSubmit={submitForm}>
                   <DropdownMolecule
                     width="72"
-                    placeholder="Select incharge"
+                    placeholder={instLoading ? 'Loading incharge' : 'Select incharge'}
                     options={getDropDownOptions({
                       inputs: instructors,
                       labelName: ['first_name', 'last_name'],

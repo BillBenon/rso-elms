@@ -30,9 +30,9 @@ class IntakeProgramStore {
       intakeProgramService.getInstructorsByIntakeProgram(intakeProgramId),
     );
   }
-  getInstructorsByIntakeProgramLevel(instructorId: string) {
+  getIntakeProgramLevelsByInstructorId(instructorId: string) {
     return useQuery(['instructors/intakeprogram', instructorId], () =>
-      intakeProgramService.getInstructorsByIntakeProgramLevel(instructorId),
+      intakeProgramService.getIntakeProgramLevelsByInstructorId(instructorId),
     );
   }
 

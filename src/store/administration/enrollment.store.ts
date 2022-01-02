@@ -28,7 +28,6 @@ class EnrolmmentStore {
     );
   }
 
-
   getModuleAssignmentByIntakeProgramAndModule(data: ModuleAssignmentType) {
     return useQuery(['instructor/module/assignment', data], () =>
       enrollmentService.getModuleAssignmentByIntakeProgramAndModule(data),

@@ -4,9 +4,9 @@ import React, { ReactNode } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { CommonCardDataType, Link } from '../../../types';
+import { IProgramData } from '../../../views/programs/AcademicPrograms';
 import Badge from '../../Atoms/custom/Badge';
 import Heading from '../../Atoms/Text/Heading';
-import { IProgramData } from '../../../views/programs/AcademicPrograms';
 
 type PropType = {
   active?: boolean;

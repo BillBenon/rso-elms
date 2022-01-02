@@ -73,10 +73,7 @@ export default function SubjectDetails() {
     history.goBack();
   };
 
-  if (intakeProg == '') {
-    goBack();
-  }
-  const tabs = [
+  let tabs = [
     {
       label: `Lessons(${lessons.length})`,
       href: `${url}?intkPrg=${intakeProg}`,
@@ -85,11 +82,13 @@ export default function SubjectDetails() {
       label: 'Evaluations',
       href: `${url}/evaluations?intkPrg=${intakeProg}`,
     },
-    {
+  ];
+  if (intakeProg) {
+    tabs.push({
       label: 'Instructors',
       href: `${url}/instructors?intkPrg=${intakeProg}`,
-    },
-  ];
+    });
+  }
 
   return (
     <main className="px-4">
