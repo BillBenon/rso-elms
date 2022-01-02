@@ -8,6 +8,7 @@ import FileUploader from '../../components/Atoms/Input/FileUploader';
 import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
+import LocationMolecule from '../../components/Molecules/input/LocationMolecule';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
 import { institutionStore } from '../../store/administration/institution.store';
 import { GenericStatus, ParamType, ValueType } from '../../types';
@@ -50,7 +51,7 @@ export default function UpdateInstitution() {
         moto: institution.moto,
         name: institution.name,
         phone_number: institution.phone_number,
-        postal_code: institution.postal_code || '',
+        postal_code: institution.postal_code || 'x',
         short_name: institution.short_name,
         website_link: institution.website_link,
         id: id,
@@ -154,22 +155,21 @@ export default function UpdateInstitution() {
               </TextAreaMolecule>
             </div>
             <div className="py-2">
-              <TextAreaMolecule
+              <InputMolecule
                 name="fax number"
                 value={values.fax_number}
                 placeholder="Fax number"
                 handleChange={(e) => handleChange(e)}>
                 Fax Number
-              </TextAreaMolecule>
+              </InputMolecule>
             </div>
             <div className="py-2">
-              <TextAreaMolecule
-                name="postal code"
-                value={values.postal_code}
-                placeholder="Postal Cide"
+              <LocationMolecule
+                name="full_address"
+                value={values.full_address}
                 handleChange={(e) => handleChange(e)}>
-                Postal Code
-              </TextAreaMolecule>
+                Head Office Location
+              </LocationMolecule>
             </div>
           </>
         </div>
