@@ -1,14 +1,16 @@
+import { Editor } from '@tiptap/react';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useLocation } from 'react-router-dom';
 
+import useInstructorModules from '../../../../hooks/getInstructorModules';
 import { authenticatorStore } from '../../../../store/administration';
 import { classStore } from '../../../../store/administration/class.store';
 import enrollmentStore from '../../../../store/administration/enrollment.store';
-import intakeProgramStore from '../../../../store/administration/intake-program.store';
 import { subjectStore } from '../../../../store/administration/subject.store';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
-import { SelectData, ValueType } from '../../../../types';
+import { CommonCardDataType, SelectData, ValueType } from '../../../../types';
 import { EnrollInstructorLevelInfo } from '../../../../types/services/enrollment.types';
 import {
   IAccessTypeEnum,
@@ -22,8 +24,6 @@ import {
   IQuestionaireTypeEnum,
   ISubmissionTypeEnum,
 } from '../../../../types/services/evaluation.types';
-import { IntakeModuleStatus } from '../../../../types/services/intake-program.types';
-import { InstructorModule } from '../../../../types/services/modules.types';
 import { setLocalStorageData } from '../../../../utils/getLocalStorageItem';
 import {
   getDropDownOptions,
@@ -31,20 +31,21 @@ import {
 } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import ILabel from '../../../Atoms/Text/ILabel';
+import Tiptap from '../../../Molecules/editor/Tiptap';
 import DateMolecule from '../../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
-import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
-// import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function EvaluationInfoComponent({
   handleNext,
   evaluationId,
   evaluationInfo,
 }: IEvaluationProps) {
-  const [moduleId, setModuleId] = useState(0);
-  const [levelId, setLevelId] = useState('');
+  const [moduleId, setModuleId] = useState('');
+  const { search } = useLocation();
+  const progId = new URLSearchParams(search).get('prog');
+  const intakePeriodId = new URLSearchParams(search).get('prd');
   // const [period, setPeriod] = useState('');
 
   const authUser = authenticatorStore.authUser().data?.data.data;
@@ -53,21 +54,14 @@ export default function EvaluationInfoComponent({
     authUser?.id + '',
   ).data?.data.data;
 
-  const { data: instrucotrModules, isLoading: moduleLoader } =
-    intakeProgramStore.getModulesByInstructorAndStatus(
-      instructorInfo?.id + '',
-      IntakeModuleStatus.ONGOING,
-    );
+  const instrucotrModules = useInstructorModules(progId + '', instructorInfo?.id + '');
 
-  let selectedModule: InstructorModule | undefined =
-    instrucotrModules?.data.data.find((mod) => mod.id === moduleId) || undefined;
+  let selectedModule = instrucotrModules?.find((mod) => mod.id === moduleId)?.id;
 
-  const { data: subjects } = subjectStore.getSubjectsByModule(
-    selectedModule?.module.id + '',
-  );
+  const { data: subjects } = subjectStore.getSubjectsByModule(selectedModule + '');
   const { data: levels } = enrollmentStore.getInstructorLevels(instructorInfo?.id + '');
 
-  const { data: classes } = classStore.getClassByPeriod(levelId + '');
+  const { data: classes } = classStore.getClassByPeriod(intakePeriodId + '');
 
   const [details, setDetails] = useState<IEvaluationCreate>({
     access_type: evaluationInfo?.access_type || IAccessTypeEnum.PUBLIC,
@@ -116,14 +110,13 @@ export default function EvaluationInfoComponent({
   const { mutateAsync } = evaluationStore.updateEvaluation();
 
   function handleChange({ name, value }: ValueType) {
-    if (name === 'module') setModuleId(parseInt(value + ''));
-    else if (name === 'levelId') setLevelId(value + '');
+    if (name === 'module') setModuleId(value + '');
     else setDetails((details) => ({ ...details, [name]: value }));
   }
 
-  // function handleEditorChange(editor: Editor) {
-  //   setDetails((details) => ({ ...details, exam_instruction: editor.getHTML() }));
-  // }
+  function handleEditorChange(editor: Editor) {
+    setDetails((details) => ({ ...details, exam_instruction: editor.getHTML() }));
+  }
 
   function submitForm(e: FormEvent) {
     e.preventDefault();
@@ -188,12 +181,12 @@ export default function EvaluationInfoComponent({
         <DropdownMolecule
           width="64"
           name="module"
-          placeholder={moduleLoader ? 'Loading...' : 'Select module'}
+          placeholder={'Select module'}
           handleChange={handleChange}
           options={getDropDownOptions({
-            inputs: instrucotrModules?.data.data || [],
+            inputs: instrucotrModules || [],
             //@ts-ignore
-            getOptionLabel: (mod: InstructorModule) => mod.module.name,
+            getOptionLabel: (mod: CommonCardDataType) => mod.title,
           })}>
           Select module
         </DropdownMolecule>
@@ -218,23 +211,13 @@ export default function EvaluationInfoComponent({
             inputs: levels?.data.data || [],
             //@ts-ignore
             getOptionLabel: (lev: EnrollInstructorLevelInfo) =>
-              lev.academic_year_program_intake_level.academic_program_level.level.name,
+              lev.academic_year_program_intake_level.academic_program_level.level.name ||
+              '',
           })}>
           Select Level
         </DropdownMolecule>
 
-        <DropdownMolecule
-          width="64"
-          name="adm_intake_level_class_id"
-          placeholder="Select class"
-          handleChange={handleChange}
-          options={getDropDownOptions({
-            inputs: classes?.data.data || [],
-            labelName: ['class_name'],
-          })}>
-          Select Class
-        </DropdownMolecule>
-        {/* <RadioMolecule
+        <RadioMolecule
           defaultValue={details.eligible_group}
           className="pb-4"
           value={details.eligible_group}
@@ -245,7 +228,20 @@ export default function EvaluationInfoComponent({
           ]}
           handleChange={handleChange}>
           Eligible Class
-        </RadioMolecule> */}
+        </RadioMolecule>
+
+        <DropdownMolecule
+          isMulti={details.eligible_group === IEligibleClassEnum.MULTIPLE}
+          width="64"
+          name="adm_intake_level_class_id"
+          placeholder="Select class"
+          handleChange={handleChange}
+          options={getDropDownOptions({
+            inputs: classes?.data.data || [],
+            labelName: ['class_name'],
+          })}>
+          Select Class(es)
+        </DropdownMolecule>
         {/* <RadioMolecule
           defaultValue={details.access_type}
           className="pb-4"
@@ -338,18 +334,18 @@ export default function EvaluationInfoComponent({
           handleChange={handleChange}>
           Shuffle evaluation questions
         </SwitchMolecule> */}
-        <TextAreaMolecule
+        {/* <TextAreaMolecule
           name={'exam_instruction'}
           value={details.exam_instruction}
           handleChange={handleChange}>
           <ILabel size="sm">Evaluation instructions</ILabel>
-        </TextAreaMolecule>
-        {/* <div className="my-2">
+        </TextAreaMolecule> */}
+        <div className="my-2">
           <div className="my-1">
             <ILabel size="sm">Evaluation instructions</ILabel>
           </div>
           <Tiptap content={details.exam_instruction} handleChange={handleEditorChange} />
-        </div> */}
+        </div>
         <InputMolecule
           style={{ width: '6rem' }}
           type="number"

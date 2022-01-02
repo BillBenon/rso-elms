@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { Link as LinkList } from '../../../../types';
@@ -23,7 +23,10 @@ export default function NewEvaluation() {
 
   const [currentStep, setCurrentStep] = useState(getLocalStorageData('currentStep'));
   const { search } = useLocation();
+  const history = useHistory();
   const [evaluationId] = useState(new URLSearchParams(search).get('evaluation'));
+
+  if (location.href === location.origin + '/dashboard/evaluations/new') history.goBack();
 
   function handleSubmit() {
     setCurrentStep(currentStep + 1);

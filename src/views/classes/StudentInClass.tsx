@@ -32,13 +32,13 @@ function StudentInClass({ classId, label }: IStudentClass) {
   } = useParams<IntakePeriodParam>();
   const { path } = useRouteMatch();
   const [students, setStudents] = useState<UserTypes[]>([]);
-  const { data, isLoading } = classStore.getStudentsByClass(classId);
+  const { data: studentsData, isLoading } = classStore.getStudentsByClass(classId) || [];
+  const authUser = authenticatorStore.authUser().data?.data.data;
   const history = useHistory();
 
-  const studentsData = data?.data.data || [];
   useEffect(() => {
     let tempStuds: UserTypes[] = [];
-    studentsData.forEach((stud) => {
+    studentsData?.data.data.forEach((stud) => {
       tempStuds.push({
         id: stud.id.toString(),
         username: stud.student.user.username,
@@ -51,9 +51,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
       });
     });
     setStudents(tempStuds);
-  }, [studentsData]);
-
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  }, [studentsData?.data.data]);
 
   return (
     <Tab label={label}>
@@ -101,7 +99,8 @@ function StudentInClass({ classId, label }: IStudentClass) {
                   <section>
                     {isLoading ? (
                       <Loader />
-                    ) : studentsData.length <= 0 ? (
+                    ) : studentsData?.data.data &&
+                      studentsData?.data.data?.length <= 0 ? (
                       <NoDataAvailable
                         showButton={false}
                         icon="user"
@@ -152,6 +151,18 @@ function StudentInClass({ classId, label }: IStudentClass) {
                       }>
                       View students
                     </Button>
+
+                    {authUser?.user_type === UserType.INSTRUCTOR && (
+                      <Button
+                        styleType="outline"
+                        onClick={() =>
+                          history.push(
+                            `/dashboard/evaluations/new?intkProg=${intakeProg}&prog=${id}&lvl=${levelId}&prd=${period}`,
+                          )
+                        }>
+                        Add evaluation
+                      </Button>
+                    )}
                   </div>
                   <div className="flex justify-between space-x-4">
                     <Heading fontWeight="semibold" fontSize="xl" className="py-2">

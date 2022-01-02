@@ -180,6 +180,7 @@ export interface IEvaluationQuestion {
 export interface IMultipleChoice {
   answer_content: string;
   correct: boolean;
+  id: string;
 }
 
 export interface ICreateEvaluationQuestions extends IEvaluationQuestion {

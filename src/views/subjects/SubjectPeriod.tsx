@@ -21,6 +21,7 @@ function SubjectPeriod() {
   );
   const [subj, setsubj] = useState<CommonCardDataType[]>();
   const history = useHistory();
+  const authUser = authenticatorStore.authUser().data?.data.data;
 
   useEffect(() => {
     if (subjects?.data.data) {
@@ -42,8 +43,6 @@ function SubjectPeriod() {
       setsubj(loadedSubjects);
     }
   }, [subjects?.data.data]);
-
-  const authUser = authenticatorStore.authUser().data?.data.data;
 
   return (
     <div>
