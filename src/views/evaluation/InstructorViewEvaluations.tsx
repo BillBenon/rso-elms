@@ -5,26 +5,32 @@ import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import { authenticatorStore } from '../../store/administration';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
+import { IEvaluationOwnership } from '../../types/services/evaluation.types';
 import {
   getLocalStorageData,
   setLocalStorageData,
 } from '../../utils/getLocalStorageItem';
-import { advancedTypeChecker } from '../../utils/getOption';
+import { advancedTypeChecker, getDropDownStatusOptions } from '../../utils/getOption';
 import EvaluationDetails from './EvaluationDetails';
 
 export default function InstructorViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
+  const [ownerShipType, setownerShipType] = useState(IEvaluationOwnership.CREATED_BY_ME);
+
   const history = useHistory();
   const { path } = useRouteMatch();
   const authUser = authenticatorStore.authUser().data?.data.data;
-  const { data, isSuccess, isLoading, isError } = evaluationStore.getEvaluations(
-    authUser?.academy.id.toString() || '',
-    authUser?.id.toString() || '',
-  );
+
+  const { data, isSuccess, isLoading, isError, refetch } =
+    evaluationStore.getEvaluationsByCategory(
+      ownerShipType,
+      authUser?.id.toString() || '',
+    );
 
   const list: LinkList[] = [
     { to: '/', title: 'home' },
@@ -53,6 +59,10 @@ export default function InstructorViewEvaluations() {
     setEvaluations(formattedEvals);
   }, [data?.data.data]);
 
+  useEffect(() => {
+    refetch();
+  }, [ownerShipType]);
+
   return (
     <div>
       <Switch>
@@ -70,7 +80,17 @@ export default function InstructorViewEvaluations() {
                   </section>
                 </>
               ) : null}
-
+              <div className="flex justify-center my-2">
+                <SelectMolecule
+                  width="80"
+                  value={ownerShipType}
+                  handleChange={(e) => setownerShipType(e.value as IEvaluationOwnership)}
+                  name={'type'}
+                  placeholder="Evaluation type"
+                  options={getDropDownStatusOptions(IEvaluationOwnership)}>
+                  <p className="text-center">Evaluation type</p>
+                </SelectMolecule>
+              </div>
               <section className="flex flex-wrap justify-start gap-4 mt-2">
                 {isLoading && evaluations.length === 0 && <Loader />}
 
