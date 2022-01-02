@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
+import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -80,16 +81,20 @@ export default function InstructorViewEvaluations() {
                   </section>
                 </>
               ) : null}
-              <div className="flex justify-center my-2">
+              <div className="flex flex-col gap-12">
+                <Heading fontWeight="semibold" className="pt-7">
+                  Evaluations
+                </Heading>
                 <SelectMolecule
                   width="80"
+                  className=""
                   value={ownerShipType}
                   handleChange={(e) => setownerShipType(e.value as IEvaluationOwnership)}
                   name={'type'}
                   placeholder="Evaluation type"
-                  options={getDropDownStatusOptions(IEvaluationOwnership)}>
-                  <p className="text-center">Evaluation type</p>
-                </SelectMolecule>
+                  options={getDropDownStatusOptions(
+                    IEvaluationOwnership,
+                  )}></SelectMolecule>
               </div>
               <section className="flex flex-wrap justify-start gap-4 mt-2">
                 {isLoading && evaluations.length === 0 && <Loader />}

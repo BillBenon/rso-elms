@@ -36,8 +36,8 @@ export enum ISubmissionTypeEnum {
 
 export enum IEvaluationOwnership {
   CREATED_BY_ME = 'CREATED_BY_ME',
-  APPROVED_BY_ME = 'APPROVED_BY_ME',
-  MARKED_BY_ME = 'MARKED_BY_ME',
+  FOR_APPROVING = 'APPROVED_BY_ME',
+  FOR_REVIEWING = 'MARKED_BY_ME',
   REVIEWD_BY_ME = 'REVIEWD_BY_ME',
 }
 
