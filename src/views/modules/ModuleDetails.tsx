@@ -14,6 +14,7 @@ import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
+import SubjectCard from '../../components/Molecules/cards/modules/SubjectCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
@@ -245,12 +246,10 @@ export default function ModuleDetails() {
                     <section className="flex flex-wrap justify-start gap-4 mt-2">
                       {subjects.map((subject, i) => (
                         <div key={i} className="p-1 mt-3">
-                          <CommonCardMolecule
-                            to={{
-                              title: 'Subject details',
-                              to: `/dashboard/modules/subjects/${subject.id}`,
-                            }}
-                            data={subject}
+                          <SubjectCard
+                            subject={subject}
+                            key={i}
+                            intakeProg={intakeProg}
                           />
                         </div>
                       ))}

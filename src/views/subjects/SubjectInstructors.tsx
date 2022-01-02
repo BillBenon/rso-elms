@@ -1,5 +1,5 @@
-import React from 'react';
-import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Route, Switch, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -15,42 +15,52 @@ interface SubjectViewerProps {
 }
 
 function SubjectInstructors({ subjectId }: SubjectViewerProps) {
+  const { search } = useLocation();
+  const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
   const { path } = useRouteMatch();
   const { data: subjectData } = subjectStore.getSubject(subjectId);
-  console.log(subjectData?.data.data.module.program.id);
-  //   const{data:instructorProgram} =
+  // console.log(subjectData?.data.data.module.program.id);
   const { data: instructorInfos, isLoading } =
     enrollmentStore.getInstructorsBySubject(subjectId);
 
-  let instrs: UserTypes[] = [];
+    // const [instructors, setInstructors] = useState<UserTypes[]>([]);
 
-  //   instructorInfos?.data.data.content.map((obj) => {
-  //   console.log(instructorInfos?.data.data.content);
-  // let {
-  //   id,
-  //   username,
-  //   first_name,
-  //   last_name,
-  //   email,
-  //   person,
-  //   academy,
-  //   generic_status,
-  //   user_type,
-  // } = obj.module_instructor.user;
+    // useEffect(()=>{
+      let instrs: UserTypes[] = [];
+      instructorInfos?.data.data.map((obj) => {
+        let {
+          id,
+          username,
+          first_name,
+          last_name,
+          email,
+          person,
+          academy,
+          generic_status,
+          user_type,
+        } = obj.user;
 
-  // let user: UserTypes = {
-  //   id: id,
-  //   username: username,
-  //   'full name': first_name + ' ' + last_name,
-  //   email: email,
-  //   'ID Card': person && person.nid,
-  //   academy: academy && academy.name,
-  //   status: generic_status,
-  //   user_type: user_type,
-  // };
 
-  // instrs.push(user);
-  //   });
+    
+        let user: UserTypes = {
+          id: id,
+          username: username,
+          'full name': first_name + ' ' + last_name,
+          email: email,
+          'ID Card': person && person.nid,
+          academy: academy && academy.name,
+          status: generic_status,
+          user_type: user_type,
+        };
+    
+        instrs.push(user);
+      });
+
+      // setInstructors(instrs);
+    // },[instructorInfos])
+
+
+  
 
   const authUser = authenticatorStore.authUser().data?.data.data;
 
@@ -69,41 +79,37 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
                 <EnrollInstructorToSubjectAssignment
                   module_id={subjectData?.data.data.module.id + ''}
                   subject_id={subjectId}
+                  intakeProg = {intakeProg}
+                  subInstructors = {instructorInfos?.data.data || []}
                 />
               )}
             </div>
             <>
               {
-                //   isLoading ? (
-                //     <Loader />
-                //   ) :
-                instrs.length === 0 ? (
-                  <NoDataAvailable
-                    showButton={false}
-                    icon="user"
-                    title={'No instructors available'}
-                    description={
-                      'There are no instructors currently assigned to this module'
-                    }
-                    handleClick={() => (
-                      <EnrollInstructorToSubjectAssignment
-                        module_id={subjectData?.data.data.module.id + ''}
-                        subject_id={subjectId}
-                      />
-                    )}
-                  />
-                ) : (
-                  <Table<UserTypes>
-                    statusColumn="status"
-                    data={instrs}
-                    selectorActions={[
-                      { name: 'Remove instructors from subject', handleAction: () => {} },
-                    ]}
-                    hide={['id', 'user_type']}
-                    uniqueCol="id"
-                  />
-                )
-              }
+              isLoading ? (
+                <Loader />
+              ) : 
+              instructorInfos?.data.data.length === 0 ? (
+                <NoDataAvailable
+                  showButton={false}
+                  icon="user"
+                  title={'No instructors available'}
+                  description={
+                    'There are no instructors currently assigned to this module'
+                  }
+                  handleClick={() => <EnrollInstructorToSubjectAssignment subInstructors = {instructorInfos?.data.data || []} module_id={subjectData?.data.data.module.id+''} subject_id={subjectId} intakeProg = {intakeProg} />}
+                />
+              ) : (
+                <Table<UserTypes>
+                  statusColumn="status"
+                  data={instrs}
+                  selectorActions={[
+                    { name: 'Remove instructors from subject', handleAction: () => {} },
+                  ]}
+                  hide={['id', 'user_type']}
+                  uniqueCol="id"
+                />
+              )}
             </>
           </div>
         )}

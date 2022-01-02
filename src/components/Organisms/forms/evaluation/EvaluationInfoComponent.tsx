@@ -171,7 +171,7 @@ export default function EvaluationInfoComponent({
           // defaultValue={details.evaluation_type}
           width="64"
           name="evaluation_type"
-          placeholder={details.evaluation_type || 'Evaluation Type'}
+          placeholder="Evaluation Type"
           handleChange={handleChange}
           options={getDropDownStatusOptions(IEvaluationTypeEnum)}>
           Evaluation type
