@@ -11,6 +11,7 @@ import {
 } from './../types/services/enrollment.types';
 import { ModuleParticipation } from './../types/services/intake-program.types';
 import { MaterialType } from './../types/services/module-material.types';
+import { ProgramStatus } from './../types/services/program.types';
 import { UserInfo } from './../types/services/user.types';
 
 interface GetDropDownOptionsProps {
@@ -81,7 +82,8 @@ export function advancedTypeChecker(
     | ModuleParticipation
     | MaterialType
     | EnrollmentStatus
-    | StudentApproval,
+    | StudentApproval
+    | ProgramStatus,
 ): 'success' | 'warning' | 'error' | 'info' {
   let successStatus = ['active', 'completed', 'opened', 'started'];
   let errorStatus = ['inactive', 'closed', 'voided', 'suspended'];

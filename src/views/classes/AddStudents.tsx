@@ -52,7 +52,7 @@ function AddStudents({ classId }: IAddStudent) {
 
     mutate(newStudent, {
       onSuccess: (data) => {
-        toast.success('Students added successfully.');
+        toast.success(data.data.message);
         queryClient.invalidateQueries(['class/students']);
       },
       onError: (error: any) => {

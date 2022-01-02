@@ -79,9 +79,7 @@ function InstructorsOnModule() {
                 <Table<UserTypes>
                   statusColumn="status"
                   data={instrs}
-                  selectorActions={[
-                    { name: 'Remove instructors from module', handleAction: () => {} },
-                  ]}
+                  selectorActions={[]}
                   hide={['id', 'user_type']}
                   uniqueCol="id"
                 />

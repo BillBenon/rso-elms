@@ -101,6 +101,7 @@ const RouterProtection = () => {
   const StudentRoutes = () => (
     <>
       {/* start of student pages */}
+      <Route path={`${path}/intakes`} component={IntakesView} />
       <Route path={`${path}/schedule`} component={ScheduleHome} />
       <Route path={`${path}/student`} component={StudentModule} />
       <Route path={`${path}/modules`} component={Modules} />

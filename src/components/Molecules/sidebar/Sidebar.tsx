@@ -50,6 +50,7 @@ export default function Sidebar() {
     ];
 
     const studentLinks: linkProps[] = [
+      { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
       { title: 'Module', to: '/dashboard/student', icon: 'module' },
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
     ];
