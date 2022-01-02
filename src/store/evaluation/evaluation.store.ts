@@ -1,6 +1,7 @@
 import { useMutation, useQuery } from 'react-query';
 
 import { evaluationService } from '../../services/evaluation/evaluation.service';
+import { IEvaluationOwnership } from '../../types/services/evaluation.types';
 
 class EvaluationStore {
   createEvaluation() {
@@ -31,6 +32,15 @@ class EvaluationStore {
   getEvaluations(academy: string, instructor: string) {
     return useQuery(['evaluationsByAcademyInstructor'], () =>
       evaluationService.fetchEvaluationsByInstructorAndAcademy(academy, instructor),
+    );
+  }
+
+  getEvaluationsByCategory(evaluationCategory: IEvaluationOwnership, instructor: string) {
+    return useQuery(['evaluationsByAcademyInstructor'], () =>
+      evaluationService.getEvaluationsByInstructorAndCategory(
+        evaluationCategory,
+        instructor,
+      ),
     );
   }
 
@@ -75,13 +85,15 @@ class EvaluationStore {
     });
   }
 
-
   getStudentReport(studentId: string) {
-    return useQuery(['studentReport', studentId], () => evaluationService.getStudentReport(studentId), {
-      enabled: !!studentId,
-    });
+    return useQuery(
+      ['studentReport', studentId],
+      () => evaluationService.getStudentReport(studentId),
+      {
+        enabled: !!studentId,
+      },
+    );
   }
-
 
   getEvaluationQuestions(id: string) {
     return useQuery(
