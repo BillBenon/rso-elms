@@ -126,7 +126,7 @@ export default function ImportUsers({ userType }: IProps) {
               handleChange={handleChange}>
               Program
             </DropdownMolecule>
-            <DropdownMolecule
+            {/* <DropdownMolecule
               options={
                 levels.map((lv) => ({
                   value: lv.academic_program_level.id,
@@ -137,7 +137,7 @@ export default function ImportUsers({ userType }: IProps) {
               placeholder={'Program'}
               handleChange={handleChange}>
               Level
-            </DropdownMolecule>
+            </DropdownMolecule> */}
           </div>
         ) : (
           <></>
