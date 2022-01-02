@@ -72,13 +72,17 @@ function LessonPlan() {
                         <Heading fontSize="base" color="txt-secondary">
                           Start Date:
                         </Heading>
-                        <Heading fontSize="base">{lp.start_time}</Heading>
+                        <Heading fontSize="base">
+                          {new Date(lp.start_time).toLocaleDateString()}
+                        </Heading>
                       </div>
                       <div className="flex gap-2">
                         <Heading fontSize="base" color="txt-secondary">
                           End Date:
                         </Heading>
-                        <Heading fontSize="base">{lp.end_time}</Heading>
+                        <Heading fontSize="base">
+                          {new Date(lp.end_time).toLocaleDateString()}
+                        </Heading>
                       </div>
                       <div className="flex gap-2">
                         <Heading fontSize="base" color="txt-secondary">

@@ -12,7 +12,7 @@ import {
 } from '../../types/services/evaluation.types';
 import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import { advancedTypeChecker } from '../../utils/getOption';
-import EvaluationContent from './EvaluationContent';
+import EvaluationDetails from './EvaluationDetails';
 
 interface IEvaluationProps {
   subjecEvaluations: IEvaluationInfoSingleEvaluation[] | IEvaluationInfo[];
@@ -118,7 +118,7 @@ export default function StudentViewEvaluations({
           )}
         />
 
-        <Route path={`${path}/:id`} component={EvaluationContent} />
+        <Route path={`${path}/:id`} component={EvaluationDetails} />
         <Route
           path={path}
           render={() => (
