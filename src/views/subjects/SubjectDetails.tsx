@@ -20,7 +20,6 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
 import { authenticatorStore } from '../../store/administration';
-import enrollmentStore from '../../store/administration/enrollment.store';
 import { lessonStore } from '../../store/administration/lesson.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
@@ -74,7 +73,7 @@ export default function SubjectDetails() {
     history.goBack();
   };
 
-  if(intakeProg == ''){
+  if (intakeProg == '') {
     goBack();
   }
   console.log(intakeProg);
