@@ -19,8 +19,8 @@ import {
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import CheckboxMolecule from '../../../Molecules/input/CheckboxMolecule';
-import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
+import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import Stepper from '../../../Molecules/Stepper/Stepper';
 
 interface IStepProps {
@@ -109,7 +109,7 @@ export default function NewTimeTable() {
   );
 }
 
-function FirstStep({ handleChange, setCurrentStep, classInfo }: IStepProps) {
+function FirstStep({ values, handleChange, setCurrentStep, classInfo }: IStepProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
   const users = instructordeploymentStore.getInstructorsDeployedInAcademy(
     authUser?.academy.id + '',
@@ -137,8 +137,9 @@ function FirstStep({ handleChange, setCurrentStep, classInfo }: IStepProps) {
           Program - Level - class
         </InputMolecule>
         <div className="pb-1">
-          <DropdownMolecule
+          <SelectMolecule
             name="courseModule"
+            value={values.courseModule}
             handleChange={handleChange}
             options={
               modules?.map((mod) => ({
@@ -148,11 +149,12 @@ function FirstStep({ handleChange, setCurrentStep, classInfo }: IStepProps) {
             }
             placeholder="Select module">
             Module
-          </DropdownMolecule>
+          </SelectMolecule>
         </div>
         <div className="pb-4">
-          <DropdownMolecule
+          <SelectMolecule
             name="instructor"
+            value={values.instructor}
             handleChange={handleChange}
             options={
               users?.map((user) => ({
@@ -162,7 +164,7 @@ function FirstStep({ handleChange, setCurrentStep, classInfo }: IStepProps) {
             }
             placeholder="Select someone">
             Instructor
-          </DropdownMolecule>
+          </SelectMolecule>
         </div>
         <Button type="submit">Next</Button>
       </form>
@@ -177,15 +179,16 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
   return (
     <form onSubmit={handleSubmit} className="max-w-sm -mb-6">
       <div className="pb-1">
-        <DropdownMolecule
+        <SelectMolecule
           name="venue"
+          value={values.venue}
           handleChange={handleChange}
           options={
             venues?.map((vn) => ({ label: vn.name, value: vn.id })) as SelectData[]
           }
           placeholder="Select venue">
           Venue
-        </DropdownMolecule>
+        </SelectMolecule>
       </div>
       <InputMolecule
         name="startHour"
