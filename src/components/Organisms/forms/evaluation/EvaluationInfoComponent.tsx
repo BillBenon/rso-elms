@@ -203,7 +203,7 @@ export default function EvaluationInfoComponent({
         <DropdownMolecule
           width="64"
           name="subject_academic_year_period_id"
-          placeholder={subjLoading ? 'Loading' : 'Select subject'}
+          placeholder={subjLoading ? 'Loading subject ...' : 'Select subject'}
           handleChange={handleChange}
           options={getDropDownOptions({
             inputs: subjects?.data.data || [],
@@ -281,7 +281,7 @@ export default function EvaluationInfoComponent({
               isMulti
               width="64"
               name="private"
-              placeholder={isLoading ? 'Loading students' : 'Select private'}
+              placeholder={isLoading ? 'Loading students...' : 'Select private'}
               handleChange={handleChange}
               options={
                 classStudent?.data.data.map((h) => ({

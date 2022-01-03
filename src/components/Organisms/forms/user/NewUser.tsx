@@ -167,7 +167,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
             <DateMolecule
               handleChange={handleChange}
               startYear={new Date().getFullYear()}
-              endYear={new Date().getFullYear() + 100}
+              endYear={new Date().getFullYear() + 10}
               reverse={false}
               name="deployed_on"
               width="60 md:w-80">
@@ -220,6 +220,9 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           Password
         </InputMolecule>
         <DateMolecule
+          startYear={new Date().getFullYear() - 100}
+          defaultValue={(new Date().getFullYear() - 16).toString()}
+          endYear={new Date().getFullYear() - 16}
           handleChange={handleChange}
           name="birth_date"
           width="60 md:w-80"
@@ -276,7 +279,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
             handleChange={handleChange}
             name="document_expire_on"
             defaultValue={details.document_expire_on}
-            endYear={new Date().getFullYear() + 50}
+            endYear={new Date(details.document_expire_on).getFullYear() + 7}
             startYear={new Date().getFullYear()}
             width="60 md:w-80">
             Passport expiry date
