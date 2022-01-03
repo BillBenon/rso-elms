@@ -52,7 +52,7 @@ function EnrollInstructorIntakeProgram({ existing }: ProgramEnrollmentProps) {
         }
       });
     setInstructors(instructorsView);
-  }, [instructorsInAcademy]);
+  }, [instructorsInAcademy, existing]);
 
   const { mutate } = enrollmentStore.enrollInstructorToProgram();
 
@@ -66,7 +66,7 @@ function EnrollInstructorIntakeProgram({ existing }: ProgramEnrollmentProps) {
       mutate(newInstructor, {
         onSuccess: (data) => {
           toast.success(data.data.message);
-          queryClient.invalidateQueries(['instructors/intakeprogramId']);
+          queryClient.invalidateQueries(['instructors/intakeprogramId', intakeProg]);
           setSidebarOpen(false);
         },
         onError: (error: any) => {
