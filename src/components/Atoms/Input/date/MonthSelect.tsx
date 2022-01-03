@@ -2,7 +2,7 @@ import React from 'react';
 
 import { SelectData, ValueType } from '../../../../types';
 import { monthNum } from '../../../../utils/date-helper';
-import DropDown from '../Dropdown';
+import Select from '../Select';
 
 type MProp = {
   year: number;
@@ -19,7 +19,6 @@ type MProp = {
   placeholder?: string;
   width?: string;
   className?: string;
-  padding?: number;
 };
 
 const MonthSelect = (mprops: MProp) => {
@@ -54,20 +53,16 @@ const MonthSelect = (mprops: MProp) => {
   };
 
   let months = renderMonthOptions();
-  let newDefaultValue = months.find(
-    (month) => parseInt(month.value) === parseInt(mprops.defaultValue || '0') + 1,
-  );
 
   return (
-    <DropDown
+    <Select
       disabled={mprops.disabled}
-      defaultValue={newDefaultValue}
+      value={mprops.defaultValue}
       name={mprops.name}
       placeholder={mprops.placeholder}
       className={mprops.className}
       width={mprops.width}
       options={months}
-      padding={mprops.padding}
       handleChange={(e: ValueType) => mprops.onChange(e)}
     />
   );

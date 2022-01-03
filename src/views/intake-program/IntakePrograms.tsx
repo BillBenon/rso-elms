@@ -59,8 +59,9 @@ function IntakePrograms() {
   const authUser = authenticatorStore.authUser().data?.data.data;
 
   const authUserId = authUser?.id;
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(authUserId + '')
-    .data?.data.data[0];
+  const instructorInfo =
+    instructordeploymentStore.getInstructorByUserId(authUserId + '').data?.data.data ||
+    [];
 
   const studentInfo =
     getStudentShipByUserId(
@@ -75,7 +76,7 @@ function IntakePrograms() {
           !!studentInfo[0]?.id,
         )
       : authUser?.user_type === UserType.INSTRUCTOR
-      ? enrollmentStore.getInstructorIntakePrograms(instructorInfo?.id + '')
+      ? enrollmentStore.getInstructorIntakePrograms(instructorInfo[0]?.id + '')
       : getProgramsByIntake(intakeId);
   const programInfo = data?.data.data || [];
 
