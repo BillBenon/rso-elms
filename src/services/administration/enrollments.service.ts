@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
-import { Response, SortedContent } from '../../types';
+import { Response } from '../../types';
 import {
   ApproveStudents,
   EnrollInstructorLevel,
@@ -13,7 +13,6 @@ import {
   EnrollStudentToProgram,
   InstructorAssignModule,
   ModuleAssignmentType,
-  SubjectInstructors,
 } from '../../types/services/enrollment.types';
 import {
   Instructor,
@@ -68,14 +67,6 @@ class EnrollmentService {
   ): Promise<AxiosResponse<Response<InstructorProgram[]>>> {
     return await adminstrationAxios.get(
       `instructorEnrolment/getInstructorIntakePrograms/${instructorId}`,
-    );
-  }
-
-  public async getInstructorLevelID(
-    levelId: string,
-  ): Promise<AxiosResponse<Response<EnrollInstructorLevelInfo[]>>> {
-    return await adminstrationAxios.get(
-      `instructorEnrolment/getInstructorEnrolmentLevelByAcademicYearProgramIntakeLevel/${levelId}`,
     );
   }
 
