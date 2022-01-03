@@ -41,18 +41,21 @@ export default function StudentsView() {
   const studentActions = [
     { name: 'Add Role', handleAction: () => {} },
     {
-      name: 'Edit student',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/users/${id}/edit`); // go to edit user
-      },
-    },
-    {
       name: 'View Student',
       handleAction: (id: string | number | undefined) => {
         history.push(`${url}/${id}/profile`); // go to view user profile
       },
     },
   ];
+
+  if (authUser?.user_type === UserType.SUPER_ADMIN) {
+    studentActions.push({
+      name: 'Edit student',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`/dashboard/users/${id}/edit`); // go to edit user
+      },
+    });
+  }
 
   function handleSearch(_e: ValueType) {}
 
