@@ -36,7 +36,6 @@ import DateMolecule from '../../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
-import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 
 export default function EvaluationInfoComponent({
   handleNext,
