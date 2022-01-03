@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Route, Switch, useLocation, useParams, useRouteMatch } from 'react-router-dom';
+import React from 'react';
+import { Route, Switch, useLocation, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -19,48 +19,36 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
   const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
   const { path } = useRouteMatch();
   const { data: subjectData } = subjectStore.getSubject(subjectId);
-  // console.log(subjectData?.data.data.module.program.id);
   const { data: instructorInfos, isLoading } =
     enrollmentStore.getInstructorsBySubject(subjectId);
 
-    // const [instructors, setInstructors] = useState<UserTypes[]>([]);
+  let instrs: UserTypes[] = [];
+  instructorInfos?.data.data.map((obj) => {
+    let {
+      id,
+      username,
+      first_name,
+      last_name,
+      email,
+      person,
+      academy,
+      generic_status,
+      user_type,
+    } = obj.user;
 
-    // useEffect(()=>{
-      let instrs: UserTypes[] = [];
-      instructorInfos?.data.data.map((obj) => {
-        let {
-          id,
-          username,
-          first_name,
-          last_name,
-          email,
-          person,
-          academy,
-          generic_status,
-          user_type,
-        } = obj.user;
+    let user: UserTypes = {
+      id: id,
+      username: username,
+      'full name': first_name + ' ' + last_name,
+      email: email,
+      'ID Card': person && person.nid,
+      academy: academy && academy.name,
+      status: generic_status,
+      user_type: user_type,
+    };
 
-
-    
-        let user: UserTypes = {
-          id: id,
-          username: username,
-          'full name': first_name + ' ' + last_name,
-          email: email,
-          'ID Card': person && person.nid,
-          academy: academy && academy.name,
-          status: generic_status,
-          user_type: user_type,
-        };
-    
-        instrs.push(user);
-      });
-
-      // setInstructors(instrs);
-    // },[instructorInfos])
-
-
-  
+    instrs.push(user);
+  });
 
   const authUser = authenticatorStore.authUser().data?.data.data;
 
@@ -79,17 +67,15 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
                 <EnrollInstructorToSubjectAssignment
                   module_id={subjectData?.data.data.module.id + ''}
                   subject_id={subjectId}
-                  intakeProg = {intakeProg}
-                  subInstructors = {instructorInfos?.data.data || []}
+                  intakeProg={intakeProg}
+                  subInstructors={instructorInfos?.data.data || []}
                 />
               )}
             </div>
             <>
-              {
-              isLoading ? (
+              {isLoading ? (
                 <Loader />
-              ) : 
-              instructorInfos?.data.data.length === 0 ? (
+              ) : instructorInfos?.data.data.length === 0 ? (
                 <NoDataAvailable
                   showButton={false}
                   icon="user"
@@ -97,15 +83,29 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
                   description={
                     'There are no instructors currently assigned to this module'
                   }
-                  handleClick={() => <EnrollInstructorToSubjectAssignment subInstructors = {instructorInfos?.data.data || []} module_id={subjectData?.data.data.module.id+''} subject_id={subjectId} intakeProg = {intakeProg} />}
+                  handleClick={() => (
+                    <EnrollInstructorToSubjectAssignment
+                      subInstructors={instructorInfos?.data.data || []}
+                      module_id={subjectData?.data.data.module.id + ''}
+                      subject_id={subjectId}
+                      intakeProg={intakeProg}
+                    />
+                  )}
                 />
               ) : (
                 <Table<UserTypes>
                   statusColumn="status"
                   data={instrs}
-                  selectorActions={[
-                    { name: 'Remove instructors from subject', handleAction: () => {} },
-                  ]}
+                  selectorActions={
+                    authUser?.user_type === UserType.ADMIN
+                      ? [
+                          {
+                            name: 'Remove instructors from subject',
+                            handleAction: () => {},
+                          },
+                        ]
+                      : []
+                  }
                   hide={['id', 'user_type']}
                   uniqueCol="id"
                 />

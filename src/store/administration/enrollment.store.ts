@@ -46,6 +46,11 @@ class EnrolmmentStore {
     );
   }
 
+  getSubjectsByInstructor(instructorId: string) {
+    return useQuery(['subjects/instructors', instructorId], () =>
+      enrollmentService.getSubjectsByInstructor(instructorId),
+    );
+  }
   getInstructorsInProgram(intakeProgram: string | number) {
     return useQuery(['instructorsInIntakeprogram/IntakeProgram', intakeProgram], () =>
       enrollmentService.getInstructorsInProgram(intakeProgram),

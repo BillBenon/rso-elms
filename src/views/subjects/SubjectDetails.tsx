@@ -83,7 +83,7 @@ export default function SubjectDetails() {
       href: `${url}/evaluations?intkPrg=${intakeProg}`,
     },
   ];
-  if (intakeProg) {
+  if (intakeProg || authUser?.user_type !== UserType.ADMIN) {
     tabs.push({
       label: 'Instructors',
       href: `${url}/instructors?intkPrg=${intakeProg}`,

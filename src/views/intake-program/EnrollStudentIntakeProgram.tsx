@@ -119,7 +119,7 @@ function EnrollStudentIntakeProgram<T>({ existing }: ProgramEnrollmentProps<T>) 
         onClick={() => setSidebarOpen(true)}
         className="flex -mt-6 items-center justify-end text-primary-500">
         <Icon name="add" size={12} fill="primary" />
-        Enroll Students
+        Enroll existing students
       </Button>
       <RightSidebar
         open={sidebarOpen}
@@ -132,7 +132,7 @@ function EnrollStudentIntakeProgram<T>({ existing }: ProgramEnrollmentProps<T>) 
             handleAction: (data?: string[]) => add(data),
           },
         ]}
-        dataLabel={'Students in this academy'}
+        dataLabel={'Students in approved in this academy'}
         isLoading={isLoading}
       />
     </div>

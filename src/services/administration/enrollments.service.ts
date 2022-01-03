@@ -174,6 +174,14 @@ class EnrollmentService {
     );
   }
 
+  public async getSubjectsByInstructor(
+    instructorId: string,
+  ): Promise<AxiosResponse<Response<EnrollInstructorToSubjectInfo[]>>> {
+    return await adminstrationAxios.get(
+      `instructorSubjectAssignment/getAllByInstructor/${instructorId}`,
+    );
+  }
+
   public async approveStudent(
     student: ApproveStudents,
   ): Promise<AxiosResponse<Response<StudentIntakeProgram>>> {
