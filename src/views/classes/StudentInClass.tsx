@@ -13,6 +13,7 @@ import { authenticatorStore } from '../../store/administration';
 import { classStore } from '../../store/administration/class.store';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import { UserType, UserTypes } from '../../types/services/user.types';
+import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import AddSubjectToPeriod from '../subjects/AddSubjectToPeriod';
 import SubjectPeriod from '../subjects/SubjectPeriod';
 import AddStudents from './AddStudents';
@@ -52,6 +53,13 @@ function StudentInClass({ classId, label }: IStudentClass) {
     });
     setStudents(tempStuds);
   }, [studentsData?.data.data]);
+
+  function goToNewEvaluation() {
+    setLocalStorageData('currentStep', 0);
+    history.push(
+      `/dashboard/evaluations/new?intkProg=${intakeProg}&prog=${id}&lvl=${levelId}&prd=${period}`,
+    );
+  }
 
   return (
     <Tab label={label}>
@@ -155,13 +163,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
                     </Button>
 
                     {authUser?.user_type === UserType.INSTRUCTOR && (
-                      <Button
-                        styleType="outline"
-                        onClick={() =>
-                          history.push(
-                            `/dashboard/evaluations/new?intkProg=${intakeProg}&prog=${id}&lvl=${levelId}&prd=${period}`,
-                          )
-                        }>
+                      <Button styleType="outline" onClick={goToNewEvaluation}>
                         Add evaluation
                       </Button>
                     )}

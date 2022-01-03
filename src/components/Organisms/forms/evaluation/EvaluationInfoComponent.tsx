@@ -66,6 +66,8 @@ export default function EvaluationInfoComponent({
 
   const { data: classes } = classStore.getClassByPeriod(intakePeriodId + '');
 
+  const { data: subjectInfo } = subjectStore.getSubject(evaluationInfo?.subject_id + '');
+
   const [details, setDetails] = useState<IEvaluationCreate>({
     access_type: evaluationInfo?.access_type || IAccessTypeEnum.PUBLIC,
     academy_id: authUser?.academy.id.toString() || '',
@@ -183,7 +185,8 @@ export default function EvaluationInfoComponent({
           handleChange={handleChange}>
           Evaluation classification
         </RadioMolecule> */}
-        <DropdownMolecule
+        <SelectMolecule
+          value={subjectInfo?.data.data.module.id.toString()}
           width="64"
           name="module"
           placeholder={'Select module'}
@@ -194,7 +197,7 @@ export default function EvaluationInfoComponent({
             getOptionLabel: (mod: CommonCardDataType) => mod.title,
           })}>
           Select module
-        </DropdownMolecule>
+        </SelectMolecule>
         <SelectMolecule
           width="64"
           value={details.subject_academic_year_period_id}
