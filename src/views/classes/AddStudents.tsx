@@ -4,8 +4,6 @@ import { useParams } from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
-import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import PopupMolecule from '../../components/Molecules/Popup';
 import RightSidebar from '../../components/Organisms/RightSidebar';
 import { queryClient } from '../../plugins/react-query';
 import { classStore } from '../../store/administration/class.store';
@@ -23,12 +21,18 @@ function AddStudents({ classId }: IAddStudent) {
   const { level } = useParams<IntakeLevelParam>();
 
   const studentsProgram = intakeProgramStore.getStudentsByIntakeProgramLevel(level || '');
+  const studentsInClass = classStore.getStudentsByClass(classId.toString());
 
   const [students, setStudents] = useState<UserView[]>([]);
   useEffect(() => {
     let studentsView: UserView[] = [];
-    studentsProgram.data?.data.data &&
-      studentsProgram.data.data.data.forEach((stud) => {
+    let studentsInClassIds = studentsInClass.data?.data.data.map((std) => std.student.id);
+    let studentsToDisplay = studentsProgram.data?.data.data.filter(
+      (std) => !studentsInClassIds?.includes(std.intake_program_student.student.id),
+    );
+
+    studentsToDisplay &&
+      studentsToDisplay.forEach((stud) => {
         let studentView: UserView = {
           id: stud.intake_program_student.student.id,
           first_name: stud.intake_program_student.student.user.first_name,
@@ -69,7 +73,7 @@ function AddStudents({ classId }: IAddStudent) {
 
       {studentsProgram.isLoading ? (
         <Loader />
-      ) : students.length > 0 ? (
+      ) : (
         <RightSidebar
           open={sidebarOpen}
           handleClose={() => setSidebarOpen(false)}
@@ -84,16 +88,6 @@ function AddStudents({ classId }: IAddStudent) {
           dataLabel={'Students in this level'}
           isLoading={studentsProgram.isLoading}
         />
-      ) : (
-        <PopupMolecule open={true}>
-          <NoDataAvailable
-            title={'No students available'}
-            icon="user"
-            description={
-              'No students have enrolled in this level, try enrolling some first'
-            }
-          />
-        </PopupMolecule>
       )}
     </div>
   );
