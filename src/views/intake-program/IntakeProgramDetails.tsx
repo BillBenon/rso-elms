@@ -107,7 +107,7 @@ function IntakeProgramDetails() {
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(
     authUser?.id + '',
-  ).data?.data.data;
+  ).data?.data.data[0];
 
   const studentInfo = getStudentShipByUserId(authUser?.id + '' || '', !!authUser?.id).data
     ?.data.data[0];

@@ -68,7 +68,7 @@ export default function Intakes() {
 
   const authUserId = authUser?.id;
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(authUserId + '')
-    .data?.data.data;
+    .data?.data.data[0];
 
   const studentInfo =
     getStudentShipByUserId(

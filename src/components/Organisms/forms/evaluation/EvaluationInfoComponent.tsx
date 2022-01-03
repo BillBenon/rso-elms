@@ -36,6 +36,7 @@ import DateMolecule from '../../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
+import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 
 export default function EvaluationInfoComponent({
   handleNext,
@@ -52,7 +53,7 @@ export default function EvaluationInfoComponent({
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(
     authUser?.id + '',
-  ).data?.data.data;
+  ).data?.data.data[0];
 
   const instrucotrModules = useInstructorModules(progId + '', instructorInfo?.id + '');
 
@@ -187,7 +188,7 @@ export default function EvaluationInfoComponent({
           handleChange={handleChange}>
           Evaluation classification
         </RadioMolecule> */}
-        <DropdownMolecule
+        <SelectMolecule
           width="64"
           name="module"
           placeholder={'Select module'}
@@ -198,7 +199,7 @@ export default function EvaluationInfoComponent({
             getOptionLabel: (mod: CommonCardDataType) => mod.title,
           })}>
           Select module
-        </DropdownMolecule>
+        </SelectMolecule>
         <DropdownMolecule
           width="64"
           name="subject_academic_year_period_id"
