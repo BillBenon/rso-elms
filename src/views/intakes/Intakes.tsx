@@ -46,8 +46,12 @@ const list: LinkType[] = [
   { to: 'intakes', title: 'Intakes' },
 ];
 
+interface IntakeCardType extends CommonCardDataType {
+  registrationControlId: string;
+}
+
 export default function Intakes() {
-  const [intakes, setIntakes] = useState<CommonCardDataType[]>([]);
+  const [intakes, setIntakes] = useState<IntakeCardType[]>([]);
   const { data: userInfo } = authenticatorStore.authUser();
 
   const history = useHistory();
@@ -97,11 +101,11 @@ export default function Intakes() {
 
   useEffect(() => {
     if (isSuccess && data?.data) {
-      let loadedIntakes: CommonCardDataType[] = [];
+      let loadedIntakes: IntakeCardType[] = [];
       data?.data.data.forEach((intk) => {
         if (authUser?.user_type === UserType.STUDENT) {
           let intake = intk as StudentIntakeProgram;
-          let prog: CommonCardDataType = {
+          let prog: IntakeCardType = {
             id: intake.intake_program.intake.id,
             status: {
               type: advancedTypeChecker(intake.intake_program.intake.intake_status),
@@ -110,13 +114,15 @@ export default function Intakes() {
             code: intake.intake_program.intake.code,
             title: intake.intake_program.intake.title,
             description: intake.intake_program.intake.description,
+            registrationControlId:
+              intake.intake_program.intake.registration_control?.id + '',
           };
           if (!loadedIntakes.find((pg) => pg.id === prog.id)?.id) {
             loadedIntakes.push(prog);
           }
         } else if (authUser?.user_type === UserType.INSTRUCTOR) {
           let intake = intk as InstructorProgram;
-          let prog: CommonCardDataType = {
+          let prog: IntakeCardType = {
             id: intake.intake_program.intake.id,
             status: {
               type: advancedTypeChecker(intake.intake_program.intake.intake_status),
@@ -125,13 +131,15 @@ export default function Intakes() {
             code: intake.intake_program.intake.code,
             title: intake.intake_program.intake.title,
             description: intake.intake_program.intake.description,
+            registrationControlId:
+              intake.intake_program.intake.registration_control?.id + '',
           };
           if (!loadedIntakes.find((pg) => pg.id === prog.id)?.id) {
             loadedIntakes.push(prog);
           }
         } else {
           let intake = intk as ExtendedIntakeInfo;
-          let cardData: CommonCardDataType = {
+          let cardData: IntakeCardType = {
             id: intake.id,
             code: intake.code.toUpperCase(),
             description: intake.description,
@@ -140,6 +148,7 @@ export default function Intakes() {
               type: advancedTypeChecker(intake.intake_status),
               text: intake.intake_status.toString(),
             },
+            registrationControlId: intake.registration_control.id + '',
           };
           loadedIntakes.push(cardData);
         }
@@ -234,7 +243,8 @@ export default function Intakes() {
                           </Link>
                         </div>
                         <div className="mt-4 space-x-4">
-                          <Link to={`${url}/${intake.id}/edit/${registrationControlId}`}>
+                          <Link
+                            to={`${url}/${intake.id}/edit/${intake.registrationControlId}`}>
                             <Button>Edit Intake</Button>
                           </Link>
                           <Button styleType="outline">Change Status</Button>

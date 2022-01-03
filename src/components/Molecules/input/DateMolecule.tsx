@@ -141,7 +141,7 @@ function DateMolecule({
               end={endYear}
               className={yearClassName}
               disabled={yearDisabled}
-              // placeholder={dateState.Year.toString()}
+              placeholder={'Year'}
             />
             <MonthSelect
               year={dateState.Year}
@@ -155,7 +155,7 @@ function DateMolecule({
               numeric={monthNumeric}
               className={monthClassName}
               disabled={monthDisabled}
-              // placeholder={dateState.Month.toString()}
+              placeholder={'Month'}
             />
             <DaySelect
               year={dateState.Year}
@@ -167,6 +167,7 @@ function DateMolecule({
               className={dayClassName}
               width={dayWidth}
               disabled={dayDisabled}
+              placeholder={'Day'}
             />
           </div>
         )}
@@ -177,9 +178,9 @@ function DateMolecule({
               value={dateState.Hours}
               onChange={handleDate}
               name="Hours"
-              placeholder={hourPlaceholder}
               width={hourWidth}
               disabled={hourDisabled}
+              placeholder={hourPlaceholder || 'hrs'}
             />
             <MinuteSelect
               defaultValue={dateState.Minutes.toString()}
