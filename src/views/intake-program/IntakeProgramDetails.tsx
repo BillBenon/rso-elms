@@ -14,7 +14,11 @@ import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPr
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
 import { authenticatorStore } from '../../store/administration';
 import enrollmentStore from '../../store/administration/enrollment.store';
-import intakeProgramStore from '../../store/administration/intake-program.store';
+import intakeProgramStore, {
+  getIntakeProgramsByStudent,
+  getStudentLevels,
+  getStudentShipByUserId,
+} from '../../store/administration/intake-program.store';
 import programStore from '../../store/administration/program.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { Link as Links } from '../../types';
@@ -64,7 +68,7 @@ function IntakeProgramDetails() {
 
   useEffect(() => {
     let demoInstructors: UserView[] = [];
-    instructorsProgram?.data?.data?.map((inst) => {
+    instructorsProgram?.data.data.map((inst) => {
       demoInstructors.push({
         id: inst.id,
         first_name: inst.instructor.user.first_name,
@@ -105,17 +109,44 @@ function IntakeProgramDetails() {
     authUser?.id + '',
   ).data?.data.data[0];
 
+  const studentInfo = getStudentShipByUserId(authUser?.id + '' || '', !!authUser?.id).data
+    ?.data.data[0];
+  const studPrograms = getIntakeProgramsByStudent(studentInfo?.id + '', !!studentInfo?.id)
+    .data?.data.data;
+
   const programData = getProgramData();
   let tabs: TabType[] = [
     {
       label: 'Program info',
       href: `${url}`,
     },
-    {
+  ];
+
+  if (authUser?.user_type !== UserType.STUDENT) {
+    tabs.push({
       label: 'Program modules',
       href: `${url}/modules`,
-    },
-  ];
+    });
+  }
+
+  if (authUser?.user_type === UserType.STUDENT) {
+    let studIntkProgstud = studPrograms?.find(
+      (prg) => prg.intake_program.id === intakeProg,
+    );
+    let { data: studentLevels } = getStudentLevels(
+      studIntkProgstud?.id + '',
+      !!studIntkProgstud?.id,
+    );
+
+    if (studentLevels?.data.data && studentLevels?.data.data.length > 0) {
+      tabs.push({
+        label: 'Program levels',
+        href: `${url}/levels/${
+          studentLevels.data.data[0].academic_year_program_level.id || ''
+        }`,
+      });
+    }
+  }
 
   if (authUser?.user_type === UserType.INSTRUCTOR) {
     let { data: instructorLevels } = enrollmentStore.getInstructorLevels(

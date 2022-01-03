@@ -78,7 +78,6 @@ export default function UpdateAcademicYear({ academicYears }: IUpdateYearProps) 
       <DateMolecule
         startYear={new Date().getFullYear()}
         endYear={new Date().getFullYear() + 100}
-        padding={3}
         reverse={false}
         defaultValue={years.plannedStartOn}
         handleChange={handleChange}
@@ -91,7 +90,6 @@ export default function UpdateAcademicYear({ academicYears }: IUpdateYearProps) 
         defaultValue={years.plannedEndOn}
         startYear={new Date(years.plannedStartOn).getFullYear()}
         endYear={new Date().getFullYear() + 100}
-        padding={3}
         reverse={false}
         name={'plannedEndOn'}>
         End Date

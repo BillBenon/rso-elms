@@ -76,10 +76,12 @@ function SubjectPeriod() {
           {subj?.map((sub) => (
             <div className="p-1 mt-3" key={sub.id}>
               <CommonCardMolecule
-                to={{
-                  title: 'Subject details',
-                  to: `/dashboard/modules/subjects/${sub.id}`,
-                }}
+                handleClick={() =>
+                  history.push({
+                    pathname: `/dashboard/modules/subjects/${sub.id}`,
+                    search: `?intkPrg=${intakeProg}`,
+                  })
+                }
                 data={sub}
               />
             </div>
