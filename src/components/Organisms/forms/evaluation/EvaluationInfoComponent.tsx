@@ -6,12 +6,10 @@ import { useLocation } from 'react-router-dom';
 import useInstructorModules from '../../../../hooks/getInstructorModules';
 import { authenticatorStore } from '../../../../store/administration';
 import { classStore } from '../../../../store/administration/class.store';
-import enrollmentStore from '../../../../store/administration/enrollment.store';
 import { subjectStore } from '../../../../store/administration/subject.store';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { CommonCardDataType, ValueType } from '../../../../types';
-import { EnrollInstructorLevelInfo } from '../../../../types/services/enrollment.types';
 import {
   IAccessTypeEnum,
   IContentFormatEnum,
@@ -62,7 +60,6 @@ export default function EvaluationInfoComponent({
   const { data: subjects, isLoading: subjLoading } = subjectStore.getSubjectsByModule(
     selectedModule + '',
   );
-  const { data: levels } = enrollmentStore.getInstructorLevels(instructorInfo?.id + '');
 
   const { data: classes } = classStore.getClassByPeriod(intakePeriodId + '');
 
@@ -210,8 +207,8 @@ export default function EvaluationInfoComponent({
           })}>
           Select subject
         </SelectMolecule>
-
-        <SelectMolecule
+        {/* 
+        <DropdownMolecule
           value={details.intake_academic_year_period}
           width="64"
           name="levelId"
@@ -225,7 +222,7 @@ export default function EvaluationInfoComponent({
               '',
           })}>
           Select Level
-        </SelectMolecule>
+        </DropdownMolecule> */}
 
         <RadioMolecule
           defaultValue={details.eligible_group}
