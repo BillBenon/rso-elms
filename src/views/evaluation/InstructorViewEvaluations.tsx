@@ -64,6 +64,26 @@ export default function InstructorViewEvaluations() {
     refetch();
   }, [ownerShipType]);
 
+  const handleClick = (id: string) => {
+    switch (ownerShipType) {
+      case IEvaluationOwnership.APPROVED_BY_ME:
+        history.push(`${path}/${id}/approve`);
+        break;
+
+      case IEvaluationOwnership.REVIEWD_BY_ME:
+        history.push(`${path}/${id}/review`);
+        break;
+
+      case IEvaluationOwnership.MARKED_BY_ME:
+        history.push(`${path}/${id}/submissions`);
+        break;
+
+      default:
+        history.push(`${path}/${id}`);
+        break;
+    }
+  };
+
   return (
     <div>
       <Switch>
@@ -112,7 +132,7 @@ export default function InstructorViewEvaluations() {
                       <CommonCardMolecule
                         className="cursor-pointer"
                         data={info}
-                        handleClick={() => history.push(`${path}/${info.id}`)}
+                        handleClick={() => handleClick(info.id + '')}
                       />
                     </div>
                   ))
