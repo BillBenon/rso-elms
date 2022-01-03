@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
 import { queryClient } from '../../../plugins/react-query';
+import { authenticatorStore } from '../../../store/administration';
 import academyStore from '../../../store/administration/academy.store';
 import {
   getIntakesByAcademy,
@@ -11,6 +12,7 @@ import {
 import intakeProgramStore from '../../../store/administration/intake-program.store';
 import usersStore from '../../../store/administration/users.store';
 import { SelectData, ValueType } from '../../../types';
+import { AcademyInfo } from '../../../types/services/academy.types';
 import {
   IImportUser,
   IImportUserRes,
@@ -22,6 +24,7 @@ import Icon from '../../Atoms/custom/Icon';
 import FileUploader from '../../Atoms/Input/FileUploader';
 import Heading from '../../Atoms/Text/Heading';
 import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
+import InputMolecule from '../../Molecules/input/InputMolecule';
 import PopupMolecule from '../../Molecules/Popup';
 
 interface IProps {
@@ -30,10 +33,11 @@ interface IProps {
 
 export default function ImportUsers({ userType }: IProps) {
   const history = useHistory();
+  const authUser = authenticatorStore.authUser().data?.data.data;
   const [values, setValues] = useState<IImportUser>({
     academicProgramLevelId: '',
     academicYearId: '',
-    academyId: '',
+    academyId: authUser?.academy.id + '',
     intakeProgramId: '',
     userType,
     intake: '',
@@ -42,17 +46,17 @@ export default function ImportUsers({ userType }: IProps) {
 
   const [importReport, setimportReport] = useState<IImportUserRes | undefined>(undefined);
 
-  const academies = academyStore.fetchAcademies().data?.data.data || [];
+  const academies: AcademyInfo[] | undefined =
+    academyStore.fetchAcademies().data?.data.data || [];
   const intakes =
-    getIntakesByAcademy(values.academyId, false, values.academyId.length > 1).data?.data
-      .data || [];
+    getIntakesByAcademy(values.academyId, false, !!values.academyId).data?.data.data ||
+    [];
   const programs =
-    getProgramsByIntake(values.intake, values.intake.length > 1).data?.data.data || [];
+    getProgramsByIntake(values.intake, !!values.intake).data?.data.data || [];
 
   const levels =
     intakeProgramStore.getLevelsByIntakeProgram(values.intakeProgramId!).data?.data
       .data || [];
-
   const { mutateAsync, isLoading } = usersStore.importUsers();
 
   async function handleSubmit<T>(e: FormEvent<T>) {
@@ -94,20 +98,26 @@ export default function ImportUsers({ userType }: IProps) {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <DropdownMolecule
-          options={getDropDownOptions({ inputs: academies || [] })}
-          name="academyId"
-          placeholder={'Academy to be enrolled'}
-          handleChange={handleChange}>
-          Academy
-        </DropdownMolecule>
+        {authUser?.user_type === UserType.SUPER_ADMIN ? (
+          <DropdownMolecule
+            options={getDropDownOptions({ inputs: academies || [] })}
+            name="academyId"
+            placeholder={'Academy to be enrolled'}
+            handleChange={handleChange}>
+            Academy
+          </DropdownMolecule>
+        ) : (
+          <InputMolecule readOnly value={authUser?.academy.name} name={'academyId'}>
+            Academy
+          </InputMolecule>
+        )}
         {userType === UserType.STUDENT ? (
           <div>
             <DropdownMolecule
               options={
                 intakes?.map((intk) => ({
                   value: intk.id,
-                  label: intk.code,
+                  label: intk.title,
                 })) as SelectData[]
               }
               name="intake"

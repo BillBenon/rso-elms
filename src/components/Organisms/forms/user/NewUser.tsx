@@ -316,7 +316,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
             <DropdownMolecule
               options={getDropDownOptions({
                 inputs: intakes.data?.data.data || [],
-                labelName: ['code'],
+                labelName: ['title'],
               })}
               name="intake"
               placeholder={'intake to be enrolled in'}
