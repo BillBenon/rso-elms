@@ -25,13 +25,11 @@ const Pagination = ({ totalPages = 1, paginate, currentPage = 0 }: PaginationPro
     paginate(currentPage - 1);
   };
 
-  let lastPage = pageNumbers.length;
-
   return totalPages > 1 ? (
     <div className="py-2">
       <nav className="my-2 flex justify-end">
         <ul className="flex pl-0 rounded list-none flex-wrap justify-center">
-          <button className="mr-3" onClick={onPrev} disabled={currentPage === 1}>
+          <button className="mr-3" onClick={onPrev} disabled={currentPage === 0}>
             <Icon name="left-arrow" size={12} stroke="none" />
           </button>
           <li className="space-x-2">
@@ -47,7 +45,10 @@ const Pagination = ({ totalPages = 1, paginate, currentPage = 0 }: PaginationPro
               </Indicator>
             ))}
           </li>
-          <button className="ml-3" onClick={onNext} disabled={currentPage === lastPage}>
+          <button
+            className="ml-3"
+            onClick={onNext}
+            disabled={currentPage === totalPages - 1}>
             <Icon name="right-arrow" size={12} stroke="none" />
           </button>
         </ul>

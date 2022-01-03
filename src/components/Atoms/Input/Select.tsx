@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import { SelectProps } from '../../../types';
+import { SelectData, SelectProps } from '../../../types';
 import Icon from '../custom/Icon';
 
 export default function Select({
@@ -20,7 +20,7 @@ export default function Select({
   const [internalValue, setInternalValue] = useState(value);
 
   const [searchQuery, setsearchQuery] = useState('');
-  const [filtered, setfiltered] = useState(options || []);
+  const [filtered, setfiltered] = useState<SelectData[]>([]);
 
   const input = useRef<HTMLInputElement>(null);
 
@@ -44,6 +44,7 @@ export default function Select({
         _placeholder ||
         `Select ${name}`,
     );
+    setfiltered(options || []);
   }, [options]);
 
   const handleSelect = (value: string) => {
