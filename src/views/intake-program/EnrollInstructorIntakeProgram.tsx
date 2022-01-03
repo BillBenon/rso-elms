@@ -1,4 +1,3 @@
-import { forEach } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router';
@@ -16,10 +15,10 @@ import { InstructorProgram } from '../../types/services/instructor.types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 
-interface ProgramEnrollmentProps<T>{
-  existing: InstructorProgram[]
+interface ProgramEnrollmentProps {
+  existing: InstructorProgram[];
 }
-function EnrollInstructorIntakeProgram<T>({existing}:ProgramEnrollmentProps<T>) {
+function EnrollInstructorIntakeProgram({ existing }: ProgramEnrollmentProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { intakeProg, intakeId } = useParams<IntakeProgParam>();
 
@@ -34,16 +33,15 @@ function EnrollInstructorIntakeProgram<T>({existing}:ProgramEnrollmentProps<T>) 
 
   const [instructors, setInstructors] = useState<UserView[]>([]);
   useEffect(() => {
-    let existing_ids:string[] = [];
+    let existing_ids: string[] = [];
     for (let index = 0; index < existing.length; index++) {
-      existing_ids.push(existing[index].instructor.id+'');
-      
+      existing_ids.push(existing[index].instructor.id + '');
     }
     let instructorsView: UserView[] = [];
     instructorsInAcademy?.data.data
       .filter((inst) => inst.user.academy.id === authUser?.data.data.academy.id)
       .forEach((inst) => {
-        if(!existing_ids.includes(inst.id+'')){
+        if (!existing_ids.includes(inst.id + '')) {
           let instructorView: UserView = {
             id: inst.id,
             first_name: inst.user.first_name,
@@ -68,7 +66,7 @@ function EnrollInstructorIntakeProgram<T>({existing}:ProgramEnrollmentProps<T>) 
       mutate(newInstructor, {
         onSuccess: (data) => {
           toast.success(data.data.message);
-          queryClient.invalidateQueries(['instructorsInIntakeprogram/IntakeProgram']);
+          queryClient.invalidateQueries(['instructors/intakeprogramId']);
           setSidebarOpen(false);
         },
         onError: (error: any) => {
