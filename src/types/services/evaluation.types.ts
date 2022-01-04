@@ -88,7 +88,7 @@ export enum IEligibleGroup {
 }
 
 export enum IEvaluationAppprovalStatus {
-  DRAFT = 'DRAFT',
+  PENDING = 'PENDING',
   REVIEWING = 'REVIEWING',
   APPROVING = 'APPROVING',
   REVIEWED_TO_APPROVE = 'REVIEWED_TO_APPROVE',

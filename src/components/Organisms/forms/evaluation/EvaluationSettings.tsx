@@ -42,7 +42,7 @@ export default function EvaluationSettings({
   const [settings, setSettings] = useState<IEvaluationApproval>({
     approver_id: '',
     evaluation_id: evaluationId || getLocalStorageData('evaluationId'),
-    evaluation_approval_status: IEvaluationAppprovalStatus.DRAFT,
+    evaluation_approval_status: IEvaluationAppprovalStatus.PENDING,
     id: '',
     preparer_ids: authUser?.id.toString() || '',
     reviewer_ids: '',
