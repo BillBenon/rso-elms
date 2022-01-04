@@ -7,10 +7,14 @@ import RightSidebar from '../../components/Organisms/RightSidebar';
 import { queryClient } from '../../plugins/react-query';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { ParamType } from '../../types';
-import { EnrollInstructorToModule } from '../../types/services/enrollment.types';
+import { EnrollInstructorToModule, ModuleInstructors } from '../../types/services/enrollment.types';
 import { UserView } from '../../types/services/user.types';
 
-function EnrollInstructorToModuleComponent() {
+interface AssignModuleType<T>{
+  existing: ModuleInstructors[];
+}
+
+function EnrollInstructorToModuleComponent<T>({existing}:AssignModuleType<T>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { search } = useLocation();
   const { id } = useParams<ParamType>();
@@ -23,7 +27,13 @@ function EnrollInstructorToModuleComponent() {
 
   useEffect(() => {
     let instructorsView: UserView[] = [];
+    let ids:string[] = [];
+    for(let i = 0; i < existing?.length; i++){
+      ids.push(existing[i].id+'');
+    }
+
     instructorsInProgram?.data.data.forEach((inst) => {
+      if(!ids.includes(inst.instructor.id+'')){
       let instructorView: UserView = {
         id: inst.id,
         first_name: inst.instructor.user.first_name,
@@ -31,9 +41,10 @@ function EnrollInstructorToModuleComponent() {
         image_url: inst.instructor.user.image_url,
       };
       instructorsView.push(instructorView);
+    }
     });
     setInstructors(instructorsView);
-  }, [instructorsInProgram]);
+  }, [instructorsInProgram,existing]);
 
   const { mutate } = enrollmentStore.enrollInstructorToModule();
 

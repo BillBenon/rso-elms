@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useLocation, useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import RightSidebar from '../../components/Organisms/RightSidebar';
 import { queryClient } from '../../plugins/react-query';
 import enrollmentStore from '../../store/administration/enrollment.store';
-import { subjectStore } from '../../store/administration/subject.store';
 import {
   EnrollInstructorToSubject,
   ModuleInstructors,

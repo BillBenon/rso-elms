@@ -18,8 +18,8 @@ import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
 import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
-import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
+import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function EvaluationQuestionComponent({
@@ -180,11 +180,12 @@ export default function EvaluationQuestionComponent({
               className="flex justify-between w-2/3 bg-main px-6 py-10 mt-8"
               key={index}>
               <div className="flex flex-col">
-                <DropdownMolecule
+                <SelectMolecule
+                  value={question.question_type}
                   disabled={question.submitted}
                   width="64"
                   name="question_type"
-                  placeholder={question.question_type || 'Question type'}
+                  placeholder="Question type"
                   handleChange={(e: ValueType) => handleChange(index, e)}
                   /*@ts-ignore*/
                   // defaultValue={evaluationQuestions[index]?.question_type || ''}
@@ -193,7 +194,7 @@ export default function EvaluationQuestionComponent({
                     { label: 'MULTIPLE CHOICE', value: IQuestionType.MULTIPLE_CHOICE },
                   ]}>
                   Question type
-                </DropdownMolecule>
+                </SelectMolecule>
                 <TextAreaMolecule
                   readOnly={question.submitted}
                   name={'question'}
@@ -247,7 +248,8 @@ export default function EvaluationQuestionComponent({
                 ) : null}
 
                 {question.choices.length > 0 ? (
-                  <DropdownMolecule
+                  <SelectMolecule
+                    value={question.choices.find((ch) => ch.correct)?.answer_content}
                     // disabled={question.submitted}
                     width="64"
                     name="correct_answer"
@@ -260,7 +262,7 @@ export default function EvaluationQuestionComponent({
                       })) as SelectData[]
                     }>
                     Correct answer
-                  </DropdownMolecule>
+                  </SelectMolecule>
                 ) : null}
 
                 <InputMolecule

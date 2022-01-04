@@ -1,6 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { SelectData, SelectProps } from '../../../types';
+import { randomString } from '../../../utils/random';
 import Icon from '../custom/Icon';
 
 export default function Select({
@@ -9,7 +10,7 @@ export default function Select({
   placeholder,
   options = [],
   className = '',
-  disabled = false,
+  // disabled = false,
   required = true,
   loading = false,
   value = '',
@@ -61,18 +62,20 @@ export default function Select({
     );
   };
 
-  const handleArrowClick = () => {
-    if (document.activeElement === input.current) {
-      input.current?.blur();
-    } else {
-      input.current?.focus();
-    }
-  };
+  // const handleArrowClick = () => {
+  //   if (document.activeElement === input.current) {
+  //     input.current?.blur();
+  //   } else {
+  //     input.current?.focus();
+  //   }
+  // };
+
+  let selectId = useMemo(() => randomString(16), []);
 
   return (
     <div className={`w-${width || 'full'} ${className}`}>
       <div>
-        <div className="relative">
+        <div className="relative hover:border-primary-400">
           {/* hidden input */}
           <input
             type="text"
@@ -91,6 +94,7 @@ export default function Select({
             onFocus={() => setisMenuOpen(true)}
             placeholder={_placeholder}
             onChange={handleSearch}
+            id={selectId}
             onBlur={() => setisMenuOpen(false)}
             className={`block w-full hover:border-primary-400 placeholder-${
               internalValue ? 'black' : 'txt-secondary'
@@ -98,12 +102,15 @@ export default function Select({
               hasError ? 'error-500' : 'tertiary'
             }  rounded-md px-4 focus:border-primary-500 focus:outline-none font-medium cursor-pointer`}
           />
-          <button
-            type="button"
-            onMouseDown={handleArrowClick}
+          {/* 
+            // type="button"
+            // onMouseDown={handleArrowClick}
+            // className="inline absolute top-0 right-0 cursor-pointer"> */}
+          <label
+            htmlFor={selectId}
             className="inline absolute top-0 right-0 cursor-pointer">
             <Icon name={'chevron-down'} />
-          </button>
+          </label>
         </div>
         {/* Dropdown menu */}
         <div
