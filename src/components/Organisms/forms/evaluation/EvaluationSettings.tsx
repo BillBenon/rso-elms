@@ -7,7 +7,6 @@ import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { SelectData, ValueType } from '../../../../types';
 import {
-  IEvaluationAppprovalStatus,
   IEvaluationApproval,
   IEvaluationProps,
 } from '../../../../types/services/evaluation.types';
@@ -40,11 +39,9 @@ export default function EvaluationSettings({
   ).data?.data.data;
 
   const [settings, setSettings] = useState<IEvaluationApproval>({
-    approver_id: '',
+    approver_ids: '',
     evaluation_id: evaluationId || getLocalStorageData('evaluationId'),
-    evaluation_approval_status: IEvaluationAppprovalStatus.PENDING,
     id: '',
-    preparer_ids: authUser?.id.toString() || '',
     reviewer_ids: '',
     marker_ids: authUser?.id.toString() || '',
     to_be_approved: false,
@@ -94,6 +91,7 @@ export default function EvaluationSettings({
       {settings.to_be_reviewed && (
         <div className="pt-6">
           <DropdownMolecule
+            isMulti
             width="60"
             placeholder="Reviewer"
             options={
@@ -122,6 +120,7 @@ export default function EvaluationSettings({
       {settings.to_be_approved && (
         <div className="pt-6">
           <DropdownMolecule
+            isMulti
             width="60"
             placeholder="Approver"
             options={

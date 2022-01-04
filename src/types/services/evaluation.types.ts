@@ -240,11 +240,9 @@ export interface IEvaluationQuestionsInfo {
 }
 
 export interface IEvaluationApproval {
-  approver_id: string;
+  approver_ids: string;
   evaluation_id: string;
-  evaluation_approval_status: string;
   id: string;
-  preparer_ids: string;
   reviewer_ids: string;
   marker_ids: string;
   to_be_approved: boolean;
