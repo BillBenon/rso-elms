@@ -68,14 +68,6 @@ export default function ClassPeriodPerformance() {
       },
     },
     {
-      name: 'Download report',
-      handleAction: (id: string | number | undefined) => {
-        history.push(
-          `${url}/report?studentId=${id}&periodId=${periodOfThisClass}&action=download`,
-        ); // go to view user profile
-      },
-    },
-    {
       name: 'Edit student',
       handleAction: (id: string | number | undefined) => {
         history.push(`/dashboard/users/${id}/edit`); // go to edit user
