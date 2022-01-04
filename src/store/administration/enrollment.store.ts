@@ -1,7 +1,10 @@
 import { useMutation, useQuery } from 'react-query';
 
 import { enrollmentService } from '../../services/administration/enrollments.service';
-import { ModuleAssignmentType } from '../../types/services/enrollment.types';
+import {
+  ModuleAssignmentType,
+  StudentApproval,
+} from '../../types/services/enrollment.types';
 
 class EnrolmmentStore {
   getInstructorLevels(instructorId: string) {
@@ -72,6 +75,14 @@ class EnrolmmentStore {
   getStudentsAcademy(academyId: string) {
     return useQuery(['student/academy', academyId], () =>
       enrollmentService.getStudentAcademy(academyId),
+    );
+  }
+  getStudentAcademyAndEnrollmentStatus(
+    academyId: string,
+    enrolmentStatus: StudentApproval,
+  ) {
+    return useQuery(['student/academy/enrolment', academyId, enrolmentStatus], () =>
+      enrollmentService.getStudentAcademyAndEnrollmentStatus(academyId, enrolmentStatus),
     );
   }
 

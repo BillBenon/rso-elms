@@ -13,6 +13,7 @@ import {
   EnrollStudentToProgram,
   InstructorAssignModule,
   ModuleAssignmentType,
+  StudentApproval,
 } from '../../types/services/enrollment.types';
 import {
   Instructor,
@@ -89,6 +90,15 @@ class EnrollmentService {
     academyId: string,
   ): Promise<AxiosResponse<Response<Student[]>>> {
     return await adminstrationAxios.get(`students/getAccademyStudents/${academyId}`);
+  }
+
+  public async getStudentAcademyAndEnrollmentStatus(
+    academyId: string,
+    enrolmentStatus: StudentApproval,
+  ): Promise<AxiosResponse<Response<StudentIntakeProgram[]>>> {
+    return await adminstrationAxios.get(
+      `students/getStudentsByAcademyAndEnrolmentStatus/${academyId}/${enrolmentStatus}`,
+    );
   }
 
   public async enrollStudentsToLevel(
