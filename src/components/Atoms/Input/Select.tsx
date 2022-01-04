@@ -9,7 +9,7 @@ export default function Select({
   placeholder,
   options = [],
   className = '',
-  disabled = false,
+  // disabled = false,
   required = true,
   loading = false,
   value = '',
