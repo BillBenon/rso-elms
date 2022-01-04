@@ -96,6 +96,21 @@ export enum IEvaluationAppprovalStatus {
   APPROVED = 'APPROVED',
 }
 
+export enum UpdateEvaluationApprovalStatusEnum {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  REVIEWED = 'REVIEWED',
+}
+
+export interface IUpdateEvaluationApprovalStatus {
+  evaluation_approval_status?: UpdateEvaluationApprovalStatusEnum;
+  evaluation_id: string;
+  evaluation_reviewer_status?: UpdateEvaluationApprovalStatusEnum;
+  instructor_id: string;
+  remarks: string;
+}
+
 export interface IEvaluationCreate {
   access_type: string;
   intake_academic_year_period: string;
