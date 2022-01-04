@@ -59,7 +59,7 @@ function InstructorsOnModule() {
                 Instructors ({instructorInfos?.data.data.length || 0})
               </Heading>
               {authUser?.user_type === UserType.ADMIN && (
-                <EnrollInstructorToModuleComponent />
+                <EnrollInstructorToModuleComponent existing={instructorInfos?.data.data || []} />
               )}
             </div>
             <>
@@ -73,7 +73,7 @@ function InstructorsOnModule() {
                   description={
                     'There are no instructors currently assigned to this module'
                   }
-                  handleClick={() => <EnrollInstructorToModuleComponent />}
+                  handleClick={() => <EnrollInstructorToModuleComponent existing={instructorInfos?.data.data || []} />}
                 />
               ) : (
                 <Table<UserTypes>

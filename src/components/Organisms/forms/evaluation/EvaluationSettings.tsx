@@ -3,15 +3,14 @@ import toast from 'react-hot-toast';
 
 import { queryClient } from '../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../store/administration';
-import usersStore from '../../../../store/administration/users.store';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
+import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { ValueType } from '../../../../types';
 import {
   IEvaluationApproval,
   IEvaluationApprovalStatus,
   IEvaluationProps,
 } from '../../../../types/services/evaluation.types';
-import { UserType } from '../../../../types/services/user.types';
 import {
   getLocalStorageData,
   setLocalStorageData,
@@ -29,13 +28,17 @@ export default function EvaluationSettings({
 }: IEvaluationProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
 
-  const { data: inCharge } = usersStore.getUsersByAcademyAndUserType(
-    authUser?.academy.id.toString() || '',
-    UserType.INSTRUCTOR,
-    { page: 0, pageSize: 1000, sortyBy: 'username' },
-  );
+  // const { data: inCharge } = usersStore.getUsersByAcademyAndUserType(
+  //   authUser?.academy.id.toString() || '',
+  //   UserType.INSTRUCTOR,
+  //   { page: 0, pageSize: 1000, sortyBy: 'username' },
+  // );
 
-  const instructors = inCharge?.data.data.content;
+  // const instructors = inCharge?.data.data.content;
+
+  const instructors = instructordeploymentStore.getInstructorsDeployedInAcademy(
+    authUser?.academy.id + '',
+  ).data?.data.data;
 
   const [settings, setSettings] = useState<IEvaluationApproval>({
     approver: '',

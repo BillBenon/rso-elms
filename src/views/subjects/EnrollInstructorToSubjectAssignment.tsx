@@ -6,7 +6,6 @@ import Button from '../../components/Atoms/custom/Button';
 import RightSidebar from '../../components/Organisms/RightSidebar';
 import { queryClient } from '../../plugins/react-query';
 import enrollmentStore from '../../store/administration/enrollment.store';
-import { subjectStore } from '../../store/administration/subject.store';
 import { EnrollInstructorToSubject, ModuleInstructors } from '../../types/services/enrollment.types';
 import { UserView } from '../../types/services/user.types';
 
@@ -21,7 +20,7 @@ export default function EnrollInstructorToSubjectComponent<T>({module_id,subject
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const { data: instructorInfos, isLoading:instructorLoading } = enrollmentStore.getInstructorsByModule(module_id);
-  const { data: instructorsInProgram, isLoading:instructorProgram } =
+  const { data: instructorsInProgram } =
     enrollmentStore.getInstructorsInProgram(intakeProg + '');
 
   const [instructors, setInstructors] = useState<UserView[]>([]);
