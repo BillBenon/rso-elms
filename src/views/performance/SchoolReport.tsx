@@ -46,7 +46,7 @@ export default function SchoolReport() {
     <div className="px-16 py-10 bg-white mx-auto max-w-5xl mt-10">
       <div className="w-20 bg-gray-300 rounded-full">
         <img
-          src="https://ur.ac.rw/IMG/jpg/logo_for_ur.jpg"
+          src="/images/nisslogo.png"
           alt="Institution logo"
           className="block w-full h-full rounded-full"
         />
@@ -75,7 +75,6 @@ export default function SchoolReport() {
         </div>
       </div>
       <h1 className="text-center font-bold underline my-10 text-lg">SCHOOL REPORT</h1>
-
       <div className="grid grid-cols-6">
         <div className="col-span-2" />
         <div className="col-span-4">
@@ -171,10 +170,84 @@ export default function SchoolReport() {
             fontSize="sm"
             fontWeight="normal"
             className="p-3 border border-black text-center">
-            {m.examObtained}
+            {m.examMax}
           </Heading>
         </div>
       ))}
+      {/* totals row */}
+      <div className="grid grid-cols-6">
+        <div className="col-span-2">
+          <Heading fontSize="sm" fontWeight="normal" className="p-3 border border-black">
+            Total
+          </Heading>
+        </div>
+
+        <Heading
+          fontSize="sm"
+          fontWeight="normal"
+          className="p-3 border border-black text-center">
+          {reportData?.data.data.quiz_obtained_marks}
+        </Heading>
+        <Heading
+          fontSize="sm"
+          fontWeight="normal"
+          className="p-3 border border-black text-center">
+          {reportData?.data.data.quiz_marks}
+        </Heading>
+        <Heading
+          fontSize="sm"
+          fontWeight="normal"
+          className="p-3 border border-black text-center">
+          {reportData?.data.data.exam_obtained_marks}
+        </Heading>
+        <Heading
+          fontSize="sm"
+          fontWeight="normal"
+          className="p-3 border border-black text-center">
+          {reportData?.data.data.exam_marks}
+        </Heading>
+      </div>
+      {/* percentage */}
+      <div className="grid grid-cols-6">
+        <Heading
+          fontSize="sm"
+          fontWeight="semibold"
+          className="p-3 col-span-2 border border-black">
+          Percentage
+        </Heading>
+        <Heading
+          fontSize="sm"
+          fontWeight="normal"
+          className="col-span-4 py-3 px-6 border border-black text-right">
+          {reportData?.data.data
+            ? (reportData?.data.data.exam_obtained_marks +
+                reportData?.data.data.quiz_obtained_marks) /
+              (reportData.data.data.exam_marks + reportData.data.data.quiz_marks)
+            : 0}
+          %
+        </Heading>
+      </div>
+      {/* Student position */}
+      <div className="grid grid-cols-6">
+        <Heading
+          fontSize="sm"
+          fontWeight="semibold"
+          className="p-3 col-span-2 border border-black">
+          Position
+        </Heading>
+        <Heading
+          fontSize="sm"
+          fontWeight="normal"
+          className="col-span-4 py-3 px-6 border border-black text-right">
+          {reportData?.data.data.position}
+        </Heading>
+      </div>
+      {/* Digital signature */}
+      <div className="pt-14">
+        <Heading fontSize="lg" fontWeight="semibold">
+          Reviewed by {`${authUser?.first_name} ${authUser?.last_name}`}
+        </Heading>
+      </div>
     </div>
   );
 }
