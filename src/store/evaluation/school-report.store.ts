@@ -14,6 +14,18 @@ export function getClassTermlyOverallReport(
   );
 }
 
+export function getStudentReportInTerm(
+  studentID: string,
+  academicYearPeriodId: string,
+  enabled = true,
+) {
+  return useQuery(
+    ['reports/student/term', studentID, academicYearPeriodId],
+    () => reportService.getStudentReportInTerm(studentID, academicYearPeriodId),
+    { enabled },
+  );
+}
+
 export function getStudentFullReport(studentId?: string) {
   return useQuery(
     ['reports/full/', studentId],

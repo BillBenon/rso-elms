@@ -36,11 +36,13 @@ class EvaluationStore {
   }
 
   getEvaluationsByCategory(evaluationCategory: IEvaluationOwnership, instructor: string) {
-    return useQuery(['evaluationsByAcademyInstructor'], () =>
-      evaluationService.getEvaluationsByInstructorAndCategory(
-        evaluationCategory,
-        instructor,
-      ),
+    return useQuery(
+      ['evaluationsByAcademyInstructor', instructor, evaluationCategory],
+      () =>
+        evaluationService.getEvaluationsByInstructorAndCategory(
+          evaluationCategory,
+          instructor,
+        ),
     );
   }
 
