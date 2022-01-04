@@ -19,7 +19,6 @@ interface YProp extends YOptProp {
 interface YOptProp {
   start?: number;
   end?: number;
-  defaultValue?: string;
 }
 
 const YearSelect = (props: YProp) => {
@@ -59,7 +58,7 @@ const YearSelect = (props: YProp) => {
       placeholder={props.placeholder}
       className={props.className}
       options={years}
-      value={props.defaultValue}
+      value={props.value + ''}
       width={props.width}
       handleChange={(e: ValueType) => props.onChange(e)}
     />
