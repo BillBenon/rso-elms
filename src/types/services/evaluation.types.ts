@@ -72,6 +72,14 @@ export enum IEvaluationStatus {
   MARKING = 'MARKING',
   MARKED = 'MARKED',
   CANCELED = 'CANCELED',
+  REVIEWING = 'REVIEWING',
+  REVIEW_REJECTED = 'REVIEW_REJECTED',
+  REVIEWED = 'REVIEWED',
+  APPROVING = 'APPROVING',
+  APPROVAL_REJECTED = 'APPROVAL_REJECTED',
+  APPROVED = 'APPROVED',
+  HIDDEN = 'HIDDEN',
+  PUBLISHED = 'PUBLISHED',
 }
 
 export enum IEligibleGroup {
@@ -79,7 +87,7 @@ export enum IEligibleGroup {
   SINGLE_CLASS = 'SINGLE_CLASS',
 }
 
-export enum IEvaluationApprovalStatus {
+export enum IEvaluationAppprovalStatus {
   DRAFT = 'DRAFT',
   REVIEWING = 'REVIEWING',
   APPROVING = 'APPROVING',
@@ -217,13 +225,13 @@ export interface IEvaluationQuestionsInfo {
 }
 
 export interface IEvaluationApproval {
-  approver: string;
-  evaluation: string;
+  approver_id: string;
+  evaluation_id: string;
   evaluation_approval_status: string;
   id: string;
-  preparer: string;
-  reviewer: string;
-  marker: string;
+  preparer_ids: string;
+  reviewer_ids: string;
+  marker_ids: string;
   to_be_approved: boolean;
   to_be_reviewed: boolean;
 }

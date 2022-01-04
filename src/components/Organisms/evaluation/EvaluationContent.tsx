@@ -117,7 +117,7 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
           evaluationQuestions?.data.data.map((question, index: number) =>
             question && question.multiple_choice_answers.length > 0 ? (
               <>
-                <div className="mt-3 flex justify-between">
+                <div className="mt-3 flex justify-between" key={question.id}>
                   <ContentSpan title={`Question ${index + 1}`} className="gap-3">
                     {question.question}
                   </ContentSpan>

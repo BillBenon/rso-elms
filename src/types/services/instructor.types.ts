@@ -32,4 +32,5 @@ export interface Instructor extends Table {
 }
 export interface InstructorDeployed extends Table, DeployInstructor {
   instructor: Instructor;
+  user: UserInfo;
 }

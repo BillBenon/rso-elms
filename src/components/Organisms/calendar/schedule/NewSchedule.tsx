@@ -24,7 +24,6 @@ import {
   methodOfInstruction,
   scheduleAppliesTo,
 } from '../../../../types/services/schedule.types';
-import { UserType } from '../../../../types/services/user.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import CheckboxMolecule from '../../../Molecules/input/CheckboxMolecule';
