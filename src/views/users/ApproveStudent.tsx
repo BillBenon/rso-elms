@@ -14,21 +14,26 @@ import { IntakeProgParam } from '../../types/services/intake-program.types';
 import { AcademyUserType } from '../../types/services/user.types';
 import { titleCase } from '../../utils/getOption';
 
+interface AcademyUser extends AcademyUserType {
+  user_id: string;
+}
+
 function ApproveStudent() {
   const history = useHistory();
   const { intakeProg } = useParams<IntakeProgParam>();
   const [unselectAll, setUnselectAll] = useState(false);
   const { data: studentProg, isLoading } =
     intakeProgramStore.getStudentsByIntakeProgram(intakeProg);
-  const [students, setStudents] = useState<AcademyUserType[]>([]);
+  const [students, setStudents] = useState<AcademyUser[]>([]);
 
   useEffect(() => {
-    let pushedStud: AcademyUserType[] = [];
+    let pushedStud: AcademyUser[] = [];
     studentProg?.data.data?.map((stud) => {
-      let { username, first_name, last_name, email, person, user_type } =
+      let { id, username, first_name, last_name, email, person, user_type } =
         stud.student.user;
-      let student: AcademyUserType = {
+      let student: AcademyUser = {
         id: stud.id,
+        user_id: id + '',
         username: username,
         'full name': first_name + ' ' + last_name,
         email: email,
@@ -118,7 +123,7 @@ function ApproveStudent() {
                     description="And the web just isnt the same without you. Lets get you back online!"
                   />
                 ) : (
-                  <Table<AcademyUserType>
+                  <Table<AcademyUser>
                     statusColumn="status"
                     data={
                       stud === StudentApproval.PENDING
@@ -127,6 +132,33 @@ function ApproveStudent() {
                         ? approvedStud
                         : rejectedStud
                     }
+                    actions={[
+                      {
+                        name: 'View Profile',
+                        handleAction: (id: string | number | undefined) => {
+                          stud === StudentApproval.PENDING
+                            ? history.push({
+                                pathname: `/dashboard/users/${
+                                  pendingStud.find((st) => st.id === id)?.user_id
+                                }/profile`,
+                                search: `?intkStud=${id}&stat=${StudentApproval.PENDING}`,
+                              })
+                            : stud === StudentApproval.APPROVED
+                            ? history.push({
+                                pathname: `/dashboard/users/${
+                                  approvedStud.find((st) => st.id === id)?.user_id
+                                }/profile`,
+                                search: `?intkStud=${id}&stat=${StudentApproval.APPROVED}`,
+                              })
+                            : history.push({
+                                pathname: `/dashboard/users/${
+                                  rejectedStud.find((st) => st.id === id)?.user_id
+                                }/profile`,
+                                search: `?intkStud=${id}&stat=${StudentApproval.REJECTED}`,
+                              });
+                        },
+                      },
+                    ]}
                     selectorActions={
                       stud === StudentApproval.PENDING
                         ? [
@@ -138,7 +170,7 @@ function ApproveStudent() {
                         : [{ name: 'Approve Students', handleAction: approveStud }]
                     }
                     // actions={studentActions}
-                    hide={['id', 'user_type']}
+                    hide={['id', 'user_type', 'user_id']}
                     uniqueCol="id"
                     unselectAll={unselectAll}
                   />
