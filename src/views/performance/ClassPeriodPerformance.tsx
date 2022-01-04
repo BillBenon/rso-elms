@@ -19,7 +19,7 @@ interface IParamType {
 interface IPerformanceTable {
   id: string;
   reg_number: string;
-  [index: string]: string;
+  [index: string]: string | number;
 }
 
 export default function ClassPeriodPerformance() {
@@ -50,6 +50,11 @@ export default function ClassPeriodPerformance() {
       processed[mark.subject.title] = mark.obtained_marks.toString();
     });
 
+    processed[`total /${record.total_marks}`] = `${
+      record.quiz_obtained_marks + record.exam_obtained_marks
+    }`;
+
+    processed['position'] = record.position;
     data.push(processed);
   });
 
