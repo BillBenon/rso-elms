@@ -4,9 +4,8 @@ import { ValueType } from '../../../../types';
 import Select from '../Select';
 
 type MProp = {
-  value: number;
+  value: string;
   onChange: (_e: ValueType) => void;
-  defaultValue?: string;
   required?: boolean;
   disabled?: boolean;
   id?: string;
@@ -29,16 +28,9 @@ const MinuteSelect = (mprops: MProp) => {
     return minOptions;
   };
 
-  let defaultValue: string = '';
-  if (mprops.defaultValue)
-    defaultValue =
-      parseInt(mprops.defaultValue) < 10
-        ? `0${mprops.defaultValue}`
-        : mprops.defaultValue;
-
   return (
     <Select
-      value={defaultValue}
+      value={mprops.value}
       name={mprops.name}
       placeholder={mprops.placeholder}
       width={mprops.width}
