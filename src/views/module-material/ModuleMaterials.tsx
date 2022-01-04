@@ -49,7 +49,7 @@ function ModuleMaterials() {
                   description={
                     'There are no learning materials currently added on this module'
                   }
-                  handleClick={() => history.push(`${url}/add-lesson`)}
+                  handleClick={() => history.push(`${url}/add-material`)}
                 />
               ) : (
                 <div className="pt-3 w-2/5">
