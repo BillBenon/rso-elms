@@ -32,6 +32,12 @@ export default function NewIntakeProgramLevel() {
   const { id: programId, intakeProg } = useParams<IntakeProgParam>();
 
   const programLevels = getLevelsByAcademicProgram(programId).data?.data.data;
+  const getLevels =
+    intakeProgramStore.getLevelsByIntakeProgram(intakeProg).data?.data.data || [];
+
+  const unaddedLevels = programLevels?.filter(
+    (pg) => !getLevels.map((lv) => lv.academic_program_level.id).includes(pg.id),
+  );
 
   const authUser = authenticatorStore.authUser().data?.data.data;
   const intakes = intakeStore.getIntakesByProgram(programId).data?.data.data;
@@ -118,7 +124,7 @@ export default function NewIntakeProgramLevel() {
       <Heading fontSize="sm" className="py-4">
         Levels
       </Heading>
-      {programLevels?.map((programLevel, index) => (
+      {unaddedLevels?.map((programLevel, index) => (
         <div key={index} className={`${checked === index ? 'bg-main' : ''} p-4`}>
           <SwitchMolecule
             value={checked === index}
@@ -132,7 +138,7 @@ export default function NewIntakeProgramLevel() {
                 <form onSubmit={submitForm}>
                   <DropdownMolecule
                     width="72"
-                    placeholder={instLoading ? 'Loading incharge' : 'Select incharge'}
+                    placeholder={instLoading ? 'Loading incharge...' : 'Select incharge'}
                     options={getDropDownOptions({
                       inputs: instructors,
                       labelName: ['first_name', 'last_name'],

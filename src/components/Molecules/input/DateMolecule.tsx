@@ -61,9 +61,9 @@ function DateMolecule({
   hourPlaceholder = 'Hours',
   dayDisabled = false,
   dayClassName,
-  yearWidth = '27',
-  monthWidth = '27',
-  dayWidth = '27',
+  yearWidth = '28',
+  monthWidth = '28',
+  dayWidth = '28',
   hourWidth = '28',
   minuteWidth = '28',
   hourDisabled = false,
@@ -123,7 +123,7 @@ function DateMolecule({
   };
 
   return (
-    <div className={`flex flex-col gap-2 pb-3 w-${width || 'full md:w80'}`}>
+    <div className={`flex flex-col gap-2 pb-3 w-${width || 'full md:w-80'}`}>
       <ILabel size="sm" weight="medium">
         {children}
       </ILabel>
@@ -141,7 +141,7 @@ function DateMolecule({
               end={endYear}
               className={yearClassName}
               disabled={yearDisabled}
-              // placeholder={dateState.Year.toString()}
+              placeholder={'Year'}
             />
             <MonthSelect
               year={dateState.Year}
@@ -155,7 +155,7 @@ function DateMolecule({
               numeric={monthNumeric}
               className={monthClassName}
               disabled={monthDisabled}
-              // placeholder={dateState.Month.toString()}
+              placeholder={'Month'}
             />
             <DaySelect
               year={dateState.Year}
@@ -167,6 +167,7 @@ function DateMolecule({
               className={dayClassName}
               width={dayWidth}
               disabled={dayDisabled}
+              placeholder={'Day'}
             />
           </div>
         )}
@@ -177,9 +178,9 @@ function DateMolecule({
               value={dateState.Hours}
               onChange={handleDate}
               name="Hours"
-              placeholder={hourPlaceholder}
               width={hourWidth}
               disabled={hourDisabled}
+              placeholder={hourPlaceholder || 'hrs'}
             />
             <MinuteSelect
               defaultValue={dateState.Minutes.toString()}

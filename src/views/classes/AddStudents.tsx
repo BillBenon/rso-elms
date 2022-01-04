@@ -4,14 +4,12 @@ import { useParams } from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
-import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import PopupMolecule from '../../components/Molecules/Popup';
 import RightSidebar from '../../components/Organisms/RightSidebar';
 import { queryClient } from '../../plugins/react-query';
 import { classStore } from '../../store/administration/class.store';
-import intakeProgramStore from '../../store/administration/intake-program.store';
+import enrollmentStore from '../../store/administration/enrollment.store';
 import { IClassStudent } from '../../types/services/class.types';
-import { IntakeLevelParam } from '../../types/services/intake-program.types';
+import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 
 type IAddStudent = {
@@ -20,15 +18,24 @@ type IAddStudent = {
 
 function AddStudents({ classId }: IAddStudent) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const { level } = useParams<IntakeLevelParam>();
+  const { level, period } = useParams<IntakePeriodParam>();
 
-  const studentsProgram = intakeProgramStore.getStudentsByIntakeProgramLevel(level || '');
+  const unaddedStudents = enrollmentStore.getStudentsWhoAreNotInAnyClassInLevel(
+    level,
+    period,
+  );
+  const studentsInClass = classStore.getStudentsByClass(classId.toString());
 
   const [students, setStudents] = useState<UserView[]>([]);
   useEffect(() => {
     let studentsView: UserView[] = [];
-    studentsProgram.data?.data.data &&
-      studentsProgram.data.data.data.forEach((stud) => {
+    let studentsInClassIds = studentsInClass.data?.data.data.map((std) => std.student.id);
+    let studentsToDisplay = unaddedStudents.data?.data.data.filter(
+      (std) => !studentsInClassIds?.includes(std.intake_program_student.student.id),
+    );
+
+    studentsToDisplay &&
+      studentsToDisplay.forEach((stud) => {
         let studentView: UserView = {
           id: stud.intake_program_student.student.id,
           first_name: stud.intake_program_student.student.user.first_name,
@@ -38,7 +45,7 @@ function AddStudents({ classId }: IAddStudent) {
         studentsView.push(studentView);
       });
     setStudents(studentsView);
-  }, [studentsProgram.data?.data.data]);
+  }, [unaddedStudents.data?.data.data]);
 
   const { mutate } = classStore.addClassStudent();
 
@@ -67,9 +74,9 @@ function AddStudents({ classId }: IAddStudent) {
         Add student
       </Button>
 
-      {studentsProgram.isLoading ? (
+      {unaddedStudents.isLoading ? (
         <Loader />
-      ) : students.length > 0 ? (
+      ) : (
         <RightSidebar
           open={sidebarOpen}
           handleClose={() => setSidebarOpen(false)}
@@ -82,18 +89,8 @@ function AddStudents({ classId }: IAddStudent) {
             },
           ]}
           dataLabel={'Students in this level'}
-          isLoading={studentsProgram.isLoading}
+          isLoading={unaddedStudents.isLoading}
         />
-      ) : (
-        <PopupMolecule open={true}>
-          <NoDataAvailable
-            title={'No students available'}
-            icon="user"
-            description={
-              'No students have enrolled in this level, try enrolling some first'
-            }
-          />
-        </PopupMolecule>
       )}
     </div>
   );

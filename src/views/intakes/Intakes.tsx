@@ -31,6 +31,7 @@ import {
 import registrationControlStore from '../../store/administration/registrationControl.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Link as LinkType, ValueType } from '../../types';
+import { StudentApproval } from '../../types/services/enrollment.types';
 import { InstructorProgram } from '../../types/services/instructor.types';
 import { ExtendedIntakeInfo } from '../../types/services/intake.types';
 import { StudentIntakeProgram } from '../../types/services/intake-program.types';
@@ -46,8 +47,12 @@ const list: LinkType[] = [
   { to: 'intakes', title: 'Intakes' },
 ];
 
+interface IntakeCardType extends CommonCardDataType {
+  registrationControlId: string;
+}
+
 export default function Intakes() {
-  const [intakes, setIntakes] = useState<CommonCardDataType[]>([]);
+  const [intakes, setIntakes] = useState<IntakeCardType[]>([]);
   const { data: userInfo } = authenticatorStore.authUser();
 
   const history = useHistory();
@@ -97,26 +102,30 @@ export default function Intakes() {
 
   useEffect(() => {
     if (isSuccess && data?.data) {
-      let loadedIntakes: CommonCardDataType[] = [];
+      let loadedIntakes: IntakeCardType[] = [];
       data?.data.data.forEach((intk) => {
         if (authUser?.user_type === UserType.STUDENT) {
           let intake = intk as StudentIntakeProgram;
-          let prog: CommonCardDataType = {
-            id: intake.intake_program.intake.id,
-            status: {
-              type: advancedTypeChecker(intake.intake_program.intake.intake_status),
-              text: intake.intake_program.intake.intake_status.toString(),
-            },
-            code: intake.intake_program.intake.code,
-            title: intake.intake_program.intake.title,
-            description: intake.intake_program.intake.description,
-          };
-          if (!loadedIntakes.find((pg) => pg.id === prog.id)?.id) {
-            loadedIntakes.push(prog);
+          if (intake && intake.enrolment_status === StudentApproval.APPROVED) {
+            let prog: IntakeCardType = {
+              id: intake.intake_program.intake.id,
+              status: {
+                type: advancedTypeChecker(intake.intake_program.intake.intake_status),
+                text: intake.intake_program.intake.intake_status.toString(),
+              },
+              code: intake.intake_program.intake.code,
+              title: intake.intake_program.intake.title,
+              description: intake.intake_program.intake.description,
+              registrationControlId:
+                intake.intake_program.intake.registration_control?.id + '',
+            };
+            if (!loadedIntakes.find((pg) => pg.id === prog.id)?.id) {
+              loadedIntakes.push(prog);
+            }
           }
         } else if (authUser?.user_type === UserType.INSTRUCTOR) {
           let intake = intk as InstructorProgram;
-          let prog: CommonCardDataType = {
+          let prog: IntakeCardType = {
             id: intake.intake_program.intake.id,
             status: {
               type: advancedTypeChecker(intake.intake_program.intake.intake_status),
@@ -125,13 +134,15 @@ export default function Intakes() {
             code: intake.intake_program.intake.code,
             title: intake.intake_program.intake.title,
             description: intake.intake_program.intake.description,
+            registrationControlId:
+              intake.intake_program.intake.registration_control?.id + '',
           };
           if (!loadedIntakes.find((pg) => pg.id === prog.id)?.id) {
             loadedIntakes.push(prog);
           }
         } else {
           let intake = intk as ExtendedIntakeInfo;
-          let cardData: CommonCardDataType = {
+          let cardData: IntakeCardType = {
             id: intake.id,
             code: intake.code.toUpperCase(),
             description: intake.description,
@@ -140,6 +151,7 @@ export default function Intakes() {
               type: advancedTypeChecker(intake.intake_status),
               text: intake.intake_status.toString(),
             },
+            registrationControlId: intake.registration_control.id + '',
           };
           loadedIntakes.push(cardData);
         }
@@ -234,7 +246,8 @@ export default function Intakes() {
                           </Link>
                         </div>
                         <div className="mt-4 space-x-4">
-                          <Link to={`${url}/${intake.id}/edit/${registrationControlId}`}>
+                          <Link
+                            to={`${url}/${intake.id}/edit/${intake.registrationControlId}`}>
                             <Button>Edit Intake</Button>
                           </Link>
                           <Button styleType="outline">Change Status</Button>
@@ -267,7 +280,13 @@ export default function Intakes() {
                           history.push(`${url}/${registrationControlId}/add-intake`);
                         else history.push('/dashboard/registration-control');
                       }}
-                      description="There haven't been any intakes added yet! try adding some from the button below."
+                      description={`${
+                        authUser?.user_type === UserType.STUDENT
+                          ? 'You have not been approved to any intake yet!'
+                          : authUser?.user_type === UserType.INSTRUCTOR
+                          ? 'You have not been enrolled to teach any intake yet!'
+                          : "There haven't been any intakes added yet! try adding some from the button below."
+                      }`}
                     />
                   )
                 )}

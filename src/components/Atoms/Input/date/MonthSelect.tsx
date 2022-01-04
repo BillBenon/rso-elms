@@ -57,7 +57,7 @@ const MonthSelect = (mprops: MProp) => {
   return (
     <Select
       disabled={mprops.disabled}
-      value={mprops.defaultValue}
+      value={(parseInt(mprops.defaultValue + '') + 1).toString()}
       name={mprops.name}
       placeholder={mprops.placeholder}
       className={mprops.className}

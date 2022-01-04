@@ -2,7 +2,7 @@ import React from 'react';
 
 import { SelectData, ValueType } from '../../../../types';
 import { getDaysInMonth } from '../../../../utils/date-helper';
-import DropDown from '../Dropdown';
+import Select from '../Select';
 
 type DProp = {
   year: number;
@@ -35,9 +35,14 @@ const DaySelect = (dprop: DProp) => {
 
   let days = renderDateOptions();
 
+  let defaultValue =
+    parseInt(dprop.defaultValue + '') < 10
+      ? '0' + dprop.defaultValue
+      : dprop.defaultValue;
+
   return (
-    <DropDown
-      value={dprop.defaultValue}
+    <Select
+      value={defaultValue}
       disabled={dprop.disabled}
       name={dprop.name}
       placeholder={dprop.placeholder}

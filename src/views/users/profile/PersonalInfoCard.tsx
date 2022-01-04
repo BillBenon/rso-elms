@@ -9,15 +9,17 @@ import { UserInfo } from '../../../types/services/user.types';
 import { advancedTypeChecker, titleCase } from '../../../utils/getOption';
 
 function PersonalInfoCard({ user }: { user: UserInfo }) {
-  const hobbies = hobbiesStore.getUserHobby(user.person.id + '').data?.data.data || [];
+  const hobbies = hobbiesStore.getUserHobby(user.person?.id + '').data?.data.data || [];
 
   return (
     <div className="max-w-sm py-4 px-6 bg-main rounded-md">
-      <div className="flex flex-col items-end mb-20">
-        <Badge badgecolor={advancedTypeChecker(user.generic_status)}>
-          {user.generic_status}
-        </Badge>
-      </div>
+      {user.generic_status && (
+        <div className="flex flex-col items-end mb-20">
+          <Badge badgecolor={advancedTypeChecker(user.generic_status)}>
+            {user.generic_status}
+          </Badge>
+        </div>
+      )}
       <div className="bg-secondary py-5 flex flex-col justify-center items-center">
         <Avatar
           className="border-4 border-primary-500 -mt-20"

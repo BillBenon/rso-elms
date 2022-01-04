@@ -4,6 +4,7 @@ import { adminstrationAxios } from '../../plugins/axios';
 import { FilterOptions, Response, SortedContent } from '../../types';
 import {
   CreateUserInfo,
+  EditUser,
   IImportUserRes,
   UserInfo,
   UserType,
@@ -25,7 +26,7 @@ class UserService {
   }
 
   public async modifyUser(
-    userInfo: UpdateUserInfo,
+    userInfo: EditUser,
   ): Promise<AxiosResponse<Response<UserInfo>>> {
     return await adminstrationAxios.put('/users/modifyUser', userInfo);
   }
