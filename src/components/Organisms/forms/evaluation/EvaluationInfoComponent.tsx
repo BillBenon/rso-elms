@@ -1,4 +1,5 @@
 import { Editor } from '@tiptap/react';
+import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
@@ -89,8 +90,6 @@ export default function EvaluationInfoComponent({
     total_mark: 0,
   });
 
-  console.log(evaluationInfo?.intake_academic_year_period);
-
   useEffect(() => {
     setDetails({
       access_type: evaluationInfo?.access_type || IAccessTypeEnum.PUBLIC,
@@ -114,7 +113,7 @@ export default function EvaluationInfoComponent({
       questionaire_type: evaluationInfo?.questionaire_type || IQuestionaireTypeEnum.OPEN,
       subject_academic_year_period_id: evaluationInfo?.subject_id || '',
       submision_type: evaluationInfo?.submision_type || ISubmissionTypeEnum.ONLINE_TEXT,
-      time_limit: evaluationInfo?.time_limit || 10,
+      time_limit: evaluationInfo?.time_limit || 0,
       total_mark: evaluationInfo?.total_mark || 0,
     });
   }, [evaluationInfo]);
@@ -145,6 +144,19 @@ export default function EvaluationInfoComponent({
 
   function handleChange({ name, value }: ValueType) {
     if (name === 'module') setModuleId(value + '');
+    else if (name === 'due_on' && typeof value === 'string') {
+      const timeDifference = moment(value).diff(
+        moment(details.allow_submission_time),
+        'minutes',
+      );
+
+      if (timeDifference < 0) toast.error('Due time cannot be less than start time!');
+
+      setDetails((details) => ({
+        ...details,
+        ['time_limit']: timeDifference,
+      }));
+    }
     setDetails((details) => ({ ...details, [name]: value.toString() }));
   }
 
@@ -372,6 +384,7 @@ export default function EvaluationInfoComponent({
           style={{ width: '6rem' }}
           type="number"
           name="total_mark"
+          min={0}
           // step=".01"
           value={details?.total_mark}
           handleChange={handleChange}>
@@ -383,7 +396,9 @@ export default function EvaluationInfoComponent({
               style={{ width: '6rem' }}
               type="number"
               // step=".01"
+              readOnly
               name="time_limit"
+              min={0}
               value={details?.time_limit}
               handleChange={handleChange}>
               Time limit (in mins)
