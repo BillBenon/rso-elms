@@ -115,6 +115,10 @@ function FirstStep({ values, handleChange, setCurrentStep, classInfo }: IStepPro
     authUser?.academy.id + '',
   ).data?.data.data;
 
+  console.log('====================================');
+  console.log(users);
+  console.log('====================================');
+
   const modules =
     moduleStore.getModulesByProgram(
       classInfo?.academic_year_program_intake_level.academic_program_level.program.id +
@@ -158,8 +162,8 @@ function FirstStep({ values, handleChange, setCurrentStep, classInfo }: IStepPro
             handleChange={handleChange}
             options={
               users?.map((user) => ({
-                label: `${user.instructor.user.first_name} ${user.instructor.user.last_name}`,
-                value: user.instructor.id,
+                label: `${user.user.first_name} ${user.user.last_name}`,
+                value: user.id,
               })) as SelectData[]
             }
             placeholder="Select someone">
