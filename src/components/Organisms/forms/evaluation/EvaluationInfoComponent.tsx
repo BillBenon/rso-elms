@@ -134,8 +134,6 @@ export default function EvaluationInfoComponent({
           ['intake_academic_year_period']: period,
         }));
       }
-
-      console.log('loraine', details.class_ids);
     }
   }, [classes?.data.data, details?.class_ids]);
 
