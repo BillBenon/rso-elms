@@ -20,13 +20,14 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
 
   return (
     <div>
-      <div className="flex justify-between items-center h-12">
+      <div className="flex justify-between h-12">
         <div>
           <Heading fontWeight="semibold" className="pt-8">
             Evaluation information
           </Heading>
         </div>
-        {children}
+
+        <div className="flex gap-4">{children}</div>
       </div>
       <div className="bg-main px-7 mt-7 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-3 pt-5">
         <div>
@@ -117,7 +118,7 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
           evaluationQuestions?.data.data.map((question, index: number) =>
             question && question.multiple_choice_answers.length > 0 ? (
               <>
-                <div className="mt-3 flex justify-between">
+                <div className="mt-3 flex justify-between" key={question.id}>
                   <ContentSpan title={`Question ${index + 1}`} className="gap-3">
                     {question.question}
                   </ContentSpan>

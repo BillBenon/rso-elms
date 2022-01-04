@@ -36,13 +36,11 @@ class EvaluationStore {
   }
 
   getEvaluationsByCategory(evaluationCategory: IEvaluationOwnership, instructor: string) {
-    return useQuery(
-      ['evaluationsByAcademyInstructor', instructor, evaluationCategory],
-      () =>
-        evaluationService.getEvaluationsByInstructorAndCategory(
-          evaluationCategory,
-          instructor,
-        ),
+    return useQuery(['evaluationsByAcademyInstructor'], () =>
+      evaluationService.getEvaluationsByInstructorAndCategory(
+        evaluationCategory,
+        instructor,
+      ),
     );
   }
 
@@ -111,6 +109,14 @@ class EvaluationStore {
 
   publishEvaluation() {
     return useMutation(evaluationService.publishEvaluation);
+  }
+
+  reviewEvaluation() {
+    return useMutation(evaluationService.reviewEvaluation);
+  }
+
+  approveEvaluation() {
+    return useMutation(evaluationService.approveEvaluation);
   }
 
   submitEvaluation() {
