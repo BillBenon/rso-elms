@@ -47,7 +47,7 @@ export default function ReviewEvaluation({ evaluationId }: IProps) {
       mutateAsync(udpateEvaluationStatus, {
         onSuccess: () => {
           toast.success('Feedback is recorded');
-          queryClient.invalidateQueries(['evaluation']);
+          queryClient.invalidateQueries(['evaluationsByAcademyInstructor']);
           history.goBack();
         },
         onError: (error: any) => {

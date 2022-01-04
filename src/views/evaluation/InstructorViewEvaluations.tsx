@@ -22,7 +22,10 @@ import EvaluationDetails from './EvaluationDetails';
 
 export default function InstructorViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
-  const [ownerShipType, setownerShipType] = useState(IEvaluationOwnership.CREATED_BY_ME);
+  const [instructorId, setinstructorId] = useState('');
+  const [ownerShipType, setownerShipType] = useState<IEvaluationOwnership>(
+    IEvaluationOwnership.CREATED_BY_ME,
+  );
 
   const history = useHistory();
   const { path } = useRouteMatch();
@@ -30,13 +33,16 @@ export default function InstructorViewEvaluations() {
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(
     authUser?.id + '',
-  ).data?.data.data[0];
+  );
+
+  useEffect(() => {
+    if (instructorInfo?.data?.data.data[0].id) {
+      setinstructorId(instructorInfo?.data?.data.data[0].id.toString());
+    }
+  }, [instructorInfo?.data?.data]);
 
   const { data, isSuccess, isLoading, isError, refetch } =
-    evaluationStore.getEvaluationsByCategory(
-      ownerShipType,
-      instructorInfo?.id.toString() || '',
-    );
+    evaluationStore.getEvaluationsByCategory(ownerShipType, instructorId);
 
   const list: LinkList[] = [
     { to: '/', title: 'home' },
@@ -65,9 +71,15 @@ export default function InstructorViewEvaluations() {
     setEvaluations(formattedEvals);
   }, [data?.data.data]);
 
+  // useEffect(() => {
+  //   if (instructorId) refetch();
+
+  //   console.log(instructorId);
+  // }, [instructorId]);
+
   useEffect(() => {
     refetch();
-  }, [ownerShipType]);
+  }, [ownerShipType, instructorInfo.isLoading]);
 
   const handleClick = (id: string) => {
     switch (ownerShipType) {
@@ -121,7 +133,9 @@ export default function InstructorViewEvaluations() {
                 />
               </div>
               <section className="flex flex-wrap justify-start gap-4 mt-2">
-                {isLoading && evaluations.length === 0 && <Loader />}
+                {(isLoading || instructorInfo.isLoading) && evaluations.length === 0 && (
+                  <Loader />
+                )}
 
                 {isSuccess && evaluations.length === 0 ? (
                   <NoDataAvailable
