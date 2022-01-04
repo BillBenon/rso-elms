@@ -84,7 +84,7 @@ export default function Select({
             required={required}
             onChange={(_e) => {}}
             onFocus={() => input.current?.focus()}
-            className="border-none focus:outline-none absolute w-full top-0 text-white h-0"
+            className="border-none focus:outline-none absolute w-full top-0 text-white h-0 placeholder-black"
             style={{ zIndex: -10 }}
           />
           {/* input with placeholder */}
@@ -116,9 +116,9 @@ export default function Select({
         <div
           className={`${
             isMenuOpen ? 'relative' : 'hidden'
-          } w-full max-h-36 p-0 m-0 pt-2 bg-white z-10`}>
+          } w-full p-0 m-0 pt-2 bg-white z-10`}>
           <div
-            className="py-1 origin-top absolute w-full rounded-md shadow-xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none p-0 m-0"
+            className="py-1 origin-top max-h-60 overflow-y-auto overflow-x-hidden absolute w-full rounded-md shadow-xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none p-0 m-0"
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="menu-button">
