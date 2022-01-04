@@ -14,6 +14,7 @@ import {
   InstructorAssignModule,
   ModuleAssignmentType,
   StudentApproval,
+  StudentsWithNoClass,
 } from '../../types/services/enrollment.types';
 import {
   Instructor,
@@ -98,6 +99,15 @@ class EnrollmentService {
   ): Promise<AxiosResponse<Response<StudentIntakeProgram[]>>> {
     return await adminstrationAxios.get(
       `students/getStudentsByAcademyAndEnrolmentStatus/${academyId}/${enrolmentStatus}`,
+    );
+  }
+
+  public async getStudentsWhoAreNotInAnyClassInLevel(
+    academicYearProgramIntakeLevelId: string,
+    intakeAcademicYearPeriodId: string,
+  ): Promise<AxiosResponse<Response<StudentsWithNoClass[]>>> {
+    return await adminstrationAxios.get(
+      `students/getStudentsWhoAreNotInAnyClassInLevel/${academicYearProgramIntakeLevelId}/${intakeAcademicYearPeriodId}`,
     );
   }
 

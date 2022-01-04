@@ -25,6 +25,18 @@ export interface EnrollInstructorProgram {
   intake_program_id: string;
 }
 
+export interface StudentsWithNoClass extends Table {
+  intake_program_student: StudentIntakeProgram;
+  academic_year_program_level: LevelIntakeProgram;
+  enrolment_status: EnrollmentStatus;
+  promotion_status: PromotionStatus;
+  position: number;
+  enrolment_mode: EnrollmentMode;
+  enroled_on: string;
+  completed_on: string;
+  intake_program_student_id: string;
+}
+
 export interface InstructorAssignModule {
   course_module_id: string | number;
   intake_program_instructor_id: number;

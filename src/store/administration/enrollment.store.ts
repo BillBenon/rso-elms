@@ -86,6 +86,24 @@ class EnrolmmentStore {
     );
   }
 
+  getStudentsWhoAreNotInAnyClassInLevel(
+    academicYearProgramIntakeLevelId: string,
+    intakeAcademicYearPeriodId: string,
+  ) {
+    return useQuery(
+      [
+        'student/academicYearProgramIntakeLevelId/intakeAcademicYearPeriodId',
+        academicYearProgramIntakeLevelId,
+        intakeAcademicYearPeriodId,
+      ],
+      () =>
+        enrollmentService.getStudentsWhoAreNotInAnyClassInLevel(
+          academicYearProgramIntakeLevelId,
+          intakeAcademicYearPeriodId,
+        ),
+    );
+  }
+
   getInstructorsonModule(courseId: string | number) {
     return useQuery(['instructorsinModule/ModuleId', courseId], () =>
       enrollmentService.getInstructorAssignedmodule(courseId),
