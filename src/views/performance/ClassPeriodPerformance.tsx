@@ -43,7 +43,7 @@ export default function ClassPeriodPerformance() {
   performance?.data.data.forEach((record) => {
     let processed: IPerformanceTable = {
       reg_number: record.student.regNumber,
-      id: record.id,
+      id: record.student.adminId,
     };
 
     record.subject_marks?.forEach((mark) => {
