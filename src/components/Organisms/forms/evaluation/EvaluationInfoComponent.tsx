@@ -76,7 +76,7 @@ export default function EvaluationInfoComponent({
     content_format: IContentFormatEnum.DOC,
     due_on: '',
     eligible_group: IEligibleClassEnum.MULTIPLE,
-    evaluation_status: IEvaluationStatus.PENDING,
+    evaluation_status: IEvaluationStatus.DRAFT,
     evaluation_type: IEvaluationTypeEnum.CAT,
     exam_instruction: '',
     is_consider_on_report: true,

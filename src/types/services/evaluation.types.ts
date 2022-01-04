@@ -64,6 +64,7 @@ export enum IContentFormatEnum {
 }
 
 export enum IEvaluationStatus {
+  DRAFT = 'DRAFT',
   PENDING = 'PENDING',
   ON_GOING = 'ON_GOING',
   ONGOING = 'ONGOING',
