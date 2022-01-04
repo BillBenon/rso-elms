@@ -6,7 +6,6 @@ import {
   PromotionStatus,
   StudentIntakeProgram,
 } from './intake-program.types';
-import { SubjectInfo } from './subject.types';
 import { UserInfo } from './user.types';
 /* eslint-disable no-unused-vars */
 export enum EnrollmentStatus {
@@ -26,11 +25,22 @@ export interface EnrollInstructorProgram {
   intake_program_id: string;
 }
 
+export interface StudentsWithNoClass extends Table {
+  intake_program_student: StudentIntakeProgram;
+  academic_year_program_level: LevelIntakeProgram;
+  enrolment_status: EnrollmentStatus;
+  promotion_status: PromotionStatus;
+  position: number;
+  enrolment_mode: EnrollmentMode;
+  enroled_on: string;
+  completed_on: string;
+  intake_program_student_id: string;
+}
+
 export interface InstructorAssignModule {
   course_module_id: string | number;
   intake_program_instructor_id: number;
 }
-
 
 export interface EnrollInstructorLevel {
   academic_year_program_intake_level_id: number;
@@ -77,7 +87,7 @@ export interface EnrollStudentToProgram {
   third_party_reg_number: string;
 }
 
-export interface ModuleAssignmentType{
+export interface ModuleAssignmentType {
   module_id: string;
   intakeProg: string;
 }
@@ -92,7 +102,7 @@ export interface EnrollInstructorToSubject {
   intake_program_instructor_id: string;
 }
 
-export interface EnrollInstructorToSubjectInfo {
+export interface EnrollInstructorToSubjectInfo extends Table {
   id: string;
   subject_id: string;
   instructor_module_assignment_id: string;
@@ -106,11 +116,6 @@ export interface ModuleInstructors extends Table {
   user: UserInfo;
   academy: AcademyInfo;
   description: string;
-}
-
-export interface SubjectInstructors{
-  subject: SubjectInfo;
-  module_instructor: ModuleInstructors
 }
 
 export interface EnrollInstructorLevelInfo extends Table {

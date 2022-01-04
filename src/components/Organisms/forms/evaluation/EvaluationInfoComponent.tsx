@@ -230,7 +230,7 @@ export default function EvaluationInfoComponent({
           width="64"
           value={details?.subject_academic_year_period_id}
           name="subject_academic_year_period_id"
-          placeholder={subjLoading ? 'Loading' : 'Select subject'}
+          placeholder={subjLoading ? 'Loading subject ...' : 'Select subject'}
           handleChange={handleChange}
           options={getDropDownOptions({
             inputs: subjects?.data.data || [],

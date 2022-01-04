@@ -177,9 +177,11 @@ function IntakePrograms() {
                     totalItems={programs.length}
                     title={`${intakeId ? intake?.data?.data.data.title : 'Programs'}`}
                     showSearch={false}>
-                    <Link to={`${url}/add-program-to-intake?intakeId=${intakeId}`}>
-                      <Button>Add Program To Intake</Button>
-                    </Link>
+                    {authUser?.user_type === UserType.ADMIN && (
+                      <Link to={`${url}/add-program-to-intake?intakeId=${intakeId}`}>
+                        <Button>Add Program To Intake</Button>
+                      </Link>
+                    )}
                   </TableHeader>
                 </section>
                 <section className="flex flex-wrap justify-start gap-2 mt-2">
@@ -297,13 +299,18 @@ function IntakePrograms() {
                     })
                   ) : (
                     <NoDataAvailable
+                      showButton={authUser?.user_type === UserType.ADMIN}
                       icon="program"
                       buttonLabel="Add new program to intake"
                       title={'No program available in this intake'}
                       handleClick={() =>
                         history.push(`${url}/add-program-to-intake?intakeId=${intakeId}`)
                       }
-                      description="There are no programs added yet, click on the below button to add some!"
+                      description={`There are no programs added yet${
+                        authUser?.user_type === UserType.ADMIN
+                          ? ', click on the below button to add some!'
+                          : ''
+                      }`}
                     />
                   )}
                 </section>

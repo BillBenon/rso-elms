@@ -9,7 +9,6 @@ import { queryClient } from '../../plugins/react-query';
 import { authenticatorStore } from '../../store/administration';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { getProgramsByIntake } from '../../store/administration/intake.store';
-import intakeProgramStore from '../../store/administration/intake-program.store';
 import {
   EnrollmentMode,
   EnrollStudentToProgram,
@@ -32,9 +31,11 @@ function EnrollStudentIntakeProgram<T>({ existing }: ProgramEnrollmentProps<T>) 
 
   const { data: authUser } = authenticatorStore.authUser();
 
-  const { data: studentsInAcademy, isLoading } = intakeProgramStore.getStudentsByAcademy(
-    authUser?.data.data.academy.id + '',
-  );
+  const { data: studentsInAcademy, isLoading } =
+    enrollmentStore.getStudentAcademyAndEnrollmentStatus(
+      authUser?.data.data.academy.id + '',
+      StudentApproval.APPROVED,
+    );
 
   const programs = getProgramsByIntake(intakeId).data?.data.data;
 
@@ -58,12 +59,12 @@ function EnrollStudentIntakeProgram<T>({ existing }: ProgramEnrollmentProps<T>) 
     }
     let studentsView: UserView[] = [];
     studentsInAcademy?.data.data.forEach((stud) => {
-      if (!existing_ids.includes(stud.id + '')) {
+      if (!existing_ids.includes(stud.student.id + '')) {
         let studentView: UserView = {
-          id: stud.id,
-          first_name: stud.user.first_name,
-          last_name: stud.user.last_name,
-          image_url: stud.user.image_url,
+          id: stud.student.id,
+          first_name: stud.student.user.first_name,
+          last_name: stud.student.user.last_name,
+          image_url: stud.student.user.image_url,
         };
         studentsView.push(studentView);
       }
@@ -75,13 +76,11 @@ function EnrollStudentIntakeProgram<T>({ existing }: ProgramEnrollmentProps<T>) 
 
   function add(data?: string[]) {
     data?.map((stud_id) => {
-      let studentInfo = studentsInAcademy?.data.data.find(
-        (st) => st.id === stud_id,
-      )?.user;
+      let studentInfo = studentsInAcademy?.data.data.find((st) => st.id === stud_id)
+        ?.student.user;
 
-      let reg_no = studentsInAcademy?.data.data.find(
-        (st) => st.id === stud_id,
-      )?.reg_number;
+      let reg_no = studentsInAcademy?.data.data.find((st) => st.id === stud_id)?.student
+        .reg_number;
 
       let newStudent: EnrollStudentToProgram = {
         completed_on: '',
@@ -119,7 +118,7 @@ function EnrollStudentIntakeProgram<T>({ existing }: ProgramEnrollmentProps<T>) 
         onClick={() => setSidebarOpen(true)}
         className="flex -mt-6 items-center justify-end text-primary-500">
         <Icon name="add" size={12} fill="primary" />
-        Enroll Students
+        Enroll existing students
       </Button>
       <RightSidebar
         open={sidebarOpen}
@@ -132,7 +131,7 @@ function EnrollStudentIntakeProgram<T>({ existing }: ProgramEnrollmentProps<T>) 
             handleAction: (data?: string[]) => add(data),
           },
         ]}
-        dataLabel={'Students in this academy'}
+        dataLabel={'Students approved in this academy'}
         isLoading={isLoading}
       />
     </div>
