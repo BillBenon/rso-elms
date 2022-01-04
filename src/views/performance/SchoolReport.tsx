@@ -43,7 +43,7 @@ export default function SchoolReport() {
   }));
 
   return (
-    <div className="px-16 py-10 bg-white mx-auto max-w-5xl mt-10">
+    <div className="px-16 py-10 bg-white mx-auto max-w-4xl mt-10">
       <div className="w-20 bg-gray-300 rounded-full">
         <img
           src="/images/nisslogo.png"
