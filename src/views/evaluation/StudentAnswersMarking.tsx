@@ -1,6 +1,6 @@
 import '../../styles/components/Molecules/correction/marking.scss';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 
@@ -8,7 +8,6 @@ import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import StudentAnswer from '../../components/Molecules/cards/correction/StudentAnswer';
-import Pagination from '../../components/Molecules/Pagination';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import FinishMarking from '../../components/Organisms/forms/evaluation/FinishMarking';
 import { markingStore } from '../../store/administration/marking.store';
@@ -32,19 +31,19 @@ export default function StudentAnswersMarking() {
   //   studentAnswers?.slice(indexOfFirstRow, indexOfLastRow),
   // );
   // useEffect(() => {
-    // setCurrentRows(studentAnswers?.slice(indexOfFirstRow, indexOfLastRow));
-    // setCorrection([]);
-    // studentAnswers?.forEach((element) => {
-    //   setCorrection([
-    //     ...correction,
-    //     {
-    //       markScored: element.mark_scored,
-    //       answerId: element.answer_id,
-    //       marked: element.marked,
-    //     },
-    //   ]);
-    // });
-    // console.log(studentAnswers?.length);
+  // setCurrentRows(studentAnswers?.slice(indexOfFirstRow, indexOfLastRow));
+  // setCorrection([]);
+  // studentAnswers?.forEach((element) => {
+  //   setCorrection([
+  //     ...correction,
+  //     {
+  //       markScored: element.mark_scored,
+  //       answerId: element.answer_id,
+  //       marked: element.marked,
+  //     },
+  //   ]);
+  // });
+  // console.log(studentAnswers?.length);
   // }, [studentAnswers, indexOfFirstRow, indexOfLastRow]);
   // const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   const list: LinkList[] = [

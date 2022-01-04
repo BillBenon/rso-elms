@@ -13,6 +13,7 @@ import {
   IStudentAnswer,
   IStudentEvaluationStart,
   IStudentEvaluationStartInfo,
+  IUpdateEvaluationApprovalStatus,
 } from '../../types/services/evaluation.types';
 
 class EvaluationService {
@@ -173,6 +174,18 @@ class EvaluationService {
     return await evaluationAxios.put(
       `/evaluations/evaluation/${data.evaluationId}/${data.status}`,
     );
+  }
+
+  public async reviewEvaluation(
+    updateEvaluation: IUpdateEvaluationApprovalStatus,
+  ): Promise<void> {
+    return await evaluationAxios.put(`evaluationApprovals/reviews`, updateEvaluation);
+  }
+
+  public async approveEvaluation(
+    updateEvaluation: IUpdateEvaluationApprovalStatus,
+  ): Promise<void> {
+    return await evaluationAxios.put(`evaluationApprovals/approvals`, updateEvaluation);
   }
 
   public async studentEvaluationStart(

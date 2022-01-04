@@ -29,20 +29,18 @@ class EvaluationStore {
     return useMutation(evaluationService.createEvaluationSettings);
   }
 
-  getEvaluations(academy: string, instructor: string) {
-    return useQuery(['evaluationsByAcademyInstructor'], () =>
-      evaluationService.fetchEvaluationsByInstructorAndAcademy(academy, instructor),
-    );
-  }
+  // getEvaluations(academy: string, instructor: string) {
+  //   return useQuery(['evaluationsByAcademyInstructor'], () =>
+  //     evaluationService.fetchEvaluationsByInstructorAndAcademy(academy, instructor),
+  //   );
+  // }
 
   getEvaluationsByCategory(evaluationCategory: IEvaluationOwnership, instructor: string) {
-    return useQuery(
-      ['evaluationsByAcademyInstructor', instructor, evaluationCategory],
-      () =>
-        evaluationService.getEvaluationsByInstructorAndCategory(
-          evaluationCategory,
-          instructor,
-        ),
+    return useQuery(['evaluations', instructor, evaluationCategory], () =>
+      evaluationService.getEvaluationsByInstructorAndCategory(
+        evaluationCategory,
+        instructor,
+      ),
     );
   }
 
@@ -111,6 +109,14 @@ class EvaluationStore {
 
   publishEvaluation() {
     return useMutation(evaluationService.publishEvaluation);
+  }
+
+  reviewEvaluation() {
+    return useMutation(evaluationService.reviewEvaluation);
+  }
+
+  approveEvaluation() {
+    return useMutation(evaluationService.approveEvaluation);
   }
 
   submitEvaluation() {
