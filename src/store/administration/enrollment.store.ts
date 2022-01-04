@@ -1,7 +1,10 @@
 import { useMutation, useQuery } from 'react-query';
 
 import { enrollmentService } from '../../services/administration/enrollments.service';
-import { ModuleAssignmentType } from '../../types/services/enrollment.types';
+import {
+  ModuleAssignmentType,
+  StudentApproval,
+} from '../../types/services/enrollment.types';
 
 class EnrolmmentStore {
   getInstructorLevels(instructorId: string) {
@@ -46,6 +49,11 @@ class EnrolmmentStore {
     );
   }
 
+  getSubjectsByInstructor(instructorId: string) {
+    return useQuery(['subjects/instructors', instructorId], () =>
+      enrollmentService.getSubjectsByInstructor(instructorId),
+    );
+  }
   getInstructorsInProgram(intakeProgram: string | number) {
     return useQuery(['instructorsInIntakeprogram/IntakeProgram', intakeProgram], () =>
       enrollmentService.getInstructorsInProgram(intakeProgram),
@@ -67,6 +75,32 @@ class EnrolmmentStore {
   getStudentsAcademy(academyId: string) {
     return useQuery(['student/academy', academyId], () =>
       enrollmentService.getStudentAcademy(academyId),
+    );
+  }
+  getStudentAcademyAndEnrollmentStatus(
+    academyId: string,
+    enrolmentStatus: StudentApproval,
+  ) {
+    return useQuery(['student/academy/enrolment', academyId, enrolmentStatus], () =>
+      enrollmentService.getStudentAcademyAndEnrollmentStatus(academyId, enrolmentStatus),
+    );
+  }
+
+  getStudentsWhoAreNotInAnyClassInLevel(
+    academicYearProgramIntakeLevelId: string,
+    intakeAcademicYearPeriodId: string,
+  ) {
+    return useQuery(
+      [
+        'student/academicYearProgramIntakeLevelId/intakeAcademicYearPeriodId',
+        academicYearProgramIntakeLevelId,
+        intakeAcademicYearPeriodId,
+      ],
+      () =>
+        enrollmentService.getStudentsWhoAreNotInAnyClassInLevel(
+          academicYearProgramIntakeLevelId,
+          intakeAcademicYearPeriodId,
+        ),
     );
   }
 

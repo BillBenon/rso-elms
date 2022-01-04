@@ -97,7 +97,7 @@ function NewClass() {
       {
         onSuccess: (data) => {
           toast.success(data.data.message);
-          queryClient.invalidateQueries(['class/levelId']);
+          queryClient.invalidateQueries(['class/periodId']);
           history.push(
             `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-class`,
           );

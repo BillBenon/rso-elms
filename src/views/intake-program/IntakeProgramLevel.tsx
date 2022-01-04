@@ -14,6 +14,7 @@ import intakeProgramStore, {
   getStudentLevels,
   getStudentShipByUserId,
 } from '../../store/administration/intake-program.store';
+import { getLevelsByAcademicProgram } from '../../store/administration/program.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import {
   IntakeProgParam,
@@ -39,6 +40,12 @@ function IntakeProgramLevel() {
 
   const { data: getLevels, isLoading } =
     intakeProgramStore.getLevelsByIntakeProgram(intakeProg);
+  const programLevels = getLevelsByAcademicProgram(id).data?.data.data;
+
+  const unaddedLevels = programLevels?.filter(
+    (pg) =>
+      !getLevels?.data.data.map((lv) => lv.academic_program_level.id).includes(pg.id),
+  );
 
   const instructorProgLevels = useInstructorLevels(instructorInfo?.id + '', intakeProg);
 
@@ -96,7 +103,7 @@ function IntakeProgramLevel() {
         />
       ) : (
         <>
-          {authUser?.user_type === UserType.ADMIN ? (
+          {authUser?.user_type === UserType.ADMIN && unaddedLevels?.length !== 0 ? (
             <div className="text-right">
               <Link
                 to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>

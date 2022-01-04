@@ -16,11 +16,11 @@ function ProfileOverview({ user }: { user: UserInfo }) {
       <PersonalInfoCard user={user} />
       <div className="flex flex-col gap-7">
         <AcademiesCard academies={userAcademies} />
-        <NextOfKinCard />
+        <NextOfKinCard user={user} />
         {user.person && <EducationBackgroundCard person={user.person} />}
       </div>
       <div className="flex flex-col gap-7">
-        <RankEnrollmentCard />
+        <RankEnrollmentCard user={user} />
         {/* <IntakesCard /> */}
       </div>
     </div>
