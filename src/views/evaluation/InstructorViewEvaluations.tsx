@@ -10,6 +10,7 @@ import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import { authenticatorStore } from '../../store/administration';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
+import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
 import { IEvaluationOwnership } from '../../types/services/evaluation.types';
 import {
@@ -27,10 +28,14 @@ export default function InstructorViewEvaluations() {
   const { path } = useRouteMatch();
   const authUser = authenticatorStore.authUser().data?.data.data;
 
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
+    authUser?.id + '',
+  ).data?.data.data[0];
+
   const { data, isSuccess, isLoading, isError, refetch } =
     evaluationStore.getEvaluationsByCategory(
       ownerShipType,
-      authUser?.id.toString() || '',
+      instructorInfo?.id.toString() || '',
     );
 
   const list: LinkList[] = [
@@ -112,9 +117,8 @@ export default function InstructorViewEvaluations() {
                   handleChange={(e) => setownerShipType(e.value as IEvaluationOwnership)}
                   name={'type'}
                   placeholder="Evaluation type"
-                  options={getDropDownStatusOptions(
-                    IEvaluationOwnership,
-                  )}></SelectMolecule>
+                  options={getDropDownStatusOptions(IEvaluationOwnership)}
+                />
               </div>
               <section className="flex flex-wrap justify-start gap-4 mt-2">
                 {isLoading && evaluations.length === 0 && <Loader />}

@@ -14,6 +14,15 @@ class SchoolReportService {
     );
   }
 
+  public async getStudentReportInTerm(
+    studentID: string,
+    academicYearPeriodId: string,
+  ): Promise<AxiosResponse<Response<IOverallStudentPerformance>>> {
+    return await evaluationAxios.get(
+      `/reports/student/${studentID}/term/${academicYearPeriodId}`,
+    );
+  }
+
   public async getStudentFullReport(
     studentId: string,
   ): Promise<AxiosResponse<Response<IOverallStudentPerformance[]>>> {
