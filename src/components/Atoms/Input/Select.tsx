@@ -116,7 +116,7 @@ export default function Select({
         <div
           className={`${
             isMenuOpen ? 'relative' : 'hidden'
-          } w-full p-0 m-0 pt-2 bg-white z-10`}>
+          } w-full max-h-36 p-0 m-0 pt-2 bg-white z-10`}>
           <div
             className="py-1 origin-top absolute w-full rounded-md shadow-xl bg-white ring-1 ring-black ring-opacity-5 focus:outline-none p-0 m-0"
             role="menu"

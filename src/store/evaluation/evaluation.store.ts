@@ -29,14 +29,14 @@ class EvaluationStore {
     return useMutation(evaluationService.createEvaluationSettings);
   }
 
-  getEvaluations(academy: string, instructor: string) {
-    return useQuery(['evaluationsByAcademyInstructor'], () =>
-      evaluationService.fetchEvaluationsByInstructorAndAcademy(academy, instructor),
-    );
-  }
+  // getEvaluations(academy: string, instructor: string) {
+  //   return useQuery(['evaluationsByAcademyInstructor'], () =>
+  //     evaluationService.fetchEvaluationsByInstructorAndAcademy(academy, instructor),
+  //   );
+  // }
 
   getEvaluationsByCategory(evaluationCategory: IEvaluationOwnership, instructor: string) {
-    return useQuery(['evaluationsByAcademyInstructor'], () =>
+    return useQuery(['evaluations', instructor, evaluationCategory], () =>
       evaluationService.getEvaluationsByInstructorAndCategory(
         evaluationCategory,
         instructor,
