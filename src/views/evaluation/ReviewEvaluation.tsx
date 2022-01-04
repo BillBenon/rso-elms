@@ -11,7 +11,10 @@ import { authenticatorStore } from '../../store/administration';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { ValueType } from '../../types';
-import { UpdateEvaluationApprovalStatusEnum } from '../../types/services/evaluation.types';
+import {
+  IEvaluationOwnership,
+  UpdateEvaluationApprovalStatusEnum,
+} from '../../types/services/evaluation.types';
 
 interface IProps {
   evaluationId: string;
@@ -47,7 +50,11 @@ export default function ReviewEvaluation({ evaluationId }: IProps) {
       mutateAsync(udpateEvaluationStatus, {
         onSuccess: () => {
           toast.success('Feedback is recorded');
-          queryClient.invalidateQueries(['evaluationsByAcademyInstructor']);
+          queryClient.invalidateQueries([
+            'evaluations',
+            instructorInfo?.id,
+            IEvaluationOwnership.FOR_REVIEWING,
+          ]);
           history.goBack();
         },
         onError: (error: any) => {
