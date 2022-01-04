@@ -19,6 +19,7 @@ export interface ICreateClass {
 }
 
 export interface IStudent {
+  regNumber: string;
   academy: AcademyInfo;
   academyId: string;
   adminId: string;
