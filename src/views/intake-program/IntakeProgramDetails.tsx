@@ -19,7 +19,9 @@ import intakeProgramStore, {
   getStudentLevels,
   getStudentShipByUserId,
 } from '../../store/administration/intake-program.store';
-import programStore from '../../store/administration/program.store';
+import programStore, {
+  getLevelsByAcademicProgram,
+} from '../../store/administration/program.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { Link as Links } from '../../types';
 import { StudentApproval } from '../../types/services/enrollment.types';
@@ -104,6 +106,11 @@ function IntakeProgramDetails() {
 
   const getLevels =
     intakeProgramStore.getLevelsByIntakeProgram(intakeProg).data?.data.data || [];
+  const programLevels = getLevelsByAcademicProgram(id).data?.data.data;
+
+  const unaddedLevels = programLevels?.filter(
+    (pg) => !getLevels.map((lv) => lv.academic_program_level.id).includes(pg.id),
+  );
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(
     authUser?.id + '',
@@ -213,7 +220,9 @@ function IntakeProgramDetails() {
         <TabNavigation
           tabs={tabs}
           headerComponent={
-            authUser?.user_type === UserType.ADMIN && getLevels.length === 0 ? (
+            authUser?.user_type === UserType.ADMIN &&
+            getLevels.length === 0 &&
+            unaddedLevels?.length !== 0 ? (
               <div className="text-right">
                 <Link
                   to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
