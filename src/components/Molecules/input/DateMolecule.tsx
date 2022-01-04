@@ -75,19 +75,20 @@ function DateMolecule({
   let defaultValueDate = defaultValue ? new Date(defaultValue) : new Date();
 
   const [dateState, setDateState] = useState({
-    Day: new Date().getDate(),
+    Day:
+      new Date().getDate() < 10 ? `0${new Date().getDate()}` : `${new Date().getDate()}`,
     Month: new Date().getMonth() + 1,
     Year: new Date().getFullYear(),
     Hours: new Date().getHours(),
-    Minutes: 0,
+    Minutes: '00',
   });
 
   const dateFormat = () => {
     let date = `${dateState.Year}-${
       dateState.Month >= 10 ? dateState.Month : `${dateState.Month}`
-    }-${dateState.Day >= 10 ? dateState.Day : `0${dateState.Day}`} ${
+    }-${parseInt(dateState.Day) >= 10 ? `${dateState.Day}` : `0${dateState.Day}`} ${
       dateState.Hours >= 10 ? dateState.Hours : `0${dateState.Hours}`
-    }:${dateState.Minutes >= 10 ? dateState.Minutes : `0${dateState.Minutes}`}:00`;
+    }:${dateState.Minutes}:00`;
 
     let selectedDate: string;
     if (date_time_type) {
@@ -108,9 +109,9 @@ function DateMolecule({
       ...old,
       Year: dV.getFullYear(),
       Month: dV.getMonth() + 1,
-      Day: dV.getDay(),
+      Day: dV.getDay() + '',
       Hours: dV.getHours(),
-      Minutes: dV.getMinutes(),
+      Minutes: dV.getMinutes().toString(),
     }));
   }
 
@@ -132,8 +133,7 @@ function DateMolecule({
           <div className="flex gap-2">
             <YearSelect
               reverse={reverse}
-              defaultValue={defaultValueDate.getFullYear().toString()}
-              value={dateState.Year}
+              value={dateState.Year || defaultValueDate.getFullYear()}
               onChange={handleDate}
               name="Year"
               width={yearWidth}
@@ -145,8 +145,7 @@ function DateMolecule({
             />
             <MonthSelect
               year={dateState.Year}
-              defaultValue={defaultValueDate.getMonth().toString()}
-              value={dateState.Month}
+              value={dateState.Month || defaultValueDate.getMonth()}
               onChange={handleDate}
               short={monthShort}
               caps={monthCapital}
@@ -160,8 +159,7 @@ function DateMolecule({
             <DaySelect
               year={dateState.Year}
               month={dateState.Month}
-              defaultValue={defaultValueDate.getDate().toString()}
-              value={dateState.Day}
+              value={dateState.Day || defaultValueDate.getDate().toString()}
               onChange={handleDate}
               name="Day"
               className={dayClassName}
@@ -183,7 +181,6 @@ function DateMolecule({
               placeholder={hourPlaceholder || 'hrs'}
             />
             <MinuteSelect
-              defaultValue={dateState.Minutes.toString()}
               value={dateState.Minutes}
               onChange={handleDate}
               name="Minutes"
