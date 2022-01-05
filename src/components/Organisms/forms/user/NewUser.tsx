@@ -56,7 +56,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
 
   const [details, setDetails] = useState<CreateUserInfo>({
     activation_key: '',
-    academy_id: authUser?.academy.id + '',
+    academy_id: authUser?.academy?.id + '',
     deployed_on: '',
     deployment_number: `DEP-${parseInt(Math.random() * 10000 + '')}`,
     birth_date: '',
