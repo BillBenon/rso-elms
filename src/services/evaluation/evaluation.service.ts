@@ -10,9 +10,11 @@ import {
   IEvaluationInfoCollected,
   IEvaluationOwnership,
   IEvaluationQuestionsInfo,
+  InstructorEvaluationAppprovalStatus,
   IStudentAnswer,
   IStudentEvaluationStart,
   IStudentEvaluationStartInfo,
+  IUpdateEvaluationApprovalStatus,
 } from '../../types/services/evaluation.types';
 
 class EvaluationService {
@@ -103,6 +105,24 @@ class EvaluationService {
     return await evaluationAxios.get(`/evaluations/getById/${id}`);
   }
 
+  public async getEvaluationApprovalByEvaluationAndInstructor(
+    evaluationId: string,
+    instructorId: string,
+  ): Promise<AxiosResponse<Response<InstructorEvaluationAppprovalStatus>>> {
+    return await evaluationAxios.get(
+      `/evaluationApprovals/approvals/evaluation/${evaluationId}/instructor/${instructorId}`,
+    );
+  }
+
+  public async getEvaluationReviewsByEvaluationAndInstructor(
+    evaluationId: string,
+    instructorId: string,
+  ): Promise<AxiosResponse<Response<InstructorEvaluationAppprovalStatus>>> {
+    return await evaluationAxios.get(
+      `/evaluationApprovals/reviews/evaluation/${evaluationId}/instructor/${instructorId}`,
+    );
+  }
+
   public async getStudentReport(
     studentId: string,
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
@@ -173,6 +193,18 @@ class EvaluationService {
     return await evaluationAxios.put(
       `/evaluations/evaluation/${data.evaluationId}/${data.status}`,
     );
+  }
+
+  public async reviewEvaluation(
+    updateEvaluation: IUpdateEvaluationApprovalStatus,
+  ): Promise<void> {
+    return await evaluationAxios.put(`evaluationApprovals/reviews`, updateEvaluation);
+  }
+
+  public async approveEvaluation(
+    updateEvaluation: IUpdateEvaluationApprovalStatus,
+  ): Promise<void> {
+    return await evaluationAxios.put(`evaluationApprovals/approvals`, updateEvaluation);
   }
 
   public async studentEvaluationStart(

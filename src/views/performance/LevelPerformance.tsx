@@ -8,7 +8,9 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import { classStore } from '../../store/administration/class.store';
 import { CommonCardDataType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
+import StudentReport from '../evaluation/StudentReport';
 import ClassPeriodPerformance from './ClassPeriodPerformance';
+import SchoolReport from './SchoolReport';
 
 interface ParamType {
   levelId: string;
@@ -45,6 +47,17 @@ export default function LevelPerformance() {
       <BreadCrumb list={list} />
 
       <Switch>
+        <Route
+          exact
+          path={`${path}/:classId/report/:studentId/:periodId`}
+          component={SchoolReport}
+        />
+
+<Route
+          exact
+          path={`${path}/:classId/reported/:studentId/:periodId`}
+          component={StudentReport}
+        />
         <Route path={`${path}/:classId`} component={ClassPeriodPerformance} />
         <Route
           path={`${path}`}

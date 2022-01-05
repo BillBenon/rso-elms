@@ -29,14 +29,14 @@ class EvaluationStore {
     return useMutation(evaluationService.createEvaluationSettings);
   }
 
-  getEvaluations(academy: string, instructor: string) {
-    return useQuery(['evaluationsByAcademyInstructor'], () =>
-      evaluationService.fetchEvaluationsByInstructorAndAcademy(academy, instructor),
-    );
-  }
+  // getEvaluations(academy: string, instructor: string) {
+  //   return useQuery(['evaluationsByAcademyInstructor'], () =>
+  //     evaluationService.fetchEvaluationsByInstructorAndAcademy(academy, instructor),
+  //   );
+  // }
 
   getEvaluationsByCategory(evaluationCategory: IEvaluationOwnership, instructor: string) {
-    return useQuery(['evaluationsByAcademyInstructor'], () =>
+    return useQuery(['evaluations', instructor, evaluationCategory], () =>
       evaluationService.getEvaluationsByInstructorAndCategory(
         evaluationCategory,
         instructor,
@@ -85,6 +85,30 @@ class EvaluationStore {
     });
   }
 
+  getEvaluationApprovalByEvaluationAndInstructor(
+    evaluationId: string,
+    instructorId: string,
+  ) {
+    return useQuery(['approvals', evaluationId, instructorId], () =>
+      evaluationService.getEvaluationApprovalByEvaluationAndInstructor(
+        evaluationId,
+        instructorId,
+      ),
+    );
+  }
+
+  getEvaluationReviewByEvaluationAndInstructor(
+    evaluationId: string,
+    instructorId: string,
+  ) {
+    return useQuery(['reviewers', evaluationId, instructorId], () =>
+      evaluationService.getEvaluationReviewsByEvaluationAndInstructor(
+        evaluationId,
+        instructorId,
+      ),
+    );
+  }
+
   getStudentReport(studentId: string) {
     return useQuery(
       ['studentReport', studentId],
@@ -109,6 +133,14 @@ class EvaluationStore {
 
   publishEvaluation() {
     return useMutation(evaluationService.publishEvaluation);
+  }
+
+  reviewEvaluation() {
+    return useMutation(evaluationService.reviewEvaluation);
+  }
+
+  approveEvaluation() {
+    return useMutation(evaluationService.approveEvaluation);
   }
 
   submitEvaluation() {

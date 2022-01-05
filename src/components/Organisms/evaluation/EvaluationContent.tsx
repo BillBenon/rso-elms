@@ -20,13 +20,14 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
 
   return (
     <div>
-      <div className="flex justify-between items-center h-12">
+      <div className="flex justify-between h-12">
         <div>
           <Heading fontWeight="semibold" className="pt-8">
             Evaluation information
           </Heading>
         </div>
-        {children}
+
+        <div className="flex gap-4">{children}</div>
       </div>
       <div className="bg-main px-7 mt-7 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-3 pt-5">
         <div>
@@ -39,7 +40,7 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
               subTitle={evaluationInfo?.number_of_questions}
             />
 
-            <div className="flex flex-col gap-4">
+            {/* <div className="flex flex-col gap-4">
               <Heading color="txt-secondary" fontSize="base">
                 Eligible Class
               </Heading>
@@ -54,7 +55,7 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
                   <div>class B</div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         {/* second column */}
@@ -74,11 +75,11 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
           />
         </div>
 
-        {/* tjird column */}
+        {/* third column */}
         <div className="flex flex-col gap-4">
           <ContentSpan
-            title="Due on"
-            subTitle={moment(evaluationInfo?.due_on).format('MM/DD/YYYY')}
+            title="Start on"
+            subTitle={evaluationInfo?.allow_submission_time}
           />
           <ContentSpan
             title="Questionaire type"
@@ -92,10 +93,11 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
 
         {/* tjird column */}
         <div className="flex flex-col gap-4">
-          <ContentSpan
+          <ContentSpan title="Due on" subTitle={evaluationInfo?.due_on} />
+          {/* <ContentSpan
             title="Total number of questions"
             subTitle={evaluationInfo?.number_of_questions}
-          />
+          /> */}
           <ContentSpan
             title="Consider on report"
             subTitle={evaluationInfo?.is_consider_on_report ? 'Yes' : 'No'}
@@ -117,7 +119,7 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
           evaluationQuestions?.data.data.map((question, index: number) =>
             question && question.multiple_choice_answers.length > 0 ? (
               <>
-                <div className="mt-3 flex justify-between">
+                <div className="mt-3 flex justify-between" key={question.id}>
                   <ContentSpan title={`Question ${index + 1}`} className="gap-3">
                     {question.question}
                   </ContentSpan>

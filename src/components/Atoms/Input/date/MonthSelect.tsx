@@ -8,7 +8,6 @@ type MProp = {
   year: number;
   value: number;
   onChange: (_e: ValueType) => void;
-  defaultValue?: string;
   numeric?: boolean;
   short?: boolean;
   caps?: boolean;
@@ -57,7 +56,7 @@ const MonthSelect = (mprops: MProp) => {
   return (
     <Select
       disabled={mprops.disabled}
-      value={mprops.defaultValue}
+      value={mprops.value + ''}
       name={mprops.name}
       placeholder={mprops.placeholder}
       className={mprops.className}

@@ -21,8 +21,10 @@ import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavig
 import UpdateModuleForm from '../../components/Organisms/forms/modules/UpdateModuleForm';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
 import { authenticatorStore } from '../../store/administration';
+import enrollmentStore from '../../store/administration/enrollment.store';
 import { moduleStore } from '../../store/administration/modules.store';
 import { subjectStore } from '../../store/administration/subject.store';
+import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Link, ParamType } from '../../types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
@@ -41,10 +43,22 @@ export default function ModuleDetails() {
   const showMenu = new URLSearchParams(search).get('showMenus');
   const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
   const history = useHistory();
-  const subjectData = subjectStore.getSubjectsByModule(id);
   let moduleData: IProgramData | undefined;
   const module = moduleStore.getModuleById(id).data?.data.data;
   const authUser = authenticatorStore.authUser().data?.data.data;
+  const subjectData = subjectStore.getSubjectsByModule(id);
+
+  const instructorInfo =
+    instructordeploymentStore.getInstructorByUserId(authUser?.id + '').data?.data.data ||
+    [];
+
+  const instSubjects = enrollmentStore.getSubjectsByInstructor(
+    instructorInfo[0]?.id.toString() || '',
+  );
+
+  const instructorSubjects = instSubjects.data?.data.data.filter((inst) =>
+    subjectData.data?.data.data.map((sub) => sub.id).includes(inst.subject_id),
+  );
 
   let tabs: TabType[] = [
     // {
@@ -124,9 +138,9 @@ export default function ModuleDetails() {
       setSubjects(loadedSubjects);
     }
     new MutationObserver(() => {
-      const url = location.href;
-      if (url !== lastUrl) {
-        lastUrl = url;
+      const loc = location.href.split('?')[0];
+      if (loc !== lastUrl) {
+        lastUrl = loc;
         if (lastUrl.endsWith('subjects')) {
           setCurrentPage('SUBJECTS');
         } else if (lastUrl.endsWith('materials')) {
@@ -137,6 +151,8 @@ export default function ModuleDetails() {
           setCurrentPage('SYLLABUS');
         } else if (lastUrl.endsWith('evaluations')) {
           setCurrentPage('EVALUATIONS');
+        } else if (lastUrl.endsWith(id)) {
+          setCurrentPage('SUBJECTS');
         } else {
           setCurrentPage('');
         }
@@ -231,7 +247,29 @@ export default function ModuleDetails() {
               path={`${path}/subjects`}
               render={() => (
                 <>
-                  {subjectData.isLoading ? (
+                  {authUser?.user_type === UserType.INSTRUCTOR ? (
+                    instSubjects.isLoading || subjectData.isLoading ? (
+                      <Loader />
+                    ) : instructorSubjects?.length === 0 ? (
+                      <NoDataAvailable
+                        showButton={false}
+                        icon="subject"
+                        title={'No subjects assigned to you'}
+                        description={
+                          'You have not been assigned any subjects yet! Please contact the admin for support.'
+                        }
+                        handleClick={() => history.push(`${url}/add-subject`)}
+                      />
+                    ) : (
+                      <section className="flex flex-wrap justify-start gap-4 mt-2">
+                        {subjects.map((subject) => (
+                          <div key={subject.id} className="p-1 mt-3">
+                            <SubjectCard subject={subject} intakeProg={intakeProg} />
+                          </div>
+                        ))}
+                      </section>
+                    )
+                  ) : subjectData.isLoading ? (
                     <Loader />
                   ) : subjects.length === 0 && subjectData.isSuccess ? (
                     <NoDataAvailable

@@ -36,9 +36,9 @@ export enum ISubmissionTypeEnum {
 
 export enum IEvaluationOwnership {
   CREATED_BY_ME = 'CREATED_BY_ME',
-  APPROVED_BY_ME = 'APPROVED_BY_ME',
-  MARKED_BY_ME = 'MARKED_BY_ME',
-  REVIEWD_BY_ME = 'REVIEWD_BY_ME',
+  FOR_APPROVING = 'FOR_APPROVING',
+  FOR_MARKING = 'FOR_MARKING',
+  FOR_REVIEWING = 'FOR_REVIEWING',
 }
 
 export enum IEvaluationClassification {
@@ -64,6 +64,7 @@ export enum IContentFormatEnum {
 }
 
 export enum IEvaluationStatus {
+  DRAFT = 'DRAFT',
   PENDING = 'PENDING',
   ON_GOING = 'ON_GOING',
   ONGOING = 'ONGOING',
@@ -72,6 +73,14 @@ export enum IEvaluationStatus {
   MARKING = 'MARKING',
   MARKED = 'MARKED',
   CANCELED = 'CANCELED',
+  REVIEWING = 'REVIEWING',
+  REVIEW_REJECTED = 'REVIEW_REJECTED',
+  REVIEWED = 'REVIEWED',
+  APPROVING = 'APPROVING',
+  APPROVAL_REJECTED = 'APPROVAL_REJECTED',
+  APPROVED = 'APPROVED',
+  HIDDEN = 'HIDDEN',
+  PUBLISHED = 'PUBLISHED',
 }
 
 export enum IEligibleGroup {
@@ -79,8 +88,8 @@ export enum IEligibleGroup {
   SINGLE_CLASS = 'SINGLE_CLASS',
 }
 
-export enum IEvaluationApprovalStatus {
-  DRAFT = 'DRAFT',
+export enum IEvaluationAppprovalStatus {
+  PENDING = 'PENDING',
   REVIEWING = 'REVIEWING',
   APPROVING = 'APPROVING',
   REVIEWED_TO_APPROVE = 'REVIEWED_TO_APPROVE',
@@ -88,9 +97,30 @@ export enum IEvaluationApprovalStatus {
   APPROVED = 'APPROVED',
 }
 
+export interface InstructorEvaluationAppprovalStatus extends Table {
+  id: string;
+  evaluation_approval_status: IEvaluationAppprovalStatus | IEvaluationAppprovalStatus;
+  evaluation_reviewer_status: IEvaluationAppprovalStatus | IEvaluationAppprovalStatus;
+  remarks: string;
+}
+
+export enum UpdateEvaluationApprovalStatusEnum {
+  PENDING = 'PENDING',
+  APPROVED = 'APPROVED',
+  REJECTED = 'REJECTED',
+  REVIEWED = 'REVIEWED',
+}
+
+export interface IUpdateEvaluationApprovalStatus {
+  evaluation_approval_status?: UpdateEvaluationApprovalStatusEnum;
+  evaluation_id: string;
+  evaluation_reviewer_status?: UpdateEvaluationApprovalStatusEnum;
+  instructor_id: string;
+  remarks: string;
+}
+
 export interface IEvaluationCreate {
   access_type: string;
-  adm_intake_level_class_id: string;
   intake_academic_year_period: string;
   academy_id: string;
   instructor_id: string;
@@ -125,7 +155,6 @@ export interface IEvaluationInfo {
   id: string;
   name: string;
   academy_id: string;
-  adm_intake_level_class_id: string;
   class_ids: string;
   intake_academic_year_period: string;
   subject_academic_year_period: string;
@@ -219,13 +248,11 @@ export interface IEvaluationQuestionsInfo {
 }
 
 export interface IEvaluationApproval {
-  approver: string;
-  evaluation: string;
-  evaluation_approval_status: string;
+  approver_ids: string;
+  evaluation_id: string;
   id: string;
-  preparer: string;
-  reviewer: string;
-  marker: string;
+  reviewer_ids: string;
+  marker_ids: string;
   to_be_approved: boolean;
   to_be_reviewed: boolean;
 }

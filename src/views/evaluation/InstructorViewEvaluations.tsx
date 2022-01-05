@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
+import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -9,6 +10,7 @@ import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import { authenticatorStore } from '../../store/administration';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
+import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
 import { IEvaluationOwnership } from '../../types/services/evaluation.types';
 import {
@@ -26,10 +28,14 @@ export default function InstructorViewEvaluations() {
   const { path } = useRouteMatch();
   const authUser = authenticatorStore.authUser().data?.data.data;
 
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
+    authUser?.id + '',
+  ).data?.data.data[0];
+
   const { data, isSuccess, isLoading, isError, refetch } =
     evaluationStore.getEvaluationsByCategory(
       ownerShipType,
-      authUser?.id.toString() || '',
+      instructorInfo?.id.toString() || '',
     );
 
   const list: LinkList[] = [
@@ -65,15 +71,15 @@ export default function InstructorViewEvaluations() {
 
   const handleClick = (id: string) => {
     switch (ownerShipType) {
-      case IEvaluationOwnership.APPROVED_BY_ME:
+      case IEvaluationOwnership.FOR_APPROVING:
         history.push(`${path}/${id}/approve`);
         break;
 
-      case IEvaluationOwnership.REVIEWD_BY_ME:
+      case IEvaluationOwnership.FOR_REVIEWING:
         history.push(`${path}/${id}/review`);
         break;
 
-      case IEvaluationOwnership.MARKED_BY_ME:
+      case IEvaluationOwnership.FOR_MARKING:
         history.push(`${path}/${id}/submissions`);
         break;
 
@@ -100,16 +106,19 @@ export default function InstructorViewEvaluations() {
                   </section>
                 </>
               ) : null}
-              <div className="flex justify-center my-2">
+              <div className="flex flex-col gap-12">
+                <Heading fontWeight="semibold" className="pt-7">
+                  Evaluations
+                </Heading>
                 <SelectMolecule
                   width="80"
+                  className=""
                   value={ownerShipType}
                   handleChange={(e) => setownerShipType(e.value as IEvaluationOwnership)}
                   name={'type'}
                   placeholder="Evaluation type"
-                  options={getDropDownStatusOptions(IEvaluationOwnership)}>
-                  <p className="text-center">Evaluation type</p>
-                </SelectMolecule>
+                  options={getDropDownStatusOptions(IEvaluationOwnership)}
+                />
               </div>
               <section className="flex flex-wrap justify-start gap-4 mt-2">
                 {isLoading && evaluations.length === 0 && <Loader />}

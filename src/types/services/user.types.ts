@@ -53,7 +53,7 @@ export interface UserInfo extends Table {
   pin: number;
   profile_status: ProfileStatus | null;
   reset_date: string;
-  send_communication_msg: SendCommunicationMsg | null;
+  send_communication_msg: SendCommunicationMsg;
   token: string;
   user_type: UserType;
   username: string;
@@ -102,6 +102,7 @@ export interface PersonInfo extends Table {
   place_of_residence: string;
   place_of_birth_id: string;
   nationality: string;
+  education_level: EducationLevel;
 }
 export interface UpdateExperienceInfo {
   attachment_id: string;
@@ -160,7 +161,7 @@ export interface UpdateUserInfo {
   username: string;
 }
 
-export interface CreateUserInfo {
+export interface EditUser {
   activation_key: string;
   academy_id: string;
   birth_date: string;
@@ -171,29 +172,30 @@ export interface CreateUserInfo {
   email: string;
   father_names: string;
   first_name: string;
-  academic_program_level_id: string;
+  // academic_program_level_id: string;
   intake_program_id: string;
   last_name: string;
   marital_status: MaritalStatus;
   mother_names: string;
-  next_of_keen_proculation_reason: string;
   nid: string;
-  password: string;
   password_reset_period_in_days: number;
   person_id: string;
   phone: string;
   place_of_birth: string;
   place_of_residence: string;
   residence_location_id: number;
-  relationship_with_next_of_ken: string;
   reset_date: string;
   sex: GenderStatus;
   user_type: UserType;
   username: string;
-  intake_id: string;
   nationality: string;
   document_expire_on: string;
   send_communication_msg: SendCommunicationMsg;
+  id: string;
+}
+
+export interface CreateUserInfo extends EditUser {
+  password: string;
 }
 export interface UserView
   extends Pick<UserInfo, 'id' | 'first_name' | 'last_name' | 'image_url'> {

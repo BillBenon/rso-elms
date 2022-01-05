@@ -72,7 +72,7 @@ export default function FinishMarking({
           <Heading fontSize="xs" color="txt-secondary">
             Student Marks
           </Heading>
-          <Heading color="success">{obtained_marks}</Heading>
+          <Heading color="success">{obtained_marks || 0}</Heading>
         </div>
         <form className="flex flex-col" onSubmit={(e: FormEvent) => submitForm(e)}>
           <TextAreaMolecule

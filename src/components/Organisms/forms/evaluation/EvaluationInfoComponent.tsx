@@ -1,4 +1,5 @@
 import { Editor } from '@tiptap/react';
+import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
@@ -6,12 +7,10 @@ import { useLocation } from 'react-router-dom';
 import useInstructorModules from '../../../../hooks/getInstructorModules';
 import { authenticatorStore } from '../../../../store/administration';
 import { classStore } from '../../../../store/administration/class.store';
-import enrollmentStore from '../../../../store/administration/enrollment.store';
 import { subjectStore } from '../../../../store/administration/subject.store';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
-import { CommonCardDataType, SelectData, ValueType } from '../../../../types';
-import { EnrollInstructorLevelInfo } from '../../../../types/services/enrollment.types';
+import { CommonCardDataType, ValueType } from '../../../../types';
 import {
   IAccessTypeEnum,
   IContentFormatEnum,
@@ -61,70 +60,106 @@ export default function EvaluationInfoComponent({
   const { data: subjects, isLoading: subjLoading } = subjectStore.getSubjectsByModule(
     selectedModule + '',
   );
-  const { data: levels } = enrollmentStore.getInstructorLevels(instructorInfo?.id + '');
 
   const { data: classes } = classStore.getClassByPeriod(intakePeriodId + '');
 
   const [details, setDetails] = useState<IEvaluationCreate>({
-    access_type: evaluationInfo?.access_type || IAccessTypeEnum.PUBLIC,
-    academy_id: authUser?.academy.id.toString() || '',
-    instructor_id: authUser?.id.toString() || '',
-    adm_intake_level_class_id: evaluationInfo?.adm_intake_level_class_id || '',
-    intake_academic_year_period: evaluationInfo?.intake_academic_year_period || '',
-    allow_submission_time: evaluationInfo?.allow_submission_time || '',
-    class_ids: evaluationInfo?.class_ids || '',
-    id: evaluationInfo?.id || '',
-    classification: evaluationInfo?.classification || IEvaluationClassification.MODULE,
-    content_format: evaluationInfo?.content_format || IContentFormatEnum.DOC,
+    access_type: IAccessTypeEnum.PUBLIC,
+    academy_id: '',
+    instructor_id: '',
+    intake_academic_year_period: '',
+    allow_submission_time: '',
+    class_ids: '',
+    id: '',
+    classification: IEvaluationClassification.MODULE,
+    content_format: IContentFormatEnum.DOC,
     due_on: '',
     eligible_group: IEligibleClassEnum.MULTIPLE,
-    evaluation_status: evaluationInfo?.evaluation_status || IEvaluationStatus.PENDING,
-    evaluation_type: evaluationInfo?.evaluation_type || IEvaluationTypeEnum.CAT,
-    exam_instruction: evaluationInfo?.exam_instruction || '',
-    is_consider_on_report: evaluationInfo?.is_consider_on_report || true,
-    marking_reminder_date: evaluationInfo?.marking_reminder_date || '',
-    maximum_file_size: evaluationInfo?.maximum_file_size || '',
-    name: evaluationInfo?.name || '',
-    questionaire_type: evaluationInfo?.questionaire_type || IQuestionaireTypeEnum.OPEN,
-    subject_academic_year_period_id: evaluationInfo?.subject_id || '',
-    submision_type: evaluationInfo?.submision_type || ISubmissionTypeEnum.ONLINE_TEXT,
-    time_limit: evaluationInfo?.time_limit || 10,
-    total_mark: evaluationInfo?.total_mark || 0,
+    evaluation_status: IEvaluationStatus.DRAFT,
+    evaluation_type: IEvaluationTypeEnum.CAT,
+    exam_instruction: '',
+    is_consider_on_report: true,
+    marking_reminder_date: '',
+    maximum_file_size: '',
+    name: '',
+    questionaire_type: IQuestionaireTypeEnum.OPEN,
+    subject_academic_year_period_id: '',
+    submision_type: ISubmissionTypeEnum.ONLINE_TEXT,
+    time_limit: 10,
+    total_mark: 0,
   });
 
-  const { data: classStudent, isLoading } = classStore.getStudentsByClass(
-    details.adm_intake_level_class_id,
-  );
+  useEffect(() => {
+    setDetails({
+      access_type: evaluationInfo?.access_type || IAccessTypeEnum.PUBLIC,
+      academy_id: authUser?.academy.id.toString() || '',
+      instructor_id: instructorInfo?.id + '' || '',
+      intake_academic_year_period: evaluationInfo?.intake_academic_year_period || '',
+      allow_submission_time: evaluationInfo?.allow_submission_time || '',
+      class_ids: evaluationInfo?.class_ids || '',
+      id: evaluationInfo?.id || '',
+      classification: evaluationInfo?.classification || IEvaluationClassification.MODULE,
+      content_format: evaluationInfo?.content_format || IContentFormatEnum.DOC,
+      due_on: '',
+      eligible_group: IEligibleClassEnum.MULTIPLE,
+      evaluation_status: evaluationInfo?.evaluation_status || IEvaluationStatus.PENDING,
+      evaluation_type: evaluationInfo?.evaluation_type || IEvaluationTypeEnum.CAT,
+      exam_instruction: evaluationInfo?.exam_instruction || '',
+      is_consider_on_report: evaluationInfo?.is_consider_on_report || true,
+      marking_reminder_date: evaluationInfo?.marking_reminder_date || '',
+      maximum_file_size: evaluationInfo?.maximum_file_size || '',
+      name: evaluationInfo?.name || '',
+      questionaire_type: evaluationInfo?.questionaire_type || IQuestionaireTypeEnum.OPEN,
+      subject_academic_year_period_id: evaluationInfo?.subject_id || '',
+      submision_type: evaluationInfo?.submision_type || ISubmissionTypeEnum.ONLINE_TEXT,
+      time_limit: evaluationInfo?.time_limit || 0,
+      total_mark: evaluationInfo?.total_mark || 0,
+    });
+  }, [evaluationInfo]);
+
+  const { data: subjectInfo } = subjectStore.getSubject(evaluationInfo?.subject_id + '');
 
   useEffect(() => {
-    const classIds = details.class_ids.split(',');
+    const classIds = details?.class_ids.split(',');
 
     if (classIds.length <= 1) {
       const period =
-        classes?.data.data.find((periodId) => periodId.id == details.class_ids)
+        classes?.data.data.find((periodId) => periodId.id == details?.class_ids)
           ?.intake_academic_year_period_id + '';
 
-      setDetails((details) => ({
-        ...details,
-        ['intake_academic_year_period']: period,
-      }));
+      if (period) {
+        setDetails((details) => ({
+          ...details,
+          ['intake_academic_year_period']: period,
+        }));
+      }
     }
-
-    console.log(details.intake_academic_year_period);
-  }, [classes?.data.data, details.class_ids]);
+  }, [classes?.data.data, details?.class_ids]);
 
   const { mutate } = evaluationStore.createEvaluation();
   const { mutateAsync } = evaluationStore.updateEvaluation();
 
   function handleChange({ name, value }: ValueType) {
     if (name === 'module') setModuleId(value + '');
-    else if (name === 'class_ids')
-      setDetails((details) => ({ ...details, class_ids: value.toString() }));
-    else setDetails((details) => ({ ...details, [name]: value }));
+    else if (name === 'due_on' && typeof value === 'string') {
+      const timeDifference = moment(value).diff(
+        moment(details.allow_submission_time),
+        'minutes',
+      );
+
+      if (timeDifference < 0) toast.error('Due time cannot be less than start time!');
+
+      setDetails((details) => ({
+        ...details,
+        ['time_limit']: timeDifference,
+      }));
+    }
+    setDetails((details) => ({ ...details, [name]: value.toString() }));
   }
 
   function handleEditorChange(editor: Editor) {
-    setDetails((details) => ({ ...details, exam_instruction: editor.getHTML() }));
+    if (details)
+      setDetails((details) => ({ ...details, exam_instruction: editor.getHTML() }));
   }
 
   function submitForm(e: FormEvent) {
@@ -162,23 +197,23 @@ export default function EvaluationInfoComponent({
           width="80"
           name="name"
           placeholder="Evaluation Name"
-          value={details.name}
+          value={details?.name}
           handleChange={handleChange}>
           Evaluation Name
         </InputMolecule>
-        <DropdownMolecule
+        <SelectMolecule
           /*@ts-ignore */
-          // defaultValue={details.evaluation_type}
+          value={details?.evaluation_type}
           width="64"
           name="evaluation_type"
           placeholder="Evaluation Type"
           handleChange={handleChange}
           options={getDropDownStatusOptions(IEvaluationTypeEnum)}>
           Evaluation type
-        </DropdownMolecule>
+        </SelectMolecule>
         {/* <RadioMolecule
           className="pb-4"
-          value={details.classification}
+          value={details?.classification}
           name="classification"
           options={[
             { label: 'MODULE', value: IEvaluationClassification.MODULE },
@@ -188,6 +223,7 @@ export default function EvaluationInfoComponent({
           Evaluation classification
         </RadioMolecule> */}
         <DropdownMolecule
+          value={subjectInfo?.data.data.module.id.toString()}
           width="64"
           name="module"
           placeholder={'Select module'}
@@ -199,19 +235,21 @@ export default function EvaluationInfoComponent({
           })}>
           Select module
         </DropdownMolecule>
-        <DropdownMolecule
+        <SelectMolecule
           width="64"
+          value={details?.subject_academic_year_period_id}
           name="subject_academic_year_period_id"
-          placeholder={subjLoading ? 'Loading' : 'Select subject'}
+          placeholder={subjLoading ? 'Loading subject ...' : 'Select subject'}
           handleChange={handleChange}
           options={getDropDownOptions({
             inputs: subjects?.data.data || [],
             labelName: ['title'],
           })}>
           Select subject
-        </DropdownMolecule>
-
+        </SelectMolecule>
+        {/* 
         <DropdownMolecule
+          value={details?.intake_academic_year_period}
           width="64"
           name="levelId"
           placeholder="Select level"
@@ -224,12 +262,12 @@ export default function EvaluationInfoComponent({
               '',
           })}>
           Select Level
-        </DropdownMolecule>
+        </DropdownMolecule> */}
 
         <RadioMolecule
-          defaultValue={details.eligible_group}
+          defaultValue={details?.eligible_group}
           className="pb-4"
-          value={details.eligible_group}
+          value={details?.eligible_group}
           name="eligible_group"
           options={[
             { label: 'MULTIPLE CLASSES', value: IEligibleClassEnum.MULTIPLE },
@@ -240,7 +278,7 @@ export default function EvaluationInfoComponent({
         </RadioMolecule>
 
         <DropdownMolecule
-          isMulti={details.eligible_group === IEligibleClassEnum.MULTIPLE}
+          isMulti={details?.eligible_group === IEligibleClassEnum.MULTIPLE}
           width="64"
           name="class_ids"
           placeholder="Select class"
@@ -252,21 +290,21 @@ export default function EvaluationInfoComponent({
           Select Class(es)
         </DropdownMolecule>
         {/* <RadioMolecule
-          defaultValue={details.access_type}
+          defaultValue={details?.access_type}
           className="pb-4"
-          value={details.access_type}
+          value={details?.access_type}
           name="access_type"
           options={[
-            { label: 'PUBLIC', value: IAccessTypeEnum.PUBLIC },
+            { label: 'PUBLIC', value: IAccessTypeEnum.PUsBLIC },
             { label: 'PRIVATE', value: IAccessTypeEnum.PRIVATE },
           ]}
           handleChange={handleChange}>
           Accessibility
         </RadioMolecule> */}
-        <RadioMolecule
-          defaultValue={details.questionaire_type}
+        {/* <RadioMolecule
+          defaultValue={details?.questionaire_type}
           className="pb-4"
-          value={details.questionaire_type}
+          value={details?.questionaire_type}
           name="questionaire_type"
           options={[
             { label: 'Open', value: IQuestionaireTypeEnum.OPEN },
@@ -275,25 +313,9 @@ export default function EvaluationInfoComponent({
             { label: 'Field', value: IQuestionaireTypeEnum.FIELD },
           ]}
           handleChange={handleChange}>
-          {details.access_type === IAccessTypeEnum.PRIVATE && (
-            <DropdownMolecule
-              isMulti
-              width="64"
-              name="private"
-              placeholder={isLoading ? 'Loading students' : 'Select private'}
-              handleChange={handleChange}
-              options={
-                classStudent?.data.data.map((h) => ({
-                  value: h.student.id,
-                  label: `${h.student.user.first_name} ${h.student.user.last_name}`,
-                })) as SelectData[]
-              }>
-              Select Attendee
-            </DropdownMolecule>
-          )}
           Questionaire type
-        </RadioMolecule>
-        {details.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
+        </RadioMolecule> */}
+        {details?.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
           <>
             {/* <DropdownMolecule
               width="64"
@@ -306,11 +328,11 @@ export default function EvaluationInfoComponent({
               ]}>
               Submission type
             </DropdownMolecule> */}
-            {details.submision_type === ISubmissionTypeEnum.FILE && (
+            {details?.submision_type === ISubmissionTypeEnum.FILE && (
               <>
-                <DropdownMolecule
+                <SelectMolecule
                   /*@ts-ignore */
-                  defaultValue={details.content_format}
+                  value={details?.content_format}
                   width="64"
                   name="submision_type"
                   placeholder="Select submission type"
@@ -322,13 +344,13 @@ export default function EvaluationInfoComponent({
                     { label: 'PNG', value: IContentFormatEnum.PNG },
                   ]}>
                   Content format
-                </DropdownMolecule>
+                </SelectMolecule>
 
                 <InputMolecule
                   width="24"
                   type="number"
                   name="maximum_file_size"
-                  value={details.maximum_file_size}
+                  value={details?.maximum_file_size}
                   handleChange={handleChange}>
                   Maximum file size (Mbs)
                 </InputMolecule>
@@ -345,7 +367,7 @@ export default function EvaluationInfoComponent({
         </SwitchMolecule> */}
         {/* <TextAreaMolecule
           name={'exam_instruction'}
-          value={details.exam_instruction}
+          value={details?.exam_instruction}
           handleChange={handleChange}>
           <ILabel size="sm">Evaluation instructions</ILabel>
         </TextAreaMolecule> */}
@@ -353,25 +375,28 @@ export default function EvaluationInfoComponent({
           <div className="my-1">
             <ILabel size="sm">Evaluation instructions</ILabel>
           </div>
-          <Tiptap content={details.exam_instruction} handleChange={handleEditorChange} />
+          <Tiptap content={details?.exam_instruction} handleChange={handleEditorChange} />
         </div>
         <InputMolecule
           style={{ width: '6rem' }}
           type="number"
           name="total_mark"
+          min={0}
           // step=".01"
-          value={details.total_mark}
+          value={details?.total_mark}
           handleChange={handleChange}>
           Evaluation marks
         </InputMolecule>
-        {details.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
+        {details?.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
           <>
             <InputMolecule
               style={{ width: '6rem' }}
               type="number"
               // step=".01"
+              readOnly
               name="time_limit"
-              value={details.time_limit}
+              min={0}
+              value={details?.time_limit}
               handleChange={handleChange}>
               Time limit (in mins)
             </InputMolecule>
@@ -407,7 +432,7 @@ export default function EvaluationInfoComponent({
         </DateMolecule>
         <RadioMolecule
           className="pb-4"
-          value={details.is_consider_on_report.toString()}
+          value={details?.is_consider_on_report.toString()}
           name="status"
           options={[
             { label: 'Yes', value: 'true' },

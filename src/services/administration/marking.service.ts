@@ -2,7 +2,10 @@ import { AxiosResponse } from 'axios';
 
 import { evaluationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
-import { MarkAllEvaluationQuestions } from '../../types/services/marking.types';
+import {
+  MarkAllEvaluationQuestions,
+  studentMarkingAnswer,
+} from '../../types/services/marking.types';
 
 class MarkingService {
   public async finishMarking(
@@ -56,7 +59,7 @@ class MarkingService {
 
   public async getStudentEvaluationAnswers(
     id: string,
-  ): Promise<AxiosResponse<Response<any[]>>> {
+  ): Promise<AxiosResponse<Response<studentMarkingAnswer[]>>> {
     return await evaluationAxios.get(`/student-answers/getAllByStudentEvaluation/${id}`);
   }
 

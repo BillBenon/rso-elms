@@ -3,20 +3,17 @@ import toast from 'react-hot-toast';
 
 import { queryClient } from '../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../store/administration';
-import usersStore from '../../../../store/administration/users.store';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
-import { ValueType } from '../../../../types';
+import instructordeploymentStore from '../../../../store/instructordeployment.store';
+import { SelectData, ValueType } from '../../../../types';
 import {
   IEvaluationApproval,
-  IEvaluationApprovalStatus,
   IEvaluationProps,
 } from '../../../../types/services/evaluation.types';
-import { UserType } from '../../../../types/services/user.types';
 import {
   getLocalStorageData,
   setLocalStorageData,
 } from '../../../../utils/getLocalStorageItem';
-import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
@@ -29,28 +26,30 @@ export default function EvaluationSettings({
 }: IEvaluationProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
 
-  const { data: inCharge } = usersStore.getUsersByAcademyAndUserType(
-    authUser?.academy.id.toString() || '',
-    UserType.INSTRUCTOR,
-    { page: 0, pageSize: 1000, sortyBy: 'username' },
-  );
+  // const { data: inCharge } = usersStore.getUsersByAcademyAndUserType(
+  //   authUser?.academy.id.toString() || '',
+  //   UserType.INSTRUCTOR,
+  //   { page: 0, pageSize: 1000, sortyBy: 'username' },
+  // );
 
-  const instructors = inCharge?.data.data.content;
+  // const instructors = inCharge?.data.data.content;
+
+  const instructors = instructordeploymentStore.getInstructorsDeployedInAcademy(
+    authUser?.academy.id + '',
+  ).data?.data.data;
 
   const [settings, setSettings] = useState<IEvaluationApproval>({
-    approver: '',
-    evaluation: evaluationId || getLocalStorageData('evaluationId'),
-    evaluation_approval_status: IEvaluationApprovalStatus.DRAFT,
+    approver_ids: '',
+    evaluation_id: evaluationId || getLocalStorageData('evaluationId'),
     id: '',
-    preparer: authUser?.id.toString() || '',
-    reviewer: '',
-    marker: authUser?.id.toString() || '',
+    reviewer_ids: '',
+    marker_ids: authUser?.id.toString() || '',
     to_be_approved: false,
     to_be_reviewed: false,
   });
 
   function handleChange({ name, value }: ValueType) {
-    setSettings((settings) => ({ ...settings, [name]: value }));
+    setSettings((settings) => ({ ...settings, [name]: value.toString() }));
   }
 
   const { mutate } = evaluationStore.createEvaluationSettings();
@@ -92,13 +91,16 @@ export default function EvaluationSettings({
       {settings.to_be_reviewed && (
         <div className="pt-6">
           <DropdownMolecule
+            isMulti
             width="60"
             placeholder="Reviewer"
-            options={getDropDownOptions({
-              inputs: instructors || [],
-              labelName: ['first_name', 'last_name'],
-            })}
-            name="reviewer"
+            options={
+              instructors?.map((instr) => ({
+                label: `${instr.user.first_name} ${instr.user.last_name}`,
+                value: instr.id,
+              })) as SelectData[]
+            }
+            name="reviewer_ids"
             handleChange={handleChange}>
             To be reviewed by
           </DropdownMolecule>
@@ -118,13 +120,16 @@ export default function EvaluationSettings({
       {settings.to_be_approved && (
         <div className="pt-6">
           <DropdownMolecule
+            isMulti
             width="60"
             placeholder="Approver"
-            options={getDropDownOptions({
-              inputs: instructors || [],
-              labelName: ['first_name', 'last_name'],
-            })}
-            name="approver"
+            options={
+              instructors?.map((instr) => ({
+                label: `${instr.user.first_name} ${instr.user.last_name}`,
+                value: instr.id,
+              })) as SelectData[]
+            }
+            name="approver_ids"
             handleChange={handleChange}>
             To be approved by
           </DropdownMolecule>
@@ -144,12 +149,14 @@ export default function EvaluationSettings({
       <div className="pt-6">
         <DropdownMolecule
           width="60"
-          placeholder="marker"
-          options={getDropDownOptions({
-            inputs: instructors || [],
-            labelName: ['first_name', 'last_name'],
-          })}
-          name="marker"
+          placeholder="Marker"
+          options={
+            instructors?.map((instr) => ({
+              label: `${instr.user.first_name} ${instr.user.last_name}`,
+              value: instr.id,
+            })) as SelectData[]
+          }
+          name="marker_ids"
           handleChange={handleChange}>
           To be marked by
         </DropdownMolecule>

@@ -15,7 +15,7 @@ import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
 interface PropType<K> extends CommonFormProps<K> {}
 
 export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
-  const { mutateAsync } = registrationControlStore.createRegControl();
+  const { mutateAsync, isLoading } = registrationControlStore.createRegControl();
   const { data } = authenticatorStore.authUser();
   const history = useHistory();
 
@@ -32,14 +32,15 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
 
   function submitForm(e: FormEvent) {
     e.preventDefault();
+    let toastId = toast.loading('Creating registration control');
     mutateAsync(regControl, {
       onSuccess: () => {
-        toast.success('Registration control created');
+        toast.success('Registration control created', { id: toastId });
         queryClient.invalidateQueries(['regControl/academyId']);
         history.goBack();
       },
       onError: (error: any) => {
-        toast.error(error.response.data.message);
+        toast.error(error.response.data.message, { id: toastId });
       },
     });
 
@@ -86,7 +87,7 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
       </RadioMolecule>
 
       <div className="mt-5">
-        <Button type="submit" full>
+        <Button type="submit" disabled={isLoading} full>
           Save
         </Button>
       </div>

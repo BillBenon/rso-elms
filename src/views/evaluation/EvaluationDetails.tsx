@@ -210,15 +210,25 @@ export default function EvaluationDetails() {
                     Edit evaluation
                   </Button>
 
-                  {evaluationInfo?.available === 'HIDDEN' ? (
-                    <Button onClick={() => publishEvaluation('PUBLIC')}>
+                  <Button
+                    disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
+                    onClick={() => publishEvaluation('PUBLIC')}>
+                    Publish evaluation
+                  </Button>
+
+                  {/* {evaluationInfo?.available === 'HIDDEN' ? (
+                    <Button
+                      disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
+                      onClick={() => publishEvaluation('PUBLIC')}>
                       Publish evaluation
                     </Button>
                   ) : (
-                    <Button onClick={() => publishEvaluation('HIDDEN')}>
+                    <Button
+                      disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
+                      onClick={() => publishEvaluation('HIDDEN')}>
                       Unpublish evaluation
                     </Button>
-                  )}
+                  )} */}
                 </div>
               </EvaluationContent>
             )}

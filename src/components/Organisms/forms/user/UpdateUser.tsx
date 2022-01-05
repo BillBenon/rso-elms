@@ -16,12 +16,11 @@ import { AcademyInfo } from '../../../../types/services/academy.types';
 import { IntakeProgramInfo } from '../../../../types/services/intake-program.types';
 import {
   DocType,
+  EditUser,
   EducationLevel,
   GenderStatus,
   MaritalStatus,
-  ProfileStatus,
   SendCommunicationMsg,
-  UpdateUserInfo,
   UserType,
 } from '../../../../types/services/user.types';
 import {
@@ -41,48 +40,37 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
   const updateUserTypeWithSuper = { ...updateUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
   const authUser = authenticatorStore.authUser();
 
-  const [details, setDetails] = useState<UpdateUserInfo>({
-    person: '',
-    academic_program_level_id: '',
-    academy_id: '',
+  const [details, setDetails] = useState<EditUser>({
     activation_key: '',
+    academy_id: '',
     birth_date: '',
-    blood_group: '',
-    current_rank_id: '',
-    date_of_commission: '',
-    date_of_issue: '',
-    date_of_last_promotion: '',
+    deployed_on: '',
+    deployment_number: '',
     doc_type: DocType.NID,
-    document_expire_on: '',
     education_level: EducationLevel.ILLITERATE,
     email: '',
-    emp_no: '',
     father_names: '',
     first_name: '',
-    id: '',
+    // academic_program_level_id: '',
     intake_program_id: '',
     last_name: '',
-    marital_status: MaritalStatus.MARRIED,
+    marital_status: MaritalStatus.SINGLE,
     mother_names: '',
     nid: '',
-    other_rank: '',
-    password: '',
     password_reset_period_in_days: 0,
     person_id: '',
     phone: '',
     place_of_birth: '',
-    place_of_birth_description: '',
-    place_of_issue: '',
     place_of_residence: '',
-    profile_status: ProfileStatus.INCOMPLETE,
-    rank_depart: '',
-    reset_date: '',
     residence_location_id: 0,
+    reset_date: '',
     sex: GenderStatus.MALE,
-    spouse_name: '',
     user_type: UserType.STUDENT,
-    send_communication_msg: SendCommunicationMsg.EMAIL,
     username: '',
+    nationality: '',
+    document_expire_on: '',
+    send_communication_msg: SendCommunicationMsg.BOTH,
+    id: '',
   });
 
   const { id } = useParams<ParamType>();
@@ -91,53 +79,40 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
   useEffect(() => {
     const selectedUser = data?.data.data;
 
+    console.log(selectedUser);
+
     selectedUser &&
       setDetails({
-        person: selectedUser.person,
-        academic_program_level_id: selectedUser.academic_program_level_id,
-        academy_id: selectedUser.academy_id,
         activation_key: selectedUser.activation_key,
-        birth_date: selectedUser.birth_date,
-        blood_group: selectedUser.person.blood_group,
-        current_rank_id: selectedUser.person.current_rank_id,
-        date_of_commission: selectedUser.person.date_of_commission,
-        date_of_issue: selectedUser.person.date_of_issue,
-        date_of_last_promotion: selectedUser.person.date_of_last_promotion,
+        academy_id: selectedUser.academy.id,
+        birth_date: selectedUser.person.birth_date,
+        deployed_on: selectedUser.person.deployed_on,
+        deployment_number: selectedUser.person.deployment_number,
         doc_type: selectedUser.person.doc_type,
-        document_expire_on: selectedUser.person.document_expire_on,
-        education_level: selectedUser.education_level,
+        education_level: selectedUser.person.education_level || EducationLevel.ILLITERATE,
         email: selectedUser.email,
-        emp_no: selectedUser.person.emp_no,
-        father_names: selectedUser.father_names,
+        father_names: selectedUser.person.father_names,
         first_name: selectedUser.first_name,
-        id: id,
+        // academic_program_level_id: '',
         intake_program_id: selectedUser.intake_program_id,
         last_name: selectedUser.last_name,
-        marital_status: selectedUser.marital_status,
-        mother_names: selectedUser.mother_names,
+        marital_status: selectedUser.person.marital_status,
+        mother_names: selectedUser.person.mother_names,
         nid: selectedUser.person.nid,
-        other_rank: selectedUser.person.other_rank,
-        password: selectedUser.password,
         password_reset_period_in_days: selectedUser.password_reset_period_in_days,
-        person_id: selectedUser.person_id,
-        phone: selectedUser.phone.toString(),
-        place_of_birth: selectedUser.place_of_birth,
-        place_of_birth_description: selectedUser.person.place_of_birth_description,
-        place_of_issue: selectedUser.person.place_of_issue,
+        person_id: selectedUser.person.id + '',
+        phone: selectedUser.person.phone_number,
+        place_of_birth: selectedUser.person.place_of_birth,
         place_of_residence: selectedUser.place_of_residence,
-        profile_status: selectedUser.profile_status
-          ? selectedUser.profile_status
-          : ProfileStatus.INCOMPLETE,
-        rank_depart: selectedUser.person.rank_depart,
+        residence_location_id: selectedUser.person.residence_location_id,
         reset_date: selectedUser.reset_date,
-        residence_location_id: selectedUser.residence_location_id,
-        sex: selectedUser.person == null ? GenderStatus.MALE : selectedUser.person.sex,
-        spouse_name: selectedUser.person.spouse_name,
+        sex: selectedUser.person.sex,
         user_type: selectedUser.user_type,
-        send_communication_msg: selectedUser.send_communication_msg
-          ? selectedUser.send_communication_msg
-          : SendCommunicationMsg.EMAIL,
         username: selectedUser.username,
+        nationality: selectedUser.person?.nationality || '',
+        document_expire_on: selectedUser.person?.document_expire_on || '',
+        send_communication_msg: selectedUser.send_communication_msg,
+        id: selectedUser.id + '',
       });
   }, [data]);
 
@@ -257,13 +232,13 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           date_time_type={false}>
           Date of Birth
         </DateMolecule>
-        <InputMolecule
+        {/* <InputMolecule
           name="place_of_residence"
           placeholder={'Enter place of residence'}
           value={details.place_of_residence}
           handleChange={handleChange}>
           Place of residence
-        </InputMolecule>
+        </InputMolecule> */}
         <InputMolecule
           name="phone"
           placeholder="Enter phone number"
@@ -311,7 +286,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Education level
         </SelectMolecule>
-        {![UserType.SUPER_ADMIN].includes(details.user_type) && (
+        {authUser.data?.data.data.user_type === UserType.SUPER_ADMIN && (
           <SelectMolecule
             options={getDropDownOptions({ inputs: academies || [] })}
             name="academy_id"
@@ -347,7 +322,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
               handleChange={handleChange}>
               Programs
             </SelectMolecule>
-            <SelectMolecule
+            {/* <SelectMolecule
               options={getDropDownOptions({
                 inputs: levels.data?.data.data || [],
                 labelName: ['name'], //@ts-ignore
@@ -358,7 +333,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
               value={details.academic_program_level_id}
               handleChange={handleChange}>
               Levels
-            </SelectMolecule>
+            </SelectMolecule> */}
           </>
         )}
         <Button type="submit">Update</Button>
