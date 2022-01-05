@@ -7,6 +7,7 @@ import {
   getLocalStorageData,
   setLocalStorageData,
 } from '../../../../utils/getLocalStorageItem';
+import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
 import BreadCrumb from '../../../Molecules/BreadCrumb';
 import Stepper from '../../../Molecules/Stepper/Stepper';
@@ -79,11 +80,23 @@ export default function NewEvaluation() {
               evaluationId={evaluationId}
             />
           </div>
-          <EvaluationSettings
-            handleNext={handleSubmit}
-            handleGoBack={handleBack}
-            evaluationId={evaluationId}
-          />
+
+          {!evaluationId ? (
+            <EvaluationSettings
+              handleNext={handleSubmit}
+              handleGoBack={handleBack}
+              evaluationId={evaluationId}
+            />
+          ) : (
+            <>
+              <Heading fontWeight="semibold" className="py-5">
+                You&apos;re all set now!
+              </Heading>
+              <Button onClick={() => history.push('/dashboard/evaluations')}>
+                Finish
+              </Button>
+            </>
+          )}
         </Stepper>
       </div>
     </div>
