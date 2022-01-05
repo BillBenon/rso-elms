@@ -9,5 +9,8 @@ class UserNextKinStore {
   getHisNextKinById(id: string) {
     return useQuery(['user/id', id], () => userNextKinService.getHisNextById(id));
   }
+  getPersonByNid(nid: string) {
+    return useQuery(['user/nid', nid], () => userNextKinService.getUserByNid(nid));
+  }
 }
 export default new UserNextKinStore();

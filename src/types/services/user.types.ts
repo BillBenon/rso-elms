@@ -103,19 +103,6 @@ export interface PersonInfo extends Table {
   place_of_birth_id: string;
   nationality: string;
 }
-export interface ExperienceInfo {
-  attachment_id: string;
-  description: string;
-  end_date: string;
-  id: number;
-  level: string;
-  location: string;
-  occupation: string;
-  person_id: string;
-  proof: string;
-  start_date: string;
-  type: string;
-}
 export interface UpdateExperienceInfo {
   attachment_id: string;
   description: string;
@@ -226,6 +213,25 @@ export interface AcademyUserType {
 export interface UserTypes extends AcademyUserType {
   academy: string;
 }
+export interface BasicPersonInfo
+  extends Pick<
+    PersonInfo,
+    | 'first_name'
+    | 'last_name'
+    | 'phone_number'
+    | 'sex'
+    | 'birth_date'
+    | 'residence_location_id'
+    | 'place_of_residence'
+    | 'nationality'
+    | 'nid'
+    | 'doc_type'
+    | 'document_expire_on'
+> {
+  email: string;
+  relationship: string;
+  user_id: string;
+}
 
 export interface PersonDetail
   extends Pick<
@@ -299,14 +305,7 @@ export enum DocType {
   RCS_CARD = 'RCS_CARD',
   OTHER = 'OTHER',
 }
-export enum ExperienceType {
-  GENERAL_EDUCATION = 'GENERAL_EDUCATION',
-  CURRIER_COURSE_EDUCATION = 'CURRIER_COURSE_EDUCATION',
-  EMPLOYMENT = 'EMPLOYMENT',
-  INTERNATIONAL_CERTIFICATION = 'INTERNATIONAL_CERTIFICATION',
-  INTERNATIONAL_MISSION = 'INTERNATIONAL_MISSION',
-  TRAINING = 'TRAINING',
-}
+
 
 export enum BloodGroup {
   'A+' = 'A+',

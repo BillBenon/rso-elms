@@ -189,12 +189,15 @@ function CompleteProfile() {
         },
         {
           onSuccess() {
-            toast.success('personal information successfully updated', {
-              duration: 1200,
-            });
+            toast.success(
+              'personal information successfully updated. You need to login to continue',
+              {
+                duration: 1200,
+              },
+            );
             setTimeout(() => {
               localStorage.clear();
-              history.push('/complete-profile/experience');
+              history.push('/login');
             }, 900);
           },
           onError(error: any) {

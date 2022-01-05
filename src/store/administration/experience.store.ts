@@ -7,7 +7,7 @@ class ExperienceStore {
     return useMutation(experienceService.create);
   }
   getAll() {
-    return useMutation('experiences', experienceService.fetchAll);
+    return useQuery('experiences', experienceService.fetchAll);
   }
   getExperienceById(id: string) {
     return useQuery(['experience/id', id], () => experienceService.getExperienceById(id));

@@ -136,18 +136,6 @@ function PersonalDetails<E>({
               options={getDropDownStatusOptions(BloodGroup)}>
               Blood type
             </DropdownMolecule>
-            {personalDetails.marital_status === MaritalStatus.MARRIED ||
-              (personalDetails.marital_status === MaritalStatus.WIDOWED && (
-                <DropdownMolecule
-                  defaultValue={getDropDownStatusOptions(MaritalStatus).find(
-                    (marital) => marital.label === personalDetails.marital_status,
-                  )}
-                  options={getDropDownStatusOptions(MaritalStatus)}
-                  handleChange={handleChange}
-                  name="marital_status">
-                  Marital Status
-                </DropdownMolecule>
-              ))}
             {(personalDetails.marital_status === MaritalStatus.MARRIED ||
               personalDetails.marital_status === MaritalStatus.WIDOWED) && (
               <InputMolecule

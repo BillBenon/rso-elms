@@ -5,6 +5,7 @@ import { UseMutateAsyncFunction } from 'react-query';
 
 import { authenticatorStore } from '../../../../../../store/administration';
 import { experienceStore } from '../../../../../../store/administration/experience.store';
+import { moduleMaterialStore } from '../../../../../../store/administration/module-material.store';
 import {
   CommonFormProps,
   CommonStepProps,
@@ -13,11 +14,12 @@ import {
 } from '../../../../../../types';
 import {
   ExperienceInfo,
-  ExperienceTypeStatus,
+  ExperienceType,
 } from '../../../../../../types/services/experience.types';
 import Button from '../../../../../Atoms/custom/Button';
 import Icon from '../../../../../Atoms/custom/Icon';
 import Panel from '../../../../../Atoms/custom/Panel';
+import FileUploader from '../../../../../Atoms/Input/FileUploader';
 import Heading from '../../../../../Atoms/Text/Heading';
 import Accordion from '../../../../../Molecules/Accordion';
 import DateMolecule from '../../../../../Molecules/input/DateMolecule';
@@ -26,7 +28,7 @@ import TextAreaMolecule from '../../../../../Molecules/input/TextAreaMolecule';
 
 interface IExperienceForm<E> extends CommonStepProps, CommonFormProps<E> {
   skip?: () => void;
-  type: ExperienceTypeStatus;
+  type: ExperienceType;
 }
 
 function ExperienceForm<E>({
@@ -52,6 +54,10 @@ function ExperienceForm<E>({
     type: type,
   });
 
+  const [file, setFile] = useState<File | null>(null);
+
+  const { mutate } = moduleMaterialStore.addFile();
+
   useEffect(() => {
     setExperience({ ...experience, person_id: authUser?.person.id.toString() || '' });
   }, [authUser?.person.id]);
@@ -71,12 +77,37 @@ function ExperienceForm<E>({
   ) {
     let isSuccess: boolean = false;
 
-    if (experience) {
+    if (file) {
+      let formData = new FormData();
+      formData.append('file', file);
+
+      await mutate(formData, {
+        onSuccess(data) {
+          toast.success(data.data.message);
+          mutateAsync(
+            {
+              ...experience,
+              attachment_id: data.data.data.id + '',
+            },
+            {
+              async onSuccess(data) {
+                toast.success(data.data.message);
+                isSuccess = true;
+              },
+              onError(error: any) {
+                toast.error(error.response.data.message);
+              },
+            },
+          );
+        },
+        onError(error: any) {
+          toast.error(error.response.data.message);
+        },
+      });
+    } else {
       await mutateAsync(experience, {
-        onSuccess() {
-          toast.success('experience information successfully added', {
-            duration: 1200,
-          });
+        onSuccess(data) {
+          toast.success(data.data.message);
           isSuccess = true;
         },
         onError(error: any) {
@@ -91,6 +122,13 @@ function ExperienceForm<E>({
   const handleChange = (e: ValueType) => {
     setExperience({ ...experience, [e.name]: e.value });
   };
+
+  const handleUpload = (files: FileList | null) => {
+    if (files) {
+      setFile(files[0]);
+    }
+  };
+
   const [totalExperience, setTotalExperience] = useState<ExperienceInfo[]>([]);
 
   const moveForward = async () => {
@@ -171,12 +209,12 @@ function ExperienceForm<E>({
             <div className="flex flex-col gap-4">
               <InputMolecule
                 name="level"
-                placeholder="Level"
+                placeholder="Name"
                 value={experience.level}
                 handleChange={handleChange}>
-                Education Level
+                {display_label.replaceAll('_', ' ')}
                 <span className="text-txt-secondary normal-case">
-                  (Write in full abbreviation)
+                  ( Write in full abbreviation )
                 </span>
               </InputMolecule>
             </div>
@@ -234,12 +272,19 @@ function ExperienceForm<E>({
                 </InputMolecule>
               </div>
             </div>
-            <Button styleType="outline" className="h-6 flex items-center">
-              <span className="flex items-center">
-                <Icon name="attach" useheightandpadding={false} fill="primary" />
-                <span className="font-semibold">Upload</span>
-              </span>
-            </Button>
+            <div className="py-2">
+              <FileUploader
+                allowPreview={false}
+                handleUpload={handleUpload}
+                accept={'application/pdf, image/*'}>
+                <Button type="button" styleType="outline" icon={true}>
+                  <span className="flex items-center">
+                    <Icon name={'attach'} fill="primary" />
+                    <span className="pr-3">Attach file</span>
+                  </span>
+                </Button>
+              </FileUploader>
+            </div>
           </div>
           <div className="py-3">
             <Button styleType="outline" type="button" onClick={() => handleMore()}>
@@ -283,12 +328,12 @@ function ExperienceForm<E>({
                 title={exp.type.replaceAll('_', ' ')}
                 subtitle={exp.description}>
                 <div>Occupation: {exp.occupation}</div>
-                <div>Level: {exp.level}</div>
+                <div>Name: {exp.level}</div>
                 <div>Start Date: {exp.start_date}</div>
                 <div>End Date: {exp.end_date}</div>
                 <div className="flex items-center">
                   <Icon name="attach" fill="primary" />
-                  <span className="border-txt-primary border-b font-medium">
+                  <span className="border-txt-primary border-b font-small">
                     {exp.proof}
                   </span>
                 </div>
