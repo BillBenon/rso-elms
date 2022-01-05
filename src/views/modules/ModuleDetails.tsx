@@ -138,9 +138,9 @@ export default function ModuleDetails() {
       setSubjects(loadedSubjects);
     }
     new MutationObserver(() => {
-      const url = location.href;
-      if (url !== lastUrl) {
-        lastUrl = url;
+      const loc = location.href.split('?')[0];
+      if (loc !== lastUrl) {
+        lastUrl = loc;
         if (lastUrl.endsWith('subjects')) {
           setCurrentPage('SUBJECTS');
         } else if (lastUrl.endsWith('materials')) {
@@ -151,6 +151,8 @@ export default function ModuleDetails() {
           setCurrentPage('SYLLABUS');
         } else if (lastUrl.endsWith('evaluations')) {
           setCurrentPage('EVALUATIONS');
+        } else if (lastUrl.endsWith(id)) {
+          setCurrentPage('SUBJECTS');
         } else {
           setCurrentPage('');
         }
