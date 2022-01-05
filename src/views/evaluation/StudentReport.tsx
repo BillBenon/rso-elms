@@ -3,13 +3,20 @@ import { useParams } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
-import { ParamType } from '../../types';
 
 export default function StudentReport() {
-  const { id } = useParams<ParamType>();
-  console.log(id);
 
-  const { data: studentReport, isLoading } = evaluationStore.getStudentReport(id);
+  interface IParamType {
+    levelId: string;
+    classId: string;
+    studentId: string;
+    periodId: string;
+  }
+
+  
+  const { classId, studentId, periodId } = useParams<IParamType>();
+
+  const { data: studentReport, isLoading } = evaluationStore.getStudentReport(studentId);
   console.log(studentReport);
   return (
     <>
