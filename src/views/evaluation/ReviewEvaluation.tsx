@@ -23,15 +23,20 @@ interface IProps {
 export default function ReviewEvaluation({ evaluationId }: IProps) {
   const history = useHistory();
   const authUser = authenticatorStore.authUser().data?.data.data;
-  const evaluationInfo = evaluationStore.getEvaluationById(evaluationId).data?.data.data;
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
+    authUser?.id + '',
+  ).data?.data.data[0];
+
+  const evaluationApprovals =
+    evaluationStore.getEvaluationReviewByEvaluationAndInstructor(
+      evaluationId,
+      instructorInfo?.id + '',
+    ).data?.data.data;
 
   const [remarks, setRemarks] = useState('');
   const [open, setOpen] = useState(false);
   const [action, setAction] = useState('');
 
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
-    authUser?.id + '',
-  ).data?.data.data[0];
   const { mutateAsync } = evaluationStore.reviewEvaluation();
 
   const review = () => {
@@ -78,12 +83,12 @@ export default function ReviewEvaluation({ evaluationId }: IProps) {
     <>
       <EvaluationContent evaluationId={evaluationId}>
         <Button
-          disabled={evaluationInfo?.evaluation_status === 'REVIEWED'}
+          disabled={evaluationApprovals?.evaluation_reviewer_status + '' !== 'PENDING'}
           onClick={() => changeAction('review')}>
           Mark as reviewed
         </Button>
         <Button
-          disabled={evaluationInfo?.evaluation_status === 'REVIEWED'}
+          disabled={evaluationApprovals?.evaluation_reviewer_status + '' !== 'PENDING'}
           styleType="outline"
           onClick={() => changeAction('reject')}>
           Mark as rejected
