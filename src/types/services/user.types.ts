@@ -192,6 +192,7 @@ export interface EditUser {
   document_expire_on: string;
   send_communication_msg: SendCommunicationMsg;
   id: string;
+  profile_status: ProfileStatus
 }
 
 export interface CreateUserInfo extends EditUser {

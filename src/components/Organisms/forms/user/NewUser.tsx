@@ -22,6 +22,7 @@ import {
   EducationLevel,
   GenderStatus,
   MaritalStatus,
+  ProfileStatus,
   SendCommunicationMsg,
   UserType,
 } from '../../../../types/services/user.types';
@@ -84,6 +85,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     nationality: '',
     document_expire_on: '',
     send_communication_msg: SendCommunicationMsg.BOTH,
+    profile_status: ProfileStatus.INCOMPLETE,
     id: '',
   });
 

@@ -114,7 +114,6 @@ export default function SupAdminProfile<E>({
       ...details,
       id: auth?.id.toString() || '',
       username: auth?.username.toString() || '',
-      password: auth?.password || '',
       user_type: auth?.user_type || UserType.STUDENT,
     });
   }, [auth]);
