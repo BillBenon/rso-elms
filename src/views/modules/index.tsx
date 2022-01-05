@@ -3,10 +3,8 @@ import toast from 'react-hot-toast';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
-import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import TableHeader from '../../components/Molecules/table/TableHeader';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { CommonCardDataType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
@@ -15,13 +13,12 @@ import SubjectDetails from '../subjects/SubjectDetails';
 import ModuleDetails from './ModuleDetails';
 
 export default function Modules({ level }: { level: string }) {
-  // const level = new URLSearchParams(search).get('levelId');
   const { data, isLoading, isSuccess, isError } = intakeProgramStore.getModulesByLevel(
     parseInt(level || ''),
   );
 
   const [modules, setModules] = useState<CommonCardDataType[]>([]);
-  const { path, url } = useRouteMatch();
+  const { path } = useRouteMatch();
 
   useEffect(() => {
     if (isSuccess && data?.data) {
@@ -43,11 +40,6 @@ export default function Modules({ level }: { level: string }) {
     } else if (isError) toast.error('error occurred when loading modules');
   }, [data]);
 
-  const list = [
-    { to: '/dashboard/student', title: 'Dashboard' },
-    { to: `${url}`, title: 'module' },
-  ];
-
   return (
     <>
       <main className="px-4">
@@ -58,15 +50,6 @@ export default function Modules({ level }: { level: string }) {
             render={() => {
               return (
                 <>
-                  <section>
-                    <BreadCrumb list={list}></BreadCrumb>
-                  </section>
-                  <TableHeader
-                    showSearch={false}
-                    showBadge={false}
-                    title="Enrolled Modules"
-                    totalItems={modules.length || 0}
-                  />
                   <section className="flex flex-wrap justify-start gap-2">
                     {isLoading ? (
                       <Loader />

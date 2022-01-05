@@ -60,12 +60,6 @@ class EnrolmmentStore {
     );
   }
 
-  getStudentsInProgramLevel(levelId: number) {
-    return useQuery(['students/levelsEnrolled', levelId], () =>
-      enrollmentService.getStudentLevelEnrollments(levelId),
-    );
-  }
-
   getInstructorsInProgramLevel(levelId: string) {
     return useQuery(['instructors/levelsEnrolled', levelId], () =>
       enrollmentService.getInstructorEnrollmentLevelByLevelId(levelId),
@@ -83,6 +77,11 @@ class EnrolmmentStore {
   ) {
     return useQuery(['student/academy/enrolment', academyId, enrolmentStatus], () =>
       enrollmentService.getStudentAcademyAndEnrollmentStatus(academyId, enrolmentStatus),
+    );
+  }
+  getAllStudentEnrollments() {
+    return useQuery(['student/enrolments'], () =>
+      enrollmentService.getAllStudentEnrollments(),
     );
   }
 
