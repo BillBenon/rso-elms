@@ -97,6 +97,13 @@ export enum IEvaluationAppprovalStatus {
   APPROVED = 'APPROVED',
 }
 
+export interface InstructorEvaluationAppprovalStatus extends Table {
+  id: string;
+  evaluation_approval_status: IEvaluationAppprovalStatus | IEvaluationAppprovalStatus;
+  evaluation_reviewer_status: IEvaluationAppprovalStatus | IEvaluationAppprovalStatus;
+  remarks: string;
+}
+
 export enum UpdateEvaluationApprovalStatusEnum {
   PENDING = 'PENDING',
   APPROVED = 'APPROVED',
