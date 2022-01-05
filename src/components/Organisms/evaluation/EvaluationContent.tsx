@@ -40,7 +40,7 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
               subTitle={evaluationInfo?.number_of_questions}
             />
 
-            <div className="flex flex-col gap-4">
+            {/* <div className="flex flex-col gap-4">
               <Heading color="txt-secondary" fontSize="base">
                 Eligible Class
               </Heading>
@@ -55,7 +55,7 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
                   <div>class B</div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
         {/* second column */}
@@ -75,11 +75,11 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
           />
         </div>
 
-        {/* tjird column */}
+        {/* third column */}
         <div className="flex flex-col gap-4">
           <ContentSpan
-            title="Due on"
-            subTitle={moment(evaluationInfo?.due_on).format('MM/DD/YYYY')}
+            title="Start on"
+            subTitle={evaluationInfo?.allow_submission_time}
           />
           <ContentSpan
             title="Questionaire type"
@@ -93,10 +93,11 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
 
         {/* tjird column */}
         <div className="flex flex-col gap-4">
-          <ContentSpan
+          <ContentSpan title="Due on" subTitle={evaluationInfo?.due_on} />
+          {/* <ContentSpan
             title="Total number of questions"
             subTitle={evaluationInfo?.number_of_questions}
-          />
+          /> */}
           <ContentSpan
             title="Consider on report"
             subTitle={evaluationInfo?.is_consider_on_report ? 'Yes' : 'No'}
