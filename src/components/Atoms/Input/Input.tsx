@@ -13,6 +13,8 @@ export default function Input<T>({
   required = true,
   value = '',
   name,
+  min = 0,
+  max, 
   full,
   fcolor = 'primary',
   bcolor = 'tertiary',
@@ -44,6 +46,8 @@ export default function Input<T>({
       spellCheck="true"
       readOnly={readonly}
       required={required}
+      min={min}
+      max={max}
       autoComplete="off"
       className={`${
         readonly ? 'bg-gray-100' : 'bg-transparent'
