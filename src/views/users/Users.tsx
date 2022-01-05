@@ -51,33 +51,34 @@ export default function Users() {
       </div>
       <Switch>
         <Route exact path={`${path}/:id/profile`} component={UserDetails} />
-        {(authUser?.data.data.user_type === UserType.ADMIN ||
-          authUser?.data.data.user_type === UserType.SUPER_ADMIN) && (
-          <>
-            <Route exact path={`${path}/add/:userType`} component={NewUser} />
-            <Route exact path={`${path}/:id/edit`} component={UpdateUser} />
-            <Route
-              path={`${path}`}
-              render={() => {
-                return (
-                  <TabNavigation
-                    tabs={tabs}
-                    onTabChange={(event) => setUserType(event.activeTabLabel)}>
-                    <Switch>
-                      <Route
-                        path={`${path}/instructors`}
-                        render={() => <InstructorsView />}
-                      />
-                      <Route path={`${path}/admins`} render={() => <AdminsView />} />
-                      <Route path={`${path}`} render={() => <StudentsView />} />
-                    </Switch>
-                  </TabNavigation>
-                );
-              }}
-            />
-          </>
-        )}
       </Switch>
+      {(authUser?.data.data.user_type === UserType.ADMIN ||
+        authUser?.data.data.user_type === UserType.SUPER_ADMIN) && (
+        <Switch>
+          <Route exact path={`${path}/add/:userType`} component={NewUser} />
+          <Route exact path={`${path}/:id/edit`} component={UpdateUser} />
+
+          <Route
+            path={`${path}`}
+            render={() => {
+              return (
+                <TabNavigation
+                  tabs={tabs}
+                  onTabChange={(event) => setUserType(event.activeTabLabel)}>
+                  <Switch>
+                    <Route
+                      path={`${path}/instructors`}
+                      render={() => <InstructorsView />}
+                    />
+                    <Route path={`${path}/admins`} render={() => <AdminsView />} />
+                    <Route path={`${path}`} render={() => <StudentsView />} />
+                  </Switch>
+                </TabNavigation>
+              );
+            }}
+          />
+        </Switch>
+      )}
     </div>
   );
 }

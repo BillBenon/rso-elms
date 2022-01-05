@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
-import { Response, SortedContent } from '../../types';
+import { FilterOptions, Response, SortedContent } from '../../types';
 import {
   ApproveStudents,
   EnrollInstructorLevel,
@@ -23,6 +23,7 @@ import {
 } from '../../types/services/instructor.types';
 import { StudentIntakeProgram } from '../../types/services/intake-program.types';
 import { Student } from '../../types/services/user.types';
+import { formatQueryParameters } from '../../utils/query';
 import {
   EnrollInstructorToModuleInfo,
   ModuleInstructors,
@@ -92,10 +93,12 @@ class EnrollmentService {
     );
   }
 
-  public async getAllStudentEnrollments(): Promise<
-    AxiosResponse<Response<SortedContent<StudentEnrollmentLevel[]>>>
-  > {
-    return await adminstrationAxios.get(`students/getAllStudentLevelEnrolments`);
+  public async getAllStudentEnrollments(
+    queryParams?: FilterOptions,
+  ): Promise<AxiosResponse<Response<SortedContent<StudentEnrollmentLevel[]>>>> {
+    return await adminstrationAxios.get(
+      `students/getAllStudentLevelEnrolments?${formatQueryParameters(queryParams)}`,
+    );
   }
 
   public async getStudentsWhoAreNotInAnyClassInLevel(

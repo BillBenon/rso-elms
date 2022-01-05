@@ -12,7 +12,7 @@ import LessonPlan from '../subjects/LessonPlan';
 import SubjectDetails from '../subjects/SubjectDetails';
 import ModuleDetails from './ModuleDetails';
 
-export default function Modules({ level }: { level: string }) {
+export default function Modules({ level }: { level?: string }) {
   const { data, isLoading, isSuccess, isError } = intakeProgramStore.getModulesByLevel(
     parseInt(level || ''),
   );
