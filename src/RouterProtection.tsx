@@ -94,12 +94,14 @@ const RouterProtection = () => {
       <Route path={`${path}/schedule`} component={ScheduleHome} />
       <Route path={`${path}/events`} component={Events} />
       <Route path={`${path}/modules`} component={Modules} />
+      <Route path={`${path}/users`} component={Users} />
       {/* end of instructor pages */}
     </>
   );
 
   const StudentRoutes = () => (
     <>
+      <Route path={`${path}/users`} component={Users} />
       {/* start of student pages */}
       <Route path={`${path}/intakes`} component={IntakesView} />
       <Route path={`${path}/schedule`} component={ScheduleHome} />

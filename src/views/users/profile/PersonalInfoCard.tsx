@@ -3,13 +3,23 @@ import React from 'react';
 
 import Avatar from '../../../components/Atoms/custom/Avatar';
 import Badge from '../../../components/Atoms/custom/Badge';
+import Button from '../../../components/Atoms/custom/Button';
+import Icon from '../../../components/Atoms/custom/Icon';
 import Heading from '../../../components/Atoms/Text/Heading';
 import hobbiesStore from '../../../store/administration/hobbies.store';
 import { UserInfo } from '../../../types/services/user.types';
 import { advancedTypeChecker, titleCase } from '../../../utils/getOption';
 
-function PersonalInfoCard({ user }: { user: UserInfo }) {
+function PersonalInfoCard({
+  user,
+  showMine = false,
+}: {
+  user: UserInfo;
+  showMine: boolean;
+}) {
   const hobbies = hobbiesStore.getUserHobby(user.person?.id + '').data?.data.data || [];
+
+  const uploadPhoto = () => {};
 
   return (
     <div className="max-w-sm py-4 px-6 bg-main rounded-md">
@@ -21,18 +31,34 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
         </div>
       )}
       <div className="bg-secondary py-5 flex flex-col justify-center items-center">
-        <Avatar
-          className="border-4 border-primary-500 -mt-20"
-          size="120"
-          src="https://static.thenounproject.com/png/2643367-200.png"
-          alt="photo"
-        />
+        <div className="relative">
+          <Avatar
+            className="border-4 border-primary-500 -mt-20"
+            size="120"
+            src="https://static.thenounproject.com/png/2643367-200.png"
+            alt="photo"
+          />
+          {showMine && (
+            <div className="absolute top-0 right-0">
+              <Button styleType="text" onClick={() => uploadPhoto()}>
+                <Icon
+                  bgColor="main"
+                  size={20}
+                  useheightandpadding={false}
+                  className="rounded-2xl p-5"
+                  fill="primary"
+                  name="camera"
+                />
+              </Button>
+            </div>
+          )}
+        </div>
         <div className="flex flex-col justify-center items-center py-7">
           <Heading fontSize="lg" fontWeight="semibold">
             {user.first_name + ' ' + user.last_name}
           </Heading>
           <p className="py-2 font-normal text-sm border-b-2 text-txt-secondary">
-            {titleCase(user.user_type)}
+            {titleCase(user.user_type).replaceAll('_', ' ')}
           </p>
           <p className="py-2 font-medium text-sm">{user.email}</p>
           <p className="py-2 font-medium text-sm">{user.phone}</p>
