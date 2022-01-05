@@ -47,7 +47,8 @@ export default function ClassPeriodPerformance() {
     };
 
     record.subject_marks?.forEach((mark) => {
-      processed[mark.subject.title] = mark.obtained_marks.toString();
+      processed[`${mark.subject.title} /${mark.total_marks}`] =
+        mark.obtained_marks.toString();
     });
 
     processed[`total /${record.total_marks}`] = `${
