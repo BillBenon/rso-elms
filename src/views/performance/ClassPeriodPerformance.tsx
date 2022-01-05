@@ -78,8 +78,14 @@ export default function ClassPeriodPerformance() {
   return (
     <div>
       <Heading fontSize="lg" fontWeight="bold" className="py-2">
-        {`${classInfo?.data.data.academic_year_program_intake_level.academic_program_level.program.name} - 
-        ${classInfo?.data.data.academic_year_program_intake_level.academic_program_level.level.name} 
+        {`${
+          classInfo?.data.data.academic_year_program_intake_level.academic_program_level
+            .program.name || ''
+        } - 
+        ${
+          classInfo?.data.data.academic_year_program_intake_level.academic_program_level
+            .level.name || ''
+        } 
        `}
       </Heading>
       {isIdle || isLoading ? (
