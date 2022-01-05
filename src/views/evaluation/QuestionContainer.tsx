@@ -13,6 +13,7 @@ import {
   IMultipleChoiceAnswers,
   IStudentAnswer,
 } from '../../types/services/evaluation.types';
+import { studentMarkingAnswer } from '../../types/services/marking.types';
 import { getLocalStorageData } from '../../utils/getLocalStorageItem';
 import ContentSpan from './ContentSpan';
 import MultipleChoiceAnswer from './MultipleChoiceAnswer';
@@ -40,8 +41,13 @@ export default function QuestionContainer({
   const history = useHistory();
 
   const [studentEvaluationId, setStudentEvaluationId] = useState('');
-  let previousAnswers =
-    markingStore.getStudentEvaluationAnswers(studentEvaluationId).data?.data.data || [];
+  const [previousAnswers, setPreviousAnswers] = useState<studentMarkingAnswer[]>([]);
+  let previoustudentAnswers =
+    markingStore.getStudentEvaluationAnswers(studentEvaluationId);
+
+  useEffect(() => {
+    setPreviousAnswers(previoustudentAnswers.data?.data.data || []);
+  }, [previoustudentAnswers.data?.data.data]);
 
   const initialState: IStudentAnswer = {
     answer_attachment: '',
@@ -114,11 +120,11 @@ export default function QuestionContainer({
     }
   }
 
-  function handleChoiceSelect(choice: string, index: number) {
+  function handleChoiceSelect(choiceId: string, index: number) {
     let choicesClone = [...(questionChoices || [])];
     choicesClone[index].highlight = true;
     choicesClone.forEach((ch) => {
-      if (ch.id !== choice) {
+      if (ch.id !== choiceId) {
         ch.highlight = false;
       }
     });
@@ -126,7 +132,7 @@ export default function QuestionContainer({
     setChoices(choicesClone);
 
     let choosenAnswer = { ...initialState };
-    choosenAnswer.multiple_choice_answer = choice;
+    choosenAnswer.multiple_choice_answer = choiceId;
 
     setAnswer(choosenAnswer);
     mutate(choosenAnswer, {
@@ -162,11 +168,13 @@ export default function QuestionContainer({
         {isMultipleChoice ? (
           <div className="flex flex-col gap-4">
             {questionChoices && questionChoices?.length > 0
-              ? questionChoices?.map((choiceAnswer) => (
+              ? questionChoices?.map((choiceAnswer, choiceIndex) => (
                   <MultipleChoiceAnswer
                     key={choiceAnswer.id}
                     choiceId={choiceAnswer.id}
-                    handleChoiceSelect={() => handleChoiceSelect(choiceAnswer.id, index)}
+                    handleChoiceSelect={() =>
+                      handleChoiceSelect(choiceAnswer.id, choiceIndex)
+                    }
                     answer_content={choiceAnswer.answer_content}
                     highlight={answer.multiple_choice_answer === choiceAnswer.id}
                   />
