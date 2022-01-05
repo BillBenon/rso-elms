@@ -24,6 +24,7 @@ import { lessonStore } from '../../store/administration/lesson.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { UserInfo, UserType } from '../../types/services/user.types';
+import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import EvaluationCategories from '../evaluation/EvaluationCategories';
 import SubjectInstructorView from '../evaluation/SubjectInstructorView';
 import SubjectInstructors from './SubjectInstructors';
@@ -36,6 +37,10 @@ interface ParamType {
 export default function SubjectDetails() {
   const { search } = useLocation();
   const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
+  const progId = new URLSearchParams(search).get('prog') || '';
+  const level = new URLSearchParams(search).get('lvl') || '';
+  const period = new URLSearchParams(search).get('prd') || '';
+
   const [authUser, setAuthUser] = useState<UserInfo>();
   const userData = authenticatorStore.authUser();
   useEffect(() => {
@@ -73,20 +78,27 @@ export default function SubjectDetails() {
     history.goBack();
   };
 
+  function goToNewEvaluation() {
+    setLocalStorageData('currentStep', 0);
+    history.push(
+      `/dashboard/evaluations/new?subj=${subjectId}&intkProg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+    );
+  }
+
   let tabs = [
     {
       label: `Lessons(${lessons.length})`,
-      href: `${url}?intkPrg=${intakeProg}`,
+      href: `${url}?intkProg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
     },
     {
       label: 'Evaluations',
-      href: `${url}/evaluations?intkPrg=${intakeProg}`,
+      href: `${url}/evaluations?intkProg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
     },
   ];
   if (intakeProg || authUser?.user_type !== UserType.ADMIN) {
     tabs.push({
       label: 'Instructors',
-      href: `${url}/instructors?intkPrg=${intakeProg}`,
+      href: `${url}/instructors?intkProg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
     });
   }
 
@@ -112,13 +124,13 @@ export default function SubjectDetails() {
 
           <TabNavigation
             tabs={tabs}
-            headerComponent={
-              authUser?.user_type === UserType.INSTRUCTOR && (
-                <BrowserLink to={`${url}/add-lesson`}>
-                  <Button>New lesson</Button>
-                </BrowserLink>
-              )
-            }
+            // headerComponent={
+            //   authUser?.user_type === UserType.INSTRUCTOR && (
+            //     <BrowserLink to={`${url}/add-lesson`}>
+            //       <Button>New lesson</Button>
+            //     </BrowserLink>
+            //   )
+            // }
             className="pt-6">
             <Switch>
               <Route
@@ -141,9 +153,16 @@ export default function SubjectDetails() {
                         />
                       ) : (
                         <>
-                          <Heading fontSize="base" className="mb-6" fontWeight="semibold">
-                            Ongoing Lessons
-                          </Heading>
+                          <div className="flex justify-between mb-6">
+                            <Heading fontSize="base" fontWeight="semibold">
+                              Ongoing Lessons
+                            </Heading>
+                            {authUser?.user_type === UserType.INSTRUCTOR && (
+                              <BrowserLink to={`${url}/add-lesson`}>
+                                <Button>New lesson</Button>
+                              </BrowserLink>
+                            )}
+                          </div>
                           <Accordion>
                             {lessons.map((les) => {
                               return (
@@ -186,7 +205,14 @@ export default function SubjectDetails() {
               {authUser?.user_type === UserType.INSTRUCTOR ? (
                 <Route
                   path={`${url}/evaluations`}
-                  render={() => <SubjectInstructorView subjectId={subjectId} />}
+                  render={() => (
+                    <div className="flex justify-between">
+                      <SubjectInstructorView subjectId={subjectId} />
+                      <div>
+                        <Button onClick={goToNewEvaluation}>New Evaluation</Button>
+                      </div>
+                    </div>
+                  )}
                 />
               ) : (
                 <Route
