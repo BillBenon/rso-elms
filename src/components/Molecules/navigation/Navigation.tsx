@@ -116,12 +116,17 @@ export default function Navigation() {
                       role="menu"
                       aria-orientation="vertical"
                       aria-labelledby="user-menu">
-                      <a
+                      {/* <a
                         href="#"
                         className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100"
                         role="menuitem">
                         Your Profile
-                      </a>
+                      </a> */}
+                      <Link
+                        to={`/dashboard/users/${authUser?.id}/profile?mine=${true}`}
+                        className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100">
+                        Your Profile
+                      </Link>
                       <a
                         href="#"
                         className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100"

@@ -68,9 +68,11 @@ export default function Sidebar() {
     <div className="bg-white md:h-screen">
       <div className="px-4 py-4">
         <AcademyProfileCard src="/images/nisslogo.png" alt="academy logo">
-          {authUser?.user_type === UserType.SUPER_ADMIN
+          {authUser?.institution_name === null
+            ? 'Institution name'
+            : authUser?.user_type === UserType.SUPER_ADMIN
             ? authUser.institution_name
-            : authUser?.academy.name || authUser?.institution_name || 'No Institution'}
+            : authUser?.academy?.name}
         </AcademyProfileCard>
       </div>
       <SidebarLinks links={defaultLinks()} />

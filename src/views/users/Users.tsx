@@ -6,6 +6,8 @@ import ILabel from '../../components/Atoms/Text/ILabel';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewUser from '../../components/Organisms/forms/user/NewUser';
 import UpdateUser from '../../components/Organisms/forms/user/UpdateUser';
+import { authenticatorStore } from '../../store/administration';
+import { UserType } from '../../types/services/user.types';
 import AdminsView from './AdminsView';
 import InstructorsView from './InstructorsView';
 import StudentsView from './StudentsView';
@@ -14,6 +16,7 @@ import UserDetails from './UserDetails';
 export default function Users() {
   const { url, path } = useRouteMatch();
   const [userType, setUserType] = useState('Students');
+  const { data: authUser } = authenticatorStore.authUser();
 
   const tabs = [
     {
@@ -47,29 +50,33 @@ export default function Users() {
         </ILabel>
       </div>
       <Switch>
-        <Route exact path={`${path}/add/:userType`} component={NewUser} />
-        <Route exact path={`${path}/:id/edit`} component={UpdateUser} />
         <Route exact path={`${path}/:id/profile`} component={UserDetails} />
-
-        <Route
-          path={`${path}`}
-          render={() => {
-            return (
-              <TabNavigation
-                tabs={tabs}
-                onTabChange={(event) => setUserType(event.activeTabLabel)}>
-                <Switch>
-                  <Route
-                    path={`${path}/instructors`}
-                    render={() => <InstructorsView />}
-                  />
-                  <Route path={`${path}/admins`} render={() => <AdminsView />} />
-                  <Route path={`${path}`} render={() => <StudentsView />} />
-                </Switch>
-              </TabNavigation>
-            );
-          }}
-        />
+        {(authUser?.data.data.user_type === UserType.ADMIN ||
+          authUser?.data.data.user_type === UserType.SUPER_ADMIN) && (
+          <>
+            <Route exact path={`${path}/add/:userType`} component={NewUser} />
+            <Route exact path={`${path}/:id/edit`} component={UpdateUser} />
+            <Route
+              path={`${path}`}
+              render={() => {
+                return (
+                  <TabNavigation
+                    tabs={tabs}
+                    onTabChange={(event) => setUserType(event.activeTabLabel)}>
+                    <Switch>
+                      <Route
+                        path={`${path}/instructors`}
+                        render={() => <InstructorsView />}
+                      />
+                      <Route path={`${path}/admins`} render={() => <AdminsView />} />
+                      <Route path={`${path}`} render={() => <StudentsView />} />
+                    </Switch>
+                  </TabNavigation>
+                );
+              }}
+            />
+          </>
+        )}
       </Switch>
     </div>
   );
