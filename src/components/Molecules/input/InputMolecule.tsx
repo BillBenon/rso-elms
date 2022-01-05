@@ -14,6 +14,8 @@ export default function InputMolecule<T>({
   value,
   handleChange = () => {},
   children,
+  min = 0,
+  max,
   error = '',
   placeholder = '',
   type = 'text',
@@ -31,6 +33,8 @@ export default function InputMolecule<T>({
         defaultValue={defaultValue}
         {...attrs}
         readonly={readOnly}
+        min={min}
+        max={max}
         required={required}
         name={name}
         placeholder={placeholder}
