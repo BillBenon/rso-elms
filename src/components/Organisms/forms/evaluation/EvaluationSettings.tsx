@@ -30,6 +30,10 @@ export default function EvaluationSettings({
     authUser?.academy.id + '',
   ).data?.data.data;
 
+  const approvals = evaluationStore.getEvaluationApprovals(evaluationId || '');
+
+  console.log(approvals.data?.data.data);
+
   const [settings, setSettings] = useState<IEvaluationApproval>({
     approver_ids: '',
     evaluation_id: evaluationId || getLocalStorageData('evaluationId'),

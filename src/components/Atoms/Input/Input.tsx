@@ -14,7 +14,7 @@ export default function Input<T>({
   value = '',
   name,
   min = 0,
-  max, 
+  max,
   full,
   fcolor = 'primary',
   bcolor = 'tertiary',
