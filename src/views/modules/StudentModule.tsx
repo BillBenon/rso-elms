@@ -49,11 +49,18 @@ function StudentModule() {
       (lv) => lv.intake_program_student.student.id === student?.data.data[0]?.id,
     ) || [];
 
+  const studentLevelToDisplay = studentLevels.map(
+    (lv) => lv.academic_year_program_level.academic_program_level.level,
+  );
+
   function handleChange(e: ValueType) {
     setSelectedLevel({
       ...selectedLevel,
       [e.name]: e.value,
-      level: studentLevels.find((lv) => lv.id === e.value),
+      level: studentLevels.find(
+        (lv) =>
+          lv.academic_year_program_level.academic_program_level.level.id === e.value,
+      ),
     });
   }
 
@@ -66,7 +73,7 @@ function StudentModule() {
 
       {studLoad || levelLoading ? (
         <Loader />
-      ) : studentLevels.length == 0 ? (
+      ) : studentLevelToDisplay.length == 0 ? (
         <NoDataAvailable
           icon="level"
           showButton={false}
@@ -81,20 +88,18 @@ function StudentModule() {
             placeholder="Select Level"
             value={selectedLevel.levelId + ''}
             options={getDropDownOptions({
-              inputs: studentLevels,
-              //@ts-ignore
-              getOptionLabel: (lv: StudentEnrollmentLevel) =>
-                lv.academic_year_program_level.academic_program_level.level.id,
+              inputs: studentLevelToDisplay,
+              labelName: ['name'],
             })}
           />
-          <Heading>
+          <Heading className="px-8">
             {
               selectedLevel.level?.academic_year_program_level.academic_program_level
                 .level.name
             }
           </Heading>
           <Modules
-            level={selectedLevel.level?.academic_year_program_level.academic_program_level.id.toString()}
+            level={selectedLevel.level?.academic_year_program_level.id.toString()}
             key={selectedLevel.level?.id}
           />
         </>
