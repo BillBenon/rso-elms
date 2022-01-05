@@ -28,7 +28,7 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
     id: id,
   };
 
-  const { mutateAsync } = registrationControlStore.updateRegControl();
+  const { mutateAsync, isLoading } = registrationControlStore.updateRegControl();
   const history = useHistory();
 
   const { data } = registrationControlStore.fetchRegControlById(id);
@@ -43,13 +43,14 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
 
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
+    let toastId = toast.loading('Creating registration control');
     mutateAsync(regControlUpdateInfo, {
       onSuccess: () => {
-        toast.success('Control updated');
+        toast.success('Control updated', { id: toastId });
         history.goBack();
       },
       onError: (error: any) => {
-        toast.error(error.response.data.message);
+        toast.error(error.response.data.message, { id: toastId });
       },
     });
     if (onSubmit) onSubmit(e);
@@ -94,7 +95,7 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
       </RadioMolecule>
 
       <div className="mt-5">
-        <Button type="submit" full>
+        <Button type="submit" disabled={isLoading} full>
           Save
         </Button>
       </div>
