@@ -23,15 +23,19 @@ interface IProps {
 export default function ApproveEvaluation({ evaluationId }: IProps) {
   const history = useHistory();
   const authUser = authenticatorStore.authUser().data?.data.data;
-  const evaluationInfo = evaluationStore.getEvaluationById(evaluationId).data?.data.data;
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
+    authUser?.id + '',
+  ).data?.data.data[0];
+  const evaluationApprovals =
+    evaluationStore.getEvaluationApprovalByEvaluationAndInstructor(
+      evaluationId,
+      instructorInfo?.id + '',
+    ).data?.data.data;
 
   const [remarks, setRemarks] = useState('');
   const [open, setOpen] = useState(false);
   const [action, setAction] = useState('');
 
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
-    authUser?.id + '',
-  ).data?.data.data[0];
   const { mutateAsync } = evaluationStore.approveEvaluation();
 
   const approve = () => {
@@ -74,16 +78,18 @@ export default function ApproveEvaluation({ evaluationId }: IProps) {
     setRemarks('');
   }
 
+  console.log(evaluationApprovals?.evaluation_approval_status);
+
   return (
     <>
       <EvaluationContent evaluationId={evaluationId}>
         <Button
-          disabled={evaluationInfo?.evaluation_status !== 'REVIEWED'}
+          disabled={evaluationApprovals?.evaluation_approval_status + '' !== 'PENDING'}
           onClick={() => changeAction('approve')}>
           Mark as approved
         </Button>
         <Button
-          disabled={evaluationInfo?.evaluation_status !== 'REVIEWED'}
+          disabled={evaluationApprovals?.evaluation_approval_status + '' !== 'PENDING'}
           styleType="outline"
           onClick={() => changeAction('reject')}>
           Mark as rejected

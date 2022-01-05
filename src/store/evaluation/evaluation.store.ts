@@ -85,6 +85,30 @@ class EvaluationStore {
     });
   }
 
+  getEvaluationApprovalByEvaluationAndInstructor(
+    evaluationId: string,
+    instructorId: string,
+  ) {
+    return useQuery(['approvals', evaluationId, instructorId], () =>
+      evaluationService.getEvaluationApprovalByEvaluationAndInstructor(
+        evaluationId,
+        instructorId,
+      ),
+    );
+  }
+
+  getEvaluationReviewByEvaluationAndInstructor(
+    evaluationId: string,
+    instructorId: string,
+  ) {
+    return useQuery(['reviewers', evaluationId, instructorId], () =>
+      evaluationService.getEvaluationReviewsByEvaluationAndInstructor(
+        evaluationId,
+        instructorId,
+      ),
+    );
+  }
+
   getStudentReport(studentId: string) {
     return useQuery(
       ['studentReport', studentId],

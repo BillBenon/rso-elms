@@ -10,6 +10,7 @@ import {
   IEvaluationInfoCollected,
   IEvaluationOwnership,
   IEvaluationQuestionsInfo,
+  InstructorEvaluationAppprovalStatus,
   IStudentAnswer,
   IStudentEvaluationStart,
   IStudentEvaluationStartInfo,
@@ -102,6 +103,24 @@ class EvaluationService {
     id: string,
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
     return await evaluationAxios.get(`/evaluations/getById/${id}`);
+  }
+
+  public async getEvaluationApprovalByEvaluationAndInstructor(
+    evaluationId: string,
+    instructorId: string,
+  ): Promise<AxiosResponse<Response<InstructorEvaluationAppprovalStatus>>> {
+    return await evaluationAxios.get(
+      `/evaluationApprovals/approvals/evaluation/${evaluationId}/instructor/${instructorId}`,
+    );
+  }
+
+  public async getEvaluationReviewsByEvaluationAndInstructor(
+    evaluationId: string,
+    instructorId: string,
+  ): Promise<AxiosResponse<Response<InstructorEvaluationAppprovalStatus>>> {
+    return await evaluationAxios.get(
+      `/evaluationApprovals/reviews/evaluation/${evaluationId}/instructor/${instructorId}`,
+    );
   }
 
   public async getStudentReport(

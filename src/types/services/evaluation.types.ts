@@ -64,6 +64,7 @@ export enum IContentFormatEnum {
 }
 
 export enum IEvaluationStatus {
+  DRAFT = 'DRAFT',
   PENDING = 'PENDING',
   ON_GOING = 'ON_GOING',
   ONGOING = 'ONGOING',
@@ -94,6 +95,13 @@ export enum IEvaluationAppprovalStatus {
   REVIEWED_TO_APPROVE = 'REVIEWED_TO_APPROVE',
   RETURNED = 'REVIEWED_TO_APPROVE',
   APPROVED = 'APPROVED',
+}
+
+export interface InstructorEvaluationAppprovalStatus extends Table {
+  id: string;
+  evaluation_approval_status: IEvaluationAppprovalStatus | IEvaluationAppprovalStatus;
+  evaluation_reviewer_status: IEvaluationAppprovalStatus | IEvaluationAppprovalStatus;
+  remarks: string;
 }
 
 export enum UpdateEvaluationApprovalStatusEnum {

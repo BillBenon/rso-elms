@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
@@ -10,7 +10,7 @@ import { advancedTypeChecker } from '../../utils/getOption';
 
 export default function ModuleEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
-  const history = useHistory();
+  // const history = useHistory();
   const { id } = useParams<ParamType>();
   const { path } = useRouteMatch();
   const { data, isSuccess, isLoading, isError } = evaluationStore.getModuleEvaluations(
@@ -59,9 +59,9 @@ export default function ModuleEvaluations() {
                       <CommonCardMolecule
                         className="cursor-pointer"
                         data={info}
-                        handleClick={() =>
-                          history.push(`/dashboard/evaluations/${info.id}`)
-                        }
+                        // handleClick={() =>
+                        //   history.push(`/dashboard/evaluations/${info.id}`)
+                        // }
                       />
                     </div>
                   ))
