@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
-import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
@@ -11,20 +10,11 @@ import { authenticatorStore } from '../../store/administration';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { getStudentShipByUserId } from '../../store/administration/intake-program.store';
 import { ValueType } from '../../types';
-import { StudentEnrollmentLevel } from '../../types/services/enrollment.types';
 import { getDropDownOptions } from '../../utils/getOption';
 import Modules from '.';
 
-interface IStudentModuleState {
-  levelId: number;
-  level: StudentEnrollmentLevel | undefined;
-}
-
 function StudentModule() {
-  const [selectedLevel, setSelectedLevel] = useState<IStudentModuleState>({
-    levelId: 0,
-    level: undefined,
-  });
+  const [selectedLevel, setSelectedLevel] = useState('');
   const { url } = useRouteMatch();
   const list = [
     { to: '/dashboard/student', title: 'Dashboard' },
@@ -54,26 +44,25 @@ function StudentModule() {
   );
 
   function handleChange(e: ValueType) {
-    setSelectedLevel({
-      ...selectedLevel,
-      [e.name]: e.value,
-      level: studentLevels.find(
-        (lv) =>
-          lv.academic_year_program_level.academic_program_level.level.id === e.value,
-      ),
-    });
+    setSelectedLevel(e.value + '');
   }
+
+  useEffect(() => {
+    setSelectedLevel(
+      studentLevelToDisplay.length > 0 ? studentLevelToDisplay[0].id + '' : '',
+    );
+  }, [levels]);
 
   return (
     <>
       <section>
-        <BreadCrumb list={list}></BreadCrumb>
+        <BreadCrumb list={list} />
       </section>
       <TableHeader showSearch={false} showBadge={false} title="Enrolled Modules" />
 
       {studLoad || levelLoading ? (
         <Loader />
-      ) : studentLevelToDisplay.length == 0 ? (
+      ) : studentLevels.length == 0 ? (
         <NoDataAvailable
           icon="level"
           showButton={false}
@@ -83,25 +72,17 @@ function StudentModule() {
       ) : (
         <>
           <SelectMolecule
+            className="px-6"
             handleChange={handleChange}
             name={'levelId'}
             placeholder="Select Level"
-            value={selectedLevel.levelId + ''}
+            value={selectedLevel}
             options={getDropDownOptions({
               inputs: studentLevelToDisplay,
               labelName: ['name'],
             })}
           />
-          <Heading className="px-8">
-            {
-              selectedLevel.level?.academic_year_program_level.academic_program_level
-                .level.name
-            }
-          </Heading>
-          <Modules
-            level={selectedLevel.level?.academic_year_program_level.id.toString()}
-            key={selectedLevel.level?.id}
-          />
+          <Modules level={selectedLevel} key={selectedLevel} />
         </>
       )}
     </>
