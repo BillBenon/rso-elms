@@ -50,22 +50,22 @@ export default function ApproveEvaluation({ evaluationId }: IProps) {
       remarks: remarks,
     };
 
-    // if ((remarks && action === 'reject') || (action === 'approve' && !remarks)) {
-    mutateAsync(udpateEvaluationStatus, {
-      onSuccess: () => {
-        toast.success('Feedback is recorded');
-        queryClient.invalidateQueries([
-          'evaluations',
-          instructorInfo?.id,
-          IEvaluationOwnership.FOR_APPROVING,
-        ]);
-        history.goBack();
-      },
-      onError: (error: any) => {
-        toast.error(error.response.data.message);
-      },
-    });
-    // } else toast.error('A remark is needed when rejecting!');
+    if ((remarks && action === 'reject') || action === 'approve') {
+      mutateAsync(udpateEvaluationStatus, {
+        onSuccess: () => {
+          toast.success('Feedback is recorded');
+          queryClient.invalidateQueries([
+            'evaluations',
+            instructorInfo?.id,
+            IEvaluationOwnership.FOR_APPROVING,
+          ]);
+          history.goBack();
+        },
+        onError: (error: any) => {
+          toast.error(error.response.data.message);
+        },
+      });
+    } else toast.error('A remark is needed when rejecting!');
   };
 
   function changeAction(action: string) {
