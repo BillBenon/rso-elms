@@ -38,12 +38,25 @@ export default function StudentAnswer({
   const [obtainedMarks, setObtainedMarks] = useState(data.mark_scored);
 
   function updateCorrectionMarks(e: ValueType) {
-    setObtainedMarks(e.value);
+    setObtainedMarks(Number(e.value));
     updateQuestionPoints(data.id, obtainedMarks);
   }
 
+  function clickUpdateMarks(isCorrect: boolean){
+    if(isCorrect && obtainedMarks == 0){
+      setObtainedMarks(Number(data?.evaluation_question.mark))
+      updateQuestionPoints(data.id, obtainedMarks);
+    }
+
+    else if(!isCorrect && obtainedMarks != 0){
+      setObtainedMarks(Number(0))
+      updateQuestionPoints(data.id, obtainedMarks);
+    }
+    
+  }
+
   useEffect(() => {
-    setObtainedMarks(data.mark_scored);
+    setObtainedMarks(data.mark_scored || 0);
   }, [data]);
   return (
     <div className={`answer-card-molecule bg-main p-6 rounded-lg `}>
@@ -105,7 +118,7 @@ export default function StudentAnswer({
               }
               onClick={() => {
                 if (data.evaluation_question?.question_type != 'MULTIPLE_CHOICE')
-                  updateQuestionPoints(data?.id, data?.evaluation_question?.mark);
+                clickUpdateMarks(true);
               }}>
               <Icon
                 name={'tick'}
@@ -123,7 +136,7 @@ export default function StudentAnswer({
               }
               onClick={() => {
                 if (data.evaluation_question?.question_type != 'MULTIPLE_CHOICE')
-                  updateQuestionPoints(data?.id, 0);
+                clickUpdateMarks(false);
               }}>
               <Icon
                 name={'cross'}
@@ -145,7 +158,7 @@ export default function StudentAnswer({
             type="number"
             min={0}
             style={{ width: '80px' }}
-            max={data?.evaluation_question?.mark}
+            max={Number(data?.evaluation_question?.mark) || 4}
             value={obtainedMarks}
             name={'question_score'}
           />
