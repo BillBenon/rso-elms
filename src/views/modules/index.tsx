@@ -56,7 +56,7 @@ export default function Modules({ level }: { level?: string }) {
                     ) : modules.length == 0 ? (
                       <NoDataAvailable
                         showButton={false}
-                        title={'No Modules available in this level'}
+                        title={'No modules available in this level'}
                         description="This level has not received any planned modules to take. Please wait for the admin to add some"
                       />
                     ) : (
