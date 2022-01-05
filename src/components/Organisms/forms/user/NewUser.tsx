@@ -22,6 +22,7 @@ import {
   EducationLevel,
   GenderStatus,
   MaritalStatus,
+  ProfileStatus,
   SendCommunicationMsg,
   UserType,
 } from '../../../../types/services/user.types';
@@ -84,6 +85,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     nationality: '',
     document_expire_on: '',
     send_communication_msg: SendCommunicationMsg.BOTH,
+    profile_status: ProfileStatus.INCOMPLETE,
     id: '',
   });
 
@@ -164,8 +166,8 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           <>
             <DateMolecule
               handleChange={handleChange}
-              startYear={new Date().getFullYear()}
-              endYear={new Date().getFullYear() + 10}
+              startYear={new Date().getFullYear() - 20}
+              endYear={new Date().getFullYear()}
               reverse={false}
               name="deployed_on"
               width="60 md:w-80">

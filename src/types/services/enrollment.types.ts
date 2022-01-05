@@ -36,7 +36,6 @@ export interface StudentsWithNoClass extends Table {
   completed_on: string;
   intake_program_student_id: string;
 }
-
 export interface InstructorAssignModule {
   course_module_id: string | number;
   intake_program_instructor_id: number;
@@ -56,6 +55,11 @@ export interface EnrollStudentToLevel {
   intake_program_student_id: number;
   position: number;
   promotion_status: PromotionStatus;
+}
+
+export interface StudentEnrollmentLevel extends Table, EnrollStudentToLevel {
+  intake_program_student: StudentIntakeProgram;
+  academic_year_program_level: LevelIntakeProgram;
 }
 
 export interface StudentLevel extends Table, EnrollStudentToLevel {

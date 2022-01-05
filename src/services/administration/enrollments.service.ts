@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
-import { Response } from '../../types';
+import { FilterOptions, Response, SortedContent } from '../../types';
 import {
   ApproveStudents,
   EnrollInstructorLevel,
@@ -14,17 +14,16 @@ import {
   InstructorAssignModule,
   ModuleAssignmentType,
   StudentApproval,
+  StudentEnrollmentLevel,
   StudentsWithNoClass,
 } from '../../types/services/enrollment.types';
 import {
   Instructor,
   InstructorModuleAssignment,
 } from '../../types/services/instructor.types';
-import {
-  LevelIntakeProgram,
-  StudentIntakeProgram,
-} from '../../types/services/intake-program.types';
-import { IntakeLevelProgramInfo, Student } from '../../types/services/user.types';
+import { StudentIntakeProgram } from '../../types/services/intake-program.types';
+import { Student } from '../../types/services/user.types';
+import { formatQueryParameters } from '../../utils/query';
 import {
   EnrollInstructorToModuleInfo,
   ModuleInstructors,
@@ -37,14 +36,6 @@ class EnrollmentService {
   ): Promise<AxiosResponse<Response<EnrollInstructorLevelInfo[]>>> {
     return await adminstrationAxios.get(
       `instructorEnrolment/getInstructorEnrolmentLevelByInstructor/${instructorId}`,
-    );
-  }
-
-  public async getStudentLevelEnrollments(
-    levelId: number,
-  ): Promise<AxiosResponse<Response<IntakeLevelProgramInfo[]>>> {
-    return await adminstrationAxios.get(
-      `students/getStudentsInIntakeProgramLevel/${levelId}`,
     );
   }
 
@@ -102,6 +93,14 @@ class EnrollmentService {
     );
   }
 
+  public async getAllStudentEnrollments(
+    queryParams?: FilterOptions,
+  ): Promise<AxiosResponse<Response<SortedContent<StudentEnrollmentLevel[]>>>> {
+    return await adminstrationAxios.get(
+      `students/getAllStudentLevelEnrolments?${formatQueryParameters(queryParams)}`,
+    );
+  }
+
   public async getStudentsWhoAreNotInAnyClassInLevel(
     academicYearProgramIntakeLevelId: string,
     intakeAcademicYearPeriodId: string,
@@ -113,7 +112,7 @@ class EnrollmentService {
 
   public async enrollStudentsToLevel(
     newStudent: EnrollStudentToLevel,
-  ): Promise<AxiosResponse<Response<LevelIntakeProgram>>> {
+  ): Promise<AxiosResponse<Response<StudentEnrollmentLevel>>> {
     return await adminstrationAxios.post(
       `students/enrolStudentInIntakeProgramLevel`,
       newStudent,
