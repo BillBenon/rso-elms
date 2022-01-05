@@ -31,7 +31,7 @@ export default function StudentsView() {
           sortyBy: 'username',
         })
       : usersStore.getUsersByAcademyAndUserType(
-          authUser?.academy.id.toString() || '',
+          authUser?.academy?.id.toString() || '',
           UserType.STUDENT,
           { page: currentPage, pageSize, sortyBy: 'username' },
         );

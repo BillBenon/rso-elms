@@ -206,9 +206,9 @@ export default function ModuleDetails() {
                   <div className="flex gap-3">
                     <Button
                       onClick={() => {
-                        history.push(`${url}/subjects/add-subject`);
+                        history.push(`/dashboard/modules/${id}/add-subject`);
                       }}>
-                      Add new Subject
+                      Add new subject
                     </Button>
                   </div>
                 ) : route == 'SYLLABUS' ? (

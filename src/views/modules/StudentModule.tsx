@@ -1,67 +1,108 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
+import Heading from '../../components/Atoms/Text/Heading';
+import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
+import TableHeader from '../../components/Molecules/table/TableHeader';
 import { authenticatorStore } from '../../store/administration';
-import {
-  getIntakeProgramsByStudent,
-  getStudentLevels,
-  getStudentShipByUserId,
-} from '../../store/administration/intake-program.store';
-import { PromotionStatus } from '../../types/services/intake-program.types';
+import enrollmentStore from '../../store/administration/enrollment.store';
+import { getStudentShipByUserId } from '../../store/administration/intake-program.store';
+import { ValueType } from '../../types';
+import { StudentEnrollmentLevel } from '../../types/services/enrollment.types';
+import { getDropDownOptions } from '../../utils/getOption';
 import Modules from '.';
 
+interface IStudentModuleState {
+  levelId: number;
+  level: StudentEnrollmentLevel | undefined;
+}
+
 function StudentModule() {
+  const [selectedLevel, setSelectedLevel] = useState<IStudentModuleState>({
+    levelId: 0,
+    level: undefined,
+  });
+  const { url } = useRouteMatch();
+  const list = [
+    { to: '/dashboard/student', title: 'Dashboard' },
+    { to: `${url}`, title: 'module' },
+  ];
   const authUser = authenticatorStore.authUser().data?.data.data;
 
-  const getStudent = getStudentShipByUserId(authUser?.id + '' || '', !!authUser?.id).data
-    ?.data.data[0];
-
-  const { data: getPrograms, isLoading: progLoading } = getIntakeProgramsByStudent(
-    getStudent?.id + '',
-    !!getStudent?.id,
+  const { data: student, isLoading: studLoad } = getStudentShipByUserId(
+    authUser?.id + '' || '',
+    !!authUser?.id,
   );
 
-  const { data: getLevels, isLoading: levelLoading } = getStudentLevels(
-    getPrograms?.data.data[0].id + '',
-    !!getPrograms?.data.data[0].id,
+  const { data: levels, isLoading: levelLoading } =
+    enrollmentStore.getAllStudentEnrollments({
+      page: 0,
+      pageSize: 100000000,
+      sortyBy: 'createdOn',
+    });
+
+  const studentLevels =
+    levels?.data.data.content.filter(
+      (lv) => lv.intake_program_student.student.id === student?.data.data[0]?.id,
+    ) || [];
+
+  const studentLevelToDisplay = studentLevels.map(
+    (lv) => lv.academic_year_program_level.academic_program_level.level,
   );
 
-  // let programs: CommonCardDataType[] = [];
-
-  // getPrograms?.data.data.map((p) => {
-  //   let prog: CommonCardDataType = {
-  //     id: p.id,
-  //     status: {
-  //       type: advancedTypeChecker(p.intake_program.program.generic_status),
-  //       text: p.intake_program.program.generic_status.toString(),
-  //     },
-  //     code: p.intake_program.program.code,
-  //     title: p.intake_program.program.name,
-  //     subTitle: p.intake_program.program.type.replaceAll('_', ' '),
-  //     description: p.intake_program.program.description,
-  //   };
-
-  //   programs.push(prog);
-  // });
+  function handleChange(e: ValueType) {
+    setSelectedLevel({
+      ...selectedLevel,
+      [e.name]: e.value,
+      level: studentLevels.find(
+        (lv) =>
+          lv.academic_year_program_level.academic_program_level.level.id === e.value,
+      ),
+    });
+  }
 
   return (
     <>
-      {progLoading || levelLoading ? (
+      <section>
+        <BreadCrumb list={list}></BreadCrumb>
+      </section>
+      <TableHeader showSearch={false} showBadge={false} title="Enrolled Modules" />
+
+      {studLoad || levelLoading ? (
         <Loader />
-      ) : getLevels?.data.data.length == 0 ? (
+      ) : studentLevelToDisplay.length == 0 ? (
         <NoDataAvailable
           icon="level"
           showButton={false}
           title={'You have not been enrolled in any level yet'}
           description="Dear student, please contact the admin so as to get enrolled as soon as possible"
         />
-      ) : getLevels?.data.data[0].promotion_status === PromotionStatus.PENDING ? (
-        <Modules
-          level={getLevels.data.data[0].academic_year_program_level.id.toString()}
-        />
       ) : (
-        <></>
+        <>
+          <SelectMolecule
+            handleChange={handleChange}
+            name={'levelId'}
+            placeholder="Select Level"
+            value={selectedLevel.levelId + ''}
+            options={getDropDownOptions({
+              inputs: studentLevelToDisplay,
+              labelName: ['name'],
+            })}
+          />
+          <Heading className="px-8">
+            {
+              selectedLevel.level?.academic_year_program_level.academic_program_level
+                .level.name
+            }
+          </Heading>
+          <Modules
+            level={selectedLevel.level?.academic_year_program_level.id.toString()}
+            key={selectedLevel.level?.id}
+          />
+        </>
       )}
     </>
   );

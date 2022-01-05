@@ -17,13 +17,17 @@ function SignIn() {
         <Loader />
       ) :  */}
       {institution.data?.data.data.length === 0 ? (
-        <NoDataAvailable
-          icon="academy"
-          title={'No institution available'}
-          description={
-            'Sorry, looks like the institution has not setup the platform yet! Try again later'
-          }
-        />
+        <div className="flex items-center justify-center h-screen">
+          <NoDataAvailable
+            icon="academy"
+            title={'No institution available'}
+            showButton={false}
+            fill={false}
+            description={
+              'Sorry, looks like the institution has not setup the platform yet! Try again later'
+            }
+          />
+        </div>
       ) : (
         <div className="grid lg:grid-cols-2 h-screen grid-cols-1 bg-main">
           <div className="items-center justify-center hidden lg:flex bg-secondary">

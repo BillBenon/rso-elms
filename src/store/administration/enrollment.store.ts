@@ -1,10 +1,12 @@
 import { useMutation, useQuery } from 'react-query';
 
 import { enrollmentService } from '../../services/administration/enrollments.service';
+import { FilterOptions } from '../../types';
 import {
   ModuleAssignmentType,
   StudentApproval,
 } from '../../types/services/enrollment.types';
+import { formatQueryParameters } from '../../utils/query';
 
 class EnrolmmentStore {
   getInstructorLevels(instructorId: string) {
@@ -60,12 +62,6 @@ class EnrolmmentStore {
     );
   }
 
-  getStudentsInProgramLevel(levelId: number) {
-    return useQuery(['students/levelsEnrolled', levelId], () =>
-      enrollmentService.getStudentLevelEnrollments(levelId),
-    );
-  }
-
   getInstructorsInProgramLevel(levelId: string) {
     return useQuery(['instructors/levelsEnrolled', levelId], () =>
       enrollmentService.getInstructorEnrollmentLevelByLevelId(levelId),
@@ -83,6 +79,11 @@ class EnrolmmentStore {
   ) {
     return useQuery(['student/academy/enrolment', academyId, enrolmentStatus], () =>
       enrollmentService.getStudentAcademyAndEnrollmentStatus(academyId, enrolmentStatus),
+    );
+  }
+  getAllStudentEnrollments(queryParams?: FilterOptions) {
+    return useQuery(['student/enrolments', formatQueryParameters(queryParams)], () =>
+      enrollmentService.getAllStudentEnrollments(queryParams),
     );
   }
 
