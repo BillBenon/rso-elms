@@ -80,7 +80,7 @@ export default function SchoolReport() {
           <div className="provider">
             <div className="w-20 bg-gray-300 rounded-full mb-5">
               <img
-                src="/images/nisslogo.png"
+                src="/images/rdf-logo.png"
                 alt="Institution logo"
                 className=" w-20 h-20 object-cover block rounded-full"
               />
@@ -97,7 +97,7 @@ export default function SchoolReport() {
               <img
                 src="https://static.thenounproject.com/png/2643367-200.png"
                 alt="Student profile"
-                className="block w-20 h-20 object-cover rounded-full"
+                className="block w-20 h-20 object-cover"
               />
             </div>
             <h2 className="text-sm font-bold ">
