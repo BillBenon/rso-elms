@@ -28,9 +28,9 @@ function AccountDetails<E>({
   const [accountDetails, setAccountDetails] = useState<AccountDetail>({
     username: '',
     pin: 0,
-    password: '',
-    doc_type: '',
-    confirm_password: '',
+    // password: '',
+    // doc_type: '',
+    // confirm_password: '',
     send_communication_msg: SendCommunicationMsg.EMAIL,
   });
   const handleChange = (e: ValueType) => {
@@ -60,10 +60,10 @@ function AccountDetails<E>({
       setAccountDetails({
         username: personInfo.username,
         pin: personInfo.pin,
-        password: personInfo.password,
-        confirm_password: personInfo.password,
+        // password: personInfo.password,
+        // confirm_password: personInfo.password,
+        // doc_type: personInfo.person ? personInfo.person.doc_type : '',
         send_communication_msg: personInfo.send_communication_msg,
-        doc_type: personInfo.person ? personInfo.person.doc_type : '',
       });
   }, [user.data?.data.data]);
 
@@ -101,7 +101,7 @@ function AccountDetails<E>({
             handleChange={handleChange}>
             Pin
           </InputMolecule> */}
-          <InputMolecule
+          {/* <InputMolecule
             name="password"
             placeholder="password"
             type="password"
@@ -116,7 +116,7 @@ function AccountDetails<E>({
             value={accountDetails.confirm_password}
             handleChange={handleChange}>
             Confirm Password
-          </InputMolecule>
+          </InputMolecule> */}
         </div>
         <div className="flex justify-between w-80">
           {prevStep && (
