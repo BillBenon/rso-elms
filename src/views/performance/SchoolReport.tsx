@@ -75,7 +75,7 @@ export default function SchoolReport() {
       </div>
       <div
         ref={report}
-        className="px-10 py-10 bg-white mx-auto max-w-4xl border print:my-0 border-gray-300 print:border-none">
+        className="px-10 py-10 bg-white mx-auto max-w-4xl border border-gray-300 print:border-none">
         <div className="flex justify-between">
           <div className="provider">
             <div className="w-20 bg-gray-300 rounded-full mb-5">
@@ -102,13 +102,11 @@ export default function SchoolReport() {
             </div>
             <h2 className="text-sm font-bold ">
               Name:
-              <span className="uppercase">
+              <span className="capitalize">
                 {` ${studentInfo?.data.data.user.first_name} ${studentInfo?.data.data.user.last_name}`}
               </span>
             </h2>
-            <h2 className="text-sm font-semibold py-2">
-              Reg No: {studentInfo?.data.data.reg_number}
-            </h2>
+            <h2 className="text-sm py-2">Reg No: {studentInfo?.data.data.reg_number}</h2>
             <h2 className="text-sm font-medium">{`${classInfo?.data.data.academic_year_program_intake_level.academic_program_level.level.name} - ${classInfo?.data.data.academic_year_program_intake_level.academic_program_level.program.name}`}</h2>
             <h2 className="text-sm font-medium py-2">
               {`Class: ${classInfo?.data.data.class_name}`}
@@ -122,7 +120,7 @@ export default function SchoolReport() {
 
         {/* new grid */}
         <div className="grid grid-cols-6">
-          <div className="col-span-2 border border-black px-3 flex items-center">
+          <div className="col-span-2 border border-gray-700 px-3 flex items-center">
             <Heading fontSize="base" fontWeight="semibold">
               Courses
             </Heading>
@@ -131,7 +129,7 @@ export default function SchoolReport() {
             <Heading
               fontSize="base"
               fontWeight="semibold"
-              className="p-3 border border-black text-center uppercase">
+              className="p-3 border border-gray-700 text-center uppercase">
               term one
             </Heading>
 
@@ -139,19 +137,19 @@ export default function SchoolReport() {
               <Heading
                 fontSize="base"
                 fontWeight="semibold"
-                className="p-2 border border-black text-center">
+                className="p-2 border border-gray-700 text-center">
                 Cat
               </Heading>
               <Heading
                 fontSize="base"
                 fontWeight="semibold"
-                className="p-2 border border-black text-center">
+                className="p-2 border border-gray-700 text-center">
                 Exam
               </Heading>
               <Heading
                 fontSize="base"
                 fontWeight="semibold"
-                className="p-2 border border-black text-center">
+                className="p-2 border border-gray-700 text-center">
                 Tot
               </Heading>
             </div>
@@ -164,7 +162,7 @@ export default function SchoolReport() {
             <Heading
               fontSize="base"
               fontWeight="semibold"
-              className="py-2 px-3 border border-black">
+              className="py-2 px-3 border border-gray-700">
               Marks
             </Heading>
           </div>
@@ -174,13 +172,13 @@ export default function SchoolReport() {
                 <Heading
                   fontSize="sm"
                   fontWeight="semibold"
-                  className="p-1 border border-black text-center">
+                  className="p-1 border border-gray-700 text-center">
                   Obt.
                 </Heading>
                 <Heading
                   fontSize="sm"
                   fontWeight="semibold"
-                  className="p-1 border border-black text-center">
+                  className="p-1 border border-gray-700 text-center">
                   Max.
                 </Heading>
               </React.Fragment>
@@ -190,36 +188,36 @@ export default function SchoolReport() {
         {/* modules map */}
         {marks.map((m) => (
           <div key={m.moduleId} className="grid grid-cols-3">
-            <p className="p-3 text-sm border border-black">{m.moduleName}</p>
+            <p className="p-3 text-sm border border-gray-700">{m.moduleName}</p>
             <div className="grid-cols-6 col-span-2 grid">
-              <p className="p-3 text-sm border border-black">{m.catObtained}</p>
-              <p className="p-3 text-sm border border-black">{m.catMax}</p>
-              <p className="p-3 text-sm border border-black">{m.examObtained}</p>
-              <p className="p-3 text-sm border border-black">{m.examMax}</p>
-              <p className="p-3 text-sm border border-black">
+              <p className="p-3 text-sm border border-gray-700">{m.catObtained}</p>
+              <p className="p-3 text-sm border border-gray-700">{m.catMax}</p>
+              <p className="p-3 text-sm border border-gray-700">{m.examObtained}</p>
+              <p className="p-3 text-sm border border-gray-700">{m.examMax}</p>
+              <p className="p-3 text-sm border border-gray-700">
                 {m.catObtained + m.examObtained}
               </p>
-              <p className="p-3 text-sm border border-black">{m.examMax + m.catMax}</p>
+              <p className="p-3 text-sm border border-gray-700">{m.examMax + m.catMax}</p>
             </div>
           </div>
         ))}
         {/* totals row */}
         <div className="grid grid-cols-3">
           <div>
-            <Heading fontSize="sm" className="p-3 border border-black">
+            <Heading fontSize="sm" className="p-3 border border-gray-700">
               Total
             </Heading>
           </div>
 
           <div className="grid-cols-6 col-span-2 grid">
-            <p className="p-3 text-sm border border-black">{totals.quizObtained}</p>
-            <p className="p-3 text-sm border border-black">{totals.quizMax}</p>
-            <p className="p-3 text-sm border border-black">{totals.examObtained}</p>
-            <p className="p-3 text-sm border border-black">{totals.examMax}</p>
-            <p className="p-3 text-sm border border-black">
+            <p className="p-3 text-sm border border-gray-700">{totals.quizObtained}</p>
+            <p className="p-3 text-sm border border-gray-700">{totals.quizMax}</p>
+            <p className="p-3 text-sm border border-gray-700">{totals.examObtained}</p>
+            <p className="p-3 text-sm border border-gray-700">{totals.examMax}</p>
+            <p className="p-3 text-sm border border-gray-700">
               {totals.quizObtained + totals.examObtained}
             </p>
-            <p className="p-3 text-sm border border-black">
+            <p className="p-3 text-sm border border-gray-700">
               {totals.quizMax + totals.examMax}
             </p>
           </div>
@@ -229,13 +227,13 @@ export default function SchoolReport() {
           <Heading
             fontSize="sm"
             fontWeight="semibold"
-            className="p-3 col-span-2 border border-black">
+            className="p-3 col-span-2 border border-gray-700">
             Percentage
           </Heading>
           <Heading
             fontSize="sm"
             fontWeight="semibold"
-            className="col-span-4 py-3 px-6 border border-black text-right">
+            className="col-span-4 py-3 px-6 border border-gray-700 text-right">
             {`${
               ((totals.quizObtained + totals.examObtained) /
                 (totals.quizMax + totals.examMax) || 0) * 100
@@ -247,13 +245,13 @@ export default function SchoolReport() {
           <Heading
             fontSize="sm"
             fontWeight="semibold"
-            className="p-3 col-span-2 border border-black">
+            className="p-3 col-span-2 border border-gray-700">
             Position
           </Heading>
           <Heading
             fontSize="sm"
             fontWeight="normal"
-            className="col-span-4 py-3 px-6 border border-black text-right">
+            className="col-span-4 py-3 px-6 border border-gray-700 text-right">
             {reportData?.data.data.position}
           </Heading>
         </div>
