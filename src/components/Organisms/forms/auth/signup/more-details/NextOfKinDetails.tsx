@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import countryList from 'react-select-country-list';
 
@@ -31,6 +31,7 @@ function NextOfKinDetails<E>({
 }: NextOfKin<E>) {
   const authUser = authenticatorStore.authUser().data?.data.data;
   const { mutateAsync } = usernextkinStore.createUserNextKin();
+  // const inputRef = useRef<HTMLInputElement>(null);
 
   const [details, setDetails] = useState<BasicPersonInfo>({
     first_name: '',
@@ -48,6 +49,45 @@ function NextOfKinDetails<E>({
     place_of_residence: '',
     user_id: authUser?.id + '',
   });
+
+  const { data } = usernextkinStore.getPersonByNid(details.nid);
+
+  useEffect(() => {
+    setDetails({
+      ...details,
+      user_id: authUser?.id + '',
+      first_name: data?.data.data.first_name || details.first_name,
+      last_name: data?.data.data.last_name || details.last_name,
+      email: data?.data.data.email || details.email,
+      phone_number: data?.data.data.phone_number || details.phone_number,
+      sex:
+        data?.data.data.sex == null
+          ? GenderStatus.MALE
+          : data?.data.data.sex || details.sex == null
+          ? GenderStatus.MALE
+          : details.sex,
+      birth_date: data?.data.data.birth_date || details.birth_date,
+      relationship: data?.data.data.relationship || details.relationship,
+      residence_location_id: details.residence_location_id,
+      nationality: data?.data.data.nationality || details.nationality,
+      doc_type:
+        data?.data.data.doc_type == null
+          ? DocType.NID
+          : data?.data.data.doc_type || details.doc_type == null
+          ? DocType.NID
+          : details.doc_type,
+      document_expire_on:
+        data?.data.data.document_expire_on || details.document_expire_on,
+      nid: data?.data.data.nid || details.nid,
+      place_of_residence:
+        data?.data.data.place_of_residence || details.place_of_residence,
+    });
+  }, [data?.data]);
+
+  const handleChange = (e: ValueType) => {
+    setDetails({ ...details, [e.name]: e.value });
+  };
+
   const moveBack = () => {
     prevStep && prevStep();
   };
@@ -72,16 +112,6 @@ function NextOfKinDetails<E>({
     if (onSubmit) onSubmit(e, details);
   };
 
-  const handleNid = (e: ValueType) => {
-    const { isSuccess, isLoading, data } = usernextkinStore.getPersonByNid(e.value + '');
-    if (!isLoading && isSuccess) {
-      data && setDetails(data?.data.data);
-    }
-  };
-
-  const handleChange = (e: ValueType) => {
-    setDetails({ ...details, [e.name]: e.value });
-  };
   const options = useMemo(() => countryList().getData(), []);
 
   return (
@@ -105,11 +135,15 @@ function NextOfKinDetails<E>({
           </DropdownMolecule>
 
           <InputMolecule
+            // ref={inputRef}
             name="nid"
+            // onBlur={(e) => console.log('called', e.target.value || '')}
+            // @ts-ignore
+            onBlur={(e) => setDetails({ ...details, nid: e.target.value || '' })}
             type="text"
             value={details.nid}
             placeholder={`Enter ${details.doc_type.replaceAll('_', ' ')} number`}
-            handleChange={handleNid}>
+            handleChange={() => {}}>
             {details.doc_type.replaceAll('_', ' ')}
           </InputMolecule>
           {details.doc_type == DocType.PASSPORT && (
@@ -125,6 +159,7 @@ function NextOfKinDetails<E>({
           )}
 
           <InputMolecule
+            readOnly={data?.data.data.first_name ? details.first_name !== '' : false}
             name="first_name"
             placeholder="eg: John"
             value={details.first_name}
@@ -132,6 +167,7 @@ function NextOfKinDetails<E>({
             First Name
           </InputMolecule>
           <InputMolecule
+            readOnly={data?.data.data.last_name ? details.last_name !== '' : false}
             name="last_name"
             placeholder="eg: Doe"
             value={details.last_name}
@@ -141,6 +177,7 @@ function NextOfKinDetails<E>({
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 ">
           <InputMolecule
+            readOnly={data?.data.data.email ? details.email !== '' : false}
             name="email"
             value={details.email}
             type="email"
@@ -159,7 +196,8 @@ function NextOfKinDetails<E>({
             Nationality
           </DropdownMolecule>
           <InputMolecule
-            name="phone"
+            readOnly={data?.data.data.phone_number ? details.phone_number !== '' : false}
+            name="phone_number"
             value={details.phone_number}
             placeholder="+250 ---------"
             handleChange={handleChange}>
@@ -186,11 +224,16 @@ function NextOfKinDetails<E>({
         <div className="grid grid-cols-1 md:grid-cols-2">
           <LocationMolecule
             width="72 md:w-80"
-            name="location"
+            name="residence_location_id"
             handleChange={handleChange}>
-            Location
+            Residence location
           </LocationMolecule>
           <InputMolecule
+            readOnly={
+              data?.data.data.place_of_residence
+                ? details.place_of_residence !== ''
+                : false
+            }
             name="place_of_residence"
             value={details.place_of_residence}
             handleChange={handleChange}>

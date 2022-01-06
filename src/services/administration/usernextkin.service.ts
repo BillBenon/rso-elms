@@ -21,7 +21,7 @@ class UserNextKinService {
   public async getUserByNid(
     nidNumber: string,
   ): Promise<AxiosResponse<Response<BasicPersonInfo>>> {
-    return await adminstrationAxios.get(`/users/getHisNextOfKeens/${nidNumber}`);
+    return await adminstrationAxios.get(`/users/getPersonByNid/${nidNumber}`);
   }
 }
 
