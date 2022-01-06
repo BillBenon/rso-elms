@@ -69,9 +69,9 @@ export default function SchoolReport() {
           <h3 className="text-base font-medium">Tel: {authUser?.academy.phone_number}</h3>
         </div>
         <div className="student">
-          <div className=" w-20 mb-5">
+          <div className="w-20 mb-5">
             <img
-              src="https://images.unsplash.com/photo-1507537297725-24a1c029d3ca?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80"
+              src="/images/student-avatar.png"
               alt="Student profile"
               className="block w-20 h-20 object-cover rounded-full"
             />
@@ -107,8 +107,8 @@ export default function SchoolReport() {
           <Heading
             fontSize="base"
             fontWeight="semibold"
-            className="p-3 border border-black text-center">
-            TERM ONE
+            className="p-3 border border-black text-center uppercase">
+            term one
           </Heading>
 
           <div className="grid grid-cols-3">
@@ -239,26 +239,17 @@ export default function SchoolReport() {
       {/* Digital signature */}
       <div className="pt-8">
         <div className="grid grid-cols-3 py-6">
-          <Heading
-            fontSize="sm"
-            fontWeight="semibold"
-            className="px-3 py-2 border border-black">
+          <Heading fontSize="sm" fontWeight="semibold" className="px-3 py-2">
             COMMANDANT
           </Heading>
-          <Heading
-            fontSize="sm"
-            fontWeight="semibold"
-            className="px-3 py-2 border border-black">
+          <Heading fontSize="sm" fontWeight="semibold" className="px-3 py-2">
             CHIEF INSTRUCTOR
           </Heading>
-          <Heading
-            fontSize="sm"
-            fontWeight="semibold"
-            className="px-3 py-2 border border-black">
+          <Heading fontSize="sm" fontWeight="semibold" className="px-3 py-2">
             SENIOR INSTRUCTOR
           </Heading>
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-12 border border-black">
+            <div key={i} className="h-12 px-4">
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Signature_of_Ann_Miller.svg/800px-Signature_of_Ann_Miller.svg.png"
                 alt="signature"
@@ -267,11 +258,13 @@ export default function SchoolReport() {
             </div>
           ))}
         </div>
-        <Heading fontSize="sm" fontWeight="semibold">
-          Printed by {`${authUser?.first_name} ${authUser?.last_name}`}
-        </Heading>
-        <div className="text-xs py-2 text-right font-medium">
-          {new Date().toDateString()}
+        <div className="grid grid-cols-2 py-2">
+          <Heading fontSize="sm">
+            Printed by {`${authUser?.first_name} ${authUser?.last_name}`}
+          </Heading>
+          <div className="text-xs text-right font-medium">
+            {new Date().toDateString()}
+          </div>
         </div>
       </div>
     </div>
