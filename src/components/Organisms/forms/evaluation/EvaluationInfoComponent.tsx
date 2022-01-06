@@ -82,6 +82,7 @@ export default function EvaluationInfoComponent({
     submision_type: ISubmissionTypeEnum.ONLINE_TEXT,
     time_limit: 10,
     total_mark: 0,
+    strict: true,
   });
 
   useEffect(() => {
@@ -96,6 +97,7 @@ export default function EvaluationInfoComponent({
       classification: evaluationInfo?.classification || IEvaluationClassification.MODULE,
       content_format: evaluationInfo?.content_format || IContentFormatEnum.DOC,
       due_on: '',
+      strict: true,
       eligible_group: IEligibleClassEnum.MULTIPLE,
       evaluation_status: evaluationInfo?.evaluation_status || IEvaluationStatus.DRAFT,
       evaluation_type: evaluationInfo?.evaluation_type || IEvaluationTypeEnum.CAT,
@@ -172,7 +174,7 @@ export default function EvaluationInfoComponent({
   }
 
   return (
-    <div className="bg-main p-8 ">
+    <div className="bg-main p-8">
       <form className="pt-6" onSubmit={submitForm}>
         <InputMolecule
           width="80"

@@ -143,6 +143,7 @@ export interface IEvaluationCreate {
   submision_type: ISubmissionTypeEnum;
   time_limit: number;
   total_mark: number;
+  strict: boolean;
 }
 
 export interface IStudentEvaluations {
@@ -177,6 +178,7 @@ export interface IEvaluationInfo {
   maximum_file_size: number;
   is_consider_on_report: boolean;
   available: string;
+  strict: boolean;
   number_of_questions: string;
   subject_academic_year_period_id: string;
   group_evaluations: [];
