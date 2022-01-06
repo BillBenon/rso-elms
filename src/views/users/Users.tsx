@@ -50,7 +50,7 @@ export default function Users() {
         </ILabel>
       </div>
       <Switch>
-        <Route exact path={`${path}/:id/profile`} component={UserDetails} />
+        <Route path={`${path}/:id/profile`} component={UserDetails} />
       </Switch>
       {(authUser?.data.data.user_type === UserType.ADMIN ||
         authUser?.data.data.user_type === UserType.SUPER_ADMIN) && (

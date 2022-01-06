@@ -8,6 +8,8 @@ const openRequests: string[] = ['/authentication/signin'];
 
 const commonConfig: AxiosRequestConfig = {};
 
+export const ADMIN_BASE_URL = 'http://197.243.110.147:8080/administration-service/api';
+
 const administrationModuleConfig: AxiosRequestConfig = {
   ...commonConfig,
   baseURL: 'http://197.243.110.147:8080/administration-service/api',
