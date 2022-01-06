@@ -26,7 +26,7 @@ export default function Navigation() {
   const [profileSrc, setProfileSrc] = useState('');
 
   useEffect(() => {
-    if (authUser) {
+    if (authUser && authUser?.profile_attachment_id !== null) {
       getImage(authUser.profile_attachment_id, authUser.id.toString()).then(
         (imageSrc) => {
           setProfileSrc(imageSrc);
@@ -36,7 +36,7 @@ export default function Navigation() {
   }, [location]);
 
   useMemo(() => {
-    if (authUser) {
+    if (authUser && authUser.profile_attachment_id !== null) {
       getImage(authUser.profile_attachment_id, authUser.id.toString()).then(
         (imageSrc) => {
           setProfileSrc(imageSrc);
@@ -120,7 +120,7 @@ export default function Navigation() {
                       src={
                         profileSrc || '../../../../public/images/fall_back_prof_pic.jpg'
                       }
-                      alt="profile"
+                      alt=""
                       size="34"
                     />
                   </button>
@@ -148,7 +148,7 @@ export default function Navigation() {
                         Your Profile
                       </a> */}
                       <Link
-                        to={`/dashboard/users/${authUser?.id}/profile?mine=${true}`}
+                        to={`/dashboard/users/${authUser?.id}/profile`}
                         className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100">
                         Your Profile
                       </Link>

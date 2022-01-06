@@ -1,6 +1,13 @@
 import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react';
-import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
+import {
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+  useParams,
+  useRouteMatch,
+} from 'react-router-dom';
 
 import Avatar from '../../../components/Atoms/custom/Avatar';
 import Badge from '../../../components/Atoms/custom/Badge';
@@ -8,35 +15,37 @@ import Button from '../../../components/Atoms/custom/Button';
 import Icon from '../../../components/Atoms/custom/Icon';
 import Heading from '../../../components/Atoms/Text/Heading';
 import PopupMolecule from '../../../components/Molecules/Popup';
+import { authenticatorStore } from '../../../store/administration';
 import hobbiesStore from '../../../store/administration/hobbies.store';
+import { ParamType } from '../../../types';
 import { UserInfo } from '../../../types/services/user.types';
 import { getImage } from '../../../utils/file-util';
 import { advancedTypeChecker, titleCase } from '../../../utils/getOption';
 import UpdatePhotoProfile from './UpdatePhotoProfile';
 
-function PersonalInfoCard({
-  user,
-  showMine = false,
-}: {
-  user: UserInfo;
-  showMine: boolean;
-}) {
+function PersonalInfoCard({ user }: { user: UserInfo }) {
   const { url, path } = useRouteMatch();
   const history = useHistory();
   const [profileSrc, setProfileSrc] = useState('');
+  const { data: auth } = authenticatorStore.authUser();
+  const { id } = useParams<ParamType>();
 
   const location = useLocation();
 
   useEffect(() => {
-    getImage(user.profile_attachment_id, user.id.toString()).then((imageSrc) => {
-      setProfileSrc(imageSrc);
-    });
+    if (user && user?.profile_attachment_id !== null) {
+      getImage(user.profile_attachment_id, user.id.toString()).then((imageSrc) => {
+        setProfileSrc(imageSrc);
+      });
+    }
   }, [location]);
 
   useMemo(() => {
-    getImage(user.profile_attachment_id, user.id.toString()).then((imageSrc) => {
-      setProfileSrc(imageSrc);
-    });
+    if (user.profile_attachment_id !== null) {
+      getImage(user.profile_attachment_id, user.id.toString()).then((imageSrc) => {
+        setProfileSrc(imageSrc);
+      });
+    }
   }, []);
 
   const hobbies = hobbiesStore.getUserHobby(user.person?.id + '').data?.data.data || [];
@@ -60,7 +69,7 @@ function PersonalInfoCard({
               alt="photo"
             />
 
-            {showMine && (
+            {auth?.data.data.id === id && (
               <div className="absolute top-0 right-0">
                 <Button
                   styleType="text"
