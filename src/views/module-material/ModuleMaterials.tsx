@@ -1,5 +1,12 @@
 import React from 'react';
-import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
+import {
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+  useParams,
+  useRouteMatch,
+} from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -25,6 +32,9 @@ function ModuleMaterials() {
     moduleMaterialStore.getModuleMaterialByModule(id);
   const moduleMaterials = moduleMaterial?.data.data || [];
   const authUser = authenticatorStore.authUser().data?.data.data;
+  const { search } = useLocation();
+  const showMenu = new URLSearchParams(search).get('showMenus');
+  const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
 
   return (
     <Switch>
@@ -78,7 +88,9 @@ function ModuleMaterials() {
                               className="mt-2 mb-4 mx-20"
                               styleType="outline"
                               onClick={() =>
-                                history.push(`${url}/add-material/${mat.id}`)
+                                history.push(
+                                  `${url}/add-material/${mat.id}?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+                                )
                               }>
                               Add supporting files
                             </Button>

@@ -36,9 +36,9 @@ export enum ISubmissionTypeEnum {
 
 export enum IEvaluationOwnership {
   CREATED_BY_ME = 'CREATED_BY_ME',
+  FOR_REVIEWING = 'FOR_REVIEWING',
   FOR_APPROVING = 'FOR_APPROVING',
   FOR_MARKING = 'FOR_MARKING',
-  FOR_REVIEWING = 'FOR_REVIEWING',
 }
 
 export enum IEvaluationClassification {

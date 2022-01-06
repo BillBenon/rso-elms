@@ -211,7 +211,8 @@ export type IconType =
   | 'png'
   | 'powerpoint'
   | 'text-file'
-  | 'chevron-down';
+  | 'chevron-down'
+  | 'camera';
 
 export interface FormPropType {
   onSubmit?: <E>(_e: FormEvent<E>) => void;

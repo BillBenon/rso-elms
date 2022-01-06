@@ -20,6 +20,7 @@ import {
   EducationLevel,
   GenderStatus,
   MaritalStatus,
+  ProfileStatus,
   SendCommunicationMsg,
   UserType,
 } from '../../../../types/services/user.types';
@@ -70,6 +71,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
     nationality: '',
     document_expire_on: '',
     send_communication_msg: SendCommunicationMsg.BOTH,
+    profile_status: ProfileStatus.INCOMPLETE,
     id: '',
   });
 
@@ -84,7 +86,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
     selectedUser &&
       setDetails({
         activation_key: selectedUser.activation_key,
-        academy_id: selectedUser.academy.id,
+        academy_id: selectedUser.academy?.id,
         birth_date: selectedUser.person.birth_date,
         deployed_on: selectedUser.person.deployed_on,
         deployment_number: selectedUser.person.deployment_number,
@@ -112,6 +114,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
         nationality: selectedUser.person?.nationality || '',
         document_expire_on: selectedUser.person?.document_expire_on || '',
         send_communication_msg: selectedUser.send_communication_msg,
+        profile_status: selectedUser.profile_status || ProfileStatus.INCOMPLETE,
         id: selectedUser.id + '',
       });
   }, [data]);

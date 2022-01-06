@@ -50,7 +50,7 @@ export default function ApproveEvaluation({ evaluationId }: IProps) {
       remarks: remarks,
     };
 
-    if ((remarks && action === 'reject') || (action === 'approve' && !remarks)) {
+    if ((remarks && action === 'reject') || action === 'approve') {
       mutateAsync(udpateEvaluationStatus, {
         onSuccess: () => {
           toast.success('Feedback is recorded');
@@ -77,8 +77,6 @@ export default function ApproveEvaluation({ evaluationId }: IProps) {
     setOpen(false);
     setRemarks('');
   }
-
-  console.log(evaluationApprovals?.evaluation_approval_status);
 
   return (
     <>

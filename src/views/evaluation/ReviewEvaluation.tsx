@@ -51,7 +51,7 @@ export default function ReviewEvaluation({ evaluationId }: IProps) {
       remarks: remarks,
     };
 
-    if ((remarks && action === 'reject') || (action === 'review' && !remarks)) {
+    if ((remarks && action === 'reject') || action === 'review') {
       mutateAsync(udpateEvaluationStatus, {
         onSuccess: () => {
           toast.success('Feedback is recorded');

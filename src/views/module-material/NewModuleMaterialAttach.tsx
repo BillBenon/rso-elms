@@ -1,6 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useLocation, useParams } from 'react-router';
 
 import Badge from '../../components/Atoms/custom/Badge';
 import Button from '../../components/Atoms/custom/Button';
@@ -37,6 +37,10 @@ function NewModuleMaterialAttach() {
   const { mutate } = moduleMaterialStore.addFile();
   const { mutateAsync } = moduleMaterialStore.addModuleMaterialAttachment();
 
+  const { search } = useLocation();
+  const showMenu = new URLSearchParams(search).get('showMenus');
+  const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
+
   const handleUpload = (files: FileList | null) => {
     setFile(files ? files[0] : null);
   };
@@ -60,7 +64,9 @@ function NewModuleMaterialAttach() {
               async onSuccess(data) {
                 toast.success(data.data.message);
                 queryClient.invalidateQueries(['material/attachment']);
-                history.push(`/dashboard/modules/${id}`);
+                history.push(
+                  `/dashboard/modules/${id}/subjects?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+                );
               },
               onError(error: any) {
                 toast.error(error.response.data.message);
