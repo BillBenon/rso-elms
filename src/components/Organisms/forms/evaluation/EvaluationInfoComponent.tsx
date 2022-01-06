@@ -1,6 +1,6 @@
 import { Editor } from '@tiptap/react';
 import moment from 'moment';
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
 
@@ -41,8 +41,14 @@ export default function EvaluationInfoComponent({
   evaluationInfo,
 }: IEvaluationProps) {
   const { search } = useLocation();
-  const intakePeriodId = new URLSearchParams(search).get('prd') || '';
-  const subjectId = new URLSearchParams(search).get('subj') || '';
+  const intakePeriodId = useMemo(
+    () => new URLSearchParams(search).get('prd') || '',
+    [search],
+  );
+  const subjectId = useMemo(
+    () => new URLSearchParams(search).get('subj') || '',
+    [search],
+  );
 
   const authUser = authenticatorStore.authUser().data?.data.data;
 
@@ -104,7 +110,13 @@ export default function EvaluationInfoComponent({
       time_limit: evaluationInfo?.time_limit || 0,
       total_mark: evaluationInfo?.total_mark || 0,
     });
-  }, [evaluationInfo]);
+  }, [
+    authUser?.academy.id,
+    evaluationInfo,
+    instructorInfo?.id,
+    intakePeriodId,
+    subjectId,
+  ]);
 
   const { mutate } = evaluationStore.createEvaluation();
   const { mutateAsync } = evaluationStore.updateEvaluation();
@@ -160,7 +172,7 @@ export default function EvaluationInfoComponent({
   }
 
   return (
-    <div>
+    <div className="bg-main p-8 ">
       <form className="pt-6" onSubmit={submitForm}>
         <InputMolecule
           width="80"
@@ -181,13 +193,14 @@ export default function EvaluationInfoComponent({
           Evaluation type
         </SelectMolecule>
         <RadioMolecule
+          type="block"
           defaultValue={details?.eligible_group}
           className="pb-4"
           value={details?.eligible_group}
           name="eligible_group"
           options={[
-            { label: 'MULTIPLE CLASSES', value: IEligibleClassEnum.MULTIPLE },
-            { label: 'SINGLE CLASS', value: IEligibleClassEnum.SINGLE },
+            { label: 'Multiple', value: IEligibleClassEnum.MULTIPLE },
+            { label: 'Single', value: IEligibleClassEnum.SINGLE },
           ]}
           handleChange={handleChange}>
           Eligible Class
@@ -279,7 +292,7 @@ export default function EvaluationInfoComponent({
         {details?.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
           <>
             <InputMolecule
-              style={{ width: '6rem' }}
+              style={{ width: '8rem' }}
               type="number"
               // step=".01"
               readOnly

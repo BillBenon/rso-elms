@@ -118,7 +118,7 @@ export default function EvaluationDetails() {
 
       data?.data.data && setSubmissions(formattedSubs);
     }
-  }, [data?.data.data]);
+  }, [data?.data.data, isSuccess]);
 
   const { data: evaluationInfo } = evaluationStore.getEvaluationById(id).data?.data || {};
 
