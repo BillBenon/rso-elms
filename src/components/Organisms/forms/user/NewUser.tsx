@@ -166,8 +166,8 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           <>
             <DateMolecule
               handleChange={handleChange}
-              startYear={new Date().getFullYear()}
-              endYear={new Date().getFullYear() + 10}
+              startYear={new Date().getFullYear() - 20}
+              endYear={new Date().getFullYear()}
               reverse={false}
               name="deployed_on"
               width="60 md:w-80">

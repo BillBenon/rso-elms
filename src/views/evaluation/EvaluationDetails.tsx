@@ -10,9 +10,11 @@ import Table from '../../components/Molecules/table/Table';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import EvaluationContent from '../../components/Organisms/evaluation/EvaluationContent';
 import { queryClient } from '../../plugins/react-query';
+import { authenticatorStore } from '../../store/administration';
 import { markingStore } from '../../store/administration/marking.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
+import { UserType } from '../../types/services/user.types';
 import ApproveEvaluation from './ApproveEvaluation';
 import ReviewEvaluation from './ReviewEvaluation';
 import StudentAnswersMarking from './StudentAnswersMarking';
@@ -27,6 +29,7 @@ export default function EvaluationDetails() {
 
   const { mutate } = markingStore.publishResults();
   const makeEvaluationPublic = evaluationStore.publishEvaluation();
+  const authUser = authenticatorStore.authUser().data?.data.data;
   const resultPublisher = markingStore.publishResult();
   const tabs = [
     {
@@ -193,30 +196,31 @@ export default function EvaluationDetails() {
             />
           </div>
 
-          <Route
-            exact
-            path={`${path}`}
-            render={() => (
-              <EvaluationContent evaluationId={id}>
-                <div className="flex gap-4">
-                  <Button
-                    styleType="outline"
-                    onClick={() =>
-                      history.push({
-                        pathname: `/dashboard/evaluations/new`,
-                        search: `?evaluation=${id}`,
-                      })
-                    }>
-                    Edit evaluation
-                  </Button>
+          {authUser?.user_type === UserType.INSTRUCTOR && (
+            <Route
+              exact
+              path={`${path}`}
+              render={() => (
+                <EvaluationContent evaluationId={id}>
+                  <div className="flex gap-4">
+                    {/* <Button
+                      styleType="outline"
+                      onClick={() =>
+                        history.push({
+                          pathname: `/dashboard/evaluations/new`,
+                          search: `?evaluation=${id}`,
+                        })
+                      }>
+                      Edit evaluation
+                    </Button> */}
 
-                  <Button
-                    disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
-                    onClick={() => publishEvaluation('PUBLIC')}>
-                    Publish evaluation
-                  </Button>
+                    <Button
+                      disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
+                      onClick={() => publishEvaluation('PUBLIC')}>
+                      Publish evaluation
+                    </Button>
 
-                  {/* {evaluationInfo?.available === 'HIDDEN' ? (
+                    {/* {evaluationInfo?.available === 'HIDDEN' ? (
                     <Button
                       disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
                       onClick={() => publishEvaluation('PUBLIC')}>
@@ -229,10 +233,11 @@ export default function EvaluationDetails() {
                       Unpublish evaluation
                     </Button>
                   )} */}
-                </div>
-              </EvaluationContent>
-            )}
-          />
+                  </div>
+                </EvaluationContent>
+              )}
+            />
+          )}
         </TabNavigation>
       </Switch>
     </div>

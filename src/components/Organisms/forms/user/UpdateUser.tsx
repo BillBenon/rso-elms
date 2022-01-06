@@ -86,7 +86,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
     selectedUser &&
       setDetails({
         activation_key: selectedUser.activation_key,
-        academy_id: selectedUser.academy.id,
+        academy_id: selectedUser.academy?.id,
         birth_date: selectedUser.person.birth_date,
         deployed_on: selectedUser.person.deployed_on,
         deployment_number: selectedUser.person.deployment_number,

@@ -32,7 +32,7 @@ export default function Select({
   useEffect(() => {
     setPlaceholder(
       (internalValue.length > 0 &&
-        options.find((op) => op.value === internalValue)?.label) ||
+        options.find((op) => op.value == internalValue)?.label) ||
         _placeholder ||
         `Select ${name}`,
     );
@@ -41,7 +41,7 @@ export default function Select({
 
   useEffect(() => {
     setPlaceholder(
-      (value.length > 0 && options.find((op) => op.value === value)?.label) ||
+      (value.length > 0 && options.find((op) => op.value == value)?.label) ||
         _placeholder ||
         `Select ${name}`,
     );

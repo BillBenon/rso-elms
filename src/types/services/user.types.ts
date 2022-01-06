@@ -191,6 +191,7 @@ export interface EditUser {
   nationality: string;
   document_expire_on: string;
   send_communication_msg: SendCommunicationMsg;
+  profile_status: ProfileStatus;
   id: string;
   profile_status: ProfileStatus
 }

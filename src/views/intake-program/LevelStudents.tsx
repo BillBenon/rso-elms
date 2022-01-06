@@ -4,20 +4,15 @@ import { useParams } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import RightSidebar from '../../components/Organisms/RightSidebar';
 import intakeProgramStore from '../../store/administration/intake-program.store';
-import {
-  IntakeLevelParam,
-} from '../../types/services/intake-program.types';
+import { IntakeLevelParam } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
-
 
 function LevelStudents() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { level: levelId } = useParams<IntakeLevelParam>();
 
   const { data: studentsProgram, isLoading } =
-    intakeProgramStore.getStudentsByIntakeProgramLevel(
-        levelId
-    );
+    intakeProgramStore.getStudentsByIntakeProgramLevel(levelId);
 
   const [students, setStudents] = useState<UserView[]>([]);
   useEffect(() => {
@@ -46,7 +41,7 @@ function LevelStudents() {
         selectorActions={[
           {
             name: 'No action',
-            handleAction: () =>{},
+            handleAction: () => {},
           },
         ]}
         dataLabel={'Students enrolled'}
