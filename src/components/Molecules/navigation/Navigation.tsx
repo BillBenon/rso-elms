@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 
@@ -8,6 +8,7 @@ import { authenticatorStore } from '../../../store/administration';
 // import { ValueType } from '../../../types';
 import { UserInfo, UserType } from '../../../types/services/user.types';
 import cookie from '../../../utils/cookie';
+import { getImage } from '../../../utils/file-util';
 import Avatar from '../../Atoms/custom/Avatar';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
@@ -22,6 +23,27 @@ export default function Navigation() {
   const { data } = authenticatorStore.authUser();
 
   const location = useLocation();
+  const [profileSrc, setProfileSrc] = useState('');
+
+  useEffect(() => {
+    if (authUser && authUser?.profile_attachment_id !== null) {
+      getImage(authUser.profile_attachment_id, authUser.id.toString()).then(
+        (imageSrc) => {
+          setProfileSrc(imageSrc);
+        },
+      );
+    }
+  }, [location]);
+
+  useMemo(() => {
+    if (authUser && authUser.profile_attachment_id !== null) {
+      getImage(authUser.profile_attachment_id, authUser.id.toString()).then(
+        (imageSrc) => {
+          setProfileSrc(imageSrc);
+        },
+      );
+    }
+  }, []);
 
   useEffect(() => {
     setAuthUser(data?.data.data);
@@ -94,8 +116,11 @@ export default function Navigation() {
                     onClick={() => setShowProfileMenu(!showProfileMenu)}>
                     <span className="sr-only">Open user menu</span>
                     <Avatar
-                      src="https://static.thenounproject.com/png/2643367-200.png"
-                      alt="profile"
+                      className="border-2 object-cover border-primary-500"
+                      src={
+                        profileSrc || '../../../../public/images/fall_back_prof_pic.jpg'
+                      }
+                      alt=""
                       size="34"
                     />
                   </button>
@@ -123,7 +148,7 @@ export default function Navigation() {
                         Your Profile
                       </a> */}
                       <Link
-                        to={`/dashboard/users/${authUser?.id}/profile?mine=${true}`}
+                        to={`/dashboard/users/${authUser?.id}/profile`}
                         className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100">
                         Your Profile
                       </Link>

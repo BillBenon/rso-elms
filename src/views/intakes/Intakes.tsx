@@ -159,7 +159,7 @@ export default function Intakes() {
 
       setIntakes(loadedIntakes);
     } else if (isError) toast.error('error occurred when loading intakes');
-  }, [data]);
+  }, [authUser?.user_type, data, isError, isSuccess]);
 
   function handleSearch(_e: ValueType) {}
   function handleClose() {

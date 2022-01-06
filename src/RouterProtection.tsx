@@ -30,6 +30,7 @@ import CalendarView from './views/schedule/Calendar';
 import Events from './views/schedule/Events';
 import ScheduleHome from './views/schedule/ScheduleHome';
 import Subjects from './views/subjects';
+import UserDetails from './views/users/UserDetails';
 import Users from './views/users/Users';
 
 const RouterProtection = () => {
@@ -94,14 +95,14 @@ const RouterProtection = () => {
       <Route path={`${path}/schedule`} component={ScheduleHome} />
       <Route path={`${path}/events`} component={Events} />
       <Route path={`${path}/modules`} component={Modules} />
-      <Route path={`${path}/users`} component={Users} />
+      <Route path={`${path}/users/:id/profile`} component={UserDetails} />
       {/* end of instructor pages */}
     </>
   );
 
   const StudentRoutes = () => (
     <>
-      <Route path={`${path}/users`} component={Users} />
+      <Route path={`${path}/users/:id/profile`} component={UserDetails} />
       {/* start of student pages */}
       <Route path={`${path}/intakes`} component={IntakesView} />
       <Route path={`${path}/schedule`} component={ScheduleHome} />

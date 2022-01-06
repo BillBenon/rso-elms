@@ -60,7 +60,6 @@ export default function SupAdminProfile<E>({
     last_name: '',
     marital_status: MaritalStatus.SINGLE,
     nid: '',
-    password: '',
     person_id: '',
     phone: '',
     sex: GenderStatus.MALE,

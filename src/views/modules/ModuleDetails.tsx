@@ -100,8 +100,6 @@ export default function ModuleDetails() {
     );
   }
 
-  var lastUrl: string = location.href;
-
   if (module) {
     moduleData = {
       status: {
@@ -119,6 +117,8 @@ export default function ModuleDetails() {
   }
 
   useEffect(() => {
+    var lastUrl: string = location.href;
+
     if (subjectData.data?.data) {
       let loadedSubjects: CommonCardDataType[] = [];
       subjectData.data.data.data.forEach((subject) => {
@@ -158,7 +158,7 @@ export default function ModuleDetails() {
         }
       }
     }).observe(document, { subtree: true, childList: true });
-  }, [subjectData.data?.data.data]);
+  }, [id, subjectData?.data?.data, subjectData?.data?.data.data]);
 
   // function onUrlChange() {
   //   alert('new-loc' + location.href);
@@ -222,15 +222,7 @@ export default function ModuleDetails() {
                 )}
               </>
             )}
-            {authUser?.user_type === UserType.INSTRUCTOR && route == 'EVALUATIONS' && (
-              <>
-                <div className="flex gap-3">
-                  <Button onClick={() => history.push(`/evaluation/new`)}>
-                    Add new Evaluation
-                  </Button>
-                </div>
-              </>
-            )}
+
             {authUser?.user_type === UserType.INSTRUCTOR && route == 'MATERIALS' && (
               <div className="flex gap-3">
                 <Button onClick={() => history.push(`${url}/materials/add-material`)}>

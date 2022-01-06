@@ -66,6 +66,14 @@ export default function SchoolReport() {
     onAfterPrint: () => setisPrinting(false),
   });
 
+  function formatPercentage() {
+    let percentage =
+      ((totals.quizObtained + totals.examObtained) / (totals.quizMax + totals.examMax) ||
+        0) * 100;
+
+    return Math.round((percentage + Number.EPSILON) * 100) / 100;
+  }
+
   return (
     <div className="mx-auto max-w-4xl">
       <div className="text-right mb-5">
@@ -80,7 +88,7 @@ export default function SchoolReport() {
           <div className="provider">
             <div className="w-20 bg-gray-300 rounded-full mb-5">
               <img
-                src="/images/nisslogo.png"
+                src="/images/rdf-logo.png"
                 alt="Institution logo"
                 className=" w-20 h-20 object-cover block rounded-full"
               />
@@ -97,7 +105,7 @@ export default function SchoolReport() {
               <img
                 src="https://static.thenounproject.com/png/2643367-200.png"
                 alt="Student profile"
-                className="block w-20 h-20 object-cover rounded-full"
+                className="block w-20 h-20 object-cover"
               />
             </div>
             <h2 className="text-sm font-bold ">
@@ -234,10 +242,7 @@ export default function SchoolReport() {
             fontSize="sm"
             fontWeight="semibold"
             className="col-span-4 py-3 px-6 border border-gray-700 text-right">
-            {`${
-              ((totals.quizObtained + totals.examObtained) /
-                (totals.quizMax + totals.examMax) || 0) * 100
-            } %`}
+            {`${formatPercentage()} %`}
           </Heading>
         </div>
         {/* Student position */}

@@ -43,7 +43,7 @@ function CompleteProfile() {
     last_name: '',
     marital_status: MaritalStatus.SINGLE,
     nid: '',
-    password: '',
+    // password: '',
     person_id: '',
     phone: '',
     sex: GenderStatus.MALE,
@@ -93,43 +93,43 @@ function CompleteProfile() {
 
     userInfo &&
       setPersonalInfo({
-        academic_program_level_id: userInfo.academic_program_level_id,
-        academy_id: userInfo.academy_id,
-        activation_key: userInfo.activation_key,
+        academic_program_level_id: '',
+        academy_id: userInfo.academy.id,
+        activation_key: '',
         id: userInfo.id.toString(),
-        intake_program_id: userInfo.intake_program_id,
+        intake_program_id: '',
         password_reset_period_in_days: userInfo.password_reset_period_in_days,
-        person_id: userInfo.person_id,
+        person_id: userInfo.person.id.toString(),
         reset_date: userInfo.reset_date,
         profile_status:
           userInfo.profile_status == null
             ? ProfileStatus.INCOMPLETE
             : userInfo.profile_status,
-        residence_location_id: userInfo.residence_location_id,
+        residence_location_id: userInfo.person.residence_location_id,
         user_type: userInfo.user_type,
         doc_type: userInfo.person ? userInfo.person.doc_type : DocType.NID,
         nid: userInfo.person ? userInfo.person.nid : '',
         phone: userInfo.person ? userInfo.person.phone_number : '',
         email: userInfo.email,
-        place_of_residence: userInfo.place_of_residence,
+        place_of_residence: '',
         send_communication_msg:
           userInfo.send_communication_msg == null
             ? SendCommunicationMsg.SMS
             : userInfo.send_communication_msg,
         person: userInfo.person,
         // academy_name: userInfo.academy ? userInfo.academy.name : '',
-        birth_date: userInfo.birth_date,
+        birth_date: userInfo.person.birth_date,
         education_level:
-          userInfo.education_level == null
+          userInfo.person.education_level == null
             ? EducationLevel.BACHELOR
-            : userInfo.education_level,
+            : userInfo.person.education_level,
         first_name: userInfo.first_name,
         last_name: userInfo.last_name,
         marital_status:
-          userInfo.marital_status == null
+          userInfo.person.marital_status == null
             ? MaritalStatus.SINGLE
-            : userInfo.marital_status,
-        password: userInfo.password,
+            : userInfo.person.marital_status,
+        // password: userInfo.password,
         sex: userInfo.person == null ? GenderStatus.MALE : userInfo.person.sex,
         username: userInfo.username,
         // acdemic_year_id: userInfo.acdemic_year_id,
@@ -143,7 +143,7 @@ function CompleteProfile() {
         // deployed_on: userInfo.person ? userInfo.person.deployed_on : '',
         // deployment_number: userInfo.person ? userInfo.person.deployment_number : '',
         document_expire_on: userInfo.person ? userInfo.person.document_expire_on : '',
-        emp_no: userInfo.person ? userInfo.person.emp_no : '',
+        emp_no: userInfo.person ? userInfo.person.empNo : '',
         father_names: userInfo.person ? userInfo.person.father_names : '',
         mother_names: userInfo.person ? userInfo.person.mother_names : '',
         other_rank: userInfo.person ? userInfo.person.other_rank : '',

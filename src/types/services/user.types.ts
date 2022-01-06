@@ -6,6 +6,7 @@ import { AcademyInfo } from './academy.types';
 import { ILevel } from './levels.types';
 import { RankRes } from './rank.types';
 import { StudentIntakeProgram } from './intake-program.types';
+import { InstitutionInfo } from './institution.types';
 export interface Student extends Table {
   reg_number: string;
   user: UserInfo;
@@ -14,50 +15,36 @@ export interface Student extends Table {
 }
 
 export interface UserInfo extends Table {
-  academic_program_level_id: string;
-  academy_id: string;
-  activation_key: string;
-  birth_date: string;
-  education_level: EducationLevel;
-  father_names: string;
-  intake_program_id: string;
-  mother_names: string;
-  next_of_keen_proculation_reason: any;
-  person_id: string;
-  place_of_birth: string;
-  place_of_residence: string;
-  relationship_with_next_of_ken: any;
-  residence_location_id: number;
-  sex: GenderStatus;
+  username: string;
+  first_name: string;
+  last_name: string;
+  pin: number;
+  phone: string;
+  age_range: string;
+  otp: string;
+  is_otp_active: string;
+  send_communication_msg: SendCommunicationMsg;
+  email: string;
+  token: string;
+  person: PersonInfo;
   academy: AcademyInfo;
-  acdemic_year_id: string;
+  institution_id: string;
+  profile_attachment_id: string;
+  institution_name: string;
+  user_type: UserType;
   activated: boolean;
   active_session: boolean;
-  age_range: string;
-  authorities: [];
-  email: string;
-  enabled: boolean;
-  first_name: string;
   image_url: string;
-  institution_id: string;
-  institution_name: string;
-  is_otp_active: boolean | null;
-  last_name: string;
-  level: EducationLevel;
-  login_try: number;
-  otp: string;
-  password: string;
   password_reset_period_in_days: number;
-  person: PersonInfo;
-  phone: number;
-  pin: number;
-  profile_status: ProfileStatus | null;
   reset_date: string;
-  send_communication_msg: SendCommunicationMsg;
-  token: string;
-  user_type: UserType;
-  username: string;
-  marital_status: MaritalStatus;
+  level: string;
+  login_try: number;
+  profile_status: ProfileStatus;
+  acdemic_year_id: string;
+  institution: InstitutionInfo;
+  enabled: boolean;
+  authorities: [];
+  otp_active: string;
 }
 
 export interface IntakeLevelProgramInfo extends Table {
@@ -69,40 +56,37 @@ export interface StudentLevel {
 }
 
 export interface PersonInfo extends Table {
-  emp_no: string;
-  birth_date: string;
-  blood_group: BloodGroup;
-  current_rank: RankRes;
-  current_rank_id: string;
-  date_of_commission: string;
-  date_of_issue: string;
-  date_of_last_promotion: string;
-  doc_type: DocType;
-  deployment_number: string;
-  deployed_on: string;
-  document_expire_on: string;
-  empNo: string;
-  father_names: string;
   first_name: string;
-  last_name: string;
-  marital_status: MaritalStatus;
+  father_names: string;
   mother_names: string;
-  nid: string;
-  other_rank: string;
+  last_name: string;
   phone_number: string;
-  place_of_birth: string;
-  place_of_birth_description: string;
-  place_of_issue: string;
-  rank_depart: string;
+  birth_date: string;
+  doc_type: DocType;
+  marital_status: MaritalStatus;
   sex: GenderStatus;
+  document_expire_on: string;
+  place_of_birth: string;
+  current_rank: RankRes;
+  date_of_issue: string;
+  date_of_commission: string;
+  date_of_last_promotion: string;
+  place_of_issue: string;
+  current_rank_id: string;
+  other_rank: string;
+  rank_depart: string;
+  blood_group: BloodGroup;
+  place_of_birth_description: string;
   spouse_name: string;
+  place_of_birth_id: string;
+  residence_location_id: number;
+  education_level: EducationLevel;
+  nid: string;
+  empNo: string;
   //to be added
   religion: string;
-  residence_location_id: number;
   place_of_residence: string;
-  place_of_birth_id: string;
   nationality: string;
-  education_level: EducationLevel;
 }
 export interface UpdateExperienceInfo {
   attachment_id: string;
@@ -142,7 +126,7 @@ export interface UpdateUserInfo {
   mother_names: string;
   nid: string;
   other_rank: string;
-  password: string;
+  // password: string;
   password_reset_period_in_days: number;
   person_id: string;
   phone: string;
@@ -270,10 +254,7 @@ export interface EmploymentDetail
   > {}
 
 export interface AccountDetail
-  extends Pick<UserInfo, 'username' | 'pin' | 'send_communication_msg' | 'password'> {
-  confirm_password: string;
-  doc_type: string;
-}
+  extends Pick<UserInfo, 'username' | 'pin' | 'send_communication_msg'> {}
 
 export enum GenderStatus {
   MALE = 'MALE',
