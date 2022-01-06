@@ -66,6 +66,14 @@ export default function SchoolReport() {
     onAfterPrint: () => setisPrinting(false),
   });
 
+  function formatPercentage() {
+    let percentage =
+      ((totals.quizObtained + totals.examObtained) / (totals.quizMax + totals.examMax) ||
+        0) * 100;
+
+    return Math.round((percentage + Number.EPSILON) * 100) / 100;
+  }
+
   return (
     <div className="mx-auto max-w-4xl">
       <div className="text-right mb-5">
@@ -234,10 +242,7 @@ export default function SchoolReport() {
             fontSize="sm"
             fontWeight="semibold"
             className="col-span-4 py-3 px-6 border border-gray-700 text-right">
-            {`${
-              ((totals.quizObtained + totals.examObtained) /
-                (totals.quizMax + totals.examMax) || 0) * 100
-            } %`}
+            {`${formatPercentage()} %`}
           </Heading>
         </div>
         {/* Student position */}
