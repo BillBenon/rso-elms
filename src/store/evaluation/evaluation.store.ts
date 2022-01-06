@@ -85,6 +85,12 @@ class EvaluationStore {
     });
   }
 
+  getEvaluationApprovals(evaluationId: string) {
+    return useQuery(['evaluationApprovals', evaluationId], () =>
+      evaluationService.getEvaluationApprovals(evaluationId),
+    );
+  }
+
   getEvaluationApprovalByEvaluationAndInstructor(
     evaluationId: string,
     instructorId: string,
