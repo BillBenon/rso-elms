@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
@@ -9,21 +9,24 @@ import FileUploader from '../../../components/Atoms/Input/FileUploader';
 import Heading from '../../../components/Atoms/Text/Heading';
 import usersStore from '../../../store/administration/users.store';
 import { UserInfo } from '../../../types/services/user.types';
-import { getImage, invalidateCacheImage } from '../../../utils/file-util';
+import { fileToBlob, getImage, invalidateCacheImage } from '../../../utils/file-util';
 
 function UpdatePhotoProfile({ user }: { user: UserInfo }) {
   const [profileFile, setProfileFile] = useState<File | null>(null);
   const { mutateAsync: mutateAddProfile } = usersStore.addProfile();
 
-  const handleUpload = (files: FileList | null) => {
+  const handleUpload = async (files: FileList | null) => {
     setProfileFile(files ? files[0] : null);
+    if (files) setProfileSrc(URL.createObjectURL(await fileToBlob(files[0])));
   };
 
   const [profileSrc, setProfileSrc] = useState('');
 
-  getImage(user.profile_attachment_id, user.id.toString()).then((imageSrc) => {
-    setProfileSrc(imageSrc);
-  });
+  useEffect(() => {
+    getImage(user.profile_attachment_id, user.id.toString()).then((imageSrc) => {
+      setProfileSrc(imageSrc);
+    });
+  }, []);
 
   const history = useHistory();
 
@@ -41,14 +44,13 @@ function UpdatePhotoProfile({ user }: { user: UserInfo }) {
         {
           onSuccess(data) {
             toast.success('succesfully uploaded', { id: toastId });
-            console.log(data.data.profile_attachment_id);
             invalidateCacheImage(
               data.data.profile_attachment_id,
               user.id.toString(),
             ).then((img) => {
               setProfileSrc(img);
+              history.goBack();
             });
-            history.goBack();
           },
           onError(error: any) {
             toast.error(error.response.data.message, { id: toastId });

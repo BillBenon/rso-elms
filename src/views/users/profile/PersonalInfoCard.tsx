@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 
 import Avatar from '../../../components/Atoms/custom/Avatar';
@@ -27,7 +27,7 @@ function PersonalInfoCard({
 
   const location = useLocation();
 
-  React.useEffect(() => {
+  useEffect(() => {
     getImage(user.profile_attachment_id, user.id.toString()).then((imageSrc) => {
       setProfileSrc(imageSrc);
     });
