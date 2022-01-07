@@ -60,7 +60,6 @@ export default function SupAdminProfile<E>({
     last_name: '',
     marital_status: MaritalStatus.SINGLE,
     nid: '',
-    password: '',
     person_id: '',
     phone: '',
     sex: GenderStatus.MALE,
@@ -114,7 +113,6 @@ export default function SupAdminProfile<E>({
       ...details,
       id: auth?.id.toString() || '',
       username: auth?.username.toString() || '',
-      password: auth?.password || '',
       user_type: auth?.user_type || UserType.STUDENT,
     });
   }, [auth]);
