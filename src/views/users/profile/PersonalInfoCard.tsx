@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Route,
   Switch,
@@ -35,18 +35,18 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
   useEffect(() => {
     if (user && user?.profile_attachment_id !== null) {
       getImage(user.profile_attachment_id, user.id.toString()).then((imageSrc) => {
-        setProfileSrc(imageSrc);
+        if (imageSrc) setProfileSrc(imageSrc);
       });
     }
-  }, [location]);
+  }, [location, user]);
 
-  useMemo(() => {
-    if (user.profile_attachment_id !== null) {
-      getImage(user.profile_attachment_id, user.id.toString()).then((imageSrc) => {
-        setProfileSrc(imageSrc);
-      });
-    }
-  }, []);
+  // useMemo(() => {
+  //   if (user.profile_attachment_id !== null) {
+  //     getImage(user.profile_attachment_id, user.id.toString()).then((imageSrc) => {
+  //       if (imageSrc) setProfileSrc(imageSrc);
+  //     });
+  //   }
+  // }, [user]);
 
   const hobbies = hobbiesStore.getUserHobby(user.person?.id + '').data?.data.data || [];
 

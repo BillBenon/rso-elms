@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 
@@ -29,27 +29,28 @@ export default function Navigation() {
     if (authUser && authUser?.profile_attachment_id !== null) {
       getImage(authUser.profile_attachment_id, authUser.id.toString()).then(
         (imageSrc) => {
-          setProfileSrc(imageSrc);
+          if (imageSrc) setProfileSrc(imageSrc);
         },
       );
     }
-  }, [location]);
+  }, [authUser, location]);
 
-  useMemo(() => {
-    if (authUser && authUser.profile_attachment_id !== null) {
-      getImage(authUser.profile_attachment_id, authUser.id.toString()).then(
-        (imageSrc) => {
-          setProfileSrc(imageSrc);
-        },
-      );
-    }
-  }, []);
+  // useMemo(() => {
+  //   if (authUser && authUser.profile_attachment_id !== null) {
+  //     getImage(authUser.profile_attachment_id, authUser.id.toString()).then(
+  //       (imageSrc) => {
+  //         if (imageSrc) setProfileSrc(imageSrc);
+  //       },
+  //     );
+  //   }
+  // }, [authUser]);
 
   useEffect(() => {
     setAuthUser(data?.data.data);
     if (authUser?.user_type === UserType.SUPER_ADMIN && !authUser.institution_id) {
       history.push('/institution/new');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.data.data]);
 
   const links = [
