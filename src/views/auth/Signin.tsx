@@ -35,7 +35,7 @@ function SignIn() {
           </div>
           <div className="px-5 py-8 md:rounded-md mx-auto lg:py-20 h-screen">
             <AcademyProfileCard
-              src="/images/nisslogo.png"
+              src="/images/rdf-logo.png"
               alt="institution logo"
               size="80"
               bgColor="none"

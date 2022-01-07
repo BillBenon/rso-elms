@@ -81,7 +81,7 @@ export default function Navigation() {
           {/* Disabled Global search just for the while its not functioning css will be justify-center 
           will replace justify-endwhen the search is added in this div */}
           {/* <div className="flex items-center">
-            <div className="flex-shrink-0 ">
+            <div className="shrink-0 ">
               <SearchMolecule handleChange={handleSearch} />
             </div>
           </div> */}
@@ -223,7 +223,7 @@ export default function Navigation() {
         </div>
         <div className="pt-4 pb-3 border-t border-gray-700">
           <div className="flex items-center px-5">
-            <div className="flex-shrink-0">
+            <div className="shrink-0">
               <img
                 className="h-10 w-10 rounded-full"
                 src="https://static.thenounproject.com/png/2643367-200.png"
