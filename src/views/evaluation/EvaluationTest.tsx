@@ -24,6 +24,7 @@ export default function EvaluationTest() {
   const [open, setOpen] = useState(true);
   const maximizableElement = React.useRef(null);
   const [studentEvaluationId, setStudentEvaluationId] = useState('');
+  const [isCheating, setIsCheating] = useState(false);
   const [timeLimit, SetTimeLimit] = useState(0);
   const [isFullscreen, setIsFullscreen] = useFullscreenStatus(maximizableElement);
   const { data: evaluationData } = evaluationStore.getEvaluationById(id);
@@ -39,18 +40,30 @@ export default function EvaluationTest() {
   let studentWorkTimer = evaluationStore.getEvaluationWorkTime(studentEvaluationId);
 
   function autoSubmit() {
-    mutate(studentEvaluationId, {
-      onSuccess: () => {
-        toast.success('Evaluation submitted', { duration: 5000 });
-        window.location.href = '/dashboard/student';
-      },
-      onError: (error) => {
-        toast.error(error + '');
-      },
-    });
+    if (isCheating)
+      toast.error(
+        'The exam was auto submitted because you tried to exit full screen or changed tab',
+        { duration: 30000 },
+      );
+
+    setTimeout(() => {
+      mutate(studentEvaluationId, {
+        onSuccess: () => {
+          toast.success('Evaluation submitted', { duration: 5000 });
+          window.location.href = '/dashboard/student';
+        },
+        onError: (error) => {
+          toast.error(error + '');
+        },
+      });
+    }, 5000);
   }
 
-  const memoizedAutoSubmitForm = useCallback(autoSubmit, [mutate, studentEvaluationId]);
+  const memoizedAutoSubmitForm = useCallback(autoSubmit, [
+    isCheating,
+    mutate,
+    studentEvaluationId,
+  ]);
 
   async function updateWorkTime(value: any) {
     let workTime = timeLimit * 60 * 1000 - time + (time - value.total);
@@ -81,13 +94,16 @@ export default function EvaluationTest() {
       !open &&
       !isFullscreen &&
       path === '/dashboard/evaluations/student-evaluation/:id'
-    )
+    ) {
+      setIsCheating(true);
       memoizedAutoSubmitForm();
+    }
     const handleTabChange = () => {
       if (
         document['hidden'] &&
         path === '/dashboard/evaluations/student-evaluation/:id'
       ) {
+        setIsCheating(true);
         memoizedAutoSubmitForm();
       }
     };
