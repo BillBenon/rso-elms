@@ -15,6 +15,8 @@ export async function invalidateCacheImage(attachmentId: string, key: string) {
 }
 
 async function fetchAndCache(attachmentId: string, key: string) {
+  if (!attachmentId) return;
+
   const token = cookie.getCookie('jwt_info');
   // when request is open no need to add bearer token
 
@@ -31,6 +33,7 @@ async function fetchAndCache(attachmentId: string, key: string) {
       headers,
     },
   );
+
   const blob = await res.blob();
 
   const image = URL.createObjectURL(blob);
