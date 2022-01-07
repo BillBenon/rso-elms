@@ -89,7 +89,7 @@ export default function StudentViewEvaluations({
         }
       }
     }
-  }, [subjecEvaluations]);
+  }, [isUndone, subjecEvaluations]);
 
   function handleClick(id = '', studEvaluation = '') {
     if (isCompleted) {

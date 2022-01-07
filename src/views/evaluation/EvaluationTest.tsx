@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
+import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import PopupMolecule from '../../components/Molecules/Popup';
+import useFullscreenStatus from '../../hooks/useFullscreenStatus';
 import { evaluationService } from '../../services/evaluation/evaluation.service';
 import { markingStore } from '../../store/administration/marking.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
@@ -16,9 +19,13 @@ import QuestionContainer from './QuestionContainer';
 export default function EvaluationTest() {
   const { id } = useParams<ParamType>();
   const history = useHistory();
+  const { path } = useRouteMatch();
   const [time, SetTime] = useState(0);
+  const [open, setOpen] = useState(true);
+  const maximizableElement = React.useRef(null);
   const [studentEvaluationId, setStudentEvaluationId] = useState('');
   const [timeLimit, SetTimeLimit] = useState(0);
+  const [isFullscreen, setIsFullscreen] = useFullscreenStatus(maximizableElement);
   const { data: evaluationData } = evaluationStore.getEvaluationById(id);
   const {
     data: questions,
@@ -35,13 +42,15 @@ export default function EvaluationTest() {
     mutate(studentEvaluationId, {
       onSuccess: () => {
         toast.success('Evaluation submitted', { duration: 5000 });
-        history.push('/dashboard/student');
+        window.location.href = '/dashboard/student';
       },
       onError: (error) => {
         toast.error(error + '');
       },
     });
   }
+
+  const memoizedAutoSubmitForm = useCallback(autoSubmit, [mutate, studentEvaluationId]);
 
   async function updateWorkTime(value: any) {
     let workTime = timeLimit * 60 * 1000 - time + (time - value.total);
@@ -61,13 +70,60 @@ export default function EvaluationTest() {
         1000,
     );
   }, [
-    studentEvaluationData.data?.data.data,
+    evaluationData?.data?.data?.time_limit,
+    studentEvaluationData?.data?.data.data,
     studentWorkTimer?.data?.data.data,
     timeLimit,
   ]);
 
+  useEffect(() => {
+    if (
+      !open &&
+      !isFullscreen &&
+      path === '/dashboard/evaluations/student-evaluation/:id'
+    )
+      memoizedAutoSubmitForm();
+    const handleTabChange = () => {
+      if (
+        document['hidden'] &&
+        path === '/dashboard/evaluations/student-evaluation/:id'
+      ) {
+        memoizedAutoSubmitForm();
+      }
+    };
+
+    if (path === '/dashboard/evaluations/student-evaluation/:id') {
+      // Handle page visibility change
+      document.addEventListener('visibilitychange', handleTabChange, false);
+    }
+
+    return () => window.removeEventListener('visibilitychange', handleTabChange);
+  }, [isFullscreen, path, open, memoizedAutoSubmitForm]);
+
   return (
-    <div>
+    <div
+      ref={maximizableElement}
+      className={`${isFullscreen && 'bg-secondary p-12 overflow-y-auto'}`}>
+      <PopupMolecule
+        closeOnClickOutSide={false}
+        open={open}
+        title="Do you want to continue?"
+        onClose={setIsFullscreen as () => void}>
+        <div>
+          <Heading fontWeight="semibold">Enable Full screen</Heading>
+          <p className="course-card-description leading-5 pb-6 w-96 text-txt-secondary text-sm mt-4">
+            You are about to attempt this evaluation test.Full screeen should be enabled
+            to avoid cheating. If you sdisable it or change tabs/desktop then you&apos;ll
+            get zero
+          </p>
+
+          <div className="flex justify-between">
+            <div>
+              <Button onClick={() => setOpen(false)}>Enable</Button>
+            </div>
+          </div>
+        </div>
+      </PopupMolecule>
       <div className="flex justify-between">
         <Heading fontWeight="semibold">{evaluationData?.data.data.name}</Heading>
         <div className="pr-28 flex justify-center items-center gap-2">

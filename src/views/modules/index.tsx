@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
@@ -37,8 +36,8 @@ export default function Modules({ level }: { level?: string }) {
       });
 
       setModules(newModules);
-    } else if (isError) toast.error('error occurred when loading modules');
-  }, [data]);
+    }
+  }, [data, isError, isSuccess]);
 
   return (
     <>

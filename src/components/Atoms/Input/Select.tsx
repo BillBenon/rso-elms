@@ -37,7 +37,7 @@ export default function Select({
         `Select ${name}`,
     );
     setInternalValue(value);
-  }, [value]);
+  }, [_placeholder, internalValue, name, options, value]);
 
   useEffect(() => {
     setPlaceholder(
@@ -46,7 +46,7 @@ export default function Select({
         `Select ${name}`,
     );
     setfiltered(options || []);
-  }, [options]);
+  }, [_placeholder, name, options, value]);
 
   const handleSelect = (value: string) => {
     setInternalValue(value);

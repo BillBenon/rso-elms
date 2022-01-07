@@ -67,7 +67,7 @@ export default function InstructorViewEvaluations() {
 
   useEffect(() => {
     refetch();
-  }, [ownerShipType]);
+  }, [ownerShipType, refetch]);
 
   const handleClick = (id: string) => {
     switch (ownerShipType) {
