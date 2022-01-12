@@ -34,7 +34,8 @@ export default function Input<T>({
   }
   useEffect(() => {
     if (handleChange) handleChange({ name, value });
-  }, [value]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [name, value]);
 
   return (
     <input

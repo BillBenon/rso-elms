@@ -57,6 +57,13 @@ class UserStore {
   updateUser() {
     return useMutation(userService.updateProfile);
   }
+
+  addProfile() {
+    return useMutation(userService.addProfile);
+  }
+  downloadProfile(attachmentId: string) {
+    return useQuery(['user/profile'], () => userService.downloadProfile(attachmentId));
+  }
 }
 
 export default new UserStore();

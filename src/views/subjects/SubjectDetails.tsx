@@ -36,7 +36,7 @@ interface ParamType {
 
 export default function SubjectDetails() {
   const { search } = useLocation();
-  const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
+  const intakeProg = new URLSearchParams(search).get('intkProg') || '';
   const progId = new URLSearchParams(search).get('prog') || '';
   const level = new URLSearchParams(search).get('lvl') || '';
   const period = new URLSearchParams(search).get('prd') || '';
@@ -81,24 +81,25 @@ export default function SubjectDetails() {
   function goToNewEvaluation() {
     setLocalStorageData('currentStep', 0);
     history.push(
-      `/dashboard/evaluations/new?subj=${subjectId}&intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+      `/dashboard/evaluations/new?subj=${subjectId}&intkProg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
     );
   }
 
   let tabs = [
     {
       label: `Lessons(${lessons.length})`,
-      href: `${url}?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+      href: `${url}?intkProg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
     },
     {
       label: 'Evaluations',
-      href: `${url}/evaluations?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+      href: `${url}/evaluations?intkProg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
     },
   ];
-  if (intakeProg) {
+
+  if (intakeProg || authUser?.user_type !== UserType.ADMIN) {
     tabs.push({
       label: 'Instructors',
-      href: `${url}/instructors?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+      href: `${url}/instructors?intkProg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
     });
   }
 
@@ -208,9 +209,11 @@ export default function SubjectDetails() {
                   render={() => (
                     <div className="flex justify-between">
                       <SubjectInstructorView subjectId={subjectId} />
-                      <div>
-                        <Button onClick={goToNewEvaluation}>New Evaluation</Button>
-                      </div>
+                      {intakeProg && progId && level && period ? (
+                        <div>
+                          <Button onClick={goToNewEvaluation}>New Evaluation</Button>
+                        </div>
+                      ) : null}
                     </div>
                   )}
                 />

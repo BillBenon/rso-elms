@@ -1,6 +1,6 @@
 import '../../styles/components/Molecules/correction/marking.scss';
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 
@@ -9,7 +9,6 @@ import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import AnswerReview from '../../components/Molecules/cards/correction/AnswerReview';
-import Pagination from '../../components/Molecules/Pagination';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import { markingStore } from '../../store/administration/marking.store';
 import { Link as LinkList } from '../../types';
@@ -30,7 +29,6 @@ export default function StudentReview() {
   // const [currentRows, setCurrentRows] = useState(
   //   studentAnswers?.slice(indexOfFirstRow, indexOfLastRow),
   // );
-  console.log(studentEvaluation?.data.data)
   const history = useHistory();
   function goBack(): void {
     history.push(`/dashboard/student`);
@@ -72,9 +70,11 @@ export default function StudentReview() {
                 <AnswerReview index={index} key={studentAnswer.id} data={studentAnswer} />
               );
             })}
-            <div className='bg-main p-4 w-full rounded items-center'>
-              <Heading>Instructor's remarks</Heading>
-              <p className='text-md'>-&gt;{' '+studentEvaluation.data.data.remark}</p>
+            <div className="bg-main flex flex-col gap-4 p-4 w-full rounded">
+              <Heading fontWeight="semibold" fontSize="base">
+                Instructor&apos;s remarks
+              </Heading>
+              <p className="text-md">-&gt;{' ' + studentEvaluation.data.data.remark}</p>
             </div>
             {/* <div className="flex item-center mx-auto">
               <Pagination

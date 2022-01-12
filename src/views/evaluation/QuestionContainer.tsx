@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
@@ -49,17 +49,19 @@ export default function QuestionContainer({
     setPreviousAnswers(previoustudentAnswers.data?.data.data || []);
   }, [previoustudentAnswers.data?.data.data]);
 
-  const initialState: IStudentAnswer = {
-    answer_attachment: '',
-    evaluation_question: id || '',
-    mark_scored: 0,
-    multiple_choice_answer:
-      (previousAnswers[index]?.multiple_choice_answer &&
-        previousAnswers[index]?.multiple_choice_answer.id) ||
-      '',
-    open_answer: '',
-    student_evaluation: getLocalStorageData('studentEvaluationId'),
-  };
+  const initialState: IStudentAnswer = useMemo(() => {
+    return {
+      answer_attachment: '',
+      evaluation_question: id || '',
+      mark_scored: 0,
+      multiple_choice_answer:
+        (previousAnswers[index]?.multiple_choice_answer &&
+          previousAnswers[index]?.multiple_choice_answer.id) ||
+        '',
+      open_answer: '',
+      student_evaluation: getLocalStorageData('studentEvaluationId'),
+    };
+  }, [id, index, previousAnswers]);
 
   const [questionToSubmit, setQuestionToSubmit] = useState('');
   const [questionChoices, setChoices] = useState(choices);
@@ -96,7 +98,7 @@ export default function QuestionContainer({
         ['multiple_choice_answer']: previousAnswers[index]?.multiple_choice_answer.id,
       }));
     }
-  }, [previousAnswers]);
+  }, [index, initialState, previousAnswers]);
 
   function disableCopyPaste(e: any) {
     e.preventDefault();
@@ -119,6 +121,8 @@ export default function QuestionContainer({
       });
     }
   }
+
+  const memoizedSubmitForm = useCallback(submitForm, [answer, mutate]);
 
   function handleChoiceSelect(choiceId: string, index: number) {
     let choicesClone = [...(questionChoices || [])];
@@ -145,13 +149,13 @@ export default function QuestionContainer({
   useEffect(() => {
     if (question !== '') {
       const interval = setInterval(() => {
-        if (questionToSubmit) submitForm();
+        if (questionToSubmit) memoizedSubmitForm();
       }, 30000);
       return () => {
         clearInterval(interval);
       };
     }
-  }, [questionToSubmit]);
+  }, [question, questionToSubmit, memoizedSubmitForm]);
 
   return (
     <form onSubmit={submitEvaluation}>
