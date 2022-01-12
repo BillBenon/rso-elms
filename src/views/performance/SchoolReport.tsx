@@ -276,7 +276,8 @@ export default function SchoolReport() {
             fontSize="sm"
             fontWeight="normal"
             className="col-span-4 py-3 px-6 border border-gray-700 text-right">
-            {reportData?.data.data.position}
+            <span className="font-bold">{reportData?.data.data.position}</span> outof
+            <span className="font-bold"> {reportData?.data.data.total_students}</span>
           </Heading>
         </div>
         {/* Digital signature */}
