@@ -8,7 +8,7 @@ import { authenticatorStore } from '../../../store/administration';
 // import { ValueType } from '../../../types';
 import { UserInfo, UserType } from '../../../types/services/user.types';
 import cookie from '../../../utils/cookie';
-import { getImage } from '../../../utils/file-util';
+import { useProfilePicture } from '../../../utils/file-util';
 import Avatar from '../../Atoms/custom/Avatar';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
@@ -23,27 +23,6 @@ export default function Navigation() {
   const { data } = authenticatorStore.authUser();
 
   const location = useLocation();
-  const [profileSrc, setProfileSrc] = useState('');
-
-  useEffect(() => {
-    if (authUser && authUser?.profile_attachment_id !== null) {
-      getImage(authUser.profile_attachment_id, authUser.id.toString()).then(
-        (imageSrc) => {
-          if (imageSrc) setProfileSrc(imageSrc);
-        },
-      );
-    }
-  }, [authUser, location]);
-
-  // useMemo(() => {
-  //   if (authUser && authUser.profile_attachment_id !== null) {
-  //     getImage(authUser.profile_attachment_id, authUser.id.toString()).then(
-  //       (imageSrc) => {
-  //         if (imageSrc) setProfileSrc(imageSrc);
-  //       },
-  //     );
-  //   }
-  // }, [authUser]);
 
   useEffect(() => {
     setAuthUser(data?.data.data);
@@ -118,9 +97,10 @@ export default function Navigation() {
                     <span className="sr-only">Open user menu</span>
                     <Avatar
                       className="border-2 object-cover border-primary-500"
-                      src={
-                        profileSrc || '../../../../public/images/fall_back_prof_pic.jpg'
-                      }
+                      src={useProfilePicture(
+                        authUser?.profile_attachment_id,
+                        authUser?.id,
+                      )}
                       alt=""
                       size="34"
                     />

@@ -8,6 +8,7 @@ import { authenticatorStore } from '../../store/administration';
 import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { getStudentReportInTerm } from '../../store/evaluation/school-report.store';
+import { useProfilePicture } from '../../utils/file-util';
 
 interface IParamType {
   levelId: string;
@@ -78,6 +79,8 @@ export default function SchoolReport() {
     return obtained < max / 2;
   }
 
+  console.log('rendered');
+
   return (
     <div className="mx-auto max-w-4xl">
       <div className="text-right mb-5">
@@ -107,7 +110,10 @@ export default function SchoolReport() {
           <div className="student">
             <div className="w-20 mb-5">
               <img
-                src="https://static.thenounproject.com/png/2643367-200.png"
+                src={useProfilePicture(
+                  studentInfo?.data.data.user.profile_attachment_id,
+                  studentInfo?.data.data.user.id,
+                )}
                 alt="Student profile"
                 className="block w-20 h-20 object-cover"
               />

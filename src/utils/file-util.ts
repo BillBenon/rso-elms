@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { ADMIN_BASE_URL } from '../plugins/axios';
 import { LoginRes } from '../types';
 import cookie from './cookie';
@@ -44,3 +45,15 @@ async function fetchAndCache(attachmentId: string, key: string) {
 
 export const fileToBlob = async (file: File) =>
   new Blob([new Uint8Array(await file.arrayBuffer())], { type: file.type });
+
+export function useProfilePicture(attachmentId?: string, userId?: string | number) {
+  const [profilePic, setprofilePic] = useState('/images/fall_back_prof_pic.jpg');
+
+  if (attachmentId && userId) {
+    getImage(attachmentId, userId.toString())
+      .then((fileName) => setprofilePic(fileName || '/images/fall_back_prof_pic.jpg'))
+      .catch((e) => console.error(e));
+  }
+
+  return profilePic;
+}
