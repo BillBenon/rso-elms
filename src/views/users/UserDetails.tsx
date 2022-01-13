@@ -20,7 +20,6 @@ export default function UserDetails() {
   const { search } = useLocation();
   const intkStud = new URLSearchParams(search).get('intkStud');
   const stat = new URLSearchParams(search).get('stat');
-  const showMine = new URLSearchParams(search).get('mine');
 
   const history = useHistory();
 
@@ -97,7 +96,7 @@ export default function UserDetails() {
           </div>
           <Tabs>
             <Tab label="Overview" className="pt-8">
-              <ProfileOverview user={user?.data.data} showMine={showMine || ''} />
+              <ProfileOverview user={user?.data.data} />
             </Tab>
             <Tab label="Performance" className="pt-8">
               <NoDataAvailable

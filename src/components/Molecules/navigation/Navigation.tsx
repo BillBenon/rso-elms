@@ -8,6 +8,7 @@ import { authenticatorStore } from '../../../store/administration';
 // import { ValueType } from '../../../types';
 import { UserInfo, UserType } from '../../../types/services/user.types';
 import cookie from '../../../utils/cookie';
+import { useProfilePicture } from '../../../utils/file-util';
 import Avatar from '../../Atoms/custom/Avatar';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
@@ -28,6 +29,7 @@ export default function Navigation() {
     if (authUser?.user_type === UserType.SUPER_ADMIN && !authUser.institution_id) {
       history.push('/institution/new');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.data.data]);
 
   const links = [
@@ -94,8 +96,12 @@ export default function Navigation() {
                     onClick={() => setShowProfileMenu(!showProfileMenu)}>
                     <span className="sr-only">Open user menu</span>
                     <Avatar
-                      src="https://static.thenounproject.com/png/2643367-200.png"
-                      alt="profile"
+                      className="border-2 object-cover border-primary-500"
+                      src={useProfilePicture(
+                        authUser?.profile_attachment_id,
+                        authUser?.id,
+                      )}
+                      alt=""
                       size="34"
                     />
                   </button>
@@ -123,7 +129,7 @@ export default function Navigation() {
                         Your Profile
                       </a> */}
                       <Link
-                        to={`/dashboard/users/${authUser?.id}/profile?mine=${true}`}
+                        to={`/dashboard/users/${authUser?.id}/profile`}
                         className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100">
                         Your Profile
                       </Link>

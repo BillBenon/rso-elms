@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
 import { FilterOptions, Response, SortedContent } from '../../types';
+import { AddInstitutionLogo } from '../../types/services/institution.types';
 import {
   CreateUserInfo,
   EditUser,
@@ -77,6 +78,16 @@ class UserService {
   }
   public async getLanguages() {
     return await adminstrationAxios.get('languages/getLanguages');
+  }
+
+  public async addProfile(req: AddInstitutionLogo): Promise<AxiosResponse<UserInfo>> {
+    return await adminstrationAxios.post(
+      `attachments/addUserProfileImage/${req.id}`,
+      req.info,
+    );
+  }
+  public async downloadProfile(attachmentId: string): Promise<AxiosResponse<Blob>> {
+    return await adminstrationAxios.get(`attachments/download/profile/${attachmentId}`);
   }
 }
 

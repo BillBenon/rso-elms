@@ -25,6 +25,7 @@ export interface IOverallStudentPerformance {
   id: string;
   obtained_marks: number;
   position: number;
+  total_students: number;
   quiz_marks: number;
   quiz_obtained_marks: number;
   student: IStudent;

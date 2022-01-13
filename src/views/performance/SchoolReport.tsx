@@ -8,6 +8,7 @@ import { authenticatorStore } from '../../store/administration';
 import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { getStudentReportInTerm } from '../../store/evaluation/school-report.store';
+import { useProfilePicture } from '../../utils/file-util';
 
 interface IParamType {
   levelId: string;
@@ -74,6 +75,12 @@ export default function SchoolReport() {
     return Math.round((percentage + Number.EPSILON) * 100) / 100;
   }
 
+  function isFailure(obtained: number, max: number) {
+    return obtained < max / 2;
+  }
+
+  console.log('rendered');
+
   return (
     <div className="mx-auto max-w-4xl">
       <div className="text-right mb-5">
@@ -103,7 +110,10 @@ export default function SchoolReport() {
           <div className="student">
             <div className="w-20 mb-5">
               <img
-                src="https://static.thenounproject.com/png/2643367-200.png"
+                src={useProfilePicture(
+                  studentInfo?.data.data.user.profile_attachment_id,
+                  studentInfo?.data.data.user.id,
+                )}
                 alt="Student profile"
                 className="block w-20 h-20 object-cover"
               />
@@ -198,11 +208,26 @@ export default function SchoolReport() {
           <div key={m.moduleId} className="grid grid-cols-3">
             <p className="p-3 text-sm border border-gray-700">{m.moduleName}</p>
             <div className="grid-cols-6 col-span-2 grid">
-              <p className="p-3 text-sm border border-gray-700">{m.catObtained}</p>
+              <p
+                className={`p-3 text-sm border border-gray-700 ${
+                  isFailure(m.catObtained, m.catMax) ? 'text-error-500' : ''
+                }`}>
+                {m.catObtained}
+              </p>
               <p className="p-3 text-sm border border-gray-700">{m.catMax}</p>
-              <p className="p-3 text-sm border border-gray-700">{m.examObtained}</p>
+              <p
+                className={`p-3 text-sm border border-gray-700 
+                  ${isFailure(m.examObtained, m.examMax) ? 'text-error-500' : ''}`}>
+                {m.examObtained}
+              </p>
               <p className="p-3 text-sm border border-gray-700">{m.examMax}</p>
-              <p className="p-3 text-sm border border-gray-700">
+              <p
+                className={`p-3 text-sm border border-gray-700 
+                ${
+                  isFailure(m.catObtained + m.examObtained, m.examMax + m.catMax)
+                    ? 'text-error-500'
+                    : ''
+                }`}>
                 {m.catObtained + m.examObtained}
               </p>
               <p className="p-3 text-sm border border-gray-700">{m.examMax + m.catMax}</p>
@@ -257,7 +282,8 @@ export default function SchoolReport() {
             fontSize="sm"
             fontWeight="normal"
             className="col-span-4 py-3 px-6 border border-gray-700 text-right">
-            {reportData?.data.data.position}
+            <span className="font-bold">{reportData?.data.data.position}</span> outof
+            <span className="font-bold"> {reportData?.data.data.total_students}</span>
           </Heading>
         </div>
         {/* Digital signature */}
