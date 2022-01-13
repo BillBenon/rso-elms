@@ -68,9 +68,9 @@ function Levels() {
       </section>
 
       <section>
-        {isLoading && <Loader />}
-
-        {levels && levels?.length > 0 ? (
+        {isLoading ? (
+          <Loader />
+        ) : levels && levels?.length > 0 ? (
           <Table<FilteredLevels>
             statusColumn="status"
             data={levels}
