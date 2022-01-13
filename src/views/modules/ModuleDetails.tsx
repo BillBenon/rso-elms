@@ -32,6 +32,7 @@ import ModuleEvaluations from '../evaluation/ModuleEvaluations';
 import ModuleMaterials from '../module-material/ModuleMaterials';
 import { IProgramData } from '../programs/AcademicPrograms';
 import InstructorsOnModule from '../users/InstructorsOnModule';
+import Prerequisites from './paths/Prerequisites';
 
 export default function ModuleDetails() {
   const [subjects, setSubjects] = useState<CommonCardDataType[]>([]);
@@ -313,6 +314,18 @@ export default function ModuleDetails() {
               path={`${path}/materials`}
               render={() => {
                 return <ModuleMaterials />;
+              }}
+            />
+            <Route
+              path={`${path}/syllabus`}
+              render={() => {
+                return <ModuleMaterials />;
+              }}
+            />
+            <Route
+              path={`${path}/prereqs`}
+              render={() => {
+                return <Prerequisites />;
               }}
             />
             <Route
