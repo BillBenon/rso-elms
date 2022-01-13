@@ -40,6 +40,13 @@ export interface CreateModuleInfo {
   program_id: string;
 }
 
+export interface ModulePrerequisites {
+  prerequisite: Prerequisite;
+  module: ModuleInfo;
+  description: string;
+  id: 0;
+}
+
 export interface Prerequisite {
   description: string;
   id: 0;

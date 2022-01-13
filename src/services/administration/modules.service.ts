@@ -6,6 +6,7 @@ import {
   CreateModuleInfo,
   CreatePrerequisites,
   ModuleInfo,
+  ModulePrerequisites,
 } from '../../types/services/modules.types';
 
 type TableId = string | number;
@@ -32,6 +33,15 @@ class ModuleService {
       `/coursemodules/getModulesByProgram/${programId}`,
     );
   }
+
+  public async getModulePrereqs(
+    moduleId: string,
+  ): Promise<AxiosResponse<Response<ModulePrerequisites[]>>> {
+    return await adminstrationAxios.get(
+      `/coursemodules/getModulePrerequisits/${moduleId}`,
+    );
+  }
+
   public async getModulesByAcademy(
     academyId: TableId,
   ): Promise<AxiosResponse<Response<ModuleInfo[]>>> {

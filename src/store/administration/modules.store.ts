@@ -28,6 +28,12 @@ class ModuleStore {
     );
   }
 
+  getModulePrereqsByModule(moduleId: string) {
+    return useQuery(['prereqs/moduleid', moduleId], () =>
+      moduleService.getModulePrereqs(moduleId),
+    );
+  }
+
   modifyModule() {
     return useMutation(moduleService.modifyModule);
   }
