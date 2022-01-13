@@ -39,7 +39,7 @@ export default function EvaluationTest() {
   let studentEvaluationData = markingStore.getStudentEvaluationById(studentEvaluationId);
   let studentWorkTimer = evaluationStore.getEvaluationWorkTime(studentEvaluationId);
 
-  function autoSubmit() {
+  const autoSubmit = useCallback(() => {
     if (isCheating)
       toast.error(
         'The exam was auto submitted because you tried to exit full screen or changed tab',
@@ -57,13 +57,7 @@ export default function EvaluationTest() {
         },
       });
     }, 5000);
-  }
-
-  const memoizedAutoSubmitForm = useCallback(autoSubmit, [
-    isCheating,
-    mutate,
-    studentEvaluationId,
-  ]);
+  }, [isCheating, mutate, studentEvaluationId]);
 
   async function updateWorkTime(value: any) {
     let workTime = timeLimit * 60 * 1000 - time + (time - value.total);
@@ -96,7 +90,7 @@ export default function EvaluationTest() {
       path === '/dashboard/evaluations/student-evaluation/:id'
     ) {
       setIsCheating(true);
-      memoizedAutoSubmitForm();
+      autoSubmit();
     }
     const handleTabChange = () => {
       if (
@@ -104,7 +98,7 @@ export default function EvaluationTest() {
         path === '/dashboard/evaluations/student-evaluation/:id'
       ) {
         setIsCheating(true);
-        memoizedAutoSubmitForm();
+        autoSubmit();
       }
     };
 
@@ -114,7 +108,7 @@ export default function EvaluationTest() {
     }
 
     return () => window.removeEventListener('visibilitychange', handleTabChange);
-  }, [isFullscreen, path, open, memoizedAutoSubmitForm]);
+  }, [isFullscreen, path, open, autoSubmit]);
 
   return (
     <div

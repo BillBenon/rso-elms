@@ -162,10 +162,6 @@ export default function ModuleDetails() {
     }
   }, [id, subjectData?.data?.data, subjectData?.data?.data.data]);
 
-  // function onUrlChange() {
-  //   alert('new-loc' + location.href);
-  // }
-
   function handleSearch() {}
   function handleClose() {
     history.goBack();
