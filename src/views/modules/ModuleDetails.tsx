@@ -118,25 +118,6 @@ export default function ModuleDetails() {
 
   useEffect(() => {
     var lastUrl: string = location.href;
-
-    if (subjectData.data?.data) {
-      let loadedSubjects: CommonCardDataType[] = [];
-      subjectData.data.data.data.forEach((subject) => {
-        let cardData: CommonCardDataType = {
-          id: subject.id,
-          code: subject.module.name || `Subject ${subject.title}`,
-          description: subject.content,
-          title: subject.title,
-          status: {
-            type: advancedTypeChecker(subject.generic_status),
-            text: subject.generic_status.toString(),
-          },
-        };
-        loadedSubjects.push(cardData);
-      });
-
-      setSubjects(loadedSubjects);
-    }
     new MutationObserver(() => {
       const loc = location.href.split('?')[0];
       if (loc !== lastUrl) {
@@ -158,6 +139,27 @@ export default function ModuleDetails() {
         }
       }
     }).observe(document, { subtree: true, childList: true });
+  }, [id]);
+
+  useEffect(() => {
+    if (subjectData.data?.data) {
+      let loadedSubjects: CommonCardDataType[] = [];
+      subjectData.data.data.data.forEach((subject) => {
+        let cardData: CommonCardDataType = {
+          id: subject.id,
+          code: subject.module.name || `Subject ${subject.title}`,
+          description: subject.content,
+          title: subject.title,
+          status: {
+            type: advancedTypeChecker(subject.generic_status),
+            text: subject.generic_status.toString(),
+          },
+        };
+        loadedSubjects.push(cardData);
+      });
+
+      setSubjects(loadedSubjects);
+    }
   }, [id, subjectData?.data?.data, subjectData?.data?.data.data]);
 
   // function onUrlChange() {
