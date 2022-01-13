@@ -105,24 +105,25 @@ export default function QuestionContainer({
     return false;
   }
 
-  function submitForm(previousValue?: string, choiceId?: string) {
-    if (
-      previousValue !== answer?.open_answer ||
-      answer.multiple_choice_answer !== choiceId
-    ) {
-      mutate(answer, {
-        onSuccess: () => {
-          // toast.success('submitted');
-          setQuestionToSubmit('');
-        },
-        onError: (error: any) => {
-          toast.error(error.response.data.message.split(':')[1] + '');
-        },
-      });
-    }
-  }
-
-  const memoizedSubmitForm = useCallback(submitForm, [answer, mutate]);
+  const submitForm = useCallback(
+    (previousValue?: string, choiceId?: string) => {
+      if (
+        previousValue !== answer?.open_answer ||
+        answer.multiple_choice_answer !== choiceId
+      ) {
+        mutate(answer, {
+          onSuccess: () => {
+            // toast.success('submitted');
+            setQuestionToSubmit('');
+          },
+          onError: (error: any) => {
+            toast.error(error.response.data.message);
+          },
+        });
+      }
+    },
+    [answer, mutate],
+  );
 
   function handleChoiceSelect(choiceId: string, index: number) {
     let choicesClone = [...(questionChoices || [])];
@@ -149,13 +150,13 @@ export default function QuestionContainer({
   useEffect(() => {
     if (question !== '') {
       const interval = setInterval(() => {
-        if (questionToSubmit) memoizedSubmitForm();
+        if (questionToSubmit) submitForm();
       }, 30000);
       return () => {
         clearInterval(interval);
       };
     }
-  }, [question, questionToSubmit, memoizedSubmitForm]);
+  }, [question, questionToSubmit, submitForm]);
 
   return (
     <form onSubmit={submitEvaluation}>

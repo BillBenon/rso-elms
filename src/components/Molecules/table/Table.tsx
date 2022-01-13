@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { GenericStatus, ValueType } from '../../../types';
 import { StudentApproval } from '../../../types/services/enrollment.types';
@@ -78,10 +78,24 @@ export default function Table2<T>({
   const colsToHide: (keyof (T & Selected))[] = ['selected'];
   hide.length > 0 && colsToHide.push(...hide); // add unique col to elements that gonna be hidden
 
+  const changeSelect = useCallback(
+    (id: string, status: boolean) => {
+      const cr = currentRows.map((row) => {
+        if (uniqueCol) {
+          // @ts-ignore
+          if (row[uniqueCol] == id) row.selected = status;
+        }
+        return row;
+      });
+      setCurrentRows(cr);
+    },
+    [currentRows, uniqueCol],
+  );
+
   useEffect(() => {
     selected.forEach((sel) => changeSelect(sel, true));
     setCurrentRows(data);
-  }, [data]);
+  }, [changeSelect, data, selected]);
 
   // handle paginate
   const paginate = (pageNumber: number) => {
@@ -110,7 +124,7 @@ export default function Table2<T>({
     if (handleSelect) handleSelect(Array.from(newSelRow));
   }
 
-  function unSelectAll() {
+  const unSelectAll = useCallback(() => {
     setSelected(new Set('')); // set set to empty, since we unselected each and everything
 
     _.map(currentRows, 'id').forEach((val) => {
@@ -118,7 +132,7 @@ export default function Table2<T>({
     });
 
     if (handleSelect) handleSelect([]);
-  }
+  }, [changeSelect, currentRows, handleSelect]);
 
   //handle single select
   function _handleSelect(e: ValueType<HTMLInputElement>) {
@@ -141,19 +155,9 @@ export default function Table2<T>({
     if (handleSelect) handleSelect(Array.from(selected));
   }
 
-  function changeSelect(id: string, status: boolean) {
-    const cr = currentRows.map((row) => {
-      if (uniqueCol) {
-        // @ts-ignore
-        if (row[uniqueCol] == id) row.selected = status;
-      }
-      return row;
-    });
-    setCurrentRows(cr);
-  }
-
   useEffect(() => {
     unSelectAll();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unselectAll]);
 
   function handleCountSelect(e: ValueType) {
@@ -248,9 +252,7 @@ export default function Table2<T>({
               </ul>
             </Tooltip>
           </td>
-        ) : (
-          ''
-        )}
+        ) : null}
       </tr>
     ));
   };
@@ -281,7 +283,9 @@ export default function Table2<T>({
         <thead>
           <tr className="text-left text-txt-secondary border-b border-silver">
             {getHeader()}
-            {actions && actions.length > 0 ? <th className="px-4 py-2 ">Actions</th> : ''}
+            {actions && actions.length > 0 ? (
+              <th className="px-4 py-2 ">Actions</th>
+            ) : null}
           </tr>
         </thead>
         <tbody>{getRowsData()}</tbody>
