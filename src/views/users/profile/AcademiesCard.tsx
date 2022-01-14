@@ -29,6 +29,7 @@ function AcademiesCard({ academies }: { academies: AcademyInfo[] }) {
                 academy.logo_attachment_id,
                 academy.id,
                 '/images/rdf-logo.png',
+                'logos',
               )}
               alt="academy logo"
               size="48"
