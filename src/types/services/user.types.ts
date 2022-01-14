@@ -177,7 +177,7 @@ export interface EditUser {
   send_communication_msg: SendCommunicationMsg;
   profile_status: ProfileStatus;
   id: string;
-  profile_status: ProfileStatus
+  spouse_name: string;
 }
 
 export interface CreateUserInfo extends EditUser {
@@ -215,6 +215,8 @@ export interface BasicPersonInfo
     | 'nid'
     | 'doc_type'
     | 'document_expire_on'
+    | 'marital_status'
+    | 'spouse_name'
 > {
   email: string;
   relationship: string;
@@ -238,7 +240,8 @@ export interface PersonDetail
     | 'marital_status'
     | 'spouse_name'
     | 'residence_location_id'
-    | 'place_of_residence'
+    | 'place_of_residence' 
+    | 'doc_type'
   > {}
 export interface EmploymentDetail
   extends Pick<

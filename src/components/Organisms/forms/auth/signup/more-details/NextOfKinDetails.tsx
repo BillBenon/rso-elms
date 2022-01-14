@@ -9,6 +9,7 @@ import {
   BasicPersonInfo,
   DocType,
   GenderStatus,
+  MaritalStatus,
 } from '../../../../../../types/services/user.types';
 import { NextKinInfo } from '../../../../../../types/services/usernextkin.types';
 import { getDropDownStatusOptions } from '../../../../../../utils/getOption';
@@ -48,6 +49,8 @@ function NextOfKinDetails<E>({
     nid: '',
     place_of_residence: '',
     user_id: authUser?.id + '',
+    marital_status: MaritalStatus.SINGLE,
+    spouse_name: '',
   });
 
   const { data } = usernextkinStore.getPersonByNid(details.nid);
@@ -81,6 +84,8 @@ function NextOfKinDetails<E>({
       nid: data?.data.data.nid || details.nid,
       place_of_residence:
         data?.data.data.place_of_residence || details.place_of_residence,
+      marital_status: data?.data.data.marital_status || details.marital_status,
+      spouse_name: data?.data.data.spouse_name || details.spouse_name,
     });
   }, [data?.data]);
 
@@ -195,6 +200,25 @@ function NextOfKinDetails<E>({
             options={options}>
             Nationality
           </DropdownMolecule>
+          <DropdownMolecule
+            defaultValue={getDropDownStatusOptions(MaritalStatus).find(
+              (marital_status) => marital_status.label === details.marital_status,
+            )}
+            options={getDropDownStatusOptions(MaritalStatus)}
+            name="marital_status"
+            placeholder={'Select your marital status'}
+            handleChange={handleChange}>
+            Marital Status
+          </DropdownMolecule>
+          {(details.marital_status === MaritalStatus.MARRIED ||
+            details.marital_status === MaritalStatus.WIDOWED) && (
+            <InputMolecule
+              name="spouse_name"
+              value={details.spouse_name}
+              handleChange={handleChange}>
+              Spouse Name
+            </InputMolecule>
+          )}
           <InputMolecule
             readOnly={data?.data.data.phone_number ? details.phone_number !== '' : false}
             name="phone_number"

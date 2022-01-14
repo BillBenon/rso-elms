@@ -56,6 +56,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
 
   const [details, setDetails] = useState<CreateUserInfo>({
     activation_key: '',
+    spouse_name: '',
     academy_id: authUser?.academy?.id + '',
     deployed_on: '',
     deployment_number: `DEP-${parseInt(Math.random() * 10000 + '')}`,
@@ -295,6 +296,15 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Marital Status
         </DropdownMolecule>
+        {(details.marital_status === MaritalStatus.MARRIED ||
+          details.marital_status === MaritalStatus.WIDOWED) && (
+          <InputMolecule
+            name="spouse_name"
+            value={details.spouse_name}
+            handleChange={handleChange}>
+            Spouse Name
+          </InputMolecule>
+        )}
         <DropdownMolecule
           defaultValue={getDropDownStatusOptions(EducationLevel).find(
             (level) => level.label === details.education_level,
