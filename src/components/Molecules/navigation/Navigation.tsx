@@ -12,11 +12,13 @@ import { useProfilePicture } from '../../../utils/file-util';
 import Avatar from '../../Atoms/custom/Avatar';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
+import Tooltip from '../Tooltip';
 // import SearchMolecule from '../input/SearchMolecule';
 
 export default function Navigation() {
   const history = useHistory();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showNotificationMenu, setNotificationMenu] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const [authUser, setAuthUser] = useState<UserInfo>();
   const logoutFn = authenticatorStore.logout();
@@ -74,16 +76,31 @@ export default function Navigation() {
                   </Link>
                 </div>
               )}
-              <button className="bg-main p-1 rounded-full flex text-gray-400">
+              <div className="bg-main p-1 rounded-full flex text-gray-400">
                 <Icon name="switch" />
                 <Icon name="settings" />
-                <div className="relative">
-                  <Icon name="notification" />
-                  <div className="bg-main rounded-full h-3 w-3 absolute top-3 right-4 flex items-center justify-center">
-                    <span className="absolute  w-2 h-2  bg-red-600 self-center rounded-full"></span>
-                  </div>
-                </div>
-              </button>
+
+                <Tooltip
+                  on="click"
+                  position="bottom center"
+                  open={showNotificationMenu}
+                  trigger={
+                    <button
+                      className="bg-main p-1 rounded-full flex text-gray-400"
+                      onClick={() => setNotificationMenu(!showNotificationMenu)}>
+                      <Icon name="switch" />
+                      <Icon name="settings" />
+                      <div className="relative">
+                        <Icon name="notification" />
+                        <div className="bg-main rounded-full h-3 w-3 absolute top-3 right-4 flex items-center justify-center">
+                          <span className="absolute  w-2 h-2  bg-red-600 self-center rounded-full"></span>
+                        </div>
+                      </div>
+                    </button>
+                  }>
+                  we go
+                </Tooltip>
+              </div>
 
               {/* Profile dropdown */}
               <div className="ml-3 relative">

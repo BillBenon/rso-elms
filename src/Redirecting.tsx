@@ -1,9 +1,11 @@
 import './styles/redirecting.scss';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { authenticatorStore } from './store/administration';
+import { experienceStore } from './store/administration/experience.store';
+import usernextkinStore from './store/administration/usernextkin.store';
 import { ProfileStatus, UserType } from './types/services/user.types';
 import NotApproved from './views/NotApproved';
 
@@ -11,8 +13,25 @@ export default function Redirecting() {
   const [hasNoAcademy, setHasNoAcademy] = useState(false);
   const [userNotAllowed, setUserNotAllowed] = useState(false);
   const { data: authUser, isLoading } = authenticatorStore.authUser();
-  //const { mutateAsync } = experienceStore.getAll();
+
+  const { data: nextOfKin } = usernextkinStore.getHisNextKinById(
+    authUser?.data.data.id + '',
+  );
+  const { data: experiences } = experienceStore.getPersonExperiences(
+    authUser?.data.data.person.id + '',
+  );
+
+  // console.log(experiences);
+
   const history = useHistory();
+
+  const redirectTo = useCallback(
+    (path: string) => {
+      history.push(path);
+    },
+    [history],
+  );
+
   useEffect(() => {
     const notAllowed =
       authUser?.data.data.user_type === UserType.SUPER_ADMIN ||
@@ -26,26 +45,38 @@ export default function Redirecting() {
 
       if (authUser.data.data.profile_status !== ProfileStatus.COMPLETD) {
         redirectTo('/complete-profile');
-      } else if (authUser.data.data.user_type === UserType.ADMIN) {
-        let val = !authUser.data.data.academy ? true : false;
-        setHasNoAcademy(val && !isLoading);
-
-        redirectTo('/dashboard/users');
-      } else if (authUser.data.data.user_type === UserType.INSTRUCTOR) {
-        redirectTo('/dashboard/inst-module');
-      } else if (authUser.data.data.user_type === UserType.STUDENT) {
-        redirectTo('/dashboard/student');
-      } else if (authUser.data.data.user_type === UserType.SUPER_ADMIN) {
-        redirectTo('/dashboard/users');
+      } else if (experiences && experiences?.data.data.length > 0) {
+        if (nextOfKin && nextOfKin?.data.data.length > 0) {
+          if (authUser.data.data.user_type === UserType.ADMIN) {
+            let val = !authUser.data.data.academy ? true : false;
+            setHasNoAcademy(val && !isLoading);
+            redirectTo('/dashboard/users');
+          } else if (authUser.data.data.user_type === UserType.INSTRUCTOR) {
+            redirectTo('/dashboard/inst-module');
+          } else if (authUser.data.data.user_type === UserType.STUDENT) {
+            redirectTo('/dashboard/student');
+          } else if (authUser.data.data.user_type === UserType.SUPER_ADMIN) {
+            redirectTo('/dashboard/users');
+          }
+        } else if (nextOfKin) {
+          redirectTo('/complete-profile/more');
+        }
+      } else if (experiences) {
+        redirectTo('/complete-profile/experience');
       }
     }
 
     setUserNotAllowed(notAllowed && !isLoading);
-  }, [authUser?.data.data, isLoading]);
-
-  const redirectTo = (path: string) => {
-    history.push(path);
-  };
+    // }, [authUser?.data.data, isLoading]);
+  }, [
+    authUser?.data.data,
+    isLoading,
+    experiences?.data.data,
+    nextOfKin?.data.data,
+    experiences,
+    redirectTo,
+    nextOfKin,
+  ]);
 
   return (
     <>
