@@ -8,7 +8,7 @@ import { authenticatorStore } from '../../store/administration';
 import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { getStudentReportInTerm } from '../../store/evaluation/school-report.store';
-import { useProfilePicture } from '../../utils/file-util';
+import { usePicture } from '../../utils/file-util';
 
 interface IParamType {
   levelId: string;
@@ -110,7 +110,7 @@ export default function SchoolReport() {
           <div className="student">
             <div className="w-20 mb-5">
               <img
-                src={useProfilePicture(
+                src={usePicture(
                   studentInfo?.data.data.user.profile_attachment_id,
                   studentInfo?.data.data.user.id,
                 )}
