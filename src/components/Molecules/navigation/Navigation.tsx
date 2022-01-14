@@ -204,7 +204,7 @@ export default function Navigation() {
             <div className="shrink-0">
               <img
                 className="h-10 w-10 rounded-full"
-                src="https://static.thenounproject.com/png/2643367-200.png"
+                src="/images/default-pic.png"
                 alt="profile"
               />
             </div>
