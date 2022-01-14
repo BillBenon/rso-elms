@@ -138,10 +138,7 @@ function RightSidebar({
               />
 
               <Avatar
-                src={
-                  user.image_url ||
-                  'https://static.thenounproject.com/png/2643367-200.png'
-                }
+                src={user.image_url || '/images/default-pic.png'}
                 size="48"
                 alt=""
               />
