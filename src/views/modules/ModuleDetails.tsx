@@ -72,7 +72,7 @@ export default function ModuleDetails() {
       href: `${url}/subjects?showMenus=${showMenu}&intkPrg=${intakeProg}`,
     },
     {
-      label: 'Preriquisites',
+      label: 'Prerequisites',
       href: `${url}/prereqs?showMenus=${showMenu}&intkPrg=${intakeProg}`,
     },
   ];
@@ -234,7 +234,12 @@ export default function ModuleDetails() {
             )}
             {authUser?.user_type === UserType.ADMIN && route == 'PREREQS' && (
               <div className="flex gap-3">
-                <Button onClick={() => history.push(`${url}/${id}/add-prereq`)}>
+                <Button
+                  onClick={() =>
+                    history.push(
+                      `${url}/${id}/add-prereq?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+                    )
+                  }>
                   Add prerequisites
                 </Button>
               </div>
