@@ -33,6 +33,7 @@ function AcademiesCard({ academies }: { academies: AcademyInfo[] }) {
               )}
               alt="academy logo"
               size="48"
+              round={false}
             />
             <div>
               <p className="py-2">
