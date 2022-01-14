@@ -75,6 +75,7 @@ export default function Sidebar() {
             '/images/rdf-logo.png',
             'logos',
           )}
+          round={false}
           alt="insitution logo">
           {authUser?.institution_name === null
             ? 'Institution name'
