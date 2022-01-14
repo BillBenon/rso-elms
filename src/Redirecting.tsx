@@ -1,6 +1,6 @@
 import './styles/redirecting.scss';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { authenticatorStore } from './store/administration';
@@ -24,6 +24,14 @@ export default function Redirecting() {
   // console.log(experiences);
 
   const history = useHistory();
+
+  const redirectTo = useCallback(
+    (path: string) => {
+      history.push(path);
+    },
+    [history],
+  );
+
   useEffect(() => {
     const notAllowed =
       authUser?.data.data.user_type === UserType.SUPER_ADMIN ||
@@ -60,11 +68,15 @@ export default function Redirecting() {
 
     setUserNotAllowed(notAllowed && !isLoading);
     // }, [authUser?.data.data, isLoading]);
-  }, [authUser?.data.data, isLoading, experiences?.data.data, nextOfKin?.data.data]);
-
-  const redirectTo = (path: string) => {
-    history.push(path);
-  };
+  }, [
+    authUser?.data.data,
+    isLoading,
+    experiences?.data.data,
+    nextOfKin?.data.data,
+    experiences,
+    redirectTo,
+    nextOfKin,
+  ]);
 
   return (
     <>

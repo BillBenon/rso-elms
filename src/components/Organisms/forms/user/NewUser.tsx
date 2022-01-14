@@ -146,7 +146,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     setSelectedProgram(
       programs.data?.data.data.find((p) => p.id == details.intake_program_id)?.program,
     );
-  }, [programs.data?.data.data]);
+  }, [details.intake_program_id, programs.data?.data.data]);
 
   let levels = getLevelsByAcademicProgram(selectedProgram?.id + '');
 
@@ -154,7 +154,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
 
   useEffect(() => {
     levels.refetch();
-  }, [selectedProgram?.id]);
+  }, [levels, selectedProgram?.id]);
   return (
     <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
       <div className="py-5 mb-3 capitalize">

@@ -59,11 +59,15 @@ function ExperienceForm<E>({
   const { mutate } = moduleMaterialStore.addFile();
 
   useEffect(() => {
-    setExperience({ ...experience, person_id: authUser?.person.id.toString() || '' });
+    setExperience((exp) => {
+      return { ...exp, person_id: authUser?.person.id.toString() || '' };
+    });
   }, [authUser?.person.id]);
 
   useEffect(() => {
-    setExperience({ ...experience, type: type });
+    setExperience((exp) => {
+      return { ...exp, type: type };
+    });
   }, [type]);
 
   const { mutateAsync } = experienceStore.create();

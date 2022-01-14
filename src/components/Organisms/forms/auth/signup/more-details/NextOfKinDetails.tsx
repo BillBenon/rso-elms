@@ -56,38 +56,40 @@ function NextOfKinDetails<E>({
   const { data } = usernextkinStore.getPersonByNid(details.nid);
 
   useEffect(() => {
-    setDetails({
-      ...details,
-      user_id: authUser?.id + '',
-      first_name: data?.data.data.first_name || details.first_name,
-      last_name: data?.data.data.last_name || details.last_name,
-      email: data?.data.data.email || details.email,
-      phone_number: data?.data.data.phone_number || details.phone_number,
-      sex:
-        data?.data.data.sex == null
-          ? GenderStatus.MALE
-          : data?.data.data.sex || details.sex == null
-          ? GenderStatus.MALE
-          : details.sex,
-      birth_date: data?.data.data.birth_date || details.birth_date,
-      relationship: data?.data.data.relationship || details.relationship,
-      residence_location_id: details.residence_location_id,
-      nationality: data?.data.data.nationality || details.nationality,
-      doc_type:
-        data?.data.data.doc_type == null
-          ? DocType.NID
-          : data?.data.data.doc_type || details.doc_type == null
-          ? DocType.NID
-          : details.doc_type,
-      document_expire_on:
-        data?.data.data.document_expire_on || details.document_expire_on,
-      nid: data?.data.data.nid || details.nid,
-      place_of_residence:
-        data?.data.data.place_of_residence || details.place_of_residence,
-      marital_status: data?.data.data.marital_status || details.marital_status,
-      spouse_name: data?.data.data.spouse_name || details.spouse_name,
+    setDetails((prevState) => {
+      return {
+        ...prevState,
+        user_id: authUser?.id + '',
+        first_name: data?.data.data.first_name || prevState.first_name,
+        last_name: data?.data.data.last_name || prevState.last_name,
+        email: data?.data.data.email || prevState.email,
+        phone_number: data?.data.data.phone_number || prevState.phone_number,
+        sex:
+          data?.data.data.sex == null
+            ? GenderStatus.MALE
+            : data?.data.data.sex || prevState.sex == null
+            ? GenderStatus.MALE
+            : prevState.sex,
+        birth_date: data?.data.data.birth_date || prevState.birth_date,
+        relationship: data?.data.data.relationship || prevState.relationship,
+        residence_location_id: prevState.residence_location_id,
+        nationality: data?.data.data.nationality || prevState.nationality,
+        doc_type:
+          data?.data.data.doc_type == null
+            ? DocType.NID
+            : data?.data.data.doc_type || prevState.doc_type == null
+            ? DocType.NID
+            : prevState.doc_type,
+        document_expire_on:
+          data?.data.data.document_expire_on || prevState.document_expire_on,
+        nid: data?.data.data.nid || prevState.nid,
+        place_of_residence:
+          data?.data.data.place_of_residence || prevState.place_of_residence,
+        marital_status: data?.data.data.marital_status || prevState.marital_status,
+        spouse_name: data?.data.data.spouse_name || prevState.spouse_name,
+      };
     });
-  }, [data?.data]);
+  }, [authUser?.id, data?.data]);
 
   const handleChange = (e: ValueType) => {
     setDetails({ ...details, [e.name]: e.value });
@@ -249,6 +251,7 @@ function NextOfKinDetails<E>({
           <LocationMolecule
             width="72 md:w-80"
             name="residence_location_id"
+            placeholder="Select location"
             handleChange={handleChange}>
             Residence location
           </LocationMolecule>
