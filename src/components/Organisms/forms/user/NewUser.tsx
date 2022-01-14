@@ -180,7 +180,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
               placeholder="eg: Manzi"
               value={details.deployment_number}
               handleChange={handleChange}>
-              Deployment number
+              Service number
             </InputMolecule>
           </>
         ) : null}
