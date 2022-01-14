@@ -20,13 +20,15 @@ function UpdatePhotoProfile({ user }: { user: UserInfo }) {
     if (files) setProfileSrc(URL.createObjectURL(await fileToBlob(files[0])));
   };
 
-  const [profileSrc, setProfileSrc] = useState('');
+  const [profileSrc, setProfileSrc] = useState('/images/fall_back_prof_pic.jpg');
 
   useEffect(() => {
     if (user.profile_attachment_id)
-      getImage(user.profile_attachment_id, user.id.toString()).then((imageSrc) => {
-        if (imageSrc) setProfileSrc(imageSrc);
-      });
+      getImage(user.profile_attachment_id, user.id.toString(), 'profile').then(
+        (imageSrc) => {
+          if (imageSrc) setProfileSrc(imageSrc);
+        },
+      );
   }, [user]);
 
   const history = useHistory();
@@ -72,7 +74,7 @@ function UpdatePhotoProfile({ user }: { user: UserInfo }) {
         <Avatar
           className="border-4 object-cover border-primary-500"
           size="120"
-          src={profileSrc || '../../../..//images/fall_back_prof_pic.jpg'}
+          src={profileSrc}
           alt="photo"
         />
         <div className="self-end -mt-3">
