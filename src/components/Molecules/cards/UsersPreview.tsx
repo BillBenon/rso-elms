@@ -31,7 +31,6 @@ export default function UsersPreview({
   totalUsers,
   dataLabel = '',
   isLoading,
-  userType,
 }: IUserPreview) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
@@ -94,18 +93,18 @@ export default function UsersPreview({
           handleClose={() => setSidebarOpen(false)}
           label={label}
           data={data}
-          selectorActions={
-            userType !== UserType.INSTRUCTOR
-              ? [
-                  {
-                    name: 'Change Status',
-                    handleAction: (_data?: string[]) => {
-                      // alert(`changing status ${data}`);
-                    },
-                  },
-                ]
-              : undefined
-          }
+          // selectorActions={
+          //   userType !== UserType.INSTRUCTOR
+          //     ? [
+          //         {
+          //           name: 'Change Status',
+          //           handleAction: (_data?: string[]) => {
+          //             // alert(`changing status ${data}`);
+          //           },
+          //         },
+          //       ]
+          //     : undefined
+          // }
           dataLabel={dataLabel}
           isLoading={isLoading}
         />

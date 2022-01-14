@@ -287,7 +287,7 @@ function IntakeProgramDetails() {
                         <div className="flex flex-col gap-8 z-0">
                           <UsersPreview
                             title="Students"
-                            label="Students in Cadette programs"
+                            label={`Students in ${programData.title}`}
                             data={students}
                             totalUsers={students.length || 0}
                             dataLabel={''}
@@ -302,7 +302,7 @@ function IntakeProgramDetails() {
 
                           <UsersPreview
                             title="Instructors"
-                            label="Instructors in Cadette programs"
+                            label={`Instructors in ${programData.title}`}
                             data={instructors}
                             totalUsers={instructors.length || 0}
                             dataLabel={''}
