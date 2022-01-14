@@ -27,13 +27,14 @@ export default function AcademyProfileCard({
   fontWeight = 'semibold',
   color = 'primary',
   subtitle = '',
+  round,
 }: ICard) {
   return (
     <Badge
       roundWidth="md"
       className="flex gap-5 h-16  w-full p-4 items-center"
       badgecolor={bgColor}>
-      <Avatar src={src} alt={alt} size={size} />
+      <Avatar round={round} src={src} alt={alt} size={size} />
       <div className="flex flex-col items-center">
         <ILabel size={txtSize} weight={fontWeight} color={color} className="text-center">
           {children}
