@@ -93,13 +93,16 @@ export default function SchoolReport() {
         className="px-10 py-10 bg-white mx-auto max-w-4xl border border-gray-300 print:border-none">
         <div className="flex justify-between">
           <div className="provider">
-            <div className="w-20 bg-gray-300 rounded-full mb-5">
-              <img
-                src="/images/rdf-logo.png"
-                alt="Institution logo"
-                className=" w-20 h-20 object-cover block rounded-full"
-              />
-            </div>
+            <img
+              src={usePicture(
+                authUser?.academy.logo_attachment_id,
+                authUser?.academy.id,
+                '/images/rdf-logo.png',
+                'logos',
+              )}
+              alt="Institution logo"
+              className=" w-20 object-cover block mb-5"
+            />
             <h2 className="text-base font-bold">{authUser?.academy.institution.name}</h2>
             <h2 className="text-sm font-medium py-2 uppercase">
               {authUser?.academy.name}

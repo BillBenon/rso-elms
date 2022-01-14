@@ -20,7 +20,7 @@ function UpdatePhotoProfile({ user }: { user: UserInfo }) {
     if (files) setProfileSrc(URL.createObjectURL(await fileToBlob(files[0])));
   };
 
-  const [profileSrc, setProfileSrc] = useState('/images/fall_back_prof_pic.jpg');
+  const [profileSrc, setProfileSrc] = useState('/images/default-pic.png');
 
   useEffect(() => {
     if (user.profile_attachment_id)

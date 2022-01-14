@@ -61,7 +61,7 @@ export default function UsersPreview({
                           size="24"
                           alt="user1 profile"
                           className="rounded-full border-2 border-main transform hover:scale-125"
-                          src="https://static.thenounproject.com/png/2643367-200.png"
+                          src="/images/default-pic.png"
                         />
                       </div>
                     ),

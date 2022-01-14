@@ -52,7 +52,7 @@ export const fileToBlob = async (file: File) =>
 export function usePicture(
   attachmentId?: string,
   uniqueId?: string | number,
-  defaultImage = '/images/fall_back_prof_pic.jpg',
+  defaultImage = '/images/default-pic.png',
   type: attachmentType = 'profile',
 ) {
   const [picture, setPicture] = useState(defaultImage);
