@@ -38,12 +38,6 @@ function LevelStudents() {
         handleClose={() => setSidebarOpen(false)}
         label="All Level Students"
         data={students}
-        selectorActions={[
-          {
-            name: 'No action',
-            handleAction: () => {},
-          },
-        ]}
         dataLabel={'Students enrolled'}
         isLoading={isLoading}
       />

@@ -1,26 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import { useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import RightSidebar from '../../components/Organisms/RightSidebar';
-import enrollmentStore from '../../store/administration/enrollment.store';
 import { EnrollInstructorLevelInfo } from '../../types/services/enrollment.types';
-import {
-  IntakeLevelParam,
-} from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 
-interface ProgramEnrollmentProps<T>{
-  instructorsData: EnrollInstructorLevelInfo[]
+// eslint-disable-next-line no-unused-vars
+interface ProgramEnrollmentProps<T> {
+  instructorsData: EnrollInstructorLevelInfo[];
   isLoading: boolean;
 }
 
-function LevelInstructors<T>({instructorsData,isLoading}:ProgramEnrollmentProps<T>) {
+function LevelInstructors<T>({ instructorsData, isLoading }: ProgramEnrollmentProps<T>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const {level: levelId } = useParams<IntakeLevelParam>();
-
-  
 
   const [instructors, setInstructors] = useState<UserView[]>([]);
   useEffect(() => {
@@ -47,12 +39,6 @@ function LevelInstructors<T>({instructorsData,isLoading}:ProgramEnrollmentProps<
         handleClose={() => setSidebarOpen(false)}
         label="All Level Instructors"
         data={instructors}
-        selectorActions={[
-          {
-            name: 'No action',
-            handleAction: () =>{},
-          },
-        ]}
         dataLabel={'Instructors enrolled'}
         isLoading={isLoading}
       />
