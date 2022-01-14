@@ -23,7 +23,7 @@ const CompleteProfileHeader = ({
       </div>
       <div>
         <AcademyProfileCard
-          src="/images/nisslogo.png"
+          src="/images/rdf-logo.png"
           alt="institution logo"
           size="80"
           bgColor="none"

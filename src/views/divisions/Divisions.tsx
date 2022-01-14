@@ -20,7 +20,7 @@ export default function Divisions() {
     } else if (path === '/dashboard/divisions') {
       setFetchType('FACULTY');
     }
-  }, []);
+  }, [location.pathname, path]);
 
   const tabs = [
     {

@@ -32,11 +32,7 @@ export default function UpdateAcademicProgram<E>({
 
   const authUser = authenticatorStore.authUser().data?.data.data;
 
-  const {
-    data: users,
-    isLoading,
-    refetch,
-  } = usersStore.getUsersByAcademyAndUserType(
+  const { data: users } = usersStore.getUsersByAcademyAndUserType(
     authUser?.academy.id.toString() || '',
     UserType.INSTRUCTOR,
     { page: 0, pageSize: 1000, sortyBy: 'username' },
@@ -61,14 +57,18 @@ export default function UpdateAcademicProgram<E>({
   const { mutate } = programStore.modifyProgram();
 
   useEffect(() => {
-    data?.data.data && setDetails({ ...data?.data.data });
     data?.data.data &&
       setDetails({
         ...details,
         department_id: data?.data.data.department.id.toString(),
         id: data?.data.data.id,
+        name: data.data.data.name,
+        code: data.data.data.code,
+        description: data.data.data.description,
+        type: data?.data.data.type,
       });
     console.log(details);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   function handleChange(e: ValueType) {

@@ -8,7 +8,7 @@ import { authenticatorStore } from '../../store/administration';
 import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { getStudentReportInTerm } from '../../store/evaluation/school-report.store';
-import { useProfilePicture } from '../../utils/file-util';
+import { usePicture } from '../../utils/file-util';
 
 interface IParamType {
   levelId: string;
@@ -93,13 +93,16 @@ export default function SchoolReport() {
         className="px-10 py-10 bg-white mx-auto max-w-4xl border border-gray-300 print:border-none">
         <div className="flex justify-between">
           <div className="provider">
-            <div className="w-20 bg-gray-300 rounded-full mb-5">
-              <img
-                src="/images/rdf-logo.png"
-                alt="Institution logo"
-                className=" w-20 h-20 object-cover block rounded-full"
-              />
-            </div>
+            <img
+              src={usePicture(
+                authUser?.academy.logo_attachment_id,
+                authUser?.academy.id,
+                '/images/rdf-logo.png',
+                'logos',
+              )}
+              alt="Institution logo"
+              className=" w-20 object-cover block mb-5"
+            />
             <h2 className="text-base font-bold">{authUser?.academy.institution.name}</h2>
             <h2 className="text-sm font-medium py-2 uppercase">
               {authUser?.academy.name}
@@ -110,7 +113,7 @@ export default function SchoolReport() {
           <div className="student">
             <div className="w-20 mb-5">
               <img
-                src={useProfilePicture(
+                src={usePicture(
                   studentInfo?.data.data.user.profile_attachment_id,
                   studentInfo?.data.data.user.id,
                 )}
