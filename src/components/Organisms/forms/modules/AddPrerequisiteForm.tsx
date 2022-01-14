@@ -34,10 +34,8 @@ export default function AddPrerequesitesForm() {
 
   const authUser = authenticatorStore.authUser().data?.data.data;
 
-  let modules =
-    moduleStore
-      .getModulesByAcademy(authUser?.academy.id + '')
-      .data?.data.data.filter((module) => module.id != moduleId) || [];
+  const moduleSt = moduleStore.getModulesByAcademy(authUser?.academy.id + '');
+  let modules = moduleSt.data?.data.data.filter((module) => module.id != moduleId) || [];
 
   const handleSubmit = async () => {
     let data: CreatePrerequisites = {
@@ -72,7 +70,7 @@ export default function AddPrerequesitesForm() {
         options={getDropDownOptions({ inputs: modules || [] })}
         name="prerequistis"
         isMulti
-        placeholder="Prerequisite"
+        placeholder={moduleSt.isLoading ? 'Loading prerequisites...' : 'Prerequisites'}
         handleChange={handleChange}>
         Select Prerequesites
       </DropdownMolecule>
