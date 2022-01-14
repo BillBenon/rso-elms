@@ -4,6 +4,7 @@ import usersStore from '../../../../../../store/administration/users.store';
 import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../types';
 import {
   BloodGroup,
+  DocType,
   GenderStatus,
   MaritalStatus,
   PersonDetail,
@@ -44,6 +45,7 @@ function PersonalDetails<E>({
     spouse_name: '',
     residence_location_id: 0,
     place_of_residence: '',
+    doc_type: DocType.NID,
   });
 
   const handleChange = (e: ValueType) => {
@@ -83,6 +85,7 @@ function PersonalDetails<E>({
         spouse_name: personInfo.spouse_name,
         residence_location_id: personInfo.residence_location_id,
         place_of_residence: personInfo.place_of_residence,
+        doc_type: personInfo.doc_type,
       });
   }, [user.data?.data.data.person]);
 
