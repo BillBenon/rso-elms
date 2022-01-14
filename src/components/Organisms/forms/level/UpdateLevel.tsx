@@ -16,7 +16,7 @@ export default function UpdateLevel({ onSubmit, academy_id }: IDivisionsAcademyT
   const { mutateAsync } = levelStore.modifyLevel();
   const history = useHistory();
   const [level, setLevels] = useState<IcreateLevel>({
-    name: 'messi',
+    name: '',
     description: '',
     id: '',
     academy_id: academy_id || '',
