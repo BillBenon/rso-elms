@@ -5,6 +5,7 @@ import Badge from '../../../components/Atoms/custom/Badge';
 import Heading from '../../../components/Atoms/Text/Heading';
 import ILabel from '../../../components/Atoms/Text/ILabel';
 import { AcademyInfo } from '../../../types/services/academy.types';
+import { usePicture } from '../../../utils/file-util';
 
 function AcademiesCard({ academies }: { academies: AcademyInfo[] }) {
   return (
@@ -24,7 +25,11 @@ function AcademiesCard({ academies }: { academies: AcademyInfo[] }) {
         academies.map((academy) => (
           <div key={academy.id} className="flex gap-3 h-16 w-full items-center mb-6">
             <Avatar
-              src="../../../../public/images/nisslogo.png"
+              src={usePicture(
+                academy.logo_attachment_id,
+                academy.id,
+                '/images/rdf-logo.png',
+              )}
               alt="academy logo"
               size="48"
             />

@@ -65,7 +65,7 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
             <Avatar
               className="border-4 object-cover border-primary-500 -mt-20"
               size="120"
-              src={profileSrc || '../../../../public/images/fall_back_prof_pic.jpg'}
+              src={profileSrc || '/images/fall_back_prof_pic.jpg'}
               alt="photo"
             />
 
