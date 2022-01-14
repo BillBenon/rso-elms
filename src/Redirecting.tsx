@@ -21,7 +21,7 @@ export default function Redirecting() {
     authUser?.data.data.person.id + '',
   );
 
-  // console.log(experiences);
+  console.log(experiences?.data.data);
 
   const history = useHistory();
 
@@ -36,7 +36,8 @@ export default function Redirecting() {
     const notAllowed =
       authUser?.data.data.user_type === UserType.SUPER_ADMIN ||
       authUser?.data.data.user_type === UserType.ADMIN ||
-      authUser?.data.data.user_type === UserType.INSTRUCTOR
+      authUser?.data.data.user_type === UserType.INSTRUCTOR ||
+      authUser?.data.data.user_type === UserType.STUDENT
         ? false
         : true;
     if (authUser?.data.data) {

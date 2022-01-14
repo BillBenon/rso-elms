@@ -58,7 +58,7 @@ export default function AcademicProgram() {
     if (location.pathname === path || location.pathname === `${path}/`) {
       refetch();
     }
-  }, [location]);
+  }, [location, path, refetch]);
 
   let programs: IProgramData[] = [];
 
