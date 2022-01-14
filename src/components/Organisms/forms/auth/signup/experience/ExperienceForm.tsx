@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { UseMutateAsyncFunction } from 'react-query';
+import { useHistory } from 'react-router-dom';
 
 import { authenticatorStore } from '../../../../../../store/administration';
 import { experienceStore } from '../../../../../../store/administration/experience.store';
@@ -40,6 +41,7 @@ function ExperienceForm<E>({
   type,
 }: IExperienceForm<E>) {
   const authUser = authenticatorStore.authUser().data?.data.data;
+  const history = useHistory();
 
   const [experience, setExperience] = useState<ExperienceInfo>({
     attachment_id: '',
@@ -172,6 +174,7 @@ function ExperienceForm<E>({
               duration: 1200,
             },
           );
+          history.goBack();
         },
         onError(error: any) {
           toast.error(error.response.data.message);

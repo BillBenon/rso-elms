@@ -322,8 +322,7 @@ export enum SendCommunicationMsg {
 }
 
 export interface IImportUser {
-  intake: string;
-  academicProgramLevelId: string;
+  program: string;
   academicYearId: string;
   academyId: string;
   intakeProgramId: string;

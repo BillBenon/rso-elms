@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useHistory } from 'react-router-dom';
 import countryList from 'react-select-country-list';
 
 import { authenticatorStore } from '../../../../../../store/administration';
@@ -32,6 +33,7 @@ function NextOfKinDetails<E>({
 }: NextOfKin<E>) {
   const authUser = authenticatorStore.authUser().data?.data.data;
   const { mutateAsync } = usernextkinStore.createUserNextKin();
+  const history = useHistory();
   // const inputRef = useRef<HTMLInputElement>(null);
 
   const [details, setDetails] = useState<BasicPersonInfo>({
@@ -109,6 +111,7 @@ function NextOfKinDetails<E>({
     await mutateAsync(data, {
       onSuccess(data) {
         toast.success(data.data.message);
+        history.goBack();
       },
       onError(_error) {
         toast.error('Failed');
