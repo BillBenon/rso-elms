@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 
@@ -8,7 +8,7 @@ import { authenticatorStore } from '../../../store/administration';
 // import { ValueType } from '../../../types';
 import { UserInfo, UserType } from '../../../types/services/user.types';
 import cookie from '../../../utils/cookie';
-import { getImage } from '../../../utils/file-util';
+import { usePicture } from '../../../utils/file-util';
 import Avatar from '../../Atoms/custom/Avatar';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
@@ -23,33 +23,13 @@ export default function Navigation() {
   const { data } = authenticatorStore.authUser();
 
   const location = useLocation();
-  const [profileSrc, setProfileSrc] = useState('');
-
-  useEffect(() => {
-    if (authUser && authUser?.profile_attachment_id !== null) {
-      getImage(authUser.profile_attachment_id, authUser.id.toString()).then(
-        (imageSrc) => {
-          setProfileSrc(imageSrc);
-        },
-      );
-    }
-  }, [location]);
-
-  useMemo(() => {
-    if (authUser && authUser.profile_attachment_id !== null) {
-      getImage(authUser.profile_attachment_id, authUser.id.toString()).then(
-        (imageSrc) => {
-          setProfileSrc(imageSrc);
-        },
-      );
-    }
-  }, []);
 
   useEffect(() => {
     setAuthUser(data?.data.data);
     if (authUser?.user_type === UserType.SUPER_ADMIN && !authUser.institution_id) {
       history.push('/institution/new');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.data.data]);
 
   const links = [
@@ -117,9 +97,7 @@ export default function Navigation() {
                     <span className="sr-only">Open user menu</span>
                     <Avatar
                       className="border-2 object-cover border-primary-500"
-                      src={
-                        profileSrc || '../../../../public/images/fall_back_prof_pic.jpg'
-                      }
+                      src={usePicture(authUser?.profile_attachment_id, authUser?.id)}
                       alt=""
                       size="34"
                     />
@@ -226,7 +204,7 @@ export default function Navigation() {
             <div className="shrink-0">
               <img
                 className="h-10 w-10 rounded-full"
-                src="https://static.thenounproject.com/png/2643367-200.png"
+                src="/images/default-pic.png"
                 alt="profile"
               />
             </div>

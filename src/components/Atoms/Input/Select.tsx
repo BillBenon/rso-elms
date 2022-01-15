@@ -29,7 +29,7 @@ export default function Select({
     placeholder || `Select ${name.replace('_', ' ').toLocaleLowerCase()}`,
   );
 
-  useEffect(() => {
+  useMemo(() => {
     setPlaceholder(
       (internalValue.length > 0 &&
         options.find((op) => op.value == internalValue)?.label) ||
@@ -39,7 +39,7 @@ export default function Select({
     setInternalValue(value);
   }, [_placeholder, internalValue, name, options, value]);
 
-  useEffect(() => {
+  useMemo(() => {
     setPlaceholder(
       (value.length > 0 && options.find((op) => op.value == value)?.label) ||
         _placeholder ||

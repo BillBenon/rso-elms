@@ -26,11 +26,7 @@ function NextOfKinCard({ user }: { user: UserInfo }) {
       ) : (
         nextOfKin?.data.data.map((kin) => (
           <div key={kin.id} className="flex justify-evenly h-16 w-full items-center mb-6">
-            <Avatar
-              src="https://static.thenounproject.com/png/2643367-200.png"
-              alt="person logo"
-              size="48"
-            />
+            <Avatar src="/images/default-pic.png" alt="person logo" size="48" />
             <div>
               <p>
                 <ILabel size="sm" weight="semibold" color="primary">

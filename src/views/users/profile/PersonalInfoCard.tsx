@@ -1,13 +1,6 @@
 import moment from 'moment';
-import React, { useEffect, useMemo, useState } from 'react';
-import {
-  Route,
-  Switch,
-  useHistory,
-  useLocation,
-  useParams,
-  useRouteMatch,
-} from 'react-router-dom';
+import React from 'react';
+import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Avatar from '../../../components/Atoms/custom/Avatar';
 import Badge from '../../../components/Atoms/custom/Badge';
@@ -19,35 +12,17 @@ import { authenticatorStore } from '../../../store/administration';
 import hobbiesStore from '../../../store/administration/hobbies.store';
 import { ParamType } from '../../../types';
 import { UserInfo } from '../../../types/services/user.types';
-import { getImage } from '../../../utils/file-util';
+import { usePicture } from '../../../utils/file-util';
 import { advancedTypeChecker, titleCase } from '../../../utils/getOption';
 import UpdatePhotoProfile from './UpdatePhotoProfile';
 
 function PersonalInfoCard({ user }: { user: UserInfo }) {
-  const { url, path } = useRouteMatch();
-  const history = useHistory();
-  const [profileSrc, setProfileSrc] = useState('');
-  const { data: auth } = authenticatorStore.authUser();
   const { id } = useParams<ParamType>();
 
-  const location = useLocation();
+  const { url, path } = useRouteMatch();
+  const history = useHistory();
 
-  useEffect(() => {
-    if (user && user?.profile_attachment_id !== null) {
-      getImage(user.profile_attachment_id, user.id.toString()).then((imageSrc) => {
-        setProfileSrc(imageSrc);
-      });
-    }
-  }, [location]);
-
-  useMemo(() => {
-    if (user.profile_attachment_id !== null) {
-      getImage(user.profile_attachment_id, user.id.toString()).then((imageSrc) => {
-        setProfileSrc(imageSrc);
-      });
-    }
-  }, []);
-
+  const authUser = authenticatorStore.authUser().data?.data.data;
   const hobbies = hobbiesStore.getUserHobby(user.person?.id + '').data?.data.data || [];
 
   return (
@@ -65,11 +40,11 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
             <Avatar
               className="border-4 object-cover border-primary-500 -mt-20"
               size="120"
-              src={profileSrc || '../../../../public/images/fall_back_prof_pic.jpg'}
+              src={usePicture(user.profile_attachment_id, user.id)}
               alt="photo"
             />
 
-            {auth?.data.data.id === id && (
+            {authUser?.id === id && (
               <div className="absolute top-0 right-0">
                 <Button
                   styleType="text"

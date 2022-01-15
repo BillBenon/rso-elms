@@ -23,19 +23,15 @@ interface IProps {
   display_label: string;
   handleChange: (_e: ValueType) => any;
   handleNext: <T>(_e: FormEvent<T>) => any;
+  handleUpload: (_files: FileList | null) => void;
 }
 
 export default function UpdateAcademy() {
-  const history = useHistory();
-
-  const { mutateAsync } = academyStore.modifyAcademy();
-
   const { id } = useParams<ParamType>();
-
+  const history = useHistory();
   const { url } = useRouteMatch();
-  const [currentStep, setCurrentStep] = useState(0);
 
-  const { data } = academyStore.getAcademyById(id);
+  const [currentStep, setCurrentStep] = useState(0);
 
   const [details, setDetails] = useState<AcademyCreateInfo>({
     current_admin_id: '',
@@ -53,6 +49,12 @@ export default function UpdateAcademy() {
     website_link: '',
   });
 
+  const [logoFile, setlogoFile] = useState<File | null>(null);
+
+  const { data } = academyStore.getAcademyById(id);
+  const { mutateAsync } = academyStore.modifyAcademy();
+  const { mutateAsync: mutateAddLogo } = academyStore.addLogo();
+
   useEffect(() => {
     data?.data.data &&
       setDetails({
@@ -68,6 +70,10 @@ export default function UpdateAcademy() {
     }));
   }
 
+  const handleUpload = (files: FileList | null) => {
+    setlogoFile(files ? files[0] : null);
+  };
+
   const list: Link[] = [
     { to: '', title: 'Institution admin' },
     { to: '/dashboard/academies', title: 'academies' },
@@ -82,12 +88,35 @@ export default function UpdateAcademy() {
         onSuccess(data) {
           toast.success(data.data.message);
           queryClient.invalidateQueries(['academies/instutionId']);
+          addLogo(data.data.data.id);
           history.goBack();
         },
         onError(error: any) {
           toast.error(error.response.data.message);
         },
       });
+    }
+  }
+
+  async function addLogo(academyId: string) {
+    if (logoFile) {
+      let data = new FormData();
+
+      data.append('description', `${details.name} s public logo`);
+      data.append('purpose', 'Add a design identifier for academy');
+      data.append('logoFile', logoFile);
+
+      await mutateAddLogo(
+        { id: academyId, info: data },
+        {
+          onSuccess(data) {
+            toast.success(data.data.message);
+          },
+          onError(error: any) {
+            toast.error(error.response.data.message);
+          },
+        },
+      );
     }
   }
 
@@ -112,12 +141,14 @@ export default function UpdateAcademy() {
             details={details}
             handleChange={handleChange}
             handleNext={handleSubmit}
+            handleUpload={handleUpload}
           />
           <AcademyLocationComponent
             display_label=""
             details={details}
             handleChange={handleChange}
             handleNext={handleSubmit}
+            handleUpload={handleUpload}
           />
         </Stepper>
       </div>
@@ -125,7 +156,12 @@ export default function UpdateAcademy() {
   );
 }
 
-function AcademyInfoComponent({ details, handleChange, handleNext }: IProps) {
+function AcademyInfoComponent({
+  details,
+  handleChange,
+  handleNext,
+  handleUpload,
+}: IProps) {
   return (
     <form onSubmit={handleNext}>
       <InputMolecule
@@ -153,10 +189,9 @@ function AcademyInfoComponent({ details, handleChange, handleNext }: IProps) {
           <ILabel weight="bold">academy logo</ILabel>
         </div>
         <FileUploader
-          accept={'image/jpeg, image/png'}
-          handleUpload={function (_files: FileList | null) {
-            throw new Error('Function not implemented.');
-          }}>
+          allowPreview={false}
+          handleUpload={handleUpload}
+          accept={'image/jpeg, image/png'}>
           <Button styleType="outline" type="button">
             upload logo
           </Button>

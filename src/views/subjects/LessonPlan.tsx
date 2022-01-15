@@ -129,11 +129,7 @@ function LessonPlan() {
                           Instructor
                         </Heading>
                         <div className="flex gap-2 items-center">
-                          <Avatar
-                            src="https://static.thenounproject.com/png/2643367-200.png"
-                            alt="profile"
-                            size="34"
-                          />
+                          <Avatar src="/images/default-pic.png" alt="profile" size="34" />
                           <Heading fontSize="base">
                             {lp.instructor.user.first_name +
                               ' ' +

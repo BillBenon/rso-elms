@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 import { authenticatorStore } from '../../../store/administration';
 import { UserInfo, UserType } from '../../../types/services/user.types';
+import { usePicture } from '../../../utils/file-util';
 import SidebarLinks, { linkProps } from '../../Atoms/custom/SidebarLinks';
 import AcademyProfileCard from '../cards/AcademyProfileCard';
 
@@ -67,7 +68,15 @@ export default function Sidebar() {
   return (
     <div className="bg-white md:h-screen">
       <div className="px-4 py-4">
-        <AcademyProfileCard src="/images/rdf-logo.png" alt="academy logo">
+        <AcademyProfileCard
+          src={usePicture(
+            authUser?.academy?.logo_attachment_id,
+            authUser?.academy?.id,
+            '/images/rdf-logo.png',
+            'logos',
+          )}
+          round={false}
+          alt="insitution logo">
           {authUser?.institution_name === null
             ? 'Institution name'
             : authUser?.user_type === UserType.SUPER_ADMIN

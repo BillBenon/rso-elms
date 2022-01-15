@@ -10,6 +10,7 @@ export interface ProgramInfo extends CreateProgramInfo, Table {
   incharge: Instructor;
   current_admin_names: string;
   total_num_modules: number;
+  current_admin_id: string;
 }
 
 export interface CreateProgramInfo {
