@@ -17,9 +17,14 @@ import { UserView } from '../../types/services/user.types';
 
 interface ProgramEnrollmentProps {
   existing: InstructorProgram[];
+  showSidebar: boolean;
+  handleShowSidebar: () => void;
 }
-function EnrollInstructorIntakeProgram({ existing }: ProgramEnrollmentProps) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+function EnrollInstructorIntakeProgram({
+  existing,
+  showSidebar,
+  handleShowSidebar,
+}: ProgramEnrollmentProps) {
   const { intakeProg, intakeId } = useParams<IntakeProgParam>();
 
   const { data: instructorsInAcademy, isLoading } =
@@ -52,7 +57,7 @@ function EnrollInstructorIntakeProgram({ existing }: ProgramEnrollmentProps) {
         }
       });
     setInstructors(instructorsView);
-  }, [instructorsInAcademy, existing]);
+  }, [instructorsInAcademy, existing, authUser?.data.data.academy.id]);
 
   const { mutate } = enrollmentStore.enrollInstructorToProgram();
 
@@ -67,7 +72,7 @@ function EnrollInstructorIntakeProgram({ existing }: ProgramEnrollmentProps) {
         onSuccess: (data) => {
           toast.success(data.data.message);
           queryClient.invalidateQueries(['instructors/intakeprogramId', intakeProg]);
-          setSidebarOpen(false);
+          handleShowSidebar();
         },
         onError: (error: any) => {
           toast.error(error.response.data.message);
@@ -79,14 +84,14 @@ function EnrollInstructorIntakeProgram({ existing }: ProgramEnrollmentProps) {
     <div className="cursor-pointer">
       <Button
         styleType="text"
-        onClick={() => setSidebarOpen(true)}
+        onClick={handleShowSidebar}
         className="flex -mt-6 items-center justify-end text-primary-500">
         <Icon name="add" size={12} fill="primary" />
         Enroll instructors
       </Button>
       <RightSidebar
-        open={sidebarOpen}
-        handleClose={() => setSidebarOpen(false)}
+        open={showSidebar}
+        handleClose={handleShowSidebar}
         label="Enroll instructor to program"
         data={instructors}
         selectorActions={[
@@ -97,6 +102,7 @@ function EnrollInstructorIntakeProgram({ existing }: ProgramEnrollmentProps) {
         ]}
         dataLabel={'Instructors in this academy'}
         isLoading={isLoading}
+        unselectAll={!showSidebar}
       />
     </div>
   );

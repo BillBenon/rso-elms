@@ -18,6 +18,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
+import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import UpdateModuleForm from '../../components/Organisms/forms/modules/UpdateModuleForm';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
 import { authenticatorStore } from '../../store/administration';
@@ -71,14 +72,17 @@ export default function ModuleDetails() {
       href: `${url}/subjects?showMenus=${showMenu}&intkPrg=${intakeProg}`,
     },
     {
-      label: 'Materials',
-      href: `${url}/materials?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-    },
-    {
-      label: 'Preriquisites',
+      label: 'Prerequisites',
       href: `${url}/prereqs?showMenus=${showMenu}&intkPrg=${intakeProg}`,
     },
   ];
+
+  if (!showMenu || showMenu == 'false') {
+    tabs.push({
+      label: 'Materials',
+      href: `${url}/materials?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+    });
+  }
 
   if (showMenu && showMenu == 'true') {
     tabs.push(
@@ -87,9 +91,13 @@ export default function ModuleDetails() {
         href: `${url}/instructors?showMenus=${showMenu}&intkPrg=${intakeProg}`,
       },
       {
-        label: 'Syllabus',
-        href: `${url}/syllabus?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+        label: 'Materials',
+        href: `${url}/materials?showMenus=${showMenu}&intkPrg=${intakeProg}`,
       },
+      // {
+      //   label: 'Syllabus',
+      //   href: `${url}/syllabus?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+      // },
       {
         label: 'Evaluation',
         href: `${url}/evaluations?showMenus=${showMenu}&intkPrg=${intakeProg}`,
@@ -129,9 +137,11 @@ export default function ModuleDetails() {
           setCurrentPage('MATERIALS');
         } else if (lastUrl.endsWith('prereqs')) {
           setCurrentPage('PREREQS');
-        } else if (lastUrl.endsWith('syllabus')) {
-          setCurrentPage('SYLLABUS');
-        } else if (lastUrl.endsWith('evaluations')) {
+        }
+        // else if (lastUrl.endsWith('syllabus')) {
+        //   setCurrentPage('SYLLABUS');
+        // }
+        else if (lastUrl.endsWith('evaluations')) {
           setCurrentPage('EVALUATIONS');
         } else if (lastUrl.endsWith(id)) {
           setCurrentPage('SUBJECTS');
@@ -210,18 +220,30 @@ export default function ModuleDetails() {
                       Add new subject
                     </Button>
                   </div>
-                ) : route == 'SYLLABUS' ? (
-                  <div className="flex gap-3">
-                    <Button onClick={() => history.push(`${url}/syllabus/add-syllabus`)}>
-                      Add new Syllabus
-                    </Button>
-                  </div>
                 ) : (
+                  //  : route == 'SYLLABUS' ? (
+                  //   <div className="flex gap-3">
+                  //     <Button onClick={() => history.push(`${url}/syllabus/add-syllabus`)}>
+                  //       Add new Syllabus
+                  //     </Button>
+                  //   </div>
+                  // )
                   <></>
                 )}
               </>
             )}
-
+            {authUser?.user_type === UserType.ADMIN && route == 'PREREQS' && (
+              <div className="flex gap-3">
+                <Button
+                  onClick={() =>
+                    history.push(
+                      `${url}/${id}/add-prereq?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+                    )
+                  }>
+                  Add prerequisites
+                </Button>
+              </div>
+            )}
             {authUser?.user_type === UserType.INSTRUCTOR && route == 'MATERIALS' && (
               <div className="flex gap-3">
                 <Button onClick={() => history.push(`${url}/materials/add-material`)}>
@@ -315,15 +337,25 @@ export default function ModuleDetails() {
               }}
             />
             <Route
-              path={`${path}/syllabus`}
-              render={() => {
-                return <ModuleMaterials />;
-              }}
-            />
-            <Route
               path={`${path}/prereqs`}
               render={() => {
                 return <Prerequisites />;
+              }}
+            />
+            {/* add prerequesite popup */}
+            <Route
+              exact
+              path={`${path}/:moduleId/add-prereq`}
+              render={() => {
+                return (
+                  <PopupMolecule
+                    closeOnClickOutSide={false}
+                    title="Add Prerequesite"
+                    open
+                    onClose={handleClose}>
+                    <AddPrerequesitesForm />
+                  </PopupMolecule>
+                );
               }}
             />
             <Route

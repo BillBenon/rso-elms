@@ -63,7 +63,7 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
               <Heading fontSize="base" fontWeight="semibold">
                 Instructors ({0})
               </Heading>
-              {authUser?.user_type === UserType.ADMIN && (
+              {intakeProg && authUser?.user_type === UserType.ADMIN && (
                 <EnrollInstructorToSubjectAssignment
                   module_id={subjectData?.data.data.module.id + ''}
                   subject_id={subjectId}
@@ -77,11 +77,11 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
                 <Loader />
               ) : instructorInfos?.data.data.length === 0 ? (
                 <NoDataAvailable
-                  showButton={false}
+                  showButton={intakeProg !== '' && authUser?.user_type === UserType.ADMIN}
                   icon="user"
                   title={'No instructors available'}
                   description={
-                    'There are no instructors currently assigned to this module'
+                    'There are no instructors currently assigned to this subject'
                   }
                   handleClick={() => (
                     <EnrollInstructorToSubjectAssignment
