@@ -1,7 +1,19 @@
 /* eslint-disable no-unused-vars */
-import { BasicPersonInfo, PersonInfo } from './user.types';
+import { Table } from '..';
+import { BasicPersonInfo } from './user.types';
 
-export interface NextKinInfo {
+export interface NextKinInfo extends Table {
+  nextOfKeenProculationReason: string | null;
+  user_id: string;
+  nextOfKin: BasicPersonInfo;
+  nextOfKinId: string;
+  relationShip: string;
+  residenceId: number;
+  residenceName: string;
+  userId: string;
+}
+
+export interface CreateNextOfKin {
   user_id: string;
   next_of_kins: BasicPersonInfo[];
 }

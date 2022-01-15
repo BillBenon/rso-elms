@@ -23,3 +23,11 @@ class ExperienceStore {
 }
 
 export const experienceStore = new ExperienceStore();
+
+export function getPersonExperiences(personId?: string | number) {
+  return useQuery(
+    ['experience/id', personId],
+    () => experienceService.findPersonExperiences(personId + ''),
+    { enabled: !!personId },
+  );
+}

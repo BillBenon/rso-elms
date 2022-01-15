@@ -14,7 +14,10 @@ import {
   MaritalStatus,
   UserType,
 } from '../../../../../../types/services/user.types';
-import { NextKinInfo } from '../../../../../../types/services/usernextkin.types';
+import {
+  CreateNextOfKin,
+  NextKinInfo,
+} from '../../../../../../types/services/usernextkin.types';
 import { getDropDownStatusOptions } from '../../../../../../utils/getOption';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
@@ -105,7 +108,7 @@ function NextOfKinDetails<E>({
   const moveForward = async (e: any) => {
     e.preventDefault();
 
-    const data: NextKinInfo = {
+    const data: CreateNextOfKin = {
       user_id: authUser?.id + '',
       next_of_kins: [details],
     };

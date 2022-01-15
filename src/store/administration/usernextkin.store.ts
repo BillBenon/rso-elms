@@ -14,3 +14,13 @@ class UserNextKinStore {
   }
 }
 export default new UserNextKinStore();
+
+export function getHisNextKinById(id?: string | number) {
+  return useQuery(
+    ['next/user_id', id],
+    () => userNextKinService.getHisNextById(id + ''),
+    {
+      enabled: !!id,
+    },
+  );
+}

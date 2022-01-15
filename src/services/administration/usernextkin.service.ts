@@ -3,11 +3,11 @@ import { AxiosResponse } from 'axios';
 import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import { BasicPersonInfo } from '../../types/services/user.types';
-import { NextKinInfo } from '../../types/services/usernextkin.types';
+import { CreateNextOfKin, NextKinInfo } from '../../types/services/usernextkin.types';
 
 class UserNextKinService {
   public async createUserNextKin(
-    NextKeenInfo: NextKinInfo,
+    NextKeenInfo: CreateNextOfKin,
   ): Promise<AxiosResponse<Response<NextKinInfo>>> {
     return await adminstrationAxios.post('/users/addHisNextOfKins', NextKeenInfo);
   }
