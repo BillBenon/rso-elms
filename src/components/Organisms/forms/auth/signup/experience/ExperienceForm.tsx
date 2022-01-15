@@ -116,6 +116,7 @@ function ExperienceForm<E>({
       await mutateAsync(experience, {
         onSuccess(data) {
           toast.success(data.data.message);
+          queryClient.invalidateQueries(['experience/id', authUser?.person.id]);
           isSuccess = true;
         },
         onError(error: any) {
@@ -259,14 +260,14 @@ function ExperienceForm<E>({
                 handleChange={handleChange}
                 defaultValue={experience.start_date}
                 name="start_date"
-                startYear={new Date().getFullYear() - 25}
+                // startYear={new Date().getFullYear() - 25}
                 width="60 md:w-80">
                 Start Date
               </DateMolecule>
               <DateMolecule
                 handleChange={handleChange}
                 name="end_date"
-                endYear={new Date().getFullYear() + 50}
+                // endYear={new Date().getFullYear() + 50}
                 defaultValue={experience.end_date}
                 width="60 md:w-80">
                 End Date

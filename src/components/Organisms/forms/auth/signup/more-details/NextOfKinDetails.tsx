@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 import countryList from 'react-select-country-list';
 
+import { queryClient } from '../../../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../../../store/administration';
 import usernextkinStore from '../../../../../../store/administration/usernextkin.store';
 import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../types';
@@ -11,6 +12,7 @@ import {
   DocType,
   GenderStatus,
   MaritalStatus,
+  UserType,
 } from '../../../../../../types/services/user.types';
 import { NextKinInfo } from '../../../../../../types/services/usernextkin.types';
 import { getDropDownStatusOptions } from '../../../../../../utils/getOption';
@@ -111,7 +113,14 @@ function NextOfKinDetails<E>({
     await mutateAsync(data, {
       onSuccess(data) {
         toast.success(data.data.message);
-        history.goBack();
+        queryClient.invalidateQueries(['next/user_id', authUser?.id]);
+        history.push(
+          authUser?.user_type === UserType.INSTRUCTOR
+            ? '/dashboard/inst-module'
+            : authUser?.user_type === UserType.STUDENT
+            ? '/dashboard/student'
+            : '/dashboard/users',
+        );
       },
       onError(_error) {
         toast.error('Failed');
