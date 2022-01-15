@@ -88,19 +88,6 @@ export interface PersonInfo extends Table {
   place_of_residence: string;
   nationality: string;
 }
-export interface ExperienceInfo {
-  attachment_id: string;
-  description: string;
-  end_date: string;
-  id: number;
-  level: string;
-  location: string;
-  occupation: string;
-  person_id: string;
-  proof: string;
-  start_date: string;
-  type: string;
-}
 export interface UpdateExperienceInfo {
   attachment_id: string;
   description: string;
@@ -190,6 +177,7 @@ export interface EditUser {
   send_communication_msg: SendCommunicationMsg;
   profile_status: ProfileStatus;
   id: string;
+  spouse_name: string;
 }
 
 export interface CreateUserInfo extends EditUser {
@@ -213,6 +201,27 @@ export interface AcademyUserType {
 export interface UserTypes extends AcademyUserType {
   academy: string;
 }
+export interface BasicPersonInfo
+  extends Pick<
+    PersonInfo,
+    | 'first_name'
+    | 'last_name'
+    | 'phone_number'
+    | 'sex'
+    | 'birth_date'
+    | 'residence_location_id'
+    | 'place_of_residence'
+    | 'nationality'
+    | 'nid'
+    | 'doc_type'
+    | 'document_expire_on'
+    | 'marital_status'
+    | 'spouse_name'
+> {
+  email: string;
+  relationship: string;
+  user_id: string;
+}
 
 export interface PersonDetail
   extends Pick<
@@ -231,7 +240,8 @@ export interface PersonDetail
     | 'marital_status'
     | 'spouse_name'
     | 'residence_location_id'
-    | 'place_of_residence'
+    | 'place_of_residence' 
+    | 'doc_type'
   > {}
 export interface EmploymentDetail
   extends Pick<
@@ -283,14 +293,7 @@ export enum DocType {
   RCS_CARD = 'RCS_CARD',
   OTHER = 'OTHER',
 }
-export enum ExperienceType {
-  GENERAL_EDUCATION = 'GENERAL_EDUCATION',
-  CURRIER_COURSE_EDUCATION = 'CURRIER_COURSE_EDUCATION',
-  EMPLOYMENT = 'EMPLOYMENT',
-  INTERNATIONAL_CERTIFICATION = 'INTERNATIONAL_CERTIFICATION',
-  INTERNATIONAL_MISSION = 'INTERNATIONAL_MISSION',
-  TRAINING = 'TRAINING',
-}
+
 
 export enum BloodGroup {
   'A+' = 'A+',
@@ -319,8 +322,7 @@ export enum SendCommunicationMsg {
 }
 
 export interface IImportUser {
-  intake: string;
-  academicProgramLevelId: string;
+  program: string;
   academicYearId: string;
   academyId: string;
   intakeProgramId: string;
