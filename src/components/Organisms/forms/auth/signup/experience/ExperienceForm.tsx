@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { UseMutateAsyncFunction } from 'react-query';
 import { useHistory } from 'react-router-dom';
 
+import { queryClient } from '../../../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../../../store/administration';
 import { experienceStore } from '../../../../../../store/administration/experience.store';
 import { moduleMaterialStore } from '../../../../../../store/administration/module-material.store';
@@ -98,6 +99,7 @@ function ExperienceForm<E>({
             {
               async onSuccess(data) {
                 toast.success(data.data.message);
+                queryClient.invalidateQueries(['experience/id', authUser?.person.id]);
                 isSuccess = true;
               },
               onError(error: any) {

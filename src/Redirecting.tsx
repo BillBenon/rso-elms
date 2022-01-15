@@ -62,7 +62,7 @@ export default function Redirecting() {
         } else if (nextOfKin) {
           redirectTo('/complete-profile/more');
         }
-      } else if (experiences) {
+      } else if (experiences && experiences.data.data.length === 0) {
         redirectTo('/complete-profile/experience');
       }
     }
