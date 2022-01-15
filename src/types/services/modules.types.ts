@@ -47,15 +47,22 @@ export interface ModulePrerequisites {
   id: 0;
 }
 
-export interface Prerequisite {
+export interface Prerequisite extends Table {
+  code: string;
   description: string;
-  id: 0;
-  module_id: string;
-  prerequisite_id: string;
-  status: GenericStatus;
+  has_prerequisite: boolean;
+  name: string;
+  program_id: string;
+  status: boolean;
+  total_num_subjects: number;
 }
 
 export interface CreatePrerequisites {
   modele_id: string;
-  prerequistis: Prerequisite[];
+  prerequistis: {
+    description: string;
+    module_id: string;
+    prerequisite_id: string;
+    status: GenericStatus;
+  }[];
 }

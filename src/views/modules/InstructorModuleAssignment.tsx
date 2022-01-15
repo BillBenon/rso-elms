@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
@@ -10,27 +9,27 @@ import enrollmentStore from '../../store/administration/enrollment.store';
 import { InstructorAssignModule } from '../../types/services/enrollment.types';
 import { UserView } from '../../types/services/user.types';
 
-interface Props<T>{
-    module_id: string | number;
-    intake_program_id: string | number;
+interface Props<T> {
+  module_id: string | number;
+  intake_program_id: string | number;
 }
 
-function InstructorModuleAssignment<T>({module_id,intake_program_id}:Props<T>) {
+function InstructorModuleAssignment<T>({ module_id, intake_program_id }: Props<T>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-
-  const { data: instructorsProgram, isLoading: instLoading } = enrollmentStore.getInstructorsInProgram(intake_program_id);
+  const { data: instructorsProgram, isLoading: instLoading } =
+    enrollmentStore.getInstructorsInProgram(intake_program_id);
 
   const [instructors, setInstructors] = useState<UserView[]>([]);
   useEffect(() => {
-    let users:UserView[] = [];
+    let users: UserView[] = [];
     instructorsProgram?.data.data.map((inst) =>
-    users.push({
-      id: inst.id,
-      first_name: inst.instructor.user.first_name,
-      last_name: inst.instructor.user.last_name,
-      image_url: inst.instructor.user.image_url,
-    })
+      users.push({
+        id: inst.id,
+        first_name: inst.instructor.user.first_name,
+        last_name: inst.instructor.user.last_name,
+        image_url: inst.instructor.user.image_url,
+      }),
     );
     setInstructors(users);
   }, [instructorsProgram]);
@@ -73,15 +72,15 @@ function InstructorModuleAssignment<T>({module_id,intake_program_id}:Props<T>) {
         selectorActions={[
           {
             name: 'assign instructors',
-            handleAction:(data?: string[]) => add(data),
+            handleAction: (data?: string[]) => add(data),
           },
         ]}
         dataLabel={'Instructors in this intake program'}
         isLoading={instLoading}
+        unselectAll={!sidebarOpen}
       />
     </div>
   );
 }
 
 export default InstructorModuleAssignment;
-

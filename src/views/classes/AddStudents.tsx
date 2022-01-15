@@ -45,7 +45,7 @@ function AddStudents({ classId }: IAddStudent) {
         studentsView.push(studentView);
       });
     setStudents(studentsView);
-  }, [unaddedStudents.data?.data.data]);
+  }, [studentsInClass.data?.data.data, unaddedStudents.data?.data.data]);
 
   const { mutate } = classStore.addClassStudent();
 
@@ -90,6 +90,7 @@ function AddStudents({ classId }: IAddStudent) {
           ]}
           dataLabel={'Students in this level'}
           isLoading={unaddedStudents.isLoading}
+          unselectAll={!sidebarOpen}
         />
       )}
     </div>

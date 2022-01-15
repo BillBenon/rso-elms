@@ -1,27 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import { useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import RightSidebar from '../../components/Organisms/RightSidebar';
-import enrollmentStore from '../../store/administration/enrollment.store';
 import { EnrollInstructorLevelInfo } from '../../types/services/enrollment.types';
-import {
-  IntakeLevelParam,
-} from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 
-interface ProgramEnrollmentProps<T>{
-  instructorsData: EnrollInstructorLevelInfo[]
+// eslint-disable-next-line no-unused-vars
+interface ProgramEnrollmentProps<T> {
+  instructorsData: EnrollInstructorLevelInfo[];
   isLoading: boolean;
+  showSidebar: boolean;
+  handleShowSidebar: () => void;
 }
 
-function LevelInstructors<T>({instructorsData,isLoading}:ProgramEnrollmentProps<T>) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const {level: levelId } = useParams<IntakeLevelParam>();
-
-  
-
+function LevelInstructors<T>({
+  instructorsData,
+  isLoading,
+  showSidebar,
+  handleShowSidebar,
+}: ProgramEnrollmentProps<T>) {
   const [instructors, setInstructors] = useState<UserView[]>([]);
   useEffect(() => {
     let instructorView: UserView[] = [];
@@ -39,22 +36,17 @@ function LevelInstructors<T>({instructorsData,isLoading}:ProgramEnrollmentProps<
   }, [instructorsData]);
   return (
     <div className="flex flex-col cursor-pointer">
-      <Button styleType="outline" onClick={() => setSidebarOpen(true)}>
+      <Button styleType="outline" onClick={handleShowSidebar}>
         View instructors
       </Button>
       <RightSidebar
-        open={sidebarOpen}
-        handleClose={() => setSidebarOpen(false)}
+        open={showSidebar}
+        handleClose={handleShowSidebar}
         label="All Level Instructors"
         data={instructors}
-        selectorActions={[
-          {
-            name: 'No action',
-            handleAction: () =>{},
-          },
-        ]}
         dataLabel={'Instructors enrolled'}
         isLoading={isLoading}
+        unselectAll={!showSidebar}
       />
     </div>
   );
