@@ -89,6 +89,7 @@ function EnrollInstructorToModuleComponent<T>({ existing }: AssignModuleType<T>)
         ]}
         dataLabel={'Instructors in this program'}
         isLoading={isLoading}
+        unselectAll={!sidebarOpen}
       />
     </div>
   );

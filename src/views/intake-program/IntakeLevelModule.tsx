@@ -30,6 +30,15 @@ function IntakeLevelModule() {
   const { data: levelModuleStore, isLoading } = intakeProgramStore.getModulesByLevel(
     parseInt(level),
   );
+
+  const initialShowSidebar = {
+    showStudent: false,
+    showInstructor: false,
+    enrollStudent: false,
+    enrollInstructor: false,
+  };
+  const [showSidebar, setShowSidebar] = useState(initialShowSidebar);
+
   useEffect(() => {
     let newModule: CommonCardDataType[] = [];
     levelModuleStore?.data.data.forEach((mod) => {
@@ -68,10 +77,42 @@ function IntakeLevelModule() {
             <LevelInstrctors
               isLoading={instructorsLoading}
               instructorsData={instructorProgramLevel?.data.data || []}
+              showSidebar={showSidebar.showInstructor}
+              handleShowSidebar={() =>
+                setShowSidebar({
+                  ...initialShowSidebar,
+                  showInstructor: !showSidebar.showInstructor,
+                })
+              }
             />
-            <EnrollInstructorToLevel existing={instructorProgramLevel?.data.data || []} />
-            <LevelStudents />
-            <EnrollStudent />
+            <EnrollInstructorToLevel
+              existing={instructorProgramLevel?.data.data || []}
+              showSidebar={showSidebar.enrollInstructor}
+              handleShowSidebar={() =>
+                setShowSidebar({
+                  ...initialShowSidebar,
+                  enrollInstructor: !showSidebar.enrollInstructor,
+                })
+              }
+            />
+            <LevelStudents
+              showSidebar={showSidebar.showStudent}
+              handleShowSidebar={() =>
+                setShowSidebar({
+                  ...initialShowSidebar,
+                  showStudent: !showSidebar.showStudent,
+                })
+              }
+            />
+            <EnrollStudent
+              showSidebar={showSidebar.enrollStudent}
+              handleShowSidebar={() =>
+                setShowSidebar({
+                  ...initialShowSidebar,
+                  enrollStudent: !showSidebar.enrollStudent,
+                })
+              }
+            />
           </>
         )}
         {prdLoading ? (

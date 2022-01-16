@@ -86,7 +86,7 @@ export default function EnrollInstructorToSubjectComponent({
       <RightSidebar
         open={sidebarOpen}
         handleClose={() => setSidebarOpen(false)}
-        label="Enroll instructor to this module"
+        label="Enroll instructor to this subject"
         data={instructors || []}
         selectorActions={[
           {
@@ -94,8 +94,9 @@ export default function EnrollInstructorToSubjectComponent({
             handleAction: (data?: string[]) => add(data),
           },
         ]}
-        dataLabel={'Instructors in this program'}
+        dataLabel={'Instructors in this module'}
         isLoading={instructorLoading}
+        unselectAll={!sidebarOpen}
       />
     </div>
   );

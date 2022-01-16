@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode } from 'react';
 
 import { UserType, UserView } from '../../../types/services/user.types';
 import Avatar from '../../Atoms/custom/Avatar';
@@ -21,6 +21,8 @@ type IUserPreview = {
   dataLabel: string;
   isLoading: boolean;
   userType?: UserType;
+  showSidebar: boolean;
+  handleShowSidebar: () => void;
 };
 
 export default function UsersPreview({
@@ -31,13 +33,14 @@ export default function UsersPreview({
   totalUsers,
   dataLabel = '',
   isLoading,
+  showSidebar,
+  handleShowSidebar,
 }: IUserPreview) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <>
       <div
         className="flex flex-col gap-6 w-60 py-4 px-6 h-32 z-1 bg-main cursor-pointer"
-        onClick={() => setSidebarOpen(!sidebarOpen)}>
+        onClick={handleShowSidebar}>
         <div className="flex flex-col gap-2">
           <Heading color="txt-secondary" fontSize="base">
             {title}
@@ -87,12 +90,13 @@ export default function UsersPreview({
         </div>
       </div>
       {children && children}
-      {sidebarOpen && (
+      {showSidebar && (
         <RightSidebar
-          open={sidebarOpen}
-          handleClose={() => setSidebarOpen(false)}
+          open={showSidebar}
+          handleClose={handleShowSidebar}
           label={label}
           data={data}
+          unselectAll={!showSidebar}
           // selectorActions={
           //   userType !== UserType.INSTRUCTOR
           //     ? [

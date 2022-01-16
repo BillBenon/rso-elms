@@ -9,11 +9,16 @@ import { UserView } from '../../types/services/user.types';
 interface ProgramEnrollmentProps<T> {
   instructorsData: EnrollInstructorLevelInfo[];
   isLoading: boolean;
+  showSidebar: boolean;
+  handleShowSidebar: () => void;
 }
 
-function LevelInstructors<T>({ instructorsData, isLoading }: ProgramEnrollmentProps<T>) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-
+function LevelInstructors<T>({
+  instructorsData,
+  isLoading,
+  showSidebar,
+  handleShowSidebar,
+}: ProgramEnrollmentProps<T>) {
   const [instructors, setInstructors] = useState<UserView[]>([]);
   useEffect(() => {
     let instructorView: UserView[] = [];
@@ -31,16 +36,17 @@ function LevelInstructors<T>({ instructorsData, isLoading }: ProgramEnrollmentPr
   }, [instructorsData]);
   return (
     <div className="flex flex-col cursor-pointer">
-      <Button styleType="outline" onClick={() => setSidebarOpen(true)}>
+      <Button styleType="outline" onClick={handleShowSidebar}>
         View instructors
       </Button>
       <RightSidebar
-        open={sidebarOpen}
-        handleClose={() => setSidebarOpen(false)}
+        open={showSidebar}
+        handleClose={handleShowSidebar}
         label="All Level Instructors"
         data={instructors}
         dataLabel={'Instructors enrolled'}
         isLoading={isLoading}
+        unselectAll={!showSidebar}
       />
     </div>
   );

@@ -90,7 +90,7 @@ export default function SubjectInstructorView({
                             onClick={() =>
                               history.push({
                                 pathname: `/dashboard/evaluations/new`,
-                                search: `?subj=${subjectId}&evaluation=${info.id}&intkProg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+                                search: `?subj=${subjectId}&evaluation=${info.id}&intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
                               })
                             }>
                             Edit
