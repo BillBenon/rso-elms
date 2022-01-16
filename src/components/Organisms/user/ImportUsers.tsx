@@ -51,10 +51,13 @@ export default function ImportUsers({ userType }: IProps) {
   // const programs =
   //   getProgramsByIntake(values.intake, !!values.intake).data?.data.data || [];
 
-  const allprograms = programStore.fetchPrograms().data?.data.data || [];
-  const programs = allprograms.filter(
-    (prog) => prog.department.academy.id === values.academyId,
-  );
+  // const allprograms = programStore.fetchPrograms().data?.data.data || [];
+  // const programs = allprograms.filter(
+  //   (prog) => prog.department.academy.id === values.academyId,
+  // );
+
+  const academic_programs =
+    programStore.getProgramsByAcademy(values.academyId).data?.data.data || [];
   const intakes = intakeStore.getIntakesByProgram(values.program).data?.data.data || [];
 
   const { mutateAsync, isLoading } = usersStore.importUsers();
@@ -115,7 +118,7 @@ export default function ImportUsers({ userType }: IProps) {
           <div>
             <DropdownMolecule
               options={
-                programs.map((p) => ({
+                academic_programs.map((p) => ({
                   value: p.id,
                   label: p.name,
                 })) as SelectData[]
