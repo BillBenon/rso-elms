@@ -73,6 +73,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
     send_communication_msg: SendCommunicationMsg.BOTH,
     profile_status: ProfileStatus.INCOMPLETE,
     id: '',
+    spouse_name: '',
   });
 
   const { id } = useParams<ParamType>();
@@ -116,6 +117,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
         send_communication_msg: selectedUser.send_communication_msg,
         profile_status: selectedUser.profile_status || ProfileStatus.INCOMPLETE,
         id: selectedUser.id + '',
+        spouse_name: selectedUser.person.spouse_name || '',
       });
   }, [data]);
 
@@ -168,13 +170,13 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
 
   useEffect(() => {
     intakes.refetch();
-  }, [details.academy_id]);
+  }, [details.academy_id, intakes]);
 
   // get programs based on selected intake
   let programs = getProgramsByIntake(otherDetails.intake, !!otherDetails.intake);
   useEffect(() => {
     programs.refetch();
-  }, [otherDetails.intake]);
+  }, [otherDetails.intake, programs]);
 
   //get levels based on selected program
   let selectedProgram = programs.data?.data.data.find(
@@ -185,7 +187,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
 
   useEffect(() => {
     levels.refetch();
-  }, [details.intake_program_id]);
+  }, [details.intake_program_id, levels]);
 
   return (
     <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">

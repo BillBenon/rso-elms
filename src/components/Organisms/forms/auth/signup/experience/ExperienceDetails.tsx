@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
 
-import { ExperienceTypeStatus } from '../../../../../../types/services/experience.types';
+import { ExperienceType } from '../../../../../../types/services/experience.types';
 import CompleteProfileHeader from '../../../../../Molecules/CompleteProfileHeader';
 import Stepper from '../../../../../Molecules/Stepper/Stepper';
 import OtherDetails from '../personal/OtherDetails';
@@ -33,7 +33,8 @@ function ExperienceDetails() {
 
   async function finishSteps(isComplete: boolean) {
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
-    history.push('/complete-profile/more');
+    history.goBack();
+    // history.push('/complete-profile/more');
   }
   return (
     <div className="bg-main p-8 md:px-20">
@@ -47,7 +48,7 @@ function ExperienceDetails() {
         completeStep={completeStep}
         navigateToStepHandler={navigateToStepHandler}>
         <ExperienceStep
-          type={ExperienceTypeStatus.GENERAL_EDUCATION}
+          type={ExperienceType.GENERAL_EDUCATION}
           isVertical
           display_label={'General Education'}
           nextStep={nextStep}
@@ -55,7 +56,7 @@ function ExperienceDetails() {
           fetched_id={''}
         />
         <ExperienceStep
-          type={ExperienceTypeStatus.CURRIER_COURSE_EDUCATION}
+          type={ExperienceType.CURRIER_COURSE_EDUCATION}
           isVertical
           display_label={'Carrier Course Education'}
           nextStep={nextStep}
@@ -64,7 +65,7 @@ function ExperienceDetails() {
           fetched_id={''}
         />
         <ExperienceStep
-          type={ExperienceTypeStatus.INTERNATIONAL_CERTIFICATION}
+          type={ExperienceType.INTERNATIONAL_CERTIFICATION}
           isVertical
           display_label={'International Certification'}
           nextStep={nextStep}
@@ -73,7 +74,7 @@ function ExperienceDetails() {
           fetched_id={''}
         />
         <ExperienceStep
-          type={ExperienceTypeStatus.INTERNATIONAL_MISSION}
+          type={ExperienceType.INTERNATIONAL_MISSION}
           isVertical
           display_label={'International Mission'}
           nextStep={nextStep}
@@ -82,7 +83,7 @@ function ExperienceDetails() {
           fetched_id={''}
         />
         <ExperienceStep
-          type={ExperienceTypeStatus.TRAINING}
+          type={ExperienceType.TRAINING}
           isVertical
           display_label={'Training'}
           nextStep={nextStep}

@@ -82,7 +82,7 @@ function EmploymentDetails<E>({
               name="current_rank_id"
               options={getDropDownOptions({ inputs: ranks || [] })}
               handleChange={handleChange}>
-              Current Rank
+              Current Title
             </DropdownMolecule>
             <InputMolecule
               required={false}
@@ -90,7 +90,7 @@ function EmploymentDetails<E>({
               placeholder="other ranks u might hold"
               value={employmentDetails.other_rank}
               handleChange={handleChange}>
-              Other rank
+              Other Title
             </InputMolecule>
           </div>
           <div className="flex flex-col gap-4">

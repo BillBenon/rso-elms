@@ -30,19 +30,23 @@ function NextOfKinCard({ user }: { user: UserInfo }) {
             <div>
               <p>
                 <ILabel size="sm" weight="semibold" color="primary">
-                  {kin.first_name + ' ' + kin.last_name}
+                  {kin.nextOfKin.first_name + ' ' + kin.nextOfKin.last_name}
                 </ILabel>
               </p>
-              <p className="text-txt-secondary text-sm py">{kin.email}</p>
-              <p className="text-txt-secondary text-sm py">{kin.place_of_residence}</p>
+              <p className="text-txt-secondary text-sm py">{kin.nextOfKin.email}</p>
+              <p className="text-txt-secondary text-sm py">
+                {kin.nextOfKin.place_of_residence}
+              </p>
             </div>
             <div>
               <p>
                 <ILabel size="sm" weight="medium" color="primary">
-                  {kin.relationship_with_next_of_ken}
+                  {kin.nextOfKin.relationship}
                 </ILabel>
               </p>
-              <p className="text-txt-primary font-semibold py-2 text-sm">{kin.phone}</p>
+              <p className="text-txt-primary font-semibold py-2 text-sm">
+                {kin.nextOfKin.phone_number}
+              </p>
             </div>
           </div>
         ))

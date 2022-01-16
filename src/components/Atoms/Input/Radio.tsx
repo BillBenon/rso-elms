@@ -21,7 +21,7 @@ export default function Radio<T>({
 }: PropType<T>) {
   const [active, setActive] = useState('');
 
-  useEffect(() => setActive(value.toString()), []);
+  useEffect(() => setActive(value.toString()), [value]);
 
   function handleClick(value: string, e: any) {
     setActive(value);

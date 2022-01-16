@@ -3,14 +3,13 @@ import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
 import { queryClient } from '../../../plugins/react-query';
+import { authenticatorStore } from '../../../store/administration';
 import academyStore from '../../../store/administration/academy.store';
-import {
-  getIntakesByAcademy,
-  getProgramsByIntake,
-} from '../../../store/administration/intake.store';
-import intakeProgramStore from '../../../store/administration/intake-program.store';
+import { intakeStore } from '../../../store/administration/intake.store';
+import programStore from '../../../store/administration/program.store';
 import usersStore from '../../../store/administration/users.store';
 import { SelectData, ValueType } from '../../../types';
+import { AcademyInfo } from '../../../types/services/academy.types';
 import {
   IImportUser,
   IImportUserRes,
@@ -22,6 +21,7 @@ import Icon from '../../Atoms/custom/Icon';
 import FileUploader from '../../Atoms/Input/FileUploader';
 import Heading from '../../Atoms/Text/Heading';
 import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
+import InputMolecule from '../../Molecules/input/InputMolecule';
 import PopupMolecule from '../../Molecules/Popup';
 
 interface IProps {
@@ -30,28 +30,32 @@ interface IProps {
 
 export default function ImportUsers({ userType }: IProps) {
   const history = useHistory();
+  const authUser = authenticatorStore.authUser().data?.data.data;
   const [values, setValues] = useState<IImportUser>({
-    academicProgramLevelId: '',
     academicYearId: '',
     academyId: '',
-    intakeProgramId: '',
     userType,
-    intake: '',
+    intakeProgramId: '',
+    program: '',
     file: null,
   });
 
   const [importReport, setimportReport] = useState<IImportUserRes | undefined>(undefined);
 
-  const academies = academyStore.fetchAcademies().data?.data.data || [];
-  const intakes =
-    getIntakesByAcademy(values.academyId, false, values.academyId.length > 1).data?.data
-      .data || [];
-  const programs =
-    getProgramsByIntake(values.intake, values.intake.length > 1).data?.data.data || [];
+  const academies: AcademyInfo[] | undefined =
+    academyStore.fetchAcademies().data?.data.data || [];
+  // const intakes =
+  //   getIntakesByAcademy(values.academyId, false, !!values.academyId).data?.data.data ||
+  //   [];
 
-  const levels =
-    intakeProgramStore.getLevelsByIntakeProgram(values.intakeProgramId!).data?.data
-      .data || [];
+  // const programs =
+  //   getProgramsByIntake(values.intake, !!values.intake).data?.data.data || [];
+
+  const allprograms = programStore.fetchPrograms().data?.data.data || [];
+  const programs = allprograms.filter(
+    (prog) => prog.department.academy.id === values.academyId,
+  );
+  const intakes = intakeStore.getIntakesByProgram(values.program).data?.data.data || [];
 
   const { mutateAsync, isLoading } = usersStore.importUsers();
 
@@ -59,17 +63,17 @@ export default function ImportUsers({ userType }: IProps) {
     e.preventDefault();
 
     if (values.file) {
-      let academicYearId =
-        levels.find((l) => l.academic_program_level.id == values.academicProgramLevelId)
-          ?.academic_year.id || '';
+      // let academicYearId =
+      // levels.find((l) => l.academic_program_level.id == values.academicProgramLevelId)
+      //   ?.academic_year.id || '';
 
       let formData = new FormData();
       formData.append('file', values.file);
-      formData.append('academicProgramLevelId', values.academicProgramLevelId);
+      //   formData.append('academicProgramLevelId', values.academicProgramLevelId);
       formData.append('academyId', values.academyId);
       formData.append('intakeProgramId', values.intakeProgramId);
       formData.append('userType', values.userType);
-      formData.append('academicYearId', academicYearId?.toString());
+      //   formData.append('academicYearId', academicYearId?.toString());
 
       await mutateAsync(formData, {
         onSuccess(data) {
@@ -94,37 +98,43 @@ export default function ImportUsers({ userType }: IProps) {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <DropdownMolecule
-          options={getDropDownOptions({ inputs: academies || [] })}
-          name="academyId"
-          placeholder={'Academy to be enrolled'}
-          handleChange={handleChange}>
-          Academy
-        </DropdownMolecule>
+        {authUser?.user_type === UserType.SUPER_ADMIN ? (
+          <DropdownMolecule
+            options={getDropDownOptions({ inputs: academies || [] })}
+            name="academyId"
+            placeholder={'Academy to be enrolled'}
+            handleChange={handleChange}>
+            Academy
+          </DropdownMolecule>
+        ) : (
+          <InputMolecule readOnly value={authUser?.academy.name} name={'academyId'}>
+            Academy
+          </InputMolecule>
+        )}
         {userType === UserType.STUDENT ? (
           <div>
             <DropdownMolecule
               options={
-                intakes?.map((intk) => ({
-                  value: intk.id,
-                  label: intk.code,
-                })) as SelectData[]
-              }
-              name="intake"
-              handleChange={handleChange}>
-              Intake
-            </DropdownMolecule>
-            <DropdownMolecule
-              options={
                 programs.map((p) => ({
                   value: p.id,
-                  label: p.program.name,
+                  label: p.name,
                 })) as SelectData[]
               }
-              name="intakeProgramId"
+              name="program"
               placeholder={'Program'}
               handleChange={handleChange}>
               Program
+            </DropdownMolecule>
+            <DropdownMolecule
+              options={
+                intakes?.map((intk) => ({
+                  value: intk.id,
+                  label: intk.intake.title,
+                })) as SelectData[]
+              }
+              name="intakeProgramId"
+              handleChange={handleChange}>
+              Intake
             </DropdownMolecule>
             {/* <DropdownMolecule
               options={

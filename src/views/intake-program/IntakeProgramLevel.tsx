@@ -118,7 +118,12 @@ function IntakeProgramLevel() {
               <Route
                 exact
                 path={`${path}/:level/enroll-students`}
-                render={() => <EnrollStudent />}
+                render={() => (
+                  <EnrollStudent
+                    showSidebar={true}
+                    handleShowSidebar={function (): void {}}
+                  />
+                )}
               />
               {/* add module to intake program level */}
               <Route

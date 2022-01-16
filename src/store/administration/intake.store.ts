@@ -76,5 +76,4 @@ export function getProgramsByIntake(intakeId: string, enabled = true) {
   );
 }
 
-
 export const intakeStore = new IntakeStore();

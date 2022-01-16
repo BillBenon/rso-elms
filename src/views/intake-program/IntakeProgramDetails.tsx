@@ -53,6 +53,13 @@ function IntakeProgramDetails() {
 
   const [students, setStudents] = useState<UserView[]>([]);
   const [instructors, setInstructors] = useState<UserView[]>([]);
+  const initialShowSidebar = {
+    showStudent: false,
+    showInstructor: false,
+    enrollStudent: false,
+    enrollInstructor: false,
+  };
+  const [showSidebar, setShowSidebar] = useState(initialShowSidebar);
 
   useEffect(() => {
     let studentsView: UserView[] = [];
@@ -287,33 +294,61 @@ function IntakeProgramDetails() {
                         <div className="flex flex-col gap-8 z-0">
                           <UsersPreview
                             title="Students"
-                            label="Students in Cadette programs"
+                            label={`Students in ${programData.title}`}
                             data={students}
                             totalUsers={students.length || 0}
                             dataLabel={''}
                             userType={authUser?.user_type}
-                            isLoading={studLoading}>
-                            {authUser?.user_type === UserType.ADMIN ? (
-                              <EnrollStudentIntakeProgram
-                                existing={studentsProgram?.data.data || []}
-                              />
-                            ) : null}
-                          </UsersPreview>
+                            isLoading={studLoading}
+                            showSidebar={showSidebar.showStudent}
+                            handleShowSidebar={() =>
+                              setShowSidebar({
+                                ...initialShowSidebar,
+                                showStudent: !showSidebar.showStudent,
+                              })
+                            }
+                          />
+                          {authUser?.user_type === UserType.ADMIN ? (
+                            <EnrollStudentIntakeProgram
+                              showSidebar={showSidebar.enrollStudent}
+                              existing={studentsProgram?.data.data || []}
+                              handleShowSidebar={() =>
+                                setShowSidebar({
+                                  ...initialShowSidebar,
+                                  enrollStudent: !showSidebar.enrollStudent,
+                                })
+                              }
+                            />
+                          ) : null}
 
                           <UsersPreview
                             title="Instructors"
-                            label="Instructors in Cadette programs"
+                            label={`Instructors in ${programData.title}`}
                             data={instructors}
                             totalUsers={instructors.length || 0}
                             dataLabel={''}
                             userType={authUser?.user_type}
-                            isLoading={instLoading}>
-                            {authUser?.user_type === UserType.ADMIN ? (
-                              <EnrollInstructorIntakeProgram
-                                existing={instructorsProgram?.data.data || []}
-                              />
-                            ) : null}
-                          </UsersPreview>
+                            isLoading={instLoading}
+                            showSidebar={showSidebar.showInstructor}
+                            handleShowSidebar={() =>
+                              setShowSidebar({
+                                ...initialShowSidebar,
+                                showInstructor: !showSidebar.showInstructor,
+                              })
+                            }
+                          />
+                          {authUser?.user_type === UserType.ADMIN ? (
+                            <EnrollInstructorIntakeProgram
+                              showSidebar={showSidebar.enrollInstructor}
+                              existing={instructorsProgram?.data.data || []}
+                              handleShowSidebar={() =>
+                                setShowSidebar({
+                                  ...initialShowSidebar,
+                                  enrollInstructor: !showSidebar.enrollInstructor,
+                                })
+                              }
+                            />
+                          ) : null}
                         </div>
                       </div>
                     )
