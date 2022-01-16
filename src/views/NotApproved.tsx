@@ -18,7 +18,7 @@ function NotApproved() {
         {authUser?.data.academy ? (
           <div className="py-4">
             <AcademyProfileCard
-              src="/images/nisslogo.png"
+              src="/images/rdf-logo.png"
               alt="academy logo"
               bgColor="none">
               <span className="font-semibold text-lg text-primary-500">
@@ -31,7 +31,7 @@ function NotApproved() {
         ) : (
           <div className="py-4">
             <AcademyProfileCard
-              src="/images/nisslogo.png"
+              src="/images/rdf-logo.png"
               alt="academy logo"
               bgColor="none">
               <span className="font-semibold text-lg text-primary-500">

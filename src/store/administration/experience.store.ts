@@ -7,7 +7,7 @@ class ExperienceStore {
     return useMutation(experienceService.create);
   }
   getAll() {
-    return useMutation('experiences', experienceService.fetchAll);
+    return useQuery('experiences', experienceService.fetchAll);
   }
   getExperienceById(id: string) {
     return useQuery(['experience/id', id], () => experienceService.getExperienceById(id));
@@ -23,3 +23,11 @@ class ExperienceStore {
 }
 
 export const experienceStore = new ExperienceStore();
+
+export function getPersonExperiences(personId?: string | number) {
+  return useQuery(
+    ['experience/id', personId],
+    () => experienceService.findPersonExperiences(personId + ''),
+    { enabled: !!personId },
+  );
+}

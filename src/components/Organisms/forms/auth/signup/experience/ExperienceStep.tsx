@@ -1,11 +1,11 @@
 import React from 'react';
 
 import { CommonFormProps, CommonStepProps } from '../../../../../../types';
-import { ExperienceTypeStatus } from '../../../../../../types/services/experience.types';
+import { ExperienceType } from '../../../../../../types/services/experience.types';
 import ExperienceForm from './ExperienceForm';
 
 interface IExperienceStep<E> extends CommonStepProps, CommonFormProps<E> {
-  type: ExperienceTypeStatus;
+  type: ExperienceType;
   skip?: () => void;
 }
 

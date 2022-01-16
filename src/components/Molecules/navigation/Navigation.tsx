@@ -8,7 +8,7 @@ import { authenticatorStore } from '../../../store/administration';
 // import { ValueType } from '../../../types';
 import { UserInfo, UserType } from '../../../types/services/user.types';
 import cookie from '../../../utils/cookie';
-import { useProfilePicture } from '../../../utils/file-util';
+import { usePicture } from '../../../utils/file-util';
 import Avatar from '../../Atoms/custom/Avatar';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
@@ -97,10 +97,7 @@ export default function Navigation() {
                     <span className="sr-only">Open user menu</span>
                     <Avatar
                       className="border-2 object-cover border-primary-500"
-                      src={useProfilePicture(
-                        authUser?.profile_attachment_id,
-                        authUser?.id,
-                      )}
+                      src={usePicture(authUser?.profile_attachment_id, authUser?.id)}
                       alt=""
                       size="34"
                     />
@@ -207,7 +204,7 @@ export default function Navigation() {
             <div className="shrink-0">
               <img
                 className="h-10 w-10 rounded-full"
-                src="https://static.thenounproject.com/png/2643367-200.png"
+                src="/images/default-pic.png"
                 alt="profile"
               />
             </div>
