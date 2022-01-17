@@ -3,6 +3,8 @@ import { AxiosResponse } from 'axios';
 import { evaluationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
+  IManualMarking,
+  IManualMarkingInfo,
   MarkAllEvaluationQuestions,
   studentMarkingAnswer,
 } from '../../types/services/marking.types';
@@ -23,6 +25,23 @@ class MarkingService {
   }): Promise<AxiosResponse<Response<any>>> {
     return await evaluationAxios.put(
       `/studentEvaluations/evaluation/${data.evaluationId}/publishResults`,
+    );
+  }
+
+  public async addManualMarking(
+    data: IManualMarking[],
+  ): Promise<AxiosResponse<Response<IManualMarking[]>>> {
+    return await evaluationAxios.post(`/studentEvaluations/marking/manual-marking`, {
+      student_evaluations: data,
+    });
+  }
+
+  public async getManualMarkingMarks(
+    evaluationId: string,
+    classId: string,
+  ): Promise<AxiosResponse<Response<IManualMarkingInfo[]>>> {
+    return await evaluationAxios.get(
+      `/studentEvaluations/evaluation/${evaluationId}/class/${classId}`,
     );
   }
 

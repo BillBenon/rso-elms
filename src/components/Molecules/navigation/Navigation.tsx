@@ -12,6 +12,7 @@ import { usePicture } from '../../../utils/file-util';
 import Avatar from '../../Atoms/custom/Avatar';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
+import Notification from '../Notification';
 import Tooltip from '../Tooltip';
 // import SearchMolecule from '../input/SearchMolecule';
 
@@ -86,10 +87,8 @@ export default function Navigation() {
                   open={showNotificationMenu}
                   trigger={
                     <button
-                      className="bg-main p-1 rounded-full flex text-gray-400"
+                      className="bg-main rounded-full flex text-gray-400"
                       onClick={() => setNotificationMenu(!showNotificationMenu)}>
-                      <Icon name="switch" />
-                      <Icon name="settings" />
                       <div className="relative">
                         <Icon name="notification" />
                         <div className="bg-main rounded-full h-3 w-3 absolute top-3 right-4 flex items-center justify-center">
@@ -98,7 +97,7 @@ export default function Navigation() {
                       </div>
                     </button>
                   }>
-                  we go
+                  <Notification />
                 </Tooltip>
               </div>
 

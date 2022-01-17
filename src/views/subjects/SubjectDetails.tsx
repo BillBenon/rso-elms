@@ -210,7 +210,7 @@ export default function SubjectDetails() {
                     <div className="flex justify-between">
                       <SubjectInstructorView subjectId={subjectId} />
                       {intakeProg && progId && level && period ? (
-                        <div>
+                        <div className="w-full">
                           <Button onClick={goToNewEvaluation}>New Evaluation</Button>
                         </div>
                       ) : null}

@@ -14,8 +14,10 @@ import { authenticatorStore } from '../../store/administration';
 import { markingStore } from '../../store/administration/marking.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
+import { IQuestionaireTypeEnum } from '../../types/services/evaluation.types';
 import { UserType } from '../../types/services/user.types';
 import ApproveEvaluation from './ApproveEvaluation';
+import ManualMarking from './ManualMarking';
 import ReviewEvaluation from './ReviewEvaluation';
 import StudentAnswersMarking from './StudentAnswersMarking';
 
@@ -168,27 +170,30 @@ export default function EvaluationDetails() {
                       description="And the web just isnt the same without you. Lets get you back online!"
                     />
                   ) : isSuccess && submissions.length > 0 ? (
-                    <div>
-                      <div className="w-full flex justify-end mb-4">
-                        <Button onClick={publishEvaluationResults}>
-                          Publish all results
-                        </Button>
+                    evaluationInfo?.questionaire_type === IQuestionaireTypeEnum.MANUAL ? (
+                      <ManualMarking evaluationId={id} />
+                    ) : (
+                      <div>
+                        <div className="w-full flex justify-end mb-4">
+                          <Button onClick={publishEvaluationResults}>
+                            Publish all results
+                          </Button>
+                        </div>
+                        <Table<any>
+                          statusColumn="status"
+                          data={submissions}
+                          hide={['id']}
+                          uniqueCol={'id'}
+                          actions={actions}
+                        />
                       </div>
-                      <Table<any>
-                        statusColumn="status"
-                        data={submissions}
-                        hide={['id']}
-                        uniqueCol={'id'}
-                        actions={actions}
-                      />
-                    </div>
+                    )
                   ) : isError ? (
                     <NoDataAvailable
                       icon="evaluation"
-                      buttonLabel="Create Evaluation"
-                      title={'No evaluations available'}
-                      handleClick={() => history.push(`${path}/new`)}
-                      description="And the web just isnt the same without you. Lets get you back online!"
+                      showButton={false}
+                      title={'Something went wrong'}
+                      description="Something went wrong, try reloading the page or check your internet connection"
                     />
                   ) : null}
                 </>

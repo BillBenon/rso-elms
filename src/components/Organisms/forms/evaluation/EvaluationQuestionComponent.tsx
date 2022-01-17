@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
@@ -33,19 +33,25 @@ export default function EvaluationQuestionComponent({
     id: '',
   };
 
-  const initialState: ICreateEvaluationQuestions = {
-    evaluation_id: evaluationId || getLocalStorageData('evaluationId'),
-    mark: 0,
-    parent_question_id: '',
-    choices: [],
-    id: '',
-    question: '',
-    question_type: IQuestionType.OPEN,
-    sub_questions: [],
-    submitted: false,
-  };
+  const initialState: ICreateEvaluationQuestions = useMemo(() => {
+    return {
+      evaluation_id: evaluationId || getLocalStorageData('evaluationId'),
+      mark: 0,
+      parent_question_id: '',
+      choices: [],
+      id: '',
+      question: '',
+      question_type: IQuestionType.OPEN,
+      sub_questions: [],
+      submitted: false,
+    };
+  }, [evaluationId]);
 
-  let evaluationQuestions: IEvaluationQuestionsInfo[] | ICreateEvaluationQuestions[] = [];
+  let evaluationQuestions: IEvaluationQuestionsInfo[] | ICreateEvaluationQuestions[] =
+    useMemo(() => {
+      return [];
+    }, []);
+
   if (evaluationId) {
     evaluationQuestions =
       evaluationStore.getEvaluationQuestions(evaluationId).data?.data.data || [];
@@ -73,7 +79,7 @@ export default function EvaluationQuestionComponent({
     } else {
       setQuestions([initialState]);
     }
-  }, []);
+  }, [evaluationQuestions, initialState]);
 
   function handleAddQuestion() {
     let newQuestion = initialState;
@@ -267,6 +273,7 @@ export default function EvaluationQuestionComponent({
 
                 <InputMolecule
                   readonly={question.submitted}
+                  required={false}
                   type="number"
                   // step=".01"
                   name={'mark'}
@@ -312,6 +319,9 @@ export default function EvaluationQuestionComponent({
       <div>
         <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
           Back
+        </Button>{' '}
+        <Button styleType="text" color="gray" className="mt-6" onClick={handleNext}>
+          Skip
         </Button>
         <div className="pt-6 flex flex-col">
           <div className="pb-6">

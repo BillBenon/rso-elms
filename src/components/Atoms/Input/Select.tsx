@@ -45,7 +45,7 @@ export default function Select({
         _placeholder ||
         `Select ${name}`,
     );
-    setfiltered(options || []);
+    setfiltered([...options] || []);
   }, [_placeholder, name, options, value]);
 
   const handleSelect = (value: string) => {

@@ -284,7 +284,7 @@ export default function Table2<T>({
           <tr className="text-left text-txt-secondary border-b border-silver">
             {getHeader()}
             {actions && actions.length > 0 ? (
-              <th className="px-4 py-2 ">Actions</th>
+              <th className="px-4 py-2">Actions</th>
             ) : null}
           </tr>
         </thead>

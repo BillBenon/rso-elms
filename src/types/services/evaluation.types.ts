@@ -16,6 +16,7 @@ export enum IQuestionType {
 
 export enum IQuestionaireTypeEnum {
   MULTIPLE = 'MULTIPLE',
+  MANUAL = 'MANUAL',
   FIELD = 'FIELD',
   OPEN = 'OPEN',
   HYBRID = 'HYBRID',
@@ -125,7 +126,7 @@ export interface IEvaluationCreate {
   academy_id: string;
   instructor_id: string;
   allow_submission_time: string;
-  class_ids: string;
+  intake_level_class_ids: string;
   subject_academic_year_period_id: string;
   classification: IEvaluationClassification;
   content_format: string;
@@ -156,7 +157,7 @@ export interface IEvaluationInfo {
   id: string;
   name: string;
   academy_id: string;
-  class_ids: string;
+  intake_level_class_ids: string;
   intake_academic_year_period: string;
   subject_academic_year_period: string;
   subject_id: string;

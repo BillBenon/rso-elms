@@ -39,6 +39,10 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
               title="Total number of questions"
               subTitle={evaluationInfo?.number_of_questions}
             />
+            <ContentSpan
+              title="Questionaire Type"
+              subTitle={evaluationInfo?.questionaire_type}
+            />
 
             {/* <div className="flex flex-col gap-4">
               <Heading color="txt-secondary" fontSize="base">
@@ -95,7 +99,7 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
         <div className="flex flex-col gap-4">
           <ContentSpan title="Due on" subTitle={evaluationInfo?.due_on} />
           {/* <ContentSpan
-            title="Total number of questions"
+            title="Questionaire Type"
             subTitle={evaluationInfo?.number_of_questions}
           /> */}
           <ContentSpan
