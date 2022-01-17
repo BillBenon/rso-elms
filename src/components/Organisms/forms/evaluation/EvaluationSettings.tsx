@@ -144,6 +144,7 @@ export default function EvaluationSettings({
       </div> */}
       <div className="pt-6">
         <DropdownMolecule
+          isMulti
           width="60"
           placeholder="Marker"
           options={

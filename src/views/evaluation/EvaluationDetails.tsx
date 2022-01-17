@@ -14,8 +14,10 @@ import { authenticatorStore } from '../../store/administration';
 import { markingStore } from '../../store/administration/marking.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
+import { IQuestionaireTypeEnum } from '../../types/services/evaluation.types';
 import { UserType } from '../../types/services/user.types';
 import ApproveEvaluation from './ApproveEvaluation';
+import ManualMarking from './ManualMarking';
 import ReviewEvaluation from './ReviewEvaluation';
 import StudentAnswersMarking from './StudentAnswersMarking';
 
@@ -159,7 +161,14 @@ export default function EvaluationDetails() {
               render={() => (
                 <>
                   {isLoading && <Loader />}
-                  {isSuccess && submissions.length === 0 ? (
+                  {evaluationInfo?.questionaire_type === IQuestionaireTypeEnum.MANUAL && (
+                    <ManualMarking evaluationId={id} />
+                  )}
+
+                  {isSuccess &&
+                  submissions.length === 0 &&
+                  evaluationInfo?.questionaire_type !==
+                    (IQuestionaireTypeEnum.MANUAL || IQuestionaireTypeEnum.FIELD) ? (
                     <NoDataAvailable
                       icon="evaluation"
                       buttonLabel="Go back"
@@ -167,7 +176,10 @@ export default function EvaluationDetails() {
                       handleClick={() => history.push(`/dashboard/evaluations/${id}`)}
                       description="And the web just isnt the same without you. Lets get you back online!"
                     />
-                  ) : isSuccess && submissions.length > 0 ? (
+                  ) : isSuccess &&
+                    submissions.length > 0 &&
+                    evaluationInfo?.questionaire_type !==
+                      (IQuestionaireTypeEnum.MANUAL || IQuestionaireTypeEnum.FIELD) ? (
                     <div>
                       <div className="w-full flex justify-end mb-4">
                         <Button onClick={publishEvaluationResults}>
@@ -185,10 +197,9 @@ export default function EvaluationDetails() {
                   ) : isError ? (
                     <NoDataAvailable
                       icon="evaluation"
-                      buttonLabel="Create Evaluation"
-                      title={'No evaluations available'}
-                      handleClick={() => history.push(`${path}/new`)}
-                      description="And the web just isnt the same without you. Lets get you back online!"
+                      showButton={false}
+                      title={'Something went wrong'}
+                      description="Something went wrong, try reloading the page or check your internet connection"
                     />
                   ) : null}
                 </>

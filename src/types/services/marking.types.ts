@@ -1,7 +1,12 @@
 /* eslint-disable no-unused-vars */
 
 import { Table } from '..';
-import { IEvaluationQuestion, IMultipleChoice } from './evaluation.types';
+import {
+  IEvaluationInfo,
+  IEvaluationQuestion,
+  IMultipleChoice,
+} from './evaluation.types';
+import { Student } from './user.types';
 
 export interface SampleQuestionInfo {
   question: string;
@@ -17,6 +22,22 @@ export interface MarkingCorrection {
   marked: boolean;
   markScored: number;
   answerId: string;
+}
+
+export interface IManualMarking {
+  evaluation_id: string;
+  marks: number;
+  student_id: string;
+}
+
+export interface EvaluationStudent {
+  admin_id: string;
+}
+
+export interface IManualMarkingInfo {
+  evaluation: IEvaluationInfo;
+  obtained_mark: number;
+  student: EvaluationStudent;
 }
 
 export interface studentMarkingAnswer extends Table {
