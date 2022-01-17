@@ -57,8 +57,7 @@ export default function ClassPeriodPerformance() {
     }`;
 
     processed['Grade'] = calculateGrades(
-      // record.quiz_obtained_marks + record.exam_obtained_marks,
-      100,
+      record.quiz_obtained_marks + record.exam_obtained_marks,
       record.total_marks,
     );
 
