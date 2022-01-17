@@ -10,6 +10,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import { classStore } from '../../store/administration/class.store';
 import { getClassTermlyOverallReport } from '../../store/evaluation/school-report.store';
 import { ValueType } from '../../types';
+import { calculateGrades } from '../../utils/school-report';
 
 interface IParamType {
   levelId: string;
@@ -42,8 +43,8 @@ export default function ClassPeriodPerformance() {
 
   performance?.data.data.forEach((record) => {
     let processed: IPerformanceTable = {
-      reg_number: record.student.regNumber,
-      id: record.student.adminId,
+      reg_number: record.student.reg_number,
+      id: record.student.admin_id,
     };
 
     record.subject_marks?.forEach((mark) => {
@@ -54,6 +55,11 @@ export default function ClassPeriodPerformance() {
     processed[`total /${record.total_marks}`] = `${
       record.quiz_obtained_marks + record.exam_obtained_marks
     }`;
+
+    processed['Grade'] = calculateGrades(
+      record.quiz_obtained_marks + record.exam_obtained_marks,
+      record.total_marks,
+    );
 
     processed['position'] = record.position;
     data.push(processed);
