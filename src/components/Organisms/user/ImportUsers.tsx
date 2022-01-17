@@ -20,8 +20,8 @@ import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import FileUploader from '../../Atoms/Input/FileUploader';
 import Heading from '../../Atoms/Text/Heading';
-import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../Molecules/input/InputMolecule';
+import SelectMolecule from '../../Molecules/input/SelectMolecule';
 import PopupMolecule from '../../Molecules/Popup';
 
 interface IProps {
@@ -31,9 +31,10 @@ interface IProps {
 export default function ImportUsers({ userType }: IProps) {
   const history = useHistory();
   const authUser = authenticatorStore.authUser().data?.data.data;
+
   const [values, setValues] = useState<IImportUser>({
     academicYearId: '',
-    academyId: '',
+    academyId: authUser?.academy?.id.toString() || '',
     userType,
     intakeProgramId: '',
     program: '',
@@ -99,13 +100,14 @@ export default function ImportUsers({ userType }: IProps) {
     <>
       <form onSubmit={handleSubmit}>
         {authUser?.user_type === UserType.SUPER_ADMIN ? (
-          <DropdownMolecule
+          <SelectMolecule
             options={getDropDownOptions({ inputs: academies || [] })}
             name="academyId"
+            value={values.academyId}
             placeholder={'Academy to be enrolled'}
             handleChange={handleChange}>
             Academy
-          </DropdownMolecule>
+          </SelectMolecule>
         ) : (
           <InputMolecule readOnly value={authUser?.academy.name} name={'academyId'}>
             Academy
@@ -113,30 +115,32 @@ export default function ImportUsers({ userType }: IProps) {
         )}
         {userType === UserType.STUDENT ? (
           <div>
-            <DropdownMolecule
+            <SelectMolecule
               options={
                 programs.map((p) => ({
                   value: p.id,
                   label: p.name,
                 })) as SelectData[]
               }
+              value={values.program}
               name="program"
               placeholder={'Program'}
               handleChange={handleChange}>
               Program
-            </DropdownMolecule>
-            <DropdownMolecule
+            </SelectMolecule>
+            <SelectMolecule
               options={
                 intakes?.map((intk) => ({
                   value: intk.id,
                   label: intk.intake.title,
                 })) as SelectData[]
               }
+              value={values.intakeProgramId}
               name="intakeProgramId"
               handleChange={handleChange}>
               Intake
-            </DropdownMolecule>
-            {/* <DropdownMolecule
+            </SelectMolecule>
+            {/* <SelectMolecule
               options={
                 levels.map((lv) => ({
                   value: lv.academic_program_level.id,
@@ -147,7 +151,7 @@ export default function ImportUsers({ userType }: IProps) {
               placeholder={'Program'}
               handleChange={handleChange}>
               Level
-            </DropdownMolecule> */}
+            </SelectMolecule> */}
           </div>
         ) : (
           <></>
