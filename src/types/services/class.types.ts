@@ -19,10 +19,10 @@ export interface ICreateClass {
 }
 
 export interface IStudent {
-  regNumber: string;
+  reg_number: string;
   academy: AcademyInfo;
   academyId: string;
-  adminId: string;
+  admin_id: string;
   id: string;
   institution: InstitutionInfo;
   institutionId: 'string';

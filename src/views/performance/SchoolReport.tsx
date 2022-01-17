@@ -9,6 +9,7 @@ import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { getStudentReportInTerm } from '../../store/evaluation/school-report.store';
 import { usePicture } from '../../utils/file-util';
+import { formatPercentage, isFailure } from '../../utils/school-report';
 
 interface IParamType {
   levelId: string;
@@ -66,20 +67,6 @@ export default function SchoolReport() {
     onBeforeGetContent: () => setisPrinting(true),
     onAfterPrint: () => setisPrinting(false),
   });
-
-  function formatPercentage() {
-    let percentage =
-      ((totals.quizObtained + totals.examObtained) / (totals.quizMax + totals.examMax) ||
-        0) * 100;
-
-    return Math.round((percentage + Number.EPSILON) * 100) / 100;
-  }
-
-  function isFailure(obtained: number, max: number) {
-    return obtained < max / 2;
-  }
-
-  console.log('rendered');
 
   return (
     <div className="mx-auto max-w-4xl">
@@ -270,7 +257,10 @@ export default function SchoolReport() {
             fontSize="sm"
             fontWeight="semibold"
             className="col-span-4 py-3 px-6 border border-gray-700 text-right">
-            {`${formatPercentage()} %`}
+            {`${formatPercentage(
+              totals.quizObtained + totals.examObtained,
+              totals.quizMax + totals.examMax,
+            )} %`}
           </Heading>
         </div>
         {/* Student position */}
