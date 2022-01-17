@@ -164,7 +164,7 @@ export default function StudentAnswersMarking() {
   else
     return (
       <FinishMarking
-        student_code={studentEvaluation?.data.data.code}
+        student_code={studentEvaluation?.data.data.code + ''}
         obtained_marks={totalMarks}
         student_evaluation={id}
       />
