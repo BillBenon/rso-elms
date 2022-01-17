@@ -178,6 +178,9 @@ export interface IEvaluationInfo {
   content_format: string;
   maximum_file_size: number;
   is_consider_on_report: boolean;
+  is_to_be_approved: boolean;
+  is_to_be_marked: boolean;
+  is_to_be_reviewed: boolean;
   available: string;
   strict: boolean;
   number_of_questions: string;

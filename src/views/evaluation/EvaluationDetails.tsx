@@ -161,7 +161,14 @@ export default function EvaluationDetails() {
               render={() => (
                 <>
                   {isLoading && <Loader />}
-                  {isSuccess && submissions.length === 0 ? (
+                  {evaluationInfo?.questionaire_type === IQuestionaireTypeEnum.MANUAL && (
+                    <ManualMarking evaluationId={id} />
+                  )}
+
+                  {isSuccess &&
+                  submissions.length === 0 &&
+                  evaluationInfo?.questionaire_type !==
+                    (IQuestionaireTypeEnum.MANUAL || IQuestionaireTypeEnum.FIELD) ? (
                     <NoDataAvailable
                       icon="evaluation"
                       buttonLabel="Go back"
@@ -169,25 +176,24 @@ export default function EvaluationDetails() {
                       handleClick={() => history.push(`/dashboard/evaluations/${id}`)}
                       description="And the web just isnt the same without you. Lets get you back online!"
                     />
-                  ) : isSuccess && submissions.length > 0 ? (
-                    evaluationInfo?.questionaire_type === IQuestionaireTypeEnum.MANUAL ? (
-                      <ManualMarking evaluationId={id} />
-                    ) : (
-                      <div>
-                        <div className="w-full flex justify-end mb-4">
-                          <Button onClick={publishEvaluationResults}>
-                            Publish all results
-                          </Button>
-                        </div>
-                        <Table<any>
-                          statusColumn="status"
-                          data={submissions}
-                          hide={['id']}
-                          uniqueCol={'id'}
-                          actions={actions}
-                        />
+                  ) : isSuccess &&
+                    submissions.length > 0 &&
+                    evaluationInfo?.questionaire_type !==
+                      (IQuestionaireTypeEnum.MANUAL || IQuestionaireTypeEnum.FIELD) ? (
+                    <div>
+                      <div className="w-full flex justify-end mb-4">
+                        <Button onClick={publishEvaluationResults}>
+                          Publish all results
+                        </Button>
                       </div>
-                    )
+                      <Table<any>
+                        statusColumn="status"
+                        data={submissions}
+                        hide={['id']}
+                        uniqueCol={'id'}
+                        actions={actions}
+                      />
+                    </div>
                   ) : isError ? (
                     <NoDataAvailable
                       icon="evaluation"
