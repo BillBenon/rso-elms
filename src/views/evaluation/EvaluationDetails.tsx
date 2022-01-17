@@ -11,7 +11,6 @@ import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
 import { UserType } from '../../types/services/user.types';
 import ApproveEvaluation from './ApproveEvaluation';
-import StudentAnswersMarking from './marking/StudentAnswersMarking';
 import Submissions from './marking/Submissions';
 import ReviewEvaluation from './ReviewEvaluation';
 
@@ -60,7 +59,6 @@ export default function EvaluationDetails() {
   return (
     <div className="block pr-24 pb-8 w-11/12">
       <Switch>
-        <Route path={`${path}/submissions/:id`} component={StudentAnswersMarking} />
         <Route
           exact
           path={`${path}/review`}
@@ -73,7 +71,7 @@ export default function EvaluationDetails() {
         />
         <TabNavigation tabs={tabs}>
           <div className="pt-8">
-            <Route exact path={`${path}/submissions`} render={() => <Submissions />} />
+            <Route path={`${path}/submissions`} render={() => <Submissions />} />
           </div>
 
           {authUser?.user_type === UserType.INSTRUCTOR && (
