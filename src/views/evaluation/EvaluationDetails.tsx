@@ -53,9 +53,9 @@ export default function EvaluationDetails() {
     },
     {
       name: 'Publish',
-      handleAction: (id: string | number | undefined) => {
+      handleAction: (id: string | number) => {
         resultPublisher.mutate(
-          { studentEvaluationId: id },
+          { studentEvaluationId: id?.toString() || '' },
           {
             onSuccess: () => {
               toast.success('Result published', { duration: 3000 });

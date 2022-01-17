@@ -13,7 +13,7 @@ import {
   IMultipleChoiceAnswers,
   IStudentAnswer,
 } from '../../types/services/evaluation.types';
-import { studentMarkingAnswer } from '../../types/services/marking.types';
+import { StudentMarkingAnswer } from '../../types/services/marking.types';
 import { getLocalStorageData } from '../../utils/getLocalStorageItem';
 import ContentSpan from './ContentSpan';
 import MultipleChoiceAnswer from './MultipleChoiceAnswer';
@@ -41,7 +41,7 @@ export default function QuestionContainer({
   const history = useHistory();
 
   const [studentEvaluationId, setStudentEvaluationId] = useState('');
-  const [previousAnswers, setPreviousAnswers] = useState<studentMarkingAnswer[]>([]);
+  const [previousAnswers, setPreviousAnswers] = useState<StudentMarkingAnswer[]>([]);
   let previoustudentAnswers =
     markingStore.getStudentEvaluationAnswers(studentEvaluationId);
 
