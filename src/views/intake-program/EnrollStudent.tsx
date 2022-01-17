@@ -19,8 +19,12 @@ import {
 } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 
-function EnrollStudent() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+interface IEnrollStudent {
+  showSidebar: boolean;
+  handleShowSidebar: () => void;
+}
+
+function EnrollStudent({ showSidebar, handleShowSidebar }: IEnrollStudent) {
   const { intakeProg, level: levelId } = useParams<IntakeLevelParam>();
 
   const { data: studentsProgram, isLoading } =
@@ -73,7 +77,7 @@ function EnrollStudent() {
         onSuccess: (data) => {
           toast.success(data.data.message);
           queryClient.invalidateQueries(['students/intakeProgramlevelId', levelId]);
-          setSidebarOpen(false);
+          handleShowSidebar();
         },
         onError: (error: any) => {
           toast.error(error.response.data.message);
@@ -83,12 +87,12 @@ function EnrollStudent() {
   }
   return (
     <div className="flex flex-col cursor-pointer">
-      <Button styleType="outline" onClick={() => setSidebarOpen(true)}>
+      <Button styleType="outline" onClick={handleShowSidebar}>
         Enroll student
       </Button>
       <RightSidebar
-        open={sidebarOpen}
-        handleClose={() => setSidebarOpen(false)}
+        open={showSidebar}
+        handleClose={handleShowSidebar}
         label="Enroll students to level"
         data={students}
         selectorActions={[
@@ -99,6 +103,7 @@ function EnrollStudent() {
         ]}
         dataLabel={'Students in this program'}
         isLoading={isLoading}
+        unselectAll={!showSidebar}
       />
     </div>
   );

@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
-import React, { useEffect, useState } from 'react';
+import _ from 'lodash';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { ValueType } from '../../types';
 import { UserView } from '../../types/services/user.types';
@@ -21,6 +22,7 @@ interface IRightSidebar {
   selectorActions?: { name: string; handleAction: (_data?: string[]) => void }[];
   dataLabel: string;
   isLoading: boolean;
+  unselectAll: boolean;
 }
 
 function RightSidebar({
@@ -31,9 +33,34 @@ function RightSidebar({
   data,
   isLoading,
   dataLabel = '',
+  unselectAll,
 }: IRightSidebar) {
   const handleSearch = () => {};
   const [selected, setSelected] = useState(new Set(''));
+
+  const changeSelect = useCallback(
+    (id: string, status: boolean) => {
+      data.map((row) => {
+        if (row.id) {
+          if (row.id == id) {
+            row.selected = status;
+          }
+        }
+        return row;
+      });
+    },
+
+    [data],
+  );
+
+  useEffect(() => {
+    selected.forEach((sel) => changeSelect(sel, true));
+  }, [changeSelect, selected]);
+
+  useEffect(() => {
+    unSelectAll();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [unselectAll]);
 
   //handle single select
   function _handleSelect(e: ValueType<HTMLInputElement>) {
@@ -59,19 +86,37 @@ function RightSidebar({
     // if (handleSelect) handleSelect(Array.from(selected));
   }
 
-  function changeSelect(id: string, status: boolean) {
-    data.map((row) => {
-      if (row.id) {
-        // @ts-ignore
-        if (row[row.id] == id) row.selected = status;
-      }
-      return row;
+  // handle select all
+  function _handleSelectAll() {
+    // when set is full we uncheck
+    if (selected.size === data.length) {
+      unSelectAll();
+    } else {
+      selectAll();
+    }
+  }
+
+  function selectAll() {
+    const newSelRow = new Set('');
+    // else when set is not full we add  all ids
+    _.map(data, 'id').forEach((val) => {
+      changeSelect(val + '', true); // mark current rows in table as selected
+      newSelRow.add(val + '');
+    });
+    setSelected(new Set([...newSelRow])); // add new selected list in selected state
+    // if (handleSelect) handleSelect(Array.from(newSelRow));
+  }
+  function unSelectAll() {
+    setSelected(new Set('')); // set set to empty, since we unselected each and everything
+
+    _.map(data, 'id').forEach((val) => {
+      changeSelect(val + '', false); // unmark all current rows in table as selected
     });
   }
 
-  useEffect(() => {
-    selected.forEach((sel) => changeSelect(sel, true));
-  }, [data]);
+  function closeBar() {
+    handleClose();
+  }
 
   return (
     <div
@@ -82,7 +127,7 @@ function RightSidebar({
         <Heading fontSize="lg" fontWeight="semibold" className="pt-3">
           {label}
         </Heading>
-        <Button styleType="text" icon onClick={() => handleClose()} className="self-end">
+        <Button styleType="text" icon onClick={() => closeBar()} className="self-end">
           <Icon name="close" fill="txt-secondary" size={18} />
         </Button>
       </div>
@@ -128,25 +173,39 @@ function RightSidebar({
             showButton={false}
           />
         ) : (
-          data.map((user, i) => (
-            <div className="flex w-full items-center pb-6 gap-4" key={i}>
+          <>
+            <div className="flex gap-2 pb-4">
               <Checkbox
-                checked={user.selected}
-                handleChange={_handleSelect}
+                checked={selected.size === data.length}
+                handleChange={() => _handleSelectAll()}
                 name={'user'}
-                value={user.id.toString()}
+                value={'all'}
               />
 
-              <Avatar
-                src={user.image_url || '/images/default-pic.png'}
-                size="48"
-                alt=""
-              />
-              <Heading fontSize="sm" fontWeight="semibold" className="text-center">
-                {user.first_name} {user.last_name}
+              <Heading fontSize="base" fontWeight="semibold">
+                Select all
               </Heading>
             </div>
-          ))
+            {data.map((user, i) => (
+              <div className="flex w-full items-center pb-6 gap-4" key={i}>
+                <Checkbox
+                  checked={user.selected}
+                  handleChange={_handleSelect}
+                  name={'user'}
+                  value={user.id.toString()}
+                />
+
+                <Avatar
+                  src={user.image_url || '/images/default-pic.png'}
+                  size="48"
+                  alt=""
+                />
+                <Heading fontSize="sm" fontWeight="semibold" className="text-center">
+                  {user.first_name} {user.last_name}
+                </Heading>
+              </div>
+            ))}
+          </>
         )}
       </div>
     </div>

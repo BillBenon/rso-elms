@@ -79,7 +79,7 @@ function SubjectPeriod() {
                 handleClick={() =>
                   history.push({
                     pathname: `/dashboard/modules/subjects/${sub.id}`,
-                    search: `?intkProg=${intakeProg}&prog=${id}&lvl=${level}&prd=${period}`,
+                    search: `?intkPrg=${intakeProg}&prog=${id}&lvl=${level}&prd=${period}`,
                   })
                 }
                 data={sub}

@@ -175,7 +175,7 @@ export default function Table2<T>({
     let header: JSX.Element[] = [];
 
     header.push(
-      <th className="checkbox-tb">
+      <th className="pl-4">
         {uniqueCol && (
           <Checkbox
             checked={selected.size === currentRows.length}
@@ -209,7 +209,7 @@ export default function Table2<T>({
 
     return currentRows.map((row, index) => (
       <tr key={index}>
-        <td className="checkbox-tb">
+        <td className="pl-4">
           {uniqueCol && (
             <Checkbox
               checked={row.selected}

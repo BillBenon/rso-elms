@@ -92,9 +92,9 @@ function DateMolecule({
 
     let selectedDate: string;
     if (date_time_type) {
-      selectedDate = formatDateToIso(date);
+      selectedDate = formatDateToIso(new Date(date));
     } else {
-      selectedDate = formatDateToYyMmDd(date);
+      selectedDate = formatDateToYyMmDd(new Date(date).toString());
     }
     handleChange({ name: name, value: selectedDate });
   };

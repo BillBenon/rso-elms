@@ -16,10 +16,15 @@ import { UserView } from '../../types/services/user.types';
 
 interface ProgramEnrollmentProps<T> {
   existing: EnrollInstructorLevelInfo[];
+  showSidebar: boolean;
+  handleShowSidebar: () => void;
 }
 
-function EnrollInstructorToLevel<T>({ existing }: ProgramEnrollmentProps<T>) {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+function EnrollInstructorToLevel<T>({
+  existing,
+  showSidebar,
+  handleShowSidebar,
+}: ProgramEnrollmentProps<T>) {
   const { intakeProg, level: levelId } = useParams<IntakeLevelParam>();
 
   const { data: instructorsInProgram, isLoading } =
@@ -61,7 +66,7 @@ function EnrollInstructorToLevel<T>({ existing }: ProgramEnrollmentProps<T>) {
         onSuccess: (data) => {
           toast.success(data.data.message);
           queryClient.invalidateQueries(['instructors/levelsEnrolled', levelId]);
-          setSidebarOpen(false);
+          handleShowSidebar();
         },
         onError: (error: any) => {
           toast.error(error.response.data.message);
@@ -71,12 +76,12 @@ function EnrollInstructorToLevel<T>({ existing }: ProgramEnrollmentProps<T>) {
   }
   return (
     <div className="cursor-pointer">
-      <Button styleType="outline" onClick={() => setSidebarOpen(true)}>
+      <Button styleType="outline" onClick={handleShowSidebar}>
         Enroll instructor
       </Button>
       <RightSidebar
-        open={sidebarOpen}
-        handleClose={() => setSidebarOpen(false)}
+        open={showSidebar}
+        handleClose={handleShowSidebar}
         label="Enroll instructor to program"
         data={instructors}
         selectorActions={[
@@ -87,6 +92,7 @@ function EnrollInstructorToLevel<T>({ existing }: ProgramEnrollmentProps<T>) {
         ]}
         dataLabel={'Instructors in this program'}
         isLoading={isLoading}
+        unselectAll={!showSidebar}
       />
     </div>
   );

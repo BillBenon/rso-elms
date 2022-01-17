@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 
+import { queryClient } from '../../../../plugins/react-query';
 import { authenticatorStore } from '../../../../store/administration';
 import { moduleStore } from '../../../../store/administration/modules.store';
 import { GenericStatus, ValueType } from '../../../../types';
@@ -20,6 +21,9 @@ export default function AddPrerequesitesForm() {
   const { moduleId } = useParams<ParamType>();
   const { mutateAsync, isLoading } = moduleStore.addPrerequisites();
   const history = useHistory();
+  const { search } = useLocation();
+  const showMenu = new URLSearchParams(search).get('showMenus');
+  const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
 
   const [values, setValues] = useState({
     module_id: moduleId,
@@ -34,10 +38,16 @@ export default function AddPrerequesitesForm() {
 
   const authUser = authenticatorStore.authUser().data?.data.data;
 
-  let modules =
-    moduleStore
-      .getModulesByAcademy(authUser?.academy.id + '')
-      .data?.data.data.filter((module) => module.id != moduleId) || [];
+  const moduleSt = moduleStore.getModulesByAcademy(authUser?.academy.id + '');
+  const modulePrereqs = moduleStore.getModulePrereqsByModule(moduleId);
+  const modulePrereqIds = modulePrereqs.data?.data.data.map(
+    (preq) => preq.prerequisite.id,
+  );
+
+  const academyModules =
+    moduleSt.data?.data.data.filter((module) => module.id != moduleId) || [];
+
+  const modules = academyModules.filter((mod) => !modulePrereqIds?.includes(mod.id + ''));
 
   const handleSubmit = async () => {
     let data: CreatePrerequisites = {
@@ -48,7 +58,6 @@ export default function AddPrerequesitesForm() {
     for (let i = 0; i < values.prerequistis.length; i++) {
       data.prerequistis.push({
         description: values.description,
-        id: 0,
         module_id: values.module_id,
         prerequisite_id: values.prerequistis[i],
         status: GenericStatus.ACTIVE,
@@ -58,10 +67,15 @@ export default function AddPrerequesitesForm() {
     await mutateAsync(data, {
       async onSuccess(res) {
         toast.success(res.data.message);
-        history.push(`/dashboard/modules/${moduleId}`);
+        queryClient.invalidateQueries(['prereqs/moduleid']);
+        showMenu && intakeProg
+          ? history.push(
+              `/dashboard/modules/${moduleId}/prereqs?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+            )
+          : history.push(`/dashboard/modules/${moduleId}/prereqs`);
       },
-      onError() {
-        toast.error('Error occurred please try again');
+      onError(error: any) {
+        toast.error(error.response.data.message);
       },
     });
   };
@@ -72,9 +86,9 @@ export default function AddPrerequesitesForm() {
         options={getDropDownOptions({ inputs: modules || [] })}
         name="prerequistis"
         isMulti
-        placeholder="Prerequisite"
+        placeholder={moduleSt.isLoading ? 'Loading prerequisites...' : 'Prerequisites'}
         handleChange={handleChange}>
-        Select Prerequesites
+        Select Prerequisites
       </DropdownMolecule>
       <TextAreaMolecule
         value={values.description}

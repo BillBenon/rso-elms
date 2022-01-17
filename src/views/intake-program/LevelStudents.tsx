@@ -6,9 +6,12 @@ import RightSidebar from '../../components/Organisms/RightSidebar';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
+interface ILevelStudent {
+  showSidebar: boolean;
+  handleShowSidebar: () => void;
+}
 
-function LevelStudents() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+function LevelStudents({ showSidebar, handleShowSidebar }: ILevelStudent) {
   const { level: levelId } = useParams<IntakeLevelParam>();
 
   const { data: studentsProgram, isLoading } =
@@ -30,22 +33,17 @@ function LevelStudents() {
   }, [studentsProgram]);
   return (
     <div className="flex flex-col cursor-pointer">
-      <Button styleType="outline" onClick={() => setSidebarOpen(true)}>
+      <Button styleType="outline" onClick={handleShowSidebar}>
         View students
       </Button>
       <RightSidebar
-        open={sidebarOpen}
-        handleClose={() => setSidebarOpen(false)}
+        open={showSidebar}
+        handleClose={handleShowSidebar}
         label="All Level Students"
         data={students}
-        selectorActions={[
-          {
-            name: 'No action',
-            handleAction: () => {},
-          },
-        ]}
         dataLabel={'Students enrolled'}
         isLoading={isLoading}
+        unselectAll={!showSidebar}
       />
     </div>
   );

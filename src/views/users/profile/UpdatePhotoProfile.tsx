@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
-import Avatar from '../../../components/Atoms/custom/Avatar';
 import Button from '../../../components/Atoms/custom/Button';
 import Icon from '../../../components/Atoms/custom/Icon';
 import FileUploader from '../../../components/Atoms/Input/FileUploader';
@@ -71,32 +70,35 @@ function UpdatePhotoProfile({ user }: { user: UserInfo }) {
         {user.first_name + ' ' + user.last_name}&apos;s profile
       </Heading>
       <div className="flex flex-col items-center w-32">
-        <Avatar
+        {/* <Avatar
           className="border-4 object-cover border-primary-500"
           size="120"
           src={profileSrc}
           alt="photo"
-        />
-        <div className="self-end -mt-3">
-          <FileUploader
-            allowPreview={false}
-            handleUpload={handleUpload}
-            accept={'image/jpeg, image/png'}>
-            <Button styleType="text" type="button" className="-mt-8">
-              <Icon
-                bgColor="main"
-                size={20}
-                useheightandpadding={false}
-                className="rounded-2xl p-5"
-                fill="primary"
-                name="camera"
-              />
-            </Button>
-          </FileUploader>
-        </div>
+        /> */}
+        <FileUploader
+          allowPreview={false}
+          handleUpload={handleUpload}
+          accept={'image/jpeg, image/png'}>
+          <div className="flex flex-col">
+            <img
+              src={profileSrc || '../../../..//images/fall_back_prof_pic.jpg'}
+              alt="profile"
+              className="border-4 border-primary-500 max-w-xs max-h-80"
+            />
+            <Icon
+              bgColor="main"
+              size={20}
+              useheightandpadding={false}
+              className="rounded-2xl p-5 self-end mx-3 -mt-12"
+              fill="primary"
+              name="camera"
+            />
+          </div>
+        </FileUploader>
       </div>
       <Button className="mt-4" onClick={handleSubmit}>
-        Save Photo
+        Change Profile
       </Button>
     </div>
   );

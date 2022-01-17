@@ -9,5 +9,18 @@ class UserNextKinStore {
   getHisNextKinById(id: string) {
     return useQuery(['next/user_id', id], () => userNextKinService.getHisNextById(id));
   }
+  getPersonByNid(nid: string) {
+    return useQuery(['user/nid', nid], () => userNextKinService.getUserByNid(nid));
+  }
 }
 export default new UserNextKinStore();
+
+export function getHisNextKinById(id?: string | number) {
+  return useQuery(
+    ['next/user_id', id],
+    () => userNextKinService.getHisNextById(id + ''),
+    {
+      enabled: !!id,
+    },
+  );
+}

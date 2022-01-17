@@ -1,5 +1,6 @@
 import { Table } from '..';
-import { MaterialInfo } from './module-material.types';
+import { AttachementInfo } from './attachement.types';
+// import { MaterialInfo } from './module-material.types';
 
 /* eslint-disable no-unused-vars */
 export interface ExperienceInfo {
@@ -12,14 +13,14 @@ export interface ExperienceInfo {
   person_id: string;
   proof: string;
   start_date: string;
-  type: ExperienceTypeStatus;
+  type: ExperienceType;
 }
 
 export interface Experiences extends Table, ExperienceInfo {
-  attachment: MaterialInfo;
+  attachment: AttachementInfo;
 }
 
-export enum ExperienceTypeStatus {
+export enum ExperienceType {
   GENERAL_EDUCATION = 'GENERAL_EDUCATION',
   CURRIER_COURSE_EDUCATION = 'CURRIER_COURSE_EDUCATION',
   EMPLOYMENT = 'EMPLOYMENT',
