@@ -83,6 +83,7 @@ export default function EvaluationQuestionComponent({
 
   function handleAddQuestion() {
     let newQuestion = initialState;
+    newQuestion.choices = [];
     let questionsClone = [...questions];
     questionsClone.push(newQuestion);
     setQuestions(questionsClone);
@@ -126,7 +127,14 @@ export default function EvaluationQuestionComponent({
 
   function handleChange(index: number, { name, value }: ValueType) {
     let questionInfo = [...questions];
+    if (
+      name === 'question_type' &&
+      value === IQuestionType.OPEN &&
+      questionInfo[index].choices.length > 0
+    )
+      questionInfo[index].choices = [];
     questionInfo[index] = { ...questionInfo[index], [name]: value };
+
     setQuestions(questionInfo);
   }
 
@@ -210,28 +218,29 @@ export default function EvaluationQuestionComponent({
                   Question {index + 1}
                 </TextAreaMolecule>
                 {/* multiple choice answers here */}
-                {question.choices.map((multipleQuestion, choiceIndex) => (
-                  <>
-                    <TextAreaMolecule
-                      key={`${choiceIndex}`}
-                      readOnly={question.submitted}
-                      name={'answer_content'}
-                      value={multipleQuestion.answer_content}
-                      placeholder="Enter answer"
-                      handleChange={(e: ValueType) =>
-                        handleChoiceChange(index, choiceIndex, e)
-                      }>
-                      <div className="flex items-center justify-between">
-                        Answer choice {choiceIndex + 1}
-                        <button
-                          type="button"
-                          onClick={() => handleRemoveChoice(index, choiceIndex)}>
-                          <Icon name="close" size={12} />
-                        </button>
-                      </div>
-                    </TextAreaMolecule>
-                  </>
-                ))}
+                {question.question_type === IQuestionType.MULTIPLE_CHOICE &&
+                  question.choices.map((multipleQuestion, choiceIndex) => (
+                    <>
+                      <TextAreaMolecule
+                        key={`${choiceIndex}`}
+                        readOnly={question.submitted}
+                        name={'answer_content'}
+                        value={multipleQuestion.answer_content}
+                        placeholder="Enter answer"
+                        handleChange={(e: ValueType) =>
+                          handleChoiceChange(index, choiceIndex, e)
+                        }>
+                        <div className="flex items-center justify-between">
+                          Answer choice {choiceIndex + 1}
+                          <button
+                            type="button"
+                            onClick={() => handleRemoveChoice(index, choiceIndex)}>
+                            <Icon name="close" size={12} />
+                          </button>
+                        </div>
+                      </TextAreaMolecule>
+                    </>
+                  ))}
 
                 {question.question_type === IQuestionType.MULTIPLE_CHOICE ? (
                   <div className="-mt-4 mb-1">
@@ -253,7 +262,8 @@ export default function EvaluationQuestionComponent({
                   </div>
                 ) : null}
 
-                {question.choices.length > 0 ? (
+                {question.choices.length > 0 &&
+                question.question_type === IQuestionType.MULTIPLE_CHOICE ? (
                   <SelectMolecule
                     value={question.choices.find((ch) => ch.correct)?.answer_content}
                     // disabled={question.submitted}
