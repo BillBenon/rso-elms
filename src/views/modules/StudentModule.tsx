@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { useLocation, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -15,6 +16,8 @@ import Modules from '.';
 
 function StudentModule() {
   const [selectedLevel, setSelectedLevel] = useState('');
+  const { search } = useLocation();
+  const forceReload = new URLSearchParams(search).get('forceReload') || '';
   const { url } = useRouteMatch();
   const list = [
     { to: '/dashboard/student', title: 'Dashboard' },
@@ -48,10 +51,23 @@ function StudentModule() {
   }
 
   useEffect(() => {
+    if (forceReload === 'true') {
+      toast.error(
+        'The exam was auto submitted because you tried to exit full screen or changed tab',
+        { duration: 30000 },
+      );
+
+      setTimeout(() => {
+        window.location.href = '/dashboard/student';
+      }, 30000);
+    }
+  }, [forceReload]);
+
+  useEffect(() => {
     setSelectedLevel(
       studentLevelToDisplay.length > 0 ? studentLevelToDisplay[0].id + '' : '',
     );
-  }, [levels]);
+  }, [levels, studentLevelToDisplay]);
 
   return (
     <>
