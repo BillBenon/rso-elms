@@ -60,6 +60,9 @@ export interface StudentEvaluationInfo extends Table {
   evaluation: IEvaluationInfo;
   work_time: number;
   code: string;
+  marking_status: string;
+  remark: string;
+  obtained_mark: number;
 }
 
 export interface MarkAllEvaluationQuestions {
