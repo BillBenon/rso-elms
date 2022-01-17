@@ -1,19 +1,19 @@
-import '../../styles/components/Molecules/correction/marking.scss';
+import '../../../styles/components/Molecules/correction/marking.scss';
 
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 
-import Button from '../../components/Atoms/custom/Button';
-import Loader from '../../components/Atoms/custom/Loader';
-import BreadCrumb from '../../components/Molecules/BreadCrumb';
-import StudentAnswer from '../../components/Molecules/cards/correction/StudentAnswer';
-import TableHeader from '../../components/Molecules/table/TableHeader';
-import FinishMarking from '../../components/Organisms/forms/evaluation/FinishMarking';
-import { markingStore } from '../../store/administration/marking.store';
-import { Link as LinkList } from '../../types';
-import { ParamType } from '../../types';
-import { MarkingCorrection } from '../../types/services/marking.types';
+import Button from '../../../components/Atoms/custom/Button';
+import Loader from '../../../components/Atoms/custom/Loader';
+import BreadCrumb from '../../../components/Molecules/BreadCrumb';
+import StudentAnswer from '../../../components/Molecules/cards/correction/StudentAnswer';
+import TableHeader from '../../../components/Molecules/table/TableHeader';
+import FinishMarking from '../../../components/Organisms/forms/evaluation/FinishMarking';
+import { markingStore } from '../../../store/administration/marking.store';
+import { Link as LinkList } from '../../../types';
+import { ParamType } from '../../../types';
+import { MarkingCorrection } from '../../../types/services/marking.types';
 
 export default function StudentAnswersMarking() {
   const { id } = useParams<ParamType>();
