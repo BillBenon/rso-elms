@@ -40,13 +40,29 @@ export interface IManualMarkingInfo {
   student: EvaluationStudent;
 }
 
-export interface studentMarkingAnswer extends Table {
+export interface StudentMarkingAnswer extends Table {
   id: '';
   mark_scored: number;
   marked: boolean;
   evaluation_question: IEvaluationQuestion;
   multiple_choice_answer: IMultipleChoice;
   open_answer: string;
+}
+
+export interface FinalizeMarking {
+  remarks: string;
+  available: string;
+}
+
+export interface StudentEvaluationInfo extends Table {
+  id: string;
+  student: Student;
+  evaluation: IEvaluationInfo;
+  work_time: number;
+  code: string;
+  marking_status: string;
+  remark: string;
+  obtained_mark: number;
 }
 
 export interface MarkAllEvaluationQuestions {

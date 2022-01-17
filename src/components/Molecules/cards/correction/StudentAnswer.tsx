@@ -1,14 +1,17 @@
 import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 import { TextDecoration, ValueType } from '../../../../types';
-import { MarkingCorrection } from '../../../../types/services/marking.types';
+import {
+  MarkingCorrection,
+  StudentMarkingAnswer,
+} from '../../../../types/services/marking.types';
 import ContentSpan from '../../../../views/evaluation/ContentSpan';
 import Icon from '../../../Atoms/custom/Icon';
 import Heading from '../../../Atoms/Text/Heading';
 import InputMolecule from '../../input/InputMolecule';
 
 interface PropTypes {
-  data: any;
+  data: StudentMarkingAnswer;
   full?: boolean;
   icon?: boolean;
   correction: MarkingCorrection[];
@@ -42,17 +45,14 @@ export default function StudentAnswer({
     updateQuestionPoints(data.id, obtainedMarks);
   }
 
-  function clickUpdateMarks(isCorrect: boolean){
-    if(isCorrect && obtainedMarks == 0){
-      setObtainedMarks(Number(data?.evaluation_question.mark))
+  function clickUpdateMarks(isCorrect: boolean) {
+    if (isCorrect && obtainedMarks == 0) {
+      setObtainedMarks(Number(data?.evaluation_question.mark));
+      updateQuestionPoints(data.id, obtainedMarks);
+    } else if (!isCorrect && obtainedMarks != 0) {
+      setObtainedMarks(Number(0));
       updateQuestionPoints(data.id, obtainedMarks);
     }
-
-    else if(!isCorrect && obtainedMarks != 0){
-      setObtainedMarks(Number(0))
-      updateQuestionPoints(data.id, obtainedMarks);
-    }
-    
   }
 
   useEffect(() => {
@@ -118,7 +118,7 @@ export default function StudentAnswer({
               }
               onClick={() => {
                 if (data.evaluation_question?.question_type != 'MULTIPLE_CHOICE')
-                clickUpdateMarks(true);
+                  clickUpdateMarks(true);
               }}>
               <Icon
                 name={'tick'}
@@ -136,7 +136,7 @@ export default function StudentAnswer({
               }
               onClick={() => {
                 if (data.evaluation_question?.question_type != 'MULTIPLE_CHOICE')
-                clickUpdateMarks(false);
+                  clickUpdateMarks(false);
               }}>
               <Icon
                 name={'cross'}

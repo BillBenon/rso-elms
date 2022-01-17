@@ -1,17 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
-import Loader from '../../components/Atoms/custom/Loader';
-import Heading from '../../components/Atoms/Text/Heading';
-import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import InputMolecule from '../../components/Molecules/input/InputMolecule';
-import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
-import { useClasses } from '../../hooks/useClasses';
-import { classStore } from '../../store/administration/class.store';
-import { markingStore } from '../../store/administration/marking.store';
-import { evaluationStore } from '../../store/evaluation/evaluation.store';
-import { ValueType } from '../../types';
-import { IManualMarking } from '../../types/services/marking.types';
+import Loader from '../../../components/Atoms/custom/Loader';
+import Heading from '../../../components/Atoms/Text/Heading';
+import NoDataAvailable from '../../../components/Molecules/cards/NoDataAvailable';
+import InputMolecule from '../../../components/Molecules/input/InputMolecule';
+import SelectMolecule from '../../../components/Molecules/input/SelectMolecule';
+import { useClasses } from '../../../hooks/useClasses';
+import { classStore } from '../../../store/administration/class.store';
+import { markingStore } from '../../../store/administration/marking.store';
+import { evaluationStore } from '../../../store/evaluation/evaluation.store';
+import { ValueType } from '../../../types';
+import { IManualMarking } from '../../../types/services/marking.types';
 
 type PropsType = {
   evaluationId: string;

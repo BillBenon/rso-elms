@@ -105,7 +105,7 @@ export default function SchoolReport() {
                   studentInfo?.data.data.user.id,
                 )}
                 alt="Student profile"
-                className="block w-20 h-20 object-cover"
+                className="block w-20 h-20 object-cover border"
               />
             </div>
             <h2 className="text-sm font-bold ">

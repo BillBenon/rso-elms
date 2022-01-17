@@ -5,7 +5,6 @@ import Loader from '../../components/Atoms/custom/Loader';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 
 export default function StudentReport() {
-
   interface IParamType {
     levelId: string;
     classId: string;
@@ -13,8 +12,7 @@ export default function StudentReport() {
     periodId: string;
   }
 
-  
-  const { classId, studentId, periodId } = useParams<IParamType>();
+  const { studentId } = useParams<IParamType>();
 
   const { data: studentReport, isLoading } = evaluationStore.getStudentReport(studentId);
   console.log(studentReport);
