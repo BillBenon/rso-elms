@@ -11,6 +11,10 @@ class MarkingStore {
     return useMutation(markingService.finalizaMarkingWithRemarks);
   }
 
+  manualMarking() {
+    return useMutation(markingService.addManualMarking);
+  }
+
   publishResults() {
     return useMutation(markingService.publishResults);
   }
@@ -22,6 +26,12 @@ class MarkingStore {
   getStudentEvaluationAnswers(id: string) {
     return useQuery(['studentEvaluation/answers', id], () =>
       markingService.getStudentEvaluationAnswers(id),
+    );
+  }
+
+  getManualMarkingMarks(evaluationId: string, classId: string) {
+    return useQuery(['manualMarkingMarks', evaluationId, classId], () =>
+      markingService.getManualMarkingMarks(evaluationId, classId),
     );
   }
 

@@ -1,9 +1,8 @@
-import { EnrollmentStatus, StudentApproval } from './enrollment.types';
+import { StudentApproval } from './enrollment.types';
 import { GenericStatus } from '..';
 /* eslint-disable no-unused-vars */
 import { Table } from '..';
 import { AcademyInfo } from './academy.types';
-import { ILevel } from './levels.types';
 import { RankRes } from './rank.types';
 import { StudentIntakeProgram } from './intake-program.types';
 import { InstitutionInfo } from './institution.types';

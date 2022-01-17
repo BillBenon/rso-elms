@@ -4,17 +4,17 @@ import React, { useEffect, useState } from 'react';
 export default function Loader() {
   const [loadingContent, setLoadingContent] = useState('');
 
-  const loading = [
-    'LOOKING OUTSIDE FOR YOU... ONE SEC',
-    'Your time is very important to us. Please wait a little bit',
-    'We will be back in 1/0 minutes.',
-    "We're building the buildings as fast as we can",
-    'Just count to 10',
-    "It's not you. It's me.",
-    'Hold on a minute.',
-  ];
-
   useEffect(() => {
+    const loading = [
+      'LOOKING OUTSIDE FOR YOU... ONE SEC',
+      'Your time is very important to us. Please wait a little bit',
+      'We will be back in 1/0 minutes.',
+      "We're building the buildings as fast as we can",
+      'Just count to 10',
+      "It's not you. It's me.",
+      'Hold on a minute.',
+    ];
+
     setLoadingContent(loading[Math.floor(Math.random() * loading.length)]);
   }, []);
 
