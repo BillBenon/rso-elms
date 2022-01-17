@@ -10,7 +10,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import { classStore } from '../../store/administration/class.store';
 import { getClassTermlyOverallReport } from '../../store/evaluation/school-report.store';
 import { ValueType } from '../../types';
-import { calculateGrades } from '../../utils/school-report';
+import { calculateGrade } from '../../utils/school-report';
 
 interface IParamType {
   levelId: string;
@@ -56,7 +56,7 @@ export default function ClassPeriodPerformance() {
       record.quiz_obtained_marks + record.exam_obtained_marks
     }`;
 
-    processed['Grade'] = calculateGrades(
+    processed['Grade'] = calculateGrade(
       record.quiz_obtained_marks + record.exam_obtained_marks,
       record.total_marks,
     );

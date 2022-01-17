@@ -219,7 +219,12 @@ export default function Intakes() {
                       key={intake.code + Math.random() * 10}
                       trigger={
                         <div className="p-1 mt-3">
-                          <CommonCardMolecule data={intake} />
+                          <CommonCardMolecule
+                            data={intake}
+                            handleClick={() =>
+                              history.push(`${url}/programs/${intake.id}`)
+                            }
+                          />
                         </div>
                       }
                       open>
