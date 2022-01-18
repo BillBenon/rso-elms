@@ -18,7 +18,6 @@ import {
 export default function Submissions() {
   const history = useHistory();
   const { id } = useParams<ParamType>();
-  const resultPublisher = markingStore.publishResult();
   const [submissions, setSubmissions] = useState([]);
   // const { url } = useRouteMatch();
 
@@ -82,24 +81,6 @@ export default function Submissions() {
         history.push({
           pathname: `/dashboard/evaluations/${id}/submissions/field/marked/${_data}`,
         });
-      },
-    },
-    {
-      name: 'Publish',
-      handleAction: () => {
-        resultPublisher.mutate(
-          { studentEvaluationId: id + '' },
-          {
-            onSuccess: () => {
-              toast.success('Result published', { duration: 3000 });
-              history.push('/dashboard/evaluations');
-            },
-            onError: (error) => {
-              console.error(error);
-              toast.error(error + '');
-            },
-          },
-        );
       },
     },
   ];

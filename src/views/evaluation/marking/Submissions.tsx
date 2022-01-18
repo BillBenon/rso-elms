@@ -42,9 +42,8 @@ export default function Submissions() {
           toast.success('Results published', { duration: 3000 });
           history.push('/dashboard/evaluations');
         },
-        onError: (error) => {
-          console.error(error);
-          toast.error(error + '');
+        onError: (error: any) => {
+          toast.error(error.response.data.message);
         },
       },
     );
