@@ -54,7 +54,7 @@ class ScheduleStore {
 
   getAllByStudent(id: string | undefined, range: DateRange) {
     return useQuery(
-      ['schedules/intakeclass/:id', id],
+      ['schedules/student/:id', id],
       () => calendarService.getAllByIntakeLevelClass(id || '', range),
       { enabled: !!id },
     );

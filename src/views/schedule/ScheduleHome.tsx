@@ -25,7 +25,7 @@ import {
 import { CommonCardDataType, Link } from '../../types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
-import CalendarView from './Calendar';
+import CalendarView from './CalendarView';
 import ClassTimeTable from './ClassTimeTable';
 import Events from './Events';
 import IntakePrograms from './IntakePrograms';
