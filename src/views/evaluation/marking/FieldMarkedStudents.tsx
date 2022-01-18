@@ -1,7 +1,7 @@
 import { pick } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '../../../components/Atoms/custom/Button';
 import Loader from '../../../components/Atoms/custom/Loader';
@@ -10,13 +10,17 @@ import Table from '../../../components/Molecules/table/Table';
 import { markingStore } from '../../../store/administration/marking.store';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import { ParamType } from '../../../types';
-import { StudentEvaluationInfo } from '../../../types/services/marking.types';
+import { IEvaluationInfo } from '../../../types/services/evaluation.types';
+import {
+  EvaluationStudent,
+  StudentEvaluationInfo,
+} from '../../../types/services/marking.types';
 export default function Submissions() {
   const history = useHistory();
   const { id } = useParams<ParamType>();
   const resultPublisher = markingStore.publishResult();
   const [submissions, setSubmissions] = useState([]);
-  const { url } = useRouteMatch();
+  // const { url } = useRouteMatch();
 
   const { mutate } = markingStore.publishResults();
   const { data: evaluation } = evaluationStore.getEvaluationById(id).data?.data || {};
@@ -72,8 +76,12 @@ export default function Submissions() {
   const actions = [
     {
       name: 'Mark Answers',
-      handleAction: () => {
-        history.push({ pathname: `${url}/${id}` });
+      handleAction: (
+        _data?: string | number | IEvaluationInfo | EvaluationStudent | undefined,
+      ) => {
+        history.push({
+          pathname: `/dashboard/evaluations/${id}/submissions/field/marked/${_data}`,
+        });
       },
     },
     {
@@ -85,7 +93,6 @@ export default function Submissions() {
             onSuccess: () => {
               toast.success('Result published', { duration: 3000 });
               history.push('/dashboard/evaluations');
-              // history.push({ pathname: `${url}` });
             },
             onError: (error) => {
               console.error(error);

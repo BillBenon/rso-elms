@@ -49,28 +49,6 @@ export default function FieldMarking({ evaluationId }: PropsType) {
     setCurrentClassId(e.value.toString());
   }
 
-  //   function handleMarksChange(e: ValueType, index: number) {
-  //     if (students.length > 0) {
-  //       let studentsClone = [...students];
-  //       let studentMark = studentsClone[index];
-
-  //       studentMark.marks = parseInt(e.value.toString()) || 0;
-  //       setStudents(studentsClone);
-  //     }
-  //   }
-
-  //   function handleSubmit() {
-  //     console.log(students);
-
-  //     mutate(students, {
-  //       onSuccess: () => {
-  //         toast.success('Marked');
-  //       },
-  //       onError: (error: any) => {
-  //         toast.error(error.response.data.message);
-  //       },
-  //     });
-  //   }
   const { url, path } = useRouteMatch();
 
   const actions = [
@@ -120,23 +98,6 @@ export default function FieldMarking({ evaluationId }: PropsType) {
     for (let index = 0; index < markedStudents.length; index++) {
       markedIds.push(markedStudents[index].student.admin_id);
     }
-
-    // if (manualMarkingData && manualMarkingData?.data.data.length > 0) {
-    //   newState =
-    //     manualMarkingData?.data.data.map((mark) => ({
-    //       student_id: mark.student.admin_id,
-    //       evaluation_id: evaluationInfo?.id || '',
-    //       marks: mark.obtained_mark,
-    //     })) || [];
-    // } else {
-    // newState =
-    //   studentsData?.data.data.map((std) => ({
-    //     id: std.student.id.toString(),
-    //     first_name: std.student.user.first_name,
-    //     last_name: std.student.user.last_name,
-    //     out_of: evaluationInfo?.total_mark + '',
-    //     obtained: 'N/A',
-    //   })) || [];
     studentsData?.data.data.forEach((std) => {
       if (!markedIds.includes(std.student.id + '')) {
         newState.push({
@@ -191,7 +152,7 @@ export default function FieldMarking({ evaluationId }: PropsType) {
                   description="And the web just isnt the same without you. Lets get you back online!"
                 />
               ) : (
-                <Table<any>
+                <Table<UnMarkedStudent>
                   statusColumn="status"
                   data={students}
                   hide={['id']}

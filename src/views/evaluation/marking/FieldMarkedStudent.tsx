@@ -11,19 +11,27 @@ import TableHeader from '../../../components/Molecules/table/TableHeader';
 import FinishMarking from '../../../components/Organisms/forms/evaluation/FinishMarking';
 import intakeProgramStore from '../../../store/administration/intake-program.store';
 import { markingStore } from '../../../store/administration/marking.store';
-import { evaluationStore } from '../../../store/evaluation/evaluation.store';
+// import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import { FieldQuestionMarks } from '../../../types/services/marking.types';
 
 interface MarkingParams {
   id: string;
-  studentId: string;
+  studentEvaluationId: string;
 }
 
 export default function FieldStudentMarking() {
-  const { id, studentId } = useParams<MarkingParams>();
-  const { data: studentInfo } = intakeProgramStore.getStudentById(studentId);
-  const { data: questions } = evaluationStore.getEvaluationQuestions(id);
-  const [totalMarks, setTotalMarks] = useState(0);
+  const { id, studentEvaluationId } = useParams<MarkingParams>();
+  const { data: studentEvaluation, isLoading } =
+    markingStore.getStudentEvaluationById(studentEvaluationId);
+  const { data: studentAnswers } =
+    markingStore.getStudentEvaluationAnswers(studentEvaluationId);
+  const { data: studentInfo } = intakeProgramStore.getStudentById(
+    studentEvaluation?.data.data.student.admin_id + '',
+  );
+  //   const { data: questions } = evaluationStore.getEvaluationQuestions(id);
+  const [totalMarks, setTotalMarks] = useState(
+    studentEvaluation?.data.data.obtained_mark || 0,
+  );
   const [questionMarks, setQuestionMarks] = useState<Array<FieldQuestionMarks>>([]);
   const [step] = useState(0);
   //   const [studentEvaluation, setStudentEvaluation] = useState<string>('');
@@ -66,14 +74,18 @@ export default function FieldStudentMarking() {
         { question_id: question_id, obtained_marks: points },
       ]);
       setTotalMarks(totalMarks + points);
-      // }
+      //   }
     }
   }
 
   function submitMarking() {
-    if (questionMarks.length == (questions?.data.data.length || 0)) {
+    if (questionMarks.length == (studentAnswers?.data.data.length || 0)) {
       mutate(
-        { questions_marks: questionMarks, student_id: studentId, evaluation_id: id },
+        {
+          questions_marks: questionMarks,
+          student_id: studentEvaluation?.data.data.student.admin_id + '',
+          evaluation_id: id,
+        },
         {
           onSuccess: () => {
             toast.success('Marks saved successfully', { duration: 3000 });
@@ -92,35 +104,36 @@ export default function FieldStudentMarking() {
     }
   }
   if (step == 0)
-    if (studentInfo && questionMarks)
+    if (!isLoading && questionMarks)
       return (
         <div className={`flex flex-col gap-4`}>
           <TableHeader
             title={
+              'Student Names: ' +
               studentInfo?.data.data.user.last_name +
               ' ' +
               studentInfo?.data.data.user.first_name
             }
             showBadge={false}
             showSearch={false}>
-            <p className="text-gray-400">
+            {/* <p className="text-gray-400">
               Marks obtained:{' '}
               <span className="text-green-300 font-semibold">{totalMarks}</span>
-            </p>
+            </p> */}
           </TableHeader>
           <section className="flex flex-wrap justify-start gap-4 mt-2">
-            {questions?.data.data?.map((question, index: number) => {
+            {studentAnswers?.data.data?.map((answer, index: number) => {
               return (
                 <FieldMarker
                   key={index}
                   index={index}
                   questionMarks={questionMarks}
                   updateQuestionPoints={updateQuestionPoints}
-                  data={question}
+                  data={answer.evaluation_question}
                   totalMarks={totalMarks}
                   setTotalMarks={setTotalMarks}
                   createCreateNewCorrection={createCreateNewCorrection}
-                  obtained={0}
+                  obtained={answer.mark_scored}
                 />
               );
             })}

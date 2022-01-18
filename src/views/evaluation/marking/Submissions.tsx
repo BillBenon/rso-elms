@@ -18,6 +18,7 @@ import {
   EvaluationStudent,
   StudentEvaluationInfo,
 } from '../../../types/services/marking.types';
+import FieldMarkedStudent from './FieldMarkedStudent';
 import FieldMarking from './FieldMarking';
 import FieldStudentMarking from './FieldStudentMarking';
 import ManualMarking from './ManualMarking';
@@ -128,6 +129,11 @@ export default function Submissions() {
           exact
           path={`${path}/field/:studentId/mark`}
           component={FieldStudentMarking}
+        />
+        <Route
+          exact
+          path={`${path}/field/marked/:studentEvaluationId`}
+          component={FieldMarkedStudent}
         />
         <Route exact path={`${path}/:id`} component={StudentAnswersMarking} />
         {isLoading && <Loader />}

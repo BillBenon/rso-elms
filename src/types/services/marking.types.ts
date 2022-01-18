@@ -4,6 +4,7 @@ import { Table } from '..';
 import {
   IEvaluationInfo,
   IEvaluationQuestion,
+  IEvaluationQuestionsInfo,
   IMultipleChoice,
 } from './evaluation.types';
 import { Student } from './user.types';
@@ -63,7 +64,7 @@ export interface StudentMarkingAnswer extends Table {
   id: '';
   mark_scored: number;
   marked: boolean;
-  evaluation_question: IEvaluationQuestion;
+  evaluation_question: IEvaluationQuestionsInfo;
   multiple_choice_answer: IMultipleChoice;
   open_answer: string;
 }
