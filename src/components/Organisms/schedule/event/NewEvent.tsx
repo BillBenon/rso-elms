@@ -2,17 +2,17 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
 
-import { queryClient } from '../../../plugins/react-query';
-import { authenticatorStore } from '../../../store/administration';
-import { eventStore } from '../../../store/timetable/event.store';
-import { GenericStatus, ValueType } from '../../../types';
-import { CreateEvent, eventCategory } from '../../../types/services/event.types';
-import { getDropDownStatusOptions } from '../../../utils/getOption';
-import { randomString } from '../../../utils/random';
-import Button from '../../Atoms/custom/Button';
-import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
-import InputMolecule from '../../Molecules/input/InputMolecule';
-import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
+import { queryClient } from '../../../../plugins/react-query';
+import { authenticatorStore } from '../../../../store/administration';
+import { eventStore } from '../../../../store/timetable/event.store';
+import { GenericStatus, ValueType } from '../../../../types';
+import { CreateEvent, eventCategory } from '../../../../types/services/event.types';
+import { getDropDownStatusOptions } from '../../../../utils/getOption';
+import { randomString } from '../../../../utils/random';
+import Button from '../../../Atoms/custom/Button';
+import InputMolecule from '../../../Molecules/input/InputMolecule';
+import SelectMolecule from '../../../Molecules/input/SelectMolecule';
+import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function NewEvent() {
   const history = useHistory();
@@ -66,13 +66,14 @@ export default function NewEvent() {
           Event code
         </InputMolecule>
         <div className="pb-4">
-          <DropdownMolecule
+          <SelectMolecule
+            value={values.eventCategory}
             name="eventCategory"
             handleChange={handleChange}
             options={getDropDownStatusOptions(eventCategory)}
             placeholder="Select event category">
             Event Category
-          </DropdownMolecule>
+          </SelectMolecule>
         </div>
         <TextAreaMolecule
           name="description"

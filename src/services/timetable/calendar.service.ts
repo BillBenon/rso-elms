@@ -29,14 +29,16 @@ class ScheduleService {
       range,
     );
   }
-  public async getAllByAcademicProgramIntakeLevelAndStatus(
-    academicProgramIntakeLevelId: string,
-    status: ScheduleStatus,
-  ): Promise<AxiosResponse<Response<ScheduleInfo[]>>> {
-    return await timetableAxios.get(
-      `/schedural/academic-program-intake-level/${academicProgramIntakeLevelId}/status/${status}`,
-    );
-  }
+
+  // public async getAllByAcademicProgramIntakeLevelAndStatus(
+  //   academicProgramIntakeLevelId: string,
+  //   status: ScheduleStatus,
+  // ): Promise<AxiosResponse<Response<ScheduleInfo[]>>> {
+  //   return await timetableAxios.get(
+  //     `/schedural/academic-program-intake-level/${academicProgramIntakeLevelId}/status/${status}`,
+  //   );
+  // }
+
   public async getAllByAcademicProgram(
     academicProgramId: string,
     range: DateRange,
@@ -46,14 +48,15 @@ class ScheduleService {
       range,
     );
   }
-  public async getAllByAcademicProgramAndStatus(
-    academicProgramId: string,
-    status: ScheduleStatus,
-  ): Promise<AxiosResponse<Response<ScheduleInfo[]>>> {
-    return await timetableAxios.get(
-      `schedural/academic-program/${academicProgramId}/status/${status}`,
-    );
-  }
+
+  // public async getAllByAcademicProgramAndStatus(
+  //   academicProgramId: string,
+  //   status: ScheduleStatus,
+  // ): Promise<AxiosResponse<Response<ScheduleInfo[]>>> {
+  //   return await timetableAxios.get(
+  //     `schedural/academic-program/${academicProgramId}/status/${status}`,
+  //   );
+  // }
 
   public async getAllByIntakeLevelClass(
     intakeLevelClassId: string,
@@ -63,6 +66,13 @@ class ScheduleService {
       `/schedural/intake-level-class/${intakeLevelClassId}`,
       range,
     );
+  }
+
+  public async getAllByStudent(
+    studentId: string,
+    range: DateRange,
+  ): Promise<AxiosResponse<Response<ScheduleInfo[]>>> {
+    return await timetableAxios.put(`/schedural/student/${studentId}`, range);
   }
 
   public async createDateRangeEvents(

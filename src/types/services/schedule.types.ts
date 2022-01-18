@@ -152,3 +152,10 @@ export interface ClassTimeTableInfo extends Table {
   timetable_status: ScheduleStatus;
   venue: VenueInfo;
 }
+
+export interface BigCalendarEvent {
+  id: string | number;
+  title: string;
+  start: Date;
+  end: Date;
+}
