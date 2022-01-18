@@ -70,8 +70,6 @@ export default function NewTimeTable() {
       timetable,
     };
 
-    console.log(data);
-
     mutateAsync(data, {
       async onSuccess(_data) {
         toast.success('Timetable was created successfully');
@@ -111,13 +109,9 @@ export default function NewTimeTable() {
 
 function FirstStep({ values, handleChange, setCurrentStep, classInfo }: IStepProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
-  const users = instructordeploymentStore.getInstructorsDeployedInAcademy(
-    authUser?.academy.id + '',
-  ).data?.data.data;
-
-  console.log('====================================');
-  console.log(users);
-  console.log('====================================');
+  const users =
+    instructordeploymentStore.getInstructorsDeployedInAcademy(authUser?.academy.id + '')
+      .data?.data.data || [];
 
   const modules =
     moduleStore.getModulesByProgram(
@@ -178,7 +172,7 @@ function FirstStep({ values, handleChange, setCurrentStep, classInfo }: IStepPro
 
 function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: IStepProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
-  const venues = getAllVenues(authUser?.academy.id + '').data?.data.data;
+  const venues = getAllVenues(authUser?.academy.id + '').data?.data.data || [];
 
   return (
     <form onSubmit={handleSubmit} className="max-w-sm -mb-6">
