@@ -7,7 +7,7 @@ import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import NewVenue from '../../components/Organisms/calendar/NewVenue';
+import NewVenue from '../../components/Organisms/schedule/venue/NewVenue';
 import { authenticatorStore } from '../../store/administration';
 import { getAllVenues } from '../../store/timetable/venue.store';
 import { UserType } from '../../types/services/user.types';

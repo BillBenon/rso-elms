@@ -15,8 +15,8 @@ import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import EditTimeTable from '../../components/Organisms/calendar/schedule/EditTimeTable';
-import NewTimeTable from '../../components/Organisms/calendar/schedule/NewTimeTable';
+import EditTimeTable from '../../components/Organisms/schedule/timetable/EditTimeTable';
+import NewTimeTable from '../../components/Organisms/schedule/timetable/NewTimeTable';
 import { authenticatorStore } from '../../store/administration';
 import { classStore } from '../../store/administration/class.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
@@ -26,7 +26,7 @@ import { UserType } from '../../types/services/user.types';
 import { groupTimeTableByDay } from '../../utils/calendar';
 import { formatDateToYyMmDd, getWeekBorderDays } from '../../utils/date-helper';
 
-export default function TimeTable() {
+export default function ClassTimeTable() {
   const { id } = useParams<ParamType>();
   const history = useHistory();
   const { url } = useRouteMatch();

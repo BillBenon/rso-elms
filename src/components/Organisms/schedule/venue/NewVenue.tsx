@@ -2,16 +2,16 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
-import { queryClient } from '../../../plugins/react-query';
-import { authenticatorStore } from '../../../store/administration';
-import { venueStore } from '../../../store/timetable/venue.store';
-import { GenericStatus, ValueType } from '../../../types';
-import { CreateVenue, venueType } from '../../../types/services/event.types';
-import { getDropDownStatusOptions } from '../../../utils/getOption';
-import Button from '../../Atoms/custom/Button';
-import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
-import InputMolecule from '../../Molecules/input/InputMolecule';
-import SelectMolecule from '../../Molecules/input/SelectMolecule';
+import { queryClient } from '../../../../plugins/react-query';
+import { authenticatorStore } from '../../../../store/administration';
+import { venueStore } from '../../../../store/timetable/venue.store';
+import { GenericStatus, ValueType } from '../../../../types';
+import { CreateVenue, venueType } from '../../../../types/services/event.types';
+import { getDropDownStatusOptions } from '../../../../utils/getOption';
+import Button from '../../../Atoms/custom/Button';
+import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
+import InputMolecule from '../../../Molecules/input/InputMolecule';
+import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 
 export default function NewVenue() {
   const history = useHistory();

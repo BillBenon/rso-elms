@@ -20,7 +20,7 @@ import Heading from '../../components/Atoms/Text/Heading';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
-import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedule';
+import NewSchedule from '../../components/Organisms/schedule/calendar/NewSchedule';
 import { authenticatorStore } from '../../store/administration/authenticator.store';
 import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
