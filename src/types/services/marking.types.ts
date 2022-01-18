@@ -30,6 +30,25 @@ export interface IManualMarking {
   student_id: string;
 }
 
+export interface UnMarkedStudent {
+  id: string;
+  first_name: string;
+  last_name: string;
+  obtained: string;
+  out_of: string;
+}
+
+export interface FieldQuestionMarks {
+  question_id: string;
+  obtained_marks: number;
+}
+
+export interface SingleFieldStudentMarker {
+  evaluation_id: string;
+  student_id: string;
+  questions_marks: FieldQuestionMarks[];
+}
+
 export interface EvaluationStudent {
   admin_id: string;
 }
@@ -56,7 +75,7 @@ export interface FinalizeMarking {
 
 export interface StudentEvaluationInfo extends Table {
   id: string;
-  student: Student;
+  student: EvaluationStudent;
   evaluation: IEvaluationInfo;
   work_time: number;
   code: string;
