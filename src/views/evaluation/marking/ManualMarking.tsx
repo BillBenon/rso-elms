@@ -118,10 +118,6 @@ export default function ManualMarking({ evaluationId }: PropsType) {
 
   return (
     <div className="flex flex-col gap-8">
-      <Heading fontWeight="semibold" className="pt-7">
-        Riding Class
-      </Heading>
-
       <div>
         <Heading fontWeight="medium" fontSize="sm">
           Select class

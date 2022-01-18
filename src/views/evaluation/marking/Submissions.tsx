@@ -5,6 +5,7 @@ import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../../components/Atoms/custom/Button';
 import Loader from '../../../components/Atoms/custom/Loader';
+import Heading from '../../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../../components/Molecules/table/Table';
 import { markingStore } from '../../../store/administration/marking.store';
@@ -106,7 +107,15 @@ export default function Submissions() {
     <div>
       {isLoading && <Loader />}
       {evaluation?.questionaire_type === IQuestionaireTypeEnum.MANUAL && (
-        <ManualMarking evaluationId={evaluation.id} />
+        <>
+          <Heading fontWeight="semibold" className="pt-7">
+            {evaluation.name}
+          </Heading>
+          <div className="w-full flex justify-end mb-4">
+            <Button onClick={publishEvaluationResults}>Publish all results</Button>
+          </div>
+          <ManualMarking evaluationId={evaluation.id} />
+        </>
       )}
 
       {isSuccess &&
