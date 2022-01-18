@@ -1,15 +1,9 @@
 import {
+  BigCalendarEvent,
   ClassTimeTableInfo,
   daysOfWeek,
   ScheduleInfo,
 } from '../types/services/schedule.types';
-
-interface BigCalendarEvent {
-  id: string | number;
-  title: string;
-  start: Date;
-  end: Date;
-}
 
 export function formatCalendarEvents(schedules: ScheduleInfo[] = []): BigCalendarEvent[] {
   let events: BigCalendarEvent[] = [];

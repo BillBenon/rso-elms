@@ -15,7 +15,7 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
-import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedule';
+import NewSchedule from '../../components/Organisms/schedule/calendar/NewSchedule';
 import { authenticatorStore } from '../../store/administration';
 import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import {
@@ -25,10 +25,10 @@ import {
 import { CommonCardDataType, Link } from '../../types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
-import CalendarView from './Calendar';
+import CalendarView from './CalendarView';
+import ClassTimeTable from './ClassTimeTable';
 import Events from './Events';
 import IntakePrograms from './IntakePrograms';
-import TimeTable from './TimeTable';
 import Venues from './Venues';
 
 const list: Link[] = [
@@ -83,7 +83,7 @@ export default function ScheduleHome() {
         <Switch>
           <Route path={`${path}/intake/:id`} component={IntakePrograms} />
           <Route path={`${path}/calendar/:id`} component={CalendarView} />
-          <Route path={`${path}/timetable/:id`} component={TimeTable} />
+          <Route path={`${path}/timetable/:id`} component={ClassTimeTable} />
           <Route path={`${path}/events`} component={Events} />
           <Route path={`${path}/venues`} component={Venues} />
 
@@ -148,8 +148,6 @@ function RedirectStudent({ userId }: IProps) {
     studentInfo?.id + '',
     !!studentInfo?.id,
   );
-
-  data?.data.data[0].intake_program.intake.id;
 
   return (
     <div>
