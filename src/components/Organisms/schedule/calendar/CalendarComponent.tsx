@@ -1,5 +1,5 @@
 import 'react-big-calendar/lib/css/react-big-calendar.css';
-import '../../styles/components/Molecules/calendar.scss';
+import '../../../../styles/components/Molecules/calendar.scss';
 
 import moment from 'moment';
 import React, { useState } from 'react';
