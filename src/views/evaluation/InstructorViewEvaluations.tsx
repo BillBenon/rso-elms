@@ -13,10 +13,6 @@ import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
 import { IEvaluationOwnership } from '../../types/services/evaluation.types';
-import {
-  getLocalStorageData,
-  setLocalStorageData,
-} from '../../utils/getLocalStorageItem';
 import { advancedTypeChecker, getDropDownStatusOptions } from '../../utils/getOption';
 import EvaluationDetails from './EvaluationDetails';
 
@@ -44,10 +40,6 @@ export default function InstructorViewEvaluations() {
   ];
 
   useEffect(() => {
-    if (!getLocalStorageData('currentStep')) {
-      setLocalStorageData('currentStep', 0);
-    }
-
     let formattedEvals: CommonCardDataType[] = [];
     data?.data.data.forEach((evaluation) => {
       let formattedEvaluations = {

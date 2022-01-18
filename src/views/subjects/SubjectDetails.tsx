@@ -205,9 +205,11 @@ export default function SubjectDetails() {
                   path={`${url}/evaluations`}
                   render={() => (
                     <div className="flex justify-between">
-                      <SubjectInstructorView subjectId={subjectId} />
+                      <div className="w-9/12">
+                        <SubjectInstructorView subjectId={subjectId} />
+                      </div>
                       {intakeProg && progId && level && period ? (
-                        <div className="w-full">
+                        <div className="w-3/12">
                           <Button onClick={goToNewEvaluation}>New Evaluation</Button>
                         </div>
                       ) : null}

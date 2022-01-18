@@ -133,6 +133,10 @@ class EvaluationStore {
     );
   }
 
+  deleteEvaluationQuestionById() {
+    return useMutation(evaluationService.deleteEvaluationQuestionById);
+  }
+
   addQuestionAnswer() {
     return useMutation(evaluationService.addQuestionAnswer);
   }
