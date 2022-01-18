@@ -29,14 +29,14 @@ export default function EvaluationDetails() {
       label: 'Submissions',
       href: `${url}/submissions`,
     },
-    {
-      label: 'Ongoing',
-      href: `${url}/ongoing-submissions`,
-    },
-    {
-      label: 'Unbegun',
-      href: `${url}/unbeguns`,
-    },
+    // {
+    //   label: 'Ongoing',
+    //   href: `${url}/ongoing-submissions`,
+    // },
+    // {
+    //   label: 'Unbegun',
+    //   href: `${url}/unbeguns`,
+    // },
   ];
 
   const { data: evaluationInfo } = evaluationStore.getEvaluationById(id).data?.data || {};

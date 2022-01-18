@@ -10,8 +10,14 @@ import Table from '../../../components/Molecules/table/Table';
 import { markingStore } from '../../../store/administration/marking.store';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import { ParamType } from '../../../types';
-import { IQuestionaireTypeEnum } from '../../../types/services/evaluation.types';
-import { StudentEvaluationInfo } from '../../../types/services/marking.types';
+import {
+  IEvaluationInfo,
+  IQuestionaireTypeEnum,
+} from '../../../types/services/evaluation.types';
+import {
+  EvaluationStudent,
+  StudentEvaluationInfo,
+} from '../../../types/services/marking.types';
 import FieldMarking from './FieldMarking';
 import FieldStudentMarking from './FieldStudentMarking';
 import ManualMarking from './ManualMarking';
@@ -89,8 +95,10 @@ export default function Submissions() {
   const actions = [
     {
       name: 'Mark Answers',
-      handleAction: () => {
-        history.push({ pathname: `${url}/${id}` });
+      handleAction: (
+        _data?: string | number | EvaluationStudent | IEvaluationInfo | undefined,
+      ) => {
+        history.push({ pathname: `${url}/${_data}` });
       },
     },
     {
