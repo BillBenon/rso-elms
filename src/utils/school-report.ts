@@ -19,7 +19,7 @@ export function isFailure(obtained: number, max: number) {
   return obtained < max / 2;
 }
 
-export function calculateGrades(marks: number, max: number): Grades {
+export function calculateGrade(marks: number, max: number): Grades {
   let percentage = (marks / max) * 100;
 
   if (percentage < 40) return Grades.F;

@@ -9,7 +9,7 @@ import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { getStudentReportInTerm } from '../../store/evaluation/school-report.store';
 import { usePicture } from '../../utils/file-util';
-import { formatPercentage, isFailure } from '../../utils/school-report';
+import { calculateGrade, formatPercentage, isFailure } from '../../utils/school-report';
 
 interface IParamType {
   levelId: string;
@@ -175,7 +175,7 @@ export default function SchoolReport() {
             </Heading>
           </div>
           <div className="col-span-4 grid grid-cols-6">
-            {[1, 2, 3].map((i) => (
+            {[1, 2].map((i) => (
               <React.Fragment key={i}>
                 <Heading
                   fontSize="sm"
@@ -191,6 +191,26 @@ export default function SchoolReport() {
                 </Heading>
               </React.Fragment>
             ))}
+            <div className="col-span-2 grid grid-cols-3 ">
+              <Heading
+                fontSize="sm"
+                fontWeight="semibold"
+                className="p-1 border border-gray-700 text-center">
+                Obt.
+              </Heading>
+              <Heading
+                fontSize="sm"
+                fontWeight="semibold"
+                className="p-1 border border-gray-700 text-center">
+                Max.
+              </Heading>
+              <Heading
+                fontSize="sm"
+                fontWeight="semibold"
+                className="p-1 border border-gray-700 text-center">
+                Grade
+              </Heading>
+            </div>
           </div>
         </div>
         {/* modules map */}
@@ -211,16 +231,23 @@ export default function SchoolReport() {
                 {m.examObtained}
               </p>
               <p className="p-3 text-sm border border-gray-700">{m.examMax}</p>
-              <p
-                className={`p-3 text-sm border border-gray-700 
+              <div className="col-span-2 grid grid-cols-3">
+                <p
+                  className={`p-3 text-sm border border-gray-700 
                 ${
                   isFailure(m.catObtained + m.examObtained, m.examMax + m.catMax)
                     ? 'text-error-500'
                     : ''
                 }`}>
-                {m.catObtained + m.examObtained}
-              </p>
-              <p className="p-3 text-sm border border-gray-700">{m.examMax + m.catMax}</p>
+                  {m.catObtained + m.examObtained}
+                </p>
+                <p className="p-3 text-sm border border-gray-700">
+                  {m.examMax + m.catMax}
+                </p>
+                <p className="p-3 text-sm border border-gray-700">
+                  {calculateGrade(m.catObtained + m.examObtained, m.examMax + m.catMax)}
+                </p>
+              </div>
             </div>
           </div>
         ))}
@@ -237,12 +264,21 @@ export default function SchoolReport() {
             <p className="p-3 text-sm border border-gray-700">{totals.quizMax}</p>
             <p className="p-3 text-sm border border-gray-700">{totals.examObtained}</p>
             <p className="p-3 text-sm border border-gray-700">{totals.examMax}</p>
-            <p className="p-3 text-sm border border-gray-700">
-              {totals.quizObtained + totals.examObtained}
-            </p>
-            <p className="p-3 text-sm border border-gray-700">
-              {totals.quizMax + totals.examMax}
-            </p>
+
+            <div className="col-span-2 grid grid-cols-3">
+              <p className="p-3 text-sm border border-gray-700">
+                {totals.quizObtained + totals.examObtained}
+              </p>
+              <p className="p-3 text-sm border border-gray-700">
+                {totals.quizMax + totals.examMax}
+              </p>
+              <p className="p-3 text-sm border border-gray-700">
+                {calculateGrade(
+                  totals.quizObtained + totals.examObtained,
+                  totals.quizMax + totals.examMax,
+                )}
+              </p>
+            </div>
           </div>
         </div>
         {/* percentage */}
