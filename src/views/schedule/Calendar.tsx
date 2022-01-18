@@ -17,7 +17,7 @@ import {
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
-import DateMolecule from '../../components/Molecules/input/DateMolecule';
+import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedule';
@@ -115,14 +115,12 @@ export default function CalendarView() {
 
       <PopupMolecule
         open={isChangeRangeOpen}
-        closeOnClickOutSide={false}
         onClose={() => setisChangeRangeOpen(false)}
         title="Change date range">
         <div>
-          <DateMolecule
-            showTime={false}
-            startYear={2020}
-            endYear={new Date().getFullYear() + 3}
+          <InputMolecule
+            type="date"
+            value={dateRange.start_date}
             handleChange={(e) =>
               setdateRange({
                 ...dateRange,
@@ -131,22 +129,19 @@ export default function CalendarView() {
             }
             name={'expected_start_date'}>
             From:
-          </DateMolecule>
-          <div className="py-2">
-            <DateMolecule
-              showTime={false}
-              startYear={2020}
-              endYear={new Date().getFullYear() + 3}
-              handleChange={(e) =>
-                setdateRange({
-                  ...dateRange,
-                  end_date: formatDateToYyMmDd(e.value.toString()),
-                })
-              }
-              name={'expected_end_date'}>
-              To:
-            </DateMolecule>
-          </div>
+          </InputMolecule>
+          <InputMolecule
+            type="date"
+            name={'expected_end_date'}
+            value={dateRange.end_date}
+            handleChange={(e) =>
+              setdateRange({
+                ...dateRange,
+                end_date: formatDateToYyMmDd(e.value.toString()),
+              })
+            }>
+            To:
+          </InputMolecule>
           <Button onClick={handleApplyDateRange}>Apply</Button>
         </div>
       </PopupMolecule>
