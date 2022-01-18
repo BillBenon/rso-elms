@@ -26,7 +26,7 @@ import AcademicProgram from './views/programs/AcademicPrograms';
 import Ranks from './views/ranks/Ranks';
 import Roles from './views/roles/Roles';
 import ViewRole from './views/roles/ViewRole';
-import CalendarView from './views/schedule/Calendar';
+import CalendarView from './views/schedule/CalendarView';
 import Events from './views/schedule/Events';
 import ScheduleHome from './views/schedule/ScheduleHome';
 import Subjects from './views/subjects';

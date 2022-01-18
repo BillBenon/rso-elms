@@ -29,6 +29,13 @@ class ScheduleStore {
   getAllSchedules() {
     return useQuery(['schedules'], calendarService.getAll);
   }
+
+  getAllByAcademicProgram(id: string, range: DateRange) {
+    return useQuery(['schedules/program/:id', id], () =>
+      calendarService.getAllByAcademicProgram(id, range),
+    );
+  }
+
   getAllByAcademicProgramIntakeLevel(id: string, range: DateRange) {
     return useQuery(
       ['schedules/level-intake/:id', id],
@@ -36,27 +43,19 @@ class ScheduleStore {
       { enabled: !!id },
     );
   }
-  getAllByAcademicProgramIntakeLevelAndStatus(id: string, status: ScheduleStatus) {
-    return useQuery(['schedules/level-intake/:id/:status', id, status], () =>
-      calendarService.getAllByAcademicProgramIntakeLevelAndStatus(id, status),
-    );
-  }
-  getAllByAcademicProgram(id: string, range: DateRange) {
-    return useQuery(['schedules/program/:id', id], () =>
-      calendarService.getAllByAcademicProgram(id, range),
-    );
-  }
-
-  getAllByAcademicProgramAndStatus(id: string, status: ScheduleStatus) {
-    return useQuery(['schedules/program/:id/:status', id, status], () =>
-      calendarService.getAllByAcademicProgramAndStatus(id, status),
-    );
-  }
 
   getAllByIntakeLevelClass(id: string, range: DateRange) {
     return useQuery(
       ['schedules/intakeclass/:id', id],
       () => calendarService.getAllByIntakeLevelClass(id, range),
+      { enabled: !!id },
+    );
+  }
+
+  getAllByStudent(id: string | undefined, range: DateRange) {
+    return useQuery(
+      ['schedules/student/:id', id],
+      () => calendarService.getAllByIntakeLevelClass(id || '', range),
       { enabled: !!id },
     );
   }

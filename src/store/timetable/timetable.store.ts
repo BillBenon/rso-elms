@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from 'react-query';
+
 import { timetableService } from '../../services/timetable/timetable.service';
 
 class TimetableStore {

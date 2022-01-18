@@ -26,15 +26,15 @@ export default function Sidebar() {
     const academicAdminLinks: linkProps[] = [
       { title: 'Users', to: '/dashboard/users', icon: 'user' },
       { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
-      { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
       { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
+      { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
+      { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
       { title: 'Academic years', to: '/dashboard/academic-years', icon: 'program' },
       {
         title: 'Registration Control',
         to: '/dashboard/registration-control',
         icon: 'reg-control',
       },
-      { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
     ];
 
     const instructorLinks: linkProps[] = [
@@ -53,7 +53,8 @@ export default function Sidebar() {
     const studentLinks: linkProps[] = [
       { title: 'Module', to: '/dashboard/student', icon: 'module' },
       { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
-      { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
+      { title: 'Timetable', to: '/dashboard/schedule/timetable', icon: 'calendar' },
+      { title: 'Calendar', to: '/dashboard/schedule', icon: 'calendar' },
     ];
 
     if (authUser?.user_type == UserType.SUPER_ADMIN)
