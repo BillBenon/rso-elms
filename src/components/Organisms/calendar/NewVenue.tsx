@@ -11,6 +11,7 @@ import { getDropDownStatusOptions } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';
 import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../Molecules/input/InputMolecule';
+import SelectMolecule from '../../Molecules/input/SelectMolecule';
 
 export default function NewVenue() {
   const history = useHistory();
@@ -53,13 +54,14 @@ export default function NewVenue() {
           handleChange={handleChange}>
           Venu name
         </InputMolecule>
-        <DropdownMolecule
+        <SelectMolecule
           name="venueType"
+          value={values.venueType}
           handleChange={handleChange}
           options={getDropDownStatusOptions(venueType)}
           placeholder="Select venue category">
           Venue type
-        </DropdownMolecule>
+        </SelectMolecule>
         <div className="pt-4">
           <Button disabled={isLoading} type="submit">
             Save

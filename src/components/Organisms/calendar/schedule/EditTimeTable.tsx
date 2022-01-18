@@ -66,7 +66,7 @@ export default function EditTimeTable() {
       startHour: data?.data.data.start_hour + '',
       venue: data?.data.data.venue.id + '',
     });
-  }, [data?.data]);
+  }, [classId, data?.data, itemId]);
 
   function handleChange(e: ValueType) {
     setvalues((val) => ({ ...val, [e.name]: e.value }));
@@ -116,9 +116,9 @@ export default function EditTimeTable() {
 
 function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
-  const users = instructordeploymentStore.getInstructorsDeployedInAcademy(
-    authUser?.academy.id + '',
-  ).data?.data.data;
+  const users =
+    instructordeploymentStore.getInstructorsDeployedInAcademy(authUser?.academy.id + '')
+      .data?.data.data || [];
 
   const modules =
     moduleStore.getModulesByProgram(
@@ -159,14 +159,14 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
         <div className="pb-4">
           <SelectMolecule
             name="instructor"
+            value={values.instructor}
             handleChange={handleChange}
             options={
               users?.map((user) => ({
-                label: `${user.instructor.user.first_name} ${user.instructor.user.last_name}`,
-                value: user.instructor.id,
+                label: `${user.user.first_name} ${user.user.last_name}`,
+                value: user.id,
               })) as SelectData[]
             }
-            value={values.instructor}
             placeholder="Select someone">
             Instructor
           </SelectMolecule>
@@ -179,7 +179,7 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
 
 function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: IStepProps) {
   const authUser = authenticatorStore.authUser().data?.data.data;
-  const venues = getAllVenues(authUser?.academy.id + '').data?.data.data;
+  const venues = getAllVenues(authUser?.academy.id + '').data?.data.data || [];
 
   return (
     <form onSubmit={handleSubmit} className="max-w-sm -mb-6">
