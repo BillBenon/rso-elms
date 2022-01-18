@@ -7,6 +7,10 @@ class MarkingStore {
     return useMutation(markingService.finishMarking);
   }
 
+  fieldMarkingFinish() {
+    return useMutation(markingService.fieldMarkingFinish);
+  }
+
   finalizaMarkingWithRemarks() {
     return useMutation(markingService.finalizaMarkingWithRemarks);
   }
