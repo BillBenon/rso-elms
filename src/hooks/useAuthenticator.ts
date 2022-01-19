@@ -9,12 +9,6 @@ export default function useAuthenticator() {
   const [userAvailabe, setUserAvailable] = useState(false);
   const { refetch } = authenticatorStore.authUser(false);
 
-  function getPrivilegesByRole(roleId: number) {
-    return user?.user_roles
-      .filter((role) => role.id === roleId)[0]
-      .privileges.map((privilege) => privilege.name);
-  }
-
   useEffect(() => {
     async function fetchData() {
       setIsUserLoading(true);
@@ -28,5 +22,5 @@ export default function useAuthenticator() {
     if (!user) fetchData();
   });
 
-  return { user, userLoading: isUserLoading, getPrivilegesByRole, userAvailabe };
+  return { user, userLoading: isUserLoading, userAvailabe };
 }

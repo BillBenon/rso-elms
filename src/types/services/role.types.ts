@@ -13,7 +13,7 @@ export interface RoleRes extends Table {
 }
 
 export interface RoleResWithPrevilages extends RoleRes {
-  privileges: PrivilegeRes[];
+  role_privileges: PrivilegeRes[];
 }
 
 export interface RolePrivilege extends Table {
