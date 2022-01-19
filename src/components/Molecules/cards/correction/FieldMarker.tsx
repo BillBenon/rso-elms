@@ -19,19 +19,23 @@ interface PropTypes {
   setTotalMarks: Dispatch<SetStateAction<number>>;
   hoverStyle?: TextDecoration;
   className?: string;
+  obtained: number | undefined;
 }
 export default function FieldMarker({
   updateQuestionPoints,
   data,
   index,
   questionMarks,
+  obtained,
   createCreateNewCorrection,
 }: PropTypes) {
   const correct: FieldQuestionMarks =
     questionMarks.find((x) => x.question_id === data?.id) ||
     createCreateNewCorrection(data?.id, 0);
 
-  const [obtainedMarks, setObtainedMarks] = useState(correct.obtained_marks || 0);
+  const [obtainedMarks, setObtainedMarks] = useState(
+    obtained || correct.obtained_marks || 0,
+  );
 
   function updateCorrectionMarks(e: ValueType) {
     setObtainedMarks(Number(e.value));

@@ -13,6 +13,7 @@ import { UserType } from '../../types/services/user.types';
 import ApproveEvaluation from './ApproveEvaluation';
 import Submissions from './marking/Submissions';
 import ReviewEvaluation from './ReviewEvaluation';
+import Unbeguns from './Unbeguns';
 
 export default function EvaluationDetails() {
   const { id } = useParams<ParamType>();
@@ -29,10 +30,10 @@ export default function EvaluationDetails() {
       label: 'Submissions',
       href: `${url}/submissions`,
     },
-    {
-      label: 'Ongoing',
-      href: `${url}/ongoing-submissions`,
-    },
+    // {
+    //   label: 'Ongoing',
+    //   href: `${url}/ongoing-submissions`,
+    // },
     {
       label: 'Unbegun',
       href: `${url}/unbeguns`,
@@ -72,6 +73,10 @@ export default function EvaluationDetails() {
         <TabNavigation tabs={tabs}>
           <div className="pt-8">
             <Route path={`${path}/submissions`} render={() => <Submissions />} />
+          </div>
+
+          <div className="pt-8">
+            <Route exact path={`${path}/unbeguns`} render={() => <Unbeguns />} />
           </div>
 
           {authUser?.user_type === UserType.INSTRUCTOR && (

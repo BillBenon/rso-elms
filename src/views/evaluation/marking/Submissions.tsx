@@ -11,8 +11,15 @@ import Table from '../../../components/Molecules/table/Table';
 import { markingStore } from '../../../store/administration/marking.store';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import { ParamType } from '../../../types';
-import { IQuestionaireTypeEnum } from '../../../types/services/evaluation.types';
-import { StudentEvaluationInfo } from '../../../types/services/marking.types';
+import {
+  IEvaluationInfo,
+  IQuestionaireTypeEnum,
+} from '../../../types/services/evaluation.types';
+import {
+  EvaluationStudent,
+  StudentEvaluationInfo,
+} from '../../../types/services/marking.types';
+import FieldMarkedStudent from './FieldMarkedStudent';
 import FieldMarking from './FieldMarking';
 import FieldStudentMarking from './FieldStudentMarking';
 import ManualMarking from './ManualMarking';
@@ -36,9 +43,8 @@ export default function Submissions() {
           toast.success('Results published', { duration: 3000 });
           history.push('/dashboard/evaluations');
         },
-        onError: (error) => {
-          console.error(error);
-          toast.error(error + '');
+        onError: (error: any) => {
+          toast.error(error.response.data.message);
         },
       },
     );
@@ -90,8 +96,10 @@ export default function Submissions() {
   const actions = [
     {
       name: 'Mark Answers',
-      handleAction: () => {
-        history.push({ pathname: `${url}/${id}` });
+      handleAction: (
+        _data?: string | number | EvaluationStudent | IEvaluationInfo | undefined,
+      ) => {
+        history.push({ pathname: `${url}/${_data}` });
       },
     },
     {
@@ -121,6 +129,11 @@ export default function Submissions() {
           exact
           path={`${path}/field/:studentId/mark`}
           component={FieldStudentMarking}
+        />
+        <Route
+          exact
+          path={`${path}/field/marked/:studentEvaluationId`}
+          component={FieldMarkedStudent}
         />
         <Route exact path={`${path}/:id`} component={StudentAnswersMarking} />
         {isLoading && <Loader />}
