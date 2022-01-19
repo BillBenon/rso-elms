@@ -2,12 +2,10 @@ import React from 'react';
 
 import Navigation from '../components/Molecules/navigation/Navigation';
 import Sidebar from '../components/Molecules/sidebar/Sidebar';
-import useAuthenticator from '../hooks/useAuthenticator';
 
 type IDashboard = { children: React.ReactNode };
 
 export default function Dashboard({ children }: IDashboard) {
-  const { user } = useAuthenticator();
   return (
     <>
       <div className="flex bg-secondary">
