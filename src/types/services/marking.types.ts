@@ -3,8 +3,8 @@
 import { Table } from '..';
 import {
   IEvaluationInfo,
-  IEvaluationQuestion,
   IEvaluationQuestionsInfo,
+  IEvaluationStatus,
   IMultipleChoice,
 } from './evaluation.types';
 import { Student } from './user.types';
@@ -29,6 +29,7 @@ export interface IManualMarking {
   evaluation_id: string;
   marks: number;
   student_id: string;
+  marking_status?: IEvaluationStatus;
 }
 
 export interface UnMarkedStudent {
@@ -58,6 +59,7 @@ export interface IManualMarkingInfo {
   evaluation: IEvaluationInfo;
   obtained_mark: number;
   student: EvaluationStudent;
+  marking_status?: IEvaluationStatus;
 }
 
 export interface StudentMarkingAnswer extends Table {

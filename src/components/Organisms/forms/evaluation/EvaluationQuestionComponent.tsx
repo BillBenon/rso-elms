@@ -89,7 +89,7 @@ export default function EvaluationQuestionComponent({
     setQuestions(questionsClone);
   }
 
-  function handleRemoveQuestion(questionIndex: number) {
+  function handleRemoveQuestion(questionId: string, questionIndex: number) {
     let questionsClone = [...questions];
 
     if (questionsClone.length === 1) {
@@ -99,6 +99,15 @@ export default function EvaluationQuestionComponent({
       questionsClone.splice(questionIndex, 1);
       setQuestions(questionsClone);
     }
+
+    deleteQuestion(questionId, {
+      onSuccess: () => {
+        toast.success('Question deleted', { duration: 2000 });
+      },
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
+      },
+    });
   }
 
   function handleRemoveChoice(questionIndex: number, choiceIndex: number) {
@@ -164,6 +173,7 @@ export default function EvaluationQuestionComponent({
   }
 
   const { mutate } = evaluationStore.createEvaluationQuestions();
+  const { mutate: deleteQuestion } = evaluationStore.deleteEvaluationQuestionById();
 
   function submitForm(e: FormEvent) {
     e.preventDefault();
@@ -171,11 +181,6 @@ export default function EvaluationQuestionComponent({
     mutate(questions, {
       onSuccess: () => {
         toast.success('Questions added', { duration: 5000 });
-
-        //first remove the button for submitted question
-        // let questionInfo = [...questions];
-        // questionInfo[index] = { ...questionInfo[index], submitted: true };
-        // setQuestions(questionInfo);
         setLocalStorageData('currentStep', 2);
         handleNext();
       },
@@ -303,7 +308,7 @@ export default function EvaluationQuestionComponent({
 
                 <Button
                   type="button"
-                  onClick={() => handleRemoveQuestion(index)}
+                  onClick={() => handleRemoveQuestion(question.id, index)}
                   styleType="text"
                   className="self-start flex justify-center items-center"
                   icon>

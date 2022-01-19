@@ -152,6 +152,12 @@ class EvaluationService {
     return await evaluationAxios.get(`/evaluationQuestions/getEvaluationQuestions/${id}`);
   }
 
+  public async deleteEvaluationQuestionById(
+    id: string,
+  ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>> {
+    return await evaluationAxios.delete(`/evaluationQuestions/deleteQuestion/${id}`);
+  }
+
   public async modifyEvaluation(
     evaluationInfo: IEvaluationCreate,
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
