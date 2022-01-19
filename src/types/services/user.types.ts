@@ -1,5 +1,5 @@
 import { StudentApproval } from './enrollment.types';
-import { GenericStatus, RoleRes } from '..';
+import { GenericStatus, RoleRes, RoleResWithPrevilages } from '..';
 /* eslint-disable no-unused-vars */
 import { Table } from '..';
 import { AcademyInfo } from './academy.types';
@@ -44,6 +44,10 @@ export interface UserInfo extends Table {
   enabled: boolean;
   authorities: [];
   otp_active: string;
+}
+
+export interface AuthUser extends UserInfo {
+  user_roles: RoleResWithPrevilages[];
 }
 
 export interface UserRole extends Table{

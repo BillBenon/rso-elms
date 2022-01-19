@@ -12,6 +12,10 @@ export interface RoleRes extends Table {
   status: GenericStatus;
 }
 
+export interface RoleResWithPrevilages extends RoleRes {
+  privileges: PrivilegeRes[];
+}
+
 export interface RolePrivilege extends Table {
   status: string;
   assigned_on: string;
