@@ -206,7 +206,7 @@ export default function ManualMarking({ evaluationId }: PropsType) {
                               (students[i]?.marking_status?.toLowerCase() as Status)
                           ] as Color
                         }>
-                        {students[i].marking_status}
+                        {students?.[i]?.marking_status}
                       </Badge>
                     </td>
                   </tr>

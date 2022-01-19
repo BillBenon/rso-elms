@@ -24,8 +24,6 @@ export default function UnBeguns() {
   const [currentClassId, setCurrentClassId] = useState<string>('');
   const [students, setStudents] = useState<UnMarkedStudent[]>([]);
   const history = useHistory();
-  console.log(evaluationId);
-
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId).data?.data || {};
   // eslint-disable-next-line react-hooks/exhaustive-deps
