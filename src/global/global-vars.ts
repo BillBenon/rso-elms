@@ -5,6 +5,7 @@ import {
   colorStyleType,
   fontSizeStyleType,
   fontWeightStyleType,
+  statusStyleType,
 } from '../types';
 
 export const fontWeightStyle: fontWeightStyleType = {
@@ -36,6 +37,29 @@ export const bgStyle: bgStyleType = {
   success: 'bg-succes-400',
   'txt-primary': 'bg-txt-primary',
   'txt-secondary': 'bg-txt-secondary',
+};
+
+export const statusColors: statusStyleType = {
+  pending: 'warning',
+  ongoing: 'info',
+  promoted: 'success',
+  retake: 'warning',
+  expelled: 'error',
+  initial: 'warning',
+  closed: 'error',
+  complete: 'success',
+  active: 'success',
+  inactive: 'error',
+  suspended: 'error',
+  cancelled: 'error',
+  started: 'success',
+  marked: 'success',
+  published: 'success',
+  marking: 'warning',
+  to_mark: 'warning',
+  approved: 'success',
+  rejected: 'error',
+  deleted: 'error',
 };
 
 export const bgStyleButton: colorStyleType = {

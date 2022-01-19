@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { GenericStatus, Status, statusStyleType } from '../../../types';
+import { statusColors } from '../../../global/global-vars';
+import { GenericStatus, Status } from '../../../types';
 import { StudentApproval } from '../../../types/services/enrollment.types';
 import { IEvaluationStatus } from '../../../types/services/evaluation.types';
 import { IntakeStatus } from '../../../types/services/intake.types';
@@ -25,29 +26,6 @@ type RowProps = {
       | StudentApproval;
     handleStatusAction: (_data?: Record<string, any>[any]) => void;
   }[];
-};
-
-const statusColors: statusStyleType = {
-  pending: 'warning',
-  ongoing: 'info',
-  promoted: 'success',
-  retake: 'warning',
-  expelled: 'error',
-  initial: 'warning',
-  closed: 'error',
-  complete: 'success',
-  active: 'success',
-  inactive: 'error',
-  suspended: 'error',
-  cancelled: 'error',
-  started: 'success',
-  marked: 'success',
-  published: 'success',
-  marking: 'warning',
-  to_mark: 'warning',
-  approved: 'success',
-  rejected: 'error',
-  deleted: 'error',
 };
 
 const Row = ({ keys, data, uniqueCol, statusColumn, statusActions }: RowProps) => {

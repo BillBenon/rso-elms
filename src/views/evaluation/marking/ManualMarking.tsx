@@ -1,27 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
+import Badge from '../../../components/Atoms/custom/Badge';
 import Loader from '../../../components/Atoms/custom/Loader';
 import Heading from '../../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../../components/Molecules/cards/NoDataAvailable';
 import InputMolecule from '../../../components/Molecules/input/InputMolecule';
 import SelectMolecule from '../../../components/Molecules/input/SelectMolecule';
+import { statusColors } from '../../../global/global-vars';
 import { useClasses } from '../../../hooks/useClasses';
 import { classStore } from '../../../store/administration/class.store';
 import { markingStore } from '../../../store/administration/marking.store';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
-import { ValueType } from '../../../types';
+import { Color, Status, ValueType } from '../../../types';
+import { IEvaluationStatus } from '../../../types/services/evaluation.types';
 import { IManualMarking } from '../../../types/services/marking.types';
 
 type PropsType = {
   evaluationId: string;
 };
-
-// type StudentMarks = {
-//   studentId: string;
-//   marks: number;
-//   evaluationId: string;
-// };
 
 export default function ManualMarking({ evaluationId }: PropsType) {
   const [currentClassId, setCurrentClassId] = useState<string>('');
@@ -89,12 +86,14 @@ export default function ManualMarking({ evaluationId }: PropsType) {
           student_id: mark.student.admin_id,
           evaluation_id: evaluationInfo?.id || '',
           marks: mark.obtained_mark,
+          marking_status: mark.marking_status,
         })) || [];
     } else {
       newState =
         studentsData?.data.data.map((std) => ({
           student_id: std.student.id.toString(),
           evaluation_id: evaluationInfo?.id || '',
+          marking_status: IEvaluationStatus.UNMARKED,
           marks: 0,
         })) || [];
     }
@@ -166,8 +165,8 @@ export default function ManualMarking({ evaluationId }: PropsType) {
                   <th className="px-4 py-5 text-sm font-semibold">First name</th>
                   <th className="px-4 py-5 text-sm font-semibold">Last name</th>
                   <th className="px-4 py-5 text-sm font-semibold">Obtained</th>
-
                   <th className="px-4 py-5 text-sm font-semibold">Out of</th>
+                  <th className="px-4 py-5 text-sm font-semibold">Status</th>
                 </tr>
               </thead>
 
@@ -191,6 +190,24 @@ export default function ManualMarking({ evaluationId }: PropsType) {
                     </td>
                     <td className="px-4 py-5 text-sm font-semibold">
                       {evaluationInfo?.total_mark}
+                    </td>
+                    <td className="px-4 py-5 text-sm font-semibold">
+                      <Badge
+                        className="cursor-pointer"
+                        badgecolor={
+                          statusColors[
+                            students &&
+                              (students[i]?.marking_status?.toLowerCase() as Status)
+                          ] as Color
+                        }
+                        badgetxtcolor={
+                          statusColors[
+                            students &&
+                              (students[i]?.marking_status?.toLowerCase() as Status)
+                          ] as Color
+                        }>
+                        {students[i].marking_status}
+                      </Badge>
                     </td>
                   </tr>
                 ))}
