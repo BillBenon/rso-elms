@@ -21,7 +21,7 @@ import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavig
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import UpdateModuleForm from '../../components/Organisms/forms/modules/UpdateModuleForm';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { moduleStore } from '../../store/administration/modules.store';
 import { subjectStore } from '../../store/administration/subject.store';
@@ -47,12 +47,11 @@ export default function ModuleDetails() {
   const history = useHistory();
   let moduleData: IProgramData | undefined;
   const module = moduleStore.getModuleById(id).data?.data.data;
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
   const subjectData = subjectStore.getSubjectsByModule(id);
 
   const instructorInfo =
-    instructordeploymentStore.getInstructorByUserId(authUser?.id + '').data?.data.data ||
-    [];
+    instructordeploymentStore.getInstructorByUserId(user?.id + '').data?.data.data || [];
 
   const instSubjects = enrollmentStore.getSubjectsByInstructor(
     instructorInfo[0]?.id.toString() || '',
@@ -209,7 +208,7 @@ export default function ModuleDetails() {
               </button>
             </div>
 
-            {authUser?.user_type === UserType.ADMIN && (
+            {user?.user_type === UserType.ADMIN && (
               <>
                 {route == 'SUBJECTS' ? (
                   <div className="flex gap-3">
@@ -232,7 +231,7 @@ export default function ModuleDetails() {
                 )}
               </>
             )}
-            {authUser?.user_type === UserType.ADMIN && route == 'PREREQS' && (
+            {user?.user_type === UserType.ADMIN && route == 'PREREQS' && (
               <div className="flex gap-3">
                 <Button
                   onClick={() =>
@@ -244,7 +243,7 @@ export default function ModuleDetails() {
                 </Button>
               </div>
             )}
-            {authUser?.user_type === UserType.INSTRUCTOR && route == 'MATERIALS' && (
+            {user?.user_type === UserType.INSTRUCTOR && route == 'MATERIALS' && (
               <div className="flex gap-3">
                 <Button onClick={() => history.push(`${url}/materials/add-material`)}>
                   Add new Material
@@ -260,7 +259,7 @@ export default function ModuleDetails() {
               path={`${path}/subjects`}
               render={() => (
                 <>
-                  {authUser?.user_type === UserType.INSTRUCTOR ? (
+                  {user?.user_type === UserType.INSTRUCTOR ? (
                     instSubjects.isLoading || subjectData.isLoading ? (
                       <Loader />
                     ) : instructorSubjects?.length === 0 ? (
@@ -286,7 +285,7 @@ export default function ModuleDetails() {
                     <Loader />
                   ) : subjects.length === 0 && subjectData.isSuccess ? (
                     <NoDataAvailable
-                      showButton={authUser?.user_type === UserType.ADMIN}
+                      showButton={user?.user_type === UserType.ADMIN}
                       icon="subject"
                       title={'No subjects registered'}
                       description={'There are no subjects available yet'}

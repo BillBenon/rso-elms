@@ -1,18 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
-import { authenticatorStore } from '../../../store/administration';
-import { UserInfo, UserType } from '../../../types/services/user.types';
+import useAuthenticator from '../../../hooks/useAuthenticator';
+import { UserType } from '../../../types/services/user.types';
 import { usePicture } from '../../../utils/file-util';
 import SidebarLinks, { linkProps } from '../../Atoms/custom/SidebarLinks';
 import AcademyProfileCard from '../cards/AcademyProfileCard';
 
 export default function Sidebar() {
-  const [authUser, setAuthUser] = useState<UserInfo>();
-  const { data } = authenticatorStore.authUser();
-
-  useEffect(() => {
-    setAuthUser(data?.data.data);
-  }, [data?.data.data]);
+  const { user } = useAuthenticator();
 
   const defaultLinks = (): linkProps[] => {
     const routes: linkProps[] = [];
@@ -57,11 +52,10 @@ export default function Sidebar() {
       { title: 'Calendar', to: '/dashboard/schedule', icon: 'calendar' },
     ];
 
-    if (authUser?.user_type == UserType.SUPER_ADMIN)
-      routes.push(...institutionAdminLinks);
-    if (authUser?.user_type == UserType.ADMIN) routes.push(...academicAdminLinks);
-    if (authUser?.user_type == UserType.INSTRUCTOR) routes.push(...instructorLinks);
-    if (authUser?.user_type == UserType.STUDENT) routes.push(...studentLinks);
+    if (user?.user_type == UserType.SUPER_ADMIN) routes.push(...institutionAdminLinks);
+    if (user?.user_type == UserType.ADMIN) routes.push(...academicAdminLinks);
+    if (user?.user_type == UserType.INSTRUCTOR) routes.push(...instructorLinks);
+    if (user?.user_type == UserType.STUDENT) routes.push(...studentLinks);
 
     return routes;
   };
@@ -71,18 +65,18 @@ export default function Sidebar() {
       <div className="px-4 py-4">
         <AcademyProfileCard
           src={usePicture(
-            authUser?.academy?.logo_attachment_id,
-            authUser?.academy?.id,
+            user?.academy?.logo_attachment_id,
+            user?.academy?.id,
             '/images/rdf-logo.png',
             'logos',
           )}
           round={false}
           alt="insitution logo">
-          {authUser?.institution_name === null
+          {user?.institution_name === null
             ? 'Institution name'
-            : authUser?.user_type === UserType.SUPER_ADMIN
-            ? authUser.institution_name
-            : authUser?.academy?.name}
+            : user?.user_type === UserType.SUPER_ADMIN
+            ? user.institution_name
+            : user?.academy?.name}
         </AcademyProfileCard>
       </div>
       <SidebarLinks links={defaultLinks()} />

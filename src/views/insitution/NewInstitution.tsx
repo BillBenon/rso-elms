@@ -7,7 +7,7 @@ import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
-import { authenticatorService } from '../../services/administration/authenticator.service';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { institutionStore } from '../../store/administration/institution.store';
 import { GenericStatus, ValueType } from '../../types';
 import { BasicInstitutionInfo } from '../../types/services/institution.types';
@@ -38,10 +38,12 @@ export default function NewInstitution() {
 
   useEffect(() => {
     const getUser = async () => {
-      const user = await authenticatorService.authUser();
-      setValues({
-        ...values,
-        current_admin_id: user.data.data.id + '',
+      const { user } = useAuthenticator();
+      setValues((vals) => {
+        return {
+          ...vals,
+          current_admin_id: user?.id + '',
+        };
       });
     };
 

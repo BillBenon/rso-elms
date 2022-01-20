@@ -10,7 +10,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import academicyearsStore from '../../store/administration/academicyears.store';
 import { Link as Links } from '../../types';
 import { IAcademicYearInfo } from '../../types/services/academicyears.types';
@@ -33,16 +33,14 @@ export default function AcademicYears() {
   ];
   const { url, path } = useRouteMatch();
   const history = useHistory();
-  const { data: userInfo } = authenticatorStore.authUser();
+  const { user } = useAuthenticator();
   const [years, setYears] = useState<FilteredData[]>([]);
 
   const {
     data: academicYears,
     isLoading,
     isSuccess,
-  } = academicyearsStore.fetchAcademicYears(
-    userInfo?.data.data.academy.id.toString() || '',
-  );
+  } = academicyearsStore.fetchAcademicYears(user?.academy.id.toString() || '');
 
   //actions to be displayed in table
   const actions = [

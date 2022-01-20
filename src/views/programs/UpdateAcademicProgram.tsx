@@ -9,7 +9,7 @@ import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule'
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 // import { divisionStore } from '../../store/administration/divisions.store';
 import programStore from '../../store/administration/program.store';
 import usersStore from '../../store/administration/users.store';
@@ -30,10 +30,10 @@ export default function UpdateAcademicProgram<E>({
   const history = useHistory();
   const { id } = useParams<ParamType>();
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
   const { data: users } = usersStore.getUsersByAcademyAndUserType(
-    authUser?.academy.id.toString() || '',
+    user?.academy.id.toString() || '',
     UserType.INSTRUCTOR,
     { page: 0, pageSize: 1000, sortyBy: 'username' },
   );

@@ -2,8 +2,8 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 
+import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { queryClient } from '../../../../plugins/react-query';
-import { authenticatorService } from '../../../../services';
 import academyStore from '../../../../store/administration/academy.store';
 import { Link, ValueType } from '../../../../types';
 import { AcademyCreateInfo } from '../../../../types/services/academy.types';
@@ -32,10 +32,10 @@ export default function NewAcademy() {
 
   useEffect(() => {
     const getUser = async () => {
-      const user = await authenticatorService.authUser();
+      const { user } = useAuthenticator();
       setDetails((details) => ({
         ...details,
-        institution_id: user.data.data.institution_id,
+        institution_id: user?.institution_id || '',
       }));
     };
 

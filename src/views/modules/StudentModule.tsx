@@ -7,7 +7,7 @@ import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { getStudentShipByUserId } from '../../store/administration/intake-program.store';
 import { ValueType } from '../../types';
@@ -23,11 +23,11 @@ function StudentModule() {
     { to: '/dashboard/student', title: 'Dashboard' },
     { to: `${url}`, title: 'module' },
   ];
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
   const { data: student, isLoading: studLoad } = getStudentShipByUserId(
-    authUser?.id + '' || '',
-    !!authUser?.id,
+    user?.id + '' || '',
+    !!user?.id,
   );
 
   const { data: levels, isLoading: levelLoading } =

@@ -3,7 +3,7 @@ import './styles/redirecting.scss';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { authenticatorStore } from './store/administration';
+import useAuthenticator from './hooks/useAuthenticator';
 import { getPersonExperiences } from './store/administration/experience.store';
 import { getHisNextKinById } from './store/administration/usernextkin.store';
 import { ProfileStatus, UserType } from './types/services/user.types';
@@ -12,10 +12,10 @@ import NotApproved from './views/NotApproved';
 export default function Redirecting() {
   const [hasNoAcademy, setHasNoAcademy] = useState(false);
   const [userNotAllowed, setUserNotAllowed] = useState(false);
-  const { data: authUser, isLoading } = authenticatorStore.authUser();
+  const { user, userLoading } = useAuthenticator();
 
-  const { data: nextOfKin } = getHisNextKinById(authUser?.data.data.id);
-  const { data: experiences } = getPersonExperiences(authUser?.data.data.person.id);
+  const { data: nextOfKin } = getHisNextKinById(user?.id);
+  const { data: experiences } = getPersonExperiences(user?.person.id);
 
   const history = useHistory();
 
@@ -27,15 +27,13 @@ export default function Redirecting() {
   );
 
   useEffect(() => {
-    const notAllowed = !Object.keys(UserType).includes(
-      authUser?.data.data.user_type + '',
-    );
+    const notAllowed = !Object.keys(UserType).includes(user?.user_type + '');
 
-    if (authUser?.data.data) {
-      // setLocalStorageData('user', authUser.data.data);
-      localStorage.setItem('user', JSON.stringify(authUser.data.data));
+    if (user) {
+      // setLocalStorageData('user', user?);
+      localStorage.setItem('user', JSON.stringify(user));
 
-      if (authUser.data.data.profile_status !== ProfileStatus.COMPLETD) {
+      if (user?.profile_status !== ProfileStatus.COMPLETD) {
         redirectTo('/complete-profile');
       } else {
         if (nextOfKin && nextOfKin?.data.data.length === 0) {
@@ -43,16 +41,13 @@ export default function Redirecting() {
         } else if (experiences && experiences?.data.data.length === 0) {
           redirectTo('/complete-profile/experience');
         } else if (nextOfKin && experiences) {
-          if (
-            authUser.data.data.user_type != UserType.SUPER_ADMIN &&
-            !authUser.data.data.academy
-          ) {
+          if (user?.user_type != UserType.SUPER_ADMIN && !user?.academy) {
             setHasNoAcademy(true);
           } else {
             redirectTo(
-              authUser.data.data.user_type === UserType.INSTRUCTOR
+              user?.user_type === UserType.INSTRUCTOR
                 ? '/dashboard/inst-module'
-                : authUser.data.data.user_type === UserType.STUDENT
+                : user?.user_type === UserType.STUDENT
                 ? '/dashboard/student'
                 : '/dashboard/users',
             );
@@ -61,11 +56,11 @@ export default function Redirecting() {
       }
     }
 
-    setUserNotAllowed(notAllowed && !isLoading);
-    // }, [authUser?.data.data, isLoading]);
+    setUserNotAllowed(notAllowed && !userLoading);
+    // }, [user?, isLoading]);
   }, [
-    authUser?.data.data,
-    isLoading,
+    user,
+    userLoading,
     experiences?.data.data,
     nextOfKin?.data.data,
     experiences,

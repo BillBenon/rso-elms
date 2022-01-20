@@ -2,8 +2,8 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
+import useAuthenticator from '../../../hooks/useAuthenticator';
 import { queryClient } from '../../../plugins/react-query';
-import { authenticatorStore } from '../../../store/administration';
 import academyStore from '../../../store/administration/academy.store';
 import { intakeStore } from '../../../store/administration/intake.store';
 import programStore from '../../../store/administration/program.store';
@@ -30,11 +30,11 @@ interface IProps {
 
 export default function ImportUsers({ userType }: IProps) {
   const history = useHistory();
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
   const [values, setValues] = useState<IImportUser>({
     academicYearId: '',
-    academyId: authUser?.academy?.id.toString() || '',
+    academyId: user?.academy?.id.toString() || '',
     userType,
     intakeProgramId: '',
     program: '',
@@ -99,7 +99,7 @@ export default function ImportUsers({ userType }: IProps) {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        {authUser?.user_type === UserType.SUPER_ADMIN ? (
+        {user?.user_type === UserType.SUPER_ADMIN ? (
           <SelectMolecule
             options={getDropDownOptions({ inputs: academies || [] })}
             name="academyId"
@@ -109,7 +109,7 @@ export default function ImportUsers({ userType }: IProps) {
             Academy
           </SelectMolecule>
         ) : (
-          <InputMolecule readOnly value={authUser?.academy.name} name={'academyId'}>
+          <InputMolecule readOnly value={user?.academy.name} name={'academyId'}>
             Academy
           </InputMolecule>
         )}

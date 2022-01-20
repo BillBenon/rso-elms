@@ -2,7 +2,7 @@ import moment from 'moment';
 import React from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
-import { authenticatorStore } from '../../../store/administration';
+import useAuthenticator from '../../../hooks/useAuthenticator';
 import registrationControlStore from '../../../store/administration/registrationControl.store';
 import { GenericStatus, ValueType } from '../../../types';
 import { IRegistrationControlInfo } from '../../../types/services/registrationControl.types';
@@ -22,11 +22,9 @@ import RegControlDetails from './RegControlDetails';
 export default function RegistrationControl() {
   const { url } = useRouteMatch();
   const history = useHistory();
-  const { data: userInfo } = authenticatorStore.authUser();
+  const { user } = useAuthenticator();
   const { data, isLoading, isSuccess } =
-    registrationControlStore.fetchRegControlByAcademy(
-      userInfo?.data.data.academy.id.toString()!,
-    );
+    registrationControlStore.fetchRegControlByAcademy(user?.academy.id.toString()!);
 
   function handleSearch(_e: ValueType) {}
 
