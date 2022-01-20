@@ -18,10 +18,11 @@ class RoleStore {
     );
   }
 
-  getPrivilegesByRole(roleId: string) {
+  getPrivilegesByRole(roleId: string, enabled = true) {
     return useQuery<AxiosResponse<Response<RolePrivilege[]>>, Response>(
       ['privilegesByRole/id', roleId],
       () => roleService.getPrivilegesByRole(roleId),
+      { enabled },
     );
   }
 

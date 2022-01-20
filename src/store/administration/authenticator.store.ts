@@ -9,8 +9,8 @@ class AuthenticatorStore {
   logout() {
     return useQuery('logout', authenticatorService.logout, { enabled: false });
   }
-  authUser() {
-    return useQuery('authUser', authenticatorService.authUser);
+  authUser(enabled = true) {
+    return useQuery('authUser', authenticatorService.authUser, { enabled });
   }
 }
 
