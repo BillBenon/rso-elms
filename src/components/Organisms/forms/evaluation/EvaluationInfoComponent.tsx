@@ -185,7 +185,6 @@ export default function EvaluationInfoComponent({
           Evaluation Name
         </InputMolecule>
         <SelectMolecule
-          /*@ts-ignore */
           value={details?.evaluation_type}
           width="64"
           name="evaluation_type"
