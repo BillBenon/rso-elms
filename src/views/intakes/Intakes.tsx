@@ -219,7 +219,12 @@ export default function Intakes() {
                       key={intake.code + Math.random() * 10}
                       trigger={
                         <div className="p-1 mt-3">
-                          <CommonCardMolecule data={intake} />
+                          <CommonCardMolecule
+                            data={intake}
+                            handleClick={() =>
+                              history.push(`${url}/programs/${intake.id}`)
+                            }
+                          />
                         </div>
                       }
                       open>
@@ -238,13 +243,13 @@ export default function Intakes() {
                           </div>
                         </div>
 
-                        <div>
+                        {/* <div>
                           <Link
                             className="outline-none"
                             to={`${url}/programs/${intake.id}`}>
                             <Button styleType="text">View programs</Button>
                           </Link>
-                        </div>
+                        </div> */}
                         <div className="mt-4 space-x-4">
                           <Link
                             to={`${url}/${intake.id}/edit/${intake.registrationControlId}`}>
