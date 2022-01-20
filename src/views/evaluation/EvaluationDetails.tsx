@@ -35,7 +35,7 @@ export default function EvaluationDetails() {
     //   href: `${url}/ongoing-submissions`,
     // },
     {
-      label: 'Unbegun',
+      label: 'Defiance/To start',
       href: `${url}/unbeguns`,
     },
   ];
