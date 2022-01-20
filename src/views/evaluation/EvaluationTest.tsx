@@ -24,7 +24,7 @@ export default function EvaluationTest() {
   const [open, setOpen] = useState(true);
   const maximizableElement = React.useRef(null);
   const [studentEvaluationId, setStudentEvaluationId] = useState('');
-  const [isCheating, setIsCheating] = useState(false);
+  const [, setIsCheating] = useState(false);
   const [timeLimit, SetTimeLimit] = useState(0);
   const [isFullscreen, setIsFullscreen] = useFullscreenStatus(maximizableElement);
   const { data: evaluationData } = evaluationStore.getEvaluationById(id);
@@ -40,24 +40,19 @@ export default function EvaluationTest() {
   let studentWorkTimer = evaluationStore.getEvaluationWorkTime(studentEvaluationId);
 
   const autoSubmit = useCallback(() => {
-    if (isCheating)
-      toast.error(
-        'The exam was auto submitted because you tried to exit full screen or changed tab',
-        { duration: 30000 },
-      );
-
-    setTimeout(() => {
-      mutate(studentEvaluationId, {
-        onSuccess: () => {
-          toast.success('Evaluation submitted', { duration: 5000 });
-          window.location.href = '/dashboard/student';
-        },
-        onError: (error) => {
-          toast.error(error + '');
-        },
-      });
-    }, 5000);
-  }, [isCheating, mutate, studentEvaluationId]);
+    // setTimeout(() => {
+    setIsCheating(false);
+    mutate(studentEvaluationId, {
+      onSuccess: () => {
+        toast.success('Evaluation submitted', { duration: 5000 });
+        history.push({ pathname: '/dashboard/student', search: '?forceReload=true' });
+      },
+      onError: (error) => {
+        toast.error(error + '');
+      },
+    });
+    // }, 2000);
+  }, [history, mutate, studentEvaluationId]);
 
   async function updateWorkTime(value: any) {
     let workTime = timeLimit * 60 * 1000 - time + (time - value.total);
@@ -84,20 +79,21 @@ export default function EvaluationTest() {
   ]);
 
   useEffect(() => {
-    if (
-      !open &&
-      !isFullscreen &&
-      path === '/dashboard/evaluations/student-evaluation/:id'
-    ) {
-      setIsCheating(true);
-      autoSubmit();
-    }
+    // if (
+    //   !open &&
+    //   !isFullscreen &&
+    //   path === '/dashboard/evaluations/student-evaluation/:id'
+    // ) {
+    //   setIsCheating(true);
+    //   autoSubmit();
+    // }
     const handleTabChange = () => {
       if (
         document['hidden'] &&
         path === '/dashboard/evaluations/student-evaluation/:id'
       ) {
         setIsCheating(true);
+
         autoSubmit();
       }
     };
@@ -123,7 +119,7 @@ export default function EvaluationTest() {
           <Heading fontWeight="semibold">Enable Full screen</Heading>
           <p className="course-card-description leading-5 pb-6 w-96 text-txt-secondary text-sm mt-4">
             You are about to attempt this evaluation test.Full screeen should be enabled
-            to avoid cheating. If you sdisable it or change tabs/desktop then you&apos;ll
+            to avoid cheating. If you disable it or change tabs/desktop then you&apos;ll
             get zero
           </p>
 

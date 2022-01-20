@@ -21,7 +21,7 @@ export default function Switch({
 }: PropType) {
   const [active, setActive] = useState(false);
 
-  useEffect(() => setActive(value), []);
+  useEffect(() => setActive(value), [value]);
 
   function handleClick(e: any) {
     handleChange({ value: !active, name, event: e });

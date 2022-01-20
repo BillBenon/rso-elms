@@ -48,6 +48,11 @@ class UserStore {
   getUserAccountsByNid(nid: string) {
     return useQuery(['user/nid', nid], () => userService.getUserAccountByNid(nid));
   }
+  getUserRoles(userId: string, enabled = true) {
+    useQuery(['user/roles', userId], () => userService.getAssignedRoles(userId), {
+      enabled,
+    });
+  }
   getLanguages() {
     return useQuery('languages', userService.getLanguages);
   }

@@ -9,7 +9,6 @@ import { classStore } from '../../store/administration/class.store';
 import { getStudentShipByUserId } from '../../store/administration/intake-program.store';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import { UserType } from '../../types/services/user.types';
-import ViewStudentReports from '../reports/ViewStudentReports';
 import StudentInClass from './StudentInClass';
 
 function Classes() {
@@ -41,7 +40,6 @@ function Classes() {
 
   return (
     <Switch>
-      <Route path={`${path}/reports`} component={ViewStudentReports} />
       <Route
         path={`${path}`}
         render={() => {

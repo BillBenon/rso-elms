@@ -11,6 +11,7 @@ import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType } from '../../types';
 import { IEvaluationOwnership } from '../../types/services/evaluation.types';
 import { UserType } from '../../types/services/user.types';
+import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import { advancedTypeChecker } from '../../utils/getOption';
 
 interface InstructorSubjectViewerProps {
@@ -44,6 +45,14 @@ export default function SubjectInstructorView({
         )
       : evaluationStore.getEvaluationsBySubject(subjectId);
 
+  function goToEditEvaluation(info: CommonCardDataType) {
+    setLocalStorageData('currentStep', 0);
+    history.push({
+      pathname: `/dashboard/evaluations/new`,
+      search: `?subj=${subjectId}&evaluation=${info.id}&intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+    });
+  }
+
   useEffect(() => {
     let formattedEvals: CommonCardDataType[] = [];
     data?.data.data.forEach((evaluation) => {
@@ -74,12 +83,14 @@ export default function SubjectInstructorView({
                 {isLoading && evaluations.length === 0 && <Loader />}
 
                 {isSuccess && evaluations.length === 0 ? (
-                  <NoDataAvailable
-                    icon="evaluation"
-                    showButton={false}
-                    title={'No evaluations available'}
-                    description="Consider adding some evaluation to see them here!"
-                  />
+                  <div className="w-full">
+                    <NoDataAvailable
+                      icon="evaluation"
+                      showButton={false}
+                      title={'No evaluations available'}
+                      description="Consider adding some evaluations to see them here!"
+                    />
+                  </div>
                 ) : isSuccess && evaluations.length > 0 ? (
                   evaluations?.map((info: CommonCardDataType, index: number) => (
                     <div key={index}>
@@ -87,12 +98,7 @@ export default function SubjectInstructorView({
                         <div className="flex justify-between">
                           <Button
                             styleType="text"
-                            onClick={() =>
-                              history.push({
-                                pathname: `/dashboard/evaluations/new`,
-                                search: `?subj=${subjectId}&evaluation=${info.id}&intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
-                              })
-                            }>
+                            onClick={() => goToEditEvaluation(info)}>
                             Edit
                           </Button>
                           <Button
@@ -109,10 +115,9 @@ export default function SubjectInstructorView({
                 ) : isError ? (
                   <NoDataAvailable
                     icon="evaluation"
-                    buttonLabel="Create Evaluation"
-                    title={'No evaluations available'}
-                    handleClick={() => history.push(`/dashboard/evaluations/new`)}
-                    description="And the web just isnt the same without you. Lets get you back online!"
+                    showButton={false}
+                    title={'Something went wrong'}
+                    description="Try refreshing the page or login again!"
                   />
                 ) : null}
               </section>

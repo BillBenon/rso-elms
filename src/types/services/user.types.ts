@@ -1,9 +1,8 @@
-import { EnrollmentStatus, StudentApproval } from './enrollment.types';
-import { GenericStatus } from '..';
+import { StudentApproval } from './enrollment.types';
+import { GenericStatus, RoleRes, RoleResWithPrevilages } from '..';
 /* eslint-disable no-unused-vars */
 import { Table } from '..';
 import { AcademyInfo } from './academy.types';
-import { ILevel } from './levels.types';
 import { RankRes } from './rank.types';
 import { StudentIntakeProgram } from './intake-program.types';
 import { InstitutionInfo } from './institution.types';
@@ -45,6 +44,15 @@ export interface UserInfo extends Table {
   enabled: boolean;
   authorities: [];
   otp_active: string;
+}
+
+export interface AuthUser extends UserInfo {
+  user_roles: RoleResWithPrevilages[];
+}
+
+export interface UserRole extends Table{
+  role:RoleRes,
+  user:UserInfo
 }
 
 export interface IntakeLevelProgramInfo extends Table {

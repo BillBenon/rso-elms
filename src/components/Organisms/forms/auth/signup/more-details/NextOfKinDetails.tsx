@@ -14,10 +14,7 @@ import {
   MaritalStatus,
   UserType,
 } from '../../../../../../types/services/user.types';
-import {
-  CreateNextOfKin,
-  NextKinInfo,
-} from '../../../../../../types/services/usernextkin.types';
+import { CreateNextOfKin } from '../../../../../../types/services/usernextkin.types';
 import { getDropDownStatusOptions } from '../../../../../../utils/getOption';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
