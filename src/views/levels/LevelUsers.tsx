@@ -10,7 +10,7 @@ import UpdateUser from '../../components/Organisms/forms/user/UpdateUser';
 import Admins from '../../components/Organisms/user/Admins';
 import Instructors from '../../components/Organisms/user/Instructors';
 import Students from '../../components/Organisms/user/Students';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { levelStore } from '../../store/administration/level.store';
 import usersStore from '../../store/administration/users.store';
 import { ParamType } from '../../types';
@@ -23,13 +23,13 @@ export default function LevelUsers() {
   // eslint-disable-next-line no-unused-vars
   const [userType, setUserType] = useState('Students');
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
   // eslint-disable-next-line no-unused-vars
   const level = levelStore.getLevelById(id).data?.data.data;
   const history = useHistory();
 
   const { data, isSuccess, isLoading } = usersStore.getUsersByAcademy(
-    authUser?.academy.id || '',
+    user?.academy.id || '',
   );
 
   const userInfo = data?.data.data.content;
@@ -94,7 +94,7 @@ export default function LevelUsers() {
     },
   ];
 
-  if (authUser?.user_type === UserType.SUPER_ADMIN) {
+  if (user?.user_type === UserType.SUPER_ADMIN) {
     tabs.push({
       label: 'Admins',
       href: `${url}/admins`,

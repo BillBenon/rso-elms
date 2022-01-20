@@ -19,7 +19,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import {
   getProgramsByIntake,
@@ -56,26 +56,23 @@ function IntakePrograms() {
     { to: 'intakes', title: 'intakes' },
     { to: `${url}`, title: 'Programs' },
   ];
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
-  const authUserId = authUser?.id;
+  const userId = user?.id;
   const instructorInfo =
-    instructordeploymentStore.getInstructorByUserId(authUserId + '').data?.data.data ||
-    [];
+    instructordeploymentStore.getInstructorByUserId(userId + '').data?.data.data || [];
 
   const studentInfo =
-    getStudentShipByUserId(
-      authUserId + '',
-      !!authUserId && authUser?.user_type === UserType.STUDENT,
-    ).data?.data.data || [];
+    getStudentShipByUserId(userId + '', !!userId && user?.user_type === UserType.STUDENT)
+      .data?.data.data || [];
 
   const { data, isLoading, refetch } =
-    authUser?.user_type === UserType.STUDENT
+    user?.user_type === UserType.STUDENT
       ? getIntakeProgramsByStudent(
           studentInfo[0]?.id.toString() || '',
           !!studentInfo[0]?.id,
         )
-      : authUser?.user_type === UserType.INSTRUCTOR
+      : user?.user_type === UserType.INSTRUCTOR
       ? enrollmentStore.getInstructorIntakePrograms(instructorInfo[0]?.id + '')
       : getProgramsByIntake(intakeId);
   const programInfo = data?.data.data || [];
@@ -86,12 +83,12 @@ function IntakePrograms() {
     if (location.pathname === path || location.pathname === `${path}/`) {
       refetch();
     }
-  }, [location]);
+  }, [location, path, refetch]);
 
   let programs: IProgramData[] = [];
 
   programInfo?.map((p) => {
-    if (authUser?.user_type === UserType.STUDENT) {
+    if (user?.user_type === UserType.STUDENT) {
       let pg = p as StudentIntakeProgram;
 
       let showProgram = pg.intake_program.intake.id === intakeId;
@@ -114,7 +111,7 @@ function IntakePrograms() {
           programs.push(prog);
         }
       }
-    } else if (authUser?.user_type === UserType.INSTRUCTOR) {
+    } else if (user?.user_type === UserType.INSTRUCTOR) {
       let pg = p as InstructorProgram;
       const showProgram = pg.intake_program.intake.id === intakeId;
       if (showProgram) {
@@ -177,7 +174,7 @@ function IntakePrograms() {
                     totalItems={programs.length}
                     title={`${intakeId ? intake?.data?.data.data.title : 'Programs'}`}
                     showSearch={false}>
-                    {authUser?.user_type === UserType.ADMIN && (
+                    {user?.user_type === UserType.ADMIN && (
                       <Link to={`${url}/add-program-to-intake?intakeId=${intakeId}`}>
                         <Button>Add Program To Intake</Button>
                       </Link>
@@ -199,12 +196,12 @@ function IntakePrograms() {
                                 className="cursor-pointer"
                                 data={Common}
                                 handleClick={() =>
-                                  authUser?.user_type === UserType.STUDENT
+                                  user?.user_type === UserType.STUDENT
                                     ? ((intakeProg = intakeProg as StudentIntakeProgram),
                                       history.push(
                                         `${url}/${Common.id}/${intakeProg.intake_program.id}`,
                                       ))
-                                    : authUser?.user_type === UserType.INSTRUCTOR
+                                    : user?.user_type === UserType.INSTRUCTOR
                                     ? ((intakeProg = intakeProg as InstructorProgram),
                                       history.push(
                                         `${url}/${Common.id}/${intakeProg.intake_program.id}`,
@@ -299,7 +296,7 @@ function IntakePrograms() {
                     })
                   ) : (
                     <NoDataAvailable
-                      showButton={authUser?.user_type === UserType.ADMIN}
+                      showButton={user?.user_type === UserType.ADMIN}
                       icon="program"
                       buttonLabel="Add new program to intake"
                       title={'No program available in this intake'}
@@ -307,7 +304,7 @@ function IntakePrograms() {
                         history.push(`${url}/add-program-to-intake?intakeId=${intakeId}`)
                       }
                       description={`There are no programs added yet${
-                        authUser?.user_type === UserType.ADMIN
+                        user?.user_type === UserType.ADMIN
                           ? ', click on the below button to add some!'
                           : ''
                       }`}

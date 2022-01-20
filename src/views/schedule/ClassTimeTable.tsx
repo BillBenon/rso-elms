@@ -17,7 +17,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import EditTimeTable from '../../components/Organisms/schedule/timetable/EditTimeTable';
 import NewTimeTable from '../../components/Organisms/schedule/timetable/NewTimeTable';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { classStore } from '../../store/administration/class.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { timetableStore } from '../../store/timetable/timetable.store';
@@ -33,7 +33,7 @@ export default function ClassTimeTable() {
 
   const [isPrinting, setisPrinting] = useState(false);
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
   const classInfo = classStore.getClassById(id).data?.data.data;
 
   const handleClose = () => {
@@ -64,7 +64,7 @@ export default function ClassTimeTable() {
         showSearch={false}
         title={`${classInfo?.academic_year_program_intake_level.academic_program_level.program.name} - ${classInfo?.academic_year_program_intake_level.academic_program_level.level.name} - ${classInfo?.class_name}`}>
         <div className="flex gap-3">
-          {authUser?.user_type !== UserType.STUDENT && (
+          {user?.user_type !== UserType.STUDENT && (
             <Link to={`${url}/new-schedule`}>
               <Button type="button">New timetable</Button>
             </Link>
@@ -116,7 +116,7 @@ export default function ClassTimeTable() {
                       <p className="py-2 text-sm print:text-xs font-medium">
                         {`${instructor?.user.first_name} ${instructor?.user.last_name}`}
                       </p>
-                      {authUser?.user_type == UserType.ADMIN && (
+                      {user?.user_type == UserType.ADMIN && (
                         <div className="actions hidden absolute top-0 right-0 -mt-2">
                           <Link to={`${url}/item/${activity.id}/edit`}>
                             <Icon name={'edit'} stroke="primary" />

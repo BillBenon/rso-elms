@@ -6,21 +6,21 @@ import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import usersStore from '../../store/administration/users.store';
 import { ValueType } from '../../types';
 import { AcademyUserType, UserType, UserTypes } from '../../types/services/user.types';
 import { formatUserTable } from '../../utils/array';
 
 export default function AdminsView() {
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
   const history = useHistory();
 
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
 
   const { data, isLoading, refetch } =
-    authUser?.user_type === UserType.SUPER_ADMIN
+    user?.user_type === UserType.SUPER_ADMIN
       ? usersStore.fetchUsers({
           userType: UserType.ADMIN,
           page: currentPage,
@@ -28,7 +28,7 @@ export default function AdminsView() {
           sortyBy: 'username',
         })
       : usersStore.getUsersByAcademyAndUserType(
-          authUser?.academy.id.toString() || '',
+          user?.academy.id.toString() || '',
           UserType.ADMIN,
           { page: currentPage, pageSize, sortyBy: 'username' },
         );
@@ -55,7 +55,7 @@ export default function AdminsView() {
 
   useEffect(() => {
     refetch();
-  }, [currentPage, pageSize]);
+  }, [currentPage, pageSize, refetch]);
 
   return (
     <div>
@@ -63,7 +63,7 @@ export default function AdminsView() {
         title="Admins"
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
-        {authUser?.user_type === UserType.SUPER_ADMIN && (
+        {user?.user_type === UserType.SUPER_ADMIN && (
           <Link to={`/dashboard/users/add/${UserType.ADMIN}`}>
             <Button>New admin</Button>
           </Link>

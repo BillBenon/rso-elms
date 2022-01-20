@@ -5,7 +5,7 @@ import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType } from '../../types';
@@ -26,11 +26,10 @@ export default function SubjectInstructorView({
   const { search } = useLocation();
   const { path } = useRouteMatch();
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
-    authUser?.id + '',
-  ).data?.data.data[0];
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
+    .data?.data.data[0];
 
   const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
   const progId = new URLSearchParams(search).get('prog') || '';
@@ -38,7 +37,7 @@ export default function SubjectInstructorView({
   const period = new URLSearchParams(search).get('prd') || '';
 
   const { data, isSuccess, isLoading, isError } =
-    authUser?.user_type === UserType.INSTRUCTOR
+    user?.user_type === UserType.INSTRUCTOR
       ? evaluationStore.getEvaluationsByCategory(
           IEvaluationOwnership.CREATED_BY_ME,
           instructorInfo?.id.toString() || '',

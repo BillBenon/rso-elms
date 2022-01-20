@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import { authenticatorStore } from '../../../store/administration';
+import useAuthenticator from '../../../hooks/useAuthenticator';
 import { divisionStore } from '../../../store/administration/divisions.store';
 import { DivisionInfo } from '../../../types/services/division.types';
 import Button from '../../Atoms/custom/Button';
@@ -30,11 +30,11 @@ export default function Faculties({ fetchType }: IFaculties) {
   const { url, path } = useRouteMatch();
   const history = useHistory();
   const [faculties, setFaculties] = useState<FilteredData[]>([]);
-  const { data: userInfo } = authenticatorStore.authUser();
+  const { user } = useAuthenticator();
 
   const { data, isLoading } = divisionStore.getDivisionsByAcademy(
     fetchType.toUpperCase() || 'FACULTY',
-    userInfo?.data.data.academy.id.toString() || '',
+    user?.academy.id.toString() || '',
   );
 
   useEffect(() => {
@@ -140,7 +140,7 @@ export default function Faculties({ fetchType }: IFaculties) {
           render={() => {
             return (
               <PopupMolecule title="Update Faculty" open={true} onClose={handleClose}>
-                <UpdateFaculty academy_id={userInfo?.data.data.academy.id.toString()} />
+                <UpdateFaculty academy_id={user?.academy.id.toString()} />
               </PopupMolecule>
             );
           }}
@@ -152,7 +152,7 @@ export default function Faculties({ fetchType }: IFaculties) {
           render={() => {
             return (
               <PopupMolecule title="New Faculty" open onClose={handleClose}>
-                <NewFaculty academy_id={userInfo?.data.data.academy.id.toString()} />
+                <NewFaculty academy_id={user?.academy.id.toString()} />
               </PopupMolecule>
             );
           }}
@@ -164,7 +164,7 @@ export default function Faculties({ fetchType }: IFaculties) {
           render={() => {
             return (
               <PopupMolecule title="New Department" open onClose={handleClose}>
-                <NewDepartment academy_id={userInfo?.data.data.academy.id.toString()} />
+                <NewDepartment academy_id={user?.academy.id.toString()} />
               </PopupMolecule>
             );
           }}

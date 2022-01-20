@@ -12,7 +12,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore, {
   getIntakeProgramsByStudent,
@@ -49,7 +49,7 @@ function IntakeProgramDetails() {
   const { data: instructorsProgram, isLoading: instLoading } =
     intakeProgramStore.getInstructorsByIntakeProgram(intakeProg);
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
   const [students, setStudents] = useState<UserView[]>([]);
   const [instructors, setInstructors] = useState<UserView[]>([]);
@@ -119,12 +119,11 @@ function IntakeProgramDetails() {
     (pg) => !getLevels.map((lv) => lv.academic_program_level.id).includes(pg.id),
   );
 
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
-    authUser?.id + '',
-  ).data?.data.data[0];
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
+    .data?.data.data[0];
 
-  const studentInfo = getStudentShipByUserId(authUser?.id + '' || '', !!authUser?.id).data
-    ?.data.data[0];
+  const studentInfo = getStudentShipByUserId(user?.id + '' || '', !!user?.id).data?.data
+    .data[0];
   const studPrograms = getIntakeProgramsByStudent(studentInfo?.id + '', !!studentInfo?.id)
     .data?.data.data;
 
@@ -136,14 +135,14 @@ function IntakeProgramDetails() {
     },
   ];
 
-  if (authUser?.user_type !== UserType.STUDENT) {
+  if (user?.user_type !== UserType.STUDENT) {
     tabs.push({
       label: 'Program modules',
       href: `${url}/modules`,
     });
   }
 
-  if (authUser?.user_type === UserType.STUDENT) {
+  if (user?.user_type === UserType.STUDENT) {
     let studIntkProgstud = studPrograms?.find(
       (prg) => prg.intake_program.id === intakeProg,
     );
@@ -162,7 +161,7 @@ function IntakeProgramDetails() {
     }
   }
 
-  if (authUser?.user_type === UserType.INSTRUCTOR) {
+  if (user?.user_type === UserType.INSTRUCTOR) {
     let { data: instructorLevels } = enrollmentStore.getInstructorLevels(
       instructorInfo?.id + '',
     );
@@ -191,7 +190,7 @@ function IntakeProgramDetails() {
     }
   }
 
-  if (authUser?.user_type === UserType.ADMIN) {
+  if (user?.user_type === UserType.ADMIN) {
     tabs.push({
       label: 'Approve students',
       href: `${url}/approve`,
@@ -227,7 +226,7 @@ function IntakeProgramDetails() {
         <TabNavigation
           tabs={tabs}
           headerComponent={
-            authUser?.user_type === UserType.ADMIN &&
+            user?.user_type === UserType.ADMIN &&
             getLevels.length === 0 &&
             unaddedLevels?.length !== 0 ? (
               <div className="text-right">
@@ -276,7 +275,7 @@ function IntakeProgramDetails() {
                                 {programData.subTitle?.replaceAll('_', ' ')}
                               </Heading>
                             </div>
-                            {authUser?.user_type === UserType.ADMIN ? (
+                            {user?.user_type === UserType.ADMIN ? (
                               <div className="mt-4 flex space-x-4">
                                 <Button
                                   onClick={() =>
@@ -298,7 +297,7 @@ function IntakeProgramDetails() {
                             data={students}
                             totalUsers={students.length || 0}
                             dataLabel={''}
-                            userType={authUser?.user_type}
+                            userType={user?.user_type}
                             isLoading={studLoading}
                             showSidebar={showSidebar.showStudent}
                             handleShowSidebar={() =>
@@ -308,7 +307,7 @@ function IntakeProgramDetails() {
                               })
                             }
                           />
-                          {authUser?.user_type === UserType.ADMIN ? (
+                          {user?.user_type === UserType.ADMIN ? (
                             <EnrollStudentIntakeProgram
                               showSidebar={showSidebar.enrollStudent}
                               existing={studentsProgram?.data.data || []}
@@ -327,7 +326,7 @@ function IntakeProgramDetails() {
                             data={instructors}
                             totalUsers={instructors.length || 0}
                             dataLabel={''}
-                            userType={authUser?.user_type}
+                            userType={user?.user_type}
                             isLoading={instLoading}
                             showSidebar={showSidebar.showInstructor}
                             handleShowSidebar={() =>
@@ -337,7 +336,7 @@ function IntakeProgramDetails() {
                               })
                             }
                           />
-                          {authUser?.user_type === UserType.ADMIN ? (
+                          {user?.user_type === UserType.ADMIN ? (
                             <EnrollInstructorIntakeProgram
                               showSidebar={showSidebar.enrollInstructor}
                               existing={instructorsProgram?.data.data || []}

@@ -14,7 +14,7 @@ import Heading from '../../components/Atoms/Text/Heading';
 import PopupMolecule from '../../components/Molecules/Popup';
 import CalendarComponent from '../../components/Organisms/schedule/calendar/CalendarComponent';
 import NewSchedule from '../../components/Organisms/schedule/calendar/NewSchedule';
-import { authenticatorStore } from '../../store/administration/authenticator.store';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import programStore from '../../store/administration/program.store';
@@ -46,7 +46,7 @@ export default function CalendarView() {
   const classInfo = classStore.getClassById(classId + '').data?.data.data;
 
   // auth info
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
   // get events
   const { data, refetch } = inLevelId
@@ -86,7 +86,7 @@ export default function CalendarView() {
               dateRange.end_date,
             ).toLocaleDateString()}`}
           </Heading>
-          {authUser?.user_type != UserType.STUDENT && (
+          {user?.user_type != UserType.STUDENT && (
             <Link to={`${url}/new-schedule`}>
               <Button>New schedule</Button>
             </Link>

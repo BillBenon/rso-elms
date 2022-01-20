@@ -4,7 +4,7 @@ import { useReactToPrint } from 'react-to-print';
 
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { getStudentReportInTerm } from '../../store/evaluation/school-report.store';
@@ -28,8 +28,7 @@ interface IReportTable {
 }
 
 export default function SchoolReport() {
-  const authUser = authenticatorStore.authUser().data?.data.data;
-
+  const { user } = useAuthenticator();
   const [isPrinting, setisPrinting] = useState(false);
 
   //path params
@@ -82,20 +81,18 @@ export default function SchoolReport() {
           <div className="provider">
             <img
               src={usePicture(
-                authUser?.academy.logo_attachment_id,
-                authUser?.academy.id,
+                user?.academy.logo_attachment_id,
+                user?.academy.id,
                 '/images/rdf-logo.png',
                 'logos',
               )}
               alt="Institution logo"
               className=" w-20 object-cover block mb-5"
             />
-            <h2 className="text-base font-bold">{authUser?.academy.institution.name}</h2>
-            <h2 className="text-sm font-medium py-2 uppercase">
-              {authUser?.academy.name}
-            </h2>
-            <h3 className="text-sm font-medium pb-2">Mail: {authUser?.academy.email}</h3>
-            <h3 className="text-sm font-medium">Tel: {authUser?.academy.phone_number}</h3>
+            <h2 className="text-base font-bold">{user?.academy.institution.name}</h2>
+            <h2 className="text-sm font-medium py-2 uppercase">{user?.academy.name}</h2>
+            <h3 className="text-sm font-medium pb-2">Mail: {user?.academy.email}</h3>
+            <h3 className="text-sm font-medium">Tel: {user?.academy.phone_number}</h3>
           </div>
           <div className="student">
             <div className="w-20 mb-5">

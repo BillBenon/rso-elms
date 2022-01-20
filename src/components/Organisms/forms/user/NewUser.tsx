@@ -3,9 +3,9 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router';
 import countryList from 'react-select-country-list';
 
+import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { queryClient } from '../../../../plugins/react-query';
 import academyStore from '../../../../store/administration/academy.store';
-import { authenticatorStore } from '../../../../store/administration/authenticator.store';
 import {
   getIntakesByAcademy,
   getProgramsByIntake,
@@ -46,7 +46,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
   // const newUserType = pick(UserType, ['ADMIN', 'INSTRUCTOR', 'STUDENT']);
   // const newUserTypeWithSuper = { ...newUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
   let { userType } = useParams<IParams>();
 
@@ -57,7 +57,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const [details, setDetails] = useState<CreateUserInfo>({
     activation_key: '',
     spouse_name: '',
-    academy_id: authUser?.academy?.id + '',
+    academy_id: user?.academy?.id + '',
     deployed_on: '',
     deployment_number: `DEP-${parseInt(Math.random() * 10000 + '')}`,
     birth_date: '',
@@ -315,7 +315,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Education level
         </DropdownMolecule>
-        {authUser?.user_type === UserType.SUPER_ADMIN && (
+        {user?.user_type === UserType.SUPER_ADMIN && (
           <DropdownMolecule
             options={getDropDownOptions({ inputs: academies || [] })}
             name="academy_id"

@@ -5,7 +5,7 @@ import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { ParamType } from '../../types';
 import { UserType, UserTypes } from '../../types/services/user.types';
@@ -45,7 +45,7 @@ function InstructorsOnModule() {
     instrs.push(user);
   });
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
   return (
     <Switch>
@@ -58,8 +58,10 @@ function InstructorsOnModule() {
               <Heading fontSize="base" fontWeight="semibold">
                 Instructors ({instructorInfos?.data.data.length || 0})
               </Heading>
-              {authUser?.user_type === UserType.ADMIN && (
-                <EnrollInstructorToModuleComponent existing={instructorInfos?.data.data || []} />
+              {user?.user_type === UserType.ADMIN && (
+                <EnrollInstructorToModuleComponent
+                  existing={instructorInfos?.data.data || []}
+                />
               )}
             </div>
             <>
@@ -73,7 +75,11 @@ function InstructorsOnModule() {
                   description={
                     'There are no instructors currently assigned to this module'
                   }
-                  handleClick={() => <EnrollInstructorToModuleComponent existing={instructorInfos?.data.data || []} />}
+                  handleClick={() => (
+                    <EnrollInstructorToModuleComponent
+                      existing={instructorInfos?.data.data || []}
+                    />
+                  )}
                 />
               ) : (
                 <Table<UserTypes>

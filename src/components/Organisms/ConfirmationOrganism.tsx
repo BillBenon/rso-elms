@@ -2,7 +2,7 @@ import React from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
-import { authenticatorStore } from '../../store/administration/authenticator.store';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
 import {
@@ -21,7 +21,7 @@ interface IConfirmationProps {
 export default function ConfirmationOrganism({
   onConfirmationClose,
 }: IConfirmationProps) {
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
   const { id } = useParams<ParamType>();
   const history = useHistory();
   const { search } = useLocation();
@@ -39,7 +39,7 @@ export default function ConfirmationOrganism({
     const studentEvaluationStart: IStudentEvaluationStart = {
       attachment: '',
       evaluation_id: id,
-      student_id: authUser?.id + '',
+      student_id: user?.id + '',
     };
 
     if (studentEval) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
-import { authenticatorStore } from '../../../store/administration';
+import useAuthenticator from '../../../hooks/useAuthenticator';
 import { ValueType } from '../../../types';
 import { UserType, UserTypes } from '../../../types/services/user.types';
 import Button from '../../Atoms/custom/Button';
@@ -32,7 +32,7 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
     },
   ];
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
   return (
     <>
@@ -41,7 +41,7 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
         totalItems={instructors && instructors.length > 0 ? instructors.length : 0}
         handleSearch={handleSearch}
         showSearch={instructors && instructors.length > 0}>
-        {authUser?.user_type === UserType.SUPER_ADMIN && (
+        {user?.user_type === UserType.SUPER_ADMIN && (
           <div className="flex gap-3">
             <Link to={`${url}/import`}>
               <Button styleType="outline">Import instructors</Button>

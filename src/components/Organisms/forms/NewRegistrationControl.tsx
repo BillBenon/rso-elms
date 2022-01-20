@@ -2,8 +2,8 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
 
+import useAuthenticator from '../../../hooks/useAuthenticator';
 import { queryClient } from '../../../plugins/react-query';
-import { authenticatorStore } from '../../../store/administration';
 import registrationControlStore from '../../../store/administration/registrationControl.store';
 import { CommonFormProps, ValueType } from '../../../types';
 import { IRegistrationControlCreateInfo } from '../../../types/services/registrationControl.types';
@@ -16,11 +16,11 @@ interface PropType<K> extends CommonFormProps<K> {}
 
 export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
   const { mutateAsync, isLoading } = registrationControlStore.createRegControl();
-  const { data } = authenticatorStore.authUser();
+  const { user } = useAuthenticator();
   const history = useHistory();
 
   const [regControl, setRegControl] = useState<IRegistrationControlCreateInfo>({
-    academy_id: data?.data.data.academy.id.toString() || '',
+    academy_id: user?.academy.id.toString() || '',
     description: '',
     expected_start_date: '',
     expected_end_date: '',

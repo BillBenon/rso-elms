@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 
-import { authenticatorStore } from '../../../store/administration';
+import useAuthenticator from '../../../hooks/useAuthenticator';
 import { divisionStore } from '../../../store/administration/divisions.store';
 import { DivisionInfo } from '../../../types/services/division.types';
 import NewAcademicProgram from '../../../views/programs/NewAcademicProgram';
@@ -26,15 +26,15 @@ interface IDepartment {
 export default function Departments({ fetchType }: IDepartment) {
   const { path } = useRouteMatch();
   const history = useHistory();
+  const { user } = useAuthenticator();
   const [departments, setDepartments] = useState<FilteredData[]>([]);
   const { search } = useLocation();
   const facultyId = new URLSearchParams(search).get('fac');
-  const { data: userInfo } = authenticatorStore.authUser();
   let { data, isLoading } = facultyId
     ? divisionStore.getDepartmentsInFaculty(facultyId)
     : divisionStore.getDivisionsByAcademy(
         fetchType.toUpperCase(),
-        userInfo?.data.data.academy.id.toString() || '',
+        user?.academy.id.toString() || '',
       );
 
   let facultyData: any;
@@ -158,9 +158,7 @@ export default function Departments({ fetchType }: IDepartment) {
                     title="Update Department"
                     open={true}
                     onClose={handleClose}>
-                    <UpdateDepartment
-                      academy_id={userInfo?.data.data.academy.id.toString()}
-                    />
+                    <UpdateDepartment academy_id={user?.academy.id.toString()} />
                   </PopupMolecule>
                 );
               }}

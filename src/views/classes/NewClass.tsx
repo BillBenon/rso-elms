@@ -5,8 +5,8 @@ import { useHistory, useParams } from 'react-router';
 import Button from '../../components/Atoms/custom/Button';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { queryClient } from '../../plugins/react-query';
-import { authenticatorStore } from '../../store/administration';
 import { classStore } from '../../store/administration/class.store';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
@@ -32,7 +32,8 @@ function NewClass() {
     intake_level_id: 0,
   });
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
+  const levelIdTitle = document.getElementById('intake_level_id')?.title;
   const {
     level: levelId,
     intakeProg,
@@ -42,20 +43,22 @@ function NewClass() {
   } = useParams<IntakePeriodParam>();
   useEffect(
     () =>
-      setForm({
-        ...form,
-        intake_level_id: parseInt(
-          document.getElementById('intake_level_id')?.title || '0',
-        ),
+      setForm((frm) => {
+        return {
+          ...frm,
+          intake_level_id: parseInt(levelIdTitle || ''),
+        };
       }),
-    [document.getElementById('intake_level_id')?.title],
+    [levelIdTitle],
   );
 
   useEffect(() => {
-    setForm({
-      ...form,
-      class_representative_two_id: form.class_representative_one_id,
-      class_representative_tree_id: form.class_representative_one_id,
+    setForm((frm) => {
+      return {
+        ...frm,
+        class_representative_two_id: form.class_representative_one_id,
+        class_representative_tree_id: form.class_representative_one_id,
+      };
     });
   }, [form.class_representative_one_id]);
 
@@ -71,11 +74,11 @@ function NewClass() {
     intakeProgramStore.getStudentsByIntakeProgramLevel(levelId).data?.data.data || [];
   const users =
     usersStore
-      .getUsersByAcademyAndUserType(
-        authUser?.academy.id.toString() || '',
-        UserType.STUDENT,
-        { page: 0, pageSize: 1000, sortyBy: 'username' },
-      )
+      .getUsersByAcademyAndUserType(user?.academy.id.toString() || '', UserType.STUDENT, {
+        page: 0,
+        pageSize: 1000,
+        sortyBy: 'username',
+      })
       .data?.data.data.content.filter((stud) => stud.user_type === UserType.STUDENT) ||
     [];
 
