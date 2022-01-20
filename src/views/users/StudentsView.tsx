@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -10,7 +11,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import ImportUsers from '../../components/Organisms/user/ImportUsers';
 import { authenticatorStore } from '../../store/administration';
 import usersStore from '../../store/administration/users.store';
-import { ValueType } from '../../types';
+import { Privileges, ValueType } from '../../types';
 import { AcademyUserType, UserType, UserTypes } from '../../types/services/user.types';
 import { formatUserTable } from '../../utils/array';
 
@@ -73,7 +74,9 @@ export default function StudentsView() {
               <Button styleType="outline">Import students</Button>
             </Link>
             <Link to={`${url}/add/${UserType.STUDENT}`}>
-              <Button>New student</Button>
+              <Permission privilege={Privileges.CAN_ACCESS_EVALUATIONS}>
+                <Button>New student</Button>
+              </Permission>
             </Link>
           </div>
         )}
