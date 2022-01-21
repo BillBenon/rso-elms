@@ -12,6 +12,7 @@ import ImportUsers from '../../components/Organisms/user/ImportUsers';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import usersStore from '../../store/administration/users.store';
 import { Privileges, ValueType } from '../../types';
+import { ActionsType } from '../../types/services/table.types';
 import { AcademyUserType, UserType, UserTypes } from '../../types/services/user.types';
 import { formatUserTable } from '../../utils/array';
 
@@ -19,9 +20,11 @@ export default function StudentsView() {
   const { url } = useRouteMatch();
   const { user } = useAuthenticator();
   const history = useHistory();
+  const [privileges, setPrivileges] = useState<string[]>();
 
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
+  let actions: ActionsType<any>[] | undefined = [];
 
   const { data, isLoading, refetch } =
     user?.user_type === UserType.SUPER_ADMIN
@@ -39,21 +42,37 @@ export default function StudentsView() {
 
   const users = formatUserTable(data?.data.data.content || []);
 
-  const studentActions = [
-    { name: 'Add Role', handleAction: () => {} },
-    {
+  if (privileges?.includes(Privileges.CAN_ASSIGN_ROLE)) {
+    actions?.push({
+      name: 'Add Role',
+      handleAction: () => {},
+    });
+  }
+
+  if (privileges?.includes(Privileges.CAN_MODIFY_USER)) {
+    actions?.push({
       name: 'Edit student',
       handleAction: (id: string | number | undefined) => {
         history.push(`/dashboard/users/${id}/edit`); // go to edit user
       },
-    },
-    {
+    });
+  }
+
+  if (privileges?.includes(Privileges.CAN_ACCESS_PROFILE)) {
+    actions?.push({
       name: 'View Student',
       handleAction: (id: string | number | undefined) => {
         history.push(`${url}/${id}/profile`); // go to view user profile
       },
-    },
-  ];
+    });
+  }
+
+  useEffect(() => {
+    const _privileges = user?.user_roles
+      ?.filter((role) => role.id === 1)[0]
+      .role_privileges?.map((privilege) => privilege.name);
+    if (_privileges) setPrivileges(_privileges);
+  }, [user]);
 
   function handleSearch(_e: ValueType) {}
 
@@ -67,19 +86,16 @@ export default function StudentsView() {
         title="Students"
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
-        {(user?.user_type === UserType.SUPER_ADMIN ||
-          user?.user_type === UserType.ADMIN) && (
+        <Permission privilege={Privileges.CAN_CREATE_USER}>
           <div className="flex gap-3">
             <Link to={`${url}/import`}>
               <Button styleType="outline">Import students</Button>
             </Link>
             <Link to={`${url}/add/${UserType.STUDENT}`}>
-              <Permission privilege={Privileges.CAN_ACCESS_EVALUATIONS}>
-                <Button>New student</Button>
-              </Permission>
+              <Button>New student</Button>
             </Link>
           </div>
-        )}
+        </Permission>
       </TableHeader>
 
       {isLoading ? (
@@ -96,7 +112,7 @@ export default function StudentsView() {
         <Table<UserTypes | AcademyUserType>
           statusColumn="status"
           data={users}
-          actions={studentActions}
+          actions={actions}
           statusActions={[]}
           hide={['id', 'user_type']}
           selectorActions={[]}
