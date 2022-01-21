@@ -6,8 +6,8 @@ import Button from '../../components/Atoms/custom/Button';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import EvaluationContent from '../../components/Organisms/evaluation/EvaluationContent';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { queryClient } from '../../plugins/react-query';
-import { authenticatorStore } from '../../store/administration';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { ValueType } from '../../types';
@@ -22,10 +22,9 @@ interface IProps {
 
 export default function ReviewEvaluation({ evaluationId }: IProps) {
   const history = useHistory();
-  const authUser = authenticatorStore.authUser().data?.data.data;
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
-    authUser?.id + '',
-  ).data?.data.data[0];
+  const { user } = useAuthenticator();
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
+    .data?.data.data[0];
 
   const evaluationApprovals =
     evaluationStore.getEvaluationReviewByEvaluationAndInstructor(

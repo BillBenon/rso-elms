@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link as BrowserLink, useHistory } from 'react-router-dom';
 
-import { authenticatorStore } from '../../../../store/administration';
+import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { CommonCardDataType } from '../../../../types';
 import { UserType } from '../../../../types/services/user.types';
 import Button from '../../../Atoms/custom/Button';
@@ -20,7 +20,7 @@ export default function ModuleCard({
   showMenus = true,
   intakeProg = '',
 }: IProps) {
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
   const history = useHistory();
   return (
@@ -47,13 +47,13 @@ export default function ModuleCard({
           <p className="pt-4 pb-2 text-txt-secondary text-sm mt-4">
             {course.description}
           </p>
-          {authUser?.user_type === UserType.STUDENT ? (
+          {user?.user_type === UserType.STUDENT ? (
             <BrowserLink
               className="outline-none"
               to={`/dashboard/modules/${course.id}/subjects`}>
               <Button styleType="outline">Start module</Button>
             </BrowserLink>
-          ) : authUser?.user_type === UserType.ADMIN ? (
+          ) : user?.user_type === UserType.ADMIN ? (
             <div className="py-2 flex justify-around gap-2">
               <BrowserLink
                 className="outline-none"

@@ -5,8 +5,8 @@ import { useParams } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import RightSidebar from '../../components/Organisms/RightSidebar';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { queryClient } from '../../plugins/react-query';
-import { authenticatorStore } from '../../store/administration';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { getProgramsByIntake } from '../../store/administration/intake.store';
 import {
@@ -34,11 +34,11 @@ function EnrollStudentIntakeProgram<T>({
 }: ProgramEnrollmentProps<T>) {
   const { intakeProg, intakeId } = useParams<IntakeProgParam>();
 
-  const { data: authUser } = authenticatorStore.authUser();
+  const { user } = useAuthenticator();
 
   const { data: studentsInAcademy, isLoading } =
     enrollmentStore.getStudentAcademyAndEnrollmentStatus(
-      authUser?.data.data.academy.id + '',
+      user?.academy.id + '',
       StudentApproval.APPROVED,
     );
 

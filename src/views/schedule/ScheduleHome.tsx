@@ -16,7 +16,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import NewSchedule from '../../components/Organisms/schedule/calendar/NewSchedule';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import {
   getIntakeProgramsByStudent,
@@ -56,8 +56,8 @@ export default function ScheduleHome() {
   const history = useHistory();
   const { path } = useRouteMatch();
 
-  const userInfo = authenticatorStore.authUser().data?.data.data;
-  const { data, isLoading } = getIntakesByAcademy(userInfo?.academy.id + '', false);
+  const { user } = useAuthenticator();
+  const { data, isLoading } = getIntakesByAcademy(user?.academy.id + '', false);
 
   let intakes: CommonCardDataType[] =
     data?.data.data.map((intake) => ({
@@ -90,8 +90,8 @@ export default function ScheduleHome() {
           <Route
             path={`${path}`}
             render={() =>
-              userInfo?.user_type === UserType.STUDENT ? (
-                <RedirectStudent userId={userInfo.id + ''} />
+              user?.user_type === UserType.STUDENT ? (
+                <RedirectStudent userId={user.id + ''} />
               ) : (
                 <>
                   <TableHeader

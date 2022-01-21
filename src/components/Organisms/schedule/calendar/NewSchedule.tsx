@@ -2,8 +2,8 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
+import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { queryClient } from '../../../../plugins/react-query';
-import { authenticatorStore } from '../../../../store/administration';
 import { classStore } from '../../../../store/administration/class.store';
 import {
   getIntakesByAcademy,
@@ -129,12 +129,12 @@ export default function NewSchedule() {
 }
 
 function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
-  const events = getAllEvents(authUser?.academy.id + '').data?.data.data;
-  const venues = getAllVenues(authUser?.academy.id + '').data?.data.data;
+  const events = getAllEvents(user?.academy.id + '').data?.data.data;
+  const venues = getAllVenues(user?.academy.id + '').data?.data.data;
 
-  const { data: users } = usersStore.getUsersByAcademy(authUser?.academy.id || '', {
+  const { data: users } = usersStore.getUsersByAcademy(user?.academy.id || '', {
     page: 0,
     pageSize: 1000,
     sortyBy: 'username',
@@ -146,7 +146,7 @@ function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
   return (
     <form onSubmit={handleSubmit} className="-mb-6">
       <div className="hidden">
-        <InputMolecule value={authUser?.academy.id} name={'academyId'}>
+        <InputMolecule value={user?.academy.id} name={'academyId'}>
           Academy id
         </InputMolecule>
       </div>
@@ -266,8 +266,8 @@ function SecondStep({ handleChange, setCurrentStep, values }: IStepProps) {
 }
 
 function ThirdStep({ values, handleChange, handleSubmit, setCurrentStep }: IStepProps) {
-  const authUser = authenticatorStore.authUser().data?.data.data;
-  let academyId = authUser?.academy.id + '';
+  const { user } = useAuthenticator();
+  let academyId = user?.academy.id + '';
 
   const programs = (programStore.fetchPrograms().data?.data.data || []).map((pr) => ({
     value: pr.id + '',

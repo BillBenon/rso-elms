@@ -3,8 +3,8 @@ import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 import countryList from 'react-select-country-list';
 
+import useAuthenticator from '../../../../../../hooks/useAuthenticator';
 import { queryClient } from '../../../../../../plugins/react-query';
-import { authenticatorStore } from '../../../../../../store/administration';
 import usernextkinStore from '../../../../../../store/administration/usernextkin.store';
 import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../types';
 import {
@@ -33,7 +33,7 @@ function NextOfKinDetails<E>({
   nextStep,
   onSubmit,
 }: NextOfKin<E>) {
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
   const { mutateAsync } = usernextkinStore.createUserNextKin();
   const history = useHistory();
   // const inputRef = useRef<HTMLInputElement>(null);
@@ -52,7 +52,7 @@ function NextOfKinDetails<E>({
     document_expire_on: '',
     nid: '',
     place_of_residence: '',
-    user_id: authUser?.id + '',
+    user_id: user?.id + '',
     marital_status: MaritalStatus.SINGLE,
     spouse_name: '',
   });
@@ -63,7 +63,7 @@ function NextOfKinDetails<E>({
     setDetails((prevState) => {
       return {
         ...prevState,
-        user_id: authUser?.id + '',
+        user_id: user?.id + '',
         first_name: data?.data.data.first_name || prevState.first_name,
         last_name: data?.data.data.last_name || prevState.last_name,
         email: data?.data.data.email || prevState.email,
@@ -93,7 +93,7 @@ function NextOfKinDetails<E>({
         spouse_name: data?.data.data.spouse_name || prevState.spouse_name,
       };
     });
-  }, [authUser?.id, data?.data]);
+  }, [user?.id, data?.data]);
 
   const handleChange = (e: ValueType) => {
     setDetails({ ...details, [e.name]: e.value });
@@ -106,18 +106,18 @@ function NextOfKinDetails<E>({
     e.preventDefault();
 
     const data: CreateNextOfKin = {
-      user_id: authUser?.id + '',
+      user_id: user?.id + '',
       next_of_kins: [details],
     };
 
     await mutateAsync(data, {
       onSuccess(data) {
         toast.success(data.data.message);
-        queryClient.invalidateQueries(['next/user_id', authUser?.id]);
+        queryClient.invalidateQueries(['next/user_id', user?.id]);
         history.push(
-          authUser?.user_type === UserType.INSTRUCTOR
+          user?.user_type === UserType.INSTRUCTOR
             ? '/dashboard/inst-module'
-            : authUser?.user_type === UserType.STUDENT
+            : user?.user_type === UserType.STUDENT
             ? '/dashboard/student'
             : '/dashboard/users',
         );

@@ -8,7 +8,7 @@ import Button from '../../../components/Atoms/custom/Button';
 import Icon from '../../../components/Atoms/custom/Icon';
 import Heading from '../../../components/Atoms/Text/Heading';
 import PopupMolecule from '../../../components/Molecules/Popup';
-import { authenticatorStore } from '../../../store/administration';
+import useAuthenticator from '../../../hooks/useAuthenticator';
 import hobbiesStore from '../../../store/administration/hobbies.store';
 import { ParamType } from '../../../types';
 import { UserInfo } from '../../../types/services/user.types';
@@ -22,7 +22,7 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
   const { url, path } = useRouteMatch();
   const history = useHistory();
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user: authUser } = useAuthenticator();
   const hobbies = hobbiesStore.getUserHobby(user.person?.id + '').data?.data.data || [];
 
   return (

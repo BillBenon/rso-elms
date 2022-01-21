@@ -5,8 +5,8 @@ import { useParams } from 'react-router';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import RightSidebar from '../../components/Organisms/RightSidebar';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { queryClient } from '../../plugins/react-query';
-import { authenticatorStore } from '../../store/administration';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { getProgramsByIntake } from '../../store/administration/intake.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
@@ -30,7 +30,7 @@ function EnrollInstructorIntakeProgram({
   const { data: instructorsInAcademy, isLoading } =
     instructordeploymentStore.getInstructors();
 
-  const { data: authUser } = authenticatorStore.authUser();
+  const { user } = useAuthenticator();
 
   const programs = getProgramsByIntake(intakeId).data?.data.data;
 
@@ -44,7 +44,7 @@ function EnrollInstructorIntakeProgram({
     }
     let instructorsView: UserView[] = [];
     instructorsInAcademy?.data.data
-      .filter((inst) => inst.user.academy.id === authUser?.data.data.academy.id)
+      .filter((inst) => inst.user.academy.id === user?.academy.id)
       .forEach((inst) => {
         if (!existing_ids.includes(inst.id + '')) {
           let instructorView: UserView = {
@@ -57,7 +57,7 @@ function EnrollInstructorIntakeProgram({
         }
       });
     setInstructors(instructorsView);
-  }, [instructorsInAcademy, existing, authUser?.data.data.academy.id]);
+  }, [instructorsInAcademy, existing, user?.academy.id]);
 
   const { mutate } = enrollmentStore.enrollInstructorToProgram();
 

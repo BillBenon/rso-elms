@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Redirect, Route, useRouteMatch } from 'react-router-dom';
 
 import Button from './components/Atoms/custom/Button';
 import Loader from './components/Atoms/custom/Loader';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
+import useAuthenticator from './hooks/useAuthenticator';
 import Dashboard from './layout/Dashboard';
-import { authenticatorStore } from './store/administration';
-import { UserInfo, UserType } from './types/services/user.types';
+import { UserType } from './types/services/user.types';
 import cookie from './utils/cookie';
 import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';
@@ -34,15 +34,10 @@ import UserDetails from './views/users/UserDetails';
 import Users from './views/users/Users';
 
 const RouterProtection = () => {
-  const [authUser, setAuthUser] = useState<UserInfo>();
-  const { data, isLoading, isError } = authenticatorStore.authUser();
+  const { user, userLoading, isError } = useAuthenticator();
   const { path } = useRouteMatch();
 
   let token = cookie.getCookie('jwt_info');
-
-  useEffect(() => {
-    setAuthUser(data?.data.data);
-  }, [data?.data.data]);
 
   const InstitutionAdminRoutes = () => (
     <>
@@ -125,16 +120,16 @@ const RouterProtection = () => {
 
   return !token ? (
     <Redirect to="/login" />
-  ) : isLoading ? (
+  ) : userLoading ? (
     <div className="h-screen">
       <Loader />
     </div>
-  ) : authUser ? (
+  ) : user ? (
     <Dashboard>
-      {authUser?.user_type === UserType.SUPER_ADMIN && InstitutionAdminRoutes()}
-      {authUser?.user_type === UserType.ADMIN && AcademicAdminRoutes()}
-      {authUser?.user_type === UserType.INSTRUCTOR && InstructorRoutes()}
-      {authUser?.user_type === UserType.STUDENT && StudentRoutes()}
+      {user?.user_type === UserType.SUPER_ADMIN && InstitutionAdminRoutes()}
+      {user?.user_type === UserType.ADMIN && AcademicAdminRoutes()}
+      {user?.user_type === UserType.INSTRUCTOR && InstructorRoutes()}
+      {user?.user_type === UserType.STUDENT && StudentRoutes()}
     </Dashboard>
   ) : isError ? (
     <div>

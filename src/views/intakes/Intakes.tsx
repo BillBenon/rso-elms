@@ -21,7 +21,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
 import NewIntake from '../../components/Organisms/intake/NewIntake';
 import UpdateIntake from '../../components/Organisms/intake/UpdateIntake';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import {
@@ -53,7 +53,7 @@ interface IntakeCardType extends CommonCardDataType {
 
 export default function Intakes() {
   const [intakes, setIntakes] = useState<IntakeCardType[]>([]);
-  const { data: userInfo } = authenticatorStore.authUser();
+  const { user } = useAuthenticator();
 
   const history = useHistory();
   const { url, path } = useRouteMatch();
@@ -69,16 +69,14 @@ export default function Intakes() {
 
   if (registrationControlId && !regSuccess && !regLoading) refetch();
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
-
-  const authUserId = authUser?.id;
+  const authUserId = user?.id;
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(authUserId + '')
     .data?.data.data[0];
 
   const studentInfo =
     getStudentShipByUserId(
       authUserId + '',
-      !!authUserId && authUser?.user_type === UserType.STUDENT,
+      !!authUserId && user?.user_type === UserType.STUDENT,
     ).data?.data.data || [];
 
   const {
@@ -87,15 +85,15 @@ export default function Intakes() {
     data,
     isLoading,
     refetch: refetchIntakes,
-  } = authUser?.user_type === UserType.STUDENT
+  } = user?.user_type === UserType.STUDENT
     ? getIntakeProgramsByStudent(
         studentInfo[0]?.id.toString() || '',
         !!studentInfo[0]?.id,
       )
-    : authUser?.user_type === UserType.INSTRUCTOR
+    : user?.user_type === UserType.INSTRUCTOR
     ? enrollmentStore.getInstructorIntakePrograms(instructorInfo?.id + '')
     : getIntakesByAcademy(
-        registrationControlId || userInfo?.data.data.academy.id.toString()!,
+        registrationControlId || user?.academy.id.toString()!,
         !!registrationControlId,
         true,
       );
@@ -104,7 +102,7 @@ export default function Intakes() {
     if (isSuccess && data?.data) {
       let loadedIntakes: IntakeCardType[] = [];
       data?.data.data.forEach((intk) => {
-        if (authUser?.user_type === UserType.STUDENT) {
+        if (user?.user_type === UserType.STUDENT) {
           let intake = intk as StudentIntakeProgram;
           if (intake && intake.enrolment_status === StudentApproval.APPROVED) {
             let prog: IntakeCardType = {
@@ -123,7 +121,7 @@ export default function Intakes() {
               loadedIntakes.push(prog);
             }
           }
-        } else if (authUser?.user_type === UserType.INSTRUCTOR) {
+        } else if (user?.user_type === UserType.INSTRUCTOR) {
           let intake = intk as InstructorProgram;
           let prog: IntakeCardType = {
             id: intake.intake_program.intake.id,
@@ -159,7 +157,7 @@ export default function Intakes() {
 
       setIntakes(loadedIntakes);
     } else if (isError) toast.error('error occurred when loading intakes');
-  }, [authUser?.user_type, data, isError, isSuccess]);
+  }, [user?.user_type, data, isError, isSuccess]);
 
   function handleSearch(_e: ValueType) {}
   function handleClose() {
@@ -279,16 +277,16 @@ export default function Intakes() {
                           ? 'No intake available in this reg Control'
                           : 'No intake available'
                       }
-                      showButton={authUser?.user_type === UserType.ADMIN}
+                      showButton={user?.user_type === UserType.ADMIN}
                       handleClick={() => {
                         if (registrationControlId)
                           history.push(`${url}/${registrationControlId}/add-intake`);
                         else history.push('/dashboard/registration-control');
                       }}
                       description={`${
-                        authUser?.user_type === UserType.STUDENT
+                        user?.user_type === UserType.STUDENT
                           ? 'You have not been approved to any intake yet!'
-                          : authUser?.user_type === UserType.INSTRUCTOR
+                          : user?.user_type === UserType.INSTRUCTOR
                           ? 'You have not been enrolled to teach any intake yet!'
                           : "There haven't been any intakes added yet! try adding some from the button below."
                       }`}

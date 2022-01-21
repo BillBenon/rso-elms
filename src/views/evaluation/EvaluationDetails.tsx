@@ -5,8 +5,8 @@ import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import EvaluationContent from '../../components/Organisms/evaluation/EvaluationContent';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { queryClient } from '../../plugins/react-query';
-import { authenticatorStore } from '../../store/administration';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
 import { UserType } from '../../types/services/user.types';
@@ -20,7 +20,7 @@ export default function EvaluationDetails() {
 
   const { url, path } = useRouteMatch();
   const makeEvaluationPublic = evaluationStore.publishEvaluation();
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
   const tabs = [
     {
       label: 'Overview evaluation',
@@ -35,7 +35,7 @@ export default function EvaluationDetails() {
     //   href: `${url}/ongoing-submissions`,
     // },
     {
-      label: 'Unbegun',
+      label: 'Defiance/To start',
       href: `${url}/unbeguns`,
     },
   ];
@@ -79,7 +79,7 @@ export default function EvaluationDetails() {
             <Route exact path={`${path}/unbeguns`} render={() => <Unbeguns />} />
           </div>
 
-          {authUser?.user_type === UserType.INSTRUCTOR && (
+          {user?.user_type === UserType.INSTRUCTOR && (
             <Route
               exact
               path={`${path}`}

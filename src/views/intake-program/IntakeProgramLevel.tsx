@@ -8,7 +8,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import useInstructorLevels from '../../hooks/getInstructorLevels';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import intakeProgramStore, {
   getIntakeProgramsByStudent,
   getStudentLevels,
@@ -32,11 +32,11 @@ function IntakeProgramLevel() {
   const { intakeProg, intakeId, id } = useParams<IntakeProgParam>();
   const [instLevels, setInstLevels] = useState<LevelIntakeProgram[]>([]);
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
-  const authUserId = authUser?.id;
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(authUserId + '')
-    .data?.data.data[0];
+  const userId = user?.id;
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(userId + '').data
+    ?.data.data[0];
 
   const { data: getLevels, isLoading } =
     intakeProgramStore.getLevelsByIntakeProgram(intakeProg);
@@ -53,8 +53,8 @@ function IntakeProgramLevel() {
     setInstLevels(instructorProgLevels);
   }, [instructorProgLevels]);
 
-  const studentInfo = getStudentShipByUserId(authUser?.id + '' || '', !!authUser?.id).data
-    ?.data.data[0];
+  const studentInfo = getStudentShipByUserId(user?.id + '' || '', !!user?.id).data?.data
+    .data[0];
   const studPrograms = getIntakeProgramsByStudent(studentInfo?.id + '', !!studentInfo?.id)
     .data?.data.data;
 
@@ -68,12 +68,12 @@ function IntakeProgramLevel() {
   );
 
   const tabs =
-    authUser?.user_type === UserType.STUDENT
+    user?.user_type === UserType.STUDENT
       ? studentLevels?.data.data.map((level) => ({
           label: `${level.academic_year_program_level.academic_program_level.level.name}`,
           href: `${url}/${level.academic_year_program_level.id}`,
         })) || []
-      : authUser?.user_type === UserType.INSTRUCTOR
+      : user?.user_type === UserType.INSTRUCTOR
       ? instLevels.map((level) => ({
           label: `${level.academic_program_level.level.name}`,
           href: `${url}/${level.id}`,
@@ -103,7 +103,7 @@ function IntakeProgramLevel() {
         />
       ) : (
         <>
-          {authUser?.user_type === UserType.ADMIN && unaddedLevels?.length !== 0 ? (
+          {user?.user_type === UserType.ADMIN && unaddedLevels?.length !== 0 ? (
             <div className="text-right">
               <Link
                 to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>

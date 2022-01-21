@@ -8,7 +8,7 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Link as LinkList } from '../../types';
@@ -22,11 +22,10 @@ export default function InstructorViewEvaluations() {
 
   const history = useHistory();
   const { path } = useRouteMatch();
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
-    authUser?.id + '',
-  ).data?.data.data[0];
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
+    .data?.data.data[0];
 
   const { data, isSuccess, isLoading, isError, refetch } =
     evaluationStore.getEvaluationsByCategory(

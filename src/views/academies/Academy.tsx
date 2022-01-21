@@ -14,7 +14,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import AssignAdminToAcademy from '../../components/Organisms/forms/academy/AssignAdminToAcademy';
 import NewAcademy from '../../components/Organisms/forms/academy/NewAcademy';
 import UpdateAcademy from '../../components/Organisms/forms/academy/UpdateAcademy';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import academyStore from '../../store/administration/academy.store';
 import usersStore from '../../store/administration/users.store';
 import { Link as LinkList } from '../../types';
@@ -32,9 +32,9 @@ export default function Academy() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
   const { data, isLoading } = academyStore.getAcademiesByInstitution(
-    authUser?.institution_id || '',
+    user?.institution_id || '',
   );
   const list: LinkList[] = [
     { to: '/', title: 'Institution Admin' },
@@ -42,7 +42,7 @@ export default function Academy() {
   ];
   const academyInfo = data?.data.data;
   let academies: AcademyTypes[] = [];
-  const users = usersStore.getUsersByInstitution(authUser?.institution_id + '');
+  const users = usersStore.getUsersByInstitution(user?.institution_id + '');
 
   academyInfo?.map((obj) => {
     let { id, name, current_admin_id, phone_number, generic_status } = obj;

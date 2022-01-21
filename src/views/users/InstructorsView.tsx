@@ -8,7 +8,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import ImportUsers from '../../components/Organisms/user/ImportUsers';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import usersStore from '../../store/administration/users.store';
 import { ValueType } from '../../types';
 import { AcademyUserType, UserType, UserTypes } from '../../types/services/user.types';
@@ -16,14 +16,14 @@ import { formatUserTable } from '../../utils/array';
 
 export default function InstructorsView() {
   const { url } = useRouteMatch();
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
   const history = useHistory();
 
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
 
   const { data, isLoading, refetch } =
-    authUser?.user_type === UserType.SUPER_ADMIN
+    user?.user_type === UserType.SUPER_ADMIN
       ? usersStore.fetchUsers({
           userType: UserType.INSTRUCTOR,
           page: currentPage,
@@ -31,7 +31,7 @@ export default function InstructorsView() {
           sortyBy: 'username',
         })
       : usersStore.getUsersByAcademyAndUserType(
-          authUser?.academy.id.toString() || '',
+          user?.academy.id.toString() || '',
           UserType.INSTRUCTOR,
           { page: currentPage, pageSize, sortyBy: 'username' },
         );
@@ -58,7 +58,7 @@ export default function InstructorsView() {
 
   useEffect(() => {
     refetch();
-  }, [currentPage, pageSize]);
+  }, [currentPage, pageSize, refetch]);
 
   return (
     <div>
@@ -66,8 +66,8 @@ export default function InstructorsView() {
         title="Instructors"
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
-        {(authUser?.user_type === UserType.SUPER_ADMIN ||
-          authUser?.user_type === UserType.ADMIN) && (
+        {(user?.user_type === UserType.SUPER_ADMIN ||
+          user?.user_type === UserType.ADMIN) && (
           <div className="flex gap-3">
             <Link to={`${url}/import`}>
               <Button styleType="outline">Import instructors</Button>
