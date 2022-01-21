@@ -62,7 +62,7 @@ export default function Roles() {
   //actions to be displayed in table
   let actions: ActionsType<any>[] | undefined = [];
 
-  if (privileges?.includes(Privileges.CAN_EDIT_ROLE)) {
+  if (privileges?.includes(Privileges.CAN_MODIFY_ROLE)) {
     actions?.push({
       name: 'Edit role',
       handleAction: (id: string | number | undefined) => {
