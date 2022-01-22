@@ -89,7 +89,6 @@ function CompleteProfile() {
   useEffect(() => {
     const userInfo = user.data?.data.data;
     // const deployedUser = userInfo?.person.doc_type === null;
-    console.log(userInfo);
 
     userInfo &&
       setPersonalInfo({
