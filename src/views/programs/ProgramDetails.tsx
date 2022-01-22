@@ -71,11 +71,14 @@ export default function ProgramDetailsMolecule() {
       label: 'Program info',
       href: `${url}`,
     },
-    {
+  ];
+
+  if (privileges?.includes(Privileges.CAN_ACCESS_MODULES)) {
+    tabs.push({
       label: 'Program modules',
       href: `${url}/modules`,
-    },
-  ];
+    });
+  }
 
   const handleClose = () => {
     history.goBack();
