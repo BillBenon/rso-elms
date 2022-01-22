@@ -27,7 +27,7 @@ function Levels() {
   const { user } = useAuthenticator();
   const [levels, setLevels] = useState<FilteredLevels[]>();
   const [privileges, setPrivileges] = useState<string[]>();
-  let actions: ActionsType<any>[] | undefined = [];
+  let actions: ActionsType<FilteredLevels>[] | undefined = [];
 
   const { data, isLoading } = levelStore.getLevelsByAcademy(
     user?.academy.id.toString() || '',
