@@ -31,7 +31,7 @@ export default function NewFaculty({ onSubmit, academy_id }: IDivisionsAcademyTy
     mutateAsync(division, {
       onSuccess: (data) => {
         toast.success(data.data.message);
-        queryClient.invalidateQueries(['faculties/academy']);
+        queryClient.invalidateQueries(['divisions', 'FACULTY', academy_id]);
         history.push('/dashboard/divisions');
       },
       onError: (error: any) => {
