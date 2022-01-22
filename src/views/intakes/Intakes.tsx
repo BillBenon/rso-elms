@@ -249,15 +249,15 @@ export default function Intakes() {
                             <Button styleType="text">View programs</Button>
                           </Link>
                         </div> */}
-                        <div className="mt-4 space-x-4">
-                          <Permission privilege={Privileges.CAN_MODIFY_INTAKE}>
+                        <Permission privilege={Privileges.CAN_MODIFY_INTAKE}>
+                          <div className="mt-4 space-x-4">
                             <Link
                               to={`${url}/${intake.id}/edit/${intake.registrationControlId}`}>
                               <Button>Edit Intake</Button>
                             </Link>
-                          </Permission>
-                          <Button styleType="outline">Change Status</Button>
-                        </div>
+                            <Button styleType="outline">Change Status</Button>
+                          </div>
+                        </Permission>
                       </div>
                     </Tooltip>
                   </div>
