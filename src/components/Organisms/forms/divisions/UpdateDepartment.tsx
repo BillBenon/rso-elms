@@ -55,7 +55,11 @@ export default function UpdateDepartment({ onSubmit }: IDivisionsAcademyType) {
     mutateAsync(updateDivisionInfo, {
       onSuccess: () => {
         toast.success('Department updated');
-        queryClient.invalidateQueries(['divisions/type', division.division_type]);
+        queryClient.invalidateQueries([
+          'divisions',
+          division.division_type,
+          division.academy?.id,
+        ]);
 
         history.goBack();
       },
