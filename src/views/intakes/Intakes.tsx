@@ -61,6 +61,14 @@ export default function Intakes() {
   const { search } = useLocation();
   const registrationControlId = new URLSearchParams(search).get('regId');
 
+  const [privileges, setPrivileges] = useState<string[]>();
+  useEffect(() => {
+    const _privileges = user?.user_roles
+      ?.filter((role) => role.id === 1)[0]
+      .role_privileges?.map((privilege) => privilege.name);
+    if (_privileges) setPrivileges(_privileges);
+  }, [user]);
+
   const {
     data: regControl,
     refetch,
@@ -115,6 +123,7 @@ export default function Intakes() {
               code: intake.intake_program.intake.code,
               title: intake.intake_program.intake.title,
               description: intake.intake_program.intake.description,
+              footerTitle: intake.intake_program.intake.total_num_students,
               registrationControlId:
                 intake.intake_program.intake.registration_control?.id + '',
             };
@@ -133,6 +142,7 @@ export default function Intakes() {
             code: intake.intake_program.intake.code,
             title: intake.intake_program.intake.title,
             description: intake.intake_program.intake.description,
+            footerTitle: intake.intake_program.intake.total_num_students,
             registrationControlId:
               intake.intake_program.intake.registration_control?.id + '',
           };
@@ -150,6 +160,7 @@ export default function Intakes() {
               type: advancedTypeChecker(intake.intake_status),
               text: intake.intake_status.toString(),
             },
+            footerTitle: intake.total_num_students,
             registrationControlId: intake.registration_control.id + '',
           };
           loadedIntakes.push(cardData);
@@ -205,14 +216,16 @@ export default function Intakes() {
                 }
                 handleSearch={handleSearch}>
                 {registrationControlId && (
-                  <Link to={`${url}/${registrationControlId}/add-intake`}>
-                    <Button>Add Intake</Button>
-                  </Link>
+                  <Permission privilege={Privileges.CAN_CREATE_INTAKE}>
+                    <Link to={`${url}/${registrationControlId}/add-intake`}>
+                      <Button>Add Intake</Button>
+                    </Link>
+                  </Permission>
                 )}
               </TableHeader>
 
               <section className="flex flex-wrap justify-start gap-4 mt-2">
-                {intakes.map((intake, index) => (
+                {intakes.map((intake) => (
                   <div key={intake.code + Math.random() * 10} className="p-1 mt-3">
                     <Tooltip
                       key={intake.code + Math.random() * 10}
@@ -221,35 +234,35 @@ export default function Intakes() {
                           <CommonCardMolecule
                             data={intake}
                             handleClick={() =>
-                              history.push(`${url}/programs/${intake.id}`)
-                            }
-                          />
+                              privileges?.includes(
+                                Privileges.CAN_ACCESS_PROGRAMS_IN_INTAKE,
+                              )
+                                ? history.push(`${url}/programs/${intake.id}`)
+                                : {}
+                            }>
+                            <div className="flex flex-col gap-6">
+                              <div className="flex gap-2">
+                                <Heading color="txt-secondary" fontSize="sm">
+                                  Total Students Enrolled:
+                                </Heading>
+                                <Heading fontSize="sm" fontWeight="semibold">
+                                  {intake.footerTitle}
+                                </Heading>
+                              </div>
+                            </div>
+                          </CommonCardMolecule>
                         </div>
                       }
                       open>
-                      <div className="w-96">
-                        <div className="flex flex-col gap-6">
-                          <div className="flex gap-2">
-                            <Heading color="txt-secondary" fontSize="sm">
-                              Total Students Enrolled:
-                            </Heading>
-                            <Heading fontSize="sm" fontWeight="semibold">
-                              {
-                                //@ts-ignore
-                                data?.data.data[index].total_num_students || 0
-                              }
-                            </Heading>
-                          </div>
-                        </div>
-
-                        {/* <div>
+                      {/* <div>
                           <Link
-                            className="outline-none"
-                            to={`${url}/programs/${intake.id}`}>
-                            <Button styleType="text">View programs</Button>
+                          className="outline-none"
+                          to={`${url}/programs/${intake.id}`}>
+                          <Button styleType="text">View programs</Button>
                           </Link>
                         </div> */}
-                        <Permission privilege={Privileges.CAN_MODIFY_INTAKE}>
+                      <Permission privilege={Privileges.CAN_MODIFY_INTAKE}>
+                        <div className="w-96">
                           <div className="mt-4 space-x-4">
                             <Link
                               to={`${url}/${intake.id}/edit/${intake.registrationControlId}`}>
@@ -257,8 +270,8 @@ export default function Intakes() {
                             </Link>
                             <Button styleType="outline">Change Status</Button>
                           </div>
-                        </Permission>
-                      </div>
+                        </div>
+                      </Permission>
                     </Tooltip>
                   </div>
                 ))}

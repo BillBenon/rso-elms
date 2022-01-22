@@ -29,9 +29,20 @@ export default function Sidebar() {
     const academicAdminLinks: linkProps[] = [
       { title: 'Users', to: '/dashboard/users', icon: 'user' },
       { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
-      { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
-      { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
     ];
+    if (privileges?.includes(Privileges.CAN_ACCESS_INTAKES)) {
+      academicAdminLinks.push({
+        title: 'Intakes',
+        to: '/dashboard/intakes',
+        icon: 'academy',
+        fill: false,
+      });
+    }
+    academicAdminLinks.push({
+      title: 'Schedule',
+      to: '/dashboard/schedule',
+      icon: 'calendar',
+    });
     if (privileges?.includes(Privileges.CAN_ACCESS_DIVISIONS)) {
       academicAdminLinks.push({
         title: 'Divisions',
@@ -40,14 +51,19 @@ export default function Sidebar() {
       });
     }
 
-    academicAdminLinks.push(
-      { title: 'Academic years', to: '/dashboard/academic-years', icon: 'program' },
-      {
+    academicAdminLinks.push({
+      title: 'Academic years',
+      to: '/dashboard/academic-years',
+      icon: 'program',
+    });
+
+    if (privileges?.includes(Privileges.CAN_ACCESS_REG_CONTROLS)) {
+      academicAdminLinks.push({
         title: 'Registration Control',
         to: '/dashboard/registration-control',
         icon: 'reg-control',
-      },
-    );
+      });
+    }
 
     const instructorLinks: linkProps[] = [
       { title: 'Modules', to: '/dashboard/inst-module', icon: 'module' },
