@@ -67,23 +67,36 @@ export default function Sidebar() {
 
     const instructorLinks: linkProps[] = [
       { title: 'Modules', to: '/dashboard/inst-module', icon: 'module' },
-      {
+    ];
+    if (privileges?.includes(Privileges.CAN_ACCESS_INTAKES)) {
+      instructorLinks.push({
         title: 'Intakes',
         to: '/dashboard/intakes',
         icon: 'academy',
         fill: false,
-      },
+      });
+    }
+    instructorLinks.push(
       { title: 'Evaluations', to: '/dashboard/evaluations', icon: 'evaluation' },
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
       { title: 'Events', to: '/dashboard/events', icon: 'calendar' },
-    ];
+    );
 
     const studentLinks: linkProps[] = [
       { title: 'Module', to: '/dashboard/student', icon: 'module' },
-      { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
+    ];
+    if (privileges?.includes(Privileges.CAN_ACCESS_INTAKES)) {
+      studentLinks.push({
+        title: 'Intakes',
+        to: '/dashboard/intakes',
+        icon: 'academy',
+        fill: false,
+      });
+    }
+    studentLinks.push(
       { title: 'Timetable', to: '/dashboard/schedule/timetable', icon: 'calendar' },
       { title: 'Calendar', to: '/dashboard/schedule', icon: 'calendar' },
-    ];
+    );
 
     if (user?.user_type == UserType.SUPER_ADMIN) routes.push(...institutionAdminLinks);
     if (user?.user_type == UserType.ADMIN) routes.push(...academicAdminLinks);
