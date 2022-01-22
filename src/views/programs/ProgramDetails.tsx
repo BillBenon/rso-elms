@@ -8,6 +8,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -20,7 +21,7 @@ import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleFor
 import programStore, {
   getLevelsByAcademicProgram,
 } from '../../store/administration/program.store';
-import { Link as Links, ParamType } from '../../types';
+import { Link as Links, ParamType, Privileges } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ProgramModules from '../modules/ProgramModules';
 import { IProgramData } from './AcademicPrograms';
@@ -129,12 +130,14 @@ export default function ProgramDetailsMolecule() {
                             <Heading fontSize="sm">{programData.incharge}</Heading>
                           </div> */}
                         </div>
-                        <div className="mt-4 flex space-x-4">
-                          <Button onClick={() => history.push(`${url}/edit`)}>
-                            Edit program
-                          </Button>
-                          <Button styleType="outline">Change Status</Button>
-                        </div>
+                        <Permission privilege={Privileges.CAN_MODIFY_PROGRAM}>
+                          <div className="mt-4 flex space-x-4">
+                            <Button onClick={() => history.push(`${url}/edit`)}>
+                              Edit program
+                            </Button>
+                            <Button styleType="outline">Change Status</Button>
+                          </div>
+                        </Permission>
                       </CommonCardMolecule>
                     )}
                   </div>
