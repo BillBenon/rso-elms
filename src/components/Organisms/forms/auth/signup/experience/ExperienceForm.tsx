@@ -4,8 +4,8 @@ import toast from 'react-hot-toast';
 import { UseMutateAsyncFunction } from 'react-query';
 import { useHistory } from 'react-router-dom';
 
+import useAuthenticator from '../../../../../../hooks/useAuthenticator';
 import { queryClient } from '../../../../../../plugins/react-query';
-import { authenticatorStore } from '../../../../../../store/administration';
 import { experienceStore } from '../../../../../../store/administration/experience.store';
 import { moduleMaterialStore } from '../../../../../../store/administration/module-material.store';
 import {
@@ -41,7 +41,7 @@ function ExperienceForm<E>({
   display_label,
   type,
 }: IExperienceForm<E>) {
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
   const history = useHistory();
 
   const [experience, setExperience] = useState<ExperienceInfo>({
@@ -51,7 +51,7 @@ function ExperienceForm<E>({
     level: '',
     location: '',
     occupation: '',
-    person_id: authUser?.person.id.toString() || '',
+    person_id: user?.person.id.toString() || '',
     proof: '',
     start_date: '',
     type: type,
@@ -63,9 +63,9 @@ function ExperienceForm<E>({
 
   useEffect(() => {
     setExperience((exp) => {
-      return { ...exp, person_id: authUser?.person.id.toString() || '' };
+      return { ...exp, person_id: user?.person.id.toString() || '' };
     });
-  }, [authUser?.person.id]);
+  }, [user?.person.id]);
 
   useEffect(() => {
     setExperience((exp) => {
@@ -99,7 +99,7 @@ function ExperienceForm<E>({
             {
               async onSuccess(data) {
                 toast.success(data.data.message);
-                queryClient.invalidateQueries(['experience/id', authUser?.person.id]);
+                queryClient.invalidateQueries(['experience/id', user?.person.id]);
                 isSuccess = true;
               },
               onError(error: any) {
@@ -116,7 +116,7 @@ function ExperienceForm<E>({
       await mutateAsync(experience, {
         onSuccess(data) {
           toast.success(data.data.message);
-          queryClient.invalidateQueries(['experience/id', authUser?.person.id]);
+          queryClient.invalidateQueries(['experience/id', user?.person.id]);
           isSuccess = true;
         },
         onError(error: any) {
@@ -152,7 +152,7 @@ function ExperienceForm<E>({
           level: '',
           location: '',
           occupation: '',
-          person_id: authUser?.person.id.toString() || '',
+          person_id: user?.person.id.toString() || '',
           proof: '',
           start_date: '',
           type: experience.type,
@@ -193,7 +193,7 @@ function ExperienceForm<E>({
       level: '',
       location: '',
       occupation: '',
-      person_id: authUser?.person.id.toString() || '',
+      person_id: user?.person.id.toString() || '',
       proof: '',
       start_date: '',
       type: experience.type,

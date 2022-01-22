@@ -7,7 +7,7 @@ import AddCard from '../../components/Molecules/cards/AddCard';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { CommonCardDataType } from '../../types';
@@ -63,7 +63,7 @@ function IntakeLevelModule() {
   );
 
   // const { data: classes } = classStore.getClassByPeriod(periods?.data.data[0].id + '');
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
   return (
     <>
@@ -72,7 +72,7 @@ function IntakeLevelModule() {
         <Button styleType="outline">Enrolled Instructors</Button> */}
         {/* <div className='py-2.5 border px-4 rounded-lg border-primary-500 text-primary-500 font-semibold text-sm'>Enrolled Students</div>
         <div className='py-2.5 border px-4 rounded-lg border-primary-500 text-primary-500 font-semibold text-sm'>Enrolled Instructors</div> */}
-        {authUser?.user_type === UserType.ADMIN && (
+        {user?.user_type === UserType.ADMIN && (
           <>
             <LevelInstrctors
               isLoading={instructorsLoading}
@@ -118,7 +118,7 @@ function IntakeLevelModule() {
         {prdLoading ? (
           <></>
         ) : periods?.data.data.length === 0 ? (
-          authUser?.user_type === UserType.ADMIN && (
+          user?.user_type === UserType.ADMIN && (
             <Button
               styleType="outline"
               onClick={() =>
@@ -146,7 +146,7 @@ function IntakeLevelModule() {
           <Loader />
         ) : levelModules.length <= 0 ? (
           <NoDataAvailable
-            showButton={authUser?.user_type === UserType.ADMIN}
+            showButton={user?.user_type === UserType.ADMIN}
             buttonLabel="Add new modules"
             title={'No modules available in this level'}
             handleClick={() =>
@@ -158,7 +158,7 @@ function IntakeLevelModule() {
           />
         ) : (
           <>
-            {authUser?.user_type === UserType.ADMIN && (
+            {user?.user_type === UserType.ADMIN && (
               <AddCard
                 title={'Add new module'}
                 onClick={() =>

@@ -7,8 +7,16 @@ class MarkingStore {
     return useMutation(markingService.finishMarking);
   }
 
+  fieldMarkingFinish() {
+    return useMutation(markingService.fieldMarkingFinish);
+  }
+
   finalizaMarkingWithRemarks() {
     return useMutation(markingService.finalizaMarkingWithRemarks);
+  }
+
+  manualMarking() {
+    return useMutation(markingService.addManualMarking);
   }
 
   publishResults() {
@@ -22,6 +30,12 @@ class MarkingStore {
   getStudentEvaluationAnswers(id: string) {
     return useQuery(['studentEvaluation/answers', id], () =>
       markingService.getStudentEvaluationAnswers(id),
+    );
+  }
+
+  getManualMarkingMarks(evaluationId: string, classId: string) {
+    return useQuery(['manualMarkingMarks', evaluationId, classId], () =>
+      markingService.getManualMarkingMarks(evaluationId, classId),
     );
   }
 

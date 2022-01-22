@@ -3,9 +3,9 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router';
 import countryList from 'react-select-country-list';
 
+import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { queryClient } from '../../../../plugins/react-query';
 import academyStore from '../../../../store/administration/academy.store';
-import { authenticatorStore } from '../../../../store/administration/authenticator.store';
 import { intakeStore } from '../../../../store/administration/intake.store';
 import programStore from '../../../../store/administration/program.store'; // getLevelsByAcademicProgram,
 import usersStore from '../../../../store/administration/users.store';
@@ -39,15 +39,16 @@ interface IParams {
 
 export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
-
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  // const newUserType = pick(UserType, ['ADMIN', 'INSTRUCTOR', 'STUDENT']);
+  // const newUserTypeWithSuper = { ...newUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
+  const { user } = useAuthenticator();
 
   let { userType } = useParams<IParams>();
 
   const [details, setDetails] = useState<CreateUserInfo>({
     activation_key: '',
     spouse_name: '',
-    academy_id: authUser?.academy?.id + '',
+    academy_id: user?.academy?.id + '',
     deployed_on: '',
     deployment_number: `DEP-${parseInt(Math.random() * 10000 + '')}`,
     birth_date: '',
@@ -291,7 +292,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Education level
         </DropdownMolecule>
-        {authUser?.user_type === UserType.SUPER_ADMIN && (
+        {user?.user_type === UserType.SUPER_ADMIN && (
           <DropdownMolecule
             options={getDropDownOptions({ inputs: academies.data?.data.data || [] })}
             name="academy_id"

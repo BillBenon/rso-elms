@@ -4,11 +4,12 @@ import { useReactToPrint } from 'react-to-print';
 
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { getStudentReportInTerm } from '../../store/evaluation/school-report.store';
 import { usePicture } from '../../utils/file-util';
+import { calculateGrade, formatPercentage, isFailure } from '../../utils/school-report';
 
 interface IParamType {
   levelId: string;
@@ -27,8 +28,7 @@ interface IReportTable {
 }
 
 export default function SchoolReport() {
-  const authUser = authenticatorStore.authUser().data?.data.data;
-
+  const { user } = useAuthenticator();
   const [isPrinting, setisPrinting] = useState(false);
 
   //path params
@@ -67,20 +67,6 @@ export default function SchoolReport() {
     onAfterPrint: () => setisPrinting(false),
   });
 
-  function formatPercentage() {
-    let percentage =
-      ((totals.quizObtained + totals.examObtained) / (totals.quizMax + totals.examMax) ||
-        0) * 100;
-
-    return Math.round((percentage + Number.EPSILON) * 100) / 100;
-  }
-
-  function isFailure(obtained: number, max: number) {
-    return obtained < max / 2;
-  }
-
-  console.log('rendered');
-
   return (
     <div className="mx-auto max-w-4xl">
       <div className="text-right mb-5">
@@ -95,20 +81,18 @@ export default function SchoolReport() {
           <div className="provider">
             <img
               src={usePicture(
-                authUser?.academy.logo_attachment_id,
-                authUser?.academy.id,
+                user?.academy.logo_attachment_id,
+                user?.academy.id,
                 '/images/rdf-logo.png',
                 'logos',
               )}
               alt="Institution logo"
               className=" w-20 object-cover block mb-5"
             />
-            <h2 className="text-base font-bold">{authUser?.academy.institution.name}</h2>
-            <h2 className="text-sm font-medium py-2 uppercase">
-              {authUser?.academy.name}
-            </h2>
-            <h3 className="text-sm font-medium pb-2">Mail: {authUser?.academy.email}</h3>
-            <h3 className="text-sm font-medium">Tel: {authUser?.academy.phone_number}</h3>
+            <h2 className="text-base font-bold">{user?.academy.institution.name}</h2>
+            <h2 className="text-sm font-medium py-2 uppercase">{user?.academy.name}</h2>
+            <h3 className="text-sm font-medium pb-2">Mail: {user?.academy.email}</h3>
+            <h3 className="text-sm font-medium">Tel: {user?.academy.phone_number}</h3>
           </div>
           <div className="student">
             <div className="w-20 mb-5">
@@ -118,7 +102,7 @@ export default function SchoolReport() {
                   studentInfo?.data.data.user.id,
                 )}
                 alt="Student profile"
-                className="block w-20 h-20 object-cover"
+                className="block w-20 h-20 object-cover border"
               />
             </div>
             <h2 className="text-sm font-bold ">
@@ -188,7 +172,7 @@ export default function SchoolReport() {
             </Heading>
           </div>
           <div className="col-span-4 grid grid-cols-6">
-            {[1, 2, 3].map((i) => (
+            {[1, 2].map((i) => (
               <React.Fragment key={i}>
                 <Heading
                   fontSize="sm"
@@ -204,6 +188,26 @@ export default function SchoolReport() {
                 </Heading>
               </React.Fragment>
             ))}
+            <div className="col-span-2 grid grid-cols-3 ">
+              <Heading
+                fontSize="sm"
+                fontWeight="semibold"
+                className="p-1 border border-gray-700 text-center">
+                Obt.
+              </Heading>
+              <Heading
+                fontSize="sm"
+                fontWeight="semibold"
+                className="p-1 border border-gray-700 text-center">
+                Max.
+              </Heading>
+              <Heading
+                fontSize="sm"
+                fontWeight="semibold"
+                className="p-1 border border-gray-700 text-center">
+                Grade
+              </Heading>
+            </div>
           </div>
         </div>
         {/* modules map */}
@@ -224,16 +228,23 @@ export default function SchoolReport() {
                 {m.examObtained}
               </p>
               <p className="p-3 text-sm border border-gray-700">{m.examMax}</p>
-              <p
-                className={`p-3 text-sm border border-gray-700 
+              <div className="col-span-2 grid grid-cols-3">
+                <p
+                  className={`p-3 text-sm border border-gray-700 
                 ${
                   isFailure(m.catObtained + m.examObtained, m.examMax + m.catMax)
                     ? 'text-error-500'
                     : ''
                 }`}>
-                {m.catObtained + m.examObtained}
-              </p>
-              <p className="p-3 text-sm border border-gray-700">{m.examMax + m.catMax}</p>
+                  {m.catObtained + m.examObtained}
+                </p>
+                <p className="p-3 text-sm border border-gray-700">
+                  {m.examMax + m.catMax}
+                </p>
+                <p className="p-3 text-sm border border-gray-700">
+                  {calculateGrade(m.catObtained + m.examObtained, m.examMax + m.catMax)}
+                </p>
+              </div>
             </div>
           </div>
         ))}
@@ -250,12 +261,21 @@ export default function SchoolReport() {
             <p className="p-3 text-sm border border-gray-700">{totals.quizMax}</p>
             <p className="p-3 text-sm border border-gray-700">{totals.examObtained}</p>
             <p className="p-3 text-sm border border-gray-700">{totals.examMax}</p>
-            <p className="p-3 text-sm border border-gray-700">
-              {totals.quizObtained + totals.examObtained}
-            </p>
-            <p className="p-3 text-sm border border-gray-700">
-              {totals.quizMax + totals.examMax}
-            </p>
+
+            <div className="col-span-2 grid grid-cols-3">
+              <p className="p-3 text-sm border border-gray-700">
+                {totals.quizObtained + totals.examObtained}
+              </p>
+              <p className="p-3 text-sm border border-gray-700">
+                {totals.quizMax + totals.examMax}
+              </p>
+              <p className="p-3 text-sm border border-gray-700">
+                {calculateGrade(
+                  totals.quizObtained + totals.examObtained,
+                  totals.quizMax + totals.examMax,
+                )}
+              </p>
+            </div>
           </div>
         </div>
         {/* percentage */}
@@ -270,7 +290,10 @@ export default function SchoolReport() {
             fontSize="sm"
             fontWeight="semibold"
             className="col-span-4 py-3 px-6 border border-gray-700 text-right">
-            {`${formatPercentage()} %`}
+            {`${formatPercentage(
+              totals.quizObtained + totals.examObtained,
+              totals.quizMax + totals.examMax,
+            )} %`}
           </Heading>
         </div>
         {/* Student position */}

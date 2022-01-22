@@ -4,7 +4,7 @@ import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
 
-import { authenticatorStore } from '../../../../store/administration';
+import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { classStore } from '../../../../store/administration/class.store';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
@@ -50,11 +50,10 @@ export default function EvaluationInfoComponent({
     [search],
   );
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
-    authUser?.id + '',
-  ).data?.data.data[0];
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
+    .data?.data.data[0];
 
   const { data: classes } = classStore.getClassByPeriod(intakePeriodId + '');
 
@@ -64,7 +63,7 @@ export default function EvaluationInfoComponent({
     instructor_id: instructorInfo?.id + '',
     intake_academic_year_period: intakePeriodId,
     allow_submission_time: '',
-    class_ids: '',
+    intake_level_class_ids: '',
     id: '',
     classification: IEvaluationClassification.MODULE,
     content_format: IContentFormatEnum.DOC,
@@ -72,7 +71,7 @@ export default function EvaluationInfoComponent({
     eligible_group: IEligibleClassEnum.MULTIPLE,
     evaluation_status: IEvaluationStatus.DRAFT,
     evaluation_type: IEvaluationTypeEnum.CAT,
-    exam_instruction: '',
+    exam_instruction: evaluationInfo?.exam_instruction || '',
     is_consider_on_report: true,
     marking_reminder_date: '',
     maximum_file_size: '',
@@ -88,11 +87,11 @@ export default function EvaluationInfoComponent({
   useEffect(() => {
     setDetails({
       access_type: evaluationInfo?.access_type || IAccessTypeEnum.PUBLIC,
-      academy_id: authUser?.academy.id.toString() || '',
+      academy_id: user?.academy.id.toString() || '',
       instructor_id: instructorInfo?.id.toString() || '',
       intake_academic_year_period: intakePeriodId,
       allow_submission_time: evaluationInfo?.allow_submission_time || '',
-      class_ids: evaluationInfo?.class_ids || '',
+      intake_level_class_ids: evaluationInfo?.intake_level_class_ids || '',
       id: evaluationInfo?.id || '',
       classification: evaluationInfo?.classification || IEvaluationClassification.MODULE,
       content_format: evaluationInfo?.content_format || IContentFormatEnum.DOC,
@@ -112,13 +111,7 @@ export default function EvaluationInfoComponent({
       time_limit: evaluationInfo?.time_limit || 0,
       total_mark: evaluationInfo?.total_mark || 0,
     });
-  }, [
-    authUser?.academy.id,
-    evaluationInfo,
-    instructorInfo?.id,
-    intakePeriodId,
-    subjectId,
-  ]);
+  }, [user?.academy.id, evaluationInfo, instructorInfo?.id, intakePeriodId, subjectId]);
 
   const { mutate } = evaluationStore.createEvaluation();
   const { mutateAsync } = evaluationStore.updateEvaluation();
@@ -155,7 +148,7 @@ export default function EvaluationInfoComponent({
           handleNext();
         },
         onError: (error: any) => {
-          toast.error(error.response.data.data.message);
+          toast.error(error.response.data.message);
         },
       });
     } else {
@@ -185,7 +178,6 @@ export default function EvaluationInfoComponent({
           Evaluation Name
         </InputMolecule>
         <SelectMolecule
-          /*@ts-ignore */
           value={details?.evaluation_type}
           width="64"
           name="evaluation_type"
@@ -210,7 +202,7 @@ export default function EvaluationInfoComponent({
         <DropdownMolecule
           isMulti={details?.eligible_group === IEligibleClassEnum.MULTIPLE}
           width="64"
-          name="class_ids"
+          name="intake_level_class_ids"
           placeholder="Select class"
           handleChange={handleChange}
           options={getDropDownOptions({
@@ -219,6 +211,20 @@ export default function EvaluationInfoComponent({
           })}>
           Select Class(es)
         </DropdownMolecule>{' '}
+        <RadioMolecule
+          defaultValue={details.questionaire_type}
+          className="pb-4"
+          value={details.questionaire_type}
+          name="questionaire_type"
+          options={[
+            { label: 'Open', value: IQuestionaireTypeEnum.OPEN },
+            // { label: 'Multiple choice', value: IQuestionaireTypeEnum.MULTIPLE },
+            { label: 'Manual', value: IQuestionaireTypeEnum.MANUAL },
+            { label: 'Field', value: IQuestionaireTypeEnum.FIELD },
+          ]}
+          handleChange={handleChange}>
+          Questionaire type
+        </RadioMolecule>
         {details?.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
           <>
             {/* <DropdownMolecule
@@ -291,41 +297,41 @@ export default function EvaluationInfoComponent({
           handleChange={handleChange}>
           Evaluation marks
         </InputMolecule>
-        {details?.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
-          <>
-            <InputMolecule
-              style={{ width: '8rem' }}
-              type="number"
-              // step=".01"
-              readOnly
-              name="time_limit"
-              min={0}
-              value={details?.time_limit}
-              handleChange={handleChange}>
-              Time limit (in mins)
-            </InputMolecule>
-            <DateMolecule
-              startYear={new Date().getFullYear()}
-              endYear={new Date().getFullYear() + 100}
-              reverse={false}
-              showTime
-              breakToNextLine
-              handleChange={handleChange}
-              name={'allow_submission_time'}>
-              Start Date
-            </DateMolecule>
-            <DateMolecule
-              handleChange={handleChange}
-              startYear={new Date().getFullYear()}
-              endYear={new Date().getFullYear() + 100}
-              showTime
-              breakToNextLine
-              reverse={false}
-              name={'due_on'}>
-              Due on
-            </DateMolecule>{' '}
-          </>
-        ) : null}
+        {/* {details?.questionaire_type !== IQuestionaireTypeEnum.FIELD ? ( */}
+        <>
+          <InputMolecule
+            style={{ width: '8rem' }}
+            type="number"
+            // step=".01"
+            readOnly
+            name="time_limit"
+            min={0}
+            value={details?.time_limit}
+            handleChange={handleChange}>
+            Time limit (in mins)
+          </InputMolecule>
+          <DateMolecule
+            startYear={new Date().getFullYear()}
+            endYear={new Date().getFullYear() + 100}
+            reverse={false}
+            showTime
+            breakToNextLine
+            handleChange={handleChange}
+            name={'allow_submission_time'}>
+            Start Date
+          </DateMolecule>
+          <DateMolecule
+            handleChange={handleChange}
+            startYear={new Date().getFullYear()}
+            endYear={new Date().getFullYear() + 100}
+            showTime
+            breakToNextLine
+            reverse={false}
+            name={'due_on'}>
+            Due on
+          </DateMolecule>{' '}
+        </>
+        {/* ) : null} */}
         <DateMolecule
           handleChange={handleChange}
           startYear={new Date().getFullYear()}

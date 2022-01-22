@@ -10,7 +10,6 @@ import {
   IEvaluationInfo,
   IEvaluationInfoSingleEvaluation,
 } from '../../types/services/evaluation.types';
-import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import { advancedTypeChecker } from '../../utils/getOption';
 import EvaluationDetails from './EvaluationDetails';
 
@@ -33,8 +32,6 @@ export default function StudentViewEvaluations({
   const { path, url } = useRouteMatch();
 
   useEffect(() => {
-    setLocalStorageData('currentStep', 0);
-
     function isSubjectEvaludations(
       ev: IEvaluationInfo[] | IEvaluationInfoSingleEvaluation[],
     ) {

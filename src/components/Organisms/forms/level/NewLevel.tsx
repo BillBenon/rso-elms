@@ -31,9 +31,9 @@ function NewLevel({ onSubmit, academy_id }: IDivisionsAcademyType) {
     e.preventDefault(); // prevent page to reload:
 
     mutateAsync(level, {
-      onSuccess: () => {
+      onSuccess: (newData) => {
         toast.success('Level created');
-        queryClient.invalidateQueries(['levels/academy']);
+        queryClient.invalidateQueries(['levels/academy', newData.data.data.id]);
         history.goBack();
       },
       onError: (error: any) => {
@@ -47,7 +47,6 @@ function NewLevel({ onSubmit, academy_id }: IDivisionsAcademyType) {
     <form onSubmit={submitForm}>
       <InputMolecule
         value={level.name}
-        required
         handleChange={handleChange}
         placeholder="Enter level name"
         name="name">
@@ -57,14 +56,12 @@ function NewLevel({ onSubmit, academy_id }: IDivisionsAcademyType) {
       <TextAreaMolecule
         value={level.description}
         name="description"
-        required
         handleChange={handleChange}>
         Descripiton
       </TextAreaMolecule>
 
       <InputMolecule
         value={level.flow}
-        required
         type="number"
         min={1}
         handleChange={handleChange}

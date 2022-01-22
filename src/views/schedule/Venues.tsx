@@ -7,8 +7,8 @@ import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import NewVenue from '../../components/Organisms/calendar/NewVenue';
-import { authenticatorStore } from '../../store/administration';
+import NewVenue from '../../components/Organisms/schedule/venue/NewVenue';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { getAllVenues } from '../../store/timetable/venue.store';
 import { UserType } from '../../types/services/user.types';
 
@@ -16,19 +16,19 @@ export default function Venues() {
   const history = useHistory();
   const { path } = useRouteMatch();
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
   const handleClose = () => {
     history.goBack();
   };
 
-  const { data, isLoading } = getAllVenues(authUser?.academy.id + '');
+  const { data, isLoading } = getAllVenues(user?.academy.id + '');
   const venues = data?.data.data;
 
   return (
     <div>
       <TableHeader totalItems={0} title={'Venues'} showBadge={false}>
-        {authUser?.user_type != UserType.STUDENT && (
+        {user?.user_type != UserType.STUDENT && (
           <Link to={`/dashboard/schedule/venues/new`}>
             <Button>New venue</Button>
           </Link>

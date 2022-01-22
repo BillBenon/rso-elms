@@ -1,9 +1,10 @@
 // import { Label } from "@headlessui/react/dist/components/label/label";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Route, useHistory, useRouteMatch } from 'react-router';
 import { Link, Switch } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -14,11 +15,12 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import AssignAdminToAcademy from '../../components/Organisms/forms/academy/AssignAdminToAcademy';
 import NewAcademy from '../../components/Organisms/forms/academy/NewAcademy';
 import UpdateAcademy from '../../components/Organisms/forms/academy/UpdateAcademy';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import academyStore from '../../store/administration/academy.store';
 import usersStore from '../../store/administration/users.store';
-import { Link as LinkList } from '../../types';
+import { Link as LinkList, Privileges } from '../../types';
 import { GenericStatus, ValueType } from '../../types';
+import { ActionsType } from '../../types/services/table.types';
 
 type AcademyTypes = {
   id: number | string | undefined;
@@ -31,18 +33,27 @@ type AcademyTypes = {
 export default function Academy() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
+  const [privileges, setPrivileges] = useState<string[]>();
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
   const { data, isLoading } = academyStore.getAcademiesByInstitution(
-    authUser?.institution_id || '',
+    user?.institution_id || '',
   );
+
+  useEffect(() => {
+    const _privileges = user?.user_roles
+      ?.filter((role) => role.id === 1)[0]
+      .role_privileges?.map((privilege) => privilege.name);
+    if (_privileges) setPrivileges(_privileges);
+  }, [user]);
+
   const list: LinkList[] = [
     { to: '/', title: 'Institution Admin' },
     { to: 'academies', title: 'Academies' },
   ];
   const academyInfo = data?.data.data;
   let academies: AcademyTypes[] = [];
-  const users = usersStore.getUsersByInstitution(authUser?.institution_id + '');
+  const users = usersStore.getUsersByInstitution(user?.institution_id + '');
 
   academyInfo?.map((obj) => {
     let { id, name, current_admin_id, phone_number, generic_status } = obj;
@@ -63,21 +74,25 @@ export default function Academy() {
   });
 
   function handleSearch(_e: ValueType) {}
+  let academyActions: ActionsType<any>[] | undefined = [];
 
-  const academyActions = [
-    {
+  if (privileges?.includes(Privileges.CAN_MODIFY_ACADEMY)) {
+    academyActions?.push({
       name: 'Edit academy',
       handleAction: (id: string | number | undefined) => {
         history.push(`${path}/${id}/edit`); // go to edit academy
       },
-    },
-    {
+    });
+  }
+
+  if (privileges?.includes(Privileges.CAN_ASSIGN_ACADEMY_INCHARGE)) {
+    academyActions?.push({
       name: 'Assign incharge',
       handleAction: (id: string | number | undefined) => {
         history.push(`${path}/${id}/assign`); // go to assign admin
       },
-    },
-  ];
+    });
+  }
 
   return (
     <>
@@ -95,9 +110,11 @@ export default function Academy() {
                   title="Academy"
                   totalItems={academies.length}
                   handleSearch={handleSearch}>
-                  <Link to={`${url}/add`}>
-                    <Button>New academy</Button>
-                  </Link>
+                  <Permission privilege={Privileges.CAN_CREATE_ACADEMY}>
+                    <Link to={`${url}/add`}>
+                      <Button>New academy</Button>
+                    </Link>
+                  </Permission>
                 </TableHeader>
               </div>
 

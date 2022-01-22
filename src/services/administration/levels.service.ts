@@ -28,7 +28,7 @@ class LevelService {
   }
 
   public async getLevelById(id: string): Promise<AxiosResponse<Response<ILevel>>> {
-    return await adminstrationAxios.get(`/levels/getLevelsById/${id}`);
+    return await adminstrationAxios.get(`/levels/getLevelById/${id}`);
   }
 
   public async modifylevel(

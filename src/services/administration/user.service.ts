@@ -8,6 +8,7 @@ import {
   EditUser,
   IImportUserRes,
   UserInfo,
+  UserRole,
   UserType,
 } from '../../types/services/user.types';
 import { formatQueryParameters } from '../../utils/query';
@@ -76,6 +77,13 @@ class UserService {
   ): Promise<AxiosResponse<Response<UserInfo[]>>> {
     return await adminstrationAxios.get(`/public/getUserAccountsByNid/${nid}`);
   }
+
+  public async getAssignedRoles(
+    userId: string,
+  ): Promise<AxiosResponse<Response<UserRole[]>>> {
+    return await adminstrationAxios.get(`/users/getAssignedRoles/${userId}`);
+  }
+
   public async getLanguages() {
     return await adminstrationAxios.get('languages/getLanguages');
   }

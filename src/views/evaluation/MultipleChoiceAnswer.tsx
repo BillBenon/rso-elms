@@ -23,7 +23,7 @@ export default function MultipleChoiceAnswer({
   return (
     <button
       type="button"
-      className="flex flex-col mb-4"
+      className="flex flex-col my-4"
       onClick={() => handleChoiceSelect(choiceId)}>
       <div className="flex">
         <div

@@ -3,34 +3,38 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 
+import useAuthenticator from '../../../hooks/useAuthenticator';
 import { queryClient } from '../../../plugins/react-query';
 import { authenticatorStore } from '../../../store/administration';
+import { Privileges } from '../../../types/services/privilege.types';
 // import { ValueType } from '../../../types';
-import { UserInfo, UserType } from '../../../types/services/user.types';
+import { UserType } from '../../../types/services/user.types';
 import cookie from '../../../utils/cookie';
 import { usePicture } from '../../../utils/file-util';
+import Permission from '../../Atoms/auth/Permission';
 import Avatar from '../../Atoms/custom/Avatar';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
+import Notification from '../Notification';
+import Tooltip from '../Tooltip';
 // import SearchMolecule from '../input/SearchMolecule';
 
 export default function Navigation() {
   const history = useHistory();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [showNotificationMenu, setNotificationMenu] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
-  const [authUser, setAuthUser] = useState<UserInfo>();
   const logoutFn = authenticatorStore.logout();
-  const { data } = authenticatorStore.authUser();
+  const { user } = useAuthenticator();
 
   const location = useLocation();
 
   useEffect(() => {
-    setAuthUser(data?.data.data);
-    if (authUser?.user_type === UserType.SUPER_ADMIN && !authUser.institution_id) {
+    if (user?.user_type === UserType.SUPER_ADMIN && !user?.institution_id) {
       history.push('/institution/new');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.data.data]);
+  }, [user]);
 
   const links = [
     { text: 'Home', to: '/' },
@@ -67,23 +71,36 @@ export default function Navigation() {
           </div> */}
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
-              {authUser?.user_type === UserType.SUPER_ADMIN && (
+              <Permission privilege={Privileges.CAN_MODIFY_INSTITUTION}>
                 <div className="px-12">
-                  <Link to={`/dashboard/institution/${authUser?.institution_id}/edit`}>
+                  <Link to={`/dashboard/institution/${user?.institution_id}/edit`}>
                     <Button styleType="outline">Edit institution</Button>
                   </Link>
                 </div>
-              )}
-              <button className="bg-main p-1 rounded-full flex text-gray-400">
+              </Permission>
+              <div className="bg-main p-1 rounded-full flex text-gray-400">
                 <Icon name="switch" />
                 <Icon name="settings" />
-                <div className="relative">
-                  <Icon name="notification" />
-                  <div className="bg-main rounded-full h-3 w-3 absolute top-3 right-4 flex items-center justify-center">
-                    <span className="absolute  w-2 h-2  bg-red-600 self-center rounded-full"></span>
-                  </div>
-                </div>
-              </button>
+
+                <Tooltip
+                  on="click"
+                  position="bottom center"
+                  open={showNotificationMenu}
+                  trigger={
+                    <button
+                      className="bg-main rounded-full flex text-gray-400"
+                      onClick={() => setNotificationMenu(!showNotificationMenu)}>
+                      <div className="relative">
+                        <Icon name="notification" />
+                        <div className="bg-main rounded-full h-3 w-3 absolute top-3 right-4 flex items-center justify-center">
+                          <span className="absolute  w-2 h-2  bg-red-600 self-center rounded-full"></span>
+                        </div>
+                      </div>
+                    </button>
+                  }>
+                  <Notification />
+                </Tooltip>
+              </div>
 
               {/* Profile dropdown */}
               <div className="ml-3 relative">
@@ -97,15 +114,15 @@ export default function Navigation() {
                     <span className="sr-only">Open user menu</span>
                     <Avatar
                       className="border-2 object-cover border-primary-500"
-                      src={usePicture(authUser?.profile_attachment_id, authUser?.id)}
+                      src={usePicture(user?.profile_attachment_id, user?.id)}
                       alt=""
                       size="34"
                     />
                   </button>
                   <div className="pl-2">
-                    <p>{authUser?.username}</p>
+                    <p>{user?.username}</p>
                     <p className="text-xs pt-1 text-txt-secondary">
-                      {authUser?.user_type.replaceAll('_', ' ')}
+                      {user?.user_type.replaceAll('_', ' ')}
                     </p>
                   </div>
                 </div>
@@ -126,7 +143,7 @@ export default function Navigation() {
                         Your Profile
                       </a> */}
                       <Link
-                        to={`/dashboard/users/${authUser?.id}/profile`}
+                        to={`/dashboard/users/${user?.id}/profile`}
                         className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100">
                         Your Profile
                       </Link>
@@ -210,10 +227,10 @@ export default function Navigation() {
             </div>
             <div className="ml-3">
               <div className="text-base font-medium leading-none text-white">
-                {authUser?.username}
+                {user?.username}
               </div>
               <div className="text-sm font-medium leading-none text-gray-400">
-                {authUser?.email}
+                {user?.email}
               </div>
             </div>
           </div>

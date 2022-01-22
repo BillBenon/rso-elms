@@ -15,8 +15,8 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
-import NewSchedule from '../../components/Organisms/calendar/schedule/NewSchedule';
-import { authenticatorStore } from '../../store/administration';
+import NewSchedule from '../../components/Organisms/schedule/calendar/NewSchedule';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import {
   getIntakeProgramsByStudent,
@@ -25,10 +25,10 @@ import {
 import { CommonCardDataType, Link } from '../../types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
-import CalendarView from './Calendar';
+import CalendarView from './CalendarView';
+import ClassTimeTable from './ClassTimeTable';
 import Events from './Events';
 import IntakePrograms from './IntakePrograms';
-import TimeTable from './TimeTable';
 import Venues from './Venues';
 
 const list: Link[] = [
@@ -56,8 +56,8 @@ export default function ScheduleHome() {
   const history = useHistory();
   const { path } = useRouteMatch();
 
-  const userInfo = authenticatorStore.authUser().data?.data.data;
-  const { data, isLoading } = getIntakesByAcademy(userInfo?.academy.id + '', false);
+  const { user } = useAuthenticator();
+  const { data, isLoading } = getIntakesByAcademy(user?.academy.id + '', false);
 
   let intakes: CommonCardDataType[] =
     data?.data.data.map((intake) => ({
@@ -83,15 +83,15 @@ export default function ScheduleHome() {
         <Switch>
           <Route path={`${path}/intake/:id`} component={IntakePrograms} />
           <Route path={`${path}/calendar/:id`} component={CalendarView} />
-          <Route path={`${path}/timetable/:id`} component={TimeTable} />
+          <Route path={`${path}/timetable/:id`} component={ClassTimeTable} />
           <Route path={`${path}/events`} component={Events} />
           <Route path={`${path}/venues`} component={Venues} />
 
           <Route
             path={`${path}`}
             render={() =>
-              userInfo?.user_type === UserType.STUDENT ? (
-                <RedirectStudent userId={userInfo.id + ''} />
+              user?.user_type === UserType.STUDENT ? (
+                <RedirectStudent userId={user.id + ''} />
               ) : (
                 <>
                   <TableHeader
@@ -148,8 +148,6 @@ function RedirectStudent({ userId }: IProps) {
     studentInfo?.id + '',
     !!studentInfo?.id,
   );
-
-  data?.data.data[0].intake_program.intake.id;
 
   return (
     <div>

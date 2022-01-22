@@ -81,7 +81,7 @@ export default function NewEvaluation() {
             />
           </div>
 
-          {!evaluationId ? (
+          {!evaluationId || (evaluationId && !evaluationInfo?.['is_to_be_approved']) ? (
             <EvaluationSettings
               handleNext={handleSubmit}
               handleGoBack={handleBack}

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useRouteMatch } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { useLocation, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { getStudentShipByUserId } from '../../store/administration/intake-program.store';
 import { ValueType } from '../../types';
@@ -15,16 +16,18 @@ import Modules from '.';
 
 function StudentModule() {
   const [selectedLevel, setSelectedLevel] = useState('');
+  const { search } = useLocation();
+  const forceReload = new URLSearchParams(search).get('forceReload') || '';
   const { url } = useRouteMatch();
   const list = [
     { to: '/dashboard/student', title: 'Dashboard' },
     { to: `${url}`, title: 'module' },
   ];
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
   const { data: student, isLoading: studLoad } = getStudentShipByUserId(
-    authUser?.id + '' || '',
-    !!authUser?.id,
+    user?.id + '' || '',
+    !!user?.id,
   );
 
   const { data: levels, isLoading: levelLoading } =
@@ -48,10 +51,23 @@ function StudentModule() {
   }
 
   useEffect(() => {
+    if (forceReload === 'true') {
+      toast.error(
+        'The exam was auto submitted because you tried to exit full screen or changed tab',
+        { duration: 30000 },
+      );
+
+      setTimeout(() => {
+        window.location.href = '/dashboard/student';
+      }, 30000);
+    }
+  }, [forceReload]);
+
+  useEffect(() => {
     setSelectedLevel(
       studentLevelToDisplay.length > 0 ? studentLevelToDisplay[0].id + '' : '',
     );
-  }, [levels]);
+  }, [levels, studentLevelToDisplay]);
 
   return (
     <>

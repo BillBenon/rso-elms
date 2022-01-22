@@ -10,6 +10,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -21,7 +22,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
 import NewIntake from '../../components/Organisms/intake/NewIntake';
 import UpdateIntake from '../../components/Organisms/intake/UpdateIntake';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import {
@@ -30,7 +31,7 @@ import {
 } from '../../store/administration/intake-program.store';
 import registrationControlStore from '../../store/administration/registrationControl.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
-import { CommonCardDataType, Link as LinkType, ValueType } from '../../types';
+import { CommonCardDataType, Link as LinkType, Privileges, ValueType } from '../../types';
 import { StudentApproval } from '../../types/services/enrollment.types';
 import { InstructorProgram } from '../../types/services/instructor.types';
 import { ExtendedIntakeInfo } from '../../types/services/intake.types';
@@ -53,7 +54,7 @@ interface IntakeCardType extends CommonCardDataType {
 
 export default function Intakes() {
   const [intakes, setIntakes] = useState<IntakeCardType[]>([]);
-  const { data: userInfo } = authenticatorStore.authUser();
+  const { user } = useAuthenticator();
 
   const history = useHistory();
   const { url, path } = useRouteMatch();
@@ -69,16 +70,14 @@ export default function Intakes() {
 
   if (registrationControlId && !regSuccess && !regLoading) refetch();
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
-
-  const authUserId = authUser?.id;
+  const authUserId = user?.id;
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(authUserId + '')
     .data?.data.data[0];
 
   const studentInfo =
     getStudentShipByUserId(
       authUserId + '',
-      !!authUserId && authUser?.user_type === UserType.STUDENT,
+      !!authUserId && user?.user_type === UserType.STUDENT,
     ).data?.data.data || [];
 
   const {
@@ -87,15 +86,15 @@ export default function Intakes() {
     data,
     isLoading,
     refetch: refetchIntakes,
-  } = authUser?.user_type === UserType.STUDENT
+  } = user?.user_type === UserType.STUDENT
     ? getIntakeProgramsByStudent(
         studentInfo[0]?.id.toString() || '',
         !!studentInfo[0]?.id,
       )
-    : authUser?.user_type === UserType.INSTRUCTOR
+    : user?.user_type === UserType.INSTRUCTOR
     ? enrollmentStore.getInstructorIntakePrograms(instructorInfo?.id + '')
     : getIntakesByAcademy(
-        registrationControlId || userInfo?.data.data.academy.id.toString()!,
+        registrationControlId || user?.academy.id.toString()!,
         !!registrationControlId,
         true,
       );
@@ -104,7 +103,7 @@ export default function Intakes() {
     if (isSuccess && data?.data) {
       let loadedIntakes: IntakeCardType[] = [];
       data?.data.data.forEach((intk) => {
-        if (authUser?.user_type === UserType.STUDENT) {
+        if (user?.user_type === UserType.STUDENT) {
           let intake = intk as StudentIntakeProgram;
           if (intake && intake.enrolment_status === StudentApproval.APPROVED) {
             let prog: IntakeCardType = {
@@ -123,7 +122,7 @@ export default function Intakes() {
               loadedIntakes.push(prog);
             }
           }
-        } else if (authUser?.user_type === UserType.INSTRUCTOR) {
+        } else if (user?.user_type === UserType.INSTRUCTOR) {
           let intake = intk as InstructorProgram;
           let prog: IntakeCardType = {
             id: intake.intake_program.intake.id,
@@ -159,7 +158,7 @@ export default function Intakes() {
 
       setIntakes(loadedIntakes);
     } else if (isError) toast.error('error occurred when loading intakes');
-  }, [authUser?.user_type, data, isError, isSuccess]);
+  }, [user?.user_type, data, isError, isSuccess]);
 
   function handleSearch(_e: ValueType) {}
   function handleClose() {
@@ -219,15 +218,20 @@ export default function Intakes() {
                       key={intake.code + Math.random() * 10}
                       trigger={
                         <div className="p-1 mt-3">
-                          <CommonCardMolecule data={intake} />
+                          <CommonCardMolecule
+                            data={intake}
+                            handleClick={() =>
+                              history.push(`${url}/programs/${intake.id}`)
+                            }
+                          />
                         </div>
                       }
                       open>
                       <div className="w-96">
                         <div className="flex flex-col gap-6">
-                          <div className="flex flex-col gap-2">
+                          <div className="flex gap-2">
                             <Heading color="txt-secondary" fontSize="sm">
-                              Total Students Enroled
+                              Total Students Enrolled:
                             </Heading>
                             <Heading fontSize="sm" fontWeight="semibold">
                               {
@@ -238,20 +242,22 @@ export default function Intakes() {
                           </div>
                         </div>
 
-                        <div>
+                        {/* <div>
                           <Link
                             className="outline-none"
                             to={`${url}/programs/${intake.id}`}>
                             <Button styleType="text">View programs</Button>
                           </Link>
-                        </div>
-                        <div className="mt-4 space-x-4">
-                          <Link
-                            to={`${url}/${intake.id}/edit/${intake.registrationControlId}`}>
-                            <Button>Edit Intake</Button>
-                          </Link>
-                          <Button styleType="outline">Change Status</Button>
-                        </div>
+                        </div> */}
+                        <Permission privilege={Privileges.CAN_MODIFY_INTAKE}>
+                          <div className="mt-4 space-x-4">
+                            <Link
+                              to={`${url}/${intake.id}/edit/${intake.registrationControlId}`}>
+                              <Button>Edit Intake</Button>
+                            </Link>
+                            <Button styleType="outline">Change Status</Button>
+                          </div>
+                        </Permission>
                       </div>
                     </Tooltip>
                   </div>
@@ -274,16 +280,16 @@ export default function Intakes() {
                           ? 'No intake available in this reg Control'
                           : 'No intake available'
                       }
-                      showButton={authUser?.user_type === UserType.ADMIN}
+                      showButton={user?.user_type === UserType.ADMIN}
                       handleClick={() => {
                         if (registrationControlId)
                           history.push(`${url}/${registrationControlId}/add-intake`);
                         else history.push('/dashboard/registration-control');
                       }}
                       description={`${
-                        authUser?.user_type === UserType.STUDENT
+                        user?.user_type === UserType.STUDENT
                           ? 'You have not been approved to any intake yet!'
-                          : authUser?.user_type === UserType.INSTRUCTOR
+                          : user?.user_type === UserType.INSTRUCTOR
                           ? 'You have not been enrolled to teach any intake yet!'
                           : "There haven't been any intakes added yet! try adding some from the button below."
                       }`}
