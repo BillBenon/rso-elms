@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
+import {
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+  useParams,
+  useRouteMatch,
+} from 'react-router';
 
 import Loader from '../../../components/Atoms/custom/Loader';
 import Heading from '../../../components/Atoms/Text/Heading';
@@ -19,6 +26,9 @@ function Prerequisites() {
   const { path } = useRouteMatch();
   const { data: modulePrereqs, isLoading } = moduleStore.getModulePrereqsByModule(id);
   const [prerequisiteModule, setPrerequisiteModule] = useState<CommonCardDataType[]>([]);
+  const { search } = useLocation();
+  const showMenu = new URLSearchParams(search).get('showMenus');
+  const intakeProg = new URLSearchParams(search).get('intkPrg');
 
   const { user } = useAuthenticator();
 
@@ -58,7 +68,7 @@ function Prerequisites() {
               <Loader />
             ) : prerequisiteModule.length === 0 ? (
               <NoDataAvailable
-                showButton={user?.user_type === UserType.INSTRUCTOR}
+                showButton={user?.user_type === UserType.ADMIN}
                 icon="subject"
                 title={'No prerequisites are available'}
                 description={'There are no prerequisites currently added on this module'}
@@ -67,7 +77,12 @@ function Prerequisites() {
             ) : (
               <section className="flex flex-wrap justify-start gap-2">
                 {prerequisiteModule.map((prereq) => (
-                  <ModuleCard key={prereq.id} course={prereq} />
+                  <ModuleCard
+                    key={prereq.id}
+                    course={prereq}
+                    showMenus={showMenu == 'true' ? true : false}
+                    intakeProg={intakeProg || ''}
+                  />
                 ))}
               </section>
 

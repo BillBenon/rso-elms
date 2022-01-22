@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import useAuthenticator from '../../../hooks/useAuthenticator';
+import { Privileges } from '../../../types';
 import { UserType } from '../../../types/services/user.types';
 import { usePicture } from '../../../utils/file-util';
 import SidebarLinks, { linkProps } from '../../Atoms/custom/SidebarLinks';
@@ -8,6 +9,13 @@ import AcademyProfileCard from '../cards/AcademyProfileCard';
 
 export default function Sidebar() {
   const { user } = useAuthenticator();
+  const [privileges, setPrivileges] = useState<string[]>();
+  useEffect(() => {
+    const _privileges = user?.user_roles
+      ?.filter((role) => role.id === 1)[0]
+      .role_privileges?.map((privilege) => privilege.name);
+    if (_privileges) setPrivileges(_privileges);
+  }, [user]);
 
   const defaultLinks = (): linkProps[] => {
     const routes: linkProps[] = [];
@@ -23,14 +31,23 @@ export default function Sidebar() {
       { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
       { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
-      { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
+    ];
+    if (privileges?.includes(Privileges.CAN_ACCESS_DIVISIONS)) {
+      academicAdminLinks.push({
+        title: 'Divisions',
+        to: '/dashboard/divisions',
+        icon: 'faculty',
+      });
+    }
+
+    academicAdminLinks.push(
       { title: 'Academic years', to: '/dashboard/academic-years', icon: 'program' },
       {
         title: 'Registration Control',
         to: '/dashboard/registration-control',
         icon: 'reg-control',
       },
-    ];
+    );
 
     const instructorLinks: linkProps[] = [
       { title: 'Modules', to: '/dashboard/inst-module', icon: 'module' },

@@ -11,7 +11,7 @@ import { subjectStore } from '../../store/administration/subject.store';
 import { CommonCardDataType, Link } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 
-export default function Subjects() {
+export default function AllSubjects() {
   const [subjects, setSubjects] = useState<CommonCardDataType[]>([]);
   const { path } = useRouteMatch();
   const history = useHistory();
