@@ -242,6 +242,7 @@ export interface PersonDetail
     | 'residence_location_id'
     | 'place_of_residence' 
     | 'doc_type'
+    | 'nationality'
   > {}
 export interface EmploymentDetail
   extends Pick<
