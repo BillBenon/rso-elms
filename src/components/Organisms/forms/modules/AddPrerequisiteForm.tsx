@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
 
+import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { queryClient } from '../../../../plugins/react-query';
-import { authenticatorStore } from '../../../../store/administration';
 import { moduleStore } from '../../../../store/administration/modules.store';
 import { GenericStatus, ValueType } from '../../../../types';
 import { CreatePrerequisites } from '../../../../types/services/modules.types';
@@ -36,9 +36,9 @@ export default function AddPrerequesitesForm() {
     setValues({ ...values, [e.name]: e.value });
   }
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
-  const moduleSt = moduleStore.getModulesByAcademy(authUser?.academy.id + '');
+  const moduleSt = moduleStore.getModulesByAcademy(user?.academy.id + '');
   const modulePrereqs = moduleStore.getModulePrereqsByModule(moduleId);
   const modulePrereqIds = modulePrereqs.data?.data.data.map(
     (preq) => preq.prerequisite.id,

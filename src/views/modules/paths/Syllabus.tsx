@@ -15,7 +15,7 @@ import Heading from '../../../components/Atoms/Text/Heading';
 import Accordion from '../../../components/Molecules/Accordion';
 import NoDataAvailable from '../../../components/Molecules/cards/NoDataAvailable';
 import Tiptap from '../../../components/Molecules/editor/Tiptap';
-import { authenticatorStore } from '../../../store/administration';
+import useAuthenticator from '../../../hooks/useAuthenticator';
 import { moduleMaterialStore } from '../../../store/administration/module-material.store';
 import { ParamType } from '../../../types';
 import { MaterialType } from '../../../types/services/module-material.types';
@@ -28,7 +28,7 @@ function ModuleMaterials() {
   const { data: moduleMaterial, isLoading } =
     moduleMaterialStore.getModuleMaterialByModule(id);
   const moduleMaterials = moduleMaterial?.data.data || [];
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
   const { search } = useLocation();
   const showMenu = new URLSearchParams(search).get('showMenus');
   const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
@@ -50,7 +50,7 @@ function ModuleMaterials() {
                 <Loader />
               ) : moduleMaterials.length === 0 ? (
                 <NoDataAvailable
-                  showButton={authUser?.user_type === UserType.INSTRUCTOR}
+                  showButton={user?.user_type === UserType.INSTRUCTOR}
                   icon="subject"
                   title={'No learning materials available'}
                   description={
@@ -80,7 +80,7 @@ function ModuleMaterials() {
                               content={mat.content}
                             />
                           </div>
-                          {authUser?.user_type === UserType.INSTRUCTOR && (
+                          {user?.user_type === UserType.INSTRUCTOR && (
                             <Button
                               className="mt-2 mb-4 mx-20"
                               styleType="outline"

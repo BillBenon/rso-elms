@@ -4,7 +4,7 @@ import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-route
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { Tabs } from '../../components/Molecules/tabs/tabs';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { classStore } from '../../store/administration/class.store';
 import { getStudentShipByUserId } from '../../store/administration/intake-program.store';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
@@ -23,9 +23,9 @@ function Classes() {
     period,
   } = useParams<IntakePeriodParam>();
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
-  const studentInfo = getStudentShipByUserId(authUser?.id + '' || '', !!authUser?.id).data
-    ?.data.data[0];
+  const { user } = useAuthenticator();
+  const studentInfo = getStudentShipByUserId(user?.id + '' || '', !!user?.id).data?.data
+    .data[0];
   const { data: studClasses, isLoading: studLoad } = classStore.getClassByStudentAndLevel(
     studentInfo?.id + '',
     levelId,
@@ -45,7 +45,7 @@ function Classes() {
         render={() => {
           return (
             <>
-              {authUser?.user_type === UserType.STUDENT ? (
+              {user?.user_type === UserType.STUDENT ? (
                 studLoad ? (
                   <Loader />
                 ) : studentClasses.length === 0 ? (
@@ -77,7 +77,7 @@ function Classes() {
                 <Loader />
               ) : classGroups.length === 0 ? (
                 <NoDataAvailable
-                  showButton={authUser?.user_type === UserType.ADMIN}
+                  showButton={user?.user_type === UserType.ADMIN}
                   buttonLabel="Add new class"
                   icon="academy"
                   fill={false}
@@ -88,7 +88,7 @@ function Classes() {
                     )
                   }
                   description={`There are no classes added yet,${
-                    authUser?.user_type === UserType.ADMIN
+                    user?.user_type === UserType.ADMIN
                       ? 'click on the below button to add some!'
                       : ''
                   }  `}

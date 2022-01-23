@@ -2,8 +2,8 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router';
 
+import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { queryClient } from '../../../../plugins/react-query';
-import { authenticatorStore } from '../../../../store/administration';
 import { lessonStore } from '../../../../store/administration/lesson.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { ParamType, ValueType } from '../../../../types';
@@ -23,9 +23,9 @@ interface IProps {
 
 function NewLessonPlan() {
   const { mutateAsync } = lessonStore.addLessonPlan();
-  const authUser = authenticatorStore.authUser().data?.data.data;
-  const authUserId = authUser?.id;
-  const instructor = instructordeploymentStore.getInstructorByUserId(authUserId + '').data
+  const { user } = useAuthenticator();
+  const userId = user?.id;
+  const instructor = instructordeploymentStore.getInstructorByUserId(userId + '').data
     ?.data.data[0];
 
   const { id } = useParams<ParamType>();
@@ -73,7 +73,9 @@ function NewLessonPlan() {
   }
 
   useEffect(() => {
-    setlessonPlan({ ...lessonPlan, instructor_id: instructor?.id + '' });
+    setlessonPlan((lessPlan) => {
+      return { ...lessPlan, instructor_id: instructor?.id + '' };
+    });
   }, [instructor?.id]);
 
   const [currentStep, setCurrentStep] = useState(0);

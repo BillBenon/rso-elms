@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Link as BrowserLink,
   Route,
@@ -19,11 +19,11 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { lessonStore } from '../../store/administration/lesson.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
-import { UserInfo, UserType } from '../../types/services/user.types';
+import { UserType } from '../../types/services/user.types';
 import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import EvaluationCategories from '../evaluation/EvaluationCategories';
 import SubjectInstructorView from '../evaluation/SubjectInstructorView';
@@ -41,11 +41,7 @@ export default function SubjectDetails() {
   const level = new URLSearchParams(search).get('lvl') || '';
   const period = new URLSearchParams(search).get('prd') || '';
 
-  const [authUser, setAuthUser] = useState<UserInfo>();
-  const userData = authenticatorStore.authUser();
-  useEffect(() => {
-    setAuthUser(userData.data?.data.data);
-  }, [userData.data?.data.data]);
+  const { user } = useAuthenticator();
   const { subjectId } = useParams<ParamType>();
   const { url } = useRouteMatch();
   const history = useHistory();
@@ -123,7 +119,7 @@ export default function SubjectDetails() {
           <TabNavigation
             tabs={tabs}
             // headerComponent={
-            //   authUser?.user_type === UserType.INSTRUCTOR && (
+            //   user?.user_type === UserType.INSTRUCTOR && (
             //     <BrowserLink to={`${url}/add-lesson`}>
             //       <Button>New lesson</Button>
             //     </BrowserLink>
@@ -142,7 +138,7 @@ export default function SubjectDetails() {
                       ) : lessons.length === 0 ? (
                         <NoDataAvailable
                           icon="subject"
-                          showButton={authUser?.user_type === UserType.INSTRUCTOR}
+                          showButton={user?.user_type === UserType.INSTRUCTOR}
                           title={'No lessons available'}
                           description={
                             'A lesson or class is a structured period of time where learning is intended to occur. It involves one or more students being taught by a teacher or instructor.'
@@ -155,7 +151,7 @@ export default function SubjectDetails() {
                             <Heading fontSize="base" fontWeight="semibold">
                               Ongoing Lessons
                             </Heading>
-                            {authUser?.user_type === UserType.INSTRUCTOR && (
+                            {user?.user_type === UserType.INSTRUCTOR && (
                               <BrowserLink to={`${url}/add-lesson`}>
                                 <Button>New lesson</Button>
                               </BrowserLink>
@@ -200,7 +196,7 @@ export default function SubjectDetails() {
                   return <SubjectInstructors subjectId={subjectId} />;
                 }}
               />
-              {authUser?.user_type === UserType.INSTRUCTOR ? (
+              {user?.user_type === UserType.INSTRUCTOR ? (
                 <Route
                   path={`${url}/evaluations`}
                   render={() => (

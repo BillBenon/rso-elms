@@ -2,26 +2,25 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
+import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { queryClient } from '../../../../plugins/react-query';
-import { authenticatorStore } from '../../../../store/administration';
 import { venueStore } from '../../../../store/timetable/venue.store';
 import { GenericStatus, ValueType } from '../../../../types';
 import { CreateVenue, venueType } from '../../../../types/services/event.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
-import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 
 export default function NewVenue() {
   const history = useHistory();
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
   const [values, setvalues] = useState<CreateVenue>({
     venueType: venueType.CLASS,
     name: '',
     status: GenericStatus.ACTIVE,
-    academyId: authUser?.academy.id + '',
+    academyId: user?.academy.id + '',
   });
 
   function handleChange(e: ValueType) {

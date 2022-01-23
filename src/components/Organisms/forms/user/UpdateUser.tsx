@@ -3,7 +3,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router';
 
-import { authenticatorStore } from '../../../../store/administration';
+import useAuthenticator from '../../../../hooks/useAuthenticator';
 import academyStore from '../../../../store/administration/academy.store';
 import {
   getIntakesByAcademy,
@@ -39,7 +39,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
   const updateUserType = pick(UserType, ['ADMIN', 'INSTRUCTOR', 'STUDENT']);
   const updateUserTypeWithSuper = { ...updateUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
-  const authUser = authenticatorStore.authUser();
+  const { user } = useAuthenticator();
 
   const [details, setDetails] = useState<EditUser>({
     activation_key: '',
@@ -200,7 +200,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
         <SelectMolecule
           value={details.user_type}
           options={getDropDownStatusOptions(
-            authUser.data?.data.data.user_type === UserType.SUPER_ADMIN
+            user?.user_type === UserType.SUPER_ADMIN
               ? updateUserTypeWithSuper
               : updateUserType,
           )}
@@ -291,7 +291,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Education level
         </SelectMolecule>
-        {authUser.data?.data.data.user_type === UserType.SUPER_ADMIN && (
+        {user?.user_type === UserType.SUPER_ADMIN && (
           <SelectMolecule
             options={getDropDownOptions({ inputs: academies || [] })}
             name="academy_id"

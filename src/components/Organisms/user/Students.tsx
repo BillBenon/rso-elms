@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-import { authenticatorStore } from '../../../store/administration';
+import useAuthenticator from '../../../hooks/useAuthenticator';
 import { GenericStatus, ValueType } from '../../../types';
 import { StudentApproval } from '../../../types/services/enrollment.types';
 import { AcademyUserType, UserType, UserTypes } from '../../../types/services/user.types';
@@ -36,7 +36,7 @@ export default function Students({
 
   function handleSearch(_e: ValueType) {}
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
   const studentStatActions =
     enumtype === 'UserTypes'
@@ -59,7 +59,7 @@ export default function Students({
           totalItems={students && students.length > 0 ? students.length : 0}
           handleSearch={handleSearch}
           showSearch={students && students.length > 0}>
-          {authUser?.user_type === UserType.SUPER_ADMIN && (
+          {user?.user_type === UserType.SUPER_ADMIN && (
             <div className="flex gap-3">
               <Link to={`${url}/import`}>
                 <Button styleType="outline">Import students</Button>
@@ -75,7 +75,7 @@ export default function Students({
         <div className="pt-8">
           {students.length <= 0 ? (
             <NoDataAvailable
-              showButton={authUser?.user_type === UserType.ADMIN}
+              showButton={user?.user_type === UserType.ADMIN}
               icon="user"
               buttonLabel="Add new student"
               title={'No students available'}

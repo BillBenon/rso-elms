@@ -6,7 +6,7 @@ import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { moduleStore } from '../../store/administration/modules.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
@@ -17,13 +17,11 @@ import { advancedTypeChecker } from '../../utils/getOption';
 function InstrLevelModule() {
   const { url } = useRouteMatch();
 
-  // const { level, id } = useParams<IntakeLevelParam>();
   const [InstrModules, setInstrModules] = useState<CommonCardDataType[]>([]);
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
-    authUser?.id + '',
-  ).data?.data.data[0];
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
+    .data?.data.data[0];
 
   const [instructor, setinstructor] = useState<Instructor>();
 

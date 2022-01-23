@@ -11,7 +11,7 @@ import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule'
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { divisionStore } from '../../store/administration/divisions.store';
 import programStore from '../../store/administration/program.store';
 import usersStore from '../../store/administration/users.store';
@@ -32,15 +32,15 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
   const { search } = useLocation();
   const facultyId = new URLSearchParams(search).get('dp');
 
-  const { data: userInfo } = authenticatorStore.authUser();
+  const { user } = useAuthenticator();
 
-  const { data:inCharge, isLoading, refetch } =usersStore.getUsersByAcademyAndUserType(
-        userInfo?.data.data.academy.id.toString() || '',
-        UserType.INSTRUCTOR,
-        { page: 0, pageSize:1000, sortyBy: 'username' },
-      );
- 
-  const instructors = inCharge?.data.data.content
+  const { data: inCharge } = usersStore.getUsersByAcademyAndUserType(
+    user?.academy.id.toString() || '',
+    UserType.INSTRUCTOR,
+    { page: 0, pageSize: 1000, sortyBy: 'username' },
+  );
+
+  const instructors = inCharge?.data.data.content;
 
   const departments = divisionStore.getDivisionByType('DEPARTMENT').data?.data.data;
   // const { data: levelsInfo } = levelStore.getLevels(); // fetch levels

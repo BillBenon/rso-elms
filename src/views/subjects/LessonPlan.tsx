@@ -12,7 +12,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import NewLessonPlan from '../../components/Organisms/forms/subjects/NewLessonPlan';
 import UpdateLessonPlan from '../../components/Organisms/forms/subjects/UpdateLessonPlan';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { lessonStore } from '../../store/administration/lesson.store';
 import { Link, ParamType } from '../../types';
 import { UserType } from '../../types/services/user.types';
@@ -22,7 +22,7 @@ function LessonPlan() {
   const history = useHistory();
 
   const { id } = useParams<ParamType>();
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
   const { data, isLoading } = lessonStore.getLessonPlanByLesson(id);
   const plan = data?.data.data || [];
   const { path, url } = useRouteMatch();
@@ -49,7 +49,7 @@ function LessonPlan() {
                 <NoDataAvailable
                   icon="subject"
                   buttonLabel={'Create plan'}
-                  showButton={authUser?.user_type === UserType.INSTRUCTOR}
+                  showButton={user?.user_type === UserType.INSTRUCTOR}
                   title={'No lesson plan available'}
                   description={'There is no lesson plan for this lesson.'}
                   handleClick={() => history.push(`${url}/add-lesson-plan`)}
@@ -137,7 +137,7 @@ function LessonPlan() {
                           </Heading>
                         </div>
                       </div>
-                      {authUser?.user_type === UserType.INSTRUCTOR && (
+                      {user?.user_type === UserType.INSTRUCTOR && (
                         <div className="flex space-x-4 pt-4">
                           <Button
                             styleType="outline"

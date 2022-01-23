@@ -1,18 +1,21 @@
 import React, { useEffect, useState } from 'react';
 
-import { authenticatorStore } from '../../../store/administration';
-import { UserInfo, UserType } from '../../../types/services/user.types';
+import useAuthenticator from '../../../hooks/useAuthenticator';
+import { Privileges } from '../../../types';
+import { UserType } from '../../../types/services/user.types';
 import { usePicture } from '../../../utils/file-util';
 import SidebarLinks, { linkProps } from '../../Atoms/custom/SidebarLinks';
 import AcademyProfileCard from '../cards/AcademyProfileCard';
 
 export default function Sidebar() {
-  const [authUser, setAuthUser] = useState<UserInfo>();
-  const { data } = authenticatorStore.authUser();
-
+  const { user } = useAuthenticator();
+  const [privileges, setPrivileges] = useState<string[]>();
   useEffect(() => {
-    setAuthUser(data?.data.data);
-  }, [data?.data.data]);
+    const _privileges = user?.user_roles
+      ?.filter((role) => role.id === 1)[0]
+      .role_privileges?.map((privilege) => privilege.name);
+    if (_privileges) setPrivileges(_privileges);
+  }, [user]);
 
   const defaultLinks = (): linkProps[] => {
     const routes: linkProps[] = [];
@@ -28,14 +31,23 @@ export default function Sidebar() {
       { title: 'Levels', to: '/dashboard/levels', icon: 'level' },
       { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
-      { title: 'Divisions', to: '/dashboard/divisions', icon: 'faculty' },
+    ];
+    if (privileges?.includes(Privileges.CAN_ACCESS_DIVISIONS)) {
+      academicAdminLinks.push({
+        title: 'Divisions',
+        to: '/dashboard/divisions',
+        icon: 'faculty',
+      });
+    }
+
+    academicAdminLinks.push(
       { title: 'Academic years', to: '/dashboard/academic-years', icon: 'program' },
       {
         title: 'Registration Control',
         to: '/dashboard/registration-control',
         icon: 'reg-control',
       },
-    ];
+    );
 
     const instructorLinks: linkProps[] = [
       { title: 'Modules', to: '/dashboard/inst-module', icon: 'module' },
@@ -57,11 +69,10 @@ export default function Sidebar() {
       { title: 'Calendar', to: '/dashboard/schedule/student/calendar', icon: 'calendar' },
     ];
 
-    if (authUser?.user_type == UserType.SUPER_ADMIN)
-      routes.push(...institutionAdminLinks);
-    if (authUser?.user_type == UserType.ADMIN) routes.push(...academicAdminLinks);
-    if (authUser?.user_type == UserType.INSTRUCTOR) routes.push(...instructorLinks);
-    if (authUser?.user_type == UserType.STUDENT) routes.push(...studentLinks);
+    if (user?.user_type == UserType.SUPER_ADMIN) routes.push(...institutionAdminLinks);
+    if (user?.user_type == UserType.ADMIN) routes.push(...academicAdminLinks);
+    if (user?.user_type == UserType.INSTRUCTOR) routes.push(...instructorLinks);
+    if (user?.user_type == UserType.STUDENT) routes.push(...studentLinks);
 
     return routes;
   };
@@ -71,18 +82,18 @@ export default function Sidebar() {
       <div className="px-4 py-4">
         <AcademyProfileCard
           src={usePicture(
-            authUser?.academy?.logo_attachment_id,
-            authUser?.academy?.id,
+            user?.academy?.logo_attachment_id,
+            user?.academy?.id,
             '/images/rdf-logo.png',
             'logos',
           )}
           round={false}
           alt="insitution logo">
-          {authUser?.institution_name === null
+          {user?.institution_name === null
             ? 'Institution name'
-            : authUser?.user_type === UserType.SUPER_ADMIN
-            ? authUser.institution_name
-            : authUser?.academy?.name}
+            : user?.user_type === UserType.SUPER_ADMIN
+            ? user.institution_name
+            : user?.academy?.name}
         </AcademyProfileCard>
       </div>
       <SidebarLinks links={defaultLinks()} />

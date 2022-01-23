@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link as BrowserLink, useHistory } from 'react-router-dom';
 
-import { authenticatorStore } from '../../../../store/administration';
-import { CommonCardDataType } from '../../../../types';
+import useAuthenticator from '../../../../hooks/useAuthenticator';
+import { CommonCardDataType, Privileges } from '../../../../types';
 import { UserType } from '../../../../types/services/user.types';
+import Permission from '../../../Atoms/auth/Permission';
 import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
 import Tooltip from '../../Tooltip';
@@ -20,7 +21,15 @@ export default function ModuleCard({
   showMenus = true,
   intakeProg = '',
 }: IProps) {
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
+  const [privileges, setPrivileges] = useState<string[]>();
+
+  useEffect(() => {
+    const _privileges = user?.user_roles
+      ?.filter((role) => role.id === 1)[0]
+      .role_privileges?.map((privilege) => privilege.name);
+    if (_privileges) setPrivileges(_privileges);
+  }, [user]);
 
   const history = useHistory();
   return (
@@ -31,10 +40,20 @@ export default function ModuleCard({
           <CommonCardMolecule
             data={course}
             handleClick={() =>
-              history.push({
-                pathname: `/dashboard/modules/${course.id}/subjects`,
-                search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
-              })
+              privileges?.includes(Privileges.CAN_ACCESS_SUBJECTS)
+                ? history.push({
+                    pathname: `/dashboard/modules/${course.id}/subjects`,
+                    search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
+                  })
+                : privileges?.includes(Privileges.CAN_ACCESS_MODULE_MATERIALS)
+                ? history.push({
+                    pathname: `/dashboard/modules/${course.id}/materials`,
+                    search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
+                  })
+                : history.push({
+                    pathname: `/dashboard/modules/${course.id}/prereqs`,
+                    search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
+                  })
             }>
             <p className="pt-3">
               Total subjects:
@@ -47,24 +66,28 @@ export default function ModuleCard({
           <p className="pt-4 pb-2 text-txt-secondary text-sm mt-4">
             {course.description}
           </p>
-          {authUser?.user_type === UserType.STUDENT ? (
+          {user?.user_type === UserType.STUDENT ? (
             <BrowserLink
               className="outline-none"
               to={`/dashboard/modules/${course.id}/subjects`}>
               <Button styleType="outline">Start module</Button>
             </BrowserLink>
-          ) : authUser?.user_type === UserType.ADMIN ? (
+          ) : user?.user_type === UserType.ADMIN ? (
             <div className="py-2 flex justify-around gap-2">
-              <BrowserLink
-                className="outline-none"
-                to={`/dashboard/modules/${course.id}/add-subject`}>
-                <Button>Add subject</Button>
-              </BrowserLink>
-              <BrowserLink
-                className="outline-none"
-                to={`/dashboard/modules/${course.id}/edit`}>
-                <Button styleType="outline">Edit</Button>
-              </BrowserLink>
+              <Permission privilege={Privileges.CAN_CREATE_SUBJECTS}>
+                <BrowserLink
+                  className="outline-none"
+                  to={`/dashboard/modules/${course.id}/add-subject`}>
+                  <Button>Add subject</Button>
+                </BrowserLink>
+              </Permission>
+              <Permission privilege={Privileges.CAN_MODIFY_MODULES}>
+                <BrowserLink
+                  className="outline-none"
+                  to={`/dashboard/modules/${course.id}/edit`}>
+                  <Button styleType="outline">Edit</Button>
+                </BrowserLink>
+              </Permission>
             </div>
           ) : (
             <></>

@@ -79,8 +79,8 @@ function ScheduleIntakes() {
   const history = useHistory();
   const { path } = useRouteMatch();
 
-  const userInfo = authenticatorStore.authUser().data?.data.data;
-  const { data, isLoading } = getIntakesByAcademy(userInfo?.academy.id + '', false);
+  const { user } = useAuthenticator();
+  const { data, isLoading } = getIntakesByAcademy(user?.academy.id + '', false);
 
   let intakes: CommonCardDataType[] =
     data?.data.data.map((intake) => ({
@@ -131,11 +131,4 @@ function ScheduleIntakes() {
       </Switch>
     </div>
   );
-}
-
-function RedirectToStudentTimeTable() {
-  const { user } = useAuthenticator();
-  const student = getStudentShipByUserId(user?.id.toString() || '', !!user?.id);
-
-  return <div></div>;
 }

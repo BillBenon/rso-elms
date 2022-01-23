@@ -6,8 +6,8 @@ import Button from '../../components/Atoms/custom/Button';
 import DateMolecule from '../../components/Molecules/input/DateMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { queryClient } from '../../plugins/react-query';
-import { authenticatorStore } from '../../store/administration';
 import academicyearsStore from '../../store/administration/academicyears.store';
 import { ParamType, ValueType } from '../../types';
 import {
@@ -24,9 +24,9 @@ interface IUpdateYearProps {
 export default function UpdateAcademicYear({ academicYears }: IUpdateYearProps) {
   const history = useHistory();
   const { id } = useParams<ParamType>();
-  const { data: userInfo } = authenticatorStore.authUser();
+  const { user } = useAuthenticator();
   const [years, setYears] = useState<ICreateAcademicYear>({
-    academyId: userInfo?.data.data.academy.id.toString() || '',
+    academyId: user?.academy.id.toString() || '',
     name: '',
     id: '',
     actualAtartOn: '',
@@ -43,8 +43,10 @@ export default function UpdateAcademicYear({ academicYears }: IUpdateYearProps) 
   useEffect(() => {
     // academicYears.length > 0 && setYears(academicYears);
     let foundYear = academicYears.find((year) => year.id === id);
-    setYears({ ...years, ...foundYear });
-  }, [academicYears]);
+    setYears((yrs) => {
+      return { ...yrs, ...foundYear };
+    });
+  }, [academicYears, id]);
 
   function submitForm(e: FormEvent) {
     e.preventDefault();
