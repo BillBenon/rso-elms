@@ -8,6 +8,10 @@ module.exports = {
       jsx: true,
     },
   },
+  globals: {
+    React: true,
+    JSX: true,
+  },
   settings: {
     react: {
       version: 'detect',
