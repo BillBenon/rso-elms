@@ -5,7 +5,7 @@ import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { UserType, UserTypes } from '../../types/services/user.types';
@@ -50,7 +50,7 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
     instrs.push(user);
   });
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
   return (
     <Switch>
@@ -63,7 +63,7 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
               <Heading fontSize="base" fontWeight="semibold">
                 Instructors ({0})
               </Heading>
-              {intakeProg && authUser?.user_type === UserType.ADMIN && (
+              {intakeProg && user?.user_type === UserType.ADMIN && (
                 <EnrollInstructorToSubjectAssignment
                   module_id={subjectData?.data.data.module.id + ''}
                   subject_id={subjectId}
@@ -77,7 +77,7 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
                 <Loader />
               ) : instructorInfos?.data.data.length === 0 ? (
                 <NoDataAvailable
-                  showButton={intakeProg !== '' && authUser?.user_type === UserType.ADMIN}
+                  showButton={intakeProg !== '' && user?.user_type === UserType.ADMIN}
                   icon="user"
                   title={'No instructors available'}
                   description={
@@ -97,7 +97,7 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
                   statusColumn="status"
                   data={instrs}
                   selectorActions={
-                    authUser?.user_type === UserType.ADMIN
+                    user?.user_type === UserType.ADMIN
                       ? [
                           {
                             name: 'Remove instructors from subject',

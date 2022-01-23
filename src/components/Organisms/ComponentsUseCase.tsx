@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Button from '../Atoms/custom/Button';
 
+import Button from '../Atoms/custom/Button';
 import Checkbox from '../Atoms/Input/CheckBox';
 import DropDown from '../Atoms/Input/Dropdown';
 import Input from '../Atoms/Input/Input';

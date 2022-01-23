@@ -9,7 +9,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import { Tab } from '../../components/Molecules/tabs/tabs';
 import Students from '../../components/Organisms/user/Students';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { classStore } from '../../store/administration/class.store';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import { UserType, UserTypes } from '../../types/services/user.types';
@@ -33,7 +33,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
   const { path } = useRouteMatch();
   const [students, setStudents] = useState<UserTypes[]>([]);
   const { data: studentsData, isLoading } = classStore.getStudentsByClass(classId) || [];
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
   const history = useHistory();
 
   useEffect(() => {
@@ -64,7 +64,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
               return (
                 <>
                   <div className="flex gap-4 self-end">
-                    {authUser?.user_type === UserType.ADMIN && (
+                    {user?.user_type === UserType.ADMIN && (
                       <Button
                         styleType="outline"
                         onClick={() =>
@@ -94,7 +94,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
                       }>
                       View performance
                     </Button>
-                    {authUser?.user_type === UserType.ADMIN && (
+                    {user?.user_type === UserType.ADMIN && (
                       <AddStudents classId={parseInt(classId)} />
                     )}
                   </div>
@@ -132,7 +132,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
               return (
                 <>
                   <div className="flex gap-4 self-end">
-                    {authUser?.user_type === UserType.ADMIN && (
+                    {user?.user_type === UserType.ADMIN && (
                       <Button
                         styleType="outline"
                         onClick={() =>

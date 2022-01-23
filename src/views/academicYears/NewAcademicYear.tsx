@@ -5,8 +5,8 @@ import { useHistory } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import DateMolecule from '../../components/Molecules/input/DateMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { queryClient } from '../../plugins/react-query';
-import { authenticatorStore } from '../../store/administration';
 import academicyearsStore from '../../store/administration/academicyears.store';
 import { ValueType } from '../../types';
 import {
@@ -17,9 +17,9 @@ import { getDropDownStatusOptions } from '../../utils/getOption';
 
 export default function NewAcademicYear() {
   const history = useHistory();
-  const { data: userInfo } = authenticatorStore.authUser();
+  const { user } = useAuthenticator();
   const [years, setYears] = useState<ICreateAcademicYear>({
-    academyId: userInfo?.data.data.academy.id.toString() || '',
+    academyId: user?.academy.id.toString() || '',
     name: '',
     id: '',
     actualAtartOn: '',

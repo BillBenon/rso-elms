@@ -3,7 +3,7 @@ import { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router';
 
-import { authenticatorService } from '../../../../services';
+import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { rankStore } from '../../../../store/administration/rank.store';
 import { FormPropType, ParamType, ValueType } from '../../../../types';
 import { CreateRankReq, RankCategory } from '../../../../types/services/rank.types';
@@ -33,12 +33,11 @@ export default function UpdateRank({ onSubmit }: FormPropType) {
 
   useEffect(() => {
     const getUser = async () => {
-      const user = await authenticatorService.authUser();
+      const { user } = useAuthenticator();
       data?.data.data &&
         setForm({
           ...data?.data.data,
-          institution_id:
-            user.data.data.institution_id || 'b832407f-fb77-4a75-8679-73bf7794f207',
+          institution_id: user?.institution_id || 'b832407f-fb77-4a75-8679-73bf7794f207',
         });
     };
     getUser();

@@ -1,8 +1,8 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 
+import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { queryClient } from '../../../../plugins/react-query';
-import { authenticatorStore } from '../../../../store/administration';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { SelectData, ValueType } from '../../../../types';
@@ -24,22 +24,18 @@ export default function EvaluationSettings({
   handleGoBack,
   evaluationId,
 }: IEvaluationProps) {
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
   const instructors = instructordeploymentStore.getInstructorsDeployedInAcademy(
-    authUser?.academy.id + '',
+    user?.academy.id + '',
   ).data?.data.data;
-
-  // const approvals = evaluationStore.getEvaluationApprovals(evaluationId || '');
-
-  // console.log(approvals.data?.data.data);
 
   const [settings, setSettings] = useState<IEvaluationApproval>({
     approver_ids: '',
     evaluation_id: evaluationId || getLocalStorageData('evaluationId'),
     id: '',
     reviewer_ids: '',
-    marker_ids: authUser?.id.toString() || '',
+    marker_ids: user?.id.toString() || '',
     to_be_approved: false,
     to_be_reviewed: false,
   });

@@ -2,6 +2,7 @@ import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -11,9 +12,11 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewLevel from '../../components/Organisms/forms/level/NewLevel';
 import UpdateLevel from '../../components/Organisms/forms/level/UpdateLevel';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { levelStore } from '../../store/administration/level.store';
 import { ILevel } from '../../types/services/levels.types';
+import { Privileges } from '../../types/services/privilege.types';
+import { ActionsType } from '../../types/services/table.types';
 
 interface FilteredLevels
   extends Pick<ILevel, 'id' | 'name' | 'description' | 'generic_status'> {}
@@ -21,11 +24,13 @@ interface FilteredLevels
 function Levels() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
-  const { data: userInfo } = authenticatorStore.authUser();
+  const { user } = useAuthenticator();
   const [levels, setLevels] = useState<FilteredLevels[]>();
+  const [privileges, setPrivileges] = useState<string[]>();
+  let actions: ActionsType<FilteredLevels>[] | undefined = [];
 
   const { data, isLoading } = levelStore.getLevelsByAcademy(
-    userInfo?.data.data.academy.id.toString() || '',
+    user?.academy.id.toString() || '',
   ); // fetch levels
 
   useEffect(() => {
@@ -37,6 +42,13 @@ function Levels() {
     data?.data.data && setLevels(filterdData);
   }, [data, data?.data.data]);
 
+  useEffect(() => {
+    const _privileges = user?.user_roles
+      ?.filter((role) => role.id === 1)[0]
+      .role_privileges?.map((privilege) => privilege.name);
+    if (_privileges) setPrivileges(_privileges);
+  }, [user]);
+
   const list = [
     { to: '', title: 'Academy Admin' },
     { to: 'users', title: 'Users' },
@@ -45,15 +57,14 @@ function Levels() {
     { to: 'levels', title: 'Level' },
   ];
 
-  //actions to be displayed in table
-  const actions = [
-    {
+  if (privileges?.includes(Privileges.CAN_MODIFY_LEVEL)) {
+    actions?.push({
       name: 'Edit level',
       handleAction: (id: string | number | undefined) => {
         history.push(`${path}/${id}/edit`); // go to edit level
       },
-    },
-  ];
+    });
+  }
   return (
     <main className="px-4">
       <section>
@@ -61,9 +72,11 @@ function Levels() {
       </section>
       <section className="">
         <TableHeader title="Levels" totalItems={levels?.length || 0}>
-          <Link to={`${url}/add`}>
-            <Button>Add Level</Button>
-          </Link>
+          <Permission privilege={Privileges.CAN_CREATE_LEVEL}>
+            <Link to={`${url}/add`}>
+              <Button>Add Level</Button>
+            </Link>
+          </Permission>
         </TableHeader>
       </section>
 
@@ -97,7 +110,7 @@ function Levels() {
           render={() => {
             return (
               <PopupMolecule title="Update Level" open onClose={history.goBack}>
-                <UpdateLevel academy_id={userInfo?.data.data.academy.id.toString()} />
+                <UpdateLevel academy_id={user?.academy.id.toString()} />
               </PopupMolecule>
             );
           }}
@@ -110,7 +123,7 @@ function Levels() {
           render={() => {
             return (
               <PopupMolecule title="New Level" open onClose={history.goBack}>
-                <NewLevel academy_id={userInfo?.data.data.academy.id.toString()} />
+                <NewLevel academy_id={user?.academy.id.toString()} />
               </PopupMolecule>
             );
           }}

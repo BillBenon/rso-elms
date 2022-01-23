@@ -9,14 +9,14 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewEvent from '../../components/Organisms/schedule/event/NewEvent';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { getAllEvents } from '../../store/timetable/event.store';
 import { UserType } from '../../types/services/user.types';
 
 export default function Events() {
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
-  const { data, isLoading } = getAllEvents(authUser?.academy.id + '');
+  const { data, isLoading } = getAllEvents(user?.academy.id + '');
   const events = data?.data.data;
 
   const history = useHistory();
@@ -29,7 +29,7 @@ export default function Events() {
   return (
     <div>
       <TableHeader totalItems={0} title={'Events'} showBadge={false}>
-        {authUser?.user_type != UserType.STUDENT && (
+        {user?.user_type != UserType.STUDENT && (
           <Link to={`/dashboard/schedule/events/new`}>
             <Button>New Event</Button>
           </Link>

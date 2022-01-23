@@ -6,8 +6,8 @@ import { useHistory, useParams } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import SwitchMolecule from '../../components/Molecules/input/SwitchMolecule';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { queryClient } from '../../plugins/react-query';
-import { authenticatorStore } from '../../store/administration';
 import { levelStore } from '../../store/administration/level.store';
 import programStore from '../../store/administration/program.store';
 import { ParamType, ValueType } from '../../types';
@@ -22,9 +22,9 @@ export default function AddLevelToProgram() {
   const { id: progId } = useParams<ParamType>();
   const history = useHistory();
   const [levels, setLevels] = useState<FilteredLevels[]>();
-  const { data: userInfo } = authenticatorStore.authUser();
+  const { user } = useAuthenticator();
   const { data: levelsInfo } = levelStore.getLevelsByAcademy(
-    userInfo?.data.data.academy.id.toString() || '',
+    user?.academy.id.toString() || '',
   ); // fetch levels
 
   const { mutateAsync } = programStore.addProgramToLevel();

@@ -6,6 +6,7 @@ import { StudentApproval } from '../../../types/services/enrollment.types';
 import { IEvaluationStatus } from '../../../types/services/evaluation.types';
 import { IntakeStatus } from '../../../types/services/intake.types';
 import { IntakeModuleStatus } from '../../../types/services/intake-program.types';
+import { ActionsType } from '../../../types/services/table.types';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import Row from '../../Atoms/custom/Row';
@@ -22,7 +23,7 @@ interface TableProps<T> {
   data: (T & Selected)[];
   uniqueCol?: keyof T;
   hide?: (keyof T)[];
-  actions?: { name: string; handleAction: (_data?: T[keyof T]) => void }[];
+  actions?: ActionsType<T>[];
   statusActions?: {
     name: string;
     type:

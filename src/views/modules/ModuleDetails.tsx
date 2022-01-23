@@ -8,35 +8,30 @@ import {
   useRouteMatch,
 } from 'react-router';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
-import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
-import SubjectCard from '../../components/Molecules/cards/modules/SubjectCard';
-import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import UpdateModuleForm from '../../components/Organisms/forms/modules/UpdateModuleForm';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
-import { authenticatorStore } from '../../store/administration';
-import enrollmentStore from '../../store/administration/enrollment.store';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { moduleStore } from '../../store/administration/modules.store';
-import { subjectStore } from '../../store/administration/subject.store';
-import instructordeploymentStore from '../../store/instructordeployment.store';
-import { CommonCardDataType, Link, ParamType } from '../../types';
+import { Link, ParamType, Privileges } from '../../types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ModuleEvaluations from '../evaluation/ModuleEvaluations';
 import ModuleMaterials from '../module-material/ModuleMaterials';
 import { IProgramData } from '../programs/AcademicPrograms';
+import Subjects from '../subjects/Subjects';
 import InstructorsOnModule from '../users/InstructorsOnModule';
 import Prerequisites from './paths/Prerequisites';
 
 export default function ModuleDetails() {
-  const [subjects, setSubjects] = useState<CommonCardDataType[]>([]);
   const [route, setCurrentPage] = useState('SUBJECTS');
 
   const { id } = useParams<ParamType>();
@@ -47,41 +42,39 @@ export default function ModuleDetails() {
   const history = useHistory();
   let moduleData: IProgramData | undefined;
   const module = moduleStore.getModuleById(id).data?.data.data;
-  const authUser = authenticatorStore.authUser().data?.data.data;
-  const subjectData = subjectStore.getSubjectsByModule(id);
+  const { user } = useAuthenticator();
+  const [privileges, setPrivileges] = useState<string[]>();
 
-  const instructorInfo =
-    instructordeploymentStore.getInstructorByUserId(authUser?.id + '').data?.data.data ||
-    [];
+  useEffect(() => {
+    const _privileges = user?.user_roles
+      ?.filter((role) => role.id === 1)[0]
+      .role_privileges?.map((privilege) => privilege.name);
+    if (_privileges) setPrivileges(_privileges);
+  }, [user]);
 
-  const instSubjects = enrollmentStore.getSubjectsByInstructor(
-    instructorInfo[0]?.id.toString() || '',
-  );
-
-  const instructorSubjects = instSubjects.data?.data.data.filter((inst) =>
-    subjectData.data?.data.data.map((sub) => sub.id).includes(inst.subject_id),
-  );
-
-  let tabs: TabType[] = [
-    // {
-    //   label: 'Module Info',
-    //   href: `${url}`,
-    // },
-    {
+  let tabs: TabType[] = [];
+  // {
+  //   label: 'Module Info',
+  //   href: `${url}`,
+  // },
+  if (privileges?.includes(Privileges.CAN_ACCESS_SUBJECTS)) {
+    tabs.push({
       label: 'Subjects',
       href: `${url}/subjects?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-    },
-    {
-      label: 'Prerequisites',
-      href: `${url}/prereqs?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-    },
-  ];
+    });
+  }
+  tabs.push({
+    label: 'Prerequisites',
+    href: `${url}/prereqs?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+  });
 
   if (!showMenu || showMenu == 'false') {
-    tabs.push({
-      label: 'Materials',
-      href: `${url}/materials?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-    });
+    if (privileges?.includes(Privileges.CAN_ACCESS_MODULE_MATERIALS)) {
+      tabs.push({
+        label: 'Materials',
+        href: `${url}/materials?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+      });
+    }
   }
 
   if (showMenu && showMenu == 'true') {
@@ -152,27 +145,6 @@ export default function ModuleDetails() {
     }).observe(document, { subtree: true, childList: true });
   }, [id]);
 
-  useEffect(() => {
-    if (subjectData.data?.data) {
-      let loadedSubjects: CommonCardDataType[] = [];
-      subjectData.data.data.data.forEach((subject) => {
-        let cardData: CommonCardDataType = {
-          id: subject.id,
-          code: subject.module.name || `Subject ${subject.title}`,
-          description: subject.content,
-          title: subject.title,
-          status: {
-            type: advancedTypeChecker(subject.generic_status),
-            text: subject.generic_status.toString(),
-          },
-        };
-        loadedSubjects.push(cardData);
-      });
-
-      setSubjects(loadedSubjects);
-    }
-  }, [id, subjectData?.data?.data, subjectData?.data?.data.data]);
-
   function handleSearch() {}
   function handleClose() {
     history.goBack();
@@ -209,17 +181,19 @@ export default function ModuleDetails() {
               </button>
             </div>
 
-            {authUser?.user_type === UserType.ADMIN && (
+            {user?.user_type === UserType.ADMIN && (
               <>
                 {route == 'SUBJECTS' ? (
-                  <div className="flex gap-3">
-                    <Button
-                      onClick={() => {
-                        history.push(`/dashboard/modules/${id}/add-subject`);
-                      }}>
-                      Add new subject
-                    </Button>
-                  </div>
+                  <Permission privilege={Privileges.CAN_CREATE_SUBJECTS}>
+                    <div className="flex gap-3">
+                      <Button
+                        onClick={() => {
+                          history.push(`/dashboard/modules/${id}/add-subject`);
+                        }}>
+                        Add new subject
+                      </Button>
+                    </div>
+                  </Permission>
                 ) : (
                   //  : route == 'SYLLABUS' ? (
                   //   <div className="flex gap-3">
@@ -232,7 +206,7 @@ export default function ModuleDetails() {
                 )}
               </>
             )}
-            {authUser?.user_type === UserType.ADMIN && route == 'PREREQS' && (
+            {user?.user_type === UserType.ADMIN && route == 'PREREQS' && (
               <div className="flex gap-3">
                 <Button
                   onClick={() =>
@@ -244,66 +218,20 @@ export default function ModuleDetails() {
                 </Button>
               </div>
             )}
-            {authUser?.user_type === UserType.INSTRUCTOR && route == 'MATERIALS' && (
-              <div className="flex gap-3">
-                <Button onClick={() => history.push(`${url}/materials/add-material`)}>
-                  Add new Material
-                </Button>
-              </div>
+            {user?.user_type === UserType.INSTRUCTOR && route == 'MATERIALS' && (
+              <Permission privilege={Privileges.CAN_CREATE_MODULE_MATERIALS}>
+                <div className="flex gap-3">
+                  <Button onClick={() => history.push(`${url}/materials/add-material`)}>
+                    Add new Material
+                  </Button>
+                </div>
+              </Permission>
             )}
           </div>
         </div>
         <TabNavigation tabs={tabs}>
           <Switch>
-            <Route
-              exact
-              path={`${path}/subjects`}
-              render={() => (
-                <>
-                  {authUser?.user_type === UserType.INSTRUCTOR ? (
-                    instSubjects.isLoading || subjectData.isLoading ? (
-                      <Loader />
-                    ) : instructorSubjects?.length === 0 ? (
-                      <NoDataAvailable
-                        showButton={false}
-                        icon="subject"
-                        title={'No subjects assigned to you'}
-                        description={
-                          'You have not been assigned any subjects yet! Please contact the admin for support.'
-                        }
-                        handleClick={() => history.push(`${url}/add-subject`)}
-                      />
-                    ) : (
-                      <section className="flex flex-wrap justify-start gap-4 mt-2">
-                        {subjects.map((subject) => (
-                          <div key={subject.id} className="p-1 mt-3">
-                            <SubjectCard subject={subject} intakeProg={intakeProg} />
-                          </div>
-                        ))}
-                      </section>
-                    )
-                  ) : subjectData.isLoading ? (
-                    <Loader />
-                  ) : subjects.length === 0 && subjectData.isSuccess ? (
-                    <NoDataAvailable
-                      showButton={authUser?.user_type === UserType.ADMIN}
-                      icon="subject"
-                      title={'No subjects registered'}
-                      description={'There are no subjects available yet'}
-                      handleClick={() => history.push(`${url}/add-subject`)}
-                    />
-                  ) : (
-                    <section className="flex flex-wrap justify-start gap-4 mt-2">
-                      {subjects.map((subject) => (
-                        <div key={subject.id} className="p-1 mt-3">
-                          <SubjectCard subject={subject} intakeProg={intakeProg} />
-                        </div>
-                      ))}
-                    </section>
-                  )}
-                </>
-              )}
-            />
+            <Route exact path={`${path}/subjects`} render={() => <Subjects />} />
 
             <Route path={`${path}/evaluations`} render={() => <ModuleEvaluations />} />
             {/* add subject popup */}

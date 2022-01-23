@@ -1,16 +1,19 @@
+import { AxiosError } from 'axios';
 import { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
 import { queryClient } from '../plugins/react-query';
 import { authenticatorStore } from '../store/administration';
-import { LoginInfo } from '../types';
+import { LoginInfo, Response } from '../types';
 import { AuthUser } from '../types/services/user.types';
 import cookie from '../utils/cookie';
 
 export default function useAuthenticator() {
   const [user, setUser] = useState<AuthUser>();
   const [isUserLoading, setIsUserLoading] = useState(false);
+  const [_isError, setIsError] = useState(false);
+  const [_error, setError] = useState<AxiosError<Response>>();
   const [userAvailabe, setUserAvailable] = useState(false);
   const { refetch } = authenticatorStore.authUser(false);
   const { mutateAsync } = authenticatorStore.login();
@@ -21,15 +24,17 @@ export default function useAuthenticator() {
   useEffect(() => {
     if (!user && isLoggedIn) fetchData();
   });
-
   async function fetchData() {
-    console.log('fetch data called');
     setIsUserLoading(true);
-    const { data, isSuccess } = await refetch();
+    const { data, isSuccess, isError, error } = await refetch();
     if (isSuccess) {
       setUser(data?.data.data);
       setUserAvailable(true);
     }
+
+    if (error) setError(error as AxiosError);
+
+    setIsError(isError);
     setIsUserLoading(false);
   }
 
@@ -68,5 +73,14 @@ export default function useAuthenticator() {
     history.push(path);
   };
 
-  return { user, userLoading: isUserLoading, userAvailabe, isLoggingIn, login, logout };
+  return {
+    user,
+    userLoading: isUserLoading,
+    userAvailabe,
+    isLoggingIn,
+    login,
+    logout,
+    isError: _isError,
+    error: _error,
+  };
 }

@@ -5,7 +5,7 @@ import Loader from '../../components/Atoms/custom/Loader';
 import AddCard from '../../components/Molecules/cards/AddCard';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { CommonCardDataType } from '../../types';
 import { IntakeClassParam } from '../../types/services/intake-program.types';
@@ -21,7 +21,7 @@ function SubjectPeriod() {
   );
   const [subj, setsubj] = useState<CommonCardDataType[]>();
   const history = useHistory();
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
   useEffect(() => {
     if (subjects?.data.data) {
@@ -50,7 +50,7 @@ function SubjectPeriod() {
         <Loader />
       ) : subj?.length === 0 ? (
         <NoDataAvailable
-          showButton={authUser?.user_type === UserType.ADMIN}
+          showButton={user?.user_type === UserType.ADMIN}
           buttonLabel="Add new subject"
           icon="subject"
           title={'No subjects available in this period'}
@@ -63,7 +63,7 @@ function SubjectPeriod() {
         />
       ) : (
         <section className="mt-4 flex flex-wrap justify-start gap-4">
-          {authUser?.user_type === UserType.ADMIN && (
+          {user?.user_type === UserType.ADMIN && (
             <AddCard
               title={'Add new subject'}
               onClick={() =>

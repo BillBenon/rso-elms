@@ -9,6 +9,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -18,8 +19,11 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewRank from '../../components/Organisms/forms/ranks/NewRank';
 import UpdateRank from '../../components/Organisms/forms/ranks/UpdateRank';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { rankStore } from '../../store/administration/rank.store';
+import { Privileges } from '../../types/services/privilege.types';
 import { RankRes } from '../../types/services/rank.types';
+import { ActionsType } from '../../types/services/table.types';
 
 interface FilteredRanks
   extends Pick<RankRes, 'id' | 'name' | 'description' | 'category' | 'institution_id'> {}
@@ -29,8 +33,11 @@ export default function Ranks() {
   const [ranks, setRanks] = useState<FilteredRanks[]>();
   const history = useHistory();
   const location = useLocation();
+  const { user } = useAuthenticator();
+  const [privileges, setPrivileges] = useState<string[]>();
 
   const { data, isSuccess, isLoading, refetch } = rankStore.getRanks(); // fetch ranks
+  let actions: ActionsType<any>[] | undefined = [];
 
   useEffect(() => {
     // filter data to display
@@ -41,22 +48,30 @@ export default function Ranks() {
     data?.data.data && setRanks(filterdData);
   }, [data]);
 
+  useEffect(() => {
+    const _privileges = user?.user_roles
+      ?.filter((role) => role.id === 1)[0]
+      .role_privileges?.map((privilege) => privilege.name);
+    if (_privileges) setPrivileges(_privileges);
+  }, [user]);
+
+  if (privileges?.includes(Privileges.CAN_EDIT_RANK)) {
+    actions?.push({
+      name: 'Edit rank',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`${path}/${id}/edit`); // go to edit rank
+      },
+    });
+  }
+
   // re fetch data whenever user come back on this page
   useEffect(() => {
     if (location.pathname === path || location.pathname === `${path}/`) {
       refetch();
     }
-  }, [location]);
+  }, [location, path, refetch]);
 
   //actions to be displayed in table
-  const actions = [
-    {
-      name: 'Edit rank',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit rank
-      },
-    },
-  ];
 
   const manyActions = [
     {
@@ -82,14 +97,27 @@ export default function Ranks() {
           title="Ranks"
           totalItems={ranks && ranks.length > 0 ? ranks.length : 0}
           handleSearch={handleSearch}>
-          <Link to={`${url}/add`}>
-            <Button>Add Rank</Button>
-          </Link>
+          <Permission privilege={Privileges.CAN_CREATE_RANK}>
+            <Link to={`${url}/add`}>
+              <Button>Add Rank</Button>
+            </Link>
+          </Permission>
         </TableHeader>
       </section>
       <section>
         {isLoading && <Loader />}
         {ranks && ranks.length > 0 && isSuccess ? (
+          // privileges?.includes(Privileges.CAN_EDIT_RANK) ? (
+          //   <Table<FilteredRanks>
+          //     selectorActions={manyActions}
+          //     hide={['id']}
+          //     handleSelect={handleSelect}
+          //     statusColumn="status"
+          //     data={ranks}
+          //     uniqueCol={'id'}
+          //     actions={actions}
+          //   />
+          // ) : (
           <Table<FilteredRanks>
             selectorActions={manyActions}
             hide={['id']}
@@ -99,7 +127,8 @@ export default function Ranks() {
             uniqueCol={'id'}
             actions={actions}
           />
-        ) : isSuccess && ranks?.length === 0 ? (
+        ) : // )
+        isSuccess && ranks?.length === 0 ? (
           <NoDataAvailable
             icon="role"
             buttonLabel="Add new rank"

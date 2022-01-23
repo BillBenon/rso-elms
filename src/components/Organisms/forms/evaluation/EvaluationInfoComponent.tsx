@@ -4,7 +4,7 @@ import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
 
-import { authenticatorStore } from '../../../../store/administration';
+import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { classStore } from '../../../../store/administration/class.store';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
@@ -50,11 +50,10 @@ export default function EvaluationInfoComponent({
     [search],
   );
 
-  const authUser = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
-    authUser?.id + '',
-  ).data?.data.data[0];
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
+    .data?.data.data[0];
 
   const { data: classes } = classStore.getClassByPeriod(intakePeriodId + '');
 
@@ -88,7 +87,7 @@ export default function EvaluationInfoComponent({
   useEffect(() => {
     setDetails({
       access_type: evaluationInfo?.access_type || IAccessTypeEnum.PUBLIC,
-      academy_id: authUser?.academy.id.toString() || '',
+      academy_id: user?.academy.id.toString() || '',
       instructor_id: instructorInfo?.id.toString() || '',
       intake_academic_year_period: intakePeriodId,
       allow_submission_time: evaluationInfo?.allow_submission_time || '',
@@ -112,13 +111,7 @@ export default function EvaluationInfoComponent({
       time_limit: evaluationInfo?.time_limit || 0,
       total_mark: evaluationInfo?.total_mark || 0,
     });
-  }, [
-    authUser?.academy.id,
-    evaluationInfo,
-    instructorInfo?.id,
-    intakePeriodId,
-    subjectId,
-  ]);
+  }, [user?.academy.id, evaluationInfo, instructorInfo?.id, intakePeriodId, subjectId]);
 
   const { mutate } = evaluationStore.createEvaluation();
   const { mutateAsync } = evaluationStore.updateEvaluation();
@@ -185,7 +178,6 @@ export default function EvaluationInfoComponent({
           Evaluation Name
         </InputMolecule>
         <SelectMolecule
-          /*@ts-ignore */
           value={details?.evaluation_type}
           width="64"
           name="evaluation_type"

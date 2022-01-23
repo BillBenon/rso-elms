@@ -9,7 +9,7 @@ import DateMolecule from '../../components/Molecules/input/DateMolecule';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import usersStore from '../../store/administration/users.store';
 import { CommonFormProps, CommonStepProps, ValueType } from '../../types';
 import {
@@ -36,12 +36,7 @@ export default function SupAdminProfile<E>({
   isVertical,
   display_label,
 }: Personal<E>) {
-  // const history = useHistory();
-  //   const updateUserType = pick(UserType, ['ADMIN', 'INSTRUCTOR', 'STUDENT']);
-  //   const updateUserTypeWithSuper = { ...updateUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
-  // const authUser = authenticatorStore.authUser();
-  // const user = usersStore.getUserById(fetched_id.toString());
-  const auth = authenticatorStore.authUser().data?.data.data;
+  const { user } = useAuthenticator();
 
   const [details, setDetails] = useState<UpdateUserInfo>({
     place_of_residence: '',
@@ -109,13 +104,15 @@ export default function SupAdminProfile<E>({
   // }, [user]);
 
   useEffect(() => {
-    setDetails({
-      ...details,
-      id: auth?.id.toString() || '',
-      username: auth?.username.toString() || '',
-      user_type: auth?.user_type || UserType.STUDENT,
+    setDetails((dets) => {
+      return {
+        ...dets,
+        id: user?.id.toString() || '',
+        username: user?.username.toString() || '',
+        user_type: user?.user_type || UserType.STUDENT,
+      };
     });
-  }, [auth]);
+  }, [user]);
 
   function handleChange(e: ValueType) {
     setDetails((details: any) => ({

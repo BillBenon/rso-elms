@@ -6,7 +6,7 @@ import AddCard from '../../components/Molecules/cards/AddCard';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import useInstructorModules from '../../hooks/getInstructorModules';
-import { authenticatorStore } from '../../store/administration';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { moduleStore } from '../../store/administration/modules.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType } from '../../types';
@@ -20,10 +20,9 @@ function IntakeProgramModules() {
   const [programModules, setProgramModules] = useState<CommonCardDataType[]>([]);
   const [instModules, setInstModules] = useState<CommonCardDataType[]>([]);
   const { id, intakeProg } = useParams<IntakeProgParam>();
-  const authUser = authenticatorStore.authUser().data?.data.data;
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
-    authUser?.id + '',
-  ).data?.data.data[0];
+  const { user } = useAuthenticator();
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
+    .data?.data.data[0];
 
   const getAllModuleStore = moduleStore.getModulesByProgram(id);
 
@@ -33,7 +32,7 @@ function IntakeProgramModules() {
     let newModules: CommonCardDataType[] = [];
 
     setInstModules(newInstModules),
-      authUser?.user_type === UserType.INSTRUCTOR
+      user?.user_type === UserType.INSTRUCTOR
         ? (newModules = instModules)
         : getAllModuleStore.data?.data.data.forEach((mod) =>
             newModules.push({
@@ -49,7 +48,13 @@ function IntakeProgramModules() {
             }),
           );
     setProgramModules(newModules);
-  }, [getAllModuleStore.data?.data.data, id, instModules, newInstModules]);
+  }, [
+    getAllModuleStore.data?.data.data,
+    id,
+    instModules,
+    newInstModules,
+    user?.user_type,
+  ]);
 
   return (
     <>
@@ -59,7 +64,7 @@ function IntakeProgramModules() {
         <section className="mt-4 flex flex-wrap justify-start gap-4">
           {programModules.length <= 0 ? (
             <NoDataAvailable
-              showButton={authUser?.user_type === UserType.ADMIN}
+              showButton={user?.user_type === UserType.ADMIN}
               buttonLabel="Add new modules"
               title={'No modules available in this program'}
               handleClick={() => history.push(`${url}/add`)}
@@ -67,7 +72,7 @@ function IntakeProgramModules() {
             />
           ) : (
             <>
-              {authUser?.user_type === UserType.ADMIN ? (
+              {user?.user_type === UserType.ADMIN ? (
                 <AddCard
                   title={'Add new module'}
                   onClick={() => history.push(`${url}/add`)}

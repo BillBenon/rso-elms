@@ -2,8 +2,8 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
+import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { queryClient } from '../../../../plugins/react-query';
-import { authenticatorStore } from '../../../../store/administration';
 import academyStore from '../../../../store/administration/academy.store';
 import usersStore from '../../../../store/administration/users.store';
 import { ParamType, ValueType } from '../../../../types';
@@ -16,8 +16,8 @@ import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 function AssignAdminToAcademy() {
   const history = useHistory();
 
-  const { data: authUser } = authenticatorStore.authUser();
-  const users = usersStore.getUsersByInstitution(authUser?.data.data.institution_id + '');
+  const { user } = useAuthenticator();
+  const users = usersStore.getUsersByInstitution(user?.institution_id + '');
   const { mutateAsync } = academyStore.modifyAcademy();
 
   const admins = users.data?.data.data.filter(
