@@ -143,7 +143,6 @@ function ExperienceForm<E>({
   const moveForward = async () => {
     if (saveData) {
       const isSuccess = await saveData(mutateAsync);
-      console.log('Output: ', experience);
       if (isSuccess) {
         setExperience({
           attachment_id: '',
@@ -160,7 +159,6 @@ function ExperienceForm<E>({
         setTotalExperience([]);
         nextStep(true);
       }
-      console.log('Failed and isSuccess : ', isSuccess);
     }
   };
 
