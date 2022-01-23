@@ -38,33 +38,33 @@ export default function Sidebar() {
     }
 
     //Academiz check
-    if (privileges?.includes(Privileges.CAN_ACCESS_ACADEMY))
-      institutionAdminLinks.push({
-        title: 'Academies',
-        to: '/dashboard/academies',
-        icon: 'academy',
-        fill: false,
-      });
+    // if (privileges?.includes(Privileges.CAN_ACCESS_ACADEMY))
+    institutionAdminLinks.push({
+      title: 'Academies',
+      to: '/dashboard/academies',
+      icon: 'academy',
+      fill: false,
+    });
 
     //Ranks check
 
-    if (privileges?.includes(Privileges.CAN_ACCESS_RANKS)) {
-      institutionAdminLinks.push({
-        title: 'Ranks',
-        to: '/dashboard/ranks',
-        icon: 'rank',
-      });
-    }
+    // if (privileges?.includes(Privileges.CAN_ACCESS_RANKS)) {
+    institutionAdminLinks.push({
+      title: 'Ranks',
+      to: '/dashboard/ranks',
+      icon: 'rank',
+    });
+    // }
 
     //Roles check
 
-    if (privileges?.includes(Privileges.CAN_ACCESS_ROLES)) {
-      institutionAdminLinks.push({
-        title: 'Roles',
-        to: '/dashboard/roles',
-        icon: 'role',
-      });
-    }
+    // if (privileges?.includes(Privileges.CAN_ACCESS_ROLES)) {
+    institutionAdminLinks.push({
+      title: 'Roles',
+      to: '/dashboard/roles',
+      icon: 'role',
+    });
+    // }
 
     //Levels check
 
