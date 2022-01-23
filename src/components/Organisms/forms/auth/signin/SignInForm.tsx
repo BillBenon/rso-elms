@@ -1,34 +1,21 @@
-import React, { FormEvent, useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import { Link, useHistory, useRouteMatch } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useRouteMatch } from 'react-router-dom';
 
-import { queryClient } from '../../../../../plugins/react-query';
-import { authenticatorStore } from '../../../../../store/administration';
+import useAuthenticator from '../../../../../hooks/useAuthenticator';
 import { ValueType } from '../../../../../types';
 import { LoginInfo } from '../../../../../types';
-import cookie from '../../../../../utils/cookie';
 import Button from '../../../../Atoms/custom/Button';
 import Heading from '../../../../Atoms/Text/Heading';
 import InputMolecule from '../../../../Molecules/input/InputMolecule';
 
 const SignInForm = () => {
-  const history = useHistory();
+  const { login, isLoggingIn, logout } = useAuthenticator();
   const { url } = useRouteMatch();
-  const [loading, setLoading] = useState(false);
-  const { mutateAsync } = authenticatorStore.login();
+
   const [details, setDetails] = useState<LoginInfo>({
     username: '',
     password: '',
   });
-
-  function logout() {
-    queryClient.clear();
-    cookie.eraseCookie('jwt_info');
-  }
-
-  const redirectTo = (path: string) => {
-    history.push(path);
-  };
 
   const handleChange = (e: ValueType) => {
     setDetails((details) => ({
@@ -36,27 +23,6 @@ const SignInForm = () => {
       [e.name]: e.value,
     }));
   };
-
-  async function login<T>(e: FormEvent<T>) {
-    setLoading(true);
-    const toastId = toast.loading('Authenticating...');
-    e.preventDefault();
-    logout();
-
-    await mutateAsync(details, {
-      onSuccess(data) {
-        setLoading(false);
-        cookie.setCookie('jwt_info', JSON.stringify(data?.data.data));
-        toast.success(data.data.message, { duration: 1200, id: toastId });
-        redirectTo('/redirecting');
-      },
-      onError(error) {
-        setLoading(false);
-        console.log(error);
-        toast.error('Authentication failed', { duration: 3000, id: toastId });
-      },
-    });
-  }
 
   useEffect(() => logout(), []);
   return (
@@ -74,7 +40,7 @@ const SignInForm = () => {
         </p>
       </div>
 
-      <form onSubmit={login}>
+      <form onSubmit={(e) => login(e, details)}>
         <div className="flex flex-col gap-2">
           <InputMolecule
             onCopy={(e: any) => {
@@ -102,7 +68,7 @@ const SignInForm = () => {
           </Link>
         </div>
 
-        <Button disabled={loading} type="submit">
+        <Button disabled={isLoggingIn} type="submit">
           Sign In
         </Button>
       </form>
