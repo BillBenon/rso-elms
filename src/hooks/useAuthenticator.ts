@@ -22,8 +22,9 @@ export default function useAuthenticator() {
   const history = useHistory();
 
   useEffect(() => {
-    if (!user && isLoggedIn) fetchData();
-  });
+    if (!user) fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   async function fetchData() {
     setIsUserLoading(true);
     const { data, isSuccess, isError, error } = await refetch();
@@ -39,16 +40,21 @@ export default function useAuthenticator() {
   }
 
   async function login<T>(e: FormEvent<T>, details: LoginInfo) {
+    e.preventDefault();
+
     setIsLoggingIn(true);
     const toastId = toast.loading('Authenticating...');
-    e.preventDefault();
     logout();
+
     await mutateAsync(details, {
       async onSuccess(data) {
         cookie.setCookie('jwt_info', JSON.stringify(data?.data.data));
         setIsLoggingIn(false);
         await fetchData();
         toast.success(data.data.message, { duration: 1200, id: toastId });
+        console.log('====================================');
+        console.log(user);
+        console.log('====================================');
         redirectTo('/redirecting');
         setIsLoggedIn(true);
       },
