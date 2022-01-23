@@ -57,6 +57,9 @@ export default function useAuthenticator() {
 
   function logout() {
     setIsLoggedIn(false);
+    setUser(undefined);
+    setIsLoggedIn(false);
+    setUserAvailable(false);
     queryClient.clear();
     cookie.eraseCookie('jwt_info');
   }
