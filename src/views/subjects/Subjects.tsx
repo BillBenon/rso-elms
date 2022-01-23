@@ -8,7 +8,7 @@ import useAuthenticator from '../../hooks/useAuthenticator';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
-import { CommonCardDataType, ParamType } from '../../types';
+import { CommonCardDataType, ParamType, Privileges } from '../../types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 
@@ -31,6 +31,14 @@ function Subjects() {
   const instructorSubjects = instSubjects.data?.data.data.filter((inst) =>
     subjectData.data?.data.data.map((sub) => sub.id).includes(inst.subject_id),
   );
+  const [privileges, setPrivileges] = useState<string[]>();
+
+  useEffect(() => {
+    const _privileges = user?.user_roles
+      ?.filter((role) => role.id === 1)[0]
+      .role_privileges?.map((privilege) => privilege.name);
+    if (_privileges) setPrivileges(_privileges);
+  }, [user]);
 
   useEffect(() => {
     if (subjectData.data?.data) {
@@ -81,7 +89,10 @@ function Subjects() {
         <Loader />
       ) : subjects.length === 0 && subjectData.isSuccess ? (
         <NoDataAvailable
-          showButton={user?.user_type === UserType.ADMIN}
+          showButton={
+            user?.user_type === UserType.ADMIN &&
+            (privileges?.includes(Privileges.CAN_CREATE_SUBJECTS) ? true : false)
+          }
           icon="subject"
           title={'No subjects registered'}
           description={'There are no subjects available yet'}

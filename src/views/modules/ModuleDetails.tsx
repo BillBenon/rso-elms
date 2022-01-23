@@ -57,12 +57,12 @@ export default function ModuleDetails() {
   //   label: 'Module Info',
   //   href: `${url}`,
   // },
-  if (privileges?.includes(Privileges.CAN_ACCESS_SUBJECTS)) {
-    tabs.push({
-      label: 'Subjects',
-      href: `${url}/subjects?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-    });
-  }
+  // if (privileges?.includes(Privileges.CAN_ACCESS_SUBJECTS)) {
+  tabs.push({
+    label: 'Subjects',
+    href: `${url}/subjects?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+  });
+  // }
   tabs.push({
     label: 'Prerequisites',
     href: `${url}/prereqs?showMenus=${showMenu}&intkPrg=${intakeProg}`,
@@ -78,19 +78,21 @@ export default function ModuleDetails() {
   }
 
   if (showMenu && showMenu == 'true') {
-    tabs.push(
-      {
-        label: 'Instructors',
-        href: `${url}/instructors?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-      },
-      {
+    tabs.push({
+      label: 'Instructors',
+      href: `${url}/instructors?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+    });
+    if (privileges?.includes(Privileges.CAN_ACCESS_MODULE_MATERIALS)) {
+      tabs.push({
         label: 'Materials',
         href: `${url}/materials?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-      },
-      // {
-      //   label: 'Syllabus',
-      //   href: `${url}/syllabus?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-      // },
+      });
+    }
+    // {
+    //   label: 'Syllabus',
+    //   href: `${url}/syllabus?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+    // },
+    tabs.push(
       {
         label: 'Evaluation',
         href: `${url}/evaluations?showMenus=${showMenu}&intkPrg=${intakeProg}`,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Link as BrowserLink,
   Route,
@@ -23,6 +23,7 @@ import useAuthenticator from '../../hooks/useAuthenticator';
 import { lessonStore } from '../../store/administration/lesson.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
+import { Privileges } from '../../types';
 import { UserType } from '../../types/services/user.types';
 import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import EvaluationCategories from '../evaluation/EvaluationCategories';
@@ -42,6 +43,14 @@ export default function SubjectDetails() {
   const period = new URLSearchParams(search).get('prd') || '';
 
   const { user } = useAuthenticator();
+  const [privileges, setPrivileges] = useState<string[]>();
+
+  useEffect(() => {
+    const _privileges = user?.user_roles
+      ?.filter((role) => role.id === 1)[0]
+      .role_privileges?.map((privilege) => privilege.name);
+    if (_privileges) setPrivileges(_privileges);
+  }, [user]);
   const { subjectId } = useParams<ParamType>();
   const { url } = useRouteMatch();
   const history = useHistory();
@@ -81,20 +90,25 @@ export default function SubjectDetails() {
     );
   }
 
-  let tabs = [
-    {
+  let tabs = [];
+
+  if (privileges?.includes(Privileges.CAN_ACCESS_LESSON)) {
+    tabs.push({
       label: `Lessons(${lessons.length})`,
       href: `${url}?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
-    },
-    {
+    });
+  }
+
+  if (privileges?.includes(Privileges.CAN_ACCESS_EVALUATIONS)) {
+    tabs.push({
       label: 'Evaluations',
       href: `${url}/evaluations?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
-    },
-    {
-      label: 'Instructors',
-      href: `${url}/instructors?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
-    },
-  ];
+    });
+  }
+  tabs.push({
+    label: 'Instructors',
+    href: `${url}/instructors?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+  });
 
   return (
     <main className="px-4">

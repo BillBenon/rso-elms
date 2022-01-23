@@ -233,12 +233,14 @@ export default function Intakes() {
                         <div className="p-1 mt-3">
                           <CommonCardMolecule
                             data={intake}
-                            handleClick={() =>
-                              privileges?.includes(
-                                Privileges.CAN_ACCESS_PROGRAMS_IN_INTAKE,
-                              )
-                                ? history.push(`${url}/programs/${intake.id}`)
-                                : {}
+                            handleClick={
+                              () =>
+                                // privileges?.includes(
+                                //   Privileges.CAN_ACCESS_PROGRAMS_IN_INTAKE,
+                                // )
+                                // ?
+                                history.push(`${url}/programs/${intake.id}`)
+                              // : {}
                             }>
                             <div className="flex flex-col gap-6">
                               <div className="flex gap-2">

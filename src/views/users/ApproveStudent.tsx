@@ -6,9 +6,11 @@ import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
 import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { queryClient } from '../../plugins/react-query';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
+import { Privileges } from '../../types';
 import { ApproveStudents, StudentApproval } from '../../types/services/enrollment.types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
 import { AcademyUserType } from '../../types/services/user.types';
@@ -25,7 +27,14 @@ function ApproveStudent() {
   const { data: studentProg, isLoading } =
     intakeProgramStore.getStudentsByIntakeProgram(intakeProg);
   const [students, setStudents] = useState<AcademyUser[]>([]);
-
+  const { user } = useAuthenticator();
+  const [privileges, setPrivileges] = useState<string[]>();
+  useEffect(() => {
+    const _privileges = user?.user_roles
+      ?.filter((role) => role.id === 1)[0]
+      .role_privileges?.map((privilege) => privilege.name);
+    if (_privileges) setPrivileges(_privileges);
+  }, [user]);
   useEffect(() => {
     let pushedStud: AcademyUser[] = [];
     studentProg?.data.data?.map((stud) => {
@@ -132,42 +141,48 @@ function ApproveStudent() {
                         ? approvedStud
                         : rejectedStud
                     }
-                    actions={[
-                      {
-                        name: 'View Profile',
-                        handleAction: (id: string | number | undefined) => {
-                          stud === StudentApproval.PENDING
-                            ? history.push({
-                                pathname: `/dashboard/users/${
-                                  pendingStud.find((st) => st.id === id)?.user_id
-                                }/profile`,
-                                search: `?intkStud=${id}&stat=${StudentApproval.PENDING}`,
-                              })
-                            : stud === StudentApproval.APPROVED
-                            ? history.push({
-                                pathname: `/dashboard/users/${
-                                  approvedStud.find((st) => st.id === id)?.user_id
-                                }/profile`,
-                                search: `?intkStud=${id}&stat=${StudentApproval.APPROVED}`,
-                              })
-                            : history.push({
-                                pathname: `/dashboard/users/${
-                                  rejectedStud.find((st) => st.id === id)?.user_id
-                                }/profile`,
-                                search: `?intkStud=${id}&stat=${StudentApproval.REJECTED}`,
-                              });
-                        },
-                      },
-                    ]}
-                    selectorActions={
-                      stud === StudentApproval.PENDING
+                    actions={
+                      privileges?.includes(Privileges.CAN_ACCESS_PROFILE)
                         ? [
-                            { name: 'Approve Students', handleAction: approveStud },
-                            { name: 'Reject', handleAction: rejectStud },
+                            {
+                              name: 'View Profile',
+                              handleAction: (id: string | number | undefined) => {
+                                stud === StudentApproval.PENDING
+                                  ? history.push({
+                                      pathname: `/dashboard/users/${
+                                        pendingStud.find((st) => st.id === id)?.user_id
+                                      }/profile`,
+                                      search: `?intkStud=${id}&stat=${StudentApproval.PENDING}`,
+                                    })
+                                  : stud === StudentApproval.APPROVED
+                                  ? history.push({
+                                      pathname: `/dashboard/users/${
+                                        approvedStud.find((st) => st.id === id)?.user_id
+                                      }/profile`,
+                                      search: `?intkStud=${id}&stat=${StudentApproval.APPROVED}`,
+                                    })
+                                  : history.push({
+                                      pathname: `/dashboard/users/${
+                                        rejectedStud.find((st) => st.id === id)?.user_id
+                                      }/profile`,
+                                      search: `?intkStud=${id}&stat=${StudentApproval.REJECTED}`,
+                                    });
+                              },
+                            },
                           ]
-                        : stud === StudentApproval.APPROVED
-                        ? [{ name: 'Reject', handleAction: rejectStud }]
-                        : [{ name: 'Approve Students', handleAction: approveStud }]
+                        : undefined
+                    }
+                    selectorActions={
+                      privileges?.includes(Privileges.CAN_MODIFY_STUDENT_APPROVAL)
+                        ? stud === StudentApproval.PENDING
+                          ? [
+                              { name: 'Approve Students', handleAction: approveStud },
+                              { name: 'Reject', handleAction: rejectStud },
+                            ]
+                          : stud === StudentApproval.APPROVED
+                          ? [{ name: 'Reject', handleAction: rejectStud }]
+                          : [{ name: 'Approve Students', handleAction: approveStud }]
+                        : undefined
                     }
                     // actions={studentActions}
                     hide={['id', 'user_type', 'user_id']}
