@@ -37,6 +37,10 @@ const RouterProtection = () => {
   const { user, userLoading, isError } = useAuthenticator();
   const { path } = useRouteMatch();
 
+  console.log('====================================');
+  console.log(username);
+  console.log('====================================');
+
   let token = cookie.getCookie('jwt_info');
 
   const InstitutionAdminRoutes = () => (
