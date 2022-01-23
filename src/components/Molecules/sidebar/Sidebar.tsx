@@ -65,8 +65,8 @@ export default function Sidebar() {
     const studentLinks: linkProps[] = [
       { title: 'Module', to: '/dashboard/student', icon: 'module' },
       { title: 'Intakes', to: '/dashboard/intakes', icon: 'academy', fill: false },
-      { title: 'Timetable', to: '/dashboard/schedule/timetable', icon: 'calendar' },
-      { title: 'Calendar', to: '/dashboard/schedule', icon: 'calendar' },
+      { title: 'Timetable', to: '/dashboard/schedule/student/t', icon: 'calendar' },
+      { title: 'Calendar', to: '/dashboard/schedule/student/calendar', icon: 'calendar' },
     ];
 
     if (user?.user_type == UserType.SUPER_ADMIN) routes.push(...institutionAdminLinks);
