@@ -136,7 +136,9 @@ export default function Faculties({ fetchType }: IFaculties) {
         ) : faculties.length === 0 ? (
           <NoDataAvailable
             icon="faculty"
-            showButton={privileges?.includes(Privileges.CAN_CREATE_DIVISION)}
+            showButton={
+              privileges?.includes(Privileges.CAN_CREATE_DIVISION) ? true : false
+            }
             buttonLabel="Add new faculty"
             title={'No faculty available'}
             handleClick={() => history.push(`/dashboard/divisions/new`)}

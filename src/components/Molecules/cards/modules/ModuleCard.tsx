@@ -39,21 +39,44 @@ export default function ModuleCard({
         trigger={
           <CommonCardMolecule
             data={course}
-            handleClick={() =>
-              privileges?.includes(Privileges.CAN_ACCESS_SUBJECTS)
-                ? history.push({
-                    pathname: `/dashboard/modules/${course.id}/subjects`,
-                    search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
-                  })
-                : privileges?.includes(Privileges.CAN_ACCESS_MODULE_MATERIALS)
-                ? history.push({
-                    pathname: `/dashboard/modules/${course.id}/materials`,
-                    search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
-                  })
-                : history.push({
-                    pathname: `/dashboard/modules/${course.id}/prereqs`,
-                    search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
-                  })
+            handleClick={
+              () =>
+                privileges?.includes(Privileges.CAN_ACCESS_SUBJECTS)
+                  ? history.push({
+                      pathname: `/dashboard/modules/${course.id}/subjects`,
+                      search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
+                    })
+                  : !showMenus
+                  ? privileges?.includes(Privileges.CAN_ACCESS_MODULE_MATERIALS)
+                    ? history.push({
+                        pathname: `/dashboard/modules/${course.id}/materials`,
+                        search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
+                      })
+                    : // : privileges?.includes(Privileges.CAN_ACCESS_PREREQUISITES)
+                      // ?
+                      history.push({
+                        pathname: `/dashboard/modules/${course.id}/prereqs`,
+                        search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
+                      })
+                  : // : {}
+                    // privileges?.includes(Privileges.CAN_ACCESS_PREREQUISITES)
+                    // ?
+                    history.push({
+                      pathname: `/dashboard/modules/${course.id}/prereqs`,
+                      search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
+                    })
+              // : privileges?.includes(Privileges.CAN_ACCESS_EVALUATIONS)
+              // ? history.push({
+              //     pathname: `/dashboard/modules/${course.id}/evaluations`,
+              //     search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
+              //   })
+              // : privileges?.includes(Privileges.CAN_ACCESS_PERFORMANCES)
+              // ?
+              // history.push({
+              //   pathname: `/dashboard/modules/${course.id}/performances`,
+              //   search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
+              // })
+              // : {}
             }>
             <p className="pt-3">
               Total subjects:
@@ -81,7 +104,12 @@ export default function ModuleCard({
                   <Button>Add subject</Button>
                 </BrowserLink>
               </Permission>
-              <Permission privilege={Privileges.CAN_MODIFY_MODULES}>
+              <Permission
+                privilege={
+                  showMenus
+                    ? Privileges.CAN_MODIFY_INTAKE_PROGRAM_MODULES
+                    : Privileges.CAN_MODIFY_MODULES
+                }>
                 <BrowserLink
                   className="outline-none"
                   to={`/dashboard/modules/${course.id}/edit`}>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -23,7 +24,7 @@ import programStore, {
   getLevelsByAcademicProgram,
 } from '../../store/administration/program.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
-import { Link as Links } from '../../types';
+import { Link as Links, Privileges } from '../../types';
 import { StudentApproval } from '../../types/services/enrollment.types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
 import { UserType, UserView } from '../../types/services/user.types';
@@ -51,6 +52,14 @@ function IntakeProgramDetails() {
 
   const { user } = useAuthenticator();
 
+  const [privileges, setPrivileges] = useState<string[]>();
+  useEffect(() => {
+    const _privileges = user?.user_roles
+      ?.filter((role) => role.id === 1)[0]
+      .role_privileges?.map((privilege) => privilege.name);
+    if (_privileges) setPrivileges(_privileges);
+  }, [user]);
+
   const [students, setStudents] = useState<UserView[]>([]);
   const [instructors, setInstructors] = useState<UserView[]>([]);
   const initialShowSidebar = {
@@ -76,6 +85,8 @@ function IntakeProgramDetails() {
   }, [studentsProgram]);
 
   useEffect(() => {
+    console.log(instructorsProgram);
+
     let demoInstructors: UserView[] = [];
     instructorsProgram?.data.data.map((inst) => {
       demoInstructors.push({
@@ -147,20 +158,24 @@ function IntakeProgramDetails() {
   ];
 
   if (user?.user_type !== UserType.STUDENT) {
-    tabs.push({
-      label: 'Program modules',
-      href: `${url}/modules`,
-    });
+    if (privileges?.includes(Privileges.CAN_ACCESS_INTAKE_PROGRAM_MODULES)) {
+      tabs.push({
+        label: 'Program modules',
+        href: `${url}/modules`,
+      });
+    }
   }
 
   if (user?.user_type === UserType.STUDENT) {
-    if (studentLevels?.data.data && studentLevels?.data.data.length > 0) {
-      tabs.push({
-        label: 'Program levels',
-        href: `${url}/levels/${
-          studentLevels.data.data[0].academic_year_program_level.id || ''
-        }`,
-      });
+    if (privileges?.includes(Privileges.CAN_ACCESS_PROGRAM_LEVELS)) {
+      if (studentLevels?.data.data && studentLevels?.data.data.length > 0) {
+        tabs.push({
+          label: 'Program levels',
+          href: `${url}/levels/${
+            studentLevels.data.data[0].academic_year_program_level.id || ''
+          }`,
+        });
+      }
     }
   }
 
@@ -180,26 +195,31 @@ function IntakeProgramDetails() {
     //     level.academic_year_program_intake_level?.academic_program_level.id,
     //   ),
     // );
-
+    // if (privileges?.includes(Privileges.CAN_ACCESS_PROGRAM_LEVELS)) {
     if (instructorProgLevels && instructorProgLevels?.length > 0) {
       tabs.push({
         label: 'Program levels',
         href: `${url}/levels/${instructorProgLevels[0]?.id || ''}`,
       });
     }
+    // }
   }
 
   if (user?.user_type === UserType.ADMIN) {
-    tabs.push({
-      label: 'Approve students',
-      href: `${url}/approve`,
-    });
-
-    if (getLevels && getLevels?.length > 0) {
+    if (privileges?.includes(Privileges.CAN_ACCESS_STUDENT_APPROVAL)) {
       tabs.push({
-        label: 'Program levels',
-        href: `${url}/levels/${getLevels[0]?.id || ''}`,
+        label: 'Approve students',
+        href: `${url}/approve`,
       });
+    }
+
+    if (privileges?.includes(Privileges.CAN_ACCESS_PROGRAM_LEVELS)) {
+      if (getLevels && getLevels?.length > 0) {
+        tabs.push({
+          label: 'Program levels',
+          href: `${url}/levels/${getLevels[0]?.id || ''}`,
+        });
+      }
     }
   }
 
@@ -228,12 +248,14 @@ function IntakeProgramDetails() {
             user?.user_type === UserType.ADMIN &&
             getLevels.length === 0 &&
             unaddedLevels?.length !== 0 ? (
-              <div className="text-right">
-                <Link
-                  to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
-                  <Button>Add level to program</Button>
-                </Link>
-              </div>
+              <Permission privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}>
+                <div className="text-right">
+                  <Link
+                    to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
+                    <Button>Add level to program</Button>
+                  </Link>
+                </div>
+              </Permission>
             ) : (
               <></>
             )
@@ -275,17 +297,19 @@ function IntakeProgramDetails() {
                               </Heading>
                             </div>
                             {user?.user_type === UserType.ADMIN ? (
-                              <div className="mt-4 flex space-x-4">
-                                <Button
-                                  onClick={() =>
-                                    history.push(
-                                      `/dashboard/intakes/programs/${intakeId}/${id}/edit`,
-                                    )
-                                  }>
-                                  Edit program
-                                </Button>
-                                <Button styleType="outline">Change Status</Button>
-                              </div>
+                              <Permission privilege={Privileges.CAN_MODIFY_PROGRAM}>
+                                <div className="mt-4 flex space-x-4">
+                                  <Button
+                                    onClick={() =>
+                                      history.push(
+                                        `/dashboard/intakes/programs/${intakeId}/${id}/edit`,
+                                      )
+                                    }>
+                                    Edit program
+                                  </Button>
+                                  <Button styleType="outline">Change Status</Button>
+                                </div>
+                              </Permission>
                             ) : null}
                           </CommonCardMolecule>
                         </div>
@@ -319,33 +343,39 @@ function IntakeProgramDetails() {
                             />
                           ) : null}
 
-                          <UsersPreview
-                            title="Instructors"
-                            label={`Instructors in ${programData.title}`}
-                            data={instructors}
-                            totalUsers={instructors.length || 0}
-                            dataLabel={''}
-                            userType={user?.user_type}
-                            isLoading={instLoading}
-                            showSidebar={showSidebar.showInstructor}
-                            handleShowSidebar={() =>
-                              setShowSidebar({
-                                ...initialShowSidebar,
-                                showInstructor: !showSidebar.showInstructor,
-                              })
-                            }
-                          />
-                          {user?.user_type === UserType.ADMIN ? (
-                            <EnrollInstructorIntakeProgram
-                              showSidebar={showSidebar.enrollInstructor}
-                              existing={instructorsProgram?.data.data || []}
+                          <Permission
+                            privilege={Privileges.CAN_ACCESS_INSTRUCTORS_ON_PROGRAM}>
+                            <UsersPreview
+                              title="Instructors"
+                              label={`Instructors in ${programData.title}`}
+                              data={instructors}
+                              totalUsers={instructors.length || 0}
+                              dataLabel={''}
+                              userType={user?.user_type}
+                              isLoading={instLoading}
+                              showSidebar={showSidebar.showInstructor}
                               handleShowSidebar={() =>
                                 setShowSidebar({
                                   ...initialShowSidebar,
-                                  enrollInstructor: !showSidebar.enrollInstructor,
+                                  showInstructor: !showSidebar.showInstructor,
                                 })
                               }
                             />
+                          </Permission>
+                          {user?.user_type === UserType.ADMIN ? (
+                            <Permission
+                              privilege={Privileges.CAN_CREATE_INSTRUCTORS_ON_PROGRAM}>
+                              <EnrollInstructorIntakeProgram
+                                showSidebar={showSidebar.enrollInstructor}
+                                existing={instructorsProgram?.data.data || []}
+                                handleShowSidebar={() =>
+                                  setShowSidebar({
+                                    ...initialShowSidebar,
+                                    enrollInstructor: !showSidebar.enrollInstructor,
+                                  })
+                                }
+                              />
+                            </Permission>
                           ) : null}
                         </div>
                       </div>
