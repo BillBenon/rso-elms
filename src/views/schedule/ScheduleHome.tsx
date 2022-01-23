@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   Link as BrowserLink,
-  Redirect,
   Route,
   Switch,
   useHistory,
@@ -16,19 +15,17 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import NewSchedule from '../../components/Organisms/schedule/calendar/NewSchedule';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { authenticatorStore } from '../../store/administration';
 import { getIntakesByAcademy } from '../../store/administration/intake.store';
-import {
-  getIntakeProgramsByStudent,
-  getStudentShipByUserId,
-} from '../../store/administration/intake-program.store';
+import { getStudentShipByUserId } from '../../store/administration/intake-program.store';
 import { CommonCardDataType, Link } from '../../types';
-import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import CalendarView from './CalendarView';
 import ClassTimeTable from './ClassTimeTable';
 import Events from './Events';
 import IntakePrograms from './IntakePrograms';
+import StudentCalendar from './StudentCalendar';
 import Venues from './Venues';
 
 const list: Link[] = [
@@ -53,6 +50,32 @@ const tabs: TabType[] = [
 ];
 
 export default function ScheduleHome() {
+  const { path } = useRouteMatch();
+
+  return (
+    <div>
+      <BreadCrumb list={list} />
+      <Switch>
+        <Route exact path={`${path}/student/calendar`} component={StudentCalendar} />
+        <Route exact path={`${path}/student/timetable`} component={IntakePrograms} />
+
+        <Route path={`${path}/intake/:id`} component={IntakePrograms} />
+        <Route path={`${path}/calendar/:id`} component={CalendarView} />
+        <Route path={`${path}/timetable/:id`} component={ClassTimeTable} />
+
+        <TabNavigation tabs={tabs}>
+          <Switch>
+            <Route path={`${path}/events`} component={Events} />
+            <Route path={`${path}/venues`} component={Venues} />
+            <Route path={`${path}`} component={ScheduleIntakes} />
+          </Switch>
+        </TabNavigation>
+      </Switch>
+    </div>
+  );
+}
+
+function ScheduleIntakes() {
   const history = useHistory();
   const { path } = useRouteMatch();
 
@@ -77,87 +100,42 @@ export default function ScheduleHome() {
 
   return (
     <div>
-      <BreadCrumb list={list} />
-
-      <TabNavigation tabs={tabs}>
-        <Switch>
-          <Route path={`${path}/intake/:id`} component={IntakePrograms} />
-          <Route path={`${path}/calendar/:id`} component={CalendarView} />
-          <Route path={`${path}/timetable/:id`} component={ClassTimeTable} />
-          <Route path={`${path}/events`} component={Events} />
-          <Route path={`${path}/venues`} component={Venues} />
-
-          <Route
-            path={`${path}`}
-            render={() =>
-              userInfo?.user_type === UserType.STUDENT ? (
-                <RedirectStudent userId={userInfo.id + ''} />
-              ) : (
-                <>
-                  <TableHeader
-                    totalItems={`${intakes.length} intakes`}
-                    title={'Schedule'}>
-                    <BrowserLink to={`${path}/schedule/new`}>
-                      <Button>New Schedule</Button>
-                    </BrowserLink>
-                  </TableHeader>
-                  <div className="mt-4 flex gap-4 flex-wrap">
-                    {intakes.length === 0 && isLoading ? (
-                      <Loader />
-                    ) : (
-                      intakes.map((intake) => (
-                        <CommonCardMolecule
-                          key={intake.id}
-                          data={intake}
-                          handleClick={() =>
-                            history.push(`/dashboard/schedule/intake/${intake.id}`)
-                          }
-                        />
-                      ))
-                    )}
-                  </div>
-                  <Route
-                    path={`${path}/schedule/new`}
-                    render={() => (
-                      <PopupMolecule
-                        title="New Schedule"
-                        open
-                        onClose={handleNewScheduleClose}>
-                        <NewSchedule />
-                      </PopupMolecule>
-                    )}
-                  />
-                </>
-              )
-            }
-          />
-        </Switch>
-      </TabNavigation>
-    </div>
-  );
-}
-
-interface IProps {
-  userId?: string;
-}
-
-function RedirectStudent({ userId }: IProps) {
-  const studentInfo = getStudentShipByUserId(userId || '', !!userId).data?.data.data[0];
-
-  const { data, isLoading, isIdle } = getIntakeProgramsByStudent(
-    studentInfo?.id + '',
-    !!studentInfo?.id,
-  );
-
-  return (
-    <div>
-      {isLoading || isIdle ? (
-        <Loader />
-      ) : (
-        <Redirect
-          to={`/dashboard/schedule/intake/${data?.data.data[0].intake_program.intake.id}/${data?.data.data[0].intake_program.id}`}
+      <TableHeader totalItems={`${intakes.length} intakes`} title={'Schedule'}>
+        <BrowserLink to={`${path}/schedule/new`}>
+          <Button>New Schedule</Button>
+        </BrowserLink>
+      </TableHeader>
+      <div className="mt-4 flex gap-4 flex-wrap">
+        {intakes.length === 0 && isLoading ? (
+          <Loader />
+        ) : (
+          intakes.map((intake) => (
+            <CommonCardMolecule
+              key={intake.id}
+              data={intake}
+              handleClick={() => history.push(`/dashboard/schedule/intake/${intake.id}`)}
+            />
+          ))
+        )}
+      </div>
+      <Switch>
+        <Route
+          exact
+          path={`${path}/schedule/new`}
+          render={() => (
+            <PopupMolecule title="New Schedule" open onClose={handleNewScheduleClose}>
+              <NewSchedule />
+            </PopupMolecule>
+          )}
         />
-      )}
+      </Switch>
     </div>
   );
+}
+
+function RedirectToStudentTimeTable() {
+  const { user } = useAuthenticator();
+  const student = getStudentShipByUserId(user?.id.toString() || '', !!user?.id);
+
+  return <div></div>;
 }

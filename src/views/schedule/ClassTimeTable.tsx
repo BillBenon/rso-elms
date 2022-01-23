@@ -64,14 +64,18 @@ export default function ClassTimeTable() {
         showSearch={false}
         title={`${classInfo?.academic_year_program_intake_level.academic_program_level.program.name} - ${classInfo?.academic_year_program_intake_level.academic_program_level.level.name} - ${classInfo?.class_name}`}>
         <div className="flex gap-3">
+          <Button
+            type="button"
+            styleType="outline"
+            onClick={handlePrint}
+            disabled={isPrinting}>
+            Print Timetable
+          </Button>
           {authUser?.user_type !== UserType.STUDENT && (
             <Link to={`${url}/new-schedule`}>
               <Button type="button">New timetable</Button>
             </Link>
           )}
-          <Button type="button" onClick={handlePrint} disabled={isPrinting}>
-            Print Timetable
-          </Button>
         </div>
       </TableHeader>
       <div className="tt print:px-10 print:py-8 print:bg-main" ref={timetableRef}>
