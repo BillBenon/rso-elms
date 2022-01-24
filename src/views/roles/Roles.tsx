@@ -9,7 +9,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
-import Permission from '../../components/Atoms/auth/Permission';
+// import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -106,11 +106,11 @@ export default function Roles() {
           title="Roles"
           totalItems={roles && roles.length > 0 ? roles.length : 0}
           handleSearch={handleSearch}>
-          <Permission privilege={Privileges.CAN_CREATE_RANK}>
-            <Link to={`${url}/add`}>
-              <Button>Add Role</Button>
-            </Link>
-          </Permission>
+          {/* <Permission privilege={Privileges.CAN_CREATE_RANK}> */}
+          <Link to={`${url}/add`}>
+            <Button>Add Role</Button>
+          </Link>
+          {/* </Permission> */}
         </TableHeader>
       </section>
       <section>
