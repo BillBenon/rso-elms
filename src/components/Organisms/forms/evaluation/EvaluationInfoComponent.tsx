@@ -145,7 +145,7 @@ export default function EvaluationInfoComponent({
       mutateAsync(details, {
         onSuccess: () => {
           toast.success('Evaluation updated', { duration: 5000 });
-          handleNext();
+          handleNext(1);
         },
         onError: (error: any) => {
           toast.error(error.response.data.message);
@@ -156,8 +156,13 @@ export default function EvaluationInfoComponent({
         onSuccess: (data) => {
           toast.success('Evaluation created', { duration: 5000 });
           setLocalStorageData('evaluationId', data.data.data.id);
-          setLocalStorageData('currentStep', 1);
-          handleNext();
+          if (details.questionaire_type === IQuestionaireTypeEnum.MANUAL) {
+            setLocalStorageData('currentStep', 2);
+            handleNext(2);
+          } else {
+            setLocalStorageData('currentStep', 1);
+            handleNext(1);
+          }
         },
         onError: (error: any) => {
           toast.error(error.response.data.data + '');

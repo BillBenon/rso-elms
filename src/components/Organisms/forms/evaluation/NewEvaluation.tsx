@@ -29,8 +29,8 @@ export default function NewEvaluation() {
 
   if (location.href === location.origin + '/dashboard/evaluations/new') history.goBack();
 
-  function handleSubmit() {
-    setCurrentStep(currentStep + 1);
+  function handleSubmit(step = 1) {
+    setCurrentStep(currentStep + step);
     setLocalStorageData('currentStep', currentStep);
   }
 
