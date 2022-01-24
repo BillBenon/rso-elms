@@ -33,6 +33,7 @@ const authIgnore: string[] = ['/', '/complete-profile'];
 
 const interceptAdminReq = (config: AxiosRequestConfig) => {
   const token = cookie.getCookie('jwt_info');
+
   // when request is open no need to add bearer token
   if (!openRequests.find((link) => link === config.url)) {
     if (token) {

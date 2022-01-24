@@ -4,7 +4,6 @@ import React from 'react';
 import Indicator from '../../Atoms/custom/Indicator';
 
 export type StepProps = {
-  // eslint-disable-next-line no-undef
   indicator: JSX.Element | number | boolean;
   display_label: string;
   navigateToStepHandler: (_index: number) => void;
@@ -55,18 +54,18 @@ const Step = ({
       <div
         className={`${
           isVertical
-            ? `pl-7 flex flex-col justify-center items-center  ${
-                isFirstStep && 'items-end'
+            ? `pl-7 flex flex-col justify-center ${
+                isFirstStep ? 'items-end' : 'items-center'
               }`
             : 'flex items-center'
         }`}>
         {/* step line(separator) */}
-        {!isFirstStep && (
+        {!isFirstStep ? (
           <div
             className={`${isComplete ? 'border-primary-400' : 'border-silver'}
           ${isVertical ? 'separator_ h-16 border-l-2' : `${width} border-b-2`} 
           ${isFirstStep ? 'h-0 border-none' : ''}`}></div>
-        )}
+        ) : null}
         {/* step (in numbers) indicator */}
         <Indicator
           isCircular={true}

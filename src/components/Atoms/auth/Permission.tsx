@@ -22,5 +22,6 @@ export default function Permission({ children, privilege }: IPermission) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  return <> {privileges?.includes(privilege) && children}</>;
+  // return <> {privileges?.includes(privilege) && children}</>;
+  return <> {children} </>;
 }

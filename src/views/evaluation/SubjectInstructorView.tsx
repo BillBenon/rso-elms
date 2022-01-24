@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
@@ -8,7 +9,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
-import { CommonCardDataType } from '../../types';
+import { CommonCardDataType, Privileges } from '../../types';
 import { IEvaluationOwnership } from '../../types/services/evaluation.types';
 import { UserType } from '../../types/services/user.types';
 import { setLocalStorageData } from '../../utils/getLocalStorageItem';
@@ -95,18 +96,22 @@ export default function SubjectInstructorView({
                     <div key={index}>
                       <CommonCardMolecule className="cursor-pointer" data={info}>
                         <div className="flex justify-between">
-                          <Button
-                            styleType="text"
-                            onClick={() => goToEditEvaluation(info)}>
-                            Edit
-                          </Button>
-                          <Button
-                            styleType="text"
-                            onClick={() =>
-                              history.push(`/dashboard/evaluations/${info.id}`)
-                            }>
-                            View
-                          </Button>
+                          <Permission privilege={Privileges.CAN_CREATE_EVALUATION}>
+                            <Button
+                              styleType="text"
+                              onClick={() => goToEditEvaluation(info)}>
+                              Edit
+                            </Button>
+                          </Permission>
+                          <Permission privilege={Privileges.CAN_ACCESS_EVALUATIONS}>
+                            <Button
+                              styleType="text"
+                              onClick={() =>
+                                history.push(`/dashboard/evaluations/${info.id}`)
+                              }>
+                              View
+                            </Button>
+                          </Permission>
                         </div>
                       </CommonCardMolecule>
                     </div>

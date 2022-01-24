@@ -29,7 +29,7 @@ export default function PrivilegesView() {
     if (location.pathname === path) {
       refetch();
     }
-  }, [location]);
+  }, [location, path, refetch]);
 
   function submited() {}
   function handleSearch() {}
