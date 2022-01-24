@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Route,
   Switch,
@@ -8,7 +8,6 @@ import {
   useRouteMatch,
 } from 'react-router';
 
-import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Panel from '../../components/Atoms/custom/Panel';
@@ -18,7 +17,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Tiptap from '../../components/Molecules/editor/Tiptap';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { moduleMaterialStore } from '../../store/administration/module-material.store';
-import { ParamType, Privileges } from '../../types';
+import { ParamType } from '../../types';
 import { MaterialType } from '../../types/services/module-material.types';
 import { UserType } from '../../types/services/user.types';
 import NewModuleMaterial from './NewModuleMaterial';
@@ -36,14 +35,6 @@ function ModuleMaterials() {
   const { search } = useLocation();
   const showMenu = new URLSearchParams(search).get('showMenus');
   const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
-  const [privileges, setPrivileges] = useState<string[]>();
-
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
 
   return (
     <Switch>
@@ -62,12 +53,7 @@ function ModuleMaterials() {
                 <Loader />
               ) : moduleMaterials.length === 0 ? (
                 <NoDataAvailable
-                  showButton={
-                    user?.user_type === UserType.INSTRUCTOR &&
-                    (privileges?.includes(Privileges.CAN_CREATE_MODULE_MATERIALS)
-                      ? true
-                      : false)
-                  }
+                  showButton={user?.user_type === UserType.INSTRUCTOR}
                   icon="subject"
                   title={'No learning materials available'}
                   description={
@@ -98,19 +84,16 @@ function ModuleMaterials() {
                             />
                           </div>
                           {user?.user_type === UserType.INSTRUCTOR && (
-                            <Permission
-                              privilege={Privileges.CAN_CREATE_MODULE_MATERIALS}>
-                              <Button
-                                className="mt-2 mb-4 mx-20"
-                                styleType="outline"
-                                onClick={() =>
-                                  history.push(
-                                    `${url}/add-material/${mat.id}?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-                                  )
-                                }>
-                                Add supporting files
-                              </Button>
-                            </Permission>
+                            <Button
+                              className="mt-2 mb-4 mx-20"
+                              styleType="outline"
+                              onClick={() =>
+                                history.push(
+                                  `${url}/add-material/${mat.id}?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+                                )
+                              }>
+                              Add supporting files
+                            </Button>
                           )}
                           <ShowModuleMaterial materialId={mat.id + ''} />
                         </Panel>

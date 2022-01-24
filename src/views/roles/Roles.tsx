@@ -9,7 +9,6 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
-import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -19,10 +18,8 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewRole from '../../components/Organisms/forms/roles/NewRole';
 import UpdateRole from '../../components/Organisms/forms/roles/UpdateRole';
-import useAuthenticator from '../../hooks/useAuthenticator';
 import { roleStore } from '../../store/administration';
-import { Privileges, RoleRes } from '../../types';
-import { ActionsType } from '../../types/services/table.types';
+import { RoleRes } from '../../types';
 
 interface FilteredRoles extends Pick<RoleRes, 'id' | 'name' | 'description' | 'status'> {}
 
@@ -31,8 +28,6 @@ export default function Roles() {
   const [roles, setRoles] = useState<FilteredRoles[]>();
   const history = useHistory();
   const location = useLocation();
-  const { user } = useAuthenticator();
-  const [privileges, setPrivileges] = useState<string[]>();
 
   const { data, isSuccess, isLoading, refetch } = roleStore.getRoles(); // fetch roles
 
@@ -45,40 +40,28 @@ export default function Roles() {
     data?.data.data && setRoles(filterdData);
   }, [data]);
 
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
-
   // re fetch data whenever user come back on this page
   useEffect(() => {
     if (location.pathname === path || location.pathname === `${path}/`) {
       refetch();
     }
-  }, [location, path, refetch]);
+  }, [location]);
 
   //actions to be displayed in table
-  let actions: ActionsType<any>[] | undefined = [];
-
-  if (privileges?.includes(Privileges.CAN_MODIFY_ROLE)) {
-    actions?.push({
+  const actions = [
+    {
       name: 'Edit role',
       handleAction: (id: string | number | undefined) => {
         history.push(`${path}/${id}/edit`); // go to edit role
       },
-    });
-  }
-
-  if (privileges?.includes(Privileges.CAN_ACCESS_ROLE)) {
-    actions?.push({
+    },
+    {
       name: 'View',
       handleAction: (id: string | number | undefined) => {
         history.push(`${path.replace(/roles/i, 'role')}/${id}/view`); // go to view role
       },
-    });
-  }
+    },
+  ];
 
   const manyActions = [
     {
@@ -106,11 +89,9 @@ export default function Roles() {
           title="Roles"
           totalItems={roles && roles.length > 0 ? roles.length : 0}
           handleSearch={handleSearch}>
-          <Permission privilege={Privileges.CAN_CREATE_RANK}>
-            <Link to={`${url}/add`}>
-              <Button>Add Role</Button>
-            </Link>
-          </Permission>
+          <Link to={`${url}/add`}>
+            <Button>Add Role</Button>
+          </Link>
         </TableHeader>
       </section>
       <section>

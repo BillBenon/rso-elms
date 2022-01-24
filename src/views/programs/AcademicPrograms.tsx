@@ -8,7 +8,6 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
-import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -20,7 +19,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Tooltip from '../../components/Molecules/Tooltip';
 import programStore from '../../store/administration/program.store';
-import { CommonCardDataType, Link as LinkList, Privileges } from '../../types';
+import { CommonCardDataType, Link as LinkList } from '../../types';
 import { DivisionInfo } from '../../types/services/division.types';
 import { ProgramInfo } from '../../types/services/program.types';
 import { advancedTypeChecker } from '../../utils/getOption';
@@ -185,20 +184,18 @@ export default function AcademicProgram() {
                           {/* remarks section */}
                           <div className="flex flex-col mt-8 gap-4">
                             <Heading fontSize="sm" fontWeight="semibold">
-                              Description
+                              Remarks
                             </Heading>
                             <Heading fontSize="sm" color="txt-secondary">
                               {Common.description}
                             </Heading>
                           </div>
-                          <Permission privilege={Privileges.CAN_MODIFY_PROGRAM}>
-                            <div className="mt-4 space-x-4">
-                              <Link to={`/dashboard/programs/${Common.id}/edit`}>
-                                <Button>Edit program</Button>
-                              </Link>
-                              <Button styleType="outline">Change Status</Button>
-                            </div>
-                          </Permission>
+                          <div className="mt-4 space-x-4">
+                            <Link to={`/dashboard/programs/${Common.id}/edit`}>
+                              <Button>Edit program</Button>
+                            </Link>
+                            <Button styleType="outline">Change Status</Button>
+                          </div>
                         </div>
                       </Tooltip>
                     ))
