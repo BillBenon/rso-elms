@@ -10,7 +10,6 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
-import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -31,7 +30,7 @@ import {
 } from '../../store/administration/intake-program.store';
 import registrationControlStore from '../../store/administration/registrationControl.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
-import { CommonCardDataType, Link as LinkType, Privileges, ValueType } from '../../types';
+import { CommonCardDataType, Link as LinkType, ValueType } from '../../types';
 import { StudentApproval } from '../../types/services/enrollment.types';
 import { InstructorProgram } from '../../types/services/instructor.types';
 import { ExtendedIntakeInfo } from '../../types/services/intake.types';
@@ -229,9 +228,9 @@ export default function Intakes() {
                       open>
                       <div className="w-96">
                         <div className="flex flex-col gap-6">
-                          <div className="flex gap-2">
+                          <div className="flex flex-col gap-2">
                             <Heading color="txt-secondary" fontSize="sm">
-                              Total Students Enrolled:
+                              Total Students Enroled
                             </Heading>
                             <Heading fontSize="sm" fontWeight="semibold">
                               {
@@ -242,22 +241,20 @@ export default function Intakes() {
                           </div>
                         </div>
 
-                        {/* <div>
+                        <div>
                           <Link
                             className="outline-none"
                             to={`${url}/programs/${intake.id}`}>
                             <Button styleType="text">View programs</Button>
                           </Link>
-                        </div> */}
-                        <Permission privilege={Privileges.CAN_MODIFY_INTAKE}>
-                          <div className="mt-4 space-x-4">
-                            <Link
-                              to={`${url}/${intake.id}/edit/${intake.registrationControlId}`}>
-                              <Button>Edit Intake</Button>
-                            </Link>
-                            <Button styleType="outline">Change Status</Button>
-                          </div>
-                        </Permission>
+                        </div>
+                        <div className="mt-4 space-x-4">
+                          <Link
+                            to={`${url}/${intake.id}/edit/${intake.registrationControlId}`}>
+                            <Button>Edit Intake</Button>
+                          </Link>
+                          <Button styleType="outline">Change Status</Button>
+                        </div>
                       </div>
                     </Tooltip>
                   </div>

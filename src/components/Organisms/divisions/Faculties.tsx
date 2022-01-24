@@ -5,10 +5,7 @@ import { Link } from 'react-router-dom';
 
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import { divisionStore } from '../../../store/administration/divisions.store';
-import { Privileges } from '../../../types';
 import { DivisionInfo } from '../../../types/services/division.types';
-import { ActionsType } from '../../../types/services/table.types';
-import Permission from '../../Atoms/auth/Permission';
 import Button from '../../Atoms/custom/Button';
 import Loader from '../../Atoms/custom/Loader';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
@@ -34,14 +31,6 @@ export default function Faculties({ fetchType }: IFaculties) {
   const history = useHistory();
   const [faculties, setFaculties] = useState<FilteredData[]>([]);
   const { user } = useAuthenticator();
-  const [privileges, setPrivileges] = useState<string[]>();
-
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
 
   const { data, isLoading } = divisionStore.getDivisionsByAcademy(
     fetchType.toUpperCase() || 'FACULTY',
@@ -80,19 +69,20 @@ export default function Faculties({ fetchType }: IFaculties) {
     history.goBack();
   }
 
-  const actions: ActionsType<FilteredData>[] = [];
-
-  if (privileges?.includes(Privileges.CAN_MODIFY_DIVISION)) {
-    actions.push({
+  const actions = [
+    {
       name: 'Edit Faculty',
       handleAction: (id: string | number | undefined) => {
         history.push(`${path}/${id}/edit`); // go to edit faculties
       },
-    });
-  }
-
-  if (privileges?.includes(Privileges.CAN_ACCESS_DIVISIONS)) {
-    actions.push({
+    },
+    {
+      name: 'Add Department',
+      handleAction: (id: string | number | undefined) => {
+        history.push(`${path}/${id}/new`);
+      },
+    },
+    {
       name: 'View Departments',
       handleAction: (id: string | number | undefined) => {
         history.push({
@@ -100,17 +90,8 @@ export default function Faculties({ fetchType }: IFaculties) {
           search: `?fac=${id}`,
         });
       },
-    });
-  }
-
-  if (privileges?.includes(Privileges.CAN_CREATE_DIVISION)) {
-    actions.push({
-      name: 'Add Department',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/new`);
-      },
-    });
-  }
+    },
+  ];
 
   return (
     <main>
@@ -120,11 +101,9 @@ export default function Faculties({ fetchType }: IFaculties) {
             title="Faculty"
             totalItems={faculties?.length || 0}
             handleSearch={() => {}}>
-            <Permission privilege={Privileges.CAN_CREATE_DIVISION}>
-              <Link to={`${url}/new`}>
-                <Button>Add Faculty</Button>
-              </Link>
-            </Permission>
+            <Link to={`${url}/new`}>
+              <Button>Add Faculty</Button>
+            </Link>
           </TableHeader>
         ) : (
           <></>
@@ -136,7 +115,6 @@ export default function Faculties({ fetchType }: IFaculties) {
         ) : faculties.length === 0 ? (
           <NoDataAvailable
             icon="faculty"
-            showButton={privileges?.includes(Privileges.CAN_CREATE_DIVISION)}
             buttonLabel="Add new faculty"
             title={'No faculty available'}
             handleClick={() => history.push(`/dashboard/divisions/new`)}

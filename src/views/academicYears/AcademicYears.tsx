@@ -3,7 +3,6 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
-import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -13,9 +12,8 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import academicyearsStore from '../../store/administration/academicyears.store';
-import { Link as Links, Privileges } from '../../types';
+import { Link as Links } from '../../types';
 import { IAcademicYearInfo } from '../../types/services/academicyears.types';
-import { ActionsType } from '../../types/services/table.types';
 import AcademicPeriod from '../academicPeriods/AcademicPeriod';
 import NewAcademicPeriod from '../academicPeriods/NewAcademicPeriod';
 import UpdateAcademicPeriod from '../academicPeriods/UpdateAcademicPeriod';
@@ -37,8 +35,6 @@ export default function AcademicYears() {
   const history = useHistory();
   const { user } = useAuthenticator();
   const [years, setYears] = useState<FilteredData[]>([]);
-  let actions: ActionsType<any>[] | undefined = [];
-  const [privileges, setPrivileges] = useState<string[]>();
 
   const {
     data: academicYears,
@@ -46,30 +42,21 @@ export default function AcademicYears() {
     isSuccess,
   } = academicyearsStore.fetchAcademicYears(user?.academy.id.toString() || '');
 
-  if (privileges?.includes(Privileges.CAN_MODIFY_ACADEMIC_YEAR)) {
-    actions?.push({
+  //actions to be displayed in table
+  const actions = [
+    {
       name: 'Edit year',
       handleAction: (id: string | number | undefined) => {
         history.push(`${path}/${id}/edit`); // go to edit year
       },
-    });
-  }
-
-  if (privileges?.includes(Privileges.CAN_ACCESS_ACADEMIC_YEAR)) {
-    actions?.push({
+    },
+    {
       name: 'Manage Period',
       handleAction: (id: string | number | undefined) => {
         history.push(`${path}/${id}/period`); // go to manage period
       },
-    });
-  }
-
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
+    },
+  ];
 
   useEffect(() => {
     let formattedYears: any = [];
@@ -120,11 +107,9 @@ export default function AcademicYears() {
                 totalItems={years?.length || 0}
                 showSearch={false}>
                 {years.length > 0 && (
-                  <Permission privilege={Privileges.CAN_CREATE_ACADEMIC_YEAR}>
-                    <Link to={`${url}/new`}>
-                      <Button>Add year</Button>
-                    </Link>
-                  </Permission>
+                  <Link to={`${url}/new`}>
+                    <Button>Add year</Button>
+                  </Link>
                 )}
               </TableHeader>
             </section>

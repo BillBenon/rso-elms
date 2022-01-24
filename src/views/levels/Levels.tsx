@@ -2,7 +2,6 @@ import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
-import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -15,8 +14,6 @@ import UpdateLevel from '../../components/Organisms/forms/level/UpdateLevel';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { levelStore } from '../../store/administration/level.store';
 import { ILevel } from '../../types/services/levels.types';
-import { Privileges } from '../../types/services/privilege.types';
-import { ActionsType } from '../../types/services/table.types';
 
 interface FilteredLevels
   extends Pick<ILevel, 'id' | 'name' | 'description' | 'generic_status'> {}
@@ -26,8 +23,6 @@ function Levels() {
   const history = useHistory();
   const { user } = useAuthenticator();
   const [levels, setLevels] = useState<FilteredLevels[]>();
-  const [privileges, setPrivileges] = useState<string[]>();
-  let actions: ActionsType<FilteredLevels>[] | undefined = [];
 
   const { data, isLoading } = levelStore.getLevelsByAcademy(
     user?.academy.id.toString() || '',
@@ -42,13 +37,6 @@ function Levels() {
     data?.data.data && setLevels(filterdData);
   }, [data, data?.data.data]);
 
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
-
   const list = [
     { to: '', title: 'Academy Admin' },
     { to: 'users', title: 'Users' },
@@ -57,14 +45,15 @@ function Levels() {
     { to: 'levels', title: 'Level' },
   ];
 
-  if (privileges?.includes(Privileges.CAN_MODIFY_LEVEL)) {
-    actions?.push({
+  //actions to be displayed in table
+  const actions = [
+    {
       name: 'Edit level',
       handleAction: (id: string | number | undefined) => {
         history.push(`${path}/${id}/edit`); // go to edit level
       },
-    });
-  }
+    },
+  ];
   return (
     <main className="px-4">
       <section>
@@ -72,11 +61,9 @@ function Levels() {
       </section>
       <section className="">
         <TableHeader title="Levels" totalItems={levels?.length || 0}>
-          <Permission privilege={Privileges.CAN_CREATE_LEVEL}>
-            <Link to={`${url}/add`}>
-              <Button>Add Level</Button>
-            </Link>
-          </Permission>
+          <Link to={`${url}/add`}>
+            <Button>Add Level</Button>
+          </Link>
         </TableHeader>
       </section>
 
