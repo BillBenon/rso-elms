@@ -96,17 +96,6 @@ export default function Ranks() {
       <section>
         {isLoading && <Loader />}
         {ranks && ranks.length > 0 && isSuccess ? (
-          // privileges?.includes(Privileges.CAN_EDIT_RANK) ? (
-          //   <Table<FilteredRanks>
-          //     selectorActions={manyActions}
-          //     hide={['id']}
-          //     handleSelect={handleSelect}
-          //     statusColumn="status"
-          //     data={ranks}
-          //     uniqueCol={'id'}
-          //     actions={actions}
-          //   />
-          // ) : (
           <Table<FilteredRanks>
             selectorActions={manyActions}
             hide={['id']}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Route,
   Switch,
@@ -36,14 +36,6 @@ function ModuleMaterials() {
   const { search } = useLocation();
   const showMenu = new URLSearchParams(search).get('showMenus');
   const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
-  const [privileges, setPrivileges] = useState<string[]>();
-
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
 
   return (
     <Switch>
@@ -62,12 +54,8 @@ function ModuleMaterials() {
                 <Loader />
               ) : moduleMaterials.length === 0 ? (
                 <NoDataAvailable
-                  showButton={
-                    user?.user_type === UserType.INSTRUCTOR &&
-                    (privileges?.includes(Privileges.CAN_CREATE_MODULE_MATERIALS)
-                      ? true
-                      : false)
-                  }
+                  showButton={user?.user_type === UserType.INSTRUCTOR}
+                  privilege={Privileges.CAN_CREATE_MODULE_MATERIALS}
                   icon="subject"
                   title={'No learning materials available'}
                   description={

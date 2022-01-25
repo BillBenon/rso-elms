@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import useAuthenticator from '../../../hooks/useAuthenticator';
@@ -27,13 +27,6 @@ export default function RegistrationControl() {
   const { user } = useAuthenticator();
   const { data, isLoading, isSuccess } =
     registrationControlStore.fetchRegControlByAcademy(user?.academy.id.toString()!);
-  const [privileges, setPrivileges] = useState<string[]>();
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
 
   function handleSearch(_e: ValueType) {}
 
@@ -154,9 +147,7 @@ export default function RegistrationControl() {
                 <NoDataAvailable
                   icon="reg-control"
                   buttonLabel="Add new Registration Control"
-                  showButton={
-                    privileges?.includes(Privileges.CAN_CREATE_REG_CONTROL) ? true : false
-                  }
+                  privilege={Privileges.CAN_CREATE_REG_CONTROL}
                   title={'No Registration Control Available'}
                   handleClick={() => {
                     history.push(`${url}/add`);

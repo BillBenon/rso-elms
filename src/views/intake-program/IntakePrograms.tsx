@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   Link,
   Route,
@@ -58,13 +58,6 @@ function IntakePrograms() {
     { to: `${url}`, title: 'Programs' },
   ];
   const { user } = useAuthenticator();
-  const [privileges, setPrivileges] = useState<string[]>();
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
 
   const userId = user?.id;
   const instructorInfo =
@@ -309,12 +302,8 @@ function IntakePrograms() {
                     })
                   ) : (
                     <NoDataAvailable
-                      showButton={
-                        user?.user_type === UserType.ADMIN &&
-                        (privileges?.includes(Privileges.CAN_CREATE_PROGRAMS_IN_INTAKE)
-                          ? true
-                          : false)
-                      }
+                      showButton={user?.user_type === UserType.ADMIN}
+                      privilege={Privileges.CAN_CREATE_PROGRAMS_IN_INTAKE}
                       icon="program"
                       buttonLabel="Add new program to intake"
                       title={'No program available in this intake'}

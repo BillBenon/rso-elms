@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { GenericStatus, ValueType } from '../../../types';
+import { GenericStatus, Privileges, ValueType } from '../../../types';
 import { StudentApproval } from '../../../types/services/enrollment.types';
 import { IEvaluationStatus } from '../../../types/services/evaluation.types';
 import { IntakeStatus } from '../../../types/services/intake.types';
@@ -35,7 +35,11 @@ interface TableProps<T> {
       | StudentApproval;
     handleStatusAction: (_data?: T[keyof T]) => void;
   }[];
-  selectorActions?: { name: string; handleAction: (_data?: string[]) => void }[];
+  selectorActions?: {
+    name: string;
+    handleAction: (_data?: string[]) => void;
+    privilege?: Privileges;
+  }[];
   handleClick?: () => void;
   statusColumn?: string;
   handleSelect?: (_selected: string[] | null) => void;
@@ -283,14 +287,25 @@ export default function Table2<T>({
             </p>
           </div>
           <div className="px-4 flex gap-2">
-            {selectorActions?.map((action) => (
-              <Button
-                key={action.name + Math.random()}
-                styleType="outline"
-                onClick={() => action.handleAction(Array.from(selected))}>
-                {action.name}
-              </Button>
-            ))}
+            {selectorActions?.map((action) =>
+              action.privilege ? (
+                <Permission privilege={action.privilege}>
+                  <Button
+                    key={action.name + Math.random()}
+                    styleType="outline"
+                    onClick={() => action.handleAction(Array.from(selected))}>
+                    {action.name}
+                  </Button>
+                </Permission>
+              ) : (
+                <Button
+                  key={action.name + Math.random()}
+                  styleType="outline"
+                  onClick={() => action.handleAction(Array.from(selected))}>
+                  {action.name}
+                </Button>
+              ),
+            )}
           </div>
         </div>
       )}

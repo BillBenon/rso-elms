@@ -34,14 +34,6 @@ export default function Faculties({ fetchType }: IFaculties) {
   const history = useHistory();
   const [faculties, setFaculties] = useState<FilteredData[]>([]);
   const { user } = useAuthenticator();
-  const [privileges, setPrivileges] = useState<string[]>();
-
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
 
   const { data, isLoading } = divisionStore.getDivisionsByAcademy(
     fetchType.toUpperCase() || 'FACULTY',
@@ -133,9 +125,7 @@ export default function Faculties({ fetchType }: IFaculties) {
         ) : faculties.length === 0 ? (
           <NoDataAvailable
             icon="faculty"
-            showButton={
-              privileges?.includes(Privileges.CAN_CREATE_DIVISION) ? true : false
-            }
+            privilege={Privileges.CAN_CREATE_DIVISION}
             buttonLabel="Add new faculty"
             title={'No faculty available'}
             handleClick={() => history.push(`/dashboard/divisions/new`)}

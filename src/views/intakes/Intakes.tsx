@@ -61,14 +61,6 @@ export default function Intakes() {
   const { search } = useLocation();
   const registrationControlId = new URLSearchParams(search).get('regId');
 
-  const [privileges, setPrivileges] = useState<string[]>();
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
-
   const {
     data: regControl,
     refetch,
