@@ -19,7 +19,6 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewRank from '../../components/Organisms/forms/ranks/NewRank';
 import UpdateRank from '../../components/Organisms/forms/ranks/UpdateRank';
-import useAuthenticator from '../../hooks/useAuthenticator';
 import { rankStore } from '../../store/administration/rank.store';
 import { Privileges } from '../../types/services/privilege.types';
 import { RankRes } from '../../types/services/rank.types';
@@ -33,8 +32,6 @@ export default function Ranks() {
   const [ranks, setRanks] = useState<FilteredRanks[]>();
   const history = useHistory();
   const location = useLocation();
-  const { user } = useAuthenticator();
-  const [privileges, setPrivileges] = useState<string[]>();
 
   const { data, isSuccess, isLoading, refetch } = rankStore.getRanks(); // fetch ranks
   let actions: ActionsType<any>[] | undefined = [];
@@ -48,21 +45,13 @@ export default function Ranks() {
     data?.data.data && setRanks(filterdData);
   }, [data]);
 
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
-
-  if (privileges?.includes(Privileges.CAN_EDIT_RANK)) {
-    actions?.push({
-      name: 'Edit rank',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit rank
-      },
-    });
-  }
+  actions?.push({
+    name: 'Edit rank',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/edit`); // go to edit rank
+    },
+    privilege: Privileges.CAN_EDIT_RANK,
+  });
 
   // re fetch data whenever user come back on this page
   useEffect(() => {

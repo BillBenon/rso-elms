@@ -82,35 +82,32 @@ export default function Faculties({ fetchType }: IFaculties) {
 
   const actions: ActionsType<FilteredData>[] = [];
 
-  if (privileges?.includes(Privileges.CAN_MODIFY_DIVISION)) {
-    actions.push({
-      name: 'Edit Faculty',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit faculties
-      },
-    });
-  }
+  actions.push({
+    name: 'Edit Faculty',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/edit`); // go to edit faculties
+    },
+    privilege: Privileges.CAN_MODIFY_DIVISION,
+  });
 
-  if (privileges?.includes(Privileges.CAN_ACCESS_DIVISIONS)) {
-    actions.push({
-      name: 'View Departments',
-      handleAction: (id: string | number | undefined) => {
-        history.push({
-          pathname: `/dashboard/divisions/departments`,
-          search: `?fac=${id}`,
-        });
-      },
-    });
-  }
+  actions.push({
+    name: 'View Departments',
+    handleAction: (id: string | number | undefined) => {
+      history.push({
+        pathname: `/dashboard/divisions/departments`,
+        search: `?fac=${id}`,
+      });
+    },
+    privilege: Privileges.CAN_ACCESS_DIVISIONS,
+  });
 
-  if (privileges?.includes(Privileges.CAN_CREATE_DIVISION)) {
-    actions.push({
-      name: 'Add Department',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/new`);
-      },
-    });
-  }
+  actions.push({
+    name: 'Add Department',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/new`);
+    },
+    privilege: Privileges.CAN_CREATE_DIVISION,
+  });
 
   return (
     <main>

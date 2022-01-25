@@ -1,6 +1,4 @@
-// import { Label } from "@headlessui/react/dist/components/label/label";
-
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Route, useHistory, useRouteMatch } from 'react-router';
 import { Link, Switch } from 'react-router-dom';
 
@@ -33,19 +31,11 @@ type AcademyTypes = {
 export default function Academy() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
-  const [privileges, setPrivileges] = useState<string[]>();
 
   const { user } = useAuthenticator();
   const { data, isLoading } = academyStore.getAcademiesByInstitution(
     user?.institution_id || '',
   );
-
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
 
   const list: LinkList[] = [
     { to: '/', title: 'Institution Admin' },
@@ -76,23 +66,21 @@ export default function Academy() {
   function handleSearch(_e: ValueType) {}
   let academyActions: ActionsType<any>[] | undefined = [];
 
-  if (privileges?.includes(Privileges.CAN_MODIFY_ACADEMY)) {
-    academyActions?.push({
-      name: 'Edit academy',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit academy
-      },
-    });
-  }
+  academyActions?.push({
+    name: 'Edit academy',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/edit`); // go to edit academy
+    },
+    privilege: Privileges.CAN_MODIFY_ACADEMY,
+  });
 
-  if (privileges?.includes(Privileges.CAN_ASSIGN_ACADEMY_INCHARGE)) {
-    academyActions?.push({
-      name: 'Assign incharge',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/assign`); // go to assign admin
-      },
-    });
-  }
+  academyActions?.push({
+    name: 'Assign incharge',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/assign`); // go to assign admin
+    },
+    privilege: Privileges.CAN_ASSIGN_ACADEMY_INCHARGE,
+  });
 
   return (
     <>

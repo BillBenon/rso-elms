@@ -77,14 +77,13 @@ export default function RegistrationControl() {
 
   const controlActions: ActionsType<IRegistrationInfo>[] = [];
 
-  if (privileges?.includes(Privileges.CAN_MODIFY_REG_CONTROL)) {
-    controlActions.push({
-      name: 'Edit control',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${url}/${id}/edit`); // go to edit reg control
-      },
-    });
-  }
+  controlActions.push({
+    name: 'Edit control',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${url}/${id}/edit`); // go to edit reg control
+    },
+    privilege: Privileges.CAN_MODIFY_REG_CONTROL,
+  });
 
   controlActions.push({
     name: 'View control',
@@ -93,14 +92,13 @@ export default function RegistrationControl() {
     },
   });
 
-  // if (privileges?.includes(Privileges.CAN_ACCESS_INTAKES)) {
   controlActions.push({
     name: 'Manage Intakes',
     handleAction: (id: string | number | undefined) => {
       history.push(`/dashboard/intakes?regId=${id}`); // go to add new intake to this reg control
     },
+    privilege: Privileges.CAN_ACCESS_INTAKES,
   });
-  // }
 
   function handleClose() {
     history.goBack();

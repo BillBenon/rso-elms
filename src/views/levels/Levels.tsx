@@ -26,7 +26,6 @@ function Levels() {
   const history = useHistory();
   const { user } = useAuthenticator();
   const [levels, setLevels] = useState<FilteredLevels[]>();
-  const [privileges, setPrivileges] = useState<string[]>();
   let actions: ActionsType<FilteredLevels>[] | undefined = [];
 
   const { data, isLoading } = levelStore.getLevelsByAcademy(
@@ -42,13 +41,6 @@ function Levels() {
     data?.data.data && setLevels(filterdData);
   }, [data, data?.data.data]);
 
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
-
   const list = [
     { to: '', title: 'Academy Admin' },
     { to: 'users', title: 'Users' },
@@ -56,15 +48,13 @@ function Levels() {
     { to: 'levels', title: 'Programs' },
     { to: 'levels', title: 'Level' },
   ];
-
-  if (privileges?.includes(Privileges.CAN_MODIFY_LEVEL)) {
-    actions?.push({
-      name: 'Edit level',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit level
-      },
-    });
-  }
+  actions?.push({
+    name: 'Edit level',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/edit`); // go to edit level
+    },
+    privilege: Privileges.CAN_MODIFY_LEVEL,
+  });
   return (
     <main className="px-4">
       <section>

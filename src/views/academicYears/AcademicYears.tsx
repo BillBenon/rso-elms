@@ -38,7 +38,6 @@ export default function AcademicYears() {
   const { user } = useAuthenticator();
   const [years, setYears] = useState<FilteredData[]>([]);
   let actions: ActionsType<any>[] | undefined = [];
-  const [privileges, setPrivileges] = useState<string[]>();
 
   const {
     data: academicYears,
@@ -46,30 +45,21 @@ export default function AcademicYears() {
     isSuccess,
   } = academicyearsStore.fetchAcademicYears(user?.academy.id.toString() || '');
 
-  if (privileges?.includes(Privileges.CAN_MODIFY_ACADEMIC_YEAR)) {
-    actions?.push({
-      name: 'Edit year',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit year
-      },
-    });
-  }
+  actions?.push({
+    name: 'Edit year',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/edit`); // go to edit year
+    },
+    privilege: Privileges.CAN_MODIFY_ACADEMIC_YEAR,
+  });
 
-  if (privileges?.includes(Privileges.CAN_ACCESS_ACADEMIC_YEAR)) {
-    actions?.push({
-      name: 'Manage Period',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/period`); // go to manage period
-      },
-    });
-  }
-
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
+  actions?.push({
+    name: 'Manage Period',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/period`); // go to manage period
+    },
+    privilege: Privileges.CAN_ACCESS_ACADEMIC_YEAR,
+  });
 
   useEffect(() => {
     let formattedYears: any = [];

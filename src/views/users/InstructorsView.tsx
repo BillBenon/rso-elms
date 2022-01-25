@@ -20,8 +20,6 @@ export default function InstructorsView() {
   const { url } = useRouteMatch();
   const { user } = useAuthenticator();
   const history = useHistory();
-  const [privileges, setPrivileges] = useState<string[]>();
-
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
   let actions: ActionsType<any>[] | undefined = [];
@@ -40,39 +38,29 @@ export default function InstructorsView() {
           { page: currentPage, pageSize, sortyBy: 'username' },
         );
 
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
-
   const users = formatUserTable(data?.data.data.content || []);
 
-  if (privileges?.includes(Privileges.CAN_ASSIGN_ROLE)) {
-    actions?.push({
-      name: 'Add Role',
-      handleAction: () => {},
-    });
-  }
+  actions?.push({
+    name: 'Add Role',
+    handleAction: () => {},
+    privilege: Privileges.CAN_ASSIGN_ROLE,
+  });
 
-  if (privileges?.includes(Privileges.CAN_MODIFY_USER)) {
-    actions?.push({
-      name: 'Edit instructor',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/users/${id}/edit`); // go to edit user
-      },
-    });
-  }
+  actions?.push({
+    name: 'Edit instructor',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`/dashboard/users/${id}/edit`); // go to edit user
+    },
+    privilege: Privileges.CAN_MODIFY_USER,
+  });
 
-  if (privileges?.includes(Privileges.CAN_ACCESS_PROFILE)) {
-    actions?.push({
-      name: 'View instructor',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/users/${id}/profile`); // go to view user profile
-      },
-    });
-  }
+  actions?.push({
+    name: 'View instructor',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`/dashboard/users/${id}/profile`); // go to view user profile
+    },
+    privilege: Privileges.CAN_ACCESS_PROFILE,
+  });
 
   function handleSearch(_e: ValueType) {}
 

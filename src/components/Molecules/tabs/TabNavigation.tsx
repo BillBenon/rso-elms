@@ -3,6 +3,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 
 import { colorStyle, fontSizeStyle, fontWeightStyle } from '../../../global/global-vars';
 import { Privileges } from '../../../types';
+import Permission from '../../Atoms/auth/Permission';
 
 export interface TabType {
   label: string;
@@ -80,13 +81,27 @@ function TabHeadings({ tabs, onTabChange }: TabsImportantProps) {
   return (
     <div className="flex flex-wrap justify-start">
       {tabs.map((tab, i) => {
-        return (
+        return tab.privilege ? (
+          <Permission privilege={tab.privilege}>
+            <button
+              key={i}
+              className={`pr-5 pl-3 py-4 ${
+                activeTabIndex === i ? 'border-b-3' : 'border-b-2'
+              } m-0 rounded-none
+                ${fontSizeStyle['sm']} ${fontWeightStyle['bold']} text-${
+                colorStyle[activeTabIndex == i ? 'primary' : 'gray']
+              } border-${colorStyle[activeTabIndex == i ? 'primary' : 'lightgray']}`}
+              onClick={() => slideTo(i, tab.href, tab.label)}>
+              {tab.label}
+            </button>
+          </Permission>
+        ) : (
           <button
             key={i}
             className={`pr-5 pl-3 py-4 ${
               activeTabIndex === i ? 'border-b-3' : 'border-b-2'
             } m-0 rounded-none
-                ${fontSizeStyle['sm']} ${fontWeightStyle['bold']} text-${
+              ${fontSizeStyle['sm']} ${fontWeightStyle['bold']} text-${
               colorStyle[activeTabIndex == i ? 'primary' : 'gray']
             } border-${colorStyle[activeTabIndex == i ? 'primary' : 'lightgray']}`}
             onClick={() => slideTo(i, tab.href, tab.label)}>

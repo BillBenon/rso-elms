@@ -19,7 +19,6 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewRole from '../../components/Organisms/forms/roles/NewRole';
 import UpdateRole from '../../components/Organisms/forms/roles/UpdateRole';
-import useAuthenticator from '../../hooks/useAuthenticator';
 import { roleStore } from '../../store/administration';
 import { Privileges, RoleRes } from '../../types';
 import { ActionsType } from '../../types/services/table.types';
@@ -31,8 +30,6 @@ export default function Roles() {
   const [roles, setRoles] = useState<FilteredRoles[]>();
   const history = useHistory();
   const location = useLocation();
-  const { user } = useAuthenticator();
-  const [privileges, setPrivileges] = useState<string[]>();
 
   const { data, isSuccess, isLoading, refetch } = roleStore.getRoles(); // fetch roles
 
@@ -45,13 +42,6 @@ export default function Roles() {
     data?.data.data && setRoles(filterdData);
   }, [data]);
 
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
-
   // re fetch data whenever user come back on this page
   useEffect(() => {
     if (location.pathname === path || location.pathname === `${path}/`) {
@@ -62,23 +52,21 @@ export default function Roles() {
   //actions to be displayed in table
   let actions: ActionsType<any>[] | undefined = [];
 
-  if (privileges?.includes(Privileges.CAN_MODIFY_ROLE)) {
-    actions?.push({
-      name: 'Edit role',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit role
-      },
-    });
-  }
+  actions?.push({
+    name: 'Edit role',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/edit`); // go to edit role
+    },
+    privilege: Privileges.CAN_MODIFY_ROLE,
+  });
 
-  if (privileges?.includes(Privileges.CAN_ACCESS_ROLE)) {
-    actions?.push({
-      name: 'View',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path.replace(/roles/i, 'role')}/${id}/view`); // go to view role
-      },
-    });
-  }
+  actions?.push({
+    name: 'View',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path.replace(/roles/i, 'role')}/${id}/view`); // go to view role
+    },
+    privilege: Privileges.CAN_ACCESS_ROLE,
+  });
 
   const manyActions = [
     {
