@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import { Privileges } from '../../../types';
@@ -9,14 +9,6 @@ import AcademyProfileCard from '../cards/AcademyProfileCard';
 
 export default function Sidebar() {
   const { user } = useAuthenticator();
-  const [privileges, setPrivileges] = useState<string[]>();
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    console.log(_privileges);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
 
   const defaultLinks = (): linkProps[] => {
     const routes: linkProps[] = [];
@@ -29,99 +21,98 @@ export default function Sidebar() {
 
     //Academic years check
 
-    if (privileges?.includes(Privileges.CAN_ACCESS_ACADEMIC_YEARS)) {
-      academicAdminLinks.push({
-        title: 'Academic years',
-        to: '/dashboard/academic-years',
-        icon: 'program',
-      });
-    }
+    academicAdminLinks.push({
+      title: 'Academic years',
+      to: '/dashboard/academic-years',
+      icon: 'program',
+      privilege: Privileges.CAN_ACCESS_ACADEMIC_YEARS,
+    });
 
     //Academiz check
-    if (privileges?.includes(Privileges.CAN_ACCESS_ACADEMY))
-      institutionAdminLinks.push({
-        title: 'Academies',
-        to: '/dashboard/academies',
-        icon: 'academy',
-        fill: false,
-      });
+    institutionAdminLinks.push({
+      title: 'Academies',
+      to: '/dashboard/academies',
+      icon: 'academy',
+      fill: false,
+      privilege: Privileges.CAN_ACCESS_ACADEMY,
+    });
 
     //Ranks check
 
-    if (privileges?.includes(Privileges.CAN_ACCESS_RANKS)) {
-      institutionAdminLinks.push({
-        title: 'Ranks',
-        to: '/dashboard/ranks',
-        icon: 'rank',
-      });
-    }
+    institutionAdminLinks.push({
+      title: 'Ranks',
+      to: '/dashboard/ranks',
+      icon: 'rank',
+      privilege: Privileges.CAN_ACCESS_RANKS,
+    });
 
     //Roles check
 
-    if (privileges?.includes(Privileges.CAN_ACCESS_ROLES)) {
-      institutionAdminLinks.push({
-        title: 'Roles',
-        to: '/dashboard/roles',
-        icon: 'role',
-      });
-    }
+    institutionAdminLinks.push({
+      title: 'Roles',
+      to: '/dashboard/roles',
+      icon: 'role',
+      privilege: Privileges.CAN_ACCESS_ROLES,
+    });
 
     //Levels check
 
-    if (privileges?.includes(Privileges.CAN_ACCESS_LEVELS)) {
-      academicAdminLinks.push({
-        title: 'Levels',
-        to: '/dashboard/levels',
-        icon: 'level',
-      });
-    }
+    academicAdminLinks.push({
+      title: 'Levels',
+      to: '/dashboard/levels',
+      icon: 'level',
+      privilege: Privileges.CAN_ACCESS_LEVELS,
+    });
 
     // Intakes check
 
-    if (privileges?.includes(Privileges.CAN_ACCESS_INTAKES)) {
-      instructorLinks.push({
-        title: 'Intakes',
-        to: '/dashboard/intakes',
-        icon: 'academy',
-        fill: false,
-      });
-      academicAdminLinks.push({
-        title: 'Intakes',
-        to: '/dashboard/intakes',
-        icon: 'academy',
-      });
-      studentLinks.push({
-        title: 'Intakes',
-        to: '/dashboard/intakes',
-        icon: 'academy',
-      });
-    }
+    instructorLinks.push({
+      title: 'Intakes',
+      to: '/dashboard/intakes',
+      icon: 'academy',
+      fill: false,
+      privilege: Privileges.CAN_ACCESS_INTAKES,
+    });
+
+    academicAdminLinks.push({
+      title: 'Intakes',
+      to: '/dashboard/intakes',
+      icon: 'academy',
+      privilege: Privileges.CAN_ACCESS_INTAKES,
+    });
+
+    studentLinks.push({
+      title: 'Intakes',
+      to: '/dashboard/intakes',
+      icon: 'academy',
+      privilege: Privileges.CAN_ACCESS_INTAKES,
+    });
 
     // Users check
 
-    if (privileges?.includes(Privileges.CAN_ACCESS_USERS)) {
-      institutionAdminLinks.push({
-        title: 'Users',
-        to: '/dashboard/users',
-        icon: 'user',
-      });
-      academicAdminLinks.push({
-        title: 'Intakes',
-        to: '/dashboard/intakes',
-        icon: 'academy',
-        fill: false,
-      });
-    }
+    institutionAdminLinks.push({
+      title: 'Users',
+      to: '/dashboard/users',
+      icon: 'user',
+      privilege: Privileges.CAN_ACCESS_USERS,
+    });
+
+    academicAdminLinks.push({
+      title: 'Intakes',
+      to: '/dashboard/intakes',
+      icon: 'academy',
+      fill: false,
+      privilege: Privileges.CAN_ACCESS_USERS,
+    });
 
     // Reg Controll check
 
-    if (privileges?.includes(Privileges.CAN_ACCESS_REG_CONTROLS)) {
-      academicAdminLinks.push({
-        title: 'Registration Control',
-        to: '/dashboard/registration-control',
-        icon: 'reg-control',
-      });
-    }
+    academicAdminLinks.push({
+      title: 'Registration Control',
+      to: '/dashboard/registration-control',
+      icon: 'reg-control',
+      privilege: Privileges.CAN_ACCESS_REG_CONTROLS,
+    });
 
     // Check Schedule
 
@@ -130,13 +121,13 @@ export default function Sidebar() {
       to: '/dashboard/schedule',
       icon: 'calendar',
     });
-    if (privileges?.includes(Privileges.CAN_ACCESS_DIVISIONS)) {
-      academicAdminLinks.push({
-        title: 'Divisions',
-        to: '/dashboard/divisions',
-        icon: 'faculty',
-      });
-    }
+
+    academicAdminLinks.push({
+      title: 'Divisions',
+      to: '/dashboard/divisions',
+      icon: 'faculty',
+      privilege: Privileges.CAN_ACCESS_DIVISIONS,
+    });
 
     //Evaluations check
 
@@ -146,22 +137,28 @@ export default function Sidebar() {
       { title: 'Events', to: '/dashboard/events', icon: 'calendar' },
     );
 
-    if (privileges?.includes(Privileges.CAN_ACCESS_MODULES)) {
-      studentLinks.push({ title: 'Module', to: '/dashboard/student', icon: 'module' });
-      instructorLinks.push({
-        title: 'Modules',
-        to: '/dashboard/inst-module',
-        icon: 'module',
-      });
-    }
-    if (privileges?.includes(Privileges.CAN_ACCESS_INTAKES)) {
-      studentLinks.push({
-        title: 'Intakes',
-        to: '/dashboard/intakes',
-        icon: 'academy',
-        fill: false,
-      });
-    }
+    //modules check
+
+    studentLinks.push({
+      title: 'Module',
+      to: '/dashboard/student',
+      icon: 'module',
+      privilege: Privileges.CAN_ACCESS_MODULES,
+    });
+    instructorLinks.push({
+      title: 'Modules',
+      to: '/dashboard/inst-module',
+      icon: 'module',
+      privilege: Privileges.CAN_ACCESS_MODULES,
+    });
+    studentLinks.push({
+      title: 'Intakes',
+      to: '/dashboard/intakes',
+      icon: 'academy',
+      fill: false,
+      privilege: Privileges.CAN_ACCESS_INTAKES,
+    });
+
     studentLinks.push(
       { title: 'Timetable', to: '/dashboard/schedule/timetable', icon: 'calendar' },
       { title: 'Calendar', to: '/dashboard/schedule', icon: 'calendar' },
