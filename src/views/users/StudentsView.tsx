@@ -12,6 +12,7 @@ import ImportUsers from '../../components/Organisms/user/ImportUsers';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import usersStore from '../../store/administration/users.store';
 import { Privileges, ValueType } from '../../types';
+import { ActionsType } from '../../types/services/table.types';
 import { AcademyUserType, UserType, UserTypes } from '../../types/services/user.types';
 import { formatUserTable } from '../../utils/array';
 
@@ -39,21 +40,29 @@ export default function StudentsView() {
 
   const users = formatUserTable(data?.data.data.content || []);
 
-  const studentActions = [
-    { name: 'Add Role', handleAction: () => {} },
-    {
-      name: 'Edit student',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/users/${id}/edit`); // go to edit user
-      },
+  let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
+
+  actions?.push({
+    name: 'Add Role',
+    handleAction: () => {},
+    privilege: Privileges.CAN_ASSIGN_ROLE,
+  });
+
+  actions?.push({
+    name: 'Edit student',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`/dashboard/users/${id}/edit`); // go to edit user
     },
-    {
-      name: 'View Student',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${url}/${id}/profile`); // go to view user profile
-      },
+    privilege: Privileges.CAN_MODIFY_USER,
+  });
+
+  actions?.push({
+    name: 'View Student',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${url}/${id}/profile`); // go to view user profile
     },
-  ];
+    privilege: Privileges.CAN_ACCESS_PROFILE,
+  });
 
   function handleSearch(_e: ValueType) {}
 
@@ -96,7 +105,7 @@ export default function StudentsView() {
         <Table<UserTypes | AcademyUserType>
           statusColumn="status"
           data={users}
-          actions={studentActions}
+          actions={actions}
           statusActions={[]}
           hide={['id', 'user_type']}
           selectorActions={[]}

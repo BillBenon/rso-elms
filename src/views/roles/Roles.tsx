@@ -9,6 +9,8 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
+// import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -19,7 +21,8 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewRole from '../../components/Organisms/forms/roles/NewRole';
 import UpdateRole from '../../components/Organisms/forms/roles/UpdateRole';
 import { roleStore } from '../../store/administration';
-import { RoleRes } from '../../types';
+import { Privileges, RoleRes } from '../../types';
+import { ActionsType } from '../../types/services/table.types';
 
 interface FilteredRoles extends Pick<RoleRes, 'id' | 'name' | 'description' | 'status'> {}
 
@@ -45,23 +48,26 @@ export default function Roles() {
     if (location.pathname === path || location.pathname === `${path}/`) {
       refetch();
     }
-  }, [location]);
+  }, [location, path, refetch]);
 
   //actions to be displayed in table
-  const actions = [
-    {
-      name: 'Edit role',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit role
-      },
+  let actions: ActionsType<FilteredRoles>[] | undefined = [];
+
+  actions?.push({
+    name: 'Edit role',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/edit`); // go to edit role
     },
-    {
-      name: 'View',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path.replace(/roles/i, 'role')}/${id}/view`); // go to view role
-      },
+    privilege: Privileges.CAN_MODIFY_ROLE,
+  });
+
+  actions?.push({
+    name: 'View',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path.replace(/roles/i, 'role')}/${id}/view`); // go to view role
     },
-  ];
+    privilege: Privileges.CAN_ACCESS_ROLE,
+  });
 
   const manyActions = [
     {
@@ -89,9 +95,11 @@ export default function Roles() {
           title="Roles"
           totalItems={roles && roles.length > 0 ? roles.length : 0}
           handleSearch={handleSearch}>
-          <Link to={`${url}/add`}>
-            <Button>Add Role</Button>
-          </Link>
+          <Permission privilege={Privileges.CAN_CREATE_RANK}>
+            <Link to={`${url}/add`}>
+              <Button>Add Role</Button>
+            </Link>
+          </Permission>
         </TableHeader>
       </section>
       <section>

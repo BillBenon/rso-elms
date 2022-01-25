@@ -12,8 +12,9 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import academicyearsStore from '../../store/administration/academicyears.store';
-import { Link as Links } from '../../types';
+import { Link as Links, Privileges } from '../../types';
 import { IAcademicYearInfo } from '../../types/services/academicyears.types';
+import { ActionsType } from '../../types/services/table.types';
 import AcademicPeriod from '../academicPeriods/AcademicPeriod';
 import NewAcademicPeriod from '../academicPeriods/NewAcademicPeriod';
 import UpdateAcademicPeriod from '../academicPeriods/UpdateAcademicPeriod';
@@ -35,6 +36,7 @@ export default function AcademicYears() {
   const history = useHistory();
   const { user } = useAuthenticator();
   const [years, setYears] = useState<FilteredData[]>([]);
+  let actions: ActionsType<FilteredData>[] | undefined = [];
 
   const {
     data: academicYears,
@@ -42,21 +44,21 @@ export default function AcademicYears() {
     isSuccess,
   } = academicyearsStore.fetchAcademicYears(user?.academy.id.toString() || '');
 
-  //actions to be displayed in table
-  const actions = [
-    {
-      name: 'Edit year',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit year
-      },
+  actions?.push({
+    name: 'Edit year',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/edit`); // go to edit year
     },
-    {
-      name: 'Manage Period',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/period`); // go to manage period
-      },
+    privilege: Privileges.CAN_MODIFY_ACADEMIC_YEAR,
+  });
+
+  actions?.push({
+    name: 'Manage Period',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/period`); // go to manage period
     },
-  ];
+    privilege: Privileges.CAN_ACCESS_ACADEMIC_YEAR,
+  });
 
   useEffect(() => {
     let formattedYears: any = [];

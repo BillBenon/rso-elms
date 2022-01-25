@@ -4,7 +4,9 @@ import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-rou
 
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import { divisionStore } from '../../../store/administration/divisions.store';
+import { Privileges } from '../../../types';
 import { DivisionInfo } from '../../../types/services/division.types';
+import { ActionsType } from '../../../types/services/table.types';
 import NewAcademicProgram from '../../../views/programs/NewAcademicProgram';
 import Loader from '../../Atoms/custom/Loader';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
@@ -77,26 +79,31 @@ export default function Departments({ fetchType }: IDepartment) {
     history.goBack();
   }
 
-  const actions = [
-    {
-      name: 'Edit Department',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit dep
-      },
+  const actions: ActionsType<FilteredData>[] = [];
+
+  actions.push({
+    name: 'Edit Department',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/edit`); // go to edit dep
     },
-    {
-      name: 'Add Program',
-      handleAction: (id: string | number | undefined) => {
-        history.push({ pathname: `/dashboard/programs/add`, search: `?dp=${id}` });
-      },
+    privilege: Privileges.CAN_MODIFY_DIVISION,
+  });
+
+  actions.push({
+    name: 'View Programs',
+    handleAction: (id: string | number | undefined) => {
+      history.push({ pathname: `/dashboard/programs/`, search: `?dp=${id}` });
     },
-    {
-      name: 'View Programs',
-      handleAction: (id: string | number | undefined) => {
-        history.push({ pathname: `/dashboard/programs/`, search: `?dp=${id}` });
-      },
+    privilege: Privileges.CAN_ACCESS_PROGRAMS,
+  });
+
+  actions.push({
+    name: 'Add Program',
+    handleAction: (id: string | number | undefined) => {
+      history.push({ pathname: `/dashboard/programs/add`, search: `?dp=${id}` });
     },
-  ];
+    privilege: Privileges.CAN_CREATE_PROGRAM,
+  });
 
   return (
     <Switch>

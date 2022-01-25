@@ -8,6 +8,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -20,7 +21,7 @@ import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleFor
 import programStore, {
   getLevelsByAcademicProgram,
 } from '../../store/administration/program.store';
-import { Link as Links, ParamType } from '../../types';
+import { Link as Links, ParamType, Privileges } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ProgramModules from '../modules/ProgramModules';
 import { IProgramData } from './AcademicPrograms';
@@ -30,7 +31,6 @@ export default function ProgramDetailsMolecule() {
   const history = useHistory();
   const { path, url } = useRouteMatch();
   const { id } = useParams<ParamType>();
-
   const program = programStore.getProgramById(id).data?.data.data;
   const programLevels = getLevelsByAcademicProgram(id).data?.data.data;
 
@@ -61,11 +61,13 @@ export default function ProgramDetailsMolecule() {
       label: 'Program info',
       href: `${url}`,
     },
-    {
-      label: 'Program modules',
-      href: `${url}/modules`,
-    },
   ];
+
+  tabs.push({
+    label: 'Program modules',
+    href: `${url}/modules`,
+    privilege: Privileges.CAN_ACCESS_MODULES,
+  });
 
   const handleClose = () => {
     history.goBack();
@@ -156,39 +158,38 @@ export default function ProgramDetailsMolecule() {
                     </div> */}
                     <div className="flex gap-8">
                       {/* levels */}
-                      <div className="flex flex-col gap-7 w-60 p-6 bg-main">
-                        <Heading color="txt-secondary" fontSize="base">
-                          Levels
-                        </Heading>
-                        <div className="flex flex-col gap-8">
-                          {programLevels && programLevels?.length > 0 ? (
-                            programLevels.map((programLevel) => (
-                              <Heading
-                                key={programLevel.id}
-                                color="primary"
-                                fontSize="base"
-                                fontWeight="semibold">
-                                {programLevel.level.name}
-                              </Heading>
-                            ))
-                          ) : (
-                            <Heading
-                              color="primary"
-                              fontSize="base"
-                              fontWeight="semibold">
-                              No levels available
-                            </Heading>
-                          )}
+                      <Permission privilege={Privileges.CAN_ACCESS_PROGRAM_LEVELS}>
+                        <div className="flex flex-col gap-7 w-60 p-6 bg-main">
+                          <Heading color="txt-secondary" fontSize="base">
+                            Levels
+                          </Heading>
+                          <div className="flex flex-col gap-8">
+                            {programLevels && programLevels?.length > 0 ? (
+                              programLevels.map((programLevel) => (
+                                <Heading
+                                  key={programLevel.id}
+                                  color="primary"
+                                  fontSize="base"
+                                  fontWeight="semibold">
+                                  {programLevel.level.name}
+                                </Heading>
+                              ))
+                            ) : (
+                              <></>
+                            )}
+                          </div>
+                          <Permission privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}>
+                            <div className="text-primary-500 py-2 text-sm mr-3">
+                              <Link
+                                to={`${url}/level/add`}
+                                className="flex items-center justify-end">
+                                <Icon name="add" size={12} fill="primary" />
+                                Add levels
+                              </Link>
+                            </div>
+                          </Permission>
                         </div>
-                        <div className="text-primary-500 py-2 text-sm mr-3">
-                          <Link
-                            to={`${url}/level/add`}
-                            className="flex items-center justify-end">
-                            <Icon name="add" size={12} fill="primary" />
-                            Add levels
-                          </Link>
-                        </div>
-                      </div>
+                      </Permission>
 
                       {/* intakes */}
                       <div className="flex flex-col gap-8">

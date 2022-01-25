@@ -18,7 +18,7 @@ import Heading from '../../components/Atoms/Text/Heading';
 import Accordion from '../../components/Molecules/Accordion';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
-import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { lessonStore } from '../../store/administration/lesson.store';
@@ -44,6 +44,7 @@ export default function SubjectDetails() {
   const period = new URLSearchParams(search).get('prd') || '';
 
   const { user } = useAuthenticator();
+
   const { subjectId } = useParams<ParamType>();
   const { url } = useRouteMatch();
   const history = useHistory();
@@ -83,20 +84,23 @@ export default function SubjectDetails() {
     );
   }
 
-  let tabs = [
-    {
-      label: `Lessons(${lessons.length})`,
-      href: `${url}?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
-    },
-    {
-      label: 'Evaluations',
-      href: `${url}/evaluations?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
-    },
-    {
-      label: 'Instructors',
-      href: `${url}/instructors?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
-    },
-  ];
+  let tabs: TabType[] = [];
+
+  tabs.push({
+    label: `Lessons(${lessons.length})`,
+    href: `${url}?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+    privilege: Privileges.CAN_ACCESS_LESSON,
+  });
+
+  tabs.push({
+    label: 'Evaluations',
+    href: `${url}/evaluations?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+    privilege: Privileges.CAN_ACCESS_EVALUATIONS,
+  });
+  tabs.push({
+    label: 'Instructors',
+    href: `${url}/instructors?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+  });
 
   return (
     <main className="px-4">

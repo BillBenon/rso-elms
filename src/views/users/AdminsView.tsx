@@ -8,7 +8,8 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import usersStore from '../../store/administration/users.store';
-import { ValueType } from '../../types';
+import { Privileges, ValueType } from '../../types';
+import { ActionsType } from '../../types/services/table.types';
 import { AcademyUserType, UserType, UserTypes } from '../../types/services/user.types';
 import { formatUserTable } from '../../utils/array';
 
@@ -35,21 +36,29 @@ export default function AdminsView() {
 
   const users = formatUserTable(data?.data.data.content || []);
 
-  const adminActions = [
-    { name: 'Add Role', handleAction: () => {} },
-    {
-      name: 'Edit admin',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/users/${id}/edit`); // go to edit user
-      },
+  let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
+
+  actions?.push({
+    name: 'Add Role',
+    handleAction: () => {},
+    privilege: Privileges.CAN_ASSIGN_ROLE,
+  });
+
+  actions?.push({
+    name: 'Edit admin',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`/dashboard/users/${id}/edit`); // go to edit user
     },
-    {
-      name: 'View admin',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/users/${id}/profile`); // go to view user profile
-      },
+    privilege: Privileges.CAN_MODIFY_USER,
+  });
+
+  actions?.push({
+    name: 'View admin',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`/dashboard/users/${id}/profile`); // go to view user profile
     },
-  ];
+    privilege: Privileges.CAN_ACCESS_PROFILE,
+  });
 
   function handleSearch(_e: ValueType) {}
 
@@ -84,7 +93,7 @@ export default function AdminsView() {
           <Table<UserTypes | AcademyUserType>
             statusColumn="status"
             data={users}
-            actions={adminActions}
+            actions={actions}
             statusActions={[]}
             hide={['id', 'user_type']}
             selectorActions={[]}

@@ -9,6 +9,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -30,7 +31,7 @@ import {
   getStudentShipByUserId,
 } from '../../store/administration/intake-program.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
-import { IntakeParamType, Link as LinkList } from '../../types';
+import { IntakeParamType, Link as LinkList, Privileges } from '../../types';
 import { InstructorProgram } from '../../types/services/instructor.types';
 import {
   IntakeProgramInfo,
@@ -175,9 +176,11 @@ function IntakePrograms() {
                     title={`${intakeId ? intake?.data?.data.data.title : 'Programs'}`}
                     showSearch={false}>
                     {user?.user_type === UserType.ADMIN && (
-                      <Link to={`${url}/add-program-to-intake?intakeId=${intakeId}`}>
-                        <Button>Add Program To Intake</Button>
-                      </Link>
+                      <Permission privilege={Privileges.CAN_CREATE_PROGRAMS_IN_INTAKE}>
+                        <Link to={`${url}/add-program-to-intake?intakeId=${intakeId}`}>
+                          <Button>Add Program To Intake</Button>
+                        </Link>
+                      </Permission>
                     )}
                   </TableHeader>
                 </section>
@@ -283,13 +286,16 @@ function IntakePrograms() {
                                 <Button styleType="text">View schedule</Button>
                               </Link>
                             </div>
-                            <div className="space-x-4">
-                              <Link
-                                to={`/dashboard/intakes/programs/${intakeId}/${Common.id}/edit`}>
-                                <Button>Edit program</Button>
-                              </Link>
-                              <Button styleType="outline">Change Status</Button>
-                            </div>
+                            <Permission
+                              privilege={Privileges.CAN_MODIFY_PROGRAMS_IN_INTAKE}>
+                              <div className="space-x-4">
+                                <Link
+                                  to={`/dashboard/intakes/programs/${intakeId}/${Common.id}/edit`}>
+                                  <Button>Edit program</Button>
+                                </Link>
+                                <Button styleType="outline">Change Status</Button>
+                              </div>
+                            </Permission>
                           </div>
                         </Tooltip>
                       );
@@ -297,6 +303,7 @@ function IntakePrograms() {
                   ) : (
                     <NoDataAvailable
                       showButton={user?.user_type === UserType.ADMIN}
+                      privilege={Privileges.CAN_CREATE_PROGRAMS_IN_INTAKE}
                       icon="program"
                       buttonLabel="Add new program to intake"
                       title={'No program available in this intake'}
