@@ -52,14 +52,6 @@ function IntakeProgramDetails() {
 
   const { user } = useAuthenticator();
 
-  const [privileges, setPrivileges] = useState<string[]>();
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
-
   const [students, setStudents] = useState<UserView[]>([]);
   const [instructors, setInstructors] = useState<UserView[]>([]);
   const initialShowSidebar = {
@@ -158,24 +150,22 @@ function IntakeProgramDetails() {
   ];
 
   if (user?.user_type !== UserType.STUDENT) {
-    if (privileges?.includes(Privileges.CAN_ACCESS_INTAKE_PROGRAM_MODULES)) {
-      tabs.push({
-        label: 'Program modules',
-        href: `${url}/modules`,
-      });
-    }
+    tabs.push({
+      label: 'Program modules',
+      href: `${url}/modules`,
+      privilege: Privileges.CAN_ACCESS_INTAKE_PROGRAM_MODULES,
+    });
   }
 
   if (user?.user_type === UserType.STUDENT) {
-    if (privileges?.includes(Privileges.CAN_ACCESS_PROGRAM_LEVELS)) {
-      if (studentLevels?.data.data && studentLevels?.data.data.length > 0) {
-        tabs.push({
-          label: 'Program levels',
-          href: `${url}/levels/${
-            studentLevels.data.data[0].academic_year_program_level.id || ''
-          }`,
-        });
-      }
+    if (studentLevels?.data.data && studentLevels?.data.data.length > 0) {
+      tabs.push({
+        label: 'Program levels',
+        href: `${url}/levels/${
+          studentLevels.data.data[0].academic_year_program_level.id || ''
+        }`,
+        privilege: Privileges.CAN_ACCESS_PROGRAM_LEVELS,
+      });
     }
   }
 
@@ -195,31 +185,28 @@ function IntakeProgramDetails() {
     //     level.academic_year_program_intake_level?.academic_program_level.id,
     //   ),
     // );
-    // if (privileges?.includes(Privileges.CAN_ACCESS_PROGRAM_LEVELS)) {
     if (instructorProgLevels && instructorProgLevels?.length > 0) {
       tabs.push({
         label: 'Program levels',
         href: `${url}/levels/${instructorProgLevels[0]?.id || ''}`,
+        privilege: Privileges.CAN_ACCESS_PROGRAM_LEVELS,
       });
     }
-    // }
   }
 
   if (user?.user_type === UserType.ADMIN) {
-    if (privileges?.includes(Privileges.CAN_ACCESS_STUDENT_APPROVAL)) {
-      tabs.push({
-        label: 'Approve students',
-        href: `${url}/approve`,
-      });
-    }
+    tabs.push({
+      label: 'Approve students',
+      href: `${url}/approve`,
+      privilege: Privileges.CAN_ACCESS_STUDENT_APPROVAL,
+    });
 
-    if (privileges?.includes(Privileges.CAN_ACCESS_PROGRAM_LEVELS)) {
-      if (getLevels && getLevels?.length > 0) {
-        tabs.push({
-          label: 'Program levels',
-          href: `${url}/levels/${getLevels[0]?.id || ''}`,
-        });
-      }
+    if (getLevels && getLevels?.length > 0) {
+      tabs.push({
+        label: 'Program levels',
+        href: `${url}/levels/${getLevels[0]?.id || ''}`,
+        privilege: Privileges.CAN_ACCESS_PROGRAM_LEVELS,
+      });
     }
   }
 

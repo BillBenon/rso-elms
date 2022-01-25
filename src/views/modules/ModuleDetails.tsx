@@ -43,38 +43,28 @@ export default function ModuleDetails() {
   let moduleData: IProgramData | undefined;
   const module = moduleStore.getModuleById(id).data?.data.data;
   const { user } = useAuthenticator();
-  const [privileges, setPrivileges] = useState<string[]>();
-
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
 
   let tabs: TabType[] = [];
   // {
   //   label: 'Module Info',
   //   href: `${url}`,
   // },
-  // if (privileges?.includes(Privileges.CAN_ACCESS_SUBJECTS)) {
   tabs.push({
     label: 'Subjects',
     href: `${url}/subjects?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+    privilege: Privileges.CAN_ACCESS_SUBJECTS,
   });
-  // }
   tabs.push({
     label: 'Prerequisites',
     href: `${url}/prereqs?showMenus=${showMenu}&intkPrg=${intakeProg}`,
   });
 
   if (!showMenu || showMenu == 'false') {
-    if (privileges?.includes(Privileges.CAN_ACCESS_MODULE_MATERIALS)) {
-      tabs.push({
-        label: 'Materials',
-        href: `${url}/materials?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-      });
-    }
+    tabs.push({
+      label: 'Materials',
+      href: `${url}/materials?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+      privilege: Privileges.CAN_ACCESS_MODULE_MATERIALS,
+    });
   }
 
   if (showMenu && showMenu == 'true') {
@@ -82,12 +72,13 @@ export default function ModuleDetails() {
       label: 'Instructors',
       href: `${url}/instructors?showMenus=${showMenu}&intkPrg=${intakeProg}`,
     });
-    if (privileges?.includes(Privileges.CAN_ACCESS_MODULE_MATERIALS)) {
-      tabs.push({
-        label: 'Materials',
-        href: `${url}/materials?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-      });
-    }
+
+    tabs.push({
+      label: 'Materials',
+      href: `${url}/materials?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+      privilege: Privileges.CAN_ACCESS_MODULE_MATERIALS,
+    });
+
     // {
     //   label: 'Syllabus',
     //   href: `${url}/syllabus?showMenus=${showMenu}&intkPrg=${intakeProg}`,

@@ -2,10 +2,12 @@ import React, { ReactNode } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import { colorStyle, fontSizeStyle, fontWeightStyle } from '../../../global/global-vars';
+import { Privileges } from '../../../types';
 
 export interface TabType {
   label: string;
   href: string;
+  privilege?: Privileges;
 }
 
 type tabEventTypes = {

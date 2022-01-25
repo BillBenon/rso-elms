@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Link,
   Route,
@@ -18,7 +18,6 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
-import useAuthenticator from '../../hooks/useAuthenticator';
 import programStore, {
   getLevelsByAcademicProgram,
 } from '../../store/administration/program.store';
@@ -32,15 +31,6 @@ export default function ProgramDetailsMolecule() {
   const history = useHistory();
   const { path, url } = useRouteMatch();
   const { id } = useParams<ParamType>();
-  const { user } = useAuthenticator();
-  const [privileges, setPrivileges] = useState<string[]>();
-
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
   const program = programStore.getProgramById(id).data?.data.data;
   const programLevels = getLevelsByAcademicProgram(id).data?.data.data;
 
@@ -73,12 +63,11 @@ export default function ProgramDetailsMolecule() {
     },
   ];
 
-  if (privileges?.includes(Privileges.CAN_ACCESS_MODULES)) {
-    tabs.push({
-      label: 'Program modules',
-      href: `${url}/modules`,
-    });
-  }
+  tabs.push({
+    label: 'Program modules',
+    href: `${url}/modules`,
+    privilege: Privileges.CAN_ACCESS_MODULES,
+  });
 
   const handleClose = () => {
     history.goBack();
@@ -171,7 +160,7 @@ export default function ProgramDetailsMolecule() {
                     </div> */}
                     <div className="flex gap-8">
                       {/* levels */}
-                      {privileges?.includes(Privileges.CAN_ACCESS_PROGRAM_LEVELS) && (
+                      <Permission privilege={Privileges.CAN_ACCESS_PROGRAM_LEVELS}>
                         <div className="flex flex-col gap-7 w-60 p-6 bg-main">
                           <Heading color="txt-secondary" fontSize="base">
                             Levels
@@ -196,7 +185,7 @@ export default function ProgramDetailsMolecule() {
                               </Heading>
                             )}
                           </div>
-                          {privileges?.includes(Privileges.CAN_CREATE_PROGRAM_LEVELS) && (
+                          <Permission privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}>
                             <div className="text-primary-500 py-2 text-sm mr-3">
                               <Link
                                 to={`${url}/level/add`}
@@ -205,9 +194,9 @@ export default function ProgramDetailsMolecule() {
                                 Add levels
                               </Link>
                             </div>
-                          )}
+                          </Permission>
                         </div>
-                      )}
+                      </Permission>
 
                       {/* intakes */}
                       <div className="flex flex-col gap-8">
