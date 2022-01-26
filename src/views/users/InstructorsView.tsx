@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
-import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -22,7 +21,6 @@ export default function InstructorsView() {
   const history = useHistory();
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
-  let actions: ActionsType<any>[] | undefined = [];
 
   const { data, isLoading, refetch } =
     user?.user_type === UserType.SUPER_ADMIN
@@ -39,6 +37,8 @@ export default function InstructorsView() {
         );
 
   const users = formatUserTable(data?.data.data.content || []);
+
+  let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
 
   actions?.push({
     name: 'Add Role',
@@ -74,7 +74,8 @@ export default function InstructorsView() {
         title="Instructors"
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
-        <Permission privilege={Privileges.CAN_CREATE_USER}>
+        {(user?.user_type === UserType.SUPER_ADMIN ||
+          user?.user_type === UserType.ADMIN) && (
           <div className="flex gap-3">
             <Link to={`${url}/import`}>
               <Button styleType="outline">Import instructors</Button>
@@ -83,7 +84,7 @@ export default function InstructorsView() {
               <Button>New instructor</Button>
             </Link>
           </div>
-        </Permission>
+        )}
       </TableHeader>
       {isLoading ? (
         <Loader />

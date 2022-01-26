@@ -131,14 +131,12 @@ export default function ProgramDetailsMolecule() {
                             <Heading fontSize="sm">{programData.incharge}</Heading>
                           </div> */}
                         </div>
-                        <Permission privilege={Privileges.CAN_MODIFY_PROGRAM}>
-                          <div className="mt-4 flex space-x-4">
-                            <Button onClick={() => history.push(`${url}/edit`)}>
-                              Edit program
-                            </Button>
-                            <Button styleType="outline">Change Status</Button>
-                          </div>
-                        </Permission>
+                        <div className="mt-4 flex space-x-4">
+                          <Button onClick={() => history.push(`${url}/edit`)}>
+                            Edit program
+                          </Button>
+                          <Button styleType="outline">Change Status</Button>
+                        </div>
                       </CommonCardMolecule>
                     )}
                   </div>
@@ -177,12 +175,7 @@ export default function ProgramDetailsMolecule() {
                                 </Heading>
                               ))
                             ) : (
-                              <Heading
-                                color="primary"
-                                fontSize="base"
-                                fontWeight="semibold">
-                                No levels available
-                              </Heading>
+                              <></>
                             )}
                           </div>
                           <Permission privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}>

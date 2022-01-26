@@ -23,7 +23,6 @@ export default function StudentsView() {
 
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
-  let actions: ActionsType<any>[] | undefined = [];
 
   const { data, isLoading, refetch } =
     user?.user_type === UserType.SUPER_ADMIN
@@ -40,6 +39,8 @@ export default function StudentsView() {
         );
 
   const users = formatUserTable(data?.data.data.content || []);
+
+  let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
 
   actions?.push({
     name: 'Add Role',
@@ -75,16 +76,19 @@ export default function StudentsView() {
         title="Students"
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
-        <Permission privilege={Privileges.CAN_CREATE_USER}>
+        {(user?.user_type === UserType.SUPER_ADMIN ||
+          user?.user_type === UserType.ADMIN) && (
           <div className="flex gap-3">
             <Link to={`${url}/import`}>
               <Button styleType="outline">Import students</Button>
             </Link>
             <Link to={`${url}/add/${UserType.STUDENT}`}>
-              <Button>New student</Button>
+              <Permission privilege={Privileges.CAN_ACCESS_EVALUATIONS}>
+                <Button>New student</Button>
+              </Permission>
             </Link>
           </div>
-        </Permission>
+        )}
       </TableHeader>
 
       {isLoading ? (

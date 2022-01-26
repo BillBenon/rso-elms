@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -17,7 +16,6 @@ import { formatUserTable } from '../../utils/array';
 export default function AdminsView() {
   const { user } = useAuthenticator();
   const history = useHistory();
-  let actions: ActionsType<any>[] | undefined = [];
 
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
@@ -37,6 +35,8 @@ export default function AdminsView() {
         );
 
   const users = formatUserTable(data?.data.data.content || []);
+
+  let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
 
   actions?.push({
     name: 'Add Role',
@@ -72,11 +72,11 @@ export default function AdminsView() {
         title="Admins"
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
-        <Permission privilege={Privileges.CAN_CREATE_USER}>
+        {user?.user_type === UserType.SUPER_ADMIN && (
           <Link to={`/dashboard/users/add/${UserType.ADMIN}`}>
             <Button>New admin</Button>
           </Link>
-        </Permission>
+        )}
       </TableHeader>
       {isLoading ? (
         <Loader />

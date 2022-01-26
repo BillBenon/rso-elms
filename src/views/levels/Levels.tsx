@@ -2,7 +2,6 @@ import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
-import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -14,8 +13,8 @@ import NewLevel from '../../components/Organisms/forms/level/NewLevel';
 import UpdateLevel from '../../components/Organisms/forms/level/UpdateLevel';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { levelStore } from '../../store/administration/level.store';
+import { Privileges } from '../../types';
 import { ILevel } from '../../types/services/levels.types';
-import { Privileges } from '../../types/services/privilege.types';
 import { ActionsType } from '../../types/services/table.types';
 
 interface FilteredLevels
@@ -62,11 +61,9 @@ function Levels() {
       </section>
       <section className="">
         <TableHeader title="Levels" totalItems={levels?.length || 0}>
-          <Permission privilege={Privileges.CAN_CREATE_LEVEL}>
-            <Link to={`${url}/add`}>
-              <Button>Add Level</Button>
-            </Link>
-          </Permission>
+          <Link to={`${url}/add`}>
+            <Button>Add Level</Button>
+          </Link>
         </TableHeader>
       </section>
 

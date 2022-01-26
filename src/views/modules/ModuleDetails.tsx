@@ -8,7 +8,6 @@ import {
   useRouteMatch,
 } from 'react-router';
 
-import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -177,16 +176,14 @@ export default function ModuleDetails() {
             {user?.user_type === UserType.ADMIN && (
               <>
                 {route == 'SUBJECTS' ? (
-                  <Permission privilege={Privileges.CAN_CREATE_SUBJECTS}>
-                    <div className="flex gap-3">
-                      <Button
-                        onClick={() => {
-                          history.push(`/dashboard/modules/${id}/add-subject`);
-                        }}>
-                        Add new subject
-                      </Button>
-                    </div>
-                  </Permission>
+                  <div className="flex gap-3">
+                    <Button
+                      onClick={() => {
+                        history.push(`/dashboard/modules/${id}/add-subject`);
+                      }}>
+                      Add new subject
+                    </Button>
+                  </div>
                 ) : (
                   //  : route == 'SYLLABUS' ? (
                   //   <div className="flex gap-3">
@@ -212,13 +209,11 @@ export default function ModuleDetails() {
               </div>
             )}
             {user?.user_type === UserType.INSTRUCTOR && route == 'MATERIALS' && (
-              <Permission privilege={Privileges.CAN_CREATE_MODULE_MATERIALS}>
-                <div className="flex gap-3">
-                  <Button onClick={() => history.push(`${url}/materials/add-material`)}>
-                    Add new Material
-                  </Button>
-                </div>
-              </Permission>
+              <div className="flex gap-3">
+                <Button onClick={() => history.push(`${url}/materials/add-material`)}>
+                  Add new Material
+                </Button>
+              </div>
             )}
           </div>
         </div>

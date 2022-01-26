@@ -9,6 +9,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 // import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -50,7 +51,7 @@ export default function Roles() {
   }, [location, path, refetch]);
 
   //actions to be displayed in table
-  let actions: ActionsType<any>[] | undefined = [];
+  let actions: ActionsType<FilteredRoles>[] | undefined = [];
 
   actions?.push({
     name: 'Edit role',
@@ -94,11 +95,11 @@ export default function Roles() {
           title="Roles"
           totalItems={roles && roles.length > 0 ? roles.length : 0}
           handleSearch={handleSearch}>
-          {/* <Permission privilege={Privileges.CAN_CREATE_RANK}> */}
-          <Link to={`${url}/add`}>
-            <Button>Add Role</Button>
-          </Link>
-          {/* </Permission> */}
+          <Permission privilege={Privileges.CAN_CREATE_RANK}>
+            <Link to={`${url}/add`}>
+              <Button>Add Role</Button>
+            </Link>
+          </Permission>
         </TableHeader>
       </section>
       <section>

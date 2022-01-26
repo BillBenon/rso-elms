@@ -2,7 +2,6 @@ import React from 'react';
 import { Route, useHistory, useRouteMatch } from 'react-router';
 import { Link, Switch } from 'react-router-dom';
 
-import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -36,7 +35,6 @@ export default function Academy() {
   const { data, isLoading } = academyStore.getAcademiesByInstitution(
     user?.institution_id || '',
   );
-
   const list: LinkList[] = [
     { to: '/', title: 'Institution Admin' },
     { to: 'academies', title: 'Academies' },
@@ -64,7 +62,8 @@ export default function Academy() {
   });
 
   function handleSearch(_e: ValueType) {}
-  let academyActions: ActionsType<any>[] | undefined = [];
+
+  let academyActions: ActionsType<AcademyTypes>[] = [];
 
   academyActions?.push({
     name: 'Edit academy',
@@ -98,11 +97,9 @@ export default function Academy() {
                   title="Academy"
                   totalItems={academies.length}
                   handleSearch={handleSearch}>
-                  <Permission privilege={Privileges.CAN_CREATE_ACADEMY}>
-                    <Link to={`${url}/add`}>
-                      <Button>New academy</Button>
-                    </Link>
-                  </Permission>
+                  <Link to={`${url}/add`}>
+                    <Button>New academy</Button>
+                  </Link>
                 </TableHeader>
               </div>
 

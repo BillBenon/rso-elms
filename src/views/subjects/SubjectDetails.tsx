@@ -9,6 +9,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -210,9 +211,11 @@ export default function SubjectDetails() {
                         <SubjectInstructorView subjectId={subjectId} />
                       </div>
                       {intakeProg && progId && level && period ? (
-                        <div className="w-3/12">
-                          <Button onClick={goToNewEvaluation}>New Evaluation</Button>
-                        </div>
+                        <Permission privilege={Privileges.CAN_CREATE_EVALUATION}>
+                          <div className="w-3/12">
+                            <Button onClick={goToNewEvaluation}>New Evaluation</Button>
+                          </div>
+                        </Permission>
                       ) : null}
                     </div>
                   )}

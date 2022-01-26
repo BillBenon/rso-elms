@@ -3,7 +3,6 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
-import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -37,7 +36,7 @@ export default function AcademicYears() {
   const history = useHistory();
   const { user } = useAuthenticator();
   const [years, setYears] = useState<FilteredData[]>([]);
-  let actions: ActionsType<any>[] | undefined = [];
+  let actions: ActionsType<FilteredData>[] | undefined = [];
 
   const {
     data: academicYears,
@@ -110,11 +109,9 @@ export default function AcademicYears() {
                 totalItems={years?.length || 0}
                 showSearch={false}>
                 {years.length > 0 && (
-                  <Permission privilege={Privileges.CAN_CREATE_ACADEMIC_YEAR}>
-                    <Link to={`${url}/new`}>
-                      <Button>Add year</Button>
-                    </Link>
-                  </Permission>
+                  <Link to={`${url}/new`}>
+                    <Button>Add year</Button>
+                  </Link>
                 )}
               </TableHeader>
             </section>
