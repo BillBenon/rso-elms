@@ -6,7 +6,6 @@ import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
 import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
-import useAuthenticator from '../../hooks/useAuthenticator';
 import { queryClient } from '../../plugins/react-query';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
@@ -27,14 +26,7 @@ function ApproveStudent() {
   const { data: studentProg, isLoading } =
     intakeProgramStore.getStudentsByIntakeProgram(intakeProg);
   const [students, setStudents] = useState<AcademyUser[]>([]);
-  const { user } = useAuthenticator();
-  const [privileges, setPrivileges] = useState<string[]>();
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
+
   useEffect(() => {
     let pushedStud: AcademyUser[] = [];
     studentProg?.data.data?.map((stud) => {
@@ -141,48 +133,63 @@ function ApproveStudent() {
                         ? approvedStud
                         : rejectedStud
                     }
-                    actions={
-                      privileges?.includes(Privileges.CAN_ACCESS_PROFILE)
+                    actions={[
+                      {
+                        name: 'View Profile',
+                        handleAction: (id: string | number | undefined) => {
+                          stud === StudentApproval.PENDING
+                            ? history.push({
+                                pathname: `/dashboard/users/${
+                                  pendingStud.find((st) => st.id === id)?.user_id
+                                }/profile`,
+                                search: `?intkStud=${id}&stat=${StudentApproval.PENDING}`,
+                              })
+                            : stud === StudentApproval.APPROVED
+                            ? history.push({
+                                pathname: `/dashboard/users/${
+                                  approvedStud.find((st) => st.id === id)?.user_id
+                                }/profile`,
+                                search: `?intkStud=${id}&stat=${StudentApproval.APPROVED}`,
+                              })
+                            : history.push({
+                                pathname: `/dashboard/users/${
+                                  rejectedStud.find((st) => st.id === id)?.user_id
+                                }/profile`,
+                                search: `?intkStud=${id}&stat=${StudentApproval.REJECTED}`,
+                              });
+                        },
+                        privilege: Privileges.CAN_ACCESS_PROFILE,
+                      },
+                    ]}
+                    selectorActions={
+                      stud === StudentApproval.PENDING
                         ? [
                             {
-                              name: 'View Profile',
-                              handleAction: (id: string | number | undefined) => {
-                                stud === StudentApproval.PENDING
-                                  ? history.push({
-                                      pathname: `/dashboard/users/${
-                                        pendingStud.find((st) => st.id === id)?.user_id
-                                      }/profile`,
-                                      search: `?intkStud=${id}&stat=${StudentApproval.PENDING}`,
-                                    })
-                                  : stud === StudentApproval.APPROVED
-                                  ? history.push({
-                                      pathname: `/dashboard/users/${
-                                        approvedStud.find((st) => st.id === id)?.user_id
-                                      }/profile`,
-                                      search: `?intkStud=${id}&stat=${StudentApproval.APPROVED}`,
-                                    })
-                                  : history.push({
-                                      pathname: `/dashboard/users/${
-                                        rejectedStud.find((st) => st.id === id)?.user_id
-                                      }/profile`,
-                                      search: `?intkStud=${id}&stat=${StudentApproval.REJECTED}`,
-                                    });
-                              },
+                              name: 'Approve Students',
+                              handleAction: approveStud,
+                              privilege: Privileges.CAN_MODIFY_STUDENT_APPROVAL,
+                            },
+                            {
+                              name: 'Reject',
+                              handleAction: rejectStud,
+                              privilege: Privileges.CAN_MODIFY_STUDENT_APPROVAL,
                             },
                           ]
-                        : undefined
-                    }
-                    selectorActions={
-                      privileges?.includes(Privileges.CAN_MODIFY_STUDENT_APPROVAL)
-                        ? stud === StudentApproval.PENDING
-                          ? [
-                              { name: 'Approve Students', handleAction: approveStud },
-                              { name: 'Reject', handleAction: rejectStud },
-                            ]
-                          : stud === StudentApproval.APPROVED
-                          ? [{ name: 'Reject', handleAction: rejectStud }]
-                          : [{ name: 'Approve Students', handleAction: approveStud }]
-                        : undefined
+                        : stud === StudentApproval.APPROVED
+                        ? [
+                            {
+                              name: 'Reject',
+                              handleAction: rejectStud,
+                              privilege: Privileges.CAN_MODIFY_STUDENT_APPROVAL,
+                            },
+                          ]
+                        : [
+                            {
+                              name: 'Approve Students',
+                              handleAction: approveStud,
+                              privilege: Privileges.CAN_MODIFY_STUDENT_APPROVAL,
+                            },
+                          ]
                     }
                     // actions={studentActions}
                     hide={['id', 'user_type', 'user_id']}

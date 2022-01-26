@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
   Link as BrowserLink,
   Route,
@@ -9,6 +9,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -17,7 +18,7 @@ import Heading from '../../components/Atoms/Text/Heading';
 import Accordion from '../../components/Molecules/Accordion';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
-import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { lessonStore } from '../../store/administration/lesson.store';
@@ -43,14 +44,7 @@ export default function SubjectDetails() {
   const period = new URLSearchParams(search).get('prd') || '';
 
   const { user } = useAuthenticator();
-  const [privileges, setPrivileges] = useState<string[]>();
 
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
   const { subjectId } = useParams<ParamType>();
   const { url } = useRouteMatch();
   const history = useHistory();
@@ -90,21 +84,19 @@ export default function SubjectDetails() {
     );
   }
 
-  let tabs = [];
+  let tabs: TabType[] = [];
 
-  if (privileges?.includes(Privileges.CAN_ACCESS_LESSON)) {
-    tabs.push({
-      label: `Lessons(${lessons.length})`,
-      href: `${url}?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
-    });
-  }
+  tabs.push({
+    label: `Lessons(${lessons.length})`,
+    href: `${url}?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+    privilege: Privileges.CAN_ACCESS_LESSON,
+  });
 
-  if (privileges?.includes(Privileges.CAN_ACCESS_EVALUATIONS)) {
-    tabs.push({
-      label: 'Evaluations',
-      href: `${url}/evaluations?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
-    });
-  }
+  tabs.push({
+    label: 'Evaluations',
+    href: `${url}/evaluations?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+    privilege: Privileges.CAN_ACCESS_EVALUATIONS,
+  });
   tabs.push({
     label: 'Instructors',
     href: `${url}/instructors?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
@@ -219,9 +211,11 @@ export default function SubjectDetails() {
                         <SubjectInstructorView subjectId={subjectId} />
                       </div>
                       {intakeProg && progId && level && period ? (
-                        <div className="w-3/12">
-                          <Button onClick={goToNewEvaluation}>New Evaluation</Button>
-                        </div>
+                        <Permission privilege={Privileges.CAN_CREATE_EVALUATION}>
+                          <div className="w-3/12">
+                            <Button onClick={goToNewEvaluation}>New Evaluation</Button>
+                          </div>
+                        </Permission>
                       ) : null}
                     </div>
                   )}

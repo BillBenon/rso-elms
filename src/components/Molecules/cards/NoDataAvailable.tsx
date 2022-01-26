@@ -1,6 +1,7 @@
 import React from 'react';
 
-import { IconType } from '../../../types';
+import { IconType, Privileges } from '../../../types';
+import Permission from '../../Atoms/auth/Permission';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 
@@ -12,6 +13,7 @@ interface IProps {
   buttonLabel?: string;
   handleClick?: () => any;
   showButton?: boolean;
+  privilege?: Privileges;
 }
 
 export default function NoDataAvailable({
@@ -22,6 +24,7 @@ export default function NoDataAvailable({
   handleClick,
   fill = true,
   showButton = true,
+  privilege,
 }: IProps) {
   return (
     <div className="w-full py-12 bg-transparent">
@@ -41,11 +44,17 @@ export default function NoDataAvailable({
           {description}
         </p>
       </div>
-      {showButton && (
-        <div className="pt-4 text-center">
-          <Button onClick={handleClick}>{buttonLabel}</Button>
-        </div>
-      )}
+      {showButton &&
+        (privilege ? (
+          <Permission privilege={privilege}>
+            <div className="pt-4 text-center">
+              <Button onClick={handleClick}>{buttonLabel}</Button>
+            </div>
+          </Permission>
+        ) : // <div className="pt-4 text-center">
+        //   <Button onClick={handleClick}>{buttonLabel}</Button>
+        // </div>
+        null)}
     </div>
   );
 }

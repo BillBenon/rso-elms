@@ -22,6 +22,8 @@ export default function ModuleCard({
   intakeProg = '',
 }: IProps) {
   const { user } = useAuthenticator();
+
+  const history = useHistory();
   const [privileges, setPrivileges] = useState<string[]>();
 
   useEffect(() => {
@@ -30,8 +32,6 @@ export default function ModuleCard({
       .role_privileges?.map((privilege) => privilege.name);
     if (_privileges) setPrivileges(_privileges);
   }, [user]);
-
-  const history = useHistory();
   return (
     <div className="p-2 mt-3">
       <Tooltip

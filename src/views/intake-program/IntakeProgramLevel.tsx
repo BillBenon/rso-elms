@@ -35,13 +35,6 @@ function IntakeProgramLevel() {
   const [instLevels, setInstLevels] = useState<LevelIntakeProgram[]>([]);
 
   const { user } = useAuthenticator();
-  const [privileges, setPrivileges] = useState<string[]>();
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
 
   const userId = user?.id;
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(userId + '').data
@@ -100,7 +93,7 @@ function IntakeProgramLevel() {
         <Loader />
       ) : getLevels?.data.data.length === 0 ? (
         <NoDataAvailable
-          showButton={privileges?.includes(Privileges.CAN_CREATE_PROGRAM_LEVELS)}
+          privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}
           buttonLabel="Add new level"
           icon="level"
           title={'No levels available in this program'}

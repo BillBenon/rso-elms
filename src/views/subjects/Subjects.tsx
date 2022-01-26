@@ -31,14 +31,6 @@ function Subjects() {
   const instructorSubjects = instSubjects.data?.data.data.filter((inst) =>
     subjectData.data?.data.data.map((sub) => sub.id).includes(inst.subject_id),
   );
-  const [privileges, setPrivileges] = useState<string[]>();
-
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
 
   useEffect(() => {
     if (subjectData.data?.data) {
@@ -89,10 +81,8 @@ function Subjects() {
         <Loader />
       ) : subjects.length === 0 && subjectData.isSuccess ? (
         <NoDataAvailable
-          showButton={
-            user?.user_type === UserType.ADMIN &&
-            (privileges?.includes(Privileges.CAN_CREATE_SUBJECTS) ? true : false)
-          }
+          showButton={user?.user_type === UserType.ADMIN}
+          privilege={Privileges.CAN_CREATE_SUBJECTS}
           icon="subject"
           title={'No subjects registered'}
           description={'There are no subjects available yet'}

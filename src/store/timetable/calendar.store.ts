@@ -5,7 +5,6 @@ import {
   CreateEventSchedule,
   DateRange,
   frequencyType,
-  ScheduleStatus,
 } from '../../types/services/schedule.types';
 
 class ScheduleStore {
@@ -55,7 +54,7 @@ class ScheduleStore {
   getAllByStudent(id: string | undefined, range: DateRange) {
     return useQuery(
       ['schedules/student/:id', id],
-      () => calendarService.getAllByIntakeLevelClass(id || '', range),
+      () => calendarService.getAllByStudent(id || '', range),
       { enabled: !!id },
     );
   }

@@ -22,13 +22,7 @@ function IntakeProgramModules() {
   const [instModules, setInstModules] = useState<CommonCardDataType[]>([]);
   const { id, intakeProg } = useParams<IntakeProgParam>();
   const { user } = useAuthenticator();
-  const [privileges, setPrivileges] = useState<string[]>();
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
+
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
     .data?.data.data[0];
 
@@ -72,12 +66,8 @@ function IntakeProgramModules() {
         <section className="mt-4 flex flex-wrap justify-start gap-4">
           {programModules.length <= 0 ? (
             <NoDataAvailable
-              showButton={
-                user?.user_type === UserType.ADMIN &&
-                (privileges?.includes(Privileges.CAN_CREATE_INTAKE_PROGRAM_MODULES)
-                  ? true
-                  : false)
-              }
+              showButton={user?.user_type === UserType.ADMIN}
+              privilege={Privileges.CAN_CREATE_INTAKE_PROGRAM_MODULES}
               buttonLabel="Add new modules"
               title={'No modules available in this program'}
               handleClick={() => history.push(`${url}/add`)}

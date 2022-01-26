@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -17,11 +16,9 @@ import { formatUserTable } from '../../utils/array';
 export default function AdminsView() {
   const { user } = useAuthenticator();
   const history = useHistory();
-  let actions: ActionsType<any>[] | undefined = [];
 
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
-  const [privileges, setPrivileges] = useState<string[]>();
 
   const { data, isLoading, refetch } =
     user?.user_type === UserType.SUPER_ADMIN
@@ -37,38 +34,31 @@ export default function AdminsView() {
           { page: currentPage, pageSize, sortyBy: 'username' },
         );
 
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
   const users = formatUserTable(data?.data.data.content || []);
 
-  if (privileges?.includes(Privileges.CAN_ASSIGN_ROLE)) {
-    actions?.push({
-      name: 'Add Role',
-      handleAction: () => {},
-    });
-  }
+  let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
 
-  if (privileges?.includes(Privileges.CAN_MODIFY_USER)) {
-    actions?.push({
-      name: 'Edit admin',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/users/${id}/edit`); // go to edit user
-      },
-    });
-  }
+  actions?.push({
+    name: 'Add Role',
+    handleAction: () => {},
+    privilege: Privileges.CAN_ASSIGN_ROLE,
+  });
 
-  if (privileges?.includes(Privileges.CAN_ACCESS_PROFILE)) {
-    actions?.push({
-      name: 'View admin',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/users/${id}/profile`); // go to view user profile
-      },
-    });
-  }
+  actions?.push({
+    name: 'Edit admin',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`/dashboard/users/${id}/edit`); // go to edit user
+    },
+    privilege: Privileges.CAN_MODIFY_USER,
+  });
+
+  actions?.push({
+    name: 'View admin',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`/dashboard/users/${id}/profile`); // go to view user profile
+    },
+    privilege: Privileges.CAN_ACCESS_PROFILE,
+  });
 
   function handleSearch(_e: ValueType) {}
 
@@ -82,11 +72,11 @@ export default function AdminsView() {
         title="Admins"
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
-        <Permission privilege={Privileges.CAN_CREATE_USER}>
+        {user?.user_type === UserType.SUPER_ADMIN && (
           <Link to={`/dashboard/users/add/${UserType.ADMIN}`}>
             <Button>New admin</Button>
           </Link>
-        </Permission>
+        )}
       </TableHeader>
       {isLoading ? (
         <Loader />

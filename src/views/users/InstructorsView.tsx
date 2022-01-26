@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
-import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -20,11 +19,8 @@ export default function InstructorsView() {
   const { url } = useRouteMatch();
   const { user } = useAuthenticator();
   const history = useHistory();
-  const [privileges, setPrivileges] = useState<string[]>();
-
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
-  let actions: ActionsType<any>[] | undefined = [];
 
   const { data, isLoading, refetch } =
     user?.user_type === UserType.SUPER_ADMIN
@@ -40,39 +36,31 @@ export default function InstructorsView() {
           { page: currentPage, pageSize, sortyBy: 'username' },
         );
 
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
-
   const users = formatUserTable(data?.data.data.content || []);
 
-  if (privileges?.includes(Privileges.CAN_ASSIGN_ROLE)) {
-    actions?.push({
-      name: 'Add Role',
-      handleAction: () => {},
-    });
-  }
+  let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
 
-  if (privileges?.includes(Privileges.CAN_MODIFY_USER)) {
-    actions?.push({
-      name: 'Edit instructor',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/users/${id}/edit`); // go to edit user
-      },
-    });
-  }
+  actions?.push({
+    name: 'Add Role',
+    handleAction: () => {},
+    privilege: Privileges.CAN_ASSIGN_ROLE,
+  });
 
-  if (privileges?.includes(Privileges.CAN_ACCESS_PROFILE)) {
-    actions?.push({
-      name: 'View instructor',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/users/${id}/profile`); // go to view user profile
-      },
-    });
-  }
+  actions?.push({
+    name: 'Edit instructor',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`/dashboard/users/${id}/edit`); // go to edit user
+    },
+    privilege: Privileges.CAN_MODIFY_USER,
+  });
+
+  actions?.push({
+    name: 'View instructor',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`/dashboard/users/${id}/profile`); // go to view user profile
+    },
+    privilege: Privileges.CAN_ACCESS_PROFILE,
+  });
 
   function handleSearch(_e: ValueType) {}
 
@@ -86,7 +74,8 @@ export default function InstructorsView() {
         title="Instructors"
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
-        <Permission privilege={Privileges.CAN_CREATE_USER}>
+        {(user?.user_type === UserType.SUPER_ADMIN ||
+          user?.user_type === UserType.ADMIN) && (
           <div className="flex gap-3">
             <Link to={`${url}/import`}>
               <Button styleType="outline">Import instructors</Button>
@@ -95,7 +84,7 @@ export default function InstructorsView() {
               <Button>New instructor</Button>
             </Link>
           </div>
-        </Permission>
+        )}
       </TableHeader>
       {isLoading ? (
         <Loader />

@@ -28,25 +28,26 @@ const Stepper = ({
   const StepHeader = () => {
     return (
       <div className={`hidden w-max ${isVertical ? 'md:block' : 'md:flex'}`}>
-        {children.map((sp, i) => {
-          const stepProp: any = sp.props;
-          return (
-            <Step
-              key={i}
-              isFirstStep={i == 0}
-              isVertical={isVertical}
-              indicator={i + 1}
-              index={i}
-              display_label={stepProp.display_label}
-              isInline={isInline}
-              isActive={i === currentStep}
-              isComplete={completeStep >= i}
-              width={width}
-              navigateToStepHandler={navigateToStepHandler}
-              isDisabled={isDisabled}
-            />
-          );
-        })}
+        {React.Children.count(children) > 0 &&
+          children.map((sp, i) => {
+            const stepProp: any = sp.props;
+            return (
+              <Step
+                key={i}
+                isFirstStep={i == 0}
+                isVertical={isVertical}
+                indicator={i + 1}
+                index={i}
+                display_label={stepProp.display_label}
+                isInline={isInline}
+                isActive={i === currentStep}
+                isComplete={completeStep >= i}
+                width={width}
+                navigateToStepHandler={navigateToStepHandler}
+                isDisabled={isDisabled}
+              />
+            );
+          })}
       </div>
     );
   };
