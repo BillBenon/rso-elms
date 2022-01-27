@@ -9,6 +9,7 @@ import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
 import { queryClient } from '../../plugins/react-query';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
+import { Privileges } from '../../types';
 import { ApproveStudents, StudentApproval } from '../../types/services/enrollment.types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
 import { AcademyUserType } from '../../types/services/user.types';
@@ -157,17 +158,38 @@ function ApproveStudent() {
                                 search: `?intkStud=${id}&stat=${StudentApproval.REJECTED}`,
                               });
                         },
+                        privilege: Privileges.CAN_ACCESS_PROFILE,
                       },
                     ]}
                     selectorActions={
                       stud === StudentApproval.PENDING
                         ? [
-                            { name: 'Approve Students', handleAction: approveStud },
-                            { name: 'Reject', handleAction: rejectStud },
+                            {
+                              name: 'Approve Students',
+                              handleAction: approveStud,
+                              privilege: Privileges.CAN_MODIFY_STUDENT_APPROVAL,
+                            },
+                            {
+                              name: 'Reject',
+                              handleAction: rejectStud,
+                              privilege: Privileges.CAN_MODIFY_STUDENT_APPROVAL,
+                            },
                           ]
                         : stud === StudentApproval.APPROVED
-                        ? [{ name: 'Reject', handleAction: rejectStud }]
-                        : [{ name: 'Approve Students', handleAction: approveStud }]
+                        ? [
+                            {
+                              name: 'Reject',
+                              handleAction: rejectStud,
+                              privilege: Privileges.CAN_MODIFY_STUDENT_APPROVAL,
+                            },
+                          ]
+                        : [
+                            {
+                              name: 'Approve Students',
+                              handleAction: approveStud,
+                              privilege: Privileges.CAN_MODIFY_STUDENT_APPROVAL,
+                            },
+                          ]
                     }
                     // actions={studentActions}
                     hide={['id', 'user_type', 'user_id']}

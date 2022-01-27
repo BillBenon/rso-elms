@@ -124,8 +124,6 @@ export function RoundedTabs({
     );
   };
 
-  console.log(children);
-
   return (
     <div className={`tabs ${className}`}>
       <div className="pb-3">

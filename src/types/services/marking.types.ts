@@ -45,6 +45,17 @@ export interface FieldQuestionMarks {
   obtained_marks: number;
 }
 
+export interface PointsUpdateInfo {
+  answer_id: string;
+  is_updating: boolean;
+  obtained: number | undefined;
+}
+
+export interface StudentAnswerMarkInfo {
+  answer_id: string;
+  marks: number;
+}
+
 export interface SingleFieldStudentMarker {
   evaluation_id: string;
   student_id: string;

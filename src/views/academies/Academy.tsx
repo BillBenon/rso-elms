@@ -1,10 +1,7 @@
-// import { Label } from "@headlessui/react/dist/components/label/label";
-
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Route, useHistory, useRouteMatch } from 'react-router';
 import { Link, Switch } from 'react-router-dom';
 
-import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -33,20 +30,11 @@ type AcademyTypes = {
 export default function Academy() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
-  const [privileges, setPrivileges] = useState<string[]>();
 
   const { user } = useAuthenticator();
   const { data, isLoading } = academyStore.getAcademiesByInstitution(
     user?.institution_id || '',
   );
-
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
-
   const list: LinkList[] = [
     { to: '/', title: 'Institution Admin' },
     { to: 'academies', title: 'Academies' },
@@ -74,25 +62,24 @@ export default function Academy() {
   });
 
   function handleSearch(_e: ValueType) {}
-  let academyActions: ActionsType<any>[] | undefined = [];
 
-  if (privileges?.includes(Privileges.CAN_MODIFY_ACADEMY)) {
-    academyActions?.push({
-      name: 'Edit academy',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit academy
-      },
-    });
-  }
+  let academyActions: ActionsType<AcademyTypes>[] = [];
 
-  if (privileges?.includes(Privileges.CAN_ASSIGN_ACADEMY_INCHARGE)) {
-    academyActions?.push({
-      name: 'Assign incharge',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/assign`); // go to assign admin
-      },
-    });
-  }
+  academyActions?.push({
+    name: 'Edit academy',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/edit`); // go to edit academy
+    },
+    privilege: Privileges.CAN_MODIFY_ACADEMY,
+  });
+
+  academyActions?.push({
+    name: 'Assign incharge',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/assign`); // go to assign admin
+    },
+    privilege: Privileges.CAN_ASSIGN_ACADEMY_INCHARGE,
+  });
 
   return (
     <>
@@ -110,11 +97,9 @@ export default function Academy() {
                   title="Academy"
                   totalItems={academies.length}
                   handleSearch={handleSearch}>
-                  <Permission privilege={Privileges.CAN_CREATE_ACADEMY}>
-                    <Link to={`${url}/add`}>
-                      <Button>New academy</Button>
-                    </Link>
-                  </Permission>
+                  <Link to={`${url}/add`}>
+                    <Button>New academy</Button>
+                  </Link>
                 </TableHeader>
               </div>
 

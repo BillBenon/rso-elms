@@ -78,7 +78,7 @@ export default function UpdateIntake(props: CProps) {
         total_num_students: _intake.total_num_students,
       });
     }
-  }, [intake.isLoading]);
+  }, [intake.data]);
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
@@ -97,8 +97,11 @@ export default function UpdateIntake(props: CProps) {
             setFormLoading(false);
             props.handleSuccess();
           },
-          onError() {
-            toast.error('error occurred please try again', { id: toastId });
+          onError(error: any) {
+            toast.error(
+              error.response.data.message || 'error occurred please try again',
+              { id: toastId },
+            );
             setFormLoading(false);
           },
         },

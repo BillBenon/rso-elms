@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Loader from '../../components/Atoms/custom/Loader';
 import AddCard from '../../components/Molecules/cards/AddCard';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
@@ -9,7 +10,7 @@ import useInstructorModules from '../../hooks/getInstructorModules';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { moduleStore } from '../../store/administration/modules.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
-import { CommonCardDataType } from '../../types';
+import { CommonCardDataType, Privileges } from '../../types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
@@ -21,6 +22,7 @@ function IntakeProgramModules() {
   const [instModules, setInstModules] = useState<CommonCardDataType[]>([]);
   const { id, intakeProg } = useParams<IntakeProgParam>();
   const { user } = useAuthenticator();
+
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
     .data?.data.data[0];
 
@@ -65,6 +67,7 @@ function IntakeProgramModules() {
           {programModules.length <= 0 ? (
             <NoDataAvailable
               showButton={user?.user_type === UserType.ADMIN}
+              privilege={Privileges.CAN_CREATE_INTAKE_PROGRAM_MODULES}
               buttonLabel="Add new modules"
               title={'No modules available in this program'}
               handleClick={() => history.push(`${url}/add`)}
@@ -73,10 +76,12 @@ function IntakeProgramModules() {
           ) : (
             <>
               {user?.user_type === UserType.ADMIN ? (
-                <AddCard
-                  title={'Add new module'}
-                  onClick={() => history.push(`${url}/add`)}
-                />
+                <Permission privilege={Privileges.CAN_CREATE_INTAKE_PROGRAM_MODULES}>
+                  <AddCard
+                    title={'Add new module'}
+                    onClick={() => history.push(`${url}/add`)}
+                  />
+                </Permission>
               ) : null}
               {programModules.map((module, index) => (
                 <ModuleCard

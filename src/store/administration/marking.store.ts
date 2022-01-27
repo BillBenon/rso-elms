@@ -6,6 +6,9 @@ class MarkingStore {
   finishMarking() {
     return useMutation(markingService.finishMarking);
   }
+  updateStudentAnswer() {
+    return useMutation(markingService.updateStudentAnswer);
+  }
 
   fieldMarkingFinish() {
     return useMutation(markingService.fieldMarkingFinish);

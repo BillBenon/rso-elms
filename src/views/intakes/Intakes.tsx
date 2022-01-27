@@ -15,6 +15,7 @@ import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
+import CardHeadMolecule from '../../components/Molecules/CardHeadMolecule';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
@@ -115,6 +116,7 @@ export default function Intakes() {
               code: intake.intake_program.intake.code,
               title: intake.intake_program.intake.title,
               description: intake.intake_program.intake.description,
+              footerTitle: intake.intake_program.intake.total_num_students,
               registrationControlId:
                 intake.intake_program.intake.registration_control?.id + '',
             };
@@ -133,6 +135,7 @@ export default function Intakes() {
             code: intake.intake_program.intake.code,
             title: intake.intake_program.intake.title,
             description: intake.intake_program.intake.description,
+            footerTitle: intake.intake_program.intake.total_num_students,
             registrationControlId:
               intake.intake_program.intake.registration_control?.id + '',
           };
@@ -150,6 +153,7 @@ export default function Intakes() {
               type: advancedTypeChecker(intake.intake_status),
               text: intake.intake_status.toString(),
             },
+            footerTitle: intake.total_num_students,
             registrationControlId: intake.registration_control.id + '',
           };
           loadedIntakes.push(cardData);
@@ -205,14 +209,16 @@ export default function Intakes() {
                 }
                 handleSearch={handleSearch}>
                 {registrationControlId && (
-                  <Link to={`${url}/${registrationControlId}/add-intake`}>
-                    <Button>Add Intake</Button>
-                  </Link>
+                  <Permission privilege={Privileges.CAN_CREATE_INTAKE}>
+                    <Link to={`${url}/${registrationControlId}/add-intake`}>
+                      <Button>Add Intake</Button>
+                    </Link>
+                  </Permission>
                 )}
               </TableHeader>
 
               <section className="flex flex-wrap justify-start gap-4 mt-2">
-                {intakes.map((intake, index) => (
+                {intakes.map((intake) => (
                   <div key={intake.code + Math.random() * 10} className="p-1 mt-3">
                     <Tooltip
                       key={intake.code + Math.random() * 10}
@@ -220,35 +226,44 @@ export default function Intakes() {
                         <div className="p-1 mt-3">
                           <CommonCardMolecule
                             data={intake}
-                            handleClick={() =>
-                              history.push(`${url}/programs/${intake.id}`)
-                            }
-                          />
+                            handleClick={
+                              () =>
+                                // privileges?.includes(
+                                //   Privileges.CAN_ACCESS_PROGRAMS_IN_INTAKE,
+                                // )
+                                // ?
+                                history.push(`${url}/programs/${intake.id}`)
+                              // : {}
+                            }>
+                            <div className="flex flex-col gap-6">
+                              <div className="flex gap-2">
+                                <Heading color="txt-secondary" fontSize="sm">
+                                  Total Students Enrolled:
+                                </Heading>
+                                <Heading fontSize="sm" fontWeight="semibold">
+                                  {intake.footerTitle}
+                                </Heading>
+                              </div>
+                            </div>
+                          </CommonCardMolecule>
                         </div>
                       }
                       open>
                       <div className="w-96">
-                        <div className="flex flex-col gap-6">
-                          <div className="flex gap-2">
-                            <Heading color="txt-secondary" fontSize="sm">
-                              Total Students Enrolled:
-                            </Heading>
-                            <Heading fontSize="sm" fontWeight="semibold">
-                              {
-                                //@ts-ignore
-                                data?.data.data[index].total_num_students || 0
-                              }
-                            </Heading>
-                          </div>
+                        <CardHeadMolecule
+                          title={intake.title}
+                          code={intake.code}
+                          status={intake.status}
+                          description={intake.description}
+                        />
+                        <div className="flex gap-2 mt-4">
+                          <Heading color="txt-secondary" fontSize="sm">
+                            Total Students Enrolled:
+                          </Heading>
+                          <Heading fontSize="sm" fontWeight="semibold">
+                            {intake.footerTitle}
+                          </Heading>
                         </div>
-
-                        {/* <div>
-                          <Link
-                            className="outline-none"
-                            to={`${url}/programs/${intake.id}`}>
-                            <Button styleType="text">View programs</Button>
-                          </Link>
-                        </div> */}
                         <Permission privilege={Privileges.CAN_MODIFY_INTAKE}>
                           <div className="mt-4 space-x-4">
                             <Link

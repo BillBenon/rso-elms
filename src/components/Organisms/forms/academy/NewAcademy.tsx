@@ -30,9 +30,9 @@ export default function NewAcademy() {
   const { url } = useRouteMatch();
   const [currentStep, setCurrentStep] = useState(0);
 
+  const { user } = useAuthenticator();
   useEffect(() => {
     const getUser = async () => {
-      const { user } = useAuthenticator();
       setDetails((details) => ({
         ...details,
         institution_id: user?.institution_id || '',
@@ -40,7 +40,7 @@ export default function NewAcademy() {
     };
 
     getUser();
-  }, []);
+  }, [user]);
 
   const [details, setDetails] = useState<AcademyCreateInfo>({
     current_admin_id: '',

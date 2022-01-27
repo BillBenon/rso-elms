@@ -75,8 +75,11 @@ export default function AddAcademicProgramToIntake({ submited }: PropType) {
         toast.success(data.data.message, { id: toastId });
         submited && submited();
       },
-      onError() {
-        toast.error('error occurred when adding programs', { id: toastId });
+      onError(error: any) {
+        toast.error(
+          error.response.data.message || 'error occurred when adding programs',
+          { id: toastId },
+        );
       },
     });
   }

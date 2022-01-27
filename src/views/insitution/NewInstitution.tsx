@@ -59,8 +59,8 @@ export default function NewInstitution() {
           toast.success(data.data.message);
           history.push('/dashboard/users');
         },
-        onError() {
-          toast.error('error occurred');
+        onError(error: any) {
+          toast.error(error.response.data.message || 'error occurred');
         },
       });
     }
