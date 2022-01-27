@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 
+import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import { moduleMaterialService } from '../../services/administration/module-material.service';
@@ -60,25 +61,30 @@ function ShowAttachment({ attach }: { attach: ModuleMaterialAttachmentInfo }) {
 
   return (
     <>
-      <div className="flex items-center gap-2 cursor-pointer" onClick={download}>
-        <Icon
-          name={
-            attachment?.file_type === 'application/pdf'
-              ? 'pdf'
-              : attachment?.file_type === 'application/msword'
-              ? 'word'
-              : attachment?.file_type === 'application/vnd.ms-excel'
-              ? 'excel'
-              : attachment?.file_type === 'application/vnd.ms-powerpoint'
-              ? 'powerpoint'
-              : attachment?.file_type === 'text/plain'
-              ? 'text-file'
-              : attachment?.file_type.includes('image/')
-              ? 'png'
-              : 'pdf'
-          }
-        />
-        <div>{filename ? filename : attach.learning_material.title}</div>
+      <div className="flex items-center justify-between w-1/2">
+        <div className="flex items-center">
+          <Icon
+            name={
+              attachment?.file_type === 'application/pdf'
+                ? 'pdf'
+                : attachment?.file_type === 'application/msword'
+                ? 'word'
+                : attachment?.file_type === 'application/vnd.ms-excel'
+                ? 'excel'
+                : attachment?.file_type === 'application/vnd.ms-powerpoint'
+                ? 'powerpoint'
+                : attachment?.file_type === 'text/plain'
+                ? 'text-file'
+                : attachment?.file_type.includes('image/')
+                ? 'png'
+                : 'pdf'
+            }
+          />
+          <p>{filename ? filename : attach.learning_material.title}</p>
+        </div>
+        <Button onClick={download} icon styleType="text" className="cursor-pointer">
+          <Icon name="download" fill="primary" />
+        </Button>
       </div>
 
       <div id="downloadme"></div>
