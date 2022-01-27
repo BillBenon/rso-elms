@@ -20,7 +20,6 @@ export default function Sidebar() {
     ];
 
     //Academic years check
-
     academicAdminLinks.push({
       title: 'Academic years',
       to: '/dashboard/academic-years',
@@ -79,6 +78,7 @@ export default function Sidebar() {
       to: '/dashboard/intakes',
       icon: 'academy',
       privilege: Privileges.CAN_ACCESS_INTAKES,
+      fill: false,
     });
 
     studentLinks.push({
@@ -86,6 +86,7 @@ export default function Sidebar() {
       to: '/dashboard/intakes',
       icon: 'academy',
       privilege: Privileges.CAN_ACCESS_INTAKES,
+      fill: false,
     });
 
     // Users check
@@ -96,15 +97,6 @@ export default function Sidebar() {
       icon: 'user',
       privilege: Privileges.CAN_ACCESS_USERS,
     });
-
-    academicAdminLinks.push({
-      title: 'Intakes',
-      to: '/dashboard/intakes',
-      icon: 'academy',
-      fill: false,
-      privilege: Privileges.CAN_ACCESS_USERS,
-    });
-
     // Reg Controll check
 
     academicAdminLinks.push({
