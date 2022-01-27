@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { GenericStatus, Privileges, ValueType } from '../../../types';
-import { StudentApproval } from '../../../types/services/enrollment.types';
-import { IEvaluationStatus } from '../../../types/services/evaluation.types';
-import { IntakeStatus } from '../../../types/services/intake.types';
-import { IntakeModuleStatus } from '../../../types/services/intake-program.types';
-import { ActionsType } from '../../../types/services/table.types';
+import { ValueType } from '../../../types';
+import {
+  ActionsType,
+  SelectorActionType,
+  StatusActionType,
+} from '../../../types/services/table.types';
 import Permission from '../../Atoms/auth/Permission';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
@@ -25,21 +25,8 @@ interface TableProps<T> {
   uniqueCol?: keyof T;
   hide?: (keyof T)[];
   actions?: ActionsType<T>[];
-  statusActions?: {
-    name: string;
-    type:
-      | GenericStatus
-      | IntakeStatus
-      | IEvaluationStatus
-      | IntakeModuleStatus
-      | StudentApproval;
-    handleStatusAction: (_data?: T[keyof T]) => void;
-  }[];
-  selectorActions?: {
-    name: string;
-    handleAction: (_data?: string[]) => void;
-    privilege?: Privileges;
-  }[];
+  statusActions?: StatusActionType<T>[];
+  selectorActions?: SelectorActionType[];
   handleClick?: () => void;
   statusColumn?: string;
   handleSelect?: (_selected: string[] | null) => void;
