@@ -8,6 +8,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
@@ -16,7 +17,7 @@ import {
   getProgramsByIntake,
   intakeStore,
 } from '../../store/administration/intake.store';
-import { CommonCardDataType, ParamType } from '../../types';
+import { CommonCardDataType, ParamType, Privileges } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ProgramLevelClasses from './ProgramsLevelClases';
 
@@ -59,12 +60,16 @@ export default function IntakePrograms() {
                 totalItems={`${programs.length} programs`}
                 title={isLoading ? 'loading....' : intakeInfo?.title || ''}>
                 <div className="flex gap-4">
-                  <BrowserLink to={`/dashboard/schedule/events/new`}>
-                    <Button>Add event</Button>
-                  </BrowserLink>
-                  <BrowserLink to={`/dashboard/schedule/venues/new`}>
-                    <Button styleType="outline">Add Venue</Button>
-                  </BrowserLink>
+                  <Permission privilege={Privileges.CAN_CREATE_EVENT}>
+                    <BrowserLink to={`/dashboard/schedule/events/new`}>
+                      <Button>Add event</Button>
+                    </BrowserLink>
+                  </Permission>
+                  <Permission privilege={Privileges.CAN_CREATE_VENUE}>
+                    <BrowserLink to={`/dashboard/schedule/venues/new`}>
+                      <Button styleType="outline">Add Venue</Button>
+                    </BrowserLink>
+                  </Permission>
                 </div>
               </TableHeader>
               <div className="mt-4 flex gap-4 flex-wrap">

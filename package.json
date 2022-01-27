@@ -2,7 +2,7 @@
   "name": "rso-elms",
   "version": "0.0.0",
   "scripts": {
-    "dev": "npm run prepare && vite",
+    "dev": "yarn prepare && vite",
     "build": "tsc && vite build",
     "serve": "HOST=$(grep HOST .env.production | cut -d '=' -f2) npm run start-prod",
     "start-prod": "vite preview  --host $HOST",
@@ -78,6 +78,5 @@
     "*": {
       "target": "http://192.168.1.112:8090/"
     }
-  },
-  "pre-commit": "lint"
+  }
 }

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -10,7 +11,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewVenue from '../../components/Organisms/schedule/venue/NewVenue';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { getAllVenues } from '../../store/timetable/venue.store';
-import { UserType } from '../../types/services/user.types';
+import { Privileges } from '../../types';
 
 export default function Venues() {
   const history = useHistory();
@@ -26,13 +27,13 @@ export default function Venues() {
   const venues = data?.data.data;
 
   return (
-    <div>
+    <Permission privilege={Privileges.CAN_ACCESS_VENUES}>
       <TableHeader totalItems={0} title={'Venues'} showBadge={false}>
-        {user?.user_type != UserType.STUDENT && (
+        <Permission privilege={Privileges.CAN_CREATE_VENUE}>
           <Link to={`/dashboard/schedule/venues/new`}>
             <Button>New venue</Button>
           </Link>
-        )}
+        </Permission>
       </TableHeader>
       {isLoading ? (
         <Loader />
@@ -72,6 +73,6 @@ export default function Venues() {
           )}
         />
       </Switch>
-    </div>
+    </Permission>
   );
 }

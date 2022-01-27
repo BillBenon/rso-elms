@@ -7,6 +7,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -16,10 +17,8 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import NewSchedule from '../../components/Organisms/schedule/calendar/NewSchedule';
 import useAuthenticator from '../../hooks/useAuthenticator';
-import { authenticatorStore } from '../../store/administration';
 import { getIntakesByAcademy } from '../../store/administration/intake.store';
-import { getStudentShipByUserId } from '../../store/administration/intake-program.store';
-import { CommonCardDataType, Link } from '../../types';
+import { CommonCardDataType, Link, Privileges } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import CalendarView from './CalendarView';
 import ClassTimeTable from './ClassTimeTable';
@@ -101,9 +100,11 @@ function ScheduleIntakes() {
   return (
     <div>
       <TableHeader totalItems={`${intakes.length} intakes`} title={'Schedule'}>
-        <BrowserLink to={`${path}/schedule/new`}>
-          <Button>New Schedule</Button>
-        </BrowserLink>
+        <Permission privilege={Privileges.CAN_CREATE_SCHEDULE}>
+          <BrowserLink to={`${path}/schedule/new`}>
+            <Button>New Schedule</Button>
+          </BrowserLink>
+        </Permission>
       </TableHeader>
       <div className="mt-4 flex gap-4 flex-wrap">
         {intakes.length === 0 && isLoading ? (
