@@ -47,8 +47,8 @@ function UpdateModuleForm() {
         queryClient.invalidateQueries(['modules/program/id']);
         history.goBack();
       },
-      onError() {
-        toast.error('error occurred please try again');
+      onError(error: any) {
+        toast.error(error.response.data.message || 'error occurred please try again');
       },
     });
   }

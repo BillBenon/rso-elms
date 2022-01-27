@@ -45,8 +45,8 @@ export default function NewModuleForm() {
           );
         else history.goBack();
       },
-      onError() {
-        toast.error('error occurred please try again');
+      onError(error: any) {
+        toast.error(error.response.data.message || 'error occurred please try again');
       },
     });
   }

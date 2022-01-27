@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import AddCard from '../../components/Molecules/cards/AddCard';
@@ -10,7 +11,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
-import { CommonCardDataType } from '../../types';
+import { CommonCardDataType, Privileges } from '../../types';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
@@ -68,53 +69,58 @@ function IntakeLevelModule() {
   return (
     <>
       <TableHeader usePadding={false} showBadge={false} showSearch={false}>
-        {/* <Button styleType="outline">Enrolled Students</Button>
-        <Button styleType="outline">Enrolled Instructors</Button> */}
-        {/* <div className='py-2.5 border px-4 rounded-lg border-primary-500 text-primary-500 font-semibold text-sm'>Enrolled Students</div>
-        <div className='py-2.5 border px-4 rounded-lg border-primary-500 text-primary-500 font-semibold text-sm'>Enrolled Instructors</div> */}
         {user?.user_type === UserType.ADMIN && (
           <>
-            <LevelInstrctors
-              isLoading={instructorsLoading}
-              instructorsData={instructorProgramLevel?.data.data || []}
-              showSidebar={showSidebar.showInstructor}
-              handleShowSidebar={() =>
-                setShowSidebar({
-                  ...initialShowSidebar,
-                  showInstructor: !showSidebar.showInstructor,
-                })
-              }
-            />
-            <EnrollInstructorToLevel
-              existing={instructorProgramLevel?.data.data || []}
-              showSidebar={showSidebar.enrollInstructor}
-              handleShowSidebar={() =>
-                setShowSidebar({
-                  ...initialShowSidebar,
-                  enrollInstructor: !showSidebar.enrollInstructor,
-                })
-              }
-            />
-            <LevelStudents
-              showSidebar={showSidebar.showStudent}
-              handleShowSidebar={() =>
-                setShowSidebar({
-                  ...initialShowSidebar,
-                  showStudent: !showSidebar.showStudent,
-                })
-              }
-            />
-            <EnrollStudent
-              showSidebar={showSidebar.enrollStudent}
-              handleShowSidebar={() =>
-                setShowSidebar({
-                  ...initialShowSidebar,
-                  enrollStudent: !showSidebar.enrollStudent,
-                })
-              }
-            />
+            <Permission privilege={Privileges.CAN_CREATE_INSTRUCTORS_ON_LEVEL_PRORAM}>
+              <EnrollInstructorToLevel
+                existing={instructorProgramLevel?.data.data || []}
+                showSidebar={showSidebar.enrollInstructor}
+                handleShowSidebar={() =>
+                  setShowSidebar({
+                    ...initialShowSidebar,
+                    enrollInstructor: !showSidebar.enrollInstructor,
+                  })
+                }
+              />
+            </Permission>
+
+            <Permission privilege={Privileges.CAN_CREATE_STUDENTS_ON_LEVEL_PRORAM}>
+              <EnrollStudent
+                showSidebar={showSidebar.enrollStudent}
+                handleShowSidebar={() =>
+                  setShowSidebar({
+                    ...initialShowSidebar,
+                    enrollStudent: !showSidebar.enrollStudent,
+                  })
+                }
+              />
+            </Permission>
           </>
         )}
+        <Permission privilege={Privileges.CAN_ACCESS_INSTRUCTORS_ON_LEVEL_PRORAM}>
+          <LevelInstrctors
+            isLoading={instructorsLoading}
+            instructorsData={instructorProgramLevel?.data.data || []}
+            showSidebar={showSidebar.showInstructor}
+            handleShowSidebar={() =>
+              setShowSidebar({
+                ...initialShowSidebar,
+                showInstructor: !showSidebar.showInstructor,
+              })
+            }
+          />
+        </Permission>
+        <Permission privilege={Privileges.CAN_ACCESS_STUDENTS_ON_LEVEL_PRORAM}>
+          <LevelStudents
+            showSidebar={showSidebar.showStudent}
+            handleShowSidebar={() =>
+              setShowSidebar({
+                ...initialShowSidebar,
+                showStudent: !showSidebar.showStudent,
+              })
+            }
+          />
+        </Permission>
         {prdLoading ? (
           <></>
         ) : periods?.data.data.length === 0 ? (

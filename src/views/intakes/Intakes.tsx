@@ -249,32 +249,22 @@ export default function Intakes() {
                         </div>
                       }
                       open>
-                      {/* <div>
-                          <Link
-                          className="outline-none"
-                          to={`${url}/programs/${intake.id}`}>
-                          <Button styleType="text">View programs</Button>
-                          </Link>
-                        </div> */}
-                      <Permission privilege={Privileges.CAN_MODIFY_INTAKE}>
-                        <div className="w-96">
-                          <CardHeadMolecule
-                            title={intake.title}
-                            code={intake.code}
-                            status={intake.status}
-                            description={intake.description}
-                          />
-                          <div className="flex flex-col gap-6 mt-4">
-                            <div className="flex gap-2">
-                              <Heading color="txt-secondary" fontSize="sm">
-                                Total Students Enrolled:
-                              </Heading>
-                              <Heading fontSize="sm" fontWeight="semibold">
-                                {intake.footerTitle}
-                              </Heading>
-                            </div>
-                          </div>
-
+                      <div className="w-96">
+                        <CardHeadMolecule
+                          title={intake.title}
+                          code={intake.code}
+                          status={intake.status}
+                          description={intake.description}
+                        />
+                        <div className="flex gap-2 mt-4">
+                          <Heading color="txt-secondary" fontSize="sm">
+                            Total Students Enrolled:
+                          </Heading>
+                          <Heading fontSize="sm" fontWeight="semibold">
+                            {intake.footerTitle}
+                          </Heading>
+                        </div>
+                        <Permission privilege={Privileges.CAN_MODIFY_INTAKE}>
                           <div className="mt-4 space-x-4">
                             <Link
                               to={`${url}/${intake.id}/edit/${intake.registrationControlId}`}>
@@ -282,8 +272,8 @@ export default function Intakes() {
                             </Link>
                             <Button styleType="outline">Change Status</Button>
                           </div>
-                        </div>
-                      </Permission>
+                        </Permission>
+                      </div>
                     </Tooltip>
                   </div>
                 ))}

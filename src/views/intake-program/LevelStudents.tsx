@@ -4,7 +4,9 @@ import { useParams } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import RightSidebar from '../../components/Organisms/RightSidebar';
 import intakeProgramStore from '../../store/administration/intake-program.store';
+import { Privileges } from '../../types';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
+import { SelectorActionType } from '../../types/services/table.types';
 import { UserView } from '../../types/services/user.types';
 interface ILevelStudent {
   showSidebar: boolean;
@@ -31,6 +33,15 @@ function LevelStudents({ showSidebar, handleShowSidebar }: ILevelStudent) {
     });
     setStudents(studentsView);
   }, [studentsProgram]);
+
+  let actions: SelectorActionType[] = [
+    {
+      name: 'remove instructors',
+      handleAction: () => {},
+      privilege: Privileges.CAN_DELETE_STUDENTS_ON_LEVEL_PRORAM,
+    },
+  ];
+
   return (
     <div className="flex flex-col cursor-pointer">
       <Button styleType="outline" onClick={handleShowSidebar}>
@@ -44,6 +55,7 @@ function LevelStudents({ showSidebar, handleShowSidebar }: ILevelStudent) {
         dataLabel={'Students enrolled'}
         isLoading={isLoading}
         unselectAll={!showSidebar}
+        selectorActions={actions}
       />
     </div>
   );

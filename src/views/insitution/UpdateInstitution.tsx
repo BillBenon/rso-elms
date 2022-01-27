@@ -58,7 +58,7 @@ export default function UpdateInstitution() {
         website_link: institution.website_link,
         id: id,
       });
-  }, [data]);
+  }, [data, id]);
 
   const handleChange = (e: ValueType) => {
     setValues({ ...values, [e.name]: e.value });
