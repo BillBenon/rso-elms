@@ -42,6 +42,7 @@ interface TableProps<T> {
   }[];
   handleClick?: () => void;
   statusColumn?: string;
+  anotherStatusColumn?: string;
   handleSelect?: (_selected: string[] | null) => void;
   unselectAll?: boolean;
 
@@ -60,6 +61,7 @@ export default function Table2<T>({
   actions,
   statusActions,
   selectorActions,
+  anotherStatusColumn,
   statusColumn,
   handleSelect,
   unselectAll = false,
@@ -231,6 +233,7 @@ export default function Table2<T>({
           uniqueCol={uniqueCol}
           keys={keys as string[]}
           statusColumn={statusColumn}
+          anotherStatusColumn={anotherStatusColumn}
           statusActions={statusActions}
         />
         {actions && actions.length > 0 ? (

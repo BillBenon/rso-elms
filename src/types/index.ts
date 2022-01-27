@@ -105,7 +105,7 @@ export interface Link {
 }
 
 export interface SelectData {
-  value: string;
+  value: string | number;
   label: string;
   subLabel?: string;
 }
