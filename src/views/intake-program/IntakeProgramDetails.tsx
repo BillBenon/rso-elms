@@ -111,7 +111,7 @@ function IntakeProgramDetails() {
 
     return programData;
   };
-
+  //
   const getLevels =
     intakeProgramStore.getLevelsByIntakeProgram(intakeProg).data?.data.data || [];
   const programLevels = getLevelsByAcademicProgram(id).data?.data.data;
@@ -122,6 +122,9 @@ function IntakeProgramDetails() {
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
     .data?.data.data[0];
+  let { data: instructorLevels } = enrollmentStore.getInstructorLevels(
+    instructorInfo?.id + '',
+  );
 
   let { data: instructorLevels } = enrollmentStore.getInstructorLevels(
     instructorInfo?.id + '',
