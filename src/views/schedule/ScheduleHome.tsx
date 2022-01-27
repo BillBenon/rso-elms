@@ -102,7 +102,7 @@ function ScheduleIntakes() {
       <TableHeader totalItems={`${intakes.length} intakes`} title={'Schedule'}>
         <Permission privilege={Privileges.CAN_CREATE_SCHEDULE}>
           <BrowserLink to={`${path}/schedule/new`}>
-            <Button>New Schedule gaah</Button>
+            <Button>New Schedule</Button>
           </BrowserLink>
         </Permission>
       </TableHeader>
