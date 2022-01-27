@@ -76,8 +76,8 @@ export default function NewTimeTable() {
         queryClient.invalidateQueries(['timetable/intakeclassid/:id', id]);
         history.goBack();
       },
-      onError() {
-        toast.error('error occurred please try again');
+      onError(error: any) {
+        toast.error(error.response.data.message || 'error occurred please try again');
       },
     });
   }

@@ -83,8 +83,8 @@ export default function EditTimeTable() {
         queryClient.invalidateQueries(['timetable/intakeclassid/:id', classId]);
         history.goBack();
       },
-      onError() {
-        toast.error('error occurred please try again');
+      onError(error: any) {
+        toast.error(error.response.data.message || 'error occurred please try again');
       },
     });
   }
