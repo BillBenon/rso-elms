@@ -124,11 +124,21 @@ function IntakeProgramDetails() {
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
     .data?.data.data[0];
+  let { data: instructorLevels } = enrollmentStore.getInstructorLevels(
+    instructorInfo?.id + '',
+  );
 
   const studentInfo = getStudentShipByUserId(user?.id + '' || '', !!user?.id).data?.data
     .data[0];
   const studPrograms = getIntakeProgramsByStudent(studentInfo?.id + '', !!studentInfo?.id)
     .data?.data.data;
+  let studIntkProgstud = studPrograms?.find(
+    (prg) => prg.intake_program.id === intakeProg,
+  );
+  let { data: studentLevels } = getStudentLevels(
+    studIntkProgstud?.id + '',
+    !!studIntkProgstud?.id,
+  );
 
   const programData = getProgramData();
   let tabs: TabType[] = [
@@ -147,14 +157,6 @@ function IntakeProgramDetails() {
   }
 
   if (user?.user_type === UserType.STUDENT) {
-    let studIntkProgstud = studPrograms?.find(
-      (prg) => prg.intake_program.id === intakeProg,
-    );
-    let { data: studentLevels } = getStudentLevels(
-      studIntkProgstud?.id + '',
-      !!studIntkProgstud?.id,
-    );
-
     if (studentLevels?.data.data && studentLevels?.data.data.length > 0) {
       tabs.push({
         label: 'Program levels',
@@ -167,10 +169,6 @@ function IntakeProgramDetails() {
   }
 
   if (user?.user_type === UserType.INSTRUCTOR) {
-    let { data: instructorLevels } = enrollmentStore.getInstructorLevels(
-      instructorInfo?.id + '',
-    );
-
     let instructorLevelsIds = instructorLevels?.data.data.map(
       (instLvl) => instLvl.academic_year_program_intake_level?.id,
     );

@@ -1,40 +1,43 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
+import toast from 'react-hot-toast';
 
-import { TextDecoration, ValueType } from '../../../../types';
+import { markingStore } from '../../../../store/administration/marking.store';
+import { ValueType } from '../../../../types';
 import { IEvaluationQuestionsInfo } from '../../../../types/services/evaluation.types';
-import { FieldQuestionMarks } from '../../../../types/services/marking.types';
+import {
+  FieldQuestionMarks,
+  PointsUpdateInfo,
+} from '../../../../types/services/marking.types';
 import ContentSpan from '../../../../views/evaluation/ContentSpan';
 import Heading from '../../../Atoms/Text/Heading';
 import InputMolecule from '../../input/InputMolecule';
 
 interface PropTypes {
   data: IEvaluationQuestionsInfo;
-  full?: boolean;
-  icon?: boolean;
   questionMarks: FieldQuestionMarks[];
   totalMarks: number;
   index: number;
   updateQuestionPoints: (_question_id: string, _marks: number) => void;
   createCreateNewCorrection: (_question_id: string, _marks: number) => FieldQuestionMarks;
   setTotalMarks: Dispatch<SetStateAction<number>>;
-  hoverStyle?: TextDecoration;
   className?: string;
-  obtained: number | undefined;
+  updates: PointsUpdateInfo;
 }
 export default function FieldMarker({
   updateQuestionPoints,
   data,
   index,
   questionMarks,
-  obtained,
+  updates,
   createCreateNewCorrection,
 }: PropTypes) {
+  const { mutate } = markingStore.updateStudentAnswer();
   const correct: FieldQuestionMarks =
     questionMarks.find((x) => x.question_id === data?.id) ||
     createCreateNewCorrection(data?.id, 0);
 
   const [obtainedMarks, setObtainedMarks] = useState(
-    obtained || correct.obtained_marks || 0,
+    updates.obtained || correct.obtained_marks || 0,
   );
 
   function updateCorrectionMarks(e: ValueType) {
@@ -42,19 +45,18 @@ export default function FieldMarker({
     updateQuestionPoints(data.id, obtainedMarks);
   }
 
-  //   function clickUpdateMarks(isCorrect: boolean) {
-  //     if (isCorrect && obtainedMarks == 0) {
-  //       setObtainedMarks(Number(data?.evaluation_question.mark));
-  //       updateQuestionPoints(data.id, obtainedMarks);
-  //     } else if (!isCorrect && obtainedMarks != 0) {
-  //       setObtainedMarks(Number(0));
-  //       updateQuestionPoints(data.id, obtainedMarks);
-  //     }
-  //   }
-
-  //   useEffect(() => {
-  //     setObtainedMarks(data.mark_scored || 0);
-  //   }, [data]);
+  function submitUpdatesOnQuestions() {
+    if (updates.is_updating) {
+      mutate(
+        { answer_id: updates.answer_id, marks: obtainedMarks },
+        {
+          onError: (error: any) => {
+            toast.error(error.response.data.message + '', { duration: 3000 });
+          },
+        },
+      );
+    }
+  }
   return (
     <div className={`answer-card-molecule bg-main p-6 rounded-lg `}>
       <div className="mt-3 flex justify-between">
@@ -80,7 +82,9 @@ export default function FieldMarker({
         </Heading>
         <InputMolecule
           handleChange={(e: ValueType) => updateCorrectionMarks(e)}
+          onBlur={submitUpdatesOnQuestions}
           type="number"
+          defaultValue={obtainedMarks + ''}
           min={0}
           style={{ width: '80px' }}
           max={Number(data?.mark) || 4}

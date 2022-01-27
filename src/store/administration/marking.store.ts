@@ -3,8 +3,11 @@ import { useMutation, useQuery } from 'react-query';
 import { markingService } from '../../services/administration/marking.service';
 
 class MarkingStore {
-  finishMarking() {
+  finishMarkingfinishMarking() {
     return useMutation(markingService.finishMarking);
+  }
+  updateStudentAnswer() {
+    return useMutation(markingService.updateStudentAnswer);
   }
 
   fieldMarkingFinish() {

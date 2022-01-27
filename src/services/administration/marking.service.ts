@@ -7,6 +7,7 @@ import {
   IManualMarkingInfo,
   MarkAllEvaluationQuestions,
   SingleFieldStudentMarker,
+  StudentAnswerMarkInfo,
   StudentEvaluationInfo,
   StudentMarkingAnswer,
 } from '../../types/services/marking.types';
@@ -19,6 +20,17 @@ class MarkingService {
     return await evaluationAxios.put(
       `/student-answers/markStudentEvaluation/${markInfo.studentEvaluation}`,
       { correction },
+    );
+  }
+
+  public async updateStudentAnswer(
+    markInfo: StudentAnswerMarkInfo,
+  ): Promise<AxiosResponse<Response<String>>> {
+    return await evaluationAxios.put(
+      `/student-answers/student-answer/${markInfo.answer_id}/markAnswer`,
+      {
+        marks: markInfo.marks,
+      },
     );
   }
 
