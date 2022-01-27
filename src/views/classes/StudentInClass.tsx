@@ -85,15 +85,19 @@ function StudentInClass({ classId, label }: IStudentClass) {
                       }>
                       View subjects
                     </Button>
-                    <Button
-                      styleType="outline"
-                      onClick={() =>
-                        history.push(
-                          `/dashboard/intakes/peformance/${levelId}/${classId}`,
-                        )
-                      }>
-                      View performance
-                    </Button>
+                    {user?.user_type === UserType.ADMIN ||
+                      (user?.user_type === UserType.INSTRUCTOR && (
+                        <Button
+                          styleType="outline"
+                          onClick={() =>
+                            history.push(
+                              `/dashboard/intakes/peformance/${levelId}/${classId}`,
+                            )
+                          }>
+                          View performance
+                        </Button>
+                      ))}
+
                     {user?.user_type === UserType.ADMIN && (
                       <AddStudents classId={parseInt(classId)} />
                     )}
