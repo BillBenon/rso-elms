@@ -125,8 +125,12 @@ export default function Sidebar() {
         privilege: Privileges.CAN_ACCESS_INTAKES,
         fill: false,
       },
+      {
+        title: 'Calendar',
+        to: '/dashboard/schedule/student/calendar',
+        icon: 'calendar',
+      },
       { title: 'Timetable', to: '/dashboard/schedule/timetable', icon: 'calendar' },
-      { title: 'Calendar', to: '/dashboard/schedule', icon: 'calendar' },
     );
 
     if (user?.user_type == UserType.SUPER_ADMIN) routes.push(...institutionAdminLinks);
