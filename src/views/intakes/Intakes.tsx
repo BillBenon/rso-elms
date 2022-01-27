@@ -15,6 +15,7 @@ import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
+import CardHeadMolecule from '../../components/Molecules/CardHeadMolecule';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
@@ -257,6 +258,23 @@ export default function Intakes() {
                         </div> */}
                       <Permission privilege={Privileges.CAN_MODIFY_INTAKE}>
                         <div className="w-96">
+                          <CardHeadMolecule
+                            title={intake.title}
+                            code={intake.code}
+                            status={intake.status}
+                            description={intake.description}
+                          />
+                          <div className="flex flex-col gap-6 mt-4">
+                            <div className="flex gap-2">
+                              <Heading color="txt-secondary" fontSize="sm">
+                                Total Students Enrolled:
+                              </Heading>
+                              <Heading fontSize="sm" fontWeight="semibold">
+                                {intake.footerTitle}
+                              </Heading>
+                            </div>
+                          </div>
+
                           <div className="mt-4 space-x-4">
                             <Link
                               to={`${url}/${intake.id}/edit/${intake.registrationControlId}`}>
