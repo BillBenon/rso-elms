@@ -21,7 +21,7 @@ function UserRoleCard({ user }: { user: UserInfo }) {
             badgecolor="main"
             badgetxtcolor="txt-secondary"
             className="mx-2">
-            No roles are currently not specificied
+            No roles are currently specificied
           </Badge>
         ) : (
           data?.data.data.map((role) => (
