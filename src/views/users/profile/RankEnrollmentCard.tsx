@@ -36,7 +36,8 @@ function RankEnrollmentCard({ user }: { user: UserInfo }) {
           fontWeight="medium"
           badgecolor="secondary"
           badgetxtcolor="txt-secondary"
-          className="mx-2 text-sm">
+          fontSize="sm"
+          className="mx-2">
           Ranks are currently not specificied
         </Badge>
       )}

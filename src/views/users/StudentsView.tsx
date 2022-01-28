@@ -8,6 +8,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import AssignRole from '../../components/Organisms/forms/user/AssignRole';
 import ImportUsers from '../../components/Organisms/user/ImportUsers';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import usersStore from '../../store/administration/users.store';
@@ -17,7 +18,7 @@ import { AcademyUserType, UserType, UserTypes } from '../../types/services/user.
 import { formatUserTable } from '../../utils/array';
 
 export default function StudentsView() {
-  const { url } = useRouteMatch();
+  const { url, path } = useRouteMatch();
   const { user } = useAuthenticator();
   const history = useHistory();
 
@@ -43,8 +44,10 @@ export default function StudentsView() {
   let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
 
   actions?.push({
-    name: 'Add Role',
-    handleAction: () => {},
+    name: 'Assign Role',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${url}/${id}/role`); // go to assign role
+    },
     privilege: Privileges.CAN_ASSIGN_ROLE,
   });
 
@@ -132,6 +135,19 @@ export default function StudentsView() {
               open={true}
               onClose={history.goBack}>
               <ImportUsers userType={UserType.STUDENT} />
+            </PopupMolecule>
+          )}
+        />
+        <Route
+          exact
+          path={`${path}/:id/role`}
+          render={() => (
+            <PopupMolecule
+              closeOnClickOutSide={false}
+              title="Assign role"
+              open={true}
+              onClose={history.goBack}>
+              <AssignRole />
             </PopupMolecule>
           )}
         />

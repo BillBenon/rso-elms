@@ -7,6 +7,7 @@ import EducationBackgroundCard from './EducationBackgroundCard';
 import NextOfKinCard from './NextOfKinCard';
 import PersonalInfoCard from './PersonalInfoCard';
 import RankEnrollmentCard from './RankEnrollmentCard';
+import UserRoleCard from './UserRoleCard';
 
 function ProfileOverview({ user }: { user: UserInfo }) {
   const userAcademies: AcademyInfo[] = user.academy ? [user.academy] : [];
@@ -21,7 +22,7 @@ function ProfileOverview({ user }: { user: UserInfo }) {
       </div>
       <div className="flex flex-col gap-7">
         <RankEnrollmentCard user={user} />
-        {/* <IntakesCard /> */}
+        <UserRoleCard user={user} />
       </div>
     </div>
   );

@@ -226,6 +226,7 @@ export default function Table2<T>({
         {actions && actions.length > 0 ? (
           <td className="flex space-x-6 cursor-pointer">
             <Tooltip
+              position="left center"
               on="click"
               trigger={
                 <button type="button" onClick={() => {}}>
