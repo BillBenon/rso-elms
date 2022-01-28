@@ -146,7 +146,7 @@ export default function UpdateLevel() {
           inputs: nextLevels,
           labelName: ['name'],
         })}>
-        Select Class(es)
+        Select Next Level
       </SelectMolecule>{' '}
       <br />
       <Button>Save</Button>
