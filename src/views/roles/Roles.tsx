@@ -32,7 +32,13 @@ export default function Roles() {
   const history = useHistory();
   const location = useLocation();
 
-  const { data, isSuccess, isLoading, refetch } = roleStore.getRoles(); // fetch roles
+  // const { user } = useAuthenticator();
+  // const { data, isSuccess, isLoading, refetch } =
+  //   user?.user_type === UserType.SUPER_ADMIN
+  //     ? roleStore.getRolesByInstitution(user.institution.id + '')
+  //     : roleStore.getRolesByAcademy(user?.academy.id + ''); // fetch roles
+
+  const { data, isSuccess, isLoading, refetch } = roleStore.getRoles();
 
   useEffect(() => {
     // filter data to display

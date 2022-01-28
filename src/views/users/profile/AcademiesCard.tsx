@@ -18,7 +18,8 @@ function AcademiesCard({ academies }: { academies: AcademyInfo[] }) {
           fontWeight="medium"
           badgecolor="secondary"
           badgetxtcolor="txt-secondary"
-          className="mx-2 text-sm">
+          fontSize="sm"
+          className="mx-2">
           User not enrolled in any academy
         </Badge>
       ) : (

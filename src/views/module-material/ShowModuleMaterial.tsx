@@ -5,7 +5,6 @@ import React from 'react';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
-import { moduleMaterialService } from '../../services/administration/module-material.service';
 import { moduleMaterialStore } from '../../store/administration/module-material.store';
 import { ModuleMaterialAttachmentInfo } from '../../types/services/module-material.types';
 
@@ -32,15 +31,14 @@ function ShowAttachment({ attach }: { attach: ModuleMaterialAttachmentInfo }) {
 
   let filename = attachment?.path_to_file.replace(/^.*[\\/]/, '').slice(36);
 
-  async function download() {
-    const file = await (
-      await moduleMaterialService.downloadFile(attach.attachment_id + '')
-    ).data;
+  const file = moduleMaterialStore.downloadFile(attach.attachment_id + '').data?.data;
 
-    // eslint-disable-next-line no-undef
-    var binaryData: BlobPart[] = [];
-    //@ts-ignore
-    binaryData.push(file);
+  function download() {
+    var binaryData: Blob[] = [];
+
+    if (file) {
+      binaryData.push(file as Blob);
+    }
 
     const url = window.URL.createObjectURL(
       new Blob(binaryData, { type: attachment?.file_type }),

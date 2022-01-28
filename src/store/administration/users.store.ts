@@ -49,7 +49,7 @@ class UserStore {
     return useQuery(['user/nid', nid], () => userService.getUserAccountByNid(nid));
   }
   getUserRoles(userId: string, enabled = true) {
-    useQuery(['user/roles', userId], () => userService.getAssignedRoles(userId), {
+    return useQuery(['user/roles', userId], () => userService.getAssignedRoles(userId), {
       enabled,
     });
   }
@@ -58,6 +58,9 @@ class UserStore {
   }
   modifyUser() {
     return useMutation(userService.modifyUser);
+  }
+  assignRole() {
+    return useMutation(userService.assignRole);
   }
   updateUser() {
     return useMutation(userService.updateProfile);

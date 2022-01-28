@@ -23,6 +23,18 @@ class RoleService {
     return await adminstrationAxios.get(`/roles/getRoleById/${id}`);
   }
 
+  public async getRolesByInstitution(
+    institutionId: string,
+  ): Promise<AxiosResponse<Response<RoleRes[]>>> {
+    return await adminstrationAxios.get(`/roles/getRoleByInstitution/${institutionId}`);
+  }
+
+  public async getRolesByAcademy(
+    academyId: string,
+  ): Promise<AxiosResponse<Response<RoleRes[]>>> {
+    return await adminstrationAxios.get(`/roles/getRoleByAcademy/${academyId}`);
+  }
+
   public async getPrivilegesByRole(
     roleId: string,
   ): Promise<AxiosResponse<Response<RolePrivilege[]>>> {
