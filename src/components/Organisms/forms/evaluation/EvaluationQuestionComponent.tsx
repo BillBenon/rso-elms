@@ -182,7 +182,7 @@ export default function EvaluationQuestionComponent({
       onSuccess: () => {
         toast.success('Questions added', { duration: 5000 });
         setLocalStorageData('currentStep', 2);
-        handleNext();
+        handleNext(1);
       },
       onError: (error: any) => {
         toast.error(error.response.data.message);
@@ -335,7 +335,11 @@ export default function EvaluationQuestionComponent({
         <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
           Back
         </Button>{' '}
-        <Button styleType="text" color="gray" className="mt-6" onClick={handleNext}>
+        <Button
+          styleType="text"
+          color="gray"
+          className="mt-6"
+          onClick={() => handleNext(1)}>
           Skip
         </Button>
         <div className="pt-6 flex flex-col">

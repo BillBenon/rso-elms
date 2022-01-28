@@ -9,19 +9,18 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
 import PopupMolecule from '../../components/Molecules/Popup';
 import CalendarComponent from '../../components/Organisms/schedule/calendar/CalendarComponent';
 import NewSchedule from '../../components/Organisms/schedule/calendar/NewSchedule';
-import useAuthenticator from '../../hooks/useAuthenticator';
 import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import programStore from '../../store/administration/program.store';
 import { scheduleStore } from '../../store/timetable/calendar.store';
-import { ParamType } from '../../types';
+import { ParamType, Privileges } from '../../types';
 import { DateRange } from '../../types/services/schedule.types';
-import { UserType } from '../../types/services/user.types';
 import { formatCalendarEvents } from '../../utils/calendar';
 import { getWeekBorderDays } from '../../utils/date-helper';
 
@@ -44,9 +43,6 @@ export default function CalendarView() {
   const programInfo = programStore.getProgramById(id).data?.data.data;
   const levelInfo = intakeProgramStore.getIntakeLevelById(inLevelId + '').data?.data.data;
   const classInfo = classStore.getClassById(classId + '').data?.data.data;
-
-  // auth info
-  const { user } = useAuthenticator();
 
   // get events
   const { data, refetch } = inLevelId
@@ -86,11 +82,12 @@ export default function CalendarView() {
               dateRange.end_date,
             ).toLocaleDateString()}`}
           </Heading>
-          {user?.user_type != UserType.STUDENT && (
+
+          <Permission privilege={Privileges.CAN_CREATE_SCHEDULE}>
             <Link to={`${url}/new-schedule`}>
               <Button>New schedule</Button>
             </Link>
-          )}
+          </Permission>
         </>
       </CalendarComponent>
 

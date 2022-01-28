@@ -56,10 +56,16 @@ export default function Sidebar() {
         privilege: Privileges.CAN_ACCESS_USERS,
       },
       {
-        title: 'Divisions',
-        to: '/dashboard/divisions',
-        icon: 'faculty',
-        privilege: Privileges.CAN_ACCESS_DIVISIONS,
+        title: 'Intakes',
+        to: '/dashboard/intakes',
+        icon: 'academy',
+        privilege: Privileges.CAN_ACCESS_INTAKES,
+        fill: false,
+      },
+      {
+        title: 'Schedule',
+        to: '/dashboard/schedule',
+        icon: 'calendar',
       },
       {
         title: 'Levels',
@@ -68,28 +74,22 @@ export default function Sidebar() {
         privilege: Privileges.CAN_ACCESS_LEVELS,
       },
       {
+        title: 'Divisions',
+        to: '/dashboard/divisions',
+        icon: 'faculty',
+        privilege: Privileges.CAN_ACCESS_DIVISIONS,
+      },
+      {
         title: 'Registration Control',
         to: '/dashboard/registration-control',
         icon: 'reg-control',
         privilege: Privileges.CAN_ACCESS_REG_CONTROLS,
       },
       {
-        title: 'Intakes',
-        to: '/dashboard/intakes',
-        icon: 'academy',
-        privilege: Privileges.CAN_ACCESS_INTAKES,
-        fill: false,
-      },
-      {
         title: 'Academic years',
         to: '/dashboard/academic-years',
         icon: 'program',
         privilege: Privileges.CAN_ACCESS_ACADEMIC_YEARS,
-      },
-      {
-        title: 'Schedule',
-        to: '/dashboard/schedule',
-        icon: 'calendar',
       },
     );
 
@@ -109,7 +109,6 @@ export default function Sidebar() {
       },
       { title: 'Evaluations', to: '/dashboard/evaluations', icon: 'evaluation' },
       { title: 'Schedule', to: '/dashboard/schedule', icon: 'calendar' },
-      { title: 'Events', to: '/dashboard/events', icon: 'calendar' },
     );
     studentLinks.push(
       {
@@ -125,8 +124,12 @@ export default function Sidebar() {
         privilege: Privileges.CAN_ACCESS_INTAKES,
         fill: false,
       },
+      {
+        title: 'Calendar',
+        to: '/dashboard/schedule/student/calendar',
+        icon: 'calendar',
+      },
       { title: 'Timetable', to: '/dashboard/schedule/timetable', icon: 'calendar' },
-      { title: 'Calendar', to: '/dashboard/schedule', icon: 'calendar' },
     );
 
     if (user?.user_type == UserType.SUPER_ADMIN) routes.push(...institutionAdminLinks);

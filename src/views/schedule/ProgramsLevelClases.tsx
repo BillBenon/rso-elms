@@ -2,6 +2,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import SkeletonLoader from '../../components/Atoms/custom/SkeletonLoader';
@@ -11,6 +12,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
 import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
+import { Privileges } from '../../types';
 
 interface ParamType {
   id: string;
@@ -35,9 +37,11 @@ export default function PrograsmLevelClasses() {
   return (
     <div>
       <TableHeader showBadge={false} title={programInfo?.name || 'Program levels'}>
-        <Link to={`/dashboard/schedule/calendar/${programInfo?.id}`}>
-          <Button styleType="outline">Program calendar</Button>
-        </Link>
+        <Permission privilege={Privileges.CAN_ACCESS_CALENDER}>
+          <Link to={`/dashboard/schedule/calendar/${programInfo?.id}`}>
+            <Button styleType="outline">Program calendar</Button>
+          </Link>
+        </Permission>
       </TableHeader>
       {levelsLoading ? (
         <Loader />
@@ -54,13 +58,15 @@ export default function PrograsmLevelClasses() {
               key={lvl.id}
               className="py-3"
               label={lvl.academic_program_level.level.name}>
-              <>
-                <Link
-                  to={`/dashboard/schedule/calendar/${programInfo?.id}?in_level_id=${lvl.id}`}>
-                  <span className="text-primary-500 font-medium block text-right">
-                    View calendar for this level
-                  </span>
-                </Link>
+              <div>
+                <Permission privilege={Privileges.CAN_ACCESS_CALENDER}>
+                  <Link
+                    to={`/dashboard/schedule/calendar/${programInfo?.id}?in_level_id=${lvl.id}`}>
+                    <span className="text-primary-500 font-medium block text-right">
+                      View calendar for this level
+                    </span>
+                  </Link>
+                </Permission>
                 <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6 mt-5">
                   {isLoading ? (
                     [1, 2].map((i) => <SkeletonLoader height={200} key={i} />)
@@ -86,29 +92,34 @@ export default function PrograsmLevelClasses() {
                         <Heading className="pt-6" fontSize="sm" fontWeight="bold">
                           {cl.class_name}
                         </Heading>
+
                         <div className="py-2 mt-3">
-                          <Link
-                            className="outline-none"
-                            to={`/dashboard/schedule/calendar/${programInfo?.id}?class_id=${cl.id}`}>
-                            <span className="text-primary-500 text-sm font-medium">
-                              View Calendar
-                            </span>
-                          </Link>
+                          <Permission privilege={Privileges.CAN_ACCESS_CALENDER}>
+                            <Link
+                              className="outline-none"
+                              to={`/dashboard/schedule/calendar/${programInfo?.id}?class_id=${cl.id}`}>
+                              <span className="text-primary-500 text-sm font-medium">
+                                View Calendar
+                              </span>
+                            </Link>
+                          </Permission>
                         </div>
                         <div className="">
-                          <Link
-                            className="outline-none"
-                            to={`/dashboard/schedule/timetable/${cl.id}`}>
-                            <span className="text-primary-500 text-sm font-medium">
-                              View Time table
-                            </span>
-                          </Link>
+                          <Permission privilege={Privileges.CAN_ACCESS_TIMETABLE}>
+                            <Link
+                              className="outline-none"
+                              to={`/dashboard/schedule/timetable/${cl.id}`}>
+                              <span className="text-primary-500 text-sm font-medium">
+                                View Time table
+                              </span>
+                            </Link>
+                          </Permission>
                         </div>
                       </div>
                     ))
                   )}
                 </div>
-              </>
+              </div>
             </Tab>
           ))}
         </Tabs>

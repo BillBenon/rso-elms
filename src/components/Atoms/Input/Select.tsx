@@ -127,7 +127,7 @@ export default function Select({
                 // eslint-disable-next-line jsx-a11y/no-static-element-interactions
                 <div
                   key={op.value}
-                  onMouseDown={() => handleSelect(op.value)}
+                  onMouseDown={() => handleSelect(op.value.toString())}
                   className={`py-2 cursor-pointer ${
                     value == op.value
                       ? 'bg-primary-500 text-white'

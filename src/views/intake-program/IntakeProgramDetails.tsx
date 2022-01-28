@@ -111,7 +111,7 @@ function IntakeProgramDetails() {
 
     return programData;
   };
-
+  //
   const getLevels =
     intakeProgramStore.getLevelsByIntakeProgram(intakeProg).data?.data.data || [];
   const programLevels = getLevelsByAcademicProgram(id).data?.data.data;
