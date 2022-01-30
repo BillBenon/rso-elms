@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
@@ -22,6 +22,10 @@ export default function NewVenue() {
     status: GenericStatus.ACTIVE,
     academyId: user?.academy.id + '',
   });
+
+  useEffect(() => {
+    setvalues((prev) => ({ ...prev, academyId: user?.academy?.id || '' }));
+  }, [user]);
 
   function handleChange(e: ValueType) {
     setvalues((val) => ({ ...val, [e.name]: e.value }));
