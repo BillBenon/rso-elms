@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -23,8 +23,12 @@ export default function Venues() {
     history.goBack();
   };
 
-  const { data, isLoading } = getAllVenues(user?.academy.id + '');
+  const { data, isLoading, refetch } = getAllVenues(user?.academy.id + '', false);
   const venues = data?.data.data;
+
+  useEffect(() => {
+    user && refetch();
+  }, [refetch, user]);
 
   return (
     <Permission privilege={Privileges.CAN_ACCESS_VENUES}>
