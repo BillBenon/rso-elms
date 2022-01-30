@@ -117,9 +117,10 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
           <div>
             <Badge
               fontWeight="medium"
+              fontSize="sm"
               badgecolor="main"
               badgetxtcolor="txt-secondary"
-              className="mx-2 text-sm">
+              className="mx-2">
               Languages are currently not specificied
             </Badge>
           </div>
@@ -132,9 +133,10 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
             {hobbies?.length === 0 ? (
               <Badge
                 fontWeight="medium"
+                fontSize="sm"
                 badgecolor="main"
                 badgetxtcolor="txt-secondary"
-                className="mx-2 text-sm">
+                className="mx-2">
                 Hobbies are currently not specificied
               </Badge>
             ) : (
@@ -158,8 +160,9 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
             <Badge
               fontWeight="medium"
               badgecolor="main"
+              fontSize="sm"
               badgetxtcolor="txt-secondary"
-              className="mx-2 text-sm">
+              className="mx-2">
               Chronic diseases are currently not specificied
             </Badge>
           </div>

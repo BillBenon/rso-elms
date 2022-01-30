@@ -20,7 +20,8 @@ function NextOfKinCard({ user }: { user: UserInfo }) {
           fontWeight="medium"
           badgecolor="secondary"
           badgetxtcolor="txt-secondary"
-          className="mx-2 text-sm">
+          fontSize="sm"
+          className="mx-2">
           The next of kins for this user are currently not specificied
         </Badge>
       ) : (

@@ -16,9 +16,9 @@ class VenueStore {
   }
 }
 
-export function getAllVenues(academyId: string) {
+export function getAllVenues(academyId: string, enabled = true) {
   return useQuery(['venues'], () => venueService.getAllVenues(academyId), {
-    enabled: academyId?.length > 0,
+    enabled,
   });
 }
 

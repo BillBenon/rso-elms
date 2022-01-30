@@ -65,7 +65,7 @@ function NewModuleMaterialAttach() {
                 toast.success(data.data.message);
                 queryClient.invalidateQueries(['material/attachment']);
                 history.push(
-                  `/dashboard/modules/${id}/subjects?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+                  `/dashboard/modules/${id}/materials?showMenus=${showMenu}&intkPrg=${intakeProg}`,
                 );
               },
               onError(error: any) {

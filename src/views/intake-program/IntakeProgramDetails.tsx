@@ -77,8 +77,6 @@ function IntakeProgramDetails() {
   }, [studentsProgram]);
 
   useEffect(() => {
-    console.log(instructorsProgram);
-
     let demoInstructors: UserView[] = [];
     instructorsProgram?.data.data.map((inst) => {
       demoInstructors.push({
@@ -124,6 +122,7 @@ function IntakeProgramDetails() {
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
     .data?.data.data[0];
+
   let { data: instructorLevels } = enrollmentStore.getInstructorLevels(
     instructorInfo?.id + '',
   );
