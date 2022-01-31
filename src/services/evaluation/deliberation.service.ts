@@ -4,8 +4,10 @@ import { adminstrationAxios, evaluationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import { StudentEnrollmentLevel } from '../../types/services/enrollment.types';
 import { LevelIntakeProgram } from '../../types/services/intake-program.types';
-import { PromotionType } from '../../types/services/promotion.types';
-import { IOverallStudentPerformance } from '../../types/services/report.types';
+import {
+  IOverallStudentPerformance,
+  PromotionType,
+} from '../../types/services/report.types';
 
 class DeliberationService {
   public async getReportByID(
@@ -34,9 +36,12 @@ class DeliberationService {
   public async updatePromotion(
     promotion: PromotionType,
   ): Promise<AxiosResponse<Response<PromotionType>>> {
-    return await adminstrationAxios.put(
+    await adminstrationAxios.put(
       '/students/changeStudentLevelEnrolmentStatus',
       promotion,
+    );
+    return await evaluationAxios.put(
+      `reports/report/${promotion.id}/${promotion.promotion_status}`,
     );
   }
 }

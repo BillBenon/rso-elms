@@ -127,8 +127,15 @@ export default function ClassPeriodPerformance() {
                   <TableHeader
                     title={`${classInfo?.data.data.class_name || 'class'} Performance`}
                     totalItems={data.length}
-                    handleSearch={handleSearch}
-                  />
+                    handleSearch={handleSearch}>
+                    <Button
+                      onClick={() => {
+                        history.push(`${url}/deliberation`);
+                      }}>
+                      Promote Students
+                    </Button>
+                  </TableHeader>
+
                   <Table
                     statusColumn="status"
                     data={data}

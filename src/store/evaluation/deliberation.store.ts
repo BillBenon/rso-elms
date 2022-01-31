@@ -7,7 +7,6 @@ export function getEnrollmentByStudentAndLevel(
   studentId: string,
   enabled: boolean,
 ) {
-  console.log(level);
   return useQuery(
     ['student/levelEnrollment', level, studentId],
     () =>

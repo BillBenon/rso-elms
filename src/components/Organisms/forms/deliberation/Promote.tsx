@@ -16,10 +16,9 @@ import {
   PromotionParams,
   PromotionStatus,
   PromotionType,
-} from '../../../../types/services/promotion.types';
+} from '../../../../types/services/report.types';
 import { getDropDownOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
-import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 
 interface LevelSelectInfo {
@@ -30,8 +29,9 @@ interface LevelSelectInfo {
 export default function UpdateLevel() {
   const { mutateAsync } = deliberationStore.updatePromotion();
   const history = useHistory();
+  const { reportId, levelId } = useParams<PromotionParams>();
   const [promotion, setPromotion] = useState<PromotionType>({
-    id: '',
+    id: reportId,
     promotion_status: PromotionStatus.RETAKE,
     enrolment_status: EnrollmentStatus.COMPLETED,
     final_level: false,
@@ -41,7 +41,6 @@ export default function UpdateLevel() {
   });
 
   const [nextLevels, setNextLevels] = useState<LevelSelectInfo[]>([]);
-  const { reportId, levelId } = useParams<PromotionParams>();
 
   const { data } = deliberationStore.getReportById(reportId);
 
@@ -58,12 +57,13 @@ export default function UpdateLevel() {
   const programLevels = getLevelsByIntakeProgram(academicProgramId + '').data?.data.data;
 
   useEffect(() => {
-    data?.data.data && setPromotion({ ...promotion, position: data?.data.data.position });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    data?.data.data &&
+      setPromotion((prom) => {
+        return { ...prom, position: data?.data.data.position };
+      });
   }, [data]);
 
   useEffect(() => {
-    console.log(programLevels);
     const levels: LevelSelectInfo[] = [];
     programLevels?.forEach((element) => {
       if (
@@ -91,19 +91,22 @@ export default function UpdateLevel() {
       }));
     }
     setNextLevels(levels);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [programLevels]);
+  }, [levelData, programLevels]);
 
   useEffect(() => {
     setPromotion((old) => ({
       ...old,
       intake_academic_level_enrolment_id: levelData?.data.data.id + '',
     }));
-    console.log(levelData?.data.data);
   }, [levelData]);
 
   function handleChange(e: ValueType) {
-    console.log(promotion);
+    if (e.name === 'promotion_status' && e.value !== PromotionStatus.PROMOTED) {
+      setPromotion((old) => ({
+        ...old,
+        next_intake_academic_level_enrolment_id: '',
+      }));
+    }
 
     setPromotion((old) => ({ ...old, [e.name]: e.value }));
   }
@@ -124,20 +127,27 @@ export default function UpdateLevel() {
 
   return (
     <form onSubmit={submitForm}>
-      <RadioMolecule
-        defaultValue={promotion.promotion_status}
-        className="pb-4"
-        value={promotion.promotion_status}
+      <SelectMolecule
+        width="64"
         name="promotion_status"
+        placeholder="Select Promotion Status"
+        value={promotion.promotion_status}
+        handleChange={handleChange}
         options={[
           { label: 'Promoted', value: PromotionStatus.PROMOTED },
           { label: 'Retake', value: PromotionStatus.RETAKE },
-        ]}
-        handleChange={handleChange}>
-        Promotion Status
-      </RadioMolecule>
+          {
+            label: 'Promoted and Expelled',
+            value: PromotionStatus.PROMOTED_AND_EXPELLED,
+          },
+          { label: 'Retake and Expelled', value: PromotionStatus.RETAKE_AND_EXPELLED },
+        ]}>
+        Select Next Level
+      </SelectMolecule>{' '}
       <SelectMolecule
         width="64"
+        required={promotion.promotion_status === PromotionStatus.PROMOTED}
+        disabled={promotion.promotion_status !== PromotionStatus.PROMOTED}
         name="next_intake_academic_level_enrolment_id"
         placeholder="Select Level"
         value={promotion.next_intake_academic_level_enrolment_id.toString()}
@@ -148,7 +158,6 @@ export default function UpdateLevel() {
         })}>
         Select Next Level
       </SelectMolecule>{' '}
-      <br />
       <Button>Save</Button>
     </form>
   );

@@ -10,7 +10,7 @@ export default function Select({
   placeholder,
   options = [],
   className = '',
-  // disabled = false,
+  disabled = false,
   required = true,
   loading = false,
   value = '',
@@ -71,7 +71,6 @@ export default function Select({
   // };
 
   let selectId = useMemo(() => randomString(16), []);
-
   return (
     <div className={`w-${width || 'full'} ${className}`}>
       <div>
@@ -89,6 +88,7 @@ export default function Select({
           />
           {/* input with placeholder */}
           <input
+            disabled={disabled}
             ref={input}
             value={searchQuery}
             onFocus={() => setisMenuOpen(true)}

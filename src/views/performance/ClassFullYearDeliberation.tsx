@@ -60,8 +60,7 @@ export default function ClassFullYearDeliberation() {
     );
 
     processed['position'] = record.position;
-    processed.promotion_status = 'PROMOTED';
-    processed.enroll_to = 'EXPELLED';
+    processed['promotion_status'] = record.promotion_status;
     data.push(processed);
   });
 
@@ -69,15 +68,9 @@ export default function ClassFullYearDeliberation() {
 
   const studentActions = [
     {
-      name: 'Add promotion',
+      name: 'Promote',
       handleAction: (id: string | number | undefined) => {
         history.push(`${url}/${id}/promotion`);
-      },
-    },
-    {
-      name: 'Enroll level',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${url}/${id}/enrollment`);
       },
     },
   ];
