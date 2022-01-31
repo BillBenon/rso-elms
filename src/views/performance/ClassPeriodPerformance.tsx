@@ -7,9 +7,11 @@ import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { classStore } from '../../store/administration/class.store';
 import { getClassTermlyOverallReport } from '../../store/evaluation/school-report.store';
 import { ValueType } from '../../types';
+import { UserType } from '../../types/services/user.types';
 import { calculateGrade } from '../../utils/school-report';
 import ClassFullYearDeliberation from './ClassFullYearDeliberation';
 
@@ -27,6 +29,7 @@ interface IPerformanceTable {
 export default function ClassPeriodPerformance() {
   const history = useHistory();
   const { url, path } = useRouteMatch();
+  const { user } = useAuthenticator();
 
   const { classId } = useParams<IParamType>();
   const { data: classInfo } = classStore.getClassById(classId);
@@ -128,12 +131,14 @@ export default function ClassPeriodPerformance() {
                     title={`${classInfo?.data.data.class_name || 'class'} Performance`}
                     totalItems={data.length}
                     handleSearch={handleSearch}>
-                    <Button
-                      onClick={() => {
-                        history.push(`${url}/deliberation`);
-                      }}>
-                      Promote Students
-                    </Button>
+                    {user?.user_type === UserType.ADMIN && (
+                      <Button
+                        onClick={() => {
+                          history.push(`${url}/deliberation`);
+                        }}>
+                        Promote Students
+                      </Button>
+                    )}
                   </TableHeader>
 
                   <Table
