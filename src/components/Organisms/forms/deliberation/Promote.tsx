@@ -139,7 +139,7 @@ export default function UpdateLevel() {
       <SelectMolecule
         width="64"
         name="next_intake_academic_level_enrolment_id"
-        placeholder="Select class"
+        placeholder="Select Level"
         value={promotion.next_intake_academic_level_enrolment_id.toString()}
         handleChange={handleChange}
         options={getDropDownOptions({
