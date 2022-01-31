@@ -2,7 +2,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 
-import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import { moduleMaterialStore } from '../../store/administration/module-material.store';
@@ -31,31 +30,33 @@ function ShowAttachment({ attach }: { attach: ModuleMaterialAttachmentInfo }) {
 
   let filename = attachment?.path_to_file.replace(/^.*[\\/]/, '').slice(36);
 
-  const file = moduleMaterialStore.downloadFile(attach.attachment_id + '').data?.data;
+  const file = `blob:http://197.243.110.147:8080/f8b8fb17-bdae-4c66-b563-77a4a7ea9b28`;
 
-  function download() {
-    var binaryData: Blob[] = [];
+  moduleMaterialStore.downloadFile(attach.attachment_id + '').data?.data;
 
-    if (file) {
-      binaryData.push(file as Blob);
-    }
+  // function download() {
+  //   var binaryData: Blob[] = [];
 
-    const url = window.URL.createObjectURL(
-      new Blob(binaryData, { type: attachment?.file_type }),
-    );
+  //   if (file) {
+  //     binaryData.push(file as Blob);
+  //   }
 
-    const a = document.createElement('a');
-    a.href = url;
+  //   const url = window.URL.createObjectURL(
+  //     new Blob(binaryData, { type: 'application/pdf' }),
+  //   );
 
-    a.download = filename + '';
+  //   const a = document.createElement('a');
+  //   a.href = url;
 
-    document.getElementById('downloadme')?.appendChild(a);
-    a.click();
-    a.remove();
+  //   a.download = filename + '';
 
-    setTimeout(() => URL.revokeObjectURL(a.href), 7000);
-    a.parentNode?.removeChild(a);
-  }
+  //   document.getElementById('downloadme')?.appendChild(a);
+  //   a.click();
+  //   a.remove();
+
+  //   setTimeout(() => URL.revokeObjectURL(a.href), 7000);
+  //   a.parentNode?.removeChild(a);
+  // }
 
   return (
     <>
@@ -78,11 +79,19 @@ function ShowAttachment({ attach }: { attach: ModuleMaterialAttachmentInfo }) {
                 : 'pdf'
             }
           />
-          <p>{filename ? filename : attach.learning_material.title}</p>
+          <p className="truncate">
+            {filename ? filename : attach.learning_material.title}
+          </p>
         </div>
-        <Button onClick={download} icon styleType="text" className="cursor-pointer">
+        {/* <Button onClick={download} icon styleType="text" className="cursor-pointer">
           <Icon name="download" fill="primary" />
-        </Button>
+        </Button> */}
+        <a href={file} target="_blank" rel="noopener noreferrer">
+          hee
+        </a>
+        <a href={file} download={true}>
+          <Icon name="download" fill="primary" />
+        </a>
       </div>
 
       <div id="downloadme"></div>
