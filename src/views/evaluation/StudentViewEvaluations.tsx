@@ -3,7 +3,6 @@ import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import ConfirmationOrganism from '../../components/Organisms/ConfirmationOrganism';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import { CommonCardDataType } from '../../types';
 import {
@@ -29,7 +28,7 @@ export default function StudentViewEvaluations({
 }: IEvaluationProps) {
   const [evaluations, setEvaluations] = useState<any[]>([]);
   const history = useHistory();
-  const { path, url } = useRouteMatch();
+  const { path } = useRouteMatch();
 
   useEffect(() => {
     function isSubjectEvaludations(
@@ -95,11 +94,11 @@ export default function StudentViewEvaluations({
       );
     } else if (isOngoing) {
       history.push({
-        pathname: `${url}/attempt/${id}`,
+        pathname: `/dashboard/evaluations/attempt/${id}`,
         search: `?studentEval=${studEvaluation}`,
       });
     } else {
-      history.push(`${url}/attempt/${id}`);
+      history.push(`/dashboard/evaluations/attempt/${id}`);
     }
   }
 
@@ -107,13 +106,6 @@ export default function StudentViewEvaluations({
     <div>
       <Switch>
         <Route exact path={`${path}/new`} component={NewEvaluation} />
-        <Route
-          exact
-          path={`${path}/attempt/:id`}
-          render={() => (
-            <ConfirmationOrganism onConfirmationClose={() => history.goBack()} />
-          )}
-        />
 
         <Route path={`${path}/:id`} component={EvaluationDetails} />
         <Route
