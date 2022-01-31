@@ -8,7 +8,6 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import Enroll from '../../components/Organisms/forms/deliberation/Enroll';
 import Promote from '../../components/Organisms/forms/deliberation/Promote';
 import { classStore } from '../../store/administration/class.store';
 import { getClassTermlyOverallReport } from '../../store/evaluation/school-report.store';
@@ -84,16 +83,6 @@ export default function ClassFullYearDeliberation() {
             return (
               <PopupMolecule title="Student Promotion" open onClose={history.goBack}>
                 <Promote />
-              </PopupMolecule>
-            );
-          }}
-        />
-        <Route
-          path={`${path}/:reportId/enrollment`}
-          render={() => {
-            return (
-              <PopupMolecule title="Student Promotion" open onClose={history.goBack}>
-                <Enroll />
               </PopupMolecule>
             );
           }}
