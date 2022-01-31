@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
 
@@ -27,6 +27,10 @@ export default function NewEvent() {
     status: GenericStatus.ACTIVE,
     academyId: user?.academy.id + '',
   });
+
+  useEffect(() => {
+    setvalues((prev) => ({ ...prev, academyId: user?.academy?.id || '' }));
+  }, [user]);
 
   const { mutateAsync, isLoading } = eventStore.createEvent();
 
