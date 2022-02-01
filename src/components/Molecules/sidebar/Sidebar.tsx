@@ -50,6 +50,13 @@ export default function Sidebar() {
     //Academic years check
     academicAdminLinks.push(
       {
+        title: 'Dashboard',
+        to: '/dashboard/admin',
+        icon: 'dashboard',
+        privilege: Privileges.CAN_ACCESS_USERS,
+        fill: false,
+      },
+      {
         title: 'Users',
         to: '/dashboard/users',
         icon: 'user',
