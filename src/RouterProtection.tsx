@@ -10,6 +10,7 @@ import { UserType } from './types/services/user.types';
 import cookie from './utils/cookie';
 import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';
+import AdminDashboard from './views/dashboard/AdminDashboard';
 import Divisions from './views/divisions/Divisions';
 import EvaluationTest from './views/evaluation/EvaluationTest';
 import InstructorViewEvaluations from './views/evaluation/InstructorViewEvaluations';
@@ -66,6 +67,7 @@ const RouterProtection = () => {
       <Route path={`${path}/academic-years`} component={AcademicYears} />
       <Route path={`${path}/programs`} component={AcademicProgram} />
       <Route path={`${path}/users`} component={Users} />
+      <Route path={`${path}/admin`} component={AdminDashboard} />
       <Route path={`${path}/levels`} component={Levels} />
       <Route path={`${path}/intakes`} component={IntakesView} />
       {/* <Route
