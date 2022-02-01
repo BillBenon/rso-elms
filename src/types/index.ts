@@ -58,8 +58,7 @@ export type Status =
   | 'approved'
   | 'deleted'
   | 'rejected'
-  | 'retake_and_expelled'
-  | 'promoted_and_expelled';
+  | 'dismissed';
 
 export type Page =
   | 'personalDetails'
