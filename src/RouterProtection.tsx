@@ -106,6 +106,7 @@ const RouterProtection = () => {
       <Route path={`${path}/schedule`} component={ScheduleHome} />
       <Route path={`${path}/student`} component={StudentModule} />
       <Route path={`${path}/modules`} component={Modules} />
+      <Route path={`${path}/programs`} component={AcademicProgram} />
       {/* <Route path={`${path}/student/evaluations/`} component={EvaluationTest} /> */}
       <Route
         exact
