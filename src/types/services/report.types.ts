@@ -13,8 +13,8 @@ interface ISubjectReport {
 export enum PromotionStatus {
   PROMOTED = 'PROMOTED',
   RETAKE = 'RETAKE',
-  PROMOTED_AND_EXPELLED = 'PROMOTED_AND_EXPELLED',
-  RETAKE_AND_EXPELLED = 'RETAKE_AND_EXPELLED',
+  DISMISSED = 'DISMISSED',
+  PENDING = 'PENDING',
 }
 
 export interface PromotionParams {
