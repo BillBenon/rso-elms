@@ -57,7 +57,8 @@ export type Status =
   | 'marking'
   | 'approved'
   | 'deleted'
-  | 'rejected';
+  | 'rejected'
+  | 'dismissed';
 
 export type Page =
   | 'personalDetails'
@@ -105,7 +106,7 @@ export interface Link {
 }
 
 export interface SelectData {
-  value: string;
+  value: string | number;
   label: string;
   subLabel?: string;
 }

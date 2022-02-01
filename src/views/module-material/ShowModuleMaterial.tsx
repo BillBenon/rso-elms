@@ -4,7 +4,6 @@ import React from 'react';
 
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
-import { moduleMaterialService } from '../../services/administration/module-material.service';
 import { moduleMaterialStore } from '../../store/administration/module-material.store';
 import { ModuleMaterialAttachmentInfo } from '../../types/services/module-material.types';
 
@@ -31,54 +30,68 @@ function ShowAttachment({ attach }: { attach: ModuleMaterialAttachmentInfo }) {
 
   let filename = attachment?.path_to_file.replace(/^.*[\\/]/, '').slice(36);
 
-  async function download() {
-    const file = await (
-      await moduleMaterialService.downloadFile(attach.attachment_id + '')
-    ).data;
+  const file = `blob:http://197.243.110.147:8080/f8b8fb17-bdae-4c66-b563-77a4a7ea9b28`;
 
-    // eslint-disable-next-line no-undef
-    var binaryData: BlobPart[] = [];
-    //@ts-ignore
-    binaryData.push(file);
+  moduleMaterialStore.downloadFile(attach.attachment_id + '').data?.data;
 
-    const url = window.URL.createObjectURL(
-      new Blob(binaryData, { type: attachment?.file_type }),
-    );
+  // function download() {
+  //   var binaryData: Blob[] = [];
 
-    const a = document.createElement('a');
-    a.href = url;
+  //   if (file) {
+  //     binaryData.push(file as Blob);
+  //   }
 
-    a.download = filename + '';
+  //   const url = window.URL.createObjectURL(
+  //     new Blob(binaryData, { type: 'application/pdf' }),
+  //   );
 
-    document.getElementById('downloadme')?.appendChild(a);
-    a.click();
-    a.remove();
+  //   const a = document.createElement('a');
+  //   a.href = url;
 
-    setTimeout(() => URL.revokeObjectURL(a.href), 7000);
-    a.parentNode?.removeChild(a);
-  }
+  //   a.download = filename + '';
+
+  //   document.getElementById('downloadme')?.appendChild(a);
+  //   a.click();
+  //   a.remove();
+
+  //   setTimeout(() => URL.revokeObjectURL(a.href), 7000);
+  //   a.parentNode?.removeChild(a);
+  // }
 
   return (
     <>
-      <div className="flex items-center gap-2 cursor-pointer" onClick={download}>
-        <Icon
-          name={
-            attachment?.file_type === 'application/pdf'
-              ? 'pdf'
-              : attachment?.file_type === 'application/msword'
-              ? 'word'
-              : attachment?.file_type === 'application/vnd.ms-excel'
-              ? 'excel'
-              : attachment?.file_type === 'application/vnd.ms-powerpoint'
-              ? 'powerpoint'
-              : attachment?.file_type === 'text/plain'
-              ? 'text-file'
-              : attachment?.file_type.includes('image/')
-              ? 'png'
-              : 'pdf'
-          }
-        />
-        <div>{filename ? filename : attach.learning_material.title}</div>
+      <div className="flex items-center justify-between w-1/2">
+        <div className="flex items-center">
+          <Icon
+            name={
+              attachment?.file_type === 'application/pdf'
+                ? 'pdf'
+                : attachment?.file_type === 'application/msword'
+                ? 'word'
+                : attachment?.file_type === 'application/vnd.ms-excel'
+                ? 'excel'
+                : attachment?.file_type === 'application/vnd.ms-powerpoint'
+                ? 'powerpoint'
+                : attachment?.file_type === 'text/plain'
+                ? 'text-file'
+                : attachment?.file_type.includes('image/')
+                ? 'png'
+                : 'pdf'
+            }
+          />
+          <p className="truncate">
+            {filename ? filename : attach.learning_material.title}
+          </p>
+        </div>
+        {/* <Button onClick={download} icon styleType="text" className="cursor-pointer">
+          <Icon name="download" fill="primary" />
+        </Button> */}
+        <a href={file} target="_blank" rel="noopener noreferrer">
+          hee
+        </a>
+        <a href={file} download={true}>
+          <Icon name="download" fill="primary" />
+        </a>
       </div>
 
       <div id="downloadme"></div>

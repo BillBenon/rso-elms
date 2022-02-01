@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -7,10 +7,13 @@ import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { classStore } from '../../store/administration/class.store';
 import { getClassTermlyOverallReport } from '../../store/evaluation/school-report.store';
 import { ValueType } from '../../types';
+import { UserType } from '../../types/services/user.types';
 import { calculateGrade } from '../../utils/school-report';
+import ClassFullYearDeliberation from './ClassFullYearDeliberation';
 
 interface IParamType {
   levelId: string;
@@ -25,7 +28,8 @@ interface IPerformanceTable {
 
 export default function ClassPeriodPerformance() {
   const history = useHistory();
-  const { url } = useRouteMatch();
+  const { url, path } = useRouteMatch();
+  const { user } = useAuthenticator();
 
   const { classId } = useParams<IParamType>();
   const { data: classInfo } = classStore.getClassById(classId);
@@ -84,53 +88,73 @@ export default function ClassPeriodPerformance() {
 
   return (
     <div>
-      <Heading fontSize="lg" fontWeight="bold" className="py-2">
-        {`${
-          classInfo?.data.data.academic_year_program_intake_level.academic_program_level
-            .program.name || ''
-        } - 
+      <Switch>
+        <Route path={`${path}/deliberation`} component={ClassFullYearDeliberation} />
+        <Route
+          path={`${path}`}
+          render={() => (
+            <div>
+              <Heading fontSize="lg" fontWeight="bold" className="py-2">
+                {`${
+                  classInfo?.data.data.academic_year_program_intake_level
+                    .academic_program_level.program.name || ''
+                } - 
         ${
           classInfo?.data.data.academic_year_program_intake_level.academic_program_level
             .level.name || ''
         } 
        `}
-      </Heading>
-      {isIdle || isLoading ? (
-        <Loader />
-      ) : isError ? (
-        <div>
-          <h2 className="text-error-500 py-2 mb-3 font-medium tracking-widest">
-            That was an error! May be this class has no students or no assignments done
-            het!
-          </h2>
-          <Button styleType="outline" onClick={() => window.location.reload()}>
-            Reload
-          </Button>
-        </div>
-      ) : data.length === 0 ? (
-        <NoDataAvailable
-          title={'No marks for this association found'}
-          description={
-            'No data associated with this class an this period found. try changing the period'
-          }
-          showButton={false}
+              </Heading>
+              {isIdle || isLoading ? (
+                <Loader />
+              ) : isError ? (
+                <div>
+                  <h2 className="text-error-500 py-2 mb-3 font-medium tracking-widest">
+                    That was an error! May be this class has no students or no assignments
+                    done het!
+                  </h2>
+                  <Button styleType="outline" onClick={() => window.location.reload()}>
+                    Reload
+                  </Button>
+                </div>
+              ) : data.length === 0 ? (
+                <NoDataAvailable
+                  title={'No marks for this association found'}
+                  description={
+                    'No data associated with this class an this period found. try changing the period'
+                  }
+                  showButton={false}
+                />
+              ) : (
+                <>
+                  <TableHeader
+                    title={`${classInfo?.data.data.class_name || 'class'} Performance`}
+                    totalItems={data.length}
+                    handleSearch={handleSearch}>
+                    {user?.user_type === UserType.ADMIN && (
+                      <Button
+                        styleType="outline"
+                        onClick={() => {
+                          history.push(`${url}/deliberation`);
+                        }}>
+                        View in Deliberation Mode
+                      </Button>
+                    )}
+                  </TableHeader>
+
+                  <Table
+                    statusColumn="status"
+                    data={data}
+                    actions={studentActions}
+                    hide={['id']}
+                    uniqueCol="id"
+                  />
+                </>
+              )}
+            </div>
+          )}
         />
-      ) : (
-        <>
-          <TableHeader
-            title={`${classInfo?.data.data.class_name || 'class'} Performance`}
-            totalItems={data.length}
-            handleSearch={handleSearch}
-          />
-          <Table
-            statusColumn="status"
-            data={data}
-            actions={studentActions}
-            hide={['id']}
-            uniqueCol="id"
-          />
-        </>
-      )}
+      </Switch>
     </div>
   );
 }

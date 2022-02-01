@@ -13,6 +13,7 @@ export enum EnrollmentStatus {
   NEW,
   RETAKE = 'RETAKE',
   DISMISSED = 'DISMISSED',
+  COMPLETED = 'COMPLETED',
 }
 
 export enum EnrollmentMode {

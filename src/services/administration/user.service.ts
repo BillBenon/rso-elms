@@ -4,6 +4,7 @@ import { adminstrationAxios } from '../../plugins/axios';
 import { FilterOptions, Response, SortedContent } from '../../types';
 import { AddInstitutionLogo } from '../../types/services/institution.types';
 import {
+  AssignUserRole,
   CreateUserInfo,
   EditUser,
   IImportUserRes,
@@ -32,6 +33,13 @@ class UserService {
   ): Promise<AxiosResponse<Response<UserInfo>>> {
     return await adminstrationAxios.put('/users/modifyUser', userInfo);
   }
+
+  public async assignRole(
+    role: AssignUserRole[],
+  ): Promise<AxiosResponse<Response<UserInfo>>> {
+    return await adminstrationAxios.put('/users/addRoles', role);
+  }
+
   public async updateProfile(
     userInfo: UpdateUserInfo,
   ): Promise<AxiosResponse<Response<UserInfo>>> {

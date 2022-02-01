@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Badge from '../../components/Atoms/custom/Badge';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -11,23 +12,30 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewEvent from '../../components/Organisms/schedule/event/NewEvent';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { getAllEvents } from '../../store/timetable/event.store';
+import { Privileges } from '../../types';
 import { UserType } from '../../types/services/user.types';
 
 export default function Events() {
   const { user } = useAuthenticator();
-
-  const { data, isLoading } = getAllEvents(user?.academy.id + '');
+  const { data, isLoading, refetch } = getAllEvents(
+    user?.academy?.id.toString() || '',
+    false,
+  );
   const events = data?.data.data;
 
   const history = useHistory();
   const { path } = useRouteMatch();
+
+  useEffect(() => {
+    user && refetch();
+  }, [refetch, user]);
 
   const handleClose = () => {
     history.goBack();
   };
 
   return (
-    <div>
+    <Permission privilege={Privileges.CAN_ACCESS_EVENTS}>
       <TableHeader totalItems={0} title={'Events'} showBadge={false}>
         {user?.user_type != UserType.STUDENT && (
           <Link to={`/dashboard/schedule/events/new`}>
@@ -83,6 +91,6 @@ export default function Events() {
           )}
         />
       </Switch>
-    </div>
+    </Permission>
   );
 }

@@ -52,9 +52,9 @@ export default function UpdateDepartment({ onSubmit }: IDivisionsAcademyType) {
       onSuccess: (data) => {
         toast.success(data.data.message);
         queryClient.invalidateQueries([
-          'divisions',
+          'division',
           division.division_type,
-          division.academy?.id,
+          division.academy_id,
         ]);
         history.push('/dashboard/divisions');
       },

@@ -11,6 +11,7 @@ import {
 } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import PopupMolecule from '../../components/Molecules/Popup';
@@ -21,7 +22,7 @@ import useAuthenticator from '../../hooks/useAuthenticator';
 import { classStore } from '../../store/administration/class.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { timetableStore } from '../../store/timetable/timetable.store';
-import { ParamType } from '../../types';
+import { ParamType, Privileges } from '../../types';
 import { UserType } from '../../types/services/user.types';
 import { groupTimeTableByDay } from '../../utils/calendar';
 import { formatDateToYyMmDd, getWeekBorderDays } from '../../utils/date-helper';
@@ -71,11 +72,12 @@ export default function ClassTimeTable() {
             disabled={isPrinting}>
             Print Timetable
           </Button>
-          {user?.user_type !== UserType.STUDENT && (
+
+          <Permission privilege={Privileges.CAN_CREATE_TIMETABLE}>
             <Link to={`${url}/new-schedule`}>
               <Button type="button">New timetable</Button>
             </Link>
-          )}
+          </Permission>
         </div>
       </TableHeader>
       <div className="tt print:px-10 print:py-8 print:bg-main" ref={timetableRef}>

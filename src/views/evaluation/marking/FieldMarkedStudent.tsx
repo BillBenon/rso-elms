@@ -9,10 +9,14 @@ import Loader from '../../../components/Atoms/custom/Loader';
 import FieldMarker from '../../../components/Molecules/cards/correction/FieldMarker';
 import TableHeader from '../../../components/Molecules/table/TableHeader';
 import FinishMarking from '../../../components/Organisms/forms/evaluation/FinishMarking';
+import { queryClient } from '../../../plugins/react-query';
 import intakeProgramStore from '../../../store/administration/intake-program.store';
 import { markingStore } from '../../../store/administration/marking.store';
 // import { evaluationStore } from '../../../store/evaluation/evaluation.store';
-import { FieldQuestionMarks } from '../../../types/services/marking.types';
+import {
+  FieldQuestionMarks,
+  PointsUpdateInfo,
+} from '../../../types/services/marking.types';
 
 interface MarkingParams {
   id: string;
@@ -34,9 +38,6 @@ export default function FieldStudentMarking() {
   );
   const [questionMarks, setQuestionMarks] = useState<Array<FieldQuestionMarks>>([]);
   const [step] = useState(0);
-  //   const [studentEvaluation, setStudentEvaluation] = useState<string>('');
-
-  const { mutate } = markingStore.fieldMarkingFinish();
   const history = useHistory();
   function createCreateNewCorrection(
     question_id: string,
@@ -79,29 +80,9 @@ export default function FieldStudentMarking() {
   }
 
   function submitMarking() {
-    if (questionMarks.length == (studentAnswers?.data.data.length || 0)) {
-      mutate(
-        {
-          questions_marks: questionMarks,
-          student_id: studentEvaluation?.data.data.student.admin_id + '',
-          evaluation_id: id,
-        },
-        {
-          onSuccess: () => {
-            toast.success('Marks saved successfully', { duration: 3000 });
-            history.push(`/dashboard/evaluations/${id}/submissions`);
-            // setStep(1);
-          },
-          onError: (error) => {
-            console.error(error);
-            toast.error(error + '');
-          },
-        },
-      );
-      console.log(questionMarks);
-    } else {
-      toast.error('Some Answers are not marked yet!' + questionMarks.length);
-    }
+    queryClient.invalidateQueries(['evaluation/studentEvaluations']);
+    toast.success('Marks saved successfully', { duration: 3000 });
+    history.push(`/dashboard/evaluations/${id}/submissions`);
   }
   if (step == 0)
     if (!isLoading && questionMarks)
@@ -123,6 +104,11 @@ export default function FieldStudentMarking() {
           </TableHeader>
           <section className="flex flex-wrap justify-start gap-4 mt-2">
             {studentAnswers?.data.data?.map((answer, index: number) => {
+              let updates: PointsUpdateInfo = {
+                is_updating: true,
+                answer_id: answer.id,
+                obtained: answer.mark_scored,
+              };
               return (
                 <FieldMarker
                   key={index}
@@ -133,7 +119,7 @@ export default function FieldStudentMarking() {
                   totalMarks={totalMarks}
                   setTotalMarks={setTotalMarks}
                   createCreateNewCorrection={createCreateNewCorrection}
-                  obtained={answer.mark_scored}
+                  updates={updates}
                 />
               );
             })}

@@ -19,7 +19,6 @@ export default function Submissions() {
   const history = useHistory();
   const { id } = useParams<ParamType>();
   const [submissions, setSubmissions] = useState([]);
-  // const { url } = useRouteMatch();
 
   const { mutate } = markingStore.publishResults();
   const { data: evaluation } = evaluationStore.getEvaluationById(id).data?.data || {};

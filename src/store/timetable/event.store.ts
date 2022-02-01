@@ -16,9 +16,9 @@ class EventStore {
   }
 }
 
-export function getAllEvents(academyId: string) {
+export function getAllEvents(academyId: string, enabled = true) {
   return useQuery(['events'], () => eventService.getAllEvents(academyId), {
-    enabled: academyId.length > 0,
+    enabled,
   });
 }
 

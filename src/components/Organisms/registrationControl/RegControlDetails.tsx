@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { intakeStore } from '../../../store/administration/intake.store';
 import { CommonCardDataType, Link, ParamType } from '../../../types';
@@ -19,7 +19,6 @@ const list: Link[] = [
 export default function RegControlDetails() {
   const [intakes, setIntakes] = useState<CommonCardDataType[]>([]);
   const { id } = useParams<ParamType>();
-  const { url } = useRouteMatch();
 
   const { isSuccess, isError, data } = intakeStore.getIntakesByRegControl(id);
   const history = useHistory();
@@ -51,16 +50,15 @@ export default function RegControlDetails() {
         <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
           Registration control details
         </Heading>
-        <Button onClick={() => history.push(`${url}/add-intake`)}>Add intake</Button>
+        <Button onClick={() => history.push(`/dashboard/intakes?regId=${id}`)}>
+          Manage intake
+        </Button>
       </div>
 
       <section className="flex flex-wrap justify-between mt-2">
         {intakes.map((course) => (
           <div key={course.code} className="p-1 mt-3">
-            <CommonCardMolecule
-              data={course}
-              to={{ title: 'module', to: 'modules/id' }}
-            />
+            <CommonCardMolecule data={course} />
           </div>
         ))}
       </section>

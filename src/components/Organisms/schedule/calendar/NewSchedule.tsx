@@ -92,8 +92,8 @@ export default function NewSchedule() {
         queryClient.invalidateQueries(['schedules/program/:id', id]);
         history.goBack();
       },
-      onError() {
-        toast.error('error occurred please try again');
+      onError(error: any) {
+        toast.error(error.response.data.message || 'error occurred please try again');
       },
     });
   }
@@ -131,8 +131,8 @@ export default function NewSchedule() {
 function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
   const { user } = useAuthenticator();
 
-  const events = getAllEvents(user?.academy.id + '').data?.data.data;
-  const venues = getAllVenues(user?.academy.id + '').data?.data.data;
+  const events = getAllEvents(user?.academy.id + '', !!user?.academy.id).data?.data.data;
+  const venues = getAllVenues(user?.academy.id + '', !!user?.academy.id).data?.data.data;
 
   const { data: users } = usersStore.getUsersByAcademy(user?.academy.id || '', {
     page: 0,

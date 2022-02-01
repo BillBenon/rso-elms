@@ -18,6 +18,18 @@ class RoleStore {
     );
   }
 
+  getRolesByInstitution(institutionId: string) {
+    return useQuery(['role/institutionId', institutionId], () =>
+      roleService.getRolesByInstitution(institutionId),
+    );
+  }
+
+  getRolesByAcademy(academyId: string) {
+    return useQuery(['role/academyId', academyId], () =>
+      roleService.getRolesByAcademy(academyId),
+    );
+  }
+
   getPrivilegesByRole(roleId: string, enabled = true) {
     return useQuery<AxiosResponse<Response<RolePrivilege[]>>, Response>(
       ['privilegesByRole/id', roleId],

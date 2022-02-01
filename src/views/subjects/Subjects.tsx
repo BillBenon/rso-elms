@@ -8,7 +8,7 @@ import useAuthenticator from '../../hooks/useAuthenticator';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
-import { CommonCardDataType, ParamType } from '../../types';
+import { CommonCardDataType, ParamType, Privileges } from '../../types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 
@@ -82,6 +82,7 @@ function Subjects() {
       ) : subjects.length === 0 && subjectData.isSuccess ? (
         <NoDataAvailable
           showButton={user?.user_type === UserType.ADMIN}
+          privilege={Privileges.CAN_CREATE_SUBJECTS}
           icon="subject"
           title={'No subjects registered'}
           description={'There are no subjects available yet'}

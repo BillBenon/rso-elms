@@ -45,15 +45,6 @@ export default function Departments({ fetchType }: IDepartment) {
     ({ data: facultyData } = divisionStore.getDivision(facultyId));
   }
 
-  const [privileges, setPrivileges] = useState<string[]>();
-
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
-
   useEffect(() => {
     // extract department data to display
     let formattedDeparts: any = [];
@@ -90,32 +81,29 @@ export default function Departments({ fetchType }: IDepartment) {
 
   const actions: ActionsType<FilteredData>[] = [];
 
-  if (privileges?.includes(Privileges.CAN_MODIFY_DIVISION)) {
-    actions.push({
-      name: 'Edit Department',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit dep
-      },
-    });
-  }
+  actions.push({
+    name: 'Edit Department',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/edit`); // go to edit dep
+    },
+    privilege: Privileges.CAN_MODIFY_DIVISION,
+  });
 
-  if (privileges?.includes(Privileges.CAN_ACCESS_PROGRAMS)) {
-    actions.push({
-      name: 'View Programs',
-      handleAction: (id: string | number | undefined) => {
-        history.push({ pathname: `/dashboard/programs/`, search: `?dp=${id}` });
-      },
-    });
-  }
+  actions.push({
+    name: 'View Programs',
+    handleAction: (id: string | number | undefined) => {
+      history.push({ pathname: `/dashboard/programs/`, search: `?dp=${id}` });
+    },
+    privilege: Privileges.CAN_ACCESS_PROGRAMS,
+  });
 
-  if (privileges?.includes(Privileges.CAN_CREATE_PROGRAM)) {
-    actions.push({
-      name: 'Add Program',
-      handleAction: (id: string | number | undefined) => {
-        history.push({ pathname: `/dashboard/programs/add`, search: `?dp=${id}` });
-      },
-    });
-  }
+  actions.push({
+    name: 'Add Program',
+    handleAction: (id: string | number | undefined) => {
+      history.push({ pathname: `/dashboard/programs/add`, search: `?dp=${id}` });
+    },
+    privilege: Privileges.CAN_CREATE_PROGRAM,
+  });
 
   return (
     <Switch>

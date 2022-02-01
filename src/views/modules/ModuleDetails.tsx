@@ -8,7 +8,6 @@ import {
   useRouteMatch,
 } from 'react-router';
 
-import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -43,54 +42,47 @@ export default function ModuleDetails() {
   let moduleData: IProgramData | undefined;
   const module = moduleStore.getModuleById(id).data?.data.data;
   const { user } = useAuthenticator();
-  const [privileges, setPrivileges] = useState<string[]>();
-
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
 
   let tabs: TabType[] = [];
   // {
   //   label: 'Module Info',
   //   href: `${url}`,
   // },
-  if (privileges?.includes(Privileges.CAN_ACCESS_SUBJECTS)) {
-    tabs.push({
-      label: 'Subjects',
-      href: `${url}/subjects?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-    });
-  }
+  tabs.push({
+    label: 'Subjects',
+    href: `${url}/subjects?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+    privilege: Privileges.CAN_ACCESS_SUBJECTS,
+  });
   tabs.push({
     label: 'Prerequisites',
     href: `${url}/prereqs?showMenus=${showMenu}&intkPrg=${intakeProg}`,
   });
 
   if (!showMenu || showMenu == 'false') {
-    if (privileges?.includes(Privileges.CAN_ACCESS_MODULE_MATERIALS)) {
-      tabs.push({
-        label: 'Materials',
-        href: `${url}/materials?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-      });
-    }
+    tabs.push({
+      label: 'Materials',
+      href: `${url}/materials?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+      privilege: Privileges.CAN_ACCESS_MODULE_MATERIALS,
+    });
   }
 
   if (showMenu && showMenu == 'true') {
+    tabs.push({
+      label: 'Instructors',
+      href: `${url}/instructors?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+    });
+
+    tabs.push({
+      label: 'Materials',
+      href: `${url}/materials?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+      privilege: Privileges.CAN_ACCESS_MODULE_MATERIALS,
+    });
+
+    // {
+    //   label: 'Syllabus',
+    //   href: `${url}/syllabus?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+    // },
     tabs.push(
-      {
-        label: 'Instructors',
-        href: `${url}/instructors?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-      },
-      {
-        label: 'Materials',
-        href: `${url}/materials?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-      },
-      // {
-      //   label: 'Syllabus',
-      //   href: `${url}/syllabus?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-      // },
       {
         label: 'Evaluation',
         href: `${url}/evaluations?showMenus=${showMenu}&intkPrg=${intakeProg}`,
@@ -184,16 +176,14 @@ export default function ModuleDetails() {
             {user?.user_type === UserType.ADMIN && (
               <>
                 {route == 'SUBJECTS' ? (
-                  <Permission privilege={Privileges.CAN_CREATE_SUBJECTS}>
-                    <div className="flex gap-3">
-                      <Button
-                        onClick={() => {
-                          history.push(`/dashboard/modules/${id}/add-subject`);
-                        }}>
-                        Add new subject
-                      </Button>
-                    </div>
-                  </Permission>
+                  <div className="flex gap-3">
+                    <Button
+                      onClick={() => {
+                        history.push(`/dashboard/modules/${id}/add-subject`);
+                      }}>
+                      Add new subject
+                    </Button>
+                  </div>
                 ) : (
                   //  : route == 'SYLLABUS' ? (
                   //   <div className="flex gap-3">
@@ -219,13 +209,11 @@ export default function ModuleDetails() {
               </div>
             )}
             {user?.user_type === UserType.INSTRUCTOR && route == 'MATERIALS' && (
-              <Permission privilege={Privileges.CAN_CREATE_MODULE_MATERIALS}>
-                <div className="flex gap-3">
-                  <Button onClick={() => history.push(`${url}/materials/add-material`)}>
-                    Add new Material
-                  </Button>
-                </div>
-              </Permission>
+              <div className="flex gap-3">
+                <Button onClick={() => history.push(`${url}/materials/add-material`)}>
+                  Add new Material
+                </Button>
+              </div>
             )}
           </div>
         </div>

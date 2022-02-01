@@ -8,11 +8,9 @@ import { queryClient } from '../../../plugins/react-query';
 import { authenticatorStore } from '../../../store/administration';
 import { getAllNotifications } from '../../../store/administration/notification.store';
 import { NotificationStatus } from '../../../types/services/notification.types';
-import { Privileges } from '../../../types/services/privilege.types';
 import { UserType } from '../../../types/services/user.types';
 import cookie from '../../../utils/cookie';
 import { usePicture } from '../../../utils/file-util';
-import Permission from '../../Atoms/auth/Permission';
 import Avatar from '../../Atoms/custom/Avatar';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
@@ -78,13 +76,13 @@ export default function Navigation() {
           </div> */}
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
-              <Permission privilege={Privileges.CAN_MODIFY_INSTITUTION}>
+              {user?.user_type === UserType.SUPER_ADMIN && (
                 <div className="px-12">
                   <Link to={`/dashboard/institution/${user?.institution_id}/edit`}>
                     <Button styleType="outline">Edit institution</Button>
                   </Link>
                 </div>
-              </Permission>
+              )}
               <div className="bg-main p-1 rounded-full flex text-gray-400">
                 <Icon name="switch" />
                 <Icon name="settings" />

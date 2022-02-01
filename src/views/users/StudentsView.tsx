@@ -8,6 +8,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import AssignRole from '../../components/Organisms/forms/user/AssignRole';
 import ImportUsers from '../../components/Organisms/user/ImportUsers';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import usersStore from '../../store/administration/users.store';
@@ -17,14 +18,12 @@ import { AcademyUserType, UserType, UserTypes } from '../../types/services/user.
 import { formatUserTable } from '../../utils/array';
 
 export default function StudentsView() {
-  const { url } = useRouteMatch();
+  const { url, path } = useRouteMatch();
   const { user } = useAuthenticator();
   const history = useHistory();
-  const [privileges, setPrivileges] = useState<string[]>();
 
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
-  let actions: ActionsType<any>[] | undefined = [];
 
   const { data, isLoading, refetch } =
     user?.user_type === UserType.SUPER_ADMIN
@@ -42,37 +41,31 @@ export default function StudentsView() {
 
   const users = formatUserTable(data?.data.data.content || []);
 
-  if (privileges?.includes(Privileges.CAN_ASSIGN_ROLE)) {
-    actions?.push({
-      name: 'Add Role',
-      handleAction: () => {},
-    });
-  }
+  let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
 
-  if (privileges?.includes(Privileges.CAN_MODIFY_USER)) {
-    actions?.push({
-      name: 'Edit student',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/users/${id}/edit`); // go to edit user
-      },
-    });
-  }
+  actions?.push({
+    name: 'Assign Role',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${url}/${id}/role`); // go to assign role
+    },
+    privilege: Privileges.CAN_ASSIGN_ROLE,
+  });
 
-  if (privileges?.includes(Privileges.CAN_ACCESS_PROFILE)) {
-    actions?.push({
-      name: 'View Student',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${url}/${id}/profile`); // go to view user profile
-      },
-    });
-  }
+  actions?.push({
+    name: 'Edit student',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`/dashboard/users/${id}/edit`); // go to edit user
+    },
+    privilege: Privileges.CAN_MODIFY_USER,
+  });
 
-  useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
-    if (_privileges) setPrivileges(_privileges);
-  }, [user]);
+  actions?.push({
+    name: 'View Student',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${url}/${id}/profile`); // go to view user profile
+    },
+    privilege: Privileges.CAN_ACCESS_PROFILE,
+  });
 
   function handleSearch(_e: ValueType) {}
 
@@ -86,16 +79,19 @@ export default function StudentsView() {
         title="Students"
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
-        <Permission privilege={Privileges.CAN_CREATE_USER}>
+        {(user?.user_type === UserType.SUPER_ADMIN ||
+          user?.user_type === UserType.ADMIN) && (
           <div className="flex gap-3">
             <Link to={`${url}/import`}>
               <Button styleType="outline">Import students</Button>
             </Link>
             <Link to={`${url}/add/${UserType.STUDENT}`}>
-              <Button>New student</Button>
+              <Permission privilege={Privileges.CAN_ACCESS_EVALUATIONS}>
+                <Button>New student</Button>
+              </Permission>
             </Link>
           </div>
-        </Permission>
+        )}
       </TableHeader>
 
       {isLoading ? (
@@ -139,6 +135,19 @@ export default function StudentsView() {
               open={true}
               onClose={history.goBack}>
               <ImportUsers userType={UserType.STUDENT} />
+            </PopupMolecule>
+          )}
+        />
+        <Route
+          exact
+          path={`${path}/:id/role`}
+          render={() => (
+            <PopupMolecule
+              closeOnClickOutSide={false}
+              title="Assign role"
+              open={true}
+              onClose={history.goBack}>
+              <AssignRole />
             </PopupMolecule>
           )}
         />

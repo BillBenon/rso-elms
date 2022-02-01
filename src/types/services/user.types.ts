@@ -50,9 +50,15 @@ export interface AuthUser extends UserInfo {
   user_roles: RoleResWithPrevilages[];
 }
 
-export interface UserRole extends Table{
-  role:RoleRes,
-  user:UserInfo
+export interface UserRole extends Table {
+  role: RoleRes;
+  user: UserInfo;
+}
+
+export interface AssignUserRole {
+  description: string;
+  role_id: number;
+  user_id: string;
 }
 
 export interface IntakeLevelProgramInfo extends Table {
@@ -225,7 +231,7 @@ export interface BasicPersonInfo
     | 'document_expire_on'
     | 'marital_status'
     | 'spouse_name'
-> {
+  > {
   email: string;
   relationship: string;
   user_id: string;
@@ -248,7 +254,7 @@ export interface PersonDetail
     | 'marital_status'
     | 'spouse_name'
     | 'residence_location_id'
-    | 'place_of_residence' 
+    | 'place_of_residence'
     | 'doc_type'
   > {}
 export interface EmploymentDetail
@@ -301,7 +307,6 @@ export enum DocType {
   RCS_CARD = 'RCS_CARD',
   OTHER = 'OTHER',
 }
-
 
 export enum BloodGroup {
   'A+' = 'A+',

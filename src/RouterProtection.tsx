@@ -11,6 +11,7 @@ import { UserType } from './types/services/user.types';
 import cookie from './utils/cookie';
 import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';
+import AdminDashboard from './views/dashboard/AdminDashboard';
 import Divisions from './views/divisions/Divisions';
 import EvaluationNotiView from './views/evaluation/EvaluationNotiView';
 import EvaluationTest from './views/evaluation/EvaluationTest';
@@ -31,7 +32,7 @@ import ViewRole from './views/roles/ViewRole';
 import CalendarView from './views/schedule/CalendarView';
 import Events from './views/schedule/Events';
 import ScheduleHome from './views/schedule/ScheduleHome';
-import AllSubjects from './views/subjects';
+import Subjects from './views/subjects';
 import UserDetails from './views/users/UserDetails';
 import Users from './views/users/Users';
 
@@ -62,13 +63,14 @@ const RouterProtection = () => {
   const AcademicAdminRoutes = () => (
     <>
       {/* start of academic admin pages */}
-      <Route path={`${path}/subjects`} component={AllSubjects} />
+      <Route path={`${path}/subjects`} component={Subjects} />
       <Route path={`${path}/schedule`} component={ScheduleHome} />
       <Route path={`${path}/registration-control`} component={RegistrationControl} />
       <Route path={`${path}/divisions`} component={Divisions} />
       <Route path={`${path}/academic-years`} component={AcademicYears} />
       <Route path={`${path}/programs`} component={AcademicProgram} />
       <Route path={`${path}/users`} component={Users} />
+      <Route path={`${path}/admin`} component={AdminDashboard} />
       <Route path={`${path}/levels`} component={Levels} />
       <Route path={`${path}/intakes`} component={IntakesView} />
       {/* <Route

@@ -2,12 +2,14 @@ import React, { useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { getStudentReportInTerm } from '../../store/evaluation/school-report.store';
+import { Privileges } from '../../types';
 import { usePicture } from '../../utils/file-util';
 import { calculateGrade, formatPercentage, isFailure } from '../../utils/school-report';
 
@@ -70,9 +72,11 @@ export default function SchoolReport() {
   return (
     <div className="mx-auto max-w-4xl">
       <div className="text-right mb-5">
-        <Button disabled={isPrinting} onClick={() => handlePrint()}>
-          Download report
-        </Button>
+        <Permission privilege={Privileges.CAN_DOWNLOAD_REPORTS}>
+          <Button disabled={isPrinting} onClick={() => handlePrint()}>
+            Download report
+          </Button>
+        </Permission>
       </div>
       <div
         ref={report}
