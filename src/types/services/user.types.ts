@@ -36,6 +36,7 @@ export interface UserInfo extends Table {
   image_url: string;
   password_reset_period_in_days: number;
   reset_date: string;
+  password: string;
   level: string;
   login_try: number;
   profile_status: ProfileStatus;

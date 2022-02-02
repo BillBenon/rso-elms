@@ -2,8 +2,19 @@ export interface LoginInfo {
   username: string;
   password: string;
 }
-
 export interface LoginRes {
   username: string;
   token: string;
+}
+export interface ChangePassword {
+  currentPassword: string;
+  newPassword: string;
+}
+export interface InitiateResetPassword {
+  email: string;
+}
+export interface ResetPassword {
+  activationCode: string;
+  email: string;
+  password: string;
 }

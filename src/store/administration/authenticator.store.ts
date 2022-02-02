@@ -12,6 +12,15 @@ class AuthenticatorStore {
   authUser(enabled = true) {
     return useQuery('authUser', authenticatorService.authUser, { enabled });
   }
+  passwordChange() {
+    return useMutation(authenticatorService.passwordChange);
+  }
+  forgotPassword() {
+    return useMutation(authenticatorService.forgotPassword);
+  }
+  passwordReset() {
+    return useMutation(authenticatorService.passwordReset);
+  }
 }
 
 export const authenticatorStore = new AuthenticatorStore();
