@@ -4,12 +4,21 @@ import { GenericStatus, Table } from './common.types';
 export interface CreateRoleReq {
   description?: string;
   name?: string;
+  academy_id?: string;
+  institution_id?: string;
+  type: RoleApplyOn;
 }
 
 export interface RoleRes extends Table {
   description: string;
   name: string;
+  academyId: string;
   status: GenericStatus;
+}
+
+export enum RoleApplyOn {
+  ACADEMY = 'ACADEMY',
+  INSTITUTION = 'INSTITUTION',
 }
 
 export interface RoleResWithPrevilages extends RoleRes {
