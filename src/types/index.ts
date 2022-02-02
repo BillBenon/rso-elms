@@ -213,7 +213,8 @@ export type IconType =
   | 'powerpoint'
   | 'text-file'
   | 'chevron-down'
-  | 'camera';
+  | 'camera'
+  | 'privilege';
 
 export interface FormPropType {
   onSubmit?: <E>(_e: FormEvent<E>) => void;

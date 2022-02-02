@@ -44,7 +44,12 @@ export default function Sidebar() {
         icon: 'role',
         privilege: Privileges.CAN_ACCESS_ROLES,
       },
-      { title: 'Privileges', to: '/dashboard/privileges', icon: 'module' },
+      {
+        title: 'Privileges',
+        to: '/dashboard/privileges',
+        icon: 'privilege',
+        fill: false,
+      },
     );
 
     //Academic years check
