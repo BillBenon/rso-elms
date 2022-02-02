@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { roleStore } from '../../../../store/administration';
 import academyStore from '../../../../store/administration/academy.store';
-import { CreateRoleReq, FormPropType, RoleApplyOn, ValueType } from '../../../../types';
+import { CreateRoleReq, FormPropType, RoleType, ValueType } from '../../../../types';
 import { AcademyInfo } from '../../../../types/services/academy.types';
 import { UserType } from '../../../../types/services/user.types';
 import {
@@ -28,7 +28,7 @@ export default function NewRole({ onSubmit }: FormPropType) {
     description: '',
     academy_id: user?.academy?.id.toString() || '',
     institution_id: user?.institution?.id.toString(),
-    type: RoleApplyOn.ACADEMY,
+    type: RoleType.ACADEMY,
   });
 
   function handleChange({ name, value }: ValueType) {
@@ -59,13 +59,13 @@ export default function NewRole({ onSubmit }: FormPropType) {
           <RadioMolecule
             className="pb-2"
             defaultValue={form.type}
-            options={getDropDownStatusOptions(RoleApplyOn)}
+            options={getDropDownStatusOptions(RoleType)}
             value={form.type}
             handleChange={handleChange}
             name="type">
             Apply Role On
           </RadioMolecule>
-          {form.type === RoleApplyOn.ACADEMY ? (
+          {form.type === RoleType.ACADEMY ? (
             <SelectMolecule
               options={getDropDownOptions({ inputs: academies || [] })}
               name="academy_id"
