@@ -7,6 +7,7 @@ import useAuthenticator from './hooks/useAuthenticator';
 import { getPersonExperiences } from './store/administration/experience.store';
 import { getHisNextKinById } from './store/administration/usernextkin.store';
 import { ProfileStatus, UserType } from './types/services/user.types';
+import cookie from './utils/cookie';
 import NotApproved from './views/NotApproved';
 
 export default function Redirecting() {
@@ -43,6 +44,10 @@ export default function Redirecting() {
         } else if (nextOfKin && experiences) {
           if (user?.user_type != UserType.SUPER_ADMIN && !user?.academy) {
             setHasNoAcademy(true);
+          } else if (user.user_roles !== null && user.user_roles.length === 1) {
+            cookie.setCookie('user_role', user.user_roles[0].id.toString());
+          } else if (user.user_roles !== null && user.user_roles.length > 1) {
+            redirectTo('/choose-role');
           } else {
             redirectTo(
               user?.user_type === UserType.INSTRUCTOR

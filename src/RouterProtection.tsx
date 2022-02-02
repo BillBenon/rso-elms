@@ -52,6 +52,7 @@ const RouterProtection = () => {
 
       <Route path={`${path}/privileges`} component={PrivilegesView} />
       <Route exact path={`${path}/institution/:id/edit`} component={UpdateInstitution} />
+
       {/* end of institution admin page */}
     </>
   );
@@ -86,11 +87,11 @@ const RouterProtection = () => {
       <Route path={`${path}/calendar`} component={CalendarView} />
       <Route path={`${path}/intakes`} component={IntakesView} />
       <Route exact path={`${path}/inst-module`} component={InstrLevelModule} />
-
       <Route path={`${path}/schedule`} component={ScheduleHome} />
       <Route path={`${path}/events`} component={Events} />
       <Route path={`${path}/modules`} component={Modules} />
       <Route path={`${path}/users/:id/profile`} component={UserDetails} />
+
       {/* end of instructor pages */}
     </>
   );
@@ -114,6 +115,7 @@ const RouterProtection = () => {
         path={`${path}/evaluations/completed/student-evaluation/:id/review`}
         component={StudentReview}
       />
+
       {/* end of student pages */}
     </>
   );

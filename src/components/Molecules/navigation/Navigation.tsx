@@ -51,6 +51,7 @@ export default function Navigation() {
       .then(() => {
         queryClient.clear();
         cookie.eraseCookie('jwt_info');
+        cookie.eraseCookie('user_role');
         history.push('/login');
         toast.success('You are now logged out.', { id: toastId });
       })

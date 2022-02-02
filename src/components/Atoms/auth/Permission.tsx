@@ -16,7 +16,7 @@ export default function Permission({ children, privilege }: IPermission) {
   useEffect(() => {
     const _privileges = user?.user_roles
       ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
+      ?.role_privileges?.map((privilege) => privilege.name);
 
     if (_privileges) setPrivileges(_privileges);
     // eslint-disable-next-line react-hooks/exhaustive-deps

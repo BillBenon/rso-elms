@@ -73,6 +73,7 @@ export default function useAuthenticator() {
     setUserAvailable(false);
     queryClient.clear();
     cookie.eraseCookie('jwt_info');
+    cookie.eraseCookie('user_role');
   }
 
   const redirectTo = (path: string) => {
