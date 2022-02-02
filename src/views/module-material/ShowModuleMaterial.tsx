@@ -1,11 +1,10 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import { moduleMaterialStore } from '../../store/administration/module-material.store';
 import { ModuleMaterialAttachmentInfo } from '../../types/services/module-material.types';
+import { downloadFile } from '../../utils/file-util';
 
 function ShowModuleMaterial({ materialId }: { materialId: string }) {
   const matAttachments = moduleMaterialStore.getModuleMaterialAttachments(materialId);
@@ -28,40 +27,21 @@ function ShowAttachment({ attach }: { attach: ModuleMaterialAttachmentInfo }) {
   const attachment = moduleMaterialStore.getFileById(attach.attachment_id).data?.data
     .data;
 
-  let filename = attachment?.path_to_file.replace(/^.*[\\/]/, '').slice(36);
+  let filename = attachment?.path_to_file.replace(/^.*[\\/]/, '').slice(36) || '';
 
-  const file = `blob:http://197.243.110.147:8080/f8b8fb17-bdae-4c66-b563-77a4a7ea9b28`;
+  const [url, setUrl] = useState('');
 
-  moduleMaterialStore.downloadFile(attach.attachment_id + '').data?.data;
-
-  // function download() {
-  //   var binaryData: Blob[] = [];
-
-  //   if (file) {
-  //     binaryData.push(file as Blob);
-  //   }
-
-  //   const url = window.URL.createObjectURL(
-  //     new Blob(binaryData, { type: 'application/pdf' }),
-  //   );
-
-  //   const a = document.createElement('a');
-  //   a.href = url;
-
-  //   a.download = filename + '';
-
-  //   document.getElementById('downloadme')?.appendChild(a);
-  //   a.click();
-  //   a.remove();
-
-  //   setTimeout(() => URL.revokeObjectURL(a.href), 7000);
-  //   a.parentNode?.removeChild(a);
-  // }
+  useEffect(() => {
+    async function getIt() {
+      setUrl(await downloadFile(attach.attachment_id));
+    }
+    getIt();
+  }, [attach.attachment_id]);
 
   return (
     <>
-      <div className="flex items-center justify-between w-1/2">
-        <div className="flex items-center">
+      <div className="flex items-center justify-between w-4/5">
+        <div className="flex items-center max-w-full">
           <Icon
             name={
               attachment?.file_type === 'application/pdf'
@@ -79,17 +59,9 @@ function ShowAttachment({ attach }: { attach: ModuleMaterialAttachmentInfo }) {
                 : 'pdf'
             }
           />
-          <p className="truncate">
-            {filename ? filename : attach.learning_material.title}
-          </p>
+          <p className="truncate">{filename}</p>
         </div>
-        {/* <Button onClick={download} icon styleType="text" className="cursor-pointer">
-          <Icon name="download" fill="primary" />
-        </Button> */}
-        <a href={file} target="_blank" rel="noopener noreferrer">
-          hee
-        </a>
-        <a href={file} download={true}>
+        <a href={url} download={true}>
           <Icon name="download" fill="primary" />
         </a>
       </div>
