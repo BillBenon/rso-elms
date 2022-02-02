@@ -3,13 +3,25 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { roleStore } from '../../../../store/administration';
-import { CreateRoleReq, FormPropType, ParamType, ValueType } from '../../../../types';
+import {
+  CreateRoleReq,
+  FormPropType,
+  ParamType,
+  RoleType,
+  ValueType,
+} from '../../../../types';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function UpdateRole({ onSubmit }: FormPropType) {
-  const [form, setForm] = useState<CreateRoleReq>({ name: '', description: '' });
+  const [form, setForm] = useState<CreateRoleReq>({
+    name: '',
+    description: '',
+    academy_id: '',
+    institution_id: '',
+    type: RoleType.ACADEMY,
+  });
   const { mutateAsync } = roleStore.modifyRole();
   const history = useHistory();
 
