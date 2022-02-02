@@ -1,11 +1,13 @@
 import _ from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 
-import { GenericStatus, ValueType } from '../../../types';
-import { StudentApproval } from '../../../types/services/enrollment.types';
-import { IEvaluationStatus } from '../../../types/services/evaluation.types';
-import { IntakeStatus } from '../../../types/services/intake.types';
-import { IntakeModuleStatus } from '../../../types/services/intake-program.types';
+import { ValueType } from '../../../types';
+import {
+  ActionsType,
+  SelectorActionType,
+  StatusActionType,
+} from '../../../types/services/table.types';
+import Permission from '../../Atoms/auth/Permission';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import Row from '../../Atoms/custom/Row';
@@ -22,20 +24,12 @@ interface TableProps<T> {
   data: (T & Selected)[];
   uniqueCol?: keyof T;
   hide?: (keyof T)[];
-  actions?: { name: string; handleAction: (_data?: T[keyof T]) => void }[];
-  statusActions?: {
-    name: string;
-    type:
-      | GenericStatus
-      | IntakeStatus
-      | IEvaluationStatus
-      | IntakeModuleStatus
-      | StudentApproval;
-    handleStatusAction: (_data?: T[keyof T]) => void;
-  }[];
-  selectorActions?: { name: string; handleAction: (_data?: string[]) => void }[];
+  actions?: ActionsType<T>[];
+  statusActions?: StatusActionType<T>[];
+  selectorActions?: SelectorActionType[];
   handleClick?: () => void;
   statusColumn?: string;
+  anotherStatusColumn?: string;
   handleSelect?: (_selected: string[] | null) => void;
   unselectAll?: boolean;
 
@@ -54,6 +48,7 @@ export default function Table2<T>({
   actions,
   statusActions,
   selectorActions,
+  anotherStatusColumn,
   statusColumn,
   handleSelect,
   unselectAll = false,
@@ -225,11 +220,13 @@ export default function Table2<T>({
           uniqueCol={uniqueCol}
           keys={keys as string[]}
           statusColumn={statusColumn}
+          anotherStatusColumn={anotherStatusColumn}
           statusActions={statusActions}
         />
         {actions && actions.length > 0 ? (
           <td className="flex space-x-6 cursor-pointer">
             <Tooltip
+              position="left center"
               on="click"
               trigger={
                 <button type="button" onClick={() => {}}>
@@ -238,17 +235,31 @@ export default function Table2<T>({
               }
               open>
               <ul>
-                {actions.map(({ name, handleAction }) => (
-                  <li className="hover:bg-secondary" key={name}>
-                    <Button
-                      styleType="text"
-                      hoverStyle="no-underline"
-                      color="txt-primary"
-                      onClick={() => handleAction(uniqueCol && row[uniqueCol])}>
-                      {name}
-                    </Button>
-                  </li>
-                ))}
+                {actions.map(({ name, handleAction, privilege }) =>
+                  privilege ? (
+                    <Permission privilege={privilege} key={name}>
+                      <li className="hover:bg-secondary">
+                        <Button
+                          styleType="text"
+                          hoverStyle="no-underline"
+                          color="txt-primary"
+                          onClick={() => handleAction(uniqueCol && row[uniqueCol])}>
+                          {name}
+                        </Button>
+                      </li>
+                    </Permission>
+                  ) : (
+                    <li className="hover:bg-secondary">
+                      <Button
+                        styleType="text"
+                        hoverStyle="no-underline"
+                        color="txt-primary"
+                        onClick={() => handleAction(uniqueCol && row[uniqueCol])}>
+                        {name}
+                      </Button>
+                    </li>
+                  ),
+                )}
               </ul>
             </Tooltip>
           </td>
@@ -267,14 +278,25 @@ export default function Table2<T>({
             </p>
           </div>
           <div className="px-4 flex gap-2">
-            {selectorActions?.map((action) => (
-              <Button
-                key={action.name + Math.random()}
-                styleType="outline"
-                onClick={() => action.handleAction(Array.from(selected))}>
-                {action.name}
-              </Button>
-            ))}
+            {selectorActions?.map((action) =>
+              action.privilege ? (
+                <Permission privilege={action.privilege}>
+                  <Button
+                    key={action.name + Math.random()}
+                    styleType="outline"
+                    onClick={() => action.handleAction(Array.from(selected))}>
+                    {action.name}
+                  </Button>
+                </Permission>
+              ) : (
+                <Button
+                  key={action.name + Math.random()}
+                  styleType="outline"
+                  onClick={() => action.handleAction(Array.from(selected))}>
+                  {action.name}
+                </Button>
+              ),
+            )}
           </div>
         </div>
       )}

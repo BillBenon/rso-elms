@@ -16,6 +16,7 @@ type RowProps = {
   data: Record<string, any>;
   uniqueCol?: any;
   statusColumn?: string;
+  anotherStatusColumn?: string;
   statusActions?: {
     name: string;
     type:
@@ -28,20 +29,35 @@ type RowProps = {
   }[];
 };
 
-const Row = ({ keys, data, uniqueCol, statusColumn, statusActions }: RowProps) => {
+const Row = ({
+  keys,
+  data,
+  uniqueCol,
+  statusColumn,
+  anotherStatusColumn,
+  statusActions,
+}: RowProps) => {
   return (
     <>
       {keys.map((key) => {
         let val = data[key];
         return (
           <td
-            className={`px-4 py-2 ${key.toLowerCase() === statusColumn ? 'text-xs' : ''}`}
+            className={`px-4 py-2 ${
+              key.toLowerCase() === statusColumn ||
+              key.toLowerCase() === anotherStatusColumn
+                ? 'text-xs'
+                : ''
+            }`}
             key={key + Math.random() * 16}>
-            {statusActions && key.toLowerCase() === statusColumn ? (
+            {statusActions &&
+            (key.toLowerCase() === statusColumn ||
+              key.toLowerCase() === anotherStatusColumn) ? (
               <Tooltip
                 on="click"
                 trigger={
-                  key.toLowerCase() === statusColumn ? (
+                  key.toLowerCase() === statusColumn ||
+                  key.toLowerCase() === anotherStatusColumn ? (
                     <Badge
                       className="cursor-pointer"
                       badgecolor={val && statusColors[val.toLowerCase() as Status]}
@@ -69,7 +85,8 @@ const Row = ({ keys, data, uniqueCol, statusColumn, statusActions }: RowProps) =
                   ))}
                 </ul>
               </Tooltip>
-            ) : key.toLowerCase() === statusColumn ? (
+            ) : key.toLowerCase() === statusColumn ||
+              key.toLowerCase() === anotherStatusColumn ? (
               <Badge
                 badgecolor={val && statusColors[val.toLowerCase() as Status]}
                 badgetxtcolor={val && statusColors[val.toLowerCase() as Status]}>

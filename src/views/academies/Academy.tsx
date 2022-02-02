@@ -1,5 +1,3 @@
-// import { Label } from "@headlessui/react/dist/components/label/label";
-
 import React from 'react';
 import { Route, useHistory, useRouteMatch } from 'react-router';
 import { Link, Switch } from 'react-router-dom';
@@ -17,8 +15,9 @@ import UpdateAcademy from '../../components/Organisms/forms/academy/UpdateAcadem
 import useAuthenticator from '../../hooks/useAuthenticator';
 import academyStore from '../../store/administration/academy.store';
 import usersStore from '../../store/administration/users.store';
-import { Link as LinkList } from '../../types';
+import { Link as LinkList, Privileges } from '../../types';
 import { GenericStatus, ValueType } from '../../types';
+import { ActionsType } from '../../types/services/table.types';
 
 type AcademyTypes = {
   id: number | string | undefined;
@@ -64,20 +63,23 @@ export default function Academy() {
 
   function handleSearch(_e: ValueType) {}
 
-  const academyActions = [
-    {
-      name: 'Edit academy',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit academy
-      },
+  let academyActions: ActionsType<AcademyTypes>[] = [];
+
+  academyActions?.push({
+    name: 'Edit academy',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/edit`); // go to edit academy
     },
-    {
-      name: 'Assign incharge',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/assign`); // go to assign admin
-      },
+    privilege: Privileges.CAN_MODIFY_ACADEMY,
+  });
+
+  academyActions?.push({
+    name: 'Assign incharge',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/assign`); // go to assign admin
     },
-  ];
+    privilege: Privileges.CAN_ASSIGN_ACADEMY_INCHARGE,
+  });
 
   return (
     <>

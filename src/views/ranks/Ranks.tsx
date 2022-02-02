@@ -19,7 +19,9 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewRank from '../../components/Organisms/forms/ranks/NewRank';
 import UpdateRank from '../../components/Organisms/forms/ranks/UpdateRank';
 import { rankStore } from '../../store/administration/rank.store';
+import { Privileges } from '../../types';
 import { RankRes } from '../../types/services/rank.types';
+import { ActionsType } from '../../types/services/table.types';
 
 interface FilteredRanks
   extends Pick<RankRes, 'id' | 'name' | 'description' | 'category' | 'institution_id'> {}
@@ -41,22 +43,22 @@ export default function Ranks() {
     data?.data.data && setRanks(filterdData);
   }, [data]);
 
+  let actions: ActionsType<FilteredRanks>[] = [];
+
+  actions?.push({
+    name: 'Edit rank',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/edit`); // go to edit rank
+    },
+    privilege: Privileges.CAN_EDIT_RANK,
+  });
+
   // re fetch data whenever user come back on this page
   useEffect(() => {
     if (location.pathname === path || location.pathname === `${path}/`) {
       refetch();
     }
-  }, [location]);
-
-  //actions to be displayed in table
-  const actions = [
-    {
-      name: 'Edit rank',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit rank
-      },
-    },
-  ];
+  }, [location, path, refetch]);
 
   const manyActions = [
     {

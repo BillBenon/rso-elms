@@ -77,8 +77,8 @@ export default function NewIntake(props: CProps) {
           // await addProgramsToIntake(data.data.data.id.toString());
           props.handleSuccess();
         },
-        onError() {
-          toast.error('error occurred please try again');
+        onError(error: any) {
+          toast.error(error.response.data.message || 'error occurred please try again');
         },
       });
     }

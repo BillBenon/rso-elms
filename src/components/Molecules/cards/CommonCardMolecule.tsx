@@ -41,7 +41,7 @@ export default function CommonCardMolecule({
   return (
     <div
       className={`course-card-molecule bg-main p-6 rounded-lg 
-      ${active && 'border-4 border-primary-500 border-solid'} cursor-pointer
+      ${active && 'active-card'} cursor-pointer
       ${className}
       `}
       role="presentation"

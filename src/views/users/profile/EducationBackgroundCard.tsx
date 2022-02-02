@@ -20,7 +20,8 @@ function EducationBackgroundCard({ person }: { person: PersonInfo }) {
           fontWeight="medium"
           badgecolor="secondary"
           badgetxtcolor="txt-secondary"
-          className="mx-2 text-sm">
+          fontSize="sm"
+          className="mx-2">
           Experiences are currently not specificied
         </Badge>
       ) : (
@@ -29,7 +30,8 @@ function EducationBackgroundCard({ person }: { person: PersonInfo }) {
             <Badge
               badgecolor="secondary"
               badgetxtcolor="txt-secondary"
-              className="text-sm flex items-center">
+              fontSize="sm"
+              className="flex items-center">
               <Icon name="chevron-right" /> {titleCase(exp.type.replaceAll('_', ' '))}
             </Badge>
             <div className="flex text-sm">

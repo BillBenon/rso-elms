@@ -5,7 +5,9 @@ import { Link } from 'react-router-dom';
 
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import { divisionStore } from '../../../store/administration/divisions.store';
+import { Privileges } from '../../../types';
 import { DivisionInfo } from '../../../types/services/division.types';
+import { ActionsType } from '../../../types/services/table.types';
 import Button from '../../Atoms/custom/Button';
 import Loader from '../../Atoms/custom/Loader';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
@@ -69,29 +71,34 @@ export default function Faculties({ fetchType }: IFaculties) {
     history.goBack();
   }
 
-  const actions = [
-    {
-      name: 'Edit Faculty',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit faculties
-      },
+  const actions: ActionsType<FilteredData>[] = [];
+
+  actions.push({
+    name: 'Edit Faculty',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/edit`); // go to edit faculties
     },
-    {
-      name: 'Add Department',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/new`);
-      },
+    privilege: Privileges.CAN_MODIFY_DIVISION,
+  });
+
+  actions.push({
+    name: 'View Departments',
+    handleAction: (id: string | number | undefined) => {
+      history.push({
+        pathname: `/dashboard/divisions/departments`,
+        search: `?fac=${id}`,
+      });
     },
-    {
-      name: 'View Departments',
-      handleAction: (id: string | number | undefined) => {
-        history.push({
-          pathname: `/dashboard/divisions/departments`,
-          search: `?fac=${id}`,
-        });
-      },
+    privilege: Privileges.CAN_ACCESS_DIVISIONS,
+  });
+
+  actions.push({
+    name: 'Add Department',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/new`);
     },
-  ];
+    privilege: Privileges.CAN_CREATE_DIVISION,
+  });
 
   return (
     <main>
@@ -115,6 +122,7 @@ export default function Faculties({ fetchType }: IFaculties) {
         ) : faculties.length === 0 ? (
           <NoDataAvailable
             icon="faculty"
+            privilege={Privileges.CAN_CREATE_DIVISION}
             buttonLabel="Add new faculty"
             title={'No faculty available'}
             handleClick={() => history.push(`/dashboard/divisions/new`)}

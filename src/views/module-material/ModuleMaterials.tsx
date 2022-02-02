@@ -17,7 +17,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Tiptap from '../../components/Molecules/editor/Tiptap';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { moduleMaterialStore } from '../../store/administration/module-material.store';
-import { ParamType } from '../../types';
+import { ParamType, Privileges } from '../../types';
 import { MaterialType } from '../../types/services/module-material.types';
 import { UserType } from '../../types/services/user.types';
 import NewModuleMaterial from './NewModuleMaterial';
@@ -54,6 +54,7 @@ function ModuleMaterials() {
               ) : moduleMaterials.length === 0 ? (
                 <NoDataAvailable
                   showButton={user?.user_type === UserType.INSTRUCTOR}
+                  privilege={Privileges.CAN_CREATE_MODULE_MATERIALS}
                   icon="subject"
                   title={'No learning materials available'}
                   description={

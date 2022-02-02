@@ -12,6 +12,7 @@ import Signin from './views/auth/Signin';
 import Home from './views/Home';
 import NewInstitution from './views/insitution/NewInstitution';
 import NotFound from './views/NotFound';
+import ChooseRole from './views/roles/ChooseRole';
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
             <Route exact path="/complete-more" component={MoreInfo} />
             <Route exact path="/complete-other" component={OtherDetails} />
             <Route exact path="/new-institution" component={NewInstitution} />
+            <Route exact path="/choose-role" component={ChooseRole} />
             <Route path="/login" component={Signin} />
             <Route path="/dashboard" component={RouterProtection} />
             <Route component={NotFound} />

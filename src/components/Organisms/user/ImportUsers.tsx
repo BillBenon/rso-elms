@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
@@ -41,6 +41,8 @@ export default function ImportUsers({ userType }: IProps) {
     file: null,
   });
 
+  console.log(values);
+
   const [importReport, setimportReport] = useState<IImportUserRes | undefined>(undefined);
 
   const academies: AcademyInfo[] | undefined =
@@ -60,6 +62,10 @@ export default function ImportUsers({ userType }: IProps) {
   const academic_programs =
     programStore.getProgramsByAcademy(values.academyId).data?.data.data || [];
   const intakes = intakeStore.getIntakesByProgram(values.program).data?.data.data || [];
+
+  useEffect(() => {
+    setValues((prev) => ({ ...prev, academyId: user?.academy?.id || '' }));
+  }, [user]);
 
   const { mutateAsync, isLoading } = usersStore.importUsers();
 
@@ -81,8 +87,14 @@ export default function ImportUsers({ userType }: IProps) {
 
       await mutateAsync(formData, {
         onSuccess(data) {
-          queryClient.invalidateQueries('users');
+          queryClient.invalidateQueries(['users']);
           queryClient.invalidateQueries(['users/institution']);
+          queryClient.invalidateQueries([
+            'users/academy/type',
+            values.academyId,
+            values.userType,
+          ]);
+
           setimportReport(data.data.data);
         },
         onError(error: any) {

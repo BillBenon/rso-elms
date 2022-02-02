@@ -10,7 +10,7 @@ export default function Select({
   placeholder,
   options = [],
   className = '',
-  // disabled = false,
+  disabled = false,
   required = true,
   loading = false,
   value = '',
@@ -71,7 +71,6 @@ export default function Select({
   // };
 
   let selectId = useMemo(() => randomString(16), []);
-
   return (
     <div className={`w-${width || 'full'} ${className}`}>
       <div>
@@ -89,6 +88,7 @@ export default function Select({
           />
           {/* input with placeholder */}
           <input
+            disabled={disabled}
             ref={input}
             value={searchQuery}
             onFocus={() => setisMenuOpen(true)}
@@ -127,7 +127,7 @@ export default function Select({
                 // eslint-disable-next-line jsx-a11y/no-static-element-interactions
                 <div
                   key={op.value}
-                  onMouseDown={() => handleSelect(op.value)}
+                  onMouseDown={() => handleSelect(op.value.toString())}
                   className={`py-2 cursor-pointer ${
                     value == op.value
                       ? 'bg-primary-500 text-white'

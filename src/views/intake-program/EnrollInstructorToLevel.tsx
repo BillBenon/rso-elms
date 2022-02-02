@@ -14,6 +14,7 @@ import {
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
 
+// eslint-disable-next-line no-unused-vars
 interface ProgramEnrollmentProps<T> {
   existing: EnrollInstructorLevelInfo[];
   showSidebar: boolean;

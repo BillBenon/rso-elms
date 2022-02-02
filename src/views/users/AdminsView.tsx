@@ -1,20 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import AssignRole from '../../components/Organisms/forms/user/AssignRole';
+import ViewUserRole from '../../components/Organisms/forms/user/ViewUserRole';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import usersStore from '../../store/administration/users.store';
-import { ValueType } from '../../types';
+import { Privileges, ValueType } from '../../types';
+import { ActionsType } from '../../types/services/table.types';
 import { AcademyUserType, UserType, UserTypes } from '../../types/services/user.types';
 import { formatUserTable } from '../../utils/array';
 
 export default function AdminsView() {
   const { user } = useAuthenticator();
   const history = useHistory();
+  const { path, url } = useRouteMatch();
 
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
@@ -35,21 +40,39 @@ export default function AdminsView() {
 
   const users = formatUserTable(data?.data.data.content || []);
 
-  const adminActions = [
-    { name: 'Add Role', handleAction: () => {} },
-    {
-      name: 'Edit admin',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/users/${id}/edit`); // go to edit user
-      },
+  let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
+
+  actions?.push({
+    name: 'Assign Role',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${url}/${id}/assign-role`); // go to assign role
     },
-    {
-      name: 'View admin',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/users/${id}/profile`); // go to view user profile
-      },
+    privilege: Privileges.CAN_ASSIGN_ROLE,
+  });
+
+  actions?.push({
+    name: 'View Role',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${url}/${id}/view-role`); // go to assign role
     },
-  ];
+    privilege: Privileges.CAN_ACCESS_ROLE,
+  });
+
+  actions?.push({
+    name: 'Edit admin',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`/dashboard/users/${id}/edit`); // go to edit user
+    },
+    privilege: Privileges.CAN_MODIFY_USER,
+  });
+
+  actions?.push({
+    name: 'View admin',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`/dashboard/users/${id}/profile`); // go to view user profile
+    },
+    privilege: Privileges.CAN_ACCESS_PROFILE,
+  });
 
   function handleSearch(_e: ValueType) {}
 
@@ -84,7 +107,7 @@ export default function AdminsView() {
           <Table<UserTypes | AcademyUserType>
             statusColumn="status"
             data={users}
-            actions={adminActions}
+            actions={actions}
             statusActions={[]}
             hide={['id', 'user_type']}
             selectorActions={[]}
@@ -100,6 +123,34 @@ export default function AdminsView() {
           />
         </>
       )}
+      <Switch>
+        <Route
+          exact
+          path={`${path}/:id/assign-role`}
+          render={() => (
+            <PopupMolecule
+              closeOnClickOutSide={false}
+              title="Assign role"
+              open={true}
+              onClose={history.goBack}>
+              <AssignRole />
+            </PopupMolecule>
+          )}
+        />
+        <Route
+          exact
+          path={`${path}/:id/view-role`}
+          render={() => (
+            <PopupMolecule
+              closeOnClickOutSide={false}
+              title="Roles"
+              open={true}
+              onClose={history.goBack}>
+              <ViewUserRole />
+            </PopupMolecule>
+          )}
+        />
+      </Switch>
     </div>
   );
 }

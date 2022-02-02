@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
@@ -18,7 +18,7 @@ import { getDropDownStatusOptions } from '../../utils/getOption';
 export default function NewAcademicYear() {
   const history = useHistory();
   const { user } = useAuthenticator();
-  const [years, setYears] = useState<ICreateAcademicYear>({
+  const [newYear, setNewYear] = useState<ICreateAcademicYear>({
     academyId: user?.academy.id.toString() || '',
     name: '',
     id: '',
@@ -28,19 +28,24 @@ export default function NewAcademicYear() {
     plannedStartOn: '',
     plannedEndOn: '',
   });
+
+  useEffect(() => {
+    setNewYear((prev) => ({ ...prev, academyId: user?.academy?.id || '' }));
+  }, [user]);
+
   function handleChange(e: ValueType) {
-    setYears((year) => ({ ...year, [e.name]: e.value }));
+    setNewYear((year) => ({ ...year, [e.name]: e.value }));
   }
   const { mutate } = academicyearsStore.createAcademy();
 
   function submitForm(e: FormEvent) {
     e.preventDefault();
 
-    let name = `YEAR ${new Date(years.plannedStartOn).getFullYear()}-${new Date(
-      years.plannedEndOn,
+    let name = `YEAR ${new Date(newYear.plannedStartOn).getFullYear()}-${new Date(
+      newYear.plannedEndOn,
     ).getFullYear()}`;
     let data = {
-      ...years,
+      ...newYear,
       name,
     };
     mutate(data, {
@@ -71,7 +76,7 @@ export default function NewAcademicYear() {
 
       <DateMolecule
         handleChange={handleChange}
-        startYear={new Date(years.plannedStartOn).getFullYear()}
+        startYear={new Date(newYear.plannedStartOn).getFullYear()}
         endYear={new Date().getFullYear() + 100}
         reverse={false}
         name={'plannedEndOn'}>
@@ -80,7 +85,7 @@ export default function NewAcademicYear() {
 
       <RadioMolecule
         className="mt-4"
-        value={years.status}
+        value={newYear.status}
         name="status"
         options={getDropDownStatusOptions(IAcademicYearStatus)}
         handleChange={handleChange}>

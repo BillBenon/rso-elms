@@ -23,7 +23,7 @@ export enum IQuestionaireTypeEnum {
 }
 
 export interface IEvaluationProps {
-  handleNext: () => void;
+  handleNext: (step: number) => void;
   handleGoBack: () => void;
   handleAddQuestion?: () => void;
   evaluationId: string | null;

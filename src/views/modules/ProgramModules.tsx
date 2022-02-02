@@ -7,7 +7,7 @@ import AddCard from '../../components/Molecules/cards/AddCard';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { moduleStore } from '../../store/administration/modules.store';
-import { CommonCardDataType, ParamType } from '../../types';
+import { CommonCardDataType, ParamType, Privileges } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 
 function ProgramModules() {
@@ -45,6 +45,7 @@ function ProgramModules() {
         <section className="mt-4 flex flex-wrap justify-start gap-4">
           {programModules.length <= 0 ? (
             <NoDataAvailable
+              privilege={Privileges.CAN_CREATE_MODULES}
               buttonLabel="Add new modules"
               title={'No Modules available in this program'}
               handleClick={() => history.push(`${url}/add`)}
@@ -55,6 +56,7 @@ function ProgramModules() {
               <AddCard
                 title={'Add new module'}
                 onClick={() => history.push(`/dashboard/programs/${id}/modules/add`)}
+                privilege={Privileges.CAN_CREATE_MODULES}
               />
               {programModules?.map((module) => (
                 <ModuleCard

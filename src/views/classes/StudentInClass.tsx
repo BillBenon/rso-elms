@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useRouteMatch } from 'react-router';
 import { Route, Switch, useParams } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -11,6 +12,7 @@ import { Tab } from '../../components/Molecules/tabs/tabs';
 import Students from '../../components/Organisms/user/Students';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { classStore } from '../../store/administration/class.store';
+import { Privileges } from '../../types';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import { UserType, UserTypes } from '../../types/services/user.types';
 import AddSubjectToPeriod from '../subjects/AddSubjectToPeriod';
@@ -85,15 +87,17 @@ function StudentInClass({ classId, label }: IStudentClass) {
                       }>
                       View subjects
                     </Button>
-                    <Button
-                      styleType="outline"
-                      onClick={() =>
-                        history.push(
-                          `/dashboard/intakes/peformance/${levelId}/${classId}`,
-                        )
-                      }>
-                      View performance
-                    </Button>
+                    <Permission privilege={Privileges.CAN_ACCESS_REPORTS}>
+                      <Button
+                        styleType="outline"
+                        onClick={() =>
+                          history.push(
+                            `/dashboard/intakes/peformance/${levelId}/${classId}`,
+                          )
+                        }>
+                        View performance
+                      </Button>
+                    </Permission>
                     {user?.user_type === UserType.ADMIN && (
                       <AddStudents classId={parseInt(classId)} />
                     )}

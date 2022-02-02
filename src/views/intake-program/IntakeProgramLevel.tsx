@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -16,6 +17,7 @@ import intakeProgramStore, {
 } from '../../store/administration/intake-program.store';
 import { getLevelsByAcademicProgram } from '../../store/administration/program.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
+import { Privileges } from '../../types';
 import {
   IntakeProgParam,
   LevelIntakeProgram,
@@ -91,6 +93,7 @@ function IntakeProgramLevel() {
         <Loader />
       ) : getLevels?.data.data.length === 0 ? (
         <NoDataAvailable
+          privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}
           buttonLabel="Add new level"
           icon="level"
           title={'No levels available in this program'}
@@ -104,12 +107,14 @@ function IntakeProgramLevel() {
       ) : (
         <>
           {user?.user_type === UserType.ADMIN && unaddedLevels?.length !== 0 ? (
-            <div className="text-right">
-              <Link
-                to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
-                <Button>Add level to program</Button>
-              </Link>
-            </div>
+            <Permission privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}>
+              <div className="text-right">
+                <Link
+                  to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
+                  <Button>Add level to program</Button>
+                </Link>
+              </div>
+            </Permission>
           ) : null}
           <TabNavigation tabs={tabs}>
             <Switch>

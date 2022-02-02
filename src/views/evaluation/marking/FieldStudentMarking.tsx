@@ -12,7 +12,10 @@ import FinishMarking from '../../../components/Organisms/forms/evaluation/Finish
 import intakeProgramStore from '../../../store/administration/intake-program.store';
 import { markingStore } from '../../../store/administration/marking.store';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
-import { FieldQuestionMarks } from '../../../types/services/marking.types';
+import {
+  FieldQuestionMarks,
+  PointsUpdateInfo,
+} from '../../../types/services/marking.types';
 
 interface MarkingParams {
   id: string;
@@ -26,7 +29,6 @@ export default function FieldStudentMarking() {
   const [totalMarks, setTotalMarks] = useState(0);
   const [questionMarks, setQuestionMarks] = useState<Array<FieldQuestionMarks>>([]);
   const [step] = useState(0);
-  //   const [studentEvaluation, setStudentEvaluation] = useState<string>('');
 
   const { mutate } = markingStore.fieldMarkingFinish();
   const history = useHistory();
@@ -86,7 +88,6 @@ export default function FieldStudentMarking() {
           },
         },
       );
-      console.log(questionMarks);
     } else {
       toast.error('Some Answers are not marked yet!' + questionMarks.length);
     }
@@ -110,6 +111,11 @@ export default function FieldStudentMarking() {
           </TableHeader>
           <section className="flex flex-wrap justify-start gap-4 mt-2">
             {questions?.data.data?.map((question, index: number) => {
+              let updates: PointsUpdateInfo = {
+                answer_id: '',
+                is_updating: false,
+                obtained: undefined,
+              };
               return (
                 <FieldMarker
                   key={index}
@@ -120,7 +126,7 @@ export default function FieldStudentMarking() {
                   totalMarks={totalMarks}
                   setTotalMarks={setTotalMarks}
                   createCreateNewCorrection={createCreateNewCorrection}
-                  obtained={0}
+                  updates={updates}
                 />
               );
             })}

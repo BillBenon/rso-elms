@@ -4,6 +4,7 @@ import _ from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { ValueType } from '../../types';
+import { SelectorActionType } from '../../types/services/table.types';
 import { UserView } from '../../types/services/user.types';
 import Avatar from '../Atoms/custom/Avatar';
 import Button from '../Atoms/custom/Button';
@@ -19,7 +20,7 @@ interface IRightSidebar {
   open: boolean;
   handleClose: () => void;
   data: UserView[];
-  selectorActions?: { name: string; handleAction: (_data?: string[]) => void }[];
+  selectorActions?: SelectorActionType[];
   dataLabel: string;
   isLoading: boolean;
   unselectAll: boolean;

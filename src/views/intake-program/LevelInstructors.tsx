@@ -2,7 +2,9 @@ import React, { useEffect, useState } from 'react';
 
 import Button from '../../components/Atoms/custom/Button';
 import RightSidebar from '../../components/Organisms/RightSidebar';
+import { Privileges } from '../../types';
 import { EnrollInstructorLevelInfo } from '../../types/services/enrollment.types';
+import { SelectorActionType } from '../../types/services/table.types';
 import { UserView } from '../../types/services/user.types';
 
 // eslint-disable-next-line no-unused-vars
@@ -34,6 +36,15 @@ function LevelInstructors<T>({
     setInstructors(instructorView);
     // console.log(students.length)
   }, [instructorsData]);
+
+  let actions: SelectorActionType[] = [
+    {
+      name: 'remove instructors',
+      handleAction: () => {},
+      privilege: Privileges.CAN_DELETE_INSTRUCTORS_ON_LEVEL_PRORAM,
+    },
+  ];
+
   return (
     <div className="flex flex-col cursor-pointer">
       <Button styleType="outline" onClick={handleShowSidebar}>
@@ -47,6 +58,7 @@ function LevelInstructors<T>({
         dataLabel={'Instructors enrolled'}
         isLoading={isLoading}
         unselectAll={!showSidebar}
+        selectorActions={actions}
       />
     </div>
   );

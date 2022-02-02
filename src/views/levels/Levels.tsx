@@ -13,7 +13,9 @@ import NewLevel from '../../components/Organisms/forms/level/NewLevel';
 import UpdateLevel from '../../components/Organisms/forms/level/UpdateLevel';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { levelStore } from '../../store/administration/level.store';
+import { Privileges } from '../../types';
 import { ILevel } from '../../types/services/levels.types';
+import { ActionsType } from '../../types/services/table.types';
 
 interface FilteredLevels
   extends Pick<ILevel, 'id' | 'name' | 'description' | 'generic_status'> {}
@@ -23,6 +25,7 @@ function Levels() {
   const history = useHistory();
   const { user } = useAuthenticator();
   const [levels, setLevels] = useState<FilteredLevels[]>();
+  let actions: ActionsType<FilteredLevels>[] | undefined = [];
 
   const { data, isLoading } = levelStore.getLevelsByAcademy(
     user?.academy.id.toString() || '',
@@ -44,16 +47,13 @@ function Levels() {
     { to: 'levels', title: 'Programs' },
     { to: 'levels', title: 'Level' },
   ];
-
-  //actions to be displayed in table
-  const actions = [
-    {
-      name: 'Edit level',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`${path}/${id}/edit`); // go to edit level
-      },
+  actions?.push({
+    name: 'Edit level',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${path}/${id}/edit`); // go to edit level
     },
-  ];
+    privilege: Privileges.CAN_MODIFY_LEVEL,
+  });
   return (
     <main className="px-4">
       <section>

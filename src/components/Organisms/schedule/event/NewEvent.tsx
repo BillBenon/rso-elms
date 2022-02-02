@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
 
@@ -28,6 +28,10 @@ export default function NewEvent() {
     academyId: user?.academy.id + '',
   });
 
+  useEffect(() => {
+    setvalues((prev) => ({ ...prev, academyId: user?.academy?.id || '' }));
+  }, [user]);
+
   const { mutateAsync, isLoading } = eventStore.createEvent();
 
   function handleChange(e: ValueType) {
@@ -42,8 +46,8 @@ export default function NewEvent() {
         queryClient.invalidateQueries(['events']);
         history.goBack();
       },
-      onError() {
-        toast.error('error occurred please try again');
+      onError(error: any) {
+        toast.error(error.response.data.message || 'error occurred please try again');
       },
     });
   }
