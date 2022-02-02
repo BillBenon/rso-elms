@@ -133,10 +133,11 @@ export default function ClassPeriodPerformance() {
                     handleSearch={handleSearch}>
                     {user?.user_type === UserType.ADMIN && (
                       <Button
+                        styleType="outline"
                         onClick={() => {
                           history.push(`${url}/deliberation`);
                         }}>
-                        Promote Students
+                        View in Deliberation Mode
                       </Button>
                     )}
                   </TableHeader>

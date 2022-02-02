@@ -11,6 +11,7 @@ import {
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
+import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
@@ -111,7 +112,7 @@ export default function ProgramDetailsMolecule() {
               render={() => (
                 <div className="flex py-9">
                   <div className="mr-24">
-                    {programData && (
+                    {programData ? (
                       <CommonCardMolecule data={programData}>
                         <div className="flex flex-col mt-8 gap-7 pb-2">
                           <Heading color="txt-secondary" fontSize="sm">
@@ -138,6 +139,8 @@ export default function ProgramDetailsMolecule() {
                           <Button styleType="outline">Change Status</Button>
                         </div>
                       </CommonCardMolecule>
+                    ) : (
+                      <Loader />
                     )}
                   </div>
 

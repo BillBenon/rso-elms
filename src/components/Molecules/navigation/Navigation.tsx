@@ -6,7 +6,8 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import { queryClient } from '../../../plugins/react-query';
 import { authenticatorStore } from '../../../store/administration';
-// import { ValueType } from '../../../types';
+import { getAllNotifications } from '../../../store/administration/notification.store';
+import { NotificationStatus } from '../../../types/services/notification.types';
 import { UserType } from '../../../types/services/user.types';
 import cookie from '../../../utils/cookie';
 import { usePicture } from '../../../utils/file-util';
@@ -26,13 +27,19 @@ export default function Navigation() {
   const { user } = useAuthenticator();
 
   const location = useLocation();
+  const notifications =
+    getAllNotifications(user?.id.toString() || '').data?.data.data || [];
+
+  const hasSomeUnreadNotifications = notifications.some(
+    (notification) =>
+      notification.notifaction_status === NotificationStatus.UNREAD.toString(),
+  );
 
   useEffect(() => {
     if (user?.user_type === UserType.SUPER_ADMIN && !user?.institution_id) {
       history.push('/institution/new');
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [history, user]);
 
   const links = [
     { text: 'Home', to: '/' },
@@ -91,13 +98,15 @@ export default function Navigation() {
                       onClick={() => setNotificationMenu(!showNotificationMenu)}>
                       <div className="relative">
                         <Icon name="notification" />
-                        <div className="bg-main rounded-full h-3 w-3 absolute top-3 right-4 flex items-center justify-center">
-                          <span className="absolute  w-2 h-2  bg-red-600 self-center rounded-full"></span>
-                        </div>
+                        {hasSomeUnreadNotifications && (
+                          <div className="bg-main rounded-full h-3 w-3 absolute top-3 right-4 flex items-center justify-center">
+                            <span className="absolute  w-2 h-2  bg-red-600 self-center rounded-full"></span>
+                          </div>
+                        )}
                       </div>
                     </button>
                   }>
-                  <Notification />
+                  <Notification notifications={notifications} />
                 </Tooltip>
               </div>
 

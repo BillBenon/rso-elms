@@ -134,13 +134,12 @@ export default function UpdateLevel() {
         value={promotion.promotion_status}
         handleChange={handleChange}
         options={[
-          { label: 'Promoted', value: PromotionStatus.PROMOTED },
+          { label: 'Promote', value: PromotionStatus.PROMOTED },
           { label: 'Retake', value: PromotionStatus.RETAKE },
           {
-            label: 'Promoted and Expelled',
-            value: PromotionStatus.PROMOTED_AND_EXPELLED,
+            label: 'Expell',
+            value: PromotionStatus.DISMISSED,
           },
-          { label: 'Retake and Expelled', value: PromotionStatus.RETAKE_AND_EXPELLED },
         ]}>
         Select Next Level
       </SelectMolecule>{' '}
