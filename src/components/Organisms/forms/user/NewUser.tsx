@@ -6,16 +6,11 @@ import countryList from 'react-select-country-list';
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { queryClient } from '../../../../plugins/react-query';
 import academyStore from '../../../../store/administration/academy.store';
-import {
-  getIntakesByAcademy,
-  getProgramsByIntake,
-} from '../../../../store/administration/intake.store';
-import { getLevelsByAcademicProgram } from '../../../../store/administration/program.store';
+import { intakeStore } from '../../../../store/administration/intake.store';
+import programStore from '../../../../store/administration/program.store'; // getLevelsByAcademicProgram,
 import usersStore from '../../../../store/administration/users.store';
-import { CommonFormProps, ValueType } from '../../../../types';
-import { AcademyInfo } from '../../../../types/services/academy.types';
-import { IntakeProgramInfo } from '../../../../types/services/intake-program.types';
-import { ProgramInfo } from '../../../../types/services/program.types';
+import { CommonFormProps, SelectData, ValueType } from '../../../../types';
+// import { ProgramInfo } from '../../../../types/services/program.types';
 import {
   CreateUserInfo,
   DocType,
@@ -49,10 +44,6 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const { user } = useAuthenticator();
 
   let { userType } = useParams<IParams>();
-
-  // get all academies in an institution
-  const academies: AcademyInfo[] | undefined =
-    academyStore.fetchAcademies().data?.data.data;
 
   const [details, setDetails] = useState<CreateUserInfo>({
     activation_key: '',
@@ -90,19 +81,16 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     id: '',
   });
 
-  const [otherDetails, setOtherDetails] = useState({
+  const [otherDetail, setOtherDetail] = useState({
     intake: '',
-    level: '',
+    program: '',
   });
 
   const options = useMemo(() => countryList().getData(), []);
 
-  // const [nationalities, setNationalitites] = useState({
-  //   country: '',
-  //   region: '',
-  // });
-
-  const [selectedProgram, setSelectedProgram] = useState<ProgramInfo>();
+  useEffect(() => {
+    setDetails((details) => ({ ...details, intake_program_id: otherDetail.intake }));
+  }, [otherDetail.intake]);
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
@@ -112,7 +100,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   }
 
   function otherhandleChange(e: ValueType) {
-    setOtherDetails((details) => ({
+    setOtherDetail((details) => ({
       ...details,
       [e.name]: e.value,
     }));
@@ -137,24 +125,13 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     });
   }
 
-  // get intakes based on selected academy
-  const intakes = getIntakesByAcademy(details.academy_id, false, !!details.academy_id);
-  // get programs based on selected intake
-  const programs = getProgramsByIntake(otherDetails.intake, !!otherDetails.intake);
-  //get levels based on selected program
-  useEffect(() => {
-    setSelectedProgram(
-      programs.data?.data.data.find((p) => p.id == details.intake_program_id)?.program,
-    );
-  }, [details.intake_program_id, programs.data?.data.data]);
+  // get all academies in an institution
+  const academies = academyStore.fetchAcademies();
 
-  let levels = getLevelsByAcademicProgram(selectedProgram?.id + '');
+  const programs = programStore.getProgramsByAcademy(details.academy_id) || [];
 
-  // let nationalities: [] = [];
-
-  useEffect(() => {
-    levels.refetch();
-  }, [levels, selectedProgram?.id]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const intakes = intakeStore.getIntakesByProgram(otherDetail.program) || [];
   return (
     <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
       <div className="py-5 mb-3 capitalize">
@@ -317,9 +294,11 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         </DropdownMolecule>
         {user?.user_type === UserType.SUPER_ADMIN && (
           <DropdownMolecule
-            options={getDropDownOptions({ inputs: academies || [] })}
+            options={getDropDownOptions({ inputs: academies.data?.data.data || [] })}
             name="academy_id"
-            placeholder={'Academy to be enrolled in'}
+            placeholder={
+              academies.isLoading ? 'Loading academies...' : 'Academy to be enrolled in'
+            }
             handleChange={handleChange}>
             Academy
           </DropdownMolecule>
@@ -327,26 +306,32 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         {details.user_type === 'STUDENT' && (
           <>
             <DropdownMolecule
-              options={getDropDownOptions({
-                inputs: intakes.data?.data.data || [],
-                labelName: ['title'],
-              })}
-              name="intake"
-              placeholder={'intake to be enrolled in'}
+              options={
+                programs.data?.data.data?.map((p) => ({
+                  value: p.id,
+                  label: p.name,
+                })) as SelectData[]
+              }
+              name="program"
+              placeholder={
+                programs.isLoading ? 'Loading programs...' : 'Program to be enrolled in'
+              }
               handleChange={otherhandleChange}>
-              Intake
+              Programs
             </DropdownMolecule>
             <DropdownMolecule
-              options={getDropDownOptions({
-                inputs: programs.data?.data.data || [],
-                labelName: ['name'],
-                //@ts-ignore
-                getOptionLabel: (prog: IntakeProgramInfo) => prog.program.name,
-              })}
-              name="intake_program_id"
-              placeholder={'Program to be enrolled in'}
-              handleChange={handleChange}>
-              Programs
+              options={
+                intakes.data?.data.data?.map((intk) => ({
+                  value: intk.id,
+                  label: intk.intake.title,
+                })) as SelectData[]
+              }
+              name="intake"
+              placeholder={
+                intakes.isLoading ? 'Loading intakes...' : 'intake to be enrolled in'
+              }
+              handleChange={otherhandleChange}>
+              Intake
             </DropdownMolecule>
             {/* <DropdownMolecule
               options={getDropDownOptions({

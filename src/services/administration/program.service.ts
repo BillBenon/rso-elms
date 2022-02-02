@@ -53,6 +53,12 @@ class ProgramService {
     return await adminstrationAxios.get(`/programs/getProgramsByDepartment/${id}`);
   }
 
+  public async getProgramsByAcademy(
+    id: string,
+  ): Promise<AxiosResponse<Response<ProgramInfo[]>>> {
+    return await adminstrationAxios.get(`/programs/getAcademiProgramByAcademy/${id}`);
+  }
+
   public async modifyProgram(
     programInfo: CreateProgramInfo,
   ): Promise<AxiosResponse<Response<ProgramInfo>>> {

@@ -2,20 +2,39 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
+import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { roleStore } from '../../../../store/administration';
-import { CreateRoleReq, FormPropType, ValueType } from '../../../../types';
+import academyStore from '../../../../store/administration/academy.store';
+import { CreateRoleReq, FormPropType, RoleApplyOn, ValueType } from '../../../../types';
+import { AcademyInfo } from '../../../../types/services/academy.types';
+import { UserType } from '../../../../types/services/user.types';
+import {
+  getDropDownOptions,
+  getDropDownStatusOptions,
+} from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
+import RadioMolecule from '../../../Molecules/input/RadioMolecule';
+import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function NewRole({ onSubmit }: FormPropType) {
-  const [form, setForm] = useState<CreateRoleReq>({ name: '', description: '' });
   const { mutateAsync } = roleStore.addRole();
+  const { user } = useAuthenticator();
   const history = useHistory();
+
+  const [form, setForm] = useState<CreateRoleReq>({
+    name: '',
+    description: '',
+    academy_id: user?.academy?.id.toString() || '',
+    institution_id: user?.institution?.id.toString(),
+    type: RoleApplyOn.ACADEMY,
+  });
 
   function handleChange({ name, value }: ValueType) {
     setForm((old) => ({ ...old, [name]: value }));
   }
+
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
     mutateAsync(form, {
@@ -29,9 +48,45 @@ export default function NewRole({ onSubmit }: FormPropType) {
     });
     if (onSubmit) onSubmit(e);
   }
+  const academies: AcademyInfo[] | undefined =
+    academyStore.fetchAcademies().data?.data.data || [];
+
   return (
     <form onSubmit={submitForm}>
       {/* model name */}
+      {user?.user_type === UserType.SUPER_ADMIN ? (
+        <>
+          <RadioMolecule
+            className="pb-2"
+            defaultValue={form.type}
+            options={getDropDownStatusOptions(RoleApplyOn)}
+            value={form.type}
+            handleChange={handleChange}
+            name="type">
+            Apply Role On
+          </RadioMolecule>
+          {form.type === RoleApplyOn.ACADEMY ? (
+            <SelectMolecule
+              options={getDropDownOptions({ inputs: academies || [] })}
+              name="academy_id"
+              value={form.academy_id}
+              handleChange={handleChange}>
+              Academy
+            </SelectMolecule>
+          ) : (
+            <InputMolecule
+              readOnly
+              value={user?.institution.name}
+              name={'institution_id'}>
+              Institution
+            </InputMolecule>
+          )}
+        </>
+      ) : (
+        <InputMolecule readOnly value={user?.academy.name} name={'academyId'}>
+          Academy
+        </InputMolecule>
+      )}
       <InputMolecule
         required
         value={form.name}

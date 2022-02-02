@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import usersStore from '../../../../../../store/administration/users.store';
 import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../types';
@@ -15,6 +16,8 @@ import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../../Molecules/input/InputMolecule';
+import PopupMolecule from '../../../../../Molecules/Popup';
+import UpdatePassword from './UpdatePassword';
 
 interface Account<E> extends CommonStepProps, CommonFormProps<E> {}
 
@@ -25,6 +28,8 @@ function AccountDetails<E>({
   nextStep,
   fetched_id,
 }: Account<E>) {
+  const { url, path } = useRouteMatch();
+  const history = useHistory();
   const [accountDetails, setAccountDetails] = useState<AccountDetail>({
     username: '',
     pin: 0,
@@ -67,6 +72,7 @@ function AccountDetails<E>({
       });
   }, [user.data?.data.data]);
 
+  function submited() {}
   return (
     <div className="flex flex-col gap-4">
       {!isVertical && (
@@ -93,30 +99,9 @@ function AccountDetails<E>({
             handleChange={handleChange}>
             Username
           </InputMolecule>
-          {/* <InputMolecule
-            name="pin"
-            type="password"
-            placeholder="Enter pin of 5 numbers"
-            value={accountDetails.pin}
-            handleChange={handleChange}>
-            Pin
-          </InputMolecule> */}
-          {/* <InputMolecule
-            name="password"
-            placeholder="password"
-            type="password"
-            value={accountDetails.password}
-            handleChange={handleChange}>
-            Password
-          </InputMolecule>
-          <InputMolecule
-            name="confirm_password"
-            placeholder="confirm password"
-            type="password"
-            value={accountDetails.confirm_password}
-            handleChange={handleChange}>
-            Confirm Password
-          </InputMolecule> */}
+          <Link to={`${url}/update-password`}>
+            <Button>Update Password</Button>
+          </Link>
         </div>
         <div className="flex justify-between w-80">
           {prevStep && (
@@ -131,6 +116,20 @@ function AccountDetails<E>({
           <Button type="submit">Save</Button>
         </div>
       </form>
+      <Switch>
+        {/* update password */}
+        <Route
+          exact
+          path={`${path}/update-password`}
+          render={() => {
+            return (
+              <PopupMolecule title="Update Password" open={true} onClose={history.goBack}>
+                <UpdatePassword onSubmit={submited} />
+              </PopupMolecule>
+            );
+          }}
+        />
+      </Switch>
     </div>
   );
 }
