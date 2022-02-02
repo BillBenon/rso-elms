@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { PrivilegeRes } from '..';
 import { GenericStatus, Table } from './common.types';
 
@@ -10,6 +11,9 @@ export interface RoleRes extends Table {
   description: string;
   name: string;
   status: GenericStatus;
+  academy_id: string;
+  institution_id: string;
+  type: RoleType;
 }
 
 export interface RoleResWithPrevilages extends RoleRes {
@@ -28,4 +32,9 @@ export interface RolePrivilege extends Table {
 export interface AddPrivilegeRoleType {
   roleId: string;
   privileges: string;
+}
+
+export enum RoleType {
+  ACADEMY = 'ACADEMY',
+  INSTITUTION = 'INSTITUTION',
 }
