@@ -7,7 +7,7 @@ export interface CreateRoleReq {
   name?: string;
   academy_id?: string;
   institution_id?: string;
-  type: RoleApplyOn;
+  type: RoleType;
 }
 
 export interface RoleRes extends Table {
