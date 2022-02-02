@@ -37,9 +37,9 @@ export default function Redirecting() {
         redirectTo('/complete-profile');
       } else {
         if (nextOfKin && nextOfKin?.data.data.length === 0) {
-          redirectTo('/complete-profile/more');
+          redirectTo('/complete-more');
         } else if (experiences && experiences?.data.data.length === 0) {
-          redirectTo('/complete-profile/experience');
+          redirectTo('/complete-experience');
         } else if (nextOfKin && experiences) {
           if (user?.user_type != UserType.SUPER_ADMIN && !user?.academy) {
             setHasNoAcademy(true);
