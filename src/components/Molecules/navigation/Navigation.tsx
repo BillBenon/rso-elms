@@ -6,15 +6,15 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import { queryClient } from '../../../plugins/react-query';
 import { authenticatorStore } from '../../../store/administration';
+import academyStore from '../../../store/administration/academy.store';
+import { institutionStore } from '../../../store/administration/institution.store';
 import { getAllNotifications } from '../../../store/administration/notification.store';
-import { RoleResWithPrevilages } from '../../../types';
+import { RoleResWithPrevilages, RoleType } from '../../../types';
 import { NotificationStatus } from '../../../types/services/notification.types';
 import { UserType } from '../../../types/services/user.types';
 import cookie from '../../../utils/cookie';
 import { usePicture } from '../../../utils/file-util';
-import { advancedTypeChecker } from '../../../utils/getOption';
 import Avatar from '../../Atoms/custom/Avatar';
-import Badge from '../../Atoms/custom/Badge';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import Notification from '../Notification';
@@ -33,6 +33,9 @@ export default function Navigation() {
   const location = useLocation();
   const notifications =
     getAllNotifications(user?.id.toString() || '').data?.data.data || [];
+
+  const institution = institutionStore.getAll().data?.data.data;
+  const academy_info = academyStore.fetchAcademies().data?.data.data;
 
   const hasSomeUnreadNotifications = notifications.some(
     (notification) =>
@@ -120,10 +123,13 @@ export default function Navigation() {
                         className="flex items-center gap-4 px-4 box-border text-left py-2 text-sm text-txt-primary hover:bg-gray-100 w-full"
                         key={role.id}
                         role="menuitem">
-                        {role.name}
-                        <Badge badgecolor={advancedTypeChecker(role.type)}>
-                          {role.type}
-                        </Badge>
+                        <span className="font-semibold">{role.name}</span> - &nbsp;
+                        {role.type === RoleType.ACADEMY
+                          ? academy_info?.find((ac) => ac.id === role.academy_id)?.name
+                          : role.type
+                          ? institution?.find((inst) => inst.id === role.institution_id)
+                              ?.name
+                          : null}
                       </button>
                     ))}
                   </Tooltip>
