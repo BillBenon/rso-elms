@@ -45,7 +45,14 @@ export default function Redirecting() {
           if (user?.user_type != UserType.SUPER_ADMIN && !user?.academy) {
             setHasNoAcademy(true);
           } else if (user.user_roles !== null && user.user_roles.length === 1) {
-            cookie.setCookie('user_role', user.user_roles[0].id.toString());
+            cookie.setCookie('user_role', JSON.stringify(user.user_roles[0]));
+            redirectTo(
+              user?.user_type === UserType.INSTRUCTOR
+                ? '/dashboard/inst-module'
+                : user?.user_type === UserType.STUDENT
+                ? '/dashboard/student'
+                : '/dashboard/users',
+            );
           } else if (user.user_roles !== null && user.user_roles.length > 1) {
             redirectTo('/choose-role');
           } else {
