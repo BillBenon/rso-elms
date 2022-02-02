@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { Link as BrowserLink, useHistory } from 'react-router-dom';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
-import { CommonCardDataType, Privileges } from '../../../../types';
+import { CommonCardDataType, Privileges, RoleResWithPrevilages } from '../../../../types';
 import { UserType } from '../../../../types/services/user.types';
+import cookie from '../../../../utils/cookie';
 import Permission from '../../../Atoms/auth/Permission';
 import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
@@ -26,12 +27,15 @@ export default function ModuleCard({
   const history = useHistory();
   const [privileges, setPrivileges] = useState<string[]>();
 
+  const picked_role_cookie = cookie.getCookie('user_role');
+  const picked_role: RoleResWithPrevilages | undefined = picked_role_cookie
+    ? JSON.parse(picked_role_cookie)
+    : undefined;
+
   useEffect(() => {
-    const _privileges = user?.user_roles
-      ?.filter((role) => role.id === 1)[0]
-      .role_privileges?.map((privilege) => privilege.name);
+    const _privileges = picked_role?.role_privileges?.map((privilege) => privilege.name);
     if (_privileges) setPrivileges(_privileges);
-  }, [user]);
+  }, [picked_role?.role_privileges]);
   return (
     <div className="p-2 mt-3">
       <Tooltip
@@ -41,30 +45,33 @@ export default function ModuleCard({
             data={course}
             handleClick={
               () =>
-                privileges?.includes(Privileges.CAN_ACCESS_SUBJECTS)
-                  ? history.push({
-                      pathname: `/dashboard/modules/${course.id}/subjects`,
-                      search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
-                    })
-                  : !showMenus
-                  ? privileges?.includes(Privileges.CAN_ACCESS_MODULE_MATERIALS)
-                    ? history.push({
-                        pathname: `/dashboard/modules/${course.id}/materials`,
-                        search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
-                      })
-                    : // : privileges?.includes(Privileges.CAN_ACCESS_PREREQUISITES)
-                      // ?
-                      history.push({
-                        pathname: `/dashboard/modules/${course.id}/prereqs`,
-                        search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
-                      })
-                  : // : {}
-                    // privileges?.includes(Privileges.CAN_ACCESS_PREREQUISITES)
-                    // ?
-                    history.push({
-                      pathname: `/dashboard/modules/${course.id}/prereqs`,
-                      search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
-                    })
+                // privileges?.includes(Privileges.CAN_ACCESS_SUBJECTS)
+                //   ?
+                history.push({
+                  pathname: `/dashboard/modules/${course.id}/subjects`,
+                  search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
+                })
+              // : !showMenus
+              // ? privileges?.includes(Privileges.CAN_ACCESS_MODULE_MATERIALS)
+              // ? history.push({
+              //     pathname: `/dashboard/modules/${course.id}/materials`,
+              //     search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
+              //   })
+              // :
+              // : privileges?.includes(Privileges.CAN_ACCESS_PREREQUISITES)
+              // ?
+              // history.push({
+              //   pathname: `/dashboard/modules/${course.id}/prereqs`,
+              //   search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
+              // })
+              // :
+              // : {}
+              // privileges?.includes(Privileges.CAN_ACCESS_PREREQUISITES)
+              // ?
+              // history.push({
+              //   pathname: `/dashboard/modules/${course.id}/prereqs`,
+              //   search: `?showMenus=${showMenus}&intkPrg=${intakeProg}`,
+              // })
               // : privileges?.includes(Privileges.CAN_ACCESS_EVALUATIONS)
               // ? history.push({
               //     pathname: `/dashboard/modules/${course.id}/evaluations`,

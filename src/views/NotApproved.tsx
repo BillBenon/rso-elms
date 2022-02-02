@@ -56,7 +56,7 @@ function NotApproved() {
           ) : (
             <p className="text-primary-500 pt-5 pb-11">
               Its our pleasure to be with you here! unfortunately you currently
-              <span className="underline">don&apos;t belong in any academy</span>.
+              <span className="underline"> don&apos;t belong in any academy</span>.
             </p>
           )}
           <div className="flex justify-evenly">

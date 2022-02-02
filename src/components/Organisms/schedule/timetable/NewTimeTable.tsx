@@ -172,7 +172,8 @@ function FirstStep({ values, handleChange, setCurrentStep, classInfo }: IStepPro
 
 function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: IStepProps) {
   const { user } = useAuthenticator();
-  const venues = getAllVenues(user?.academy.id + '').data?.data.data || [];
+  const venues =
+    getAllVenues(user?.academy.id + '', !!user?.academy.id).data?.data.data || [];
 
   return (
     <form onSubmit={handleSubmit} className="max-w-sm -mb-6">
