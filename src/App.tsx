@@ -22,14 +22,10 @@ const App = () => {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/redirecting" component={Redirecting} />
-            <Route exact path="/complete-profile" component={CompleteProfile} />
-            <Route
-              exact
-              path="/complete-profile/experience"
-              component={ExperienceDetails}
-            />
-            <Route exact path="/complete-profile/more" component={MoreInfo} />
-            <Route exact path="/complete-profile/other" component={OtherDetails} />
+            <Route exact path="/complete-experience" component={ExperienceDetails} />
+            <Route path="/complete-profile" component={CompleteProfile} />
+            <Route exact path="/complete-more" component={MoreInfo} />
+            <Route exact path="/complete-other" component={OtherDetails} />
             <Route exact path="/new-institution" component={NewInstitution} />
             <Route exact path="/choose-role" component={ChooseRole} />
             <Route path="/login" component={Signin} />

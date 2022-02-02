@@ -29,18 +29,14 @@ export default function NewAcademy() {
 
   const { url } = useRouteMatch();
   const [currentStep, setCurrentStep] = useState(0);
-
   const { user } = useAuthenticator();
-  useEffect(() => {
-    const getUser = async () => {
-      setDetails((details) => ({
-        ...details,
-        institution_id: user?.institution_id || '',
-      }));
-    };
 
-    getUser();
-  }, [user]);
+  useEffect(() => {
+    setDetails((details) => ({
+      ...details,
+      institution_id: user?.institution_id || '',
+    }));
+  }, [user?.institution_id]);
 
   const [details, setDetails] = useState<AcademyCreateInfo>({
     current_admin_id: '',

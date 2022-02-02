@@ -28,6 +28,12 @@ class ProgramStore {
     );
   }
 
+  getProgramsByAcademy(program_id: string) {
+    return useQuery(['programs/program_id', program_id], () =>
+      programService.getProgramsByAcademy(program_id),
+    );
+  }
+
   modifyProgram() {
     return useMutation(programService.modifyProgram);
   }
