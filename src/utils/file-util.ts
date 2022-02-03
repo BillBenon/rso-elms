@@ -65,3 +65,26 @@ export function usePicture(
 
   return picture;
 }
+
+export const downloadFile = async (attachmentId: string) => {
+  // eslint-disable-next-line no-undef
+  const headers: HeadersInit = {};
+  const token = cookie.getCookie('jwt_info');
+
+  if (token) {
+    const jwtInfo: LoginRes = JSON.parse(token);
+    headers['Authorization'] = `Bearer ${jwtInfo.token}`;
+  }
+
+  const res = await fetch(`${ADMIN_BASE_URL}/attachments/download/${attachmentId}`, {
+    headers,
+  });
+
+  const blob = await res.blob();
+
+  // const file = URL.createObjectURL(blob);
+
+  const url = window.URL.createObjectURL(new Blob([blob], { type: 'application/pdf' }));
+
+  return url;
+};

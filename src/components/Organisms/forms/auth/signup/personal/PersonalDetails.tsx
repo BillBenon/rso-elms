@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import countryList from 'react-select-country-list';
 
 import usersStore from '../../../../../../store/administration/users.store';
 import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../types';
@@ -46,11 +47,25 @@ function PersonalDetails<E>({
     residence_location_id: 0,
     place_of_residence: '',
     doc_type: DocType.NID,
+    nationality: '',
   });
 
   const handleChange = (e: ValueType) => {
     setPersonalDetails({ ...personalDetails, [e.name]: e.value });
   };
+
+  const options = useMemo(
+    () =>
+      countryList()
+        .getData()
+        .map((country) => {
+          return {
+            value: country.label,
+            label: country.label,
+          };
+        }),
+    [],
+  );
 
   const moveForward = (e: any) => {
     e.preventDefault();
@@ -86,6 +101,7 @@ function PersonalDetails<E>({
         residence_location_id: personInfo.residence_location_id,
         place_of_residence: personInfo.place_of_residence,
         doc_type: personInfo.doc_type,
+        nationality: personInfo.nationality,
       });
   }, [user.data?.data.data.person]);
 
@@ -157,12 +173,23 @@ function PersonalDetails<E>({
             </InputMolecule>
           </div>
           <div>
-            <LocationMolecule
-              placeholder="Select place of birth"
-              name="place_of_birth"
-              handleChange={handleChange}>
+            <DropdownMolecule
+              width="60 md:w-80"
+              name="nationality"
+              placeholder="Select the Nation"
+              defaultValue={options.find(
+                (national) => national.label === personalDetails.nationality,
+              )}
+              handleChange={handleChange}
+              options={options}>
               Place of birth
-            </LocationMolecule>
+            </DropdownMolecule>
+            {personalDetails.nationality == 'Rwanda' && (
+              <LocationMolecule
+                placeholder="Select place of birth"
+                name="place_of_birth"
+                handleChange={handleChange}></LocationMolecule>
+            )}
             <TextAreaMolecule
               width="72 md:w-80"
               name="place_of_birth_description"
@@ -170,13 +197,23 @@ function PersonalDetails<E>({
               handleChange={handleChange}>
               Place of birth description (optional)
             </TextAreaMolecule>
-
-            <LocationMolecule
-              placeholder="Select place of residence"
-              name="residence_location_id"
-              handleChange={handleChange}>
+            <DropdownMolecule
+              width="60 md:w-80"
+              name="nationality"
+              placeholder="Select the Nation"
+              defaultValue={options.find(
+                (national) => national.label === personalDetails.nationality,
+              )}
+              handleChange={handleChange}
+              options={options}>
               Place of residence
-            </LocationMolecule>
+            </DropdownMolecule>
+            {personalDetails.nationality == 'Rwanda' && (
+              <LocationMolecule
+                placeholder="Select place of residence"
+                name="residence_location_id"
+                handleChange={handleChange}></LocationMolecule>
+            )}
             <TextAreaMolecule
               width="72 md:w-80"
               name="place_of_residence"

@@ -131,8 +131,18 @@ function NextOfKinDetails<E>({
     if (onSubmit) onSubmit(e, details);
   };
 
-  const options = useMemo(() => countryList().getData(), []);
-
+  const options = useMemo(
+    () =>
+      countryList()
+        .getData()
+        .map((country) => {
+          return {
+            value: country.label,
+            label: country.label,
+          };
+        }),
+    [],
+  );
   return (
     <div className="flex flex-col gap-2 ">
       <form onSubmit={moveForward}>
@@ -260,13 +270,23 @@ function NextOfKinDetails<E>({
           </InputMolecule>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2">
-          <LocationMolecule
-            width="72 md:w-80"
-            name="residence_location_id"
-            placeholder="Select location"
-            handleChange={handleChange}>
-            Residence location
-          </LocationMolecule>
+          <DropdownMolecule
+            width="60 md:w-80"
+            name="nationality"
+            placeholder="Select the Nation"
+            defaultValue={options.find(
+              (national) => national.label === details.nationality,
+            )}
+            handleChange={handleChange}
+            options={options}>
+            Place of residence
+          </DropdownMolecule>
+          {details.nationality == 'Rwanda' && (
+            <LocationMolecule
+              placeholder="Select place of residence"
+              name="residence_location_id"
+              handleChange={handleChange}></LocationMolecule>
+          )}
           <InputMolecule
             readOnly={
               data?.data.data.place_of_residence

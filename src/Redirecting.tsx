@@ -7,6 +7,7 @@ import useAuthenticator from './hooks/useAuthenticator';
 import { getPersonExperiences } from './store/administration/experience.store';
 import { getHisNextKinById } from './store/administration/usernextkin.store';
 import { ProfileStatus, UserType } from './types/services/user.types';
+import cookie from './utils/cookie';
 import NotApproved from './views/NotApproved';
 
 export default function Redirecting() {
@@ -37,12 +38,23 @@ export default function Redirecting() {
         redirectTo('/complete-profile');
       } else {
         if (nextOfKin && nextOfKin?.data.data.length === 0) {
-          redirectTo('/complete-profile/more');
+          redirectTo('/complete-more');
         } else if (experiences && experiences?.data.data.length === 0) {
-          redirectTo('/complete-profile/experience');
+          redirectTo('/complete-experience');
         } else if (nextOfKin && experiences) {
           if (user?.user_type != UserType.SUPER_ADMIN && !user?.academy) {
             setHasNoAcademy(true);
+          } else if (user.user_roles !== null && user.user_roles.length === 1) {
+            cookie.setCookie('user_role', JSON.stringify(user.user_roles[0]));
+            redirectTo(
+              user?.user_type === UserType.INSTRUCTOR
+                ? '/dashboard/inst-module'
+                : user?.user_type === UserType.STUDENT
+                ? '/dashboard/student'
+                : '/dashboard/users',
+            );
+          } else if (user.user_roles !== null && user.user_roles.length > 1) {
+            redirectTo('/choose-role');
           } else {
             redirectTo(
               user?.user_type === UserType.INSTRUCTOR

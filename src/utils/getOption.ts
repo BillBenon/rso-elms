@@ -1,4 +1,4 @@
-import { SelectData } from '../types';
+import { RoleType, SelectData } from '../types';
 import { IEvaluationStatus } from '../types/services/evaluation.types';
 import { IntakeStatus } from '../types/services/intake.types';
 import { IntakeModuleStatus } from '../types/services/intake-program.types';
@@ -83,11 +83,20 @@ export function advancedTypeChecker(
     | MaterialType
     | EnrollmentStatus
     | StudentApproval
-    | ProgramStatus,
+    | ProgramStatus
+    | RoleType,
 ): 'success' | 'warning' | 'error' | 'info' {
   let successStatus = ['active', 'completed', 'opened', 'started'];
   let errorStatus = ['inactive', 'closed', 'voided', 'suspended'];
-  let infoStatus = ['ongoing', 'notes', 'exams', 'workshop', 'seminaries'];
+  let infoStatus = [
+    'ongoing',
+    'notes',
+    'exams',
+    'workshop',
+    'seminaries',
+    'academy',
+    'institution',
+  ];
 
   if (successStatus.includes(status.toString().toLowerCase())) return 'success';
   else if (errorStatus.includes(status.toString().toLowerCase())) return 'error';

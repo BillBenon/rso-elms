@@ -6,7 +6,10 @@ import { Link, useHistory, useLocation } from 'react-router-dom';
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import { queryClient } from '../../../plugins/react-query';
 import { authenticatorStore } from '../../../store/administration';
+import academyStore from '../../../store/administration/academy.store';
+import { institutionStore } from '../../../store/administration/institution.store';
 import { getAllNotifications } from '../../../store/administration/notification.store';
+import { RoleResWithPrevilages, RoleType } from '../../../types';
 import { NotificationStatus } from '../../../types/services/notification.types';
 import { UserType } from '../../../types/services/user.types';
 import cookie from '../../../utils/cookie';
@@ -22,6 +25,7 @@ export default function Navigation() {
   const history = useHistory();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotificationMenu, setNotificationMenu] = useState(false);
+  const [showSwitchMenu, setSwitchMenu] = useState(false);
   const [showMenu, setShowMenu] = useState(false);
   const logoutFn = authenticatorStore.logout();
   const { user } = useAuthenticator();
@@ -29,6 +33,9 @@ export default function Navigation() {
   const location = useLocation();
   const notifications =
     getAllNotifications(user?.id.toString() || '').data?.data.data || [];
+
+  const institution = institutionStore.getAll().data?.data.data;
+  const academy_info = academyStore.fetchAcademies().data?.data.data;
 
   const hasSomeUnreadNotifications = notifications.some(
     (notification) =>
@@ -58,11 +65,21 @@ export default function Navigation() {
       .then(() => {
         queryClient.clear();
         cookie.eraseCookie('jwt_info');
+        cookie.eraseCookie('user_role');
         history.push('/login');
         toast.success('You are now logged out.', { id: toastId });
       })
       .catch(() => toast.error('Signout failed. try again latter.', { id: toastId }));
   }
+
+  const user_role_cookie = cookie.getCookie('user_role');
+  const user_role: RoleResWithPrevilages | undefined = user_role_cookie
+    ? JSON.parse(user_role_cookie)
+    : undefined;
+  const other_user_roles = user_role
+    ? user?.user_roles.filter((role) => role.id !== user_role.id)
+    : undefined;
+
   return (
     <nav className="bg-main">
       <div className=" mx-auto px-4 sm:px-6 lg:px-8">
@@ -84,7 +101,39 @@ export default function Navigation() {
                 </div>
               )}
               <div className="bg-main p-1 rounded-full flex text-gray-400">
-                <Icon name="switch" />
+                {other_user_roles && (
+                  <Tooltip
+                    on="click"
+                    position="bottom center"
+                    open={showSwitchMenu}
+                    trigger={
+                      <button
+                        className="bg-main rounded-full flex text-gray-400"
+                        onClick={() => setSwitchMenu(!showSwitchMenu)}>
+                        <div className="relative">
+                          <Icon name="switch" />
+                        </div>
+                      </button>
+                    }>
+                    {other_user_roles.map((role) => (
+                      <button
+                        onClick={() =>
+                          cookie.setCookie('user_role', JSON.stringify(role))
+                        }
+                        className="flex items-center gap-4 px-4 box-border text-left py-2 text-sm text-txt-primary hover:bg-gray-100 w-full"
+                        key={role.id}
+                        role="menuitem">
+                        <span className="font-semibold">{role.name}</span> - &nbsp;
+                        {role.type === RoleType.ACADEMY
+                          ? academy_info?.find((ac) => ac.id === role.academy_id)?.name
+                          : role.type
+                          ? institution?.find((inst) => inst.id === role.institution_id)
+                              ?.name
+                          : null}
+                      </button>
+                    ))}
+                  </Tooltip>
+                )}
                 <Icon name="settings" />
 
                 <Tooltip
@@ -242,21 +291,23 @@ export default function Navigation() {
             </div>
           </div>
           <div className="mt-3 px-2 space-y-1">
-            <a
-              href="#"
+            <Link
+              to={`/dashboard/users/${user?.id}/profile`}
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">
               Your Profile
-            </a>
+            </Link>
             <a
               href="#"
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">
               Settings
             </a>
-            <a
-              href="#"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">
-              Sign out
-            </a>
+            <button
+              disabled={logoutFn.isLoading}
+              onClick={() => logout()}
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
+              role="menuitem">
+              {logoutFn.isLoading ? 'Signing out ....' : 'Sign out'}
+            </button>
           </div>
         </div>
       </div>
