@@ -93,6 +93,14 @@ class EnrollmentService {
     );
   }
 
+  public async getAllStudentEnrollmentsFreely(): Promise<
+    AxiosResponse<Response<SortedContent<StudentEnrollmentLevel[]>>>
+  > {
+    return await adminstrationAxios.get(
+      `/students/getAllStudentLevelEnrolments?page=0&pageSize=10000&sortyBy=createdOn`,
+    );
+  }
+
   public async getAllStudentEnrollments(
     queryParams?: FilterOptions,
   ): Promise<AxiosResponse<Response<SortedContent<StudentEnrollmentLevel[]>>>> {

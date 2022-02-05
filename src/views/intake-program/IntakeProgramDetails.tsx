@@ -33,6 +33,7 @@ import { IProgramData } from '../programs/AcademicPrograms';
 import AddLevelToProgram from '../programs/AddLevelToProgram';
 import ApproveStudent from '../users/ApproveStudent';
 import EnrollInstructorIntakeProgram from './EnrollInstructorIntakeProgram';
+import EnrollRetakingStudents from './EnrollRetakingStudents';
 import EnrollStudentIntakeProgram from './EnrollStudentIntakeProgram';
 import IntakeProgramLevel from './IntakeProgramLevel';
 import IntakeProgramModules from './IntakeProgramModules';
@@ -59,6 +60,7 @@ function IntakeProgramDetails() {
     showInstructor: false,
     enrollStudent: false,
     enrollInstructor: false,
+    enrollRetaking: false,
   };
   const [showSidebar, setShowSidebar] = useState(initialShowSidebar);
 
@@ -327,6 +329,17 @@ function IntakeProgramDetails() {
                               }
                             />
                           ) : null}
+
+                          <EnrollRetakingStudents
+                            showSidebar={showSidebar.enrollRetaking}
+                            existing={studentsProgram?.data.data || []}
+                            handleShowSidebar={() =>
+                              setShowSidebar({
+                                ...initialShowSidebar,
+                                enrollRetaking: !showSidebar.enrollRetaking,
+                              })
+                            }
+                          />
 
                           <Permission
                             privilege={Privileges.CAN_ACCESS_INSTRUCTORS_ON_PROGRAM}>
