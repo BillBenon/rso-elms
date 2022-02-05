@@ -1,8 +1,9 @@
 import React from 'react';
-import { Redirect, Route, useRouteMatch } from 'react-router-dom';
+import { Redirect, Route, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from './components/Atoms/custom/Button';
 import Loader from './components/Atoms/custom/Loader';
+import ConfirmationOrganism from './components/Organisms/ConfirmationOrganism';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import useAuthenticator from './hooks/useAuthenticator';
 import Dashboard from './layout/Dashboard';
@@ -12,6 +13,7 @@ import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';
 import AdminDashboard from './views/dashboard/AdminDashboard';
 import Divisions from './views/divisions/Divisions';
+import EvaluationNotiView from './views/evaluation/EvaluationNotiView';
 import EvaluationTest from './views/evaluation/EvaluationTest';
 import InstructorViewEvaluations from './views/evaluation/InstructorViewEvaluations';
 import StudentReview from './views/evaluation/StudentReview';
@@ -37,6 +39,7 @@ import Users from './views/users/Users';
 const RouterProtection = () => {
   const { user, userLoading, isError } = useAuthenticator();
   const { path } = useRouteMatch();
+  const history = useHistory();
 
   let token = cookie.getCookie('jwt_info');
 
@@ -53,6 +56,7 @@ const RouterProtection = () => {
 
       <Route path={`${path}/privileges`} component={PrivilegesView} />
       <Route exact path={`${path}/institution/:id/edit`} component={UpdateInstitution} />
+
       {/* end of institution admin page */}
     </>
   );
@@ -88,11 +92,11 @@ const RouterProtection = () => {
       <Route path={`${path}/calendar`} component={CalendarView} />
       <Route path={`${path}/intakes`} component={IntakesView} />
       <Route exact path={`${path}/inst-module`} component={InstrLevelModule} />
-
       <Route path={`${path}/schedule`} component={ScheduleHome} />
       <Route path={`${path}/events`} component={Events} />
       <Route path={`${path}/modules`} component={Modules} />
       <Route path={`${path}/users/:id/profile`} component={UserDetails} />
+
       {/* end of instructor pages */}
     </>
   );
@@ -105,6 +109,7 @@ const RouterProtection = () => {
       <Route path={`${path}/schedule`} component={ScheduleHome} />
       <Route path={`${path}/student`} component={StudentModule} />
       <Route path={`${path}/modules`} component={Modules} />
+      <Route path={`${path}/programs`} component={AcademicProgram} />
       {/* <Route path={`${path}/student/evaluations/`} component={EvaluationTest} /> */}
       <Route
         exact
@@ -116,7 +121,15 @@ const RouterProtection = () => {
         path={`${path}/evaluations/completed/student-evaluation/:id/review`}
         component={StudentReview}
       />
+      <Route exact path={`${path}/evaluations/view/:id`} component={EvaluationNotiView} />
       {/* end of student pages */}
+      <Route
+        exact
+        path={`/dashboard/evaluations/attempt/:id`}
+        render={() => (
+          <ConfirmationOrganism onConfirmationClose={() => history.goBack()} />
+        )}
+      />
     </>
   );
 

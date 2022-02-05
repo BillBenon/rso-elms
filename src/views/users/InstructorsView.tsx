@@ -8,6 +8,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import AssignRole from '../../components/Organisms/forms/user/AssignRole';
+import ViewUserRole from '../../components/Organisms/forms/user/ViewUserRole';
 import ImportUsers from '../../components/Organisms/user/ImportUsers';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import usersStore from '../../store/administration/users.store';
@@ -44,9 +45,17 @@ export default function InstructorsView() {
   actions?.push({
     name: 'Assign Role',
     handleAction: (id: string | number | undefined) => {
-      history.push(`${url}/${id}/role`); // go to assign role
+      history.push(`${url}/${id}/assign-role`); // go to assign role
     },
     privilege: Privileges.CAN_ASSIGN_ROLE,
+  });
+
+  actions?.push({
+    name: 'View Role',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${url}/${id}/view-role`); // go to assign role
+    },
+    privilege: Privileges.CAN_ACCESS_ROLE,
   });
 
   actions?.push({
@@ -134,7 +143,7 @@ export default function InstructorsView() {
         />
         <Route
           exact
-          path={`${path}/:id/role`}
+          path={`${path}/:id/assign-role`}
           render={() => (
             <PopupMolecule
               closeOnClickOutSide={false}
@@ -142,6 +151,20 @@ export default function InstructorsView() {
               open={true}
               onClose={history.goBack}>
               <AssignRole />
+            </PopupMolecule>
+          )}
+        />
+
+        <Route
+          exact
+          path={`${path}/:id/view-role`}
+          render={() => (
+            <PopupMolecule
+              closeOnClickOutSide={false}
+              title="Roles"
+              open={true}
+              onClose={history.goBack}>
+              <ViewUserRole />
             </PopupMolecule>
           )}
         />

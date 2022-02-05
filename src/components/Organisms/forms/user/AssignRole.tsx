@@ -14,6 +14,8 @@ import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 export default function AssignRole() {
   const { id: userId } = useParams<ParamType>();
   const { data, isLoading } = roleStore.getRoles();
+  const { data: userRoles } = usersStore.getUserRoles(userId);
+
   const [roles, setRoles] = useState<string[]>([]);
   const history = useHistory();
 
@@ -48,13 +50,18 @@ export default function AssignRole() {
     });
   }
 
+  const userRolesId = userRoles?.data.data.map((role) => role.role.id) || [];
+
+  const roleOptions =
+    data?.data.data.filter((role) => !userRolesId.includes(role.id)) || [];
+
   return (
     <form onSubmit={saveRoles}>
       <DropdownMolecule
         isMulti
         name="role"
         handleChange={handleChange}
-        options={getDropDownOptions({ inputs: data?.data.data || [] })}
+        options={getDropDownOptions({ inputs: roleOptions })}
         placeholder={isLoading ? 'Loading roles...' : 'Select role'}>
         Select roles
       </DropdownMolecule>

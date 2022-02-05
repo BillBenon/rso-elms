@@ -1,7 +1,14 @@
 import { AxiosResponse } from 'axios';
 
 import { adminstrationAxios } from '../../plugins/axios';
-import { LoginInfo, LoginRes, Response } from '../../types';
+import {
+  ChangePassword,
+  InitiateResetPassword,
+  LoginInfo,
+  LoginRes,
+  ResetPassword,
+  Response,
+} from '../../types';
 import { AuthUser } from '../../types/services/user.types';
 
 class AuthenticatorService {
@@ -14,6 +21,23 @@ class AuthenticatorService {
   }
   public async logout() {
     return await adminstrationAxios.get('/authentication/logout');
+  }
+
+  public async passwordChange(changePassword: ChangePassword) {
+    return await adminstrationAxios.post(
+      '/authentication/changePassword',
+      changePassword,
+    );
+  }
+
+  public async forgotPassword(initiateResetPassword: InitiateResetPassword) {
+    return await adminstrationAxios.post(
+      '/authentication/initiatePasswordReset',
+      initiateResetPassword,
+    );
+  }
+  public async passwordReset(resetPassword: ResetPassword) {
+    return await adminstrationAxios.post('/authentication/resetPassword', resetPassword);
   }
 }
 
