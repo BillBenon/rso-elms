@@ -89,5 +89,6 @@ export default function useAuthenticator() {
     logout,
     isError: _isError,
     error: _error,
+    isLoggedIn,
   };
 }
