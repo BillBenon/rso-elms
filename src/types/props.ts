@@ -87,3 +87,11 @@ export interface SelectProps extends commonInputProps {
   hasError?: boolean;
   width?: string;
 }
+
+export interface IChart {
+  data: Object[];
+  position: string;
+  width?: number;
+  height?: number;
+  fill?: string;
+}
