@@ -73,6 +73,11 @@ class EnrolmmentStore {
       enrollmentService.getStudentAcademy(academyId),
     );
   }
+  getAllStudentEnrollmentsFreely() {
+    return useQuery(['student/academy/free-enrolments'], () =>
+      enrollmentService.getAllStudentEnrollmentsFreely(),
+    );
+  }
   getStudentAcademyAndEnrollmentStatus(
     academyId: string,
     enrolmentStatus: StudentApproval,
