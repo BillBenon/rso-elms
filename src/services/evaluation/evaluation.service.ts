@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import { evaluationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
+  IAddprivateAttendee,
   ICreateEvaluationQuestions,
   IEvaluationApproval,
   IEvaluationCreate,
@@ -22,6 +23,11 @@ class EvaluationService {
     evaluationInfo: IEvaluationCreate,
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
     return await evaluationAxios.post('/evaluations/add', evaluationInfo);
+  }
+  public async addEvaluationAttendee(
+    attendeeInfo: IAddprivateAttendee,
+  ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
+    return await evaluationAxios.post('/privateAttendee/add', attendeeInfo);
   }
   public async updateEvaluation(
     evaluationInfo: IEvaluationCreate,

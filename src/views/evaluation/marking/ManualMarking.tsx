@@ -55,8 +55,6 @@ export default function ManualMarking({ evaluationId }: PropsType) {
   }
 
   function handleSubmit() {
-    console.log(students);
-
     mutate(students, {
       onSuccess: () => {
         toast.success('Marked');

@@ -7,6 +7,9 @@ class EvaluationStore {
   createEvaluation() {
     return useMutation(evaluationService.createEvaluation);
   }
+  addEvaluationAttendee() {
+    return useMutation(evaluationService.addEvaluationAttendee);
+  }
 
   updateEvaluation() {
     return useMutation(evaluationService.updateEvaluation);

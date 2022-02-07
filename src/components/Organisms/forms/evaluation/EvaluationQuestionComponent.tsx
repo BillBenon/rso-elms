@@ -95,19 +95,23 @@ export default function EvaluationQuestionComponent({
     if (questionsClone.length === 1) {
       toast.error('You must add at least one question');
     }
-    if (questionIndex > -1 && questionsClone.length > 1) {
-      questionsClone.splice(questionIndex, 1);
-      setQuestions(questionsClone);
-    }
 
-    deleteQuestion(questionId, {
-      onSuccess: () => {
-        toast.success('Question deleted', { duration: 2000 });
-      },
-      onError: (error: any) => {
-        toast.error(error.response.data.message);
-      },
-    });
+    if (questionsClone[questionIndex].question) {
+      console.log('delete question');
+
+      deleteQuestion(questionId, {
+        onSuccess: () => {
+          toast.success('Question deleted', { duration: 2000 });
+          if (questionIndex > -1 && questionsClone.length > 1) {
+            questionsClone.splice(questionIndex, 1);
+            setQuestions(questionsClone);
+          }
+        },
+        onError: (error: any) => {
+          toast.error(error.response.data.message);
+        },
+      });
+    }
   }
 
   function handleRemoveChoice(questionIndex: number, choiceIndex: number) {
