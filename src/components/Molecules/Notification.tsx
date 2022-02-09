@@ -76,9 +76,13 @@ export default function Notification({ notifications }: NotificationProps) {
                 )
               }>
               <div className="flex justify-between items-center gap-6">
-                {notification.notifaction_status === NotificationStatus.UNREAD && (
-                  <span className="h-2 w-4 bg-primary-400 rounded-full"></span>
-                )}
+                <div>
+                  {notification.notifaction_status === NotificationStatus.UNREAD ? (
+                    <span className="h-2 w-2 block bg-primary-400 rounded-full"></span>
+                  ) : (
+                    <span className="h-2 w-2 mblock bg-main rounded-full"></span>
+                  )}
+                </div>
 
                 <div className="flex flex-col gap-1 pb-4 pt-4">
                   <Heading color="txt-primary" fontSize="base" fontWeight="semibold">
