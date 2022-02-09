@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
@@ -50,16 +51,10 @@ export default function Notification({ notifications }: NotificationProps) {
     if (url) history.push(url, beneficiaryId);
   }
   return (
-    <div className="flex flex-col pb-6 w-72">
+    <div className="flex flex-col pb-6 pr-4 w-72 overflow-y-auto h-96">
       <Heading fontWeight="semibold" color="txt-primary">
         Notifications
       </Heading>
-
-      {/* <div className="pt-7 pb-4">
-        <Heading fontSize="base" fontWeight="semibold" color="txt-secondary">
-          Today
-        </Heading>
-      </div> */}
 
       {notifications && notifications?.length > 0 ? (
         notifications?.map((notification, index) => (
@@ -75,16 +70,13 @@ export default function Notification({ notifications }: NotificationProps) {
                   notification.notification_entity_beneficiary_uuid,
                 )
               }>
+              <div className="pt-7 pb-3">
+                <Heading fontSize="base" fontWeight="semibold" color="txt-secondary">
+                  {moment(notification.created_on).format('MM/DD/YYYY')}
+                </Heading>
+              </div>
               <div className="flex justify-between items-center gap-6">
-                <div>
-                  {notification.notifaction_status === NotificationStatus.UNREAD ? (
-                    <span className="h-2 w-2 block bg-primary-400 rounded-full"></span>
-                  ) : (
-                    <span className="h-2 w-2 mblock bg-main rounded-full"></span>
-                  )}
-                </div>
-
-                <div className="flex flex-col gap-1 pb-4 pt-4">
+                <div className="flex flex-col gap-1 pb-4">
                   <Heading color="txt-primary" fontSize="base" fontWeight="semibold">
                     {notification.title}
                   </Heading>
@@ -93,9 +85,16 @@ export default function Notification({ notifications }: NotificationProps) {
                     {notification.message}
                   </Heading>
                 </div>
+                <div>
+                  {notification.notifaction_status === NotificationStatus.UNREAD ? (
+                    <span className="h-2 w-2 block bg-primary-400 rounded-full"></span>
+                  ) : (
+                    <span className="h-2 w-2 mblock bg-main rounded-full"></span>
+                  )}
+                </div>
               </div>
             </div>
-            <hr className="bg-tertiary border-0" style={{ height: '2px' }} />
+            <hr className="bg-tertiary" style={{ height: '2px' }} />
           </React.Fragment>
         ))
       ) : (
