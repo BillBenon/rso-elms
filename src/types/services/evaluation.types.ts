@@ -153,6 +153,13 @@ export interface IStudentEvaluations {
   ongoingEvaluations: any[];
 }
 
+export interface IAddprivateAttendee {
+  evaluation: string;
+  id: string;
+  private_status: true;
+  students: string[];
+}
+
 export interface IEvaluationInfo {
   id: string;
   name: string;
