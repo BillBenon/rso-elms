@@ -121,7 +121,7 @@ function EnrollStudentIntakeProgram<T>({
       <Button
         styleType="text"
         onClick={handleShowSidebar}
-        className="flex -mt-6 items-center justify-end text-primary-500">
+        className="flex -m-10 items-center justify-end text-primary-500">
         <Icon name="add" size={12} fill="primary" />
         Enroll existing students
       </Button>
