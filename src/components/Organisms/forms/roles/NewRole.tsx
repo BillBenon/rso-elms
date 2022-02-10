@@ -69,6 +69,7 @@ export default function NewRole({ onSubmit }: FormPropType) {
             <SelectMolecule
               options={getDropDownOptions({ inputs: academies || [] })}
               name="academy_id"
+              placeholder="select academy"
               value={form.academy_id}
               handleChange={handleChange}>
               Academy
