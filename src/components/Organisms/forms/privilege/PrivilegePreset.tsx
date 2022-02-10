@@ -68,7 +68,7 @@ function PrivilegePreset({ roleId, onSubmit }: RolePropType) {
         </Badge>
       ) : (
         <>
-          <div className="grid grid-cols-3 gap-2 max-h-80 overflow-y-scroll">
+          <div className="grid grid-cols-3 max-h-80 overflow-y-scroll">
             {roles.map((role) => (
               <div onClick={() => setSelectedRole(role.id.toString())} key={role.id}>
                 <Badge

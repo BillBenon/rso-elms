@@ -1,8 +1,11 @@
 import React from 'react';
 
 import useAuthenticator from '../../../hooks/useAuthenticator';
-import { Privileges } from '../../../types';
+import academyStore from '../../../store/administration/academy.store';
+import { institutionStore } from '../../../store/administration/institution.store';
+import { Privileges, RoleResWithPrevilages, RoleType } from '../../../types';
 import { UserType } from '../../../types/services/user.types';
+import cookie from '../../../utils/cookie';
 import { usePicture } from '../../../utils/file-util';
 import SidebarLinks, { linkProps } from '../../Atoms/custom/SidebarLinks';
 import AcademyProfileCard from '../cards/AcademyProfileCard';
@@ -152,23 +155,47 @@ export default function Sidebar() {
     return routes;
   };
 
+  const user_role_cookie = cookie.getCookie('user_role');
+  const user_role: RoleResWithPrevilages | undefined = user_role_cookie
+    ? JSON.parse(user_role_cookie)
+    : undefined;
+
+  const institution = institutionStore.getAll().data?.data.data;
+  const academy_info = academyStore.fetchAcademies().data?.data.data;
+
+  const display_attach_id =
+    user_role?.type === RoleType.ACADEMY
+      ? academy_info?.find((ac) => ac.id === user_role?.academy_id)?.logo_attachment_id
+      : institution?.find((ac) => ac.id === user_role?.institution_id)
+          ?.logo_attachment_id || undefined;
+
+  const display_id =
+    user_role?.type === RoleType.ACADEMY
+      ? academy_info?.find((ac) => ac.id === user_role?.academy_id)?.id
+      : institution?.find((ac) => ac.id === user_role?.institution_id)?.id + '';
+
+  const display_name =
+    user_role?.type === RoleType.ACADEMY
+      ? academy_info?.find((ac) => ac.id === user_role?.academy_id)?.name
+      : institution?.find((ac) => ac.id === user_role?.institution_id)?.name;
+
   return (
     <div className="bg-white md:h-screen">
       <div className="px-4 py-4">
         <AcademyProfileCard
           src={usePicture(
-            user?.academy?.logo_attachment_id,
-            user?.academy?.id,
+            display_attach_id
+              ? display_attach_id
+              : user_role?.type === RoleType.ACADEMY
+              ? user?.academy?.logo_attachment_id
+              : user?.institution.logo_attachment_id || undefined,
+            display_id ? display_id : user?.academy?.id,
             '/images/rdf-logo.png',
             'logos',
           )}
           round={false}
           alt="insitution logo">
-          {user?.institution_name === null
-            ? 'Institution name'
-            : user?.user_type === UserType.SUPER_ADMIN
-            ? user.institution_name
-            : user?.academy?.name}
+          {display_name}
         </AcademyProfileCard>
       </div>
       <SidebarLinks links={defaultLinks()} />
