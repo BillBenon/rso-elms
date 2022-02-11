@@ -8,7 +8,7 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import useAuthenticator from '../../hooks/useAuthenticator';
 import academyStore from '../../store/administration/academy.store';
 import { institutionStore } from '../../store/administration/institution.store';
-import { CommonCardDataType, RoleResWithPrevilages, RoleType } from '../../types';
+import { CommonCardDataType, RoleType } from '../../types';
 import { UserType } from '../../types/services/user.types';
 import cookie from '../../utils/cookie';
 import { advancedTypeChecker } from '../../utils/getOption';
@@ -16,7 +16,7 @@ import { advancedTypeChecker } from '../../utils/getOption';
 export default function ChooseRole() {
   const { user } = useAuthenticator();
   const [user_roles, setUserRoles] = useState<CommonCardDataType[]>([]);
-  const [picked_role, setPickedRole] = useState<RoleResWithPrevilages>();
+  const [picked_role, setPickedRole] = useState<string>();
 
   const institution = institutionStore.getAll();
   const academy_info = academyStore.fetchAcademies();
@@ -67,7 +67,9 @@ export default function ChooseRole() {
   ]);
 
   const pickRole = () => {
-    picked_role && cookie.setCookie('user_role', JSON.stringify(picked_role));
+    if (picked_role) {
+      cookie.setCookie('user_role', picked_role);
+    }
     redirectTo(
       user?.user_type === UserType.INSTRUCTOR
         ? '/dashboard/inst-module'
@@ -76,6 +78,7 @@ export default function ChooseRole() {
         : '/dashboard/users',
     );
   };
+
   return (
     <div className="px-48 py-14">
       <div className="pb-20">
@@ -106,12 +109,11 @@ export default function ChooseRole() {
         <div className="grid grid-cols-3">
           {user_roles.map((user_role) => (
             <CommonCardMolecule
-              active={picked_role?.id == user_role.id}
+              className="my-2"
+              active={picked_role == user_role.id}
               data={user_role}
               key={user_role.id}
-              handleClick={() =>
-                setPickedRole(user?.user_roles.find((role) => role.id === user_role.id))
-              }
+              handleClick={() => setPickedRole(user_role.id + '')}
             />
           ))}
         </div>
