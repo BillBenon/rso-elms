@@ -76,7 +76,6 @@ export default function ChooseRole() {
         : '/dashboard/users',
     );
   };
-
   return (
     <div className="px-48 py-14">
       <div className="pb-20">
@@ -104,7 +103,7 @@ export default function ChooseRole() {
           Which Role would you like to use?
         </Heading>
 
-        <div className="flex gap-6 ">
+        <div className="grid grid-cols-3">
           {user_roles.map((user_role) => (
             <CommonCardMolecule
               active={picked_role?.id == user_role.id}
