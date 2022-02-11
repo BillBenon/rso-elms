@@ -3,7 +3,8 @@ import React from 'react';
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import academyStore from '../../../store/administration/academy.store';
 import { institutionStore } from '../../../store/administration/institution.store';
-import { Privileges, RoleResWithPrevilages, RoleType } from '../../../types';
+import { Privileges, RoleType } from '../../../types';
+import { UserType } from '../../../types/services/user.types';
 import cookie from '../../../utils/cookie';
 import { usePicture } from '../../../utils/file-util';
 import SidebarLinks, { linkProps } from '../../Atoms/custom/SidebarLinks';
@@ -156,8 +157,38 @@ export default function Sidebar() {
 
   const defaultLinks = (): linkProps[] => {
     const routes: linkProps[] = [];
+    const institutionAdminLinks: linkProps[] = [];
     const privilegedLinks: linkProps[] = [];
-    //Academic check
+
+    institutionAdminLinks.push(
+      {
+        title: 'Users',
+        to: '/dashboard/users',
+        icon: 'user',
+      },
+      {
+        title: 'Academies',
+        to: '/dashboard/academies',
+        icon: 'academy',
+        fill: false,
+      },
+      {
+        title: 'Ranks',
+        to: '/dashboard/ranks',
+        icon: 'rank',
+      },
+      {
+        title: 'Roles',
+        to: '/dashboard/roles',
+        icon: 'role',
+      },
+      {
+        title: 'Privileges',
+        to: '/dashboard/privileges',
+        icon: 'privilege',
+        fill: false,
+      },
+    );
     privilegedLinks.push(
       {
         title: 'Dashboard',
@@ -180,6 +211,73 @@ export default function Sidebar() {
         privilege: Privileges.CAN_ACCESS_ACADEMY,
       },
       {
+        title: 'Divisions',
+        to: '/dashboard/divisions',
+        icon: 'faculty',
+        privilege: Privileges.CAN_ACCESS_DIVISIONS,
+      },
+      {
+        title: 'Levels',
+        to: '/dashboard/levels',
+        icon: 'level',
+        privilege: Privileges.CAN_ACCESS_LEVELS,
+      },
+      {
+        title: 'Academic years',
+        to: '/dashboard/academic-years',
+        icon: 'program',
+        privilege: Privileges.CAN_ACCESS_ACADEMIC_YEARS,
+      },
+      {
+        title: 'Registration Control',
+        to: '/dashboard/registration-control',
+        icon: 'reg-control',
+        privilege: Privileges.CAN_ACCESS_REG_CONTROLS,
+      },
+      {
+        title: 'Intakes',
+        to: '/dashboard/intakes',
+        icon: 'academy',
+        privilege: Privileges.CAN_ACCESS_INTAKES,
+        fill: false,
+      },
+      {
+        title: 'Modules',
+        to: '/dashboard/inst-module',
+        icon: 'module',
+        privilege: Privileges.CAN_TEACH_MODULE,
+      },
+      {
+        title: 'Module',
+        to: '/dashboard/student',
+        icon: 'module',
+        privilege: Privileges.CAN_ACCESS_MODULES,
+      },
+      {
+        title: 'Evaluations',
+        to: '/dashboard/evaluations',
+        icon: 'evaluation',
+        privilege: Privileges.CAN_ACCESS_EVALUATIONS,
+      },
+      {
+        title: 'Schedule',
+        to: '/dashboard/schedule',
+        icon: 'calendar',
+        privilege: Privileges.CAN_ACCESS_SCHEDULES,
+      },
+      {
+        title: 'Calendar',
+        to: '/dashboard/schedule/student/calendar',
+        icon: 'calendar',
+        privilege: Privileges.CAN_ACCESS_CALENDER,
+      },
+      {
+        title: 'Timetable',
+        to: '/dashboard/schedule/timetable',
+        icon: 'calendar',
+        privilege: Privileges.CAN_ACCESS_TIMETABLE,
+      },
+      {
         title: 'Ranks',
         to: '/dashboard/ranks',
         icon: 'rank',
@@ -196,73 +294,21 @@ export default function Sidebar() {
         to: '/dashboard/privileges',
         icon: 'privilege',
         fill: false,
-      },
-      {
-        title: 'Intakes',
-        to: '/dashboard/intakes',
-        icon: 'academy',
-        privilege: Privileges.CAN_ACCESS_INTAKES,
-        fill: false,
-      },
-      {
-        title: 'Modules',
-        to: '/dashboard/inst-module',
-        icon: 'module',
-        privilege: Privileges.CAN_ACCESS_MODULES,
-      },
-      {
-        title: 'Module',
-        to: '/dashboard/student',
-        icon: 'module',
-        privilege: Privileges.CAN_ACCESS_MODULES,
-      },
-      { title: 'Evaluations', to: '/dashboard/evaluations', icon: 'evaluation' },
-      {
-        title: 'Schedule',
-        to: '/dashboard/schedule',
-        icon: 'calendar',
-      },
-      {
-        title: 'Calendar',
-        to: '/dashboard/schedule/student/calendar',
-        icon: 'calendar',
-      },
-      { title: 'Timetable', to: '/dashboard/schedule/timetable', icon: 'calendar' },
-      {
-        title: 'Levels',
-        to: '/dashboard/levels',
-        icon: 'level',
-        privilege: Privileges.CAN_ACCESS_LEVELS,
-      },
-      {
-        title: 'Divisions',
-        to: '/dashboard/divisions',
-        icon: 'faculty',
-        privilege: Privileges.CAN_ACCESS_DIVISIONS,
-      },
-      {
-        title: 'Registration Control',
-        to: '/dashboard/registration-control',
-        icon: 'reg-control',
-        privilege: Privileges.CAN_ACCESS_REG_CONTROLS,
-      },
-      {
-        title: 'Academic years',
-        to: '/dashboard/academic-years',
-        icon: 'program',
-        privilege: Privileges.CAN_ACCESS_ACADEMIC_YEARS,
+        privilege: Privileges.CAN_ACCESS_PRIVILEGES,
       },
     );
 
-    routes.push(...privilegedLinks);
+    if (user?.user_type === UserType.SUPER_ADMIN) {
+      routes.push(...institutionAdminLinks);
+    } else {
+      routes.push(...privilegedLinks);
+    }
 
     return routes;
   };
 
-  const user_role_cookie = cookie.getCookie('user_role');
-  const user_role: RoleResWithPrevilages | undefined = user_role_cookie
-    ? JSON.parse(user_role_cookie)
-    : undefined;
+  const user_role_cookie = cookie.getCookie('user_role') || '';
+  const user_role = user?.user_roles?.find((role) => role.id + '' === user_role_cookie);
 
   const institution = institutionStore.getAll().data?.data.data;
   const academy_info = academyStore.fetchAcademies().data?.data.data;
@@ -284,7 +330,7 @@ export default function Sidebar() {
       : institution?.find((ac) => ac.id === user_role?.institution_id)?.name;
 
   return (
-    <div className="bg-white md:h-screen">
+    <div className="bg-white md:h-screen overflow-y-scroll">
       <div className="px-4 py-4">
         <AcademyProfileCard
           src={usePicture(
@@ -299,7 +345,7 @@ export default function Sidebar() {
           )}
           round={false}
           alt="insitution logo">
-          {display_name}
+          {display_name || user?.institution_name}
         </AcademyProfileCard>
       </div>
       <SidebarLinks links={defaultLinks()} />
