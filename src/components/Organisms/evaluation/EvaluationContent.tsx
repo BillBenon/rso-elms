@@ -2,10 +2,17 @@ import moment from 'moment';
 import React, { ReactNode, useState } from 'react';
 import toast from 'react-hot-toast';
 
+import { useGetInstructor } from '../../../hooks/useGetInstructor';
 import { useStudents } from '../../../hooks/useStudents';
-import { evaluationStore } from '../../../store/evaluation/evaluation.store';
+import {
+  evaluationStore,
+  getEvaluationFeedbacks,
+} from '../../../store/evaluation/evaluation.store';
 import { ValueType } from '../../../types';
-import { IAddprivateAttendee } from '../../../types/services/evaluation.types';
+import {
+  IAddprivateAttendee,
+  IEvaluationFeedback,
+} from '../../../types/services/evaluation.types';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
 import MultipleChoiceAnswer from '../../../views/evaluation/MultipleChoiceAnswer';
 import Button from '../../Atoms/custom/Button';
@@ -16,9 +23,14 @@ import PopupMolecule from '../../Molecules/Popup';
 interface IProps {
   evaluationId: string;
   children: ReactNode;
+  feedbackType: IEvaluationFeedback;
 }
 
-export default function EvaluationContent({ evaluationId, children }: IProps) {
+export default function EvaluationContent({
+  evaluationId,
+  children,
+  feedbackType,
+}: IProps) {
   const [showPopup, setShowPopup] = useState(false);
   const [privateAttendee, setPrivateAttendee] = useState<IAddprivateAttendee>({
     evaluation: evaluationId,
@@ -28,6 +40,9 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
   });
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId).data?.data || {};
+
+  const feedbacks = getEvaluationFeedbacks(evaluationId, feedbackType).data?.data
+    .data || [{ id: '', remarks: '', reviewer: { adminId: '' } }];
 
   const { mutate } = evaluationStore.addEvaluationAttendee();
 
@@ -178,7 +193,7 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
       <div
         className={`${
           !loading && 'bg-main'
-        }  px-16 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
+        }  px-7 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
         {evaluationQuestions?.data.data.length ? (
           evaluationQuestions?.data.data.map((question, index: number) =>
             question && question.multiple_choice_answers.length > 0 ? (
@@ -216,10 +231,41 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
               </div>
             ),
           )
-        ) : evaluationQuestions?.data.data.length === 0 ? (
-          <Heading>No questions attached</Heading>
-        ) : null}
+        ) : (
+          <Heading fontSize="sm">No questions attached</Heading>
+        )}
       </div>
+      <Heading fontWeight="semibold" fontSize="base" className="pt-6">
+        Evaluation remarks
+      </Heading>
+
+      {feedbackType && (
+        <div
+          className={`${
+            !loading && 'bg-main'
+          }  px-7 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
+          <ul>
+            {feedbacks.map((feedback) => {
+              let instructorInfo = useGetInstructor(feedback?.reviewer?.adminId)?.user;
+
+              return feedback.remarks ? (
+                <div className="flex flex-col gap-2 pb-4" key={feedback.id}>
+                  <Heading fontSize="base" fontWeight="semibold">
+                    {`${instructorInfo?.first_name} ${instructorInfo?.last_name}` || ''}
+                  </Heading>
+                  <Heading
+                    fontSize="sm"
+                    fontWeight="normal">{`=> ${feedback.remarks}`}</Heading>
+                </div>
+              ) : (
+                <Heading fontSize="base" fontWeight="semibold">
+                  No remarks found
+                </Heading>
+              );
+            })}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

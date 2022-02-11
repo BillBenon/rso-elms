@@ -128,9 +128,9 @@ const RouterProtection = () => {
         path={`/dashboard/evaluations/attempt/:id`}
         render={() => (
           <ConfirmationOrganism onConfirmationClose={() => history.goBack()} />
-          )}
-          />
-          {/* end of student pages */}
+        )}
+      />
+      {/* end of student pages */}
     </>
   );
 

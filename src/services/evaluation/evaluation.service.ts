@@ -7,6 +7,8 @@ import {
   ICreateEvaluationQuestions,
   IEvaluationApproval,
   IEvaluationCreate,
+  IEvaluationFeedback,
+  IEvaluationFeedbackInfo,
   IEvaluationInfo,
   IEvaluationInfoCollected,
   IEvaluationOwnership,
@@ -111,11 +113,12 @@ class EvaluationService {
     return await evaluationAxios.get(`/evaluations/getById/${id}`);
   }
 
-  public async getEvaluationApprovals(
+  public async getEvaluationFeedbacks(
     evaluationId: string,
-  ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
+    feedbackType: IEvaluationFeedback,
+  ): Promise<AxiosResponse<Response<IEvaluationFeedbackInfo[]>>> {
     return await evaluationAxios.get(
-      `evaluationApprovals/approvals/getByEvaluationId/${evaluationId}`,
+      `/evaluations/getByFeedback/${evaluationId}/feedback?feedback_type=${feedbackType}`,
     );
   }
 

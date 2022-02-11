@@ -192,7 +192,7 @@ export default function ImportUsers({ userType }: IProps) {
       </form>
       <div className="pt-2">
         <a
-          href="/documents/Importuserselms.xlsx"
+          href="/documents/Import users elms.xlsx"
           target="_blank"
           download
           className="text-sm font-bold text-primary-600 flex items-center">
