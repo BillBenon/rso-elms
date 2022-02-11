@@ -84,7 +84,7 @@ export default function EvaluationDetails() {
               exact
               path={`${path}`}
               render={() => (
-                <EvaluationContent evaluationId={id}>
+                <EvaluationContent evaluationId={id} feedbackType="">
                   <div className="flex gap-4">
                     {/* <Button
                       styleType="outline"
