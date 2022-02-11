@@ -231,9 +231,9 @@ export default function EvaluationContent({
               </div>
             ),
           )
-        ) : evaluationQuestions?.data.data.length === 0 ? (
-          <Heading>No questions attached</Heading>
-        ) : null}
+        ) : (
+          <Heading fontSize="sm">No questions attached</Heading>
+        )}
       </div>
       <Heading fontWeight="semibold" fontSize="base" className="pt-6">
         Evaluation remarks
