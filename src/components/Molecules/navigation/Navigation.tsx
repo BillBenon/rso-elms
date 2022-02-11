@@ -9,7 +9,7 @@ import { authenticatorStore } from '../../../store/administration';
 import academyStore from '../../../store/administration/academy.store';
 import { institutionStore } from '../../../store/administration/institution.store';
 import { getAllNotifications } from '../../../store/administration/notification.store';
-import { RoleResWithPrevilages, RoleType } from '../../../types';
+import { RoleType } from '../../../types';
 import { NotificationStatus } from '../../../types/services/notification.types';
 import { UserType } from '../../../types/services/user.types';
 import cookie from '../../../utils/cookie';
@@ -72,13 +72,11 @@ export default function Navigation() {
       .catch(() => toast.error('Signout failed. try again latter.', { id: toastId }));
   }
 
-  const user_role_cookie = cookie.getCookie('user_role');
-  const user_role: RoleResWithPrevilages | undefined = user_role_cookie
-    ? JSON.parse(user_role_cookie)
-    : undefined;
-  const other_user_roles = user_role
-    ? user?.user_roles.filter((role) => role.id !== user_role.id)
-    : undefined;
+  const picked_role_cookie = cookie.getCookie('user_role') || '';
+
+  const other_user_roles = user?.user_roles?.filter(
+    (role) => role.id !== picked_role_cookie,
+  );
 
   return (
     <nav className="bg-main">
