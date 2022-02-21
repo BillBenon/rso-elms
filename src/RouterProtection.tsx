@@ -35,7 +35,6 @@ import CalendarView from './views/schedule/CalendarView';
 import Events from './views/schedule/Events';
 import ScheduleHome from './views/schedule/ScheduleHome';
 import Subjects from './views/subjects';
-import UserDetails from './views/users/UserDetails';
 import Users from './views/users/Users';
 
 const RouterProtection = () => {
@@ -183,9 +182,9 @@ const RouterProtection = () => {
             <Route path={`${path}/events`} component={Events} />
           )}
           {/* <Route path={`${path}/modules`} component={Modules} /> */}
-          {hasPrivilege(Privileges.CAN_ACCESS_PROFILE) && (
+          {/* {hasPrivilege(Privileges.CAN_ACCESS_PROFILE) && (
             <Route path={`${path}/users/:id/profile`} component={UserDetails} />
-          )}
+          )} */}
           {/* end of instructor routes */}
           {/* student routes */}
 
