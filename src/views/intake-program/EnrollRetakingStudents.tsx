@@ -5,8 +5,9 @@ import { useParams } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import RightSidebar from '../../components/Organisms/RightSidebar';
-// import useAuthenticator from '../../hooks/useAuthenticator';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import { queryClient } from '../../plugins/react-query';
+import { authenticatorStore } from '../../store/administration';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { getProgramsByIntake } from '../../store/administration/intake.store';
 import {
@@ -35,10 +36,13 @@ export default function EnrollRetakingStudents<T>({
 }: ProgramEnrollmentProps<T>) {
   const { intakeProg, intakeId } = useParams<IntakeProgParam>();
 
-  // const { user } = useAuthenticator();
+  const { data } = authenticatorStore.authUser(true);
 
   const { data: retakingStudents, isLoading } =
-    enrollmentStore.getAllStudentEnrollmentsFreely();
+    enrollmentStore.getAllStudentEnrollmentsByPromotionStatus(
+      data?.data.data.academy.id + '',
+      PromotionStatus.RETAKE,
+    );
 
   const programs = getProgramsByIntake(intakeId).data?.data.data;
 
@@ -53,23 +57,20 @@ export default function EnrollRetakingStudents<T>({
       existing_ids.push(existing[index].student.id + '');
     }
     let studentsView: UserView[] = [];
-    retakingStudents?.data.data.content.forEach((stud) => {
-      if (
-        !existing_ids.includes(stud.intake_program_student.student.id + '') &&
-        stud.promotion_status === PromotionStatus.RETAKE
-      ) {
+    retakingStudents?.data.data.forEach((stud) => {
+      if (!existing_ids.includes(stud.student.id + '')) {
         let studentView: UserView = {
-          id: stud.intake_program_student.student.id,
-          first_name: stud.intake_program_student.student.user.first_name,
-          last_name: stud.intake_program_student.student.user.last_name,
-          image_url: stud.intake_program_student.student.user.image_url,
+          id: stud.student.id,
+          first_name: stud.student.user.first_name,
+          last_name: stud.student.user.last_name,
+          image_url: stud.student.user.image_url,
         };
         studentsView.push(studentView);
       }
     });
-    console.log(retakingStudents?.data.data.content);
+    console.log(retakingStudents);
     setStudents(studentsView);
-  }, [existing, retakingStudents?.data.data]);
+  }, [existing, retakingStudents, retakingStudents?.data.data]);
 
   const { mutate } = enrollmentStore.enrollStudentToProgram();
 

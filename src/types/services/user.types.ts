@@ -62,6 +62,26 @@ export interface AssignUserRole {
   user_id: string;
 }
 
+export interface PersonalDocs {
+  description: string;
+  purpose: string;
+  id: string;
+  attachment: Blob;
+  created_at: string;
+  updated_at: string;
+  person: PersonInfo;
+}
+
+export interface INewPersonalDoc{
+  description: string;
+  purpose: string;
+  personId: string;
+}
+
+export interface FileAttachment{
+  docInfo: FormData,
+  id: string;
+}
 export interface IntakeLevelProgramInfo extends Table {
   student: Student;
 }

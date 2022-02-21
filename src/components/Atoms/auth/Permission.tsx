@@ -26,5 +26,6 @@ export default function Permission({ children, privilege }: IPermission) {
     if (_privileges) setPrivileges(_privileges);
   }, [role_privilege?.data.data, user]);
 
-  return <> {privileges?.includes(privilege) && children}</>;
+  // return <> {privileges?.includes(privilege) && children}</>;
+  return children;
 }
