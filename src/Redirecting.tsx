@@ -59,8 +59,8 @@ export default function Redirecting() {
           } else if (user.user_roles !== null && user.user_roles.length > 1) {
             redirectTo('/choose-role');
           } else if (
-            user.user_roles === null &&
-            user.user_type !== UserType.SUPER_ADMIN
+            user.user_roles === null
+            // && user.user_type !== UserType.SUPER_ADMIN
           ) {
             console.log('I have no roles buddy');
             setUserNoRoles(true);

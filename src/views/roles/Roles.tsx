@@ -101,7 +101,7 @@ export default function Roles() {
           title="Roles"
           totalItems={roles && roles.length > 0 ? roles.length : 0}
           handleSearch={handleSearch}>
-          <Permission privilege={Privileges.CAN_CREATE_RANK}>
+          <Permission privilege={Privileges.CAN_CREATE_ROLE}>
             <Link to={`${url}/add`}>
               <Button>Add Role</Button>
             </Link>
