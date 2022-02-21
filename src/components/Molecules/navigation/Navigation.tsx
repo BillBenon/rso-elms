@@ -197,7 +197,7 @@ export default function Navigation() {
                         Your Profile
                       </a> */}
                       <Link
-                        to={`/dashboard/users/${user?.id}/profile`}
+                        to={`/dashboard/users/${user?.id}/profile?me=true`}
                         className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100">
                         Your Profile
                       </Link>
