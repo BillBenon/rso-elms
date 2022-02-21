@@ -162,7 +162,7 @@ const RouterProtection = () => {
               />
             </>
           )}
-          {hasPrivilege(Privileges.CAN_ACCESS_MODULES) && (
+          {hasPrivilege(Privileges.CAN_TEACH_MODULE) && (
             <Route exact path={`${path}/inst-module`} component={InstrLevelModule} />
           )}
           {hasPrivilege(Privileges.CAN_ACCESS_EVENTS) && (

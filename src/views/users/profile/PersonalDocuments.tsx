@@ -15,6 +15,7 @@ import usersStore from '../../../store/administration/users.store';
 import { IEvaluationInfo } from '../../../types/services/evaluation.types';
 import { EvaluationStudent } from '../../../types/services/marking.types';
 import { UserInfo } from '../../../types/services/user.types';
+import { downloadFile } from '../../../utils/file-util';
 
 // interface AttachementsInfo {}
 
@@ -27,12 +28,28 @@ export default function PersonalDocuments({ user }: { user: UserInfo }) {
     user.person.id + '',
   );
   const { mutateAsync } = usersStore.deletePersonalDoc();
+  const [fileUrl, setUrl] = useState('');
+
+  async function downloadDoc(data: string) {
+    setUrl(await downloadFile(data));
+    var element = document.createElement('a');
+    element.setAttribute('href', fileUrl);
+    element.setAttribute('download', fileUrl);
+
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+  }
+
   const actions = [
     {
       name: 'Download',
-      handleAction: (_data?: string | number | undefined) => {
-        toast.success('Downloading');
-      },
+      handleAction: (_data?: string | number | undefined) =>
+        _data
+          ? downloadDoc(data?.data.data.find((e) => e.id == _data)?.attachment.id + '')
+          : {},
     },
     {
       name: 'Delete',

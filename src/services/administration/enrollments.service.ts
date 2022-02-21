@@ -99,7 +99,7 @@ class EnrollmentService {
   public async getAllStudentEnrollmentsByPromotionStatus(
     academyId: string,
     promotionStatus: PromotionStatus,
-  ): Promise<AxiosResponse<Response<SortedContent<StudentIntakeProgram[]>>>> {
+  ): Promise<AxiosResponse<Response<StudentIntakeProgram[]>>> {
     return await adminstrationAxios.get(
       `/students/getStudentsByAcademyAndPromotionStatus/${academyId}/${promotionStatus}`,
     );

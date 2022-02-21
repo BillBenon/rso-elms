@@ -6,6 +6,7 @@ import { AcademyInfo } from './academy.types';
 import { RankRes } from './rank.types';
 import { StudentIntakeProgram } from './intake-program.types';
 import { InstitutionInfo } from './institution.types';
+import { ModuleAttachment } from './module-material.types';
 export interface Student extends Table {
   reg_number: string;
   user: UserInfo;
@@ -66,7 +67,7 @@ export interface PersonalDocs {
   description: string;
   purpose: string;
   id: string;
-  attachment: Blob;
+  attachment: ModuleAttachment;
   created_at: string;
   updated_at: string;
   person: PersonInfo;

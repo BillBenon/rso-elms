@@ -58,7 +58,7 @@ export default function EnrollRetakingStudents<T>({
       existing_ids.push(existing[index].student.id + '');
     }
     let studentsView: UserView[] = [];
-    retakingStudents?.data.data.content.forEach((stud) => {
+    retakingStudents?.data.data.forEach((stud) => {
       if (!existing_ids.includes(stud.student.id + '')) {
         let studentView: UserView = {
           id: stud.student.id,
@@ -77,12 +77,11 @@ export default function EnrollRetakingStudents<T>({
 
   function add(data?: string[]) {
     data?.map((stud_id) => {
-      let studentInfo = retakingStudents?.data.data.content.find(
-        (st) => st.id + '' === stud_id,
-      )?.student.user;
+      let studentInfo = retakingStudents?.data.data.find((st) => st.id + '' === stud_id)
+        ?.student.user;
 
-      let reg_no = retakingStudents?.data.data.content.find((st) => st.id === stud_id)
-        ?.student.reg_number;
+      let reg_no = retakingStudents?.data.data.find((st) => st.id === stud_id)?.student
+        .reg_number;
 
       let newStudent: EnrollStudentToProgram = {
         completed_on: '',
