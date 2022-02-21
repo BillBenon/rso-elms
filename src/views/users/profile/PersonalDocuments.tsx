@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../../components/Atoms/custom/Button';
+import Loader from '../../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../../components/Molecules/Popup';
 import Table from '../../../components/Molecules/table/Table';
@@ -29,7 +30,7 @@ export default function PersonalDocuments({ user }: { user: UserInfo }) {
       handleAction: (
         _data?: string | number | EvaluationStudent | IEvaluationInfo | undefined,
       ) => {
-        toast('Downloading');
+        toast.success('Downloading');
       },
     },
     {
@@ -37,7 +38,7 @@ export default function PersonalDocuments({ user }: { user: UserInfo }) {
       handleAction: (
         _data?: string | number | EvaluationStudent | IEvaluationInfo | undefined,
       ) => {
-        toast('Deleting');
+        toast.success('Deleting');
       },
     },
   ];
@@ -47,22 +48,16 @@ export default function PersonalDocuments({ user }: { user: UserInfo }) {
 
     if (isSuccess && data?.data.data) {
       const filteredInfo = data?.data.data.map((attachment: any) =>
-        pick(attachment, [
-          'id',
-          'attachment_id',
-          'description',
-          'attachment',
-          'created_at',
-          'updated_at',
-        ]),
+        pick(attachment, ['id', 'attachment', 'attachmentId']),
       );
 
       filteredInfo?.map((attachment: any) => {
         let filteredData: any = {
-          id: attachment.id.toString(),
-          'File name': attachment.code,
-          'Attachment Description': attachment.description,
-          'Date uploaded': attachment.created_at,
+          id: attachment.id,
+          'File name': attachment.attachment.original_file_name,
+          'Attachment Description': attachment.attachment.description,
+          'Attachment Purpose': attachment.attachment.purpose,
+          'Date uploaded': attachment.attachment.created_on?.substring(0, 10),
         };
         formattedSubs.push(filteredData);
       });
@@ -72,39 +67,40 @@ export default function PersonalDocuments({ user }: { user: UserInfo }) {
   }, [data?.data, isSuccess]);
   return (
     <>
-      <div>
-        <div className="flex float-right">
+      <div className="flex flex-col">
+        <div className="mb-2">
           <Link to={`${url}/add-p-doc`}>
-            <Button>Upload new file</Button>
+            <Button className="flex float-right">Upload new file</Button>
           </Link>
         </div>
-
-        {isSuccess && attachments.length === 0 ? (
-          <NoDataAvailable
-            icon="evaluation"
-            buttonLabel="Go back"
-            title={'No personal files has been add so far!'}
-            handleClick={() => history.goBack}
-            description="And the web just isnt the same without you. Lets get you back online!"
-          />
-        ) : isSuccess && attachments.length > 0 ? (
-          <div>
-            <Table<any>
-              statusColumn="status"
-              data={attachments}
-              hide={['id']}
-              uniqueCol={'id'}
-              actions={actions}
+        <div>
+          {isLoading && <Loader />}
+          {isSuccess && attachments.length === 0 ? (
+            <NoDataAvailable
+              icon="evaluation"
+              buttonLabel="Go back"
+              title={'No personal files has been add so far!'}
+              handleClick={() => history.goBack}
+              description="And the web just isnt the same without you. Lets get you back online!"
             />
-          </div>
-        ) : isError ? (
-          <NoDataAvailable
-            icon="evaluation"
-            showButton={false}
-            title={'Something went wrong'}
-            description="Something went wrong, try reloading the page or check your internet connection"
-          />
-        ) : null}
+          ) : isSuccess && attachments.length > 0 ? (
+            <div>
+              <Table<any>
+                data={attachments}
+                hide={['id']}
+                uniqueCol={'id'}
+                actions={actions}
+              />
+            </div>
+          ) : isError ? (
+            <NoDataAvailable
+              icon="evaluation"
+              showButton={false}
+              title={'Something went wrong'}
+              description="Something went wrong, try reloading the page or check your internet connection"
+            />
+          ) : null}
+        </div>
       </div>
       <Switch>
         {/* add new level popup */}
@@ -113,7 +109,7 @@ export default function PersonalDocuments({ user }: { user: UserInfo }) {
           path={`${path}/add-p-doc`}
           render={() => {
             return (
-              <PopupMolecule title="New Level" open onClose={history.goBack}>
+              <PopupMolecule title="New Personal Document" open onClose={history.goBack}>
                 <NewPersonalDocument personId={user?.person.id + ''} />
               </PopupMolecule>
             );

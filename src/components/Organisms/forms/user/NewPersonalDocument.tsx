@@ -49,8 +49,8 @@ export default function NewPersonalDocument({ personId }: DocParams) {
       await mutateAsync(
         { id: personId, docInfo: data },
         {
-          onSuccess(data) {
-            toast.success(data.data.message);
+          onSuccess() {
+            toast.success('Document uploaded successfully');
             queryClient.invalidateQueries(['user/personal_docs', personId]);
             history.goBack();
           },
