@@ -7,7 +7,9 @@ import {
   AssignUserRole,
   CreateUserInfo,
   EditUser,
+  FileAttachment,
   IImportUserRes,
+  PersonalDocs,
   UserInfo,
   UserRole,
   UserType,
@@ -44,6 +46,15 @@ class UserService {
     userInfo: UpdateUserInfo,
   ): Promise<AxiosResponse<Response<UserInfo>>> {
     return await adminstrationAxios.put('/users/updateProfile', userInfo);
+  }
+
+  public async addPersonalDoc(
+    data: FileAttachment,
+  ): Promise<AxiosResponse<Response<UserInfo>>> {
+    return await adminstrationAxios.post(
+      `/attachments/addPersonalDocs/${data.id}`,
+      data.docInfo,
+    );
   }
   public async fetchUsers(
     queryParams?: FilterOptions,
@@ -104,6 +115,12 @@ class UserService {
   }
   public async downloadProfile(attachmentId: string): Promise<AxiosResponse<Blob>> {
     return await adminstrationAxios.get(`attachments/download/profile/${attachmentId}`);
+  }
+
+  public async getUserFiles(
+    personId: string,
+  ): Promise<AxiosResponse<Response<PersonalDocs[]>>> {
+    return await adminstrationAxios.get(`attachments/getAllPersonalDocs/${personId}`);
   }
 }
 
