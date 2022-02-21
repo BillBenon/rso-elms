@@ -60,14 +60,14 @@ export default function Ranks() {
     }
   }, [location, path, refetch]);
 
-  const manyActions = [
-    {
-      name: 'Disable/Enable',
-      handleAction: (data?: string[]) => {
-        alert(`handling many at once ${data}`);
-      },
-    },
-  ];
+  // const manyActions = [
+  // {
+  //   name: 'Disable/Enable',
+  //   handleAction: (data?: string[]) => {
+  //     alert(`handling many at once ${data}`);
+  //   },
+  // },
+  // ];
 
   function submited() {}
   function handleSearch() {}
@@ -93,7 +93,7 @@ export default function Ranks() {
         {isLoading && <Loader />}
         {ranks && ranks.length > 0 && isSuccess ? (
           <Table<FilteredRanks>
-            selectorActions={manyActions}
+            selectorActions={[]}
             hide={['id']}
             handleSelect={handleSelect}
             statusColumn="status"
