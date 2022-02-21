@@ -95,7 +95,7 @@ export default function StudentsView() {
               <Button styleType="outline">Import students</Button>
             </Link>
             <Link to={`${url}/add/${UserType.STUDENT}`}>
-              <Permission privilege={Privileges.CAN_ACCESS_EVALUATIONS}>
+              <Permission privilege={Privileges.CAN_CREATE_USER}>
                 <Button>New student</Button>
               </Permission>
             </Link>
