@@ -9,6 +9,7 @@ import UpdateUser from '../../components/Organisms/forms/user/UpdateUser';
 import AdminsView from './AdminsView';
 import InstructorsView from './InstructorsView';
 import StudentsView from './StudentsView';
+import SuperAdminView from './SuperAdminView';
 import UserDetails from './UserDetails';
 
 export default function Users() {
@@ -27,6 +28,10 @@ export default function Users() {
     {
       label: 'Admins',
       href: `${url}/admins`,
+    },
+    {
+      label: 'Super Admins',
+      href: `${url}/superadmins`,
     },
   ];
 
@@ -64,6 +69,7 @@ export default function Users() {
                     render={() => <InstructorsView />}
                   />
                   <Route path={`${path}/admins`} render={() => <AdminsView />} />
+                  <Route path={`${path}/superadmins`} render={() => <SuperAdminView />} />
                   <Route path={`${path}`} render={() => <StudentsView />} />
                 </Switch>
               </TabNavigation>

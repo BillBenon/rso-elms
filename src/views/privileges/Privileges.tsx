@@ -41,12 +41,12 @@ export default function PrivilegesView() {
         history.push(`${path}/${id}/edit`); // go to edit page
       },
     },
-    {
-      name: 'Disable/Enable',
-      handleAction: (_id: string | undefined) => {
-        // history.push(`/${id}/edit`);
-      },
-    },
+    // {
+    //   name: 'Disable/Enable',
+    //   handleAction: (_id: string | undefined) => {
+    //     // history.push(`/${id}/edit`);
+    //   },
+    // },
   ];
 
   return (

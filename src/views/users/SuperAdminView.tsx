@@ -10,15 +10,14 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import AssignRole from '../../components/Organisms/forms/user/AssignRole';
 import ViewUserRole from '../../components/Organisms/forms/user/ViewUserRole';
-import ImportUsers from '../../components/Organisms/user/ImportUsers';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import usersStore from '../../store/administration/users.store';
 import { Privileges, ValueType } from '../../types';
 import { ActionsType } from '../../types/services/table.types';
-import { AcademyUserType, UserType, UserTypes } from '../../types/services/user.types';
+import { UserType, UserTypes } from '../../types/services/user.types';
 import { formatUserTable } from '../../utils/array';
 
-export default function StudentsView() {
+export default function SuperAdminView() {
   const { url, path } = useRouteMatch();
   const { user } = useAuthenticator();
   const history = useHistory();
@@ -26,23 +25,16 @@ export default function StudentsView() {
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
 
-  const { data, isLoading, refetch } =
-    user?.user_type === UserType.SUPER_ADMIN
-      ? usersStore.fetchUsers({
-          userType: UserType.STUDENT,
-          page: currentPage,
-          pageSize,
-          sortyBy: 'username',
-        })
-      : usersStore.getUsersByAcademyAndUserType(
-          user?.academy?.id.toString() || '',
-          UserType.STUDENT,
-          { page: currentPage, pageSize, sortyBy: 'username' },
-        );
+  const { data, isLoading, refetch } = usersStore.fetchUsers({
+    userType: UserType.SUPER_ADMIN,
+    page: currentPage,
+    pageSize,
+    sortyBy: 'username',
+  });
 
   const users = formatUserTable(data?.data.data.content || []);
 
-  let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
+  let actions: ActionsType<UserTypes>[] = [];
 
   actions?.push({
     name: 'Assign Role',
@@ -55,13 +47,13 @@ export default function StudentsView() {
   actions?.push({
     name: 'View Role',
     handleAction: (id: string | number | undefined) => {
-      history.push(`${url}/${id}/view-role`); // go to assign role
+      history.push(`/dashboard/users/${id}/view-role`); // go to assign role
     },
     privilege: Privileges.CAN_ACCESS_ROLE,
   });
 
   actions?.push({
-    name: 'Edit student',
+    name: 'Edit super admin',
     handleAction: (id: string | number | undefined) => {
       history.push(`/dashboard/users/${id}/edit`); // go to edit user
     },
@@ -69,9 +61,9 @@ export default function StudentsView() {
   });
 
   actions?.push({
-    name: 'View Student',
+    name: 'View Super Admin',
     handleAction: (id: string | number | undefined) => {
-      history.push(`${url}/${id}/profile`); // go to view user profile
+      history.push(`/dashboard/users/${id}/profile`); // go to view user profile
     },
     privilege: Privileges.CAN_ACCESS_PROFILE,
   });
@@ -85,21 +77,15 @@ export default function StudentsView() {
   return (
     <div>
       <TableHeader
-        title="Students"
+        title="Super Admins"
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
-        {(user?.user_type === UserType.SUPER_ADMIN ||
-          user?.user_type === UserType.ADMIN) && (
-          <div className="flex gap-3">
-            <Link to={`${url}/import`}>
-              <Button styleType="outline">Import students</Button>
-            </Link>
-            <Link to={`${url}/add/${UserType.STUDENT}`}>
-              <Permission privilege={Privileges.CAN_CREATE_USER}>
-                <Button>New student</Button>
-              </Permission>
-            </Link>
-          </div>
+        {user?.user_type === UserType.SUPER_ADMIN && (
+          <Link to={`/dashboard/users/add/${UserType.SUPER_ADMIN}`}>
+            <Permission privilege={Privileges.CAN_CREATE_USER}>
+              <Button>New Super Admin</Button>
+            </Permission>
+          </Link>
         )}
       </TableHeader>
 
@@ -108,13 +94,13 @@ export default function StudentsView() {
       ) : users.length <= 0 ? (
         <NoDataAvailable
           icon="user"
-          buttonLabel="Add new student"
+          buttonLabel="Add new superADmin"
           title={'No students available'}
-          handleClick={() => history.push(`/dashboard/users/add/STUDENT`)}
+          handleClick={() => history.push(`/dashboard/users/add/${UserType.SUPER_ADMIN}`)}
           description="And the web just isnt the same without you. Lets get you back online!"
         />
       ) : (
-        <Table<UserTypes | AcademyUserType>
+        <Table<UserTypes>
           statusColumn="status"
           data={users}
           actions={actions}
@@ -134,19 +120,6 @@ export default function StudentsView() {
       )}
 
       <Switch>
-        <Route
-          exact
-          path={`${url}/import`}
-          render={() => (
-            <PopupMolecule
-              closeOnClickOutSide={false}
-              title="Import students"
-              open={true}
-              onClose={history.goBack}>
-              <ImportUsers userType={UserType.STUDENT} />
-            </PopupMolecule>
-          )}
-        />
         <Route
           exact
           path={`${path}/:id/assign-role`}

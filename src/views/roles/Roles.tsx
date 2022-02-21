@@ -75,14 +75,14 @@ export default function Roles() {
     privilege: Privileges.CAN_ACCESS_ROLE,
   });
 
-  const manyActions = [
-    {
-      name: 'Disable/Enable',
-      handleAction: (data?: string[]) => {
-        alert(`handling many at once ${data}`);
-      },
-    },
-  ];
+  // const manyActions = [
+  //   {
+  //     name: 'Disable/Enable',
+  //     handleAction: (data?: string[]) => {
+  //       alert(`handling many at once ${data}`);
+  //     },
+  //   },
+  // ];
 
   function submited() {
     // setOpen(false);
@@ -112,7 +112,7 @@ export default function Roles() {
         {isLoading && <Loader />}
         {roles && roles.length > 0 && isSuccess ? (
           <Table<FilteredRoles>
-            selectorActions={manyActions}
+            selectorActions={[]}
             hide={['id']}
             handleSelect={handleSelect}
             statusColumn="status"
