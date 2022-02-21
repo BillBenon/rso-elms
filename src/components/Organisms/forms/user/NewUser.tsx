@@ -39,6 +39,7 @@ interface IParams {
 
 export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
+
   // const newUserType = pick(UserType, ['ADMIN', 'INSTRUCTOR', 'STUDENT']);
   // const newUserTypeWithSuper = { ...newUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
   const { user } = useAuthenticator();
@@ -114,10 +115,10 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     let toastId = toast.loading(`Saving new ${userType.toLowerCase()}`);
 
     await mutateAsync(details, {
-      onSuccess(data) {
-        toast.success(data.data.message, { id: toastId });
+      onSuccess(theUser) {
+        toast.success(theUser.data.message, { id: toastId });
         queryClient.invalidateQueries(['users', 'users/academy', 'users/academy/type']);
-        history.goBack();
+        history.push(`/dashboard/users/${theUser.data.data.id}/assign-role`);
       },
       onError(error: any) {
         toast.error(error.response.data.message.split(':')[2], { id: toastId });
