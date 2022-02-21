@@ -81,6 +81,10 @@ class UserStore {
   addPersonalDoc() {
     return useMutation(userService.addPersonalDoc);
   }
+
+  deletePersonalDoc() {
+    return useMutation(userService.deletePersonalDoc);
+  }
 }
 
 export default new UserStore();

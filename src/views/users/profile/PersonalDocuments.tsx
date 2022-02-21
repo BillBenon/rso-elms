@@ -9,6 +9,8 @@ import NoDataAvailable from '../../../components/Molecules/cards/NoDataAvailable
 import PopupMolecule from '../../../components/Molecules/Popup';
 import Table from '../../../components/Molecules/table/Table';
 import NewPersonalDocument from '../../../components/Organisms/forms/user/NewPersonalDocument';
+import useAuthenticator from '../../../hooks/useAuthenticator';
+import { queryClient } from '../../../plugins/react-query';
 import usersStore from '../../../store/administration/users.store';
 import { IEvaluationInfo } from '../../../types/services/evaluation.types';
 import { EvaluationStudent } from '../../../types/services/marking.types';
@@ -18,27 +20,35 @@ import { UserInfo } from '../../../types/services/user.types';
 
 export default function PersonalDocuments({ user }: { user: UserInfo }) {
   const [attachments, setAttachments] = useState([]);
+  const { user: currentUser } = useAuthenticator();
   const { url, path } = useRouteMatch();
   const history = useHistory();
   const { data, isSuccess, isLoading, isError } = usersStore.getPersonalFiles(
     user.person.id + '',
   );
-  console.log(data);
+  const { mutateAsync } = usersStore.deletePersonalDoc();
   const actions = [
     {
       name: 'Download',
-      handleAction: (
-        _data?: string | number | EvaluationStudent | IEvaluationInfo | undefined,
-      ) => {
+      handleAction: (_data?: string | number | undefined) => {
         toast.success('Downloading');
       },
     },
     {
       name: 'Delete',
-      handleAction: (
+      handleAction: async (
         _data?: string | number | EvaluationStudent | IEvaluationInfo | undefined,
       ) => {
-        toast.success('Deleting');
+        await mutateAsync(_data + '', {
+          onSuccess() {
+            toast.success('Document deleted successfully');
+            queryClient.invalidateQueries(['user/personal_docs', user?.person.id + '']);
+            history.goBack();
+          },
+          onError(error: any) {
+            toast.error(error.response.data.message);
+          },
+        });
       },
     },
   ];
@@ -69,9 +79,11 @@ export default function PersonalDocuments({ user }: { user: UserInfo }) {
     <>
       <div className="flex flex-col">
         <div className="mb-2">
-          <Link to={`${url}/add-p-doc`}>
-            <Button className="flex float-right">Upload new file</Button>
-          </Link>
+          {user.id === currentUser?.id && (
+            <Link to={`${url}/add-p-doc`}>
+              <Button className="flex float-right">Upload new file</Button>
+            </Link>
+          )}
         </div>
         <div>
           {isLoading && <Loader />}

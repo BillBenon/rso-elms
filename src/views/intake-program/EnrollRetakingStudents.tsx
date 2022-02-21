@@ -5,7 +5,6 @@ import { useParams } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import RightSidebar from '../../components/Organisms/RightSidebar';
-import useAuthenticator from '../../hooks/useAuthenticator';
 import { queryClient } from '../../plugins/react-query';
 import { authenticatorStore } from '../../store/administration';
 import enrollmentStore from '../../store/administration/enrollment.store';
@@ -44,6 +43,8 @@ export default function EnrollRetakingStudents<T>({
       PromotionStatus.RETAKE,
     );
 
+  console.log(retakingStudents);
+
   const programs = getProgramsByIntake(intakeId).data?.data.data;
 
   const intakeProgram = programs?.find((pr) => pr.id === intakeProg);
@@ -57,7 +58,7 @@ export default function EnrollRetakingStudents<T>({
       existing_ids.push(existing[index].student.id + '');
     }
     let studentsView: UserView[] = [];
-    retakingStudents?.data.data.forEach((stud) => {
+    retakingStudents?.data.data.content.forEach((stud) => {
       if (!existing_ids.includes(stud.student.id + '')) {
         let studentView: UserView = {
           id: stud.student.id,
@@ -77,12 +78,11 @@ export default function EnrollRetakingStudents<T>({
   function add(data?: string[]) {
     data?.map((stud_id) => {
       let studentInfo = retakingStudents?.data.data.content.find(
-        (st) => st.intake_program_student.id === stud_id,
-      )?.intake_program_student.student.user;
+        (st) => st.id + '' === stud_id,
+      )?.student.user;
 
-      let reg_no = retakingStudents?.data.data.content.find(
-        (st) => st.intake_program_student.id === stud_id,
-      )?.intake_program_student.student.reg_number;
+      let reg_no = retakingStudents?.data.data.content.find((st) => st.id === stud_id)
+        ?.student.reg_number;
 
       let newStudent: EnrollStudentToProgram = {
         completed_on: '',

@@ -47,7 +47,6 @@ class UserService {
   ): Promise<AxiosResponse<Response<UserInfo>>> {
     return await adminstrationAxios.put('/users/updateProfile', userInfo);
   }
-
   public async addPersonalDoc(
     data: FileAttachment,
   ): Promise<AxiosResponse<Response<UserInfo>>> {
@@ -55,6 +54,10 @@ class UserService {
       `/attachments/addPersonalDocs/${data.id}`,
       data.docInfo,
     );
+  }
+
+  public async deletePersonalDoc(id: string): Promise<AxiosResponse<Response<UserInfo>>> {
+    return await adminstrationAxios.delete(`/attachments/deletePersonalDoc/${id}`);
   }
   public async fetchUsers(
     queryParams?: FilterOptions,

@@ -3,7 +3,6 @@ import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
 import { queryClient } from '../../../../plugins/react-query';
-import { levelStore } from '../../../../store/administration/level.store';
 import usersStore from '../../../../store/administration/users.store';
 import { ValueType } from '../../../../types';
 import { INewPersonalDoc } from '../../../../types/services/user.types';
@@ -38,6 +37,7 @@ export default function NewPersonalDocument({ personId }: DocParams) {
 
   async function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
+    console.log(attachment);
     if (file) {
       let data = new FormData();
 
@@ -69,7 +69,7 @@ export default function NewPersonalDocument({ personId }: DocParams) {
           value={attachment.purpose}
           handleChange={handleChange}
           placeholder="Enter attachment purpose"
-          name="name">
+          name="purpose">
           Personal Doc Purpose
         </InputMolecule>
 

@@ -114,9 +114,6 @@ const RouterProtection = () => {
           {hasPrivilege(Privileges.CAN_ACCESS_PROGRAMS) && (
             <Route path={`${path}/programs`} component={AcademicProgram} />
           )}
-          {/* {hasPrivilege(Privileges.CAN_ACCESS_USERS) && (
-        <Route path={`${path}/users`} component={Users} />
-      )} */}
           {
             // hasPrivilege(Privileges.CAN_ACCESS_DASHBOARD) && (
             <Route path={`${path}/admin`} component={AdminDashboard} />
@@ -135,7 +132,6 @@ const RouterProtection = () => {
           {hasPrivilege(Privileges.CAN_ACCESS_MODULES) && (
             <Route path={`${path}/modules`} component={Modules} />
           )}
-          {/* <Route exact path={`${path}/intakes/:id`} component={IntakeModulesView} /> */}
           {/* end of academic admin routes */}
 
           {/* instructor routes */}
@@ -166,31 +162,12 @@ const RouterProtection = () => {
               />
             </>
           )}
-          {/* {hasPrivilege(Privileges.CAN_ACCESS_CALENDER) && (
-        <Route path={`${path}/calendar`} component={CalendarView} />
-      )} */}
-          {hasPrivilege(Privileges.CAN_ACCESS_INTAKES) && (
-            <Route path={`${path}/intakes`} component={IntakesView} />
-          )}
           {hasPrivilege(Privileges.CAN_ACCESS_MODULES) && (
             <Route exact path={`${path}/inst-module`} component={InstrLevelModule} />
-          )}
-          {hasPrivilege(Privileges.CAN_ACCESS_SCHEDULES) && (
-            <Route path={`${path}/schedule`} component={ScheduleHome} />
           )}
           {hasPrivilege(Privileges.CAN_ACCESS_EVENTS) && (
             <Route path={`${path}/events`} component={Events} />
           )}
-          {/* <Route path={`${path}/modules`} component={Modules} /> */}
-          {/* {hasPrivilege(Privileges.CAN_ACCESS_PROFILE) && (
-            <Route path={`${path}/users/:id/profile`} component={UserDetails} />
-          )} */}
-          {/* end of instructor routes */}
-          {/* student routes */}
-
-          {/* <Route path={`${path}/users/:id/profile`} component={UserDetails} /> */}
-          {/* <Route path={`${path}/intakes`} component={IntakesView} /> */}
-          {/* <Route path={`${path}/schedule`} component={ScheduleHome} /> */}
           {hasPrivilege(Privileges.CAN_ACCESS_MODULES) && (
             <Route path={`${path}/student`} component={StudentModule} />
           )}
@@ -218,79 +195,6 @@ const RouterProtection = () => {
     </>
   );
 
-  // const AcademicAdminRoutes = () => (
-  //   <>
-  //     {/* start of academic admin pages */}
-  //     <Route path={`${path}/subjects`} component={Subjects} />
-  //     <Route path={`${path}/schedule`} component={ScheduleHome} />
-  //     <Route path={`${path}/registration-control`} component={RegistrationControl} />
-  //     <Route path={`${path}/divisions`} component={Divisions} />
-  //     <Route path={`${path}/academic-years`} component={AcademicYears} />
-  //     <Route path={`${path}/programs`} component={AcademicProgram} />
-  //     <Route path={`${path}/users`} component={Users} />
-  //     <Route path={`${path}/admin`} component={AdminDashboard} />
-  //     <Route path={`${path}/levels`} component={Levels} />
-  //     <Route path={`${path}/intakes`} component={IntakesView} />
-  //     {/* <Route
-  //       path={`${path}/modules/:intakeProgram/:moduleId`}
-  //       component={AdmModuleDetails}
-  //     /> */}
-  //     <Route path={`${path}/modules`} component={Modules} />
-  //     {/* <Route exact path={`${path}/intakes/:id`} component={IntakeModulesView} /> */}
-
-  //     {/* end of academic admin pages */}
-  //   </>
-  // );
-
-  // const InstructorRoutes = () => (
-  //   <>
-  //     {/* start of instructor pages */}
-  //     <Route path={`${path}/evaluations`} component={InstructorViewEvaluations} />
-  //     <Route exact path={`${path}/evaluations/view/:id`} component={EvaluationNotiView} />
-  //     <Route path={`${path}/calendar`} component={CalendarView} />
-  //     <Route path={`${path}/intakes`} component={IntakesView} />
-  //     <Route exact path={`${path}/inst-module`} component={InstrLevelModule} />
-  //     <Route path={`${path}/schedule`} component={ScheduleHome} />
-  //     <Route path={`${path}/events`} component={Events} />
-  //     <Route path={`${path}/modules`} component={Modules} />
-  //     <Route path={`${path}/users/:id/profile`} component={UserDetails} />
-
-  //     {/* end of instructor pages */}
-  //   </>
-  // );
-
-  // const StudentRoutes = () => (
-  //   <>
-  //     <Route path={`${path}/users/:id/profile`} component={UserDetails} />
-  //     {/* start of student pages */}
-  //     <Route path={`${path}/intakes`} component={IntakesView} />
-  //     <Route path={`${path}/schedule`} component={ScheduleHome} />
-  //     <Route path={`${path}/student`} component={StudentModule} />
-  //     <Route path={`${path}/modules`} component={Modules} />
-  //     <Route path={`${path}/programs`} component={AcademicProgram} />
-  //     {/* <Route path={`${path}/student/evaluations/`} component={EvaluationTest} /> */}
-  //     <Route
-  //       exact
-  //       path={`${path}/evaluations/student-evaluation/:id`}
-  //       component={EvaluationTest}
-  //     />
-  //     <Route
-  //       exact
-  //       path={`${path}/evaluations/completed/student-evaluation/:id/review`}
-  //       component={StudentReview}
-  //     />
-  //     <Route exact path={`${path}/evaluations/view/:id`} component={EvaluationNotiView} />
-  //     <Route
-  //       exact
-  //       path={`/dashboard/evaluations/attempt/:id`}
-  //       render={() => (
-  //         <ConfirmationOrganism onConfirmationClose={() => history.goBack()} />
-  //       )}
-  //     />
-  //     {/* end of student pages */}
-  //   </>
-  // );
-
   return !token ? (
     <Redirect to="/login" />
   ) : userLoading ? (
@@ -302,9 +206,6 @@ const RouterProtection = () => {
       {user?.user_type === UserType.SUPER_ADMIN
         ? InstitutionAdminRoutes()
         : PrivilegedRoutes()}
-      {/* {user?.user_type === UserType.ADMIN && AcademicAdminRoutes()}
-      {user?.user_type === UserType.INSTRUCTOR && InstructorRoutes()}
-      {user?.user_type === UserType.STUDENT && StudentRoutes()} */}
     </Dashboard>
   ) : isError ? (
     <div>
