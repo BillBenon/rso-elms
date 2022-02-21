@@ -25,6 +25,7 @@ import Levels from './views/levels/Levels';
 import Modules from './views/modules';
 import InstrLevelModule from './views/modules/InstrLevelModule';
 import StudentModule from './views/modules/StudentModule';
+import NotFound from './views/NotFound';
 import PrivilegesView from './views/privileges/Privileges';
 import AcademicProgram from './views/programs/AcademicPrograms';
 import Ranks from './views/ranks/Ranks';
@@ -44,7 +45,7 @@ const RouterProtection = () => {
 
   const user_role_cookie = cookie.getCookie('user_role') || '';
   const user_role = user?.user_roles?.find((role) => role.id + '' === user_role_cookie);
-  const user_privileges = user_role?.role_privileges.map((role) => role.name);
+  const user_privileges = user_role?.role_privileges?.map((role) => role.name);
 
   let token = cookie.getCookie('jwt_info');
 
@@ -52,142 +53,151 @@ const RouterProtection = () => {
 
   const PrivilegedRoutes = () => (
     <>
-      {/* insttution routes */}
-      {hasPrivilege(Privileges.CAN_ACCESS_ROLE) && (
-        <Route path={`${path}/role/:id/view`} component={ViewRole} />
-      )}
-      {hasPrivilege(Privileges.CAN_ACCESS_ACADEMY) && (
-        <Route path={`${path}/academies`} component={Academies} />
-      )}
-      {hasPrivilege(Privileges.CAN_ACCESS_CALENDER) && (
-        <Route path={`${path}/calendar`} component={CalendarView} />
-      )}
-      {hasPrivilege(Privileges.CAN_ACCESS_RANKS) && (
-        <Route path={`${path}/ranks`} component={Ranks} />
-      )}
-      {hasPrivilege(Privileges.CAN_ACCESS_ROLES) && (
-        <Route path={`${path}/roles`} component={Roles} />
-      )}
-      {hasPrivilege(Privileges.CAN_ACCESS_USERS) && (
-        <Route path={`${path}/users`} component={Users} />
-      )}
-      {hasPrivilege(Privileges.CAN_MODIFY_INSTITUTION) && (
+      {!user_privileges ? (
+        <NotFound />
+      ) : (
         <>
-          <Route exact path={`/institution/new`} component={NewInstitution} />
-          <Route
-            exact
-            path={`${path}/institution/:id/edit`}
-            component={UpdateInstitution}
-          />
-        </>
-      )}
+          {/* insttution routes */}
+          {hasPrivilege(Privileges.CAN_ACCESS_ROLE) && (
+            <Route path={`${path}/role/:id/view`} component={ViewRole} />
+          )}
+          {hasPrivilege(Privileges.CAN_ACCESS_ACADEMY) && (
+            <Route path={`${path}/academies`} component={Academies} />
+          )}
+          {hasPrivilege(Privileges.CAN_ACCESS_CALENDER) && (
+            <Route path={`${path}/calendar`} component={CalendarView} />
+          )}
+          {hasPrivilege(Privileges.CAN_ACCESS_RANKS) && (
+            <Route path={`${path}/ranks`} component={Ranks} />
+          )}
+          {hasPrivilege(Privileges.CAN_ACCESS_ROLES) && (
+            <Route path={`${path}/roles`} component={Roles} />
+          )}
+          {hasPrivilege(Privileges.CAN_ACCESS_USERS) && (
+            <Route path={`${path}/users`} component={Users} />
+          )}
+          {hasPrivilege(Privileges.CAN_MODIFY_INSTITUTION) && (
+            <>
+              <Route exact path={`/institution/new`} component={NewInstitution} />
+              <Route
+                exact
+                path={`${path}/institution/:id/edit`}
+                component={UpdateInstitution}
+              />
+            </>
+          )}
 
-      {hasPrivilege(Privileges.CAN_ACCESS_PRIVILEGES) && (
-        <Route path={`${path}/privileges`} component={PrivilegesView} />
-      )}
+          {hasPrivilege(Privileges.CAN_ACCESS_PRIVILEGES) && (
+            <Route path={`${path}/privileges`} component={PrivilegesView} />
+          )}
 
-      {/* end of institution routes */}
+          {/* end of institution routes */}
 
-      {/* academic admin routes */}
-      {hasPrivilege(Privileges.CAN_ACCESS_SUBJECTS) && (
-        <Route path={`${path}/subjects`} component={Subjects} />
-      )}
-      {hasPrivilege(Privileges.CAN_ACCESS_SCHEDULES) && (
-        <Route path={`${path}/schedule`} component={ScheduleHome} />
-      )}
-      {hasPrivilege(Privileges.CAN_ACCESS_REG_CONTROLS) && (
-        <Route path={`${path}/registration-control`} component={RegistrationControl} />
-      )}
-      {hasPrivilege(Privileges.CAN_ACCESS_DIVISIONS) && (
-        <Route path={`${path}/divisions`} component={Divisions} />
-      )}
-      {hasPrivilege(Privileges.CAN_ACCESS_ACADEMIC_YEARS) && (
-        <Route path={`${path}/academic-years`} component={AcademicYears} />
-      )}
-      {hasPrivilege(Privileges.CAN_ACCESS_PROGRAMS) && (
-        <Route path={`${path}/programs`} component={AcademicProgram} />
-      )}
-      {/* {hasPrivilege(Privileges.CAN_ACCESS_USERS) && (
+          {/* academic admin routes */}
+          {hasPrivilege(Privileges.CAN_ACCESS_SUBJECTS) && (
+            <Route path={`${path}/subjects`} component={Subjects} />
+          )}
+          {hasPrivilege(Privileges.CAN_ACCESS_SCHEDULES) && (
+            <Route path={`${path}/schedule`} component={ScheduleHome} />
+          )}
+          {hasPrivilege(Privileges.CAN_ACCESS_REG_CONTROLS) && (
+            <Route
+              path={`${path}/registration-control`}
+              component={RegistrationControl}
+            />
+          )}
+          {hasPrivilege(Privileges.CAN_ACCESS_DIVISIONS) && (
+            <Route path={`${path}/divisions`} component={Divisions} />
+          )}
+          {hasPrivilege(Privileges.CAN_ACCESS_ACADEMIC_YEARS) && (
+            <Route path={`${path}/academic-years`} component={AcademicYears} />
+          )}
+          {hasPrivilege(Privileges.CAN_ACCESS_PROGRAMS) && (
+            <Route path={`${path}/programs`} component={AcademicProgram} />
+          )}
+          {/* {hasPrivilege(Privileges.CAN_ACCESS_USERS) && (
         <Route path={`${path}/users`} component={Users} />
       )} */}
-      {
-        // hasPrivilege(Privileges.CAN_ACCESS_DASHBOARD) && (
-        <Route path={`${path}/admin`} component={AdminDashboard} />
-        // )
-      }
-      {hasPrivilege(Privileges.CAN_ACCESS_LEVELS) && (
-        <Route path={`${path}/levels`} component={Levels} />
-      )}
-      {hasPrivilege(Privileges.CAN_ACCESS_INTAKES) && (
-        <Route path={`${path}/intakes`} component={IntakesView} />
-      )}
-      {/* <Route
+          {
+            // hasPrivilege(Privileges.CAN_ACCESS_DASHBOARD) && (
+            <Route path={`${path}/admin`} component={AdminDashboard} />
+            // )
+          }
+          {hasPrivilege(Privileges.CAN_ACCESS_LEVELS) && (
+            <Route path={`${path}/levels`} component={Levels} />
+          )}
+          {hasPrivilege(Privileges.CAN_ACCESS_INTAKES) && (
+            <Route path={`${path}/intakes`} component={IntakesView} />
+          )}
+          {/* <Route
         path={`${path}/modules/:intakeProgram/:moduleId`}
         component={AdmModuleDetails}
       /> */}
-      {hasPrivilege(Privileges.CAN_ACCESS_MODULES) && (
-        <Route path={`${path}/modules`} component={Modules} />
-      )}
-      {/* <Route exact path={`${path}/intakes/:id`} component={IntakeModulesView} /> */}
-      {/* end of academic admin routes */}
+          {hasPrivilege(Privileges.CAN_ACCESS_MODULES) && (
+            <Route path={`${path}/modules`} component={Modules} />
+          )}
+          {/* <Route exact path={`${path}/intakes/:id`} component={IntakeModulesView} /> */}
+          {/* end of academic admin routes */}
 
-      {/* instructor routes */}
-      {hasPrivilege(Privileges.CAN_ACCESS_EVALUATIONS) && (
-        <>
-          <Route path={`${path}/evaluations`} component={InstructorViewEvaluations} />
-          <Route
-            exact
-            path={`${path}/evaluations/view/:id`}
-            component={EvaluationNotiView}
-          />
-          <Route
-            exact
-            path={`${path}/evaluations/student-evaluation/:id`}
-            component={EvaluationTest}
-          />
-          <Route
-            exact
-            path={`${path}/evaluations/completed/student-evaluation/:id/review`}
-            component={StudentReview}
-          />
-          <Route
-            exact
-            path={`/dashboard/evaluations/attempt/:id`}
-            render={() => (
-              <ConfirmationOrganism onConfirmationClose={() => history.goBack()} />
-            )}
-          />
-        </>
-      )}
-      {/* {hasPrivilege(Privileges.CAN_ACCESS_CALENDER) && (
+          {/* instructor routes */}
+          {hasPrivilege(Privileges.CAN_ACCESS_EVALUATIONS) && (
+            <>
+              <Route path={`${path}/evaluations`} component={InstructorViewEvaluations} />
+              <Route
+                exact
+                path={`${path}/evaluations/view/:id`}
+                component={EvaluationNotiView}
+              />
+              <Route
+                exact
+                path={`${path}/evaluations/student-evaluation/:id`}
+                component={EvaluationTest}
+              />
+              <Route
+                exact
+                path={`${path}/evaluations/completed/student-evaluation/:id/review`}
+                component={StudentReview}
+              />
+              <Route
+                exact
+                path={`/dashboard/evaluations/attempt/:id`}
+                render={() => (
+                  <ConfirmationOrganism onConfirmationClose={() => history.goBack()} />
+                )}
+              />
+            </>
+          )}
+          {/* {hasPrivilege(Privileges.CAN_ACCESS_CALENDER) && (
         <Route path={`${path}/calendar`} component={CalendarView} />
       )} */}
-      {hasPrivilege(Privileges.CAN_ACCESS_INTAKES) && (
-        <Route path={`${path}/intakes`} component={IntakesView} />
-      )}
-      {hasPrivilege(Privileges.CAN_ACCESS_MODULES) && (
-        <Route exact path={`${path}/inst-module`} component={InstrLevelModule} />
-      )}
-      {hasPrivilege(Privileges.CAN_ACCESS_SCHEDULES) && (
-        <Route path={`${path}/schedule`} component={ScheduleHome} />
-      )}
-      {hasPrivilege(Privileges.CAN_ACCESS_EVENTS) && (
-        <Route path={`${path}/events`} component={Events} />
-      )}
-      {/* <Route path={`${path}/modules`} component={Modules} /> */}
-      {hasPrivilege(Privileges.CAN_ACCESS_PROFILE) && (
-        <Route path={`${path}/users/:id/profile`} component={UserDetails} />
-      )}
-      {/* end of instructor routes */}
-      {/* student routes */}
+          {hasPrivilege(Privileges.CAN_ACCESS_INTAKES) && (
+            <Route path={`${path}/intakes`} component={IntakesView} />
+          )}
+          {hasPrivilege(Privileges.CAN_ACCESS_MODULES) && (
+            <Route exact path={`${path}/inst-module`} component={InstrLevelModule} />
+          )}
+          {hasPrivilege(Privileges.CAN_ACCESS_SCHEDULES) && (
+            <Route path={`${path}/schedule`} component={ScheduleHome} />
+          )}
+          {hasPrivilege(Privileges.CAN_ACCESS_EVENTS) && (
+            <Route path={`${path}/events`} component={Events} />
+          )}
+          {/* <Route path={`${path}/modules`} component={Modules} /> */}
+          {hasPrivilege(Privileges.CAN_ACCESS_PROFILE) && (
+            <Route path={`${path}/users/:id/profile`} component={UserDetails} />
+          )}
+          {/* end of instructor routes */}
+          {/* student routes */}
 
-      {/* <Route path={`${path}/users/:id/profile`} component={UserDetails} /> */}
-      {/* <Route path={`${path}/intakes`} component={IntakesView} /> */}
-      {/* <Route path={`${path}/schedule`} component={ScheduleHome} /> */}
-      {hasPrivilege(Privileges.CAN_ACCESS_MODULES) && (
-        <Route path={`${path}/student`} component={StudentModule} />
+          {/* <Route path={`${path}/users/:id/profile`} component={UserDetails} /> */}
+          {/* <Route path={`${path}/intakes`} component={IntakesView} /> */}
+          {/* <Route path={`${path}/schedule`} component={ScheduleHome} /> */}
+          {hasPrivilege(Privileges.CAN_ACCESS_MODULES) && (
+            <Route path={`${path}/student`} component={StudentModule} />
+          )}
+          {/* end of student routes */}
+        </>
       )}
-      {/* end of student routes */}
     </>
   );
 
