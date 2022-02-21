@@ -15,6 +15,7 @@ import Heading from '../../components/Atoms/Text/Heading';
 import ActionableList from '../../components/Molecules/ActionableList';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import PopupMolecule from '../../components/Molecules/Popup';
+import PrivilegePreset from '../../components/Organisms/forms/privilege/PrivilegePreset';
 import AddPrivileges from '../../components/Organisms/forms/roles/AddPrivileges';
 import { queryClient } from '../../plugins/react-query';
 import { roleStore } from '../../store/administration';
@@ -134,8 +135,32 @@ export default function ViewRole() {
           path={`${url}/addPrivileges`}
           render={() => {
             return (
-              <PopupMolecule title="Add Privilege" open={true} onClose={history.goBack}>
+              <PopupMolecule
+                title="Add Privilege"
+                open={true}
+                onClose={history.goBack}
+                closeOnClickOutSide={false}>
                 <AddPrivileges
+                  roleName={role?.name || ''}
+                  roleId={role?.id + '' || ''}
+                  onSubmit={submited}
+                />
+              </PopupMolecule>
+            );
+          }}
+        />
+        {/* add previleges presets */}
+        <Route
+          exact
+          path={`${url}/addPresets`}
+          render={() => {
+            return (
+              <PopupMolecule
+                title="Presets"
+                open={true}
+                onClose={history.goBack}
+                closeOnClickOutSide={false}>
+                <PrivilegePreset
                   roleName={role?.name || ''}
                   roleId={role?.id + '' || ''}
                   onSubmit={submited}

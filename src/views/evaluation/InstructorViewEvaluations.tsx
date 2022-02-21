@@ -49,7 +49,7 @@ export default function InstructorViewEvaluations() {
         description: `${evaluation.total_mark} marks`,
         status: {
           type: advancedTypeChecker(evaluation.evaluation_status),
-          text: evaluation.evaluation_status,
+          text: evaluation.evaluation_status.replace('_', ' '),
         },
       };
       formattedEvals.push(formattedEvaluations);

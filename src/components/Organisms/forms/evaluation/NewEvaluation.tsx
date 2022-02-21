@@ -36,7 +36,7 @@ export default function NewEvaluation() {
 
   function handleBack() {
     if (currentStep >= 1) setCurrentStep(currentStep - 1);
-    setLocalStorageData('currentStep', currentStep);
+    setLocalStorageData('currentStep', currentStep - 1);
   }
 
   let evaluationInfo;

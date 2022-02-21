@@ -51,6 +51,7 @@ export default function EvaluationInfoComponent({
   );
 
   const { user } = useAuthenticator();
+  const [timeDifference, setTimeDifference] = useState(0);
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
     .data?.data.data[0];
@@ -64,10 +65,10 @@ export default function EvaluationInfoComponent({
     intake_academic_year_period: intakePeriodId,
     allow_submission_time: '',
     intake_level_class_ids: '',
-    id: '',
+    id: evaluationId || '',
     classification: IEvaluationClassification.MODULE,
     content_format: IContentFormatEnum.DOC,
-    due_on: '',
+    due_on: evaluationInfo?.due_on || '',
     eligible_group: IEligibleClassEnum.MULTIPLE,
     evaluation_status: IEvaluationStatus.DRAFT,
     evaluation_type: IEvaluationTypeEnum.CAT,
@@ -95,7 +96,7 @@ export default function EvaluationInfoComponent({
       id: evaluationInfo?.id || '',
       classification: evaluationInfo?.classification || IEvaluationClassification.MODULE,
       content_format: evaluationInfo?.content_format || IContentFormatEnum.DOC,
-      due_on: '',
+      due_on: evaluationInfo?.due_on || '',
       strict: true,
       eligible_group: IEligibleClassEnum.MULTIPLE,
       evaluation_status: evaluationInfo?.evaluation_status || IEvaluationStatus.DRAFT,
@@ -117,12 +118,10 @@ export default function EvaluationInfoComponent({
   const { mutateAsync } = evaluationStore.updateEvaluation();
 
   function handleChange({ name, value }: ValueType) {
-    if (name === 'due_on' && typeof value === 'string') {
-      const timeDifference = moment(value).diff(
-        moment(details.allow_submission_time),
-        'minutes',
+    if (name === ('due_on' || 'allow_submission_time') && typeof value === 'string') {
+      setTimeDifference(
+        moment(value).diff(moment(details.allow_submission_time), 'minutes'),
       );
-
       if (timeDifference < 0) toast.error('Due time cannot be less than start time!');
 
       setDetails((details) => ({
@@ -141,7 +140,7 @@ export default function EvaluationInfoComponent({
   function submitForm(e: FormEvent) {
     e.preventDefault();
 
-    if (evaluationId) {
+    if (evaluationId && details.time_limit > 0) {
       mutateAsync(details, {
         onSuccess: () => {
           toast.success('Evaluation updated', { duration: 5000 });
@@ -296,7 +295,7 @@ export default function EvaluationInfoComponent({
           style={{ width: '6rem' }}
           type="number"
           name="total_mark"
-          min={0}
+          // min={0}
           // step=".01"
           value={details?.total_mark}
           handleChange={handleChange}>
@@ -310,7 +309,7 @@ export default function EvaluationInfoComponent({
             // step=".01"
             readOnly
             name="time_limit"
-            min={0}
+            // min={0}
             value={details?.time_limit}
             handleChange={handleChange}>
             Time limit (in mins)
@@ -326,6 +325,7 @@ export default function EvaluationInfoComponent({
             Start Date
           </DateMolecule>
           <DateMolecule
+            defaultValue={details?.due_on}
             handleChange={handleChange}
             startYear={new Date().getFullYear()}
             endYear={new Date().getFullYear() + 100}

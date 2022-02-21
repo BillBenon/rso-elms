@@ -27,7 +27,7 @@ class InstructorDeployment {
 
   public async getInstructorById(
     id: string,
-  ): Promise<AxiosResponse<Response<Instructor[]>>> {
+  ): Promise<AxiosResponse<Response<Instructor>>> {
     return await adminstrationAxios.get(`instructorDeployments/getInstructorById/${id}`);
   }
 

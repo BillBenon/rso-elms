@@ -89,6 +89,7 @@ const RouterProtection = () => {
     <>
       {/* start of instructor pages */}
       <Route path={`${path}/evaluations`} component={InstructorViewEvaluations} />
+      <Route exact path={`${path}/evaluations/view/:id`} component={EvaluationNotiView} />
       <Route path={`${path}/calendar`} component={CalendarView} />
       <Route path={`${path}/intakes`} component={IntakesView} />
       <Route exact path={`${path}/inst-module`} component={InstrLevelModule} />
@@ -122,7 +123,6 @@ const RouterProtection = () => {
         component={StudentReview}
       />
       <Route exact path={`${path}/evaluations/view/:id`} component={EvaluationNotiView} />
-      {/* end of student pages */}
       <Route
         exact
         path={`/dashboard/evaluations/attempt/:id`}
@@ -130,6 +130,7 @@ const RouterProtection = () => {
           <ConfirmationOrganism onConfirmationClose={() => history.goBack()} />
         )}
       />
+      {/* end of student pages */}
     </>
   );
 

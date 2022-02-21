@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { CommonCardDataType, Privileges, RoleResWithPrevilages } from '../../../../types';
+import { roleStore } from '../../../../store/administration';
+import { CommonCardDataType, Privileges } from '../../../../types';
 import cookie from '../../../../utils/cookie';
 import CommonCardMolecule from '../CommonCardMolecule';
 
@@ -14,36 +15,33 @@ export default function SubjectCard({ subject, intakeProg = '' }: IProps) {
   const history = useHistory();
   const [privileges, setPrivileges] = useState<string[]>();
 
-  const picked_role_cookie = cookie.getCookie('user_role');
-  const picked_role: RoleResWithPrevilages | undefined = picked_role_cookie
-    ? JSON.parse(picked_role_cookie)
-    : undefined;
+  const picked_role_cookie = cookie.getCookie('user_role') || '';
+  const { data: role_privilege } = roleStore.getPrivilegesByRole(picked_role_cookie);
 
   useEffect(() => {
-    const _privileges = picked_role?.role_privileges?.map((privilege) => privilege.name);
+    const _privileges = role_privilege?.data.data?.map(
+      (privilege) => privilege.privilege.name,
+    );
     if (_privileges) setPrivileges(_privileges);
-  }, [picked_role?.role_privileges]);
-
+  }, [role_privilege?.data.data]);
   return (
     <CommonCardMolecule
       data={subject}
-      handleClick={
-        () =>
-          // privileges?.includes(Privileges.CAN_ACCESS_LESSON)
-          //   ?
-          history.push({
-            pathname: `/dashboard/modules/subjects/${subject.id}`,
-            search: `?intkPrg=${intakeProg}`,
-          })
-        // : privileges?.includes(Privileges.CAN_ACCESS_EVALUATIONS)
-        // ? history.push({
-        //     pathname: `/dashboard/modules/subjects/${subject.id}/evaluations`,
-        //     search: `?intkPrg=${intakeProg}`,
-        //   })
-        // : history.push({
-        //     pathname: `/dashboard/modules/subjects/${subject.id}/instructors`,
-        //     search: `?intkPrg=${intakeProg}`,
-        //   })
+      handleClick={() =>
+        privileges?.includes(Privileges.CAN_ACCESS_LESSON)
+          ? history.push({
+              pathname: `/dashboard/modules/subjects/${subject.id}`,
+              search: `?intkPrg=${intakeProg}`,
+            })
+          : privileges?.includes(Privileges.CAN_ACCESS_EVALUATIONS)
+          ? history.push({
+              pathname: `/dashboard/modules/subjects/${subject.id}/evaluations`,
+              search: `?intkPrg=${intakeProg}`,
+            })
+          : history.push({
+              pathname: `/dashboard/modules/subjects/${subject.id}/instructors`,
+              search: `?intkPrg=${intakeProg}`,
+            })
       }>
       {/* <p className="pt-3">
         Total subjects:

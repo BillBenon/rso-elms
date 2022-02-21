@@ -9,7 +9,7 @@ import { authenticatorStore } from '../../../store/administration';
 import academyStore from '../../../store/administration/academy.store';
 import { institutionStore } from '../../../store/administration/institution.store';
 import { getAllNotifications } from '../../../store/administration/notification.store';
-import { RoleResWithPrevilages, RoleType } from '../../../types';
+import { RoleType } from '../../../types';
 import { NotificationStatus } from '../../../types/services/notification.types';
 import { UserType } from '../../../types/services/user.types';
 import cookie from '../../../utils/cookie';
@@ -72,13 +72,10 @@ export default function Navigation() {
       .catch(() => toast.error('Signout failed. try again latter.', { id: toastId }));
   }
 
-  const user_role_cookie = cookie.getCookie('user_role');
-  const user_role: RoleResWithPrevilages | undefined = user_role_cookie
-    ? JSON.parse(user_role_cookie)
-    : undefined;
-  const other_user_roles = user_role
-    ? user?.user_roles.filter((role) => role.id !== user_role.id)
-    : undefined;
+  let picked_role_cookie = cookie.getCookie('user_role') || '';
+
+  const other_user_roles =
+    user?.user_roles?.filter((role) => role.id + '' !== picked_role_cookie) || [];
 
   return (
     <nav className="bg-main">
@@ -101,7 +98,7 @@ export default function Navigation() {
                 </div>
               )}
               <div className="bg-main p-1 rounded-full flex text-gray-400">
-                {other_user_roles && (
+                {other_user_roles.length > 0 && (
                   <Tooltip
                     on="click"
                     position="bottom center"
@@ -117,9 +114,10 @@ export default function Navigation() {
                     }>
                     {other_user_roles.map((role) => (
                       <button
-                        onClick={() =>
-                          cookie.setCookie('user_role', JSON.stringify(role))
-                        }
+                        onClick={() => {
+                          cookie.setCookie('user_role', role.id + ''),
+                            window.location.reload();
+                        }}
                         className="flex items-center gap-4 px-4 box-border text-left py-2 text-sm text-txt-primary hover:bg-gray-100 w-full"
                         key={role.id}
                         role="menuitem">

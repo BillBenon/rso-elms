@@ -45,7 +45,7 @@ export default function Redirecting() {
           if (user?.user_type != UserType.SUPER_ADMIN && !user?.academy) {
             setHasNoAcademy(true);
           } else if (user.user_roles !== null && user.user_roles.length === 1) {
-            cookie.setCookie('user_role', JSON.stringify(user.user_roles[0]));
+            cookie.setCookie('user_role', user.user_roles[0].id + '');
             redirectTo(
               user?.user_type === UserType.INSTRUCTOR
                 ? '/dashboard/inst-module'

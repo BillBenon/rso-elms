@@ -105,6 +105,12 @@ export interface InstructorEvaluationAppprovalStatus extends Table {
   remarks: string;
 }
 
+export interface IEvaluationFeedbackInfo extends Table {
+  evaluation_reviewer_status: IEvaluationAppprovalStatus | IEvaluationAppprovalStatus;
+  reviewer: { adminId: string; id: string };
+  remarks: string;
+}
+
 export enum UpdateEvaluationApprovalStatusEnum {
   PENDING = 'PENDING',
   APPROVED = 'APPROVED',
@@ -147,10 +153,20 @@ export interface IEvaluationCreate {
   strict: boolean;
 }
 
+export type IEvaluationFeedback = 'reviews' | 'approvals' | '';
+
 export interface IStudentEvaluations {
   undoneEvaluations: IEvaluationInfo[];
   unfinishedEvaluations: any[];
+
   ongoingEvaluations: any[];
+}
+
+export interface IAddprivateAttendee {
+  evaluation: string;
+  id: string;
+  private_status: true;
+  students: string[];
 }
 
 export interface IEvaluationInfo {

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { ReactNode } from 'react';
 
 import useAuthenticator from '../../../hooks/useAuthenticator';
-import { Privileges, RoleResWithPrevilages } from '../../../types';
+import { roleStore } from '../../../store/administration';
+import { Privileges } from '../../../types';
 import cookie from '../../../utils/cookie';
 
 interface IPermission {
@@ -14,17 +15,16 @@ export default function Permission({ children, privilege }: IPermission) {
   const { user } = useAuthenticator();
   const [privileges, setPrivileges] = useState<string[]>();
 
-  const picked_role_cookie = cookie.getCookie('user_role');
-  const picked_role: RoleResWithPrevilages | undefined = picked_role_cookie
-    ? JSON.parse(picked_role_cookie)
-    : undefined;
+  const picked_role_cookie = cookie.getCookie('user_role') || '';
+  const { data: role_privilege } = roleStore.getPrivilegesByRole(picked_role_cookie);
 
   useEffect(() => {
-    const _privileges = picked_role?.role_privileges?.map((privilege) => privilege.name);
+    const _privileges = role_privilege?.data.data?.map(
+      (privilege) => privilege.privilege.name,
+    );
 
     if (_privileges) setPrivileges(_privileges);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user]);
+  }, [role_privilege?.data.data, user]);
 
   // return <> {privileges?.includes(privilege) && children}</>;
   return children;

@@ -3,9 +3,12 @@ import { AxiosResponse } from 'axios';
 import { evaluationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
+  IAddprivateAttendee,
   ICreateEvaluationQuestions,
   IEvaluationApproval,
   IEvaluationCreate,
+  IEvaluationFeedback,
+  IEvaluationFeedbackInfo,
   IEvaluationInfo,
   IEvaluationInfoCollected,
   IEvaluationOwnership,
@@ -22,6 +25,11 @@ class EvaluationService {
     evaluationInfo: IEvaluationCreate,
   ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
     return await evaluationAxios.post('/evaluations/add', evaluationInfo);
+  }
+  public async addEvaluationAttendee(
+    attendeeInfo: IAddprivateAttendee,
+  ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
+    return await evaluationAxios.post('/privateAttendee/add', attendeeInfo);
   }
   public async updateEvaluation(
     evaluationInfo: IEvaluationCreate,
@@ -105,11 +113,12 @@ class EvaluationService {
     return await evaluationAxios.get(`/evaluations/getById/${id}`);
   }
 
-  public async getEvaluationApprovals(
+  public async getEvaluationFeedbacks(
     evaluationId: string,
-  ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
+    feedbackType: IEvaluationFeedback,
+  ): Promise<AxiosResponse<Response<IEvaluationFeedbackInfo[]>>> {
     return await evaluationAxios.get(
-      `evaluationApprovals/approvals/getByEvaluationId/${evaluationId}`,
+      `/evaluations/getByFeedback/${evaluationId}/feedback?feedback_type=${feedbackType}`,
     );
   }
 
