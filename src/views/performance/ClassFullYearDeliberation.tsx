@@ -81,7 +81,11 @@ export default function ClassFullYearDeliberation() {
           path={`${path}/:reportId/promotion`}
           render={() => {
             return (
-              <PopupMolecule title="Student Promotion" open onClose={history.goBack}>
+              <PopupMolecule
+                title="Student Promotion"
+                open
+                onClose={history.goBack}
+                closeOnClickOutSide={false}>
                 <Promote />
               </PopupMolecule>
             );
