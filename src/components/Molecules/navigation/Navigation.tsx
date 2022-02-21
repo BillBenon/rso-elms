@@ -74,6 +74,10 @@ export default function Navigation() {
 
   let picked_role_cookie = cookie.getCookie('user_role') || '';
 
+  const picked_role = user?.user_roles?.find(
+    (role) => role.id + '' === picked_role_cookie,
+  );
+
   const other_user_roles =
     user?.user_roles?.filter((role) => role.id + '' !== picked_role_cookie) || [];
 
@@ -176,7 +180,9 @@ export default function Navigation() {
                   <div className="pl-2">
                     <p>{user?.username}</p>
                     <p className="text-xs pt-1 text-txt-secondary">
-                      {user?.user_type.replaceAll('_', ' ')}
+                      {picked_role?.name
+                        ? picked_role.name
+                        : user?.user_type.replaceAll('_', ' ')}
                     </p>
                   </div>
                 </div>
