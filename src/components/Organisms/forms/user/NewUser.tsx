@@ -49,7 +49,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const [details, setDetails] = useState<CreateUserInfo>({
     activation_key: '',
     spouse_name: '',
-    academy_id: user?.academy?.id + '',
+    academy_id: '',
     deployed_on: '',
     deployment_number: `DEP-${parseInt(Math.random() * 10000 + '')}`,
     birth_date: '',
@@ -90,8 +90,14 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const options = useMemo(() => countryList().getData(), []);
 
   useEffect(() => {
-    setDetails((details) => ({ ...details, intake_program_id: otherDetail.intake }));
-  }, [otherDetail.intake]);
+    setDetails((details) => ({
+      ...details,
+      intake_program_id: otherDetail.intake,
+      academy_id: details.user_type !== 'SUPER_ADMIN' ? user?.academy?.id + '' : '',
+    }));
+  }, [otherDetail.intake, user?.academy?.id]);
+
+  console.log(details.academy_id);
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
@@ -293,7 +299,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Education level
         </DropdownMolecule>
-        {user?.user_type === UserType.SUPER_ADMIN && (
+        {user?.user_type === UserType.SUPER_ADMIN && details.user_type !== 'SUPER_ADMIN' && (
           <DropdownMolecule
             options={getDropDownOptions({ inputs: academies.data?.data.data || [] })}
             name="academy_id"
