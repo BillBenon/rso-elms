@@ -6,6 +6,8 @@ import ILabel from '../../components/Atoms/Text/ILabel';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import NewUser from '../../components/Organisms/forms/user/NewUser';
 import UpdateUser from '../../components/Organisms/forms/user/UpdateUser';
+import useAuthenticator from '../../hooks/useAuthenticator';
+import { UserType } from '../../types/services/user.types';
 import AdminsView from './AdminsView';
 import InstructorsView from './InstructorsView';
 import StudentsView from './StudentsView';
@@ -29,11 +31,16 @@ export default function Users() {
       label: 'Admins',
       href: `${url}/admins`,
     },
-    {
+  ];
+
+  const { user } = useAuthenticator();
+
+  if (user?.user_type === UserType.SUPER_ADMIN) {
+    tabs.push({
       label: 'Super Admins',
       href: `${url}/superadmins`,
-    },
-  ];
+    });
+  }
 
   return (
     <div>

@@ -3,6 +3,7 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -108,11 +109,13 @@ export default function AcademicYears() {
                 title="Academic years"
                 totalItems={years?.length || 0}
                 showSearch={false}>
-                {years.length > 0 && (
+                {/* {years.length > 0 && ( */}
+                <Permission privilege={Privileges.CAN_CREATE_ACADEMIC_YEAR}>
                   <Link to={`${url}/new`}>
                     <Button>Add year</Button>
                   </Link>
-                )}
+                </Permission>
+                {/* )} */}
               </TableHeader>
             </section>
 

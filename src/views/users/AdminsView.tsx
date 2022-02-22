@@ -87,13 +87,11 @@ export default function AdminsView() {
         title="Admins"
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
-        {user?.user_type === UserType.SUPER_ADMIN && (
-          <Link to={`/dashboard/users/add/${UserType.ADMIN}`}>
-            <Permission privilege={Privileges.CAN_CREATE_USER}>
-              <Button>New admin</Button>
-            </Permission>
-          </Link>
-        )}
+        <Link to={`/dashboard/users/add/${UserType.ADMIN}`}>
+          <Permission privilege={Privileges.CAN_CREATE_USER}>
+            <Button>New admin</Button>
+          </Permission>
+        </Link>
       </TableHeader>
       {isLoading ? (
         <Loader />
