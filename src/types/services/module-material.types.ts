@@ -24,6 +24,8 @@ export interface ModuleMaterialAttachment {
 }
 export interface ModuleAttachment {
   id: string;
+  original_file_name: string;
+  file_type: string;
 }
 
 export interface ModuleMaterialAttachmentInfo extends Table, ModuleMaterialAttachment {
