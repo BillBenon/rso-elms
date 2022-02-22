@@ -42,7 +42,10 @@ export default function Redirecting() {
           redirectTo('/complete-more');
         } else if (experiences && experiences?.data.data.length === 0) {
           redirectTo('/complete-experience');
-        } else if (nextOfKin && experiences) {
+        } else if (
+          nextOfKin?.data.data.length !== 0 &&
+          experiences?.data.data.length !== 0
+        ) {
           if (user?.user_type != UserType.SUPER_ADMIN && !user?.academy) {
             console.log('no academy');
 

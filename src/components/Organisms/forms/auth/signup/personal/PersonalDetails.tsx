@@ -50,6 +50,14 @@ function PersonalDetails<E>({
     nationality: '',
   });
 
+  const [nationality, setnationality] = useState({
+    birth: '',
+    residence: '',
+  });
+  const nationhandleChange = (e: ValueType) => {
+    setnationality({ ...nationality, [e.name]: e.value });
+  };
+
   const handleChange = (e: ValueType) => {
     setPersonalDetails({ ...personalDetails, [e.name]: e.value });
   };
@@ -101,9 +109,9 @@ function PersonalDetails<E>({
         residence_location_id: personInfo.residence_location_id,
         place_of_residence: personInfo.place_of_residence,
         doc_type: personInfo.doc_type,
-        nationality: personInfo.nationality,
+        nationality: nationality.residence,
       });
-  }, [user.data?.data.data.person]);
+  }, [nationality.residence, user.data?.data.data.person]);
 
   return (
     <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
@@ -175,20 +183,21 @@ function PersonalDetails<E>({
           <div>
             <DropdownMolecule
               width="60 md:w-80"
-              name="nationality"
+              name="birth"
               placeholder="Select the Nation"
               defaultValue={options.find(
-                (national) => national.label === personalDetails.nationality,
+                (national) => national.label === nationality.birth,
               )}
-              handleChange={handleChange}
+              handleChange={nationhandleChange}
               options={options}>
               Place of birth
             </DropdownMolecule>
-            {personalDetails.nationality == 'Rwanda' && (
+            {nationality.birth == 'Rwanda' && (
               <LocationMolecule
                 placeholder="Select place of birth"
                 name="place_of_birth"
-                handleChange={handleChange}></LocationMolecule>
+                handleChange={handleChange}
+              />
             )}
             <TextAreaMolecule
               width="72 md:w-80"
@@ -199,20 +208,21 @@ function PersonalDetails<E>({
             </TextAreaMolecule>
             <DropdownMolecule
               width="60 md:w-80"
-              name="nationality"
+              name="residence"
               placeholder="Select the Nation"
               defaultValue={options.find(
-                (national) => national.label === personalDetails.nationality,
+                (national) => national.label === nationality.residence,
               )}
-              handleChange={handleChange}
+              handleChange={nationhandleChange}
               options={options}>
               Place of residence
             </DropdownMolecule>
-            {personalDetails.nationality == 'Rwanda' && (
+            {nationality.residence == 'Rwanda' && (
               <LocationMolecule
                 placeholder="Select place of residence"
                 name="residence_location_id"
-                handleChange={handleChange}></LocationMolecule>
+                handleChange={handleChange}
+              />
             )}
             <TextAreaMolecule
               width="72 md:w-80"
