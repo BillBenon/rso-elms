@@ -95,7 +95,7 @@ export default function SubjectDetails() {
   tabs.push({
     label: 'Evaluations',
     href: `${url}/evaluations?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
-    // privilege: Privileges.CAN_ACCESS_EVALUATIONS,
+    privilege: Privileges.CAN_ACCESS_EVALUATIONS,
   });
   tabs.push({
     label: 'Instructors',
@@ -211,12 +211,12 @@ export default function SubjectDetails() {
                         <SubjectInstructorView subjectId={subjectId} />
                       </div>
                       {intakeProg && progId && level && period ? (
-                        // <Permission privilege={Privileges.CAN_CREATE_EVALUATION}>
-                        <div className="w-3/12">
-                          <Button onClick={goToNewEvaluation}>New Evaluation</Button>
-                        </div>
-                      ) : // </Permission>
-                      null}
+                        <Permission privilege={Privileges.CAN_CREATE_EVALUATION}>
+                          <div className="w-3/12">
+                            <Button onClick={goToNewEvaluation}>New Evaluation</Button>
+                          </div>
+                        </Permission>
+                      ) : null}
                     </div>
                   )}
                 />
