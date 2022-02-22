@@ -22,6 +22,11 @@ export interface ModuleMaterialAttachment {
   attachment_id: string;
   learning_material_id: number;
 }
+export interface ModuleAttachment {
+  id: string;
+  original_file_name: string;
+  file_type: string;
+}
 
 export interface ModuleMaterialAttachmentInfo extends Table, ModuleMaterialAttachment {
   learning_material: ModuleMaterial;

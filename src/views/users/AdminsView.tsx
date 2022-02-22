@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -86,11 +87,11 @@ export default function AdminsView() {
         title="Admins"
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
-        {user?.user_type === UserType.SUPER_ADMIN && (
-          <Link to={`/dashboard/users/add/${UserType.ADMIN}`}>
+        <Link to={`/dashboard/users/add/${UserType.ADMIN}`}>
+          <Permission privilege={Privileges.CAN_CREATE_USER}>
             <Button>New admin</Button>
-          </Link>
-        )}
+          </Permission>
+        </Link>
       </TableHeader>
       {isLoading ? (
         <Loader />

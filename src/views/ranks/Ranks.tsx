@@ -50,7 +50,7 @@ export default function Ranks() {
     handleAction: (id: string | number | undefined) => {
       history.push(`${path}/${id}/edit`); // go to edit rank
     },
-    privilege: Privileges.CAN_EDIT_RANK,
+    privilege: Privileges.CAN_MODIFY_RANKS,
   });
 
   // re fetch data whenever user come back on this page
@@ -60,14 +60,14 @@ export default function Ranks() {
     }
   }, [location, path, refetch]);
 
-  const manyActions = [
-    {
-      name: 'Disable/Enable',
-      handleAction: (data?: string[]) => {
-        alert(`handling many at once ${data}`);
-      },
-    },
-  ];
+  // const manyActions = [
+  // {
+  //   name: 'Disable/Enable',
+  //   handleAction: (data?: string[]) => {
+  //     alert(`handling many at once ${data}`);
+  //   },
+  // },
+  // ];
 
   function submited() {}
   function handleSearch() {}
@@ -93,7 +93,6 @@ export default function Ranks() {
         {isLoading && <Loader />}
         {ranks && ranks.length > 0 && isSuccess ? (
           <Table<FilteredRanks>
-            selectorActions={manyActions}
             hide={['id']}
             handleSelect={handleSelect}
             statusColumn="status"

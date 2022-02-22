@@ -9,9 +9,14 @@ import cookie from '../../../utils/cookie';
 interface IPermission {
   children: ReactNode;
   privilege: Privileges;
+  ignorePrivilege?: boolean;
 }
 
-export default function Permission({ children, privilege }: IPermission) {
+export default function Permission({
+  children,
+  privilege,
+  ignorePrivilege = false,
+}: IPermission) {
   const { user } = useAuthenticator();
   const [privileges, setPrivileges] = useState<string[]>();
 
@@ -26,5 +31,5 @@ export default function Permission({ children, privilege }: IPermission) {
     if (_privileges) setPrivileges(_privileges);
   }, [role_privilege?.data.data, user]);
 
-  return <> {privileges?.includes(privilege) && children}</>;
+  return <> {ignorePrivilege ? children : privileges?.includes(privilege) && children}</>;
 }

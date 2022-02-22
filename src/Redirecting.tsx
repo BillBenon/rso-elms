@@ -42,7 +42,10 @@ export default function Redirecting() {
           redirectTo('/complete-more');
         } else if (experiences && experiences?.data.data.length === 0) {
           redirectTo('/complete-experience');
-        } else if (nextOfKin && experiences) {
+        } else if (
+          nextOfKin?.data.data.length !== 0 &&
+          experiences?.data.data.length !== 0
+        ) {
           if (user?.user_type != UserType.SUPER_ADMIN && !user?.academy) {
             console.log('no academy');
 
@@ -59,8 +62,8 @@ export default function Redirecting() {
           } else if (user.user_roles !== null && user.user_roles.length > 1) {
             redirectTo('/choose-role');
           } else if (
-            user.user_roles === null &&
-            user.user_type !== UserType.SUPER_ADMIN
+            user.user_roles === null
+            // && user.user_type !== UserType.SUPER_ADMIN
           ) {
             console.log('I have no roles buddy');
             setUserNoRoles(true);
