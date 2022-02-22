@@ -19,16 +19,21 @@ export default function InputMolecule<T>({
   error = '',
   placeholder = '',
   type = 'text',
+  width = '80',
   readOnly = false,
+  className = '',
   required = true,
   defaultValue,
   ...attrs
 }: IInputMolecule<T>) {
   return (
     <div className="flex flex-col gap-2 pb-3">
-      <ILabel className="capitalize w-full" size="sm" weight="medium">
-        {children}
-      </ILabel>
+      {children && (
+        <ILabel className="capitalize w-full" size="sm" weight="medium">
+          {children}
+        </ILabel>
+      )}
+
       <Input
         defaultValue={defaultValue}
         {...attrs}
@@ -40,9 +45,11 @@ export default function InputMolecule<T>({
         placeholder={placeholder}
         fcolor={error ? 'error' : undefined}
         type={type}
+        width={width}
         value={value}
         /* @ts-ignore */
         handleChange={handleChange}
+        className={className}
       />
       <Error>{error && error}</Error>
     </div>
