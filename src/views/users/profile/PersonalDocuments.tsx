@@ -14,8 +14,9 @@ import { queryClient } from '../../../plugins/react-query';
 import usersStore from '../../../store/administration/users.store';
 import { IEvaluationInfo } from '../../../types/services/evaluation.types';
 import { EvaluationStudent } from '../../../types/services/marking.types';
+import { ModuleAttachment } from '../../../types/services/module-material.types';
 import { UserInfo } from '../../../types/services/user.types';
-import { downloadFile } from '../../../utils/file-util';
+import { downloadPersonalDoc } from '../../../utils/file-util';
 
 // interface AttachementsInfo {}
 
@@ -30,11 +31,13 @@ export default function PersonalDocuments({ user }: { user: UserInfo }) {
   const { mutateAsync } = usersStore.deletePersonalDoc();
   const [fileUrl, setUrl] = useState('');
 
-  async function downloadDoc(data: string) {
-    setUrl(await downloadFile(data));
+  async function downloadDoc(data: ModuleAttachment | undefined) {
+    await setUrl(
+      await downloadPersonalDoc(data?.original_file_name + '', data?.file_type + ''),
+    );
     var element = document.createElement('a');
     element.setAttribute('href', fileUrl);
-    element.setAttribute('download', fileUrl);
+    element.setAttribute('download', data?.original_file_name + '');
 
     document.body.appendChild(element);
 
@@ -43,13 +46,12 @@ export default function PersonalDocuments({ user }: { user: UserInfo }) {
     document.body.removeChild(element);
   }
 
+  console.log(data);
   const actions = [
     {
       name: 'Download',
       handleAction: (_data?: string | number | undefined) =>
-        _data
-          ? downloadDoc(data?.data.data.find((e) => e.id == _data)?.attachment.id + '')
-          : {},
+        _data ? downloadDoc(data?.data.data.find((e) => e.id == _data)?.attachment) : {},
     },
     {
       name: 'Delete',

@@ -88,3 +88,33 @@ export const downloadFile = async (attachmentId: string) => {
 
   return url;
 };
+
+export const downloadPersonalDoc = async (filename: string, file_type: string) => {
+  let appsType = ['doc', 'xlxs', 'pptx', 'pdf', 'docx'];
+  // eslint-disable-next-line no-undef
+  const headers: HeadersInit = {};
+  const token = cookie.getCookie('jwt_info');
+  const content_type = appsType.includes(file_type)
+    ? `application/${file_type}`
+    : `image/${file_type}`;
+
+  if (token) {
+    const jwtInfo: LoginRes = JSON.parse(token);
+    headers['Authorization'] = `Bearer ${jwtInfo.token}`;
+  }
+
+  const res = await fetch(
+    `${ADMIN_BASE_URL}/attachments/download/personalDocs/${filename}`,
+    {
+      headers,
+    },
+  );
+  console.log(res);
+  const blob = await res.blob();
+
+  // const file = URL.createObjectURL(blob);
+
+  const url = window.URL.createObjectURL(new Blob([blob], { type: content_type }));
+
+  return url;
+};
