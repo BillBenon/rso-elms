@@ -88,11 +88,12 @@ export default function StudentsView() {
         title="Students"
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
-        {(user?.user_type === UserType.SUPER_ADMIN ||
-          user?.user_type === UserType.ADMIN) && (
+        {
           <div className="flex gap-3">
             <Link to={`${url}/import`}>
-              <Button styleType="outline">Import students</Button>
+              <Permission privilege={Privileges.CAN_CREATE_USER}>
+                <Button styleType="outline">Import students</Button>
+              </Permission>
             </Link>
             <Link to={`${url}/add/${UserType.STUDENT}`}>
               <Permission privilege={Privileges.CAN_CREATE_USER}>
@@ -100,7 +101,7 @@ export default function StudentsView() {
               </Permission>
             </Link>
           </div>
-        )}
+        }
       </TableHeader>
 
       {isLoading ? (
