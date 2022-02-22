@@ -54,7 +54,7 @@ export default function ModuleDetails() {
     privilege: Privileges.CAN_ACCESS_SUBJECTS,
   });
   tabs.push({
-    label: 'Prerequisites',
+    label: 'Module Prerequisites',
     href: `${url}/prereqs?showMenus=${showMenu}&intkPrg=${intakeProg}`,
   });
 

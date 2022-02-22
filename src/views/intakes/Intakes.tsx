@@ -209,7 +209,7 @@ export default function Intakes() {
                 }
                 handleSearch={handleSearch}>
                 {registrationControlId && (
-                  <Permission privilege={Privileges.CAN_CREATE_INTAKE}>
+                  <Permission privilege={Privileges.CAN_ACCESS_INTAKES}>
                     <Link to={`${url}/${registrationControlId}/add-intake`}>
                       <Button>Add Intake</Button>
                     </Link>

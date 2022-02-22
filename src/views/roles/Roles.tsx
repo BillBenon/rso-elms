@@ -64,15 +64,15 @@ export default function Roles() {
     handleAction: (id: string | number | undefined) => {
       history.push(`${path}/${id}/edit`); // go to edit role
     },
-    privilege: Privileges.CAN_MODIFY_ROLE,
+    privilege: Privileges.CAN_MODIFY_ROLES,
   });
 
   actions?.push({
-    name: 'View',
+    name: 'View role  ',
     handleAction: (id: string | number | undefined) => {
       history.push(`${path.replace(/roles/i, 'role')}/${id}/view`); // go to view role
     },
-    privilege: Privileges.CAN_ACCESS_ROLE,
+    privilege: Privileges.CAN_ACCESS_ROLES,
   });
 
   // const manyActions = [
@@ -101,7 +101,7 @@ export default function Roles() {
           title="Roles"
           totalItems={roles && roles.length > 0 ? roles.length : 0}
           handleSearch={handleSearch}>
-          <Permission privilege={Privileges.CAN_CREATE_ROLE}>
+          <Permission privilege={Privileges.CAN_CREATE_ROLES}>
             <Link to={`${url}/add`}>
               <Button>Add Role</Button>
             </Link>
@@ -112,7 +112,6 @@ export default function Roles() {
         {isLoading && <Loader />}
         {roles && roles.length > 0 && isSuccess ? (
           <Table<FilteredRoles>
-            selectorActions={[]}
             hide={['id']}
             handleSelect={handleSelect}
             statusColumn="status"
