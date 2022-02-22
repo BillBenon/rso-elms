@@ -21,6 +21,7 @@ import {
   IQuestionaireTypeEnum,
   ISubmissionTypeEnum,
 } from '../../../../types/services/evaluation.types';
+import { formatDateToIso } from '../../../../utils/date-helper';
 import { setLocalStorageData } from '../../../../utils/getLocalStorageItem';
 import {
   getDropDownOptions,
@@ -128,8 +129,28 @@ export default function EvaluationInfoComponent({
         ...details,
         ['time_limit']: timeDifference,
       }));
+
+      setDetails((details) => ({
+        ...details,
+        [name]: formatDateToIso(value),
+      }));
     }
-    setDetails((details) => ({ ...details, [name]: value.toString() }));
+
+    console.log(value);
+    if (name === 'startHours') {
+      console.log(`${details.allow_submission_time} ${value} 00`);
+      setDetails((details) => ({
+        ...details,
+        ['allow_submission_time']: `${details.allow_submission_time} ${value} 00`,
+      }));
+    }
+    if (name === 'endHours') {
+      console.log(`${details.due_on} ${value} 00`);
+      setDetails((details) => ({
+        ...details,
+        ['due_on']: `${details.allow_submission_time} ${value} 00`,
+      }));
+    }
   }
 
   function handleEditorChange(editor: Editor) {
@@ -314,27 +335,43 @@ export default function EvaluationInfoComponent({
             handleChange={handleChange}>
             Time limit (in mins)
           </InputMolecule>
-          <DateMolecule
-            startYear={new Date().getFullYear()}
-            endYear={new Date().getFullYear() + 100}
-            reverse={false}
-            showTime
-            breakToNextLine
-            handleChange={handleChange}
-            name={'allow_submission_time'}>
-            Start Date
-          </DateMolecule>
-          <DateMolecule
-            defaultValue={details?.due_on}
-            handleChange={handleChange}
-            startYear={new Date().getFullYear()}
-            endYear={new Date().getFullYear() + 100}
-            showTime
-            breakToNextLine
-            reverse={false}
-            name={'due_on'}>
-            Due on
-          </DateMolecule>{' '}
+          <div className="flex gap-2 self-end">
+            <InputMolecule
+              width="44"
+              type="date"
+              handleChange={handleChange}
+              value={details.allow_submission_time}
+              name={'allow_submission_time'}>
+              Start Date
+            </InputMolecule>
+
+            <InputMolecule
+              width="44"
+              type="time"
+              handleChange={handleChange}
+              value=""
+              name="startHours"
+            />
+          </div>
+
+          <div className="flex gap-2 items-center">
+            <InputMolecule
+              width="44"
+              type="date"
+              handleChange={handleChange}
+              value={details.due_on}
+              name={'due_on'}>
+              Start Date
+            </InputMolecule>
+
+            <InputMolecule
+              width="44"
+              type="time"
+              handleChange={handleChange}
+              value=""
+              name="endHours"
+            />
+          </div>
         </>
         {/* ) : null} */}
         <DateMolecule
