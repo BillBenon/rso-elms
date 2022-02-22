@@ -66,7 +66,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
               return (
                 <>
                   <div className="flex gap-4 self-end">
-                    {user?.user_type === UserType.ADMIN && (
+                    <Permission privilege={Privileges.CAN_CREATE_CLASSES}>
                       <Button
                         styleType="outline"
                         onClick={() =>
@@ -76,7 +76,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
                         }>
                         Add class
                       </Button>
-                    )}
+                    </Permission>
 
                     <Button
                       styleType="outline"
