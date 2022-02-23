@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Route, useHistory, useRouteMatch } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from './components/Atoms/custom/Button';
 import Loader from './components/Atoms/custom/Loader';
@@ -55,7 +55,7 @@ const RouterProtection = () => {
       {!user_privileges ? (
         <NotFound />
       ) : (
-        <>
+        <Switch>
           {/* insttution routes */}
           {hasPrivilege(Privileges.CAN_ACCESS_ROLE) && (
             <Route path={`${path}/role/:id/view`} component={ViewRole} />
@@ -136,7 +136,7 @@ const RouterProtection = () => {
 
           {/* instructor routes */}
           {hasPrivilege(Privileges.CAN_ACCESS_EVALUATIONS) && (
-            <>
+            <Switch>
               <Route path={`${path}/evaluations`} component={InstructorViewEvaluations} />
               <Route
                 exact
@@ -160,7 +160,7 @@ const RouterProtection = () => {
                   <ConfirmationOrganism onConfirmationClose={() => history.goBack()} />
                 )}
               />
-            </>
+            </Switch>
           )}
           {hasPrivilege(Privileges.CAN_TEACH_MODULE) && (
             <Route exact path={`${path}/inst-module`} component={InstrLevelModule} />
@@ -171,14 +171,15 @@ const RouterProtection = () => {
           {hasPrivilege(Privileges.CAN_ACCESS_MODULES) && (
             <Route path={`${path}/student`} component={StudentModule} />
           )}
+          <Route component={NotFound} />
           {/* end of student routes */}
-        </>
+        </Switch>
       )}
     </>
   );
 
   const InstitutionAdminRoutes = () => (
-    <>
+    <Switch>
       {/*start of institution admin */}
       <Route path={`${path}/role/:id/view`} component={ViewRole} />
       <Route path={`${path}/academies`} component={Academies} />
@@ -192,7 +193,7 @@ const RouterProtection = () => {
       <Route exact path={`${path}/institution/:id/edit`} component={UpdateInstitution} />
 
       {/* end of institution admin page */}
-    </>
+    </Switch>
   );
 
   return !token ? (
@@ -203,9 +204,11 @@ const RouterProtection = () => {
     </div>
   ) : user ? (
     <Dashboard>
-      {user?.user_type === UserType.SUPER_ADMIN
-        ? InstitutionAdminRoutes()
-        : PrivilegedRoutes()}
+      <Switch>
+        {user?.user_type === UserType.SUPER_ADMIN
+          ? InstitutionAdminRoutes()
+          : PrivilegedRoutes()}
+      </Switch>
     </Dashboard>
   ) : isError ? (
     <div>

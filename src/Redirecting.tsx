@@ -94,7 +94,6 @@ export default function Redirecting() {
 
   return (
     <>
-      {/* <p>User has no Academy, please contact admin to give you </p> */}
       {userNoRoles ? (
         <NotApproved />
       ) : hasNoAcademy ? (
@@ -108,16 +107,6 @@ export default function Redirecting() {
           </div>
         </div>
       ) : null}
-
-      <div>
-        {/* when academic admin does not have academy assigned to him */}
-        {/* {hasNoAcademy && <NotApproved />} */}
-        {/* when user type is not yet supported in system */}
-        {/* {userNotAllowed && <NotApproved />} */}
-
-        {/* when user type has no roles */}
-        {/* {userNoRoles && <NotApproved />} */}
-      </div>
     </>
   );
 }
