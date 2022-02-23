@@ -7,7 +7,7 @@ import ModuleCard from '../../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../../components/Molecules/cards/NoDataAvailable';
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import { moduleStore } from '../../../store/administration/modules.store';
-import { CommonCardDataType, ParamType } from '../../../types';
+import { CommonCardDataType, ParamType, Privileges } from '../../../types';
 import { UserType } from '../../../types/services/user.types';
 import { advancedTypeChecker } from '../../../utils/getOption';
 import NewModuleMaterial from '../../module-material/NewModuleMaterial';
@@ -59,6 +59,7 @@ function Prerequisites() {
             ) : prerequisiteModule.length === 0 ? (
               <NoDataAvailable
                 showButton={user?.user_type === UserType.INSTRUCTOR}
+                privilege={Privileges.CAN_ACCESS_MODULE_PREREQUISITES}
                 icon="subject"
                 title={'No prerequisites are available'}
                 description={'There are no prerequisites currently added on this module'}

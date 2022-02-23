@@ -152,7 +152,7 @@ function IntakeLevelModule() {
           <Loader />
         ) : levelModules.length <= 0 ? (
           <NoDataAvailable
-            showButton={user?.user_type === UserType.ADMIN}
+            privilege={Privileges.CAN_CREATE_INTAKE_PROGRAM_LEVELS}
             buttonLabel="Add new modules"
             title={'No modules available in this level'}
             handleClick={() =>
@@ -164,7 +164,7 @@ function IntakeLevelModule() {
           />
         ) : (
           <>
-            {user?.user_type === UserType.ADMIN && (
+            <Permission privilege={Privileges.CAN_CREATE_INTAKE_PROGRAM_LEVELS}>
               <AddCard
                 title={'Add new module'}
                 onClick={() =>
@@ -173,7 +173,7 @@ function IntakeLevelModule() {
                   )
                 }
               />
-            )}
+            </Permission>
             {levelModules &&
               levelModules.map((module, index) => (
                 <ModuleCard

@@ -101,7 +101,8 @@ export default function AdminsView() {
           buttonLabel="Add new admin"
           title={'No admins available'}
           handleClick={() => history.push(`/dashboard/users/add/${UserType.ADMIN}`)}
-          description="And the web just isnt the same without you. Lets get you back online!"
+          description="There are no admins added into the system yet"
+          privilege={Privileges.CAN_CREATE_USER}
         />
       ) : (
         <>
