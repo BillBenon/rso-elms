@@ -127,7 +127,8 @@ export default function Departments({ fetchType }: IDepartment) {
                       : 'Department'
                   }`}
                   totalItems={departments?.length}
-                  handleSearch={() => {}}></TableHeader>
+                  handleSearch={() => {}}
+                />
               </section>
             ) : null}
 

@@ -113,6 +113,7 @@ export default function StudentsView() {
           title={'No students available'}
           handleClick={() => history.push(`/dashboard/users/add/STUDENT`)}
           description="There are no students added into the system yet"
+          privilege={Privileges.CAN_CREATE_USER}
         />
       ) : (
         <Table<UserTypes | AcademyUserType>

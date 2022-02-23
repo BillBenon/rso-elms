@@ -80,6 +80,7 @@ function Levels() {
           />
         ) : (
           <NoDataAvailable
+            privilege={Privileges.CAN_CREATE_LEVEL}
             icon="level"
             buttonLabel="Add new level"
             title={'No levels available'}

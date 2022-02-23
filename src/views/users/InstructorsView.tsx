@@ -107,6 +107,7 @@ export default function InstructorsView() {
           title={'No instructor available'}
           handleClick={() => history.push(`/dashboard/users/add/${UserType.INSTRUCTOR}`)}
           description="There are no instructors added into the system yet"
+          privilege={Privileges.CAN_CREATE_USER}
         />
       ) : (
         <Table<UserTypes | AcademyUserType>

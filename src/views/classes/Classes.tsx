@@ -57,7 +57,6 @@ function Classes() {
                   <Loader />
                 ) : studentClasses.length === 0 ? (
                   <NoDataAvailable
-                    showButton={hasPrivilege(Privileges.CAN_CREATE_CLASSES)}
                     buttonLabel="Add new class"
                     icon="academy"
                     fill={false}
@@ -67,7 +66,12 @@ function Classes() {
                         `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
                       )
                     }
-                    description={`There are no classes added yet`}
+                    description={`There are no classes added yet ${
+                      hasPrivilege(Privileges.CAN_CREATE_CLASSES)
+                        ? ', click on the below button to add some!'
+                        : ''
+                    }  `}
+                    privilege={Privileges.CAN_CREATE_CLASSES}
                   />
                 ) : (
                   <Tabs>
@@ -84,7 +88,6 @@ function Classes() {
                 <Loader />
               ) : classGroups.length === 0 ? (
                 <NoDataAvailable
-                  showButton={hasPrivilege(Privileges.CAN_CREATE_CLASSES)}
                   buttonLabel="Add new class"
                   icon="academy"
                   fill={false}
@@ -94,11 +97,12 @@ function Classes() {
                       `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
                     )
                   }
-                  description={`There are no classes added yet,${
+                  description={`There are no classes added yet ${
                     hasPrivilege(Privileges.CAN_CREATE_CLASSES)
-                      ? 'click on the below button to add some!'
+                      ? ', click on the below button to add some!'
                       : ''
                   }  `}
+                  privilege={Privileges.CAN_CREATE_CLASSES}
                 />
               ) : (
                 <Tabs>

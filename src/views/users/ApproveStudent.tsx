@@ -167,12 +167,12 @@ function ApproveStudent() {
                             {
                               name: 'Approve Students',
                               handleAction: approveStud,
-                              privilege: Privileges.CAN_MODIFY_STUDENT_APPROVAL,
+                              privilege: Privileges.CAN_APPROVE_STUDENT,
                             },
                             {
                               name: 'Reject',
                               handleAction: rejectStud,
-                              privilege: Privileges.CAN_MODIFY_STUDENT_APPROVAL,
+                              privilege: Privileges.CAN_APPROVE_STUDENT,
                             },
                           ]
                         : stud === StudentApproval.APPROVED
@@ -180,14 +180,14 @@ function ApproveStudent() {
                             {
                               name: 'Reject',
                               handleAction: rejectStud,
-                              privilege: Privileges.CAN_MODIFY_STUDENT_APPROVAL,
+                              privilege: Privileges.CAN_APPROVE_STUDENT,
                             },
                           ]
                         : [
                             {
                               name: 'Approve Students',
                               handleAction: approveStud,
-                              privilege: Privileges.CAN_MODIFY_STUDENT_APPROVAL,
+                              privilege: Privileges.CAN_APPROVE_STUDENT,
                             },
                           ]
                     }

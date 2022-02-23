@@ -51,6 +51,7 @@ function ModuleMaterials() {
               ) : moduleMaterials.length === 0 ? (
                 <NoDataAvailable
                   showButton={user?.user_type === UserType.INSTRUCTOR}
+                  // privilege={Privileges.CAN_CREATE_SYLLABUS}
                   icon="subject"
                   title={'No learning materials available'}
                   description={

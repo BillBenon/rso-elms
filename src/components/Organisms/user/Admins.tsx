@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
-import { ValueType } from '../../../types';
+import { Privileges, ValueType } from '../../../types';
 import { UserType, UserTypes } from '../../../types/services/user.types';
+import Permission from '../../Atoms/auth/Permission';
 import Button from '../../Atoms/custom/Button';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import Table from '../../Molecules/table/Table';
@@ -34,13 +35,15 @@ export default function Admins({ admins }: { admins: UserTypes[] }) {
         totalItems={admins && admins.length > 0 ? admins.length : 0}
         handleSearch={handleSearch}
         showSearch={admins && admins.length > 0}>
-        <div className="flex gap-3">
+        <Permission privilege={Privileges.CAN_CREATE_USER}>
           <div className="flex gap-3">
-            <Link to={`/dashboard/users/add/${UserType.ADMIN}`}>
-              <Button>New admin</Button>
-            </Link>
+            <div className="flex gap-3">
+              <Link to={`/dashboard/users/add/${UserType.ADMIN}`}>
+                <Button>New admin</Button>
+              </Link>
+            </div>
           </div>
-        </div>
+        </Permission>
       </TableHeader>
       {admins && (
         <div className="pt-8">
@@ -51,6 +54,7 @@ export default function Admins({ admins }: { admins: UserTypes[] }) {
               title={'No admin available'}
               handleClick={() => history.push(`/dashboard/users/add`)}
               description="There are no admins added into the system yet."
+              privilege={Privileges.CAN_CREATE_USER}
             />
           ) : (
             <Table<UserTypes>

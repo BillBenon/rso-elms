@@ -52,6 +52,7 @@ export default function Events() {
             'No venues registered so far. Please register one with button below'
           }
           buttonLabel="New venue"
+          privilege={Privileges.CAN_CREATE_EVENT}
           handleClick={() => history.push(`${path}/new`)}
         />
       ) : (

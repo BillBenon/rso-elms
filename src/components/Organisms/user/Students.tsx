@@ -2,10 +2,10 @@ import React from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
-import useAuthenticator from '../../../hooks/useAuthenticator';
-import { GenericStatus, ValueType } from '../../../types';
+import { GenericStatus, Privileges, ValueType } from '../../../types';
 import { StudentApproval } from '../../../types/services/enrollment.types';
 import { AcademyUserType, UserType, UserTypes } from '../../../types/services/user.types';
+import Permission from '../../Atoms/auth/Permission';
 import Button from '../../Atoms/custom/Button';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../Molecules/Popup';
@@ -36,8 +36,6 @@ export default function Students({
 
   function handleSearch(_e: ValueType) {}
 
-  const { user } = useAuthenticator();
-
   const studentStatActions =
     enumtype === 'UserTypes'
       ? Object.keys(GenericStatus).map((stat) => ({
@@ -59,7 +57,7 @@ export default function Students({
           totalItems={students && students.length > 0 ? students.length : 0}
           handleSearch={handleSearch}
           showSearch={students && students.length > 0}>
-          {user?.user_type === UserType.SUPER_ADMIN && (
+          <Permission privilege={Privileges.CAN_CREATE_USER}>
             <div className="flex gap-3">
               <Link to={`${url}/import`}>
                 <Button styleType="outline">Import students</Button>
@@ -68,19 +66,19 @@ export default function Students({
                 <Button>New student</Button>
               </Link>
             </div>
-          )}
+          </Permission>
         </TableHeader>
       )}
       {students && (
         <div className="pt-8">
           {students.length <= 0 ? (
             <NoDataAvailable
-              showButton={user?.user_type === UserType.ADMIN}
               icon="user"
               buttonLabel="Add new student"
               title={'No students available'}
               handleClick={() => history.push(`/dashboard/users/add`)}
               description="There are no students added into the system yet."
+              privilege={Privileges.CAN_CREATE_USER}
             />
           ) : (
             <Table<UserTypes | AcademyUserType>

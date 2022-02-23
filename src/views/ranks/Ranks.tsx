@@ -9,6 +9,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -85,7 +86,9 @@ export default function Ranks() {
           totalItems={ranks && ranks.length > 0 ? ranks.length : 0}
           handleSearch={handleSearch}>
           <Link to={`${url}/add`}>
-            <Button>Add Rank</Button>
+            <Permission privilege={Privileges.CAN_CREATE_RANK}>
+              <Button>Add Rank</Button>
+            </Permission>
           </Link>
         </TableHeader>
       </section>
@@ -102,6 +105,7 @@ export default function Ranks() {
           />
         ) : isSuccess && ranks?.length === 0 ? (
           <NoDataAvailable
+            privilege={Privileges.CAN_CREATE_RANK}
             icon="role"
             buttonLabel="Add new rank"
             title={'No ranks available'}

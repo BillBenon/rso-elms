@@ -102,6 +102,7 @@ export default function AdminsView() {
           title={'No admins available'}
           handleClick={() => history.push(`/dashboard/users/add/${UserType.ADMIN}`)}
           description="There are no admins added into the system yet"
+          privilege={Privileges.CAN_CREATE_USER}
         />
       ) : (
         <>

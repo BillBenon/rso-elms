@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, useHistory, useRouteMatch } from 'react-router';
 import { Link, Switch } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -97,9 +98,11 @@ export default function Academy() {
                   title="Academy"
                   totalItems={academies.length}
                   handleSearch={handleSearch}>
-                  <Link to={`${url}/add`}>
-                    <Button>New academy</Button>
-                  </Link>
+                  <Permission privilege={Privileges.CAN_CREATE_ACADEMY}>
+                    <Link to={`${url}/add`}>
+                      <Button>New academy</Button>
+                    </Link>
+                  </Permission>
                 </TableHeader>
               </div>
 
@@ -113,6 +116,7 @@ export default function Academy() {
                   title={'No academies available'}
                   handleClick={() => history.push(`${url}/add`)}
                   description="the academies are not yet created, click below to create new ones"
+                  privilege={Privileges.CAN_CREATE_ACADEMY}
                 />
               ) : (
                 <div className="mt-14">

@@ -113,6 +113,7 @@ export default function PersonalDocuments({ user }: { user: UserInfo }) {
               title={'No personal files has been add so far!'}
               handleClick={() => history.goBack}
               description="Personal files have not been uploaded into the system yet"
+              // privilege={Privileges.CAN_CREATE_PERSONAL_DOCUMENTS}
             />
           ) : isSuccess && attachments.length > 0 ? (
             <div>
