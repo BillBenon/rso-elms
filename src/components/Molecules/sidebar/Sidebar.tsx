@@ -195,7 +195,7 @@ export default function Sidebar() {
               ? display_attach_id
               : user_role?.type === RoleType.ACADEMY
               ? user?.academy?.logo_attachment_id
-              : user?.institution.logo_attachment_id || undefined,
+              : user?.institution?.logo_attachment_id || undefined,
             display_id ? display_id : user?.academy?.id,
             '/images/rdf-logo.png',
             'logos',

@@ -127,7 +127,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         history.push(`/dashboard/users/${theUser.data.data.id}/assign-role`);
       },
       onError(error: any) {
-        toast.error(error.response.data.message.split(':')[2], { id: toastId });
+        toast.error(error.response.data.message, { id: toastId });
       },
     });
   }
