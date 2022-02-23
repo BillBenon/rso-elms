@@ -342,7 +342,7 @@ function IntakeProgramDetails() {
                           />
 
                           <Permission
-                            privilege={Privileges.CAN_ENROLL_INSTRUCTORS_ON_PROGRAM}>
+                            privilege={Privileges.CAN_ACCESS_INSTRUCTORS_ON_LEVEL_PRORAM}>
                             <UsersPreview
                               title="Instructors"
                               label={`Instructors in ${programData.title}`}
@@ -360,21 +360,19 @@ function IntakeProgramDetails() {
                               }
                             />
                           </Permission>
-                          {user?.user_type === UserType.ADMIN ? (
-                            <Permission
-                              privilege={Privileges.CAN_ENROLL_STUDENTS_ON_PROGRAM}>
-                              <EnrollInstructorIntakeProgram
-                                showSidebar={showSidebar.enrollInstructor}
-                                existing={instructorsProgram?.data.data || []}
-                                handleShowSidebar={() =>
-                                  setShowSidebar({
-                                    ...initialShowSidebar,
-                                    enrollInstructor: !showSidebar.enrollInstructor,
-                                  })
-                                }
-                              />
-                            </Permission>
-                          ) : null}
+                          <Permission
+                            privilege={Privileges.CAN_ENROLL_INSTRUCTORS_ON_PROGRAM}>
+                            <EnrollInstructorIntakeProgram
+                              showSidebar={showSidebar.enrollInstructor}
+                              existing={instructorsProgram?.data.data || []}
+                              handleShowSidebar={() =>
+                                setShowSidebar({
+                                  ...initialShowSidebar,
+                                  enrollInstructor: !showSidebar.enrollInstructor,
+                                })
+                              }
+                            />
+                          </Permission>
                         </div>
                       </div>
                     )
