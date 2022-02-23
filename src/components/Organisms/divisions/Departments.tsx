@@ -141,7 +141,7 @@ export default function Departments({ fetchType }: IDepartment) {
                   buttonLabel="Add new department"
                   title="No department available"
                   handleClick={() => history.push(`/dashboard/divisions/departments/new`)}
-                  description="And the web just isnt the same without you. Lets get you back online!"
+                  description="There aren't any departments added yet"
                 />
               ) : (
                 <Table<FilteredData>

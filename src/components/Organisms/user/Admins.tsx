@@ -47,10 +47,10 @@ export default function Admins({ admins }: { admins: UserTypes[] }) {
           {admins.length <= 0 ? (
             <NoDataAvailable
               icon="user"
-              buttonLabel="Add new instructor"
-              title={'No instructor available'}
+              buttonLabel="Add new admin"
+              title={'No admin available'}
               handleClick={() => history.push(`/dashboard/users/add`)}
-              description="And the web just isnt the same without you. Lets get you back online!"
+              description="There are no admins added into the system yet."
             />
           ) : (
             <Table<UserTypes>

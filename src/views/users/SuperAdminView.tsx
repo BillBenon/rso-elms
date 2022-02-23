@@ -94,10 +94,10 @@ export default function SuperAdminView() {
       ) : users.length <= 0 ? (
         <NoDataAvailable
           icon="user"
-          buttonLabel="Add new superADmin"
+          buttonLabel="Add new super admin"
           title={'No students available'}
           handleClick={() => history.push(`/dashboard/users/add/${UserType.SUPER_ADMIN}`)}
-          description="And the web just isnt the same without you. Lets get you back online!"
+          description="There are no super admins added into the system yet"
         />
       ) : (
         <Table<UserTypes>

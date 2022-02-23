@@ -121,7 +121,7 @@ function ApproveStudent() {
                     showButton={false}
                     title={'No students available'}
                     handleClick={() => history.push(`/dashboard/users/add`)}
-                    description="And the web just isnt the same without you. Lets get you back online!"
+                    description="There are no new students waiting for approval"
                   />
                 ) : (
                   <Table<AcademyUser>

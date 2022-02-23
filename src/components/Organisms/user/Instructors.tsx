@@ -60,7 +60,7 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
               buttonLabel="Add new instructor"
               title={'No instructor available'}
               handleClick={() => history.push(`/dashboard/users/add`)}
-              description="And the web just isnt the same without you. Lets get you back online!"
+              description="There are no instructors added into the system yet."
             />
           ) : (
             <Table<UserTypes>

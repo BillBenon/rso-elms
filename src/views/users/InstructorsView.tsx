@@ -106,7 +106,7 @@ export default function InstructorsView() {
           buttonLabel="Add new instructor"
           title={'No instructor available'}
           handleClick={() => history.push(`/dashboard/users/add/${UserType.INSTRUCTOR}`)}
-          description="And the web just isnt the same without you. Lets get you back online!"
+          description="There are no instructors added into the system yet"
         />
       ) : (
         <Table<UserTypes | AcademyUserType>

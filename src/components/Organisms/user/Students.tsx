@@ -80,7 +80,7 @@ export default function Students({
               buttonLabel="Add new student"
               title={'No students available'}
               handleClick={() => history.push(`/dashboard/users/add`)}
-              description="And the web just isnt the same without you. Lets get you back online!"
+              description="There are no students added into the system yet."
             />
           ) : (
             <Table<UserTypes | AcademyUserType>
