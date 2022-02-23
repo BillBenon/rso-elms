@@ -112,7 +112,8 @@ export default function PersonalDocuments({ user }: { user: UserInfo }) {
               buttonLabel="Go back"
               title={'No personal files has been add so far!'}
               handleClick={() => history.goBack}
-              description="And the web just isnt the same without you. Lets get you back online!"
+              description="Personal files have not been uploaded into the system yet"
+              // privilege={Privileges.CAN_CREATE_PERSONAL_DOCUMENTS}
             />
           ) : isSuccess && attachments.length > 0 ? (
             <div>

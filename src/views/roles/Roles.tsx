@@ -122,6 +122,7 @@ export default function Roles() {
         ) : isSuccess && roles?.length === 0 ? (
           <NoDataAvailable
             icon="role"
+            privilege={Privileges.CAN_CREATE_ROLES}
             buttonLabel="Add new role"
             title={'No roles available'}
             handleClick={() => history.push(`${url}/add`)}

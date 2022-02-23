@@ -1,14 +1,15 @@
 import React from 'react';
 import { Route, Switch, useLocation, useRouteMatch } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
-import useAuthenticator from '../../hooks/useAuthenticator';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { subjectStore } from '../../store/administration/subject.store';
-import { UserType, UserTypes } from '../../types/services/user.types';
+import { Privileges } from '../../types';
+import { UserTypes } from '../../types/services/user.types';
 import EnrollInstructorToSubjectAssignment from './EnrollInstructorToSubjectAssignment';
 interface SubjectViewerProps {
   subjectId: string;
@@ -50,8 +51,6 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
     instrs.push(user);
   });
 
-  const { user } = useAuthenticator();
-
   return (
     <Switch>
       <Route
@@ -63,13 +62,15 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
               <Heading fontSize="base" fontWeight="semibold">
                 Instructors ({0})
               </Heading>
-              {intakeProg && user?.user_type === UserType.ADMIN && (
-                <EnrollInstructorToSubjectAssignment
-                  module_id={subjectData?.data.data.module.id + ''}
-                  subject_id={subjectId}
-                  intakeProg={intakeProg}
-                  subInstructors={instructorInfos?.data.data || []}
-                />
+              {intakeProg && (
+                <Permission privilege={Privileges.CAN_ENROLL_INSTRUCTORS_ON_SUBJECT}>
+                  <EnrollInstructorToSubjectAssignment
+                    module_id={subjectData?.data.data.module.id + ''}
+                    subject_id={subjectId}
+                    intakeProg={intakeProg}
+                    subInstructors={instructorInfos?.data.data || []}
+                  />
+                </Permission>
               )}
             </div>
             <>
@@ -77,12 +78,13 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
                 <Loader />
               ) : instructorInfos?.data.data.length === 0 ? (
                 <NoDataAvailable
-                  showButton={intakeProg !== '' && user?.user_type === UserType.ADMIN}
+                  showButton={intakeProg !== ''}
                   icon="user"
                   title={'No instructors available'}
                   description={
                     'There are no instructors currently assigned to this subject'
                   }
+                  privilege={Privileges.CAN_ENROLL_INSTRUCTORS_ON_SUBJECT}
                   handleClick={() => (
                     <EnrollInstructorToSubjectAssignment
                       subInstructors={instructorInfos?.data.data || []}
@@ -96,16 +98,13 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
                 <Table<UserTypes>
                   statusColumn="status"
                   data={instrs}
-                  selectorActions={
-                    user?.user_type === UserType.ADMIN
-                      ? [
-                          {
-                            name: 'Remove instructors from subject',
-                            handleAction: () => {},
-                          },
-                        ]
-                      : []
-                  }
+                  selectorActions={[
+                    {
+                      name: 'Remove instructors from subject',
+                      handleAction: () => {},
+                      privilege: Privileges.CAN_REMOVE_INSTRUCTORS_ON_SUBJECT,
+                    },
+                  ]}
                   hide={['id', 'user_type']}
                   uniqueCol="id"
                 />

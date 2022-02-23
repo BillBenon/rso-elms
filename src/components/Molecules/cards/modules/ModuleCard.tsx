@@ -105,7 +105,12 @@ export default function ModuleCard({
             </BrowserLink>
           ) : user?.user_type === UserType.ADMIN ? (
             <div className="py-2 flex justify-around gap-2">
-              <Permission privilege={Privileges.CAN_CREATE_SUBJECTS}>
+              <Permission
+                privilege={
+                  showMenus
+                    ? Privileges.CAN_CREATE_INTAKE_PROGRAM_MODULE_SUBJECTS
+                    : Privileges.CAN_CREATE_SUBJECTS
+                }>
                 <BrowserLink
                   className="outline-none"
                   to={`/dashboard/modules/${course.id}/add-subject`}>

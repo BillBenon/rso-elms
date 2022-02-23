@@ -45,10 +45,9 @@ const RouterProtection = () => {
   const user_role_cookie = cookie.getCookie('user_role') || '';
   const user_role = user?.user_roles?.find((role) => role.id + '' === user_role_cookie);
   const user_privileges = user_role?.role_privileges?.map((role) => role.name);
+  const hasPrivilege = (privilege: Privileges) => user_privileges?.includes(privilege);
 
   let token = cookie.getCookie('jwt_info');
-
-  const hasPrivilege = (privilege: Privileges) => user_privileges?.includes(privilege);
 
   const PrivilegedRoutes = () => (
     <>

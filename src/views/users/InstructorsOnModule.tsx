@@ -1,14 +1,14 @@
 import React from 'react';
 import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
-import useAuthenticator from '../../hooks/useAuthenticator';
 import enrollmentStore from '../../store/administration/enrollment.store';
-import { ParamType } from '../../types';
-import { UserType, UserTypes } from '../../types/services/user.types';
+import { ParamType, Privileges } from '../../types';
+import { UserTypes } from '../../types/services/user.types';
 import EnrollInstructorToModuleComponent from '../modules/EnrollInstructorToModuleComponent';
 
 function InstructorsOnModule() {
@@ -45,8 +45,6 @@ function InstructorsOnModule() {
     instrs.push(user);
   });
 
-  const { user } = useAuthenticator();
-
   return (
     <Switch>
       <Route
@@ -58,11 +56,11 @@ function InstructorsOnModule() {
               <Heading fontSize="base" fontWeight="semibold">
                 Instructors ({instructorInfos?.data.data.length || 0})
               </Heading>
-              {user?.user_type === UserType.ADMIN && (
+              <Permission privilege={Privileges.CAN_ENROLL_INSTRUCTORS_ON_MODULE}>
                 <EnrollInstructorToModuleComponent
                   existing={instructorInfos?.data.data || []}
                 />
-              )}
+              </Permission>
             </div>
             <>
               {isLoading ? (
@@ -75,6 +73,7 @@ function InstructorsOnModule() {
                   description={
                     'There are no instructors currently assigned to this module'
                   }
+                  privilege={Privileges.CAN_ENROLL_INSTRUCTORS_ON_MODULE}
                   handleClick={() => (
                     <EnrollInstructorToModuleComponent
                       existing={instructorInfos?.data.data || []}

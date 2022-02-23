@@ -7,8 +7,10 @@ import { Tabs } from '../../components/Molecules/tabs/tabs';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { classStore } from '../../store/administration/class.store';
 import { getStudentShipByUserId } from '../../store/administration/intake-program.store';
+import { Privileges } from '../../types';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import { UserType } from '../../types/services/user.types';
+import cookie from '../../utils/cookie';
 import StudentInClass from './StudentInClass';
 
 function Classes() {
@@ -38,6 +40,11 @@ function Classes() {
 
   const studentClasses = classGroups.filter((cl) => studentClassIds?.includes(cl.id));
 
+  const user_role_cookie = cookie.getCookie('user_role') || '';
+  const user_role = user?.user_roles?.find((role) => role.id + '' === user_role_cookie);
+  const user_privileges = user_role?.role_privileges?.map((role) => role.name);
+  const hasPrivilege = (privilege: Privileges) => user_privileges?.includes(privilege);
+
   return (
     <Switch>
       <Route
@@ -50,7 +57,6 @@ function Classes() {
                   <Loader />
                 ) : studentClasses.length === 0 ? (
                   <NoDataAvailable
-                    showButton={false}
                     buttonLabel="Add new class"
                     icon="academy"
                     fill={false}
@@ -60,7 +66,12 @@ function Classes() {
                         `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
                       )
                     }
-                    description={`There are no classes added yet`}
+                    description={`There are no classes added yet ${
+                      hasPrivilege(Privileges.CAN_CREATE_CLASSES)
+                        ? ', click on the below button to add some!'
+                        : ''
+                    }  `}
+                    privilege={Privileges.CAN_CREATE_CLASSES}
                   />
                 ) : (
                   <Tabs>
@@ -77,7 +88,6 @@ function Classes() {
                 <Loader />
               ) : classGroups.length === 0 ? (
                 <NoDataAvailable
-                  showButton={user?.user_type === UserType.ADMIN}
                   buttonLabel="Add new class"
                   icon="academy"
                   fill={false}
@@ -87,11 +97,12 @@ function Classes() {
                       `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
                     )
                   }
-                  description={`There are no classes added yet,${
-                    user?.user_type === UserType.ADMIN
-                      ? 'click on the below button to add some!'
+                  description={`There are no classes added yet ${
+                    hasPrivilege(Privileges.CAN_CREATE_CLASSES)
+                      ? ', click on the below button to add some!'
                       : ''
                   }  `}
+                  privilege={Privileges.CAN_CREATE_CLASSES}
                 />
               ) : (
                 <Tabs>
