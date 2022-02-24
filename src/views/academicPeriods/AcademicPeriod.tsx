@@ -7,7 +7,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import academicperiodStore from '../../store/administration/academicperiod.store';
-import { Link as Links, ParamType } from '../../types';
+import { Link as Links, ParamType, Privileges } from '../../types';
 import { PeriodType } from '../../types/services/intake.types';
 
 type FilteredPeriod = {
@@ -44,7 +44,7 @@ export default function AcademicPeriod() {
     if (location.pathname === path || location.pathname === `${path}/`) {
       refetch();
     }
-  }, [location]);
+  }, [location, path]);
 
   return (
     <main>
@@ -82,6 +82,7 @@ export default function AcademicPeriod() {
               history.push(`/dashboard/academic-years/${yearId}/period/add`);
             }}
             description="You might have forgotten to add the academic period these academic year will have! Add some"
+            privilege={Privileges.CAN_CREATE_ACADEMIC_YEAR}
           />
         ) : null}
       </section>

@@ -49,7 +49,7 @@ function ProgramModules() {
               buttonLabel="Add new modules"
               title={'No Modules available in this program'}
               handleClick={() => history.push(`${url}/add`)}
-              description="And the web just isnt the same without you. Lets get you back online!"
+              description="There are no modules available for this program yet"
             />
           ) : (
             <>

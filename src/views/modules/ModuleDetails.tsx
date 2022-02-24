@@ -8,6 +8,7 @@ import {
   useRouteMatch,
 } from 'react-router';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -56,6 +57,7 @@ export default function ModuleDetails() {
   tabs.push({
     label: 'Module Prerequisites',
     href: `${url}/prereqs?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+    privilege: Privileges.CAN_ACCESS_MODULE_PREREQUISITES,
   });
 
   if (!showMenu || showMenu == 'false') {
@@ -197,16 +199,18 @@ export default function ModuleDetails() {
               </>
             )}
             {user?.user_type === UserType.ADMIN && route == 'PREREQS' && (
-              <div className="flex gap-3">
-                <Button
-                  onClick={() =>
-                    history.push(
-                      `${url}/${id}/add-prereq?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-                    )
-                  }>
-                  Add prerequisites
-                </Button>
-              </div>
+              <Permission privilege={Privileges.CAN_CREATE_MODULE_PREREQUISITES}>
+                <div className="flex gap-3">
+                  <Button
+                    onClick={() =>
+                      history.push(
+                        `${url}/${id}/add-prereq?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+                      )
+                    }>
+                    Add prerequisites
+                  </Button>
+                </div>
+              </Permission>
             )}
             {user?.user_type === UserType.INSTRUCTOR && route == 'MATERIALS' && (
               <div className="flex gap-3">

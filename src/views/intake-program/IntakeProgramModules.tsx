@@ -66,7 +66,6 @@ function IntakeProgramModules() {
         <section className="mt-4 flex flex-wrap justify-start gap-4">
           {programModules.length <= 0 ? (
             <NoDataAvailable
-              showButton={user?.user_type === UserType.ADMIN}
               privilege={Privileges.CAN_CREATE_INTAKE_PROGRAM_MODULES}
               buttonLabel="Add new modules"
               title={'No modules available in this program'}

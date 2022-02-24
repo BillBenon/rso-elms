@@ -144,7 +144,7 @@ export default function SubjectDetails() {
                       ) : lessons.length === 0 ? (
                         <NoDataAvailable
                           icon="subject"
-                          showButton={user?.user_type === UserType.INSTRUCTOR}
+                          privilege={Privileges.CAN_CREATE_LESSON}
                           title={'No lessons available'}
                           description={
                             'A lesson or class is a structured period of time where learning is intended to occur. It involves one or more students being taught by a teacher or instructor.'

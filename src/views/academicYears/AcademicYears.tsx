@@ -137,6 +137,7 @@ export default function AcademicYears() {
                   title={'No years available'}
                   handleClick={() => history.push(`${url}/new`)}
                   description="No academic years have been added yet."
+                  privilege={Privileges.CAN_CREATE_ACADEMIC_YEAR}
                 />
               ) : null}
             </section>

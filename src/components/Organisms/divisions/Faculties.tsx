@@ -8,6 +8,7 @@ import { divisionStore } from '../../../store/administration/divisions.store';
 import { Privileges } from '../../../types';
 import { DivisionInfo } from '../../../types/services/division.types';
 import { ActionsType } from '../../../types/services/table.types';
+import Permission from '../../Atoms/auth/Permission';
 import Button from '../../Atoms/custom/Button';
 import Loader from '../../Atoms/custom/Loader';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
@@ -108,9 +109,11 @@ export default function Faculties({ fetchType }: IFaculties) {
             title="Faculty"
             totalItems={faculties?.length || 0}
             handleSearch={() => {}}>
-            <Link to={`${url}/new`}>
-              <Button>Add Faculty</Button>
-            </Link>
+            <Permission privilege={Privileges.CAN_CREATE_DIVISION}>
+              <Link to={`${url}/new`}>
+                <Button>Add Faculty</Button>
+              </Link>
+            </Permission>
           </TableHeader>
         ) : (
           <></>
@@ -126,7 +129,7 @@ export default function Faculties({ fetchType }: IFaculties) {
             buttonLabel="Add new faculty"
             title={'No faculty available'}
             handleClick={() => history.push(`/dashboard/divisions/new`)}
-            description="And the web just isnt the same without you. Lets get you back online!"
+            description="There aren't any faculties added yet"
           />
         ) : (
           <Table<FilteredData>

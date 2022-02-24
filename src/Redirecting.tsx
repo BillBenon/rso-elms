@@ -47,8 +47,6 @@ export default function Redirecting() {
           experiences?.data.data.length !== 0
         ) {
           if (user?.user_type != UserType.SUPER_ADMIN && !user?.academy) {
-            console.log('no academy');
-
             setHasNoAcademy(true);
           } else if (user.user_roles !== null && user.user_roles.length === 1) {
             cookie.setCookie('user_role', user.user_roles[0].id + '');
@@ -65,7 +63,6 @@ export default function Redirecting() {
             user.user_roles === null
             // && user.user_type !== UserType.SUPER_ADMIN
           ) {
-            console.log('I have no roles buddy');
             setUserNoRoles(true);
           } else {
             redirectTo(
@@ -94,7 +91,6 @@ export default function Redirecting() {
 
   return (
     <>
-      {/* <p>User has no Academy, please contact admin to give you </p> */}
       {userNoRoles ? (
         <NotApproved />
       ) : hasNoAcademy ? (
@@ -108,16 +104,6 @@ export default function Redirecting() {
           </div>
         </div>
       ) : null}
-
-      <div>
-        {/* when academic admin does not have academy assigned to him */}
-        {/* {hasNoAcademy && <NotApproved />} */}
-        {/* when user type is not yet supported in system */}
-        {/* {userNotAllowed && <NotApproved />} */}
-
-        {/* when user type has no roles */}
-        {/* {userNoRoles && <NotApproved />} */}
-      </div>
     </>
   );
 }
