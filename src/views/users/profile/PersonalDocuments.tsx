@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
+import Permission from '../../../components/Atoms/auth/Permission';
 import Button from '../../../components/Atoms/custom/Button';
 import Loader from '../../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../../components/Molecules/cards/NoDataAvailable';
@@ -12,13 +13,12 @@ import NewPersonalDocument from '../../../components/Organisms/forms/user/NewPer
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import { queryClient } from '../../../plugins/react-query';
 import usersStore from '../../../store/administration/users.store';
+import { Privileges } from '../../../types';
 import { IEvaluationInfo } from '../../../types/services/evaluation.types';
 import { EvaluationStudent } from '../../../types/services/marking.types';
 import { ModuleAttachment } from '../../../types/services/module-material.types';
 import { UserInfo } from '../../../types/services/user.types';
 import { downloadPersonalDoc } from '../../../utils/file-util';
-
-// interface AttachementsInfo {}
 
 export default function PersonalDocuments({ user }: { user: UserInfo }) {
   const [attachments, setAttachments] = useState([]);
@@ -50,11 +50,15 @@ export default function PersonalDocuments({ user }: { user: UserInfo }) {
   const actions = [
     {
       name: 'Download',
+      privelege:
+        user.id === currentUser?.id ? null : Privileges.CAN_DOWNLOAD_USERS_DOCUMENTS,
       handleAction: (_data?: string | number | undefined) =>
         _data ? downloadDoc(data?.data.data.find((e) => e.id == _data)?.attachment) : {},
     },
     {
       name: 'Delete',
+      privelege:
+        user.id === currentUser?.id ? null : Privileges.CAN_DELETE_USERS_DOCUMENTS,
       handleAction: async (
         _data?: string | number | EvaluationStudent | IEvaluationInfo | undefined,
       ) => {
@@ -98,10 +102,16 @@ export default function PersonalDocuments({ user }: { user: UserInfo }) {
     <>
       <div className="flex flex-col">
         <div className="mb-2">
-          {user.id === currentUser?.id && (
+          {user.id === currentUser?.id ? (
             <Link to={`${url}/add-p-doc`}>
               <Button className="flex float-right">Upload new file</Button>
             </Link>
+          ) : (
+            <Permission privilege={Privileges.CAN_CREATE_USERS_DOCUMENTS}>
+              <Link to={`${url}/add-p-doc`}>
+                <Button className="flex float-right">Upload new file</Button>
+              </Link>
+            </Permission>
           )}
         </div>
         <div>
