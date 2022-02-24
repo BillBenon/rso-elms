@@ -203,7 +203,7 @@ export interface EditUser {
   phone: string;
   place_of_birth: string;
   place_of_residence: string;
-  residence_location_id: number;
+  residence_location_id: number | null;
   reset_date: string;
   sex: GenderStatus;
   user_type: UserType;
@@ -213,6 +213,7 @@ export interface EditUser {
   send_communication_msg: SendCommunicationMsg;
   profile_status: ProfileStatus;
   id: string;
+  institution_id: string;
   spouse_name: string;
 }
 
