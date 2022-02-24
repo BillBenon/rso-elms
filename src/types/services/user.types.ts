@@ -115,7 +115,7 @@ export interface PersonInfo extends Table {
   place_of_birth_description: string;
   spouse_name: string;
   place_of_birth_id: string;
-  residence_location_id: number;
+  residence_location_id: number | null;
   education_level: EducationLevel;
   nid: string;
   empNo: string;
