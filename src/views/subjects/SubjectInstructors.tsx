@@ -78,7 +78,7 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
                 <Loader />
               ) : instructorInfos?.data.data.length === 0 ? (
                 <NoDataAvailable
-                  showButton={intakeProg !== ''}
+                  showButton={false}
                   icon="user"
                   title={'No instructors available'}
                   description={
