@@ -128,12 +128,12 @@ export default function Sidebar() {
         icon: 'calendar',
         privilege: Privileges.CAN_ACCESS_CALENDER,
       },
-      {
-        title: 'Timetable',
-        to: '/dashboard/schedule/timetable',
-        icon: 'calendar',
-        privilege: Privileges.CAN_ACCESS_TIMETABLE,
-      },
+      // {
+      //   title: 'Timetable',
+      //   to: '/dashboard/schedule/timetable',
+      //   icon: 'calendar',
+      //   privilege: Privileges.CAN_ACCESS_TIMETABLE,
+      // },
       {
         title: 'Ranks',
         to: '/dashboard/ranks',

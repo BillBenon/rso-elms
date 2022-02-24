@@ -280,7 +280,7 @@ function ThirdStep({ values, handleChange, handleSubmit, setCurrentStep }: IStep
     academyId.length > 1,
   ).data?.data.data.map((intake) => ({
     value: intake.id,
-    label: intake.code,
+    label: intake.title,
   })) as SelectData[];
 
   const programIntakes = (
