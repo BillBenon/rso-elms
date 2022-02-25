@@ -20,21 +20,20 @@ const list: Link[] = [
 export default function AdminDashboard() {
   const { user } = useAuthenticator();
 
-  const { data: users } = usersStore.getUsersByAcademy(user?.academy.id || '', {
-    page: 0,
-    pageSize: 100000000,
-    sortyBy: 'username',
-  });
+  const users =
+    usersStore.getUsersByAcademy(user?.academy.id || '', {
+      page: 0,
+      pageSize: 100000000,
+      sortyBy: 'username',
+    }).data?.data.data.content || [];
 
-  const departments = divisionStore.getDivisionsByAcademy(
-    'DEPARTMENT',
-    user?.academy?.id.toString() || '',
-  ).data?.data.data;
+  const departments =
+    divisionStore.getDivisionsByAcademy('DEPARTMENT', user?.academy?.id.toString() || '')
+      .data?.data.data || [];
 
-  const faculties = divisionStore.getDivisionsByAcademy(
-    'FACULTY',
-    user?.academy?.id.toString() || '',
-  ).data?.data.data;
+  const faculties =
+    divisionStore.getDivisionsByAcademy('FACULTY', user?.academy?.id.toString() || '')
+      .data?.data.data || [];
 
   const chartData = [
     { department: 'Technology', students: 38 },
@@ -61,11 +60,7 @@ export default function AdminDashboard() {
                   Total students
                 </Heading>
                 <Heading className="pt-4" fontSize="sm" fontWeight="bold">
-                  {
-                    (users?.data.data.content || []).filter(
-                      (user) => user.user_type === UserType.STUDENT,
-                    ).length
-                  }
+                  {users.filter((user) => user.user_type === UserType.STUDENT).length}
                 </Heading>
               </div>
             </BrowserLink>
@@ -75,11 +70,7 @@ export default function AdminDashboard() {
                   Total instructors
                 </Heading>
                 <Heading className="pt-4" fontSize="sm" fontWeight="bold">
-                  {
-                    (users?.data.data.content || []).filter(
-                      (user) => user.user_type === UserType.INSTRUCTOR,
-                    ).length
-                  }
+                  {users.filter((user) => user.user_type === UserType.INSTRUCTOR).length}
                 </Heading>
               </div>
             </BrowserLink>
@@ -124,14 +115,14 @@ export default function AdminDashboard() {
               </div>
             </BrowserLink>
           </div>
-          <div className="p-3 my-6 bg-white shadow-sm rounded-lg">
+          {/* <div className="p-3 my-6 bg-white shadow-sm rounded-lg">
             <Heading className="px-6" fontWeight="semibold">
               Students in departments
             </Heading>
             <Barchat data={chartData} position={'department*students'} />
-          </div>
+          </div> */}
         </div>
-        <div className="col-span-2 h-56 border-2 rounded"></div>
+        <div className="col-span-2 h-56 rounded"></div>
       </div>
     </div>
   );
