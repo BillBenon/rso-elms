@@ -38,7 +38,7 @@ function LevelStudents({ showSidebar, handleShowSidebar }: ILevelStudent) {
     {
       name: 'remove instructors',
       handleAction: () => {},
-      privilege: Privileges.CAN_DELETE_STUDENTS_ON_LEVEL_PRORAM,
+      privilege: Privileges.CAN_DELETE_STUDENTS_ON_LEVEL_PROGRAM,
     },
   ];
 
