@@ -21,7 +21,7 @@ import {
   IQuestionaireTypeEnum,
   ISubmissionTypeEnum,
 } from '../../../../types/services/evaluation.types';
-import { formatDateToIso } from '../../../../utils/date-helper';
+// import { formatDateToIso } from '../../../../utils/date-helper';
 import { setLocalStorageData } from '../../../../utils/getLocalStorageItem';
 import {
   getDropDownOptions,
@@ -120,9 +120,12 @@ export default function EvaluationInfoComponent({
 
   function handleChange({ name, value }: ValueType) {
     if (name === ('due_on' || 'allow_submission_time') && typeof value === 'string') {
-      setTimeDifference(
-        moment(value).diff(moment(details.allow_submission_time), 'minutes'),
-      );
+      if (name === 'due_on') {
+        setTimeDifference(
+          moment(value).diff(moment(details.allow_submission_time), 'minutes'),
+        );
+      }
+
       if (timeDifference < 0) toast.error('Due time cannot be less than start time!');
 
       setDetails((details) => ({
@@ -132,25 +135,16 @@ export default function EvaluationInfoComponent({
 
       setDetails((details) => ({
         ...details,
-        [name]: formatDateToIso(value),
+        [name]: value,
       }));
+
+      return;
     }
 
-    console.log(value);
-    if (name === 'startHours') {
-      console.log(`${details.allow_submission_time} ${value} 00`);
-      setDetails((details) => ({
-        ...details,
-        ['allow_submission_time']: `${details.allow_submission_time} ${value} 00`,
-      }));
-    }
-    if (name === 'endHours') {
-      console.log(`${details.due_on} ${value} 00`);
-      setDetails((details) => ({
-        ...details,
-        ['due_on']: `${details.allow_submission_time} ${value} 00`,
-      }));
-    }
+    setDetails((details) => ({
+      ...details,
+      [name]: value.toString(),
+    }));
   }
 
   function handleEditorChange(editor: Editor) {
@@ -162,32 +156,50 @@ export default function EvaluationInfoComponent({
     e.preventDefault();
 
     if (evaluationId && details.time_limit > 0) {
-      mutateAsync(details, {
-        onSuccess: () => {
-          toast.success('Evaluation updated', { duration: 5000 });
-          handleNext(1);
+      mutateAsync(
+        {
+          ...details,
+          ['due_on']: moment(details.due_on).format('YYYY-MM-DD HH:mm:ss'),
+          ['allow_submission_time']: moment(details.allow_submission_time).format(
+            'YYYY-MM-DD HH:mm:ss',
+          ),
         },
-        onError: (error: any) => {
-          toast.error(error.response.data.message);
-        },
-      });
-    } else {
-      mutate(details, {
-        onSuccess: (data) => {
-          toast.success('Evaluation created', { duration: 5000 });
-          setLocalStorageData('evaluationId', data.data.data.id);
-          if (details.questionaire_type === IQuestionaireTypeEnum.MANUAL) {
-            setLocalStorageData('currentStep', 2);
-            handleNext(2);
-          } else {
-            setLocalStorageData('currentStep', 1);
+        {
+          onSuccess: () => {
+            toast.success('Evaluation updated', { duration: 5000 });
             handleNext(1);
-          }
+          },
+          onError: (error: any) => {
+            toast.error(error.response.data.message);
+          },
         },
-        onError: (error: any) => {
-          toast.error(error.response.data.data + '');
+      );
+    } else {
+      mutate(
+        {
+          ...details,
+          ['due_on']: moment(details.due_on).format('YYYY-MM-DD HH:mm:ss'),
+          ['allow_submission_time']: moment(details.allow_submission_time).format(
+            'YYYY-MM-DD HH:mm:ss',
+          ),
         },
-      });
+        {
+          onSuccess: (data) => {
+            toast.success('Evaluation created', { duration: 5000 });
+            setLocalStorageData('evaluationId', data.data.data.id);
+            if (details.questionaire_type === IQuestionaireTypeEnum.MANUAL) {
+              setLocalStorageData('currentStep', 2);
+              handleNext(2);
+            } else {
+              setLocalStorageData('currentStep', 1);
+              handleNext(1);
+            }
+          },
+          onError: (error: any) => {
+            toast.error(error.response.data.data + '');
+          },
+        },
+      );
     }
   }
 
@@ -335,42 +347,26 @@ export default function EvaluationInfoComponent({
             handleChange={handleChange}>
             Time limit (in mins)
           </InputMolecule>
-          <div className="flex gap-2 self-end">
+          <div className="flex gap-2 items-end">
             <InputMolecule
               width="44"
-              type="date"
+              type="datetime-local"
               handleChange={handleChange}
               value={details.allow_submission_time}
               name={'allow_submission_time'}>
               Start Date
             </InputMolecule>
-
-            <InputMolecule
-              width="44"
-              type="time"
-              handleChange={handleChange}
-              value=""
-              name="startHours"
-            />
           </div>
 
-          <div className="flex gap-2 items-center">
+          <div className="flex gap-2 items-end">
             <InputMolecule
               width="44"
-              type="date"
+              type="datetime-local"
               handleChange={handleChange}
               value={details.due_on}
               name={'due_on'}>
-              Start Date
+              End Date
             </InputMolecule>
-
-            <InputMolecule
-              width="44"
-              type="time"
-              handleChange={handleChange}
-              value=""
-              name="endHours"
-            />
           </div>
         </>
         {/* ) : null} */}

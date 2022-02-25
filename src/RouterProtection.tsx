@@ -75,14 +75,14 @@ const RouterProtection = () => {
             <Route path={`${path}/users`} component={Users} />
           )}
           {hasPrivilege(Privileges.CAN_MODIFY_INSTITUTION) && (
-            <>
-              <Route exact path={`/institution/new`} component={NewInstitution} />
-              <Route
-                exact
-                path={`${path}/institution/:id/edit`}
-                component={UpdateInstitution}
-              />
-            </>
+            <Route exact path={`/institution/new`} component={NewInstitution} />
+          )}
+          {hasPrivilege(Privileges.CAN_MODIFY_INSTITUTION) && (
+            <Route
+              exact
+              path={`${path}/institution/:id/edit`}
+              component={UpdateInstitution}
+            />
           )}
 
           {hasPrivilege(Privileges.CAN_ACCESS_PRIVILEGES) && (
@@ -170,8 +170,8 @@ const RouterProtection = () => {
           {hasPrivilege(Privileges.CAN_ACCESS_MODULES) && (
             <Route path={`${path}/student`} component={StudentModule} />
           )}
-          <Route component={NotFound} />
           {/* end of student routes */}
+          <Route component={NotFound} />
         </Switch>
       )}
     </>
@@ -203,11 +203,11 @@ const RouterProtection = () => {
     </div>
   ) : user ? (
     <Dashboard>
-      <Switch>
-        {user?.user_type === UserType.SUPER_ADMIN
-          ? InstitutionAdminRoutes()
-          : PrivilegedRoutes()}
-      </Switch>
+      {/* <Switch> */}
+      {user?.user_type === UserType.SUPER_ADMIN
+        ? InstitutionAdminRoutes()
+        : PrivilegedRoutes()}
+      {/* </Switch> */}
     </Dashboard>
   ) : isError ? (
     <div>
