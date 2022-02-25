@@ -74,6 +74,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
     profile_status: ProfileStatus.INCOMPLETE,
     id: '',
     spouse_name: '',
+    institution_id: '',
   });
 
   const { id } = useParams<ParamType>();
@@ -117,6 +118,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
         send_communication_msg: selectedUser.send_communication_msg,
         profile_status: selectedUser.profile_status || ProfileStatus.INCOMPLETE,
         id: selectedUser.id + '',
+        institution_id: selectedUser.institution?.id.toString() || '',
         spouse_name: selectedUser.person.spouse_name || '',
       });
   }, [data]);
