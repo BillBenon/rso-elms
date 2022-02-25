@@ -72,6 +72,19 @@ class UserStore {
   downloadProfile(attachmentId: string) {
     return useQuery(['user/profile'], () => userService.downloadProfile(attachmentId));
   }
+  getPersonalFiles(personId: string) {
+    return useQuery(['user/personal_docs', personId], () =>
+      userService.getUserFiles(personId),
+    );
+  }
+
+  addPersonalDoc() {
+    return useMutation(userService.addPersonalDoc);
+  }
+
+  deletePersonalDoc() {
+    return useMutation(userService.deletePersonalDoc);
+  }
 }
 
 export default new UserStore();

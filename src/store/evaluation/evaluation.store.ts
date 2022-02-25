@@ -1,11 +1,17 @@
 import { useMutation, useQuery } from 'react-query';
 
 import { evaluationService } from '../../services/evaluation/evaluation.service';
-import { IEvaluationOwnership } from '../../types/services/evaluation.types';
+import {
+  IEvaluationFeedback,
+  IEvaluationOwnership,
+} from '../../types/services/evaluation.types';
 
 class EvaluationStore {
   createEvaluation() {
     return useMutation(evaluationService.createEvaluation);
+  }
+  addEvaluationAttendee() {
+    return useMutation(evaluationService.addEvaluationAttendee);
   }
 
   updateEvaluation() {
@@ -85,12 +91,6 @@ class EvaluationStore {
     });
   }
 
-  getEvaluationApprovals(evaluationId: string) {
-    return useQuery(['evaluationApprovals', evaluationId], () =>
-      evaluationService.getEvaluationApprovals(evaluationId),
-    );
-  }
-
   getEvaluationApprovalByEvaluationAndInstructor(
     evaluationId: string,
     instructorId: string,
@@ -162,6 +162,17 @@ class EvaluationStore {
   studentEvaluationStart() {
     return useMutation(evaluationService.studentEvaluationStart);
   }
+}
+
+export function getEvaluationFeedbacks(
+  evaluationId: string,
+  feedbackType: IEvaluationFeedback,
+) {
+  return useQuery(
+    ['evaluationApprovals', evaluationId],
+    () => evaluationService.getEvaluationFeedbacks(evaluationId, feedbackType),
+    { enabled: !!feedbackType },
+  );
 }
 
 export const evaluationStore = new EvaluationStore();

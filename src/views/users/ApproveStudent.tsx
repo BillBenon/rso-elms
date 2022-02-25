@@ -121,7 +121,7 @@ function ApproveStudent() {
                     showButton={false}
                     title={'No students available'}
                     handleClick={() => history.push(`/dashboard/users/add`)}
-                    description="And the web just isnt the same without you. Lets get you back online!"
+                    description="There are no new students waiting for approval"
                   />
                 ) : (
                   <Table<AcademyUser>
@@ -167,12 +167,12 @@ function ApproveStudent() {
                             {
                               name: 'Approve Students',
                               handleAction: approveStud,
-                              privilege: Privileges.CAN_MODIFY_STUDENT_APPROVAL,
+                              privilege: Privileges.CAN_APPROVE_STUDENT,
                             },
                             {
                               name: 'Reject',
                               handleAction: rejectStud,
-                              privilege: Privileges.CAN_MODIFY_STUDENT_APPROVAL,
+                              privilege: Privileges.CAN_APPROVE_STUDENT,
                             },
                           ]
                         : stud === StudentApproval.APPROVED
@@ -180,14 +180,14 @@ function ApproveStudent() {
                             {
                               name: 'Reject',
                               handleAction: rejectStud,
-                              privilege: Privileges.CAN_MODIFY_STUDENT_APPROVAL,
+                              privilege: Privileges.CAN_APPROVE_STUDENT,
                             },
                           ]
                         : [
                             {
                               name: 'Approve Students',
                               handleAction: approveStud,
-                              privilege: Privileges.CAN_MODIFY_STUDENT_APPROVAL,
+                              privilege: Privileges.CAN_APPROVE_STUDENT,
                             },
                           ]
                     }

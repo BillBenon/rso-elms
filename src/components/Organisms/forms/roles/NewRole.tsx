@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
@@ -26,10 +26,20 @@ export default function NewRole({ onSubmit }: FormPropType) {
   const [form, setForm] = useState<CreateRoleReq>({
     name: '',
     description: '',
-    academy_id: user?.academy?.id.toString() || '',
-    institution_id: user?.institution?.id.toString(),
+    academy_id: '',
+    institution_id: '',
     type: RoleType.ACADEMY,
   });
+
+  useEffect(() => {
+    setForm({
+      name: '',
+      description: '',
+      academy_id: user?.academy?.id.toString() || '',
+      institution_id: user?.institution?.id.toString() || '',
+      type: RoleType.ACADEMY,
+    });
+  }, [user?.academy?.id, user?.institution?.id]);
 
   function handleChange({ name, value }: ValueType) {
     setForm((old) => ({ ...old, [name]: value }));
@@ -69,21 +79,23 @@ export default function NewRole({ onSubmit }: FormPropType) {
             <SelectMolecule
               options={getDropDownOptions({ inputs: academies || [] })}
               name="academy_id"
+              placeholder="select academy"
               value={form.academy_id}
               handleChange={handleChange}>
               Academy
             </SelectMolecule>
           ) : (
             <InputMolecule
+              name=""
               readOnly
               value={user?.institution.name}
-              name={'institution_id'}>
+              handleChange={handleChange}>
               Institution
             </InputMolecule>
           )}
         </>
       ) : (
-        <InputMolecule readOnly value={user?.academy.name} name={'academyId'}>
+        <InputMolecule readOnly value={user?.academy.name} name={'academy_id'}>
           Academy
         </InputMolecule>
       )}

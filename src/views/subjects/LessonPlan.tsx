@@ -14,7 +14,7 @@ import NewLessonPlan from '../../components/Organisms/forms/subjects/NewLessonPl
 import UpdateLessonPlan from '../../components/Organisms/forms/subjects/UpdateLessonPlan';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { lessonStore } from '../../store/administration/lesson.store';
-import { Link, ParamType } from '../../types';
+import { Link, ParamType, Privileges } from '../../types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker, titleCase } from '../../utils/getOption';
 
@@ -50,6 +50,7 @@ function LessonPlan() {
                   icon="subject"
                   buttonLabel={'Create plan'}
                   showButton={user?.user_type === UserType.INSTRUCTOR}
+                  privilege={Privileges.CAN_CREATE_LESSON_PLAN}
                   title={'No lesson plan available'}
                   description={'There is no lesson plan for this lesson.'}
                   handleClick={() => history.push(`${url}/add-lesson-plan`)}

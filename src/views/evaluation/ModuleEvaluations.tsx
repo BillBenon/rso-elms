@@ -51,7 +51,7 @@ export default function ModuleEvaluations() {
                     icon="evaluation"
                     showButton={false}
                     title={'No evaluations available in this module'}
-                    description="And the web just isnt the same without you. Lets get you back online!"
+                    description="There seems to be no evaluations added to this module yet."
                   />
                 ) : isSuccess && evaluations.length > 0 ? (
                   evaluations?.map((info: CommonCardDataType, index: number) => (
@@ -70,7 +70,7 @@ export default function ModuleEvaluations() {
                     icon="evaluation"
                     showButton={false}
                     title={'No evaluations available in this module'}
-                    description="And the web just isnt the same without you. Lets get you back online!"
+                    description="There seems to be no evaluations added to this module yet."
                   />
                 ) : null}
               </section>

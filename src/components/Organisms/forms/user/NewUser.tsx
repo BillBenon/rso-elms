@@ -39,6 +39,7 @@ interface IParams {
 
 export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
+
   // const newUserType = pick(UserType, ['ADMIN', 'INSTRUCTOR', 'STUDENT']);
   // const newUserTypeWithSuper = { ...newUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
   const { user } = useAuthenticator();
@@ -48,7 +49,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const [details, setDetails] = useState<CreateUserInfo>({
     activation_key: '',
     spouse_name: '',
-    academy_id: user?.academy?.id + '',
+    academy_id: '',
     deployed_on: '',
     deployment_number: `DEP-${parseInt(Math.random() * 10000 + '')}`,
     birth_date: '',
@@ -89,8 +90,14 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const options = useMemo(() => countryList().getData(), []);
 
   useEffect(() => {
-    setDetails((details) => ({ ...details, intake_program_id: otherDetail.intake }));
-  }, [otherDetail.intake]);
+    setDetails((details) => ({
+      ...details,
+      intake_program_id: otherDetail.intake,
+      academy_id: details.user_type !== 'SUPER_ADMIN' ? user?.academy?.id + '' : '',
+    }));
+  }, [otherDetail.intake, user?.academy?.id]);
+
+  console.log(details.academy_id);
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
@@ -114,13 +121,13 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     let toastId = toast.loading(`Saving new ${userType.toLowerCase()}`);
 
     await mutateAsync(details, {
-      onSuccess(data) {
-        toast.success(data.data.message, { id: toastId });
+      onSuccess(theUser) {
+        toast.success(theUser.data.message, { id: toastId });
         queryClient.invalidateQueries(['users', 'users/academy', 'users/academy/type']);
-        history.goBack();
+        history.push(`/dashboard/users/${theUser.data.data.id}/assign-role`);
       },
       onError(error: any) {
-        toast.error(error.response.data.message.split(':')[2], { id: toastId });
+        toast.error(error.response.data.message, { id: toastId });
       },
     });
   }
@@ -292,7 +299,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Education level
         </DropdownMolecule>
-        {user?.user_type === UserType.SUPER_ADMIN && (
+        {user?.user_type === UserType.SUPER_ADMIN && details.user_type !== 'SUPER_ADMIN' && (
           <DropdownMolecule
             options={getDropDownOptions({ inputs: academies.data?.data.data || [] })}
             name="academy_id"

@@ -7,7 +7,7 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import intakeProgramStore from '../../store/administration/intake-program.store';
-import { CommonCardDataType } from '../../types';
+import { CommonCardDataType, Privileges } from '../../types';
 import { IntakeClassParam } from '../../types/services/intake-program.types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
@@ -50,7 +50,7 @@ function SubjectPeriod() {
         <Loader />
       ) : subj?.length === 0 ? (
         <NoDataAvailable
-          showButton={user?.user_type === UserType.ADMIN}
+          privilege={Privileges.CAN_CREATE_LEVEL_MODULE_SUBJECTS}
           buttonLabel="Add new subject"
           icon="subject"
           title={'No subjects available in this period'}

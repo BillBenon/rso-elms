@@ -12,6 +12,7 @@ import enrollmentStore from '../../store/administration/enrollment.store';
 import usersStore from '../../store/administration/users.store';
 import { ParamType } from '../../types';
 import { ApproveStudents, StudentApproval } from '../../types/services/enrollment.types';
+import PersonalDocuments from './profile/PersonalDocuments';
 import ProfileOverview from './profile/ProfileOverview';
 
 export default function UserDetails() {
@@ -117,6 +118,9 @@ export default function UserDetails() {
                 title={'User have no logs yet'}
                 description={"This user's logs are not currently being recorded"}
               />
+            </Tab>
+            <Tab label="Personal Documents" className="pt-8">
+              <PersonalDocuments user={user?.data.data} />
             </Tab>
           </Tabs>
         </>

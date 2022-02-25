@@ -118,7 +118,7 @@ export default function UnBeguns() {
                   icon="user"
                   buttonLabel="Add new student"
                   title={'All students started attempted this evaluation.'}
-                  description="And the web just isnt the same without you. Lets get you back online!"
+                  description="There seems to be no students left who haven't attempted this evaluation"
                 />
               ) : (
                 <Table<UnMarkedStudent>

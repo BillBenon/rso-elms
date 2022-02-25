@@ -23,23 +23,20 @@ export default function NewRank({ onSubmit }: FormPropType) {
   const { mutateAsync } = rankStore.addRank();
   const history = useHistory();
 
+  const { user } = useAuthenticator();
   useEffect(() => {
-    const getUser = async () => {
-      const { user } = useAuthenticator();
-      setForm((form) => ({
-        ...form,
-        institution_id: user?.institution_id || 'b832407f-fb77-4a75-8679-73bf7794f207',
-        current_admin_id: user?.id + '',
-      }));
-    };
-    getUser();
-  }, []);
+    setForm((form) => ({
+      ...form,
+      institution_id: user?.institution.id + '',
+    }));
+  }, [user?.id, user?.institution.id]);
 
   function handleChange({ name, value }: ValueType) {
     setForm((old) => ({ ...old, [name]: value }));
   }
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
+
     mutateAsync(form, {
       onSuccess: () => {
         toast.success('Rank created');

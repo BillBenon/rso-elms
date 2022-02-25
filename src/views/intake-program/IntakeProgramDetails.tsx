@@ -33,6 +33,7 @@ import { IProgramData } from '../programs/AcademicPrograms';
 import AddLevelToProgram from '../programs/AddLevelToProgram';
 import ApproveStudent from '../users/ApproveStudent';
 import EnrollInstructorIntakeProgram from './EnrollInstructorIntakeProgram';
+import EnrollRetakingStudents from './EnrollRetakingStudents';
 import EnrollStudentIntakeProgram from './EnrollStudentIntakeProgram';
 import IntakeProgramLevel from './IntakeProgramLevel';
 import IntakeProgramModules from './IntakeProgramModules';
@@ -59,6 +60,7 @@ function IntakeProgramDetails() {
     showInstructor: false,
     enrollStudent: false,
     enrollInstructor: false,
+    enrollRetaking: false,
   };
   const [showSidebar, setShowSidebar] = useState(initialShowSidebar);
 
@@ -196,7 +198,7 @@ function IntakeProgramDetails() {
     tabs.push({
       label: 'Approve students',
       href: `${url}/approve`,
-      privilege: Privileges.CAN_ACCESS_STUDENT_APPROVAL,
+      privilege: Privileges.CAN_APPROVE_STUDENT,
     });
 
     if (getLevels && getLevels?.length > 0) {
@@ -328,8 +330,19 @@ function IntakeProgramDetails() {
                             />
                           ) : null}
 
+                          <EnrollRetakingStudents
+                            showSidebar={showSidebar.enrollRetaking}
+                            existing={studentsProgram?.data.data || []}
+                            handleShowSidebar={() =>
+                              setShowSidebar({
+                                ...initialShowSidebar,
+                                enrollRetaking: !showSidebar.enrollRetaking,
+                              })
+                            }
+                          />
+
                           <Permission
-                            privilege={Privileges.CAN_ACCESS_INSTRUCTORS_ON_PROGRAM}>
+                            privilege={Privileges.CAN_ACCESS_INSTRUCTORS_ON_LEVEL_PRORAM}>
                             <UsersPreview
                               title="Instructors"
                               label={`Instructors in ${programData.title}`}
@@ -347,21 +360,19 @@ function IntakeProgramDetails() {
                               }
                             />
                           </Permission>
-                          {user?.user_type === UserType.ADMIN ? (
-                            <Permission
-                              privilege={Privileges.CAN_CREATE_INSTRUCTORS_ON_PROGRAM}>
-                              <EnrollInstructorIntakeProgram
-                                showSidebar={showSidebar.enrollInstructor}
-                                existing={instructorsProgram?.data.data || []}
-                                handleShowSidebar={() =>
-                                  setShowSidebar({
-                                    ...initialShowSidebar,
-                                    enrollInstructor: !showSidebar.enrollInstructor,
-                                  })
-                                }
-                              />
-                            </Permission>
-                          ) : null}
+                          <Permission
+                            privilege={Privileges.CAN_ENROLL_INSTRUCTORS_ON_PROGRAM}>
+                            <EnrollInstructorIntakeProgram
+                              showSidebar={showSidebar.enrollInstructor}
+                              existing={instructorsProgram?.data.data || []}
+                              handleShowSidebar={() =>
+                                setShowSidebar({
+                                  ...initialShowSidebar,
+                                  enrollInstructor: !showSidebar.enrollInstructor,
+                                })
+                              }
+                            />
+                          </Permission>
                         </div>
                       </div>
                     )

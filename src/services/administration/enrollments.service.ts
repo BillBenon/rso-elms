@@ -21,7 +21,10 @@ import {
   Instructor,
   InstructorModuleAssignment,
 } from '../../types/services/instructor.types';
-import { StudentIntakeProgram } from '../../types/services/intake-program.types';
+import {
+  PromotionStatus,
+  StudentIntakeProgram,
+} from '../../types/services/intake-program.types';
 import { Student } from '../../types/services/user.types';
 import { formatQueryParameters } from '../../utils/query';
 import {
@@ -90,6 +93,15 @@ class EnrollmentService {
   ): Promise<AxiosResponse<Response<StudentIntakeProgram[]>>> {
     return await adminstrationAxios.get(
       `students/getStudentsByAcademyAndEnrolmentStatus/${academyId}/${enrolmentStatus}`,
+    );
+  }
+
+  public async getAllStudentEnrollmentsByPromotionStatus(
+    academyId: string,
+    promotionStatus: PromotionStatus,
+  ): Promise<AxiosResponse<Response<StudentIntakeProgram[]>>> {
+    return await adminstrationAxios.get(
+      `/students/getStudentsByAcademyAndPromotionStatus/${academyId}/${promotionStatus}`,
     );
   }
 

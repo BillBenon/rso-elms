@@ -1,3 +1,5 @@
+import { FormEvent } from 'react';
+
 /* eslint-disable no-unused-vars */
 import { PrivilegeRes } from '..';
 import { GenericStatus, Table } from './common.types';
@@ -41,6 +43,12 @@ export interface RolePrivilege extends Table {
 export interface AddPrivilegeRoleType {
   roleId: string;
   privileges: string;
+}
+
+export interface RolePropType {
+  onSubmit: <E>(_e?: FormEvent<E>) => void;
+  roleName: string;
+  roleId: string;
 }
 
 export enum RoleType {

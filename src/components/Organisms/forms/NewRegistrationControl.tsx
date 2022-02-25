@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
 
@@ -20,11 +20,15 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
   const history = useHistory();
 
   const [regControl, setRegControl] = useState<IRegistrationControlCreateInfo>({
-    academy_id: user?.academy.id.toString() || '',
+    academy_id: '',
     description: '',
     expected_start_date: '',
     expected_end_date: '',
   });
+
+  useEffect(() => {
+    setRegControl((reg) => ({ ...reg, academy_id: user?.academy.id + '' }));
+  }, [user?.academy.id]);
 
   function handleChange(e: ValueType) {
     setRegControl((regControl) => ({ ...regControl, [e.name]: e.value }));

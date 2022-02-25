@@ -6,6 +6,7 @@ import { AcademyInfo } from './academy.types';
 import { RankRes } from './rank.types';
 import { StudentIntakeProgram } from './intake-program.types';
 import { InstitutionInfo } from './institution.types';
+import { ModuleAttachment } from './module-material.types';
 export interface Student extends Table {
   reg_number: string;
   user: UserInfo;
@@ -62,6 +63,26 @@ export interface AssignUserRole {
   user_id: string;
 }
 
+export interface PersonalDocs {
+  description: string;
+  purpose: string;
+  id: string;
+  attachment: ModuleAttachment;
+  created_at: string;
+  updated_at: string;
+  person: PersonInfo;
+}
+
+export interface INewPersonalDoc{
+  description: string;
+  purpose: string;
+  personId: string;
+}
+
+export interface FileAttachment{
+  docInfo: FormData,
+  id: string;
+}
 export interface IntakeLevelProgramInfo extends Table {
   student: Student;
 }

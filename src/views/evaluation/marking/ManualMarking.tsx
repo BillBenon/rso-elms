@@ -55,8 +55,6 @@ export default function ManualMarking({ evaluationId }: PropsType) {
   }
 
   function handleSubmit() {
-    console.log(students);
-
     mutate(students, {
       onSuccess: () => {
         toast.success('Marked');
@@ -149,7 +147,7 @@ export default function ManualMarking({ evaluationId }: PropsType) {
               icon="user"
               buttonLabel="Add new student"
               title={'No students available'}
-              description="And the web just isnt the same without you. Lets get you back online!"
+              description="It looks like there aren't any students who are not marked for this evaluation"
             />
           ) : (
             // <Table2<UserTypes>
