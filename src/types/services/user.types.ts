@@ -173,7 +173,7 @@ export interface UpdateUserInfo {
   profile_status: ProfileStatus;
   rank_depart: string;
   reset_date: string;
-  residence_location_id: number;
+  residence_location_id: number | null;
   sex: GenderStatus;
   spouse_name: string;
   user_type: UserType;

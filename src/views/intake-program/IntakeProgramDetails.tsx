@@ -342,7 +342,9 @@ function IntakeProgramDetails() {
                           />
 
                           <Permission
-                            privilege={Privileges.CAN_ACCESS_INSTRUCTORS_ON_LEVEL_PRORAM}>
+                            privilege={
+                              Privileges.CAN_ACCESS_INSTRUCTORS_ON_LEVEL_PROGRAM
+                            }>
                             <UsersPreview
                               title="Instructors"
                               label={`Instructors in ${programData.title}`}

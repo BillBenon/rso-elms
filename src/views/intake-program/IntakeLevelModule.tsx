@@ -71,7 +71,7 @@ function IntakeLevelModule() {
       <TableHeader usePadding={false} showBadge={false} showSearch={false}>
         {user?.user_type === UserType.ADMIN && (
           <>
-            <Permission privilege={Privileges.CAN_CREATE_INSTRUCTORS_ON_LEVEL_PRORAM}>
+            <Permission privilege={Privileges.CAN_CREATE_INSTRUCTORS_ON_LEVEL_PROGRAM}>
               <EnrollInstructorToLevel
                 existing={instructorProgramLevel?.data.data || []}
                 showSidebar={showSidebar.enrollInstructor}
@@ -84,7 +84,7 @@ function IntakeLevelModule() {
               />
             </Permission>
 
-            <Permission privilege={Privileges.CAN_CREATE_STUDENTS_ON_LEVEL_PRORAM}>
+            <Permission privilege={Privileges.CAN_CREATE_STUDENTS_ON_LEVEL_PROGRAM}>
               <EnrollStudent
                 showSidebar={showSidebar.enrollStudent}
                 handleShowSidebar={() =>
@@ -97,7 +97,7 @@ function IntakeLevelModule() {
             </Permission>
           </>
         )}
-        <Permission privilege={Privileges.CAN_ACCESS_INSTRUCTORS_ON_LEVEL_PRORAM}>
+        <Permission privilege={Privileges.CAN_ACCESS_INSTRUCTORS_ON_LEVEL_PROGRAM}>
           <LevelInstrctors
             isLoading={instructorsLoading}
             instructorsData={instructorProgramLevel?.data.data || []}
@@ -110,7 +110,7 @@ function IntakeLevelModule() {
             }
           />
         </Permission>
-        <Permission privilege={Privileges.CAN_ACCESS_STUDENTS_ON_LEVEL_PRORAM}>
+        <Permission privilege={Privileges.CAN_ACCESS_STUDENTS_ON_LEVEL_PROGRAM}>
           <LevelStudents
             showSidebar={showSidebar.showStudent}
             handleShowSidebar={() =>

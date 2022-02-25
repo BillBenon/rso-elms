@@ -211,7 +211,7 @@ export default function SubjectDetails() {
                         <SubjectInstructorView subjectId={subjectId} />
                       </div>
                       {intakeProg && progId && level && period ? (
-                        <Permission privilege={Privileges.CAN_CREATE_EVALUATION}>
+                        <Permission privilege={Privileges.CAN_CREATE_EVALUATIONS}>
                           <div className="w-3/12">
                             <Button onClick={goToNewEvaluation}>New Evaluation</Button>
                           </div>
