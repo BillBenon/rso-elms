@@ -59,6 +59,15 @@ function NextOfKinDetails<E>({
 
   const { data } = usernextkinStore.getPersonByNid(details.nid);
 
+  const [nationality, setnationality] = useState({
+    birth: '',
+    residence: '',
+  });
+
+  const nationhandleChange = (e: ValueType) => {
+    setnationality({ ...nationality, [e.name]: e.value });
+  };
+
   useEffect(() => {
     setDetails((prevState) => {
       return {
@@ -77,7 +86,7 @@ function NextOfKinDetails<E>({
         birth_date: data?.data.data.birth_date || prevState.birth_date,
         relationship: data?.data.data.relationship || prevState.relationship,
         residence_location_id: prevState.residence_location_id,
-        nationality: data?.data.data.nationality || prevState.nationality,
+        nationality: nationality.residence || prevState.nationality,
         doc_type:
           data?.data.data.doc_type == null
             ? DocType.NID
@@ -93,7 +102,7 @@ function NextOfKinDetails<E>({
         spouse_name: data?.data.data.spouse_name || prevState.spouse_name,
       };
     });
-  }, [user?.id, data?.data]);
+  }, [nationality.residence, user?.id, data?.data]);
 
   const handleChange = (e: ValueType) => {
     setDetails({ ...details, [e.name]: e.value });
@@ -216,14 +225,21 @@ function NextOfKinDetails<E>({
           </InputMolecule>
           <DropdownMolecule
             width="60 md:w-80"
-            name="nationality"
+            name="birth"
             defaultValue={options.find(
-              (national) => national.value === details.nationality,
+              (national) => national.label === nationality.birth,
             )}
-            handleChange={handleChange}
+            handleChange={nationhandleChange}
             options={options}>
             Nationality
           </DropdownMolecule>
+          {nationality.birth == 'Rwanda' && (
+            <LocationMolecule
+              placeholder="Select place of birth"
+              name="place_of_birth"
+              handleChange={handleChange}
+            />
+          )}
           <DropdownMolecule
             defaultValue={getDropDownStatusOptions(MaritalStatus).find(
               (marital_status) => marital_status.label === details.marital_status,
@@ -272,20 +288,21 @@ function NextOfKinDetails<E>({
         <div className="grid grid-cols-1 md:grid-cols-2">
           <DropdownMolecule
             width="60 md:w-80"
-            name="nationality"
+            name="residence"
             placeholder="Select the Nation"
             defaultValue={options.find(
-              (national) => national.label === details.nationality,
+              (national) => national.label === nationality.residence,
             )}
-            handleChange={handleChange}
+            handleChange={nationhandleChange}
             options={options}>
             Place of residence
           </DropdownMolecule>
-          {details.nationality == 'Rwanda' && (
+          {nationality.residence == 'Rwanda' && (
             <LocationMolecule
               placeholder="Select place of residence"
               name="residence_location_id"
-              handleChange={handleChange}></LocationMolecule>
+              handleChange={handleChange}
+            />
           )}
           <InputMolecule
             readOnly={
