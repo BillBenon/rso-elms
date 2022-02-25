@@ -57,13 +57,14 @@ export default function EvaluationContent({
 
   let classesSelect = evaluationInfo?.intake_level_class_ids
     ? evaluationInfo?.intake_level_class_ids.split(',')
-    : ['2'];
+    : [''];
 
-  let attendees = classesSelect
-    .map((classId) => {
-      return useStudents(classId);
-    })
-    .flat();
+  let attendees =
+    classesSelect
+      .map((classId) => {
+        return useStudents(classId);
+      })
+      .flat() || [];
 
   function addAttendee() {
     mutate(privateAttendee, {
