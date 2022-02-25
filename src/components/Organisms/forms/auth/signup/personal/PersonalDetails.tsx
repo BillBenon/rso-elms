@@ -44,7 +44,7 @@ function PersonalDetails<E>({
     mother_names: '',
     marital_status: MaritalStatus.SINGLE,
     spouse_name: '',
-    residence_location_id: 0,
+    residence_location_id: null,
     place_of_residence: '',
     doc_type: DocType.NID,
     nationality: '',

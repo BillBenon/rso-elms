@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 
@@ -42,11 +42,11 @@ export default function Navigation() {
       notification.notifaction_status === NotificationStatus.UNREAD.toString(),
   );
 
-  useEffect(() => {
-    if (user?.user_type === UserType.SUPER_ADMIN && !user?.institution_id) {
-      history.push('/institution/new');
-    }
-  }, [history, user]);
+  // useEffect(() => {
+  //   if (user?.user_type === UserType.SUPER_ADMIN && !user?.institution_id) {
+  //     history.push('/institution/new');
+  //   }
+  // }, [history, user]);
 
   const links = [
     { text: 'Home', to: '/' },

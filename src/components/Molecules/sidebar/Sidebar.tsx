@@ -99,7 +99,7 @@ export default function Sidebar() {
         fill: false,
       },
       {
-        title: 'Teaching Module',
+        title: 'Teaching Modules',
         to: '/dashboard/inst-module',
         icon: 'module',
         privilege: Privileges.CAN_TEACH_MODULE,
@@ -128,12 +128,12 @@ export default function Sidebar() {
         icon: 'calendar',
         privilege: Privileges.CAN_ACCESS_CALENDER,
       },
-      {
-        title: 'Timetable',
-        to: '/dashboard/schedule/timetable',
-        icon: 'calendar',
-        privilege: Privileges.CAN_ACCESS_TIMETABLE,
-      },
+      // {
+      //   title: 'Timetable',
+      //   to: '/dashboard/schedule/timetable',
+      //   icon: 'calendar',
+      //   privilege: Privileges.CAN_ACCESS_TIMETABLE,
+      // },
       {
         title: 'Ranks',
         to: '/dashboard/ranks',
@@ -195,7 +195,7 @@ export default function Sidebar() {
               ? display_attach_id
               : user_role?.type === RoleType.ACADEMY
               ? user?.academy?.logo_attachment_id
-              : user?.institution.logo_attachment_id || undefined,
+              : user?.institution?.logo_attachment_id || undefined,
             display_id ? display_id : user?.academy?.id,
             '/images/rdf-logo.png',
             'logos',

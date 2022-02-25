@@ -22,7 +22,13 @@ import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOpt
 
 function AddSubjectToPeriod() {
   const history = useHistory();
-  const { level, period, classId } = useParams<IntakeClassParam>();
+  const {
+    level,
+    period,
+    classId,
+    intakeProg,
+    id: progId,
+  } = useParams<IntakeClassParam>();
 
   const { data: levelModuleStore, isLoading: LevelLoading } =
     intakeProgramStore.getModulesByLevel(parseInt(level));
@@ -70,7 +76,9 @@ function AddSubjectToPeriod() {
         onSuccess: (data) => {
           toast.success(data.data.message);
           queryClient.invalidateQueries(['subjects/period']);
-          history.goBack();
+          history.push(
+            `/dashboard/modules/subjects/${subjectPrd.subjectId}/instructors?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+          );
         },
         onError: (error: any) => {
           toast.error(error.response.data.message);
