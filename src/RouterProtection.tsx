@@ -18,7 +18,6 @@ import EvaluationNotiView from './views/evaluation/EvaluationNotiView';
 import EvaluationTest from './views/evaluation/EvaluationTest';
 import InstructorViewEvaluations from './views/evaluation/InstructorViewEvaluations';
 import StudentReview from './views/evaluation/StudentReview';
-import NewInstitution from './views/insitution/NewInstitution';
 import UpdateInstitution from './views/insitution/UpdateInstitution';
 import IntakesView from './views/intakes/Intakes';
 import Levels from './views/levels/Levels';
@@ -76,7 +75,7 @@ const RouterProtection = () => {
           )}
           {hasPrivilege(Privileges.CAN_MODIFY_INSTITUTION) && (
             <>
-              <Route exact path={`/institution/new`} component={NewInstitution} />
+              {/* <Route exact path={`/institution/new`} component={NewInstitution} /> */}
               <Route
                 exact
                 path={`${path}/institution/:id/edit`}
@@ -186,7 +185,7 @@ const RouterProtection = () => {
       <Route path={`${path}/ranks`} component={Ranks} />
       <Route path={`${path}/roles`} component={Roles} />
       <Route path={`${path}/users`} component={Users} />
-      <Route exact path={`/institution/new`} component={NewInstitution} />
+      {/* <Route exact path={`/institution/new`} component={NewInstitution} /> */}
 
       <Route path={`${path}/privileges`} component={PrivilegesView} />
       <Route exact path={`${path}/institution/:id/edit`} component={UpdateInstitution} />

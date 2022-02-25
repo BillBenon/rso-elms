@@ -74,7 +74,9 @@ function NewIntakeLevelModule() {
     instructorInPrograms.data?.data.data.map((instr) => instr.instructor) || [];
 
   useEffect(() => {
-    setvalues({ ...values, academic_year_program_intake_level_id: parseInt(levelId) });
+    setvalues((prevValues) => {
+      return { ...prevValues, academic_year_program_intake_level_id: parseInt(levelId) };
+    });
   }, [levelId]);
 
   async function addMore() {
@@ -86,6 +88,11 @@ function NewIntakeLevelModule() {
       onSuccess() {
         toast.success('module added to level');
         queryClient.invalidateQueries(['levels/modules']);
+        history.push(
+          `/dashboard/modules/${
+            values.module_id
+          }/instructors?showMenus=${true}&intkPrg=${intakeProg}`,
+        );
       },
       onError: (error: any) => {
         toast.error(error.response.data.message);
@@ -105,7 +112,11 @@ function NewIntakeLevelModule() {
       onSuccess: () => {
         toast.success('module added to level');
         queryClient.invalidateQueries(['levels/modules']);
-        history.goBack();
+        history.push(
+          `/dashboard/modules/${
+            values.module_id
+          }/instructors?showMenus=${true}&intkPrg=${intakeProg}`,
+        );
       },
       onError: (error: any) => {
         toast.error(error.response.data.message);

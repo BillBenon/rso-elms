@@ -64,6 +64,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     marital_status: MaritalStatus.SINGLE,
     mother_names: '',
     nid: '',
+    institution_id: '',
     password: '',
     password_reset_period_in_days: 0,
     person_id: '',
@@ -71,7 +72,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     place_of_birth: '',
     place_of_residence: '',
     reset_date: '',
-    residence_location_id: 0,
+    residence_location_id: null,
     sex: GenderStatus.MALE,
     user_type: userType,
     username: '',
@@ -93,11 +94,10 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     setDetails((details) => ({
       ...details,
       intake_program_id: otherDetail.intake,
+      institution_id: user?.institution?.id.toString() || '',
       academy_id: details.user_type !== 'SUPER_ADMIN' ? user?.academy?.id + '' : '',
     }));
-  }, [otherDetail.intake, user?.academy?.id]);
-
-  console.log(details.academy_id);
+  }, [otherDetail.intake, user?.academy?.id, user?.institution?.id]);
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
@@ -127,7 +127,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         history.push(`/dashboard/users/${theUser.data.data.id}/assign-role`);
       },
       onError(error: any) {
-        toast.error(error.response.data.message.split(':')[2], { id: toastId });
+        toast.error(error.response.data.message, { id: toastId });
       },
     });
   }
