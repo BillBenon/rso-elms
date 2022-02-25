@@ -79,7 +79,7 @@ export default function ApproveEvaluation({ evaluationId }: IProps) {
 
   return (
     <>
-      <EvaluationContent evaluationId={evaluationId}>
+      <EvaluationContent evaluationId={evaluationId} feedbackType="approvals">
         <Button
           disabled={evaluationApprovals?.evaluation_approval_status + '' !== 'PENDING'}
           onClick={() => changeAction('approve')}>

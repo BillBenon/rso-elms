@@ -302,7 +302,6 @@ function IntakePrograms() {
                     })
                   ) : (
                     <NoDataAvailable
-                      showButton={user?.user_type === UserType.ADMIN}
                       privilege={Privileges.CAN_CREATE_PROGRAMS_IN_INTAKE}
                       icon="program"
                       buttonLabel="Add new program to intake"

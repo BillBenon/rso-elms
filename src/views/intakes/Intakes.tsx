@@ -209,7 +209,7 @@ export default function Intakes() {
                 }
                 handleSearch={handleSearch}>
                 {registrationControlId && (
-                  <Permission privilege={Privileges.CAN_CREATE_INTAKE}>
+                  <Permission privilege={Privileges.CAN_ACCESS_INTAKES}>
                     <Link to={`${url}/${registrationControlId}/add-intake`}>
                       <Button>Add Intake</Button>
                     </Link>
@@ -295,7 +295,7 @@ export default function Intakes() {
                           ? 'No intake available in this reg Control'
                           : 'No intake available'
                       }
-                      showButton={user?.user_type === UserType.ADMIN}
+                      privilege={Privileges.CAN_CREATE_INTAKE}
                       handleClick={() => {
                         if (registrationControlId)
                           history.push(`${url}/${registrationControlId}/add-intake`);

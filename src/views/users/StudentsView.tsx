@@ -88,19 +88,20 @@ export default function StudentsView() {
         title="Students"
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
-        {(user?.user_type === UserType.SUPER_ADMIN ||
-          user?.user_type === UserType.ADMIN) && (
+        {
           <div className="flex gap-3">
             <Link to={`${url}/import`}>
-              <Button styleType="outline">Import students</Button>
+              <Permission privilege={Privileges.CAN_CREATE_USER}>
+                <Button styleType="outline">Import students</Button>
+              </Permission>
             </Link>
             <Link to={`${url}/add/${UserType.STUDENT}`}>
-              <Permission privilege={Privileges.CAN_ACCESS_EVALUATIONS}>
+              <Permission privilege={Privileges.CAN_CREATE_USER}>
                 <Button>New student</Button>
               </Permission>
             </Link>
           </div>
-        )}
+        }
       </TableHeader>
 
       {isLoading ? (
@@ -111,7 +112,8 @@ export default function StudentsView() {
           buttonLabel="Add new student"
           title={'No students available'}
           handleClick={() => history.push(`/dashboard/users/add/STUDENT`)}
-          description="And the web just isnt the same without you. Lets get you back online!"
+          description="There are no students added into the system yet"
+          privilege={Privileges.CAN_CREATE_USER}
         />
       ) : (
         <Table<UserTypes | AcademyUserType>

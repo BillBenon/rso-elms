@@ -6,6 +6,7 @@ import {
   ModuleAssignmentType,
   StudentApproval,
 } from '../../types/services/enrollment.types';
+import { PromotionStatus } from '../../types/services/intake-program.types';
 import { formatQueryParameters } from '../../utils/query';
 
 class EnrolmmentStore {
@@ -71,6 +72,17 @@ class EnrolmmentStore {
   getStudentsAcademy(academyId: string) {
     return useQuery(['student/academy', academyId], () =>
       enrollmentService.getStudentAcademy(academyId),
+    );
+  }
+  getAllStudentEnrollmentsByPromotionStatus(
+    academyId: string,
+    promotionStatus: PromotionStatus,
+  ) {
+    return useQuery(['student/academy/free-enrolments'], () =>
+      enrollmentService.getAllStudentEnrollmentsByPromotionStatus(
+        academyId,
+        promotionStatus,
+      ),
     );
   }
   getStudentAcademyAndEnrollmentStatus(

@@ -9,6 +9,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -50,7 +51,7 @@ export default function Ranks() {
     handleAction: (id: string | number | undefined) => {
       history.push(`${path}/${id}/edit`); // go to edit rank
     },
-    privilege: Privileges.CAN_EDIT_RANK,
+    privilege: Privileges.CAN_MODIFY_RANKS,
   });
 
   // re fetch data whenever user come back on this page
@@ -60,14 +61,14 @@ export default function Ranks() {
     }
   }, [location, path, refetch]);
 
-  const manyActions = [
-    {
-      name: 'Disable/Enable',
-      handleAction: (data?: string[]) => {
-        alert(`handling many at once ${data}`);
-      },
-    },
-  ];
+  // const manyActions = [
+  // {
+  //   name: 'Disable/Enable',
+  //   handleAction: (data?: string[]) => {
+  //     alert(`handling many at once ${data}`);
+  //   },
+  // },
+  // ];
 
   function submited() {}
   function handleSearch() {}
@@ -85,7 +86,9 @@ export default function Ranks() {
           totalItems={ranks && ranks.length > 0 ? ranks.length : 0}
           handleSearch={handleSearch}>
           <Link to={`${url}/add`}>
-            <Button>Add Rank</Button>
+            <Permission privilege={Privileges.CAN_CREATE_RANK}>
+              <Button>Add Rank</Button>
+            </Permission>
           </Link>
         </TableHeader>
       </section>
@@ -93,7 +96,6 @@ export default function Ranks() {
         {isLoading && <Loader />}
         {ranks && ranks.length > 0 && isSuccess ? (
           <Table<FilteredRanks>
-            selectorActions={manyActions}
             hide={['id']}
             handleSelect={handleSelect}
             statusColumn="status"
@@ -103,6 +105,7 @@ export default function Ranks() {
           />
         ) : isSuccess && ranks?.length === 0 ? (
           <NoDataAvailable
+            privilege={Privileges.CAN_CREATE_RANK}
             icon="role"
             buttonLabel="Add new rank"
             title={'No ranks available'}

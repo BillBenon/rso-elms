@@ -49,6 +49,7 @@ export default function Venues() {
           }
           buttonLabel="New venue"
           handleClick={() => history.push(`${path}/new`)}
+          privilege={Privileges.CAN_CREATE_VENUE}
         />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6">

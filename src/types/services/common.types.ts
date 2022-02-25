@@ -2,6 +2,7 @@ import { UserType } from './user.types';
 
 /* eslint-disable no-unused-vars */
 export interface Response<T = unknown> {
+  academy: any;
   data: T;
   message: string;
   status: string;

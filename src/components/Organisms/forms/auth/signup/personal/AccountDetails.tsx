@@ -59,7 +59,6 @@ function AccountDetails<E>({
   const user = usersStore.getUserById(fetched_id.toString());
   useEffect(() => {
     let personInfo = user.data?.data.data;
-    console.log('personal', personInfo);
 
     personInfo &&
       setAccountDetails({

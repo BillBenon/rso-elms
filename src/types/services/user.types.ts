@@ -6,6 +6,7 @@ import { AcademyInfo } from './academy.types';
 import { RankRes } from './rank.types';
 import { StudentIntakeProgram } from './intake-program.types';
 import { InstitutionInfo } from './institution.types';
+import { ModuleAttachment } from './module-material.types';
 export interface Student extends Table {
   reg_number: string;
   user: UserInfo;
@@ -62,6 +63,26 @@ export interface AssignUserRole {
   user_id: string;
 }
 
+export interface PersonalDocs {
+  description: string;
+  purpose: string;
+  id: string;
+  attachment: ModuleAttachment;
+  created_at: string;
+  updated_at: string;
+  person: PersonInfo;
+}
+
+export interface INewPersonalDoc{
+  description: string;
+  purpose: string;
+  personId: string;
+}
+
+export interface FileAttachment{
+  docInfo: FormData,
+  id: string;
+}
 export interface IntakeLevelProgramInfo extends Table {
   student: Student;
 }
@@ -94,7 +115,7 @@ export interface PersonInfo extends Table {
   place_of_birth_description: string;
   spouse_name: string;
   place_of_birth_id: string;
-  residence_location_id: number;
+  residence_location_id: number | null;
   education_level: EducationLevel;
   nid: string;
   empNo: string;
@@ -182,7 +203,7 @@ export interface EditUser {
   phone: string;
   place_of_birth: string;
   place_of_residence: string;
-  residence_location_id: number;
+  residence_location_id: number | null;
   reset_date: string;
   sex: GenderStatus;
   user_type: UserType;
@@ -192,6 +213,7 @@ export interface EditUser {
   send_communication_msg: SendCommunicationMsg;
   profile_status: ProfileStatus;
   id: string;
+  institution_id: string;
   spouse_name: string;
 }
 

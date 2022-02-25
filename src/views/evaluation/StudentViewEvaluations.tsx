@@ -132,7 +132,7 @@ export default function StudentViewEvaluations({
                     icon="evaluation"
                     showButton={false}
                     title={'No evaluations available'}
-                    description="And the web just isnt the same without you. Lets get you back online!"
+                    description="There seems to be no evaluations added to this module yet. Please wait for instructors to add them or contact the administrators if you think there's a mistake!"
                   />
                 )}
               </section>

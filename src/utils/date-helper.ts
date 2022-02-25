@@ -52,8 +52,7 @@ export function formatDateToYyMmDd(date: string) {
 }
 
 export function formatDateToIso(date: string | Date): string {
-  let formatedDate = moment(new Date(`${date} UTC`))
-    .toISOString()
+  let formatedDate = (moment(new Date(`${date} UTC`)).toISOString() || '')
     .split('T')
     .join(' ');
 

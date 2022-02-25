@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
-import useAuthenticator from '../../../hooks/useAuthenticator';
-import { ValueType } from '../../../types';
+import { Privileges, ValueType } from '../../../types';
 import { UserType, UserTypes } from '../../../types/services/user.types';
+import Permission from '../../Atoms/auth/Permission';
 import Button from '../../Atoms/custom/Button';
 import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../Molecules/Popup';
@@ -32,8 +32,6 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
     },
   ];
 
-  const { user } = useAuthenticator();
-
   return (
     <>
       <TableHeader
@@ -41,7 +39,7 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
         totalItems={instructors && instructors.length > 0 ? instructors.length : 0}
         handleSearch={handleSearch}
         showSearch={instructors && instructors.length > 0}>
-        {user?.user_type === UserType.SUPER_ADMIN && (
+        <Permission privilege={Privileges.CAN_CREATE_USER}>
           <div className="flex gap-3">
             <Link to={`${url}/import`}>
               <Button styleType="outline">Import instructors</Button>
@@ -50,7 +48,7 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
               <Button>New instructor</Button>
             </Link>
           </div>
-        )}
+        </Permission>
       </TableHeader>
       {instructors && (
         <div className="pt-8">
@@ -60,7 +58,8 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
               buttonLabel="Add new instructor"
               title={'No instructor available'}
               handleClick={() => history.push(`/dashboard/users/add`)}
-              description="And the web just isnt the same without you. Lets get you back online!"
+              description="There are no instructors added into the system yet."
+              privilege={Privileges.CAN_CREATE_USER}
             />
           ) : (
             <Table<UserTypes>

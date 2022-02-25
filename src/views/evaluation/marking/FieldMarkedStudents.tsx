@@ -93,7 +93,7 @@ export default function Submissions() {
           buttonLabel="Go back"
           title={'No submissions has been made so far!'}
           handleClick={() => history.push(`/dashboard/evaluations/${evaluation?.id}`)}
-          description="And the web just isnt the same without you. Lets get you back online!"
+          description="It looks like no student have submitted yet."
         />
       ) : isSuccess && submissions.length > 0 ? (
         <div>

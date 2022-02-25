@@ -12,7 +12,7 @@ import { privilegeStore } from '../../store/administration';
 import { PrivilegeRes } from '../../types';
 
 export default function PrivilegesView() {
-  const { path, url } = useRouteMatch();
+  const { path } = useRouteMatch();
   const location = useLocation();
 
   const [privileges, setPrivileges] = useState<PrivilegeRes[]>([]);
@@ -41,12 +41,12 @@ export default function PrivilegesView() {
         history.push(`${path}/${id}/edit`); // go to edit page
       },
     },
-    {
-      name: 'Disable/Enable',
-      handleAction: (_id: string | undefined) => {
-        // history.push(`/${id}/edit`);
-      },
-    },
+    // {
+    //   name: 'Disable/Enable',
+    //   handleAction: (_id: string | undefined) => {
+    //     // history.push(`/${id}/edit`);
+    //   },
+    // },
   ];
 
   return (
@@ -73,8 +73,9 @@ export default function PrivilegesView() {
           <NoDataAvailable
             buttonLabel="Add new privilege"
             title={'No privilege available'}
-            handleClick={() => history.push(`${url}/add`)}
-            description="There are no priviledges added yet. Click below to add some"
+            handleClick={() => {}}
+            description="There are no priviledges added yet"
+            showButton={false}
           />
         ) : null}
       </section>

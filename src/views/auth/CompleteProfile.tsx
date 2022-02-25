@@ -93,7 +93,7 @@ function CompleteProfile() {
     userInfo &&
       setPersonalInfo({
         academic_program_level_id: '',
-        academy_id: userInfo.academy.id,
+        academy_id: userInfo.academy?.id || '',
         activation_key: '',
         id: userInfo.id.toString(),
         intake_program_id: '',

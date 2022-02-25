@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Link as BrowserLink, useHistory } from 'react-router-dom';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
-import { CommonCardDataType, Privileges, RoleResWithPrevilages } from '../../../../types';
+import { roleStore } from '../../../../store/administration';
+import { CommonCardDataType, Privileges } from '../../../../types';
 import { UserType } from '../../../../types/services/user.types';
 import cookie from '../../../../utils/cookie';
 import Permission from '../../../Atoms/auth/Permission';
@@ -27,15 +28,15 @@ export default function ModuleCard({
   const history = useHistory();
   const [privileges, setPrivileges] = useState<string[]>();
 
-  const picked_role_cookie = cookie.getCookie('user_role');
-  const picked_role: RoleResWithPrevilages | undefined = picked_role_cookie
-    ? JSON.parse(picked_role_cookie)
-    : undefined;
+  const picked_role_cookie = cookie.getCookie('user_role') || '';
+  const { data: role_privilege } = roleStore.getPrivilegesByRole(picked_role_cookie);
 
   useEffect(() => {
-    const _privileges = picked_role?.role_privileges?.map((privilege) => privilege.name);
+    const _privileges = role_privilege?.data.data?.map(
+      (privilege) => privilege.privilege.name,
+    );
     if (_privileges) setPrivileges(_privileges);
-  }, [picked_role?.role_privileges]);
+  }, [role_privilege?.data.data]);
   return (
     <div className="p-2 mt-3">
       <Tooltip
@@ -104,7 +105,12 @@ export default function ModuleCard({
             </BrowserLink>
           ) : user?.user_type === UserType.ADMIN ? (
             <div className="py-2 flex justify-around gap-2">
-              <Permission privilege={Privileges.CAN_CREATE_SUBJECTS}>
+              <Permission
+                privilege={
+                  showMenus
+                    ? Privileges.CAN_CREATE_INTAKE_PROGRAM_MODULE_SUBJECTS
+                    : Privileges.CAN_CREATE_SUBJECTS
+                }>
                 <BrowserLink
                   className="outline-none"
                   to={`/dashboard/modules/${course.id}/add-subject`}>

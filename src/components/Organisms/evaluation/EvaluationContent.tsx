@@ -1,22 +1,81 @@
 import moment from 'moment';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
+import toast from 'react-hot-toast';
 
-import { evaluationStore } from '../../../store/evaluation/evaluation.store';
+import { useGetInstructor } from '../../../hooks/useGetInstructor';
+import { useStudents } from '../../../hooks/useStudents';
+import {
+  evaluationStore,
+  getEvaluationFeedbacks,
+} from '../../../store/evaluation/evaluation.store';
+import { ValueType } from '../../../types';
+import {
+  IAddprivateAttendee,
+  IEvaluationFeedback,
+} from '../../../types/services/evaluation.types';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
 import MultipleChoiceAnswer from '../../../views/evaluation/MultipleChoiceAnswer';
+import Button from '../../Atoms/custom/Button';
 import Heading from '../../Atoms/Text/Heading';
+import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
+import PopupMolecule from '../../Molecules/Popup';
 
 interface IProps {
   evaluationId: string;
   children: ReactNode;
+  feedbackType: IEvaluationFeedback;
 }
 
-export default function EvaluationContent({ evaluationId, children }: IProps) {
+export default function EvaluationContent({
+  evaluationId,
+  children,
+  feedbackType,
+}: IProps) {
+  const [showPopup, setShowPopup] = useState(false);
+  const [privateAttendee, setPrivateAttendee] = useState<IAddprivateAttendee>({
+    evaluation: evaluationId,
+    id: '',
+    private_status: true,
+    students: [],
+  });
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId).data?.data || {};
 
+  const feedbacks = getEvaluationFeedbacks(evaluationId, feedbackType).data?.data
+    .data || [{ id: '', remarks: '', reviewer: { adminId: '' } }];
+
+  const { mutate } = evaluationStore.addEvaluationAttendee();
+
   const { data: evaluationQuestions, isLoading: loading } =
     evaluationStore.getEvaluationQuestions(evaluationId);
+
+  function handleChange(e: ValueType) {
+    setPrivateAttendee((prev) => {
+      return { ...prev, [e.name]: e.value.toString() };
+    });
+  }
+
+  let classesSelect = evaluationInfo?.intake_level_class_ids
+    ? evaluationInfo?.intake_level_class_ids.split(',')
+    : ['2'];
+
+  let attendees = classesSelect
+    .map((classId) => {
+      return useStudents(classId);
+    })
+    .flat();
+
+  function addAttendee() {
+    mutate(privateAttendee, {
+      onSuccess: () => {
+        toast.success('Succesfully added attendee(s)', { duration: 5000 });
+        setShowPopup(false);
+      },
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
+      },
+    });
+  }
 
   return (
     <div>
@@ -39,6 +98,7 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
               title="Total number of questions"
               subTitle={evaluationInfo?.number_of_questions}
             />
+            <ContentSpan title="Access type" subTitle={evaluationInfo?.access_type} />
 
             {/* <div className="flex flex-col gap-4">
               <Heading color="txt-secondary" fontSize="base">
@@ -101,8 +161,10 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
           <ContentSpan
             title="Consider on report"
             subTitle={evaluationInfo?.is_consider_on_report ? 'Yes' : 'No'}
-          />{' '}
-          <ContentSpan title="Access type" subTitle={evaluationInfo?.access_type} />
+          />
+          <Button styleType="outline" onClick={() => setShowPopup(true)}>
+            Add personal attendee
+          </Button>
         </div>
       </div>
 
@@ -111,10 +173,27 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
         Evaluation questions
       </Heading>
 
+      {/* don't render it unless it is opened */}
+      {/* {showPopup && ( */}
+      <PopupMolecule
+        open={showPopup}
+        title="Add private attendee"
+        onClose={() => setShowPopup(false)}>
+        <DropdownMolecule
+          handleChange={handleChange}
+          name={'students'}
+          options={attendees}
+          isMulti>
+          Students
+        </DropdownMolecule>
+        <Button onClick={addAttendee}>Add students</Button>
+      </PopupMolecule>
+      {/* )} */}
+
       <div
         className={`${
           !loading && 'bg-main'
-        }  px-16 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
+        }  px-7 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
         {evaluationQuestions?.data.data.length ? (
           evaluationQuestions?.data.data.map((question, index: number) =>
             question && question.multiple_choice_answers.length > 0 ? (
@@ -152,10 +231,41 @@ export default function EvaluationContent({ evaluationId, children }: IProps) {
               </div>
             ),
           )
-        ) : evaluationQuestions?.data.data.length === 0 ? (
-          <Heading>No questions attached</Heading>
-        ) : null}
+        ) : (
+          <Heading fontSize="sm">No questions attached</Heading>
+        )}
       </div>
+      <Heading fontWeight="semibold" fontSize="base" className="pt-6">
+        Evaluation remarks
+      </Heading>
+
+      {feedbackType && (
+        <div
+          className={`${
+            !loading && 'bg-main'
+          }  px-7 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
+          <ul>
+            {feedbacks.map((feedback) => {
+              let instructorInfo = useGetInstructor(feedback?.reviewer?.adminId)?.user;
+
+              return feedback.remarks ? (
+                <div className="flex flex-col gap-2 pb-4" key={feedback.id}>
+                  <Heading fontSize="base" fontWeight="semibold">
+                    {`${instructorInfo?.first_name} ${instructorInfo?.last_name}` || ''}
+                  </Heading>
+                  <Heading
+                    fontSize="sm"
+                    fontWeight="normal">{`=> ${feedback.remarks}`}</Heading>
+                </div>
+              ) : (
+                <Heading fontSize="base" fontWeight="semibold">
+                  No remarks found
+                </Heading>
+              );
+            })}
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

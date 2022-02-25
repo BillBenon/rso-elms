@@ -1,29 +1,59 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
+import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { queryClient } from '../../../../plugins/react-query';
 import { roleStore } from '../../../../store/administration';
+import academyStore from '../../../../store/administration/academy.store';
 import usersStore from '../../../../store/administration/users.store';
-import { ParamType, ValueType } from '../../../../types';
+import { ParamType, RoleType, ValueType } from '../../../../types';
+import { AcademyInfo } from '../../../../types/services/academy.types';
 import { AssignUserRole } from '../../../../types/services/user.types';
-import { getDropDownOptions } from '../../../../utils/getOption';
+import {
+  getDropDownOptions,
+  getDropDownStatusOptions,
+} from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
+import InputMolecule from '../../../Molecules/input/InputMolecule';
+import RadioMolecule from '../../../Molecules/input/RadioMolecule';
+import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 
 export default function AssignRole() {
   const { id: userId } = useParams<ParamType>();
-  const { data, isLoading } = roleStore.getRoles();
+  const history = useHistory();
+
   const { data: userRoles } = usersStore.getUserRoles(userId);
 
   const [roles, setRoles] = useState<string[]>([]);
-  const history = useHistory();
+  const { user } = useAuthenticator();
+  const [roleInfo, setRoleInfo] = useState({
+    name: '',
+    description: '',
+    academy_id: '',
+    institution_id: '',
+    type: RoleType.ACADEMY,
+  });
+
+  useEffect(() => {
+    setRoleInfo((role) => ({ ...role, institution_id: user?.institution.id + '' }));
+  }, [user?.institution.id]);
+
+  const { data, isLoading } =
+    roleInfo.type === RoleType.ACADEMY
+      ? roleStore.getRolesByAcademy(roleInfo.academy_id)
+      : roleStore.getRolesByInstitution(roleInfo.institution_id);
 
   const { mutate } = usersStore.assignRole();
 
   function handleChange(e: ValueType) {
     const value = e.value as string[];
     setRoles(value);
+  }
+
+  function otherHandleChange({ name, value }: ValueType) {
+    setRoleInfo((old) => ({ ...old, [name]: value }));
   }
 
   async function saveRoles(e: FormEvent) {
@@ -55,8 +85,40 @@ export default function AssignRole() {
   const roleOptions =
     data?.data.data.filter((role) => !userRolesId.includes(role.id)) || [];
 
+  const academies: AcademyInfo[] | undefined =
+    academyStore.fetchAcademies().data?.data.data || [];
+
   return (
     <form onSubmit={saveRoles}>
+      <>
+        <RadioMolecule
+          className="pb-2"
+          defaultValue={roleInfo.type}
+          options={getDropDownStatusOptions(RoleType)}
+          value={roleInfo.type}
+          handleChange={otherHandleChange}
+          name="type">
+          Apply Role On
+        </RadioMolecule>
+        {roleInfo.type === RoleType.ACADEMY ? (
+          <SelectMolecule
+            options={getDropDownOptions({ inputs: academies || [] })}
+            name="academy_id"
+            placeholder="select academy"
+            value={roleInfo.academy_id}
+            handleChange={otherHandleChange}>
+            Academy
+          </SelectMolecule>
+        ) : (
+          <InputMolecule
+            name=""
+            readOnly
+            value={user?.institution.name}
+            handleChange={otherHandleChange}>
+            Institution
+          </InputMolecule>
+        )}
+      </>
       <DropdownMolecule
         isMulti
         name="role"

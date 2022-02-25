@@ -19,7 +19,7 @@ export default function Input<T>({
   fcolor = 'primary',
   bcolor = 'tertiary',
   pcolor = 'txt-secondary',
-  width = '80',
+  width,
   handleChange = () => {},
   className = '',
   ...attrs

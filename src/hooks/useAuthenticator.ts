@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
@@ -18,14 +18,9 @@ export default function useAuthenticator() {
   const { refetch } = authenticatorStore.authUser(false);
   const { mutateAsync } = authenticatorStore.login();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const history = useHistory();
 
-  useEffect(() => {
-    if (!user) fetchData();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  async function fetchData() {
+  const fetchData = useCallback(async () => {
     setIsUserLoading(true);
     const { data, isSuccess, isError, error } = await refetch();
     if (isSuccess) {
@@ -37,7 +32,11 @@ export default function useAuthenticator() {
 
     setIsError(isError);
     setIsUserLoading(false);
-  }
+  }, [refetch]);
+
+  useEffect(() => {
+    if (!user) fetchData();
+  }, [fetchData, user]);
 
   async function login<T>(e: FormEvent<T>, details: LoginInfo) {
     e.preventDefault();
@@ -52,11 +51,7 @@ export default function useAuthenticator() {
         setIsLoggingIn(false);
         await fetchData();
         toast.success(data.data.message, { duration: 1200, id: toastId });
-        console.log('====================================');
-        console.log(user);
-        console.log('====================================');
         redirectTo('/redirecting');
-        setIsLoggedIn(true);
       },
       onError(error) {
         setIsLoggingIn(false);
@@ -67,9 +62,7 @@ export default function useAuthenticator() {
   }
 
   function logout() {
-    setIsLoggedIn(false);
     setUser(undefined);
-    setIsLoggedIn(false);
     setUserAvailable(false);
     queryClient.clear();
     cookie.eraseCookie('jwt_info');
