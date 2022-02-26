@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Loader from '../../components/Atoms/custom/Loader';
 import AddCard from '../../components/Molecules/cards/AddCard';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import useAuthenticator from '../../hooks/useAuthenticator';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { CommonCardDataType, Privileges } from '../../types';
 import { IntakeClassParam } from '../../types/services/intake-program.types';
-import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 
 function SubjectPeriod() {
@@ -21,7 +20,6 @@ function SubjectPeriod() {
   );
   const [subj, setsubj] = useState<CommonCardDataType[]>();
   const history = useHistory();
-  const { user } = useAuthenticator();
 
   useEffect(() => {
     if (subjects?.data.data) {
@@ -63,7 +61,7 @@ function SubjectPeriod() {
         />
       ) : (
         <section className="mt-4 flex flex-wrap justify-start gap-4">
-          {user?.user_type === UserType.ADMIN && (
+          <Permission privilege={Privileges.CAN_CREATE_LEVEL_MODULE_SUBJECTS}>
             <AddCard
               title={'Add new subject'}
               onClick={() =>
@@ -72,7 +70,7 @@ function SubjectPeriod() {
                 )
               }
             />
-          )}
+          </Permission>
           {subj?.map((sub) => (
             <div className="p-1 mt-3" key={sub.id}>
               <CommonCardMolecule

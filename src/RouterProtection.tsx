@@ -133,8 +133,20 @@ const RouterProtection = () => {
           {/* end of academic admin routes */}
 
           {/* instructor routes */}
+          {hasPrivilege(Privileges.CAN_TEACH_MODULE) && (
+            <Route exact path={`${path}/inst-module`} component={InstrLevelModule} />
+          )}
+          {hasPrivilege(Privileges.CAN_ACCESS_EVENTS) && (
+            <Route path={`${path}/events`} component={Events} />
+          )}
+          {hasPrivilege(Privileges.CAN_ACCESS_MODULES) && (
+            <Route path={`${path}/student`} component={StudentModule} />
+          )}
+
+          {/* end of student routes */}
+          <Route component={NotFound} />
           {hasPrivilege(Privileges.CAN_ACCESS_EVALUATIONS) && (
-            <Switch>
+            <>
               <Route path={`${path}/evaluations`} component={InstructorViewEvaluations} />
               <Route
                 exact
@@ -158,19 +170,8 @@ const RouterProtection = () => {
                   <ConfirmationOrganism onConfirmationClose={() => history.goBack()} />
                 )}
               />
-            </Switch>
+            </>
           )}
-          {hasPrivilege(Privileges.CAN_TEACH_MODULE) && (
-            <Route exact path={`${path}/inst-module`} component={InstrLevelModule} />
-          )}
-          {hasPrivilege(Privileges.CAN_ACCESS_EVENTS) && (
-            <Route path={`${path}/events`} component={Events} />
-          )}
-          {hasPrivilege(Privileges.CAN_ACCESS_MODULES) && (
-            <Route path={`${path}/student`} component={StudentModule} />
-          )}
-          {/* end of student routes */}
-          <Route component={NotFound} />
         </Switch>
       )}
     </>

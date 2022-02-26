@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -16,7 +17,7 @@ import { advancedTypeChecker } from '../../utils/getOption';
 export default function ChooseRole() {
   const { user } = useAuthenticator();
   const [user_roles, setUserRoles] = useState<CommonCardDataType[]>([]);
-  const [picked_role, setPickedRole] = useState<string>();
+  const [picked_role, setPickedRole] = useState<string>('');
 
   const institution = institutionStore.getAll();
   const academy_info = academyStore.fetchAcademies();
@@ -69,14 +70,16 @@ export default function ChooseRole() {
   const pickRole = () => {
     if (picked_role) {
       cookie.setCookie('user_role', picked_role);
+      redirectTo(
+        user?.user_type === UserType.INSTRUCTOR
+          ? '/dashboard/inst-module'
+          : user?.user_type === UserType.STUDENT
+          ? '/dashboard/student'
+          : '/dashboard/users',
+      );
+    } else {
+      toast.error('You must pick a role');
     }
-    redirectTo(
-      user?.user_type === UserType.INSTRUCTOR
-        ? '/dashboard/inst-module'
-        : user?.user_type === UserType.STUDENT
-        ? '/dashboard/student'
-        : '/dashboard/users',
-    );
   };
 
   return (
