@@ -82,7 +82,7 @@ export default function FieldStudentMarking() {
   function submitMarking() {
     queryClient.invalidateQueries(['evaluation/studentEvaluations']);
     toast.success('Marks saved successfully', { duration: 3000 });
-    history.push(`/dashboard/evaluations/${id}/submissions`);
+    history.push(`/dashboard/evaluations/details/${id}/submissions`);
   }
   if (step == 0)
     if (!isLoading && questionMarks)

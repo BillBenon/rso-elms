@@ -79,7 +79,7 @@ export default function FieldStudentMarking() {
         {
           onSuccess: () => {
             toast.success('Marks saved successfully', { duration: 3000 });
-            history.push(`/dashboard/evaluations/${id}/submissions`);
+            history.push(`/dashboard/evaluations/details/${id}/submissions`);
             // setStep(1);
           },
           onError: (error) => {

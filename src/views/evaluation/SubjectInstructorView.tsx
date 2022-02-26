@@ -107,7 +107,7 @@ export default function SubjectInstructorView({
                             <Button
                               styleType="text"
                               onClick={() =>
-                                history.push(`/dashboard/evaluations/${info.id}`)
+                                history.push(`/dashboard/evaluations/details/${info.id}`)
                               }>
                               View
                             </Button>

@@ -60,7 +60,7 @@ export default function ModuleEvaluations() {
                         className="cursor-pointer"
                         data={info}
                         // handleClick={() =>
-                        //   history.push(`/dashboard/evaluations/${info.id}`)
+                        //   history.push(`/dashboard/evaluations/details/${info.id}`)
                         // }
                       />
                     </div>
