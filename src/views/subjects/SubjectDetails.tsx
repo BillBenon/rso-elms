@@ -95,6 +95,12 @@ export default function SubjectDetails() {
   tabs.push({
     label: 'Evaluations',
     href: `${url}/evaluations?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+    privilege: Privileges.CAN_ANSWER_EVALUATION,
+  });
+
+  tabs.push({
+    label: 'Manage evaluations',
+    href: `${url}/evaluations/manage?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
     privilege: Privileges.CAN_ACCESS_EVALUATIONS,
   });
   tabs.push({
@@ -202,10 +208,11 @@ export default function SubjectDetails() {
                   return <SubjectInstructors subjectId={subjectId} />;
                 }}
               />
-              {user?.user_type === UserType.INSTRUCTOR ? (
-                <Route
-                  path={`${url}/evaluations`}
-                  render={() => (
+
+              <Route
+                path={`${url}/evaluations/manage`}
+                render={() => (
+                  <>
                     <div className="flex justify-between">
                       <div className="w-9/12">
                         <SubjectInstructorView subjectId={subjectId} />
@@ -218,25 +225,25 @@ export default function SubjectDetails() {
                         </Permission>
                       ) : null}
                     </div>
-                  )}
-                />
-              ) : (
-                <Route
-                  path={`${url}/evaluations`}
-                  render={() => (
-                    <>
-                      {isLoading && !isSuccess ? (
-                        <Loader />
-                      ) : (
-                        <EvaluationCategories
-                          loading={isLoading}
-                          subjecEvaluations={subjectEvaluations?.data.data}
-                        />
-                      )}
-                    </>
-                  )}
-                />
-              )}
+                  </>
+                )}
+              />
+
+              <Route
+                path={`${url}/evaluations`}
+                render={() => (
+                  <>
+                    {isLoading && !isSuccess ? (
+                      <Loader />
+                    ) : (
+                      <EvaluationCategories
+                        loading={isLoading}
+                        subjecEvaluations={subjectEvaluations?.data.data}
+                      />
+                    )}
+                  </>
+                )}
+              />
             </Switch>
           </TabNavigation>
         </div>
