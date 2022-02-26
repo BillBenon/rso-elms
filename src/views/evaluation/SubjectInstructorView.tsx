@@ -11,7 +11,7 @@ import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Privileges } from '../../types';
 import { IEvaluationOwnership } from '../../types/services/evaluation.types';
-import { UserType } from '../../types/services/user.types';
+import cookie from '../../utils/cookie';
 import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import { advancedTypeChecker } from '../../utils/getOption';
 
@@ -32,18 +32,26 @@ export default function SubjectInstructorView({
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
     .data?.data.data[0];
 
+  console.log(user);
+
   const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
   const progId = new URLSearchParams(search).get('prog') || '';
   const level = new URLSearchParams(search).get('lvl') || '';
   const period = new URLSearchParams(search).get('prd') || '';
 
-  const { data, isSuccess, isLoading, isError } =
-    user?.user_type === UserType.INSTRUCTOR
-      ? evaluationStore.getEvaluationsByCategory(
-          IEvaluationOwnership.CREATED_BY_ME,
-          instructorInfo?.id.toString() || '',
-        )
-      : evaluationStore.getEvaluationsBySubject(subjectId);
+  const user_role_cookie = cookie.getCookie('user_role') || '';
+  const user_role = user?.user_roles?.find((role) => role.id + '' === user_role_cookie);
+  const user_privileges = user_role?.role_privileges?.map((role) => role.name);
+  const hasPrivilege = (privilege: Privileges) => user_privileges?.includes(privilege);
+
+  const { data, isSuccess, isLoading, isError } = hasPrivilege(
+    Privileges.CAN_ACCESS_EVALUATIONS,
+  )
+    ? evaluationStore.getEvaluationsByCategory(
+        IEvaluationOwnership.CREATED_BY_ME,
+        instructorInfo?.id.toString() || '',
+      )
+    : evaluationStore.getEvaluationsBySubject(subjectId);
 
   function goToEditEvaluation(info: CommonCardDataType) {
     setLocalStorageData('currentStep', 0);

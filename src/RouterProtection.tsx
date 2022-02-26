@@ -1,8 +1,9 @@
 import React from 'react';
-import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from './components/Atoms/custom/Button';
 import Loader from './components/Atoms/custom/Loader';
+import ConfirmationOrganism from './components/Organisms/ConfirmationOrganism';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import useAuthenticator from './hooks/useAuthenticator';
 import Dashboard from './layout/Dashboard';
@@ -13,7 +14,10 @@ import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';
 import AdminDashboard from './views/dashboard/AdminDashboard';
 import Divisions from './views/divisions/Divisions';
+import EvaluationNotiView from './views/evaluation/EvaluationNotiView';
+import EvaluationTest from './views/evaluation/EvaluationTest';
 import InstructorViewEvaluations from './views/evaluation/InstructorViewEvaluations';
+import StudentReview from './views/evaluation/StudentReview';
 import UpdateInstitution from './views/insitution/UpdateInstitution';
 import IntakesView from './views/intakes/Intakes';
 import Levels from './views/levels/Levels';
@@ -35,6 +39,7 @@ import Users from './views/users/Users';
 const RouterProtection = () => {
   const { user, userLoading, isError } = useAuthenticator();
   const { path } = useRouteMatch();
+  const history = useHistory();
 
   const user_role_cookie = cookie.getCookie('user_role') || '';
   const user_role = user?.user_roles?.find((role) => role.id + '' === user_role_cookie);
@@ -69,11 +74,14 @@ const RouterProtection = () => {
             <Route path={`${path}/users`} component={Users} />
           )}
           {hasPrivilege(Privileges.CAN_MODIFY_INSTITUTION) && (
-            <Route
-              exact
-              path={`${path}/institution/:id/edit`}
-              component={UpdateInstitution}
-            />
+            <>
+              {/* <Route exact path={`/institution/new`} component={NewInstitution} /> */}
+              <Route
+                exact
+                path={`${path}/institution/:id/edit`}
+                component={UpdateInstitution}
+              />
+            </>
           )}
 
           {hasPrivilege(Privileges.CAN_ACCESS_PRIVILEGES) && (
@@ -115,12 +123,43 @@ const RouterProtection = () => {
           {hasPrivilege(Privileges.CAN_ACCESS_INTAKES) && (
             <Route path={`${path}/intakes`} component={IntakesView} />
           )}
+          {/* <Route
+        path={`${path}/modules/:intakeProgram/:moduleId`}
+        component={AdmModuleDetails}
+      /> */}
           {hasPrivilege(Privileges.CAN_ACCESS_MODULES) && (
             <Route path={`${path}/modules`} component={Modules} />
           )}
           {/* end of academic admin routes */}
 
           {/* instructor routes */}
+          {hasPrivilege(Privileges.CAN_ACCESS_EVALUATIONS) && (
+            <Switch>
+              <Route path={`${path}/evaluations`} component={InstructorViewEvaluations} />
+              <Route
+                exact
+                path={`${path}/evaluations/view/:id`}
+                component={EvaluationNotiView}
+              />
+              <Route
+                exact
+                path={`${path}/evaluations/student-evaluation/:id`}
+                component={EvaluationTest}
+              />
+              <Route
+                exact
+                path={`${path}/evaluations/completed/student-evaluation/:id/review`}
+                component={StudentReview}
+              />
+              <Route
+                exact
+                path={`/dashboard/evaluations/attempt/:id`}
+                render={() => (
+                  <ConfirmationOrganism onConfirmationClose={() => history.goBack()} />
+                )}
+              />
+            </Switch>
+          )}
           {hasPrivilege(Privileges.CAN_TEACH_MODULE) && (
             <Route exact path={`${path}/inst-module`} component={InstrLevelModule} />
           )}
@@ -129,11 +168,6 @@ const RouterProtection = () => {
           )}
           {hasPrivilege(Privileges.CAN_ACCESS_MODULES) && (
             <Route path={`${path}/student`} component={StudentModule} />
-          )}
-
-          {(hasPrivilege(Privileges.CAN_ACCESS_EVALUATIONS) ||
-            hasPrivilege(Privileges.CAN_ANSWER_EVALUATION)) && (
-            <Route path={`${path}/evaluations`} component={InstructorViewEvaluations} />
           )}
           {/* end of student routes */}
           <Route component={NotFound} />
