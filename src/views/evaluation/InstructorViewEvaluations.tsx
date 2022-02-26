@@ -7,14 +7,19 @@ import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
+import ConfirmationOrganism from '../../components/Organisms/ConfirmationOrganism';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
-import { CommonCardDataType, Link as LinkList } from '../../types';
+import { CommonCardDataType, Link as LinkList, Privileges } from '../../types';
 import { IEvaluationOwnership } from '../../types/services/evaluation.types';
+import cookie from '../../utils/cookie';
 import { advancedTypeChecker, getDropDownStatusOptions } from '../../utils/getOption';
 import EvaluationDetails from './EvaluationDetails';
+import EvaluationNotiView from './EvaluationNotiView';
+import EvaluationTest from './EvaluationTest';
+import StudentReview from './StudentReview';
 
 export default function InstructorViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
@@ -23,6 +28,11 @@ export default function InstructorViewEvaluations() {
   const history = useHistory();
   const { path } = useRouteMatch();
   const { user } = useAuthenticator();
+
+  const user_role_cookie = cookie.getCookie('user_role') || '';
+  const user_role = user?.user_roles?.find((role) => role.id + '' === user_role_cookie);
+  const user_privileges = user_role?.role_privileges?.map((role) => role.name);
+  const hasPrivilege = (privilege: Privileges) => user_privileges?.includes(privilege);
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
     .data?.data.data[0];
@@ -84,8 +94,6 @@ export default function InstructorViewEvaluations() {
   return (
     <div>
       <Switch>
-        <Route exact path={`${path}/new`} component={NewEvaluation} />
-        <Route path={`${path}/:id`} component={EvaluationDetails} />
         <Route
           exact
           path={path}
@@ -155,6 +163,34 @@ export default function InstructorViewEvaluations() {
             </>
           )}
         />
+        <Route exact path={`${path}/new`} component={NewEvaluation} />
+
+        <Route exact path={`${path}/view/:id`} component={EvaluationNotiView} />
+        {hasPrivilege(Privileges.CAN_ANSWER_EVALUATION) && (
+          <Route
+            exact
+            path={`${path}/student-evaluation/:id`}
+            component={EvaluationTest}
+          />
+        )}
+        {hasPrivilege(Privileges.CAN_ANSWER_EVALUATION) && (
+          <Route
+            exact
+            path={`${path}/completed/student-evaluation/:id/review`}
+            component={StudentReview}
+          />
+        )}
+
+        {hasPrivilege(Privileges.CAN_ANSWER_EVALUATION) && (
+          <Route
+            exact
+            path={`${path}/attempt/:id`}
+            render={() => (
+              <ConfirmationOrganism onConfirmationClose={() => history.goBack()} />
+            )}
+          />
+        )}
+        <Route path={`${path}/details/:id`} component={EvaluationDetails} />
       </Switch>
     </div>
   );

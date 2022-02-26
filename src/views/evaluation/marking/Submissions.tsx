@@ -161,7 +161,9 @@ export default function Submissions() {
             icon="evaluation"
             buttonLabel="Go back"
             title={'No submissions has been made so far!'}
-            handleClick={() => history.push(`/dashboard/evaluations/${evaluation?.id}`)}
+            handleClick={() =>
+              history.push(`/dashboard/evaluations/details/${evaluation?.id}`)
+            }
             description="It looks like there is any student who have submitted so far."
           />
         ) : isSuccess &&

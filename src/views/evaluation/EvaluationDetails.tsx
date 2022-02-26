@@ -5,11 +5,9 @@ import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import EvaluationContent from '../../components/Organisms/evaluation/EvaluationContent';
-import useAuthenticator from '../../hooks/useAuthenticator';
 import { queryClient } from '../../plugins/react-query';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
-import { UserType } from '../../types/services/user.types';
 import ApproveEvaluation from './ApproveEvaluation';
 import Submissions from './marking/Submissions';
 import ReviewEvaluation from './ReviewEvaluation';
@@ -20,7 +18,6 @@ export default function EvaluationDetails() {
 
   const { url, path } = useRouteMatch();
   const makeEvaluationPublic = evaluationStore.publishEvaluation();
-  const { user } = useAuthenticator();
   const tabs = [
     {
       label: 'Overview evaluation',
@@ -79,14 +76,13 @@ export default function EvaluationDetails() {
             <Route exact path={`${path}/unbeguns`} render={() => <Unbeguns />} />
           </div>
 
-          {user?.user_type === UserType.INSTRUCTOR && (
-            <Route
-              exact
-              path={`${path}`}
-              render={() => (
-                <EvaluationContent evaluationId={id} feedbackType="">
-                  <div className="flex gap-4">
-                    {/* <Button
+          <Route
+            exact
+            path={`${path}`}
+            render={() => (
+              <EvaluationContent evaluationId={id} feedbackType="">
+                <div className="flex gap-4">
+                  {/* <Button
                       styleType="outline"
                       onClick={() =>
                         history.push({
@@ -97,13 +93,13 @@ export default function EvaluationDetails() {
                       Edit evaluation
                     </Button> */}
 
-                    <Button
-                      disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
-                      onClick={() => publishEvaluation('PUBLIC')}>
-                      Publish evaluation
-                    </Button>
+                  <Button
+                    disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
+                    onClick={() => publishEvaluation('PUBLIC')}>
+                    Publish evaluation
+                  </Button>
 
-                    {/* {evaluationInfo?.available === 'HIDDEN' ? (
+                  {/* {evaluationInfo?.available === 'HIDDEN' ? (
                     <Button
                       disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
                       onClick={() => publishEvaluation('PUBLIC')}>
@@ -116,11 +112,10 @@ export default function EvaluationDetails() {
                       Unpublish evaluation
                     </Button>
                   )} */}
-                  </div>
-                </EvaluationContent>
-              )}
-            />
-          )}
+                </div>
+              </EvaluationContent>
+            )}
+          />
         </TabNavigation>
       </Switch>
     </div>

@@ -107,7 +107,7 @@ export default function StudentViewEvaluations({
       <Switch>
         <Route exact path={`${path}/new`} component={NewEvaluation} />
 
-        <Route path={`${path}/:id`} component={EvaluationDetails} />
+        <Route path={`${path}/details/:id`} component={EvaluationDetails} />
         <Route
           path={path}
           render={() => (
