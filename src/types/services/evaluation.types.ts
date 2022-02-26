@@ -165,7 +165,7 @@ export interface IStudentEvaluations {
 export interface IAddprivateAttendee {
   evaluation: string;
   id: string;
-  private_status: true;
+  private_status: boolean;
   students: string[];
 }
 
