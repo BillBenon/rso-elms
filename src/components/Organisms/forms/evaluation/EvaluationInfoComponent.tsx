@@ -6,9 +6,10 @@ import { useLocation } from 'react-router-dom';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { classStore } from '../../../../store/administration/class.store';
+import intakeProgramStore from '../../../../store/administration/intake-program.store';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
-import { ValueType } from '../../../../types';
+import { SelectData, ValueType } from '../../../../types';
 import {
   IAccessTypeEnum,
   IContentFormatEnum,
@@ -21,7 +22,6 @@ import {
   IQuestionaireTypeEnum,
   ISubmissionTypeEnum,
 } from '../../../../types/services/evaluation.types';
-// import { formatDateToIso } from '../../../../utils/date-helper';
 import { setLocalStorageData } from '../../../../utils/getLocalStorageItem';
 import {
   getDropDownOptions,
@@ -46,6 +46,7 @@ export default function EvaluationInfoComponent({
     () => new URLSearchParams(search).get('prd') || '',
     [search],
   );
+  const levelId = useMemo(() => new URLSearchParams(search).get('lvl') || '', [search]);
   const subjectId = useMemo(
     () => new URLSearchParams(search).get('subj') || '',
     [search],
@@ -57,11 +58,31 @@ export default function EvaluationInfoComponent({
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
     .data?.data.data[0];
 
+  const { data: studentsProgram } = intakeProgramStore.getStudentsByIntakeProgramLevel(
+    levelId || '',
+  );
+
+  const [students, setStudents] = useState<SelectData[]>([]);
+  useEffect(() => {
+    let studentsView: SelectData[] = [];
+    studentsProgram?.data.data.forEach((stud) => {
+      let studentView: SelectData = {
+        value: stud.id,
+        label: `${stud.intake_program_student.student.user.first_name} ${stud.intake_program_student.student.user.last_name}`,
+      };
+      studentsView.push(studentView);
+    });
+    setStudents(studentsView);
+  }, [studentsProgram]);
+
+  console.log(studentsProgram);
+
   const { data: classes } = classStore.getClassByPeriod(intakePeriodId + '');
 
   const [details, setDetails] = useState<IEvaluationCreate>({
     access_type: IAccessTypeEnum.PUBLIC,
     academy_id: '',
+    private_attendees: evaluationInfo?.private_attendees.toString() || '',
     instructor_id: instructorInfo?.id + '',
     intake_academic_year_period: intakePeriodId,
     allow_submission_time: '',
@@ -90,6 +111,7 @@ export default function EvaluationInfoComponent({
     setDetails({
       access_type: evaluationInfo?.access_type || IAccessTypeEnum.PUBLIC,
       academy_id: user?.academy.id.toString() || '',
+      private_attendees: evaluationInfo?.private_attendees.toString() || '',
       instructor_id: instructorInfo?.id.toString() || '',
       intake_academic_year_period: intakePeriodId,
       allow_submission_time: evaluationInfo?.allow_submission_time || '',
@@ -224,6 +246,18 @@ export default function EvaluationInfoComponent({
           Evaluation type
         </SelectMolecule>
         <RadioMolecule
+          defaultValue={details?.access_type}
+          className="pb-4"
+          value={details?.access_type}
+          name="access_type"
+          options={[
+            { label: 'PUBLIC', value: IAccessTypeEnum.PUBLIC },
+            { label: 'PRIVATE', value: IAccessTypeEnum.PRIVATE },
+          ]}
+          handleChange={handleChange}>
+          Accessibility
+        </RadioMolecule>
+        <RadioMolecule
           type="block"
           defaultValue={details?.eligible_group}
           className="pb-4"
@@ -236,18 +270,32 @@ export default function EvaluationInfoComponent({
           handleChange={handleChange}>
           Eligible Class
         </RadioMolecule>
-        <DropdownMolecule
-          isMulti={details?.eligible_group === IEligibleClassEnum.MULTIPLE}
-          width="64"
-          name="intake_level_class_ids"
-          placeholder="Select class"
-          handleChange={handleChange}
-          options={getDropDownOptions({
-            inputs: classes?.data.data || [],
-            labelName: ['class_name'],
-          })}>
-          Select Class(es)
-        </DropdownMolecule>{' '}
+
+        {details.access_type === IAccessTypeEnum.PUBLIC ? (
+          <DropdownMolecule
+            isMulti={details?.eligible_group === IEligibleClassEnum.MULTIPLE}
+            width="64"
+            name="intake_level_class_ids"
+            placeholder="Select class"
+            handleChange={handleChange}
+            options={getDropDownOptions({
+              inputs: classes?.data.data || [],
+              labelName: ['class_name'],
+            })}>
+            Select Class(es)
+          </DropdownMolecule>
+        ) : (
+          <DropdownMolecule
+            isMulti
+            width="64"
+            name="private_attendees"
+            placeholder="Select class"
+            handleChange={handleChange}
+            options={students}>
+            Select students
+          </DropdownMolecule>
+        )}
+
         <RadioMolecule
           defaultValue={details.questionaire_type}
           className="pb-4"

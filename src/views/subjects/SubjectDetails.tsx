@@ -94,7 +94,7 @@ export default function SubjectDetails() {
 
   tabs.push({
     label: 'Evaluations',
-    href: `${url}/evaluations?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+    href: `${url}/evaluations?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}&lvl=${level}`,
     privilege: Privileges.CAN_ANSWER_EVALUATION,
   });
 
