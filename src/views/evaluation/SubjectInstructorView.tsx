@@ -96,7 +96,7 @@ export default function SubjectInstructorView({
                     <div key={index}>
                       <CommonCardMolecule className="cursor-pointer" data={info}>
                         <div className="flex justify-between">
-                          <Permission privilege={Privileges.CAN_CREATE_EVALUATION}>
+                          <Permission privilege={Privileges.CAN_CREATE_EVALUATIONS}>
                             <Button
                               styleType="text"
                               onClick={() => goToEditEvaluation(info)}>

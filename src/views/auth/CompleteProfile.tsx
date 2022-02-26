@@ -72,7 +72,7 @@ function CompleteProfile() {
     place_of_issue: '',
     rank_depart: '',
     reset_date: '',
-    residence_location_id: 0,
+    residence_location_id: null,
     spouse_name: '',
   });
 
@@ -104,7 +104,7 @@ function CompleteProfile() {
           userInfo.profile_status == null
             ? ProfileStatus.INCOMPLETE
             : userInfo.profile_status,
-        residence_location_id: userInfo.person.residence_location_id,
+        residence_location_id: null,
         user_type: userInfo.user_type,
         doc_type: userInfo.person ? userInfo.person.doc_type : DocType.NID,
         nid: userInfo.person ? userInfo.person.nid : '',

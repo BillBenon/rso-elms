@@ -52,6 +52,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
     email: '',
     father_names: '',
     first_name: '',
+    institution_id: '',
     // academic_program_level_id: '',
     intake_program_id: '',
     last_name: '',
@@ -74,7 +75,6 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
     profile_status: ProfileStatus.INCOMPLETE,
     id: '',
     spouse_name: '',
-    institution_id: '',
   });
 
   const { id } = useParams<ParamType>();
@@ -82,8 +82,6 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
 
   useEffect(() => {
     const selectedUser = data?.data.data;
-
-    console.log(selectedUser);
 
     selectedUser &&
       setDetails({
@@ -108,6 +106,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
         phone: selectedUser.person.phone_number,
         place_of_birth: selectedUser.person.place_of_birth,
         place_of_residence: '',
+        institution_id: selectedUser.institution.id.toString() || '',
         residence_location_id: selectedUser.person.residence_location_id,
         reset_date: selectedUser.reset_date,
         sex: selectedUser.person.sex,
@@ -118,7 +117,6 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
         send_communication_msg: selectedUser.send_communication_msg,
         profile_status: selectedUser.profile_status || ProfileStatus.INCOMPLETE,
         id: selectedUser.id + '',
-        institution_id: selectedUser.institution?.id.toString() || '',
         spouse_name: selectedUser.person.spouse_name || '',
       });
   }, [data]);

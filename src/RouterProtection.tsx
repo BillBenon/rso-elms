@@ -169,8 +169,8 @@ const RouterProtection = () => {
           {hasPrivilege(Privileges.CAN_ACCESS_MODULES) && (
             <Route path={`${path}/student`} component={StudentModule} />
           )}
-          <Route component={NotFound} />
           {/* end of student routes */}
+          <Route component={NotFound} />
         </Switch>
       )}
     </>
@@ -202,11 +202,11 @@ const RouterProtection = () => {
     </div>
   ) : user ? (
     <Dashboard>
-      <Switch>
-        {user?.user_type === UserType.SUPER_ADMIN
-          ? InstitutionAdminRoutes()
-          : PrivilegedRoutes()}
-      </Switch>
+      {/* <Switch> */}
+      {user?.user_type === UserType.SUPER_ADMIN
+        ? InstitutionAdminRoutes()
+        : PrivilegedRoutes()}
+      {/* </Switch> */}
     </Dashboard>
   ) : isError ? (
     <div>

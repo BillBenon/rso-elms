@@ -99,7 +99,7 @@ export default function Sidebar() {
         fill: false,
       },
       {
-        title: 'Teaching Module',
+        title: 'Teaching Modules',
         to: '/dashboard/inst-module',
         icon: 'module',
         privilege: Privileges.CAN_TEACH_MODULE,

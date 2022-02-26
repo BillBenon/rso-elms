@@ -41,7 +41,7 @@ function LevelInstructors<T>({
     {
       name: 'remove instructors',
       handleAction: () => {},
-      privilege: Privileges.CAN_DELETE_INSTRUCTORS_ON_LEVEL_PRORAM,
+      privilege: Privileges.CAN_DELETE_INSTRUCTORS_ON_LEVEL_PROGRAM,
     },
   ];
 
