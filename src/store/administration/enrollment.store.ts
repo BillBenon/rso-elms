@@ -125,6 +125,10 @@ class EnrolmmentStore {
 
   enrollStudentsToLevel() {
     return useMutation(enrollmentService.enrollStudentsToLevel);
+  } /* Enrolling users to a program. */
+
+  enrollUsersToProgram() {
+    return useMutation(enrollmentService.enrollUsersToProgram);
   }
   enrollStudentToProgram() {
     return useMutation(enrollmentService.enrollStudentToProgram);

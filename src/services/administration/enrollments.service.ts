@@ -11,6 +11,7 @@ import {
   EnrollInstructorToSubjectInfo,
   EnrollStudentToLevel,
   EnrollStudentToProgram,
+  EnrollUserToProgram,
   InstructorAssignModule,
   ModuleAssignmentType,
   StudentApproval,
@@ -129,6 +130,12 @@ class EnrollmentService {
       `students/enrolStudentInIntakeProgramLevel`,
       newStudent,
     );
+  }
+
+  public async enrollUsersToProgram(
+    newUser: EnrollUserToProgram,
+  ): Promise<AxiosResponse<Response<StudentEnrollmentLevel>>> {
+    return await adminstrationAxios.post(`students/enrolUserInIntakeProgram`, newUser);
   }
 
   public async enrollStudentToProgram(
