@@ -196,12 +196,11 @@ export default function Navigation() {
                       role="menu"
                       aria-orientation="vertical"
                       aria-labelledby="user-menu">
-                      {/* <a
-                        href="#"
-                        className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100"
-                        role="menuitem">
-                        Your Profile
-                      </a> */}
+                      <Link
+                        to={`/dashboard/account/update-password`}
+                        className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100">
+                        Change password
+                      </Link>
                       <Link
                         to={`/dashboard/users/${user?.id}/profile?me=true`}
                         className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100">
