@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link as BrowserLink, useHistory } from 'react-router-dom';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
-import { roleStore } from '../../../../store/administration';
+import { getPrivilegesByRole } from '../../../../store/administration';
 import { CommonCardDataType, Privileges } from '../../../../types';
 import { UserType } from '../../../../types/services/user.types';
 import cookie from '../../../../utils/cookie';
@@ -29,7 +29,7 @@ export default function ModuleCard({
   const [privileges, setPrivileges] = useState<string[]>();
 
   const picked_role_cookie = cookie.getCookie('user_role') || '';
-  const { data: role_privilege } = roleStore.getPrivilegesByRole(picked_role_cookie);
+  const { data: role_privilege } = getPrivilegesByRole(picked_role_cookie);
 
   useEffect(() => {
     const _privileges = role_privilege?.data.data?.map(

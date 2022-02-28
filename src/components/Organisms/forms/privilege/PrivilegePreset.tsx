@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
-import { getUnAssignedPrivileges, roleStore } from '../../../../store/administration';
+import { getPrivilegesByRole, roleStore } from '../../../../store/administration';
 import { AddPrivilegeRoleType, RolePropType } from '../../../../types';
 import Badge from '../../../Atoms/custom/Badge';
 import Button from '../../../Atoms/custom/Button';
@@ -20,10 +20,7 @@ function PrivilegePreset({ roleId, onSubmit }: RolePropType) {
   const { mutateAsync } = roleStore.addPrivilegesOnRole();
   let roles = data?.data.data.filter((role) => role.id != roleId) || [];
 
-  const { data: rolePrivileges } = getUnAssignedPrivileges(
-    selectedRole + '',
-    !!selectedRole,
-  );
+  const { data: rolePrivileges } = getPrivilegesByRole(selectedRole + '', !!selectedRole);
 
   useEffect(() => {
     let privileges = rolePrivileges?.data.data
@@ -40,19 +37,24 @@ function PrivilegePreset({ roleId, onSubmit }: RolePropType) {
   }, [roleId, rolePrivileges?.data.data]);
 
   const savePrivileges = () => {
-    const toastId = toast.loading('adding privileges to role');
-    mutateAsync(priv, {
-      onSuccess: () => {
-        onSubmit();
-        toast.success('Privilege(s) Added', { id: toastId });
-        history.push(`/dashboard/role/${roleId}/view`);
-      },
-      onError: () => {
-        toast.error('something wrong happened adding privileges on role', {
-          id: toastId,
-        });
-      },
-    });
+    if (selectedRole) {
+      const toastId = toast.loading('adding privileges to role');
+
+      mutateAsync(priv, {
+        onSuccess: () => {
+          onSubmit();
+          toast.success('Privilege(s) Added', { id: toastId });
+          history.push(`/dashboard/role/${roleId}/view`);
+        },
+        onError: () => {
+          toast.error('something wrong happened adding privileges on role', {
+            id: toastId,
+          });
+        },
+      });
+    } else {
+      toast.error('You must select a role for presets');
+    }
   };
 
   return (
