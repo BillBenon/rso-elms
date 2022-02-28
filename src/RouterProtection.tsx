@@ -1,5 +1,5 @@
 import React from 'react';
-import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from './components/Atoms/custom/Button';
 import Loader from './components/Atoms/custom/Loader';
@@ -37,6 +37,7 @@ import Users from './views/users/Users';
 const RouterProtection = () => {
   const { user, userLoading, isError } = useAuthenticator();
   const { path } = useRouteMatch();
+  const history = useHistory();
 
   const user_role_cookie = cookie.getCookie('user_role') || '';
   const user_role = user?.user_roles?.find((role) => role.id + '' === user_role_cookie);
@@ -162,8 +163,12 @@ const RouterProtection = () => {
         exact
         path={`${path}/account/update-password`}
         render={() => (
-          <PopupMolecule title="Update Password" open={true} onClose={() => {}}>
-            <UpdatePassword onSubmit={() => {}} />
+          <PopupMolecule
+            closeOnClickOutSide={false}
+            title="Update Password"
+            open={true}
+            onClose={() => history.goBack()}>
+            <UpdatePassword onSubmit={() => history.goBack()} />
           </PopupMolecule>
         )}
       />
