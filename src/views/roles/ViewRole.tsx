@@ -142,6 +142,7 @@ export default function ViewRole() {
                 closeOnClickOutSide={false}>
                 <AddPrivileges
                   roleName={role?.name || ''}
+                  academyId={role?.academy_id || ''}
                   roleId={role?.id + '' || ''}
                   onSubmit={submited}
                 />
@@ -163,6 +164,7 @@ export default function ViewRole() {
                 <PrivilegePreset
                   roleName={role?.name || ''}
                   roleId={role?.id + '' || ''}
+                  academyId={role?.academy_id + '' || ''}
                   onSubmit={submited}
                 />
               </PopupMolecule>

@@ -45,7 +45,7 @@ export default function SubjectInstructorView({
   const hasPrivilege = (privilege: Privileges) => user_privileges?.includes(privilege);
 
   const { data, isSuccess, isLoading, isError } = hasPrivilege(
-    Privileges.CAN_ACCESS_EVALUATIONS,
+    Privileges.CAN_MANAGE_EVALUATIONS,
   )
     ? evaluationStore.getEvaluationsByCategory(
         IEvaluationOwnership.CREATED_BY_ME,

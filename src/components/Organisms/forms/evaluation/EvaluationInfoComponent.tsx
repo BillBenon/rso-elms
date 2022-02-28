@@ -204,6 +204,17 @@ export default function EvaluationInfoComponent({
       return;
     }
 
+    //set class ids and eligible group to empty since it's private
+    if (name === 'private_attendees') {
+      setDetails((details) => ({
+        ...details,
+        eligible_group: '',
+        intake_level_class_ids: '',
+      }));
+
+      return;
+    }
+
     setDetails((details) => ({
       ...details,
       [name]: value.toString(),
@@ -300,19 +311,22 @@ export default function EvaluationInfoComponent({
           handleChange={handleChange}>
           Accessibility
         </RadioMolecule>
-        <RadioMolecule
-          type="block"
-          defaultValue={details?.eligible_group}
-          className="pb-4"
-          value={details?.eligible_group}
-          name="eligible_group"
-          options={[
-            { label: 'Multiple', value: IEligibleClassEnum.MULTIPLE },
-            { label: 'Single', value: IEligibleClassEnum.SINGLE },
-          ]}
-          handleChange={handleChange}>
-          Eligible Class
-        </RadioMolecule>
+
+        {details.access_type === IAccessTypeEnum.PUBLIC && (
+          <RadioMolecule
+            type="block"
+            defaultValue={details?.eligible_group}
+            className="pb-4"
+            value={details?.eligible_group}
+            name="eligible_group"
+            options={[
+              { label: 'Multiple', value: IEligibleClassEnum.MULTIPLE },
+              { label: 'Single', value: IEligibleClassEnum.SINGLE },
+            ]}
+            handleChange={handleChange}>
+            Eligible Class
+          </RadioMolecule>
+        )}
 
         {details.access_type === IAccessTypeEnum.PUBLIC ? (
           <DropdownMolecule
@@ -332,7 +346,7 @@ export default function EvaluationInfoComponent({
             isMulti
             width="64"
             name="private_attendees"
-            placeholder="Select class"
+            placeholder="Select students"
             handleChange={handleChange}
             options={students}>
             Select students
