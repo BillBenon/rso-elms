@@ -5,9 +5,9 @@ import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Barchart from '../../components/Organisms/chart/Barchart';
-import Barchat from '../../components/Organisms/chart/Barchart';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { divisionStore } from '../../store/administration/divisions.store';
+import { getDepartmentStatsByAcademy } from '../../store/administration/stats.store';
 import usersStore from '../../store/administration/users.store';
 import { Link } from '../../types';
 import { UserType } from '../../types/services/user.types';
@@ -27,6 +27,8 @@ export default function AdminDashboard() {
       pageSize: 100000000,
       sortyBy: 'username',
     }).data?.data.data.content || [];
+
+  const { data: stats } = getDepartmentStatsByAcademy(user?.academy.id);
 
   const departments =
     divisionStore.getDivisionsByAcademy('DEPARTMENT', user?.academy?.id.toString() || '')
@@ -109,7 +111,11 @@ export default function AdminDashboard() {
             <Heading className="px-6" fontWeight="semibold">
               Students in departments
             </Heading>
-            <Barchart />
+            <Barchart
+              xAxisLabel={'department_name'}
+              dataKey={'total_students'}
+              data={stats?.data.data || []}
+            />
           </div>
         </div>
         <div className="col-span-2 h-56 rounded"></div>
