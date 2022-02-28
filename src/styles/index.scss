@@ -10,6 +10,9 @@
   font-family: 'Inter', sans-serif;
   @apply to-txt-primary;
 }
+.editor-no-border {
+  border: none;
+}
 body,
 html {
   @apply bg-secondary;
@@ -77,4 +80,3 @@ html {
 ::-webkit-scrollbar-track-piece {
   max-height: 20px;
 }
-

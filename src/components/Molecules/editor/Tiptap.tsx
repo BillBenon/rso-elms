@@ -11,6 +11,7 @@ interface IProps {
   content: string;
   editable?: boolean;
   viewMenu?: boolean;
+  showBorder?: boolean;
 }
 
 export default function Tiptap({
@@ -18,6 +19,7 @@ export default function Tiptap({
   content,
   editable = true,
   viewMenu = true,
+  showBorder = true,
 }: IProps) {
   const editor = useEditor({
     onUpdate({ editor }) {
@@ -29,7 +31,7 @@ export default function Tiptap({
   });
 
   return (
-    <section id="tiptap-editor">
+    <section id="tiptap-editor" className={`${showBorder ? 'show-border' : ''}`}>
       {viewMenu && (
         <article>
           <MenuBar editor={editor} />
