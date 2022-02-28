@@ -3,6 +3,8 @@ import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import Button from './components/Atoms/custom/Button';
 import Loader from './components/Atoms/custom/Loader';
+import PopupMolecule from './components/Molecules/Popup';
+import UpdatePassword from './components/Organisms/forms/auth/signup/personal/UpdatePassword';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import useAuthenticator from './hooks/useAuthenticator';
 import Dashboard from './layout/Dashboard';
@@ -135,6 +137,16 @@ const RouterProtection = () => {
             hasPrivilege(Privileges.CAN_ANSWER_EVALUATION)) && (
             <Route path={`${path}/evaluations`} component={InstructorViewEvaluations} />
           )}
+
+          <Route
+            exact
+            path={`${path}/account/update-password`}
+            render={() => (
+              <PopupMolecule title="Update Password" open={true} onClose={() => {}}>
+                <UpdatePassword onSubmit={() => {}} />
+              </PopupMolecule>
+            )}
+          />
           {/* end of student routes */}
           <Route component={NotFound} />
         </Switch>
@@ -146,6 +158,15 @@ const RouterProtection = () => {
     <Switch>
       {/*start of institution admin */}
       <Route path={`${path}/role/:id/view`} component={ViewRole} />
+      <Route
+        exact
+        path={`${path}/account/update-password`}
+        render={() => (
+          <PopupMolecule title="Update Password" open={true} onClose={() => {}}>
+            <UpdatePassword onSubmit={() => {}} />
+          </PopupMolecule>
+        )}
+      />
       <Route path={`${path}/academies`} component={Academies} />
       <Route path={`${path}/calendar`} component={CalendarView} />
       <Route path={`${path}/ranks`} component={Ranks} />

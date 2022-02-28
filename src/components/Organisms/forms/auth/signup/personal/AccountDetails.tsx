@@ -71,7 +71,6 @@ function AccountDetails<E>({
       });
   }, [user.data?.data.data]);
 
-  function submited() {}
   return (
     <div className="flex flex-col gap-4">
       {!isVertical && (
@@ -123,7 +122,7 @@ function AccountDetails<E>({
           render={() => {
             return (
               <PopupMolecule title="Update Password" open={true} onClose={history.goBack}>
-                <UpdatePassword onSubmit={submited} />
+                <UpdatePassword onSubmit={() => {}} />
               </PopupMolecule>
             );
           }}
