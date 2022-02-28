@@ -88,6 +88,13 @@ export interface SelectProps extends commonInputProps {
   width?: string;
 }
 
+export interface MultiselectProps extends commonInputProps {
+  loading?: boolean;
+  value?: string[];
+  hasError?: boolean;
+  width?: string;
+}
+
 export interface IChart {
   data: Object[];
   position: string;
