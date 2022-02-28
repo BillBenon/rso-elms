@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
-import { roleStore } from '../../../../store/administration';
+import { getPrivilegesByRole } from '../../../../store/administration';
 import { CommonCardDataType, Privileges } from '../../../../types';
 import cookie from '../../../../utils/cookie';
 import CommonCardMolecule from '../CommonCardMolecule';
@@ -16,7 +16,7 @@ export default function SubjectCard({ subject, intakeProg = '' }: IProps) {
   const [privileges, setPrivileges] = useState<string[]>();
 
   const picked_role_cookie = cookie.getCookie('user_role') || '';
-  const { data: role_privilege } = roleStore.getPrivilegesByRole(picked_role_cookie);
+  const { data: role_privilege } = getPrivilegesByRole(picked_role_cookie);
 
   useEffect(() => {
     const _privileges = role_privilege?.data.data?.map(

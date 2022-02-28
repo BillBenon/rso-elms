@@ -16,6 +16,8 @@ import { Privileges, ValueType } from '../../types';
 import { ActionsType } from '../../types/services/table.types';
 import { AcademyUserType, UserType, UserTypes } from '../../types/services/user.types';
 import { formatUserTable } from '../../utils/array';
+import DeployInstructors from '../DeployInstructors';
+import EnrollStudents from '../EnrollStudents';
 
 export default function AdminsView() {
   const { user } = useAuthenticator();
@@ -44,11 +46,34 @@ export default function AdminsView() {
   let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
 
   actions?.push({
-    name: 'Assign Role',
+    name: 'View admin',
     handleAction: (id: string | number | undefined) => {
-      history.push(`${url}/${id}/assign-role`); // go to assign role
+      history.push(`/dashboard/users/${id}/profile`); // go to view user profile
     },
-    privilege: Privileges.CAN_ASSIGN_ROLE,
+    privilege: Privileges.CAN_ACCESS_PROFILE,
+  });
+  actions?.push({
+    name: 'Edit admin',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`/dashboard/users/${id}/edit`); // go to edit user
+    },
+    privilege: Privileges.CAN_MODIFY_USER,
+  });
+
+  actions?.push({
+    name: 'Deploy instructor',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${url}/${id}/deploy`); // go to assign role
+    },
+    privilege: Privileges.CAN_CREATE_USER,
+  });
+
+  actions?.push({
+    name: 'Enroll student',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${url}/${id}/enroll`); // go to assign role
+    },
+    privilege: Privileges.CAN_CREATE_USER,
   });
 
   actions?.push({
@@ -60,19 +85,11 @@ export default function AdminsView() {
   });
 
   actions?.push({
-    name: 'Edit admin',
+    name: 'Assign Role',
     handleAction: (id: string | number | undefined) => {
-      history.push(`/dashboard/users/${id}/edit`); // go to edit user
+      history.push(`${url}/${id}/assign-role`); // go to assign role
     },
-    privilege: Privileges.CAN_MODIFY_USER,
-  });
-
-  actions?.push({
-    name: 'View admin',
-    handleAction: (id: string | number | undefined) => {
-      history.push(`/dashboard/users/${id}/profile`); // go to view user profile
-    },
-    privilege: Privileges.CAN_ACCESS_PROFILE,
+    privilege: Privileges.CAN_ASSIGN_ROLE,
   });
 
   function handleSearch(_e: ValueType) {}
@@ -136,6 +153,32 @@ export default function AdminsView() {
               open={true}
               onClose={history.goBack}>
               <AssignRole />
+            </PopupMolecule>
+          )}
+        />
+        <Route
+          exact
+          path={`${path}/:id/deploy`}
+          render={() => (
+            <PopupMolecule
+              closeOnClickOutSide={false}
+              title="Deploy as an instructor"
+              open={true}
+              onClose={history.goBack}>
+              <DeployInstructors />
+            </PopupMolecule>
+          )}
+        />
+        <Route
+          exact
+          path={`${path}/:id/enroll`}
+          render={() => (
+            <PopupMolecule
+              closeOnClickOutSide={false}
+              title="Enroll as a student"
+              open={true}
+              onClose={history.goBack}>
+              <EnrollStudents />
             </PopupMolecule>
           )}
         />

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ReactNode } from 'react';
 
 import useAuthenticator from '../../../hooks/useAuthenticator';
-import { roleStore } from '../../../store/administration';
+import { getPrivilegesByRole } from '../../../store/administration';
 import { Privileges } from '../../../types';
 import cookie from '../../../utils/cookie';
 
@@ -21,7 +21,7 @@ export default function Permission({
   const [privileges, setPrivileges] = useState<string[]>();
 
   const picked_role_cookie = cookie.getCookie('user_role') || '';
-  const { data: role_privilege } = roleStore.getPrivilegesByRole(picked_role_cookie);
+  const { data: role_privilege } = getPrivilegesByRole(picked_role_cookie);
 
   useEffect(() => {
     const _privileges = role_privilege?.data.data?.map(
