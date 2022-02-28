@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { MultiselectProps, SelectData } from '../../../types';
 import { randomString } from '../../../utils/random';
@@ -24,6 +24,10 @@ export default function Multiselect({
   const [filtered, setfiltered] = useState<SelectData[]>(options);
 
   const input = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setfiltered([...options] || []);
+  }, [options]);
 
   const handleSelect = (value: string) => {
     if (internalValue.includes(value)) {
@@ -54,29 +58,42 @@ export default function Multiselect({
           <input
             type="text"
             name={name}
-            value={internalValue}
+            value={internalValue.join()}
             required={required}
             onChange={(_e) => {}}
             onFocus={() => input.current?.focus()}
             className="border-none focus:outline-none absolute w-full top-0 text-white h-0 placeholder-black"
             style={{ zIndex: -10 }}
           />
-          {/* input with placeholder */}
-          <input
-            disabled={disabled}
-            ref={input}
-            value={searchQuery}
-            onFocus={() => setisMenuOpen(true)}
-            placeholder={placeholder || `Select ${name}`}
-            onChange={handleSearch}
-            id={selectId}
-            onBlur={() => setisMenuOpen(false)}
-            className={`block w-full hover:border-primary-400 placeholder-${
-              internalValue ? 'black' : 'txt-secondary'
-            } h-12 text-sm border-2 border-${
-              hasError ? 'error-500' : 'tertiary'
-            }  rounded-md px-4 focus:border-primary-500 focus:outline-none font-normal cursor-pointer`}
-          />
+          <div className="border-2 border-tertiary bg-white rounded-md px-4 hover:border-primary-400">
+            <div
+              className={`flex flex-wrap w-full gap-1 ${
+                internalValue.length > 0 ? 'pt-1' : ''
+              }`}>
+              {internalValue.map((val) => (
+                <div key={val} className="inline p-2 text-sm bg-gray-200 rounded">
+                  {options.find((op) => op.value === val)?.label || val}
+                </div>
+              ))}
+            </div>
+
+            {/* filter options input with placeholder */}
+
+            <input
+              disabled={disabled}
+              ref={input}
+              value={searchQuery}
+              onFocus={() => setisMenuOpen(true)}
+              placeholder={placeholder || `Select ${name}`}
+              onChange={handleSearch}
+              id={selectId}
+              onBlur={() => setisMenuOpen(false)}
+              className={`block w-full placeholder-${
+                internalValue.length > 0 ? 'black' : 'txt-secondary'
+              } h-12 text-sm  focus:outline-none font-normal cursor-pointer`}
+            />
+          </div>
+
           {/* 
             // type="button"
             // onMouseDown={handleArrowClick}
