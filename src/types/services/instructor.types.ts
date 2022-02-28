@@ -5,10 +5,11 @@ import { UserInfo } from './user.types';
 
 export interface DeployInstructor {
   academy_id: string;
+  institution_id: string;
   deployed_on: string;
   deployment_number: string;
   description: string;
-  instructor_id: string;
+  user_id: string;
 }
 
 export interface InstructorProgram extends Table {
