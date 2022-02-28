@@ -1,56 +1,38 @@
 import React, { useMemo, useRef, useState } from 'react';
 
-import { SelectData, SelectProps } from '../../../types';
+import { MultiselectProps, SelectData } from '../../../types';
 import { randomString } from '../../../utils/random';
 import Icon from '../custom/Icon';
 
-export default function Mutiselect({
+export default function Multiselect({
   handleChange,
   name,
   placeholder,
-  options = [],
+  options,
   className = '',
   disabled = false,
   required = true,
   loading = false,
-  value = '',
+  value = [],
   hasError = false,
   width = '80',
-}: SelectProps) {
+}: MultiselectProps) {
   const [isMenuOpen, setisMenuOpen] = useState(false);
   const [internalValue, setInternalValue] = useState(value);
 
   const [searchQuery, setsearchQuery] = useState('');
-  const [filtered, setfiltered] = useState<SelectData[]>([]);
+  const [filtered, setfiltered] = useState<SelectData[]>(options);
 
   const input = useRef<HTMLInputElement>(null);
 
-  const [_placeholder, setPlaceholder] = useState(
-    placeholder || `Select ${name.replace('_', ' ').toLocaleLowerCase()}`,
-  );
-
-  useMemo(() => {
-    setPlaceholder(
-      (internalValue.length > 0 &&
-        options.find((op) => op.value == internalValue)?.label) ||
-        _placeholder ||
-        `Select ${name}`,
-    );
-    setInternalValue(value);
-  }, [_placeholder, internalValue, name, options, value]);
-
-  useMemo(() => {
-    setPlaceholder(
-      (value.length > 0 && options.find((op) => op.value == value)?.label) ||
-        _placeholder ||
-        `Select ${name}`,
-    );
-    setfiltered([...options] || []);
-  }, [_placeholder, name, options, value]);
-
   const handleSelect = (value: string) => {
-    setInternalValue(value);
-    handleChange({ name, value });
+    if (internalValue.includes(value)) {
+      //remove from select items
+      setInternalValue(internalValue.filter((val) => val != value));
+    } else {
+      setInternalValue([...internalValue, value]);
+    }
+    handleChange({ name, value: internalValue });
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,15 +44,8 @@ export default function Mutiselect({
     );
   };
 
-  // const handleArrowClick = () => {
-  //   if (document.activeElement === input.current) {
-  //     input.current?.blur();
-  //   } else {
-  //     input.current?.focus();
-  //   }
-  // };
-
   let selectId = useMemo(() => randomString(16), []);
+
   return (
     <div className={`w-${width || 'full'} ${className}`}>
       <div>
@@ -92,7 +67,7 @@ export default function Mutiselect({
             ref={input}
             value={searchQuery}
             onFocus={() => setisMenuOpen(true)}
-            placeholder={_placeholder}
+            placeholder={placeholder || `Select ${name}`}
             onChange={handleSearch}
             id={selectId}
             onBlur={() => setisMenuOpen(false)}
@@ -129,7 +104,7 @@ export default function Mutiselect({
                   key={op.value}
                   onMouseDown={() => handleSelect(op.value.toString())}
                   className={`py-2 cursor-pointer ${
-                    value == op.value
+                    internalValue.includes(op.value.toString())
                       ? 'bg-primary-500 text-white'
                       : 'bg-main text-black hover:bg-blue-100'
                   } rounded-none text-left px-4 text-base capitalize`}>

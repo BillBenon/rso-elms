@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react';
 
-import { SelectProps } from '../../../types';
-import Select from '../../Atoms/Input/Select';
+import { MultiselectProps } from '../../../types';
+import Multiselect from '../../Atoms/Input/Mutiselect';
 import ILabel from '../../Atoms/Text/ILabel';
 
-interface Props extends SelectProps {
+interface Props extends MultiselectProps {
   children?: ReactNode | string;
   error?: string;
 }
@@ -16,7 +16,7 @@ export default function MultiselectMolecule(props: Props) {
         {props.children}
       </ILabel>
       <div className="mt-2">
-        <Select
+        <Multiselect
           required={props.required}
           className={props.className}
           loading={props.loading}
