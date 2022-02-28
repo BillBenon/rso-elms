@@ -16,7 +16,7 @@ export function useClasses(classId: string): SelectData {
       value: data?.data.data.id.toString() || '',
       label: data?.data.data.class_name || '',
     });
-  }, [data?.data]);
+  }, [data?.data.data]);
 
   return classInfo;
 }
