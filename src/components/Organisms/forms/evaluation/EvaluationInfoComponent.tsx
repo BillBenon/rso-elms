@@ -67,7 +67,7 @@ export default function EvaluationInfoComponent({
     let studentsView: SelectData[] = [];
     studentsProgram?.data.data.forEach((stud) => {
       let studentView: SelectData = {
-        value: stud.id,
+        value: stud.intake_program_student.student.id + '',
         label: `${stud.intake_program_student.student.user.first_name} ${stud.intake_program_student.student.user.last_name}`,
       };
       studentsView.push(studentView);
