@@ -16,6 +16,8 @@ import { Privileges, ValueType } from '../../types';
 import { ActionsType } from '../../types/services/table.types';
 import { AcademyUserType, UserType, UserTypes } from '../../types/services/user.types';
 import { formatUserTable } from '../../utils/array';
+import DeployInstructors from '../DeployInstructors';
+import EnrollStudents from '../EnrollStudents';
 
 export default function InstructorsView() {
   const { url, path } = useRouteMatch();
@@ -43,19 +45,11 @@ export default function InstructorsView() {
   let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
 
   actions?.push({
-    name: 'Assign Role',
+    name: 'View instructor',
     handleAction: (id: string | number | undefined) => {
-      history.push(`${url}/${id}/assign-role`); // go to assign role
+      history.push(`/dashboard/users/${id}/profile`); // go to view user profile
     },
-    privilege: Privileges.CAN_ASSIGN_ROLE,
-  });
-
-  actions?.push({
-    name: 'View Role',
-    handleAction: (id: string | number | undefined) => {
-      history.push(`${url}/${id}/view-role`); // go to assign role
-    },
-    privilege: Privileges.CAN_ACCESS_ROLE,
+    privilege: Privileges.CAN_ACCESS_PROFILE,
   });
 
   actions?.push({
@@ -67,11 +61,35 @@ export default function InstructorsView() {
   });
 
   actions?.push({
-    name: 'View instructor',
+    name: 'Deploy instructor',
     handleAction: (id: string | number | undefined) => {
-      history.push(`/dashboard/users/${id}/profile`); // go to view user profile
+      history.push(`${url}/${id}/deploy`); // go to assign role
     },
-    privilege: Privileges.CAN_ACCESS_PROFILE,
+    privilege: Privileges.CAN_CREATE_USER,
+  });
+
+  actions?.push({
+    name: 'Enroll student',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${url}/${id}/enroll`); // go to assign role
+    },
+    privilege: Privileges.CAN_CREATE_USER,
+  });
+
+  actions?.push({
+    name: 'View Role',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${url}/${id}/view-role`); // go to assign role
+    },
+    privilege: Privileges.CAN_ACCESS_ROLE,
+  });
+
+  actions?.push({
+    name: 'Assign Role',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${url}/${id}/assign-role`); // go to assign role
+    },
+    privilege: Privileges.CAN_ASSIGN_ROLE,
   });
 
   function handleSearch(_e: ValueType) {}
@@ -155,7 +173,32 @@ export default function InstructorsView() {
             </PopupMolecule>
           )}
         />
-
+        <Route
+          exact
+          path={`${path}/:id/deploy`}
+          render={() => (
+            <PopupMolecule
+              closeOnClickOutSide={false}
+              title="Deploy as an instructor"
+              open={true}
+              onClose={history.goBack}>
+              <DeployInstructors />
+            </PopupMolecule>
+          )}
+        />
+        <Route
+          exact
+          path={`${path}/:id/enroll`}
+          render={() => (
+            <PopupMolecule
+              closeOnClickOutSide={false}
+              title="Enroll as a student"
+              open={true}
+              onClose={history.goBack}>
+              <EnrollStudents />
+            </PopupMolecule>
+          )}
+        />
         <Route
           exact
           path={`${path}/:id/view-role`}

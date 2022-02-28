@@ -30,14 +30,6 @@ class RoleStore {
     );
   }
 
-  getPrivilegesByRole(roleId: string, enabled = true) {
-    return useQuery<AxiosResponse<Response<RolePrivilege[]>>, Response>(
-      ['privilegesByRole/id', roleId],
-      () => roleService.getPrivilegesByRole(roleId),
-      { enabled },
-    );
-  }
-
   modifyRole() {
     return useMutation(roleService.modifyRole);
   }
@@ -55,6 +47,14 @@ export const getUnAssignedPrivileges = (roleId: string, enabled = true) => {
   return useQuery<AxiosResponse<Response<PrivilegeRes[]>>, Response>(
     ['unAssignedPrivileges/id', roleId],
     () => roleService.getUnAssignedPrivilege(roleId),
+    { enabled },
+  );
+};
+
+export const getPrivilegesByRole = (roleId: string, enabled = true) => {
+  return useQuery<AxiosResponse<Response<RolePrivilege[]>>, Response>(
+    ['privilegesByRole/id', roleId],
+    () => roleService.getPrivilegesByRole(roleId),
     { enabled },
   );
 };

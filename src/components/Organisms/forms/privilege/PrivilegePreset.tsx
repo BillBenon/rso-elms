@@ -5,7 +5,8 @@ import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
-import { getUnAssignedPrivileges, roleStore } from '../../../../store/administration';
+import { queryClient } from '../../../../plugins/react-query';
+import { getPrivilegesByRole, roleStore } from '../../../../store/administration';
 import { AddPrivilegeRoleType, RolePropType, RoleRes } from '../../../../types';
 import Badge from '../../../Atoms/custom/Badge';
 import Button from '../../../Atoms/custom/Button';
@@ -22,10 +23,7 @@ function PrivilegePreset({ roleId, academyId, onSubmit }: RolePropType) {
   const [selectedRole, setSelectedRole] = useState<string>();
   const { mutateAsync } = roleStore.addPrivilegesOnRole();
 
-  const { data: rolePrivileges } = getUnAssignedPrivileges(
-    selectedRole + '',
-    !!selectedRole,
-  );
+  const { data: rolePrivileges } = getPrivilegesByRole(selectedRole + '', !!selectedRole);
 
   useEffect(() => {
     setRoles(
@@ -49,19 +47,25 @@ function PrivilegePreset({ roleId, academyId, onSubmit }: RolePropType) {
   }, [roleId, rolePrivileges?.data.data]);
 
   const savePrivileges = () => {
-    const toastId = toast.loading('adding privileges to role');
-    mutateAsync(priv, {
-      onSuccess: () => {
-        onSubmit();
-        toast.success('Privilege(s) Added', { id: toastId });
-        history.push(`/dashboard/role/${roleId}/view`);
-      },
-      onError: () => {
-        toast.error('something wrong happened adding privileges on role', {
-          id: toastId,
-        });
-      },
-    });
+    if (selectedRole) {
+      const toastId = toast.loading('adding privileges to role');
+
+      mutateAsync(priv, {
+        onSuccess: () => {
+          onSubmit();
+          toast.success('Privilege(s) Added', { id: toastId });
+          queryClient.invalidateQueries(['privilegesByRole/id', selectedRole]);
+          history.push(`/dashboard/role/${roleId}/view`);
+        },
+        onError: () => {
+          toast.error('something wrong happened adding privileges on role', {
+            id: toastId,
+          });
+        },
+      });
+    } else {
+      toast.error('You must select a role for presets');
+    }
   };
 
   return (
