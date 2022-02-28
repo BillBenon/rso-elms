@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -11,6 +12,7 @@ import AssignRole from '../../components/Organisms/forms/user/AssignRole';
 import ViewUserRole from '../../components/Organisms/forms/user/ViewUserRole';
 import ImportUsers from '../../components/Organisms/user/ImportUsers';
 import useAuthenticator from '../../hooks/useAuthenticator';
+import { authenticatorStore } from '../../store/administration';
 import usersStore from '../../store/administration/users.store';
 import { Privileges, ValueType } from '../../types';
 import { ActionsType } from '../../types/services/table.types';
@@ -25,6 +27,8 @@ export default function InstructorsView() {
   const history = useHistory();
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
+
+  const { mutateAsync } = authenticatorStore.resetPassword();
 
   const { data, isLoading, refetch } =
     user?.user_type === UserType.SUPER_ADMIN
@@ -90,6 +94,21 @@ export default function InstructorsView() {
       history.push(`${url}/${id}/assign-role`); // go to assign role
     },
     privilege: Privileges.CAN_ASSIGN_ROLE,
+  });
+  actions?.push({
+    name: 'Reset Pawssword',
+    handleAction: (id: string | number | undefined) => {
+      //call a reset password api
+      mutateAsync(id?.toString() || '', {
+        onSuccess: () => {
+          toast.success('Password reset successfully', { duration: 5000 });
+        },
+        onError: (error: any) => {
+          toast.error(error + '');
+        },
+      });
+    },
+    privilege: Privileges.CAN_RESET_USER_PASSWORD,
   });
 
   function handleSearch(_e: ValueType) {}

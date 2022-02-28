@@ -30,6 +30,10 @@ class AuthenticatorService {
     );
   }
 
+  public async resetPassword(userId: string) {
+    return await adminstrationAxios.post(`/users/resetPassword/${userId}`);
+  }
+
   public async forgotPassword(initiateResetPassword: InitiateResetPassword) {
     return await adminstrationAxios.post(
       '/authentication/initiatePasswordReset',
