@@ -4,19 +4,17 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
-import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { queryClient } from '../../../../plugins/react-query';
 import { getPrivilegesByRole, roleStore } from '../../../../store/administration';
-import { AddPrivilegeRoleType, RolePropType, RoleRes } from '../../../../types';
+import { AddPrivilegeRoleType, PresetRolePropType, RoleRes } from '../../../../types';
 import Badge from '../../../Atoms/custom/Badge';
 import Button from '../../../Atoms/custom/Button';
 
-function PrivilegePreset({ roleId, academyId, onSubmit }: RolePropType) {
+function PrivilegePreset({ role, onSubmit }: PresetRolePropType) {
   const { data } = roleStore.getRoles();
-  const { user } = useAuthenticator();
   const history = useHistory();
   const [priv, setPriv] = useState<AddPrivilegeRoleType>({
-    roleId: roleId,
+    roleId: role?.id + '',
     privileges: '',
   });
   const [roles, setRoles] = useState<RoleRes[]>([]);
@@ -26,25 +24,21 @@ function PrivilegePreset({ roleId, academyId, onSubmit }: RolePropType) {
   const { data: rolePrivileges } = getPrivilegesByRole(selectedRole + '', !!selectedRole);
 
   useEffect(() => {
-    setRoles(
-      data?.data.data.filter(
-        (role) => role.id != roleId && role.academy_id === academyId,
-      ) || [],
-    );
-  }, [academyId, data?.data.data, roleId, user]);
+    setRoles(data?.data.data.filter((rl) => rl.id != role?.id) || []);
+  }, [data?.data.data, role]);
   useEffect(() => {
     let privileges = rolePrivileges?.data.data
-      ? rolePrivileges.data.data.map((priv) => priv.id)
+      ? rolePrivileges.data.data.map((priv) => priv.privilege.id)
       : undefined;
 
     let privs = privileges?.map((priv) => priv).join(',');
 
     privs &&
       setPriv({
-        roleId: roleId,
+        roleId: role?.id + '',
         privileges: privs,
       });
-  }, [roleId, rolePrivileges?.data.data]);
+  }, [role, rolePrivileges?.data.data]);
 
   const savePrivileges = () => {
     if (selectedRole) {
@@ -55,7 +49,7 @@ function PrivilegePreset({ roleId, academyId, onSubmit }: RolePropType) {
           onSubmit();
           toast.success('Privilege(s) Added', { id: toastId });
           queryClient.invalidateQueries(['privilegesByRole/id', selectedRole]);
-          history.push(`/dashboard/role/${roleId}/view`);
+          history.push(`/dashboard/role/${role?.id}/view`);
         },
         onError: () => {
           toast.error('something wrong happened adding privileges on role', {
