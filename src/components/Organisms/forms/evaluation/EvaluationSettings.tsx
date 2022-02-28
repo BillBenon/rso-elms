@@ -12,6 +12,7 @@ import {
 } from '../../../../types/services/evaluation.types';
 import {
   getLocalStorageData,
+  removeLocalStorageData,
   setLocalStorageData,
 } from '../../../../utils/getLocalStorageItem';
 import Button from '../../../Atoms/custom/Button';
@@ -55,6 +56,7 @@ export default function EvaluationSettings({
         queryClient.invalidateQueries(['evaluationsByAcademyInstructor']);
         localStorage.removeItem('evaluationId');
         setLocalStorageData('currentStep', 0);
+        removeLocalStorageData('evaluationInfo');
         // history.push('/dashboard/evaluations');
         window.location.href = '/dashboard/evaluations';
       },
