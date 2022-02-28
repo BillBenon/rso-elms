@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
+import { queryClient } from '../../../../plugins/react-query';
 import { getPrivilegesByRole, roleStore } from '../../../../store/administration';
 import { AddPrivilegeRoleType, RolePropType } from '../../../../types';
 import Badge from '../../../Atoms/custom/Badge';
@@ -44,6 +45,7 @@ function PrivilegePreset({ roleId, onSubmit }: RolePropType) {
         onSuccess: () => {
           onSubmit();
           toast.success('Privilege(s) Added', { id: toastId });
+          queryClient.invalidateQueries(['privilegesByRole/id', selectedRole]);
           history.push(`/dashboard/role/${roleId}/view`);
         },
         onError: () => {
