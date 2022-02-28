@@ -161,12 +161,7 @@ export default function ViewRole() {
                 open={true}
                 onClose={history.goBack}
                 closeOnClickOutSide={false}>
-                <PrivilegePreset
-                  roleName={role?.name || ''}
-                  roleId={role?.id + '' || ''}
-                  academyId={role?.academy_id + '' || ''}
-                  onSubmit={submited}
-                />
+                <PrivilegePreset role={role} onSubmit={submited} />
               </PopupMolecule>
             );
           }}
