@@ -8,6 +8,7 @@ import {
   useRouteMatch,
 } from 'react-router';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Panel from '../../components/Atoms/custom/Panel';
@@ -15,11 +16,10 @@ import Heading from '../../components/Atoms/Text/Heading';
 import Accordion from '../../components/Molecules/Accordion';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Tiptap from '../../components/Molecules/editor/Tiptap';
-import useAuthenticator from '../../hooks/useAuthenticator';
+// import useAuthenticator from '../../hooks/useAuthenticator';
 import { moduleMaterialStore } from '../../store/administration/module-material.store';
 import { ParamType, Privileges } from '../../types';
 import { MaterialType } from '../../types/services/module-material.types';
-import { UserType } from '../../types/services/user.types';
 import NewModuleMaterial from './NewModuleMaterial';
 import NewModuleMaterialAttach from './NewModuleMaterialAttach';
 import ShowModuleMaterial from './ShowModuleMaterial';
@@ -31,7 +31,7 @@ function ModuleMaterials() {
   const { data: moduleMaterial, isLoading } =
     moduleMaterialStore.getModuleMaterialByModule(id);
   const moduleMaterials = moduleMaterial?.data.data || [];
-  const { user } = useAuthenticator();
+  // const { user } = useAuthenticator();
   const { search } = useLocation();
   const showMenu = new URLSearchParams(search).get('showMenus');
   const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
@@ -83,7 +83,7 @@ function ModuleMaterials() {
                               content={mat.content}
                             />
                           </div>
-                          {user?.user_type === UserType.INSTRUCTOR && (
+                          <Permission privilege={Privileges.CAN_CREATE_MODULE_MATERIALS}>
                             <Button
                               className="mt-2 mb-4 mx-20"
                               styleType="outline"
@@ -94,7 +94,7 @@ function ModuleMaterials() {
                               }>
                               Add supporting files
                             </Button>
-                          )}
+                          </Permission>
                           <ShowModuleMaterial materialId={mat.id + ''} />
                         </Panel>
                       );

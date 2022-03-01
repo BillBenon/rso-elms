@@ -86,7 +86,7 @@ export default function Ranks() {
           totalItems={ranks && ranks.length > 0 ? ranks.length : 0}
           handleSearch={handleSearch}>
           <Link to={`${url}/add`}>
-            <Permission privilege={Privileges.CAN_CREATE_RANK}>
+            <Permission privilege={Privileges.CAN_CREATE_RANKS}>
               <Button>Add Rank</Button>
             </Permission>
           </Link>
@@ -105,7 +105,7 @@ export default function Ranks() {
           />
         ) : isSuccess && ranks?.length === 0 ? (
           <NoDataAvailable
-            privilege={Privileges.CAN_CREATE_RANK}
+            privilege={Privileges.CAN_CREATE_RANKS}
             icon="role"
             buttonLabel="Add new rank"
             title={'No ranks available'}
