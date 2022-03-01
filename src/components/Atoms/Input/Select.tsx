@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { SelectData, SelectProps } from '../../../types';
 import { randomString } from '../../../utils/random';
@@ -23,34 +23,34 @@ export default function Select({
   const [searchQuery, setsearchQuery] = useState('');
   const [filtered, setfiltered] = useState<SelectData[]>([]);
 
-  const input = useRef<HTMLInputElement>(null);
-
-  const [_placeholder, setPlaceholder] = useState(
+  const [_placeholder, set_placeholder] = useState(
     placeholder || `Select ${name.replace('_', ' ').toLocaleLowerCase()}`,
   );
 
-  useMemo(() => {
-    setPlaceholder(
-      (internalValue.length > 0 &&
-        options.find((op) => op.value == internalValue)?.label) ||
-        _placeholder ||
-        `Select ${name}`,
-    );
-    setInternalValue(value);
-  }, [_placeholder, internalValue, name, options, value]);
+  const input = useRef<HTMLInputElement>(null);
 
-  useMemo(() => {
-    setPlaceholder(
-      (value.length > 0 && options.find((op) => op.value == value)?.label) ||
-        _placeholder ||
-        `Select ${name}`,
-    );
+  useEffect(() => {
     setfiltered([...options] || []);
-  }, [_placeholder, name, options, value]);
+  }, [options]);
+
+  //if value prop changes, update internalValue
+  useEffect(() => {
+    if (value !== internalValue) setInternalValue(value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+
+  // when internal value changes, call handleChange
+  useEffect(() => {
+    handleChange({ name, value: internalValue });
+    if (internalValue.length > 0)
+      set_placeholder(
+        options.find((op) => op.value == internalValue)?.label || `Select ${name}`,
+      );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [internalValue]);
 
   const handleSelect = (value: string) => {
     setInternalValue(value);
-    handleChange({ name, value });
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -129,7 +129,7 @@ export default function Select({
                   key={op.value}
                   onMouseDown={() => handleSelect(op.value.toString())}
                   className={`py-2 cursor-pointer ${
-                    value == op.value
+                    internalValue == op.value
                       ? 'bg-primary-500 text-white'
                       : 'bg-main text-black hover:bg-blue-100'
                   } rounded-none text-left px-4 text-base capitalize`}>
