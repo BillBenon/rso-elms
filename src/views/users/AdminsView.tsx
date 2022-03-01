@@ -123,11 +123,11 @@ export default function AdminsView() {
         title="Admins"
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
-        <Link to={`/dashboard/users/add/${UserType.ADMIN}`}>
-          <Permission privilege={Privileges.CAN_CREATE_USER}>
+        <Permission privilege={Privileges.CAN_CREATE_USER}>
+          <Link to={`/dashboard/users/add/${UserType.ADMIN}`}>
             <Button>New admin</Button>
-          </Permission>
-        </Link>
+          </Link>
+        </Permission>
       </TableHeader>
       {isLoading ? (
         <Loader />

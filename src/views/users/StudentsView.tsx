@@ -120,20 +120,16 @@ export default function StudentsView() {
         title="Students"
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
-        {
+        <Permission privilege={Privileges.CAN_CREATE_USER}>
           <div className="flex gap-3">
             <Link to={`${url}/import`}>
-              <Permission privilege={Privileges.CAN_CREATE_USER}>
-                <Button styleType="outline">Import students</Button>
-              </Permission>
+              <Button styleType="outline">Import students</Button>
             </Link>
             <Link to={`${url}/add/${UserType.STUDENT}`}>
-              <Permission privilege={Privileges.CAN_CREATE_USER}>
-                <Button>New student</Button>
-              </Permission>
+              <Button>New student</Button>
             </Link>
           </div>
-        }
+        </Permission>
       </TableHeader>
 
       {isLoading ? (
