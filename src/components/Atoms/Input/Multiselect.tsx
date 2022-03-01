@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { MultiselectProps, SelectData } from '../../../types';
+import { arrayEquals } from '../../../utils/array';
 import { randomString } from '../../../utils/random';
 import Icon from '../custom/Icon';
 
@@ -18,7 +19,7 @@ export default function Multiselect({
   width = '80',
 }: MultiselectProps) {
   const [isMenuOpen, setisMenuOpen] = useState(false);
-  const [internalValue, setInternalValue] = useState(value);
+  const [internalValue, setInternalValue] = useState<string[]>([]);
 
   const [searchQuery, setsearchQuery] = useState('');
   const [filtered, setfiltered] = useState<SelectData[]>(options);
@@ -29,19 +30,24 @@ export default function Multiselect({
     setfiltered([...options] || []);
   }, [options]);
 
+  //if value prop changes, update internalValue
   useEffect(() => {
-    if (value !== internalValue) setInternalValue(value);
+    if (!arrayEquals(value, internalValue)) setInternalValue(value);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
+  // when internal value changes, call handleChange
+  useEffect(() => {
+    handleChange({ name, value: internalValue });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [internalValue]);
+
   const handleSelect = (value: string) => {
     if (internalValue.includes(value)) {
-      //remove from select items
       setInternalValue(internalValue.filter((val) => val != value));
     } else {
       setInternalValue([...internalValue, value]);
     }
-    handleChange({ name, value: internalValue });
   };
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,9 +99,7 @@ export default function Multiselect({
               onChange={handleSearch}
               id={selectId}
               onBlur={() => setisMenuOpen(false)}
-              className={`block w-full placeholder-${
-                internalValue.length > 0 ? 'black' : 'txt-secondary'
-              } h-12 text-sm  focus:outline-none font-normal cursor-pointer`}
+              className={`block w-full placeholder-txt-secondary h-12 text-sm  focus:outline-none font-normal cursor-pointer`}
             />
           </div>
 
