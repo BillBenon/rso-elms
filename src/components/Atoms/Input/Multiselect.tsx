@@ -76,7 +76,10 @@ export default function Multiselect({
             className="border-none focus:outline-none absolute w-full top-0 text-white h-0 placeholder-black"
             style={{ zIndex: -10 }}
           />
-          <div className="border-2 border-tertiary bg-white rounded-md px-4 hover:border-primary-400">
+          <div
+            className={`border-2 border-${
+              hasError ? 'error-500' : 'tertiary'
+            } bg-white rounded-md px-4 hover:border-primary-400`}>
             <div
               className={`flex flex-wrap w-full gap-1 ${
                 internalValue.length > 0 ? 'pt-1' : ''
