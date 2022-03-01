@@ -8,21 +8,21 @@ const openRequests: string[] = ['/authentication/signin'];
 
 const commonConfig: AxiosRequestConfig = {};
 
-export const ADMIN_BASE_URL = 'http://197.243.110.147:8080/administration-service/api';
+export const ADMIN_BASE_URL = 'http://172.31.1.35:8080/administration-service/api';
 
 const administrationModuleConfig: AxiosRequestConfig = {
   ...commonConfig,
-  baseURL: 'http://197.243.110.147:8080/administration-service/api',
+  baseURL: 'http://172.31.1.35:8080/administration-service/api',
 };
 
 const evalutationModuleConfig: AxiosRequestConfig = {
   ...commonConfig,
-  baseURL: 'http://197.243.110.147:8080/evaluation-service/api',
+  baseURL: 'http://172.31.1.35:8080/evaluation-service/api',
 };
 
 const timetableModuleConfig: AxiosRequestConfig = {
   ...commonConfig,
-  baseURL: 'http://197.243.110.147:8080/timetable-service/api',
+  baseURL: 'http://172.31.1.35:8080/timetable-service/api',
 };
 
 const adminstrationAxios = axios.create(administrationModuleConfig);
