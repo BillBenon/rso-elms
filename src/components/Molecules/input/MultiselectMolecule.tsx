@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 
 import { MultiselectProps } from '../../../types';
-import Multiselect from '../../Atoms/Input/Mutiselect';
+import Multiselect from '../../Atoms/Input/Multiselect';
 import ILabel from '../../Atoms/Text/ILabel';
 
 interface Props extends MultiselectProps {
