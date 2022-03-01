@@ -29,6 +29,11 @@ export default function Multiselect({
     setfiltered([...options] || []);
   }, [options]);
 
+  useEffect(() => {
+    if (value !== internalValue) setInternalValue(value);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+
   const handleSelect = (value: string) => {
     if (internalValue.includes(value)) {
       //remove from select items
