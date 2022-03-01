@@ -18,7 +18,7 @@ import UpdateDepartment from '../forms/divisions/UpdateDepartment';
 interface FilteredData
   extends Pick<
     DivisionInfo,
-    'id' | 'name' | 'description' | 'generic_status' | 'total_num_childreen'
+    'id' | 'name' | 'description' | 'generic_status' | 'total_num_of_programs'
   > {}
 
 interface IDepartment {
@@ -50,13 +50,15 @@ export default function Departments({ fetchType }: IDepartment) {
     let formattedDeparts: any = [];
 
     if (data?.data) {
+      console.log(data.data);
+
       const filteredInfo = data?.data.data.map((department: DivisionInfo) =>
         _.pick(department, [
           'id',
           'name',
           'description',
           'generic_status',
-          'total_num_childreen',
+          'total_num_of_programs',
         ]),
       );
 
@@ -66,7 +68,7 @@ export default function Departments({ fetchType }: IDepartment) {
           decription: department.description,
           name: department.name,
           status: department.generic_status,
-          programs: department.total_num_childreen || 0,
+          programs: department.total_num_of_programs + '' || '0',
         };
         formattedDeparts.push(filteredData);
       });
