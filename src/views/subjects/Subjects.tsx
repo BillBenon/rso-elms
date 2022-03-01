@@ -81,6 +81,7 @@ function Subjects() {
         <Loader />
       ) : subjects.length === 0 && subjectData.isSuccess ? (
         <NoDataAvailable
+          showButton={false}
           privilege={Privileges.CAN_CREATE_SUBJECTS}
           icon="subject"
           title={'No subjects registered'}
