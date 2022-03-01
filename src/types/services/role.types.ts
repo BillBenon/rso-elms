@@ -49,6 +49,7 @@ export interface RolePropType {
   onSubmit: <E>(_e?: FormEvent<E>) => void;
   roleName: string;
   roleId: string;
+  academyId: string;
 }
 
 export enum RoleType {
