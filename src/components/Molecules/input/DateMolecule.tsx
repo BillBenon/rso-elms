@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { ValueType } from '../../../types';
 import { formatDateToIso, formatDateToYyMmDd } from '../../../utils/date-helper';
@@ -25,7 +25,6 @@ type IProp = {
   monthCapital?: boolean;
   monthDisabled?: boolean;
   monthClassName?: string;
-  hourPlaceholder?: string;
   dayDisabled?: boolean;
   dayClassName?: string;
   yearWidth?: string;
@@ -58,7 +57,6 @@ function DateMolecule({
   monthCapital = false,
   monthDisabled = false,
   monthClassName,
-  hourPlaceholder = 'Hours',
   dayDisabled = false,
   dayClassName,
   yearWidth = '28',
@@ -75,18 +73,17 @@ function DateMolecule({
   let defaultValueDate = defaultValue ? new Date(defaultValue) : new Date();
 
   const [dateState, setDateState] = useState({
-    Day:
-      new Date().getDate() < 10 ? `0${new Date().getDate()}` : `${new Date().getDate()}`,
+    Day: new Date().getDate(),
     Month: new Date().getMonth() + 1,
     Year: new Date().getFullYear(),
     Hours: new Date().getHours(),
     Minutes: '00',
   });
 
-  const dateFormat = () => {
+  const dateFormat = useCallback(() => {
     let date = `${dateState.Year}-${
       dateState.Month >= 10 ? dateState.Month : `${dateState.Month}`
-    }-${dateState.Day} ${
+    }-${dateState.Day >= 10 ? dateState.Day : `0${dateState.Day}`} ${
       dateState.Hours >= 10 ? dateState.Hours : `0${dateState.Hours}`
     }:${dateState.Minutes}:00`;
 
@@ -97,31 +94,39 @@ function DateMolecule({
       selectedDate = formatDateToYyMmDd(new Date(date).toString());
     }
     handleChange({ name: name, value: selectedDate });
-  };
-
-  useEffect(() => {
-    defaultValue && setDate();
-  }, []);
-
-  function setDate() {
-    const dV = new Date(defaultValue || '');
-
-    setDateState((old) => ({
-      ...old,
-      Year: dV.getFullYear(),
-      Month: dV.getMonth() + 1,
-      Day: dV.getDate() + '',
-      Hours: dV.getHours(),
-      Minutes: dV.getMinutes().toString(),
-    }));
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    dateState.Day,
+    dateState.Hours,
+    dateState.Minutes,
+    dateState.Month,
+    dateState.Year,
+  ]);
 
   useEffect(() => {
     dateFormat();
-  }, [dateState]);
+  }, [dateFormat]);
+
+  useEffect(() => {
+    if (defaultValue) {
+      const dV = new Date(defaultValue || '');
+
+      setDateState((old) => ({
+        ...old,
+        Year: dV.getFullYear(),
+        Month: dV.getMonth() + 1,
+        Day: dV.getDate(),
+        Hours: dV.getHours(),
+        Minutes: dV.getMinutes().toString(),
+      }));
+    }
+  }, [defaultValue]);
 
   const handleDate = (e: ValueType) => {
-    setDateState({ ...dateState, [e.name]: e.value });
+    // setDateState((date) => ({ ...date, [e.name]: e.value }));
+    setDateState((prevDate) => {
+      return { ...prevDate, [e.name]: e.value };
+    });
   };
 
   return (
@@ -142,7 +147,7 @@ function DateMolecule({
               end={endYear}
               className={yearClassName}
               disabled={yearDisabled}
-              placeholder={'Year'}
+              placeholder={'year'}
             />
             <MonthSelect
               year={dateState.Year}
@@ -155,18 +160,18 @@ function DateMolecule({
               numeric={monthNumeric}
               className={monthClassName}
               disabled={monthDisabled}
-              placeholder={'Month'}
+              placeholder={'month'}
             />
             <DaySelect
               year={dateState.Year}
               month={dateState.Month}
-              value={dateState.Day || defaultValueDate.getDate().toString()}
+              value={dateState.Day || defaultValueDate.getDate()}
               onChange={handleDate}
               name="Day"
               className={dayClassName}
               width={dayWidth}
               disabled={dayDisabled}
-              placeholder={'Day'}
+              placeholder={'day'}
             />
           </div>
         )}
@@ -179,7 +184,7 @@ function DateMolecule({
               name="Hours"
               width={hourWidth}
               disabled={hourDisabled}
-              placeholder={hourPlaceholder || 'hrs'}
+              placeholder={'hrs'}
             />
             <MinuteSelect
               value={dateState.Minutes}

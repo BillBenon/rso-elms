@@ -87,29 +87,30 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
       setDetails({
         activation_key: '',
         academy_id: selectedUser.academy?.id,
-        birth_date: selectedUser.person.birth_date,
+        birth_date: selectedUser.person?.birth_date,
         deployed_on: '',
         deployment_number: '',
-        doc_type: selectedUser.person.doc_type,
-        education_level: selectedUser.person.education_level || EducationLevel.ILLITERATE,
+        doc_type: selectedUser.person?.doc_type || DocType.NID,
+        education_level:
+          selectedUser.person?.education_level || EducationLevel.ILLITERATE,
         email: selectedUser.email,
-        father_names: selectedUser.person.father_names,
+        father_names: selectedUser.person?.father_names,
         first_name: selectedUser.first_name,
         // academic_program_level_id: '',
         intake_program_id: '',
         last_name: selectedUser.last_name,
-        marital_status: selectedUser.person.marital_status,
-        mother_names: selectedUser.person.mother_names,
-        nid: selectedUser.person.nid,
+        marital_status: selectedUser.person?.marital_status,
+        mother_names: selectedUser.person?.mother_names,
+        nid: selectedUser.person?.nid,
         password_reset_period_in_days: selectedUser.password_reset_period_in_days,
-        person_id: selectedUser.person.id + '',
-        phone: selectedUser.person.phone_number,
-        place_of_birth: selectedUser.person.place_of_birth,
+        person_id: selectedUser.person?.id + '',
+        phone: selectedUser.person?.phone_number || '',
+        place_of_birth: selectedUser.person?.place_of_birth || '',
         place_of_residence: '',
-        institution_id: selectedUser.institution.id.toString() || '',
-        residence_location_id: selectedUser.person.residence_location_id,
+        institution_id: selectedUser.institution?.id.toString() || '',
+        residence_location_id: selectedUser.person?.residence_location_id || 0,
         reset_date: selectedUser.reset_date,
-        sex: selectedUser.person.sex,
+        sex: selectedUser.person?.sex || GenderStatus.MALE,
         user_type: selectedUser.user_type,
         username: selectedUser.username,
         nationality: selectedUser.person?.nationality || '',
@@ -117,7 +118,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
         send_communication_msg: selectedUser.send_communication_msg,
         profile_status: selectedUser.profile_status || ProfileStatus.INCOMPLETE,
         id: selectedUser.id + '',
-        spouse_name: selectedUser.person.spouse_name || '',
+        spouse_name: selectedUser.person?.spouse_name || '',
       });
   }, [data]);
 
@@ -231,6 +232,9 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           Email
         </InputMolecule>
         <DateMolecule
+          startYear={new Date().getFullYear() - 100}
+          defaultValue={(new Date().getFullYear() - 16).toString()}
+          endYear={new Date().getFullYear() - 16}
           handleChange={handleChange}
           name="birth_date"
           width="60 md:w-80"
@@ -277,6 +281,18 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           {details.doc_type.replaceAll('_', ' ')}
         </InputMolecule>
+        {details.doc_type == DocType.PASSPORT && (
+          <DateMolecule
+            startYear={new Date().getFullYear() - 7}
+            defaultValue={new Date().toString()}
+            endYear={new Date().getFullYear() + 7}
+            handleChange={handleChange}
+            name="document_expire_on"
+            width="60 md:w-80"
+            date_time_type={false}>
+            Passport expiry date
+          </DateMolecule>
+        )}
         <SelectMolecule
           options={getDropDownStatusOptions(MaritalStatus)}
           name="marital_status"
@@ -284,6 +300,16 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Marital Status
         </SelectMolecule>
+        {(details.marital_status === MaritalStatus.MARRIED ||
+          details.marital_status === MaritalStatus.WIDOWED) && (
+          <InputMolecule
+            name="spouse_name"
+            required={false}
+            value={details.spouse_name}
+            handleChange={handleChange}>
+            Spouse Name
+          </InputMolecule>
+        )}
         <SelectMolecule
           options={getDropDownStatusOptions(EducationLevel)}
           name="education_level"

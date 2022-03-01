@@ -179,6 +179,9 @@ export default function SupAdminProfile<E>({
           Email
         </InputMolecule>
         <DateMolecule
+          defaultValue={(new Date().getFullYear() - 16).toString()}
+          startYear={new Date().getFullYear() - 100}
+          endYear={new Date().getFullYear() - 16}
           handleChange={handleChange}
           name="birth_date"
           width="60 md:w-80"

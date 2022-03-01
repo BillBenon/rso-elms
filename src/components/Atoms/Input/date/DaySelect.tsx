@@ -7,7 +7,7 @@ import Select from '../Select';
 type DProp = {
   year: number;
   month: number;
-  value: string;
+  value: number;
   placeholder?: string;
   width?: string;
   onChange: Function;
@@ -36,7 +36,7 @@ const DaySelect = (dprop: DProp) => {
 
   return (
     <Select
-      value={dprop.value}
+      value={dprop.value < 10 ? `0${dprop.value}` : `${dprop.value}`}
       disabled={dprop.disabled}
       name={dprop.name}
       placeholder={dprop.placeholder}
