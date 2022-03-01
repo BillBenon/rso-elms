@@ -13,6 +13,7 @@ export default function UpdatePassword({ onSubmit }: FormPropType) {
   const [form, setForm] = useState<ChangePassword>({
     currentPassword: '',
     newPassword: '',
+    confirmPassword: '',
   });
   const { mutateAsync } = authenticatorStore.passwordChange();
   const history = useHistory();
@@ -34,6 +35,7 @@ export default function UpdatePassword({ onSubmit }: FormPropType) {
   }
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
+
     mutateAsync(form, {
       onSuccess: () => {
         toast.success('Password updated');
@@ -50,7 +52,7 @@ export default function UpdatePassword({ onSubmit }: FormPropType) {
     <form onSubmit={submitForm}>
       <InputMolecule
         name="currentPassword"
-        placeholder="currentPassword"
+        placeholder="current password"
         type="password"
         value={form.currentPassword}
         handleChange={handleChange}>
@@ -58,14 +60,22 @@ export default function UpdatePassword({ onSubmit }: FormPropType) {
       </InputMolecule>
       <InputMolecule
         name="newPassword"
-        placeholder="new password"
+        placeholder="New password"
         type="password"
         value={form.newPassword}
         handleChange={handleChange}>
         New Password
+      </InputMolecule>{' '}
+      <InputMolecule
+        name="confirmPassword"
+        placeholder="confirm password"
+        type="password"
+        value={form.confirmPassword}
+        handleChange={handleChange}>
+        Confirm Password
       </InputMolecule>
       <div>
-        <Button type="submit" full>
+        <Button disabled={form.confirmPassword !== form.newPassword} type="submit" full>
           Save
         </Button>
       </div>

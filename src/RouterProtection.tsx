@@ -1,8 +1,10 @@
 import React from 'react';
-import { Redirect, Route, Switch, useRouteMatch } from 'react-router-dom';
+import { Redirect, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from './components/Atoms/custom/Button';
 import Loader from './components/Atoms/custom/Loader';
+import PopupMolecule from './components/Molecules/Popup';
+import UpdatePassword from './components/Organisms/forms/auth/signup/personal/UpdatePassword';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import useAuthenticator from './hooks/useAuthenticator';
 import Dashboard from './layout/Dashboard';
@@ -35,6 +37,7 @@ import Users from './views/users/Users';
 const RouterProtection = () => {
   const { user, userLoading, isError } = useAuthenticator();
   const { path } = useRouteMatch();
+  const history = useHistory();
 
   const user_role_cookie = cookie.getCookie('user_role') || '';
   const user_role = user?.user_roles?.find((role) => role.id + '' === user_role_cookie);
@@ -135,6 +138,16 @@ const RouterProtection = () => {
             hasPrivilege(Privileges.CAN_ANSWER_EVALUATION)) && (
             <Route path={`${path}/evaluations`} component={InstructorViewEvaluations} />
           )}
+
+          <Route
+            exact
+            path={`${path}/account/update-password`}
+            render={() => (
+              <PopupMolecule title="Update Password" open={true} onClose={() => {}}>
+                <UpdatePassword onSubmit={() => {}} />
+              </PopupMolecule>
+            )}
+          />
           {/* end of student routes */}
           <Route component={NotFound} />
         </Switch>
@@ -146,6 +159,19 @@ const RouterProtection = () => {
     <Switch>
       {/*start of institution admin */}
       <Route path={`${path}/role/:id/view`} component={ViewRole} />
+      <Route
+        exact
+        path={`${path}/account/update-password`}
+        render={() => (
+          <PopupMolecule
+            closeOnClickOutSide={false}
+            title="Update Password"
+            open={true}
+            onClose={() => history.goBack()}>
+            <UpdatePassword onSubmit={() => history.goBack()} />
+          </PopupMolecule>
+        )}
+      />
       <Route path={`${path}/academies`} component={Academies} />
       <Route path={`${path}/calendar`} component={CalendarView} />
       <Route path={`${path}/ranks`} component={Ranks} />

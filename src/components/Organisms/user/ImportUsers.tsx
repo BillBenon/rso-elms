@@ -4,13 +4,15 @@ import { useHistory } from 'react-router-dom';
 
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import { queryClient } from '../../../plugins/react-query';
+import { roleStore } from '../../../store/administration';
 import academyStore from '../../../store/administration/academy.store';
 import { intakeStore } from '../../../store/administration/intake.store';
 import programStore from '../../../store/administration/program.store';
 import usersStore from '../../../store/administration/users.store';
-import { SelectData, ValueType } from '../../../types';
+import { RoleType, SelectData, ValueType } from '../../../types';
 import { AcademyInfo } from '../../../types/services/academy.types';
 import {
+  AssignUserRole,
   IImportUser,
   IImportUserRes,
   UserType,
@@ -32,16 +34,29 @@ export default function ImportUsers({ userType }: IProps) {
   const history = useHistory();
   const { user } = useAuthenticator();
 
+  const { mutate } = usersStore.assignRoles();
+
+  const [roleInfo, setRoleInfo] = useState({
+    name: '',
+    description: '',
+    academyId: '',
+    institution_id: '',
+    type: RoleType.ACADEMY,
+  });
+
+  useEffect(() => {
+    setRoleInfo((role) => ({ ...role, institution_id: user?.institution.id + '' }));
+  }, [user?.institution.id]);
+
   const [values, setValues] = useState<IImportUser>({
     academicYearId: '',
-    academyId: user?.academy?.id.toString() || '',
+    academyId: '',
     userType,
     intakeProgramId: '',
     program: '',
+    roleId: '',
     file: null,
   });
-
-  console.log(values);
 
   const [importReport, setimportReport] = useState<IImportUserRes | undefined>(undefined);
 
@@ -58,6 +73,18 @@ export default function ImportUsers({ userType }: IProps) {
   // const programs = allprograms.filter(
   //   (prog) => prog.department.academy.id === values.academyId,
   // );
+
+  const { data } =
+    roleInfo.type === RoleType.ACADEMY
+      ? roleStore.getRolesByAcademy(values.academyId)
+      : roleStore.getRolesByInstitution(roleInfo.institution_id);
+
+  const { data: userRoles } = usersStore.getUserRoles(user?.id + '');
+
+  const userRolesId = userRoles?.data.data.map((role) => role.role.id) || [];
+
+  const roleOptions =
+    data?.data.data.filter((role) => !userRolesId.includes(role.id)) || [];
 
   const academic_programs =
     programStore.getProgramsByAcademy(values.academyId).data?.data.data || [];
@@ -87,6 +114,27 @@ export default function ImportUsers({ userType }: IProps) {
 
       await mutateAsync(formData, {
         onSuccess(data) {
+          const successfullyImportedUsers: AssignUserRole[] = data.data.data.success.map(
+            (success) => {
+              return {
+                user_id: success.id.toString(),
+                role_id: parseInt(values.roleId),
+                description: '',
+                id: '',
+              };
+            },
+          );
+
+          mutate(successfullyImportedUsers, {
+            onSuccess() {
+              toast.success('Users role assigned successfully');
+            },
+
+            onError(error: any) {
+              toast.error('Error assigning users role', error.response.message);
+            },
+          });
+
           queryClient.invalidateQueries(['users']);
           queryClient.invalidateQueries(['users/institution']);
           queryClient.invalidateQueries([
@@ -154,6 +202,15 @@ export default function ImportUsers({ userType }: IProps) {
               name="intakeProgramId"
               handleChange={handleChange}>
               Intake
+            </SelectMolecule>
+
+            <SelectMolecule
+              placeholder="Select role"
+              options={getDropDownOptions({ inputs: roleOptions })}
+              value={values.roleId}
+              name="roleId"
+              handleChange={handleChange}>
+              Select role
             </SelectMolecule>
             {/* <SelectMolecule
               options={

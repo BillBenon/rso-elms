@@ -62,6 +62,10 @@ class UserStore {
   assignRole() {
     return useMutation(userService.assignRole);
   }
+
+  assignRoles() {
+    return useMutation(userService.assignRole);
+  }
   updateUser() {
     return useMutation(userService.updateProfile);
   }

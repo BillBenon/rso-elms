@@ -18,7 +18,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import PrivilegePreset from '../../components/Organisms/forms/privilege/PrivilegePreset';
 import AddPrivileges from '../../components/Organisms/forms/roles/AddPrivileges';
 import { queryClient } from '../../plugins/react-query';
-import { roleStore } from '../../store/administration';
+import { getPrivilegesByRole, roleStore } from '../../store/administration';
 import { ParamType, Response, RolePrivilege, RoleRes } from '../../types';
 
 export default function ViewRole() {
@@ -28,7 +28,7 @@ export default function ViewRole() {
   const [role, setRole] = useState<RoleRes>();
   const [privilegesByRole, setPrivilegesByRole] = useState<RolePrivilege[]>();
   const { data, isLoading, isSuccess, isError, error } = roleStore.getRole(id);
-  const rolesPrivileges = roleStore.getPrivilegesByRole(id);
+  const rolesPrivileges = getPrivilegesByRole(id);
   const { mutateAsync: deletePrivilege } = roleStore.removeProvilege();
 
   function removePrivilege(rolePrivilege: RolePrivilege) {
@@ -142,6 +142,7 @@ export default function ViewRole() {
                 closeOnClickOutSide={false}>
                 <AddPrivileges
                   roleName={role?.name || ''}
+                  academyId={role?.academy_id || ''}
                   roleId={role?.id + '' || ''}
                   onSubmit={submited}
                 />
@@ -160,11 +161,7 @@ export default function ViewRole() {
                 open={true}
                 onClose={history.goBack}
                 closeOnClickOutSide={false}>
-                <PrivilegePreset
-                  roleName={role?.name || ''}
-                  roleId={role?.id + '' || ''}
-                  onSubmit={submited}
-                />
+                <PrivilegePreset role={role} onSubmit={submited} />
               </PopupMolecule>
             );
           }}

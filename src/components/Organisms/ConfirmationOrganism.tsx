@@ -12,6 +12,7 @@ import {
 import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import Button from '../Atoms/custom/Button';
 import Heading from '../Atoms/Text/Heading';
+import Tiptap from '../Molecules/editor/Tiptap';
 import PopupMolecule from '../Molecules/Popup';
 
 interface IConfirmationProps {
@@ -59,17 +60,23 @@ export default function ConfirmationOrganism({
       });
     }
   }
+
   return (
     <PopupMolecule
       closeOnClickOutSide={false}
       open
-      title="Do you want to continue?"
+      title="Instructions"
       onClose={onConfirmationClose}>
       <div>
         <Heading fontWeight="semibold">{evaluation?.name || ''}</Heading>
         <p className="course-card-description leading-5 pb-6 w-96 text-txt-secondary text-sm mt-4">
-          You are about to attempt this {evaluation?.name || ''} test. Are you sure you
-          want to do it now ? This action is irreversible.
+          <Tiptap
+            showBorder={false}
+            handleChange={() => {}}
+            editable={false}
+            viewMenu={false}
+            content={evaluation?.exam_instruction || ''}
+          />
         </p>
 
         <div className="flex justify-starg">

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -12,16 +13,20 @@ import AssignRole from '../../components/Organisms/forms/user/AssignRole';
 import ViewUserRole from '../../components/Organisms/forms/user/ViewUserRole';
 import ImportUsers from '../../components/Organisms/user/ImportUsers';
 import useAuthenticator from '../../hooks/useAuthenticator';
+import { authenticatorStore } from '../../store/administration';
 import usersStore from '../../store/administration/users.store';
 import { Privileges, ValueType } from '../../types';
 import { ActionsType } from '../../types/services/table.types';
 import { AcademyUserType, UserType, UserTypes } from '../../types/services/user.types';
 import { formatUserTable } from '../../utils/array';
+import DeployInstructors from '../DeployInstructors';
+import EnrollStudents from '../EnrollStudents';
 
 export default function StudentsView() {
   const { url, path } = useRouteMatch();
   const { user } = useAuthenticator();
   const history = useHistory();
+  const { mutateAsync } = authenticatorStore.resetPassword();
 
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
@@ -43,21 +48,12 @@ export default function StudentsView() {
   const users = formatUserTable(data?.data.data.content || []);
 
   let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
-
   actions?.push({
-    name: 'Assign Role',
+    name: 'View Student',
     handleAction: (id: string | number | undefined) => {
-      history.push(`${url}/${id}/assign-role`); // go to assign role
+      history.push(`${url}/${id}/profile`); // go to view user profile
     },
-    privilege: Privileges.CAN_ASSIGN_ROLE,
-  });
-
-  actions?.push({
-    name: 'View Role',
-    handleAction: (id: string | number | undefined) => {
-      history.push(`${url}/${id}/view-role`); // go to assign role
-    },
-    privilege: Privileges.CAN_ACCESS_ROLE,
+    privilege: Privileges.CAN_ACCESS_PROFILE,
   });
 
   actions?.push({
@@ -67,13 +63,49 @@ export default function StudentsView() {
     },
     privilege: Privileges.CAN_MODIFY_USER,
   });
+  actions?.push({
+    name: 'Deploy instructor',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${url}/${id}/deploy`); // go to assign role
+    },
+    privilege: Privileges.CAN_CREATE_USER,
+  });
 
   actions?.push({
-    name: 'View Student',
+    name: 'Enroll student',
     handleAction: (id: string | number | undefined) => {
-      history.push(`${url}/${id}/profile`); // go to view user profile
+      history.push(`${url}/${id}/enroll`); // go to assign role
     },
-    privilege: Privileges.CAN_ACCESS_PROFILE,
+    privilege: Privileges.CAN_CREATE_USER,
+  });
+  actions?.push({
+    name: 'View Role',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${url}/${id}/view-role`); // go to assign role
+    },
+    privilege: Privileges.CAN_ACCESS_ROLE,
+  });
+  actions?.push({
+    name: 'Assign Role',
+    handleAction: (id: string | number | undefined) => {
+      history.push(`${url}/${id}/assign-role`); // go to assign role
+    },
+    privilege: Privileges.CAN_RESET_USER_PASSWORD,
+  });
+  actions?.push({
+    name: 'Reset Pawssword',
+    handleAction: (id: string | number | undefined) => {
+      //call a reset password api
+      mutateAsync(id?.toString() || '', {
+        onSuccess: () => {
+          toast.success('Password reset successfully', { duration: 5000 });
+        },
+        onError: (error: any) => {
+          toast.error(error + '');
+        },
+      });
+    },
+    privilege: Privileges.CAN_RESET_USER_PASSWORD,
   });
 
   function handleSearch(_e: ValueType) {}
@@ -162,7 +194,32 @@ export default function StudentsView() {
             </PopupMolecule>
           )}
         />
-
+        <Route
+          exact
+          path={`${path}/:id/deploy`}
+          render={() => (
+            <PopupMolecule
+              closeOnClickOutSide={false}
+              title="Deploy as an instructor"
+              open={true}
+              onClose={history.goBack}>
+              <DeployInstructors />
+            </PopupMolecule>
+          )}
+        />
+        <Route
+          exact
+          path={`${path}/:id/enroll`}
+          render={() => (
+            <PopupMolecule
+              closeOnClickOutSide={false}
+              title="Enroll as a student"
+              open={true}
+              onClose={history.goBack}>
+              <EnrollStudents />
+            </PopupMolecule>
+          )}
+        />
         <Route
           exact
           path={`${path}/:id/view-role`}

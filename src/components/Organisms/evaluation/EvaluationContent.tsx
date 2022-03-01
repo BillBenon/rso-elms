@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useState } from 'react';
 
 import { useGetInstructor } from '../../../hooks/useGetInstructor';
 import {
@@ -9,7 +9,9 @@ import {
 import { IEvaluationFeedback } from '../../../types/services/evaluation.types';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
 import MultipleChoiceAnswer from '../../../views/evaluation/MultipleChoiceAnswer';
+import Button from '../../Atoms/custom/Button';
 import Heading from '../../Atoms/Text/Heading';
+import PopupMolecule from '../../Molecules/Popup';
 
 interface IProps {
   evaluationId: string;
@@ -22,6 +24,8 @@ export default function EvaluationContent({
   children,
   feedbackType,
 }: IProps) {
+  const [showPopup, setShowPopup] = useState(false);
+
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId).data?.data || {};
 
@@ -116,6 +120,9 @@ export default function EvaluationContent({
             title="Consider on report"
             subTitle={evaluationInfo?.is_consider_on_report ? 'Yes' : 'No'}
           />
+          <Button styleType="outline" onClick={() => setShowPopup(true)}>
+            View personal attendees
+          </Button>
         </div>
       </div>
 
@@ -123,6 +130,14 @@ export default function EvaluationContent({
       <Heading fontWeight="semibold" fontSize="base" className="pt-6">
         Evaluation questions
       </Heading>
+
+      <PopupMolecule
+        open={showPopup}
+        title="Add private attendee"
+        onClose={() => setShowPopup(false)}>
+        <h2>show list of private</h2>
+        <Button onClick={() => setShowPopup(false)}>Done</Button>
+      </PopupMolecule>
 
       <div
         className={`${
@@ -182,7 +197,7 @@ export default function EvaluationContent({
             {feedbacks.map((feedback) => {
               let instructorInfo = useGetInstructor(feedback?.reviewer?.adminId)?.user;
 
-              return feedback.remarks ? (
+              return feedback.remarks !== null ? (
                 <div className="flex flex-col gap-2 pb-4" key={feedback.id}>
                   <Heading fontSize="base" fontWeight="semibold">
                     {`${instructorInfo?.first_name} ${instructorInfo?.last_name}` || ''}

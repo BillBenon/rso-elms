@@ -73,14 +73,14 @@ export interface PersonalDocs {
   person: PersonInfo;
 }
 
-export interface INewPersonalDoc{
+export interface INewPersonalDoc {
   description: string;
   purpose: string;
   personId: string;
 }
 
-export interface FileAttachment{
-  docInfo: FormData,
+export interface FileAttachment {
+  docInfo: FormData;
   id: string;
 }
 export interface IntakeLevelProgramInfo extends Table {
@@ -360,6 +360,7 @@ export enum SendCommunicationMsg {
 
 export interface IImportUser {
   program: string;
+  roleId: string;
   academicYearId: string;
   academyId: string;
   intakeProgramId: string;
@@ -371,4 +372,6 @@ export interface IImportUserRes {
   failures: {
     [index: string]: string;
   };
+
+  success: UserInfo[];
 }

@@ -34,7 +34,7 @@ export default function UnBeguns() {
     classStore.getStudentsByClass(currentClassId + '') || [];
 
   const [classes, setclasses] = useState(
-    evaluationInfo?.intake_level_class_ids.split(','),
+    evaluationInfo?.intake_level_class_ids.split(',') || [' '],
   );
 
   function handleClassChange(e: ValueType) {
@@ -53,14 +53,12 @@ export default function UnBeguns() {
   ];
 
   useEffect(() => {
-    setclasses(evaluationInfo?.intake_level_class_ids.split(',') || ['']);
+    setclasses(evaluationInfo?.intake_level_class_ids.split(',') || [' ']);
   }, [evaluationInfo?.intake_level_class_ids]);
 
   useEffect(() => {
-    classes && setCurrentClassId(classes[0]);
+    setCurrentClassId(classes?.[0] || ' ');
   }, [classes]);
-
-  //   useEffect(() => {}, [students]);
 
   useEffect(() => {
     let newState: UnMarkedStudent[] = [];
@@ -87,7 +85,7 @@ export default function UnBeguns() {
   return (
     <div className="flex flex-col gap-8">
       <Heading fontWeight="semibold" className="pt-7">
-        Riding Class
+        {useClasses(currentClassId).label || 'No choosen class'}{' '}
       </Heading>
 
       <div>

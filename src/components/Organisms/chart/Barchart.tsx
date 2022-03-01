@@ -1,18 +1,47 @@
-import { Chart, Interval, Tooltip } from 'bizcharts';
 import React from 'react';
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Legend,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 
-import { IChart } from '../../../types';
+interface IBarchatProps {
+  fill?: string;
+  xAxisLabel: string;
+  dataKey: string;
+  data: any[];
+}
 
-export default function Barchat({ data, position }: IChart) {
+export default function Barchart({
+  data,
+  xAxisLabel,
+  dataKey,
+  fill = '#8884d8',
+}: IBarchatProps) {
   return (
-    <Chart
-      height={400}
-      autoFit
-      data={data}
-      interactions={['active-region']}
-      padding={[30, 30, 30, 50]}>
-      <Interval position={position} />
-      <Tooltip shared />
-    </Chart>
+    <div className="pt-6">
+      <ResponsiveContainer width="100%" height={500}>
+        <BarChart
+          data={data}
+          margin={{
+            top: 5,
+            right: 30,
+            left: 20,
+            bottom: 5,
+          }}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey={xAxisLabel} />
+          <YAxis />
+          <Tooltip />
+          <Legend />
+          <Bar dataKey={dataKey} maxBarSize={50} fill={fill} />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
   );
 }

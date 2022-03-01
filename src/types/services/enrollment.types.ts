@@ -9,8 +9,8 @@ import {
 import { UserInfo } from './user.types';
 /* eslint-disable no-unused-vars */
 export enum EnrollmentStatus {
-  PENDING,
-  NEW,
+  PENDING = 'PENDING',
+  NEW = 'NEW',
   RETAKE = 'RETAKE',
   DISMISSED = 'DISMISSED',
   COMPLETED = 'COMPLETED',
@@ -45,6 +45,20 @@ export interface InstructorAssignModule {
 export interface EnrollInstructorLevel {
   academic_year_program_intake_level_id: number;
   intake_program_instructor_id: number;
+}
+
+export interface EnrollUserToProgram {
+  completed_on: string;
+  employee_number: string;
+  enroled_on: string;
+  enrolment_mode: EnrollmentMode;
+  enrolment_status: StudentApproval;
+  intake_program_id: string;
+  other_rank: string;
+  rank_id: string;
+  rank_institution: string;
+  third_party_reg_number: string;
+  user_id: string;
 }
 
 export interface EnrollStudentToLevel {

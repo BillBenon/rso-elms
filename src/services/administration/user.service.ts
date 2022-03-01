@@ -42,6 +42,12 @@ class UserService {
     return await adminstrationAxios.put('/users/addRoles', role);
   }
 
+  public async assignRoles(
+    role: AssignUserRole[],
+  ): Promise<AxiosResponse<Response<UserInfo>>> {
+    return await adminstrationAxios.put('/users/addRoles', role);
+  }
+
   public async updateProfile(
     userInfo: UpdateUserInfo,
   ): Promise<AxiosResponse<Response<UserInfo>>> {
