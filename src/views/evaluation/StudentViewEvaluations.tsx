@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
-import { CommonCardDataType } from '../../types';
+import { usePrivilege } from '../../hooks/usePrivilege';
+import { CommonCardDataType, Privileges } from '../../types';
 import {
   IEvaluationInfo,
   IEvaluationInfoSingleEvaluation,
@@ -98,7 +100,11 @@ export default function StudentViewEvaluations({
         search: `?studentEval=${studEvaluation}`,
       });
     } else {
-      history.push(`/dashboard/evaluations/attempt/${id}`);
+      if (usePrivilege(Privileges.CAN_ANSWER_EVALUATION)) {
+        history.push(`/dashboard/evaluations/attempt/${id}`);
+      } else {
+        toast.error("You don't have rights to answer evaluation");
+      }
     }
   }
 
@@ -107,7 +113,7 @@ export default function StudentViewEvaluations({
       <Switch>
         <Route exact path={`${path}/new`} component={NewEvaluation} />
 
-        <Route path={`${path}/:id`} component={EvaluationDetails} />
+        <Route path={`${path}/details/:id`} component={EvaluationDetails} />
         <Route
           path={path}
           render={() => (

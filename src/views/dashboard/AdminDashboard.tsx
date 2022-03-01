@@ -4,9 +4,10 @@ import { Link as BrowserLink } from 'react-router-dom';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import Barchat from '../../components/Organisms/chart/Barchart';
+import Barchart from '../../components/Organisms/chart/Barchart';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { divisionStore } from '../../store/administration/divisions.store';
+import { getDepartmentStatsByAcademy } from '../../store/administration/stats.store';
 import usersStore from '../../store/administration/users.store';
 import { Link } from '../../types';
 import { UserType } from '../../types/services/user.types';
@@ -27,6 +28,8 @@ export default function AdminDashboard() {
       sortyBy: 'username',
     }).data?.data.data.content || [];
 
+  const { data: stats } = getDepartmentStatsByAcademy(user?.academy.id);
+
   const departments =
     divisionStore.getDivisionsByAcademy('DEPARTMENT', user?.academy?.id.toString() || '')
       .data?.data.data || [];
@@ -34,17 +37,6 @@ export default function AdminDashboard() {
   const faculties =
     divisionStore.getDivisionsByAcademy('FACULTY', user?.academy?.id.toString() || '')
       .data?.data.data || [];
-
-  const chartData = [
-    { department: 'Technology', students: 38 },
-    { department: 'Peace keeping', students: 52 },
-    { department: 'Weapon engineering', students: 61 },
-    { department: 'Music band', students: 45 },
-    { department: 'Medicine', students: 48 },
-    { department: 'Aviation', students: 38 },
-    { department: 'Construction', students: 58 },
-    { department: 'Finance', students: 38 },
-  ];
 
   return (
     <div className="py-2">
@@ -115,12 +107,16 @@ export default function AdminDashboard() {
               </div>
             </BrowserLink>
           </div>
-          {/* <div className="p-3 my-6 bg-white shadow-sm rounded-lg">
+          <div className="p-3 my-6 bg-white shadow-sm rounded-lg">
             <Heading className="px-6" fontWeight="semibold">
               Students in departments
             </Heading>
-            <Barchat data={chartData} position={'department*students'} />
-          </div> */}
+            <Barchart
+              xAxisLabel={'department_name'}
+              dataKey={'total_students'}
+              data={stats?.data.data || []}
+            />
+          </div>
         </div>
         <div className="col-span-2 h-56 rounded"></div>
       </div>

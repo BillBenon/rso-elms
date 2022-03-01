@@ -1,23 +1,16 @@
 import moment from 'moment';
 import React, { ReactNode, useState } from 'react';
-import toast from 'react-hot-toast';
 
 import { useGetInstructor } from '../../../hooks/useGetInstructor';
-import { useStudents } from '../../../hooks/useStudents';
 import {
   evaluationStore,
   getEvaluationFeedbacks,
 } from '../../../store/evaluation/evaluation.store';
-import { ValueType } from '../../../types';
-import {
-  IAddprivateAttendee,
-  IEvaluationFeedback,
-} from '../../../types/services/evaluation.types';
+import { IEvaluationFeedback } from '../../../types/services/evaluation.types';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
 import MultipleChoiceAnswer from '../../../views/evaluation/MultipleChoiceAnswer';
 import Button from '../../Atoms/custom/Button';
 import Heading from '../../Atoms/Text/Heading';
-import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 import PopupMolecule from '../../Molecules/Popup';
 
 interface IProps {
@@ -32,51 +25,15 @@ export default function EvaluationContent({
   feedbackType,
 }: IProps) {
   const [showPopup, setShowPopup] = useState(false);
-  const [privateAttendee, setPrivateAttendee] = useState<IAddprivateAttendee>({
-    evaluation: evaluationId,
-    id: '',
-    private_status: true,
-    students: [],
-  });
+
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId).data?.data || {};
 
   const feedbacks = getEvaluationFeedbacks(evaluationId, feedbackType).data?.data
     .data || [{ id: '', remarks: '', reviewer: { adminId: '' } }];
 
-  const { mutate } = evaluationStore.addEvaluationAttendee();
-
   const { data: evaluationQuestions, isLoading: loading } =
     evaluationStore.getEvaluationQuestions(evaluationId);
-
-  function handleChange(e: ValueType) {
-    setPrivateAttendee((prev) => {
-      return { ...prev, [e.name]: e.value.toString() };
-    });
-  }
-
-  let classesSelect = evaluationInfo?.intake_level_class_ids
-    ? evaluationInfo?.intake_level_class_ids.split(',')
-    : [''];
-
-  let attendees =
-    classesSelect
-      .map((classId) => {
-        return useStudents(classId);
-      })
-      .flat() || [];
-
-  function addAttendee() {
-    mutate(privateAttendee, {
-      onSuccess: () => {
-        toast.success('Succesfully added attendee(s)', { duration: 5000 });
-        setShowPopup(false);
-      },
-      onError: (error: any) => {
-        toast.error(error.response.data.message);
-      },
-    });
-  }
 
   return (
     <div>
@@ -164,7 +121,7 @@ export default function EvaluationContent({
             subTitle={evaluationInfo?.is_consider_on_report ? 'Yes' : 'No'}
           />
           <Button styleType="outline" onClick={() => setShowPopup(true)}>
-            Add personal attendee
+            View personal attendees
           </Button>
         </div>
       </div>
@@ -174,22 +131,13 @@ export default function EvaluationContent({
         Evaluation questions
       </Heading>
 
-      {/* don't render it unless it is opened */}
-      {/* {showPopup && ( */}
       <PopupMolecule
         open={showPopup}
         title="Add private attendee"
         onClose={() => setShowPopup(false)}>
-        <DropdownMolecule
-          handleChange={handleChange}
-          name={'students'}
-          options={attendees}
-          isMulti>
-          Students
-        </DropdownMolecule>
-        <Button onClick={addAttendee}>Add students</Button>
+        <h2>show list of private</h2>
+        <Button onClick={() => setShowPopup(false)}>Done</Button>
       </PopupMolecule>
-      {/* )} */}
 
       <div
         className={`${
@@ -249,7 +197,7 @@ export default function EvaluationContent({
             {feedbacks.map((feedback) => {
               let instructorInfo = useGetInstructor(feedback?.reviewer?.adminId)?.user;
 
-              return feedback.remarks ? (
+              return feedback.remarks !== null ? (
                 <div className="flex flex-col gap-2 pb-4" key={feedback.id}>
                   <Heading fontSize="base" fontWeight="semibold">
                     {`${instructorInfo?.first_name} ${instructorInfo?.last_name}` || ''}

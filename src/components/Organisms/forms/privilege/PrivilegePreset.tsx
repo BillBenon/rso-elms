@@ -4,55 +4,62 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
-import { getUnAssignedPrivileges, roleStore } from '../../../../store/administration';
-import { AddPrivilegeRoleType, RolePropType } from '../../../../types';
+import { queryClient } from '../../../../plugins/react-query';
+import { getPrivilegesByRole, roleStore } from '../../../../store/administration';
+import { AddPrivilegeRoleType, PresetRolePropType, RoleRes } from '../../../../types';
 import Badge from '../../../Atoms/custom/Badge';
 import Button from '../../../Atoms/custom/Button';
 
-function PrivilegePreset({ roleId, onSubmit }: RolePropType) {
+function PrivilegePreset({ role, onSubmit }: PresetRolePropType) {
   const { data } = roleStore.getRoles();
   const history = useHistory();
   const [priv, setPriv] = useState<AddPrivilegeRoleType>({
-    roleId: roleId,
+    roleId: role?.id + '',
     privileges: '',
   });
+  const [roles, setRoles] = useState<RoleRes[]>([]);
   const [selectedRole, setSelectedRole] = useState<string>();
   const { mutateAsync } = roleStore.addPrivilegesOnRole();
-  let roles = data?.data.data.filter((role) => role.id != roleId) || [];
 
-  const { data: rolePrivileges } = getUnAssignedPrivileges(
-    selectedRole + '',
-    !!selectedRole,
-  );
+  const { data: rolePrivileges } = getPrivilegesByRole(selectedRole + '', !!selectedRole);
 
   useEffect(() => {
+    setRoles(data?.data.data.filter((rl) => rl.id != role?.id) || []);
+  }, [data?.data.data, role]);
+  useEffect(() => {
     let privileges = rolePrivileges?.data.data
-      ? rolePrivileges.data.data.map((priv) => priv.id)
+      ? rolePrivileges.data.data.map((priv) => priv.privilege.id)
       : undefined;
 
     let privs = privileges?.map((priv) => priv).join(',');
 
     privs &&
       setPriv({
-        roleId: roleId,
+        roleId: role?.id + '',
         privileges: privs,
       });
-  }, [roleId, rolePrivileges?.data.data]);
+  }, [role, rolePrivileges?.data.data]);
 
   const savePrivileges = () => {
-    const toastId = toast.loading('adding privileges to role');
-    mutateAsync(priv, {
-      onSuccess: () => {
-        onSubmit();
-        toast.success('Privilege(s) Added', { id: toastId });
-        history.push(`/dashboard/role/${roleId}/view`);
-      },
-      onError: () => {
-        toast.error('something wrong happened adding privileges on role', {
-          id: toastId,
-        });
-      },
-    });
+    if (selectedRole) {
+      const toastId = toast.loading('adding privileges to role');
+
+      mutateAsync(priv, {
+        onSuccess: () => {
+          onSubmit();
+          toast.success('Privilege(s) Added', { id: toastId });
+          queryClient.invalidateQueries(['privilegesByRole/id', selectedRole]);
+          history.push(`/dashboard/role/${role?.id}/view`);
+        },
+        onError: () => {
+          toast.error('something wrong happened adding privileges on role', {
+            id: toastId,
+          });
+        },
+      });
+    } else {
+      toast.error('You must select a role for presets');
+    }
   };
 
   return (

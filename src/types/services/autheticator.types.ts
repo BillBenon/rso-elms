@@ -9,6 +9,7 @@ export interface LoginRes {
 export interface ChangePassword {
   currentPassword: string;
   newPassword: string;
+  confirmPassword: string;
 }
 export interface InitiateResetPassword {
   email: string;

@@ -128,6 +128,7 @@ export interface IUpdateEvaluationApprovalStatus {
 
 export interface IEvaluationCreate {
   access_type: string;
+  private_attendees: string;
   intake_academic_year_period: string;
   academy_id: string;
   instructor_id: string;
@@ -165,7 +166,7 @@ export interface IStudentEvaluations {
 export interface IAddprivateAttendee {
   evaluation: string;
   id: string;
-  private_status: true;
+  private_status: boolean;
   students: string[];
 }
 

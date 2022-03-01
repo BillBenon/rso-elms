@@ -57,7 +57,7 @@ export default function FieldMarking({ evaluationId }: PropsType) {
       // eslint-disable-next-line no-undef
       handleAction: (id: string | number | undefined | IEvaluationInfo | Student) => {
         history.push(
-          `/dashboard/evaluations/${evaluationId}/submissions/field/${id}/mark`,
+          `/dashboard/evaluations/details/${evaluationId}/submissions/field/${id}/mark`,
         );
       },
     },
@@ -115,7 +115,7 @@ export default function FieldMarking({ evaluationId }: PropsType) {
   return (
     <div className="flex flex-col gap-8">
       <Heading fontWeight="semibold" className="pt-7">
-        Riding Class
+        {useClasses(currentClassId).label || 'No choosen class'}{' '}
       </Heading>
 
       <div>

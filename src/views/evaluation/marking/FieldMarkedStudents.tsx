@@ -78,7 +78,7 @@ export default function Submissions() {
         _data?: string | number | IEvaluationInfo | EvaluationStudent | undefined,
       ) => {
         history.push({
-          pathname: `/dashboard/evaluations/${id}/submissions/field/marked/${_data}`,
+          pathname: `/dashboard/evaluations/details/${id}/submissions/field/marked/${_data}`,
         });
       },
     },
@@ -92,7 +92,9 @@ export default function Submissions() {
           icon="evaluation"
           buttonLabel="Go back"
           title={'No submissions has been made so far!'}
-          handleClick={() => history.push(`/dashboard/evaluations/${evaluation?.id}`)}
+          handleClick={() =>
+            history.push(`/dashboard/evaluations/details/${evaluation?.id}`)
+          }
           description="It looks like no student have submitted yet."
         />
       ) : isSuccess && submissions.length > 0 ? (

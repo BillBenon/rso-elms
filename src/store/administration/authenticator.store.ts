@@ -15,6 +15,9 @@ class AuthenticatorStore {
   passwordChange() {
     return useMutation(authenticatorService.passwordChange);
   }
+  resetPassword() {
+    return useMutation(authenticatorService.resetPassword);
+  }
   forgotPassword() {
     return useMutation(authenticatorService.forgotPassword);
   }
@@ -24,17 +27,3 @@ class AuthenticatorStore {
 }
 
 export const authenticatorStore = new AuthenticatorStore();
-
-// const {
-//     data,
-//     error,
-//     isError,
-//     isIdle,
-//     isLoading,
-//     isPaused,
-//     isSuccess,
-//     mutate,
-//     mutateAsync,
-//     reset,
-//     status,
-//   }
