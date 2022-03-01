@@ -10,6 +10,7 @@ import usersStore from '../../../../store/administration/users.store';
 import { ParamType, RoleType, ValueType } from '../../../../types';
 import { AcademyInfo } from '../../../../types/services/academy.types';
 import { AssignUserRole } from '../../../../types/services/user.types';
+import cookie from '../../../../utils/cookie';
 import {
   getDropDownOptions,
   getDropDownStatusOptions,
@@ -36,12 +37,20 @@ export default function AssignRole() {
     type: RoleType.ACADEMY,
   });
 
+  let picked_role_cookie = cookie.getCookie('user_role') || '';
+
+  const picked_role = user?.user_roles?.find(
+    (role) => role.id + '' === picked_role_cookie,
+  );
+
   useEffect(() => {
     setRoleInfo((role) => ({ ...role, institution_id: user?.institution.id + '' }));
   }, [user?.institution.id]);
 
   const { data, isLoading } =
-    roleInfo.type === RoleType.ACADEMY
+    picked_role?.type === RoleType.ACADEMY
+      ? roleStore.getRolesByAcademy(picked_role.academy_id)
+      : roleInfo.type === RoleType.ACADEMY
       ? roleStore.getRolesByAcademy(roleInfo.academy_id)
       : roleStore.getRolesByInstitution(roleInfo.institution_id);
 
@@ -53,7 +62,13 @@ export default function AssignRole() {
   }
 
   function otherHandleChange({ name, value }: ValueType) {
-    setRoleInfo((old) => ({ ...old, [name]: value }));
+    if (picked_role?.type === RoleType.ACADEMY)
+      setRoleInfo((old) => ({
+        ...old,
+        [name]: value,
+        ['academyId']: picked_role?.academy_id,
+      }));
+    else setRoleInfo((old) => ({ ...old, [name]: value }));
   }
 
   async function saveRoles(e: FormEvent) {
@@ -91,16 +106,27 @@ export default function AssignRole() {
   return (
     <form onSubmit={saveRoles}>
       <>
-        <RadioMolecule
-          className="pb-2"
-          defaultValue={roleInfo.type}
-          options={getDropDownStatusOptions(RoleType)}
-          value={roleInfo.type}
-          handleChange={otherHandleChange}
-          name="type">
-          Apply Role On
-        </RadioMolecule>
-        {roleInfo.type === RoleType.ACADEMY ? (
+        {picked_role?.type === RoleType.INSTITUTION && (
+          <RadioMolecule
+            className="pb-2"
+            defaultValue={roleInfo.type}
+            options={getDropDownStatusOptions(RoleType)}
+            value={roleInfo.type}
+            handleChange={otherHandleChange}
+            name="type">
+            Apply Role On
+          </RadioMolecule>
+        )}
+        {picked_role?.type === RoleType.ACADEMY ? (
+          <InputMolecule
+            readOnly
+            value={
+              academies.find((academy) => academy.id === picked_role?.academy_id)?.name
+            }
+            name={'academyId'}>
+            Academy
+          </InputMolecule>
+        ) : roleInfo?.type === RoleType.ACADEMY ? (
           <SelectMolecule
             options={getDropDownOptions({ inputs: academies || [] })}
             name="academy_id"

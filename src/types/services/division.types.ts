@@ -8,6 +8,7 @@ export interface DivisionInfo extends Table, DivisionCreateInfo {
   departments: [];
   programs: ProgramInfo;
   total_num_childreen: number;
+  total_num_of_programs: number;
   parent: DivisionInfo;
 }
 
