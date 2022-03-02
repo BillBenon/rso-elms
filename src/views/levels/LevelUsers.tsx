@@ -15,7 +15,6 @@ import { levelStore } from '../../store/administration/level.store';
 import usersStore from '../../store/administration/users.store';
 import { ParamType } from '../../types';
 import { UserType, UserTypes } from '../../types/services/user.types';
-import UserDetails from '../users/UserDetails';
 
 export default function LevelUsers() {
   const { url, path } = useRouteMatch();
@@ -111,7 +110,7 @@ export default function LevelUsers() {
     {
       name: 'View Student',
       handleAction: (id: string | number | undefined) => {
-        history.push(`${url}/${id}/profile`); // go to view user profile
+        history.push(`/dashboard/user/${id}/profile`); // go to view user profile
       },
     },
   ];
@@ -126,7 +125,6 @@ export default function LevelUsers() {
       <Switch>
         <Route exact path={`${path}/add`} component={NewUser} />
         <Route exact path={`${path}/:id/edit`} component={UpdateUser} />
-        <Route exact path={`${path}/:id/profile`} component={UserDetails} />
 
         <Route
           path={`${path}`}
