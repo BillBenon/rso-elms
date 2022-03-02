@@ -48,6 +48,12 @@ class UserService {
     return await adminstrationAxios.put('/users/addRoles', role);
   }
 
+  public async revokeRole(
+    userRoleId: number,
+  ): Promise<AxiosResponse<Response<UserInfo>>> {
+    return await adminstrationAxios.delete(`/users/removeRole/${userRoleId}`);
+  }
+
   public async updateProfile(
     userInfo: UpdateUserInfo,
   ): Promise<AxiosResponse<Response<UserInfo>>> {

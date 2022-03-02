@@ -27,7 +27,7 @@ export default function Instructors({ instructors }: { instructors: UserTypes[] 
     {
       name: 'View instructor',
       handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/users/${id}/profile`); // go to view user profile
+        history.push(`/dashboard/user/${id}/profile`); // go to view user profile
       },
     },
   ];
