@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -51,9 +52,9 @@ export default function InstructorsView() {
   actions?.push({
     name: 'View instructor',
     handleAction: (id: string | number | undefined) => {
-      history.push(`/dashboard/users/${id}/profile`); // go to view user profile
+      history.push(`/dashboard/user/${id}/profile`); // go to view user profile
     },
-    privilege: Privileges.CAN_ACCESS_PROFILE,
+    privilege: Privileges.CAN_ACCESS_USERS,
   });
 
   actions?.push({
@@ -85,7 +86,7 @@ export default function InstructorsView() {
     handleAction: (id: string | number | undefined) => {
       history.push(`${url}/${id}/view-role`); // go to assign role
     },
-    privilege: Privileges.CAN_ACCESS_ROLE,
+    privilege: Privileges.CAN_ACCESS_USERS_ROLES,
   });
 
   actions?.push({
@@ -123,8 +124,7 @@ export default function InstructorsView() {
         title="Instructors"
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
-        {(user?.user_type === UserType.SUPER_ADMIN ||
-          user?.user_type === UserType.ADMIN) && (
+        <Permission privilege={Privileges.CAN_CREATE_USER}>
           <div className="flex gap-3">
             <Link to={`${url}/import`}>
               <Button styleType="outline">Import instructors</Button>
@@ -133,7 +133,7 @@ export default function InstructorsView() {
               <Button>New instructor</Button>
             </Link>
           </div>
-        )}
+        </Permission>
       </TableHeader>
       {isLoading ? (
         <Loader />

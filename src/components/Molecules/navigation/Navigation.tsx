@@ -202,7 +202,7 @@ export default function Navigation() {
                         Change password
                       </Link>
                       <Link
-                        to={`/dashboard/users/${user?.id}/profile?me=true`}
+                        to={`/dashboard/user/${user?.id}/profile?me=true`}
                         className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100">
                         Your Profile
                       </Link>
@@ -295,7 +295,7 @@ export default function Navigation() {
           </div>
           <div className="mt-3 px-2 space-y-1">
             <Link
-              to={`/dashboard/users/${user?.id}/profile`}
+              to={`/dashboard/user/${user?.id}/profile`}
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">
               Your Profile
             </Link>

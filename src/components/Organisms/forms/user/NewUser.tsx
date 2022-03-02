@@ -150,6 +150,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         {details.user_type === UserType.INSTRUCTOR ? (
           <>
             <DateMolecule
+              defaultValue={new Date().toString()}
               handleChange={handleChange}
               startYear={new Date().getFullYear() - 20}
               endYear={new Date().getFullYear()}
@@ -261,11 +262,11 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         </InputMolecule>
         {details.doc_type == DocType.PASSPORT && (
           <DateMolecule
+            startYear={new Date().getFullYear() - 7}
+            defaultValue={new Date().toString()}
+            endYear={new Date().getFullYear() + 7}
             handleChange={handleChange}
             name="document_expire_on"
-            defaultValue={details.document_expire_on}
-            endYear={new Date(details.document_expire_on).getFullYear() + 7}
-            startYear={new Date().getFullYear()}
             width="60 md:w-80">
             Passport expiry date
           </DateMolecule>
@@ -284,6 +285,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           details.marital_status === MaritalStatus.WIDOWED) && (
           <InputMolecule
             name="spouse_name"
+            required={false}
             value={details.spouse_name}
             handleChange={handleChange}>
             Spouse Name

@@ -51,6 +51,8 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
     if (onSubmit) onSubmit(e);
   }
 
+  console.log(regControl.expected_start_date);
+
   return (
     <form onSubmit={submitForm}>
       <TextAreaMolecule
@@ -60,18 +62,28 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
         handleChange={handleChange}>
         Registration control description
       </TextAreaMolecule>
-      <DateMolecule
+      {/* <DateMolecule
         startYear={new Date().getFullYear()}
         endYear={new Date().getFullYear() + 15}
         reverse={false}
         handleChange={handleChange}
         name={'expected_start_date'}>
         Start Date
+      </DateMolecule> */}
+      <DateMolecule
+        startYear={new Date().getFullYear()}
+        defaultValue={new Date().toString()}
+        endYear={new Date().getFullYear() + 15}
+        reverse={false}
+        handleChange={handleChange}
+        name="expected_start_date">
+        Start Date
       </DateMolecule>
 
       <DateMolecule
         handleChange={handleChange}
         startYear={new Date(regControl.expected_start_date).getFullYear()}
+        defaultValue={new Date().toString()}
         endYear={new Date().getFullYear() + 15}
         reverse={false}
         name={'expected_end_date'}>

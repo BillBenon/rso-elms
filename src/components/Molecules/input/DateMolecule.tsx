@@ -86,7 +86,7 @@ function DateMolecule({
   const dateFormat = () => {
     let date = `${dateState.Year}-${
       dateState.Month >= 10 ? dateState.Month : `${dateState.Month}`
-    }-${dateState.Day} ${
+    }-${parseInt(dateState.Day) >= 10 ? `${dateState.Day}` : `0${dateState.Day}`} ${
       dateState.Hours >= 10 ? dateState.Hours : `0${dateState.Hours}`
     }:${dateState.Minutes}:00`;
 
@@ -105,12 +105,11 @@ function DateMolecule({
 
   function setDate() {
     const dV = new Date(defaultValue || '');
-
     setDateState((old) => ({
       ...old,
       Year: dV.getFullYear(),
       Month: dV.getMonth() + 1,
-      Day: dV.getDate() + '',
+      Day: dV.getDay() + '',
       Hours: dV.getHours(),
       Minutes: dV.getMinutes().toString(),
     }));

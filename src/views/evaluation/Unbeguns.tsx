@@ -47,7 +47,7 @@ export default function UnBeguns() {
     {
       name: 'View Student',
       handleAction: (id: string | number | undefined | IEvaluationInfo | Student) => {
-        history.push(`/dashboard/users/${id}/profile`);
+        history.push(`/dashboard/user/${id}/profile`);
       },
     },
   ];
