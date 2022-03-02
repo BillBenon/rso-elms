@@ -24,7 +24,7 @@ export default function Admins({ admins }: { admins: UserTypes[] }) {
     {
       name: 'View admin',
       handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/users/${id}/profile`); // go to view user profile
+        history.push(`/dashboard/user/${id}/profile`); // go to view user profile
       },
     },
   ];

@@ -12,8 +12,6 @@ import AdminsView from './AdminsView';
 import InstructorsView from './InstructorsView';
 import StudentsView from './StudentsView';
 import SuperAdminView from './SuperAdminView';
-import UserDetails from './UserDetails';
-
 export default function Users() {
   const { url, path } = useRouteMatch();
   const [userType, setUserType] = useState('Students');
@@ -59,7 +57,6 @@ export default function Users() {
         </ILabel>
       </div>
       <Switch>
-        <Route path={`${path}/:id/profile`} component={UserDetails} />
         <Route exact path={`${path}/add/:userType`} component={NewUser} />
         <Route exact path={`${path}/:id/edit`} component={UpdateUser} />
 

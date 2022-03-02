@@ -64,7 +64,7 @@ export default function FieldMarking({ evaluationId }: PropsType) {
     {
       name: 'View student',
       handleAction: (id: string | number | undefined | IEvaluationInfo | Student) => {
-        history.push(`/dashboard/users/${id}/profile`);
+        history.push(`/dashboard/user/${id}/profile`);
       },
     },
   ];

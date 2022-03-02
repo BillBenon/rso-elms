@@ -51,9 +51,9 @@ export default function AdminsView() {
   actions?.push({
     name: 'View admin',
     handleAction: (id: string | number | undefined) => {
-      history.push(`/dashboard/users/${id}/profile`); // go to view user profile
+      history.push(`/dashboard/user/${id}/profile`); // go to view user profile
     },
-    privilege: Privileges.CAN_ACCESS_PROFILE,
+    privilege: Privileges.CAN_ACCESS_USERS,
   });
   actions?.push({
     name: 'Edit admin',
@@ -84,7 +84,7 @@ export default function AdminsView() {
     handleAction: (id: string | number | undefined) => {
       history.push(`${url}/${id}/view-role`); // go to assign role
     },
-    privilege: Privileges.CAN_ACCESS_ROLE,
+    privilege: Privileges.CAN_ACCESS_USERS_ROLES,
   });
 
   actions?.push({

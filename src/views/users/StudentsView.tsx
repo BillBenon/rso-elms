@@ -51,9 +51,9 @@ export default function StudentsView() {
   actions?.push({
     name: 'View Student',
     handleAction: (id: string | number | undefined) => {
-      history.push(`${url}/${id}/profile`); // go to view user profile
+      history.push(`/dashboard/user/${id}/profile`); // go to view user profile
     },
-    privilege: Privileges.CAN_ACCESS_PROFILE,
+    privilege: Privileges.CAN_ACCESS_USERS,
   });
 
   actions?.push({
@@ -83,17 +83,18 @@ export default function StudentsView() {
     handleAction: (id: string | number | undefined) => {
       history.push(`${url}/${id}/view-role`); // go to assign role
     },
-    privilege: Privileges.CAN_ACCESS_ROLE,
+    privilege: Privileges.CAN_ACCESS_USERS_ROLES,
   });
   actions?.push({
     name: 'Assign Role',
     handleAction: (id: string | number | undefined) => {
       history.push(`${url}/${id}/assign-role`); // go to assign role
     },
-    privilege: Privileges.CAN_RESET_USER_PASSWORD,
+    privilege: Privileges.CAN_ASSIGN_ROLE,
   });
+
   actions?.push({
-    name: 'Reset Pawssword',
+    name: 'Reset Password',
     handleAction: (id: string | number | undefined) => {
       //call a reset password api
       mutateAsync(id?.toString() || '', {

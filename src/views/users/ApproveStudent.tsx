@@ -96,7 +96,7 @@ function ApproveStudent() {
   //   {
   //     name: 'View Student',
   //     handleAction: (id: string | number | undefined) => {
-  //       history.push(`/dashboard/users/${id}/profile`); // go to view user profile
+  //       history.push(`/dashboard/user/${id}/profile`); // go to view user profile
   //     },
   //   },
   // ];
@@ -139,20 +139,20 @@ function ApproveStudent() {
                         handleAction: (id: string | number | undefined) => {
                           stud === StudentApproval.PENDING
                             ? history.push({
-                                pathname: `/dashboard/users/${
+                                pathname: `/dashboard/user/${
                                   pendingStud.find((st) => st.id === id)?.user_id
                                 }/profile`,
                                 search: `?intkStud=${id}&stat=${StudentApproval.PENDING}`,
                               })
                             : stud === StudentApproval.APPROVED
                             ? history.push({
-                                pathname: `/dashboard/users/${
+                                pathname: `/dashboard/user/${
                                   approvedStud.find((st) => st.id === id)?.user_id
                                 }/profile`,
                                 search: `?intkStud=${id}&stat=${StudentApproval.APPROVED}`,
                               })
                             : history.push({
-                                pathname: `/dashboard/users/${
+                                pathname: `/dashboard/user/${
                                   rejectedStud.find((st) => st.id === id)?.user_id
                                 }/profile`,
                                 search: `?intkStud=${id}&stat=${StudentApproval.REJECTED}`,
