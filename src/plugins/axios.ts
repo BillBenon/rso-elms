@@ -6,23 +6,30 @@ import cookie from '../utils/cookie';
 
 const openRequests: string[] = ['/authentication/signin'];
 
+console.log(import.meta.env);
+
 const commonConfig: AxiosRequestConfig = {};
 
-export const ADMIN_BASE_URL = 'http://172.31.1.35:8080/administration-service/api';
+export const ADMIN_BASE_URL = `${
+  import.meta.env.VITE_API_URL
+}/administration-service/api`;
+
+export const EVAL_BASE_URL = `${import.meta.env.VITE_API_URL}/evaluation-service/api`;
+export const TIMETABLE_BASE_URL = `${import.meta.env.VITE_API_URL}/timetable-service/api`;
 
 const administrationModuleConfig: AxiosRequestConfig = {
   ...commonConfig,
-  baseURL: 'http://172.31.1.35:8080/administration-service/api',
+  baseURL: ADMIN_BASE_URL,
 };
 
 const evalutationModuleConfig: AxiosRequestConfig = {
   ...commonConfig,
-  baseURL: 'http://172.31.1.35:8080/evaluation-service/api',
+  baseURL: EVAL_BASE_URL,
 };
 
 const timetableModuleConfig: AxiosRequestConfig = {
   ...commonConfig,
-  baseURL: 'http://172.31.1.35:8080/timetable-service/api',
+  baseURL: TIMETABLE_BASE_URL,
 };
 
 const adminstrationAxios = axios.create(administrationModuleConfig);

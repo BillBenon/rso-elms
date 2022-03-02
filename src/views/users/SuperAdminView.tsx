@@ -43,9 +43,9 @@ export default function SuperAdminView() {
   actions?.push({
     name: 'View Super Admin',
     handleAction: (id: string | number | undefined) => {
-      history.push(`/dashboard/users/${id}/profile`); // go to view user profile
+      history.push(`/dashboard/user/${id}/profile`); // go to view user profile
     },
-    privilege: Privileges.CAN_ACCESS_PROFILE,
+    privilege: Privileges.CAN_ACCESS_USERS,
   });
   actions?.push({
     name: 'Edit super admin',
@@ -72,9 +72,9 @@ export default function SuperAdminView() {
   actions?.push({
     name: 'View Role',
     handleAction: (id: string | number | undefined) => {
-      history.push(`/dashboard/users/${id}/view-role`); // go to assign role
+      history.push(`${url}/${id}/view-role`); // go to assign role
     },
-    privilege: Privileges.CAN_ACCESS_ROLE,
+    privilege: Privileges.CAN_ACCESS_USERS_ROLES,
   });
   actions?.push({
     name: 'Assign Role',

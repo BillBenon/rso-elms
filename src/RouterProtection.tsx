@@ -32,6 +32,7 @@ import CalendarView from './views/schedule/CalendarView';
 import Events from './views/schedule/Events';
 import ScheduleHome from './views/schedule/ScheduleHome';
 import Subjects from './views/subjects';
+import UserDetails from './views/users/UserDetails';
 import Users from './views/users/Users';
 
 const RouterProtection = () => {
@@ -52,9 +53,11 @@ const RouterProtection = () => {
         <NotFound />
       ) : (
         <Switch>
-          {/* insttution routes */}
-          {hasPrivilege(Privileges.CAN_ACCESS_ROLE) && (
+          {hasPrivilege(Privileges.CAN_ACCESS_ROLES) && (
             <Route path={`${path}/role/:id/view`} component={ViewRole} />
+          )}
+          {hasPrivilege(Privileges.CAN_ACCESS_ROLES) && (
+            <Route path={`${path}/roles`} component={Roles} />
           )}
           {hasPrivilege(Privileges.CAN_ACCESS_ACADEMY) && (
             <Route path={`${path}/academies`} component={Academies} />
@@ -65,11 +68,11 @@ const RouterProtection = () => {
           {hasPrivilege(Privileges.CAN_ACCESS_RANKS) && (
             <Route path={`${path}/ranks`} component={Ranks} />
           )}
-          {hasPrivilege(Privileges.CAN_ACCESS_ROLES) && (
-            <Route path={`${path}/roles`} component={Roles} />
-          )}
           {hasPrivilege(Privileges.CAN_ACCESS_USERS) && (
             <Route path={`${path}/users`} component={Users} />
+          )}
+          {hasPrivilege(Privileges.CAN_ACCESS_USERS) && (
+            <Route path={`${path}/user/:id/profile`} component={UserDetails} />
           )}
           {hasPrivilege(Privileges.CAN_MODIFY_INSTITUTION) && (
             <Route
