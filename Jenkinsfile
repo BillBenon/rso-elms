@@ -30,6 +30,7 @@ pipeline {
                     } else {
                         echo "Not sure about productin envoromnet"
                         sh 'npm run build' 
+                    }
                 }
             }
         }
