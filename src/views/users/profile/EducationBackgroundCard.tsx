@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react';
 
 import Badge from '../../../components/Atoms/custom/Badge';
@@ -42,14 +43,14 @@ function EducationBackgroundCard({ person }: { person: PersonInfo }) {
               <p className="text-txt-secondary pr-1">Occupation: </p>
               <p className="text-txt-primary px-2">{exp.occupation}g</p>
             </div>
-            <div className="flex text-sm">
+            <div className="flex text-xs">
               <p className="text-txt-secondary pr-2">From: </p>
               <p className="text-txt-primary px-2">
-                {new Date(exp.start_date).toDateString()}
+                {moment(exp.start_date).format('ddd, YYYY-MM-DD')}
               </p>
               <p className="text-txt-secondary pr-1">To: </p>
               <p className="text-txt-primary px-2">
-                {new Date(exp.end_date).toDateString()}
+                {moment(exp.end_date).format('ddd, YYYY-MM-DD')}
               </p>
             </div>
           </div>

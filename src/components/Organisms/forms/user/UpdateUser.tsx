@@ -1,4 +1,5 @@
 import { pick } from 'lodash';
+import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router';
@@ -232,9 +233,9 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           Email
         </InputMolecule>
         <DateMolecule
-          startYear={new Date().getFullYear() - 100}
-          defaultValue={(new Date().getFullYear() - 16).toString()}
-          endYear={new Date().getFullYear() - 16}
+          startYear={moment().year() - 100}
+          defaultValue={(moment().year() - 16).toString()}
+          endYear={moment().year() - 16}
           handleChange={handleChange}
           name="birth_date"
           width="60 md:w-80"
@@ -283,9 +284,9 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
         </InputMolecule>
         {details.doc_type == DocType.PASSPORT && (
           <DateMolecule
-            startYear={new Date().getFullYear() - 7}
-            defaultValue={new Date().toString()}
-            endYear={new Date().getFullYear() + 7}
+            startYear={moment().year() - 7}
+            defaultValue={moment().toString()}
+            endYear={moment().year() + 7}
             handleChange={handleChange}
             name="document_expire_on"
             width="60 md:w-80"

@@ -41,20 +41,18 @@ export const getDaysInMonth = (year: number, month: number): number => {
 };
 
 export function formatDateToYyMmDd(date: string) {
-  let formatedDate = new Date(date);
+  let formatedDate = moment(date);
 
-  const month = formatedDate.getMonth() + 1;
-  const day = formatedDate.getDate();
+  const month = formatedDate.month() + 1;
+  const day = formatedDate.date();
 
-  return `${formatedDate.getFullYear()}-${month < 10 ? '0' : ''}${month}-${
+  return `${formatedDate.year()}-${month < 10 ? '0' : ''}${month}-${
     day < 10 ? '0' : ''
   }${day}`;
 }
 
-export function formatDateToIso(date: string | Date): string {
-  let formatedDate = (moment(new Date(`${date} UTC`)).toISOString() || '')
-    .split('T')
-    .join(' ');
+export function formatDateToIso(date: string): string {
+  let formatedDate = moment(`${date} UTC`).toISOString().split('T').join(' ');
 
   return formatedDate.substring(0, formatedDate.length - 5);
 }

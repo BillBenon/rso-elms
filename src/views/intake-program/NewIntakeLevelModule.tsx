@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router';
@@ -126,6 +127,8 @@ function NewIntakeLevelModule() {
     setTotalModules([]);
   }
 
+  let level = levels.find((lv) => (lv.id = levelId));
+
   return (
     <div className="grid lg:grid-cols-2 grid-cols-1 w-full mx-auto">
       <div className="bg-main pl-10 pt-6">
@@ -214,22 +217,25 @@ function NewIntakeLevelModule() {
         </div>
         <div className="flex flex-col gap-2">
           <DateMolecule
-            startYear={new Date(
-              levels.find((lv) => (lv.id = levelId))?.planed_start_on || '',
-            ).getFullYear()}
-            endYear={new Date(
-              levels.find((lv) => (lv.id = levelId))?.planed_end_on || '',
-            ).getFullYear()}
+            startYear={moment(
+              level?.planed_start_on === '' ? undefined : level?.planed_start_on,
+            ).year()}
+            endYear={moment(
+              level?.planed_end_on === '' ? undefined : level?.planed_end_on,
+            ).year()}
             handleChange={handleChange}
             reverse={false}
             name="planned_start_on">
             Start Date
           </DateMolecule>
           <DateMolecule
-            startYear={new Date(values.planned_start_on).getFullYear()}
-            endYear={new Date(
-              levels.find((lv) => (lv.id = levelId))?.planed_end_on || '',
-            ).getFullYear()}
+            startYear={moment(
+              values.planned_start_on === '' ? undefined : values.planned_start_on,
+            ).year()}
+            defaultValue={values.planned_start_on}
+            endYear={moment(
+              level?.planed_end_on === '' ? undefined : level?.planed_end_on,
+            ).year()}
             handleChange={handleChange}
             name="planned_end_on">
             End Date

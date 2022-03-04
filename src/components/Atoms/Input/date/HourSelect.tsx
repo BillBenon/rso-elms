@@ -4,9 +4,8 @@ import { ValueType } from '../../../../types';
 import Select from '../Select';
 
 type MProp = {
-  value: number;
+  value: string;
   onChange: (_e: ValueType) => void;
-  defaultValue?: string;
   required?: boolean;
   disabled?: boolean;
   id?: string;
@@ -31,7 +30,7 @@ const HourSelect = (mprops: MProp) => {
 
   return (
     <Select
-      value={mprops.defaultValue}
+      value={mprops.value}
       disabled={mprops.disabled}
       name={mprops.name}
       placeholder={mprops.placeholder}

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
 
@@ -49,7 +50,6 @@ function LessonPlan() {
                 <NoDataAvailable
                   icon="subject"
                   buttonLabel={'Create plan'}
-                  showButton={user?.user_type === UserType.INSTRUCTOR}
                   privilege={Privileges.CAN_CREATE_LESSON_PLAN}
                   title={'No lesson plan available'}
                   description={'There is no lesson plan for this lesson.'}
@@ -74,7 +74,7 @@ function LessonPlan() {
                           Start Date:
                         </Heading>
                         <Heading fontSize="base">
-                          {new Date(lp.start_time).toLocaleDateString()}
+                          {moment(lp.start_time).format('ddd, YYYY-MM-DD')}
                         </Heading>
                       </div>
                       <div className="flex gap-2">
@@ -82,7 +82,7 @@ function LessonPlan() {
                           End Date:
                         </Heading>
                         <Heading fontSize="base">
-                          {new Date(lp.end_time).toLocaleDateString()}
+                          {moment(lp.end_time).format('ddd, YYYY-MM-DD')}
                         </Heading>
                       </div>
                       <div className="flex gap-2">
