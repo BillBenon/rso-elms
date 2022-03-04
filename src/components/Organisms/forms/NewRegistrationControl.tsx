@@ -62,7 +62,7 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
         Registration control description
       </TextAreaMolecule>
       <DateMolecule
-        startYear={moment().year()}
+        startYear={moment().year() - 15}
         endYear={moment().year() + 15}
         reverse={false}
         handleChange={handleChange}
