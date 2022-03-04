@@ -19,6 +19,7 @@ export default function UpdateRank({ onSubmit }: FormPropType) {
     description: '',
     category: RankCategory.GENERALS,
     institution_id: '',
+    abbreviation: '',
     id: '',
   });
   const { mutateAsync } = rankStore.modifyRank();
