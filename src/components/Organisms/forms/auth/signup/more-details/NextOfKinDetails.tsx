@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
@@ -189,8 +190,8 @@ function NextOfKinDetails<E>({
               handleChange={handleChange}
               name="document_expire_on"
               defaultValue={details.document_expire_on}
-              endYear={new Date().getFullYear() + 50}
-              startYear={new Date().getFullYear()}
+              endYear={moment().year() + 50}
+              startYear={moment().year()}
               width="60 md:w-80">
               Passport expiry date
             </DateMolecule>

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
@@ -51,9 +52,11 @@ export default function UpdateAcademicYear({ academicYears }: IUpdateYearProps) 
   function submitForm(e: FormEvent) {
     e.preventDefault();
 
-    let name = `YEAR ${new Date(years.plannedStartOn).getFullYear()}-${new Date(
-      years.plannedEndOn,
-    ).getFullYear()}`;
+    let name = `YEAR ${moment(
+      years.plannedStartOn === '' ? undefined : years.plannedStartOn,
+    ).year()}-${moment(
+      years.plannedEndOn === '' ? undefined : years.plannedEndOn,
+    ).year()}`;
     let data = {
       ...years,
       name,
@@ -78,8 +81,8 @@ export default function UpdateAcademicYear({ academicYears }: IUpdateYearProps) 
       </InputMolecule>
 
       <DateMolecule
-        startYear={new Date().getFullYear()}
-        endYear={new Date().getFullYear() + 100}
+        startYear={moment().year() - 30}
+        endYear={moment().year() + 30}
         reverse={false}
         defaultValue={years.plannedStartOn}
         handleChange={handleChange}
@@ -90,8 +93,10 @@ export default function UpdateAcademicYear({ academicYears }: IUpdateYearProps) 
       <DateMolecule
         handleChange={handleChange}
         defaultValue={years.plannedEndOn}
-        startYear={new Date(years.plannedStartOn).getFullYear()}
-        endYear={new Date().getFullYear() + 100}
+        startYear={moment(
+          years.plannedStartOn === '' ? undefined : years.plannedStartOn,
+        ).year()}
+        endYear={moment().year() + 30}
         reverse={false}
         name={'plannedEndOn'}>
         End Date

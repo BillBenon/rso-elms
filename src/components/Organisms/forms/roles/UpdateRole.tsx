@@ -74,7 +74,7 @@ export default function UpdateRole({ onSubmit }: FormPropType) {
       {/* save button */}
       <div className="mt-5">
         <Button type="submit" full>
-          Add
+          Save
         </Button>
       </div>
     </form>

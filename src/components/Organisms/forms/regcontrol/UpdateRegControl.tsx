@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
@@ -66,8 +67,8 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
       </TextAreaMolecule>
       <DateMolecule
         defaultValue={regControl.expected_start_date}
-        startYear={new Date().getFullYear()}
-        endYear={new Date().getFullYear() + 15}
+        startYear={moment().year() - 15}
+        endYear={moment().year() + 15}
         handleChange={handleChange}
         name={'expected_start_date'}>
         Start Date
@@ -75,8 +76,18 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
 
       <DateMolecule
         handleChange={handleChange}
-        startYear={new Date(regControl.expected_start_date).getFullYear()}
-        endYear={new Date().getFullYear() + 15}
+        startYear={moment(
+          regControl.expected_start_date === ''
+            ? undefined
+            : regControl.expected_start_date,
+        ).year()}
+        endYear={
+          moment(
+            regControl.expected_start_date === ''
+              ? undefined
+              : regControl.expected_start_date,
+          ).year() + 15
+        }
         defaultValue={regControl.expected_end_date}
         name={'expected_end_date'}>
         End Date
