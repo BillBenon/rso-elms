@@ -7,6 +7,10 @@ export interface CreateRankReq {
   institution_id?: string;
 }
 
+export interface UpdateRankReq extends CreateRankReq {
+  id: string;
+}
+
 export interface RankRes extends CreateRankReq, Table {}
 
 export enum RankCategory {
