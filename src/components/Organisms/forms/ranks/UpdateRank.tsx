@@ -20,6 +20,7 @@ export default function UpdateRank({ onSubmit }: FormPropType) {
     category: RankCategory.GENERALS,
     institution_id: '',
     abbreviation: '',
+    priority: 0,
     id: '',
   });
   const { mutateAsync } = rankStore.modifyRank();
@@ -80,6 +81,23 @@ export default function UpdateRank({ onSubmit }: FormPropType) {
         handleChange={handleChange}
         name="name">
         Rank name
+      </InputMolecule>
+      <InputMolecule
+        required
+        value={form.abbreviation}
+        error=""
+        handleChange={handleChange}
+        name="abbreviation">
+        Rank abbreviation
+      </InputMolecule>
+      <InputMolecule
+        required
+        value={form.priority}
+        error=""
+        handleChange={handleChange}
+        type="number"
+        name="priority">
+        Rank priority
       </InputMolecule>
       {/* model code
       {/* module description */}

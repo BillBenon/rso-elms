@@ -6,6 +6,7 @@ export interface CreateRankReq {
   abbreviation: string;
   category?: RankCategory;
   institution_id?: string;
+  priority: number;
 }
 
 export interface UpdateRankReq extends CreateRankReq {

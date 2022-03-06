@@ -18,6 +18,7 @@ export default function NewRank({ onSubmit }: FormPropType) {
     name: '',
     description: '',
     abbreviation: '',
+    priority: 0,
     category: RankCategory.GENERALS,
     institution_id: '',
   });
@@ -79,6 +80,15 @@ export default function NewRank({ onSubmit }: FormPropType) {
         handleChange={handleChange}
         name="abbreviation">
         Rank abbreviation
+      </InputMolecule>
+      <InputMolecule
+        required
+        value={form.priority}
+        error=""
+        handleChange={handleChange}
+        type="number"
+        name="priority">
+        Rank priority
       </InputMolecule>
       {/* model code
       {/* module description */}
