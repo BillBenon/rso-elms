@@ -10,6 +10,7 @@ import Heading from '../../../components/Atoms/Text/Heading';
 import PopupMolecule from '../../../components/Molecules/Popup';
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import hobbiesStore from '../../../store/administration/hobbies.store';
+import locationStore from '../../../store/administration/location.store';
 import { ParamType } from '../../../types';
 import { UserInfo } from '../../../types/services/user.types';
 import { usePicture } from '../../../utils/file-util';
@@ -24,6 +25,12 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
 
   const { user: authUser } = useAuthenticator();
   const hobbies = hobbiesStore.getUserHobby(user.person?.id + '').data?.data.data || [];
+  const residence = locationStore.getLocationsById(
+    user.person?.residence_location_id + '',
+  ).data?.data.data;
+
+  const place_of_birth = locationStore.getLocationsById(user.person?.place_of_birth + '')
+    .data?.data.data;
 
   return (
     <>
@@ -84,32 +91,33 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
               <p className="py-2">Gender</p>
               <p className="py-2">Nationality</p>
               <p className="py-2">Marital Status</p>
-              <p className="py-2">Passport Expiry Date</p>
+              <p className="py-2 text-xs">Passport Expiry Date</p>
               <p className="py-2">Place of birth</p>
               <p className="py-2">Birth location</p>
               <p className="py-2">Place of Residence</p>
               <p className="py-2">Residence location</p>
             </div>
             <div className="font-medium text-sm">
-              <p className="py-3">{new Date(user.created_on).toDateString()}</p>
+              <p className="py-3">{moment(user.created_on).format('ddd, YYYY-MM-DD')}</p>
               <p className="py-2">
-                {moment(Date.now()).diff(moment(user.person.birth_date || ''), 'years')}
+                {moment().diff(moment(user.person.birth_date), 'years')}
               </p>
               <p className="py-2">{user.person.sex}</p>
               <p className="py-3">{user.person.nationality || 'Rwanda'}</p>
               <p className="py-2">{titleCase(user.person.marital_status)}</p>
               <p className="py-3">{user.person.document_expire_on || '-----'}</p>
               <p className="py-2">
-                {user.person.place_of_birth || '----'} <br />
+                {place_of_birth?.name || '----'} <br />
               </p>
               <p className="py-3">{user.person.place_of_birth_description || '----'}</p>
               <p className="py-2">
                 {user.person.place_of_residence || '----'} <br />
               </p>
-              <p className="py-3">{user.person.residence_location_id || '----'}</p>
+              <p className="py-3">{residence?.name || '----'}</p>
             </div>
           </div>
         </div>
+
         <div className="other-information bg-secondary py-5">
           <Heading fontWeight="semibold" fontSize="base" className="px-5 py-2">
             Languages
