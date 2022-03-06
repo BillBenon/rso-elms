@@ -208,7 +208,7 @@ export default function Table2<T>({
     let keys = getKeys();
 
     return currentRows.map((row, index) => (
-      <tr key={index}>
+      <tr key={index} className="hover:bg-secondary cursor-pointer">
         <td className="pl-4">
           {uniqueCol && (
             <Checkbox
