@@ -6,7 +6,7 @@ import { useHistory, useParams } from 'react-router';
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { rankStore } from '../../../../store/administration/rank.store';
 import { FormPropType, ParamType, ValueType } from '../../../../types';
-import { CreateRankReq, RankCategory } from '../../../../types/services/rank.types';
+import { RankCategory, UpdateRankReq } from '../../../../types/services/rank.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
@@ -14,11 +14,13 @@ import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function UpdateRank({ onSubmit }: FormPropType) {
-  const [form, setForm] = useState<CreateRankReq>({
+  const [form, setForm] = useState<UpdateRankReq>({
     name: '',
     description: '',
     category: RankCategory.GENERALS,
     institution_id: '',
+    abbreviation: '',
+    id: '',
   });
   const { mutateAsync } = rankStore.modifyRank();
   const history = useHistory();
@@ -26,22 +28,21 @@ export default function UpdateRank({ onSubmit }: FormPropType) {
   const { id } = useParams<ParamType>();
 
   const { data } = rankStore.getRank(id);
-
-  //   useEffect(() => {
-  //     data?.data.data && setForm({ ...data?.data.data });
-  //   }, [data]);
+  const { user } = useAuthenticator();
 
   useEffect(() => {
-    const getUser = async () => {
-      const { user } = useAuthenticator();
-      data?.data.data &&
-        setForm({
-          ...data?.data.data,
-          institution_id: user?.institution_id || 'b832407f-fb77-4a75-8679-73bf7794f207',
-        });
-    };
-    getUser();
-  }, [data]);
+    data?.data.data &&
+      setForm({ ...data?.data.data, institution_id: user?.institution.id + '', id: id });
+  }, [data, id, user?.institution.id]);
+
+  // useEffect(() => {
+  //   const { user } = useAuthenticator();
+  //   data?.data.data &&
+  //     setForm({
+  //       ...data?.data.data,
+  //       institution_id: user?.institution_id || 'b832407f-fb77-4a75-8679-73bf7794f207',
+  //     });
+  // }, [data, form]);
 
   function handleChange({ name, value }: ValueType) {
     setForm((old) => ({ ...old, [name]: value }));

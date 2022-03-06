@@ -3,8 +3,13 @@ import { Table } from '..';
 export interface CreateRankReq {
   name?: string;
   description?: string;
+  abbreviation: string;
   category?: RankCategory;
   institution_id?: string;
+}
+
+export interface UpdateRankReq extends CreateRankReq {
+  id: string;
 }
 
 export interface RankRes extends CreateRankReq, Table {}
@@ -14,4 +19,5 @@ export enum RankCategory {
   SENIOR_COMMANDS = 'SENIOR_COMMANDS',
   GENERALS = 'GENERALS',
   MEN = 'MEN',
+  NOT_APPLICABLE = 'NOT_APPLICABLE',
 }
