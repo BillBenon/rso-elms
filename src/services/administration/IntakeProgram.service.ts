@@ -178,6 +178,14 @@ class IntakeProgramService {
     );
   }
 
+  public async removeStudentInLevel(
+    intakeProgramStudentId: string,
+  ): Promise<AxiosResponse<Response<SubjectPeriodInfo>>> {
+    return await adminstrationAxios.delete(
+      `students/removeStudentInIntakeProgramLevel/${intakeProgramStudentId}`,
+    );
+  }
+
   public async getClassSubjects(
     classId: string,
     periodId: string,
