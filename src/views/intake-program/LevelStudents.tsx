@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import RightSidebar from '../../components/Organisms/RightSidebar';
+import { queryClient } from '../../plugins/react-query';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { Privileges } from '../../types';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
@@ -19,6 +21,8 @@ function LevelStudents({ showSidebar, handleShowSidebar }: ILevelStudent) {
   const { data: studentsProgram, isLoading } =
     intakeProgramStore.getStudentsByIntakeProgramLevel(levelId);
 
+  const { mutate } = intakeProgramStore.removeStudentInLevel();
+
   const [students, setStudents] = useState<UserView[]>([]);
   useEffect(() => {
     let studentsView: UserView[] = [];
@@ -34,10 +38,24 @@ function LevelStudents({ showSidebar, handleShowSidebar }: ILevelStudent) {
     setStudents(studentsView);
   }, [studentsProgram]);
 
+  function remove(data?: string[]) {
+    data?.map((student) =>
+      mutate(student, {
+        onSuccess: (data) => {
+          toast.success(data.data.message);
+          queryClient.invalidateQueries(['students/intakeProgramlevelId']);
+        },
+        onError: (error: any) => {
+          toast.error(error.response.data.message);
+        },
+      }),
+    );
+  }
+
   let actions: SelectorActionType[] = [
     {
-      name: 'remove instructors',
-      handleAction: () => {},
+      name: 'remove students',
+      handleAction: (data?: string[]) => remove(data),
       privilege: Privileges.CAN_DELETE_STUDENTS_ON_LEVEL_PROGRAM,
     },
   ];

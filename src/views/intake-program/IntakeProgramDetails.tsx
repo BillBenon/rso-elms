@@ -27,7 +27,7 @@ import instructordeploymentStore from '../../store/instructordeployment.store';
 import { Link as Links, Privileges } from '../../types';
 import { StudentApproval } from '../../types/services/enrollment.types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
-import { UserType, UserView } from '../../types/services/user.types';
+import { UserView } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from '../programs/AcademicPrograms';
 import AddLevelToProgram from '../programs/AddLevelToProgram';
@@ -224,9 +224,7 @@ function IntakeProgramDetails() {
         <TabNavigation
           tabs={tabs}
           headerComponent={
-            user?.user_type === UserType.ADMIN &&
-            getLevels.length === 0 &&
-            unaddedLevels?.length !== 0 ? (
+            getLevels.length === 0 && unaddedLevels?.length !== 0 ? (
               <Permission privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}>
                 <div className="text-right">
                   <Link
@@ -275,21 +273,20 @@ function IntakeProgramDetails() {
                                 {programData.subTitle?.replaceAll('_', ' ')}
                               </Heading>
                             </div>
-                            {user?.user_type === UserType.ADMIN ? (
-                              <Permission privilege={Privileges.CAN_MODIFY_PROGRAM}>
-                                <div className="mt-4 flex space-x-4">
-                                  <Button
-                                    onClick={() =>
-                                      history.push(
-                                        `/dashboard/intakes/programs/${intakeId}/${id}/edit`,
-                                      )
-                                    }>
-                                    Edit program
-                                  </Button>
-                                  <Button styleType="outline">Change Status</Button>
-                                </div>
-                              </Permission>
-                            ) : null}
+
+                            <Permission privilege={Privileges.CAN_MODIFY_PROGRAM}>
+                              <div className="mt-4 flex space-x-4">
+                                <Button
+                                  onClick={() =>
+                                    history.push(
+                                      `/dashboard/intakes/programs/${intakeId}/${id}/edit`,
+                                    )
+                                  }>
+                                  Edit program
+                                </Button>
+                                {/* <Button styleType="outline">Change Status</Button> */}
+                              </div>
+                            </Permission>
                           </CommonCardMolecule>
                         </div>
                         <div className="flex flex-col gap-8 z-0">
@@ -299,7 +296,6 @@ function IntakeProgramDetails() {
                             data={students}
                             totalUsers={students.length || 0}
                             dataLabel={''}
-                            userType={user?.user_type}
                             isLoading={studLoading}
                             showSidebar={showSidebar.showStudent}
                             handleShowSidebar={() =>
@@ -309,7 +305,8 @@ function IntakeProgramDetails() {
                               })
                             }
                           />
-                          {user?.user_type === UserType.ADMIN ? (
+                          <Permission
+                            privilege={Privileges.CAN_ENROLL_STUDENTS_ON_PROGRAM}>
                             <EnrollStudentIntakeProgram
                               showSidebar={showSidebar.enrollStudent}
                               existing={studentsProgram?.data.data || []}
@@ -320,7 +317,7 @@ function IntakeProgramDetails() {
                                 })
                               }
                             />
-                          ) : null}
+                          </Permission>
 
                           <EnrollRetakingStudents
                             showSidebar={showSidebar.enrollRetaking}
@@ -343,7 +340,6 @@ function IntakeProgramDetails() {
                               data={instructors}
                               totalUsers={instructors.length || 0}
                               dataLabel={''}
-                              userType={user?.user_type}
                               isLoading={instLoading}
                               showSidebar={showSidebar.showInstructor}
                               handleShowSidebar={() =>
