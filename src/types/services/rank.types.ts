@@ -19,5 +19,5 @@ export enum RankCategory {
   SENIOR_COMMANDS = 'SENIOR_COMMANDS',
   GENERALS = 'GENERALS',
   MEN = 'MEN',
-  N_A = 'N/A',
+  NOT_APPLICABLE = 'NOT_APPLICABLE',
 }
