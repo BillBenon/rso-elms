@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import { GenericStatus, Privileges, ValueType } from '../../../types';
 import { StudentApproval } from '../../../types/services/enrollment.types';
+import { ActionsType, SelectorActionType } from '../../../types/services/table.types';
 import { AcademyUserType, UserType, UserTypes } from '../../../types/services/user.types';
 import Permission from '../../Atoms/auth/Permission';
 import Button from '../../Atoms/custom/Button';
@@ -23,12 +24,9 @@ export default function Students({
 }: {
   students: UserTypes[] | AcademyUserType[];
   showTableHeader?: boolean;
-  handleStatusAction: () => void;
-  studentActions: {
-    name: string;
-    handleAction: (_id: string | number | undefined) => void;
-  }[];
-  selectorActions?: { name: string; handleAction: (_data?: string[]) => void }[];
+  handleStatusAction?: () => void;
+  studentActions?: ActionsType<UserTypes | AcademyUserType>[];
+  selectorActions?: SelectorActionType[];
   enumtype: string;
 }) {
   const { url } = useRouteMatch();
@@ -36,8 +34,8 @@ export default function Students({
 
   function handleSearch(_e: ValueType) {}
 
-  const studentStatActions =
-    enumtype === 'UserTypes'
+  const studentStatActions = handleStatusAction
+    ? enumtype === 'UserTypes'
       ? Object.keys(GenericStatus).map((stat) => ({
           name: stat,
           type: stat as GenericStatus,
@@ -47,7 +45,8 @@ export default function Students({
           name: stat,
           type: stat as StudentApproval,
           handleStatusAction: handleStatusAction,
-        }));
+        }))
+    : undefined;
 
   return (
     <>
