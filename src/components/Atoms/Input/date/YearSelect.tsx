@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react';
 
 import { SelectData, ValueType } from '../../../../types';
@@ -22,10 +23,7 @@ interface YOptProp {
 }
 
 const YearSelect = (props: YProp) => {
-  const renderYearOptions = ({
-    start = 1910,
-    end = new Date().getFullYear(),
-  }: YOptProp) => {
+  const renderYearOptions = ({ start = 1910, end = moment().year() }: YOptProp) => {
     let years = [];
     if (start <= end) {
       for (let i = start; i <= end; ++i) {

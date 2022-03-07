@@ -4,4 +4,8 @@ import { defineConfig } from 'vite';
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [reactRefresh()],
+  build: {
+    chunkSizeWarningLimit: 2000,
+  },
+  css: {},
 });

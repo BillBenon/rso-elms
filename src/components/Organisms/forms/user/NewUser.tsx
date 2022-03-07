@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router';
@@ -150,9 +151,10 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         {details.user_type === UserType.INSTRUCTOR ? (
           <>
             <DateMolecule
+              defaultValue={moment().toString()}
               handleChange={handleChange}
-              startYear={new Date().getFullYear() - 20}
-              endYear={new Date().getFullYear()}
+              startYear={moment().year() - 20}
+              endYear={moment().year()}
               reverse={false}
               name="deployed_on"
               width="60 md:w-80">
@@ -205,9 +207,9 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           Password
         </InputMolecule>
         <DateMolecule
-          startYear={new Date().getFullYear() - 100}
-          defaultValue={(new Date().getFullYear() - 16).toString()}
-          endYear={new Date().getFullYear() - 16}
+          startYear={moment().year() - 100}
+          defaultValue={(moment().year() - 16).toString()}
+          endYear={moment().year() - 16}
           handleChange={handleChange}
           name="birth_date"
           width="60 md:w-80"
@@ -261,11 +263,11 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         </InputMolecule>
         {details.doc_type == DocType.PASSPORT && (
           <DateMolecule
+            startYear={moment().year() - 7}
+            defaultValue={moment().toString()}
+            endYear={moment().year() + 7}
             handleChange={handleChange}
             name="document_expire_on"
-            defaultValue={details.document_expire_on}
-            endYear={new Date(details.document_expire_on).getFullYear() + 7}
-            startYear={new Date().getFullYear()}
             width="60 md:w-80">
             Passport expiry date
           </DateMolecule>
@@ -284,6 +286,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           details.marital_status === MaritalStatus.WIDOWED) && (
           <InputMolecule
             name="spouse_name"
+            required={false}
             value={details.spouse_name}
             handleChange={handleChange}>
             Spouse Name

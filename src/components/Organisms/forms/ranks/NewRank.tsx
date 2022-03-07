@@ -17,6 +17,8 @@ export default function NewRank({ onSubmit }: FormPropType) {
   const [form, setForm] = useState<CreateRankReq>({
     name: '',
     description: '',
+    abbreviation: '',
+    priority: 0,
     category: RankCategory.GENERALS,
     institution_id: '',
   });
@@ -70,6 +72,23 @@ export default function NewRank({ onSubmit }: FormPropType) {
         handleChange={handleChange}
         name="name">
         Rank name
+      </InputMolecule>
+      <InputMolecule
+        required
+        value={form.abbreviation}
+        error=""
+        handleChange={handleChange}
+        name="abbreviation">
+        Rank abbreviation
+      </InputMolecule>
+      <InputMolecule
+        required
+        value={form.priority}
+        error=""
+        handleChange={handleChange}
+        type="number"
+        name="priority">
+        Rank priority
       </InputMolecule>
       {/* model code
       {/* module description */}

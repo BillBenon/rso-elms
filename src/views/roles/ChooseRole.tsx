@@ -83,7 +83,7 @@ export default function ChooseRole() {
   };
 
   return (
-    <div className="px-48 py-14">
+    <div className="p-2 md:px-48 md:py-14">
       <div className="pb-20">
         <AcademyProfileCard
           src="/images/rdf-logo.png"
@@ -109,7 +109,7 @@ export default function ChooseRole() {
           Which Role would you like to use?
         </Heading>
 
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-1 md:grid-cols-3 md:gap-x-32 md:gap-y-8">
           {user_roles.map((user_role) => (
             <CommonCardMolecule
               className="my-2"

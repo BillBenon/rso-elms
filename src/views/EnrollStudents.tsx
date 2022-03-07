@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
@@ -143,8 +144,8 @@ function EnrollmentInfo({ values, handleChange, handleNext }: IProps) {
     <form onSubmit={handleNext}>
       <DateMolecule
         handleChange={handleChange}
-        startYear={new Date().getFullYear() - 20}
-        endYear={new Date().getFullYear()}
+        startYear={moment().year() - 20}
+        endYear={moment().year()}
         reverse={false}
         name="enroled_on"
         width="60 md:w-80">

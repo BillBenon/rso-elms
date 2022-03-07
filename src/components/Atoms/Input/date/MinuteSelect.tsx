@@ -31,6 +31,7 @@ const MinuteSelect = (mprops: MProp) => {
   return (
     <Select
       value={mprops.value}
+      disabled={mprops.disabled}
       name={mprops.name}
       placeholder={mprops.placeholder}
       width={mprops.width}

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
@@ -61,18 +62,27 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
         Registration control description
       </TextAreaMolecule>
       <DateMolecule
-        startYear={new Date().getFullYear()}
-        endYear={new Date().getFullYear() + 15}
+        startYear={moment().year() - 15}
+        endYear={moment().year() + 15}
         reverse={false}
         handleChange={handleChange}
-        name={'expected_start_date'}>
+        name="expected_start_date">
         Start Date
       </DateMolecule>
 
       <DateMolecule
         handleChange={handleChange}
-        startYear={new Date(regControl.expected_start_date).getFullYear()}
-        endYear={new Date().getFullYear() + 15}
+        startYear={moment(
+          regControl.expected_start_date === ''
+            ? undefined
+            : regControl.expected_start_date,
+        ).year()}
+        defaultValue={
+          regControl.expected_start_date === ''
+            ? undefined
+            : regControl.expected_start_date
+        }
+        endYear={moment().year() + 15}
         reverse={false}
         name={'expected_end_date'}>
         End Date

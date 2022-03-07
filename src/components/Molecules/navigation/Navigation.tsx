@@ -9,11 +9,11 @@ import { authenticatorStore } from '../../../store/administration';
 import academyStore from '../../../store/administration/academy.store';
 import { institutionStore } from '../../../store/administration/institution.store';
 import { getAllNotifications } from '../../../store/administration/notification.store';
-import { RoleType } from '../../../types';
+import { Privileges, RoleType } from '../../../types';
 import { NotificationStatus } from '../../../types/services/notification.types';
-import { UserType } from '../../../types/services/user.types';
 import cookie from '../../../utils/cookie';
 import { usePicture } from '../../../utils/file-util';
+import Permission from '../../Atoms/auth/Permission';
 import Avatar from '../../Atoms/custom/Avatar';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
@@ -41,13 +41,6 @@ export default function Navigation() {
     (notification) =>
       notification.notifaction_status === NotificationStatus.UNREAD.toString(),
   );
-
-  // useEffect(() => {
-  //   if (user?.user_type === UserType.SUPER_ADMIN && !user?.institution_id) {
-  //     history.push('/institution/new');
-  //   }
-  // }, [history, user]);
-
   const links = [
     { text: 'Home', to: '/' },
     { text: 'About', to: '/about' },
@@ -94,13 +87,13 @@ export default function Navigation() {
           </div> */}
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
-              {user?.user_type === UserType.SUPER_ADMIN && (
+              <Permission privilege={Privileges.CAN_MODIFY_INSTITUTION}>
                 <div className="px-12">
                   <Link to={`/dashboard/institution/${user?.institution_id}/edit`}>
                     <Button styleType="outline">Edit institution</Button>
                   </Link>
                 </div>
-              )}
+              </Permission>
               <div className="bg-main p-1 rounded-full flex text-gray-400">
                 {other_user_roles.length > 0 && (
                   <Tooltip
@@ -202,7 +195,7 @@ export default function Navigation() {
                         Change password
                       </Link>
                       <Link
-                        to={`/dashboard/users/${user?.id}/profile?me=true`}
+                        to={`/dashboard/user/${user?.id}/profile?me=true`}
                         className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100">
                         Your Profile
                       </Link>
@@ -295,7 +288,7 @@ export default function Navigation() {
           </div>
           <div className="mt-3 px-2 space-y-1">
             <Link
-              to={`/dashboard/users/${user?.id}/profile`}
+              to={`/dashboard/user/${user?.id}/profile`}
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">
               Your Profile
             </Link>

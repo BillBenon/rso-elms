@@ -5,10 +5,8 @@ import Loader from '../../../components/Atoms/custom/Loader';
 import Heading from '../../../components/Atoms/Text/Heading';
 import ModuleCard from '../../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../../components/Molecules/cards/NoDataAvailable';
-import useAuthenticator from '../../../hooks/useAuthenticator';
 import { moduleStore } from '../../../store/administration/modules.store';
 import { CommonCardDataType, ParamType, Privileges } from '../../../types';
-import { UserType } from '../../../types/services/user.types';
 import { advancedTypeChecker } from '../../../utils/getOption';
 import NewModuleMaterial from '../../module-material/NewModuleMaterial';
 import NewModuleMaterialAttach from '../../module-material/NewModuleMaterialAttach';
@@ -19,8 +17,6 @@ function Prerequisites() {
   const { path } = useRouteMatch();
   const { data: modulePrereqs, isLoading } = moduleStore.getModulePrereqsByModule(id);
   const [prerequisiteModule, setPrerequisiteModule] = useState<CommonCardDataType[]>([]);
-
-  const { user } = useAuthenticator();
 
   useEffect(() => {
     let newPrereqs: CommonCardDataType[] = [];
@@ -58,7 +54,6 @@ function Prerequisites() {
               <Loader />
             ) : prerequisiteModule.length === 0 ? (
               <NoDataAvailable
-                showButton={user?.user_type === UserType.INSTRUCTOR}
                 privilege={Privileges.CAN_ACCESS_MODULE_PREREQUISITES}
                 icon="subject"
                 title={'No prerequisites are available'}

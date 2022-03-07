@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router';
@@ -46,9 +47,10 @@ export function NewIntakePeriod({ level_id, checked }: PeriodStep) {
   const [completeStep, setCompleteStep] = useState(0);
   const [lastStep, setLastStep] = useState(0);
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const academicperiods =
     academicperiodStore.getAcademicPeriodsByAcademicYear(
-      intakeLevel?.academic_year.id.toString() || '',
+      intakeLevel?.academic_year.id + '',
     ).data?.data.data || [];
 
   const nextStep = (isComplete: boolean) => {
@@ -62,11 +64,11 @@ export function NewIntakePeriod({ level_id, checked }: PeriodStep) {
   }, [academicperiods]);
 
   useEffect(() => {
-    setvalues({ ...values, actual_start_on: values.planed_start_on });
+    setvalues((values) => ({ ...values, actual_start_on: values.planed_start_on }));
   }, [values.planed_start_on]);
 
   useEffect(() => {
-    setvalues({ ...values, actual_end_on: values.planed_end_on });
+    setvalues((values) => ({ ...values, actual_end_on: values.planed_end_on }));
   }, [values.planed_end_on]);
 
   function handleChange(e: ValueType) {
@@ -95,6 +97,8 @@ export function NewIntakePeriod({ level_id, checked }: PeriodStep) {
       },
     );
   }
+
+  console.log(values.planed_start_on);
 
   return done !== checked ? (
     <div className="pt-4">
@@ -129,8 +133,12 @@ export function NewIntakePeriod({ level_id, checked }: PeriodStep) {
                 {prd.name}
               </Heading>
               <DateMolecule
-                startYear={new Date(prd.academic_year.planned_start_on).getFullYear()}
-                endYear={new Date(prd.academic_year.planned_end_on).getFullYear()}
+                startYear={moment(
+                  prd.academic_year.planned_start_on === ''
+                    ? undefined
+                    : prd.academic_year.planned_start_on,
+                ).year()}
+                endYear={moment(prd.academic_year.planned_end_on).year()}
                 handleChange={handleChange}
                 reverse={false}
                 name="planed_start_on">
@@ -138,8 +146,11 @@ export function NewIntakePeriod({ level_id, checked }: PeriodStep) {
               </DateMolecule>
               <div className="pt-4">
                 <DateMolecule
-                  startYear={new Date(values.planed_start_on).getFullYear()}
-                  endYear={new Date(prd.academic_year.planned_end_on).getFullYear()}
+                  startYear={moment(
+                    values.planed_start_on === '' ? undefined : values.planed_start_on,
+                  ).year()}
+                  endYear={moment(prd.academic_year.planned_end_on).year()}
+                  defaultValue={values.planed_start_on}
                   handleChange={handleChange}
                   name="planed_end_on">
                   End Date

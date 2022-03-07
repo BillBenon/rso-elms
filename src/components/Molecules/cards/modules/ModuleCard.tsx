@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link as BrowserLink, useHistory } from 'react-router-dom';
 
-import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { getPrivilegesByRole } from '../../../../store/administration';
 import { CommonCardDataType, Privileges } from '../../../../types';
-import { UserType } from '../../../../types/services/user.types';
 import cookie from '../../../../utils/cookie';
 import Permission from '../../../Atoms/auth/Permission';
 import Button from '../../../Atoms/custom/Button';
@@ -23,8 +21,6 @@ export default function ModuleCard({
   showMenus = true,
   intakeProg = '',
 }: IProps) {
-  const { user } = useAuthenticator();
-
   const history = useHistory();
   const [privileges, setPrivileges] = useState<string[]>();
 
@@ -97,42 +93,37 @@ export default function ModuleCard({
           <p className="pt-4 pb-2 text-txt-secondary text-sm mt-4">
             {course.description}
           </p>
-          {user?.user_type === UserType.STUDENT ? (
-            <BrowserLink
+          {/* <BrowserLink
               className="outline-none"
               to={`/dashboard/modules/${course.id}/subjects`}>
               <Button styleType="outline">Start module</Button>
-            </BrowserLink>
-          ) : user?.user_type === UserType.ADMIN ? (
-            <div className="py-2 flex justify-around gap-2">
-              <Permission
-                privilege={
-                  showMenus
-                    ? Privileges.CAN_CREATE_INTAKE_PROGRAM_MODULE_SUBJECTS
-                    : Privileges.CAN_CREATE_SUBJECTS
-                }>
-                <BrowserLink
-                  className="outline-none"
-                  to={`/dashboard/modules/${course.id}/add-subject`}>
-                  <Button>Add subject</Button>
-                </BrowserLink>
-              </Permission>
-              <Permission
-                privilege={
-                  showMenus
-                    ? Privileges.CAN_MODIFY_INTAKE_PROGRAM_MODULES
-                    : Privileges.CAN_MODIFY_MODULES
-                }>
-                <BrowserLink
-                  className="outline-none"
-                  to={`/dashboard/modules/${course.id}/edit`}>
-                  <Button styleType="outline">Edit</Button>
-                </BrowserLink>
-              </Permission>
-            </div>
-          ) : (
-            <></>
-          )}
+            </BrowserLink> */}
+          <div className="py-2 flex justify-around gap-2">
+            <Permission
+              privilege={
+                showMenus
+                  ? Privileges.CAN_CREATE_INTAKE_PROGRAM_MODULE_SUBJECTS
+                  : Privileges.CAN_CREATE_SUBJECTS
+              }>
+              <BrowserLink
+                className="outline-none"
+                to={`/dashboard/modules/${course.id}/add-subject`}>
+                <Button>Add subject</Button>
+              </BrowserLink>
+            </Permission>
+            <Permission
+              privilege={
+                showMenus
+                  ? Privileges.CAN_MODIFY_INTAKE_PROGRAM_MODULES
+                  : Privileges.CAN_MODIFY_MODULES
+              }>
+              <BrowserLink
+                className="outline-none"
+                to={`/dashboard/modules/${course.id}/edit`}>
+                <Button styleType="outline">Edit</Button>
+              </BrowserLink>
+            </Permission>
+          </div>
         </div>
       </Tooltip>
     </div>

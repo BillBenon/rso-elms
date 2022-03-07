@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
@@ -62,9 +63,9 @@ export default function NewIntake(props: CProps) {
     e.preventDefault();
     if (currentStep === 0) setCurrentStep(currentStep + 1);
     else {
-      let code = `INTK-${randomString(4)}-${new Date(
-        values.expected_start_date,
-      ).getFullYear()}`;
+      let code = `INTK-${randomString(4)}-${moment(
+        values.expected_start_date === '' ? undefined : values.expected_start_date,
+      ).year()}`;
 
       let data = {
         ...values,
@@ -164,9 +165,9 @@ function IntakeStatusComponent({ handleChange, handleNext }: IProps) {
       <div className="pt-4">
         <DateMolecule
           showTime={false}
-          endYear={new Date().getFullYear() + 15}
+          endYear={moment().year() + 15}
           defaultValue={formatDateToYyMmDd(
-            new Date((new Date().getFullYear() + 4).toString()).toISOString(),
+            moment((moment().year() + 4).toString()).toISOString(),
           )}
           handleChange={handleChange}
           name={'expected_end_date'}>
