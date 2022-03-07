@@ -68,7 +68,7 @@ export default function Departments({ fetchType }: IDepartment) {
           decription: department.description,
           name: department.name,
           status: department.generic_status,
-          programs: department.total_num_of_programs + '' || '0',
+          programs: department.total_num_of_programs || '0',
         };
         formattedDeparts.push(filteredData);
       });
