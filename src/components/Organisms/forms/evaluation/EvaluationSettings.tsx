@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
@@ -43,7 +43,13 @@ export default function EvaluationSettings({
 
   function handleChange({ name, value }: ValueType) {
     setSettings((settings) => ({ ...settings, [name]: value.toString() }));
+    setLocalStorageData('evaluationSettings', { ...settings, [name]: value.toString() });
   }
+
+  useEffect(() => {
+    const cachedData: IEvaluationApproval = getLocalStorageData('evaluationSettings');
+    setSettings(cachedData || {});
+  }, []);
 
   const { mutate } = evaluationStore.createEvaluationSettings();
 
@@ -57,6 +63,8 @@ export default function EvaluationSettings({
         localStorage.removeItem('evaluationId');
         setLocalStorageData('currentStep', 0);
         removeLocalStorageData('evaluationInfo');
+        removeLocalStorageData('evaluationQuestions');
+        removeLocalStorageData('evaluationSettings');
         // history.push('/dashboard/evaluations');
         window.location.href = '/dashboard/evaluations';
       },
@@ -82,7 +90,7 @@ export default function EvaluationSettings({
           True
         </SwitchMolecule>
       </div>
-      {settings.to_be_reviewed && (
+      {settings?.to_be_reviewed && (
         <div className="pt-6">
           <DropdownMolecule
             isMulti
@@ -111,7 +119,7 @@ export default function EvaluationSettings({
           True
         </SwitchMolecule>
       </div>
-      {settings.to_be_approved && (
+      {settings?.to_be_approved && (
         <div className="pt-6">
           <DropdownMolecule
             isMulti
