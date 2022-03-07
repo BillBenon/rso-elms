@@ -48,7 +48,7 @@ function NextOfKinDetails<E>({
     birth_date: '',
     relationship: '',
     nationality: '',
-    residence_location_id: 0,
+    residence_location_id: null,
     doc_type: DocType.NID,
     document_expire_on: '',
     nid: '',
