@@ -29,7 +29,7 @@ pipeline {
                         sh 'npm run build --mode=production' 
                     } else {
                         echo "Not sure about productin envoromnet"
-                        sh 'npm run build' 
+                        sh 'npm run build --mode=staging' 
                     }
                 }
             }
