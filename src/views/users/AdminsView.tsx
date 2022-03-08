@@ -12,6 +12,7 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import AssignRole from '../../components/Organisms/forms/user/AssignRole';
 import ViewUserRole from '../../components/Organisms/forms/user/ViewUserRole';
 import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { authenticatorStore } from '../../store/administration';
 import usersStore from '../../store/administration/users.store';
 import { Privileges, ValueType } from '../../types';
@@ -30,6 +31,7 @@ export default function AdminsView() {
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
 
+  const picked_role = usePickedRole();
   const { data, isLoading, refetch } =
     user?.user_type === UserType.SUPER_ADMIN
       ? usersStore.fetchUsers({
@@ -39,7 +41,7 @@ export default function AdminsView() {
           sortyBy: 'username',
         })
       : usersStore.getUsersByAcademyAndUserType(
-          user?.academy.id.toString() || '',
+          picked_role?.academy_id.toString() || '',
           UserType.ADMIN,
           { page: currentPage, pageSize, sortyBy: 'username' },
         );

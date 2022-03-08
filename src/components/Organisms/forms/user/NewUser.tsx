@@ -5,6 +5,7 @@ import { useHistory, useParams } from 'react-router';
 import countryList from 'react-select-country-list';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
+import usePickedRole from '../../../../hooks/usePickedRole';
 import { queryClient } from '../../../../plugins/react-query';
 import academyStore from '../../../../store/administration/academy.store';
 import { intakeStore } from '../../../../store/administration/intake.store';
@@ -44,6 +45,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   // const newUserType = pick(UserType, ['ADMIN', 'INSTRUCTOR', 'STUDENT']);
   // const newUserTypeWithSuper = { ...newUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
   const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
 
   let { userType } = useParams<IParams>();
 
@@ -96,9 +98,9 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
       ...details,
       intake_program_id: otherDetail.intake,
       institution_id: user?.institution?.id.toString() || '',
-      academy_id: details.user_type !== 'SUPER_ADMIN' ? user?.academy?.id + '' : '',
+      academy_id: details.user_type !== 'SUPER_ADMIN' ? picked_role?.academy_id + '' : '',
     }));
-  }, [otherDetail.intake, user?.academy?.id, user?.institution?.id]);
+  }, [otherDetail.intake, picked_role?.academy_id, user?.institution?.id]);
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({

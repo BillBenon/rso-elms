@@ -5,7 +5,8 @@ import { useReactToPrint } from 'react-to-print';
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
-import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
+import academyStore from '../../store/administration/academy.store';
 import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { getStudentReportInTerm } from '../../store/evaluation/school-report.store';
@@ -30,9 +31,11 @@ interface IReportTable {
 }
 
 export default function SchoolReport() {
-  const { user } = useAuthenticator();
   const [isPrinting, setisPrinting] = useState(false);
-
+  const picked_role = usePickedRole();
+  const { data: role_academy } = academyStore.getAcademyById(
+    picked_role?.academy_id + '',
+  );
   //path params
   const { classId, studentId, periodId } = useParams<IParamType>();
 
@@ -85,18 +88,26 @@ export default function SchoolReport() {
           <div className="provider">
             <img
               src={usePicture(
-                user?.academy.logo_attachment_id,
-                user?.academy.id,
+                role_academy?.data.data.logo_attachment_id,
+                role_academy?.data.data.id,
                 '/images/rdf-logo.png',
                 'logos',
               )}
               alt="Institution logo"
               className=" w-20 object-cover block mb-5"
             />
-            <h2 className="text-base font-bold">{user?.academy.institution.name}</h2>
-            <h2 className="text-sm font-medium py-2 uppercase">{user?.academy.name}</h2>
-            <h3 className="text-sm font-medium pb-2">Mail: {user?.academy.email}</h3>
-            <h3 className="text-sm font-medium">Tel: {user?.academy.phone_number}</h3>
+            <h2 className="text-base font-bold">
+              {role_academy?.data.data.institution.name}
+            </h2>
+            <h2 className="text-sm font-medium py-2 uppercase">
+              {role_academy?.data.data.name}
+            </h2>
+            <h3 className="text-sm font-medium pb-2">
+              Mail: {role_academy?.data.data.email}
+            </h3>
+            <h3 className="text-sm font-medium">
+              Tel: {role_academy?.data.data.phone_number}
+            </h3>
           </div>
           <div className="student">
             <div className="w-20 mb-5">

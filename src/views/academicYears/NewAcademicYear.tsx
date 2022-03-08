@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import DateMolecule from '../../components/Molecules/input/DateMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
-import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { queryClient } from '../../plugins/react-query';
 import academicyearsStore from '../../store/administration/academicyears.store';
 import { ValueType } from '../../types';
@@ -18,9 +18,9 @@ import { getDropDownStatusOptions } from '../../utils/getOption';
 
 export default function NewAcademicYear() {
   const history = useHistory();
-  const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
   const [newYear, setNewYear] = useState<ICreateAcademicYear>({
-    academyId: user?.academy.id.toString() || '',
+    academyId: picked_role?.academy_id + '',
     name: '',
     id: '',
     actualAtartOn: '',
@@ -31,8 +31,8 @@ export default function NewAcademicYear() {
   });
 
   useEffect(() => {
-    setNewYear((prev) => ({ ...prev, academyId: user?.academy?.id || '' }));
-  }, [user]);
+    setNewYear((prev) => ({ ...prev, academyId: picked_role?.academy_id + '' }));
+  }, [picked_role?.academy_id]);
 
   function handleChange(e: ValueType) {
     setNewYear((year) => ({ ...year, [e.name]: e.value }));

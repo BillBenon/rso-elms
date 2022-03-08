@@ -3,7 +3,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
 
-import useAuthenticator from '../../../hooks/useAuthenticator';
+import usePickedRole from '../../../hooks/usePickedRole';
 import { queryClient } from '../../../plugins/react-query';
 import registrationControlStore from '../../../store/administration/registrationControl.store';
 import { CommonFormProps, ValueType } from '../../../types';
@@ -17,7 +17,7 @@ interface PropType<K> extends CommonFormProps<K> {}
 
 export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
   const { mutateAsync, isLoading } = registrationControlStore.createRegControl();
-  const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
   const history = useHistory();
 
   const [regControl, setRegControl] = useState<IRegistrationControlCreateInfo>({
@@ -28,8 +28,8 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
   });
 
   useEffect(() => {
-    setRegControl((reg) => ({ ...reg, academy_id: user?.academy.id + '' }));
-  }, [user?.academy.id]);
+    setRegControl((reg) => ({ ...reg, academy_id: picked_role?.academy_id + '' }));
+  }, [picked_role?.academy_id]);
 
   function handleChange(e: ValueType) {
     setRegControl((regControl) => ({ ...regControl, [e.name]: e.value }));
