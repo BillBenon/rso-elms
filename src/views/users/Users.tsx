@@ -22,7 +22,7 @@ export default function Users() {
       href: `${url}`,
     },
     {
-      label: 'Instructors',
+      label: 'DS',
       href: `${url}/instructors`,
     },
     {
