@@ -5,7 +5,7 @@ import { useHistory, useParams } from 'react-router';
 import Button from '../../components/Atoms/custom/Button';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
-import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { queryClient } from '../../plugins/react-query';
 import { classStore } from '../../store/administration/class.store';
 import enrollmentStore from '../../store/administration/enrollment.store';
@@ -31,8 +31,7 @@ function NewClass() {
     intake_academic_year_period_id: 0,
     intake_level_id: 0,
   });
-
-  const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
   const levelIdTitle = document.getElementById('intake_level_id')?.title;
   const {
     level: levelId,
@@ -72,9 +71,10 @@ function NewClass() {
 
   const students =
     intakeProgramStore.getStudentsByIntakeProgramLevel(levelId).data?.data.data || [];
+
   const users =
     usersStore
-      .getUsersByAcademyAndUserType(user?.academy.id.toString() || '', UserType.STUDENT, {
+      .getUsersByAcademyAndUserType(picked_role?.academy_id + '', UserType.STUDENT, {
         page: 0,
         pageSize: 1000,
         sortyBy: 'username',

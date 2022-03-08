@@ -5,6 +5,7 @@ import toast from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
+import usePickedRole from '../../../../hooks/usePickedRole';
 import { classStore } from '../../../../store/administration/class.store';
 import intakeProgramStore from '../../../../store/administration/intake-program.store';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
@@ -57,6 +58,7 @@ export default function EvaluationInfoComponent({
   );
 
   const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
   const [timeDifference, setTimeDifference] = useState(0);
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
@@ -120,7 +122,7 @@ export default function EvaluationInfoComponent({
     setDetails({
       access_type:
         evaluationInfo?.access_type || cachedData?.access_type || IAccessTypeEnum.PUBLIC,
-      academy_id: user?.academy.id.toString() || cachedData?.academy_id || '',
+      academy_id: picked_role?.academy_id + '' || cachedData?.academy_id || '',
       private_attendees:
         evaluationInfo?.private_attendees.toString() ||
         cachedData?.private_attendees?.toString() ||
@@ -176,7 +178,13 @@ export default function EvaluationInfoComponent({
       time_limit: evaluationInfo?.time_limit || cachedData?.time_limit || 0,
       total_mark: evaluationInfo?.total_mark || cachedData?.total_mark || 0,
     });
-  }, [user?.academy.id, evaluationInfo, instructorInfo?.id, intakePeriodId, subjectId]);
+  }, [
+    evaluationInfo,
+    instructorInfo?.id,
+    intakePeriodId,
+    subjectId,
+    picked_role?.academy_id,
+  ]);
 
   useEffect(() => {
     setLocalStorageData('evaluationInfo', details);
@@ -232,7 +240,6 @@ export default function EvaluationInfoComponent({
 
   function submitForm(e: FormEvent) {
     e.preventDefault();
-    handleNext(1);
 
     if (evaluationId && details.time_limit > 0) {
       mutateAsync(

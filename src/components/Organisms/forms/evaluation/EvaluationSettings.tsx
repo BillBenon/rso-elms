@@ -2,6 +2,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
+import usePickedRole from '../../../../hooks/usePickedRole';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { SelectData, ValueType } from '../../../../types';
@@ -25,23 +26,39 @@ export default function EvaluationSettings({
   evaluationId,
 }: IEvaluationProps) {
   const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
 
   const instructors = instructordeploymentStore.getInstructorsDeployedInAcademy(
-    user?.academy.id + '',
+    picked_role?.academy_id + '',
   ).data?.data.data;
 
-  const [settings, setSettings] = useState<IEvaluationApproval>({
+  const initialState = {
     approver_ids: '',
-    evaluation_id: evaluationId || getLocalStorageData('evaluationId'),
+    evaluation_id: getLocalStorageData('evaluationId') || evaluationId,
     id: '',
     reviewer_ids: '',
     marker_ids: user?.id.toString() || '',
     to_be_approved: false,
     to_be_reviewed: false,
-  });
+  };
+
+  useEffect(() => {
+    setSettings({
+      approver_ids: '',
+      evaluation_id: getLocalStorageData('evaluationId') || evaluationId,
+      id: '',
+      reviewer_ids: '',
+      marker_ids: user?.id.toString() || '',
+      to_be_approved: false,
+      to_be_reviewed: false,
+    });
+  }, [evaluationId, user?.id]);
+
+  const [settings, setSettings] = useState<IEvaluationApproval>(initialState);
 
   function handleChange({ name, value }: ValueType) {
-    setSettings((settings) => ({ ...settings, [name]: value.toString() }));
+    setSettings({ ...settings, [name]: value.toString() });
+
     setLocalStorageData('evaluationSettings', { ...settings, [name]: value.toString() });
   }
 

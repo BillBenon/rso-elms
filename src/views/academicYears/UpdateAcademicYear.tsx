@@ -7,7 +7,7 @@ import Button from '../../components/Atoms/custom/Button';
 import DateMolecule from '../../components/Molecules/input/DateMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
-import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { queryClient } from '../../plugins/react-query';
 import academicyearsStore from '../../store/administration/academicyears.store';
 import { ParamType, ValueType } from '../../types';
@@ -25,9 +25,9 @@ interface IUpdateYearProps {
 export default function UpdateAcademicYear({ academicYears }: IUpdateYearProps) {
   const history = useHistory();
   const { id } = useParams<ParamType>();
-  const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
   const [years, setYears] = useState<ICreateAcademicYear>({
-    academyId: user?.academy.id.toString() || '',
+    academyId: picked_role?.academy_id + '',
     name: '',
     id: '',
     actualAtartOn: '',

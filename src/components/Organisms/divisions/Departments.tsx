@@ -2,7 +2,7 @@ import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 
-import useAuthenticator from '../../../hooks/useAuthenticator';
+import usePickedRole from '../../../hooks/usePickedRole';
 import { divisionStore } from '../../../store/administration/divisions.store';
 import { Privileges } from '../../../types';
 import { DivisionInfo } from '../../../types/services/division.types';
@@ -28,15 +28,15 @@ interface IDepartment {
 export default function Departments({ fetchType }: IDepartment) {
   const { path } = useRouteMatch();
   const history = useHistory();
-  const { user } = useAuthenticator();
   const [departments, setDepartments] = useState<FilteredData[]>([]);
   const { search } = useLocation();
   const facultyId = new URLSearchParams(search).get('fac');
+  const picked_role = usePickedRole();
   let { data, isLoading } = facultyId
     ? divisionStore.getDepartmentsInFaculty(facultyId)
     : divisionStore.getDivisionsByAcademy(
         fetchType.toUpperCase(),
-        user?.academy.id.toString() || '',
+        picked_role?.academy_id + '',
       );
 
   let facultyData: any;
@@ -168,7 +168,7 @@ export default function Departments({ fetchType }: IDepartment) {
                     title="Update Department"
                     open={true}
                     onClose={handleClose}>
-                    <UpdateDepartment academy_id={user?.academy.id.toString()} />
+                    <UpdateDepartment academy_id={picked_role?.academy_id} />
                   </PopupMolecule>
                 );
               }}

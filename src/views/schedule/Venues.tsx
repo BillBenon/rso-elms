@@ -10,6 +10,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewVenue from '../../components/Organisms/schedule/venue/NewVenue';
 import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { getAllVenues } from '../../store/timetable/venue.store';
 import { Privileges } from '../../types';
 
@@ -23,7 +24,9 @@ export default function Venues() {
     history.goBack();
   };
 
-  const { data, isLoading, refetch } = getAllVenues(user?.academy.id + '', false);
+  const picked_role = usePickedRole();
+
+  const { data, isLoading, refetch } = getAllVenues(picked_role?.academy_id + '', false);
   const venues = data?.data.data;
 
   useEffect(() => {

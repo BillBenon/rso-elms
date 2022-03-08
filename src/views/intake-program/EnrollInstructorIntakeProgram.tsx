@@ -5,7 +5,7 @@ import { useParams } from 'react-router';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import RightSidebar from '../../components/Organisms/RightSidebar';
-import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { queryClient } from '../../plugins/react-query';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { getProgramsByIntake } from '../../store/administration/intake.store';
@@ -30,7 +30,7 @@ function EnrollInstructorIntakeProgram({
   const { data: instructorsInAcademy, isLoading } =
     instructordeploymentStore.getInstructors();
 
-  const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
 
   const programs = getProgramsByIntake(intakeId).data?.data.data;
 
@@ -44,7 +44,7 @@ function EnrollInstructorIntakeProgram({
     }
     let instructorsView: UserView[] = [];
     instructorsInAcademy?.data.data
-      .filter((inst) => inst.user.academy.id === user?.academy.id)
+      .filter((inst) => inst.user.academy.id === picked_role?.academy_id)
       .forEach((inst) => {
         if (!existing_ids.includes(inst.id + '')) {
           let instructorView: UserView = {
@@ -57,7 +57,7 @@ function EnrollInstructorIntakeProgram({
         }
       });
     setInstructors(instructorsView);
-  }, [instructorsInAcademy, existing, user?.academy.id]);
+  }, [instructorsInAcademy, existing, picked_role?.academy_id]);
 
   const { mutate } = enrollmentStore.enrollInstructorToProgram();
 
