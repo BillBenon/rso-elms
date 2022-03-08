@@ -59,7 +59,7 @@ export default function Faculties({ fetchType }: IFaculties) {
           decription: faculty.description,
           name: faculty.name,
           status: faculty.generic_status,
-          departments: faculty.total_num_childreen || 0,
+          departments: faculty.total_num_childreen || '0',
         };
         formattedFaculties.push(filteredInfo);
       });
