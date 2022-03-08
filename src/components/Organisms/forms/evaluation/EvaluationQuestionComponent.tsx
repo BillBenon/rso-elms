@@ -35,7 +35,7 @@ export default function EvaluationQuestionComponent({
 
   const initialState: ICreateEvaluationQuestions = useMemo(() => {
     return {
-      evaluation_id: evaluationId || getLocalStorageData('evaluationId'),
+      evaluation_id: evaluationId || getLocalStorageData('evaluationId') || '',
       mark: 0,
       parent_question_id: '',
       choices: [],
