@@ -16,8 +16,10 @@ export default function Redirecting() {
   const [userNoRoles, setUserNoRoles] = useState(false);
   const { user, userLoading } = useAuthenticator();
 
-  const { data: nextOfKin } = getHisNextKinById(user?.id);
-  const { data: experiences } = getPersonExperiences(user?.person.id);
+  const { data: nextOfKin, isLoading: nextOfKinLoading } = getHisNextKinById(user?.id);
+  const { data: experiences, isLoading: experiencesLoading } = getPersonExperiences(
+    user?.person.id,
+  );
 
   const history = useHistory();
 
@@ -37,7 +39,7 @@ export default function Redirecting() {
 
       if (user?.profile_status !== ProfileStatus.COMPLETD) {
         redirectTo('/complete-profile');
-      } else {
+      } else if (!nextOfKinLoading && !experiencesLoading) {
         if (nextOfKin && nextOfKin?.data.data.length === 0) {
           redirectTo('/complete-more');
         } else if (experiences && experiences?.data.data.length === 0) {
@@ -89,6 +91,8 @@ export default function Redirecting() {
     experiences,
     redirectTo,
     nextOfKin,
+    nextOfKinLoading,
+    experiencesLoading,
   ]);
 
   return (
