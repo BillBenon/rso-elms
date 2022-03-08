@@ -68,7 +68,7 @@ export default function Sidebar() {
         privilege: Privileges.CAN_ACCESS_ACADEMY,
       },
       {
-        title: 'Divisions',
+        title: 'College HQ',
         to: '/dashboard/divisions',
         icon: 'faculty',
         privilege: Privileges.CAN_ACCESS_DIVISIONS,
