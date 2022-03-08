@@ -4,6 +4,8 @@ import toast from 'react-hot-toast';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 
 import useAuthenticator from '../../../hooks/useAuthenticator';
+import useNonPickedRole from '../../../hooks/useNonPickedRole';
+import usePickedRole from '../../../hooks/usePickedRole';
 import { queryClient } from '../../../plugins/react-query';
 import { authenticatorStore } from '../../../store/administration';
 import academyStore from '../../../store/administration/academy.store';
@@ -65,15 +67,9 @@ export default function Navigation() {
       .catch(() => toast.error('Signout failed. try again latter.', { id: toastId }));
   }
 
-  let picked_role_cookie = cookie.getCookie('user_role') || '';
+  const picked_role = usePickedRole();
 
-  const picked_role = user?.user_roles?.find(
-    (role) => role.id + '' === picked_role_cookie,
-  );
-
-  const other_user_roles =
-    user?.user_roles?.filter((role) => role.id + '' !== picked_role_cookie) || [];
-
+  const other_user_roles = useNonPickedRole();
   return (
     <nav className="bg-main">
       <div className=" mx-auto px-4 sm:px-6 lg:px-8">
