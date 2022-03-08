@@ -9,7 +9,7 @@ import DateMolecule from '../../components/Molecules/input/DateMolecule';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import SwitchMolecule from '../../components/Molecules/input/SwitchMolecule';
-import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { queryClient } from '../../plugins/react-query';
 import academicyearsStore from '../../store/administration/academicyears.store';
 import { intakeStore } from '../../store/administration/intake.store';
@@ -27,7 +27,7 @@ import { NewIntakePeriod } from './NewIntakePeriod';
 
 export default function NewIntakeProgramLevel() {
   const history = useHistory();
-
+  const picked_role = usePickedRole();
   const [success, setSuccess] = useState(false);
 
   const { id: programId, intakeProg } = useParams<IntakeProgParam>();
@@ -40,14 +40,13 @@ export default function NewIntakeProgramLevel() {
     (pg) => !getLevels.map((lv) => lv.academic_program_level.id).includes(pg.id),
   );
 
-  const { user } = useAuthenticator();
   const intakes = intakeStore.getIntakesByProgram(programId).data?.data.data;
 
   const intakeProgram = intakes?.find((intpr) => intpr.id === intakeProg);
 
   const academicYears =
-    academicyearsStore.fetchAcademicYears(user?.academy.id.toString() || '').data?.data
-      .data || [];
+    academicyearsStore.fetchAcademicYears(picked_role?.academy_id + '').data?.data.data ||
+    [];
 
   const { data: instructorsProgram, isLoading: instLoading } =
     intakeProgramStore.getInstructorsByIntakeProgram(intakeProg);

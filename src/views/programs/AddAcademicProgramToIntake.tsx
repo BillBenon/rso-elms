@@ -5,7 +5,7 @@ import { useLocation } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
-import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { divisionStore } from '../../store/administration/divisions.store';
 import { intakeStore } from '../../store/administration/intake.store';
 import programStore from '../../store/administration/program.store';
@@ -29,13 +29,14 @@ export default function AddAcademicProgramToIntake({ submited }: PropType) {
   const intakeId = new URLSearchParams(search).get('intakeId');
   const intake = intakeStore.getIntakeById(intakeId!);
   const [departmentId, setDepartmentId] = useState('');
-  const { user } = useAuthenticator();
 
   const addProgram = intakeStore.addPrograms();
 
+  const picked_role = usePickedRole();
+
   const departments: DivisionInfo[] =
-    divisionStore.getDivisionsByAcademy('DEPARTMENT', user?.academy.id.toString() || '')
-      .data?.data.data || [];
+    divisionStore.getDivisionsByAcademy('DEPARTMENT', picked_role?.academy_id + '').data
+      ?.data.data || [];
   function handleDepartments(e: ValueType) {
     setDepartmentId(e.value.toString());
   }

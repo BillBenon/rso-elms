@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import useAuthenticator from '../../../hooks/useAuthenticator';
+import usePickedRole from '../../../hooks/usePickedRole';
 import { divisionStore } from '../../../store/administration/divisions.store';
 import { Privileges } from '../../../types';
 import { DivisionInfo } from '../../../types/services/division.types';
@@ -33,11 +33,11 @@ export default function Faculties({ fetchType }: IFaculties) {
   const { url, path } = useRouteMatch();
   const history = useHistory();
   const [faculties, setFaculties] = useState<FilteredData[]>([]);
-  const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
 
   const { data, isLoading } = divisionStore.getDivisionsByAcademy(
     fetchType.toUpperCase() || 'FACULTY',
-    user?.academy.id.toString() || '',
+    picked_role?.academy_id + '',
   );
 
   useEffect(() => {
@@ -151,7 +151,7 @@ export default function Faculties({ fetchType }: IFaculties) {
           render={() => {
             return (
               <PopupMolecule title="Update Faculty" open={true} onClose={handleClose}>
-                <UpdateFaculty academy_id={user?.academy.id.toString()} />
+                <UpdateFaculty academy_id={picked_role?.academy_id} />
               </PopupMolecule>
             );
           }}
@@ -163,7 +163,7 @@ export default function Faculties({ fetchType }: IFaculties) {
           render={() => {
             return (
               <PopupMolecule title="New Faculty" open onClose={handleClose}>
-                <NewFaculty academy_id={user?.academy.id.toString()} />
+                <NewFaculty academy_id={picked_role?.academy_id} />
               </PopupMolecule>
             );
           }}
@@ -175,7 +175,7 @@ export default function Faculties({ fetchType }: IFaculties) {
           render={() => {
             return (
               <PopupMolecule title="New Department" open onClose={handleClose}>
-                <NewDepartment academy_id={user?.academy.id.toString()} />
+                <NewDepartment academy_id={picked_role?.academy_id} />
               </PopupMolecule>
             );
           }}

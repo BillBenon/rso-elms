@@ -16,7 +16,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import NewSchedule from '../../components/Organisms/schedule/calendar/NewSchedule';
-import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import { CommonCardDataType, Link, Privileges } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
@@ -78,8 +78,8 @@ function ScheduleIntakes() {
   const history = useHistory();
   const { path } = useRouteMatch();
 
-  const { user } = useAuthenticator();
-  const { data, isLoading } = getIntakesByAcademy(user?.academy.id + '', false);
+  const picked_role = usePickedRole();
+  const { data, isLoading } = getIntakesByAcademy(picked_role?.academy_id + '', false);
 
   let intakes: CommonCardDataType[] =
     data?.data.data.map((intake) => ({

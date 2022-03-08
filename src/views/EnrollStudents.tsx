@@ -10,6 +10,7 @@ import InputMolecule from '../components/Molecules/input/InputMolecule';
 import SelectMolecule from '../components/Molecules/input/SelectMolecule';
 import Stepper from '../components/Molecules/Stepper/Stepper';
 import useAuthenticator from '../hooks/useAuthenticator';
+import usePickedRole from '../hooks/usePickedRole';
 import academyStore from '../store/administration/academy.store';
 import enrollmentStore from '../store/administration/enrollment.store';
 import { intakeStore } from '../store/administration/intake.store';
@@ -23,7 +24,6 @@ import {
 } from '../types/services/enrollment.types';
 import { IntakeProgramInfo } from '../types/services/intake-program.types';
 import { RankRes } from '../types/services/rank.types';
-import cookie from '../utils/cookie';
 import { getDropDownOptions, getDropDownStatusOptions } from '../utils/getOption';
 
 interface EnrollUserToProgramIntakes extends EnrollUserToProgram {
@@ -64,8 +64,7 @@ export default function EnrollStudents() {
     intake_id: '',
   });
 
-  const picked_role_cookie = cookie.getCookie('user_role') || '';
-  const user_roles = user?.user_roles.find((role) => role.id == picked_role_cookie);
+  const user_roles = usePickedRole();
 
   function handleChange(e: ValueType) {
     setEnrollStud((enrol) => ({
