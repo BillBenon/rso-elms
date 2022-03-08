@@ -47,7 +47,8 @@ export default function EvaluationSettings({
   }
 
   useEffect(() => {
-    const cachedData: IEvaluationApproval = getLocalStorageData('evaluationSettings');
+    const cachedData: IEvaluationApproval =
+      getLocalStorageData('evaluationSettings') || {};
     setSettings(cachedData || {});
   }, []);
 
