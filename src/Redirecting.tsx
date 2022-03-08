@@ -16,8 +16,8 @@ export default function Redirecting() {
   const [userNoRoles, setUserNoRoles] = useState(false);
   const { user, userLoading } = useAuthenticator();
 
-  const { data: nextOfKin, isLoading: nextOfKinLoading } = getHisNextKinById(user?.id);
-  const { data: experiences, isLoading: experiencesLoading } = getPersonExperiences(
+  const { data: nextOfKin, isFetching: nextOfKinLoading } = getHisNextKinById(user?.id);
+  const { data: experiences, isFetching: experiencesLoading } = getPersonExperiences(
     user?.person.id,
   );
 
