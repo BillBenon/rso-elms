@@ -121,7 +121,7 @@ export default function EvaluationContent({
           <ContentSpan title="Due on" subTitle={evaluationInfo?.due_on} />
           <div className="flex flex-col gap-4">
             <Heading color="txt-secondary" fontSize="base">
-              Classes
+              Eligible Class
             </Heading>
             <div className="flex gap-1">
               {classes.map((cl, index) => (
