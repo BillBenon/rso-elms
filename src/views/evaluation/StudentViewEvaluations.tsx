@@ -32,6 +32,8 @@ export default function StudentViewEvaluations({
   const history = useHistory();
   const { path } = useRouteMatch();
 
+  const isAllowedToAnswer = usePrivilege(Privileges.CAN_ANSWER_EVALUATION);
+
   useEffect(() => {
     function isSubjectEvaludations(
       ev: IEvaluationInfo[] | IEvaluationInfoSingleEvaluation[],
@@ -100,7 +102,7 @@ export default function StudentViewEvaluations({
         search: `?studentEval=${studEvaluation}`,
       });
     } else {
-      if (usePrivilege(Privileges.CAN_ANSWER_EVALUATION)) {
+      if (isAllowedToAnswer) {
         history.push(`/dashboard/evaluations/attempt/${id}`);
       } else {
         toast.error("You don't have rights to answer evaluation");
