@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useHistory, useRouteMatch } from 'react-router';
 import { Route, Switch, useParams } from 'react-router-dom';
 
@@ -10,11 +11,12 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import { Tab } from '../../components/Molecules/tabs/tabs';
 import Students from '../../components/Organisms/user/Students';
-import useAuthenticator from '../../hooks/useAuthenticator';
+import { queryClient } from '../../plugins/react-query';
 import { classStore } from '../../store/administration/class.store';
 import { Privileges } from '../../types';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
-import { UserType, UserTypes } from '../../types/services/user.types';
+import { SelectorActionType } from '../../types/services/table.types';
+import { UserTypes } from '../../types/services/user.types';
 import AddSubjectToPeriod from '../subjects/AddSubjectToPeriod';
 import SubjectPeriod from '../subjects/SubjectPeriod';
 import AddStudents from './AddStudents';
@@ -35,7 +37,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
   const { path } = useRouteMatch();
   const [students, setStudents] = useState<UserTypes[]>([]);
   const { data: studentsData, isLoading } = classStore.getStudentsByClass(classId) || [];
-  const { user } = useAuthenticator();
+  const { mutate } = classStore.removeStudentInClass();
   const history = useHistory();
 
   useEffect(() => {
@@ -54,6 +56,28 @@ function StudentInClass({ classId, label }: IStudentClass) {
     });
     setStudents(tempStuds);
   }, [studentsData?.data.data]);
+
+  function remove(data?: string[]) {
+    data?.map((student) =>
+      mutate(student, {
+        onSuccess: (data) => {
+          toast.success(data.data.message);
+          queryClient.invalidateQueries(['class/students']);
+        },
+        onError: (error: any) => {
+          toast.error(error.response.data.message);
+        },
+      }),
+    );
+  }
+
+  let actions: SelectorActionType[] = [
+    {
+      name: 'remove students',
+      handleAction: (data?: string[]) => remove(data),
+      privilege: Privileges.CAN_DELETE_CLASSES_MEMBERS,
+    },
+  ];
 
   return (
     <Tab label={label}>
@@ -98,9 +122,9 @@ function StudentInClass({ classId, label }: IStudentClass) {
                         View performance
                       </Button>
                     </Permission>
-                    {user?.user_type === UserType.ADMIN && (
+                    <Permission privilege={Privileges.CAN_CREATE_CLASSES_MEMBERS}>
                       <AddStudents classId={parseInt(classId)} />
-                    )}
+                    </Permission>
                   </div>
                   <section>
                     {isLoading ? (
@@ -119,8 +143,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
                       <Students
                         students={students}
                         showTableHeader={false}
-                        handleStatusAction={() => {}}
-                        studentActions={[]}
+                        selectorActions={actions}
                         enumtype={'UserTypes'}
                       />
                     )}
@@ -136,7 +159,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
               return (
                 <>
                   <div className="flex gap-4 self-end">
-                    {user?.user_type === UserType.ADMIN && (
+                    <Permission privilege={Privileges.CAN_CREATE_CLASSES}>
                       <Button
                         styleType="outline"
                         onClick={() =>
@@ -146,7 +169,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
                         }>
                         Add class
                       </Button>
-                    )}
+                    </Permission>
 
                     <Button
                       styleType="outline"

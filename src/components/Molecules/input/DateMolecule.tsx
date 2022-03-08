@@ -1,4 +1,5 @@
-import React, { ReactNode, useEffect, useState } from 'react';
+import moment from 'moment';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 
 import { ValueType } from '../../../types';
 import { formatDateToIso, formatDateToYyMmDd } from '../../../utils/date-helper';
@@ -25,7 +26,6 @@ type IProp = {
   monthCapital?: boolean;
   monthDisabled?: boolean;
   monthClassName?: string;
-  hourPlaceholder?: string;
   dayDisabled?: boolean;
   dayClassName?: string;
   yearWidth?: string;
@@ -58,7 +58,6 @@ function DateMolecule({
   monthCapital = false,
   monthDisabled = false,
   monthClassName,
-  hourPlaceholder = 'Hours',
   dayDisabled = false,
   dayClassName,
   yearWidth = '28',
@@ -72,52 +71,56 @@ function DateMolecule({
   date_time_type = true,
   breakToNextLine = false,
 }: IProp) {
-  let defaultValueDate = defaultValue ? new Date(defaultValue) : new Date();
-
   const [dateState, setDateState] = useState({
-    Day:
-      new Date().getDate() < 10 ? `0${new Date().getDate()}` : `${new Date().getDate()}`,
-    Month: new Date().getMonth() + 1,
-    Year: new Date().getFullYear(),
-    Hours: new Date().getHours(),
-    Minutes: '00',
+    Year: moment().year(),
+    Month: moment().month() + 1,
+    Day: `${moment().date()}`,
+    Hours: `${moment().hours()}`,
+    Minutes: `${moment().minutes()}`,
   });
 
-  const dateFormat = () => {
-    let date = `${dateState.Year}-${
-      dateState.Month >= 10 ? dateState.Month : `${dateState.Month}`
-    }-${parseInt(dateState.Day) >= 10 ? `${dateState.Day}` : `0${dateState.Day}`} ${
-      dateState.Hours >= 10 ? dateState.Hours : `0${dateState.Hours}`
-    }:${dateState.Minutes}:00`;
+  const dateFormat = useCallback(() => {
+    let date = moment(
+      `${dateState.Year}-${dateState.Month}-${dateState.Day} ${dateState.Hours}:${dateState.Minutes}:00`,
+    ).format('YYYY-MM-DD hh:mm:ss');
 
     let selectedDate: string;
     if (date_time_type) {
-      selectedDate = formatDateToIso(new Date(date));
+      selectedDate = formatDateToIso(date);
     } else {
-      selectedDate = formatDateToYyMmDd(new Date(date).toString());
+      selectedDate = formatDateToYyMmDd(date);
     }
     handleChange({ name: name, value: selectedDate });
-  };
-
-  useEffect(() => {
-    defaultValue && setDate();
-  }, []);
-
-  function setDate() {
-    const dV = new Date(defaultValue || '');
-    setDateState((old) => ({
-      ...old,
-      Year: dV.getFullYear(),
-      Month: dV.getMonth() + 1,
-      Day: dV.getDay() + '',
-      Hours: dV.getHours(),
-      Minutes: dV.getMinutes().toString(),
-    }));
-  }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    dateState.Day,
+    dateState.Hours,
+    dateState.Minutes,
+    dateState.Month,
+    dateState.Year,
+    date_time_type,
+    name,
+  ]);
 
   useEffect(() => {
     dateFormat();
-  }, [dateState]);
+  }, [dateFormat]);
+
+  const initiateDate = useCallback(() => {
+    const dV = moment(defaultValue === '' ? undefined : defaultValue);
+    setDateState((old) => ({
+      ...old,
+      Year: dV.year(),
+      Month: dV.month() + 1,
+      Day: dV.date() < 10 ? `0${dV.date()}` : `${dV.date()}`,
+      Hours: dV.hours() < 10 ? `0${dV.hours()}` : `${dV.hours()}`,
+      Minutes: dV.minutes() < 10 ? `0${dV.minutes()}` : `${dV.minutes()}`,
+    }));
+  }, [defaultValue]);
+
+  useEffect(() => {
+    initiateDate();
+  }, [initiateDate]);
 
   const handleDate = (e: ValueType) => {
     setDateState({ ...dateState, [e.name]: e.value });
@@ -133,7 +136,7 @@ function DateMolecule({
           <div className="flex gap-2">
             <YearSelect
               reverse={reverse}
-              value={dateState.Year || defaultValueDate.getFullYear()}
+              value={dateState.Year}
               onChange={handleDate}
               name="Year"
               width={yearWidth}
@@ -145,7 +148,7 @@ function DateMolecule({
             />
             <MonthSelect
               year={dateState.Year}
-              value={dateState.Month || defaultValueDate.getMonth()}
+              value={dateState.Month}
               onChange={handleDate}
               short={monthShort}
               caps={monthCapital}
@@ -159,7 +162,7 @@ function DateMolecule({
             <DaySelect
               year={dateState.Year}
               month={dateState.Month}
-              value={dateState.Day || defaultValueDate.getDate().toString()}
+              value={dateState.Day}
               onChange={handleDate}
               name="Day"
               className={dayClassName}
@@ -172,21 +175,20 @@ function DateMolecule({
         {showTime && (
           <div className="flex gap-1">
             <HourSelect
-              defaultValue={dateState.Hours.toString()}
               value={dateState.Hours}
               onChange={handleDate}
               name="Hours"
               width={hourWidth}
               disabled={hourDisabled}
-              placeholder={hourPlaceholder || 'hrs'}
+              placeholder={'hrs'}
             />
             <MinuteSelect
               value={dateState.Minutes}
               onChange={handleDate}
               name="Minutes"
-              placeholder="mins"
               width={minuteWidth}
               disabled={minuteDisabled}
+              placeholder="mins"
             />
           </div>
         )}

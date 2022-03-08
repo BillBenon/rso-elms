@@ -8,12 +8,10 @@ import AddCard from '../../components/Molecules/cards/AddCard';
 import ModuleCard from '../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import useAuthenticator from '../../hooks/useAuthenticator';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { CommonCardDataType, Privileges } from '../../types';
 import { IntakeLevelParam } from '../../types/services/intake-program.types';
-import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import EnrollInstructorToLevel from './EnrollInstructorToLevel';
 import EnrollStudent from './EnrollStudent';
@@ -63,40 +61,35 @@ function IntakeLevelModule() {
     parseInt(level),
   );
 
-  // const { data: classes } = classStore.getClassByPeriod(periods?.data.data[0].id + '');
-  const { user } = useAuthenticator();
-
   return (
     <>
       <TableHeader usePadding={false} showBadge={false} showSearch={false}>
-        {user?.user_type === UserType.ADMIN && (
-          <>
-            <Permission privilege={Privileges.CAN_CREATE_INSTRUCTORS_ON_LEVEL_PROGRAM}>
-              <EnrollInstructorToLevel
-                existing={instructorProgramLevel?.data.data || []}
-                showSidebar={showSidebar.enrollInstructor}
-                handleShowSidebar={() =>
-                  setShowSidebar({
-                    ...initialShowSidebar,
-                    enrollInstructor: !showSidebar.enrollInstructor,
-                  })
-                }
-              />
-            </Permission>
+        <>
+          <Permission privilege={Privileges.CAN_CREATE_INSTRUCTORS_ON_LEVEL_PROGRAM}>
+            <EnrollInstructorToLevel
+              existing={instructorProgramLevel?.data.data || []}
+              showSidebar={showSidebar.enrollInstructor}
+              handleShowSidebar={() =>
+                setShowSidebar({
+                  ...initialShowSidebar,
+                  enrollInstructor: !showSidebar.enrollInstructor,
+                })
+              }
+            />
+          </Permission>
 
-            <Permission privilege={Privileges.CAN_CREATE_STUDENTS_ON_LEVEL_PROGRAM}>
-              <EnrollStudent
-                showSidebar={showSidebar.enrollStudent}
-                handleShowSidebar={() =>
-                  setShowSidebar({
-                    ...initialShowSidebar,
-                    enrollStudent: !showSidebar.enrollStudent,
-                  })
-                }
-              />
-            </Permission>
-          </>
-        )}
+          <Permission privilege={Privileges.CAN_CREATE_STUDENTS_ON_LEVEL_PROGRAM}>
+            <EnrollStudent
+              showSidebar={showSidebar.enrollStudent}
+              handleShowSidebar={() =>
+                setShowSidebar({
+                  ...initialShowSidebar,
+                  enrollStudent: !showSidebar.enrollStudent,
+                })
+              }
+            />
+          </Permission>
+        </>
         <Permission privilege={Privileges.CAN_ACCESS_INSTRUCTORS_ON_LEVEL_PROGRAM}>
           <LevelInstrctors
             isLoading={instructorsLoading}
@@ -124,7 +117,7 @@ function IntakeLevelModule() {
         {prdLoading ? (
           <></>
         ) : periods?.data.data.length === 0 ? (
-          user?.user_type === UserType.ADMIN && (
+          <Permission privilege={Privileges.CAN_CREATE_INTAKE_PROGRAM_LEVELS}>
             <Button
               styleType="outline"
               onClick={() =>
@@ -134,7 +127,7 @@ function IntakeLevelModule() {
               }>
               Add period
             </Button>
-          )
+          </Permission>
         ) : (
           <Button
             styleType="outline"

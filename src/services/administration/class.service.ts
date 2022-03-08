@@ -14,10 +14,18 @@ class ClassService {
   public async addClass(cl: ICreateClass): Promise<AxiosResponse<Response<IClass>>> {
     return await adminstrationAxios.post('/intakeLevelClasses/addIntakeLevelClasses', cl);
   }
+
   public async addClassStudent(
     stud: IClassStudent,
   ): Promise<AxiosResponse<Response<Student>>> {
     return await adminstrationAxios.post('/intakeLevelClasses/addStudents', stud);
+  }
+  public async removeStudentInClass(
+    intakeLevelClassStudentId: string,
+  ): Promise<AxiosResponse<Response<IClass>>> {
+    return await adminstrationAxios.delete(
+      `/intakeLevelClasses/removeStudent/${intakeLevelClassStudentId}`,
+    );
   }
   public async getClassById(id: string): Promise<AxiosResponse<Response<IClass>>> {
     return await adminstrationAxios.get(

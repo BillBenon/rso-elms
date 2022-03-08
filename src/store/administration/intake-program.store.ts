@@ -90,6 +90,9 @@ class IntakeProgramStore {
   addSubjectToPeriod() {
     return useMutation(intakeProgramService.addSubjectToPeriod);
   }
+  removeStudentInLevel() {
+    return useMutation(intakeProgramService.removeStudentInLevel);
+  }
 }
 
 export function getStudentShipByUserId(userId: string, enabled = false) {

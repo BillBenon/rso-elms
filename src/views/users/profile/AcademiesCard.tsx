@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React from 'react';
 
 import Avatar from '../../../components/Atoms/custom/Avatar';
@@ -46,13 +47,13 @@ function AcademiesCard({ academies }: { academies: AcademyInfo[] }) {
                 <div className="flex text-sm">
                   <p className="text-txt-secondary pr-2">From: </p>
                   <p className="text-txt-primary px-2">
-                    {new Date(academy.created_on).toDateString()}
+                    {moment(academy.created_on).format('ddd, YYYY-MM-DD')}
                   </p>
                 </div>
                 <div className="flex text-sm">
                   <p className="text-txt-secondary pr-1">To </p>
                   <p className="text-txt-primary px-2">
-                    {new Date(Date.now()).toDateString()}
+                    {moment().format('ddd, YYYY-MM-DD')}
                   </p>
                 </div>
               </div>

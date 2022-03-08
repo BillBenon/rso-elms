@@ -106,7 +106,7 @@ function IntakeProgramLevel() {
         />
       ) : (
         <>
-          {user?.user_type === UserType.ADMIN && unaddedLevels?.length !== 0 ? (
+          {unaddedLevels?.length !== 0 ? (
             <Permission privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}>
               <div className="text-right">
                 <Link

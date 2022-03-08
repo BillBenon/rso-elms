@@ -35,7 +35,7 @@ export default function EvaluationQuestionComponent({
 
   const initialState: ICreateEvaluationQuestions = useMemo(() => {
     return {
-      evaluation_id: evaluationId || getLocalStorageData('evaluationId'),
+      evaluation_id: evaluationId || getLocalStorageData('evaluationId') || '',
       mark: 0,
       parent_question_id: '',
       choices: [],
@@ -76,8 +76,9 @@ export default function EvaluationQuestionComponent({
         allQuestions.push(questionData);
       });
       setQuestions(allQuestions);
+      setLocalStorageData('evaluationQuestions', allQuestions);
     } else {
-      setQuestions([initialState]);
+      setQuestions(getLocalStorageData('evaluationQuestions') || [initialState]);
     }
   }, [evaluationQuestions, initialState]);
 
@@ -86,6 +87,7 @@ export default function EvaluationQuestionComponent({
     newQuestion.choices = [];
     let questionsClone = [...questions];
     questionsClone.push(newQuestion);
+    setLocalStorageData('evaluationQuestions', questionsClone);
     setQuestions(questionsClone);
   }
 
@@ -104,6 +106,7 @@ export default function EvaluationQuestionComponent({
           toast.success('Question deleted', { duration: 2000 });
           if (questionIndex > -1 && questionsClone.length > 1) {
             questionsClone.splice(questionIndex, 1);
+            setLocalStorageData('evaluationQuestions', questionsClone);
             setQuestions(questionsClone);
           }
         },
@@ -127,6 +130,7 @@ export default function EvaluationQuestionComponent({
 
       questionsClone[questionIndex] = question;
 
+      setLocalStorageData('evaluationQuestions', questionsClone);
       setQuestions(questionsClone);
     }
   }
@@ -135,6 +139,7 @@ export default function EvaluationQuestionComponent({
     let questionsClone = [...questions];
     let questionChoices = questionsClone[index];
     questionChoices.choices.push(multipleChoiceContent);
+    setLocalStorageData('evaluationQuestions', questionsClone);
     setQuestions(questionsClone);
   }
 
@@ -148,6 +153,7 @@ export default function EvaluationQuestionComponent({
       questionInfo[index].choices = [];
     questionInfo[index] = { ...questionInfo[index], [name]: value };
 
+    setLocalStorageData('evaluationQuestions', questionInfo);
     setQuestions(questionInfo);
   }
 
@@ -160,6 +166,7 @@ export default function EvaluationQuestionComponent({
     question.choices.forEach((choice) => (choice.correct = false));
     question.choices[choiceIndex].correct = true;
 
+    setLocalStorageData('evaluationQuestions', questionsClone);
     setQuestions(questionsClone);
   }
 
@@ -174,6 +181,7 @@ export default function EvaluationQuestionComponent({
     questionsClone[questionIndex] = question;
 
     setQuestions(questionsClone);
+    setLocalStorageData('evaluationQuestions', questionsClone);
   }
 
   const { mutate } = evaluationStore.createEvaluationQuestions();

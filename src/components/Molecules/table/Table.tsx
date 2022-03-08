@@ -23,6 +23,7 @@ interface Selected {
 interface TableProps<T> {
   data: (T & Selected)[];
   uniqueCol?: keyof T;
+  showNumbering?: boolean;
   hide?: (keyof T)[];
   actions?: ActionsType<T>[];
   statusActions?: StatusActionType<T>[];
@@ -44,6 +45,7 @@ interface TableProps<T> {
 export default function Table2<T>({
   uniqueCol,
   hide = [],
+  showNumbering = true,
   data,
   actions,
   statusActions,
@@ -176,10 +178,13 @@ export default function Table2<T>({
             checked={selected.size === currentRows.length}
             handleChange={() => _handleSelectAll()}
             name={uniqueCol + ''}
-            value={'all'}></Checkbox>
+            value={'all'}
+          />
         )}
       </th>,
     );
+
+    showNumbering && header.push(<th className="pl-4"> №</th>);
 
     /**
      * show dynamic headers, but exclude keys that are marked as to be hidden, in @link row
@@ -203,7 +208,7 @@ export default function Table2<T>({
     let keys = getKeys();
 
     return currentRows.map((row, index) => (
-      <tr key={index}>
+      <tr key={index} className="hover:bg-secondary cursor-pointer">
         <td className="pl-4">
           {uniqueCol && (
             <Checkbox
@@ -213,6 +218,7 @@ export default function Table2<T>({
               value={row[uniqueCol] + ''}></Checkbox>
           )}
         </td>
+        {showNumbering && <td className="pl-4"> {index + 1}</td>}
 
         <Row
           key={index + Math.random() * 16}

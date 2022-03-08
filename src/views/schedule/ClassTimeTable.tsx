@@ -18,12 +18,10 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import EditTimeTable from '../../components/Organisms/schedule/timetable/EditTimeTable';
 import NewTimeTable from '../../components/Organisms/schedule/timetable/NewTimeTable';
-import useAuthenticator from '../../hooks/useAuthenticator';
 import { classStore } from '../../store/administration/class.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { timetableStore } from '../../store/timetable/timetable.store';
 import { ParamType, Privileges } from '../../types';
-import { UserType } from '../../types/services/user.types';
 import { groupTimeTableByDay } from '../../utils/calendar';
 import { formatDateToYyMmDd, getWeekBorderDays } from '../../utils/date-helper';
 
@@ -34,7 +32,6 @@ export default function ClassTimeTable() {
 
   const [isPrinting, setisPrinting] = useState(false);
 
-  const { user } = useAuthenticator();
   const classInfo = classStore.getClassById(id).data?.data.data;
 
   const handleClose = () => {
@@ -122,13 +119,13 @@ export default function ClassTimeTable() {
                       <p className="py-2 text-sm print:text-xs font-medium">
                         {`${instructor?.user.first_name} ${instructor?.user.last_name}`}
                       </p>
-                      {user?.user_type == UserType.ADMIN && (
+                      <Permission privilege={Privileges.CAN_MODIFY_TIMETABLE}>
                         <div className="actions hidden absolute top-0 right-0 -mt-2">
                           <Link to={`${url}/item/${activity.id}/edit`}>
                             <Icon name={'edit'} stroke="primary" />
                           </Link>
                         </div>
-                      )}
+                      </Permission>
                     </div>
                   );
                 })}

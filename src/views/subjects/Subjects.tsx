@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Loader from '../../components/Atoms/custom/Loader';
+import Heading from '../../components/Atoms/Text/Heading';
 import SubjectCard from '../../components/Molecules/cards/modules/SubjectCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import useAuthenticator from '../../hooks/useAuthenticator';
@@ -9,7 +11,6 @@ import enrollmentStore from '../../store/administration/enrollment.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, ParamType, Privileges } from '../../types';
-import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 
 function Subjects() {
@@ -55,8 +56,9 @@ function Subjects() {
 
   return (
     <>
-      {user?.user_type === UserType.INSTRUCTOR ? (
-        instSubjects.isLoading || subjectData.isLoading ? (
+      <Permission privilege={Privileges.CAN_TEACH_MODULE}>
+        <Heading className="py-2">Instructor&apos;s Subjects</Heading>
+        {instSubjects.isLoading || subjectData.isLoading ? (
           <Loader />
         ) : instructorSubjects?.length === 0 ? (
           <NoDataAvailable
@@ -76,27 +78,31 @@ function Subjects() {
               </div>
             ))}
           </section>
-        )
-      ) : subjectData.isLoading ? (
-        <Loader />
-      ) : subjects.length === 0 && subjectData.isSuccess ? (
-        <NoDataAvailable
-          showButton={false}
-          privilege={Privileges.CAN_CREATE_SUBJECTS}
-          icon="subject"
-          title={'No subjects registered'}
-          description={'There are no subjects available yet'}
-          handleClick={() => history.push(`${url}/add-subject`)}
-        />
-      ) : (
-        <section className="flex flex-wrap justify-start gap-4 mt-2">
-          {subjects.map((subject) => (
-            <div key={subject.id} className="p-1 mt-3">
-              <SubjectCard subject={subject} intakeProg={intakeProg} />
-            </div>
-          ))}
-        </section>
-      )}
+        )}
+      </Permission>
+      <Permission privilege={Privileges.CAN_ACCESS_SUBJECTS}>
+        <Heading className="py-2">Manage these ubjects</Heading>
+        {subjectData.isLoading ? (
+          <Loader />
+        ) : subjects.length === 0 && subjectData.isSuccess ? (
+          <NoDataAvailable
+            showButton={false}
+            privilege={Privileges.CAN_CREATE_SUBJECTS}
+            icon="subject"
+            title={'No subjects registered'}
+            description={'There are no subjects available yet'}
+            handleClick={() => history.push(`${url}/add-subject`)}
+          />
+        ) : (
+          <section className="flex flex-wrap justify-start gap-4 mt-2">
+            {subjects.map((subject) => (
+              <div key={subject.id} className="p-1 mt-3">
+                <SubjectCard subject={subject} intakeProg={intakeProg} />
+              </div>
+            ))}
+          </section>
+        )}
+      </Permission>
     </>
   );
 }

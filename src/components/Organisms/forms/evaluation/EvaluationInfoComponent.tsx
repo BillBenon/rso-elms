@@ -81,96 +81,100 @@ export default function EvaluationInfoComponent({
 
   const { data: classes } = classStore.getClassByPeriod(intakePeriodId + '');
 
-  const cachedData: IEvaluationInfo = getLocalStorageData('evaluationInfo');
+  const cachedData: IEvaluationInfo = getLocalStorageData('evaluationInfo') || {};
 
   const [details, setDetails] = useState<IEvaluationCreate>({
-    access_type: cachedData.access_type || IAccessTypeEnum.PUBLIC,
-    academy_id: cachedData.academy_id || '',
+    access_type: cachedData?.access_type || IAccessTypeEnum.PUBLIC,
+    academy_id: cachedData?.academy_id || '',
     private_attendees:
-      evaluationInfo?.private_attendees.toString() ||
-      cachedData.private_attendees.toString() ||
+      evaluationInfo?.private_attendees?.toString() ||
+      cachedData?.private_attendees?.toString() ||
       '',
     instructor_id: instructorInfo?.id + '',
     intake_academic_year_period: intakePeriodId,
-    allow_submission_time: cachedData.allow_submission_time || '',
-    intake_level_class_ids: cachedData.intake_level_class_ids || '',
+    allow_submission_time: cachedData?.allow_submission_time || '',
+    intake_level_class_ids: cachedData?.intake_level_class_ids || '',
     id: evaluationId || '',
-    classification: cachedData.classification || IEvaluationClassification.MODULE,
-    content_format: cachedData.content_format || IContentFormatEnum.DOC,
-    due_on: evaluationInfo?.due_on || cachedData.due_on || '',
-    eligible_group: cachedData.eligible_group || IEligibleClassEnum.MULTIPLE,
-    evaluation_status: cachedData.evaluation_status || IEvaluationStatus.DRAFT,
-    evaluation_type: cachedData.evaluation_type || IEvaluationTypeEnum.CAT,
+    classification: cachedData?.classification || IEvaluationClassification.MODULE,
+    content_format: cachedData?.content_format || IContentFormatEnum.DOC,
+    due_on: evaluationInfo?.due_on || cachedData?.due_on || '',
+    eligible_group: cachedData?.eligible_group || IEligibleClassEnum.MULTIPLE,
+    evaluation_status: cachedData?.evaluation_status || IEvaluationStatus.DRAFT,
+    evaluation_type: cachedData?.evaluation_type || IEvaluationTypeEnum.CAT,
     exam_instruction: evaluationInfo?.exam_instruction || '',
-    is_consider_on_report: cachedData.is_consider_on_report || true,
-    marking_reminder_date: cachedData.marking_reminder_date || '',
-    maximum_file_size: cachedData.maximum_file_size || '',
-    name: cachedData.name || '',
-    questionaire_type: cachedData.questionaire_type || IQuestionaireTypeEnum.OPEN,
+    is_consider_on_report: cachedData?.is_consider_on_report || true,
+    marking_reminder_date: cachedData?.marking_reminder_date || '',
+    maximum_file_size: cachedData?.maximum_file_size || '',
+    name: cachedData?.name || '',
+    questionaire_type: cachedData?.questionaire_type || IQuestionaireTypeEnum.OPEN,
     subject_academic_year_period_id:
-      cachedData.subject_academic_year_period_id || subjectId,
-    submision_type: cachedData.submision_type || ISubmissionTypeEnum.ONLINE_TEXT,
-    time_limit: cachedData.time_limit || 10,
-    total_mark: cachedData.total_mark || 0,
+      cachedData?.subject_academic_year_period_id || subjectId,
+    submision_type: cachedData?.submision_type || ISubmissionTypeEnum.ONLINE_TEXT,
+    time_limit: cachedData?.time_limit || 10,
+    total_mark: cachedData?.total_mark || 0,
     strict: true,
   });
 
   useEffect(() => {
-    const cachedData: IEvaluationInfo = getLocalStorageData('evaluationInfo');
+    const cachedData: IEvaluationInfo = getLocalStorageData('evaluationInfo') || {};
     setDetails({
       access_type:
-        evaluationInfo?.access_type || cachedData.access_type || IAccessTypeEnum.PUBLIC,
-      academy_id: user?.academy.id.toString() || cachedData.academy_id || '',
+        evaluationInfo?.access_type || cachedData?.access_type || IAccessTypeEnum.PUBLIC,
+      academy_id: user?.academy.id.toString() || cachedData?.academy_id || '',
       private_attendees:
         evaluationInfo?.private_attendees.toString() ||
-        cachedData.private_attendees.toString() ||
+        cachedData?.private_attendees?.toString() ||
         '',
       instructor_id: instructorInfo?.id.toString() || '',
       intake_academic_year_period: intakePeriodId,
       allow_submission_time:
-        evaluationInfo?.allow_submission_time || cachedData.allow_submission_time || '',
+        evaluationInfo?.allow_submission_time || cachedData?.allow_submission_time || '',
       intake_level_class_ids:
-        evaluationInfo?.intake_level_class_ids || cachedData.intake_level_class_ids || '',
-      id: evaluationInfo?.id || cachedData.id || '',
+        evaluationInfo?.intake_level_class_ids ||
+        cachedData?.intake_level_class_ids ||
+        '',
+      id: evaluationInfo?.id || cachedData?.id || '',
       classification:
         evaluationInfo?.classification ||
-        cachedData.classification ||
+        cachedData?.classification ||
         IEvaluationClassification.MODULE,
       content_format:
         evaluationInfo?.content_format ||
-        cachedData.content_format ||
+        cachedData?.content_format ||
         IContentFormatEnum.DOC,
-      due_on: evaluationInfo?.due_on || cachedData.due_on || '',
+      due_on: evaluationInfo?.due_on || cachedData?.due_on || '',
       strict: true,
       eligible_group: IEligibleClassEnum.MULTIPLE,
       evaluation_status:
         evaluationInfo?.evaluation_status ||
-        cachedData.evaluation_status ||
+        cachedData?.evaluation_status ||
         IEvaluationStatus.DRAFT,
       evaluation_type:
         evaluationInfo?.evaluation_type ||
-        cachedData.evaluation_type ||
+        cachedData?.evaluation_type ||
         IEvaluationTypeEnum.CAT,
       exam_instruction:
-        evaluationInfo?.exam_instruction || cachedData.exam_instruction || '',
+        evaluationInfo?.exam_instruction || cachedData?.exam_instruction || '',
       is_consider_on_report:
-        evaluationInfo?.is_consider_on_report || cachedData.is_consider_on_report || true,
+        evaluationInfo?.is_consider_on_report ||
+        cachedData?.is_consider_on_report ||
+        true,
       marking_reminder_date:
-        evaluationInfo?.marking_reminder_date || cachedData.marking_reminder_date || '',
+        evaluationInfo?.marking_reminder_date || cachedData?.marking_reminder_date || '',
       maximum_file_size:
-        evaluationInfo?.maximum_file_size || cachedData.maximum_file_size || '',
-      name: evaluationInfo?.name || cachedData.name || '',
+        evaluationInfo?.maximum_file_size || cachedData?.maximum_file_size || '',
+      name: evaluationInfo?.name || cachedData?.name || '',
       questionaire_type:
         evaluationInfo?.questionaire_type ||
-        cachedData.questionaire_type ||
+        cachedData?.questionaire_type ||
         IQuestionaireTypeEnum.OPEN,
       subject_academic_year_period_id: subjectId,
       submision_type:
         evaluationInfo?.submision_type ||
-        cachedData.submision_type ||
+        cachedData?.submision_type ||
         ISubmissionTypeEnum.ONLINE_TEXT,
-      time_limit: evaluationInfo?.time_limit || cachedData.time_limit || 0,
-      total_mark: evaluationInfo?.total_mark || cachedData.total_mark || 0,
+      time_limit: evaluationInfo?.time_limit || cachedData?.time_limit || 0,
+      total_mark: evaluationInfo?.total_mark || cachedData?.total_mark || 0,
     });
   }, [user?.academy.id, evaluationInfo, instructorInfo?.id, intakePeriodId, subjectId]);
 

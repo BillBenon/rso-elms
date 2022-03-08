@@ -209,7 +209,7 @@ export default function Intakes() {
                 }
                 handleSearch={handleSearch}>
                 {registrationControlId && (
-                  <Permission privilege={Privileges.CAN_ACCESS_INTAKES}>
+                  <Permission privilege={Privileges.CAN_CREATE_INTAKE}>
                     <Link to={`${url}/${registrationControlId}/add-intake`}>
                       <Button>Add Intake</Button>
                     </Link>
@@ -245,6 +245,15 @@ export default function Intakes() {
                                 </Heading>
                               </div>
                             </div>
+                            <Permission privilege={Privileges.CAN_MODIFY_INTAKE}>
+                              <div className="mt-4 space-x-4">
+                                <Link
+                                  to={`${url}/${intake.id}/edit/${intake.registrationControlId}`}>
+                                  <Button>Edit Intake</Button>
+                                </Link>
+                                {/* <Button styleType="outline">Change Status</Button> */}
+                              </div>
+                            </Permission>
                           </CommonCardMolecule>
                         </div>
                       }
@@ -264,15 +273,6 @@ export default function Intakes() {
                             {intake.footerTitle}
                           </Heading>
                         </div>
-                        <Permission privilege={Privileges.CAN_MODIFY_INTAKE}>
-                          <div className="mt-4 space-x-4">
-                            <Link
-                              to={`${url}/${intake.id}/edit/${intake.registrationControlId}`}>
-                              <Button>Edit Intake</Button>
-                            </Link>
-                            <Button styleType="outline">Change Status</Button>
-                          </div>
-                        </Permission>
                       </div>
                     </Tooltip>
                   </div>

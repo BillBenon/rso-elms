@@ -12,6 +12,9 @@ class ClassStore {
   modifyClass() {
     return useMutation(classService.modifyClass);
   }
+  removeStudentInClass() {
+    return useMutation(classService.removeStudentInClass);
+  }
   getAllClasses() {
     return useQuery(['classes'], classService.getAllClasses);
   }
