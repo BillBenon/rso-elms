@@ -2,7 +2,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
 
-import useAuthenticator from '../../../../hooks/useAuthenticator';
+import usePickedRole from '../../../../hooks/usePickedRole';
 import { queryClient } from '../../../../plugins/react-query';
 import { eventStore } from '../../../../store/timetable/event.store';
 import { GenericStatus, ValueType } from '../../../../types';
@@ -17,7 +17,7 @@ import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 export default function NewEvent() {
   const history = useHistory();
 
-  const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
 
   const [values, setvalues] = useState<CreateEvent>({
     code: randomString(8).toUpperCase(),
@@ -25,12 +25,12 @@ export default function NewEvent() {
     eventCategory: eventCategory.VISIT,
     name: '',
     status: GenericStatus.ACTIVE,
-    academyId: user?.academy.id + '',
+    academyId: picked_role?.academy_id + '',
   });
 
   useEffect(() => {
-    setvalues((prev) => ({ ...prev, academyId: user?.academy?.id || '' }));
-  }, [user]);
+    setvalues((prev) => ({ ...prev, academyId: picked_role?.academy_id + '' }));
+  }, [picked_role?.academy_id]);
 
   const { mutateAsync, isLoading } = eventStore.createEvent();
 

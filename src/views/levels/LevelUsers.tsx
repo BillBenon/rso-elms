@@ -11,6 +11,7 @@ import Admins from '../../components/Organisms/user/Admins';
 import Instructors from '../../components/Organisms/user/Instructors';
 import Students from '../../components/Organisms/user/Students';
 import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { levelStore } from '../../store/administration/level.store';
 import usersStore from '../../store/administration/users.store';
 import { ParamType } from '../../types';
@@ -26,9 +27,10 @@ export default function LevelUsers() {
   // eslint-disable-next-line no-unused-vars
   const level = levelStore.getLevelById(id).data?.data.data;
   const history = useHistory();
+  const picked_role = usePickedRole();
 
   const { data, isSuccess, isLoading } = usersStore.getUsersByAcademy(
-    user?.academy.id || '',
+    picked_role?.academy_id + '',
   );
 
   const userInfo = data?.data.data.content;

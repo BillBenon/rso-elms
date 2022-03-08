@@ -2,6 +2,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
+import usePickedRole from '../../../../hooks/usePickedRole';
 import { queryClient } from '../../../../plugins/react-query';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
@@ -26,9 +27,10 @@ export default function EvaluationSettings({
   evaluationId,
 }: IEvaluationProps) {
   const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
 
   const instructors = instructordeploymentStore.getInstructorsDeployedInAcademy(
-    user?.academy.id + '',
+    picked_role?.academy_id + '',
   ).data?.data.data;
 
   const initialState = {

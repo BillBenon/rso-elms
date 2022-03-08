@@ -2,7 +2,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
-import useAuthenticator from '../../../../hooks/useAuthenticator';
+import usePickedRole from '../../../../hooks/usePickedRole';
 import { queryClient } from '../../../../plugins/react-query';
 import { venueStore } from '../../../../store/timetable/venue.store';
 import { GenericStatus, ValueType } from '../../../../types';
@@ -14,18 +14,19 @@ import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 
 export default function NewVenue() {
   const history = useHistory();
-  const { user } = useAuthenticator();
+
+  const picked_role = usePickedRole();
 
   const [values, setvalues] = useState<CreateVenue>({
     venueType: venueType.CLASS,
     name: '',
     status: GenericStatus.ACTIVE,
-    academyId: user?.academy.id + '',
+    academyId: picked_role?.academy_id + '',
   });
 
   useEffect(() => {
-    setvalues((prev) => ({ ...prev, academyId: user?.academy?.id || '' }));
-  }, [user]);
+    setvalues((prev) => ({ ...prev, academyId: picked_role?.academy_id + '' }));
+  }, [picked_role?.academy_id]);
 
   function handleChange(e: ValueType) {
     setvalues((val) => ({ ...val, [e.name]: e.value }));

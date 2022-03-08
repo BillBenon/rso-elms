@@ -11,7 +11,7 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewLevel from '../../components/Organisms/forms/level/NewLevel';
 import UpdateLevel from '../../components/Organisms/forms/level/UpdateLevel';
-import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { levelStore } from '../../store/administration/level.store';
 import { Privileges } from '../../types';
 import { ILevel } from '../../types/services/levels.types';
@@ -23,13 +23,11 @@ interface FilteredLevels
 function Levels() {
   const { url, path } = useRouteMatch();
   const history = useHistory();
-  const { user } = useAuthenticator();
   const [levels, setLevels] = useState<FilteredLevels[]>();
   let actions: ActionsType<FilteredLevels>[] | undefined = [];
 
-  const { data, isLoading } = levelStore.getLevelsByAcademy(
-    user?.academy.id.toString() || '',
-  ); // fetch levels
+  const picked_role = usePickedRole();
+  const { data, isLoading } = levelStore.getLevelsByAcademy(picked_role?.academy_id + ''); // fetch levels
 
   useEffect(() => {
     // filter data to display
@@ -98,7 +96,7 @@ function Levels() {
           render={() => {
             return (
               <PopupMolecule title="Update Level" open onClose={history.goBack}>
-                <UpdateLevel academy_id={user?.academy.id.toString()} />
+                <UpdateLevel academy_id={picked_role?.academy_id} />
               </PopupMolecule>
             );
           }}
@@ -111,7 +109,7 @@ function Levels() {
           render={() => {
             return (
               <PopupMolecule title="New Level" open onClose={history.goBack}>
-                <NewLevel academy_id={user?.academy.id.toString()} />
+                <NewLevel academy_id={picked_role?.academy_id} />
               </PopupMolecule>
             );
           }}
