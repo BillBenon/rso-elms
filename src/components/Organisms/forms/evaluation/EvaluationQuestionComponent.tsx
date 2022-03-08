@@ -49,7 +49,7 @@ export default function EvaluationQuestionComponent({
 
   let evaluationQuestions: IEvaluationQuestionsInfo[] | ICreateEvaluationQuestions[] =
     useMemo(() => {
-      return [];
+      return getLocalStorageData('evaluationQuestions') || [];
     }, []);
 
   if (evaluationId) {
@@ -99,8 +99,6 @@ export default function EvaluationQuestionComponent({
     }
 
     if (questionsClone[questionIndex].question) {
-      console.log('delete question');
-
       deleteQuestion(questionId, {
         onSuccess: () => {
           toast.success('Question deleted', { duration: 2000 });

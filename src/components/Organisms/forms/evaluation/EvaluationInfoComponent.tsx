@@ -232,7 +232,6 @@ export default function EvaluationInfoComponent({
 
   function submitForm(e: FormEvent) {
     e.preventDefault();
-    handleNext(1);
 
     if (evaluationId && details.time_limit > 0) {
       mutateAsync(
