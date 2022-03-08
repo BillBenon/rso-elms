@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { ReactNode, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 
 import { useGetInstructor } from '../../../hooks/useGetInstructor';
 import {
@@ -7,6 +7,7 @@ import {
   getEvaluationFeedbacks,
 } from '../../../store/evaluation/evaluation.store';
 import { IEvaluationFeedback } from '../../../types/services/evaluation.types';
+import DisplayClasses from '../../../views/classes/DisplayClasses';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
 import MultipleChoiceAnswer from '../../../views/evaluation/MultipleChoiceAnswer';
 import Button from '../../Atoms/custom/Button';
@@ -34,6 +35,12 @@ export default function EvaluationContent({
 
   const { data: evaluationQuestions, isLoading: loading } =
     evaluationStore.getEvaluationQuestions(evaluationId);
+
+  const [classes, setclasses] = useState([' ']);
+
+  useEffect(() => {
+    setclasses(evaluationInfo?.intake_level_class_ids.split(',') || [' ']);
+  }, [evaluationInfo?.intake_level_class_ids]);
 
   return (
     <div>
@@ -112,10 +119,20 @@ export default function EvaluationContent({
         {/* tjird column */}
         <div className="flex flex-col gap-4">
           <ContentSpan title="Due on" subTitle={evaluationInfo?.due_on} />
-          {/* <ContentSpan
-            title="Questionaire Type"
-            subTitle={evaluationInfo?.number_of_questions}
-          /> */}
+          <div className="flex flex-col gap-4">
+            <Heading color="txt-secondary" fontSize="base">
+              Classes
+            </Heading>
+            <div className="flex gap-1">
+              {classes.map((cl, index) => (
+                <DisplayClasses
+                  isLast={index === classes.length - 1}
+                  classId={cl}
+                  key={cl}
+                />
+              ))}
+            </div>
+          </div>
           <ContentSpan
             title="Consider on report"
             subTitle={evaluationInfo?.is_consider_on_report ? 'Yes' : 'No'}
@@ -135,7 +152,16 @@ export default function EvaluationContent({
         open={showPopup}
         title="Add private attendee"
         onClose={() => setShowPopup(false)}>
-        <h2>show list of private</h2>
+        {evaluationInfo?.private_attendees &&
+        evaluationInfo?.private_attendees.length > 0 ? (
+          evaluationInfo?.private_attendees.map((attendee) => (
+            <p className="py-2" key={attendee.id}>
+              we go
+            </p>
+          ))
+        ) : (
+          <p className="py-2">No private attendees</p>
+        )}
         <Button onClick={() => setShowPopup(false)}>Done</Button>
       </PopupMolecule>
 
