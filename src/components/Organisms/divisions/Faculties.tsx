@@ -111,7 +111,7 @@ export default function Faculties({ fetchType }: IFaculties) {
             handleSearch={() => {}}>
             <Permission privilege={Privileges.CAN_CREATE_DIVISION}>
               <Link to={`${url}/new`}>
-                <Button>Add Faculty</Button>
+                <Button>Add Wing</Button>
               </Link>
             </Permission>
           </TableHeader>
@@ -129,7 +129,7 @@ export default function Faculties({ fetchType }: IFaculties) {
             buttonLabel="Add new wing"
             title={'No faculty available'}
             handleClick={() => history.push(`/dashboard/divisions/new`)}
-            description="There aren't any faculties added yet"
+            description="There aren't any wings added yet"
           />
         ) : (
           <Table<FilteredData>
