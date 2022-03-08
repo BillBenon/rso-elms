@@ -36,7 +36,7 @@ export default function Faculties({ fetchType }: IFaculties) {
   const { user } = useAuthenticator();
 
   const { data, isLoading } = divisionStore.getDivisionsByAcademy(
-    fetchType.toUpperCase() || 'FACULTY',
+    fetchType.toUpperCase() || 'WINGS',
     user?.academy.id.toString() || '',
   );
 
@@ -75,7 +75,7 @@ export default function Faculties({ fetchType }: IFaculties) {
   const actions: ActionsType<FilteredData>[] = [];
 
   actions.push({
-    name: 'Edit Faculty',
+    name: 'Edit Wing',
     handleAction: (id: string | number | undefined) => {
       history.push(`${path}/${id}/edit`); // go to edit faculties
     },
@@ -106,7 +106,7 @@ export default function Faculties({ fetchType }: IFaculties) {
       <section>
         {faculties.length > 0 ? (
           <TableHeader
-            title="Faculty"
+            title="Wing"
             totalItems={faculties?.length || 0}
             handleSearch={() => {}}>
             <Permission privilege={Privileges.CAN_CREATE_DIVISION}>
@@ -126,7 +126,7 @@ export default function Faculties({ fetchType }: IFaculties) {
           <NoDataAvailable
             icon="faculty"
             privilege={Privileges.CAN_CREATE_DIVISION}
-            buttonLabel="Add new faculty"
+            buttonLabel="Add new wing"
             title={'No faculty available'}
             handleClick={() => history.push(`/dashboard/divisions/new`)}
             description="There aren't any faculties added yet"
@@ -150,7 +150,7 @@ export default function Faculties({ fetchType }: IFaculties) {
           path={`${path}/:id/edit`}
           render={() => {
             return (
-              <PopupMolecule title="Update Faculty" open={true} onClose={handleClose}>
+              <PopupMolecule title="Update Wing" open={true} onClose={handleClose}>
                 <UpdateFaculty academy_id={user?.academy.id.toString()} />
               </PopupMolecule>
             );
@@ -162,7 +162,7 @@ export default function Faculties({ fetchType }: IFaculties) {
           path={`${path}/new`}
           render={() => {
             return (
-              <PopupMolecule title="New Faculty" open onClose={handleClose}>
+              <PopupMolecule title="New Wing" open onClose={handleClose}>
                 <NewFaculty academy_id={user?.academy.id.toString()} />
               </PopupMolecule>
             );
