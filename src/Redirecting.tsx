@@ -55,6 +55,8 @@ export default function Redirecting() {
                 ? '/dashboard/inst-module'
                 : user?.user_type === UserType.STUDENT
                 ? '/dashboard/student'
+                : user.user_type === UserType.ADMIN
+                ? '/dashboard/admin'
                 : '/dashboard/users',
             );
           } else if (user.user_roles !== null && user.user_roles.length > 1) {
