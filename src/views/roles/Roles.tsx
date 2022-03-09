@@ -27,7 +27,8 @@ import { Privileges, RoleRes } from '../../types';
 import { ActionsType } from '../../types/services/table.types';
 import { UserType } from '../../types/services/user.types';
 
-interface FilteredRoles extends Pick<RoleRes, 'id' | 'name' | 'description' | 'status'> {}
+interface FilteredRoles
+  extends Pick<RoleRes, 'id' | 'name' | 'description' | 'type' | 'status'> {}
 
 export default function Roles() {
   const { url, path } = useRouteMatch();
@@ -53,7 +54,9 @@ export default function Roles() {
         user?.user_type === UserType.SUPER_ADMIN ||
         element?.academy_id === picked_role?.academy_id
       ) {
-        filterdData.push(_.pick(element, ['id', 'name', 'description', 'status']));
+        filterdData.push(
+          _.pick(element, ['id', 'name', 'description', 'type', 'status']),
+        );
       }
     });
 
