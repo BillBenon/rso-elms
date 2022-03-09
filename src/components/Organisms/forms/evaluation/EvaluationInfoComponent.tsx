@@ -222,6 +222,7 @@ export default function EvaluationInfoComponent({
         ...details,
         eligible_group: '',
         intake_level_class_ids: '',
+        private_attendees: value.toString(),
       }));
 
       return;
