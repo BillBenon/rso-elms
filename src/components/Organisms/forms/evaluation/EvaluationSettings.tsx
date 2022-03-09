@@ -3,7 +3,6 @@ import toast from 'react-hot-toast';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
-import { queryClient } from '../../../../plugins/react-query';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { SelectData, ValueType } from '../../../../types';
@@ -77,12 +76,11 @@ export default function EvaluationSettings({
     mutate(settings, {
       onSuccess: () => {
         toast.success('Settings added', { duration: 5000 });
-        queryClient.invalidateQueries(['evaluationsByAcademyInstructor']);
-        localStorage.removeItem('evaluationId');
-        setLocalStorageData('currentStep', 0);
+        removeLocalStorageData('evaluationId');
         removeLocalStorageData('evaluationInfo');
         removeLocalStorageData('evaluationQuestions');
         removeLocalStorageData('evaluationSettings');
+        setLocalStorageData('currentStep', 0);
         window.location.href = '/dashboard/evaluations';
       },
       onError: (error: any) => {

@@ -7,6 +7,7 @@ import PopupMolecule from './components/Molecules/Popup';
 import UpdatePassword from './components/Organisms/forms/auth/signup/personal/UpdatePassword';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import useAuthenticator from './hooks/useAuthenticator';
+import usePickedRole from './hooks/usePickedRole';
 import Dashboard from './layout/Dashboard';
 import { Privileges } from './types';
 import cookie from './utils/cookie';
@@ -39,8 +40,7 @@ const RouterProtection = () => {
   const { path } = useRouteMatch();
   const history = useHistory();
 
-  const user_role_cookie = cookie.getCookie('user_role') || '';
-  const user_role = user?.user_roles?.find((role) => role.id + '' === user_role_cookie);
+  const user_role = usePickedRole();
   const user_privileges = user_role?.role_privileges?.map((role) => role.name);
   const hasPrivilege = (privilege: Privileges) => user_privileges?.includes(privilege);
 
