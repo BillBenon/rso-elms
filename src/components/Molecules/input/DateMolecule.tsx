@@ -107,7 +107,9 @@ function DateMolecule({
   }, [dateFormat]);
 
   const initiateDate = useCallback(() => {
-    const dV = moment(defaultValue === '' ? undefined : defaultValue);
+    const dV = moment(
+      defaultValue === '' || defaultValue === null ? undefined : defaultValue,
+    );
     setDateState((old) => ({
       ...old,
       Year: dV.year(),

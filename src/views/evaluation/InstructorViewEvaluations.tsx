@@ -74,15 +74,15 @@ export default function InstructorViewEvaluations() {
   const handleClick = (id: string) => {
     switch (ownerShipType) {
       case IEvaluationOwnership.FOR_APPROVING:
-        history.push(`${path}/${id}/approve`);
+        history.push(`${path}/details/${id}/approve`);
         break;
 
       case IEvaluationOwnership.FOR_REVIEWING:
-        history.push(`${path}/${id}/review`);
+        history.push(`${path}/details/${id}/review`);
         break;
 
       case IEvaluationOwnership.FOR_MARKING:
-        history.push(`${path}/${id}/submissions`);
+        history.push(`${path}/details/${id}/submissions`);
         break;
 
       default:

@@ -2,7 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
-import useAuthenticator from '../../../../hooks/useAuthenticator';
+import usePickedRole from '../../../../hooks/usePickedRole';
 import { queryClient } from '../../../../plugins/react-query';
 import { classStore } from '../../../../store/administration/class.store';
 import {
@@ -129,12 +129,14 @@ export default function NewSchedule() {
 }
 
 function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
-  const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
 
-  const events = getAllEvents(user?.academy.id + '', !!user?.academy.id).data?.data.data;
-  const venues = getAllVenues(user?.academy.id + '', !!user?.academy.id).data?.data.data;
+  const events = getAllEvents(picked_role?.academy_id + '', !!picked_role?.academy_id)
+    .data?.data.data;
+  const venues = getAllVenues(picked_role?.academy_id + '', !!picked_role?.academy_id)
+    .data?.data.data;
 
-  const { data: users } = usersStore.getUsersByAcademy(user?.academy.id || '', {
+  const { data: users } = usersStore.getUsersByAcademy(picked_role?.academy_id || '', {
     page: 0,
     pageSize: 1000,
     sortyBy: 'username',
@@ -146,7 +148,7 @@ function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
   return (
     <form onSubmit={handleSubmit} className="-mb-6">
       <div className="hidden">
-        <InputMolecule value={user?.academy.id} name={'academyId'}>
+        <InputMolecule value={picked_role?.academy_id} name={'academyId'}>
           Academy id
         </InputMolecule>
       </div>
@@ -266,8 +268,8 @@ function SecondStep({ handleChange, setCurrentStep, values }: IStepProps) {
 }
 
 function ThirdStep({ values, handleChange, handleSubmit, setCurrentStep }: IStepProps) {
-  const { user } = useAuthenticator();
-  let academyId = user?.academy.id + '';
+  const picked_role = usePickedRole();
+  let academyId = picked_role?.academy_id + '';
 
   const programs = (programStore.fetchPrograms().data?.data.data || []).map((pr) => ({
     value: pr.id + '',

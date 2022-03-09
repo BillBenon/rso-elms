@@ -5,7 +5,7 @@ import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Barchart from '../../components/Organisms/chart/Barchart';
-import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { divisionStore } from '../../store/administration/divisions.store';
 import { getDepartmentStatsByAcademy } from '../../store/administration/stats.store';
 import usersStore from '../../store/administration/users.store';
@@ -19,24 +19,23 @@ const list: Link[] = [
 ];
 
 export default function AdminDashboard() {
-  const { user } = useAuthenticator();
-
+  const picked_role = usePickedRole();
   const users =
-    usersStore.getUsersByAcademy(user?.academy.id || '', {
+    usersStore.getUsersByAcademy(picked_role?.academy_id + '', {
       page: 0,
       pageSize: 100000000,
       sortyBy: 'username',
     }).data?.data.data.content || [];
 
-  const { data: stats } = getDepartmentStatsByAcademy(user?.academy.id);
+  const { data: stats } = getDepartmentStatsByAcademy(picked_role?.academy_id + '');
 
   const departments =
-    divisionStore.getDivisionsByAcademy('DEPARTMENT', user?.academy?.id.toString() || '')
-      .data?.data.data || [];
+    divisionStore.getDivisionsByAcademy('DEPARTMENT', picked_role?.academy_id + '').data
+      ?.data.data || [];
 
   const faculties =
-    divisionStore.getDivisionsByAcademy('FACULTY', user?.academy?.id.toString() || '')
-      .data?.data.data || [];
+    divisionStore.getDivisionsByAcademy('FACULTY', picked_role?.academy_id + '').data
+      ?.data.data || [];
 
   return (
     <div className="py-2">

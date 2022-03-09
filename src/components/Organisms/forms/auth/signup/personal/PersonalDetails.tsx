@@ -111,7 +111,8 @@ function PersonalDetails<E>({
         doc_type: personInfo.doc_type,
         nationality: nationality.residence,
       });
-  }, [nationality.residence, user.data?.data.data.person]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user.data?.data.data.person]);
 
   return (
     <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>

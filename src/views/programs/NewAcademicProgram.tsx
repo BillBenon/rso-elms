@@ -11,7 +11,7 @@ import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule'
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
-import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { divisionStore } from '../../store/administration/divisions.store';
 import programStore from '../../store/administration/program.store';
 import usersStore from '../../store/administration/users.store';
@@ -32,10 +32,9 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
   const { search } = useLocation();
   const facultyId = new URLSearchParams(search).get('dp');
 
-  const { user } = useAuthenticator();
-
+  const picked_role = usePickedRole();
   const { data: inCharge } = usersStore.getUsersByAcademyAndUserType(
-    user?.academy.id.toString() || '',
+    picked_role?.academy_id + '',
     UserType.INSTRUCTOR,
     { page: 0, pageSize: 1000, sortyBy: 'username' },
   );

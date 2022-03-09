@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
+import usePickedRole from '../../../../hooks/usePickedRole';
 import { roleStore } from '../../../../store/administration';
 import academyStore from '../../../../store/administration/academy.store';
 import { CreateRoleReq, FormPropType, RoleType, ValueType } from '../../../../types';
@@ -21,7 +22,11 @@ import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 export default function NewRole({ onSubmit }: FormPropType) {
   const { mutateAsync } = roleStore.addRole();
   const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
   const history = useHistory();
+  const { data: academy, isLoading } = academyStore.getAcademyById(
+    picked_role?.academy_id + '',
+  );
 
   const [form, setForm] = useState<CreateRoleReq>({
     name: '',
@@ -35,11 +40,11 @@ export default function NewRole({ onSubmit }: FormPropType) {
     setForm({
       name: '',
       description: '',
-      academy_id: user?.academy?.id.toString() || '',
+      academy_id: picked_role?.academy_id + '',
       institution_id: user?.institution?.id.toString() || '',
       type: RoleType.ACADEMY,
     });
-  }, [user?.academy?.id, user?.institution?.id]);
+  }, [picked_role?.academy_id, user?.institution?.id]);
 
   function handleChange({ name, value }: ValueType) {
     setForm((old) => ({ ...old, [name]: value }));
@@ -95,7 +100,11 @@ export default function NewRole({ onSubmit }: FormPropType) {
           )}
         </>
       ) : (
-        <InputMolecule readOnly value={user?.academy.name} name={'academy_id'}>
+        <InputMolecule
+          readOnly
+          value={academy?.data.data.name}
+          name={'academy_id'}
+          placeholder={isLoading ? 'Loading academy...' : ''}>
           Academy
         </InputMolecule>
       )}

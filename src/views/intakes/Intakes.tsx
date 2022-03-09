@@ -24,6 +24,7 @@ import Tooltip from '../../components/Molecules/Tooltip';
 import NewIntake from '../../components/Organisms/intake/NewIntake';
 import UpdateIntake from '../../components/Organisms/intake/UpdateIntake';
 import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import {
@@ -81,6 +82,7 @@ export default function Intakes() {
       !!authUserId && user?.user_type === UserType.STUDENT,
     ).data?.data.data || [];
 
+  const picked_role = usePickedRole();
   const {
     isSuccess,
     isError,
@@ -95,7 +97,7 @@ export default function Intakes() {
     : user?.user_type === UserType.INSTRUCTOR
     ? enrollmentStore.getInstructorIntakePrograms(instructorInfo?.id + '')
     : getIntakesByAcademy(
-        registrationControlId || user?.academy.id.toString()!,
+        registrationControlId || picked_role?.academy_id + '',
         !!registrationControlId,
         true,
       );

@@ -11,7 +11,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import academicyearsStore from '../../store/administration/academicyears.store';
 import { Link as Links, Privileges } from '../../types';
 import { IAcademicYearInfo } from '../../types/services/academicyears.types';
@@ -35,7 +35,7 @@ export default function AcademicYears() {
   ];
   const { url, path } = useRouteMatch();
   const history = useHistory();
-  const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
   const [years, setYears] = useState<FilteredData[]>([]);
   let actions: ActionsType<FilteredData>[] | undefined = [];
 
@@ -43,7 +43,7 @@ export default function AcademicYears() {
     data: academicYears,
     isLoading,
     isSuccess,
-  } = academicyearsStore.fetchAcademicYears(user?.academy.id.toString() || '');
+  } = academicyearsStore.fetchAcademicYears(picked_role?.academy_id + '');
 
   actions?.push({
     name: 'Edit year',
