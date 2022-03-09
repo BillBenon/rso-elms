@@ -1,5 +1,6 @@
 import { Table } from '..';
 import { IClass, IClassStudent } from './class.types';
+import { Student } from './user.types';
 
 /* eslint-disable no-unused-vars */
 export enum IEvaluationTypeEnum {
@@ -170,6 +171,11 @@ export interface IAddprivateAttendee {
   students: string[];
 }
 
+export interface IPrivateAttendeeInfo extends Table {
+  student: Student;
+  evaluation: IEvaluationInfo;
+}
+
 export interface IEvaluationInfo {
   id: string;
   name: string;
@@ -203,7 +209,7 @@ export interface IEvaluationInfo {
   number_of_questions: string;
   subject_academic_year_period_id: string;
   group_evaluations: [];
-  private_attendees: [];
+  private_attendees: IPrivateAttendeeInfo[];
   student_answers: [];
   evaluation_attachments: [];
   evaluation_approvals: [];

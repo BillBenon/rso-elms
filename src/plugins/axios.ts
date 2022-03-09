@@ -6,8 +6,6 @@ import cookie from '../utils/cookie';
 
 const openRequests: string[] = ['/authentication/signin'];
 
-console.log(import.meta.env);
-
 const commonConfig: AxiosRequestConfig = {};
 
 export const ADMIN_BASE_URL = `${

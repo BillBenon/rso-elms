@@ -24,7 +24,6 @@ export default function NewRole({ onSubmit }: FormPropType) {
   const { user } = useAuthenticator();
   const picked_role = usePickedRole();
   const history = useHistory();
-
   const { data: academy, isLoading } = academyStore.getAcademyById(
     picked_role?.academy_id + '',
   );
