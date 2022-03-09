@@ -1,12 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Route,
-  Switch,
-  useHistory,
-  useLocation,
-  useParams,
-  useRouteMatch,
-} from 'react-router';
+import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -34,11 +27,13 @@ import EnrollStudent from './EnrollStudent';
 import IntakeLevelModule from './IntakeLevelModule';
 import { NewIntakePeriod } from './NewIntakePeriod';
 
-function IntakeProgramLevel() {
+interface IntakeProgramLevelProp {
+  action: 'learn' | 'manage' | 'teach';
+}
+
+function IntakeProgramLevel({ action }: IntakeProgramLevelProp) {
   const history = useHistory();
-  const { path, url } = useRouteMatch();
-  const { search } = useLocation();
-  const priv = new URLSearchParams(search).get('priv');
+  const { path } = useRouteMatch();
   const { intakeProg, intakeId, id } = useParams<IntakeProgParam>();
   const [instLevels, setInstLevels] = useState<LevelIntakeProgram[]>([]);
 
@@ -76,21 +71,22 @@ function IntakeProgramLevel() {
     studIntkProgstud?.id + '',
     !!studIntkProgstud?.id,
   );
+
   const tabs: TabType[] =
-    priv === 'learn'
+    action === 'learn'
       ? studentLevels?.data.data.map((level) => ({
           label: `${level.academic_year_program_level.academic_program_level.level.name}`,
-          href: `${url}/${level.academic_year_program_level.id}?priv=learn`,
+          href: `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${level.academic_year_program_level.id}`,
         })) || []
-      : priv === 'teach'
+      : action === 'teach'
       ? instLevels.map((level) => ({
           label: `${level.academic_program_level.level.name}`,
-          href: `${url}/${level.id}?priv=teach`,
+          href: `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${level.id}`,
         })) || []
-      : priv === 'manage'
+      : action === 'manage'
       ? getLevels?.data.data.map((level) => ({
           label: `${level.academic_program_level.level.name}`,
-          href: `${url}/${level.id}?priv=manage`,
+          href: `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${level.id}`,
         })) || []
       : [];
 

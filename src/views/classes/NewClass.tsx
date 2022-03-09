@@ -1,6 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams, useRouteMatch } from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
@@ -20,6 +20,7 @@ import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOpt
 
 function NewClass() {
   const history = useHistory();
+  const { path } = useRouteMatch();
 
   const [form, setForm] = useState<ICreateClass>({
     class_group_type: ClassGroupType.CLASS,
@@ -101,9 +102,20 @@ function NewClass() {
         onSuccess: (data) => {
           toast.success(data.data.message);
           queryClient.invalidateQueries(['class/periodId']);
-          history.push(
-            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-class`,
-          );
+
+          path.includes('learn')
+            ? history.push(
+                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-class`,
+              )
+            : path.includes('teach')
+            ? history.push(
+                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-class`,
+              )
+            : path.includes('manage')
+            ? history.push(
+                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-class`,
+              )
+            : {};
         },
         onError: (error: any) => {
           toast.error(error.response.data.message);

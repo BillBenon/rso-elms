@@ -94,9 +94,19 @@ function StudentInClass({ classId, label }: IStudentClass) {
                       <Button
                         styleType="outline"
                         onClick={() =>
-                          history.push(
-                            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
-                          )
+                          path.includes('learn')
+                            ? history.push(
+                                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/add-class`,
+                              )
+                            : path.includes('teach')
+                            ? history.push(
+                                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/add-class`,
+                              )
+                            : path.includes('manage')
+                            ? history.push(
+                                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/add-class`,
+                              )
+                            : {}
                         }>
                         Add class
                       </Button>
@@ -105,9 +115,19 @@ function StudentInClass({ classId, label }: IStudentClass) {
                     <Button
                       styleType="outline"
                       onClick={() =>
-                        history.push(
-                          `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/view-class/${classId}/subject`,
-                        )
+                        path.includes('learn')
+                          ? history.push(
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/view-class/${classId}/subject`,
+                            )
+                          : path.includes('teach')
+                          ? history.push(
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/view-class/${classId}/subject`,
+                            )
+                          : path.includes('manage')
+                          ? history.push(
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/view-class/${classId}/subject`,
+                            )
+                          : {}
                       }>
                       View subjects
                     </Button>
@@ -163,9 +183,19 @@ function StudentInClass({ classId, label }: IStudentClass) {
                       <Button
                         styleType="outline"
                         onClick={() =>
-                          history.push(
-                            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
-                          )
+                          path.includes('learn')
+                            ? history.push(
+                                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/add-class`,
+                              )
+                            : path.includes('teach')
+                            ? history.push(
+                                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/add-class`,
+                              )
+                            : path.includes('learn')
+                            ? history.push(
+                                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/add-class`,
+                              )
+                            : {}
                         }>
                         Add class
                       </Button>
@@ -174,9 +204,19 @@ function StudentInClass({ classId, label }: IStudentClass) {
                     <Button
                       styleType="outline"
                       onClick={() =>
-                        history.push(
-                          `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/view-class`,
-                        )
+                        path.includes('learn')
+                          ? history.push(
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/view-class`,
+                            )
+                          : path.includes('teach')
+                          ? history.push(
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/view-class`,
+                            )
+                          : path.includes('learn')
+                          ? history.push(
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/view-class`,
+                            )
+                          : {}
                       }>
                       View students
                     </Button>
