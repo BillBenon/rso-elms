@@ -212,7 +212,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
                           ? history.push(
                               `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/view-class`,
                             )
-                          : path.includes('learn')
+                          : path.includes('manage')
                           ? history.push(
                               `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/view-class`,
                             )
