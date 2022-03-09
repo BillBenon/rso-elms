@@ -11,16 +11,14 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewEvent from '../../components/Organisms/schedule/event/NewEvent';
 import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { getAllEvents } from '../../store/timetable/event.store';
 import { Privileges } from '../../types';
-import { UserType } from '../../types/services/user.types';
 
 export default function Events() {
   const { user } = useAuthenticator();
-  const { data, isLoading, refetch } = getAllEvents(
-    user?.academy?.id.toString() || '',
-    false,
-  );
+  const picked_role = usePickedRole();
+  const { data, isLoading, refetch } = getAllEvents(picked_role?.academy_id + '', false);
   const events = data?.data.data;
 
   const history = useHistory();
@@ -37,11 +35,11 @@ export default function Events() {
   return (
     <Permission privilege={Privileges.CAN_ACCESS_EVENTS}>
       <TableHeader totalItems={0} title={'Events'} showBadge={false}>
-        {user?.user_type != UserType.STUDENT && (
+        <Permission privilege={Privileges.CAN_CREATE_EVENT}>
           <Link to={`/dashboard/schedule/events/new`}>
             <Button>New Event</Button>
           </Link>
-        )}
+        </Permission>
       </TableHeader>
       {isLoading ? (
         <Loader />

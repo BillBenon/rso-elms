@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
+import usePickedRole from '../../../../hooks/usePickedRole';
 import { queryClient } from '../../../../plugins/react-query';
 import { roleStore } from '../../../../store/administration';
 import academyStore from '../../../../store/administration/academy.store';
@@ -10,7 +11,6 @@ import usersStore from '../../../../store/administration/users.store';
 import { ParamType, RoleType, ValueType } from '../../../../types';
 import { AcademyInfo } from '../../../../types/services/academy.types';
 import { AssignUserRole } from '../../../../types/services/user.types';
-import cookie from '../../../../utils/cookie';
 import {
   getDropDownOptions,
   getDropDownStatusOptions,
@@ -37,11 +37,7 @@ export default function AssignRole() {
     type: RoleType.ACADEMY,
   });
 
-  let picked_role_cookie = cookie.getCookie('user_role') || '';
-
-  const picked_role = user?.user_roles?.find(
-    (role) => role.id + '' === picked_role_cookie,
-  );
+  const picked_role = usePickedRole();
 
   useEffect(() => {
     setRoleInfo((role) => ({ ...role, institution_id: user?.institution.id + '' }));

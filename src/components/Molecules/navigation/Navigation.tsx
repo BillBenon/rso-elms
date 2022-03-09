@@ -4,16 +4,18 @@ import toast from 'react-hot-toast';
 import { Link, useHistory, useLocation } from 'react-router-dom';
 
 import useAuthenticator from '../../../hooks/useAuthenticator';
+import useNonPickedRole from '../../../hooks/useNonPickedRole';
+import usePickedRole from '../../../hooks/usePickedRole';
 import { queryClient } from '../../../plugins/react-query';
 import { authenticatorStore } from '../../../store/administration';
 import academyStore from '../../../store/administration/academy.store';
 import { institutionStore } from '../../../store/administration/institution.store';
 import { getAllNotifications } from '../../../store/administration/notification.store';
-import { RoleType } from '../../../types';
+import { Privileges, RoleType } from '../../../types';
 import { NotificationStatus } from '../../../types/services/notification.types';
-import { UserType } from '../../../types/services/user.types';
 import cookie from '../../../utils/cookie';
 import { usePicture } from '../../../utils/file-util';
+import Permission from '../../Atoms/auth/Permission';
 import Avatar from '../../Atoms/custom/Avatar';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
@@ -41,13 +43,6 @@ export default function Navigation() {
     (notification) =>
       notification.notifaction_status === NotificationStatus.UNREAD.toString(),
   );
-
-  // useEffect(() => {
-  //   if (user?.user_type === UserType.SUPER_ADMIN && !user?.institution_id) {
-  //     history.push('/institution/new');
-  //   }
-  // }, [history, user]);
-
   const links = [
     { text: 'Home', to: '/' },
     { text: 'About', to: '/about' },
@@ -72,15 +67,9 @@ export default function Navigation() {
       .catch(() => toast.error('Signout failed. try again latter.', { id: toastId }));
   }
 
-  let picked_role_cookie = cookie.getCookie('user_role') || '';
+  const picked_role = usePickedRole();
 
-  const picked_role = user?.user_roles?.find(
-    (role) => role.id + '' === picked_role_cookie,
-  );
-
-  const other_user_roles =
-    user?.user_roles?.filter((role) => role.id + '' !== picked_role_cookie) || [];
-
+  const other_user_roles = useNonPickedRole();
   return (
     <nav className="bg-main">
       <div className=" mx-auto px-4 sm:px-6 lg:px-8">
@@ -94,13 +83,13 @@ export default function Navigation() {
           </div> */}
           <div className="hidden md:block">
             <div className="ml-4 flex items-center md:ml-6">
-              {user?.user_type === UserType.SUPER_ADMIN && (
+              <Permission privilege={Privileges.CAN_MODIFY_INSTITUTION}>
                 <div className="px-12">
                   <Link to={`/dashboard/institution/${user?.institution_id}/edit`}>
                     <Button styleType="outline">Edit institution</Button>
                   </Link>
                 </div>
-              )}
+              </Permission>
               <div className="bg-main p-1 rounded-full flex text-gray-400">
                 {other_user_roles.length > 0 && (
                   <Tooltip

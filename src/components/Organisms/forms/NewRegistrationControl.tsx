@@ -1,8 +1,9 @@
+import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router';
 
-import useAuthenticator from '../../../hooks/useAuthenticator';
+import usePickedRole from '../../../hooks/usePickedRole';
 import { queryClient } from '../../../plugins/react-query';
 import registrationControlStore from '../../../store/administration/registrationControl.store';
 import { CommonFormProps, ValueType } from '../../../types';
@@ -16,7 +17,7 @@ interface PropType<K> extends CommonFormProps<K> {}
 
 export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
   const { mutateAsync, isLoading } = registrationControlStore.createRegControl();
-  const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
   const history = useHistory();
 
   const [regControl, setRegControl] = useState<IRegistrationControlCreateInfo>({
@@ -27,8 +28,8 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
   });
 
   useEffect(() => {
-    setRegControl((reg) => ({ ...reg, academy_id: user?.academy.id + '' }));
-  }, [user?.academy.id]);
+    setRegControl((reg) => ({ ...reg, academy_id: picked_role?.academy_id + '' }));
+  }, [picked_role?.academy_id]);
 
   function handleChange(e: ValueType) {
     setRegControl((regControl) => ({ ...regControl, [e.name]: e.value }));
@@ -51,8 +52,6 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
     if (onSubmit) onSubmit(e);
   }
 
-  console.log(regControl.expected_start_date);
-
   return (
     <form onSubmit={submitForm}>
       <TextAreaMolecule
@@ -62,18 +61,9 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
         handleChange={handleChange}>
         Registration control description
       </TextAreaMolecule>
-      {/* <DateMolecule
-        startYear={new Date().getFullYear()}
-        endYear={new Date().getFullYear() + 15}
-        reverse={false}
-        handleChange={handleChange}
-        name={'expected_start_date'}>
-        Start Date
-      </DateMolecule> */}
       <DateMolecule
-        startYear={new Date().getFullYear()}
-        defaultValue={new Date().toString()}
-        endYear={new Date().getFullYear() + 15}
+        startYear={moment().year() - 15}
+        endYear={moment().year() + 15}
         reverse={false}
         handleChange={handleChange}
         name="expected_start_date">
@@ -82,9 +72,17 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
 
       <DateMolecule
         handleChange={handleChange}
-        startYear={new Date(regControl.expected_start_date).getFullYear()}
-        defaultValue={new Date().toString()}
-        endYear={new Date().getFullYear() + 15}
+        startYear={moment(
+          regControl.expected_start_date === ''
+            ? undefined
+            : regControl.expected_start_date,
+        ).year()}
+        defaultValue={
+          regControl.expected_start_date === ''
+            ? undefined
+            : regControl.expected_start_date
+        }
+        endYear={moment().year() + 15}
         reverse={false}
         name={'expected_end_date'}>
         End Date

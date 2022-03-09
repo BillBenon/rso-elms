@@ -1,4 +1,5 @@
 // import { pick } from 'lodash';
+import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Renderable, Toast, ValueFunction } from 'react-hot-toast/dist/core/types';
@@ -179,9 +180,9 @@ export default function SupAdminProfile<E>({
           Email
         </InputMolecule>
         <DateMolecule
-          defaultValue={(new Date().getFullYear() - 16).toString()}
-          startYear={new Date().getFullYear() - 100}
-          endYear={new Date().getFullYear() - 16}
+          defaultValue={(moment().year() - 16).toString()}
+          startYear={moment().year() - 100}
+          endYear={moment().year() - 16}
           handleChange={handleChange}
           name="birth_date"
           width="60 md:w-80"

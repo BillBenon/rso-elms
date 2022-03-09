@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
@@ -53,7 +54,7 @@ function AddSubjectToPeriod() {
     setSubjectPrd((sub) => ({ ...sub, [e.name]: e.value }));
   }
 
-  const pickedModule = levelModuleStore?.data.data.find(
+  const pickedModule: IntakeLevelModule | undefined = levelModuleStore?.data.data.find(
     (lvl) => lvl.id === subjectPrd.intakeProgramModuleLevelId,
   );
 
@@ -131,16 +132,26 @@ function AddSubjectToPeriod() {
         Incharge
       </DropdownMolecule>
       <DateMolecule
-        startYear={new Date(pickedModule?.planned_start_on + '').getFullYear()}
-        endYear={new Date(pickedModule?.planned_end_on + '').getFullYear()}
+        startYear={moment(
+          pickedModule?.planned_start_on === ''
+            ? undefined
+            : pickedModule?.planned_start_on,
+        ).year()}
+        endYear={moment(
+          pickedModule?.planned_end_on === '' ? undefined : pickedModule?.planned_end_on,
+        ).year()}
         handleChange={handleChange}
         reverse={false}
         name="plannedStartOn">
         Start Date
       </DateMolecule>
       <DateMolecule
-        startYear={new Date(subjectPrd.plannedStartOn).getFullYear()}
-        endYear={new Date(pickedModule?.planned_end_on + '').getFullYear()}
+        startYear={moment(
+          subjectPrd.plannedStartOn === '' ? undefined : subjectPrd.plannedStartOn,
+        ).year()}
+        endYear={moment(
+          pickedModule?.planned_end_on === '' ? undefined : pickedModule?.planned_end_on,
+        ).year()}
         handleChange={handleChange}
         name="plannedEndOn">
         End Date

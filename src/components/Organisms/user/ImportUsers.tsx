@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
 import useAuthenticator from '../../../hooks/useAuthenticator';
+import usePickedRole from '../../../hooks/usePickedRole';
 import { queryClient } from '../../../plugins/react-query';
 import { roleStore } from '../../../store/administration';
 import academyStore from '../../../store/administration/academy.store';
@@ -90,9 +91,14 @@ export default function ImportUsers({ userType }: IProps) {
     programStore.getProgramsByAcademy(values.academyId).data?.data.data || [];
   const intakes = intakeStore.getIntakesByProgram(values.program).data?.data.data || [];
 
+  const picked_role = usePickedRole();
+  const { data: academy, isLoading: academyLoading } = academyStore.getAcademyById(
+    picked_role?.academy_id + '',
+  );
+
   useEffect(() => {
-    setValues((prev) => ({ ...prev, academyId: user?.academy?.id || '' }));
-  }, [user]);
+    setValues((prev) => ({ ...prev, academyId: picked_role?.academy_id + '' }));
+  }, [picked_role?.academy_id]);
 
   const { mutateAsync, isLoading } = usersStore.importUsers();
 
@@ -125,15 +131,17 @@ export default function ImportUsers({ userType }: IProps) {
             },
           );
 
-          mutate(successfullyImportedUsers, {
-            onSuccess() {
-              toast.success('Users role assigned successfully');
-            },
+          if (values.roleId) {
+            mutate(successfullyImportedUsers, {
+              onSuccess() {
+                toast.success('Users role assigned successfully');
+              },
 
-            onError(error: any) {
-              toast.error('Error assigning users role', error.response.message);
-            },
-          });
+              onError(error: any) {
+                toast.error('Error assigning users role', error.response.message);
+              },
+            });
+          }
 
           queryClient.invalidateQueries(['users']);
           queryClient.invalidateQueries(['users/institution']);
@@ -172,10 +180,25 @@ export default function ImportUsers({ userType }: IProps) {
             Academy
           </SelectMolecule>
         ) : (
-          <InputMolecule readOnly value={user?.academy.name} name={'academyId'}>
+          <InputMolecule
+            readOnly
+            value={academy?.data.data.name}
+            name={'academyId'}
+            placeholder={academyLoading ? 'Loading academy...' : ''}>
             Academy
           </InputMolecule>
         )}
+        {userType === UserType.STUDENT ||
+          (UserType.INSTRUCTOR && (
+            <SelectMolecule
+              placeholder="Select role"
+              options={getDropDownOptions({ inputs: roleOptions })}
+              value={values.roleId}
+              name="roleId"
+              handleChange={handleChange}>
+              Select role
+            </SelectMolecule>
+          ))}
         {userType === UserType.STUDENT ? (
           <div>
             <SelectMolecule
@@ -202,15 +225,6 @@ export default function ImportUsers({ userType }: IProps) {
               name="intakeProgramId"
               handleChange={handleChange}>
               Intake
-            </SelectMolecule>
-
-            <SelectMolecule
-              placeholder="Select role"
-              options={getDropDownOptions({ inputs: roleOptions })}
-              value={values.roleId}
-              name="roleId"
-              handleChange={handleChange}>
-              Select role
             </SelectMolecule>
             {/* <SelectMolecule
               options={

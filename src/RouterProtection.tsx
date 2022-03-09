@@ -7,9 +7,9 @@ import PopupMolecule from './components/Molecules/Popup';
 import UpdatePassword from './components/Organisms/forms/auth/signup/personal/UpdatePassword';
 import RegistrationControl from './components/Organisms/registrationControl/RegistrationControl';
 import useAuthenticator from './hooks/useAuthenticator';
+import usePickedRole from './hooks/usePickedRole';
 import Dashboard from './layout/Dashboard';
 import { Privileges } from './types';
-import { UserType } from './types/services/user.types';
 import cookie from './utils/cookie';
 import AcademicYears from './views/academicYears/AcademicYears';
 import Academies from './views/academies/Academy';
@@ -40,8 +40,7 @@ const RouterProtection = () => {
   const { path } = useRouteMatch();
   const history = useHistory();
 
-  const user_role_cookie = cookie.getCookie('user_role') || '';
-  const user_role = user?.user_roles?.find((role) => role.id + '' === user_role_cookie);
+  const user_role = usePickedRole();
   const user_privileges = user_role?.role_privileges?.map((role) => role.name);
   const hasPrivilege = (privilege: Privileges) => user_privileges?.includes(privilege);
 
@@ -71,7 +70,11 @@ const RouterProtection = () => {
           {hasPrivilege(Privileges.CAN_ACCESS_USERS) && (
             <Route path={`${path}/users`} component={Users} />
           )}
-          {hasPrivilege(Privileges.CAN_ACCESS_USERS) && (
+          {(hasPrivilege(Privileges.CAN_ACCESS_USERS_ROLES) ||
+            hasPrivilege(Privileges.CAN_ACCESS_USERS_RANKS) ||
+            hasPrivilege(Privileges.CAN_ACCESS_USERS_NEXTOFKIN) ||
+            hasPrivilege(Privileges.CAN_ACCESS_USERS_PERSONAL_INFO) ||
+            hasPrivilege(Privileges.CAN_ACCESS_PROFILE)) && (
             <Route path={`${path}/user/:id/profile`} component={UserDetails} />
           )}
           {hasPrivilege(Privileges.CAN_MODIFY_INSTITUTION) && (
@@ -141,7 +144,6 @@ const RouterProtection = () => {
             hasPrivilege(Privileges.CAN_ANSWER_EVALUATION)) && (
             <Route path={`${path}/evaluations`} component={InstructorViewEvaluations} />
           )}
-
           <Route
             exact
             path={`${path}/account/update-password`}
@@ -158,6 +160,7 @@ const RouterProtection = () => {
     </>
   );
 
+  // eslint-disable-next-line no-unused-vars
   const InstitutionAdminRoutes = () => (
     <Switch>
       {/*start of institution admin */}
@@ -198,9 +201,11 @@ const RouterProtection = () => {
   ) : user ? (
     <Dashboard>
       {/* <Switch> */}
-      {user?.user_type === UserType.SUPER_ADMIN
-        ? InstitutionAdminRoutes()
-        : PrivilegedRoutes()}
+      {
+        // user?.user_type === UserType.SUPER_ADMIN
+        //   ? InstitutionAdminRoutes() :
+        PrivilegedRoutes()
+      }
       {/* </Switch> */}
     </Dashboard>
   ) : isError ? (

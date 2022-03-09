@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router';
 import { Link } from 'react-router-dom';
 
-import useAuthenticator from '../../../hooks/useAuthenticator';
+import usePickedRole from '../../../hooks/usePickedRole';
 import { divisionStore } from '../../../store/administration/divisions.store';
 import { Privileges } from '../../../types';
 import { DivisionInfo } from '../../../types/services/division.types';
@@ -33,11 +33,11 @@ export default function Faculties({ fetchType }: IFaculties) {
   const { url, path } = useRouteMatch();
   const history = useHistory();
   const [faculties, setFaculties] = useState<FilteredData[]>([]);
-  const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
 
   const { data, isLoading } = divisionStore.getDivisionsByAcademy(
-    fetchType.toUpperCase() || 'WINGS',
-    user?.academy.id.toString() || '',
+    fetchType.toUpperCase() || 'FACULTY',
+    picked_role?.academy_id + '',
   );
 
   useEffect(() => {
@@ -59,7 +59,7 @@ export default function Faculties({ fetchType }: IFaculties) {
           decription: faculty.description,
           name: faculty.name,
           status: faculty.generic_status,
-          departments: faculty.total_num_childreen || 0,
+          departments: faculty.total_num_childreen || '0',
         };
         formattedFaculties.push(filteredInfo);
       });
@@ -75,7 +75,7 @@ export default function Faculties({ fetchType }: IFaculties) {
   const actions: ActionsType<FilteredData>[] = [];
 
   actions.push({
-    name: 'Edit Wing',
+    name: 'Edit Faculty',
     handleAction: (id: string | number | undefined) => {
       history.push(`${path}/${id}/edit`); // go to edit faculties
     },
@@ -106,12 +106,12 @@ export default function Faculties({ fetchType }: IFaculties) {
       <section>
         {faculties.length > 0 ? (
           <TableHeader
-            title="Wing"
+            title="Faculty"
             totalItems={faculties?.length || 0}
             handleSearch={() => {}}>
             <Permission privilege={Privileges.CAN_CREATE_DIVISION}>
               <Link to={`${url}/new`}>
-                <Button>Add Wing</Button>
+                <Button>Add Faculty</Button>
               </Link>
             </Permission>
           </TableHeader>
@@ -126,10 +126,10 @@ export default function Faculties({ fetchType }: IFaculties) {
           <NoDataAvailable
             icon="faculty"
             privilege={Privileges.CAN_CREATE_DIVISION}
-            buttonLabel="Add new wing"
+            buttonLabel="Add new faculty"
             title={'No faculty available'}
             handleClick={() => history.push(`/dashboard/divisions/new`)}
-            description="There aren't any wings added yet"
+            description="There aren't any faculties added yet"
           />
         ) : (
           <Table<FilteredData>
@@ -150,8 +150,8 @@ export default function Faculties({ fetchType }: IFaculties) {
           path={`${path}/:id/edit`}
           render={() => {
             return (
-              <PopupMolecule title="Update Wing" open={true} onClose={handleClose}>
-                <UpdateFaculty academy_id={user?.academy.id.toString()} />
+              <PopupMolecule title="Update Faculty" open={true} onClose={handleClose}>
+                <UpdateFaculty academy_id={picked_role?.academy_id} />
               </PopupMolecule>
             );
           }}
@@ -162,8 +162,8 @@ export default function Faculties({ fetchType }: IFaculties) {
           path={`${path}/new`}
           render={() => {
             return (
-              <PopupMolecule title="New Wing" open onClose={handleClose}>
-                <NewFaculty academy_id={user?.academy.id.toString()} />
+              <PopupMolecule title="New Faculty" open onClose={handleClose}>
+                <NewFaculty academy_id={picked_role?.academy_id} />
               </PopupMolecule>
             );
           }}
@@ -175,7 +175,7 @@ export default function Faculties({ fetchType }: IFaculties) {
           render={() => {
             return (
               <PopupMolecule title="New Department" open onClose={handleClose}>
-                <NewDepartment academy_id={user?.academy.id.toString()} />
+                <NewDepartment academy_id={picked_role?.academy_id} />
               </PopupMolecule>
             );
           }}

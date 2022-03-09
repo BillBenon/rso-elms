@@ -20,12 +20,10 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import NewLessonForm from '../../components/Organisms/forms/subjects/NewLessonForm';
-import useAuthenticator from '../../hooks/useAuthenticator';
 import { lessonStore } from '../../store/administration/lesson.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { Privileges } from '../../types';
-import { UserType } from '../../types/services/user.types';
 import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import EvaluationCategories from '../evaluation/EvaluationCategories';
 import SubjectInstructorView from '../evaluation/SubjectInstructorView';
@@ -42,8 +40,6 @@ export default function SubjectDetails() {
   const progId = new URLSearchParams(search).get('prog') || '';
   const level = new URLSearchParams(search).get('lvl') || '';
   const period = new URLSearchParams(search).get('prd') || '';
-
-  const { user } = useAuthenticator();
 
   const { subjectId } = useParams<ParamType>();
   const { url } = useRouteMatch();
@@ -128,16 +124,7 @@ export default function SubjectDetails() {
           </Heading>
           <p className="w-10/12 text-base">{subjectData.data?.data.data.content}</p>
 
-          <TabNavigation
-            tabs={tabs}
-            // headerComponent={
-            //   user?.user_type === UserType.INSTRUCTOR && (
-            //     <BrowserLink to={`${url}/add-lesson`}>
-            //       <Button>New lesson</Button>
-            //     </BrowserLink>
-            //   )
-            // }
-            className="pt-6">
+          <TabNavigation tabs={tabs} className="pt-6">
             <Switch>
               <Route
                 exact
@@ -163,11 +150,11 @@ export default function SubjectDetails() {
                             <Heading fontSize="base" fontWeight="semibold">
                               Ongoing Lessons
                             </Heading>
-                            {user?.user_type === UserType.INSTRUCTOR && (
+                            <Permission privilege={Privileges.CAN_CREATE_LESSON}>
                               <BrowserLink to={`${url}/add-lesson`}>
                                 <Button>New lesson</Button>
                               </BrowserLink>
-                            )}
+                            </Permission>
                           </div>
                           <Accordion>
                             {lessons.map((les) => {

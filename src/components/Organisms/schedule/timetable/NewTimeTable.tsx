@@ -2,7 +2,7 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
-import useAuthenticator from '../../../../hooks/useAuthenticator';
+import usePickedRole from '../../../../hooks/usePickedRole';
 import { queryClient } from '../../../../plugins/react-query';
 import { classStore } from '../../../../store/administration/class.store';
 import { moduleStore } from '../../../../store/administration/modules.store';
@@ -108,10 +108,11 @@ export default function NewTimeTable() {
 }
 
 function FirstStep({ values, handleChange, setCurrentStep, classInfo }: IStepProps) {
-  const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
   const users =
-    instructordeploymentStore.getInstructorsDeployedInAcademy(user?.academy.id + '').data
-      ?.data.data || [];
+    instructordeploymentStore.getInstructorsDeployedInAcademy(
+      picked_role?.academy_id + '',
+    ).data?.data.data || [];
 
   const modules =
     moduleStore.getModulesByProgram(
@@ -171,9 +172,10 @@ function FirstStep({ values, handleChange, setCurrentStep, classInfo }: IStepPro
 }
 
 function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: IStepProps) {
-  const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
   const venues =
-    getAllVenues(user?.academy.id + '', !!user?.academy.id).data?.data.data || [];
+    getAllVenues(picked_role?.academy_id + '', !!picked_role?.academy_id).data?.data
+      .data || [];
 
   return (
     <form onSubmit={handleSubmit} className="max-w-sm -mb-6">

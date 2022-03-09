@@ -1,9 +1,11 @@
+import moment from 'moment';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router';
 import countryList from 'react-select-country-list';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
+import usePickedRole from '../../../../hooks/usePickedRole';
 import { queryClient } from '../../../../plugins/react-query';
 import academyStore from '../../../../store/administration/academy.store';
 import { intakeStore } from '../../../../store/administration/intake.store';
@@ -43,6 +45,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   // const newUserType = pick(UserType, ['ADMIN', 'INSTRUCTOR', 'STUDENT']);
   // const newUserTypeWithSuper = { ...newUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
   const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
 
   let { userType } = useParams<IParams>();
 
@@ -95,9 +98,9 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
       ...details,
       intake_program_id: otherDetail.intake,
       institution_id: user?.institution?.id.toString() || '',
-      academy_id: details.user_type !== 'SUPER_ADMIN' ? user?.academy?.id + '' : '',
+      academy_id: details.user_type !== 'SUPER_ADMIN' ? picked_role?.academy_id + '' : '',
     }));
-  }, [otherDetail.intake, user?.academy?.id, user?.institution?.id]);
+  }, [otherDetail.intake, picked_role?.academy_id, user?.institution?.id]);
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
@@ -150,10 +153,10 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         {details.user_type === UserType.INSTRUCTOR ? (
           <>
             <DateMolecule
-              defaultValue={new Date().toString()}
+              defaultValue={moment().toString()}
               handleChange={handleChange}
-              startYear={new Date().getFullYear() - 20}
-              endYear={new Date().getFullYear()}
+              startYear={moment().year() - 20}
+              endYear={moment().year()}
               reverse={false}
               name="deployed_on"
               width="60 md:w-80">
@@ -206,9 +209,9 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           Password
         </InputMolecule>
         <DateMolecule
-          startYear={new Date().getFullYear() - 100}
-          defaultValue={(new Date().getFullYear() - 16).toString()}
-          endYear={new Date().getFullYear() - 16}
+          startYear={moment().year() - 100}
+          defaultValue={(moment().year() - 16).toString()}
+          endYear={moment().year() - 16}
           handleChange={handleChange}
           name="birth_date"
           width="60 md:w-80"
@@ -262,9 +265,9 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         </InputMolecule>
         {details.doc_type == DocType.PASSPORT && (
           <DateMolecule
-            startYear={new Date().getFullYear() - 7}
-            defaultValue={new Date().toString()}
-            endYear={new Date().getFullYear() + 7}
+            startYear={moment().year() - 7}
+            defaultValue={moment().toString()}
+            endYear={moment().year() + 7}
             handleChange={handleChange}
             name="document_expire_on"
             width="60 md:w-80">

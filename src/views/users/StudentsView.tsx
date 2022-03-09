@@ -13,6 +13,7 @@ import AssignRole from '../../components/Organisms/forms/user/AssignRole';
 import ViewUserRole from '../../components/Organisms/forms/user/ViewUserRole';
 import ImportUsers from '../../components/Organisms/user/ImportUsers';
 import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { authenticatorStore } from '../../store/administration';
 import usersStore from '../../store/administration/users.store';
 import { Privileges, ValueType } from '../../types';
@@ -30,6 +31,7 @@ export default function StudentsView() {
 
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
+  const picked_role = usePickedRole();
 
   const { data, isLoading, refetch } =
     user?.user_type === UserType.SUPER_ADMIN
@@ -40,7 +42,7 @@ export default function StudentsView() {
           sortyBy: 'username',
         })
       : usersStore.getUsersByAcademyAndUserType(
-          user?.academy?.id.toString() || '',
+          picked_role?.academy_id + '',
           UserType.STUDENT,
           { page: currentPage, pageSize, sortyBy: 'username' },
         );

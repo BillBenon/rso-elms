@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
@@ -5,7 +6,7 @@ import { useHistory } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import DateMolecule from '../../components/Molecules/input/DateMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
-import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { queryClient } from '../../plugins/react-query';
 import academicyearsStore from '../../store/administration/academicyears.store';
 import { ValueType } from '../../types';
@@ -17,9 +18,9 @@ import { getDropDownStatusOptions } from '../../utils/getOption';
 
 export default function NewAcademicYear() {
   const history = useHistory();
-  const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
   const [newYear, setNewYear] = useState<ICreateAcademicYear>({
-    academyId: user?.academy.id.toString() || '',
+    academyId: picked_role?.academy_id + '',
     name: '',
     id: '',
     actualAtartOn: '',
@@ -30,8 +31,8 @@ export default function NewAcademicYear() {
   });
 
   useEffect(() => {
-    setNewYear((prev) => ({ ...prev, academyId: user?.academy?.id || '' }));
-  }, [user]);
+    setNewYear((prev) => ({ ...prev, academyId: picked_role?.academy_id + '' }));
+  }, [picked_role?.academy_id]);
 
   function handleChange(e: ValueType) {
     setNewYear((year) => ({ ...year, [e.name]: e.value }));
@@ -41,9 +42,11 @@ export default function NewAcademicYear() {
   function submitForm(e: FormEvent) {
     e.preventDefault();
 
-    let name = `YEAR ${new Date(newYear.plannedStartOn).getFullYear()}-${new Date(
-      newYear.plannedEndOn,
-    ).getFullYear()}`;
+    let name = `YEAR ${moment(
+      newYear.plannedStartOn === '' ? undefined : newYear.plannedStartOn,
+    ).year()}-${moment(
+      newYear.plannedStartOn === '' ? undefined : newYear.plannedStartOn,
+    ).year()}`;
     let data = {
       ...newYear,
       name,
@@ -66,8 +69,8 @@ export default function NewAcademicYear() {
         Name
       </InputMolecule> */}
       <DateMolecule
-        startYear={new Date().getFullYear() - 30}
-        endYear={new Date().getFullYear() + 30}
+        startYear={moment().year() - 30}
+        endYear={moment().year() + 30}
         reverse={false}
         handleChange={handleChange}
         name={'plannedStartOn'}>
@@ -76,8 +79,10 @@ export default function NewAcademicYear() {
 
       <DateMolecule
         handleChange={handleChange}
-        startYear={new Date(newYear.plannedStartOn).getFullYear()}
-        endYear={new Date().getFullYear() + 30}
+        startYear={moment(
+          newYear.plannedStartOn === '' ? undefined : newYear.plannedStartOn,
+        ).year()}
+        endYear={moment().year() + 30}
         reverse={false}
         name={'plannedEndOn'}>
         End Date

@@ -1,8 +1,8 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
-import { queryClient } from '../../../../plugins/react-query';
+import usePickedRole from '../../../../hooks/usePickedRole';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { SelectData, ValueType } from '../../../../types';
@@ -26,24 +26,47 @@ export default function EvaluationSettings({
   evaluationId,
 }: IEvaluationProps) {
   const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
 
   const instructors = instructordeploymentStore.getInstructorsDeployedInAcademy(
-    user?.academy.id + '',
+    picked_role?.academy_id + '',
   ).data?.data.data;
 
-  const [settings, setSettings] = useState<IEvaluationApproval>({
+  const initialState = {
     approver_ids: '',
-    evaluation_id: evaluationId || getLocalStorageData('evaluationId'),
+    evaluation_id: getLocalStorageData('evaluationId') || evaluationId,
     id: '',
     reviewer_ids: '',
     marker_ids: user?.id.toString() || '',
     to_be_approved: false,
     to_be_reviewed: false,
-  });
+  };
+
+  useEffect(() => {
+    setSettings({
+      approver_ids: '',
+      evaluation_id: getLocalStorageData('evaluationId') || evaluationId,
+      id: '',
+      reviewer_ids: '',
+      marker_ids: user?.id.toString() || '',
+      to_be_approved: false,
+      to_be_reviewed: false,
+    });
+  }, [evaluationId, user?.id]);
+
+  const [settings, setSettings] = useState<IEvaluationApproval>(initialState);
 
   function handleChange({ name, value }: ValueType) {
-    setSettings((settings) => ({ ...settings, [name]: value.toString() }));
+    setSettings({ ...settings, [name]: value.toString() });
+
+    setLocalStorageData('evaluationSettings', { ...settings, [name]: value.toString() });
   }
+
+  useEffect(() => {
+    const cachedData: IEvaluationApproval =
+      getLocalStorageData('evaluationSettings') || {};
+    setSettings(cachedData || {});
+  }, []);
 
   const { mutate } = evaluationStore.createEvaluationSettings();
 
@@ -53,11 +76,11 @@ export default function EvaluationSettings({
     mutate(settings, {
       onSuccess: () => {
         toast.success('Settings added', { duration: 5000 });
-        queryClient.invalidateQueries(['evaluationsByAcademyInstructor']);
-        localStorage.removeItem('evaluationId');
-        setLocalStorageData('currentStep', 0);
+        removeLocalStorageData('evaluationId');
         removeLocalStorageData('evaluationInfo');
-        // history.push('/dashboard/evaluations');
+        removeLocalStorageData('evaluationQuestions');
+        removeLocalStorageData('evaluationSettings');
+        setLocalStorageData('currentStep', 0);
         window.location.href = '/dashboard/evaluations';
       },
       onError: (error: any) => {
@@ -82,7 +105,7 @@ export default function EvaluationSettings({
           True
         </SwitchMolecule>
       </div>
-      {settings.to_be_reviewed && (
+      {settings?.to_be_reviewed && (
         <div className="pt-6">
           <DropdownMolecule
             isMulti
@@ -111,7 +134,7 @@ export default function EvaluationSettings({
           True
         </SwitchMolecule>
       </div>
-      {settings.to_be_approved && (
+      {settings?.to_be_approved && (
         <div className="pt-6">
           <DropdownMolecule
             isMulti

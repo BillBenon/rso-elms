@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
@@ -189,7 +190,7 @@ function IntakeStatusComponent({ values, handleChange, handleNext, disabled }: I
       <div className="pt-4">
         <DateMolecule
           showTime={false}
-          endYear={new Date().getFullYear() + 15}
+          endYear={moment().year() + 15}
           defaultValue={
             values.expected_end_date ? values.expected_end_date.toString() : ''
           }

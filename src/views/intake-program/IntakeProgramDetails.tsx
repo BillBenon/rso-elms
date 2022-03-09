@@ -27,7 +27,7 @@ import instructordeploymentStore from '../../store/instructordeployment.store';
 import { Link as Links, Privileges } from '../../types';
 import { StudentApproval } from '../../types/services/enrollment.types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
-import { UserType, UserView } from '../../types/services/user.types';
+import { UserView } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from '../programs/AcademicPrograms';
 import AddLevelToProgram from '../programs/AddLevelToProgram';
@@ -149,66 +149,57 @@ function IntakeProgramDetails() {
     },
   ];
 
-  if (user?.user_type !== UserType.STUDENT) {
+  tabs.push({
+    label: 'Program modules',
+    href: `${url}/modules`,
+    privilege: Privileges.CAN_ACCESS_INTAKE_PROGRAM_MODULES,
+  });
+
+  if (studentLevels?.data.data && studentLevels?.data.data.length > 0) {
     tabs.push({
-      label: 'Program modules',
-      href: `${url}/modules`,
-      privilege: Privileges.CAN_ACCESS_INTAKE_PROGRAM_MODULES,
+      label: 'Student Program levels',
+      href: `${url}/levels/${
+        studentLevels.data.data[0].academic_year_program_level.id || ''
+      }?priv=learn`,
+      privilege: Privileges.CAN_LEARN_IN_INTAKE_PROGRAM_LEVELS,
     });
   }
 
-  if (user?.user_type === UserType.STUDENT) {
-    if (studentLevels?.data.data && studentLevels?.data.data.length > 0) {
-      tabs.push({
-        label: 'Program levels',
-        href: `${url}/levels/${
-          studentLevels.data.data[0].academic_year_program_level.id || ''
-        }`,
-        privilege: Privileges.CAN_ACCESS_PROGRAM_LEVELS,
-      });
-    }
-  }
+  let instructorLevelsIds = instructorLevels?.data.data.map(
+    (instLvl) => instLvl.academic_year_program_intake_level?.id,
+  );
 
-  if (user?.user_type === UserType.INSTRUCTOR) {
-    let instructorLevelsIds = instructorLevels?.data.data.map(
-      (instLvl) => instLvl.academic_year_program_intake_level?.id,
-    );
+  const instructorProgLevels = getLevels?.filter((level) =>
+    instructorLevelsIds?.includes(level.id),
+  );
 
-    const instructorProgLevels = getLevels?.filter((level) =>
-      instructorLevelsIds?.includes(level.id),
-    );
+  // const programLevelsIds = getLevels.map((lvl) => lvl.academic_program_level.id);
 
-    // const programLevelsIds = getLevels.map((lvl) => lvl.academic_program_level.id);
-
-    // const instrLevels = instructorLevels?.data.data.filter((level) =>
-    //   programLevelsIds.includes(
-    //     level.academic_year_program_intake_level?.academic_program_level.id,
-    //   ),
-    // );
-    if (instructorProgLevels && instructorProgLevels?.length > 0) {
-      tabs.push({
-        label: 'Program levels',
-        href: `${url}/levels/${instructorProgLevels[0]?.id || ''}`,
-        privilege: Privileges.CAN_ACCESS_PROGRAM_LEVELS,
-      });
-    }
-  }
-
-  if (user?.user_type === UserType.ADMIN) {
+  // const instrLevels = instructorLevels?.data.data.filter((level) =>
+  //   programLevelsIds.includes(
+  //     level.academic_year_program_intake_level?.academic_program_level.id,
+  //   ),
+  // );
+  if (instructorProgLevels && instructorProgLevels?.length > 0) {
     tabs.push({
-      label: 'Approve students',
-      href: `${url}/approve`,
-      privilege: Privileges.CAN_APPROVE_STUDENT,
+      label: 'Instructor Program levels',
+      href: `${url}/levels/${instructorProgLevels[0]?.id || ''}?priv=teach`,
+      privilege: Privileges.CAN_TEACH_IN_INTAKE_PROGRAM_LEVELS,
     });
-
-    if (getLevels && getLevels?.length > 0) {
-      tabs.push({
-        label: 'Program levels',
-        href: `${url}/levels/${getLevels[0]?.id || ''}`,
-        privilege: Privileges.CAN_ACCESS_PROGRAM_LEVELS,
-      });
-    }
   }
+  if (getLevels && getLevels?.length > 0) {
+    tabs.push({
+      label: 'Manage Program levels',
+      href: `${url}/levels/${getLevels[0]?.id || ''}?priv=manage`,
+      privilege: Privileges.CAN_ACCESS_INTAKE_PROGRAM_LEVELS,
+    });
+  }
+
+  tabs.push({
+    label: 'Approve students',
+    href: `${url}/approve`,
+    privilege: Privileges.CAN_APPROVE_STUDENT,
+  });
 
   const handleClose = () => {
     history.goBack();
@@ -232,9 +223,7 @@ function IntakeProgramDetails() {
         <TabNavigation
           tabs={tabs}
           headerComponent={
-            user?.user_type === UserType.ADMIN &&
-            getLevels.length === 0 &&
-            unaddedLevels?.length !== 0 ? (
+            getLevels.length === 0 && unaddedLevels?.length !== 0 ? (
               <Permission privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}>
                 <div className="text-right">
                   <Link
@@ -283,21 +272,20 @@ function IntakeProgramDetails() {
                                 {programData.subTitle?.replaceAll('_', ' ')}
                               </Heading>
                             </div>
-                            {user?.user_type === UserType.ADMIN ? (
-                              <Permission privilege={Privileges.CAN_MODIFY_PROGRAM}>
-                                <div className="mt-4 flex space-x-4">
-                                  <Button
-                                    onClick={() =>
-                                      history.push(
-                                        `/dashboard/intakes/programs/${intakeId}/${id}/edit`,
-                                      )
-                                    }>
-                                    Edit program
-                                  </Button>
-                                  <Button styleType="outline">Change Status</Button>
-                                </div>
-                              </Permission>
-                            ) : null}
+
+                            <Permission privilege={Privileges.CAN_MODIFY_PROGRAM}>
+                              <div className="mt-4 flex space-x-4">
+                                <Button
+                                  onClick={() =>
+                                    history.push(
+                                      `/dashboard/intakes/programs/${intakeId}/${id}/edit`,
+                                    )
+                                  }>
+                                  Edit program
+                                </Button>
+                                {/* <Button styleType="outline">Change Status</Button> */}
+                              </div>
+                            </Permission>
                           </CommonCardMolecule>
                         </div>
                         <div className="flex flex-col gap-8 z-0">
@@ -307,7 +295,6 @@ function IntakeProgramDetails() {
                             data={students}
                             totalUsers={students.length || 0}
                             dataLabel={''}
-                            userType={user?.user_type}
                             isLoading={studLoading}
                             showSidebar={showSidebar.showStudent}
                             handleShowSidebar={() =>
@@ -317,7 +304,8 @@ function IntakeProgramDetails() {
                               })
                             }
                           />
-                          {user?.user_type === UserType.ADMIN ? (
+                          <Permission
+                            privilege={Privileges.CAN_ENROLL_STUDENTS_ON_PROGRAM}>
                             <EnrollStudentIntakeProgram
                               showSidebar={showSidebar.enrollStudent}
                               existing={studentsProgram?.data.data || []}
@@ -328,7 +316,7 @@ function IntakeProgramDetails() {
                                 })
                               }
                             />
-                          ) : null}
+                          </Permission>
 
                           <EnrollRetakingStudents
                             showSidebar={showSidebar.enrollRetaking}
@@ -351,7 +339,6 @@ function IntakeProgramDetails() {
                               data={instructors}
                               totalUsers={instructors.length || 0}
                               dataLabel={''}
-                              userType={user?.user_type}
                               isLoading={instLoading}
                               showSidebar={showSidebar.showInstructor}
                               handleShowSidebar={() =>

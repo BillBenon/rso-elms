@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
@@ -6,7 +7,7 @@ import Button from '../../components/Atoms/custom/Button';
 import DateMolecule from '../../components/Molecules/input/DateMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import RadioMolecule from '../../components/Molecules/input/RadioMolecule';
-import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { queryClient } from '../../plugins/react-query';
 import academicyearsStore from '../../store/administration/academicyears.store';
 import { ParamType, ValueType } from '../../types';
@@ -24,9 +25,9 @@ interface IUpdateYearProps {
 export default function UpdateAcademicYear({ academicYears }: IUpdateYearProps) {
   const history = useHistory();
   const { id } = useParams<ParamType>();
-  const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
   const [years, setYears] = useState<ICreateAcademicYear>({
-    academyId: user?.academy.id.toString() || '',
+    academyId: picked_role?.academy_id + '',
     name: '',
     id: '',
     actualAtartOn: '',
@@ -51,9 +52,11 @@ export default function UpdateAcademicYear({ academicYears }: IUpdateYearProps) 
   function submitForm(e: FormEvent) {
     e.preventDefault();
 
-    let name = `YEAR ${new Date(years.plannedStartOn).getFullYear()}-${new Date(
-      years.plannedEndOn,
-    ).getFullYear()}`;
+    let name = `YEAR ${moment(
+      years.plannedStartOn === '' ? undefined : years.plannedStartOn,
+    ).year()}-${moment(
+      years.plannedEndOn === '' ? undefined : years.plannedEndOn,
+    ).year()}`;
     let data = {
       ...years,
       name,
@@ -78,8 +81,8 @@ export default function UpdateAcademicYear({ academicYears }: IUpdateYearProps) 
       </InputMolecule>
 
       <DateMolecule
-        startYear={new Date().getFullYear()}
-        endYear={new Date().getFullYear() + 100}
+        startYear={moment().year() - 30}
+        endYear={moment().year() + 30}
         reverse={false}
         defaultValue={years.plannedStartOn}
         handleChange={handleChange}
@@ -90,8 +93,10 @@ export default function UpdateAcademicYear({ academicYears }: IUpdateYearProps) 
       <DateMolecule
         handleChange={handleChange}
         defaultValue={years.plannedEndOn}
-        startYear={new Date(years.plannedStartOn).getFullYear()}
-        endYear={new Date().getFullYear() + 100}
+        startYear={moment(
+          years.plannedStartOn === '' ? undefined : years.plannedStartOn,
+        ).year()}
+        endYear={moment().year() + 30}
         reverse={false}
         name={'plannedEndOn'}>
         End Date

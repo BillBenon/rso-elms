@@ -24,6 +24,7 @@ import Tooltip from '../../components/Molecules/Tooltip';
 import NewIntake from '../../components/Organisms/intake/NewIntake';
 import UpdateIntake from '../../components/Organisms/intake/UpdateIntake';
 import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import {
@@ -81,6 +82,7 @@ export default function Intakes() {
       !!authUserId && user?.user_type === UserType.STUDENT,
     ).data?.data.data || [];
 
+  const picked_role = usePickedRole();
   const {
     isSuccess,
     isError,
@@ -95,7 +97,7 @@ export default function Intakes() {
     : user?.user_type === UserType.INSTRUCTOR
     ? enrollmentStore.getInstructorIntakePrograms(instructorInfo?.id + '')
     : getIntakesByAcademy(
-        registrationControlId || user?.academy.id.toString()!,
+        registrationControlId || picked_role?.academy_id + '',
         !!registrationControlId,
         true,
       );
@@ -209,7 +211,7 @@ export default function Intakes() {
                 }
                 handleSearch={handleSearch}>
                 {registrationControlId && (
-                  <Permission privilege={Privileges.CAN_ACCESS_INTAKES}>
+                  <Permission privilege={Privileges.CAN_CREATE_INTAKE}>
                     <Link to={`${url}/${registrationControlId}/add-intake`}>
                       <Button>Add Intake</Button>
                     </Link>
@@ -245,6 +247,15 @@ export default function Intakes() {
                                 </Heading>
                               </div>
                             </div>
+                            <Permission privilege={Privileges.CAN_MODIFY_INTAKE}>
+                              <div className="mt-4 space-x-4">
+                                <Link
+                                  to={`${url}/${intake.id}/edit/${intake.registrationControlId}`}>
+                                  <Button>Edit Intake</Button>
+                                </Link>
+                                {/* <Button styleType="outline">Change Status</Button> */}
+                              </div>
+                            </Permission>
                           </CommonCardMolecule>
                         </div>
                       }
@@ -264,15 +275,6 @@ export default function Intakes() {
                             {intake.footerTitle}
                           </Heading>
                         </div>
-                        <Permission privilege={Privileges.CAN_MODIFY_INTAKE}>
-                          <div className="mt-4 space-x-4">
-                            <Link
-                              to={`${url}/${intake.id}/edit/${intake.registrationControlId}`}>
-                              <Button>Edit Intake</Button>
-                            </Link>
-                            <Button styleType="outline">Change Status</Button>
-                          </div>
-                        </Permission>
                       </div>
                     </Tooltip>
                   </div>

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
@@ -8,7 +9,7 @@ import DateMolecule from '../../components/Molecules/input/DateMolecule';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import SwitchMolecule from '../../components/Molecules/input/SwitchMolecule';
-import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { queryClient } from '../../plugins/react-query';
 import academicyearsStore from '../../store/administration/academicyears.store';
 import { intakeStore } from '../../store/administration/intake.store';
@@ -26,7 +27,7 @@ import { NewIntakePeriod } from './NewIntakePeriod';
 
 export default function NewIntakeProgramLevel() {
   const history = useHistory();
-
+  const picked_role = usePickedRole();
   const [success, setSuccess] = useState(false);
 
   const { id: programId, intakeProg } = useParams<IntakeProgParam>();
@@ -39,14 +40,13 @@ export default function NewIntakeProgramLevel() {
     (pg) => !getLevels.map((lv) => lv.academic_program_level.id).includes(pg.id),
   );
 
-  const { user } = useAuthenticator();
   const intakes = intakeStore.getIntakesByProgram(programId).data?.data.data;
 
   const intakeProgram = intakes?.find((intpr) => intpr.id === intakeProg);
 
   const academicYears =
-    academicyearsStore.fetchAcademicYears(user?.academy.id.toString() || '').data?.data
-      .data || [];
+    academicyearsStore.fetchAcademicYears(picked_role?.academy_id + '').data?.data.data ||
+    [];
 
   const { data: instructorsProgram, isLoading: instLoading } =
     intakeProgramStore.getInstructorsByIntakeProgram(intakeProg);
@@ -111,6 +111,8 @@ export default function NewIntakeProgramLevel() {
     });
   }, [intakeProgram]);
 
+  let academic_year = academicYears.find((yr) => yr.id == values.academic_year_id);
+
   return (
     <div className="p-10 w-3/5">
       <Heading fontWeight="semibold" fontSize="2xl" className="pb-8">
@@ -161,14 +163,12 @@ export default function NewIntakeProgramLevel() {
                     Academic Year
                   </DropdownMolecule>
                   <DateMolecule
-                    startYear={new Date(
-                      academicYears.find((yr) => yr.id == values.academic_year_id)
-                        ?.planned_start_on || '',
-                    ).getFullYear()}
-                    endYear={new Date(
-                      academicYears.find((yr) => yr.id == values.academic_year_id)
-                        ?.planned_end_on || '',
-                    ).getFullYear()}
+                    startYear={moment(
+                      academic_year?.planned_start_on === ''
+                        ? undefined
+                        : academic_year?.planned_start_on,
+                    ).year()}
+                    endYear={moment(academic_year?.planned_end_on).year()}
                     handleChange={handleChange}
                     reverse={false}
                     name="planed_start_on">
@@ -176,11 +176,12 @@ export default function NewIntakeProgramLevel() {
                   </DateMolecule>
                   <div className="pt-4">
                     <DateMolecule
-                      startYear={new Date(values.planed_start_on).getFullYear()}
-                      endYear={new Date(
-                        academicYears.find((yr) => yr.id == values.academic_year_id)
-                          ?.planned_end_on || '',
-                      ).getFullYear()}
+                      startYear={moment(
+                        values.planed_start_on === ''
+                          ? undefined
+                          : values.planed_start_on,
+                      ).year()}
+                      endYear={moment(academic_year?.planned_end_on).year()}
                       handleChange={handleChange}
                       name="planed_end_on">
                       End Date

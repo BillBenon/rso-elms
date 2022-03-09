@@ -19,10 +19,8 @@ import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavig
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import UpdateModuleForm from '../../components/Organisms/forms/modules/UpdateModuleForm';
 import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubjectForm';
-import useAuthenticator from '../../hooks/useAuthenticator';
 import { moduleStore } from '../../store/administration/modules.store';
 import { Link, ParamType, Privileges } from '../../types';
-import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ModuleEvaluations from '../evaluation/ModuleEvaluations';
 import ModuleMaterials from '../module-material/ModuleMaterials';
@@ -42,7 +40,6 @@ export default function ModuleDetails() {
   const history = useHistory();
   let moduleData: IProgramData | undefined;
   const module = moduleStore.getModuleById(id).data?.data.data;
-  const { user } = useAuthenticator();
 
   let tabs: TabType[] = [];
   // {
@@ -175,30 +172,28 @@ export default function ModuleDetails() {
               </button>
             </div>
 
-            {user?.user_type === UserType.ADMIN && (
-              <>
-                {route == 'SUBJECTS' ? (
-                  <div className="flex gap-3">
-                    <Button
-                      onClick={() => {
-                        history.push(`/dashboard/modules/${id}/add-subject`);
-                      }}>
-                      Add new subject
-                    </Button>
-                  </div>
-                ) : (
-                  //  : route == 'SYLLABUS' ? (
-                  //   <div className="flex gap-3">
-                  //     <Button onClick={() => history.push(`${url}/syllabus/add-syllabus`)}>
-                  //       Add new Syllabus
-                  //     </Button>
-                  //   </div>
-                  // )
-                  <></>
-                )}
-              </>
+            {route == 'SUBJECTS' && (
+              <Permission privilege={Privileges.CAN_CREATE_SUBJECTS}>
+                <div className="flex gap-3">
+                  <Button
+                    onClick={() => {
+                      history.push(`/dashboard/modules/${id}/add-subject`);
+                    }}>
+                    Add new subject
+                  </Button>
+                </div>
+              </Permission>
             )}
-            {user?.user_type === UserType.ADMIN && route == 'PREREQS' && (
+            {/* {route == 'SYLLABUS' && (
+              <Permission privilege={Privileges.CAN_CREATE_SYLLABUS}>
+              <div className="flex gap-3">
+                   <Button onClick={() => history.push(`${url}/syllabus/add-syllabus`)}>
+                     Add new Syllabus
+                   </Button>
+                 </div>
+              </Permission>
+            )} */}
+            {route == 'PREREQS' && (
               <Permission privilege={Privileges.CAN_CREATE_MODULE_PREREQUISITES}>
                 <div className="flex gap-3">
                   <Button
@@ -212,12 +207,14 @@ export default function ModuleDetails() {
                 </div>
               </Permission>
             )}
-            {user?.user_type === UserType.INSTRUCTOR && route == 'MATERIALS' && (
-              <div className="flex gap-3">
-                <Button onClick={() => history.push(`${url}/materials/add-material`)}>
-                  Add new Material
-                </Button>
-              </div>
+            {route == 'MATERIALS' && (
+              <Permission privilege={Privileges.CAN_CREATE_MODULE_MATERIALS}>
+                <div className="flex gap-3">
+                  <Button onClick={() => history.push(`${url}/materials/add-material`)}>
+                    Add new Material
+                  </Button>
+                </div>
+              </Permission>
             )}
           </div>
         </div>

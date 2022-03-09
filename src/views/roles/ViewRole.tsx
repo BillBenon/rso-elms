@@ -85,6 +85,12 @@ export default function ViewRole() {
               </div>
               <div className="pt-3">
                 <Heading fontSize="lg" color="txt-secondary">
+                  Role type
+                </Heading>
+                <p className="pt-2">{role.type}</p>
+              </div>
+              <div className="pt-3">
+                <Heading fontSize="lg" color="txt-secondary">
                   Role description
                 </Heading>
                 <p className="pt-2"> {role.name} </p>

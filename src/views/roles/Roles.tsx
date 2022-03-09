@@ -21,24 +21,21 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewRole from '../../components/Organisms/forms/roles/NewRole';
 import UpdateRole from '../../components/Organisms/forms/roles/UpdateRole';
 import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { roleStore } from '../../store/administration';
 import { Privileges, RoleRes } from '../../types';
 import { ActionsType } from '../../types/services/table.types';
 import { UserType } from '../../types/services/user.types';
-import cookie from '../../utils/cookie';
 
-interface FilteredRoles extends Pick<RoleRes, 'id' | 'name' | 'description' | 'status'> {}
+interface FilteredRoles
+  extends Pick<RoleRes, 'id' | 'name' | 'description' | 'type' | 'status'> {}
 
 export default function Roles() {
   const { url, path } = useRouteMatch();
   const [roles, setRoles] = useState<FilteredRoles[]>();
   const history = useHistory();
   const { user } = useAuthenticator();
-  let picked_role_cookie = cookie.getCookie('user_role') || '';
-
-  const picked_role = user?.user_roles?.find(
-    (role) => role.id + '' === picked_role_cookie,
-  );
+  const picked_role = usePickedRole();
   const location = useLocation();
 
   // const { user } = useAuthenticator();
@@ -57,7 +54,9 @@ export default function Roles() {
         user?.user_type === UserType.SUPER_ADMIN ||
         element?.academy_id === picked_role?.academy_id
       ) {
-        filterdData.push(_.pick(element, ['id', 'name', 'description', 'status']));
+        filterdData.push(
+          _.pick(element, ['id', 'name', 'description', 'type', 'status']),
+        );
       }
     });
 

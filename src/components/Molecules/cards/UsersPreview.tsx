@@ -2,7 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { ReactNode } from 'react';
 
-import { UserType, UserView } from '../../../types/services/user.types';
+import { UserView } from '../../../types/services/user.types';
 import Avatar from '../../Atoms/custom/Avatar';
 import Icon from '../../Atoms/custom/Icon';
 import Heading from '../../Atoms/Text/Heading';
@@ -20,7 +20,6 @@ type IUserPreview = {
   children?: ReactNode;
   dataLabel: string;
   isLoading: boolean;
-  userType?: UserType;
   showSidebar: boolean;
   handleShowSidebar: () => void;
 };
@@ -97,18 +96,6 @@ export default function UsersPreview({
           label={label}
           data={data}
           unselectAll={!showSidebar}
-          // selectorActions={
-          //   userType !== UserType.INSTRUCTOR
-          //     ? [
-          //         {
-          //           name: 'Change Status',
-          //           handleAction: (_data?: string[]) => {
-          //             // alert(`changing status ${data}`);
-          //           },
-          //         },
-          //       ]
-          //     : undefined
-          // }
           dataLabel={dataLabel}
           isLoading={isLoading}
         />

@@ -37,8 +37,17 @@ export default function Ranks() {
 
   useEffect(() => {
     // filter data to display
+    data?.data.data.sort((a, b) => a.priority - b.priority);
     const filterdData = data?.data.data.map((rank) =>
-      _.pick(rank, ['id', 'name', 'description', 'category', 'institution_id']),
+      _.pick(rank, [
+        'id',
+        'abbreviation',
+        'name',
+        'description',
+        'category',
+        'priority',
+        'institution_id',
+      ]),
     );
 
     data?.data.data && setRanks(filterdData);

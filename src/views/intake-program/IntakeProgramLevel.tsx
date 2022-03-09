@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
+import {
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+  useParams,
+  useRouteMatch,
+} from 'react-router';
 import { Link } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -7,7 +14,7 @@ import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
-import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
+import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import useInstructorLevels from '../../hooks/getInstructorLevels';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import intakeProgramStore, {
@@ -22,7 +29,6 @@ import {
   IntakeProgParam,
   LevelIntakeProgram,
 } from '../../types/services/intake-program.types';
-import { UserType } from '../../types/services/user.types';
 import LevelPeriod from '../classes/LevelPeriod';
 import EnrollStudent from './EnrollStudent';
 import IntakeLevelModule from './IntakeLevelModule';
@@ -31,6 +37,8 @@ import { NewIntakePeriod } from './NewIntakePeriod';
 function IntakeProgramLevel() {
   const history = useHistory();
   const { path, url } = useRouteMatch();
+  const { search } = useLocation();
+  const priv = new URLSearchParams(search).get('priv');
   const { intakeProg, intakeId, id } = useParams<IntakeProgParam>();
   const [instLevels, setInstLevels] = useState<LevelIntakeProgram[]>([]);
 
@@ -68,24 +76,23 @@ function IntakeProgramLevel() {
     studIntkProgstud?.id + '',
     !!studIntkProgstud?.id,
   );
-
-  const tabs =
-    user?.user_type === UserType.STUDENT
+  const tabs: TabType[] =
+    priv === 'learn'
       ? studentLevels?.data.data.map((level) => ({
           label: `${level.academic_year_program_level.academic_program_level.level.name}`,
-          href: `${url}/${level.academic_year_program_level.id}`,
+          href: `${url}/${level.academic_year_program_level.id}?priv=learn`,
         })) || []
-      : user?.user_type === UserType.INSTRUCTOR
+      : priv === 'teach'
       ? instLevels.map((level) => ({
           label: `${level.academic_program_level.level.name}`,
-          href: `${url}/${level.id}`,
+          href: `${url}/${level.id}?priv=teach`,
         })) || []
-      : (getLevels &&
-          getLevels.data.data.map((level) => ({
-            label: `${level.academic_program_level.level.name}`,
-            href: `${url}/${level.id}`,
-          }))) ||
-        [];
+      : priv === 'manage'
+      ? getLevels?.data.data.map((level) => ({
+          label: `${level.academic_program_level.level.name}`,
+          href: `${url}/${level.id}?priv=manage`,
+        })) || []
+      : [];
 
   return (
     <>
@@ -106,7 +113,7 @@ function IntakeProgramLevel() {
         />
       ) : (
         <>
-          {user?.user_type === UserType.ADMIN && unaddedLevels?.length !== 0 ? (
+          {unaddedLevels?.length !== 0 ? (
             <Permission privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}>
               <div className="text-right">
                 <Link

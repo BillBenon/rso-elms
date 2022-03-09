@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import RightSidebar from '../../components/Organisms/RightSidebar';
-import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { queryClient } from '../../plugins/react-query';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { getProgramsByIntake } from '../../store/administration/intake.store';
@@ -33,12 +33,11 @@ function EnrollStudentIntakeProgram<T>({
   handleShowSidebar,
 }: ProgramEnrollmentProps<T>) {
   const { intakeProg, intakeId } = useParams<IntakeProgParam>();
-
-  const { user } = useAuthenticator();
+  const picked_role = usePickedRole();
 
   const { data: studentsInAcademy, isLoading } =
     enrollmentStore.getStudentAcademyAndEnrollmentStatus(
-      user?.academy.id + '',
+      picked_role?.academy_id + '',
       StudentApproval.APPROVED,
     );
 
