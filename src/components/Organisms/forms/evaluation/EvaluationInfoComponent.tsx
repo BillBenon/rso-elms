@@ -7,7 +7,10 @@ import { useLocation } from 'react-router-dom';
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { classStore } from '../../../../store/administration/class.store';
+import enrollmentStore from '../../../../store/administration/enrollment.store';
 import intakeProgramStore from '../../../../store/administration/intake-program.store';
+import { moduleStore } from '../../../../store/administration/modules.store';
+import { subjectStore } from '../../../../store/administration/subject.store';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { SelectData, ValueType } from '../../../../types';
@@ -19,6 +22,7 @@ import {
   IEvaluationCreate,
   IEvaluationInfo,
   IEvaluationProps,
+  IEvaluationSectionBased,
   IEvaluationStatus,
   IEvaluationTypeEnum,
   IQuestionaireTypeEnum,
@@ -38,8 +42,18 @@ import Tiptap from '../../../Molecules/editor/Tiptap';
 import DateMolecule from '../../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
+import MultiselectMolecule from '../../../Molecules/input/MultiselectMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
+
+const initialState: IEvaluationSectionBased = {
+  evaluation_id: '',
+  instructor_subject_assignment: '',
+  intake_program_level_module: '',
+  questionaire_setting_status: IEvaluationStatus.PENDING,
+  section_total_marks: 0,
+  subject_academic_year_period: '',
+};
 
 export default function EvaluationInfoComponent({
   handleNext,
@@ -51,6 +65,8 @@ export default function EvaluationInfoComponent({
     () => new URLSearchParams(search).get('prd') || '',
     [search],
   );
+  const programId = useMemo(() => new URLSearchParams(search).get('prg') || '', [search]);
+
   const levelId = useMemo(() => new URLSearchParams(search).get('lvl') || '', [search]);
   const subjectId = useMemo(
     () => new URLSearchParams(search).get('subj') || '',
@@ -60,13 +76,17 @@ export default function EvaluationInfoComponent({
   const { user } = useAuthenticator();
   const picked_role = usePickedRole();
   const [timeDifference, setTimeDifference] = useState(0);
+  const [currentModule, setCurrentModule] = useState('');
+  const [currentSubject, setCurrentSubject] = useState('');
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
     .data?.data.data[0];
+  const instructors = enrollmentStore.getInstructorsBySubject(currentSubject) || [];
 
   const { data: studentsProgram } = intakeProgramStore.getStudentsByIntakeProgramLevel(
     levelId || '',
   );
+  const subjects = subjectStore.getSubjectsByModule(currentModule.toString());
 
   const [students, setStudents] = useState<SelectData[]>([]);
   useEffect(() => {
@@ -82,8 +102,14 @@ export default function EvaluationInfoComponent({
   }, [studentsProgram]);
 
   const { data: classes } = classStore.getClassByPeriod(intakePeriodId + '');
+  const modules = moduleStore.getModulesByProgram(programId);
 
   const cachedData: IEvaluationInfo = getLocalStorageData('evaluationInfo') || {};
+  const [evaluationModule, setEvaluationModule] = useState<IEvaluationSectionBased[]>([]);
+
+  useEffect(() => {
+    setEvaluationModule([initialState]);
+  }, []);
 
   const [details, setDetails] = useState<IEvaluationCreate>({
     access_type: cachedData?.access_type || IAccessTypeEnum.PUBLIC,
@@ -192,6 +218,7 @@ export default function EvaluationInfoComponent({
 
   const { mutate } = evaluationStore.createEvaluation();
   const { mutateAsync } = evaluationStore.updateEvaluation();
+  const { mutate: mutateSectionBased } = evaluationStore.createSectionBasedEvaluation();
 
   function handleChange({ name, value }: ValueType) {
     if (name === ('due_on' || 'allow_submission_time') && typeof value === 'string') {
@@ -234,6 +261,43 @@ export default function EvaluationInfoComponent({
     }));
   }
 
+  function handleModuleChange(index: number, { name, value }: ValueType) {
+    let evaluationModuleInfo = [...evaluationModule];
+    evaluationModuleInfo[index] = { ...evaluationModuleInfo[index], [name]: value };
+    setEvaluationModule(evaluationModuleInfo);
+
+    if (name === 'intake_program_level_module') {
+      setCurrentModule(value.toString());
+      return;
+    }
+
+    if (name === 'subject_academic_year_period') {
+      setCurrentSubject(value.toString());
+      return;
+    }
+  }
+
+  function handleAddModule() {
+    let newModule = initialState;
+    let modulesClone = [...evaluationModule];
+    modulesClone.push(newModule);
+
+    setEvaluationModule(modulesClone);
+  }
+
+  function handleRemoveModule(index: number) {
+    let evaluationModulesClone = [...evaluationModule];
+
+    if (evaluationModulesClone.length === 1) {
+      toast.error('You must add at least one module');
+
+      return;
+    }
+
+    evaluationModulesClone.splice(index, 1);
+    setEvaluationModule(evaluationModulesClone);
+  }
+
   function handleEditorChange(editor: Editor) {
     if (details)
       setDetails((details) => ({ ...details, exam_instruction: editor.getHTML() }));
@@ -272,15 +336,31 @@ export default function EvaluationInfoComponent({
         },
         {
           onSuccess: (data) => {
-            toast.success('Evaluation created', { duration: 5000 });
-            setLocalStorageData('evaluationId', data.data.data.id);
-            if (details.questionaire_type === IQuestionaireTypeEnum.MANUAL) {
-              setLocalStorageData('currentStep', 2);
-              handleNext(2);
-            } else {
-              setLocalStorageData('currentStep', 1);
-              handleNext(1);
-            }
+            //update evaluation id
+            const modulesClone = [...evaluationModule];
+            console.log();
+
+            const newEvaluation = modulesClone.map((evalMod) => {
+              evalMod.evaluation_id = data.data.data.id;
+              return evalMod;
+            });
+
+            mutateSectionBased(newEvaluation, {
+              onSuccess: () => {
+                toast.success('Evaluation created', { duration: 5000 });
+                setLocalStorageData('evaluationId', data.data.data.id);
+                if (details.questionaire_type === IQuestionaireTypeEnum.MANUAL) {
+                  setLocalStorageData('currentStep', 2);
+                  handleNext(2);
+                } else {
+                  setLocalStorageData('currentStep', 1);
+                  handleNext(1);
+                }
+              },
+              onError: (error: any) => {
+                toast.error(error.response.data.message);
+              },
+            });
           },
           onError: (error: any) => {
             toast.error(error.response.data.data + '');
@@ -311,6 +391,87 @@ export default function EvaluationInfoComponent({
           options={getDropDownStatusOptions(IEvaluationTypeEnum)}>
           Evaluation type
         </SelectMolecule>
+
+        {IEvaluationTypeEnum.SECTION_BASED === details.evaluation_type && (
+          <div className="flex flex-col gap pt-[2.3rem]">
+            {evaluationModule.map((evalMod, index) => (
+              <div
+                className="flex flex-col gap-4 pb-10"
+                key={`${evalMod.instructor_subject_assignment} ${index}`}>
+                <div className="flex gap-6">
+                  <SelectMolecule
+                    width="36"
+                    value={evalMod?.intake_program_level_module}
+                    name="intake_program_level_module"
+                    placeholder="select module"
+                    loading={modules.isLoading}
+                    handleChange={(e: ValueType) => handleModuleChange(index, e)}
+                    options={getDropDownOptions({
+                      inputs: modules.data?.data.data || [],
+                    })}>
+                    Select module
+                  </SelectMolecule>
+
+                  <SelectMolecule
+                    width="36"
+                    value={evalMod?.subject_academic_year_period?.toString() || ''}
+                    name="subject_academic_year_period"
+                    loading={subjects.isLoading}
+                    placeholder="select subject"
+                    handleChange={(e: ValueType) => handleModuleChange(index, e)}
+                    options={getDropDownOptions({
+                      inputs: subjects.data?.data.data || [],
+                      labelName: ['title'],
+                    })}>
+                    Select subject
+                  </SelectMolecule>
+                </div>
+
+                <div className="flex gap-6 items-center">
+                  <SelectMolecule
+                    className="pb-3"
+                    width="36"
+                    value={evalMod?.instructor_subject_assignment}
+                    name="instructor_subject_assignment"
+                    placeholder="select instructor"
+                    loading={instructors.isLoading}
+                    handleChange={(e: ValueType) => handleModuleChange(index, e)}
+                    options={
+                      instructors.data?.data.data.length
+                        ? (instructors?.data.data.data.map((instr) => ({
+                            label: `${instr.user.first_name} ${instr.user.last_name}`,
+                            value: instr.id,
+                          })) as SelectData[])
+                        : []
+                    }>
+                    Select Instructor
+                  </SelectMolecule>
+
+                  <InputMolecule
+                    type="number"
+                    value={evalMod?.section_total_marks}
+                    name={'section_total_marks'}
+                    style={{ width: '5.5rem' }}>
+                    Total marks
+                  </InputMolecule>
+                </div>
+
+                <div>
+                  <Button styleType="outline" onClick={() => handleRemoveModule(index)}>
+                    Remove
+                  </Button>
+                </div>
+              </div>
+            ))}
+
+            <div className="pt-10 pb-[1rem]">
+              <Button styleType="outline" onClick={handleAddModule}>
+                Add module
+              </Button>
+            </div>
+          </div>
+        )}
+
         <RadioMolecule
           defaultValue={details?.access_type}
           className="pb-4"
@@ -341,18 +502,22 @@ export default function EvaluationInfoComponent({
         )}
 
         {details.access_type === IAccessTypeEnum.PUBLIC ? (
-          <DropdownMolecule
-            isMulti={details?.eligible_group === IEligibleClassEnum.MULTIPLE}
+          <MultiselectMolecule
             width="64"
             name="intake_level_class_ids"
             placeholder="Select class"
             handleChange={handleChange}
+            value={
+              details.intake_level_class_ids.split(',') ||
+              classes?.data.data.map((cl) => cl.id.toString()) ||
+              []
+            }
             options={getDropDownOptions({
               inputs: classes?.data.data || [],
               labelName: ['class_name'],
             })}>
             Select Class(es)
-          </DropdownMolecule>
+          </MultiselectMolecule>
         ) : (
           <DropdownMolecule
             isMulti

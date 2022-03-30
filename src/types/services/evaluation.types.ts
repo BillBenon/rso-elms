@@ -8,6 +8,9 @@ export enum IEvaluationTypeEnum {
   CAT = 'CAT',
   GROUP_WORK = 'GROUP_WORK',
   QUIZ = 'QUIZ',
+  RESEARCH_PAPER = 'RESEARCH_PAPER',
+  SECTION_BASED = 'SECTION_BASED',
+  DS_ASSESSMENT = 'DS_ASSESSMENT',
 }
 
 export enum IQuestionType {
@@ -154,6 +157,15 @@ export interface IEvaluationCreate {
   total_mark: number;
   strict: boolean;
 }
+
+export type IEvaluationSectionBased = {
+  evaluation_id: string;
+  instructor_subject_assignment: string;
+  intake_program_level_module: string;
+  questionaire_setting_status: IEvaluationStatus;
+  section_total_marks: number;
+  subject_academic_year_period: number | string;
+};
 
 export type IEvaluationFeedback = 'reviews' | 'approvals' | '';
 

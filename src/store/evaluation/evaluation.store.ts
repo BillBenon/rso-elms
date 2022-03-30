@@ -35,6 +35,10 @@ class EvaluationStore {
     return useMutation(evaluationService.createEvaluationSettings);
   }
 
+  createSectionBasedEvaluation() {
+    return useMutation(evaluationService.createSectionBasedEvaluation);
+  }
+
   // getEvaluations(academy: string, instructor: string) {
   //   return useQuery(['evaluationsByAcademyInstructor'], () =>
   //     evaluationService.fetchEvaluationsByInstructorAndAcademy(academy, instructor),

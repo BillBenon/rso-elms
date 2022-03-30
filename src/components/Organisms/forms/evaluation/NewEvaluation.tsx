@@ -27,7 +27,7 @@ export default function NewEvaluation() {
   const history = useHistory();
   const [evaluationId] = useState(new URLSearchParams(search).get('evaluation'));
 
-  if (location.href === location.origin + '/dashboard/evaluations/new') history.goBack();
+  // if (location.href === location.origin + '/dashboard/evaluations/new') history.goBack();
 
   function handleSubmit(step?: number) {
     setCurrentStep(currentStep + (step || 1));

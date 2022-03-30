@@ -13,6 +13,7 @@ import {
   IEvaluationInfoCollected,
   IEvaluationOwnership,
   IEvaluationQuestionsInfo,
+  IEvaluationSectionBased,
   InstructorEvaluationAppprovalStatus,
   IStudentAnswer,
   IStudentEvaluationStart,
@@ -234,6 +235,12 @@ class EvaluationService {
     student: IStudentEvaluationStart,
   ): Promise<AxiosResponse<Response<IStudentEvaluationStartInfo>>> {
     return await evaluationAxios.post('studentEvaluations/start', student);
+  }
+
+  public async createSectionBasedEvaluation(
+    evaluation: IEvaluationSectionBased[],
+  ): Promise<AxiosResponse<Response<IEvaluationSectionBased[]>>> {
+    return await evaluationAxios.post('evaluation-module-subjects/add', evaluation);
   }
 }
 
