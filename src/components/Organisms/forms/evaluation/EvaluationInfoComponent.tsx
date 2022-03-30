@@ -105,11 +105,15 @@ export default function EvaluationInfoComponent({
   const modules = moduleStore.getModulesByProgram(programId);
 
   const cachedData: IEvaluationInfo = getLocalStorageData('evaluationInfo') || {};
-  const [evaluationModule, setEvaluationModule] = useState<IEvaluationSectionBased[]>([]);
+  const cachedEvaluationModuleData: IEvaluationSectionBased[] =
+    getLocalStorageData('evaluationModule') || {};
+  const [evaluationModule, setEvaluationModule] = useState<IEvaluationSectionBased[]>(
+    cachedEvaluationModuleData || [],
+  );
 
-  useEffect(() => {
-    setEvaluationModule([initialState]);
-  }, []);
+  // useEffect(() => {
+  //   setEvaluationModule([initialState]);
+  // }, []);
 
   const [details, setDetails] = useState<IEvaluationCreate>({
     access_type: cachedData?.access_type || IAccessTypeEnum.PUBLIC,
@@ -145,6 +149,7 @@ export default function EvaluationInfoComponent({
 
   useEffect(() => {
     const cachedData: IEvaluationInfo = getLocalStorageData('evaluationInfo') || {};
+
     setDetails({
       access_type:
         evaluationInfo?.access_type || cachedData?.access_type || IAccessTypeEnum.PUBLIC,
@@ -265,6 +270,7 @@ export default function EvaluationInfoComponent({
     let evaluationModuleInfo = [...evaluationModule];
     evaluationModuleInfo[index] = { ...evaluationModuleInfo[index], [name]: value };
     setEvaluationModule(evaluationModuleInfo);
+    setLocalStorageData('evaluationModule', evaluationModuleInfo);
 
     if (name === 'intake_program_level_module') {
       setCurrentModule(value.toString());
@@ -351,6 +357,7 @@ export default function EvaluationInfoComponent({
                 setLocalStorageData('evaluationId', data.data.data.id);
                 if (details.questionaire_type === IQuestionaireTypeEnum.MANUAL) {
                   setLocalStorageData('currentStep', 2);
+                  setLocalStorageData('evaluationModule', newEvaluation);
                   handleNext(2);
                 } else {
                   setLocalStorageData('currentStep', 1);

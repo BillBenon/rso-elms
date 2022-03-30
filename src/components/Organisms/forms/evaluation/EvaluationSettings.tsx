@@ -80,6 +80,7 @@ export default function EvaluationSettings({
         removeLocalStorageData('evaluationInfo');
         removeLocalStorageData('evaluationQuestions');
         removeLocalStorageData('evaluationSettings');
+        removeLocalStorageData('evaluationModule');
         setLocalStorageData('currentStep', 0);
         window.location.href = '/dashboard/evaluations';
       },
