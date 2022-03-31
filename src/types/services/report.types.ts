@@ -58,3 +58,12 @@ export interface IOverallStudentPerformance {
   total_marks: number;
   promotion_status: PromotionStatus;
 }
+export interface IQuestionPerformance {
+  obtainedTotal: number;
+  question: string;
+  questionTotal: number;
+}
+export interface IEvaluationPerformance {
+  student: IStudent;
+  questionPoints: IQuestionPerformance[];
+}

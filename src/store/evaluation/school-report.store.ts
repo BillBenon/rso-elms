@@ -33,3 +33,9 @@ export function getStudentFullReport(studentId?: string) {
     { enabled: !!studentId },
   );
 }
+
+export function getEvaluationPerformance(evaluationId: string) {
+  return useQuery(['evaluation/performance/', evaluationId], () =>
+    reportService.getEvaluationPerformance(evaluationId),
+  );
+}

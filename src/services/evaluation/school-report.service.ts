@@ -2,7 +2,10 @@ import { AxiosResponse } from 'axios';
 
 import { evaluationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
-import { IOverallStudentPerformance } from '../../types/services/report.types';
+import {
+  IEvaluationPerformance,
+  IOverallStudentPerformance,
+} from '../../types/services/report.types';
 
 class SchoolReportService {
   public async getClassTermlyOverallReport(
@@ -29,6 +32,12 @@ class SchoolReportService {
     return await evaluationAxios.get(
       `/studentReport/getThreeTermSchoolReport/${studentId}`,
     );
+  }
+
+  public async getEvaluationPerformance(
+    evaluationId: string,
+  ): Promise<AxiosResponse<Response<IEvaluationPerformance[]>>> {
+    return await evaluationAxios.get(`/reports/evaluation/${evaluationId}`);
   }
 }
 
