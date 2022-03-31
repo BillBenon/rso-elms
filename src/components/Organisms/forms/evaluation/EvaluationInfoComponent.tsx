@@ -110,12 +110,12 @@ export default function EvaluationInfoComponent({
   ) || [initialState];
 
   const [evaluationModule, setEvaluationModule] = useState<IEvaluationSectionBased[]>(
-    cachedEvaluationModuleData,
+    [cachedEvaluationModuleData].flat(),
   );
 
   // useEffect(() => {
-  //   setEvaluationModule(cachedEvaluationModuleData);
-  // }, []);
+  //   console.log(evaluationModule);
+  // }, [evaluationModule]);
 
   const [details, setDetails] = useState<IEvaluationCreate>({
     access_type: cachedData?.access_type || IAccessTypeEnum.PUBLIC,
@@ -127,7 +127,10 @@ export default function EvaluationInfoComponent({
     instructor_id: instructorInfo?.id + '',
     intake_academic_year_period: intakePeriodId,
     allow_submission_time: cachedData?.allow_submission_time || '',
-    intake_level_class_ids: cachedData?.intake_level_class_ids || '',
+    intake_level_class_ids:
+      cachedData?.intake_level_class_ids ||
+      classes?.data.data.map((cl) => cl.id.toString()).join(',') ||
+      '',
     id: evaluationId || '',
     classification: cachedData?.classification || IEvaluationClassification.MODULE,
     content_format: cachedData?.content_format || IContentFormatEnum.DOC,
@@ -167,6 +170,7 @@ export default function EvaluationInfoComponent({
       intake_level_class_ids:
         evaluationInfo?.intake_level_class_ids ||
         cachedData?.intake_level_class_ids ||
+        classes?.data.data.map((cl) => cl.id.toString()).join(',') ||
         '',
       id: evaluationInfo?.id || cachedData?.id || '',
       classification:
@@ -461,7 +465,8 @@ export default function EvaluationInfoComponent({
                   <InputMolecule
                     type="number"
                     value={evalMod?.section_total_marks}
-                    name={'section_total_marks'}
+                    handleChange={(e: ValueType) => handleModuleChange(index, e)}
+                    name="section_total_marks"
                     style={{ width: '5.5rem' }}>
                     Total marks
                   </InputMolecule>
@@ -519,9 +524,9 @@ export default function EvaluationInfoComponent({
             placeholder="Select class"
             handleChange={handleChange}
             value={
-              details.intake_level_class_ids.split(',') ||
-              classes?.data.data.map((cl) => cl.id.toString()) ||
-              []
+              // details.intake_level_class_ids.split(',') || []
+              classes?.data.data.map((cl) => cl.id.toString()) || []
+              // []
             }
             options={getDropDownOptions({
               inputs: classes?.data.data || [],

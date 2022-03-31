@@ -44,6 +44,7 @@ export enum IEvaluationOwnership {
   FOR_REVIEWING = 'FOR_REVIEWING',
   FOR_APPROVING = 'FOR_APPROVING',
   FOR_MARKING = 'FOR_MARKING',
+  FOR_SETTING = 'FOR_SETTING',
 }
 
 export enum IEvaluationClassification {
@@ -109,7 +110,7 @@ export interface InstructorEvaluationAppprovalStatus extends Table {
   remarks: string;
 }
 
-export interface IEvaluationFeedbackInfo extends Table {
+export interface IEvaluationActionInfo extends Table {
   evaluation_reviewer_status: IEvaluationAppprovalStatus | IEvaluationAppprovalStatus;
   reviewer: { adminId: string; id: string };
   remarks: string;
@@ -167,7 +168,7 @@ export type IEvaluationSectionBased = {
   subject_academic_year_period: number | string;
 };
 
-export type IEvaluationFeedback = 'reviews' | 'approvals' | '';
+export type IEvaluationAction = 'reviews' | 'approvals' | 'section_based' | '';
 
 export interface IStudentEvaluations {
   undoneEvaluations: IEvaluationInfo[];

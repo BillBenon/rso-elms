@@ -8,6 +8,7 @@ import EvaluationContent from '../../components/Organisms/evaluation/EvaluationC
 import { queryClient } from '../../plugins/react-query';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
+import AddEvaluationQuestions from './AddEvaluationQuestions';
 import ApproveEvaluation from './ApproveEvaluation';
 import Submissions from './marking/Submissions';
 import ReviewEvaluation from './ReviewEvaluation';
@@ -67,6 +68,11 @@ export default function EvaluationDetails() {
           path={`${path}/approve`}
           render={() => <ApproveEvaluation evaluationId={id} />}
         />
+        <Route
+          exact
+          path={`${path}/add-questions`}
+          render={() => <AddEvaluationQuestions />}
+        />
         <TabNavigation tabs={tabs}>
           <div className="pt-8">
             <Route path={`${path}/submissions`} render={() => <Submissions />} />
@@ -80,7 +86,7 @@ export default function EvaluationDetails() {
             exact
             path={`${path}`}
             render={() => (
-              <EvaluationContent evaluationId={id} feedbackType="">
+              <EvaluationContent evaluationId={id} actionType="">
                 <div className="flex gap-4">
                   {/* <Button
                       styleType="outline"

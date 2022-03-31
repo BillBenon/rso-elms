@@ -2,7 +2,7 @@ import { useMutation, useQuery } from 'react-query';
 
 import { evaluationService } from '../../services/evaluation/evaluation.service';
 import {
-  IEvaluationFeedback,
+  IEvaluationAction,
   IEvaluationOwnership,
 } from '../../types/services/evaluation.types';
 
@@ -170,12 +170,12 @@ class EvaluationStore {
 
 export function getEvaluationFeedbacks(
   evaluationId: string,
-  feedbackType: IEvaluationFeedback,
+  actionType: IEvaluationAction,
 ) {
   return useQuery(
     ['evaluationApprovals', evaluationId],
-    () => evaluationService.getEvaluationFeedbacks(evaluationId, feedbackType),
-    { enabled: !!feedbackType },
+    () => evaluationService.getEvaluationFeedbacks(evaluationId, actionType),
+    { enabled: !!actionType },
   );
 }
 

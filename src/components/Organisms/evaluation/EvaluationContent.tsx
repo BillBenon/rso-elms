@@ -1,12 +1,13 @@
 import moment from 'moment';
 import React, { ReactNode, useEffect, useState } from 'react';
+import { Link, useRouteMatch } from 'react-router-dom';
 
 import { useGetInstructor } from '../../../hooks/useGetInstructor';
 import {
   evaluationStore,
   getEvaluationFeedbacks,
 } from '../../../store/evaluation/evaluation.store';
-import { IEvaluationFeedback } from '../../../types/services/evaluation.types';
+import { IEvaluationAction } from '../../../types/services/evaluation.types';
 import DisplayClasses from '../../../views/classes/DisplayClasses';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
 import MultipleChoiceAnswer from '../../../views/evaluation/MultipleChoiceAnswer';
@@ -17,21 +18,23 @@ import PopupMolecule from '../../Molecules/Popup';
 interface IProps {
   evaluationId: string;
   children: ReactNode;
-  feedbackType: IEvaluationFeedback;
+  actionType: IEvaluationAction;
 }
 
 export default function EvaluationContent({
   evaluationId,
   children,
-  feedbackType,
+  actionType,
 }: IProps) {
+  const { path } = useRouteMatch();
   const [showPopup, setShowPopup] = useState(false);
 
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId).data?.data || {};
 
-  const feedbacks = getEvaluationFeedbacks(evaluationId, feedbackType).data?.data
-    .data || [{ id: '', remarks: '', reviewer: { adminId: '' } }];
+  const feedbacks = getEvaluationFeedbacks(evaluationId, actionType).data?.data.data || [
+    { id: '', remarks: '', reviewer: { adminId: '' } },
+  ];
 
   const { data: evaluationQuestions, isLoading: loading } =
     evaluationStore.getEvaluationQuestions(evaluationId);
@@ -156,7 +159,7 @@ export default function EvaluationContent({
         evaluationInfo?.private_attendees.length > 0 ? (
           evaluationInfo?.private_attendees.map((attendee) => (
             <p className="py-2" key={attendee.id}>
-              we go
+              Attendees will go here
             </p>
           ))
         ) : (
@@ -168,7 +171,7 @@ export default function EvaluationContent({
       <div
         className={`${
           !loading && 'bg-main'
-        }  px-7 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
+        }  px-7 pt-4 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
         {evaluationQuestions?.data.data.length ? (
           evaluationQuestions?.data.data.map((question, index: number) =>
             question && question.multiple_choice_answers.length > 0 ? (
@@ -206,40 +209,48 @@ export default function EvaluationContent({
               </div>
             ),
           )
+        ) : actionType === 'section_based' ? (
+          <Link to={`${path}/add-questions`}>
+            <Button styleType="outline">Set questions</Button>
+          </Link>
         ) : (
-          <Heading fontSize="sm">No questions attached</Heading>
+          <Heading fontWeight="semibold" fontSize="sm">
+            No questions attached
+          </Heading>
         )}
       </div>
-      <Heading fontWeight="semibold" fontSize="base" className="pt-6">
-        Evaluation remarks
-      </Heading>
 
-      {feedbackType && (
-        <div
-          className={`${
-            !loading && 'bg-main'
-          }  px-7 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
-          <ul>
-            {feedbacks.map((feedback) => {
-              let instructorInfo = useGetInstructor(feedback?.reviewer?.adminId)?.user;
+      {actionType && (
+        <>
+          <Heading fontWeight="semibold" fontSize="base" className="pt-6">
+            Evaluation remarks
+          </Heading>
+          <div
+            className={`${
+              !loading && 'bg-main'
+            }  px-7 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
+            <ul>
+              {feedbacks.map((feedback) => {
+                let instructorInfo = useGetInstructor(feedback?.reviewer?.adminId)?.user;
 
-              return feedback.remarks !== null ? (
-                <div className="flex flex-col gap-2 pb-4" key={feedback.id}>
+                return feedback.remarks ? (
+                  <div className="flex flex-col gap-2 pb-4" key={feedback.id}>
+                    <Heading fontSize="base" fontWeight="semibold">
+                      {`${instructorInfo?.first_name} ${instructorInfo?.last_name}` || ''}
+                    </Heading>
+                    <Heading
+                      fontSize="sm"
+                      fontWeight="normal">{`=> ${feedback.remarks}`}</Heading>
+                  </div>
+                ) : (
                   <Heading fontSize="base" fontWeight="semibold">
-                    {`${instructorInfo?.first_name} ${instructorInfo?.last_name}` || ''}
+                    No remarks found
                   </Heading>
-                  <Heading
-                    fontSize="sm"
-                    fontWeight="normal">{`=> ${feedback.remarks}`}</Heading>
-                </div>
-              ) : (
-                <Heading fontSize="base" fontWeight="semibold">
-                  No remarks found
-                </Heading>
-              );
-            })}
-          </ul>
-        </div>
+                );
+              })}
+            </ul>
+          </div>
+        </>
       )}
     </div>
   );

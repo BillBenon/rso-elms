@@ -5,10 +5,10 @@ import { Response } from '../../types';
 import {
   IAddprivateAttendee,
   ICreateEvaluationQuestions,
+  IEvaluationAction,
+  IEvaluationActionInfo,
   IEvaluationApproval,
   IEvaluationCreate,
-  IEvaluationFeedback,
-  IEvaluationFeedbackInfo,
   IEvaluationInfo,
   IEvaluationInfoCollected,
   IEvaluationOwnership,
@@ -116,10 +116,10 @@ class EvaluationService {
 
   public async getEvaluationFeedbacks(
     evaluationId: string,
-    feedbackType: IEvaluationFeedback,
-  ): Promise<AxiosResponse<Response<IEvaluationFeedbackInfo[]>>> {
+    actionType: IEvaluationAction,
+  ): Promise<AxiosResponse<Response<IEvaluationActionInfo[]>>> {
     return await evaluationAxios.get(
-      `/evaluations/getByFeedback/${evaluationId}/feedback?feedback_type=${feedbackType}`,
+      `/evaluations/getByFeedback/${evaluationId}/feedback?feedback_type=${actionType}`,
     );
   }
 
@@ -240,7 +240,7 @@ class EvaluationService {
   public async createSectionBasedEvaluation(
     evaluation: IEvaluationSectionBased[],
   ): Promise<AxiosResponse<Response<IEvaluationSectionBased[]>>> {
-    return await evaluationAxios.post('evaluation-module-subjects/add', evaluation);
+    return await evaluationAxios.post('evaluation-module-subjects/add-bulk', evaluation);
   }
 }
 

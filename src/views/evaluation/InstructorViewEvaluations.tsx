@@ -55,11 +55,11 @@ export default function InstructorViewEvaluations() {
         questionaireType: evaluation.questionaire_type,
         id: evaluation.id,
         title: evaluation.name,
-        code: evaluation.evaluation_type,
+        code: evaluation.evaluation_type.replaceAll('_', ' '),
         description: `${evaluation.total_mark} marks`,
         status: {
           type: advancedTypeChecker(evaluation.evaluation_status),
-          text: evaluation.evaluation_status.replace('_', ' '),
+          text: evaluation.evaluation_status.replaceAll('_', ' '),
         },
       };
       formattedEvals.push(formattedEvaluations);
@@ -83,6 +83,10 @@ export default function InstructorViewEvaluations() {
 
       case IEvaluationOwnership.FOR_MARKING:
         history.push(`${path}/details/${id}/submissions`);
+        break;
+
+      case IEvaluationOwnership.FOR_SETTING:
+        history.push(`${path}/details/${id}/add-questions`);
         break;
 
       default:
