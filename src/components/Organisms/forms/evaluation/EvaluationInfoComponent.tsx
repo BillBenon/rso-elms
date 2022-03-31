@@ -105,14 +105,16 @@ export default function EvaluationInfoComponent({
   const modules = moduleStore.getModulesByProgram(programId);
 
   const cachedData: IEvaluationInfo = getLocalStorageData('evaluationInfo') || {};
-  const cachedEvaluationModuleData: IEvaluationSectionBased[] =
-    getLocalStorageData('evaluationModule') || {};
+  const cachedEvaluationModuleData: IEvaluationSectionBased[] = getLocalStorageData(
+    'evaluationModule',
+  ) || [initialState];
+
   const [evaluationModule, setEvaluationModule] = useState<IEvaluationSectionBased[]>(
-    cachedEvaluationModuleData || [],
+    cachedEvaluationModuleData,
   );
 
   // useEffect(() => {
-  //   setEvaluationModule([initialState]);
+  //   setEvaluationModule(cachedEvaluationModuleData);
   // }, []);
 
   const [details, setDetails] = useState<IEvaluationCreate>({
@@ -355,9 +357,11 @@ export default function EvaluationInfoComponent({
               onSuccess: () => {
                 toast.success('Evaluation created', { duration: 5000 });
                 setLocalStorageData('evaluationId', data.data.data.id);
-                if (details.questionaire_type === IQuestionaireTypeEnum.MANUAL) {
+                if (
+                  details.questionaire_type === IQuestionaireTypeEnum.MANUAL ||
+                  details.evaluation_type === IEvaluationTypeEnum.SECTION_BASED
+                ) {
                   setLocalStorageData('currentStep', 2);
-                  setLocalStorageData('evaluationModule', newEvaluation);
                   handleNext(2);
                 } else {
                   setLocalStorageData('currentStep', 1);
