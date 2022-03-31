@@ -98,7 +98,7 @@ export default function Multiselect({
               ref={input}
               value={searchQuery}
               onFocus={() => setisMenuOpen(true)}
-              placeholder={placeholder || `Select ${name}`}
+              placeholder={placeholder || `Select ${name.replaceAll('_', '')}`}
               onChange={handleSearch}
               id={selectId}
               onBlur={() => setisMenuOpen(false)}
