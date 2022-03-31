@@ -2,17 +2,14 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
-import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
-import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { getEvaluationPerformance } from '../../store/evaluation/school-report.store';
 import { ParamType } from '../../types';
 import { IPerformanceTable } from '../../types/services/report.types';
 
 export default function EvaluationPerformance() {
   const { id } = useParams<ParamType>();
-  // const evaluation = evaluationStore.getEvaluationById(id).data?.data;
   const { data, isLoading } = getEvaluationPerformance(id);
 
   const formattedData: IPerformanceTable[] = [];
@@ -43,7 +40,6 @@ export default function EvaluationPerformance() {
   console.log(formattedData);
   return (
     <div>
-      <Heading>Helllo people</Heading>
       {isLoading ? (
         <Loader />
       ) : data?.data.data.length === 0 ? (

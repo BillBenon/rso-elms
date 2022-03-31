@@ -76,13 +76,11 @@ export default function EvaluationDetails() {
           <div className="pt-8">
             <Route exact path={`${path}/unbeguns`} render={() => <Unbeguns />} />
           </div>
-          <div className="pt-8">
-            <Route
-              exact
-              path={`${path}/performance`}
-              render={() => <EvaluationPerformance />}
-            />
-          </div>
+          <Route
+            exact
+            path={`${path}/performance`}
+            render={() => <EvaluationPerformance />}
+          />
 
           <Route
             exact
