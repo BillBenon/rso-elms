@@ -8,7 +8,7 @@ export default function Select({
   handleChange,
   name,
   placeholder,
-  options = [],
+  options,
   className = '',
   disabled = false,
   required = true,
@@ -42,12 +42,17 @@ export default function Select({
   // when internal value changes, call handleChange
   useEffect(() => {
     handleChange({ name, value: internalValue });
-    if (internalValue.length > 0)
-      set_placeholder(
-        options.find((op) => op.value == internalValue)?.label || _placeholder,
-      );
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [internalValue]);
+
+  useEffect(() => {
+    if (internalValue.length > 0) {
+      set_placeholder(
+        options.find((op) => op.value == internalValue)?.label || 'Nothing to show',
+      );
+    }
+  }, [internalValue, options]);
 
   const handleSelect = (value: string) => {
     setInternalValue(value);

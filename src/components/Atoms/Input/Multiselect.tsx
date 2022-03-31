@@ -86,7 +86,7 @@ export default function Multiselect({
               }`}>
               {internalValue.map((val) => (
                 <div key={val} className="inline p-2 text-sm bg-gray-200 rounded">
-                  {options.find((op) => op.value === val)?.label || val}
+                  {options.find((op) => op.value == val)?.label || val}
                 </div>
               ))}
             </div>
