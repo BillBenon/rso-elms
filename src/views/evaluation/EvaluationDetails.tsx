@@ -29,7 +29,7 @@ export default function EvaluationDetails() {
       href: `${url}/submissions`,
     },
     {
-      label: 'Defiance/To start',
+      label: 'Not attempted',
       href: `${url}/unbeguns`,
     },
     {

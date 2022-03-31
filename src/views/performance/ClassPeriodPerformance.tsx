@@ -11,6 +11,7 @@ import useAuthenticator from '../../hooks/useAuthenticator';
 import { classStore } from '../../store/administration/class.store';
 import { getClassTermlyOverallReport } from '../../store/evaluation/school-report.store';
 import { ValueType } from '../../types';
+import { IPerformanceTable } from '../../types/services/report.types';
 import { UserType } from '../../types/services/user.types';
 import { calculateGrade } from '../../utils/school-report';
 import ClassFullYearDeliberation from './ClassFullYearDeliberation';
@@ -18,12 +19,6 @@ import ClassFullYearDeliberation from './ClassFullYearDeliberation';
 interface IParamType {
   levelId: string;
   classId: string;
-}
-
-interface IPerformanceTable {
-  id: string;
-  reg_number: string;
-  [index: string]: string | number;
 }
 
 export default function ClassPeriodPerformance() {
