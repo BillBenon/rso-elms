@@ -58,7 +58,10 @@ export type Status =
   | 'approved'
   | 'deleted'
   | 'rejected'
-  | 'dismissed';
+  | 'dismissed'
+  | 'completed'
+  | 'pending'
+  | 'error';
 
 export type Page =
   | 'personalDetails'

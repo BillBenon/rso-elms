@@ -13,6 +13,7 @@ import {
 } from '../../../../types/services/evaluation.types';
 import {
   getLocalStorageData,
+  removeLocalStorageData,
   setLocalStorageData,
 } from '../../../../utils/getLocalStorageItem';
 import Button from '../../../Atoms/custom/Button';
@@ -31,7 +32,6 @@ const multipleChoiceContent: IMultipleChoice = {
 
 export default function EvaluationQuestionComponent({
   handleGoBack,
-  handleNext,
   evaluationId,
 }: IEvaluationProps) {
   const { id: subjectId } = useParams<ParamType>();
@@ -198,8 +198,8 @@ export default function EvaluationQuestionComponent({
     mutate(questions, {
       onSuccess: () => {
         toast.success('Questions added', { duration: 5000 });
-        setLocalStorageData('currentStep', 2);
-        handleNext(1);
+
+        removeLocalStorageData('evaluationQuestions');
       },
       onError: (error: any) => {
         toast.error(error.response.data.message);
@@ -363,13 +363,6 @@ export default function EvaluationQuestionComponent({
       <div>
         <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
           Back
-        </Button>{' '}
-        <Button
-          styleType="text"
-          color="gray"
-          className="mt-6"
-          onClick={() => handleNext(1)}>
-          Skip
         </Button>
         <div className="pt-6 flex flex-col">
           <div className="pb-6">

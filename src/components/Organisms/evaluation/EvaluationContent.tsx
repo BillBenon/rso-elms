@@ -1,12 +1,18 @@
 import moment from 'moment';
 import React, { ReactNode, useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 import { useGetInstructor } from '../../../hooks/useGetInstructor';
+import { queryClient } from '../../../plugins/react-query';
+import { evaluationService } from '../../../services/evaluation/evaluation.service';
 import {
   evaluationStore,
   getEvaluationFeedbacks,
 } from '../../../store/evaluation/evaluation.store';
-import { IEvaluationAction } from '../../../types/services/evaluation.types';
+import {
+  IEvaluationAction,
+  IEvaluationStatus,
+} from '../../../types/services/evaluation.types';
 import DisplayClasses from '../../../views/classes/DisplayClasses';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
 import MultipleChoiceAnswer from '../../../views/evaluation/MultipleChoiceAnswer';
@@ -45,6 +51,18 @@ export default function EvaluationContent({
   useEffect(() => {
     setclasses(evaluationInfo?.intake_level_class_ids.split(',') || [' ']);
   }, [evaluationInfo?.intake_level_class_ids]);
+
+  function updateStatus(questionId: string, status: IEvaluationStatus) {
+    evaluationService
+      .updateQuestionChoosen(questionId, status)
+      .then(() => {
+        toast.success('Successfully updated');
+        queryClient.invalidateQueries(['evaluation/questions', evaluationId]);
+      })
+      .catch((error: any) => {
+        toast.error('Failed to update', error.message);
+      });
+  }
 
   return (
     <div>
@@ -215,16 +233,65 @@ export default function EvaluationContent({
                     {question.mark} marks
                   </Heading>
                 </div>
-                <div className="self-end">
-                  <button className={'bg-'} onClick={() => {}}>
+                <div className="self-end flex gap-4">
+                  <button
+                    className={
+                      question?.choosen_question === IEvaluationStatus.ACCEPTED
+                        ? 'right-button'
+                        : 'normal-button'
+                    }
+                    onClick={() => updateStatus(question.id, IEvaluationStatus.ACCEPTED)}>
                     <Icon
                       name={'tick'}
                       size={18}
-                      // stroke={!correct?.marked || correct?.markScored == 0 ? 'none' : 'main'}
+                      stroke={
+                        question?.choosen_question === IEvaluationStatus.PENDING ||
+                        question?.choosen_question === IEvaluationStatus.REJECTED
+                          ? 'none'
+                          : 'main'
+                      }
                       fill={'none'}
                     />
                   </button>
+
+                  <button
+                    className={
+                      question?.choosen_question === IEvaluationStatus.REJECTED
+                        ? 'wrong-button'
+                        : 'normal-button'
+                    }
+                    onClick={() => updateStatus(question.id, IEvaluationStatus.REJECTED)}>
+                    <Icon
+                      name={'cross'}
+                      size={18}
+                      fill={
+                        question?.choosen_question === IEvaluationStatus.PENDING ||
+                        question?.choosen_question === IEvaluationStatus.ACCEPTED
+                          ? 'none'
+                          : 'main'
+                      }
+                      // fill={'none'}
+                    />
+                  </button>
                 </div>
+
+                {/* <>
+                  <div>
+                    <Button styleType="outline" onClick={() => setshowSubjects(true)}>
+                      Set questions
+                    </Button>
+                  </div>
+
+                  <PopupMolecule
+                    onClose={() => setshowSubjects(false)}
+                    open={showSubjects}
+                    title="Select subject to add questions">
+                    <EvaluationSubjects
+                      evaluationId={evaluationId}
+                      action="add_questions"
+                    />
+                  </PopupMolecule>
+                </> */}
               </>
             ),
           )
@@ -248,6 +315,21 @@ export default function EvaluationContent({
             No questions attached
           </Heading>
         )}
+      </div>
+
+      <div className="py-4">
+        <div>
+          <Button styleType="outline" onClick={() => setshowSubjects(true)}>
+            Set questions
+          </Button>
+        </div>
+
+        <PopupMolecule
+          onClose={() => setshowSubjects(false)}
+          open={showSubjects}
+          title="Select subject to add questions">
+          <EvaluationSubjects evaluationId={evaluationId} action="add_questions" />
+        </PopupMolecule>
       </div>
 
       {actionType && (

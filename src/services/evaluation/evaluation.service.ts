@@ -209,6 +209,15 @@ class EvaluationService {
     return await evaluationAxios.post('student-answers/add', answer);
   }
 
+  public async updateQuestionChoosen(
+    id: string,
+    status: IEvaluationStatus,
+  ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo>>> {
+    return await evaluationAxios.put(
+      `/evaluationQuestions/${id}/changeChooseStatus/${status}`,
+    );
+  }
+
   public async submitEvaluation(studentEvaluationId: string): Promise<void> {
     return await evaluationAxios.put(
       `studentEvaluations/studentEvaluation/${studentEvaluationId}/submit`,

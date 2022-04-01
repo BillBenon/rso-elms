@@ -4,7 +4,6 @@ import { evaluationService } from '../../services/evaluation/evaluation.service'
 import {
   IEvaluationAction,
   IEvaluationOwnership,
-  IEvaluationStatus,
 } from '../../types/services/evaluation.types';
 
 class EvaluationStore {

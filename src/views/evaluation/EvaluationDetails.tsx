@@ -1,6 +1,6 @@
 import React from 'react';
 import toast from 'react-hot-toast';
-import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
@@ -9,6 +9,7 @@ import AddEvaluationQuestions from '../../components/Organisms/forms/evaluation/
 import { queryClient } from '../../plugins/react-query';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
+import EvaluationSettingProgress from '../EvaluationSettingProgress';
 import ApproveEvaluation from './ApproveEvaluation';
 import Submissions from './marking/Submissions';
 import ReviewEvaluation from './ReviewEvaluation';
@@ -17,6 +18,7 @@ import Unbeguns from './Unbeguns';
 
 export default function EvaluationDetails() {
   const { id } = useParams<ParamType>();
+  const history = useHistory();
 
   const { url, path } = useRouteMatch();
   const makeEvaluationPublic = evaluationStore.publishEvaluation();
@@ -36,6 +38,10 @@ export default function EvaluationDetails() {
     {
       label: 'Defiance/To start',
       href: `${url}/unbeguns`,
+    },
+    {
+      label: 'Evaluation sections',
+      href: `${url}/sections`,
     },
   ];
 
@@ -75,7 +81,7 @@ export default function EvaluationDetails() {
           path={`${path}/section/:id/add-questions`}
           render={() => (
             <AddEvaluationQuestions
-              handleGoBack={() => {}}
+              handleGoBack={() => history.push('/dashboard/evaluations')}
               handleNext={() => {}}
               evaluationId={id}
             />
@@ -85,11 +91,16 @@ export default function EvaluationDetails() {
           <div className="pt-8">
             <Route path={`${path}/submissions`} render={() => <Submissions />} />
           </div>
-
           <div className="pt-8">
             <Route exact path={`${path}/unbeguns`} render={() => <Unbeguns />} />
+          </div>{' '}
+          <div className="pt-8">
+            <Route
+              exact
+              path={`${path}/sections`}
+              render={() => <EvaluationSettingProgress />}
+            />
           </div>
-
           <Route
             exact
             path={`${path}`}

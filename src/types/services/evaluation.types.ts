@@ -88,6 +88,8 @@ export enum IEvaluationStatus {
   HIDDEN = 'HIDDEN',
   PUBLISHED = 'PUBLISHED',
   COMPLETED = 'COMPLETED',
+  ACCEPTED = 'ACCEPTED',
+  REJECTED = 'REJECTED',
 }
 
 export enum IEligibleGroup {
@@ -299,6 +301,7 @@ export interface IEvaluationQuestionsInfo {
   question: string;
   evaluation_id: string;
   choices: IMultipleChoice[];
+  choosen_question: IEvaluationStatus;
   mark: number;
   evaluationQuestions: [];
   question_type: IQuestionType;
