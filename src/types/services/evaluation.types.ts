@@ -87,6 +87,7 @@ export enum IEvaluationStatus {
   APPROVED = 'APPROVED',
   HIDDEN = 'HIDDEN',
   PUBLISHED = 'PUBLISHED',
+  COMPLETED = 'COMPLETED',
 }
 
 export enum IEligibleGroup {
@@ -160,6 +161,7 @@ export interface IEvaluationCreate {
 }
 
 export type IEvaluationSectionBased = {
+  id: string;
   evaluation_id: string;
   instructor_subject_assignment: string;
   intake_program_level_module: string;
@@ -168,7 +170,12 @@ export type IEvaluationSectionBased = {
   subject_academic_year_period: number | string;
 };
 
-export type IEvaluationAction = 'reviews' | 'approvals' | 'section_based' | '';
+export type IEvaluationAction =
+  | 'reviews'
+  | 'approvals'
+  | 'section_based'
+  | ''
+  | 'questions_review';
 
 export interface IStudentEvaluations {
   undoneEvaluations: IEvaluationInfo[];
@@ -189,13 +196,19 @@ export interface IPrivateAttendeeInfo extends Table {
   evaluation: IEvaluationInfo;
 }
 
+interface ISubjectAcademicYearPeriod {
+  adminId: string;
+  id: string;
+}
+
 export interface IEvaluationInfo {
   id: string;
   name: string;
   academy_id: string;
   intake_level_class_ids: string;
   intake_academic_year_period: string;
-  subject_academic_year_period: string;
+  subject_academic_year_period: { admSubject: ISubjectAcademicYearPeriod }[]; //used on on get
+  evaluation_module_subjects: IEvaluationSectionBased[];
   subject_id: string;
   access_type: IAccessTypeEnum;
   evaluation_type: IEvaluationTypeEnum;
@@ -267,6 +280,8 @@ export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
   submitted: boolean;
   question_type: IQuestionType;
   id: string;
+  answer: string;
+  evaluation_module_subject_id: string;
   choices: IMultipleChoice[];
 }
 
@@ -280,6 +295,7 @@ export interface IMultipleChoiceAnswers {
 
 export interface IEvaluationQuestionsInfo {
   id: string;
+  answer: string;
   question: string;
   evaluation_id: string;
   choices: IMultipleChoice[];
