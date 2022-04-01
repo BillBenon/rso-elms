@@ -74,3 +74,16 @@ export interface IEvaluationPerformance {
   student: IStudent;
   questionPoints: IQuestionPerformance[];
 }
+
+export interface IModuleTermPerformance {
+  id: string;
+  student: IStudent;
+  evaluationAttempts: [
+    {
+      evaluationId: string;
+      evaluationName: string;
+      maximum: number;
+      obtained: number;
+    },
+  ];
+}

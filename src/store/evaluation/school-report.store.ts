@@ -34,8 +34,18 @@ export function getStudentFullReport(studentId?: string) {
   );
 }
 
-export function getEvaluationPerformance(evaluationId: string) {
-  return useQuery(['evaluation/performance/', evaluationId], () =>
-    reportService.getEvaluationPerformance(evaluationId),
+export function getEvaluationPerformance(evaluationId?: string) {
+  return useQuery(
+    ['evaluation/performance/', evaluationId],
+    () => reportService.getEvaluationPerformance(evaluationId || ''),
+    { enabled: !!evaluationId },
+  );
+}
+
+export function getModuleTermPerformance(moduleId?: string, termId?: string) {
+  return useQuery(
+    ['evaluation/module-performance/', moduleId],
+    () => reportService.getModuleTermPerformance(moduleId || '', termId || ''),
+    { enabled: !!moduleId && !!termId },
   );
 }
