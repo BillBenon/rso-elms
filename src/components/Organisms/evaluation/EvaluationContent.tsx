@@ -215,8 +215,8 @@ export default function EvaluationContent({
                     {question.mark} marks
                   </Heading>
                 </div>
-                <div className="items-end">
-                  <button className={''} onClick={() => {}}>
+                <div className="self-end">
+                  <button className={'bg-'} onClick={() => {}}>
                     <Icon
                       name={'tick'}
                       size={18}
