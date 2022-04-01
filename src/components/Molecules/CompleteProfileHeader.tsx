@@ -1,6 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { institutionStore } from '../../store/administration/institution.store';
+import Button from '../Atoms/custom/Button';
+import Icon from '../Atoms/custom/Icon';
 import Heading from '../Atoms/Text/Heading';
 import AcademyProfileCard from './cards/AcademyProfileCard';
 
@@ -20,6 +23,17 @@ const CompleteProfileHeader = ({
           {title}
         </Heading>
         <p className="text-txt-secondary text-sm md:text-base pt-2">{details}</p>
+        <Button styleType="text">
+          <Link to="/login" className="flex items-center justify-center">
+            <Icon
+              size={16}
+              name="chevron-left"
+              fill="primary"
+              useheightandpadding={false}
+            />{' '}
+            Back to login
+          </Link>
+        </Button>
       </div>
       <div>
         <AcademyProfileCard

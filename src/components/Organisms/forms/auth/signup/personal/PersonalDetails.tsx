@@ -9,12 +9,14 @@ import {
   GenderStatus,
   MaritalStatus,
   PersonDetail,
+  UserInfo,
 } from '../../../../../../types/services/user.types';
 import {
   getLocalStorageData,
   setLocalStorageData,
 } from '../../../../../../utils/getLocalStorageItem';
 import { getDropDownStatusOptions } from '../../../../../../utils/getOption';
+import { personalDetailsSchema } from '../../../../../../validations/complete-profile.validation';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
@@ -23,6 +25,21 @@ import LocationMolecule from '../../../../../Molecules/input/LocationMolecule';
 import TextAreaMolecule from '../../../../../Molecules/input/TextAreaMolecule';
 
 interface Personal<E> extends CommonStepProps, CommonFormProps<E> {}
+
+interface PersonalDetailErrors {
+  first_name: string;
+  last_name: string;
+  place_of_birth: string;
+  place_of_birth_description: string;
+  religion: string;
+  blood_group: string;
+  father_names: string;
+  mother_names: string;
+  residence_location_id: string;
+  place_of_residence: string;
+  nationality: string;
+  spouse_name: string;
+}
 
 function PersonalDetails<E>({
   display_label,
@@ -49,6 +66,23 @@ function PersonalDetails<E>({
     doc_type: DocType.NID,
     nationality: '',
   });
+
+  const initialErrorState: PersonalDetailErrors = {
+    first_name: '',
+    last_name: '',
+    place_of_birth: '',
+    place_of_birth_description: '',
+    religion: '',
+    blood_group: '',
+    father_names: '',
+    mother_names: '',
+    residence_location_id: '',
+    place_of_residence: '',
+    nationality: '',
+    spouse_name: '',
+  };
+
+  const [errors, setErrors] = useState<PersonalDetailErrors>(initialErrorState);
 
   const [nationality, setnationality] = useState({
     birth: '',
@@ -81,38 +115,50 @@ function PersonalDetails<E>({
     let newObj = Object.assign({}, data, personalDetails);
 
     Object.keys(newObj).map((val) => {
-      //@ts-ignore
       if (!newObj[val]) newObj[val] = '';
     });
-    setLocalStorageData('user', newObj);
-    nextStep(true);
-  };
-  const user = usersStore.getUserById(fetched_id.toString());
 
+    const validatedForm = personalDetailsSchema.validate(personalDetails, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => {
+        setLocalStorageData('user', newObj);
+        nextStep(true);
+      })
+      .catch((err) => {
+        const validatedErr: PersonalDetailErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof PersonalDetailErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
+  };
+
+  const user = usersStore.getUserById(fetched_id.toString());
+  const [userInfo] = useState<UserInfo>(getLocalStorageData('user'));
+
+  //when information change from the backend
   useEffect(() => {
     let personInfo = user.data?.data.data.person;
     personInfo &&
-      setPersonalDetails({
-        first_name: personInfo.first_name,
-        last_name: personInfo.last_name,
-        phone_number: personInfo.phone_number,
-        sex: personInfo.sex,
-        place_of_birth: personInfo.place_of_birth,
-        place_of_birth_description: personInfo.place_of_birth_description,
-        birth_date: personInfo.birth_date,
-        religion: personInfo.religion,
-        blood_group: personInfo.blood_group,
-        father_names: personInfo.father_names,
-        mother_names: personInfo.mother_names,
-        marital_status: personInfo.marital_status,
-        spouse_name: personInfo.spouse_name,
-        residence_location_id: personInfo.residence_location_id,
-        place_of_residence: personInfo.place_of_residence,
-        doc_type: personInfo.doc_type,
-        nationality: nationality.residence,
+      !userInfo &&
+      setPersonalDetails((old) => {
+        return { ...old, ...personInfo };
       });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user.data?.data.data.person]);
+  }, [user.data?.data.data.person, userInfo]);
+
+  //when user comes back to this step
+  useEffect(() => {
+    setPersonalDetails((old) => {
+      {
+        return { ...old, ...userInfo };
+      }
+    });
+  }, [userInfo]);
+
+  console.log(errors);
 
   return (
     <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
@@ -120,6 +166,8 @@ function PersonalDetails<E>({
       <form onSubmit={moveForward}>
         <div className="grid grid-cols-1 md:grid-cols-2">
           <InputMolecule
+            required={false}
+            error={errors.first_name}
             readOnly={
               user.data?.data.data.person ? personalDetails.first_name !== '' : false
             }
@@ -129,6 +177,8 @@ function PersonalDetails<E>({
             handleChange={handleChange}
           />
           <InputMolecule
+            required={false}
+            error={errors.last_name}
             readOnly={
               user.data?.data.data.person ? personalDetails.last_name !== '' : false
             }
@@ -141,6 +191,8 @@ function PersonalDetails<E>({
         <div className="grid grid-cols-1 md:grid-cols-2 ">
           <div>
             <InputMolecule
+              required={false}
+              error={errors.father_names}
               name="father_names"
               placeholder="eg: John"
               value={personalDetails.father_names}
@@ -148,6 +200,8 @@ function PersonalDetails<E>({
               Father&apos;s names
             </InputMolecule>
             <InputMolecule
+              required={false}
+              error={errors.mother_names}
               name="mother_names"
               placeholder="eg: Doe"
               value={personalDetails.mother_names}
@@ -155,6 +209,8 @@ function PersonalDetails<E>({
               Mother&apos;s names
             </InputMolecule>
             <DropdownMolecule
+              error={errors.blood_group}
+              hasError={errors.blood_group !== ''}
               placeholder="Select your blood type"
               name="blood_group"
               defaultValue={getDropDownStatusOptions(BloodGroup).find(
@@ -167,6 +223,7 @@ function PersonalDetails<E>({
             {(personalDetails.marital_status === MaritalStatus.MARRIED ||
               personalDetails.marital_status === MaritalStatus.WIDOWED) && (
               <InputMolecule
+                error={errors.spouse_name}
                 name="spouse_name"
                 value={personalDetails.spouse_name}
                 handleChange={handleChange}>
@@ -174,6 +231,8 @@ function PersonalDetails<E>({
               </InputMolecule>
             )}
             <InputMolecule
+              required={false}
+              error={errors.religion}
               name="religion"
               value={personalDetails.religion}
               placeholder="eg: Catholic"
@@ -183,6 +242,8 @@ function PersonalDetails<E>({
           </div>
           <div>
             <DropdownMolecule
+              error={errors.place_of_birth}
+              hasError={errors.place_of_birth !== ''}
               width="60 md:w-80"
               name="birth"
               placeholder="Select the Nation"
@@ -198,9 +259,12 @@ function PersonalDetails<E>({
                 placeholder="Select place of birth"
                 name="place_of_birth"
                 handleChange={handleChange}
+                isRequired={errors.place_of_birth !== ''}
+                requiredMessage={errors.place_of_birth}
               />
             )}
             <TextAreaMolecule
+              error={errors.place_of_birth_description}
               width="72 md:w-80"
               name="place_of_birth_description"
               value={personalDetails.place_of_birth_description}
@@ -208,6 +272,8 @@ function PersonalDetails<E>({
               Place of birth description (optional)
             </TextAreaMolecule>
             <DropdownMolecule
+              error={errors.nationality}
+              hasError={errors.nationality !== ''}
               width="60 md:w-80"
               name="residence"
               placeholder="Select the Nation"
@@ -223,9 +289,12 @@ function PersonalDetails<E>({
                 placeholder="Select place of residence"
                 name="residence_location_id"
                 handleChange={handleChange}
+                isRequired={errors.residence_location_id !== ''}
+                requiredMessage={errors.residence_location_id}
               />
             )}
             <TextAreaMolecule
+              error={errors.place_of_residence}
               width="72 md:w-80"
               name="place_of_residence"
               value={personalDetails.place_of_residence}
