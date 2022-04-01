@@ -10,6 +10,7 @@ import intakeProgramStore from '../../store/administration/intake-program.store'
 import { getModuleTermPerformance } from '../../store/evaluation/school-report.store';
 import { SelectData } from '../../types';
 import { IPerformanceTable } from '../../types/services/report.types';
+import { calculateGrade } from '../../utils/school-report';
 
 interface IParamType {
   levelId: string;
@@ -54,6 +55,7 @@ export default function TermModulePerfomance() {
     });
 
     processed[`total /${total.max}`] = total.obtained;
+    processed['grade'] = calculateGrade(total.obtained, total.max);
     formattedData.push(processed);
   });
 
