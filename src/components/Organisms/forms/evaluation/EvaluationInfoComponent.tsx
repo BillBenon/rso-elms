@@ -221,6 +221,7 @@ export default function EvaluationInfoComponent({
     intakePeriodId,
     subjectId,
     picked_role?.academy_id,
+    classes?.data.data,
   ]);
 
   useEffect(() => {

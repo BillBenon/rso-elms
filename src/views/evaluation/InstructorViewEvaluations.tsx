@@ -86,7 +86,7 @@ export default function InstructorViewEvaluations() {
         break;
 
       case IEvaluationOwnership.FOR_SETTING:
-        history.push(`${path}/details/${id}/add-questions`);
+        history.push(`${path}/details/${id}/section`);
         break;
 
       default:

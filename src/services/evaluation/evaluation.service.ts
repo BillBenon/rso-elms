@@ -14,6 +14,7 @@ import {
   IEvaluationOwnership,
   IEvaluationQuestionsInfo,
   IEvaluationSectionBased,
+  IEvaluationStatus,
   InstructorEvaluationAppprovalStatus,
   IStudentAnswer,
   IStudentEvaluationStart,
@@ -166,6 +167,15 @@ class EvaluationService {
     id: string,
   ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>> {
     return await evaluationAxios.delete(`/evaluationQuestions/deleteQuestion/${id}`);
+  }
+
+  public async updateEvaluationModuleSubject(
+    id: string,
+    status: IEvaluationStatus,
+  ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>> {
+    return await evaluationAxios.put(
+      `evaluation-module-subjects/${id}/changeSettingStatus/${status}`,
+    );
   }
 
   public async modifyEvaluation(

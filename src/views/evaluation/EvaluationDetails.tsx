@@ -5,13 +5,14 @@ import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import EvaluationContent from '../../components/Organisms/evaluation/EvaluationContent';
+import AddEvaluationQuestions from '../../components/Organisms/forms/evaluation/AddEvaluationQuestions';
 import { queryClient } from '../../plugins/react-query';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
-import AddEvaluationQuestions from './AddEvaluationQuestions';
 import ApproveEvaluation from './ApproveEvaluation';
 import Submissions from './marking/Submissions';
 import ReviewEvaluation from './ReviewEvaluation';
+import SectionBasedEvaluation from './SectionBasedEvaluation';
 import Unbeguns from './Unbeguns';
 
 export default function EvaluationDetails() {
@@ -68,10 +69,17 @@ export default function EvaluationDetails() {
           path={`${path}/approve`}
           render={() => <ApproveEvaluation evaluationId={id} />}
         />
+        <Route exact path={`${path}/section`} render={() => <SectionBasedEvaluation />} />{' '}
         <Route
           exact
-          path={`${path}/add-questions`}
-          render={() => <AddEvaluationQuestions />}
+          path={`${path}/section/:id/add-questions`}
+          render={() => (
+            <AddEvaluationQuestions
+              handleGoBack={() => {}}
+              handleNext={() => {}}
+              evaluationId={id}
+            />
+          )}
         />
         <TabNavigation tabs={tabs}>
           <div className="pt-8">

@@ -1,6 +1,5 @@
 import moment from 'moment';
 import React, { ReactNode, useEffect, useState } from 'react';
-import { Link, useRouteMatch } from 'react-router-dom';
 
 import { useGetInstructor } from '../../../hooks/useGetInstructor';
 import {
@@ -12,8 +11,10 @@ import DisplayClasses from '../../../views/classes/DisplayClasses';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
 import MultipleChoiceAnswer from '../../../views/evaluation/MultipleChoiceAnswer';
 import Button from '../../Atoms/custom/Button';
+import Icon from '../../Atoms/custom/Icon';
 import Heading from '../../Atoms/Text/Heading';
 import PopupMolecule from '../../Molecules/Popup';
+import EvaluationSubjects from './EvaluationSubjects';
 
 interface IProps {
   evaluationId: string;
@@ -26,8 +27,8 @@ export default function EvaluationContent({
   children,
   actionType,
 }: IProps) {
-  const { path } = useRouteMatch();
   const [showPopup, setShowPopup] = useState(false);
+  const [showSubjects, setshowSubjects] = useState(false);
 
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId).data?.data || {};
@@ -90,7 +91,7 @@ export default function EvaluationContent({
         <div className="flex flex-col gap-4">
           <ContentSpan
             title="Evaluation type"
-            subTitle={evaluationInfo?.evaluation_type}
+            subTitle={evaluationInfo?.evaluation_type.replace('_', ' ')}
           />
 
           <ContentSpan
@@ -119,7 +120,7 @@ export default function EvaluationContent({
           />
         </div>
 
-        {/* tjird column */}
+        {/* third column */}
         <div className="flex flex-col gap-4">
           <ContentSpan title="Due on" subTitle={evaluationInfo?.due_on} />
           <div className="flex flex-col gap-4">
@@ -140,9 +141,9 @@ export default function EvaluationContent({
             title="Consider on report"
             subTitle={evaluationInfo?.is_consider_on_report ? 'Yes' : 'No'}
           />
-          <Button styleType="outline" onClick={() => setShowPopup(true)}>
+          {/* <Button styleType="outline" onClick={() => setShowPopup(true)}>
             View personal attendees
-          </Button>
+          </Button> */}
         </div>
       </div>
 
@@ -198,21 +199,50 @@ export default function EvaluationContent({
                   : null}
               </div>
             ) : (
-              <div className="mt-3 flex justify-between">
-                <ContentSpan title={`Question ${index + 1}`} className="gap-3">
-                  {question.question}
-                </ContentSpan>
+              <>
+                <div className="mt-3 flex justify-between">
+                  <div className="flex flex-col gap-4">
+                    <ContentSpan title={`Question ${index + 1}`} className="gap-3">
+                      {question.question}
+                    </ContentSpan>
 
-                <Heading fontWeight="semibold" fontSize="sm">
-                  {question.mark} marks
-                </Heading>
-              </div>
+                    <ContentSpan title={`Question ${index + 1} answer`} className="gap-3">
+                      {question.answer}
+                    </ContentSpan>
+                  </div>
+
+                  <Heading fontWeight="semibold" fontSize="sm">
+                    {question.mark} marks
+                  </Heading>
+                </div>
+                <div className="items-end">
+                  <button className={''} onClick={() => {}}>
+                    <Icon
+                      name={'tick'}
+                      size={18}
+                      // stroke={!correct?.marked || correct?.markScored == 0 ? 'none' : 'main'}
+                      fill={'none'}
+                    />
+                  </button>
+                </div>
+              </>
             ),
           )
         ) : actionType === 'section_based' ? (
-          <Link to={`${path}/add-questions`}>
-            <Button styleType="outline">Set questions</Button>
-          </Link>
+          <>
+            <div>
+              <Button styleType="outline" onClick={() => setshowSubjects(true)}>
+                Set questions
+              </Button>
+            </div>
+
+            <PopupMolecule
+              onClose={() => setshowSubjects(false)}
+              open={showSubjects}
+              title="Select subject to add questions">
+              <EvaluationSubjects evaluationId={evaluationId} action="add_questions" />
+            </PopupMolecule>
+          </>
         ) : (
           <Heading fontWeight="semibold" fontSize="sm">
             No questions attached
