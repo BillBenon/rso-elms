@@ -20,6 +20,12 @@ class AttachmentService {
   public async getAttachementById(id: string): Promise<AxiosResponse<AttachementInfo>> {
     return await adminstrationAxios.get(`/attachements/getById/${id}`);
   }
+
+  public async deleteAttachementById(
+    id: string,
+  ): Promise<AxiosResponse<AttachementInfo>> {
+    return await adminstrationAxios.delete(`/attachments/deletePersonalDoc/${id}`);
+  }
 }
 
 export const attachmentService = new AttachmentService();

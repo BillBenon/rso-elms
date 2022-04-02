@@ -33,7 +33,11 @@ export default function PersonalDocuments({ user }: { user: UserInfo }) {
 
   async function downloadDoc(data: ModuleAttachment | undefined) {
     await setUrl(
-      await downloadPersonalDoc(data?.original_file_name + '', data?.file_type + ''),
+      await downloadPersonalDoc(
+        data?.original_file_name + '',
+        data?.file_type + '',
+        '/attachments/download/personalDocs/',
+      ),
     );
     var element = document.createElement('a');
     element.setAttribute('href', fileUrl);
