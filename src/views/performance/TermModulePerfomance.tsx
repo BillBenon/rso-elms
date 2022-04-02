@@ -30,7 +30,7 @@ export default function TermModulePerfomance() {
   // auto select first module
   useEffect(() => {
     if (modules?.data && modules?.data.data?.length > 0 && !moduleId)
-      setModuleId(modules.data.data[0].id.toString());
+      setModuleId(modules.data.data[0].module.id.toString());
   }, [moduleId, modules]);
 
   const formattedData: IPerformanceTable[] = [];
