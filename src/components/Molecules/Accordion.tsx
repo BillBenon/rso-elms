@@ -18,29 +18,32 @@ function Accordion({ children }: IProps) {
 
   return (
     <div>
-      {children.map((panel, i) => {
-        const panelProps: PanelProps = panel.props;
-        return (
-          <Panel
-            index={i}
-            bgColor={panelProps.bgColor}
-            key={panel.key}
-            active={activePanel === i}
-            handleOpen={(i) => handleOpen(i)}
-            title={panelProps.title}
-            subtitle={panelProps.subtitle}
-            className={panelProps.className}
-            width={panelProps.width}
-            badge={
-              panelProps.badge && {
-                type: panelProps.badge.type,
-                text: panelProps.badge.text,
-              }
-            }>
-            {panelProps.children}
-          </Panel>
-        );
-      })}
+      {children.length > 0
+        ? children.map((panel, i) => {
+            const panelProps: PanelProps = panel.props;
+            return (
+              <Panel
+                index={i}
+                show={panel.props.show}
+                bgColor={panelProps.bgColor}
+                key={panel.key}
+                active={activePanel === i}
+                handleOpen={(i) => handleOpen(i)}
+                title={panelProps.title}
+                subtitle={panelProps.subtitle}
+                className={panelProps.className}
+                width={panelProps.width}
+                badge={
+                  panelProps.badge && {
+                    type: panelProps.badge.type,
+                    text: panelProps.badge.text,
+                  }
+                }>
+                {panelProps.children}
+              </Panel>
+            );
+          })
+        : null}
     </div>
   );
 }
