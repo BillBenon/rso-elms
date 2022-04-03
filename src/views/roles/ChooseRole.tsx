@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import AcademyProfileCard from '../../components/Molecules/cards/AcademyProfileCard';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
@@ -84,7 +85,7 @@ export default function ChooseRole() {
 
   return (
     <div className="p-2 md:px-48 md:py-14">
-      <div className="pb-20">
+      <div className="pb-16">
         <AcademyProfileCard
           src="/images/rdf-logo.png"
           alt="institution logo"
@@ -96,6 +97,17 @@ export default function ChooseRole() {
           subtitle={institution.data?.data.data[0].moto}>
           {institution.data?.data.data[0].name}
         </AcademyProfileCard>
+        <Button styleType="text" className="pt-10">
+          <Link to="/login" className="flex items-center justify-center">
+            <Icon
+              size={16}
+              name="chevron-left"
+              fill="primary"
+              useheightandpadding={false}
+            />{' '}
+            Back to login
+          </Link>
+        </Button>
       </div>
       <div>
         <Heading fontSize="2xl" fontWeight="medium" className="py-2">
