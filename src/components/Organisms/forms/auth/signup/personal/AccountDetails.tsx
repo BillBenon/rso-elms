@@ -13,7 +13,7 @@ import {
   setLocalStorageData,
 } from '../../../../../../utils/getLocalStorageItem';
 import { getDropDownStatusOptions } from '../../../../../../utils/getOption';
-import { accountDetailsSchema } from '../../../../../../validations/complete-profile.validation';
+import { accountDetailsSchema } from '../../../../../../validations/complete-profile/complete-profile.validation';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';

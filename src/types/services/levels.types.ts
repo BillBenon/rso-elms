@@ -10,6 +10,10 @@ export interface IcreateLevel {
   flow: number;
 }
 
+export interface LevelErrors extends Pick<IcreateLevel, 'name'> {
+  flow: string;
+}
+
 export interface ILevel extends Table, IcreateLevel {
   lastStatusChangeReason: string;
   flow: number;

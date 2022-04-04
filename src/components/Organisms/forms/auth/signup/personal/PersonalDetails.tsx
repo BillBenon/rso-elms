@@ -16,7 +16,7 @@ import {
   setLocalStorageData,
 } from '../../../../../../utils/getLocalStorageItem';
 import { getDropDownStatusOptions } from '../../../../../../utils/getOption';
-import { personalDetailsSchema } from '../../../../../../validations/complete-profile.validation';
+import { personalDetailsSchema } from '../../../../../../validations/complete-profile/complete-profile.validation';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
@@ -26,19 +26,22 @@ import TextAreaMolecule from '../../../../../Molecules/input/TextAreaMolecule';
 
 interface Personal<E> extends CommonStepProps, CommonFormProps<E> {}
 
-interface PersonalDetailErrors {
-  first_name: string;
-  last_name: string;
-  place_of_birth: string;
-  place_of_birth_description: string;
-  religion: string;
+interface PersonalDetailErrors
+  extends Pick<
+    PersonDetail,
+    | 'first_name'
+    | 'last_name'
+    | 'place_of_birth'
+    | 'place_of_birth_description'
+    | 'religion'
+    | 'father_names'
+    | 'mother_names'
+    | 'place_of_residence'
+    | 'nationality'
+    | 'spouse_name'
+  > {
   blood_group: string;
-  father_names: string;
-  mother_names: string;
   residence_location_id: string;
-  place_of_residence: string;
-  nationality: string;
-  spouse_name: string;
 }
 
 function PersonalDetails<E>({
@@ -158,8 +161,6 @@ function PersonalDetails<E>({
     });
   }, [userInfo]);
 
-  console.log(errors);
-
   return (
     <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
       {!isVertical && <Heading fontWeight="semibold">{display_label}</Heading>}
@@ -214,7 +215,7 @@ function PersonalDetails<E>({
               placeholder="Select your blood type"
               name="blood_group"
               defaultValue={getDropDownStatusOptions(BloodGroup).find(
-                (grp) => grp.label === personalDetails.blood_group,
+                (grp) => grp.value === personalDetails.blood_group,
               )}
               handleChange={handleChange}
               options={getDropDownStatusOptions(BloodGroup)}>
@@ -248,7 +249,7 @@ function PersonalDetails<E>({
               name="birth"
               placeholder="Select the Nation"
               defaultValue={options.find(
-                (national) => national.label === nationality.birth,
+                (national) => national.value === nationality.birth,
               )}
               handleChange={nationhandleChange}
               options={options}>
@@ -278,7 +279,7 @@ function PersonalDetails<E>({
               name="residence"
               placeholder="Select the Nation"
               defaultValue={options.find(
-                (national) => national.label === nationality.residence,
+                (national) => national.value === nationality.residence,
               )}
               handleChange={nationhandleChange}
               options={options}>

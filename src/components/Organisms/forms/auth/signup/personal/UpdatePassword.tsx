@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom';
 import useAuthenticator from '../../../../../../hooks/useAuthenticator';
 import { authenticatorStore } from '../../../../../../store/administration';
 import { ChangePassword, FormPropType, ValueType } from '../../../../../../types';
+import { changePasswordSchema } from '../../../../../../validations/user.validation';
 import Button from '../../../../../Atoms/custom/Button';
 import InputMolecule from '../../../../../Molecules/input/InputMolecule';
 
@@ -15,6 +16,13 @@ export default function UpdatePassword({ onSubmit }: FormPropType) {
     newPassword: '',
     confirmPassword: '',
   });
+  const initialErrorState: ChangePassword = {
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: '',
+  };
+  const [errors, setErrors] = useState<ChangePassword>(initialErrorState);
+
   const { mutateAsync } = authenticatorStore.passwordChange();
   const history = useHistory();
 
@@ -36,21 +44,41 @@ export default function UpdatePassword({ onSubmit }: FormPropType) {
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
 
-    mutateAsync(form, {
-      onSuccess: () => {
-        toast.success('Password updated');
-        history.goBack();
-      },
-      onError: (error: any) => {
-        toast.error(error.response.data.message);
-      },
+    const validatedForm = changePasswordSchema.validate(form, {
+      abortEarly: false,
     });
-    if (onSubmit) onSubmit(e);
+
+    validatedForm
+      .then(() => {
+        if (form.confirmPassword !== form.newPassword) {
+          toast.error('Passwords do not match');
+        } else {
+          mutateAsync(form, {
+            onSuccess: () => {
+              toast.success('Password updated');
+              history.goBack();
+            },
+            onError: (error: any) => {
+              toast.error(error.response.data.message);
+            },
+          });
+          if (onSubmit) onSubmit(e);
+        }
+      })
+      .catch((err) => {
+        const validatedErr: ChangePassword = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof ChangePassword] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
 
   return (
     <form onSubmit={submitForm}>
       <InputMolecule
+        required={false}
+        error={errors.currentPassword}
         name="currentPassword"
         placeholder="current password"
         type="password"
@@ -59,6 +87,8 @@ export default function UpdatePassword({ onSubmit }: FormPropType) {
         Current Password
       </InputMolecule>
       <InputMolecule
+        required={false}
+        error={errors.newPassword}
         name="newPassword"
         placeholder="New password"
         type="password"
@@ -67,6 +97,8 @@ export default function UpdatePassword({ onSubmit }: FormPropType) {
         New Password
       </InputMolecule>{' '}
       <InputMolecule
+        required={false}
+        error={errors.confirmPassword}
         name="confirmPassword"
         placeholder="confirm password"
         type="password"
@@ -75,7 +107,7 @@ export default function UpdatePassword({ onSubmit }: FormPropType) {
         Confirm Password
       </InputMolecule>
       <div>
-        <Button disabled={form.confirmPassword !== form.newPassword} type="submit" full>
+        <Button type="submit" full>
           Save
         </Button>
       </div>

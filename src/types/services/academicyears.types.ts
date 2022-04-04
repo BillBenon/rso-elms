@@ -30,3 +30,6 @@ export interface ICreateAcademicYear {
   plannedStartOn: string;
   status: IAcademicYearStatus;
 }
+
+export interface AcademicYearErrors
+  extends Pick<ICreateAcademicYear, 'plannedStartOn' | 'plannedEndOn'> {}

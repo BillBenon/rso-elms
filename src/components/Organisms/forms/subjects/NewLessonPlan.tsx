@@ -7,8 +7,16 @@ import { queryClient } from '../../../../plugins/react-query';
 import { lessonStore } from '../../../../store/administration/lesson.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { ParamType, ValueType } from '../../../../types';
-import { LessonPlan } from '../../../../types/services/lesson.types';
+import {
+  LessonPlan,
+  LessonTextAreaErrors,
+  LessonTimeErrors,
+} from '../../../../types/services/lesson.types';
 import { formatDateToIso } from '../../../../utils/date-helper';
+import {
+  lessonPlanTextAreaSchema,
+  lessonPlanTimeSchema,
+} from '../../../../validations/lesson.validation';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
@@ -107,9 +115,33 @@ function NewLessonPlan() {
 }
 
 function LessonTimeComponent({ lessonPlan, handleChange, handleNext }: IProps) {
+  const initialErrorState: LessonTimeErrors = {
+    start_time: '',
+    end_time: '',
+  };
+
+  const [errors, setErrors] = useState<LessonTimeErrors>(initialErrorState);
+
+  const handleSubmit = () => {
+    const validatedForm = lessonPlanTimeSchema.validate(lessonPlan, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => handleNext)
+      .catch((err) => {
+        const validatedErr: LessonTimeErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof LessonTimeErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
+  };
   return (
-    <form onSubmit={handleNext}>
+    <form onSubmit={handleSubmit}>
       <InputMolecule
+        required={false}
+        error={errors.start_time}
         value={lessonPlan.start_time}
         name="start_time"
         type="date"
@@ -117,6 +149,8 @@ function LessonTimeComponent({ lessonPlan, handleChange, handleNext }: IProps) {
         Start Date
       </InputMolecule>
       <InputMolecule
+        required={false}
+        error={errors.end_time}
         value={lessonPlan.end_time}
         name="end_time"
         type="date"
@@ -138,27 +172,56 @@ function LessonTimeComponent({ lessonPlan, handleChange, handleNext }: IProps) {
 }
 
 function LessonTextArea({ lessonPlan, handleChange, handleNext }: IProps) {
+  const initialErrorState: LessonTextAreaErrors = {
+    lesson_objective: '',
+    lesson_requirements: '',
+    text_books: '',
+    class_policy: '',
+  };
+
+  const [errors, setErrors] = useState<LessonTextAreaErrors>(initialErrorState);
+
+  const handleSubmit = () => {
+    const validatedForm = lessonPlanTextAreaSchema.validate(lessonPlan, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => handleNext)
+      .catch((err) => {
+        const validatedErr: LessonTextAreaErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof LessonTextAreaErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
+  };
+
   return (
-    <form onSubmit={handleNext}>
+    <form onSubmit={handleSubmit}>
       <TextAreaMolecule
+        error={errors.lesson_objective}
         name="lesson_objective"
         value={lessonPlan.lesson_objective}
         handleChange={handleChange}>
         Lesson Objective
       </TextAreaMolecule>
       <TextAreaMolecule
+        error={errors.lesson_requirements}
         name="lesson_requirements"
         value={lessonPlan.lesson_requirements}
         handleChange={handleChange}>
         Lesson Requirements
       </TextAreaMolecule>
       <TextAreaMolecule
+        error={errors.text_books}
         name="text_books"
         value={lessonPlan.text_books}
         handleChange={handleChange}>
         Text Books
       </TextAreaMolecule>
       <TextAreaMolecule
+        error={errors.class_policy}
         name="class_policy"
         value={lessonPlan.class_policy}
         handleChange={handleChange}>

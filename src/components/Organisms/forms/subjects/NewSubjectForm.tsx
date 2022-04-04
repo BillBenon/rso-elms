@@ -7,10 +7,12 @@ import { moduleStore } from '../../../../store/administration/modules.store';
 import { subjectStore } from '../../../../store/administration/subject.store';
 import { ParamType, ValueType } from '../../../../types';
 import { SubjectInfo } from '../../../../types/services/subject.types';
+import { newSubjectSchema } from '../../../../validations/lesson.validation';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
-import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
+
+interface SubjectErrors extends Pick<SubjectInfo, 'content' | 'title'> {}
 
 export default function NewSubjectForm() {
   const { id } = useParams<ParamType>();
@@ -25,32 +27,53 @@ export default function NewSubjectForm() {
     title: '',
   });
 
+  const initialErrorState: SubjectErrors = {
+    content: '',
+    title: '',
+  };
+
+  const [errors, setErrors] = useState<SubjectErrors>(initialErrorState);
+
   function handleChange(e: ValueType) {
     setsubject({ ...subject, [e.name]: e.value });
   }
 
-  const handleSubmit = async () => {
-    await mutateAsync(subject, {
-      async onSuccess(data) {
-        toast.success(data.data.message);
-        queryClient.invalidateQueries(['subjects/moduleId']);
-        history.goBack();
-        // history.push(
-        //   `/dashboard/modules/${module?.id}/subjects/${data.data.data.id}/add-lesson`,
-        // );
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    const validatedForm = newSubjectSchema.validate(
+      { content: subject.content, title: subject.title },
+      {
+        abortEarly: false,
       },
-      onError(error: any) {
-        toast.error(error.response.data.message);
-      },
-    });
+    );
+
+    validatedForm
+      .then(() => {
+        mutateAsync(subject, {
+          async onSuccess(data) {
+            toast.success(data.data.message);
+            queryClient.invalidateQueries(['subjects/moduleId']);
+            history.goBack();
+            // history.push(
+            //   `/dashboard/modules/${module?.id}/subjects/${data.data.data.id}/add-lesson`,
+            // );
+          },
+          onError(error: any) {
+            toast.error(error.response.data.message);
+          },
+        });
+      })
+      .catch((err) => {
+        const validatedErr: SubjectErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof SubjectErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   };
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit();
-      }}>
+    <form onSubmit={handleSubmit}>
       <InputMolecule
         value={module?.name}
         handleChange={(_e: ValueType<Event>) => {}}
@@ -60,19 +83,22 @@ export default function NewSubjectForm() {
         Module
       </InputMolecule>
       <InputMolecule
+        required={false}
+        error={errors.title}
         value={subject.title}
-        error=""
         handleChange={handleChange}
         name="title">
         Subject name
       </InputMolecule>
       <TextAreaMolecule
+        required={false}
+        error={errors.content}
         value={subject.content}
         name="description"
         handleChange={handleChange}>
         Subject remarks
       </TextAreaMolecule>
-      <RadioMolecule
+      {/* <RadioMolecule
         className="mt-4"
         value="ACTIVE"
         name="status"
@@ -82,9 +108,9 @@ export default function NewSubjectForm() {
         ]}
         handleChange={handleChange}>
         Status
-      </RadioMolecule>
+      </RadioMolecule> */}
       <div className="mt-5">
-        <Button type="submit" disabled={isLoading} onClick={handleSubmit} full>
+        <Button type="submit" disabled={isLoading} full>
           Add
         </Button>
       </div>

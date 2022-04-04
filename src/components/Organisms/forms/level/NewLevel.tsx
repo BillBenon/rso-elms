@@ -5,7 +5,8 @@ import { useHistory } from 'react-router-dom';
 import { queryClient } from '../../../../plugins/react-query';
 import { levelStore } from '../../../../store/administration/level.store';
 import { IDivisionsAcademyType, ValueType } from '../../../../types';
-import { IcreateLevel } from '../../../../types/services/levels.types';
+import { IcreateLevel, LevelErrors } from '../../../../types/services/levels.types';
+import { levelSchema } from '../../../../validations/level.validation';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
@@ -20,6 +21,13 @@ function NewLevel({ onSubmit, academy_id }: IDivisionsAcademyType) {
     flow: 0,
   });
 
+  const initialErrorState: LevelErrors = {
+    name: '',
+    flow: '',
+  };
+
+  const [errors, setErrors] = useState<LevelErrors>(initialErrorState);
+
   const history = useHistory();
   const { mutateAsync, isLoading } = levelStore.addLevel();
 
@@ -30,22 +38,38 @@ function NewLevel({ onSubmit, academy_id }: IDivisionsAcademyType) {
   function submitForm(e: FormEvent) {
     e.preventDefault(); // prevent page to reload:
 
-    mutateAsync(level, {
-      onSuccess: (newData) => {
-        toast.success('Level created');
-        queryClient.invalidateQueries(['levels/academy', newData.data.data.id]);
-        history.goBack();
-      },
-      onError: (error: any) => {
-        toast.error(error.response.data.message.split(':')[1]);
-      },
+    const validatedForm = levelSchema.validate(level, {
+      abortEarly: false,
     });
-    if (onSubmit) onSubmit(e);
+
+    validatedForm
+      .then(() => {
+        mutateAsync(level, {
+          onSuccess: (newData) => {
+            toast.success('Level created');
+            queryClient.invalidateQueries(['levels/academy', newData.data.data.id]);
+            history.goBack();
+          },
+          onError: (error: any) => {
+            toast.error(error.response.data.message.split(':')[1]);
+          },
+        });
+        if (onSubmit) onSubmit(e);
+      })
+      .catch((err) => {
+        const validatedErr: LevelErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof LevelErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
 
   return (
     <form onSubmit={submitForm}>
       <InputMolecule
+        required={false}
+        error={errors.name}
         value={level.name}
         handleChange={handleChange}
         placeholder="Enter level name"
@@ -61,9 +85,9 @@ function NewLevel({ onSubmit, academy_id }: IDivisionsAcademyType) {
       </TextAreaMolecule>
 
       <InputMolecule
+        error={errors.flow}
         value={level.flow}
         type="number"
-        min={1}
         handleChange={handleChange}
         placeholder="Enter level flow"
         name="flow">

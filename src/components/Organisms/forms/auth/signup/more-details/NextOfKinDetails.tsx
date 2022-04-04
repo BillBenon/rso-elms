@@ -17,6 +17,8 @@ import {
 } from '../../../../../../types/services/user.types';
 import { CreateNextOfKin } from '../../../../../../types/services/usernextkin.types';
 import { getDropDownStatusOptions } from '../../../../../../utils/getOption';
+import { validation } from '../../../../../../utils/validations';
+import { nextOfKinSchema } from '../../../../../../validations/more-info.validation';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DateMolecule from '../../../../../Molecules/input/DateMolecule';
@@ -27,6 +29,21 @@ import RadioMolecule from '../../../../../Molecules/input/RadioMolecule';
 
 interface NextOfKin<E> extends CommonStepProps, CommonFormProps<E> {}
 
+interface NextOfKinErrors
+  extends Pick<
+    BasicPersonInfo,
+    | 'first_name'
+    | 'last_name'
+    | 'email'
+    | 'phone_number'
+    | 'relationship'
+    | 'document_expire_on'
+    | 'nid'
+    | 'spouse_name'
+  > {
+  residence_location_id: string;
+}
+
 function NextOfKinDetails<E>({
   display_label,
   isVertical,
@@ -35,9 +52,21 @@ function NextOfKinDetails<E>({
   onSubmit,
 }: NextOfKin<E>) {
   const { user } = useAuthenticator();
-  const { mutateAsync } = usernextkinStore.createUserNextKin();
+  const { mutate } = usernextkinStore.createUserNextKin();
   const history = useHistory();
   // const inputRef = useRef<HTMLInputElement>(null);
+
+  const initialErrorState: NextOfKinErrors = {
+    first_name: '',
+    last_name: '',
+    email: '',
+    phone_number: '',
+    relationship: '',
+    residence_location_id: '',
+    document_expire_on: '',
+    nid: '',
+    spouse_name: '',
+  };
 
   const [details, setDetails] = useState<BasicPersonInfo>({
     first_name: '',
@@ -58,10 +87,11 @@ function NextOfKinDetails<E>({
     spouse_name: '',
   });
 
+  const [errors, setErrors] = useState(initialErrorState);
+
   const { data } = usernextkinStore.getPersonByNid(details.nid);
 
   const [nationality, setnationality] = useState({
-    birth: '',
     residence: '',
   });
 
@@ -112,33 +142,66 @@ function NextOfKinDetails<E>({
   const moveBack = () => {
     prevStep && prevStep();
   };
-  const moveForward = async (e: any) => {
+  const moveForward = (e: any) => {
     e.preventDefault();
-
-    const data: CreateNextOfKin = {
-      user_id: user?.id + '',
-      next_of_kins: [details],
-    };
-
-    await mutateAsync(data, {
-      onSuccess(data) {
-        toast.success(data.data.message);
-        queryClient.invalidateQueries(['next/user_id', user?.id]);
-        history.push(
-          user?.user_type === UserType.INSTRUCTOR
-            ? '/dashboard/inst-module'
-            : user?.user_type === UserType.STUDENT
-            ? '/dashboard/student'
-            : '/dashboard/users',
-        );
-      },
-      onError(_error) {
-        toast.error('Failed');
-      },
+    const cloneDetails = { ...details };
+    Object.assign(cloneDetails, {
+      has_spouse:
+        details.marital_status === MaritalStatus.MARRIED ||
+        details.marital_status === MaritalStatus.WIDOWED,
+      has_passport: details.doc_type === DocType.PASSPORT,
+      has_rwanda_nationality: nationality.residence === 'Rwanda',
     });
 
-    nextStep(true);
-    if (onSubmit) onSubmit(e, details);
+    const validatedForm = nextOfKinSchema.validate(cloneDetails, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => {
+        const data: CreateNextOfKin = {
+          user_id: user?.id + '',
+          next_of_kins: [details],
+        };
+
+        if (
+          details.doc_type === DocType.NID &&
+          validation.nidRwandaValidation(details.nid) !== ''
+        ) {
+          setErrors({
+            ...errors,
+            nid: validation.nidRwandaValidation(details.nid),
+          });
+        } else {
+          mutate(data, {
+            onSuccess(data) {
+              toast.success(data.data.message);
+              queryClient.invalidateQueries(['next/user_id', user?.id]);
+              history.push(
+                user?.user_type === UserType.INSTRUCTOR
+                  ? '/dashboard/inst-module'
+                  : user?.user_type === UserType.STUDENT
+                  ? '/dashboard/student'
+                  : '/dashboard/users',
+              );
+            },
+            onError(_error) {
+              toast.error('Failed');
+            },
+          });
+          nextStep(true);
+          if (onSubmit) onSubmit(e, details);
+        }
+      })
+      .catch((err) => {
+        const validatedErr: NextOfKinErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          //@ts-ignore
+          validatedErr[el.path as keyof NextOfKinErrors] = el.message;
+        });
+
+        setErrors(validatedErr);
+      });
   };
 
   const options = useMemo(
@@ -167,7 +230,7 @@ function NextOfKinDetails<E>({
             handleChange={handleChange}
             name="doc_type"
             defaultValue={getDropDownStatusOptions(DocType).find(
-              (doc) => doc.label === details.doc_type,
+              (doc) => doc.value === details.doc_type,
             )}
             options={getDropDownStatusOptions(DocType)}>
             Reference Number
@@ -175,6 +238,8 @@ function NextOfKinDetails<E>({
 
           <InputMolecule
             // ref={inputRef}
+            required={false}
+            error={errors.nid}
             name="nid"
             // onBlur={(e) => console.log('called', e.target.value || '')}
             // @ts-ignore
@@ -187,6 +252,7 @@ function NextOfKinDetails<E>({
           </InputMolecule>
           {details.doc_type == DocType.PASSPORT && (
             <DateMolecule
+              error={errors.document_expire_on}
               handleChange={handleChange}
               name="document_expire_on"
               defaultValue={details.document_expire_on}
@@ -198,7 +264,9 @@ function NextOfKinDetails<E>({
           )}
 
           <InputMolecule
+            error={errors.first_name}
             readOnly={data?.data.data.first_name ? details.first_name !== '' : false}
+            required={false}
             name="first_name"
             placeholder="eg: John"
             value={details.first_name}
@@ -206,7 +274,9 @@ function NextOfKinDetails<E>({
             First Name
           </InputMolecule>
           <InputMolecule
+            error={errors.last_name}
             readOnly={data?.data.data.last_name ? details.last_name !== '' : false}
+            required={false}
             name="last_name"
             placeholder="eg: Doe"
             value={details.last_name}
@@ -216,7 +286,9 @@ function NextOfKinDetails<E>({
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 ">
           <InputMolecule
+            error={errors.email}
             readOnly={data?.data.data.email ? details.email !== '' : false}
+            required={false}
             name="email"
             value={details.email}
             type="email"
@@ -225,25 +297,8 @@ function NextOfKinDetails<E>({
             Email
           </InputMolecule>
           <DropdownMolecule
-            width="60 md:w-80"
-            name="birth"
-            defaultValue={options.find(
-              (national) => national.label === nationality.birth,
-            )}
-            handleChange={nationhandleChange}
-            options={options}>
-            Nationality
-          </DropdownMolecule>
-          {nationality.birth == 'Rwanda' && (
-            <LocationMolecule
-              placeholder="Select place of birth"
-              name="place_of_birth"
-              handleChange={handleChange}
-            />
-          )}
-          <DropdownMolecule
             defaultValue={getDropDownStatusOptions(MaritalStatus).find(
-              (marital_status) => marital_status.label === details.marital_status,
+              (marital_status) => marital_status.value === details.marital_status,
             )}
             options={getDropDownStatusOptions(MaritalStatus)}
             name="marital_status"
@@ -254,6 +309,8 @@ function NextOfKinDetails<E>({
           {(details.marital_status === MaritalStatus.MARRIED ||
             details.marital_status === MaritalStatus.WIDOWED) && (
             <InputMolecule
+              error={errors.spouse_name}
+              required={false}
               name="spouse_name"
               value={details.spouse_name}
               handleChange={handleChange}>
@@ -261,10 +318,12 @@ function NextOfKinDetails<E>({
             </InputMolecule>
           )}
           <InputMolecule
+            error={errors.phone_number}
+            required={false}
             readOnly={data?.data.data.phone_number ? details.phone_number !== '' : false}
             name="phone_number"
             value={details.phone_number}
-            placeholder="+250 ---------"
+            placeholder="250 ---------"
             handleChange={handleChange}>
             Phone number
           </InputMolecule>
@@ -280,10 +339,12 @@ function NextOfKinDetails<E>({
             Gender
           </RadioMolecule>
           <InputMolecule
+            error={errors.relationship}
+            required={false}
             name="relationship"
             value={details.relationship}
             handleChange={handleChange}>
-            RelationShip
+            Relationship
           </InputMolecule>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2">
@@ -292,7 +353,7 @@ function NextOfKinDetails<E>({
             name="residence"
             placeholder="Select the Nation"
             defaultValue={options.find(
-              (national) => national.label === nationality.residence,
+              (national) => national.value === nationality.residence,
             )}
             handleChange={nationhandleChange}
             options={options}>
@@ -300,6 +361,7 @@ function NextOfKinDetails<E>({
           </DropdownMolecule>
           {nationality.residence == 'Rwanda' && (
             <LocationMolecule
+              error={errors.residence_location_id}
               placeholder="Select place of residence"
               name="residence_location_id"
               handleChange={handleChange}
@@ -311,6 +373,7 @@ function NextOfKinDetails<E>({
                 ? details.place_of_residence !== ''
                 : false
             }
+            required={false}
             name="place_of_residence"
             value={details.place_of_residence}
             handleChange={handleChange}>

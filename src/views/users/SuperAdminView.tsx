@@ -9,7 +9,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import AssignRole from '../../components/Organisms/forms/user/AssignRole';
+import AssignRole from '../../components/Organisms/forms/roles/AssignRole';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { authenticatorStore } from '../../store/administration';
 import usersStore from '../../store/administration/users.store';

@@ -8,9 +8,14 @@ import { venueStore } from '../../../../store/timetable/venue.store';
 import { GenericStatus, ValueType } from '../../../../types';
 import { CreateVenue, venueType } from '../../../../types/services/event.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
+import { venueSchema } from '../../../../validations/calendar.validation';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
+
+interface VenueErrors extends Pick<CreateVenue, 'name'> {
+  venueType: string;
+}
 
 export default function NewVenue() {
   const history = useHistory();
@@ -32,33 +37,57 @@ export default function NewVenue() {
     setvalues((val) => ({ ...val, [e.name]: e.value }));
   }
 
+  const initialErrorState: VenueErrors = {
+    name: '',
+    venueType: '',
+  };
+  const [errors, setErrors] = useState<VenueErrors>(initialErrorState);
+
   const { mutateAsync, isLoading } = venueStore.createVenue();
 
-  async function handleSubmit<T>(e: FormEvent<T>) {
+  function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
-    await mutateAsync(values, {
-      async onSuccess(_data) {
-        toast.success('Venue was created successfully');
-        queryClient.invalidateQueries(['venues']);
-        history.goBack();
-      },
-      onError(error: any) {
-        toast.error(error.response.data.message || 'error occurred please try again');
-      },
+
+    const validatedForm = venueSchema.validate(values, {
+      abortEarly: false,
     });
+
+    validatedForm
+      .then(() => {
+        mutateAsync(values, {
+          async onSuccess(_data) {
+            toast.success('Venue was created successfully');
+            queryClient.invalidateQueries(['venues']);
+            history.goBack();
+          },
+          onError(error: any) {
+            toast.error(error.response.data.message || 'error occurred please try again');
+          },
+        });
+      })
+      .catch((err) => {
+        const validatedErr: VenueErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof VenueErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <InputMolecule
+          error={errors.name}
+          required={false}
           name="name"
           placeholder="Venue name"
           value={values.name}
           handleChange={handleChange}>
-          Venu name
+          Venue name
         </InputMolecule>
         <SelectMolecule
+          error={errors.venueType}
           name="venueType"
           value={values.venueType}
           handleChange={handleChange}

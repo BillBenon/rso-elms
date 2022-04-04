@@ -7,7 +7,7 @@ import { RankRes } from '../../../../../../types/services/rank.types';
 import { EmploymentDetail, UserInfo } from '../../../../../../types/services/user.types';
 import { getLocalStorageData } from '../../../../../../utils/getLocalStorageItem';
 import { getDropDownOptions } from '../../../../../../utils/getOption';
-import { employmentDetailsSchema } from '../../../../../../validations/complete-profile.validation';
+import { employmentDetailsSchema } from '../../../../../../validations/complete-profile/complete-profile.validation';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DateMolecule from '../../../../../Molecules/input/DateMolecule';

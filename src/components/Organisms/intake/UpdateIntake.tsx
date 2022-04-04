@@ -8,10 +8,13 @@ import { intakeStore } from '../../../store/administration/intake.store';
 import { ValueType } from '../../../types';
 import {
   IntakeInfo,
+  IntakeInfoErrors,
   IntakeStatus,
+  IntakeStatusErrors,
   PeriodType,
 } from '../../../types/services/intake.types';
 import { getDropDownStatusOptions } from '../../../utils/getOption';
+import { intakeInfoSchema } from '../../../validations/intake.validation';
 import Button from '../../Atoms/custom/Button';
 import DateMolecule from '../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
@@ -138,12 +141,35 @@ export default function UpdateIntake(props: CProps) {
 }
 
 function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
+  const initialErrorState: IntakeInfoErrors = {
+    title: '',
+    total_num_students: '',
+  };
+
+  const [errors, setErrors] = useState<IntakeInfoErrors>(initialErrorState);
+
+  const handleSubmit = () => {
+    const validatedForm = intakeInfoSchema.validate(values, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => handleNext)
+      .catch((err) => {
+        const validatedErr: IntakeInfoErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof IntakeInfoErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
+  };
   return (
-    <form onSubmit={handleNext}>
+    <form>
       <InputMolecule
-        required
+        error={errors.title}
+        required={false}
         name="title"
-        readOnly
+        readOnly={values.title !== ''}
         placeholder="Intake title"
         value={values.title}
         handleChange={handleChange}>
@@ -157,8 +183,8 @@ function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
         Description
       </TextAreaMolecule>
       <InputMolecule
-        required
-        min={1}
+        required={false}
+        error={errors.total_num_students}
         name="total_num_students"
         placeholder="Number"
         value={values.total_num_students.toString()}
@@ -167,7 +193,7 @@ function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
         Total number of students
       </InputMolecule>
       <div className="pt-3">
-        <Button type="submit" onClick={() => handleNext}>
+        <Button type="submit" onClick={handleSubmit}>
           Next
         </Button>
       </div>
@@ -176,9 +202,35 @@ function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
 }
 
 function IntakeStatusComponent({ values, handleChange, handleNext, disabled }: IProps) {
+  const initialErrorState: IntakeStatusErrors = {
+    expected_start_date: '',
+    expected_end_date: '',
+    period_type: '',
+    intake_status: '',
+  };
+
+  const [errors, setErrors] = useState<IntakeStatusErrors>(initialErrorState);
+
+  const handleSubmit = () => {
+    const validatedForm = intakeInfoSchema.validate(values, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => handleNext)
+      .catch((err) => {
+        const validatedErr: IntakeStatusErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof IntakeStatusErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
+  };
+
   return (
-    <form onSubmit={handleNext}>
+    <form>
       <DateMolecule
+        error={errors.expected_start_date}
         showTime={false}
         defaultValue={
           values.expected_start_date ? values.expected_start_date.toString() : ''
@@ -189,6 +241,7 @@ function IntakeStatusComponent({ values, handleChange, handleNext, disabled }: I
       </DateMolecule>
       <div className="pt-4">
         <DateMolecule
+          error={errors.expected_end_date}
           showTime={false}
           endYear={moment().year() + 15}
           defaultValue={
@@ -201,9 +254,10 @@ function IntakeStatusComponent({ values, handleChange, handleNext, disabled }: I
       </div>
       <DropdownMolecule
         name="period_type"
+        error={errors.period_type}
         handleChange={handleChange}
         defaultValue={getDropDownStatusOptions(PeriodType).find(
-          (period) => period.label === values.period_type,
+          (period) => period.value === values.period_type,
         )}
         options={getDropDownStatusOptions(PeriodType)}
         placeholder="Select Period type">
@@ -211,9 +265,10 @@ function IntakeStatusComponent({ values, handleChange, handleNext, disabled }: I
       </DropdownMolecule>
       <DropdownMolecule
         name="intake_status"
+        error={errors.intake_status}
         handleChange={handleChange}
         defaultValue={getDropDownStatusOptions(IntakeStatus).find(
-          (intake) => intake.label === values.intake_status,
+          (intake) => intake.value === values.intake_status,
         )}
         options={getDropDownStatusOptions(IntakeStatus)}>
         Intake status
@@ -223,7 +278,7 @@ function IntakeStatusComponent({ values, handleChange, handleNext, disabled }: I
         <Button styleType="text" color="gray">
           Back
         </Button>
-        <Button disabled={disabled} type="submit" onClick={() => handleNext}>
+        <Button disabled={disabled} type="submit" onClick={handleSubmit}>
           Update intake
         </Button>
       </div>

@@ -25,12 +25,22 @@ import {
 import { IntakeProgramInfo } from '../types/services/intake-program.types';
 import { RankRes } from '../types/services/rank.types';
 import { getDropDownOptions, getDropDownStatusOptions } from '../utils/getOption';
+import {
+  enrollmentAcademySchema,
+  enrollmentInfoSchema,
+} from '../validations/user.validation';
 
 interface EnrollUserToProgramIntakes extends EnrollUserToProgram {
   academy_id: string;
   program_id: string;
   intake_id: string;
 }
+
+interface EnrollmentInfoErrors
+  extends Pick<EnrollUserToProgramIntakes, 'enroled_on' | 'employee_number'> {}
+
+interface EnrollmentAcademyErrors
+  extends Pick<EnrollUserToProgramIntakes, 'academy_id' | 'program_id' | 'intake_id'> {}
 
 interface IProps {
   values: EnrollUserToProgramIntakes;
@@ -139,9 +149,32 @@ export default function EnrollStudents() {
 
 function EnrollmentInfo({ values, handleChange, handleNext }: IProps) {
   const ranks: RankRes[] | undefined = rankStore.getRanks().data?.data.data;
+  const initialErrorState: EnrollmentInfoErrors = {
+    enroled_on: '',
+    employee_number: '',
+  };
+
+  const [errors, setErrors] = useState<EnrollmentInfoErrors>(initialErrorState);
+
+  const handleSubmit = () => {
+    const validatedForm = enrollmentInfoSchema.validate(values, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => handleNext)
+      .catch((err) => {
+        const validatedErr: EnrollmentInfoErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof EnrollmentInfoErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
+  };
   return (
-    <form onSubmit={handleNext}>
+    <form onSubmit={handleSubmit}>
       <DateMolecule
+        error={errors.enroled_on}
         handleChange={handleChange}
         startYear={moment().year() - 20}
         endYear={moment().year()}
@@ -151,6 +184,8 @@ function EnrollmentInfo({ values, handleChange, handleNext }: IProps) {
         Enrollment date
       </DateMolecule>
       <InputMolecule
+        error={errors.employee_number}
+        required={false}
         name="employee_number"
         value={values.employee_number}
         handleChange={handleChange}>
@@ -175,9 +210,7 @@ function EnrollmentInfo({ values, handleChange, handleNext }: IProps) {
         User Rank
       </DropdownMolecule>
       <div className="pt-3">
-        <Button type="submit" onClick={() => handleNext}>
-          Next
-        </Button>
+        <Button type="submit">Next</Button>
       </div>
     </form>
   );
@@ -188,10 +221,39 @@ function EnrollmentAcademy({ values, user_roles, handleChange, handleNext }: IPr
   const programs = programStore.getProgramsByAcademy(values.academy_id) || [];
   const intakes = intakeStore.getIntakesByProgram(values.program_id) || [];
 
+  const initialErrorState: EnrollmentAcademyErrors = {
+    academy_id: '',
+    program_id: '',
+    intake_id: '',
+  };
+
+  const [errors, setErrors] = useState<EnrollmentAcademyErrors>(initialErrorState);
+
+  const handleSubmit = () => {
+    const cloneValues = { ...values };
+    Object.assign(cloneValues, {
+      has_academy: user_roles?.type === RoleType.INSTITUTION,
+    });
+    const validatedForm = enrollmentAcademySchema.validate(cloneValues, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => handleNext)
+      .catch((err) => {
+        const validatedErr: EnrollmentAcademyErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof EnrollmentAcademyErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
+  };
+
   return (
-    <form onSubmit={handleNext}>
+    <form onSubmit={handleSubmit}>
       {user_roles?.type === RoleType.INSTITUTION && (
         <SelectMolecule
+          error={errors.academy_id}
           options={getDropDownOptions({ inputs: academies.data?.data.data || [] })}
           name="academy_id"
           placeholder={
@@ -203,6 +265,7 @@ function EnrollmentAcademy({ values, user_roles, handleChange, handleNext }: IPr
         </SelectMolecule>
       )}
       <SelectMolecule
+        error={errors.program_id}
         options={getDropDownOptions({ inputs: programs.data?.data.data || [] })}
         name="program_id"
         placeholder={
@@ -213,6 +276,7 @@ function EnrollmentAcademy({ values, user_roles, handleChange, handleNext }: IPr
         Programs
       </SelectMolecule>
       <SelectMolecule
+        error={errors.intake_id}
         options={getDropDownOptions({
           inputs: intakes.data?.data.data || [],
           labelName: ['intake_id'],

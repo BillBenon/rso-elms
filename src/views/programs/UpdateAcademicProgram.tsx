@@ -16,12 +16,14 @@ import usersStore from '../../store/administration/users.store';
 import { Link as LinkList } from '../../types';
 import { CommonFormProps, ParamType, ValueType } from '../../types';
 import {
+  ProgramErrors,
   ProgramStatus,
   ProgramType,
   UpdateProgramInfo,
 } from '../../types/services/program.types';
 import { UserType } from '../../types/services/user.types';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
+import { programSchema } from '../../validations/program.validation';
 
 interface IUpdateAcademicProgram<K> extends CommonFormProps<K> {}
 export default function UpdateAcademicProgram<E>({
@@ -53,6 +55,16 @@ export default function UpdateAcademicProgram<E>({
     type: ProgramType.SHORT_COURSE,
     status: ProgramStatus.ACTIVE,
   });
+
+  const initialErrorState: ProgramErrors = {
+    name: '',
+    code: '',
+    description: '',
+    in_charge_id: '',
+  };
+
+  const [errors, setErrors] = useState<ProgramErrors>(initialErrorState);
+
   const { mutate } = programStore.modifyProgram();
 
   useEffect(() => {
@@ -87,18 +99,33 @@ export default function UpdateAcademicProgram<E>({
 
   function updateProgram<T>(e: FormEvent<T>) {
     e.preventDefault();
-    mutate(details, {
-      onSuccess() {
-        toast.success('Successfully updated program', { duration: 1200 });
-        setTimeout(() => {
-          history.goBack();
-        }, 900);
-      },
-      onError(error) {
-        toast.error(error + '');
-      },
+
+    const validatedForm = programSchema.validate(details, {
+      abortEarly: false,
     });
-    if (onSubmit) onSubmit(e);
+
+    validatedForm
+      .then(() => {
+        mutate(details, {
+          onSuccess() {
+            toast.success('Successfully updated program', { duration: 1200 });
+            setTimeout(() => {
+              history.goBack();
+            }, 900);
+          },
+          onError(error) {
+            toast.error(error + '');
+          },
+        });
+        if (onSubmit) onSubmit(e);
+      })
+      .catch((err) => {
+        const validatedErr: ProgramErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof ProgramErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
 
   return (
@@ -115,14 +142,16 @@ export default function UpdateAcademicProgram<E>({
           </div>
           <InputMolecule
             value={details.name}
-            error=""
+            required={false}
+            error={errors.name}
             handleChange={(e) => handleChange(e)}
             name="name">
             program name
           </InputMolecule>
           <InputMolecule
             value={details.code}
-            error=""
+            required={false}
+            error={errors.code}
             handleChange={(e) => handleChange(e)}
             name="code">
             Program code
@@ -136,12 +165,15 @@ export default function UpdateAcademicProgram<E>({
             Program Type
           </RadioMolecule>
           <TextAreaMolecule
+            error={errors.description}
             value={details.description}
             name="description"
             handleChange={(e) => handleChange(e)}>
             Program description
           </TextAreaMolecule>
           <DropdownMolecule
+            error={errors.in_charge_id}
+            hasError={errors.in_charge_id !== ''}
             defaultValue={getDropDownOptions({
               inputs: instructors || [],
               labelName: ['username'],

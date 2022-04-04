@@ -16,6 +16,10 @@ import {
   IUpdateClassTimetable,
 } from '../../../../types/services/schedule.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
+import {
+  firstTimetableSchema,
+  secondEditTimetableSchema,
+} from '../../../../validations/calendar.validation';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
@@ -32,6 +36,13 @@ interface IStepProps {
 interface ParamType {
   classId: string;
   itemId: string;
+}
+
+interface FirstTimeTableErrors
+  extends Pick<IUpdateClassTimetable, 'courseModule' | 'instructor'> {}
+interface SecondTimeTableErrors
+  extends Pick<IUpdateClassTimetable, 'venue' | 'startHour' | 'endHour'> {
+  dayOfWeek: string;
 }
 
 export default function EditTimeTable() {
@@ -127,9 +138,28 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
         '',
     ).data?.data.data || [];
 
-  const handleSubmit = (e: FormEvent) => {
+  const initialErrorState: FirstTimeTableErrors = {
+    courseModule: '',
+    instructor: '',
+  };
+
+  const [errors, setErrors] = useState<FirstTimeTableErrors>(initialErrorState);
+
+  const handleSubmit = (e: any) => {
     e.preventDefault();
-    setCurrentStep(1);
+    const validatedForm = firstTimetableSchema.validate(values, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => setCurrentStep(1))
+      .catch((err) => {
+        const validatedErr: FirstTimeTableErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof FirstTimeTableErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   };
 
   return (
@@ -144,6 +174,7 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
         </InputMolecule>
         <div className="pb-1">
           <SelectMolecule
+            error={errors.courseModule}
             name="courseModule"
             handleChange={handleChange}
             options={
@@ -159,6 +190,7 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
         </div>
         <div className="pb-4">
           <SelectMolecule
+            error={errors.instructor}
             name="instructor"
             value={values.instructor}
             handleChange={handleChange}
@@ -182,10 +214,38 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
   const picked_role = usePickedRole();
   const venues = getAllVenues(picked_role?.academy_id + '').data?.data.data || [];
 
+  const initialErrorState: SecondTimeTableErrors = {
+    venue: '',
+    startHour: '',
+    endHour: '',
+    dayOfWeek: '',
+  };
+
+  const [errors, setErrors] = useState<SecondTimeTableErrors>(initialErrorState);
+
+  const handleFinish = (e: any) => {
+    e.preventDefault();
+
+    const validatedForm = secondEditTimetableSchema.validate(values, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => handleSubmit)
+      .catch((err) => {
+        const validatedErr: SecondTimeTableErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof SecondTimeTableErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="max-w-sm -mb-6">
+    <form onSubmit={handleFinish} className="max-w-sm -mb-6">
       <SelectMolecule
         name="venue"
+        error={errors.venue}
         value={values.venue}
         handleChange={handleChange}
         options={venues?.map((vn) => ({ label: vn.name, value: vn.id })) as SelectData[]}
@@ -193,6 +253,8 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
         Venue
       </SelectMolecule>
       <InputMolecule
+        error={errors.startHour}
+        required={false}
         name="startHour"
         type="time"
         value={values.startHour}
@@ -200,6 +262,8 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
         Start hour
       </InputMolecule>
       <InputMolecule
+        error={errors.endHour}
+        required={false}
         type="time"
         value={values.endHour}
         name="endHour"
@@ -207,6 +271,7 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
         End hour
       </InputMolecule>
       <SelectMolecule
+        error={errors.dayOfWeek}
         options={getDropDownStatusOptions(daysOfWeek).slice(0, 7)}
         name="dayOfWeek"
         placeholder="Class date"
