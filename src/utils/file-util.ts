@@ -89,7 +89,11 @@ export const downloadFile = async (attachmentId: string) => {
   return url;
 };
 
-export const downloadPersonalDoc = async (filename: string, file_type: string) => {
+export const downloadPersonalDoc = async (
+  filename: string,
+  file_type: string,
+  downloadPath: string,
+) => {
   let appsType = ['doc', 'xlxs', 'pptx', 'pdf', 'docx'];
   // eslint-disable-next-line no-undef
   const headers: HeadersInit = {};
@@ -103,12 +107,9 @@ export const downloadPersonalDoc = async (filename: string, file_type: string) =
     headers['Authorization'] = `Bearer ${jwtInfo.token}`;
   }
 
-  const res = await fetch(
-    `${ADMIN_BASE_URL}/attachments/download/personalDocs/${filename}`,
-    {
-      headers,
-    },
-  );
+  const res = await fetch(`${ADMIN_BASE_URL}${downloadPath}${filename}`, {
+    headers,
+  });
   console.log(res);
   const blob = await res.blob();
 

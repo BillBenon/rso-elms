@@ -9,7 +9,9 @@ class ProgramStore {
   addProgramToLevel() {
     return useMutation(programService.addProgramToLevel);
   }
-
+  addProgramSyllabus() {
+    return useMutation(programService.addProgramSyllabus);
+  }
   fetchPrograms() {
     return useQuery('programs', programService.fetchPrograms);
   }

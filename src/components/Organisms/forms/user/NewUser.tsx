@@ -27,6 +27,8 @@ import {
   getDropDownOptions,
   getDropDownStatusOptions,
 } from '../../../../utils/getOption';
+import { validation } from '../../../../utils/validations';
+import { newUserSchema } from '../../../../validations/user.validation';
 import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
 import DateMolecule from '../../../Molecules/input/DateMolecule';
@@ -37,6 +39,30 @@ import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 
 interface IParams {
   userType: UserType;
+}
+
+export interface NewUserErrors
+  extends Pick<
+    CreateUserInfo,
+    | 'spouse_name'
+    | 'academy_id'
+    | 'birth_date'
+    | 'email'
+    | 'first_name'
+    | 'intake_program_id'
+    | 'last_name'
+    | 'mother_names'
+    | 'nid'
+    | 'password'
+    | 'phone'
+    | 'username'
+    | 'nationality'
+    | 'document_expire_on'
+  > {
+  is_student: boolean;
+  has_spouse: boolean;
+  has_academy: boolean;
+  has_passport: boolean;
 }
 
 export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
@@ -86,21 +112,49 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     id: '',
   });
 
+  const initialErrorState: NewUserErrors = {
+    spouse_name: '',
+    academy_id: '',
+    birth_date: '',
+    email: '',
+    first_name: '',
+    intake_program_id: '',
+    last_name: '',
+    mother_names: '',
+    nid: '',
+    password: '',
+    phone: '',
+    username: '',
+    nationality: '',
+    document_expire_on: '',
+    is_student: false,
+    has_spouse: false,
+    has_academy: false,
+    has_passport: false,
+  };
+
+  const [errors, setErrors] = useState<NewUserErrors>(initialErrorState);
+
   const [otherDetail, setOtherDetail] = useState({
     intake: '',
     program: '',
   });
 
   const options = useMemo(() => countryList().getData(), []);
-
   useEffect(() => {
     setDetails((details) => ({
       ...details,
       intake_program_id: otherDetail.intake,
-      institution_id: user?.institution?.id.toString() || '',
-      academy_id: details.user_type !== 'SUPER_ADMIN' ? picked_role?.academy_id + '' : '',
     }));
-  }, [otherDetail.intake, picked_role?.academy_id, user?.institution?.id]);
+  }, [otherDetail.intake]);
+
+  useEffect(() => {
+    setDetails((details) => ({
+      ...details,
+      institution_id: user?.institution?.id.toString() || '',
+      academy_id: user?.user_type !== 'SUPER_ADMIN' ? picked_role?.academy_id || '' : '',
+    }));
+  }, [picked_role?.academy_id, user?.institution?.id, user?.user_type]);
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
@@ -117,22 +171,60 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   }
 
   const { mutateAsync, isLoading } = usersStore.createUser();
-  async function addUser<T>(e: FormEvent<T>) {
+  function addUser<T>(e: FormEvent<T>) {
     e.preventDefault();
-    if (onSubmit) onSubmit(e);
-
-    let toastId = toast.loading(`Saving new ${userType.toLowerCase()}`);
-
-    await mutateAsync(details, {
-      onSuccess(theUser) {
-        toast.success(theUser.data.message, { id: toastId });
-        queryClient.invalidateQueries(['users', 'users/academy', 'users/academy/type']);
-        history.push(`/dashboard/users/${theUser.data.data.id}/assign-role`);
-      },
-      onError(error: any) {
-        toast.error(error.response.data.message, { id: toastId });
-      },
+    const cloneDetails = { ...details };
+    Object.assign(cloneDetails, {
+      is_student: details.user_type === UserType.STUDENT,
+      has_spouse:
+        details.marital_status === MaritalStatus.MARRIED ||
+        details.marital_status === MaritalStatus.WIDOWED,
+      has_academy: details.user_type !== UserType.SUPER_ADMIN,
+      has_passport: details.doc_type == DocType.PASSPORT,
     });
+
+    const validatedForm = newUserSchema.validate(cloneDetails, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(async () => {
+        if (
+          details.doc_type === DocType.NID &&
+          validation.nidRwandaValidation(details.nid) !== ''
+        ) {
+          setErrors({
+            ...errors,
+            nid: validation.nidRwandaValidation(details.nid),
+          });
+        } else {
+          let toastId = toast.loading(`Saving new ${userType.toLowerCase()}`);
+
+          await mutateAsync(details, {
+            onSuccess(theUser) {
+              toast.success(theUser.data.message, { id: toastId });
+              queryClient.invalidateQueries([
+                'users',
+                'users/academy',
+                'users/academy/type',
+              ]);
+              history.push(`/dashboard/users/${theUser.data.data.id}/assign-role`);
+            },
+            onError(error: any) {
+              toast.error(error.response.data.message, { id: toastId });
+            },
+          });
+          if (onSubmit) onSubmit(e);
+        }
+      })
+      .catch((err) => {
+        const validatedErr: NewUserErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          //@ts-ignore
+          validatedErr[el.path as keyof NewUserErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
 
   // get all academies in an institution
@@ -173,6 +265,8 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           </>
         ) : null}
         <InputMolecule
+          required={false}
+          error={errors.first_name}
           name="first_name"
           placeholder="eg: Manzi"
           value={details.first_name}
@@ -180,6 +274,8 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           First name
         </InputMolecule>
         <InputMolecule
+          required={false}
+          error={errors.last_name}
           name="last_name"
           placeholder="eg: Claude"
           value={details.last_name}
@@ -187,6 +283,8 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           Last name
         </InputMolecule>
         <InputMolecule
+          required={false}
+          error={errors.email}
           name="email"
           placeholder="Enter email"
           value={details.email}
@@ -194,6 +292,8 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           Email
         </InputMolecule>
         <InputMolecule
+          required={false}
+          error={errors.username}
           name="username"
           placeholder="Enter username"
           value={details.username}
@@ -201,6 +301,8 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           Username
         </InputMolecule>
         <InputMolecule
+          required={false}
+          error={errors.password}
           type="password"
           name="password"
           placeholder="Enter password"
@@ -209,6 +311,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           Password
         </InputMolecule>
         <DateMolecule
+          error={errors.birth_date}
           startYear={moment().year() - 100}
           defaultValue={(moment().year() - 16).toString()}
           endYear={moment().year() - 16}
@@ -219,6 +322,8 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           Date of Birth
         </DateMolecule>
         <InputMolecule
+          required={false}
+          error={errors.phone}
           name="phone"
           placeholder="Enter phone number"
           value={details.phone}
@@ -235,6 +340,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           Gender
         </RadioMolecule>
         <DropdownMolecule
+          error={errors.nationality}
           width="60 md:w-80"
           name="nationality"
           defaultValue={options.find(
@@ -249,13 +355,14 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}
           name="doc_type"
           defaultValue={getDropDownStatusOptions(DocType).find(
-            (doc) => doc.label === details.doc_type,
+            (doc) => doc.value === details.doc_type,
           )}
           options={getDropDownStatusOptions(DocType)}>
           Reference Number
         </DropdownMolecule>
-
         <InputMolecule
+          error={errors.nid}
+          required={false}
           name="nid"
           type="text"
           value={details.nid}
@@ -265,6 +372,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         </InputMolecule>
         {details.doc_type == DocType.PASSPORT && (
           <DateMolecule
+            error={errors.document_expire_on}
             startYear={moment().year() - 7}
             defaultValue={moment().toString()}
             endYear={moment().year() + 7}
@@ -276,7 +384,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         )}
         <DropdownMolecule
           defaultValue={getDropDownStatusOptions(MaritalStatus).find(
-            (marital_status) => marital_status.label === details.marital_status,
+            (marital_status) => marital_status.value === details.marital_status,
           )}
           options={getDropDownStatusOptions(MaritalStatus)}
           name="marital_status"
@@ -287,8 +395,9 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         {(details.marital_status === MaritalStatus.MARRIED ||
           details.marital_status === MaritalStatus.WIDOWED) && (
           <InputMolecule
-            name="spouse_name"
+            error={errors.spouse_name}
             required={false}
+            name="spouse_name"
             value={details.spouse_name}
             handleChange={handleChange}>
             Spouse Name
@@ -296,7 +405,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         )}
         <DropdownMolecule
           defaultValue={getDropDownStatusOptions(EducationLevel).find(
-            (level) => level.label === details.education_level,
+            (level) => level.value === details.education_level,
           )}
           options={getDropDownStatusOptions(EducationLevel)}
           name="education_level"
@@ -306,6 +415,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         </DropdownMolecule>
         {user?.user_type === UserType.SUPER_ADMIN && details.user_type !== 'SUPER_ADMIN' && (
           <DropdownMolecule
+            error={errors.academy_id}
             options={getDropDownOptions({ inputs: academies.data?.data.data || [] })}
             name="academy_id"
             placeholder={
@@ -318,6 +428,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
         {details.user_type === 'STUDENT' && (
           <>
             <DropdownMolecule
+              error={errors.intake_program_id}
               options={
                 programs.data?.data.data?.map((p) => ({
                   value: p.id,
@@ -332,6 +443,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
               Programs
             </DropdownMolecule>
             <DropdownMolecule
+              error={errors.intake_program_id}
               options={
                 intakes.data?.data.data?.map((intk) => ({
                   value: intk.id,

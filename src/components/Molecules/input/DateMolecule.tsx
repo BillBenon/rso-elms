@@ -8,6 +8,7 @@ import HourSelect from '../../Atoms/Input/date/HourSelect';
 import MinuteSelect from '../../Atoms/Input/date/MinuteSelect';
 import MonthSelect from '../../Atoms/Input/date/MonthSelect';
 import YearSelect from '../../Atoms/Input/date/YearSelect';
+import Error from '../../Atoms/Text/Error';
 import ILabel from '../../Atoms/Text/ILabel';
 
 type IProp = {
@@ -39,6 +40,7 @@ type IProp = {
   reverse?: boolean;
   date_time_type?: boolean;
   breakToNextLine?: boolean;
+  error?: string;
 };
 
 function DateMolecule({
@@ -70,6 +72,7 @@ function DateMolecule({
   defaultValue,
   date_time_type = true,
   breakToNextLine = false,
+  error = '',
 }: IProp) {
   const [dateState, setDateState] = useState({
     Year: moment().year(),
@@ -195,6 +198,7 @@ function DateMolecule({
           </div>
         )}
       </div>
+      <Error>{error && error}</Error>
     </div>
   );
 }

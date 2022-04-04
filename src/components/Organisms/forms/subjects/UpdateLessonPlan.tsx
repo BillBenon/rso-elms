@@ -5,8 +5,16 @@ import { useParams } from 'react-router';
 import { queryClient } from '../../../../plugins/react-query';
 import { lessonStore } from '../../../../store/administration/lesson.store';
 import { ValueType } from '../../../../types';
-import { LessonPlan } from '../../../../types/services/lesson.types';
+import {
+  LessonPlan,
+  LessonTextAreaErrors,
+  LessonTimeErrors,
+} from '../../../../types/services/lesson.types';
 import { formatDateToIso, formatDateToYyMmDd } from '../../../../utils/date-helper';
+import {
+  lessonPlanTextAreaSchema,
+  lessonPlanTimeSchema,
+} from '../../../../validations/lesson.validation';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
@@ -114,9 +122,34 @@ function UpdateLessonPlan() {
 }
 
 function LessonTimeComponent({ lessonPlan, handleChange, handleNext }: IProps) {
+  const initialErrorState: LessonTimeErrors = {
+    start_time: '',
+    end_time: '',
+  };
+
+  const [errors, setErrors] = useState<LessonTimeErrors>(initialErrorState);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const validatedForm = lessonPlanTimeSchema.validate(lessonPlan, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => handleNext)
+      .catch((err) => {
+        const validatedErr: LessonTimeErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof LessonTimeErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
+  };
   return (
-    <form onSubmit={handleNext}>
+    <form onSubmit={handleSubmit}>
       <InputMolecule
+        required={false}
+        error={errors.start_time}
         value={
           lessonPlan.start_time
             ? formatDateToYyMmDd(lessonPlan.start_time)
@@ -128,6 +161,8 @@ function LessonTimeComponent({ lessonPlan, handleChange, handleNext }: IProps) {
         Start Date
       </InputMolecule>
       <InputMolecule
+        required={false}
+        error={errors.end_time}
         value={
           lessonPlan.end_time
             ? formatDateToYyMmDd(lessonPlan.end_time)
@@ -153,28 +188,57 @@ function LessonTimeComponent({ lessonPlan, handleChange, handleNext }: IProps) {
 }
 
 function LessonTextArea({ lessonPlan, handleChange, handleNext }: IProps) {
+  const initialErrorState: LessonTextAreaErrors = {
+    lesson_objective: '',
+    lesson_requirements: '',
+    text_books: '',
+    class_policy: '',
+  };
+
+  const [errors, setErrors] = useState<LessonTextAreaErrors>(initialErrorState);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const validatedForm = lessonPlanTextAreaSchema.validate(lessonPlan, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => handleNext)
+      .catch((err) => {
+        const validatedErr: LessonTextAreaErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof LessonTextAreaErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
+  };
   return (
-    <form onSubmit={handleNext}>
+    <form onSubmit={handleSubmit}>
       <TextAreaMolecule
         name="lesson_objective"
+        error={errors.lesson_objective}
         value={lessonPlan.lesson_objective}
         handleChange={handleChange}>
         Lesson Objective
       </TextAreaMolecule>
       <TextAreaMolecule
         name="lesson_requirements"
+        error={errors.lesson_requirements}
         value={lessonPlan.lesson_requirements}
         handleChange={handleChange}>
         Lesson Requirements
       </TextAreaMolecule>
       <TextAreaMolecule
         name="text_books"
+        error={errors.text_books}
         value={lessonPlan.text_books}
         handleChange={handleChange}>
         Text Books
       </TextAreaMolecule>
       <TextAreaMolecule
         name="class_policy"
+        error={errors.class_policy}
         value={lessonPlan.class_policy}
         handleChange={handleChange}>
         Class Policy

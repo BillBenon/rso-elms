@@ -3,14 +3,16 @@ import { Table } from '..';
 import { DivisionInfo } from './division.types';
 import { Instructor } from './instructor.types';
 import { ILevel } from './levels.types';
-import { UserInfo } from './user.types';
-
-export interface ProgramInfo extends CreateProgramInfo, Table {
+export interface ProgramInfo extends CreateProgramInfo, Table, ProgramFile {
   department: DivisionInfo;
   incharge: Instructor;
   current_admin_names: string;
   total_num_modules: number;
   current_admin_id: string;
+}
+export interface ProgramFile {
+  attachment_file_name: string;
+  attachment_id: string;
 }
 
 export interface CreateProgramInfo {
@@ -34,6 +36,9 @@ export interface UpdateProgramInfo {
   status: ProgramStatus;
 }
 
+export interface ProgramErrors
+  extends Pick<UpdateProgramInfo, 'name' | 'code' | 'in_charge_id' | 'description'> {}
+
 export interface CreateAcademicProgramLevel {
   endg_flow: number;
   level_id?: number;
@@ -55,4 +60,9 @@ export enum ProgramStatus {
 export enum ProgramType {
   SHORT_COURSE = 'SHORT_COURSE',
   ACADEMIC = 'ACADEMIC',
+}
+export interface ProgramSyllabus {
+  description: string;
+  purpose: string;
+  programId: string;
 }

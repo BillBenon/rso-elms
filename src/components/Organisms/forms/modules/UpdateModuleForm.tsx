@@ -5,7 +5,8 @@ import { useHistory, useParams } from 'react-router-dom';
 import { queryClient } from '../../../../plugins/react-query';
 import { moduleStore } from '../../../../store/administration/modules.store';
 import { ValueType } from '../../../../types';
-import { CreateModuleInfo } from '../../../../types/services/modules.types';
+import { CreateModuleInfo, ModuleError } from '../../../../types/services/modules.types';
+import { newModuleSchema } from '../../../../validations/program.validation';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
@@ -20,7 +21,13 @@ function UpdateModuleForm() {
   const { moduleId } = useParams<ParamType>();
   const module = moduleStore.getModuleById(moduleId).data?.data.data;
 
-  const { mutateAsync, isLoading } = moduleStore.modifyModule();
+  const { mutate, isLoading } = moduleStore.modifyModule();
+
+  const initialErrorState = {
+    name: '',
+  };
+
+  const [errors, setErrors] = useState(initialErrorState);
 
   const [values, setvalues] = useState<CreateModuleInfo>({
     id: '',
@@ -38,23 +45,41 @@ function UpdateModuleForm() {
     setvalues({ ...values, [e.name]: e.value });
   }
 
-  async function submitForm(e: FormEvent) {
+  function submitForm(e: FormEvent) {
     e.preventDefault();
 
-    await mutateAsync(values, {
-      async onSuccess(data) {
-        toast.success(data.data.message);
-        queryClient.invalidateQueries(['modules/program/id']);
-        history.goBack();
-      },
-      onError(error: any) {
-        toast.error(error.response.data.message || 'error occurred please try again');
-      },
+    const validatedForm = newModuleSchema.validate(values, {
+      abortEarly: false,
     });
+
+    validatedForm
+      .then(() => {
+        mutate(values, {
+          onSuccess(data) {
+            toast.success(data.data.message);
+            queryClient.invalidateQueries(['modules/program/id']);
+            history.goBack();
+          },
+          onError(error: any) {
+            toast.error(error.response.data.message || 'error occurred please try again');
+          },
+        });
+      })
+      .catch((err) => {
+        const validatedErr: ModuleError = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof ModuleError] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
   return (
     <form onSubmit={submitForm}>
-      <InputMolecule value={values.name} error="" handleChange={handleChange} name="name">
+      <InputMolecule
+        value={values.name}
+        error={errors.name}
+        handleChange={handleChange}
+        name="name">
         Module name
       </InputMolecule>
       <TextAreaMolecule

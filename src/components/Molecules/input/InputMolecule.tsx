@@ -44,6 +44,7 @@ export default function InputMolecule<T>({
         name={name}
         placeholder={placeholder}
         fcolor={error ? 'error' : undefined}
+        bcolor={error ? 'error' : 'tertiary'}
         type={type}
         width={width}
         value={value}

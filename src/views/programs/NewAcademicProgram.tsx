@@ -19,13 +19,18 @@ import { Link as LinkList } from '../../types';
 import { CommonFormProps, ValueType } from '../../types';
 import {
   CreateProgramInfo,
+  ProgramErrors,
   ProgramStatus,
   ProgramType,
 } from '../../types/services/program.types';
 import { UserType } from '../../types/services/user.types';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
+import { newProgramSchema } from '../../validations/program.validation';
 
 interface INewAcademyProgram<K> extends CommonFormProps<K> {}
+interface NewProgramErrors extends ProgramErrors {
+  department_id: string;
+}
 
 export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E>) {
   const history = useHistory();
@@ -54,6 +59,16 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
     status: ProgramStatus.ACTIVE,
   });
 
+  const initialErrorState: NewProgramErrors = {
+    name: '',
+    code: '',
+    description: '',
+    in_charge_id: '',
+    department_id: '',
+  };
+
+  const [errors, setErrors] = useState<NewProgramErrors>(initialErrorState);
+
   const { mutateAsync } = programStore.createProgram();
 
   function handleChange(e: ValueType) {
@@ -70,19 +85,36 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
     { to: '/', title: 'New Program' },
   ];
 
-  async function createProgram<T>(e: FormEvent<T>) {
+  function createProgram<T>(e: FormEvent<T>) {
     e.preventDefault();
 
-    if (onSubmit) onSubmit(e);
-    await mutateAsync(details, {
-      onSuccess(newProgram) {
-        toast.success('Program created');
-        history.push(`/dashboard/programs/${newProgram.data.data.id}/level/add`);
-      },
-      onError(error: any) {
-        toast.error(error.response.data.message);
-      },
+    const cloneDetails = { ...details };
+    Object.assign(cloneDetails, { has_faculty: !facultyId });
+
+    const validatedForm = newProgramSchema.validate(cloneDetails, {
+      abortEarly: false,
     });
+
+    validatedForm
+      .then(() => {
+        mutateAsync(cloneDetails, {
+          onSuccess(newProgram) {
+            toast.success('Program created');
+            history.push(`/dashboard/programs/${newProgram.data.data.id}/level/add`);
+          },
+          onError(error: any) {
+            toast.error(error.response.data.message);
+          },
+        });
+        if (onSubmit) onSubmit(e);
+      })
+      .catch((err) => {
+        const validatedErr: NewProgramErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof NewProgramErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
 
   return (
@@ -98,7 +130,8 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
             </Heading>
           </div>
           <InputMolecule
-            required
+            required={false}
+            error={errors.name}
             value={details.name}
             handleChange={handleChange}
             name="name">
@@ -106,7 +139,8 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
           </InputMolecule>
           <InputMolecule
             value={details.code}
-            required
+            required={false}
+            error={errors.code}
             handleChange={handleChange}
             name="code">
             Program code
@@ -121,13 +155,15 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
             Program Type
           </RadioMolecule>
           <TextAreaMolecule
+            error={errors.description}
             value={details.description}
-            required
             name="description"
             handleChange={handleChange}>
             Program description
           </TextAreaMolecule>
           <DropdownMolecule
+            error={errors.in_charge_id}
+            hasError={errors.in_charge_id !== ''}
             width="60 md:w-80"
             placeholder="Select incharge"
             options={getDropDownOptions({
@@ -141,6 +177,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
 
           {!facultyId && (
             <DropdownMolecule
+              error={errors.department_id}
               width="60 md:w-80"
               placeholder="Select department"
               options={getDropDownOptions({ inputs: departments || [] })}

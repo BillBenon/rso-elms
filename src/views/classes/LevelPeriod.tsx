@@ -22,9 +22,17 @@ function LevelPeriod() {
   const tabs: TabType[] = [];
 
   prds.map((prd) => {
+    let privileged_user_action = path.includes('learn')
+      ? `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${level}/view-period/${prd.id}/view-class`
+      : path.includes('teach')
+      ? `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${level}/view-period/${prd.id}/view-class`
+      : path.includes('manage')
+      ? `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${level}/view-period/${prd.id}/view-class`
+      : '';
+
     tabs.push({
       label: `${prd.academic_period.name}`,
-      href: `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${prd.id}/view-class`,
+      href: privileged_user_action,
     });
   });
 

@@ -80,6 +80,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
       privilege: Privileges.CAN_DELETE_CLASSES_MEMBERS,
     },
   ];
+
   function goToNewEvaluation() {
     setLocalStorageData('currentStep', 0);
     history.push(`/dashboard/evaluations/new?prd=${period}&prg=${programId}`);
@@ -102,43 +103,61 @@ function StudentInClass({ classId, label }: IStudentClass) {
                       <Button onClick={goToNewEvaluation}> New evaluation</Button>
                     </div>
                     {/* </Permission> */}
-                    <div className="flex gap-4 self-end">
-                      <Permission privilege={Privileges.CAN_CREATE_CLASSES}>
-                        <Button
-                          styleType="outline"
-                          onClick={() =>
-                            history.push(
-                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
-                            )
-                          }>
-                          Add class
-                        </Button>
-                      </Permission>
+                    <Permission privilege={Privileges.CAN_CREATE_CLASSES}>
+                      <Button
+                        styleType="outline"
+                        onClick={() =>
+                          path.includes('learn')
+                            ? history.push(
+                                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/add-class`,
+                              )
+                            : path.includes('teach')
+                            ? history.push(
+                                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/add-class`,
+                              )
+                            : path.includes('manage')
+                            ? history.push(
+                                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/add-class`,
+                              )
+                            : {}
+                        }>
+                        Add class
+                      </Button>
+                    </Permission>
 
+                    <Button
+                      styleType="outline"
+                      onClick={() =>
+                        path.includes('learn')
+                          ? history.push(
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/view-class/${classId}/subject`,
+                            )
+                          : path.includes('teach')
+                          ? history.push(
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/view-class/${classId}/subject`,
+                            )
+                          : path.includes('manage')
+                          ? history.push(
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/view-class/${classId}/subject`,
+                            )
+                          : {}
+                      }>
+                      View subjects
+                    </Button>
+                    <Permission privilege={Privileges.CAN_ACCESS_REPORTS}>
                       <Button
                         styleType="outline"
                         onClick={() =>
                           history.push(
-                            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/view-class/${classId}/subject`,
+                            `/dashboard/intakes/peformance/${levelId}/${classId}`,
                           )
                         }>
-                        View subjects
+                        View performance
                       </Button>
-                      <Permission privilege={Privileges.CAN_ACCESS_REPORTS}>
-                        <Button
-                          styleType="outline"
-                          onClick={() =>
-                            history.push(
-                              `/dashboard/intakes/peformance/${levelId}/${classId}`,
-                            )
-                          }>
-                          View performance
-                        </Button>
-                      </Permission>
-                      <Permission privilege={Privileges.CAN_CREATE_CLASSES_MEMBERS}>
-                        <AddStudents classId={parseInt(classId)} />
-                      </Permission>
-                    </div>
+                    </Permission>
+                    <Permission privilege={Privileges.CAN_CREATE_CLASSES_MEMBERS}>
+                      <AddStudents classId={parseInt(classId)} />
+                    </Permission>
                   </div>
                   <section>
                     {isLoading ? (
@@ -177,9 +196,19 @@ function StudentInClass({ classId, label }: IStudentClass) {
                       <Button
                         styleType="outline"
                         onClick={() =>
-                          history.push(
-                            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/add-class`,
-                          )
+                          path.includes('learn')
+                            ? history.push(
+                                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/add-class`,
+                              )
+                            : path.includes('teach')
+                            ? history.push(
+                                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/add-class`,
+                              )
+                            : path.includes('learn')
+                            ? history.push(
+                                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/add-class`,
+                              )
+                            : {}
                         }>
                         Add class
                       </Button>
@@ -188,9 +217,19 @@ function StudentInClass({ classId, label }: IStudentClass) {
                     <Button
                       styleType="outline"
                       onClick={() =>
-                        history.push(
-                          `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-period/${period}/view-class`,
-                        )
+                        path.includes('learn')
+                          ? history.push(
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/view-class`,
+                            )
+                          : path.includes('teach')
+                          ? history.push(
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/view-class`,
+                            )
+                          : path.includes('manage')
+                          ? history.push(
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/view-class`,
+                            )
+                          : {}
                       }>
                       View students
                     </Button>

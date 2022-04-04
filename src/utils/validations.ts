@@ -40,9 +40,47 @@ const dateValidation = (age: number) => {
   return null;
 };
 
+const nidRwandaValidation = (nid: string) => {
+  if (!nid) {
+    return 'National ID is required';
+  }
+  if (nid.length != 16 || !isNumber(nid)) {
+    return 'Rwanda National ID must be 16 numbers';
+  }
+
+  // get birth year
+  var tempDate = new Date();
+  tempDate.setFullYear(parseInt(nid.substring(1, 5)));
+
+  const birth_year = tempDate.getFullYear();
+
+  if (!(birth_year == parseInt(nid.substring(1, 5)))) {
+    return 'Invalid National ID - birth year part not valid';
+  }
+
+  // get the gender
+  var genderCode = parseInt(nid.substring(5, 6));
+  if (genderCode !== 7 && genderCode !== 8) {
+    return 'Invalid National ID - gender part not valid';
+  }
+
+  // get country ID for citzenship
+  var first_time_received = parseInt(nid.substring(13, 14));
+  if (first_time_received !== 0 && first_time_received !== 1) {
+    return 'Invalid National ID - check the digits again';
+  } else {
+    return '';
+  }
+};
+
+function isNumber(n: string) {
+  return !isNaN(parseFloat(n)) && isFinite(parseFloat(n));
+}
+
 export const validation = {
   dateValidation,
   emailValidation,
   nameValidation,
   phoneValidation,
+  nidRwandaValidation,
 };
