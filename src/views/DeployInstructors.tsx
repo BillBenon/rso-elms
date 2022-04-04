@@ -14,6 +14,10 @@ import { ParamType, ValueType } from '../types';
 import { AcademyInfo } from '../types/services/academy.types';
 import { DeployInstructor } from '../types/services/instructor.types';
 import { getDropDownOptions } from '../utils/getOption';
+import { deployInstSchema } from '../validations/user.validation';
+
+interface DeployInstError
+  extends Pick<DeployInstructor, 'deployed_on' | 'deployment_number' | 'academy_id'> {}
 
 export default function DeployInstructors() {
   const { user } = useAuthenticator();
@@ -28,6 +32,13 @@ export default function DeployInstructors() {
     description: '',
     user_id: '',
   });
+
+  const initialErrorState: DeployInstError = {
+    deployed_on: '',
+    deployment_number: '',
+    academy_id: '',
+  };
+  const [errors, setErrors] = useState(initialErrorState);
 
   useEffect(() => {
     setDeployInst((inst) => ({ ...inst, user_id: id }));
@@ -47,23 +58,38 @@ export default function DeployInstructors() {
     }));
   }
 
-  async function deployInstruct(e: FormEvent) {
+  function deployInstruct(e: FormEvent) {
     e.preventDefault();
 
-    await mutate(deployInst, {
-      onSuccess(data) {
-        toast.success(data.data.message);
-        history.goBack();
-      },
-      onError(error: any) {
-        toast.error(error.response.data.message);
-      },
+    const validatedForm = deployInstSchema.validate(deployInst, {
+      abortEarly: false,
     });
+
+    validatedForm
+      .then(async () => {
+        mutate(deployInst, {
+          onSuccess(data) {
+            toast.success(data.data.message);
+            history.goBack();
+          },
+          onError(error: any) {
+            toast.error(error.response.data.message);
+          },
+        });
+      })
+      .catch((err) => {
+        const validatedErr: DeployInstError = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof DeployInstError] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
 
   return (
     <form onSubmit={deployInstruct}>
       <DateMolecule
+        error={errors.deployed_on}
         handleChange={handleChange}
         startYear={moment().year() - 20}
         endYear={moment().year()}
@@ -73,6 +99,8 @@ export default function DeployInstructors() {
         Deployment date
       </DateMolecule>
       <InputMolecule
+        error={errors.deployment_number}
+        required={false}
         name="deployment_number"
         value={deployInst.deployment_number}
         handleChange={handleChange}>
@@ -86,6 +114,8 @@ export default function DeployInstructors() {
         Description
       </InputMolecule>
       <SelectMolecule
+        error={errors.academy_id}
+        hasError={errors.academy_id !== ''}
         options={getDropDownOptions({ inputs: academies || [] })}
         name="academy_id"
         placeholder="select academy"

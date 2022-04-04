@@ -17,6 +17,10 @@ import {
   ICreateClassTimeTable,
 } from '../../../../types/services/schedule.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
+import {
+  firstTimetableSchema,
+  secondTimetableSchema,
+} from '../../../../validations/calendar.validation';
 import Button from '../../../Atoms/custom/Button';
 import CheckboxMolecule from '../../../Molecules/input/CheckboxMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
@@ -30,6 +34,11 @@ interface IStepProps {
   handleSubmit?: (_e: FormEvent) => any;
   classInfo?: IClass;
 }
+
+interface FirstTimeTableErrors
+  extends Pick<ICreateClassTimeTable, 'courseModule' | 'instructor'> {}
+interface SecondTimeTableErrors
+  extends Pick<ICreateClassTimeTable, 'venue' | 'startHour' | 'endHour'> {}
 
 export default function NewTimeTable() {
   const { id } = useParams<ParamType>();
@@ -120,9 +129,28 @@ function FirstStep({ values, handleChange, setCurrentStep, classInfo }: IStepPro
         '',
     ).data?.data.data || [];
 
+  const initialErrorState: FirstTimeTableErrors = {
+    courseModule: '',
+    instructor: '',
+  };
+
+  const [errors, setErrors] = useState<FirstTimeTableErrors>(initialErrorState);
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setCurrentStep(1);
+    const validatedForm = firstTimetableSchema.validate(values, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => setCurrentStep(1))
+      .catch((err) => {
+        const validatedErr: FirstTimeTableErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof FirstTimeTableErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   };
 
   return (
@@ -137,6 +165,7 @@ function FirstStep({ values, handleChange, setCurrentStep, classInfo }: IStepPro
         </InputMolecule>
         <div className="pb-1">
           <SelectMolecule
+            error={errors.courseModule}
             name="courseModule"
             value={values.courseModule}
             handleChange={handleChange}
@@ -152,6 +181,7 @@ function FirstStep({ values, handleChange, setCurrentStep, classInfo }: IStepPro
         </div>
         <div className="pb-4">
           <SelectMolecule
+            error={errors.instructor}
             name="instructor"
             value={values.instructor}
             handleChange={handleChange}
@@ -177,10 +207,37 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
     getAllVenues(picked_role?.academy_id + '', !!picked_role?.academy_id).data?.data
       .data || [];
 
+  const initialErrorState: SecondTimeTableErrors = {
+    venue: '',
+    startHour: '',
+    endHour: '',
+  };
+
+  const [errors, setErrors] = useState<SecondTimeTableErrors>(initialErrorState);
+
+  const handleFinish = (e: FormEvent) => {
+    e.preventDefault();
+
+    const validatedForm = secondTimetableSchema.validate(values, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => handleSubmit)
+      .catch((err) => {
+        const validatedErr: SecondTimeTableErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof SecondTimeTableErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="max-w-sm -mb-6">
+    <form onSubmit={handleFinish} className="max-w-sm -mb-6">
       <div className="pb-1">
         <SelectMolecule
+          error={errors.venue}
           name="venue"
           value={values.venue}
           handleChange={handleChange}
@@ -192,6 +249,8 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
         </SelectMolecule>
       </div>
       <InputMolecule
+        error={errors.startHour}
+        required={false}
         name="startHour"
         type="time"
         value={values.startHour}
@@ -199,6 +258,8 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
         Start hour
       </InputMolecule>
       <InputMolecule
+        error={errors.endHour}
+        required={false}
         type="time"
         value={values.endHour}
         name="endHour"

@@ -10,9 +10,12 @@ import {
   RoleType,
   ValueType,
 } from '../../../../types';
+import { updateSchema } from '../../../../validations/role.validation';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
+
+interface UpdateRoleErrors extends Pick<CreateRoleReq, 'name'> {}
 
 export default function UpdateRole({ onSubmit }: FormPropType) {
   const [form, setForm] = useState<CreateRoleReq>({
@@ -22,6 +25,12 @@ export default function UpdateRole({ onSubmit }: FormPropType) {
     institution_id: '',
     type: RoleType.ACADEMY,
   });
+
+  const initialErrorState: UpdateRoleErrors = {
+    name: '',
+  };
+
+  const [errors, setErrors] = useState(initialErrorState);
   const { mutateAsync } = roleStore.modifyRole();
   const history = useHistory();
 
@@ -39,24 +48,43 @@ export default function UpdateRole({ onSubmit }: FormPropType) {
 
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
-    mutateAsync(form, {
-      onSuccess: () => {
-        toast.success('Role updated');
-        history.goBack();
+    const validatedForm = updateSchema.validate(
+      {
+        names: form.name,
       },
-      onError: (error: any) => {
-        toast.error(error.response.data.message);
+      {
+        abortEarly: false,
       },
-    });
-    if (onSubmit) onSubmit(e);
+    );
+
+    validatedForm
+      .then(() => {
+        mutateAsync(form, {
+          onSuccess: () => {
+            toast.success('Role updated');
+            history.goBack();
+          },
+          onError: (error: any) => {
+            toast.error(error.response.data.message);
+          },
+        });
+        if (onSubmit) onSubmit(e);
+      })
+      .catch((err) => {
+        const validatedErr: UpdateRoleErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof UpdateRoleErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
   return (
     <form onSubmit={submitForm}>
       {/* model name */}
       <InputMolecule
-        required
+        required={false}
+        error={errors.name}
         value={form.name}
-        error=""
         handleChange={handleChange}
         name="name">
         Role name
@@ -64,9 +92,9 @@ export default function UpdateRole({ onSubmit }: FormPropType) {
       {/* model code
     {/* module description */}
       <TextAreaMolecule
+        required={false}
         value={form.description}
         name="description"
-        required
         handleChange={handleChange}>
         Descripiton
       </TextAreaMolecule>

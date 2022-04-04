@@ -9,8 +9,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import AssignRole from '../../components/Organisms/forms/user/AssignRole';
-import ViewUserRole from '../../components/Organisms/forms/user/ViewUserRole';
+import AssignRole from '../../components/Organisms/forms/roles/AssignRole';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import usePickedRole from '../../hooks/usePickedRole';
 import { authenticatorStore } from '../../store/administration';
@@ -21,6 +20,7 @@ import { AcademyUserType, UserType, UserTypes } from '../../types/services/user.
 import { formatUserTable } from '../../utils/array';
 import DeployInstructors from '../DeployInstructors';
 import EnrollStudents from '../EnrollStudents';
+import ViewUserRole from '../roles/ViewUserRole';
 
 export default function AdminsView() {
   const { user } = useAuthenticator();

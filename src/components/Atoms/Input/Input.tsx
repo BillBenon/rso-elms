@@ -54,7 +54,7 @@ export default function Input<T>({
         readonly ? 'bg-gray-100' : 'bg-transparent'
       } h-12 ${padding} placeholder-${pcolor} rounded-md ${
         full ? 'w-full' : `w-full md:w-${width}`
-      } focus:outline-none border-${bcolor} focus:border-${
+      } focus:outline-none border-${colorStyle[bcolor]} focus:border-${
         colorStyle[fcolor]
       } border-2 ${className}`}
       /* @ts-ignore */

@@ -10,12 +10,17 @@ import { queryClient } from '../../plugins/react-query';
 import programStore from '../../store/administration/program.store';
 import { ValueType } from '../../types';
 import { ProgramSyllabus } from '../../types/services/program.types';
+import { DocErrors } from '../../types/services/user.types';
+import { programSyllabusSchema } from '../../validations/program.validation';
 
 interface DocParams {
   programId: string;
 }
 
 export default function AddProgramSyllabus({ programId }: DocParams) {
+  const initialErrorState: DocErrors = { purpose: '', file: '' };
+  const [errors, setErrors] = useState<DocErrors>(initialErrorState);
+
   const [attachment, setAttachment] = useState<ProgramSyllabus>({
     description: '',
     purpose: '',
@@ -35,31 +40,47 @@ export default function AddProgramSyllabus({ programId }: DocParams) {
     setAttachment({ ...attachment, [e.name]: e.value });
   }
 
-  async function submitForm<T>(e: FormEvent<T>) {
+  function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
-    console.log(attachment);
-    if (file) {
-      let data = new FormData();
+    const validatedForm = programSyllabusSchema.validate(
+      { purpose: attachment.purpose, file: file },
+      {
+        abortEarly: false,
+      },
+    );
 
-      data.append('description', `${attachment.description}`);
-      data.append('purpose', `${attachment.purpose}`);
-      data.append('attachmentFile', file);
-      data.append('programId', `${programId}`);
+    validatedForm
+      .then(() => {
+        if (file) {
+          let data = new FormData();
 
-      await mutateAsync(
-        { id: programId, docInfo: data },
-        {
-          onSuccess() {
-            toast.success('Document uploaded successfully');
-            queryClient.invalidateQueries(['programs/id', programId]);
-            history.goBack();
-          },
-          onError(error: any) {
-            toast.error(error.response.data.message);
-          },
-        },
-      );
-    }
+          data.append('description', `${attachment.description}`);
+          data.append('purpose', `${attachment.purpose}`);
+          data.append('attachmentFile', file);
+          data.append('programId', `${programId}`);
+
+          mutateAsync(
+            { id: programId, docInfo: data },
+            {
+              onSuccess() {
+                toast.success('Document uploaded successfully');
+                queryClient.invalidateQueries(['programs/id', programId]);
+                history.goBack();
+              },
+              onError(error: any) {
+                toast.error(error.response.data.message);
+              },
+            },
+          );
+        }
+      })
+      .catch((err) => {
+        const validatedErr: DocErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof DocErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
 
   return (
@@ -67,6 +88,7 @@ export default function AddProgramSyllabus({ programId }: DocParams) {
       <div className="mb-6">
         <InputMolecule
           value={attachment.purpose}
+          error={errors.purpose}
           handleChange={handleChange}
           placeholder="Enter attachment purpose"
           name="purpose">

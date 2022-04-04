@@ -9,10 +9,15 @@ import { GenericStatus, ValueType } from '../../../../types';
 import { CreateEvent, eventCategory } from '../../../../types/services/event.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import { randomString } from '../../../../utils/random';
+import { eventSchema } from '../../../../validations/calendar.validation';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
+
+interface EventErrors extends Pick<CreateEvent, 'name' | 'code'> {
+  eventCategory: string;
+}
 
 export default function NewEvent() {
   const history = useHistory();
@@ -28,6 +33,14 @@ export default function NewEvent() {
     academyId: picked_role?.academy_id + '',
   });
 
+  const initialErrorState: EventErrors = {
+    name: '',
+    code: '',
+    eventCategory: '',
+  };
+
+  const [errors, setErrors] = useState(initialErrorState);
+
   useEffect(() => {
     setvalues((prev) => ({ ...prev, academyId: picked_role?.academy_id + '' }));
   }, [picked_role?.academy_id]);
@@ -40,38 +53,59 @@ export default function NewEvent() {
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
-    await mutateAsync(values, {
-      async onSuccess(_data) {
-        toast.success('Event was created successfully');
-        queryClient.invalidateQueries(['events']);
-        history.goBack();
-      },
-      onError(error: any) {
-        toast.error(error.response.data.message || 'error occurred please try again');
-      },
+
+    const validatedForm = eventSchema.validate(values, {
+      abortEarly: false,
     });
+
+    validatedForm
+      .then(async () => {
+        await mutateAsync(values, {
+          async onSuccess(_data) {
+            toast.success('Event was created successfully');
+            queryClient.invalidateQueries(['events']);
+            history.goBack();
+          },
+          onError(error: any) {
+            toast.error(error.response.data.message || 'error occurred please try again');
+          },
+        });
+      })
+      .catch((err) => {
+        const validatedErr: EventErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof EventErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
 
   return (
     <div>
       <form onSubmit={handleSubmit}>
         <InputMolecule
+          required={false}
           name="name"
           placeholder="Event title"
           value={values.name}
+          error={errors.name}
           handleChange={handleChange}>
           Event title
         </InputMolecule>
         <InputMolecule
           name="code"
+          required={false}
           placeholder="Event code"
           value={values.code}
+          error={errors.code}
           handleChange={handleChange}>
           Event code
         </InputMolecule>
         <div className="pb-4">
           <SelectMolecule
+            required={false}
             value={values.eventCategory}
+            error={errors.eventCategory}
             name="eventCategory"
             handleChange={handleChange}
             options={getDropDownStatusOptions(eventCategory)}
@@ -81,6 +115,7 @@ export default function NewEvent() {
         </div>
         <TextAreaMolecule
           name="description"
+          required={false}
           placeholder="Event Description"
           value={values.description}
           handleChange={handleChange}>

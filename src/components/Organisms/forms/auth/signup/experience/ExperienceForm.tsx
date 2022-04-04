@@ -18,6 +18,7 @@ import {
   ExperienceInfo,
   ExperienceType,
 } from '../../../../../../types/services/experience.types';
+import { experienceFormSchema } from '../../../../../../validations/complete-profile/experience-form.validtation';
 import Button from '../../../../../Atoms/custom/Button';
 import Icon from '../../../../../Atoms/custom/Icon';
 import Panel from '../../../../../Atoms/custom/Panel';
@@ -33,6 +34,12 @@ interface IExperienceForm<E> extends CommonStepProps, CommonFormProps<E> {
   type: ExperienceType;
 }
 
+interface ExperienceInfoErrors
+  extends Pick<
+    ExperienceInfo,
+    'end_date' | 'level' | 'location' | 'occupation' | 'proof' | 'start_date'
+  > {}
+
 function ExperienceForm<E>({
   isVertical,
   nextStep,
@@ -43,6 +50,17 @@ function ExperienceForm<E>({
 }: IExperienceForm<E>) {
   const { user } = useAuthenticator();
   const history = useHistory();
+
+  const initialErrorState: ExperienceInfoErrors = {
+    level: '',
+    start_date: '',
+    end_date: '',
+    location: '',
+    occupation: '',
+    proof: '',
+  };
+
+  const [errors, setErrors] = useState<ExperienceInfoErrors>(initialErrorState);
 
   const [experience, setExperience] = useState<ExperienceInfo>({
     attachment_id: '',
@@ -88,7 +106,7 @@ function ExperienceForm<E>({
       let formData = new FormData();
       formData.append('file', file);
 
-      await mutate(formData, {
+      mutate(formData, {
         onSuccess(data) {
           toast.success(data.data.message);
           mutateAsync(
@@ -113,7 +131,7 @@ function ExperienceForm<E>({
         },
       });
     } else {
-      await mutateAsync(experience, {
+      mutateAsync(experience, {
         onSuccess(data) {
           toast.success(data.data.message);
           queryClient.invalidateQueries(['experience/id', user?.person.id]);
@@ -140,10 +158,70 @@ function ExperienceForm<E>({
 
   const [totalExperience, setTotalExperience] = useState<ExperienceInfo[]>([]);
 
-  const moveForward = async () => {
-    if (saveData) {
-      const isSuccess = await saveData(mutateAsync);
-      if (isSuccess) {
+  const moveForward = () => {
+    const validatedForm = experienceFormSchema.validate(experience, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(async () => {
+        if (saveData) {
+          const isSuccess = await saveData(mutateAsync);
+          if (isSuccess) {
+            setExperience({
+              attachment_id: '',
+              description: '',
+              end_date: '',
+              level: '',
+              location: '',
+              occupation: '',
+              person_id: user?.person.id.toString() || '',
+              proof: '',
+              start_date: '',
+              type: experience.type,
+            });
+            setTotalExperience([]);
+            nextStep(true);
+          }
+        }
+      })
+      .catch((err) => {
+        const validatedErr: ExperienceInfoErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof ExperienceInfoErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
+  };
+
+  async function handleMore() {
+    const validatedForm = experienceFormSchema.validate(experience, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => {
+        if (experience) {
+          mutateAsync(experience, {
+            onSuccess() {
+              toast.success(
+                `${experience.type.replaceAll(
+                  '_',
+                  ' ',
+                )} experience information successfully added`,
+                {
+                  duration: 1200,
+                },
+              );
+              history.goBack();
+            },
+            onError(error: any) {
+              toast.error(error.response.data.message);
+            },
+          });
+        }
+        setTotalExperience([...totalExperience, experience]);
+
         setExperience({
           attachment_id: '',
           description: '',
@@ -156,46 +234,14 @@ function ExperienceForm<E>({
           start_date: '',
           type: experience.type,
         });
-        setTotalExperience([]);
-        nextStep(true);
-      }
-    }
-  };
-
-  async function handleMore() {
-    if (experience) {
-      await mutateAsync(experience, {
-        onSuccess() {
-          toast.success(
-            `${experience.type.replaceAll(
-              '_',
-              ' ',
-            )} experience information successfully added`,
-            {
-              duration: 1200,
-            },
-          );
-          history.goBack();
-        },
-        onError(error: any) {
-          toast.error(error.response.data.message);
-        },
+      })
+      .catch((err) => {
+        const validatedErr: ExperienceInfoErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof ExperienceInfoErrors] = el.message;
+        });
+        setErrors(validatedErr);
       });
-    }
-    setTotalExperience([...totalExperience, experience]);
-
-    setExperience({
-      attachment_id: '',
-      description: '',
-      end_date: '',
-      level: '',
-      location: '',
-      occupation: '',
-      person_id: user?.person.id.toString() || '',
-      proof: '',
-      start_date: '',
-      type: experience.type,
-    });
   }
 
   const moveBack = () => {
@@ -218,6 +264,8 @@ function ExperienceForm<E>({
           <div>
             <div className="flex flex-col gap-4">
               <InputMolecule
+                required={false}
+                error={errors.level}
                 name="level"
                 placeholder="Name"
                 value={experience.level}
@@ -230,6 +278,8 @@ function ExperienceForm<E>({
             </div>
             <div className="flex flex-col gap-4">
               <InputMolecule
+                required={false}
+                error={errors.occupation}
                 placeholder={`Enter your occupation`}
                 name="occupation"
                 value={experience.occupation}
@@ -237,6 +287,8 @@ function ExperienceForm<E>({
                 Occupation
               </InputMolecule>
               <InputMolecule
+                required={false}
+                error={errors.location}
                 placeholder={`Enter the location`}
                 name="location"
                 value={experience.location}
@@ -255,6 +307,7 @@ function ExperienceForm<E>({
           <div>
             <div className="flex flex-col gap-4">
               <DateMolecule
+                error={errors.start_date}
                 handleChange={handleChange}
                 defaultValue={experience.start_date}
                 name="start_date"
@@ -263,6 +316,7 @@ function ExperienceForm<E>({
                 Start Date
               </DateMolecule>
               <DateMolecule
+                error={errors.end_date}
                 handleChange={handleChange}
                 name="end_date"
                 // endYear={new Date().getFullYear() + 50}
@@ -274,6 +328,8 @@ function ExperienceForm<E>({
             <div className="flex flex-col gap-4">
               <div>
                 <InputMolecule
+                  required={false}
+                  error={errors.proof}
                   placeholder={`Enter document title (eg: proof, certificate)`}
                   name="proof"
                   value={experience.proof}

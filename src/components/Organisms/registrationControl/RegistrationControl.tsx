@@ -17,7 +17,7 @@ import NoDataAvailable from '../../Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../Molecules/Popup';
 import Table from '../../Molecules/table/Table';
 import TableHeader from '../../Molecules/table/TableHeader';
-import NewRegistrationControl from '../forms/NewRegistrationControl';
+import NewRegistrationControl from '../forms/regcontrol/NewRegistrationControl';
 import UpdateRegControl from '../forms/regcontrol/UpdateRegControl';
 import RegControlDetails from './RegControlDetails';
 

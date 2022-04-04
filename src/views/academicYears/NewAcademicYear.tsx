@@ -11,10 +11,12 @@ import { queryClient } from '../../plugins/react-query';
 import academicyearsStore from '../../store/administration/academicyears.store';
 import { ValueType } from '../../types';
 import {
+  AcademicYearErrors,
   IAcademicYearStatus,
   ICreateAcademicYear,
 } from '../../types/services/academicyears.types';
 import { getDropDownStatusOptions } from '../../utils/getOption';
+import { academicYearSchema } from '../../validations/program.validation';
 
 export default function NewAcademicYear() {
   const history = useHistory();
@@ -30,6 +32,13 @@ export default function NewAcademicYear() {
     plannedEndOn: '',
   });
 
+  const initialErrorState: AcademicYearErrors = {
+    plannedStartOn: '',
+    plannedEndOn: '',
+  };
+
+  const [errors, setErrors] = useState(initialErrorState);
+
   useEffect(() => {
     setNewYear((prev) => ({ ...prev, academyId: picked_role?.academy_id + '' }));
   }, [picked_role?.academy_id]);
@@ -42,25 +51,39 @@ export default function NewAcademicYear() {
   function submitForm(e: FormEvent) {
     e.preventDefault();
 
-    let name = `YEAR ${moment(
-      newYear.plannedStartOn === '' ? undefined : newYear.plannedStartOn,
-    ).year()}-${moment(
-      newYear.plannedStartOn === '' ? undefined : newYear.plannedStartOn,
-    ).year()}`;
-    let data = {
-      ...newYear,
-      name,
-    };
-    mutate(data, {
-      onSuccess: (year) => {
-        toast.success('Academic year created', { duration: 5000 });
-        queryClient.invalidateQueries(['academicyears']);
-        history.push(`/dashboard/academic-years/${year.data.data.id}/period/add`);
-      },
-      onError: (error: any) => {
-        toast.error(error.response.data.message);
-      },
+    const validatedForm = academicYearSchema.validate(newYear, {
+      abortEarly: false,
     });
+
+    validatedForm
+      .then(() => {
+        let name = `YEAR ${moment(
+          newYear.plannedStartOn === '' ? undefined : newYear.plannedStartOn,
+        ).year()}-${moment(
+          newYear.plannedStartOn === '' ? undefined : newYear.plannedStartOn,
+        ).year()}`;
+        let data = {
+          ...newYear,
+          name,
+        };
+        mutate(data, {
+          onSuccess: (year) => {
+            toast.success('Academic year created', { duration: 5000 });
+            queryClient.invalidateQueries(['academicyears']);
+            history.push(`/dashboard/academic-years/${year.data.data.id}/period/add`);
+          },
+          onError: (error: any) => {
+            toast.error(error.response.data.message);
+          },
+        });
+      })
+      .catch((err) => {
+        const validatedErr: AcademicYearErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof AcademicYearErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
 
   return (
@@ -69,6 +92,7 @@ export default function NewAcademicYear() {
         Name
       </InputMolecule> */}
       <DateMolecule
+        error={errors.plannedStartOn}
         startYear={moment().year() - 30}
         endYear={moment().year() + 30}
         reverse={false}
@@ -78,6 +102,7 @@ export default function NewAcademicYear() {
       </DateMolecule>
 
       <DateMolecule
+        error={errors.plannedEndOn}
         handleChange={handleChange}
         startYear={moment(
           newYear.plannedStartOn === '' ? undefined : newYear.plannedStartOn,
