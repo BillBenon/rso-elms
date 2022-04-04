@@ -2,6 +2,9 @@
   width: 354px;
   border: 2px solid #e9ecef;
 }
+.small-card-molecule {
+  border: 2px solid #e9ecef;
+}
 
 .answer-card-molecule {
   width: 100%;

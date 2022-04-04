@@ -16,6 +16,9 @@ class AttachmentStore {
       attachmentService.getAttachementById(id),
     );
   }
+  deleteAttachmentById() {
+    return useMutation(attachmentService.deleteAttachementById);
+  }
 }
 
 export const attachementStore = new AttachmentStore();
