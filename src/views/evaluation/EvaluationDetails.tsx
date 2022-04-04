@@ -21,6 +21,7 @@ export default function EvaluationDetails() {
   const history = useHistory();
 
   const { url, path } = useRouteMatch();
+
   const makeEvaluationPublic = evaluationStore.publishEvaluation();
   const tabs = [
     {
@@ -75,7 +76,7 @@ export default function EvaluationDetails() {
           path={`${path}/approve`}
           render={() => <ApproveEvaluation evaluationId={id} />}
         />
-        <Route exact path={`${path}/section`} render={() => <SectionBasedEvaluation />} />{' '}
+        <Route path={`${path}/section`} render={() => <SectionBasedEvaluation />} />{' '}
         <Route
           exact
           path={`${path}/section/:id/add-questions`}

@@ -49,10 +49,10 @@ export default function Select({
   useEffect(() => {
     if (internalValue.length > 0) {
       set_placeholder(
-        options.find((op) => op.value == internalValue)?.label || 'Nothing to show',
+        options.find((op) => op.value == internalValue)?.label || placeholder || '',
       );
     }
-  }, [internalValue, options]);
+  }, [internalValue, options, placeholder]);
 
   const handleSelect = (value: string) => {
     setInternalValue(value);

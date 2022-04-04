@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useRouteMatch } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import Loader from '../components/Atoms/custom/Loader';
 import NoDataAvailable from '../components/Molecules/cards/NoDataAvailable';
@@ -20,7 +20,6 @@ type ProggresSettingsProps = {
 
 export default function EvaluationSettingProgress() {
   const { id } = useParams<ParamType>();
-  const { url } = useRouteMatch();
   const [isLoading, setIsloading] = useState(false);
   const [progress, setProgress] = useState<ProggresSettingsProps[]>([]);
   const { data: evaluationInfo } = evaluationStore.getEvaluationById(id).data?.data || {};
@@ -63,7 +62,7 @@ export default function EvaluationSettingProgress() {
     }
     get();
     setIsloading(false);
-  }, [evaluationInfo?.evaluation_module_subjects, url]);
+  }, [evaluationInfo?.evaluation_module_subjects]);
 
   return (
     <div>

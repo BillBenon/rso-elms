@@ -3,8 +3,8 @@ import { useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import PopupMolecule from '../../components/Molecules/Popup';
-import EvaluationContent from '../../components/Organisms/evaluation/EvaluationContent';
 import EvaluationSubjects from '../../components/Organisms/evaluation/EvaluationSubjects';
+import SectionBasedEvaluationContent from '../../components/Organisms/evaluation/SectionBasedEvaluationContent';
 import { ParamType } from '../../types';
 
 export default function SectionBasedEvaluation() {
@@ -13,12 +13,14 @@ export default function SectionBasedEvaluation() {
 
   return (
     <>
-      <EvaluationContent evaluationId={evaluationId} actionType="section_based">
+      <SectionBasedEvaluationContent
+        evaluationId={evaluationId}
+        actionType="section_based">
         <Button styleType="outline" onClick={() => setshowSubjects(true)}>
           Finish setting
         </Button>
         {/* <Button>Save as template</Button> */}
-      </EvaluationContent>
+      </SectionBasedEvaluationContent>
 
       <PopupMolecule
         onClose={() => setshowSubjects(false)}

@@ -227,6 +227,10 @@ export interface ParamType {
   id: string;
 }
 
+export interface EvaluationParamType {
+  moduleId: string;
+}
+
 export interface IntakeParamType {
   intakeId: string;
 }

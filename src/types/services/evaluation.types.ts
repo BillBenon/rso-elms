@@ -172,6 +172,16 @@ export type IEvaluationSectionBased = {
   subject_academic_year_period: number | string;
 };
 
+export interface IModules {
+  id: string;
+  module: string;
+}
+
+export interface ISubjects {
+  id: string;
+  subject: string;
+}
+
 export type IEvaluationAction =
   | 'reviews'
   | 'approvals'

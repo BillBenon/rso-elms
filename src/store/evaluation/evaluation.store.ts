@@ -95,6 +95,16 @@ class EvaluationStore {
     });
   }
 
+  getEvaluationByIdAndInstructor(id: string, instructor: string) {
+    return useQuery(
+      ['evaluation', [id, instructor]],
+      () => evaluationService.getEvaluationByIdAndInstructor(id, instructor),
+      {
+        enabled: !!id,
+      },
+    );
+  }
+
   getEvaluationApprovalByEvaluationAndInstructor(
     evaluationId: string,
     instructorId: string,

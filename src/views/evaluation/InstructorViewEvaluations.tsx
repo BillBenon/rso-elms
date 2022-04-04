@@ -10,10 +10,12 @@ import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
 import ConfirmationOrganism from '../../components/Organisms/ConfirmationOrganism';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import useAuthenticator from '../../hooks/useAuthenticator';
+import { moduleService } from '../../services/administration/modules.service';
+import { subjectService } from '../../services/administration/subject.service';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Link as LinkList, Privileges } from '../../types';
-import { IEvaluationOwnership } from '../../types/services/evaluation.types';
+import { IEvaluationOwnership, ISubjects } from '../../types/services/evaluation.types';
 import cookie from '../../utils/cookie';
 import { advancedTypeChecker, getDropDownStatusOptions } from '../../utils/getOption';
 import EvaluationDetails from './EvaluationDetails';
@@ -23,6 +25,9 @@ import StudentReview from './StudentReview';
 
 export default function InstructorViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
+  const [subjects, setSubjects] = useState<ISubjects[]>([]);
+  const [module, setModule] = useState('');
+  const [evaluationId, setEvaluationId] = useState('');
   const [ownerShipType, setownerShipType] = useState(IEvaluationOwnership.CREATED_BY_ME);
 
   const history = useHistory();
@@ -36,6 +41,9 @@ export default function InstructorViewEvaluations() {
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
     .data?.data.data[0];
+
+  const { data: evaluationInfo } =
+    evaluationStore.getEvaluationById(evaluationId).data?.data || {};
 
   const { data, isSuccess, isLoading, isError, refetch } =
     evaluationStore.getEvaluationsByCategory(
@@ -71,27 +79,56 @@ export default function InstructorViewEvaluations() {
     refetch();
   }, [ownerShipType, refetch]);
 
+  useEffect(() => {
+    async function getSubjects() {
+      if (evaluationInfo?.evaluation_module_subjects) {
+        const subjectData = await subjectService.getSubjectsByModule(
+          evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module,
+        );
+
+        const moduleData = await moduleService.getModuleById(
+          evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module.toString(),
+        );
+
+        const filteredSubjects: ISubjects[] = subjectData.data.data.map((subject) => ({
+          subject: subject.title,
+          id: subject.id.toString(),
+        }));
+
+        setModule(moduleData.data.data.id.toString());
+
+        setSubjects(filteredSubjects);
+      }
+    }
+
+    getSubjects();
+  }, [evaluationInfo?.evaluation_module_subjects]);
+
   const handleClick = (id: string) => {
-    switch (ownerShipType) {
-      case IEvaluationOwnership.FOR_APPROVING:
-        history.push(`${path}/details/${id}/approve`);
-        break;
+    setEvaluationId(id);
 
-      case IEvaluationOwnership.FOR_REVIEWING:
-        history.push(`${path}/details/${id}/review`);
-        break;
+    if (evaluationInfo?.id === id) {
+      switch (ownerShipType) {
+        case IEvaluationOwnership.FOR_APPROVING:
+          history.push(`${path}/details/${id}/approve`);
+          break;
 
-      case IEvaluationOwnership.FOR_MARKING:
-        history.push(`${path}/details/${id}/submissions`);
-        break;
+        case IEvaluationOwnership.FOR_REVIEWING:
+          history.push(`${path}/details/${id}/review`);
+          break;
 
-      case IEvaluationOwnership.FOR_SETTING:
-        history.push(`${path}/details/${id}/section`);
-        break;
+        case IEvaluationOwnership.FOR_MARKING:
+          history.push(`${path}/details/${id}/submissions`);
+          break;
 
-      default:
-        history.push(`${path}/details/${id}`);
-        break;
+        case IEvaluationOwnership.FOR_SETTING:
+          history.push(`${path}/details/${id}/section/${module}/${subjects[0].id}`);
+          break;
+
+        default:
+          history.push(`${path}/details/${id}`);
+          break;
+      }
     }
   };
 

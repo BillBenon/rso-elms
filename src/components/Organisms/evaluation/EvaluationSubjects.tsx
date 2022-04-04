@@ -27,22 +27,37 @@ export default function EvaluationSubjects({
   const [subjectId, setSubjectId] = useState('');
 
   useEffect(() => {
-    let subjs: SubjectInfo[] = [];
+    let filteredInfo: SubjectInfo[] = [];
 
-    if (evaluationInfo?.evaluation_module_subjects) {
-      console.log('checking the if');
-      evaluationInfo?.evaluation_module_subjects?.map((subj) => {
-        subjectService
-          .getSubject(subj.subject_academic_year_period.toString())
-          .then((res) => {
-            console.log('subject data', res.data.data);
-            subjs.push(res.data.data);
-            setSubjects(subjs);
-          });
-      });
+    async function get() {
+      if (evaluationInfo?.evaluation_module_subjects) {
+        //   alert('we fetched');
+        for (let [index, subj] of evaluationInfo.evaluation_module_subjects.entries()) {
+          // request one
+          const subjectData = await subjectService.getSubject(
+            subj.subject_academic_year_period.toString(),
+          );
 
-      console.log(subjs);
+          let temp = {
+            id: '',
+            subject: '',
+            section: '',
+            instructor: '',
+            status: IEvaluationStatus.ACCEPTED,
+          };
+          temp.subject = subjectData.data.data.title;
+          temp.section = `section ${index + 1}`;
+          temp.status = subj.questionaire_setting_status;
+          temp.id = subj.id;
+          //@ts-ignore
+          filteredInfo.push(temp);
+        }
+
+        setSubjects(filteredInfo);
+        setIsloading(false);
+      }
     }
+    get();
     setIsloading(false);
   }, [evaluationInfo?.evaluation_module_subjects]);
 

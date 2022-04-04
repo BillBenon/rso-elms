@@ -115,6 +115,15 @@ class EvaluationService {
     return await evaluationAxios.get(`/evaluations/getById/${id}`);
   }
 
+  public async getEvaluationByIdAndInstructor(
+    id: string,
+    instructor: string,
+  ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
+    return await evaluationAxios.get(
+      `/evaluations/getById/${id}/instructor/${instructor}`,
+    );
+  }
+
   public async getEvaluationFeedbacks(
     evaluationId: string,
     actionType: IEvaluationAction,
