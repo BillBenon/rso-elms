@@ -96,9 +96,12 @@ function StudentInClass({ classId, label }: IStudentClass) {
               return (
                 <>
                   <div className="flex justify-between py-2">
+                    {/* UNCOMMENT THIS LINE AFTER DEVELOPMENT TO RESPECT PRIVILEGES */}
+                    {/* <Permission privilege={Privileges.CAN_CREATE_EVALUATIONS}> */}
                     <div>
                       <Button onClick={goToNewEvaluation}> New evaluation</Button>
                     </div>
+                    {/* </Permission> */}
                     <div className="flex gap-4 self-end">
                       <Permission privilege={Privileges.CAN_CREATE_CLASSES}>
                         <Button

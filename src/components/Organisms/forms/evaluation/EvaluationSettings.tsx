@@ -76,6 +76,7 @@ export default function EvaluationSettings({
     mutate(settings, {
       onSuccess: () => {
         toast.success('Settings added', { duration: 5000 });
+        //remove all data that we have stored in local storage for caching
         removeLocalStorageData('evaluationId');
         removeLocalStorageData('evaluationInfo');
         removeLocalStorageData('evaluationQuestions');
@@ -153,17 +154,6 @@ export default function EvaluationSettings({
           </DropdownMolecule>
         </div>
       )}
-      {/* <div className="pt-6 flex-col">
-        <ILabel>Marking status</ILabel>
-        <SwitchMolecule
-          showLabelFirst
-          loading={false}
-          name="shuffle"
-          value={false}
-          handleChange={handleChange}>
-          True
-        </SwitchMolecule>
-      </div> */}
       <div className="pt-6">
         <DropdownMolecule
           isMulti
@@ -188,21 +178,6 @@ export default function EvaluationSettings({
           <Button type="submit">Finish</Button>
         </div>
       </div>
-      {/* <div className="flex flex-col">
-        <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
-          Back
-        </Button>
-        <div className="pt-4">
-          <Button type="submit">Finish</Button>
-        </div>
-      </div> */}
-      {/* <SwitchMolecule
-        loading={false}
-        name="shuffle"
-        value={false}
-        handleChange={handleChange}>
-        Evaluation Reviewing status
-      </SwitchMolecule> */}
     </form>
   );
 }

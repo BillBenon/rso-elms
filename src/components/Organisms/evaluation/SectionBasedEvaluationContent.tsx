@@ -61,9 +61,7 @@ export default function SectionBasedEvaluationContent({
 
     async function getModules() {
       if (evaluationInfo?.evaluation_module_subjects) {
-        //   alert('we fetched');
         for (const subj of evaluationInfo.evaluation_module_subjects) {
-          // request one
           const moduleData = await moduleService.getModuleById(
             subj.intake_program_level_module.toString(),
           );
@@ -118,23 +116,6 @@ export default function SectionBasedEvaluationContent({
                     title="Access type"
                     subTitle={evaluationInfo?.access_type}
                   />
-
-                  {/* <div className="flex flex-col gap-4">
-              <Heading color="txt-secondary" fontSize="base">
-                Eligible Class
-              </Heading>
-              <div className="flex flex-col gap-2">
-                <div className="flex gap-9">
-                  <div>class A</div>
-                  <div>class B</div>
-                </div>
-
-                <div className="flex gap-9">
-                  <div>class A</div>
-                  <div>class B</div>
-                </div>
-              </div>
-            </div> */}
                 </div>
               </div>
               {/* second column */}
@@ -191,6 +172,8 @@ export default function SectionBasedEvaluationContent({
                   title="Consider on report"
                   subTitle={evaluationInfo?.is_consider_on_report ? 'Yes' : 'No'}
                 />
+
+                {/* will be uncommented later */}
                 {/* <Button styleType="outline" onClick={() => setShowPopup(true)}>
             View personal attendees
           </Button> */}

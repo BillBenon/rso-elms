@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 
 import useAuthenticator from '../../../hooks/useAuthenticator';
-import { queryClient } from '../../../plugins/react-query';
 import { subjectService } from '../../../services/administration/subject.service';
-import { evaluationService } from '../../../services/evaluation/evaluation.service';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../store/instructordeployment.store';
 import { EvaluationParamType, ParamType } from '../../../types';
-import { IEvaluationStatus, ISubjects } from '../../../types/services/evaluation.types';
+import { ISubjects } from '../../../types/services/evaluation.types';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
 import Button from '../../Atoms/custom/Button';
 import Heading from '../../Atoms/Text/Heading';
@@ -33,17 +30,17 @@ export default function ModuleSubjectQuestion() {
 
   const { data: evaluationQuestions, isLoading: loading } =
     evaluationStore.getEvaluationQuestions(evaluationId);
-  function updateStatus(questionId: string, status: IEvaluationStatus) {
-    evaluationService
-      .updateQuestionChoosen(questionId, status)
-      .then(() => {
-        toast.success('Successfully updated');
-        queryClient.invalidateQueries(['evaluation/questions', evaluationId]);
-      })
-      .catch((error: any) => {
-        toast.error('Failed to update', error.message);
-      });
-  }
+  // function updateStatus(questionId: string, status: IEvaluationStatus) {
+  //   evaluationService
+  //     .updateQuestionChoosen(questionId, status)
+  //     .then(() => {
+  //       toast.success('Successfully updated');
+  //       queryClient.invalidateQueries(['evaluation/questions', evaluationId]);
+  //     })
+  //     .catch((error: any) => {
+  //       toast.error('Failed to update', error.message);
+  //     });
+  // }
   const subjectTabs: TabType[] = [];
 
   useEffect(() => {

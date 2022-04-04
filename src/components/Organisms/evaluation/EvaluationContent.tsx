@@ -209,24 +209,6 @@ export default function EvaluationContent({
                     </Heading>
                   </div>
                 </div>
-
-                {/* <>
-                  <div>
-                    <Button styleType="outline" onClick={() => setshowSubjects(true)}>
-                      Set questions
-                    </Button>
-                  </div>
-
-                  <PopupMolecule
-                    onClose={() => setshowSubjects(false)}
-                    open={showSubjects}
-                    title="Select subject to add questions">
-                    <EvaluationSubjects
-                      evaluationId={evaluationId}
-                      action="add_questions"
-                    />
-                  </PopupMolecule>
-                </> */}
               </>
             ),
           )

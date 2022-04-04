@@ -115,10 +115,6 @@ export default function EvaluationInfoComponent({
     [cachedEvaluationModuleData].flat(),
   );
 
-  // useEffect(() => {
-  //   console.log(evaluationModule);
-  // }, [evaluationModule]);
-
   const [details, setDetails] = useState<IEvaluationCreate>({
     access_type: cachedData?.access_type || IAccessTypeEnum.PUBLIC,
     academy_id: cachedData?.academy_id || '',
@@ -331,7 +327,6 @@ export default function EvaluationInfoComponent({
     setLocalStorageData('evaluationModule', evaluationModuleInfo);
 
     if (name === 'intake_program_level_module') {
-      // setCurrentModule(value.toString());
       getSubjectsByModule(value.toString());
 
       return;
@@ -411,9 +406,8 @@ export default function EvaluationInfoComponent({
         },
         {
           onSuccess: (data) => {
-            //update evaluation id
+            //update evaluation id in evaluation module
             const modulesClone = [...evaluationModule];
-            console.log();
 
             const newEvaluation = modulesClone.map((evalMod) => {
               evalMod.evaluation_id = data.data.data.id;
@@ -423,7 +417,7 @@ export default function EvaluationInfoComponent({
             mutateSectionBased(newEvaluation, {
               onSuccess: () => {
                 toast.success('Evaluation created', { duration: 5000 });
-                setLocalStorageData('evaluationId', data.data.data.id);
+                setLocalStorageData('evaluationId', data.data.data.id); //should be removed at some point
                 if (
                   details.questionaire_type === IQuestionaireTypeEnum.MANUAL ||
                   details.evaluation_type === IEvaluationTypeEnum.SECTION_BASED
@@ -667,19 +661,7 @@ export default function EvaluationInfoComponent({
             )}
           </>
         ) : null}
-        {/* <SwitchMolecule
-          loading={false}
-          name="shuffle"
-          value={false}
-          handleChange={handleChange}>
-          Shuffle evaluation questions
-        </SwitchMolecule> */}
-        {/* <TextAreaMolecule
-          name={'exam_instruction'}
-          value={details?.exam_instruction}
-          handleChange={handleChange}>
-          <ILabel size="sm">Evaluation instructions</ILabel>
-        </TextAreaMolecule> */}
+
         <div className="my-2">
           <div className="my-1">
             <ILabel size="sm">Evaluation instructions</ILabel>
@@ -691,13 +673,10 @@ export default function EvaluationInfoComponent({
           readonly
           type="number"
           name="total_mark"
-          // min={0}
-          // step=".01"
           value={details?.total_mark}
           handleChange={handleChange}>
           Evaluation marks
         </InputMolecule>
-        {/* {details?.questionaire_type !== IQuestionaireTypeEnum.FIELD ? ( */}
         <>
           <InputMolecule
             style={{ width: '8rem' }}
@@ -732,7 +711,7 @@ export default function EvaluationInfoComponent({
             </InputMolecule>
           </div>
         </>
-        {/* ) : null} */}
+
         <DateMolecule
           handleChange={handleChange}
           startYear={new Date().getFullYear()}

@@ -68,7 +68,6 @@ export default function EvaluationQuestionComponent({
     if (evaluationQuestions?.length > 0) {
       evaluationQuestions.forEach((question) => {
         let questionData = { ...initialState };
-        //@ts-ignore
         questionData.choices = question.multiple_choice_answers || [];
         questionData.evaluation_id = question.evaluation_id;
         questionData.mark = question.mark;
@@ -223,8 +222,6 @@ export default function EvaluationQuestionComponent({
                   name="question_type"
                   placeholder="Question type"
                   handleChange={(e: ValueType) => handleChange(index, e)}
-                  /*@ts-ignore*/
-                  // defaultValue={evaluationQuestions[index]?.question_type || ''}
                   options={[
                     { label: 'OPEN', value: IQuestionType.OPEN },
                     { label: 'MULTIPLE CHOICE', value: IQuestionType.MULTIPLE_CHOICE },
@@ -300,7 +297,6 @@ export default function EvaluationQuestionComponent({
                 question.question_type === IQuestionType.MULTIPLE_CHOICE ? (
                   <SelectMolecule
                     value={question.choices.find((ch) => ch.correct)?.answer_content}
-                    // disabled={question.submitted}
                     width="64"
                     name="correct_answer"
                     placeholder="Choose correct answer"
@@ -319,7 +315,6 @@ export default function EvaluationQuestionComponent({
                   readonly={question.submitted}
                   required={false}
                   type="number"
-                  // step=".01"
                   name={'mark'}
                   min={1}
                   style={{ width: '6rem' }}
@@ -327,13 +322,6 @@ export default function EvaluationQuestionComponent({
                   handleChange={(e: ValueType) => handleChange(index, e)}>
                   Question marks
                 </InputMolecule>
-                {/* <div>
-                  {!question.submitted ? (
-                    <Button type="submit" onSubmit={submitForm}>
-                      save question
-                    </Button>
-                  ) : null}
-                </div> */}
 
                 <Button
                   type="button"
