@@ -33,6 +33,7 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
   };
 
   const initialErrorState: RegErrors = {
+    description: '',
     expected_start_date: '',
     expected_end_date: '',
   };
