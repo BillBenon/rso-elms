@@ -24,7 +24,7 @@ class AttachmentService {
   public async deleteAttachementById(
     id: string,
   ): Promise<AxiosResponse<AttachementInfo>> {
-    return await adminstrationAxios.delete(`/attachments/deletePersonalDoc/${id}`);
+    return await adminstrationAxios.delete(`/attachments/deleteProgramSyllabus/${id}`);
   }
 }
 

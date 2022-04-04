@@ -51,7 +51,7 @@ export default function AddProgramSyllabus({ programId }: DocParams) {
         {
           onSuccess() {
             toast.success('Document uploaded successfully');
-            queryClient.invalidateQueries(['program/syllabus', programId]);
+            queryClient.invalidateQueries(['programs/id', programId]);
             history.goBack();
           },
           onError(error: any) {

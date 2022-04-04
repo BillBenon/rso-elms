@@ -20,6 +20,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
+import { queryClient } from '../../plugins/react-query';
 import { attachementStore } from '../../store/administration/attachment.store';
 // import { attachementStore } from '../../store/administration/attachment.store';
 import programStore, {
@@ -67,16 +68,18 @@ export default function ProgramDetailsMolecule() {
     document.body.removeChild(element);
   }
 
-  async function deleteSyllabus(id: string) {
-    mutate(id),
-      {
-        onSuccess() {
-          toast.success('successfully deleted');
-        },
-        onError(error: any) {
-          toast.error(error.response.data.message);
-        },
-      };
+  console.log(program);
+
+  function deleteSyllabus(id: string) {
+    mutate(id, {
+      onSuccess() {
+        toast.success('successfully deleted');
+        queryClient.invalidateQueries(['programs/id', id]);
+      },
+      onError(error: any) {
+        toast.error(error.response.data.message);
+      },
+    });
   }
 
   const getProgramData = () => {
@@ -205,134 +208,99 @@ export default function ProgramDetailsMolecule() {
                       />
                     </div> */}
                   {/* levels */}
+
                   <Permission privilege={Privileges.CAN_ACCESS_PROGRAM_LEVELS}>
-                    <div className="mr-20 flex flex-col gap-7 w-60 p-6 bg-main">
-                      <Heading color="txt-secondary" fontSize="base">
-                        Levels
-                      </Heading>
-                      <div className="flex flex-col gap-8">
-                        {programLevels && programLevels?.length > 0 ? (
-                          programLevels.map((programLevel) => (
-                            <Heading
-                              key={programLevel.id}
-                              color="primary"
-                              fontSize="base"
-                              fontWeight="semibold">
-                              {programLevel.level.name}
-                            </Heading>
-                          ))
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                      <Permission privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}>
-                        <div className="text-primary-500 py-2 text-sm mr-3">
-                          <Link
-                            to={`${url}/level/add`}
-                            className="flex items-center justify-end">
-                            <Icon name="add" size={12} fill="primary" />
-                            Add levels
-                          </Link>
+                    <div className="flex flex-col gap-8">
+                      <div className="mr-20 flex flex-col gap-7 w-60 p-6 bg-main">
+                        <Heading color="txt-secondary" fontSize="base">
+                          Levels
+                        </Heading>
+                        <div className="flex flex-col gap-8">
+                          {programLevels && programLevels?.length > 0 ? (
+                            programLevels.map((programLevel) => (
+                              <Heading
+                                key={programLevel.id}
+                                color="primary"
+                                fontSize="base"
+                                fontWeight="semibold">
+                                {programLevel.level.name}
+                              </Heading>
+                            ))
+                          ) : (
+                            <></>
+                          )}
                         </div>
-                      </Permission>
+                        <Permission privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}>
+                          <div className="text-primary-500 py-2 text-sm mr-3">
+                            <Link
+                              to={`${url}/level/add`}
+                              className="flex items-center justify-end">
+                              <Icon name="add" size={12} fill="primary" />
+                              Add levels
+                            </Link>
+                          </div>
+                        </Permission>
+                      </div>
                     </div>
                   </Permission>
-                  <Permission privilege={Privileges.CAN_ACCESS_PROGRAM_LEVELS}>
-                    <div className="mr-20 flex flex-col gap-7 w-60 p-6 bg-main">
-                      <Heading color="txt-secondary" fontSize="base">
-                        Progam Syllabus
-                      </Heading>
-                      <div className="flex flex-col gap-8">
-                        {program?.attachment_id != undefined ? (
-                          <Heading
-                            key={program?.attachment_id}
-                            color="primary"
-                            fontSize="base"
-                            fontWeight="semibold">
-                            {program?.attachment_file_name}
-                          </Heading>
-                        ) : (
-                          <></>
-                        )}
-                      </div>
-                      <Permission privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}>
-                        <div className="text-primary-500 py-2 text-sm mr-3">
-                          <Button onClick={() => downloadProgramAttachment(program)}>
-                            Download Syllabus
-                          </Button>
-                          <Button
-                            onClick={() => deleteSyllabus(program?.attachment_id + '')}
-                            styleType="outline">
-                            Delete Syllabus
-                          </Button>
-                          <Link
-                            to={`${url}/programSyllabus/add`}
-                            className="flex items-center justify-end">
-                            <Icon name="add" size={12} fill="primary" />
-                            Add Program Syllabus
-                          </Link>
-                        </div>
-                      </Permission>
-                    </div>
-                  </Permission>
-                  {/* <Permission privilege={Privileges.CAN_ACCESS_PROGRAMS}>
-                    <div className="flex flex-col gap-4 z-0 pt-6">
-                      <div className="flex justify-between items-center">
-                        <Heading fontSize="base" fontWeight="semibold">
+
+                  <div className="flex flex-col gap-8">
+                    <Permission privilege={Privileges.CAN_ACCESS_PROGRAM_LEVELS}>
+                      <div className="mr-20 flex flex-col gap-7 w-354 p-6 bg-main">
+                        <Heading color="txt-secondary" fontSize="base">
                           Program Syllabus
                         </Heading>
+                        <div className="flex flex-col gap-4">
+                          {program?.attachment_id == null ? (
+                            <Permission privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}>
+                              <div className="text-primary-500 py-2 text-sm mr-3 flex space-x-4">
+                                <Link
+                                  to={`${url}/programSyllabus/add`}
+                                  className="flex items-center justify-end">
+                                  <Icon name="add" size={12} fill="primary" />
+                                  Add Program Syllabus
+                                </Link>
+                              </div>
+                            </Permission>
+                          ) : (
+                            <>
+                              <Heading
+                                key={program?.attachment_id}
+                                color="txt-primary"
+                                fontSize="base"
+                                fontWeight="semibold">
+                                {program?.name + ' Syllabus'}
+                              </Heading>
+                              <Permission
+                                privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}>
+                                <div className="text-primary-500 py-1 text-sm mr-3 flex space-x-4">
+                                  <Link
+                                    to={`${url}/programSyllabus/add`}
+                                    className="flex items-center justify-end">
+                                    <Icon name="add" size={12} fill="primary" />
+                                    Edit Program Syllabus
+                                  </Link>
+                                </div>
+                                <div className="flex space-x-4">
+                                  <Button
+                                    onClick={() => downloadProgramAttachment(program)}>
+                                    Download
+                                  </Button>
+                                  <Button
+                                    onClick={() => deleteSyllabus(program.id + '')}
+                                    styleType="outline">
+                                    Delete
+                                  </Button>
+                                </div>
+                              </Permission>
+                            </>
+                          )}
+                        </div>
                       </div>
-                      <>
-                        {isLoading ? (
-                          <Loader />
-                        ) : programSyllabusInfo.length === 0 ? (
-                          <NoDataAvailable
-                            // privilege={Privileges.CAN_CREATE_SYLLABUS}
-                            icon="subject"
-                            title={'No program syllabus available'}
-                            description={
-                              'There are no program syllabus currently added on this program'
-                            }
-                            handleClick={() => history.push(`${url}/add-syllabus`)}
-                          />
-                        ) : (
-                          <div className="pt-3 w-2/5">
-                            <Accordion>
-                              {programSyllabusInfo.map((mat) => {
-                                return (
-                                  <Panel
-                                    width="w-full"
-                                    bgColor="main"
-                                    key={mat.description}
-                                    title={mat.purpose}>
-                                    <div className="font-medium text-gray-600 text-sm py-4">
-                                      <Tiptap
-                                        editable={false}
-                                        viewMenu={false}
-                                        handleChange={() => {}}
-                                        content={mat.description}
-                                      />
-                                    </div>
-                                    <Button
-                                      className="mt-2 mb-4 mx-20"
-                                      styleType="outline"
-                                      onClick={() =>
-                                        history.push(`${url}/add-syllabus/add`)
-                                      }>
-                                      Add Program Syllabus
-                                    </Button>
-                                  </Panel>
-                                );
-                              })}
-                            </Accordion>
-                          </div>
-                        )}
-                      </>
-                    </div>
-                  </Permission> */}
+                    </Permission>
 
-                  {/* intakes */}
-                  <div className="flex flex-col gap-8">
+                    {/* intakes */}
+                    {/* <div className="flex flex-col gap-8"> */}
                     <div className="flex flex-col gap-7 bg-main w-60 p-6">
                       <Heading color="txt-secondary" fontSize="base">
                         Intakes
@@ -348,6 +316,7 @@ export default function ProgramDetailsMolecule() {
                     </div>
                   </div>
                 </div>
+                // </div>
                 // </div>
               )}
             />
