@@ -35,6 +35,7 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
   const initialErrorState: RegErrors = {
     expected_start_date: '',
     expected_end_date: '',
+    description: '',
   };
 
   const [errors, setErrors] = useState(initialErrorState);
