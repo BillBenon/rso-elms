@@ -6,14 +6,15 @@ import { useLocation } from 'react-router-dom';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
+import { enrollmentService } from '../../../../services/administration/enrollments.service';
+import { subjectService } from '../../../../services/administration/subject.service';
 import { classStore } from '../../../../store/administration/class.store';
-import enrollmentStore from '../../../../store/administration/enrollment.store';
 import intakeProgramStore from '../../../../store/administration/intake-program.store';
 import { moduleStore } from '../../../../store/administration/modules.store';
-import { subjectStore } from '../../../../store/administration/subject.store';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { SelectData, ValueType } from '../../../../types';
+import { ModuleInstructors } from '../../../../types/services/enrollment.types';
 import {
   IAccessTypeEnum,
   IContentFormatEnum,
@@ -53,7 +54,10 @@ const initialState: IEvaluationSectionBased = {
   questionaire_setting_status: IEvaluationStatus.PENDING,
   section_total_marks: 0,
   subject_academic_year_period: '',
+  id: '',
 };
+
+type IInstructorData = { [key: string]: ModuleInstructors[] };
 
 export default function EvaluationInfoComponent({
   handleNext,
@@ -76,17 +80,13 @@ export default function EvaluationInfoComponent({
   const { user } = useAuthenticator();
   const picked_role = usePickedRole();
   const [timeDifference, setTimeDifference] = useState(0);
-  const [currentModule, setCurrentModule] = useState('');
-  const [currentSubject, setCurrentSubject] = useState('');
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
     .data?.data.data[0];
-  const instructors = enrollmentStore.getInstructorsBySubject(currentSubject) || [];
 
   const { data: studentsProgram } = intakeProgramStore.getStudentsByIntakeProgramLevel(
     levelId || '',
   );
-  const subjects = subjectStore.getSubjectsByModule(currentModule.toString());
 
   const [students, setStudents] = useState<SelectData[]>([]);
   useEffect(() => {
@@ -103,6 +103,8 @@ export default function EvaluationInfoComponent({
 
   const { data: classes } = classStore.getClassByPeriod(intakePeriodId + '');
   const modules = moduleStore.getModulesByProgram(programId);
+  const [subjectData, setSubjectData] = useState({});
+  const [instructorData, setInstructorData] = useState<IInstructorData>({});
 
   const cachedData: IEvaluationInfo = getLocalStorageData('evaluationInfo') || {};
   const cachedEvaluationModuleData: IEvaluationSectionBased[] = getLocalStorageData(
@@ -273,6 +275,55 @@ export default function EvaluationInfoComponent({
     }));
   }
 
+  async function getSubjectsByModule(module: string) {
+    try {
+      const objkeys = Object.keys(subjectData);
+
+      if (objkeys.length === 0) {
+        const subjects =
+          (await subjectService.getSubjectsByModule(module)).data.data || [];
+
+        setSubjectData({ ...subjectData, [module]: subjects });
+      } else {
+        for (let currKey of objkeys) {
+          if (currKey !== module) {
+            const subjects =
+              (await subjectService.getSubjectsByModule(module)).data.data || [];
+
+            setSubjectData({ ...subjectData, [module]: subjects });
+          }
+        }
+      }
+    } catch (error) {
+      return;
+    }
+  }
+
+  async function getInstructorsBySubject(subject: string) {
+    try {
+      const objkeys = Object.keys(instructorData);
+
+      if (objkeys.length === 0) {
+        const instructors =
+          (await enrollmentService.getInstructorsBySubjectId(subject)).data.data || [];
+
+        setInstructorData({ ...instructorData, [subject]: instructors });
+      } else {
+        for (let currKey of objkeys) {
+          if (currKey !== subject) {
+            const instructors =
+              (await enrollmentService.getInstructorsBySubjectId(subject)).data.data ||
+              [];
+
+            setInstructorData({ ...instructorData, [subject]: instructors });
+          }
+        }
+      }
+    } catch (error) {
+      return;
+    }
+  }
+
   function handleModuleChange(index: number, { name, value }: ValueType) {
     let evaluationModuleInfo = [...evaluationModule];
     evaluationModuleInfo[index] = { ...evaluationModuleInfo[index], [name]: value };
@@ -280,12 +331,23 @@ export default function EvaluationInfoComponent({
     setLocalStorageData('evaluationModule', evaluationModuleInfo);
 
     if (name === 'intake_program_level_module') {
-      setCurrentModule(value.toString());
+      // setCurrentModule(value.toString());
+      getSubjectsByModule(value.toString());
+
       return;
     }
 
     if (name === 'subject_academic_year_period') {
-      setCurrentSubject(value.toString());
+      getInstructorsBySubject(value.toString());
+
+      return;
+    }
+
+    if (name === 'section_total_marks') {
+      setDetails((details) => ({
+        ...details,
+        total_marks: details.total_mark + parseInt(value.toString()),
+      }));
       return;
     }
   }
@@ -432,11 +494,12 @@ export default function EvaluationInfoComponent({
                     width="36"
                     value={evalMod?.subject_academic_year_period?.toString() || ''}
                     name="subject_academic_year_period"
-                    loading={subjects.isLoading}
+                    loading={false}
                     placeholder="select subject"
                     handleChange={(e: ValueType) => handleModuleChange(index, e)}
                     options={getDropDownOptions({
-                      inputs: subjects.data?.data.data || [],
+                      //@ts-ignore
+                      inputs: subjectData[evalMod.intake_program_level_module] || [],
                       labelName: ['title'],
                     })}>
                     Select subject
@@ -450,15 +513,15 @@ export default function EvaluationInfoComponent({
                     value={evalMod?.instructor_subject_assignment}
                     name="instructor_subject_assignment"
                     placeholder="select instructor"
-                    loading={instructors.isLoading}
                     handleChange={(e: ValueType) => handleModuleChange(index, e)}
                     options={
-                      instructors.data?.data.data.length
-                        ? (instructors?.data.data.data.map((instr) => ({
-                            label: `${instr.user.first_name} ${instr.user.last_name}`,
-                            value: instr.id,
-                          })) as SelectData[])
-                        : []
+                      (
+                        instructorData[evalMod.subject_academic_year_period.toString()] ||
+                        []
+                      ).map((instr: any) => ({
+                        label: `${instr.user.first_name} ${instr.user.last_name}`,
+                        value: instr.id,
+                      })) as SelectData[]
                     }>
                     Select Instructor
                   </SelectMolecule>
@@ -625,6 +688,7 @@ export default function EvaluationInfoComponent({
         </div>
         <InputMolecule
           style={{ width: '6rem' }}
+          readonly
           type="number"
           name="total_mark"
           // min={0}
