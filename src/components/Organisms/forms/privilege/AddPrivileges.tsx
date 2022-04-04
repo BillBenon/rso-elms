@@ -49,18 +49,22 @@ export default function AddPrivileges({ onSubmit, roleName, roleId }: RolePropTy
 
     validatedForm
       .then(() => {
-        mutateAsync(form, {
-          onSuccess: () => {
-            onSubmit(e);
-            toast.success('Privilege(s) Added', { id: toastId });
-            history.goBack();
-          },
-          onError: () => {
-            toast.error('something wrong happened adding privileges on role', {
-              id: toastId,
-            });
-          },
-        });
+        if (privileges.length === 0) {
+          toast.error('Please select privileges');
+        } else {
+          mutateAsync(form, {
+            onSuccess: () => {
+              onSubmit(e);
+              toast.success('Privilege(s) Added', { id: toastId });
+              history.goBack();
+            },
+            onError: () => {
+              toast.error('something wrong happened adding privileges on role', {
+                id: toastId,
+              });
+            },
+          });
+        }
       })
       .catch((err) => {
         const validatedErr: PrivErrors = initialErrorState;

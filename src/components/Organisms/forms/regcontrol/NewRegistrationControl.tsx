@@ -24,6 +24,7 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
   const history = useHistory();
 
   const initialErrorState: RegErrors = {
+    description: '',
     expected_start_date: '',
     expected_end_date: '',
   };
@@ -80,6 +81,7 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
     <form onSubmit={submitForm}>
       <TextAreaMolecule
         required={false}
+        error={errors.description}
         value={regControl.description}
         name="description"
         handleChange={handleChange}>

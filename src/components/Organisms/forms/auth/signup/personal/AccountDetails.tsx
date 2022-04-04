@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import usersStore from '../../../../../../store/administration/users.store';
@@ -66,13 +66,12 @@ function AccountDetails<E>({
   const moveBack = () => {
     prevStep && prevStep();
   };
-  const moveForward = (e: any) => {
+  const moveForward = (e: FormEvent) => {
     e.preventDefault();
     let data: any = getLocalStorageData('user');
     let newObj = Object.assign({}, data, accountDetails);
 
     Object.keys(newObj).map((val) => {
-      //@ts-ignore
       if (!newObj[val]) newObj[val] = '';
     });
 

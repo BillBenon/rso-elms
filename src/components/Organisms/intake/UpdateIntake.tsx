@@ -65,7 +65,7 @@ export default function UpdateIntake(props: CProps) {
   const intake = intakeStore.getIntakeById(id);
 
   useEffect(() => {
-    if (intake.data) {
+    if (intake.data?.data.data) {
       const _intake = intake?.data.data.data;
       setValues({
         id: _intake.id,
@@ -82,7 +82,7 @@ export default function UpdateIntake(props: CProps) {
         total_num_students: _intake.total_num_students,
       });
     }
-  }, [intake.data]);
+  }, [intake.data?.data.data]);
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
@@ -148,7 +148,8 @@ function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
 
   const [errors, setErrors] = useState<IntakeInfoErrors>(initialErrorState);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
     const validatedForm = intakeInfoSchema.validate(values, {
       abortEarly: false,
     });
@@ -163,8 +164,9 @@ function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
         setErrors(validatedErr);
       });
   };
+
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <InputMolecule
         error={errors.title}
         required={false}
@@ -193,9 +195,7 @@ function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
         Total number of students
       </InputMolecule>
       <div className="pt-3">
-        <Button type="submit" onClick={handleSubmit}>
-          Next
-        </Button>
+        <Button type="submit">Next</Button>
       </div>
     </form>
   );
@@ -211,7 +211,8 @@ function IntakeStatusComponent({ values, handleChange, handleNext, disabled }: I
 
   const [errors, setErrors] = useState<IntakeStatusErrors>(initialErrorState);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
     const validatedForm = intakeInfoSchema.validate(values, {
       abortEarly: false,
     });
@@ -228,7 +229,7 @@ function IntakeStatusComponent({ values, handleChange, handleNext, disabled }: I
   };
 
   return (
-    <form>
+    <form onSubmit={handleSubmit}>
       <DateMolecule
         error={errors.expected_start_date}
         showTime={false}
@@ -278,7 +279,7 @@ function IntakeStatusComponent({ values, handleChange, handleNext, disabled }: I
         <Button styleType="text" color="gray">
           Back
         </Button>
-        <Button disabled={disabled} type="submit" onClick={handleSubmit}>
+        <Button disabled={disabled} type="submit">
           Update intake
         </Button>
       </div>

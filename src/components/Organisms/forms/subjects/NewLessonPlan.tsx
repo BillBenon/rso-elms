@@ -122,7 +122,8 @@ function LessonTimeComponent({ lessonPlan, handleChange, handleNext }: IProps) {
 
   const [errors, setErrors] = useState<LessonTimeErrors>(initialErrorState);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
     const validatedForm = lessonPlanTimeSchema.validate(lessonPlan, {
       abortEarly: false,
     });

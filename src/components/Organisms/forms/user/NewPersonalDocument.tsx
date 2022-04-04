@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import { queryClient } from '../../../../plugins/react-query';
 import usersStore from '../../../../store/administration/users.store';
 import { ValueType } from '../../../../types';
-import { INewPersonalDoc } from '../../../../types/services/user.types';
+import { DocErrors, INewPersonalDoc } from '../../../../types/services/user.types';
 import { userDocSchema } from '../../../../validations/user.validation';
 import Button from '../../../Atoms/custom/Button';
 import FileUploader from '../../../Atoms/Input/FileUploader';
@@ -14,11 +14,6 @@ import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 interface DocParams {
   personId: string;
-}
-
-interface DocErrors {
-  purpose: string;
-  file: string;
 }
 
 export default function NewPersonalDocument({ personId }: DocParams) {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 
 import { rankStore } from '../../../../../../store/administration/rank.store';
 import usersStore from '../../../../../../store/administration/users.store';
@@ -54,12 +54,11 @@ function EmploymentDetails<E>({
     user.data?.data.data.institution_id + '',
   ).data?.data.data;
 
-  const moveForward = (e: any) => {
+  const moveForward = (e: FormEvent) => {
     e.preventDefault();
     let data: any = getLocalStorageData('user');
     let newObj = Object.assign({}, data, employmentDetails);
     Object.keys(newObj).map((val) => {
-      //@ts-ignore
       if (!newObj[val]) newObj[val] = '';
     });
 

@@ -1,5 +1,5 @@
 import moment from 'moment';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 import countryList from 'react-select-country-list';
@@ -18,7 +18,7 @@ import {
 import { CreateNextOfKin } from '../../../../../../types/services/usernextkin.types';
 import { getDropDownStatusOptions } from '../../../../../../utils/getOption';
 import { validation } from '../../../../../../utils/validations';
-import { nextOfKinSchema } from '../../../../../../validations/more-info.validation';
+import { nextOfKinSchema } from '../../../../../../validations/complete-profile/more-info.validation';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DateMolecule from '../../../../../Molecules/input/DateMolecule';
@@ -142,7 +142,7 @@ function NextOfKinDetails<E>({
   const moveBack = () => {
     prevStep && prevStep();
   };
-  const moveForward = (e: any) => {
+  const moveForward = (e: FormEvent) => {
     e.preventDefault();
     const cloneDetails = { ...details };
     Object.assign(cloneDetails, {
@@ -193,10 +193,9 @@ function NextOfKinDetails<E>({
           if (onSubmit) onSubmit(e, details);
         }
       })
-      .catch((err) => {
+      .catch((err: any) => {
         const validatedErr: NextOfKinErrors = initialErrorState;
         err.inner.map((el: { path: string | number; message: string }) => {
-          //@ts-ignore
           validatedErr[el.path as keyof NextOfKinErrors] = el.message;
         });
 

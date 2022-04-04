@@ -2,6 +2,7 @@ import * as yup from 'yup';
 
 export const levelSchema = yup.object().shape({
   name: yup.string().required('level name is required'),
+  description: yup.string().required('level description is required'),
   flow: yup.number().required('level flow is required').min(1),
 });
 

@@ -12,5 +12,5 @@ export const privilegeSchema = yup.object().shape({
 });
 
 export const addPrivilegeSchema = yup.object().shape({
-  privileges: yup.array().required('selecting privileges is required'),
+  // privileges: yup.array().required('selecting privileges is required'),
 });

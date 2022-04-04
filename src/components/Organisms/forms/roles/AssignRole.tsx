@@ -24,8 +24,7 @@ import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 
 interface RoleErrors {
   academy_id: string;
-  roles: string;
-  chose_academy: boolean;
+  // roles: string;
 }
 
 export default function AssignRole() {
@@ -36,8 +35,7 @@ export default function AssignRole() {
 
   const initialErrorState: RoleErrors = {
     academy_id: '',
-    roles: '',
-    chose_academy: false,
+    // roles: '',
   };
 
   const [errors, setErrors] = useState(initialErrorState);
@@ -87,8 +85,9 @@ export default function AssignRole() {
     const validatedForm = userAssignRoleSchema.validate(
       {
         academy_id: roleInfo.academy_id,
-        roles: roles,
-        chose_academy: roleInfo.type === RoleType.ACADEMY,
+        // roles: roles,
+        chose_academy:
+          picked_role?.type !== RoleType.ACADEMY && roleInfo.type === RoleType.ACADEMY,
       },
       {
         abortEarly: false,
@@ -97,31 +96,34 @@ export default function AssignRole() {
 
     validatedForm
       .then(() => {
-        let user_roles: AssignUserRole[] = [];
+        if (roles.length === 0) {
+          toast.error('Please select roles');
+        } else {
+          let user_roles: AssignUserRole[] = [];
 
-        roles.map((role) => {
-          user_roles.push({
-            description: '',
-            role_id: +role,
-            user_id: userId,
+          roles.map((role) => {
+            user_roles.push({
+              description: '',
+              role_id: +role,
+              user_id: userId,
+            });
           });
-        });
 
-        mutate(user_roles, {
-          onSuccess(data) {
-            toast.success(data.data.message);
-            queryClient.invalidateQueries('roles');
-            history.goBack();
-          },
-          onError(error: any) {
-            toast.error(error.response.data.message);
-          },
-        });
+          mutate(user_roles, {
+            onSuccess(data) {
+              toast.success(data.data.message);
+              queryClient.invalidateQueries('roles');
+              history.goBack();
+            },
+            onError(error: any) {
+              toast.error(error.response.data.message);
+            },
+          });
+        }
       })
       .catch((err) => {
         const validatedErr: RoleErrors = initialErrorState;
         err.inner.map((el: { path: string | number; message: string }) => {
-          //@ts-ignore
           validatedErr[el.path as keyof RoleErrors] = el.message;
         });
         setErrors(validatedErr);
@@ -183,7 +185,7 @@ export default function AssignRole() {
         )}
       </>
       <DropdownMolecule
-        error={errors.roles}
+        // error={errors.roles}
         isMulti
         name="role"
         handleChange={handleChange}

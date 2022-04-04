@@ -129,7 +129,8 @@ function LessonTimeComponent({ lessonPlan, handleChange, handleNext }: IProps) {
 
   const [errors, setErrors] = useState<LessonTimeErrors>(initialErrorState);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
     const validatedForm = lessonPlanTimeSchema.validate(lessonPlan, {
       abortEarly: false,
     });
@@ -196,7 +197,8 @@ function LessonTextArea({ lessonPlan, handleChange, handleNext }: IProps) {
 
   const [errors, setErrors] = useState<LessonTextAreaErrors>(initialErrorState);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
     const validatedForm = lessonPlanTextAreaSchema.validate(lessonPlan, {
       abortEarly: false,
     });

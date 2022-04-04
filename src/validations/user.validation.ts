@@ -107,7 +107,7 @@ export const editUserSchema = yup.object().shape({
 });
 export const userDocSchema = yup.object().shape({
   purpose: yup.string().required('Document purpose is required'),
-  file: yup.string().required('File must be uploaded'),
+  file: yup.string().required('File must be uploaded').nullable(),
 });
 
 export const loginSchema = yup.object().shape({

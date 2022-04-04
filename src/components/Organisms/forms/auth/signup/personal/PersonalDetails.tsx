@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import countryList from 'react-select-country-list';
 
 import usersStore from '../../../../../../store/administration/users.store';
@@ -112,7 +112,7 @@ function PersonalDetails<E>({
     [],
   );
 
-  const moveForward = (e: any) => {
+  const moveForward = (e: FormEvent) => {
     e.preventDefault();
     let data: any = getLocalStorageData('user');
     let newObj = Object.assign({}, data, personalDetails);

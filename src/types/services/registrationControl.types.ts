@@ -12,7 +12,7 @@ export interface IRegistrationControlCreateInfo {
 export interface RegErrors
   extends Pick<
     IRegistrationControlCreateInfo,
-    'expected_start_date' | 'expected_end_date'
+    'description' | 'expected_start_date' | 'expected_end_date'
   > {}
 
 export interface IRegistrationControlInfo

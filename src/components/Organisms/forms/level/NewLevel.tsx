@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
@@ -21,8 +21,13 @@ function NewLevel({ onSubmit, academy_id }: IDivisionsAcademyType) {
     flow: 0,
   });
 
+  useEffect(() => {
+    setLevel((level) => ({ ...level, academy_id: academy_id || '' }));
+  }, [academy_id]);
+
   const initialErrorState: LevelErrors = {
     name: '',
+    description: '',
     flow: '',
   };
 
@@ -51,7 +56,7 @@ function NewLevel({ onSubmit, academy_id }: IDivisionsAcademyType) {
             history.goBack();
           },
           onError: (error: any) => {
-            toast.error(error.response.data.message.split(':')[1]);
+            toast.error(error.response.data.message);
           },
         });
         if (onSubmit) onSubmit(e);
@@ -78,10 +83,11 @@ function NewLevel({ onSubmit, academy_id }: IDivisionsAcademyType) {
       </InputMolecule>
 
       <TextAreaMolecule
+        error={errors.description}
         value={level.description}
         name="description"
         handleChange={handleChange}>
-        Descripiton
+        Descripton
       </TextAreaMolecule>
 
       <InputMolecule

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 
 import diseasesStore from '../../../../../../store/administration/diseases.store';
 import hobbiesStore from '../../../../../../store/administration/hobbies.store';
@@ -33,7 +33,7 @@ function OtherDetails<O>({ display_label, isVertical, prevStep, nextStep }: Othe
   const handleChange = (e: ValueType) => {
     setOtherDetails({ ...otherDetails, [e.name]: e.value });
   };
-  const moveForward = (e: any) => {
+  const moveForward = (e: FormEvent) => {
     e.preventDefault();
     let data: any = getLocalStorageData('user');
     let newObj = Object.assign({}, data, otherDetails);

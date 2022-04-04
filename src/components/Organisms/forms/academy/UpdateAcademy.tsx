@@ -179,7 +179,8 @@ function AcademyInfoComponent({
 
   const [errors, setErrors] = useState<AcademyInfoErrors>(initialErrorState);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
     const validatedForm = academyInfoSchema.validate(details, {
       abortEarly: false,
     });

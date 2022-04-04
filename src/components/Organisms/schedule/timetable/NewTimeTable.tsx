@@ -136,7 +136,7 @@ function FirstStep({ values, handleChange, setCurrentStep, classInfo }: IStepPro
 
   const [errors, setErrors] = useState<FirstTimeTableErrors>(initialErrorState);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const validatedForm = firstTimetableSchema.validate(values, {
       abortEarly: false,
@@ -215,7 +215,7 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
 
   const [errors, setErrors] = useState<SecondTimeTableErrors>(initialErrorState);
 
-  const handleFinish = (e: any) => {
+  const handleFinish = (e: FormEvent) => {
     e.preventDefault();
 
     const validatedForm = secondTimetableSchema.validate(values, {

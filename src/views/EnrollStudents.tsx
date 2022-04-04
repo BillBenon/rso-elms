@@ -156,7 +156,8 @@ function EnrollmentInfo({ values, handleChange, handleNext }: IProps) {
 
   const [errors, setErrors] = useState<EnrollmentInfoErrors>(initialErrorState);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
     const validatedForm = enrollmentInfoSchema.validate(values, {
       abortEarly: false,
     });
@@ -229,7 +230,8 @@ function EnrollmentAcademy({ values, user_roles, handleChange, handleNext }: IPr
 
   const [errors, setErrors] = useState<EnrollmentAcademyErrors>(initialErrorState);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
     const cloneValues = { ...values };
     Object.assign(cloneValues, {
       has_academy: user_roles?.type === RoleType.INSTITUTION,

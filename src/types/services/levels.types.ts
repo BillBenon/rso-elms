@@ -10,7 +10,7 @@ export interface IcreateLevel {
   flow: number;
 }
 
-export interface LevelErrors extends Pick<IcreateLevel, 'name'> {
+export interface LevelErrors extends Pick<IcreateLevel, 'name' | 'description'> {
   flow: string;
 }
 

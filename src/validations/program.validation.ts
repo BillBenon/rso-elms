@@ -37,3 +37,8 @@ export const academicYearSchema = yup.object().shape({
   plannedStartOn: yup.string().required('Start date is required'),
   plannedEndOn: yup.string().required('End date is required'),
 });
+
+export const programSyllabusSchema = yup.object().shape({
+  purpose: yup.string().required('Syllabus purpose is required'),
+  file: yup.string().required('File must be uploaded').nullable(),
+});

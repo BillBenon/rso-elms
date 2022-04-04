@@ -122,7 +122,8 @@ function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
 
   const [errors, setErrors] = useState<IntakeInfoErrors>(initialErrorState);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
     const validatedForm = intakeInfoSchema.validate(values, {
       abortEarly: false,
     });
@@ -190,7 +191,8 @@ function IntakeStatusComponent({ values, handleChange, handleNext }: IProps) {
 
   const [errors, setErrors] = useState<IntakeStatusErrors>(initialErrorState);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
     const validatedForm = intakeInfoSchema.validate(values, {
       abortEarly: false,
     });

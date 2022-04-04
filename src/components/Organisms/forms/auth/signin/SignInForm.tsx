@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 
 import useAuthenticator from '../../../../../hooks/useAuthenticator';
@@ -33,7 +33,8 @@ const SignInForm = () => {
 
   useEffect(() => logout(), []);
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
     const validatedForm = loginSchema.validate(details, {
       abortEarly: false,
     });

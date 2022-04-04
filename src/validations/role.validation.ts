@@ -6,7 +6,7 @@ export const userAssignRoleSchema = yup.object().shape({
     then: yup.string().required('Academy is required'),
     otherwise: yup.string(),
   }),
-  roles: yup.array().required('selecting roles is required'),
+  // roles: yup.array().required('selecting roles is required'),
   chose_academy: yup.boolean(),
 });
 export const newRoleSchema = yup.object().shape({

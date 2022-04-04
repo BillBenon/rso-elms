@@ -2,7 +2,7 @@ import * as yup from 'yup';
 
 export const intakeInfoSchema = yup.object().shape({
   title: yup.string().required('Intake title is required'),
-  total_num_students: yup.number().min(1),
+  total_num_students: yup.number().required('Total number of students is required'),
 });
 
 export const intakeStatusSchema = yup.object().shape({

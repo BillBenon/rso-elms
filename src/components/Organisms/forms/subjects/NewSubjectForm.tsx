@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router';
 
@@ -38,7 +38,7 @@ export default function NewSubjectForm() {
     setsubject({ ...subject, [e.name]: e.value });
   }
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const validatedForm = newSubjectSchema.validate(
       { content: subject.content, title: subject.title },

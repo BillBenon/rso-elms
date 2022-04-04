@@ -83,6 +83,11 @@ export interface FileAttachment {
   docInfo: FormData;
   id: string;
 }
+
+export interface DocErrors {
+  purpose: string;
+  file: string;
+}
 export interface IntakeLevelProgramInfo extends Table {
   student: Student;
 }
