@@ -92,17 +92,6 @@ export default function ClassFullYearDeliberation() {
           }}
         />
       </Switch>
-      <Heading fontSize="lg" fontWeight="bold" className="py-2">
-        {`${
-          classInfo?.data.data.academic_year_program_intake_level.academic_program_level
-            .program.name || ''
-        } - 
-        ${
-          classInfo?.data.data.academic_year_program_intake_level.academic_program_level
-            .level.name || ''
-        } 
-       `}
-      </Heading>
       {isIdle || isLoading ? (
         <Loader />
       ) : isError ? (

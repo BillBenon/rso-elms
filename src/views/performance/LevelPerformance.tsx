@@ -5,11 +5,13 @@ import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
+import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
 import { classStore } from '../../store/administration/class.store';
 import { CommonCardDataType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ClassPeriodPerformance from './ClassPeriodPerformance';
-import SchoolReport from './SchoolReport';
+import EndTermForm from './EndTermForm';
+import StudentAcademicReport from './StudentAcademicReport';
 
 interface ParamType {
   levelId: string;
@@ -49,7 +51,16 @@ export default function LevelPerformance() {
         <Route
           exact
           path={`${path}/:classId/report/:studentId/:periodId`}
-          component={SchoolReport}
+          render={() => (
+            <Tabs>
+              <Tab label="Academic report">
+                <StudentAcademicReport />
+              </Tab>
+              <Tab label="Informative form">
+                <EndTermForm />
+              </Tab>
+            </Tabs>
+          )}
         />
         <Route path={`${path}/:classId`} component={ClassPeriodPerformance} />
         <Route

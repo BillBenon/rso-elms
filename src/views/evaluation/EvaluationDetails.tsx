@@ -9,6 +9,7 @@ import { queryClient } from '../../plugins/react-query';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
 import ApproveEvaluation from './ApproveEvaluation';
+import EvaluationPerformance from './EvaluationPerformance';
 import Submissions from './marking/Submissions';
 import ReviewEvaluation from './ReviewEvaluation';
 import Unbeguns from './Unbeguns';
@@ -27,13 +28,13 @@ export default function EvaluationDetails() {
       label: 'Submissions',
       href: `${url}/submissions`,
     },
-    // {
-    //   label: 'Ongoing',
-    //   href: `${url}/ongoing-submissions`,
-    // },
     {
-      label: 'Defiance/To start',
+      label: 'Not attempted',
       href: `${url}/unbeguns`,
+    },
+    {
+      label: 'Performance report',
+      href: `${url}/performance`,
     },
   ];
 
@@ -75,6 +76,11 @@ export default function EvaluationDetails() {
           <div className="pt-8">
             <Route exact path={`${path}/unbeguns`} render={() => <Unbeguns />} />
           </div>
+          <Route
+            exact
+            path={`${path}/performance`}
+            render={() => <EvaluationPerformance />}
+          />
 
           <Route
             exact

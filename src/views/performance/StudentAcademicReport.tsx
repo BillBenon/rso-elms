@@ -30,7 +30,7 @@ interface IReportTable {
   examMax: number;
 }
 
-export default function SchoolReport() {
+export default function StudentAcademicReport() {
   const [isPrinting, setisPrinting] = useState(false);
   const picked_role = usePickedRole();
   const { data: role_academy } = academyStore.getAcademyById(
@@ -73,7 +73,7 @@ export default function SchoolReport() {
   });
 
   return (
-    <div className="mx-auto max-w-4xl">
+    <div className="max-w-4xl">
       <div className="text-right mb-5">
         <Permission privilege={Privileges.CAN_DOWNLOAD_REPORTS}>
           <Button disabled={isPrinting} onClick={() => handlePrint()}>
@@ -342,7 +342,7 @@ export default function SchoolReport() {
             {[1, 2, 3].map((i) => (
               <div key={i} className="h-12 px-4">
                 <img
-                  src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/Signature-Amini.png/640px-Signature-Amini.png"
+                  src="https://i.stack.imgur.com/eUcfI.gif"
                   alt="signature"
                   className="block max-w-full max-h-12"
                 />
