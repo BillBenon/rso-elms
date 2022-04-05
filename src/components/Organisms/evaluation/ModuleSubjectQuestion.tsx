@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import { subjectService } from '../../../services/administration/subject.service';
+import { evaluationService } from '../../../services/evaluation/evaluation.service';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../store/instructordeployment.store';
 import { EvaluationParamType, ParamType } from '../../../types';
@@ -20,6 +21,7 @@ export default function ModuleSubjectQuestion() {
   const [subjects, setSubjects] = useState<ISubjects[]>([]);
   const { id: evaluationId } = useParams<ParamType>();
   const { moduleId } = useParams<EvaluationParamType>();
+  const { subjectId } = useParams<EvaluationParamType>();
   const userInfo = useAuthenticator();
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(
     userInfo?.user?.id + '',
@@ -29,7 +31,7 @@ export default function ModuleSubjectQuestion() {
       .data?.data || {};
 
   const { data: evaluationQuestions, isLoading: loading } =
-    evaluationStore.getEvaluationQuestions(evaluationId);
+    evaluationStore.getEvaluationQuestionsBySubject(evaluationId, subjectId);
   // function updateStatus(questionId: string, status: IEvaluationStatus) {
   //   evaluationService
   //     .updateQuestionChoosen(questionId, status)
@@ -44,23 +46,31 @@ export default function ModuleSubjectQuestion() {
   const subjectTabs: TabType[] = [];
 
   useEffect(() => {
-    // let filteredSubjects: ISubjects[] = [];
+    let filteredSubjects: ISubjects[] = [];
 
     async function getSubjects() {
       if (evaluationInfo?.evaluation_module_subjects) {
-        const subjectData = await subjectService.getSubjectsByModule(moduleId);
+        const subjectData = await evaluationService.getEvaluationModuleSubjectsByModule(
+          evaluationId,
+          moduleId,
+        );
 
-        const filteredSubjects: ISubjects[] = subjectData.data.data.map((subject) => ({
-          subject: subject.title,
-          id: subject.id.toString(),
-        }));
+        for (const subj of subjectData.data.data) {
+          const subject = await subjectService.getSubject(
+            subj.subject_academic_year_period.toString(),
+          );
+          filteredSubjects.push({
+            subject: subject.data.data.title,
+            id: subject.data.data.id.toString(),
+          });
+        }
 
         setSubjects(filteredSubjects);
       }
     }
 
     getSubjects();
-  }, [evaluationInfo?.evaluation_module_subjects, moduleId]);
+  }, [evaluationId, evaluationInfo?.evaluation_module_subjects, moduleId]);
 
   subjects.map((subj) => {
     subjectTabs.push({

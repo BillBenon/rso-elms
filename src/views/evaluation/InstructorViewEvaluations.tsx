@@ -10,8 +10,8 @@ import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
 import ConfirmationOrganism from '../../components/Organisms/ConfirmationOrganism';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import useAuthenticator from '../../hooks/useAuthenticator';
-import { moduleService } from '../../services/administration/modules.service';
 import { subjectService } from '../../services/administration/subject.service';
+import { evaluationService } from '../../services/evaluation/evaluation.service';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Link as LinkList, Privileges } from '../../types';
@@ -26,7 +26,6 @@ import StudentReview from './StudentReview';
 export default function InstructorViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
   const [subjects, setSubjects] = useState<ISubjects[]>([]);
-  const [module, setModule] = useState('');
   const [evaluationId, setEvaluationId] = useState('');
   const [ownerShipType, setownerShipType] = useState(IEvaluationOwnership.CREATED_BY_ME);
 
@@ -81,28 +80,30 @@ export default function InstructorViewEvaluations() {
 
   useEffect(() => {
     async function getSubjects() {
+      let filteredSubjects: ISubjects[] = [];
+
       if (evaluationInfo?.evaluation_module_subjects) {
-        const subjectData = await subjectService.getSubjectsByModule(
+        const subjectData = await evaluationService.getEvaluationModuleSubjectsByModule(
+          evaluationId,
           evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module,
         );
 
-        const moduleData = await moduleService.getModuleById(
-          evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module.toString(),
-        );
-
-        const filteredSubjects: ISubjects[] = subjectData.data.data.map((subject) => ({
-          subject: subject.title,
-          id: subject.id.toString(),
-        }));
-
-        setModule(moduleData.data.data.id.toString());
+        for (const subj of subjectData.data.data) {
+          const subject = await subjectService.getSubject(
+            subj.subject_academic_year_period.toString(),
+          );
+          filteredSubjects.push({
+            subject: subject.data.data.title,
+            id: subject.data.data.id.toString(),
+          });
+        }
 
         setSubjects(filteredSubjects);
       }
     }
 
     getSubjects();
-  }, [evaluationInfo?.evaluation_module_subjects]);
+  }, [evaluationId, evaluationInfo?.evaluation_module_subjects]);
 
   const handleClick = (id: string) => {
     setEvaluationId(id);
@@ -122,7 +123,9 @@ export default function InstructorViewEvaluations() {
           break;
 
         case IEvaluationOwnership.FOR_SETTING:
-          history.push(`${path}/details/${id}/section/${module}/${subjects[0].id}`);
+          history.push(
+            `${path}/details/${id}/section/${evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module}/${subjects[0].id}`,
+          );
           break;
 
         default:

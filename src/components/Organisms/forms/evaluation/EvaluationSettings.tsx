@@ -116,7 +116,7 @@ export default function EvaluationSettings({
             options={
               instructors?.map((instr) => ({
                 label: `${instr.user.first_name} ${instr.user.last_name}`,
-                value: instr.id,
+                value: instr.user.id,
               })) as SelectData[]
             }
             name="reviewer_ids"
@@ -145,7 +145,7 @@ export default function EvaluationSettings({
             options={
               instructors?.map((instr) => ({
                 label: `${instr.user.first_name} ${instr.user.last_name}`,
-                value: instr.id,
+                value: instr.user.id,
               })) as SelectData[]
             }
             name="approver_ids"
@@ -162,7 +162,7 @@ export default function EvaluationSettings({
           options={
             instructors?.map((instr) => ({
               label: `${instr.user.first_name} ${instr.user.last_name}`,
-              value: instr.id,
+              value: instr.user.id,
             })) as SelectData[]
           }
           name="marker_ids"

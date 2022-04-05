@@ -172,10 +172,28 @@ class EvaluationService {
     return await evaluationAxios.get(`/evaluationQuestions/getEvaluationQuestions/${id}`);
   }
 
+  public async getEvaluationQuestionsBySubject(
+    evaluationId: string,
+    subjectId: string,
+  ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>> {
+    return await evaluationAxios.get(
+      `/evaluationQuestions/getEvaluationQuestions/evaluation/${evaluationId}/subject/${subjectId}`,
+    );
+  }
+
   public async deleteEvaluationQuestionById(
     id: string,
   ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>> {
     return await evaluationAxios.delete(`/evaluationQuestions/deleteQuestion/${id}`);
+  }
+
+  public async getEvaluationModuleSubjectsByModule(
+    evaluationId: string,
+    moduleId: string,
+  ): Promise<AxiosResponse<Response<IEvaluationSectionBased[]>>> {
+    return await evaluationAxios.get(
+      `/evaluation-module-subjects/getByEvaluationAndModule/${evaluationId}/module/${moduleId}`,
+    );
   }
 
   public async updateEvaluationModuleSubject(

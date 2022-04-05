@@ -164,6 +164,7 @@ export interface IEvaluationCreate {
 
 export type IEvaluationSectionBased = {
   id: string;
+  marker_id: string;
   evaluation_id: string;
   instructor_subject_assignment: string;
   intake_program_level_module: string;

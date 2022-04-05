@@ -147,6 +147,14 @@ class EvaluationStore {
     );
   }
 
+  getEvaluationQuestionsBySubject(evaluationId: string, subjectId: string) {
+    return useQuery(
+      ['evaluation/questions', [evaluationId, subjectId]],
+      () => evaluationService.getEvaluationQuestionsBySubject(evaluationId, subjectId),
+      { enabled: !!evaluationId },
+    );
+  }
+
   deleteEvaluationQuestionById() {
     return useMutation(evaluationService.deleteEvaluationQuestionById);
   }

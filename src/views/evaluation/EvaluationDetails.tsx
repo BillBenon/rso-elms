@@ -76,7 +76,6 @@ export default function EvaluationDetails() {
           path={`${path}/approve`}
           render={() => <ApproveEvaluation evaluationId={id} />}
         />
-        <Route path={`${path}/section`} render={() => <SectionBasedEvaluation />} />{' '}
         <Route
           exact
           path={`${path}/section/:id/add-questions`}
@@ -88,6 +87,7 @@ export default function EvaluationDetails() {
             />
           )}
         />
+        <Route path={`${path}/section`} render={() => <SectionBasedEvaluation />} />{' '}
         <TabNavigation tabs={tabs}>
           <div className="pt-8">
             <Route path={`${path}/submissions`} render={() => <Submissions />} />
@@ -108,36 +108,11 @@ export default function EvaluationDetails() {
             render={() => (
               <EvaluationContent evaluationId={id} actionType="">
                 <div className="flex gap-4">
-                  {/* <Button
-                      styleType="outline"
-                      onClick={() =>
-                        history.push({
-                          pathname: `/dashboard/evaluations/new`,
-                          search: `?evaluation=${id}`,
-                        })
-                      }>
-                      Edit evaluation
-                    </Button> */}
-
                   <Button
                     disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
                     onClick={() => publishEvaluation('PUBLIC')}>
                     Publish evaluation
                   </Button>
-
-                  {/* {evaluationInfo?.available === 'HIDDEN' ? (
-                    <Button
-                      disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
-                      onClick={() => publishEvaluation('PUBLIC')}>
-                      Publish evaluation
-                    </Button>
-                  ) : (
-                    <Button
-                      disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
-                      onClick={() => publishEvaluation('HIDDEN')}>
-                      Unpublish evaluation
-                    </Button>
-                  )} */}
                 </div>
               </EvaluationContent>
             )}

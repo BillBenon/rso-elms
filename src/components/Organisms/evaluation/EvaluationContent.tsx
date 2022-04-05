@@ -10,7 +10,6 @@ import Button from '../../Atoms/custom/Button';
 import Heading from '../../Atoms/Text/Heading';
 import PopupMolecule from '../../Molecules/Popup';
 import EvaluationRemarks from './EvaluationRemarks';
-import EvaluationSubjects from './EvaluationSubjects';
 
 interface IProps {
   evaluationId: string;
@@ -24,7 +23,6 @@ export default function EvaluationContent({
   actionType,
 }: IProps) {
   const [showPopup, setShowPopup] = useState(false);
-  const [showSubjects, setshowSubjects] = useState(false);
 
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId).data?.data || {};
@@ -217,21 +215,6 @@ export default function EvaluationContent({
             No questions attached
           </Heading>
         )}
-      </div>
-
-      <div className="py-4">
-        <div>
-          <Button styleType="outline" onClick={() => setshowSubjects(true)}>
-            Set questions
-          </Button>
-        </div>
-
-        <PopupMolecule
-          onClose={() => setshowSubjects(false)}
-          open={showSubjects}
-          title="Select subject to add questions">
-          <EvaluationSubjects evaluationId={evaluationId} action="add_questions" />
-        </PopupMolecule>
       </div>
 
       {actionType && <EvaluationRemarks actionType={actionType} />}

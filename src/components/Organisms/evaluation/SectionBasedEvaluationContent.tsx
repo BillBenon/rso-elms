@@ -4,6 +4,7 @@ import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import { moduleService } from '../../../services/administration/modules.service';
+import { evaluationService } from '../../../services/evaluation/evaluation.service';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../store/instructordeployment.store';
 import { IEvaluationAction, IModules } from '../../../types/services/evaluation.types';
@@ -32,6 +33,7 @@ export default function SectionBasedEvaluationContent({
   const { path } = useRouteMatch();
   const [showPopup, setShowPopup] = useState(false);
   const [modules, setModules] = useState<IModules[]>([]);
+  const [tabs, setTabs] = useState<TabType[]>([]);
   const userInfo = useAuthenticator();
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(
     userInfo?.user?.id + '',
@@ -47,14 +49,34 @@ export default function SectionBasedEvaluationContent({
     setclasses(evaluationInfo?.intake_level_class_ids.split(',') || [' ']);
   }, [evaluationInfo?.intake_level_class_ids]);
 
-  const tabs: TabType[] = [];
+  // const tabs: TabType[] = [];
 
-  modules.map((mod) => {
-    tabs.push({
-      label: `${mod.module}`,
-      href: `/dashboard/evaluations/details/${evaluationId}/section/${mod.id}/${evaluationInfo?.evaluation_module_subjects[0].id}`,
-    });
-  });
+  useEffect(() => {
+    async function createTabs() {
+      if (modules.length < 1) return;
+
+      const allTabs: TabType[] = [];
+
+      try {
+        for (const mod of modules) {
+          const subjects = await evaluationService.getEvaluationModuleSubjectsByModule(
+            evaluationId,
+            mod.id,
+          );
+
+          allTabs.push({
+            label: `${mod.module}`,
+            href: `/dashboard/evaluations/details/${evaluationId}/section/${mod.id}/${subjects.data.data[0].subject_academic_year_period}`,
+          });
+        }
+      } catch (error) {
+        return;
+      }
+
+      setTabs(allTabs);
+    }
+    createTabs();
+  }, [evaluationId, modules]);
 
   useEffect(() => {
     let filteredModules: IModules[] = [];
@@ -189,15 +211,20 @@ export default function SectionBasedEvaluationContent({
       </Heading>
 
       {/* tabs here */}
-      <TabNavigation tabs={tabs}>
-        <Switch>
-          <Route
-            exact
-            path={`${path}/:moduleId/:subjectId`}
-            render={() => <ModuleSubjectQuestion />}
-          />
-        </Switch>
-      </TabNavigation>
+      {tabs.length != 0 ? (
+        <TabNavigation tabs={tabs}>
+          <Switch>
+            <Route
+              exact
+              path={`${path}/:moduleId/:subjectId`}
+              render={() => <ModuleSubjectQuestion />}
+            />
+          </Switch>
+        </TabNavigation>
+      ) : (
+        <p>No parts/sections available in this evaluation</p>
+      )}
+
       <PopupMolecule
         open={showPopup}
         title="Add private attendee"

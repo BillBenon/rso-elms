@@ -11,6 +11,7 @@ import { subjectService } from '../../../../services/administration/subject.serv
 import { classStore } from '../../../../store/administration/class.store';
 import intakeProgramStore from '../../../../store/administration/intake-program.store';
 import { moduleStore } from '../../../../store/administration/modules.store';
+import usersStore from '../../../../store/administration/users.store';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { SelectData, ValueType } from '../../../../types';
@@ -49,6 +50,7 @@ import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 
 const initialState: IEvaluationSectionBased = {
   evaluation_id: '',
+  marker_id: '',
   instructor_subject_assignment: '',
   intake_program_level_module: '',
   questionaire_setting_status: IEvaluationStatus.PENDING,
@@ -84,6 +86,10 @@ export default function EvaluationInfoComponent({
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
     .data?.data.data[0];
 
+  const markers =
+    usersStore.getUsersByAcademy(user?.academy.id.toString() || '').data?.data.data
+      .content || [];
+
   const { data: studentsProgram } = intakeProgramStore.getStudentsByIntakeProgramLevel(
     levelId || '',
   );
@@ -107,9 +113,11 @@ export default function EvaluationInfoComponent({
   const [instructorData, setInstructorData] = useState<IInstructorData>({});
 
   const cachedData: IEvaluationInfo = getLocalStorageData('evaluationInfo') || {};
-  const cachedEvaluationModuleData: IEvaluationSectionBased[] = getLocalStorageData(
-    'evaluationModule',
-  ) || [initialState];
+  // const cachedEvaluationModuleData: IEvaluationSectionBased[] = getLocalStorageData(
+  //   'evaluationModule',
+  // ) || [initialState];//uncomment this to start with data cached in local storage
+
+  const cachedEvaluationModuleData: IEvaluationSectionBased[] = [initialState];
 
   const [evaluationModule, setEvaluationModule] = useState<IEvaluationSectionBased[]>(
     [cachedEvaluationModuleData].flat(),
@@ -517,6 +525,20 @@ export default function EvaluationInfoComponent({
                         value: instr.id,
                       })) as SelectData[]
                     }>
+                    Select Instructor
+                  </SelectMolecule>
+
+                  <SelectMolecule
+                    className="pb-3"
+                    width="36"
+                    value={evalMod?.marker_id}
+                    name="marker_id"
+                    placeholder="select instructor"
+                    handleChange={(e: ValueType) => handleModuleChange(index, e)}
+                    options={getDropDownOptions({
+                      inputs: markers,
+                      labelName: ['first_name', 'last_name'],
+                    })}>
                     Select Instructor
                   </SelectMolecule>
 

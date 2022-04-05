@@ -229,6 +229,7 @@ export interface ParamType {
 
 export interface EvaluationParamType {
   moduleId: string;
+  subjectId: string;
 }
 
 export interface IntakeParamType {

@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
+import useAuthenticator from '../../../hooks/useAuthenticator';
 import { subjectService } from '../../../services/administration/subject.service';
 import { evaluationService } from '../../../services/evaluation/evaluation.service';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
+import instructordeploymentStore from '../../../store/instructordeployment.store';
 import { ValueType } from '../../../types';
 import { IEvaluationStatus } from '../../../types/services/evaluation.types';
 import { SubjectInfo } from '../../../types/services/subject.types';
@@ -18,8 +20,14 @@ export default function EvaluationSubjects({
   evaluationId,
   action,
 }: IEvaluationSubjectsProps) {
+  const userInfo = useAuthenticator();
+  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
+    userInfo?.user?.id + '',
+  ).data?.data.data[0];
+
   const { data: evaluationInfo } =
-    evaluationStore.getEvaluationById(evaluationId).data?.data || {};
+    evaluationStore.getEvaluationByIdAndInstructor(evaluationId, instructorInfo?.id + '')
+      .data?.data || {};
   const history = useHistory();
 
   const [subjects, setSubjects] = useState<SubjectInfo[]>([]);
@@ -48,7 +56,7 @@ export default function EvaluationSubjects({
           temp.subject = subjectData.data.data.title;
           temp.section = `section ${index + 1}`;
           temp.status = subj.questionaire_setting_status;
-          temp.id = subj.id;
+          temp.id = subj.subject_academic_year_period.toString();
           //@ts-ignore
           filteredInfo.push(temp);
         }
@@ -62,16 +70,17 @@ export default function EvaluationSubjects({
   }, [evaluationInfo?.evaluation_module_subjects]);
 
   function handleChange(e: ValueType) {
+    console.log(evaluationInfo?.evaluation_module_subjects);
+    console.log(e.value);
     setSubjectId(
       evaluationInfo?.evaluation_module_subjects.find(
-        (mod) => mod.subject_academic_year_period === e.value.toString(),
+        (mod) => mod.subject_academic_year_period == e.value.toString(),
       )?.id || '',
     );
   }
 
   function handleAction() {
-    if (action === 'finish_setting') {
-      console.log('calling the right api');
+    if (action == 'finish_setting') {
       evaluationService
         .updateEvaluationModuleSubject(subjectId, IEvaluationStatus.COMPLETED)
         .then(() => {
@@ -81,12 +90,14 @@ export default function EvaluationSubjects({
         .catch((err) => {
           toast.error(err);
         });
-    } else if (action === 'add_questions') {
+    } else if (action == 'add_questions') {
+      alert(
+        `/dashboard/evaluations/details/${evaluationId}/section/${subjectId}/add-questions`,
+      );
       history.push(
         `/dashboard/evaluations/details/${evaluationId}/section/${subjectId}/add-questions`,
       );
     } else {
-      console.log('calling else');
       return;
     }
   }
@@ -98,14 +109,14 @@ export default function EvaluationSubjects({
         loading={isLoading}
         name="subjectId"
         placeholder="select subject"
-        options={getDropDownOptions({ inputs: subjects, labelName: ['title'] })}>
+        options={getDropDownOptions({ inputs: subjects, labelName: ['subject'] })}>
         Select subject
       </SelectMolecule>
 
       <div className="py-6">
         {/* <Link
           to={`/dashboard/evaluations/details/${evaluationId}/section/${subjectId}/add-questions`}> */}
-        <Button onClick={handleAction} disabled={subjectId == ''}>
+        <Button onClick={handleAction} disabled={!subjectId}>
           Continue
         </Button>
         {/* </Link> */}

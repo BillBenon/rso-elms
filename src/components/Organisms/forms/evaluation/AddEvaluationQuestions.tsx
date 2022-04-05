@@ -30,7 +30,7 @@ const multipleChoiceContent: IMultipleChoice = {
   id: '',
 };
 
-export default function EvaluationQuestionComponent({
+export default function AdddEvaluationQuestions({
   handleGoBack,
   evaluationId,
 }: IEvaluationProps) {
