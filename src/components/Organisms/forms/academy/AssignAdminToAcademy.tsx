@@ -60,18 +60,22 @@ function AssignAdminToAcademy() {
     }));
   }
 
-  async function saveAdmin<T>(e: FormEvent<T>) {
+  function saveAdmin<T>(e: FormEvent<T>) {
     e.preventDefault();
-    await mutateAsync(details, {
-      onSuccess(data) {
-        toast.success(data.data.message);
-        queryClient.invalidateQueries(['academies/instutionId']);
-        history.goBack();
-      },
-      onError(error: any) {
-        toast.error(error.response.data.message);
-      },
-    });
+    if (details.current_admin_id === '') {
+      toast.error('Please select an admin');
+    } else {
+      mutateAsync(details, {
+        onSuccess(data) {
+          toast.success(data.data.message);
+          queryClient.invalidateQueries(['academies/instutionId']);
+          history.goBack();
+        },
+        onError(error: any) {
+          toast.error(error.response.data.message);
+        },
+      });
+    }
   }
 
   return (

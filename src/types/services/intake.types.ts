@@ -19,6 +19,16 @@ export interface IntakeInfo {
   total_num_students: number;
 }
 
+export interface IntakeInfoErrors extends Pick<IntakeInfo, 'title'> {
+  total_num_students: string;
+}
+export interface IntakeStatusErrors {
+  expected_start_date: string;
+  expected_end_date: string;
+  period_type: string;
+  intake_status: string;
+}
+
 export interface ExtendedIntakeInfo extends Table, IntakeInfo {
   registration_control: IRegistrationControlInfo;
   registration_control_id: string;

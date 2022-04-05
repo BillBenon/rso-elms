@@ -21,6 +21,13 @@ export interface LessonPlan {
   text_books: string;
 }
 
+export interface LessonTimeErrors extends Pick<LessonPlan, 'start_time' | 'end_time'> {}
+export interface LessonTextAreaErrors
+  extends Pick<
+    LessonPlan,
+    'lesson_objective' | 'lesson_requirements' | 'text_books' | 'class_policy'
+  > {}
+
 export interface LessonPlanInfo extends LessonPlan, Table {
   instructor: Instructor;
   lesson: Lesson;

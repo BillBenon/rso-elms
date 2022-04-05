@@ -54,35 +54,41 @@ export default function AddAcademicProgramToIntake({ submited }: PropType) {
     setFormLoading(true);
     const toastId = toast.loading('adding programs');
 
-    let intakePrograms: IntakeProgramsCreate = {
-      description: '',
-      intak_id: intakeId!,
-      programs: [],
-    };
-
-    for (let i = 0; i < selectedPrograms.length; i++) {
-      const element: CreateIntakeProgram = {
+    if (departmentId === '') {
+      toast.error('Please select department');
+    } else if (selectedPrograms.length === 0) {
+      toast.error('Please select programs');
+    } else {
+      let intakePrograms: IntakeProgramsCreate = {
         description: '',
-        intake_id: intakeId!,
-        intake_program_id: '',
-        program_id: selectedPrograms[i],
-        status: GenericStatus.ACTIVE,
+        intak_id: intakeId!,
+        programs: [],
       };
-      intakePrograms.programs.push(element);
-    }
 
-    await addProgram.mutateAsync(intakePrograms, {
-      onSuccess(data) {
-        toast.success(data.data.message, { id: toastId });
-        submited && submited();
-      },
-      onError(error: any) {
-        toast.error(
-          error.response.data.message || 'error occurred when adding programs',
-          { id: toastId },
-        );
-      },
-    });
+      for (let i = 0; i < selectedPrograms.length; i++) {
+        const element: CreateIntakeProgram = {
+          description: '',
+          intake_id: intakeId!,
+          intake_program_id: '',
+          program_id: selectedPrograms[i],
+          status: GenericStatus.ACTIVE,
+        };
+        intakePrograms.programs.push(element);
+      }
+
+      await addProgram.mutateAsync(intakePrograms, {
+        onSuccess(data) {
+          toast.success(data.data.message, { id: toastId });
+          submited && submited();
+        },
+        onError(error: any) {
+          toast.error(
+            error.response.data.message || 'error occurred when adding programs',
+            { id: toastId },
+          );
+        },
+      });
+    }
   }
 
   return (

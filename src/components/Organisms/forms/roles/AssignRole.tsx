@@ -15,17 +15,30 @@ import {
   getDropDownOptions,
   getDropDownStatusOptions,
 } from '../../../../utils/getOption';
+import { userAssignRoleSchema } from '../../../../validations/role.validation';
 import Button from '../../../Atoms/custom/Button';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 
+interface RoleErrors {
+  academy_id: string;
+  // roles: string;
+}
+
 export default function AssignRole() {
   const { id: userId } = useParams<ParamType>();
   const history = useHistory();
 
   const { data: userRoles } = usersStore.getUserRoles(userId);
+
+  const initialErrorState: RoleErrors = {
+    academy_id: '',
+    // roles: '',
+  };
+
+  const [errors, setErrors] = useState(initialErrorState);
 
   const [roles, setRoles] = useState<string[]>([]);
   const { user } = useAuthenticator();
@@ -67,28 +80,54 @@ export default function AssignRole() {
     else setRoleInfo((old) => ({ ...old, [name]: value }));
   }
 
-  async function saveRoles(e: FormEvent) {
+  function saveRoles(e: FormEvent) {
     e.preventDefault();
-    let user_roles: AssignUserRole[] = [];
+    const validatedForm = userAssignRoleSchema.validate(
+      {
+        academy_id: roleInfo.academy_id,
+        // roles: roles,
+        chose_academy:
+          picked_role?.type !== RoleType.ACADEMY && roleInfo.type === RoleType.ACADEMY,
+      },
+      {
+        abortEarly: false,
+      },
+    );
 
-    roles.map((role) => {
-      user_roles.push({
-        description: '',
-        role_id: +role,
-        user_id: userId,
+    validatedForm
+      .then(() => {
+        if (roles.length === 0) {
+          toast.error('Please select roles');
+        } else {
+          let user_roles: AssignUserRole[] = [];
+
+          roles.map((role) => {
+            user_roles.push({
+              description: '',
+              role_id: +role,
+              user_id: userId,
+            });
+          });
+
+          mutate(user_roles, {
+            onSuccess(data) {
+              toast.success(data.data.message);
+              queryClient.invalidateQueries('roles');
+              history.goBack();
+            },
+            onError(error: any) {
+              toast.error(error.response.data.message);
+            },
+          });
+        }
+      })
+      .catch((err) => {
+        const validatedErr: RoleErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof RoleErrors] = el.message;
+        });
+        setErrors(validatedErr);
       });
-    });
-
-    await mutate(user_roles, {
-      onSuccess(data) {
-        toast.success(data.data.message);
-        queryClient.invalidateQueries('roles');
-        history.goBack();
-      },
-      onError(error: any) {
-        toast.error(error.response.data.message);
-      },
-    });
   }
 
   const userRolesId = userRoles?.data.data.map((role) => role.role.id) || [];
@@ -115,6 +154,7 @@ export default function AssignRole() {
         )}
         {picked_role?.type === RoleType.ACADEMY ? (
           <InputMolecule
+            required={false}
             readOnly
             value={
               academies.find((academy) => academy.id === picked_role?.academy_id)?.name
@@ -122,8 +162,10 @@ export default function AssignRole() {
             name={'academyId'}>
             Academy
           </InputMolecule>
-        ) : roleInfo?.type === RoleType.ACADEMY ? (
+        ) : roleInfo.type === RoleType.ACADEMY ? (
           <SelectMolecule
+            error={errors.academy_id}
+            hasError={errors.academy_id !== ''}
             options={getDropDownOptions({ inputs: academies || [] })}
             name="academy_id"
             placeholder="select academy"
@@ -134,6 +176,7 @@ export default function AssignRole() {
         ) : (
           <InputMolecule
             name=""
+            required={false}
             readOnly
             value={user?.institution.name}
             handleChange={otherHandleChange}>
@@ -142,6 +185,7 @@ export default function AssignRole() {
         )}
       </>
       <DropdownMolecule
+        // error={errors.roles}
         isMulti
         name="role"
         handleChange={handleChange}

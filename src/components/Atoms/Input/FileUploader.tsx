@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { ChangeEvent, ReactNode, useRef, useState } from 'react';
 
+import Error from '../../Atoms/Text/Error';
 interface IProps {
   maxNumberOfFiles?: number;
   maxFileSizeInBytes?: number;
@@ -9,6 +10,7 @@ interface IProps {
   accept: string;
   handleUpload: (_files: FileList | null) => any;
   children: ReactNode;
+  error?: string;
 }
 
 export default function FileUploader(props: IProps) {
@@ -22,7 +24,7 @@ export default function FileUploader(props: IProps) {
   };
 
   return (
-    <div>
+    <>
       <input
         type="file"
         className="hidden"
@@ -41,6 +43,7 @@ export default function FileUploader(props: IProps) {
       {files && files[0] && (
         <div className="py-2 text-sm font-semibold">{files[0].name}</div>
       )}
-    </div>
+      <Error>{props.error && props.error}</Error>
+    </>
   );
 }

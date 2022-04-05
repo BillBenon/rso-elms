@@ -23,7 +23,14 @@ import {
   ProgressStatus,
 } from '../../types/services/intake-program.types';
 import { getDropDownOptions } from '../../utils/getOption';
+import { programLevelSchema } from '../../validations/level.validation';
 import { NewIntakePeriod } from './NewIntakePeriod';
+
+interface ProgLevelErrors
+  extends Pick<
+    CreateLevelIntakeProgram,
+    'incharge_id' | 'academic_year_id' | 'planed_start_on' | 'planed_end_on'
+  > {}
 
 export default function NewIntakeProgramLevel() {
   const history = useHistory();
@@ -85,20 +92,43 @@ export default function NewIntakeProgramLevel() {
     }
   };
 
-  async function submitForm<T>(e: FormEvent<T>) {
+  const initialErrorState: ProgLevelErrors = {
+    incharge_id: '',
+    academic_year_id: '',
+    planed_start_on: '',
+    planed_end_on: '',
+  };
+
+  const [errors, setErrors] = useState<ProgLevelErrors>(initialErrorState);
+
+  function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault(); // prevent page to reload:
 
-    await mutateAsync(values, {
-      onSuccess: (data) => {
-        toast.success(data.data.message);
-        queryClient.invalidateQueries(['levels/academy']);
-        setSuccess(true);
-        setIntakeprogramlevelId(data.data.data.id.toString());
-      },
-      onError: (error: any) => {
-        toast.error(error.response.data.message);
-      },
+    const validatedForm = programLevelSchema.validate(values, {
+      abortEarly: false,
     });
+
+    validatedForm
+      .then(() => {
+        mutateAsync(values, {
+          onSuccess: (data) => {
+            toast.success(data.data.message);
+            queryClient.invalidateQueries(['levels/academy']);
+            setSuccess(true);
+            setIntakeprogramlevelId(data.data.data.id.toString());
+          },
+          onError: (error: any) => {
+            toast.error(error.response.data.message);
+          },
+        });
+      })
+      .catch((err) => {
+        const validatedErr: ProgLevelErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof ProgLevelErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
 
   // useEffect(() => {
@@ -141,6 +171,8 @@ export default function NewIntakeProgramLevel() {
               {!success && (
                 <form onSubmit={submitForm}>
                   <DropdownMolecule
+                    error={errors.incharge_id}
+                    hasError={errors.incharge_id !== ''}
                     width="72"
                     placeholder={instLoading ? 'Loading incharge...' : 'Select incharge'}
                     options={getDropDownOptions({
@@ -155,6 +187,8 @@ export default function NewIntakeProgramLevel() {
                     Instructor Incharge
                   </DropdownMolecule>
                   <DropdownMolecule
+                    error={errors.academic_year_id}
+                    hasError={errors.academic_year_id !== ''}
                     width="72"
                     placeholder="Select academic year"
                     options={getDropDownOptions({ inputs: academicYears })}
@@ -163,6 +197,7 @@ export default function NewIntakeProgramLevel() {
                     Academic Year
                   </DropdownMolecule>
                   <DateMolecule
+                    error={errors.planed_start_on}
                     startYear={moment(
                       academic_year?.planned_start_on === ''
                         ? undefined
@@ -176,6 +211,7 @@ export default function NewIntakeProgramLevel() {
                   </DateMolecule>
                   <div className="pt-4">
                     <DateMolecule
+                      error={errors.planed_end_on}
                       startYear={moment(
                         values.planed_start_on === ''
                           ? undefined

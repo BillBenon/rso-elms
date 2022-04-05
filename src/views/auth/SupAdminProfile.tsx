@@ -28,8 +28,20 @@ import {
   setLocalStorageData,
 } from '../../utils/getLocalStorageItem';
 import { getDropDownStatusOptions } from '../../utils/getOption';
+import { adminProfileSchema } from '../../validations/complete-profile/complete-profile.validation';
 
 interface Personal<E> extends CommonStepProps, CommonFormProps<E> {}
+interface ProfileErrors
+  extends Pick<
+    UpdateUserInfo,
+    | 'first_name'
+    | 'last_name'
+    | 'email'
+    | 'birth_date'
+    | 'phone'
+    | 'nid'
+    | 'place_of_residence'
+  > {}
 
 export default function SupAdminProfile<E>({
   onSubmit,
@@ -88,6 +100,18 @@ export default function SupAdminProfile<E>({
     spouse_name: '',
   });
 
+  const initialErrorState: ProfileErrors = {
+    first_name: '',
+    last_name: '',
+    email: '',
+    birth_date: '',
+    place_of_residence: '',
+    phone: '',
+    nid: '',
+  };
+
+  const [errors, setErrors] = useState<ProfileErrors>(initialErrorState);
+
   const moveForward = () => {
     let data: any = getLocalStorageData('user');
     let newObj = Object.assign({}, data, details);
@@ -123,29 +147,43 @@ export default function SupAdminProfile<E>({
   }
 
   const { mutateAsync } = usersStore.updateUser();
-  async function addUser<T>(e: FormEvent<T>) {
+  function addUser<T>(e: FormEvent<T>) {
     e.preventDefault();
 
-    if (onSubmit) onSubmit(e);
-
-    Object.keys(details).map((val) => {
-      //@ts-ignore
-      if (!details[val]) details[val] = '';
+    const validatedForm = adminProfileSchema.validate(details, {
+      abortEarly: false,
     });
 
-    await mutateAsync(details, {
-      onSuccess(data: {
-        data: { message: Renderable | ValueFunction<Renderable, Toast> };
-      }) {
-        toast.success(data.data.message);
-        // history.goBack();
-      },
-      onError(error: any) {
-        const msg = toast.error(error.response.data.message);
-        console.log(msg);
-      },
-    });
-    moveForward();
+    validatedForm
+      .then(() => {
+        if (onSubmit) onSubmit(e);
+
+        Object.keys(details).map((val) => {
+          //@ts-ignore
+          if (!details[val]) details[val] = '';
+        });
+
+        mutateAsync(details, {
+          onSuccess(data: {
+            data: { message: Renderable | ValueFunction<Renderable, Toast> };
+          }) {
+            toast.success(data.data.message);
+            // history.goBack();
+          },
+          onError(error: any) {
+            const msg = toast.error(error.response.data.message);
+            console.log(msg);
+          },
+        });
+        moveForward();
+      })
+      .catch((err) => {
+        const validatedErr: ProfileErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof ProfileErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
 
   return (
@@ -159,6 +197,8 @@ export default function SupAdminProfile<E>({
       {!isVertical && <Heading fontWeight="semibold">{display_label}</Heading>}
       <form onSubmit={addUser}>
         <InputMolecule
+          error={errors.first_name}
+          required={false}
           name="first_name"
           placeholder="eg: Kabera"
           value={details.first_name}
@@ -166,6 +206,8 @@ export default function SupAdminProfile<E>({
           First name
         </InputMolecule>
         <InputMolecule
+          error={errors.last_name}
+          required={false}
           name="last_name"
           placeholder="eg: Claude"
           value={details.last_name}
@@ -173,6 +215,8 @@ export default function SupAdminProfile<E>({
           Last name
         </InputMolecule>
         <InputMolecule
+          error={errors.email}
+          required={false}
           name="email"
           placeholder="Enter email"
           value={details.email}
@@ -180,6 +224,7 @@ export default function SupAdminProfile<E>({
           Email
         </InputMolecule>
         <DateMolecule
+          error={errors.birth_date}
           defaultValue={(moment().year() - 16).toString()}
           startYear={moment().year() - 100}
           endYear={moment().year() - 16}
@@ -190,6 +235,8 @@ export default function SupAdminProfile<E>({
           Date of Birth
         </DateMolecule>
         <InputMolecule
+          error={errors.place_of_residence}
+          required={false}
           name="place_of_residence"
           placeholder={'Enter place of residence'}
           value={details.place_of_residence}
@@ -197,6 +244,8 @@ export default function SupAdminProfile<E>({
           Place of residence
         </InputMolecule>
         <InputMolecule
+          error={errors.phone}
+          required={false}
           name="phone"
           placeholder="Enter phone number"
           value={details.phone}
@@ -224,6 +273,8 @@ export default function SupAdminProfile<E>({
           Reference Number
         </DropdownMolecule>
         <InputMolecule
+          error={errors.nid}
+          required={false}
           name="nid"
           type="text"
           value={details.nid}

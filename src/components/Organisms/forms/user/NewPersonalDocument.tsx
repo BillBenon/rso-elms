@@ -5,7 +5,8 @@ import { useHistory } from 'react-router-dom';
 import { queryClient } from '../../../../plugins/react-query';
 import usersStore from '../../../../store/administration/users.store';
 import { ValueType } from '../../../../types';
-import { INewPersonalDoc } from '../../../../types/services/user.types';
+import { DocErrors, INewPersonalDoc } from '../../../../types/services/user.types';
+import { userDocSchema } from '../../../../validations/user.validation';
 import Button from '../../../Atoms/custom/Button';
 import FileUploader from '../../../Atoms/Input/FileUploader';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
@@ -16,6 +17,9 @@ interface DocParams {
 }
 
 export default function NewPersonalDocument({ personId }: DocParams) {
+  const initialErrorState: DocErrors = { purpose: '', file: '' };
+  const [errors, setErrors] = useState<DocErrors>(initialErrorState);
+
   const [attachment, setAttachment] = useState<INewPersonalDoc>({
     description: '',
     purpose: '',
@@ -37,35 +41,54 @@ export default function NewPersonalDocument({ personId }: DocParams) {
 
   async function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
-    console.log(attachment);
-    if (file) {
-      let data = new FormData();
 
-      data.append('description', `${attachment.description}`);
-      data.append('purpose', `${attachment.purpose}`);
-      data.append('attachmentFile', file);
-      data.append('personId', `${personId}`);
+    const validatedForm = userDocSchema.validate(
+      { purpose: attachment.purpose, file: file },
+      {
+        abortEarly: false,
+      },
+    );
 
-      await mutateAsync(
-        { id: personId, docInfo: data },
-        {
-          onSuccess() {
-            toast.success('Document uploaded successfully');
-            queryClient.invalidateQueries(['user/personal_docs', personId]);
-            history.goBack();
-          },
-          onError(error: any) {
-            toast.error(error.response.data.message);
-          },
-        },
-      );
-    }
+    validatedForm
+      .then(() => {
+        if (file) {
+          let data = new FormData();
+
+          data.append('description', `${attachment.description}`);
+          data.append('purpose', `${attachment.purpose}`);
+          data.append('attachmentFile', file);
+          data.append('personId', `${personId}`);
+
+          mutateAsync(
+            { id: personId, docInfo: data },
+            {
+              onSuccess() {
+                toast.success('Document uploaded successfully');
+                queryClient.invalidateQueries(['user/personal_docs', personId]);
+                history.goBack();
+              },
+              onError(error: any) {
+                toast.error(error.response.data.message);
+              },
+            },
+          );
+        }
+      })
+      .catch((err) => {
+        const validatedErr: DocErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof DocErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
 
   return (
     <form onSubmit={submitForm}>
       <div className="mb-6">
         <InputMolecule
+          required={false}
+          error={errors.purpose}
           value={attachment.purpose}
           handleChange={handleChange}
           placeholder="Enter attachment purpose"
@@ -74,13 +97,18 @@ export default function NewPersonalDocument({ personId }: DocParams) {
         </InputMolecule>
 
         <TextAreaMolecule
+          required={false}
           value={attachment.description}
           name="description"
           handleChange={handleChange}>
           Doc Descripiton
         </TextAreaMolecule>
 
-        <FileUploader allowPreview={false} handleUpload={handleUpload} accept={'*'}>
+        <FileUploader
+          allowPreview={false}
+          handleUpload={handleUpload}
+          accept={'*'}
+          error={errors.file}>
           <Button styleType="outline" type="button">
             upload doc
           </Button>

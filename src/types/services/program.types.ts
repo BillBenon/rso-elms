@@ -36,6 +36,9 @@ export interface UpdateProgramInfo {
   status: ProgramStatus;
 }
 
+export interface ProgramErrors
+  extends Pick<UpdateProgramInfo, 'name' | 'code' | 'in_charge_id' | 'description'> {}
+
 export interface CreateAcademicProgramLevel {
   endg_flow: number;
   level_id?: number;

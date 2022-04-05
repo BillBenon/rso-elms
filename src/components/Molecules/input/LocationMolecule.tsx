@@ -9,12 +9,16 @@ import DropdownMolecule from './DropdownMolecule';
 interface Props extends Omit<DropdownProps, 'options'> {
   children?: ReactNode | string;
   error?: string;
+  isRequired?: boolean;
+  requiredMessage?: string;
 }
 export default function LocationMolecule({
   name,
   handleChange = (_e: ValueType) => {},
   children,
   placeholder = '',
+  isRequired = false,
+  requiredMessage,
   ...attrs
 }: Props) {
   const [locationLevel, setLocationLevel] = useState(1);
@@ -65,6 +69,7 @@ export default function LocationMolecule({
         disabled={isFetchingCountry || isFetchingLocations}
         options={getDropDownOptions({ inputs: locations! })}>
         {children}
+        {isRequired && <span className="text-error-500">{requiredMessage}</span>}
         {locationLevel > 1 && locationLevel < 7 && (
           <span className="text-error-500">( select {levels[locationLevel - 1]} )</span>
         )}

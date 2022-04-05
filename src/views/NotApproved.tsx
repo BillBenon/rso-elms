@@ -82,7 +82,7 @@ function NotApproved() {
               {user?.user_type.replaceAll('_', ' ').toLowerCase()} to{' '}
               <span className="underline">{academy?.data.data.name}</span>.
             </p>
-          ) : user?.user_roles.length === 0 ? (
+          ) : user?.user_roles?.length === 0 ? (
             <p className="text-primary-500 pt-5 pb-11">
               Its our pleasure to be with you here! Please wait for your academy to give
               you a role to <span className="underline">{academy?.data.data.name}</span>.

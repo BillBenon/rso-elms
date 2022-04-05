@@ -11,6 +11,7 @@ import {
   SelectData,
   ValueType,
 } from '../../../../types';
+import { privilegeSchema } from '../../../../validations/privilege.validation';
 import Button from '../../../Atoms/custom/Button';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
@@ -20,15 +21,27 @@ interface PropType {
   onSubmit: <E>(_e: FormEvent<E>) => void;
 }
 
+interface PrivErrors extends Pick<PrivilegeUpdate, 'name' | 'description'> {
+  feature_type: string;
+}
+
 export default function NewPrivilege({ onSubmit }: PropType) {
   const history = useHistory();
   const [form, setForm] = useState<PrivilegeUpdate>({
     description: '',
-    name: 's',
+    name: '',
     feature_type: PrivilegeFeatureType.ADMIN,
     id: '',
     status: PrivilegeStatus.ACTIVE,
   });
+
+  const initialErrorState: PrivErrors = {
+    name: '',
+    description: '',
+    feature_type: '',
+  };
+
+  const [errors, setErrors] = useState<PrivErrors>(initialErrorState);
 
   const { id } = useParams<ParamType>();
 
@@ -51,31 +64,47 @@ export default function NewPrivilege({ onSubmit }: PropType) {
   }
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
-    mutate(form, {
-      onSuccess: () => {
-        toast.success('Privilege updated');
-        history.goBack();
-        // TODO: @liberi to fix this function which is not reachable
-      },
-      onError: (error: any) => {
-        toast.error(error.response.data.message);
-      },
+
+    const validatedForm = privilegeSchema.validate(form, {
+      abortEarly: false,
     });
-    onSubmit(e);
+
+    validatedForm
+      .then(() => {
+        mutate(form, {
+          onSuccess: () => {
+            toast.success('Privilege updated');
+            history.goBack();
+            // TODO: @liberi to fix this function which is not reachable
+          },
+          onError: (error: any) => {
+            toast.error(error.response.data.message);
+          },
+        });
+        onSubmit(e);
+      })
+      .catch((err) => {
+        const validatedErr: PrivErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof PrivErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
   return (
     <form onSubmit={submitForm}>
       {/* model name */}
       <InputMolecule
-        required
+        required={false}
         disabled
         value={form.name}
-        error=""
+        error={errors.name}
         handleChange={handleChange}
         name="name">
         Privilege name
       </InputMolecule>
       <DropdownMolecule
+        error={errors.feature_type}
         handleChange={handleChange}
         name="feature_type"
         options={featureType}>
@@ -84,9 +113,9 @@ export default function NewPrivilege({ onSubmit }: PropType) {
       {/* model code
     {/* module description */}
       <TextAreaMolecule
+        error={errors.description}
         value={form.description}
         name="description"
-        required
         handleChange={handleChange}>
         Descripiton
       </TextAreaMolecule>

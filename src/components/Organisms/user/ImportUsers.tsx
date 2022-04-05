@@ -19,6 +19,7 @@ import {
   UserType,
 } from '../../../types/services/user.types';
 import { getDropDownOptions } from '../../../utils/getOption';
+import { importUserSchema } from '../../../validations/user.validation';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import FileUploader from '../../Atoms/Input/FileUploader';
@@ -30,6 +31,9 @@ import PopupMolecule from '../../Molecules/Popup';
 interface IProps {
   userType: UserType;
 }
+
+interface ImportErrors
+  extends Pick<IImportUser, 'academyId' | 'roleId' | 'program' | 'intakeProgramId'> {}
 
 export default function ImportUsers({ userType }: IProps) {
   const history = useHistory();
@@ -58,6 +62,15 @@ export default function ImportUsers({ userType }: IProps) {
     roleId: '',
     file: null,
   });
+
+  const initialErrorState: ImportErrors = {
+    academyId: '',
+    roleId: '',
+    program: '',
+    intakeProgramId: '',
+  };
+
+  const [errors, setErrors] = useState<ImportErrors>(initialErrorState);
 
   const [importReport, setimportReport] = useState<IImportUserRes | undefined>(undefined);
 
@@ -105,59 +118,72 @@ export default function ImportUsers({ userType }: IProps) {
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
 
-    if (values.file) {
-      // let academicYearId =
-      // levels.find((l) => l.academic_program_level.id == values.academicProgramLevelId)
-      //   ?.academic_year.id || '';
+    const validatedForm = importUserSchema.validate(values, {
+      abortEarly: false,
+    });
 
-      let formData = new FormData();
-      formData.append('file', values.file);
-      //   formData.append('academicProgramLevelId', values.academicProgramLevelId);
-      formData.append('academyId', values.academyId);
-      formData.append('intakeProgramId', values.intakeProgramId);
-      formData.append('userType', values.userType);
-      //   formData.append('academicYearId', academicYearId?.toString());
+    validatedForm
+      .then(async () => {
+        if (values.file) {
+          // let academicYearId =
+          // levels.find((l) => l.academic_program_level.id == values.academicProgramLevelId)
+          //   ?.academic_year.id || '';
 
-      await mutateAsync(formData, {
-        onSuccess(data) {
-          const successfullyImportedUsers: AssignUserRole[] = data.data.data.success.map(
-            (success) => {
-              return {
-                user_id: success.id.toString(),
-                role_id: parseInt(values.roleId),
-                description: '',
-                id: '',
-              };
+          let formData = new FormData();
+          formData.append('file', values.file);
+          //   formData.append('academicProgramLevelId', values.academicProgramLevelId);
+          formData.append('academyId', values.academyId);
+          formData.append('intakeProgramId', values.intakeProgramId);
+          formData.append('userType', values.userType);
+          //   formData.append('academicYearId', academicYearId?.toString());
+
+          await mutateAsync(formData, {
+            onSuccess(data) {
+              const successfullyImportedUsers: AssignUserRole[] =
+                data.data.data.success.map((success) => {
+                  return {
+                    user_id: success.id.toString(),
+                    role_id: parseInt(values.roleId),
+                    description: '',
+                    id: '',
+                  };
+                });
+
+              if (values.roleId) {
+                mutate(successfullyImportedUsers, {
+                  onSuccess() {
+                    toast.success('Users role assigned successfully');
+                  },
+
+                  onError(error: any) {
+                    toast.error('Error assigning users role', error.response.message);
+                  },
+                });
+              }
+
+              queryClient.invalidateQueries(['users']);
+              queryClient.invalidateQueries(['users/institution']);
+              queryClient.invalidateQueries([
+                'users/academy/type',
+                values.academyId,
+                values.userType,
+              ]);
+
+              setimportReport(data.data.data);
             },
-          );
-
-          if (values.roleId) {
-            mutate(successfullyImportedUsers, {
-              onSuccess() {
-                toast.success('Users role assigned successfully');
-              },
-
-              onError(error: any) {
-                toast.error('Error assigning users role', error.response.message);
-              },
-            });
-          }
-
-          queryClient.invalidateQueries(['users']);
-          queryClient.invalidateQueries(['users/institution']);
-          queryClient.invalidateQueries([
-            'users/academy/type',
-            values.academyId,
-            values.userType,
-          ]);
-
-          setimportReport(data.data.data);
-        },
-        onError(error: any) {
-          toast.error(error.response.data.message);
-        },
+            onError(error: any) {
+              toast.error(error.response.data.message);
+            },
+          });
+        } else toast.error('Please attach excel file.');
+      })
+      .catch((err) => {
+        const validatedErr: ImportErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof ImportErrors] = el.message;
+        });
+        setErrors(validatedErr);
       });
-    } else toast.error('Please attach excel file.');
   }
 
   const handleUpload = (files: FileList | null) => {
@@ -172,6 +198,7 @@ export default function ImportUsers({ userType }: IProps) {
       <form onSubmit={handleSubmit}>
         {user?.user_type === UserType.SUPER_ADMIN ? (
           <SelectMolecule
+            error={errors.academyId}
             options={getDropDownOptions({ inputs: academies || [] })}
             name="academyId"
             value={values.academyId}
@@ -191,6 +218,7 @@ export default function ImportUsers({ userType }: IProps) {
         {userType === UserType.STUDENT ||
           (UserType.INSTRUCTOR && (
             <SelectMolecule
+              error={errors.roleId}
               placeholder="Select role"
               options={getDropDownOptions({ inputs: roleOptions })}
               value={values.roleId}
@@ -202,6 +230,7 @@ export default function ImportUsers({ userType }: IProps) {
         {userType === UserType.STUDENT ? (
           <div>
             <SelectMolecule
+              error={errors.program}
               options={
                 academic_programs.map((p) => ({
                   value: p.id,
@@ -215,6 +244,7 @@ export default function ImportUsers({ userType }: IProps) {
               Program
             </SelectMolecule>
             <SelectMolecule
+              error={errors.intakeProgramId}
               options={
                 intakes?.map((intk) => ({
                   value: intk.id,

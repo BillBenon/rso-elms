@@ -1,6 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams, useRouteMatch } from 'react-router';
 
 import Button from '../../components/Atoms/custom/Button';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
@@ -17,9 +17,19 @@ import { Instructor } from '../../types/services/instructor.types';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import { UserType } from '../../types/services/user.types';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
+import { classSchema } from '../../validations/level.validation';
+
+interface ClassError
+  extends Pick<
+    ICreateClass,
+    'class_name' | 'instructor_class_in_charge_id' | 'class_representative_one_id'
+  > {
+  class_group_type: string;
+}
 
 function NewClass() {
   const history = useHistory();
+  const { path } = useRouteMatch();
 
   const [form, setForm] = useState<ICreateClass>({
     class_group_type: ClassGroupType.CLASS,
@@ -31,6 +41,16 @@ function NewClass() {
     intake_academic_year_period_id: 0,
     intake_level_id: 0,
   });
+
+  const initialErrorState: ClassError = {
+    class_group_type: '',
+    class_name: '',
+    instructor_class_in_charge_id: '',
+    class_representative_one_id: '',
+  };
+
+  const [errors, setErrors] = useState(initialErrorState);
+
   const picked_role = usePickedRole();
   const levelIdTitle = document.getElementById('intake_level_id')?.title;
   const {
@@ -95,21 +115,46 @@ function NewClass() {
   function submitForm(e: FormEvent) {
     e.preventDefault();
 
-    mutate(
-      { ...form, intake_academic_year_period_id: parseInt(period) },
-      {
-        onSuccess: (data) => {
-          toast.success(data.data.message);
-          queryClient.invalidateQueries(['class/periodId']);
-          history.push(
-            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${levelId}/view-class`,
-          );
-        },
-        onError: (error: any) => {
-          toast.error(error.response.data.message);
-        },
-      },
-    );
+    const validatedForm = classSchema.validate(form, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => {
+        mutate(
+          { ...form, intake_academic_year_period_id: parseInt(period) },
+          {
+            onSuccess: (data) => {
+              toast.success(data.data.message);
+              queryClient.invalidateQueries(['class/periodId']);
+
+              path.includes('learn')
+                ? history.push(
+                    `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-class`,
+                  )
+                : path.includes('teach')
+                ? history.push(
+                    `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-class`,
+                  )
+                : path.includes('manage')
+                ? history.push(
+                    `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-class`,
+                  )
+                : {};
+            },
+            onError: (error: any) => {
+              toast.error(error.response.data.message);
+            },
+          },
+        );
+      })
+      .catch((err) => {
+        const validatedErr: ClassError = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof ClassError] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
 
   return (
@@ -123,6 +168,7 @@ function NewClass() {
           name="intake_level_id"
         />
         <DropdownMolecule
+          error={errors.class_group_type}
           name="class_group_type"
           handleChange={handleChange}
           defaultValue={getDropDownStatusOptions(ClassGroupType).find(
@@ -134,12 +180,14 @@ function NewClass() {
         </DropdownMolecule>
 
         <InputMolecule
+          error={errors.class_name}
           value={form.class_name}
           handleChange={handleChange}
           name="class_name">
           Class name
         </InputMolecule>
         <DropdownMolecule
+          error={errors.instructor_class_in_charge_id}
           name="instructor_class_in_charge_id"
           handleChange={handleChange}
           options={getDropDownOptions({
@@ -158,6 +206,7 @@ function NewClass() {
         </DropdownMolecule>
 
         <DropdownMolecule
+          error={errors.class_representative_one_id}
           name="class_representative_one_id"
           handleChange={handleChange}
           options={getDropDownOptions({

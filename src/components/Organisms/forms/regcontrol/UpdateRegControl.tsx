@@ -5,10 +5,13 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import registrationControlStore from '../../../../store/administration/registrationControl.store';
 import { FormPropType, ParamType, ValueType } from '../../../../types';
-import { IRegistrationControlCreateInfo } from '../../../../types/services/registrationControl.types';
+import {
+  IRegistrationControlCreateInfo,
+  RegErrors,
+} from '../../../../types/services/registrationControl.types';
+import { newRegControlSchema } from '../../../../validations/regcontrol.validation';
 import Button from '../../../Atoms/custom/Button';
 import DateMolecule from '../../../Molecules/input/DateMolecule';
-import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function UpdateRegControl({ onSubmit }: FormPropType) {
@@ -29,6 +32,13 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
     id: id,
   };
 
+  const initialErrorState: RegErrors = {
+    expected_start_date: '',
+    expected_end_date: '',
+  };
+
+  const [errors, setErrors] = useState(initialErrorState);
+
   const { mutateAsync, isLoading } = registrationControlStore.updateRegControl();
   const history = useHistory();
 
@@ -44,17 +54,31 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
 
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
-    let toastId = toast.loading('Creating registration control');
-    mutateAsync(regControlUpdateInfo, {
-      onSuccess: () => {
-        toast.success('Control updated', { id: toastId });
-        history.goBack();
-      },
-      onError: (error: any) => {
-        toast.error(error.response.data.message, { id: toastId });
-      },
+    const validatedForm = newRegControlSchema.validate(regControl, {
+      abortEarly: false,
     });
-    if (onSubmit) onSubmit(e);
+
+    validatedForm
+      .then(() => {
+        let toastId = toast.loading('Creating registration control');
+        mutateAsync(regControlUpdateInfo, {
+          onSuccess: () => {
+            toast.success('Control updated', { id: toastId });
+            history.goBack();
+          },
+          onError: (error: any) => {
+            toast.error(error.response.data.message, { id: toastId });
+          },
+        });
+        if (onSubmit) onSubmit(e);
+      })
+      .catch((err) => {
+        const validatedErr: RegErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof RegErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
 
   return (
@@ -66,6 +90,7 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
         Registration control description
       </TextAreaMolecule>
       <DateMolecule
+        error={errors.expected_start_date}
         defaultValue={regControl.expected_start_date}
         startYear={moment().year() - 15}
         endYear={moment().year() + 15}
@@ -75,6 +100,7 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
       </DateMolecule>
 
       <DateMolecule
+        error={errors.expected_end_date}
         handleChange={handleChange}
         startYear={moment(
           regControl.expected_start_date === ''
@@ -93,7 +119,7 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
         End Date
       </DateMolecule>
 
-      <RadioMolecule
+      {/* <RadioMolecule
         className="mt-4"
         value="ACTIVE"
         name="status"
@@ -103,7 +129,7 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
         ]}
         handleChange={handleChange}>
         Status
-      </RadioMolecule>
+      </RadioMolecule> */}
 
       <div className="mt-5">
         <Button type="submit" disabled={isLoading} full>
