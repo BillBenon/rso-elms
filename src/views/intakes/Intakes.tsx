@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -182,6 +183,13 @@ export default function Intakes() {
     history.goBack();
   }
 
+  const goToEdit = (e: Event, intakeId: string, IntakeRegId: string) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    history.push(`${url}/${intakeId}/edit/${IntakeRegId}`);
+  };
+
   return (
     <Switch>
       <Route
@@ -248,9 +256,16 @@ export default function Intakes() {
                               </div>
                             </div>
                             <Permission privilege={Privileges.CAN_MODIFY_INTAKE}>
-                              <div className="mt-4 space-x-4">
+                              <div className="mt-4 space-x-4 z-30">
                                 <Link
-                                  to={`${url}/${intake.id}/edit/${intake.registrationControlId}`}>
+                                  //@ts-ignore
+                                  onClick={(e: Event) =>
+                                    goToEdit(
+                                      e,
+                                      intake.id + '',
+                                      intake.registrationControlId,
+                                    )
+                                  }>
                                   <Button>Edit Intake</Button>
                                 </Link>
                                 {/* <Button styleType="outline">Change Status</Button> */}

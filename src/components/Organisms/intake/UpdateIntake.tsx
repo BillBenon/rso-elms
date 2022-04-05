@@ -37,6 +37,18 @@ interface CProps {
   handleSuccess: () => any;
 }
 
+const initialInfoErrorState: IntakeInfoErrors = {
+  title: '',
+  total_num_students: '',
+};
+
+const initialErrorState: IntakeStatusErrors = {
+  expected_start_date: '',
+  expected_end_date: '',
+  period_type: '',
+  intake_status: '',
+};
+
 export default function UpdateIntake(props: CProps) {
   const [formLoading, setFormLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
@@ -141,12 +153,7 @@ export default function UpdateIntake(props: CProps) {
 }
 
 function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
-  const initialErrorState: IntakeInfoErrors = {
-    title: '',
-    total_num_students: '',
-  };
-
-  const [errors, setErrors] = useState<IntakeInfoErrors>(initialErrorState);
+  const [errors, setErrors] = useState<IntakeInfoErrors>(initialInfoErrorState);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -157,7 +164,7 @@ function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
     validatedForm
       .then(() => handleNext)
       .catch((err) => {
-        const validatedErr: IntakeInfoErrors = initialErrorState;
+        const validatedErr: IntakeInfoErrors = initialInfoErrorState;
         err.inner.map((el: { path: string | number; message: string }) => {
           validatedErr[el.path as keyof IntakeInfoErrors] = el.message;
         });
@@ -202,13 +209,6 @@ function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
 }
 
 function IntakeStatusComponent({ values, handleChange, handleNext, disabled }: IProps) {
-  const initialErrorState: IntakeStatusErrors = {
-    expected_start_date: '',
-    expected_end_date: '',
-    period_type: '',
-    intake_status: '',
-  };
-
   const [errors, setErrors] = useState<IntakeStatusErrors>(initialErrorState);
 
   const handleSubmit = (e: FormEvent) => {
