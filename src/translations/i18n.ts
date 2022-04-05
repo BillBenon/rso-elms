@@ -36,8 +36,6 @@ i18n
     resources: await getTranslations(),
   });
 
-console.log(getTranslations());
-
 i18n.changeLanguage('fake');
 
 export { i18n };

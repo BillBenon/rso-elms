@@ -5,6 +5,7 @@ import { defineConfig } from 'vite';
 export default defineConfig({
   plugins: [reactRefresh()],
   build: {
+    target: 'esnext',
     chunkSizeWarningLimit: 2000,
   },
   css: {},
