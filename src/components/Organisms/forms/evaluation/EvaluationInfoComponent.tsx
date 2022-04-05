@@ -12,7 +12,6 @@ import intakeProgramStore from '../../../../store/administration/intake-program.
 import { moduleStore } from '../../../../store/administration/modules.store';
 import usersStore from '../../../../store/administration/users.store';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
-import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { SelectData, ValueType } from '../../../../types';
 import { ModuleInstructors } from '../../../../types/services/enrollment.types';
 import {
@@ -83,9 +82,6 @@ export default function EvaluationInfoComponent({
   const picked_role = usePickedRole();
   const [timeDifference, setTimeDifference] = useState(0);
 
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
-    .data?.data.data[0];
-
   const markers =
     usersStore.getUsersByAcademy(user?.academy.id.toString() || '').data?.data.data
       .content || [];
@@ -131,7 +127,7 @@ export default function EvaluationInfoComponent({
       evaluationInfo?.private_attendees?.toString() ||
       cachedData?.private_attendees?.toString() ||
       '',
-    instructor_id: instructorInfo?.user.id + '',
+    instructor_id: user?.id + '',
     intake_academic_year_period: intakePeriodId,
     allow_submission_time: cachedData?.allow_submission_time || '',
     intake_level_class_ids:
@@ -170,7 +166,7 @@ export default function EvaluationInfoComponent({
         evaluationInfo?.private_attendees.toString() ||
         cachedData?.private_attendees?.toString() ||
         '',
-      instructor_id: instructorInfo?.user.id.toString() || '',
+      instructor_id: user?.id.toString() || '',
       intake_academic_year_period: intakePeriodId,
       allow_submission_time:
         evaluationInfo?.allow_submission_time || cachedData?.allow_submission_time || '',
@@ -224,7 +220,6 @@ export default function EvaluationInfoComponent({
     });
   }, [
     evaluationInfo,
-    instructorInfo?.id,
     intakePeriodId,
     subjectId,
     picked_role?.academy_id,
