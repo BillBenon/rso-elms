@@ -52,7 +52,7 @@ export default function TableHeader({
         {showSearch && (
           <div className="flex flex-wrap justify-start items-center">
             <SearchMolecule handleChange={handleChange} />
-            <button className="border p-0 rounded-md mx-2">
+            <button aria-label="filter" className="border p-0 rounded-md mx-2">
               <Icon name="filter" />
             </button>
           </div>
