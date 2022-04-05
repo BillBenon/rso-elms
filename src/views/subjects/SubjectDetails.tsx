@@ -6,9 +6,8 @@ import {
   useHistory,
   useLocation,
   useParams,
-  useRouteMatch,
+  useRouteMatch
 } from 'react-router-dom';
-
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
@@ -24,9 +23,11 @@ import { lessonStore } from '../../store/administration/lesson.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { Privileges } from '../../types';
+import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import EvaluationCategories from '../evaluation/EvaluationCategories';
 import SubjectInstructorView from '../evaluation/SubjectInstructorView';
 import SubjectInstructors from './SubjectInstructors';
+
 
 interface ParamType {
   id: string;
@@ -72,12 +73,12 @@ export default function SubjectDetails() {
     history.goBack();
   };
 
-  // function goToNewEvaluation() {
-  //   setLocalStorageData('currentStep', 0);
-  //   history.push(
-  //     `/dashboard/evaluations/new?subj=${subjectId}&intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
-  //   );
-  // }
+  function goToNewEvaluation() {
+    setLocalStorageData('currentStep', 0);
+    history.push(
+      `/dashboard/evaluations/new?subj=${subjectId}&intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+    );
+  }
 
   let tabs: TabType[] = [];
 
@@ -102,6 +103,7 @@ export default function SubjectDetails() {
     label: 'Instructors',
     href: `${url}/instructors?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
   });
+
 
   return (
     <main className="px-4">
@@ -203,13 +205,13 @@ export default function SubjectDetails() {
                       <div className="w-9/12">
                         <SubjectInstructorView subjectId={subjectId} />
                       </div>
-                      {/* {intakeProg && progId && level && period ? (
+                      {intakeProg && progId && level && period ? (
                         <Permission privilege={Privileges.CAN_CREATE_EVALUATIONS}>
                           <div className="w-3/12">
                             <Button onClick={goToNewEvaluation}>New Evaluation</Button>
                           </div>
                         </Permission>
-                      ) : null} */}
+                      ) : null}
                     </div>
                   </>
                 )}

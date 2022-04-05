@@ -1,10 +1,10 @@
 import { useMutation, useQuery } from 'react-query';
-
 import { evaluationService } from '../../services/evaluation/evaluation.service';
 import {
   IEvaluationAction,
-  IEvaluationOwnership,
+  IEvaluationOwnership
 } from '../../types/services/evaluation.types';
+
 
 class EvaluationStore {
   createEvaluation() {
@@ -33,10 +33,6 @@ class EvaluationStore {
 
   createEvaluationSettings() {
     return useMutation(evaluationService.createEvaluationSettings);
-  }
-
-  createSectionBasedEvaluation() {
-    return useMutation(evaluationService.createSectionBasedEvaluation);
   }
 
   // getEvaluations(academy: string, instructor: string) {
@@ -95,16 +91,6 @@ class EvaluationStore {
     });
   }
 
-  getEvaluationByIdAndInstructor(id: string, instructor: string) {
-    return useQuery(
-      ['evaluation', [id, instructor]],
-      () => evaluationService.getEvaluationByIdAndInstructor(id, instructor),
-      {
-        enabled: !!id,
-      },
-    );
-  }
-
   getEvaluationApprovalByEvaluationAndInstructor(
     evaluationId: string,
     instructorId: string,
@@ -147,20 +133,8 @@ class EvaluationStore {
     );
   }
 
-  getEvaluationQuestionsBySubject(evaluationId: string, subjectId: string) {
-    return useQuery(
-      ['evaluation/questions', [evaluationId, subjectId]],
-      () => evaluationService.getEvaluationQuestionsBySubject(evaluationId, subjectId),
-      { enabled: !!evaluationId },
-    );
-  }
-
   deleteEvaluationQuestionById() {
     return useMutation(evaluationService.deleteEvaluationQuestionById);
-  }
-
-  updateEvaluationModuleSubject() {
-    evaluationService.updateEvaluationModuleSubject;
   }
 
   addQuestionAnswer() {
