@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
-
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -22,6 +21,7 @@ import EvaluationDetails from './EvaluationDetails';
 import EvaluationNotiView from './EvaluationNotiView';
 import EvaluationTest from './EvaluationTest';
 import StudentReview from './StudentReview';
+
 
 export default function InstructorViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
@@ -47,7 +47,7 @@ export default function InstructorViewEvaluations() {
   const { data, isSuccess, isLoading, isError, refetch } =
     evaluationStore.getEvaluationsByCategory(
       ownerShipType,
-      instructorInfo?.id.toString() || '',
+      user?.id.toString() || '',
     );
 
   const list: LinkList[] = [

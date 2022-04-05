@@ -1,7 +1,7 @@
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
-
+import { queryClient } from '../../../../plugins/react-query';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { ParamType, SelectData, ValueType } from '../../../../types';
 import {
@@ -9,12 +9,12 @@ import {
   IEvaluationProps,
   IEvaluationQuestionsInfo,
   IMultipleChoice,
-  IQuestionType,
+  IQuestionType
 } from '../../../../types/services/evaluation.types';
 import {
   getLocalStorageData,
   removeLocalStorageData,
-  setLocalStorageData,
+  setLocalStorageData
 } from '../../../../utils/getLocalStorageItem';
 import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
@@ -23,6 +23,7 @@ import ILabel from '../../../Atoms/Text/ILabel';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
+
 
 const multipleChoiceContent: IMultipleChoice = {
   answer_content: '',
@@ -56,22 +57,22 @@ export default function AdddEvaluationQuestions({
       return getLocalStorageData('evaluationQuestions') || [];
     }, []);
 
-  if (evaluationId) {
     evaluationQuestions =
-      evaluationStore.getEvaluationQuestions(evaluationId).data?.data.data || [];
-  }
+      evaluationStore.getEvaluationQuestions(evaluationId || "").data?.data.data || [];
 
   const [questions, setQuestions] = useState([initialState]);
 
   useEffect(() => {
     let allQuestions: any[] = [];
     if (evaluationQuestions?.length > 0) {
+      console.log('inside if')
       evaluationQuestions.forEach((question) => {
         let questionData = { ...initialState };
         questionData.choices = question.multiple_choice_answers || [];
         questionData.evaluation_id = question.evaluation_id;
         questionData.mark = question.mark;
         questionData.question = question.question;
+        questionData.answer = question.answer;
         questionData.question_type = question.question_type;
         questionData.submitted = false;
         questionData.id = question.id;
@@ -84,7 +85,7 @@ export default function AdddEvaluationQuestions({
       setQuestions(getLocalStorageData('evaluationQuestions'));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialState]);
+  }, [evaluationQuestions]);
 
   function handleAddQuestion() {
     let newQuestion = initialState;
@@ -195,10 +196,11 @@ export default function AdddEvaluationQuestions({
     e.preventDefault();
 
     mutate(questions, {
-      onSuccess: () => {
+      onSuccess: (createdQuestion) => {
         toast.success('Questions added', { duration: 5000 });
 
         removeLocalStorageData('evaluationQuestions');
+        queryClient.invalidateQueries(['evaluation/questions', createdQuestion.data.data.id]);
       },
       onError: (error: any) => {
         toast.error(error.response.data.message);

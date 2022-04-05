@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
-
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import { subjectService } from '../../../services/administration/subject.service';
 import { evaluationService } from '../../../services/evaluation/evaluation.service';
@@ -13,6 +12,7 @@ import { SubjectInfo } from '../../../types/services/subject.types';
 import { getDropDownOptions } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';
 import SelectMolecule from '../../Molecules/input/SelectMolecule';
+
 
 type IEvaluationSubjectsProps = { evaluationId: string; action: string };
 
@@ -26,7 +26,7 @@ export default function EvaluationSubjects({
   ).data?.data.data[0];
 
   const { data: evaluationInfo } =
-    evaluationStore.getEvaluationByIdAndInstructor(evaluationId, instructorInfo?.id + '')
+    evaluationStore.getEvaluationByIdAndInstructor(evaluationId, userInfo.user?.id + '')
       .data?.data || {};
   const history = useHistory();
 
@@ -71,7 +71,6 @@ export default function EvaluationSubjects({
 
   function handleChange(e: ValueType) {
     console.log(evaluationInfo?.evaluation_module_subjects);
-    console.log(e.value);
     setSubjectId(
       evaluationInfo?.evaluation_module_subjects.find(
         (mod) => mod.subject_academic_year_period == e.value.toString(),
@@ -91,9 +90,6 @@ export default function EvaluationSubjects({
           toast.error(err);
         });
     } else if (action == 'add_questions') {
-      alert(
-        `/dashboard/evaluations/details/${evaluationId}/section/${subjectId}/add-questions`,
-      );
       history.push(
         `/dashboard/evaluations/details/${evaluationId}/section/${subjectId}/add-questions`,
       );

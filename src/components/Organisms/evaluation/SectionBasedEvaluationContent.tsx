@@ -1,7 +1,6 @@
 import moment from 'moment';
 import React, { ReactNode, useEffect, useState } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
-
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import { moduleService } from '../../../services/administration/modules.service';
 import { evaluationService } from '../../../services/evaluation/evaluation.service';
@@ -18,6 +17,7 @@ import PopupMolecule from '../../Molecules/Popup';
 import TabNavigation, { TabType } from '../../Molecules/tabs/TabNavigation';
 import EvaluationRemarks from './EvaluationRemarks';
 import ModuleSubjectQuestion from './ModuleSubjectQuestion';
+
 
 interface IProps {
   evaluationId: string;
@@ -40,7 +40,9 @@ export default function SectionBasedEvaluationContent({
   ).data?.data.data[0];
 
   const { data: evaluationInfo } =
-    evaluationStore.getEvaluationByIdAndInstructor(evaluationId, instructorInfo?.id + '')
+
+
+    evaluationStore.getEvaluationByIdAndInstructor(evaluationId, userInfo?.user?.id + '')
       .data?.data || {};
 
   const [classes, setclasses] = useState([' ']);
@@ -52,6 +54,8 @@ export default function SectionBasedEvaluationContent({
   // const tabs: TabType[] = [];
 
   useEffect(() => {
+    
+          
     async function createTabs() {
       if (modules.length < 1) return;
 
@@ -82,11 +86,14 @@ export default function SectionBasedEvaluationContent({
     let filteredModules: IModules[] = [];
 
     async function getModules() {
-      if (evaluationInfo?.evaluation_module_subjects) {
+      if (evaluationInfo?.evaluation_module_subjects && evaluationInfo.evaluation_module_subjects.length > 0) {
+
+
         for (const subj of evaluationInfo.evaluation_module_subjects) {
           const moduleData = await moduleService.getModuleById(
             subj.intake_program_level_module.toString(),
           );
+
 
           let temp = {
             id: '',

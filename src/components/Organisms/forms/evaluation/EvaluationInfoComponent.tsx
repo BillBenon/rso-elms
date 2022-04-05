@@ -131,7 +131,7 @@ export default function EvaluationInfoComponent({
       evaluationInfo?.private_attendees?.toString() ||
       cachedData?.private_attendees?.toString() ||
       '',
-    instructor_id: instructorInfo?.id + '',
+    instructor_id: instructorInfo?.user.id + '',
     intake_academic_year_period: intakePeriodId,
     allow_submission_time: cachedData?.allow_submission_time || '',
     intake_level_class_ids:
@@ -170,7 +170,7 @@ export default function EvaluationInfoComponent({
         evaluationInfo?.private_attendees.toString() ||
         cachedData?.private_attendees?.toString() ||
         '',
-      instructor_id: instructorInfo?.id.toString() || '',
+      instructor_id: instructorInfo?.user.id.toString() || '',
       intake_academic_year_period: intakePeriodId,
       allow_submission_time:
         evaluationInfo?.allow_submission_time || cachedData?.allow_submission_time || '',
@@ -520,9 +520,8 @@ export default function EvaluationInfoComponent({
                     handleChange={(e: ValueType) => handleModuleChange(index, e)}
                     options={
                       (
-                        (instructorData[
-                          evalMod.subject_academic_year_period.toString()
-                        ] as ModuleInstructors[]) || []
+                        instructorData[evalMod.subject_academic_year_period.toString()] ||
+                        []
                       ).map((instr) => ({
                         label: `${instr.user.first_name} ${instr.user.last_name}`,
                         value: instr.user.id,
