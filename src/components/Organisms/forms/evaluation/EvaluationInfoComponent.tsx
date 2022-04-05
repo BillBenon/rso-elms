@@ -519,11 +519,12 @@ export default function EvaluationInfoComponent({
                     handleChange={(e: ValueType) => handleModuleChange(index, e)}
                     options={
                       (
-                        instructorData[evalMod.subject_academic_year_period.toString()] ||
-                        []
-                      ).map((instr: any) => ({
+                        (instructorData[
+                          evalMod.subject_academic_year_period.toString()
+                        ] as ModuleInstructors[]) || []
+                      ).map((instr) => ({
                         label: `${instr.user.first_name} ${instr.user.last_name}`,
-                        value: instr.id,
+                        value: instr.user.id,
                       })) as SelectData[]
                     }>
                     Select Instructor
