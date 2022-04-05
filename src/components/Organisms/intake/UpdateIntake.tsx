@@ -162,7 +162,10 @@ function IntakeInfoComponent({ values, handleChange, handleNext }: IProps) {
     });
 
     validatedForm
-      .then(() => handleNext)
+      .then(() => {
+        handleNext(e);
+      })
+
       .catch((err) => {
         const validatedErr: IntakeInfoErrors = initialInfoErrorState;
         err.inner.map((el: { path: string | number; message: string }) => {
@@ -218,7 +221,10 @@ function IntakeStatusComponent({ values, handleChange, handleNext, disabled }: I
     });
 
     validatedForm
-      .then(() => handleNext)
+      .then(() => {
+        handleNext(e);
+      })
+
       .catch((err) => {
         const validatedErr: IntakeStatusErrors = initialErrorState;
         err.inner.map((el: { path: string | number; message: string }) => {

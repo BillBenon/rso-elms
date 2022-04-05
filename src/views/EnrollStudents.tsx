@@ -163,7 +163,10 @@ function EnrollmentInfo({ values, handleChange, handleNext }: IProps) {
     });
 
     validatedForm
-      .then(() => handleNext)
+      .then(() => {
+        handleNext(e);
+      })
+
       .catch((err) => {
         const validatedErr: EnrollmentInfoErrors = initialErrorState;
         err.inner.map((el: { path: string | number; message: string }) => {
@@ -241,7 +244,10 @@ function EnrollmentAcademy({ values, user_roles, handleChange, handleNext }: IPr
     });
 
     validatedForm
-      .then(() => handleNext)
+      .then(() => {
+        handleNext(e);
+      })
+
       .catch((err) => {
         const validatedErr: EnrollmentAcademyErrors = initialErrorState;
         err.inner.map((el: { path: string | number; message: string }) => {
