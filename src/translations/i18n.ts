@@ -2,11 +2,12 @@ import i18n from 'i18next';
 import LanguageDetector from 'i18next-browser-languagedetector';
 import { initReactI18next } from 'react-i18next';
 
-export type TranslationPresetsTypes = 'default' | 'nyakinama';
+export type TranslationPresetsTypes = 'default' | 'nyakinama' | 'fake';
 
 export const TranslationPresets: Array<TranslationPresetsTypes> = [
   'default',
   'nyakinama',
+  'fake',
 ];
 
 export type translationsType = {
@@ -37,6 +38,6 @@ i18n
 
 console.log(getTranslations());
 
-i18n.changeLanguage('nyakinama');
+i18n.changeLanguage('fake');
 
 export { i18n };
