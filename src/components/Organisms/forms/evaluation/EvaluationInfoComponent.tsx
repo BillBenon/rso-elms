@@ -3,6 +3,7 @@ import moment from 'moment';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
+
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { enrollmentService } from '../../../../services/administration/enrollments.service';
@@ -12,7 +13,6 @@ import intakeProgramStore from '../../../../store/administration/intake-program.
 import { moduleStore } from '../../../../store/administration/modules.store';
 import usersStore from '../../../../store/administration/users.store';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
-import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { SelectData, ValueType } from '../../../../types';
 import { ModuleInstructors } from '../../../../types/services/enrollment.types';
 import {
@@ -27,15 +27,15 @@ import {
   IEvaluationStatus,
   IEvaluationTypeEnum,
   IQuestionaireTypeEnum,
-  ISubmissionTypeEnum
+  ISubmissionTypeEnum,
 } from '../../../../types/services/evaluation.types';
 import {
   getLocalStorageData,
-  setLocalStorageData
+  setLocalStorageData,
 } from '../../../../utils/getLocalStorageItem';
 import {
   getDropDownOptions,
-  getDropDownStatusOptions
+  getDropDownStatusOptions,
 } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import ILabel from '../../../Atoms/Text/ILabel';
@@ -46,7 +46,6 @@ import InputMolecule from '../../../Molecules/input/InputMolecule';
 import MultiselectMolecule from '../../../Molecules/input/MultiselectMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
-
 
 const initialState: IEvaluationSectionBased = {
   evaluation_id: '',
@@ -82,9 +81,6 @@ export default function EvaluationInfoComponent({
   const { user } = useAuthenticator();
   const picked_role = usePickedRole();
   const [timeDifference, setTimeDifference] = useState(0);
-
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
-    .data?.data.data[0];
 
   const markers =
     usersStore.getUsersByAcademy(user?.academy.id.toString() || '').data?.data.data
@@ -131,7 +127,7 @@ export default function EvaluationInfoComponent({
       evaluationInfo?.private_attendees?.toString() ||
       cachedData?.private_attendees?.toString() ||
       '',
-    instructor_id: instructorInfo?.user.id + '',
+    instructor_id: user?.id + '',
     intake_academic_year_period: intakePeriodId,
     allow_submission_time: cachedData?.allow_submission_time || '',
     intake_level_class_ids:
@@ -170,7 +166,7 @@ export default function EvaluationInfoComponent({
         evaluationInfo?.private_attendees.toString() ||
         cachedData?.private_attendees?.toString() ||
         '',
-      instructor_id: instructorInfo?.user.id.toString() || '',
+      instructor_id: user?.id.toString() || '',
       intake_academic_year_period: intakePeriodId,
       allow_submission_time:
         evaluationInfo?.allow_submission_time || cachedData?.allow_submission_time || '',
@@ -224,7 +220,7 @@ export default function EvaluationInfoComponent({
     });
   }, [
     evaluationInfo,
-    instructorInfo?.id,
+    user?.id,
     intakePeriodId,
     subjectId,
     picked_role?.academy_id,
@@ -248,7 +244,7 @@ export default function EvaluationInfoComponent({
       }
 
       if (timeDifference < 0) toast.error('Due time cannot be less than start time!');
-      
+
       setDetails((details) => ({
         ...details,
         ['time_limit']: timeDifference,
@@ -348,7 +344,7 @@ export default function EvaluationInfoComponent({
     }
 
     if (name === 'section_total_marks') {
-      // FIXME: on evaluation marks change, it will update the total marks of the evaluation 
+      // FIXME: on evaluation marks change, it will update the total marks of the evaluation
       setDetails((details) => ({
         ...details,
         total_marks: details.total_mark + parseInt(value.toString()),

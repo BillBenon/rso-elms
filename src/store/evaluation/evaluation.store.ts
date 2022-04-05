@@ -1,10 +1,10 @@
 import { useMutation, useQuery } from 'react-query';
+
 import { evaluationService } from '../../services/evaluation/evaluation.service';
 import {
   IEvaluationAction,
-  IEvaluationOwnership
+  IEvaluationOwnership,
 } from '../../types/services/evaluation.types';
-
 
 class EvaluationStore {
   createEvaluation() {
