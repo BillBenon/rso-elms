@@ -5,7 +5,7 @@ dist
 dist-ssr
 *.local
 *.log
- 
+.yarn
 todo.*
 
 *try/
