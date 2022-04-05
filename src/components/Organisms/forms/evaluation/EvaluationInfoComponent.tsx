@@ -113,9 +113,10 @@ export default function EvaluationInfoComponent({
   const [instructorData, setInstructorData] = useState<IInstructorData>({});
 
   const cachedData: IEvaluationInfo = getLocalStorageData('evaluationInfo') || {};
+  //uncomment this to start with data cached in local storage
   // const cachedEvaluationModuleData: IEvaluationSectionBased[] = getLocalStorageData(
   //   'evaluationModule',
-  // ) || [initialState];//uncomment this to start with data cached in local storage
+  // ) || [initialState];
 
   const cachedEvaluationModuleData: IEvaluationSectionBased[] = [initialState];
 
