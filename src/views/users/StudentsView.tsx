@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -28,6 +29,7 @@ export default function StudentsView() {
   const { user } = useAuthenticator();
   const history = useHistory();
   const { mutateAsync } = authenticatorStore.resetPassword();
+  const { t } = useTranslation();
 
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
@@ -51,7 +53,7 @@ export default function StudentsView() {
 
   let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
   actions?.push({
-    name: 'View Student',
+    name: 'View ' + t('Students'),
     handleAction: (id: string | number | undefined) => {
       history.push(`/dashboard/user/${id}/profile`); // go to view user profile
     },
@@ -59,14 +61,14 @@ export default function StudentsView() {
   });
 
   actions?.push({
-    name: 'Edit student',
+    name: 'Edit ' + t('Students'),
     handleAction: (id: string | number | undefined) => {
       history.push(`/dashboard/users/${id}/edit`); // go to edit user
     },
     privilege: Privileges.CAN_MODIFY_USER,
   });
   actions?.push({
-    name: 'Deploy instructor',
+    name: 'Deploy ' + t('Instructor'),
     handleAction: (id: string | number | undefined) => {
       history.push(`${url}/${id}/deploy`); // go to assign role
     },
@@ -74,7 +76,7 @@ export default function StudentsView() {
   });
 
   actions?.push({
-    name: 'Enroll student',
+    name: 'Enroll ' + t('Students'),
     handleAction: (id: string | number | undefined) => {
       history.push(`${url}/${id}/enroll`); // go to assign role
     },
@@ -120,16 +122,16 @@ export default function StudentsView() {
   return (
     <div>
       <TableHeader
-        title="Students"
+        title={t('Students')}
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
         <Permission privilege={Privileges.CAN_CREATE_USER}>
           <div className="flex gap-3">
             <Link to={`${url}/import`}>
-              <Button styleType="outline">Import students</Button>
+              <Button styleType="outline">Import {t('Students')}</Button>
             </Link>
             <Link to={`${url}/add/${UserType.STUDENT}`}>
-              <Button>New student</Button>
+              <Button>New {t('Students')}</Button>
             </Link>
           </div>
         </Permission>
@@ -141,7 +143,7 @@ export default function StudentsView() {
         <NoDataAvailable
           icon="user"
           buttonLabel="Add new student"
-          title={'No students available'}
+          title={'No ' + t('Students') + ' available'}
           handleClick={() => history.push(`/dashboard/users/add/STUDENT`)}
           description="There are no students added into the system yet"
           privilege={Privileges.CAN_CREATE_USER}
