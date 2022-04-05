@@ -1,5 +1,6 @@
 import { AxiosError } from 'axios';
-import { FormEvent, useCallback, useEffect, useState } from 'react';
+import { create, isSet } from 'lodash';
+import { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
@@ -8,6 +9,7 @@ import { authenticatorStore } from '../store/administration';
 import { LoginInfo, Response } from '../types';
 import { AuthUser } from '../types/services/user.types';
 import cookie from '../utils/cookie';
+let created = false;
 
 export default function useAuthenticator() {
   const [user, setUser] = useState<AuthUser>();
@@ -19,12 +21,32 @@ export default function useAuthenticator() {
   const { mutateAsync } = authenticatorStore.login();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const history = useHistory();
+  const [isSettingUser, setIsSettingUser] = useState(false);
 
   const fetchData = useCallback(async () => {
     setIsUserLoading(true);
     const { data, isSuccess, isError, error } = await refetch();
-    if (isSuccess) {
-      setUser(data?.data.data);
+    console.log(
+      user?.id,
+      data?.data.data.id,
+      data?.data.data.id != user?.id,
+      isSettingUser,
+      isError,
+      isError,
+      data,
+      isUserLoading,
+    );
+
+    const context = useContext();
+    console.log(context, 'context');
+
+    if (isSuccess && data?.data.data.id != user?.id && !isSettingUser) {
+      console.log('confirmations');
+      setUser((_old) => {
+        console.log('trapish', data?.data.data);
+        setIsSettingUser(true);
+        return data?.data.data;
+      });
       setUserAvailable(true);
     }
 
@@ -32,11 +54,20 @@ export default function useAuthenticator() {
 
     setIsError(isError);
     setIsUserLoading(false);
-  }, [refetch]);
+  }, [isSettingUser, isUserLoading, refetch, user?.id]);
 
   useEffect(() => {
-    if (!user) fetchData();
-  }, [fetchData, user]);
+    if (!created) {
+      fetchData();
+      created = true;
+    }
+    console.log('authenticator triggered , useEffect', user);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    console.log(user, 'user has changed');
+  }, [user]);
 
   async function login<T>(e: FormEvent<T>, details: LoginInfo) {
     e.preventDefault();
