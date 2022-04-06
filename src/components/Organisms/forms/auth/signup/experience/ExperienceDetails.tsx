@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router';
+import { useHistory } from 'react-router-dom';
 
 import { ExperienceType } from '../../../../../../types/services/experience.types';
 import CompleteProfileHeader from '../../../../../Molecules/CompleteProfileHeader';

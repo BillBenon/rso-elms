@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, useHistory, useRouteMatch } from 'react-router';
+import { Route, useHistory, useRouteMatch } from 'react-router-dom';
 import { Link, Switch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';

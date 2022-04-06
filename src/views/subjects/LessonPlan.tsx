@@ -1,6 +1,6 @@
 import moment from 'moment';
 import React from 'react';
-import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
+import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
 import Avatar from '../../components/Atoms/custom/Avatar';

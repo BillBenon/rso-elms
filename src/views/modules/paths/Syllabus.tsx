@@ -6,7 +6,7 @@ import {
   useLocation,
   useParams,
   useRouteMatch,
-} from 'react-router';
+} from 'react-router-dom';
 
 import Button from '../../../components/Atoms/custom/Button';
 import Loader from '../../../components/Atoms/custom/Loader';

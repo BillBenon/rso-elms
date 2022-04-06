@@ -6,7 +6,7 @@ import {
   useLocation,
   useParams,
   useRouteMatch,
-} from 'react-router';
+} from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';

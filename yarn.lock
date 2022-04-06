@@ -5645,7 +5645,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:5.3.0":
+"react-router-dom@npm:5":
   version: 5.3.0
   resolution: "react-router-dom@npm:5.3.0"
   dependencies:
@@ -6142,7 +6142,7 @@ __metadata:
     react-hot-toast: 2.2.0
     react-i18next: ^11.16.2
     react-query: 3.34.19
-    react-router-dom: 5.3.0
+    react-router-dom: 5
     react-router-dom-v5-compat: ^6.3.0
     react-select: 5.2.2
     react-select-country-list: ^2.2.3

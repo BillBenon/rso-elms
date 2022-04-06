@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useRouteMatch } from 'react-router';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import { Route, Switch, useParams } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
