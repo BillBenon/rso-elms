@@ -8,13 +8,14 @@ import {
   ICreateEvaluationQuestions,
   IEvaluationProps,
   IEvaluationQuestionsInfo,
+  IEvaluationStatus,
   IMultipleChoice,
-  IQuestionType
+  IQuestionType,
 } from '../../../../types/services/evaluation.types';
 import {
   getLocalStorageData,
   removeLocalStorageData,
-  setLocalStorageData
+  setLocalStorageData,
 } from '../../../../utils/getLocalStorageItem';
 import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
@@ -23,7 +24,6 @@ import ILabel from '../../../Atoms/Text/ILabel';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
-
 
 const multipleChoiceContent: IMultipleChoice = {
   answer_content: '',
@@ -57,8 +57,11 @@ export default function AdddEvaluationQuestions({
       return getLocalStorageData('evaluationQuestions') || [];
     }, []);
 
-    evaluationQuestions =
-      evaluationStore.getEvaluationQuestions(evaluationId || "").data?.data.data || [];
+  evaluationQuestions =
+    evaluationStore.getEvaluationQuestionsByStatus(
+      evaluationId || '',
+      IEvaluationStatus.COMPLETED,
+    ).data?.data.data || [];
 
   const [questions, setQuestions] = useState([initialState]);
 
@@ -116,11 +119,11 @@ export default function AdddEvaluationQuestions({
           toast.error(error.response.data.message);
         },
       });
-    }else {
+    } else {
       questionsClone.splice(questionIndex, 1);
       setLocalStorageData('evaluationQuestions', questionsClone);
       setQuestions(questionsClone);
-    } 
+    }
   }
 
   function handleRemoveChoice(questionIndex: number, choiceIndex: number) {

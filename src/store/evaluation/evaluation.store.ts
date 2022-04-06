@@ -2,7 +2,8 @@ import { useMutation, useQuery } from 'react-query';
 import { evaluationService } from '../../services/evaluation/evaluation.service';
 import {
   IEvaluationAction,
-  IEvaluationOwnership
+  IEvaluationOwnership,
+  IEvaluationStatus
 } from '../../types/services/evaluation.types';
 
 
@@ -139,13 +140,16 @@ class EvaluationStore {
     );
   }
 
-  getEvaluationQuestions(id: string) {
+  getEvaluationQuestionsByStatus(id: string, status: IEvaluationStatus) {
     return useQuery(
       ['evaluation/questions', id],
-      () => evaluationService.getEvaluationQuestions(id),
+      () => evaluationService.getEvaluationQuestions(id, status),
       { enabled: !!id },
     );
   }
+
+
+
 
   getEvaluationQuestionsBySubject(evaluationId: string, subjectId: string) {
     return useQuery(
@@ -188,6 +192,11 @@ class EvaluationStore {
   studentEvaluationStart() {
     return useMutation(evaluationService.studentEvaluationStart);
   }
+
+  updateEvaluationQuestion() {
+    return useMutation(evaluationService.updateQuestion);
+  }
+
 }
 
 export function getEvaluationFeedbacks(

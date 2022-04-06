@@ -10,8 +10,7 @@ import {
   IEvaluationCreate,
   IEvaluationInfo,
   IEvaluationInfoCollected,
-  IEvaluationOwnership,
-  IEvaluationQuestionsInfo,
+  IEvaluationOwnership, IEvaluationQuestionsInfo,
   IEvaluationSectionBased,
   IEvaluationStatus,
   InstructorEvaluationAppprovalStatus,
@@ -168,8 +167,9 @@ class EvaluationService {
 
   public async getEvaluationQuestions(
     id: string,
+    status: IEvaluationStatus
   ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>> {
-    return await evaluationAxios.get(`/evaluationQuestions/getEvaluationQuestions/${id}`);
+    return await evaluationAxios.get(`/evaluationQuestions/getEvaluationQuestions/${id}/settingStatus/${status}`);
   }
 
   public async getEvaluationQuestionsBySubject(
@@ -288,6 +288,15 @@ class EvaluationService {
   ): Promise<AxiosResponse<Response<IEvaluationSectionBased[]>>> {
     return await evaluationAxios.post('evaluation-module-subjects/add-bulk', evaluation);
   }
+
+   public async updateQuestion(
+     question: IEvaluationQuestionsInfo
+  ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo>>> {
+    return await evaluationAxios.put(`evaluationQuestions/editQuestion/${question.id}`,question);
+  }
+
+
+
 }
 
 export const evaluationService = new EvaluationService();
