@@ -160,6 +160,7 @@ export interface IEvaluationCreate {
   time_limit: number;
   total_mark: number;
   strict: boolean;
+  marking_type: IMarkingType
 }
 
 export type IEvaluationSectionBased = {
@@ -246,6 +247,7 @@ export interface IEvaluationInfo {
   available: string;
   strict: boolean;
   number_of_questions: string;
+  marking_type: IMarkingType;
   subject_academic_year_period_id: string;
   group_evaluations: [];
   private_attendees: IPrivateAttendeeInfo[];
@@ -287,6 +289,14 @@ export interface IMultipleChoice {
   correct: boolean;
   id: string;
 }
+
+export enum IMarkingType {
+  PER_STUDENT = 'PER_STUDENT', 
+  NOT_APPLICABLE = 'NOT_APPLICABLE', 
+  NOT_SET = 'NOT_SET', 
+  PER_SECTION = 'PER_SECTION', 
+  PER_QUESTION = 'PER_QUESTION'
+};
 
 export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
   sub_questions: IEvaluationQuestion[];

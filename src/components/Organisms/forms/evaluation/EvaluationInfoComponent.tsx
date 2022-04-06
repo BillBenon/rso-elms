@@ -25,16 +25,17 @@ import {
   IEvaluationSectionBased,
   IEvaluationStatus,
   IEvaluationTypeEnum,
+  IMarkingType,
   IQuestionaireTypeEnum,
-  ISubmissionTypeEnum
+  ISubmissionTypeEnum,
 } from '../../../../types/services/evaluation.types';
 import {
   getLocalStorageData,
-  setLocalStorageData
+  setLocalStorageData,
 } from '../../../../utils/getLocalStorageItem';
 import {
   getDropDownOptions,
-  getDropDownStatusOptions
+  getDropDownStatusOptions,
 } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import ILabel from '../../../Atoms/Text/ILabel';
@@ -45,7 +46,6 @@ import InputMolecule from '../../../Molecules/input/InputMolecule';
 import MultiselectMolecule from '../../../Molecules/input/MultiselectMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
-
 
 const initialState: IEvaluationSectionBased = {
   evaluation_id: '',
@@ -122,12 +122,13 @@ export default function EvaluationInfoComponent({
 
   const [details, setDetails] = useState<IEvaluationCreate>({
     access_type: cachedData?.access_type || IAccessTypeEnum.PUBLIC,
+    marking_type: IMarkingType.NOT_SET,
     academy_id: cachedData?.academy_id || '',
     private_attendees:
       evaluationInfo?.private_attendees?.toString() ||
       cachedData?.private_attendees?.toString() ||
       '',
-    instructor_id: user?.id + "",
+    instructor_id: user?.id + '',
     intake_academic_year_period: intakePeriodId,
     allow_submission_time: cachedData?.allow_submission_time || '',
     intake_level_class_ids:
@@ -162,6 +163,9 @@ export default function EvaluationInfoComponent({
       access_type:
         evaluationInfo?.access_type || cachedData?.access_type || IAccessTypeEnum.PUBLIC,
       academy_id: picked_role?.academy_id + '' || cachedData?.academy_id || '',
+      marking_type:
+        evaluationInfo?.marking_type || cachedData?.marking_type || IMarkingType.NOT_SET,
+
       private_attendees:
         evaluationInfo?.private_attendees.toString() ||
         cachedData?.private_attendees?.toString() ||
@@ -243,7 +247,7 @@ export default function EvaluationInfoComponent({
       }
 
       if (timeDifference < 0) toast.error('Due time cannot be less than start time!');
-      
+
       setDetails((details) => ({
         ...details,
         ['time_limit']: timeDifference,
@@ -343,7 +347,8 @@ export default function EvaluationInfoComponent({
     }
 
     if (name === 'section_total_marks') {
-      // FIXME: on evaluation marks change, it will update the total marks of the evaluation 
+      // FIXME: on evaluation marks change, it will update the total marks of the evaluation
+      // FIXME: up and down
       setDetails((details) => ({
         ...details,
         total_marks: details.total_mark + parseInt(value.toString()),
@@ -637,6 +642,15 @@ export default function EvaluationInfoComponent({
           handleChange={handleChange}>
           Questionaire type
         </RadioMolecule>
+        <SelectMolecule
+          value={'' + details?.marking_type}
+          width="64"
+          name="marking_type"
+          placeholder="Evaluation Type"
+          handleChange={handleChange}
+          options={getDropDownStatusOptions(IMarkingType)}>
+          Marking type
+        </SelectMolecule>
         {details?.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
           <>
             {/* <DropdownMolecule
