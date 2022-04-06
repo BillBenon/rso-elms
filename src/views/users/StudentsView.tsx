@@ -142,10 +142,10 @@ export default function StudentsView() {
       ) : users.length <= 0 ? (
         <NoDataAvailable
           icon="user"
-          buttonLabel="Add new student"
+          buttonLabel={'Add new student'}
           title={'No ' + t('Students') + ' available'}
           handleClick={() => history.push(`/dashboard/users/add/STUDENT`)}
-          description="There are no students added into the system yet"
+          description={`There are no ${t('Students')} students added into the system yet`}
           privilege={Privileges.CAN_CREATE_USER}
         />
       ) : (
