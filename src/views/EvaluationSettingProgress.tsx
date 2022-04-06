@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
 import Loader from '../components/Atoms/custom/Loader';
 import NoDataAvailable from '../components/Molecules/cards/NoDataAvailable';
 import Table from '../components/Molecules/table/Table';
-import { instructorDeployment } from '../services/administration/InstructorDeployment.service';
 import { subjectService } from '../services/administration/subject.service';
+import { userService } from '../services/administration/user.service';
 import { evaluationStore } from '../store/evaluation/evaluation.store';
 import { ParamType } from '../types';
 import { IEvaluationStatus } from '../types/services/evaluation.types';
@@ -49,10 +48,8 @@ export default function EvaluationSettingProgress() {
           temp.id = subj.id;
 
           //request two
-          const instructors = await instructorDeployment.getInstructorById(
-            subj.instructor_subject_assignment,
-          );
-          temp.instructor = `${instructors.data.data.user.first_name} ${instructors.data.data.user.last_name}`;
+          const user = await userService.getUserByid(subj.instructor_subject_assignment);
+          temp.instructor = `${user.data?.data.first_name} ${user.data?.data.last_name}`;
           filteredInfo.push(temp);
         }
 

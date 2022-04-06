@@ -27,15 +27,15 @@ import {
   IEvaluationTypeEnum,
   IMarkingType,
   IQuestionaireTypeEnum,
-  ISubmissionTypeEnum,
+  ISubmissionTypeEnum
 } from '../../../../types/services/evaluation.types';
 import {
   getLocalStorageData,
-  setLocalStorageData,
+  setLocalStorageData
 } from '../../../../utils/getLocalStorageItem';
 import {
   getDropDownOptions,
-  getDropDownStatusOptions,
+  getDropDownStatusOptions
 } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import ILabel from '../../../Atoms/Text/ILabel';
@@ -349,10 +349,18 @@ export default function EvaluationInfoComponent({
     if (name === 'section_total_marks') {
       // FIXME: on evaluation marks change, it will update the total marks of the evaluation
       // FIXME: up and down
+
+      function getTotalMark() {
+        return evaluationModule.reduce((evaluation, currEvaluation) => {
+          return Number(evaluation) + Number(currEvaluation.section_total_marks);
+        }, 0);
+      }
+
       setDetails((details) => ({
         ...details,
-        total_marks: details.total_mark + parseInt(value.toString()),
+        total_mark: getTotalMark(),
       }));
+
       return;
     }
   }
@@ -703,7 +711,7 @@ export default function EvaluationInfoComponent({
         </div>
         <InputMolecule
           style={{ width: '6rem' }}
-          readonly
+          readOnly
           type="number"
           name="total_mark"
           value={details?.total_mark}
