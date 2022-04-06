@@ -3,9 +3,13 @@ import { AxiosResponse } from 'axios';
 import { evaluationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
+  IEditSubjectiveForm,
   IEvaluationPerformance,
   IModuleTermPerformance,
+  InformativeReport,
   IOverallStudentPerformance,
+  ISubjective,
+  ISubjectiveForm,
 } from '../../types/services/report.types';
 
 class SchoolReportService {
@@ -24,6 +28,15 @@ class SchoolReportService {
   ): Promise<AxiosResponse<Response<IOverallStudentPerformance>>> {
     return await evaluationAxios.get(
       `/reports/student/${studentID}/term/${academicYearPeriodId}`,
+    );
+  }
+
+  public async getStudentInformativeReport(
+    studentID: string,
+    academicYearPeriodId: string,
+  ): Promise<AxiosResponse<Response<InformativeReport>>> {
+    return await evaluationAxios.get(
+      `/reports/end-of-term-report/student/${studentID}/term/${academicYearPeriodId}`,
     );
   }
 
@@ -46,6 +59,16 @@ class SchoolReportService {
     termID: string,
   ): Promise<AxiosResponse<Response<IModuleTermPerformance[]>>> {
     return await evaluationAxios.get(`/reports/module/${moduleID}/term/${termID}`);
+  }
+  public async createSubjective(
+    subjective: ISubjectiveForm,
+  ): Promise<AxiosResponse<Response<ISubjective>>> {
+    return await evaluationAxios.post('reports/add-term-subjective', subjective);
+  }
+  public async editSubjective(
+    subjective: IEditSubjectiveForm,
+  ): Promise<AxiosResponse<Response<ISubjective>>> {
+    return await evaluationAxios.put('reports/edit-subjective', subjective);
   }
 }
 

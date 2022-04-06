@@ -66,7 +66,9 @@ export default function StudentAcademicReport() {
     content: () => report.current,
     bodyClass: 'bg-white',
     documentTitle: studentInfo?.data
-      ? `${studentInfo?.data.data.user.first_name}-${studentInfo?.data.data.user.last_name}-report`
+      ? `${studentInfo?.data.data.user.first_name || '...'}-${
+          studentInfo?.data.data.user.last_name || '...'
+        }-report`
       : 'student report',
     onBeforeGetContent: () => setisPrinting(true),
     onAfterPrint: () => setisPrinting(false),
@@ -123,16 +125,27 @@ export default function StudentAcademicReport() {
             <h2 className="text-sm font-bold ">
               Name:
               <span className="capitalize">
-                {` ${studentInfo?.data.data.user.first_name} ${studentInfo?.data.data.user.last_name}`}
+                {` ${studentInfo?.data.data.user.first_name || '...'} ${
+                  studentInfo?.data.data.user.last_name || '...'
+                }`}
               </span>
             </h2>
-            <h2 className="text-sm py-2">Reg No: {studentInfo?.data.data.reg_number}</h2>
-            <h2 className="text-sm font-medium">{`${classInfo?.data.data.academic_year_program_intake_level.academic_program_level.level.name} - ${classInfo?.data.data.academic_year_program_intake_level.academic_program_level.program.name}`}</h2>
+            <h2 className="text-sm py-2">
+              Reg No: {studentInfo?.data.data.reg_number || '...'}
+            </h2>
+            <h2 className="text-sm font-medium">{`${
+              classInfo?.data.data.academic_year_program_intake_level
+                .academic_program_level.level.name || '...'
+            } - ${
+              classInfo?.data.data.academic_year_program_intake_level
+                .academic_program_level.program.name || '...'
+            }`}</h2>
             <h2 className="text-sm font-medium py-2">
-              {`Class: ${classInfo?.data.data.class_name}`}
+              {`Class: ${classInfo?.data.data.class_name || '...'}`}
             </h2>
             <h2 className="text-sm font-medium">
-              {classInfo?.data.data.academic_year_program_intake_level.academic_year.name}
+              {classInfo?.data.data.academic_year_program_intake_level.academic_year
+                .name || '...'}
             </h2>
           </div>
         </div>

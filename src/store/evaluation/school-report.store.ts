@@ -1,7 +1,15 @@
-import { useQuery } from 'react-query';
+import { useMutation, useQuery } from 'react-query';
 
 import { reportService } from '../../services/evaluation/school-report.service';
 
+class SchoolReportStore {
+  createSubjective() {
+    return useMutation(reportService.createSubjective);
+  }
+  editSubjective() {
+    return useMutation(reportService.editSubjective);
+  }
+}
 export function getClassTermlyOverallReport(
   classId: string,
   periodId: string,
@@ -22,6 +30,18 @@ export function getStudentReportInTerm(
   return useQuery(
     ['reports/student/term', studentID, academicYearPeriodId],
     () => reportService.getStudentReportInTerm(studentID, academicYearPeriodId),
+    { enabled },
+  );
+}
+
+export function getStudentInformativeReport(
+  studentID: string,
+  academicYearPeriodId: string,
+  enabled = true,
+) {
+  return useQuery(
+    ['reports/student/term/informative', studentID, academicYearPeriodId],
+    () => reportService.getStudentInformativeReport(studentID, academicYearPeriodId),
     { enabled },
   );
 }
@@ -49,3 +69,5 @@ export function getModuleTermPerformance(moduleId?: string, termId?: string) {
     { enabled: !!moduleId && !!termId },
   );
 }
+
+export const reportStore = new SchoolReportStore();

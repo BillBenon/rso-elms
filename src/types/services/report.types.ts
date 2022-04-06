@@ -1,7 +1,11 @@
 /* eslint-disable no-unused-vars */
+import { AcademyInfo } from './academy.types';
 import { IStudent } from './class.types';
+import { Status } from './division.types';
 import { EnrollmentStatus } from './enrollment.types';
 import { IclassWorkGroupInfo } from './evaluation.types';
+import { InstitutionInfo } from './institution.types';
+import { UserType } from './user.types';
 
 interface ISubjectReport {
   adminId: 'string';
@@ -86,4 +90,73 @@ export interface IModuleTermPerformance {
       obtained: number;
     },
   ];
+}
+
+interface Marker {
+  academy: AcademyInfo;
+  academyId: string;
+  adminId: string;
+  createdOn: string;
+  id: string;
+  institution: InstitutionInfo;
+  institutionId: string;
+  passwordResetPeriodInDays: number;
+  status: Status;
+  token: string;
+  userType: UserType;
+  username: string;
+}
+
+interface EvStudent {
+  admin_id: string;
+  id: string;
+  reg_number: string;
+  since_on: string;
+}
+
+export interface ISubjective {
+  created_by: string;
+  created_on: string;
+  id: string;
+  last_modification_on: string;
+  marker: Marker;
+  student: EvStudent;
+  subjective_label: TermFormSection;
+  subjective_value: string;
+  term: string;
+  updated_by: string;
+}
+
+export interface InformativeReport {
+  dsAssessments: [];
+  evaluationAttempts: [];
+  student: EvStudent;
+  studentSubjective: ISubjective[];
+  term: string;
+}
+
+export interface ISubjectiveForm {
+  studentId: string;
+  subjectiveLabel: TermFormSection | TermFormComment;
+  subjectiveValue: string;
+  termId: string;
+}
+
+export interface IEditSubjectiveForm extends ISubjectiveForm {
+  id: string;
+}
+
+export enum TermFormSection {
+  INTRODUCTION = 'INTRODUCTION',
+  WRITTEN_WORK = 'WRITTEN_WORK',
+  ORAL_WORK = 'ORAL_WORK',
+  ATTITUDE_TO_WORK = 'ATTITUDE_TO_WORK',
+  PRATICAL_ABILITY = 'PRATICAL_ABILITY',
+  EXTRACURRICULAR_ACTIVITY = 'EXTRACURRICULAR_ACTIVITY',
+  SUMMARY = 'SUMMARY',
+}
+export enum TermFormComment {
+  INTELLECTUAL_COMPETENCE = 'INTELLECTUAL_COMPETENCE',
+  PROFESSIONAL_COMPETENCE = 'PROFESSIONAL_COMPETENCE',
+  PERSONAL_QUALITIES = 'PERSONAL_QUALITIES',
 }
