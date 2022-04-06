@@ -8,6 +8,9 @@ export enum IEvaluationTypeEnum {
   CAT = 'CAT',
   GROUP_WORK = 'GROUP_WORK',
   QUIZ = 'QUIZ',
+  RESEARCH_PAPER = 'RESEARCH_PAPER',
+  SECTION_BASED = 'SECTION_BASED',
+  DS_ASSESSMENT = 'DS_ASSESSMENT',
 }
 
 export enum IQuestionType {
@@ -41,6 +44,7 @@ export enum IEvaluationOwnership {
   FOR_REVIEWING = 'FOR_REVIEWING',
   FOR_APPROVING = 'FOR_APPROVING',
   FOR_MARKING = 'FOR_MARKING',
+  FOR_SETTING = 'FOR_SETTING',
 }
 
 export enum IEvaluationClassification {
@@ -83,6 +87,9 @@ export enum IEvaluationStatus {
   APPROVED = 'APPROVED',
   HIDDEN = 'HIDDEN',
   PUBLISHED = 'PUBLISHED',
+  COMPLETED = 'COMPLETED',
+  ACCEPTED = 'ACCEPTED',
+  REJECTED = 'REJECTED',
 }
 
 export enum IEligibleGroup {
@@ -106,7 +113,7 @@ export interface InstructorEvaluationAppprovalStatus extends Table {
   remarks: string;
 }
 
-export interface IEvaluationFeedbackInfo extends Table {
+export interface IEvaluationActionInfo extends Table {
   evaluation_reviewer_status: IEvaluationAppprovalStatus | IEvaluationAppprovalStatus;
   reviewer: { adminId: string; id: string };
   remarks: string;
@@ -153,9 +160,36 @@ export interface IEvaluationCreate {
   time_limit: number;
   total_mark: number;
   strict: boolean;
+  marking_type: IMarkingType
 }
 
-export type IEvaluationFeedback = 'reviews' | 'approvals' | '';
+export type IEvaluationSectionBased = {
+  id: string;
+  marker_id: string;
+  evaluation_id: string;
+  instructor_subject_assignment: string;
+  intake_program_level_module: string;
+  questionaire_setting_status: IEvaluationStatus;
+  section_total_marks: number;
+  subject_academic_year_period: number | string;
+};
+
+export interface IModules {
+  id: string;
+  module: string;
+}
+
+export interface ISubjects {
+  id: string;
+  subject: string;
+}
+
+export type IEvaluationAction =
+  | 'reviews'
+  | 'approvals'
+  | 'section_based'
+  | ''
+  | 'questions_review';
 
 export interface IStudentEvaluations {
   undoneEvaluations: IEvaluationInfo[];
@@ -176,13 +210,19 @@ export interface IPrivateAttendeeInfo extends Table {
   evaluation: IEvaluationInfo;
 }
 
+interface ISubjectAcademicYearPeriod {
+  adminId: string;
+  id: string;
+}
+
 export interface IEvaluationInfo {
   id: string;
   name: string;
   academy_id: string;
   intake_level_class_ids: string;
   intake_academic_year_period: string;
-  subject_academic_year_period: string;
+  subject_academic_year_period: { admSubject: ISubjectAcademicYearPeriod }[]; //used on on get
+  evaluation_module_subjects: IEvaluationSectionBased[];
   subject_id: string;
   access_type: IAccessTypeEnum;
   evaluation_type: IEvaluationTypeEnum;
@@ -207,6 +247,7 @@ export interface IEvaluationInfo {
   available: string;
   strict: boolean;
   number_of_questions: string;
+  marking_type: IMarkingType;
   subject_academic_year_period_id: string;
   group_evaluations: [];
   private_attendees: IPrivateAttendeeInfo[];
@@ -249,11 +290,21 @@ export interface IMultipleChoice {
   id: string;
 }
 
+export enum IMarkingType {
+  PER_STUDENT = 'PER_STUDENT', 
+  NOT_APPLICABLE = 'NOT_APPLICABLE', 
+  NOT_SET = 'NOT_SET', 
+  PER_SECTION = 'PER_SECTION', 
+  PER_QUESTION = 'PER_QUESTION'
+};
+
 export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
   sub_questions: IEvaluationQuestion[];
   submitted: boolean;
   question_type: IQuestionType;
   id: string;
+  answer: string;
+  evaluation_module_subject_id: string;
   choices: IMultipleChoice[];
 }
 
@@ -267,9 +318,11 @@ export interface IMultipleChoiceAnswers {
 
 export interface IEvaluationQuestionsInfo {
   id: string;
+  answer: string;
   question: string;
   evaluation_id: string;
   choices: IMultipleChoice[];
+  choosen_question: IEvaluationStatus;
   mark: number;
   evaluationQuestions: [];
   question_type: IQuestionType;

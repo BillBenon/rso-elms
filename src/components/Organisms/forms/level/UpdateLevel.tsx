@@ -28,6 +28,7 @@ export default function UpdateLevel({ onSubmit, academy_id }: IDivisionsAcademyT
     name: '',
     description: '',
     flow: '',
+    description: '',
   };
 
   const [errors, setErrors] = useState<LevelErrors>(initialErrorState);

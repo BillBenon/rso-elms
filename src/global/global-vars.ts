@@ -61,6 +61,7 @@ export const statusColors: statusStyleType = {
   rejected: 'error',
   deleted: 'error',
   dismissed: 'error',
+  completed: 'success',
 };
 
 export const bgStyleButton: colorStyleType = {
