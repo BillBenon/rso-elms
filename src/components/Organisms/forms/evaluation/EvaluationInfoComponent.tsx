@@ -27,15 +27,15 @@ import {
   IEvaluationTypeEnum,
   IMarkingType,
   IQuestionaireTypeEnum,
-  ISubmissionTypeEnum
+  ISubmissionTypeEnum,
 } from '../../../../types/services/evaluation.types';
 import {
   getLocalStorageData,
-  setLocalStorageData
+  setLocalStorageData,
 } from '../../../../utils/getLocalStorageItem';
 import {
   getDropDownOptions,
-  getDropDownStatusOptions
+  getDropDownStatusOptions,
 } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import ILabel from '../../../Atoms/Text/ILabel';
@@ -91,6 +91,7 @@ export default function EvaluationInfoComponent({
   );
 
   const [students, setStudents] = useState<SelectData[]>([]);
+
   useEffect(() => {
     let studentsView: SelectData[] = [];
     studentsProgram?.data.data.forEach((stud) => {
@@ -108,7 +109,7 @@ export default function EvaluationInfoComponent({
   const [subjectData, setSubjectData] = useState({});
   const [instructorData, setInstructorData] = useState<IInstructorData>({});
 
-  const cachedData: IEvaluationInfo = getLocalStorageData('evaluationInfo') || {};
+  const cachedData: Partial<IEvaluationInfo> = {};
   //uncomment this to start with data cached in local storage
   // const cachedEvaluationModuleData: IEvaluationSectionBased[] = getLocalStorageData(
   //   'evaluationModule',
@@ -230,9 +231,9 @@ export default function EvaluationInfoComponent({
     classes?.data.data,
   ]);
 
-  useEffect(() => {
-    setLocalStorageData('evaluationInfo', details);
-  }, [details]);
+  // useEffect(() => {
+  //   setLocalStorageData('evaluationInfo', details);
+  // }, [details]);
 
   const { mutate } = evaluationStore.createEvaluation();
   const { mutateAsync } = evaluationStore.updateEvaluation();
@@ -346,23 +347,24 @@ export default function EvaluationInfoComponent({
       return;
     }
 
-    if (name === 'section_total_marks') {
-      // FIXME: on evaluation marks change, it will update the total marks of the evaluation
-      // FIXME: up and down
+    // if (name === 'section_total_marks') {
+    // FIXME: on evaluation marks change, it will update the total marks of the evaluation
+    // FIXME: up and down
 
-      function getTotalMark() {
-        return evaluationModule.reduce((evaluation, currEvaluation) => {
-          return Number(evaluation) + Number(currEvaluation.section_total_marks);
-        }, 0);
-      }
+    // function getTotalMark() {
+    //   return evaluationModule.reduce((evaluation, currEvaluation) => {
+    //     return Number(evaluation) + Number(currEvaluation.section_total_marks);
+    //   }, 0);
+    // }
 
-      setDetails((details) => ({
-        ...details,
-        total_mark: getTotalMark(),
-      }));
+    //TODO: Make input async with evaluation marks
+    // setDetails((details) => ({
+    //   ...details,
+    //   total_mark: getTotalMark(),
+    // }));
 
-      return;
-    }
+    //   return;
+    // }
   }
 
   function handleAddModule() {
@@ -711,7 +713,6 @@ export default function EvaluationInfoComponent({
         </div>
         <InputMolecule
           style={{ width: '6rem' }}
-          readOnly
           type="number"
           name="total_mark"
           value={details?.total_mark}

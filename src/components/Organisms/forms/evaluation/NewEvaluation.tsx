@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
-
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { Link as LinkList } from '../../../../types';
 import {
@@ -15,6 +14,8 @@ import EvaluationInfoComponent from './EvaluationInfoComponent';
 import EvaluationQuestionComponent from './EvaluationQuestionComponent';
 import EvaluationSettings from './EvaluationSettings';
 
+const activeStep = getLocalStorageData('currentStep');
+
 export default function NewEvaluation() {
   const list: LinkList[] = [
     { to: 'home', title: 'home' },
@@ -22,7 +23,7 @@ export default function NewEvaluation() {
     { to: 'new', title: 'new evaluation' },
   ];
 
-  const [currentStep, setCurrentStep] = useState(getLocalStorageData('currentStep'));
+  const [currentStep, setCurrentStep] = useState(activeStep);
   const { search } = useLocation();
   const history = useHistory();
   const [evaluationId] = useState(new URLSearchParams(search).get('evaluation'));
