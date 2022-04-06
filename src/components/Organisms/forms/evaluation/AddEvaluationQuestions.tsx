@@ -116,7 +116,11 @@ export default function AdddEvaluationQuestions({
           toast.error(error.response.data.message);
         },
       });
-    }
+    }else {
+      questionsClone.splice(questionIndex, 1);
+      setLocalStorageData('evaluationQuestions', questionsClone);
+      setQuestions(questionsClone);
+    } 
   }
 
   function handleRemoveChoice(questionIndex: number, choiceIndex: number) {
@@ -195,11 +199,11 @@ export default function AdddEvaluationQuestions({
     e.preventDefault();
 
     mutate(questions, {
-      onSuccess: (createdQuestion) => {
+      onSuccess: () => {
         toast.success('Questions added', { duration: 5000 });
 
         removeLocalStorageData('evaluationQuestions');
-        queryClient.invalidateQueries(['evaluation/questions', createdQuestion.data.data.id]);
+        queryClient.invalidateQueries(['evaluation/questions', evaluationId]);
       },
       onError: (error: any) => {
         toast.error(error.response.data.message);

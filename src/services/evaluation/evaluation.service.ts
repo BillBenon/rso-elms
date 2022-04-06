@@ -1,5 +1,4 @@
 import { AxiosResponse } from 'axios';
-
 import { evaluationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
@@ -19,8 +18,9 @@ import {
   IStudentAnswer,
   IStudentEvaluationStart,
   IStudentEvaluationStartInfo,
-  IUpdateEvaluationApprovalStatus,
+  IUpdateEvaluationApprovalStatus
 } from '../../types/services/evaluation.types';
+
 
 class EvaluationService {
   public async createEvaluation(
@@ -51,7 +51,7 @@ class EvaluationService {
   // }
   public async createEvaluationQuestion(
     questionsInfo: ICreateEvaluationQuestions[],
-  ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
+  ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>> {
     return await evaluationAxios.post('/evaluationQuestions/update-multiple', {
       questions: questionsInfo,
     });
