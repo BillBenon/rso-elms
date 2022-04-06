@@ -12,6 +12,7 @@ import Badge from './Badge';
 import Icon from './Icon';
 
 export type PanelProps = {
+  show?: boolean;
   title: string;
   subtitle?: string;
   children: ReactNode;
@@ -43,12 +44,13 @@ function Panel({
   badge,
   width = 'w-80',
   handleOpen,
+  show = true,
 }: PanelProps) {
   function toggleAccordion() {
     if (handleOpen) handleOpen(index || 0);
   }
 
-  return (
+  return show ? (
     <div
       className={`bg-${bgColor} text-sm py-2 ${width} rounded-lg mb-4 px-4 ${className}`}>
       <div className="w-full mb-2" role="button" onClick={toggleAccordion}>
@@ -80,7 +82,7 @@ function Panel({
         {children}
       </div>
     </div>
-  );
+  ) : null;
 }
 
 export default Panel;

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
-
 import Button from '../../components/Atoms/custom/Button';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
@@ -9,12 +8,12 @@ import EvaluationContent from '../../components/Organisms/evaluation/EvaluationC
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { queryClient } from '../../plugins/react-query';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
-import instructordeploymentStore from '../../store/instructordeployment.store';
 import { ValueType } from '../../types';
 import {
   IEvaluationOwnership,
-  UpdateEvaluationApprovalStatusEnum,
+  UpdateEvaluationApprovalStatusEnum
 } from '../../types/services/evaluation.types';
+
 
 interface IProps {
   evaluationId: string;
@@ -23,12 +22,11 @@ interface IProps {
 export default function ApproveEvaluation({ evaluationId }: IProps) {
   const history = useHistory();
   const { user } = useAuthenticator();
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
-    .data?.data.data[0];
+
   const evaluationApprovals =
     evaluationStore.getEvaluationApprovalByEvaluationAndInstructor(
       evaluationId,
-      instructorInfo?.id + '',
+      user?.id + '',
     ).data?.data.data;
 
   const [remarks, setRemarks] = useState('');
@@ -45,7 +43,7 @@ export default function ApproveEvaluation({ evaluationId }: IProps) {
         action === 'approve'
           ? UpdateEvaluationApprovalStatusEnum.APPROVED
           : UpdateEvaluationApprovalStatusEnum.REJECTED,
-      instructor_id: instructorInfo?.id + '',
+      instructor_id: user?.id + '',
       remarks: remarks,
     };
 
@@ -55,7 +53,7 @@ export default function ApproveEvaluation({ evaluationId }: IProps) {
           toast.success('Feedback is recorded');
           queryClient.invalidateQueries([
             'evaluations',
-            instructorInfo?.id,
+            user?.id,
             IEvaluationOwnership.FOR_APPROVING,
           ]);
           history.goBack();
@@ -79,7 +77,7 @@ export default function ApproveEvaluation({ evaluationId }: IProps) {
 
   return (
     <>
-      <EvaluationContent evaluationId={evaluationId} feedbackType="approvals">
+      <EvaluationContent evaluationId={evaluationId} actionType="approvals">
         <Button
           disabled={evaluationApprovals?.evaluation_approval_status + '' !== 'PENDING'}
           onClick={() => changeAction('approve')}>

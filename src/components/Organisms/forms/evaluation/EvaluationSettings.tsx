@@ -1,6 +1,5 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
@@ -8,18 +7,19 @@ import instructordeploymentStore from '../../../../store/instructordeployment.st
 import { SelectData, ValueType } from '../../../../types';
 import {
   IEvaluationApproval,
-  IEvaluationProps,
+  IEvaluationProps
 } from '../../../../types/services/evaluation.types';
 import {
   getLocalStorageData,
   removeLocalStorageData,
-  setLocalStorageData,
+  setLocalStorageData
 } from '../../../../utils/getLocalStorageItem';
 import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import SwitchMolecule from '../../../Molecules/input/SwitchMolecule';
+
 
 export default function EvaluationSettings({
   handleGoBack,
@@ -32,6 +32,8 @@ export default function EvaluationSettings({
     picked_role?.academy_id + '',
   ).data?.data.data;
 
+  console.log(getLocalStorageData('evaluationId'));
+  
   const initialState = {
     approver_ids: '',
     evaluation_id: getLocalStorageData('evaluationId') || evaluationId,
@@ -73,13 +75,23 @@ export default function EvaluationSettings({
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
+
+    setSettings({
+       ...settings,
+       evaluation_id: getLocalStorageData('evaluationId') || evaluationId,
+    });
+
+     getLocalStorageData('evaluationId')
+
     mutate(settings, {
       onSuccess: () => {
         toast.success('Settings added', { duration: 5000 });
+        //remove all data that we have stored in local storage for caching
         removeLocalStorageData('evaluationId');
         removeLocalStorageData('evaluationInfo');
         removeLocalStorageData('evaluationQuestions');
         removeLocalStorageData('evaluationSettings');
+        removeLocalStorageData('evaluationModule');
         setLocalStorageData('currentStep', 0);
         window.location.href = '/dashboard/evaluations';
       },
@@ -114,7 +126,7 @@ export default function EvaluationSettings({
             options={
               instructors?.map((instr) => ({
                 label: `${instr.user.first_name} ${instr.user.last_name}`,
-                value: instr.id,
+                value: instr.user.id,
               })) as SelectData[]
             }
             name="reviewer_ids"
@@ -143,7 +155,7 @@ export default function EvaluationSettings({
             options={
               instructors?.map((instr) => ({
                 label: `${instr.user.first_name} ${instr.user.last_name}`,
-                value: instr.id,
+                value: instr.user.id,
               })) as SelectData[]
             }
             name="approver_ids"
@@ -152,17 +164,6 @@ export default function EvaluationSettings({
           </DropdownMolecule>
         </div>
       )}
-      {/* <div className="pt-6 flex-col">
-        <ILabel>Marking status</ILabel>
-        <SwitchMolecule
-          showLabelFirst
-          loading={false}
-          name="shuffle"
-          value={false}
-          handleChange={handleChange}>
-          True
-        </SwitchMolecule>
-      </div> */}
       <div className="pt-6">
         <DropdownMolecule
           isMulti
@@ -171,7 +172,7 @@ export default function EvaluationSettings({
           options={
             instructors?.map((instr) => ({
               label: `${instr.user.first_name} ${instr.user.last_name}`,
-              value: instr.id,
+              value: instr.user.id,
             })) as SelectData[]
           }
           name="marker_ids"
@@ -187,21 +188,6 @@ export default function EvaluationSettings({
           <Button type="submit">Finish</Button>
         </div>
       </div>
-      {/* <div className="flex flex-col">
-        <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
-          Back
-        </Button>
-        <div className="pt-4">
-          <Button type="submit">Finish</Button>
-        </div>
-      </div> */}
-      {/* <SwitchMolecule
-        loading={false}
-        name="shuffle"
-        value={false}
-        handleChange={handleChange}>
-        Evaluation Reviewing status
-      </SwitchMolecule> */}
     </form>
   );
 }

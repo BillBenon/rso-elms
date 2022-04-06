@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
-
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -10,10 +9,12 @@ import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
 import ConfirmationOrganism from '../../components/Organisms/ConfirmationOrganism';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import useAuthenticator from '../../hooks/useAuthenticator';
+import { subjectService } from '../../services/administration/subject.service';
+import { evaluationService } from '../../services/evaluation/evaluation.service';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Link as LinkList, Privileges } from '../../types';
-import { IEvaluationOwnership } from '../../types/services/evaluation.types';
+import { IEvaluationOwnership, ISubjects } from '../../types/services/evaluation.types';
 import cookie from '../../utils/cookie';
 import { advancedTypeChecker, getDropDownStatusOptions } from '../../utils/getOption';
 import EvaluationDetails from './EvaluationDetails';
@@ -21,8 +22,11 @@ import EvaluationNotiView from './EvaluationNotiView';
 import EvaluationTest from './EvaluationTest';
 import StudentReview from './StudentReview';
 
+
 export default function InstructorViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
+  const [subjects, setSubjects] = useState<ISubjects[]>([]);
+  const [evaluationId, setEvaluationId] = useState('');
   const [ownerShipType, setownerShipType] = useState(IEvaluationOwnership.CREATED_BY_ME);
 
   const history = useHistory();
@@ -37,10 +41,13 @@ export default function InstructorViewEvaluations() {
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
     .data?.data.data[0];
 
+  const { data: evaluationInfo } =
+    evaluationStore.getEvaluationById(evaluationId).data?.data || {};
+
   const { data, isSuccess, isLoading, isError, refetch } =
     evaluationStore.getEvaluationsByCategory(
       ownerShipType,
-      instructorInfo?.id.toString() || '',
+      user?.id.toString() || '',
     );
 
   const list: LinkList[] = [
@@ -55,11 +62,11 @@ export default function InstructorViewEvaluations() {
         questionaireType: evaluation.questionaire_type,
         id: evaluation.id,
         title: evaluation.name,
-        code: evaluation.evaluation_type,
+        code: evaluation.evaluation_type.replaceAll('_', ' '),
         description: `${evaluation.total_mark} marks`,
         status: {
           type: advancedTypeChecker(evaluation.evaluation_status),
-          text: evaluation.evaluation_status.replace('_', ' '),
+          text: evaluation.evaluation_status.replaceAll('_', ' '),
         },
       };
       formattedEvals.push(formattedEvaluations);
@@ -71,23 +78,60 @@ export default function InstructorViewEvaluations() {
     refetch();
   }, [ownerShipType, refetch]);
 
+  useEffect(() => {
+    async function getSubjects() {
+      let filteredSubjects: ISubjects[] = [];
+
+      if (evaluationInfo?.evaluation_module_subjects) {
+        const subjectData = await evaluationService.getEvaluationModuleSubjectsByModule(
+          evaluationId,
+          evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module,
+        );
+
+        for (const subj of subjectData.data.data) {
+          const subject = await subjectService.getSubject(
+            subj.subject_academic_year_period.toString(),
+          );
+          filteredSubjects.push({
+            subject: subject.data.data.title,
+            id: subject.data.data.id.toString(),
+          });
+        }
+
+        setSubjects(filteredSubjects);
+      }
+    }
+
+    getSubjects();
+  }, [evaluationId, evaluationInfo?.evaluation_module_subjects]);
+
   const handleClick = (id: string) => {
-    switch (ownerShipType) {
-      case IEvaluationOwnership.FOR_APPROVING:
-        history.push(`${path}/details/${id}/approve`);
-        break;
+    setEvaluationId(id);
 
-      case IEvaluationOwnership.FOR_REVIEWING:
-        history.push(`${path}/details/${id}/review`);
-        break;
+    if (evaluationInfo?.id === id) {
+      switch (ownerShipType) {
+        case IEvaluationOwnership.FOR_APPROVING:
+          history.push(`${path}/details/${id}/approve`);
+          break;
 
-      case IEvaluationOwnership.FOR_MARKING:
-        history.push(`${path}/details/${id}/submissions`);
-        break;
+        case IEvaluationOwnership.FOR_REVIEWING:
+          history.push(`${path}/details/${id}/review`);
+          break;
 
-      default:
-        history.push(`${path}/details/${id}`);
-        break;
+        case IEvaluationOwnership.FOR_MARKING:
+          history.push(`${path}/details/${id}/submissions`);
+          break;
+
+        case IEvaluationOwnership.FOR_SETTING:
+          history.push(
+            `${path}/details/${id}/section/${evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module}/${subjects[0].id}`,
+          );
+          break;
+
+        default:
+          history.push(`${path}/details/${id}`);
+          break;
+      }
     }
   };
 

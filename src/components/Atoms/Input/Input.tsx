@@ -30,10 +30,11 @@ export default function Input<T>({
 
   function handleOnChange(e: any) {
     setValue(e.target.value);
-    if (handleChange) handleChange({ name, value: e.target.value, event: e });
+    if (handleChange && _value !== e.target.value)
+      handleChange({ name, value: e.target.value, event: e });
   }
   useEffect(() => {
-    if (handleChange) handleChange({ name, value });
+    if (handleChange && _value !== value) handleChange({ name, value });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [name, value]);
 
