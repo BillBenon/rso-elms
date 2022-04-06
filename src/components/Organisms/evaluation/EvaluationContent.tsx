@@ -1,26 +1,32 @@
 import moment from 'moment';
 import React, { ReactNode, useEffect, useState } from 'react';
-
+import toast from 'react-hot-toast';
+import { queryClient } from '../../../plugins/react-query';
+import { evaluationService } from '../../../services/evaluation/evaluation.service';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
-import { IEvaluationAction } from '../../../types/services/evaluation.types';
+import { IEvaluationAction, IEvaluationStatus } from '../../../types/services/evaluation.types';
 import DisplayClasses from '../../../views/classes/DisplayClasses';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
 import MultipleChoiceAnswer from '../../../views/evaluation/MultipleChoiceAnswer';
 import Button from '../../Atoms/custom/Button';
+import Icon from '../../Atoms/custom/Icon';
 import Heading from '../../Atoms/Text/Heading';
 import PopupMolecule from '../../Molecules/Popup';
 import EvaluationRemarks from './EvaluationRemarks';
+
 
 interface IProps {
   evaluationId: string;
   children: ReactNode;
   actionType: IEvaluationAction;
+  showActions?: boolean;
 }
 
 export default function EvaluationContent({
   evaluationId,
   children,
   actionType,
+  showActions = false 
 }: IProps) {
   const [showPopup, setShowPopup] = useState(false);
 
@@ -35,6 +41,19 @@ export default function EvaluationContent({
   useEffect(() => {
     setclasses(evaluationInfo?.intake_level_class_ids.split(',') || [' ']);
   }, [evaluationInfo?.intake_level_class_ids]);
+
+    
+    function updateStatus(questionId: string, status: IEvaluationStatus) {
+    evaluationService
+      .updateQuestionChoosen(questionId, status)
+      .then(() => {
+        toast.success('Successfully updated');
+        queryClient.invalidateQueries(['evaluation/questions', evaluationId]);
+      })
+      .catch((error: any) => {
+        toast.error('Failed to update', error.message);
+      });
+  }
 
   return (
     <div>
@@ -177,6 +196,9 @@ export default function EvaluationContent({
                   </Heading>
                 </div>
 
+             
+                
+
                 {question.multiple_choice_answers.length
                   ? question.multiple_choice_answers.map((choiceAnswer) => (
                       <MultipleChoiceAnswer
@@ -190,8 +212,8 @@ export default function EvaluationContent({
               </div>
             ) : (
               <>
-                <div className="mt-3 w-full flex justify-between">
-                  <div className="flex flex-col  gap-4">
+                <div className="mt-3 flex justify-between">
+                  <div className="flex flex-col gap-4">
                     <ContentSpan title={`Question ${index + 1}`} className="gap-3">
                       {question.question}
                     </ContentSpan>
@@ -201,12 +223,53 @@ export default function EvaluationContent({
                     </ContentSpan>
                   </div>
 
-                  <div className="w-20">
-                    <Heading fontWeight="semibold" fontSize="sm">
-                      {question.mark} marks
-                    </Heading>
-                  </div>
+                  <Heading fontWeight="semibold" fontSize="sm">
+                    {question.mark} marks
+                  </Heading>
                 </div>
+
+
+                {showActions && <div className="self-end flex gap-4">
+                  <button
+                    className={
+                      question?.choosen_question === IEvaluationStatus.ACCEPTED
+                        ? 'right-button'
+                        : 'normal-button'
+                    }
+                    onClick={() => updateStatus(question.id, IEvaluationStatus.ACCEPTED)}>
+                    <Icon
+                      name={'tick'}
+                      size={18}
+                      stroke={
+                        question?.choosen_question === IEvaluationStatus.PENDING ||
+                        question?.choosen_question === IEvaluationStatus.REJECTED
+                          ? 'none'
+                          : 'main'
+                      }
+                      fill={'none'}
+                    />
+                  </button>
+
+                  <button
+                    className={
+                      question?.choosen_question === IEvaluationStatus.REJECTED
+                        ? 'wrong-button'
+                        : 'normal-button'
+                    }
+                    onClick={() => updateStatus(question.id, IEvaluationStatus.REJECTED)}>
+                    <Icon
+                      name={'cross'}
+                      size={18}
+                      fill={
+                        question?.choosen_question === IEvaluationStatus.PENDING ||
+                        question?.choosen_question === IEvaluationStatus.ACCEPTED
+                          ? 'none'
+                          : 'main'
+                      }
+                      // fill={'none'}
+                    />
+                  </button>
+                </div>}
               </>
             ),
           )

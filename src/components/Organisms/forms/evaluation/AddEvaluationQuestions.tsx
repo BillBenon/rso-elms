@@ -65,11 +65,10 @@ export default function AdddEvaluationQuestions({
   useEffect(() => {
     let allQuestions: any[] = [];
     if (evaluationQuestions?.length > 0) {
-      console.log('inside if')
       evaluationQuestions.forEach((question) => {
         let questionData = { ...initialState };
         questionData.choices = question.multiple_choice_answers || [];
-        questionData.evaluation_id = question.evaluation_id;
+        questionData.evaluation_id = evaluationId ?? question.evaluation_id;
         questionData.mark = question.mark;
         questionData.question = question.question;
         questionData.answer = question.answer;

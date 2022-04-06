@@ -127,7 +127,7 @@ export default function EvaluationInfoComponent({
       evaluationInfo?.private_attendees?.toString() ||
       cachedData?.private_attendees?.toString() ||
       '',
-    instructor_id: user?.id + '',
+    instructor_id: user?.id + "",
     intake_academic_year_period: intakePeriodId,
     allow_submission_time: cachedData?.allow_submission_time || '',
     intake_level_class_ids:

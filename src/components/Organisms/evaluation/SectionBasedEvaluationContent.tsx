@@ -1,11 +1,10 @@
 import moment from 'moment';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { Fragment, ReactNode, useEffect, useState } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import { moduleService } from '../../../services/administration/modules.service';
 import { evaluationService } from '../../../services/evaluation/evaluation.service';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
-import instructordeploymentStore from '../../../store/instructordeployment.store';
 import { IEvaluationAction, IModules } from '../../../types/services/evaluation.types';
 import DisplayClasses from '../../../views/classes/DisplayClasses';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
@@ -35,14 +34,9 @@ export default function SectionBasedEvaluationContent({
   const [modules, setModules] = useState<IModules[]>([]);
   const [tabs, setTabs] = useState<TabType[]>([]);
   const userInfo = useAuthenticator();
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
-    userInfo?.user?.id + '',
-  ).data?.data.data[0];
-
-  const { data: evaluationInfo } =
 
 
-    evaluationStore.getEvaluationByIdAndInstructor(evaluationId, userInfo?.user?.id + '')
+  const { data: evaluationInfo } = evaluationStore.getEvaluationByIdAndInstructor(evaluationId, userInfo?.user?.id + '')
       .data?.data || {};
 
   const [classes, setclasses] = useState([' ']);
@@ -126,7 +120,10 @@ export default function SectionBasedEvaluationContent({
       <div className="pt-6">
         <Accordion>
           <Panel show={false} title="">
-            <></>
+            {/*CAUTION: Don't touch this fragment
+            It will break the accordion component
+            Do it for your own risk*/}
+            <Fragment/>
           </Panel>
           <Panel width="full" bgColor="main" title={'View Evaluation details'}>
             <div className="bg-main px-7 mt-7 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-3 pt-5">
