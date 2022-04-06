@@ -5,7 +5,10 @@ dist
 dist-ssr
 *.local
 *.log
-.yarn
 todo.*
 
 *try/
+
+/.yarn/*
+!/.yarn/plugins
+!/.yarn/releases
