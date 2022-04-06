@@ -1,6 +1,5 @@
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
-
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { SelectData, ValueType } from '../../../../types';
 import {
@@ -184,7 +183,8 @@ export default function EvaluationQuestionComponent({
     setLocalStorageData('evaluationQuestions', questionsClone);
   }
 
-  const { mutate } = evaluationStore.createEvaluationQuestions();
+  const { mutate, isLoading: createQuestionLoader } =
+    evaluationStore.createEvaluationQuestions();
   const { mutate: deleteQuestion } = evaluationStore.deleteEvaluationQuestionById();
 
   function submitForm(e: FormEvent) {
@@ -377,7 +377,9 @@ export default function EvaluationQuestionComponent({
           </div>
 
           <div>
-            <Button onSubmit={submitForm}>save</Button>
+            <Button onSubmit={submitForm} disabled={createQuestionLoader}>
+              save
+            </Button>
           </div>
         </div>
       </div>

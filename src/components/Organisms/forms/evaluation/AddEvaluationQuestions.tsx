@@ -68,7 +68,7 @@ export default function AdddEvaluationQuestions({
       evaluationQuestions.forEach((question) => {
         let questionData = { ...initialState };
         questionData.choices = question.multiple_choice_answers || [];
-        questionData.evaluation_id = question.evaluation_id;
+        questionData.evaluation_id = evaluationId ?? question.evaluation_id;
         questionData.mark = question.mark;
         questionData.question = question.question;
         questionData.answer = question.answer;
@@ -83,7 +83,7 @@ export default function AdddEvaluationQuestions({
     } else {
       setQuestions(getLocalStorageData('evaluationQuestions'));
     }
-  }, [evaluationQuestions, initialState]);
+  }, [evaluationId, evaluationQuestions, initialState]);
 
   function handleAddQuestion() {
     let newQuestion = initialState;
@@ -115,6 +115,10 @@ export default function AdddEvaluationQuestions({
           toast.error(error.response.data.message);
         },
       });
+    } else {
+      questionsClone.splice(questionIndex, 1);
+      setLocalStorageData('evaluationQuestions', questionsClone);
+      setQuestions(questionsClone);
     }
   }
 
@@ -187,21 +191,19 @@ export default function AdddEvaluationQuestions({
     setLocalStorageData('evaluationQuestions', questionsClone);
   }
 
-  const { mutate } = evaluationStore.createEvaluationQuestions();
+  const { mutate, isLoading: createQuestionsLoader } =
+    evaluationStore.createEvaluationQuestions();
   const { mutate: deleteQuestion } = evaluationStore.deleteEvaluationQuestionById();
 
   function submitForm(e: FormEvent) {
     e.preventDefault();
 
     mutate(questions, {
-      onSuccess: (createdQuestion) => {
+      onSuccess: () => {
         toast.success('Questions added', { duration: 5000 });
 
         removeLocalStorageData('evaluationQuestions');
-        queryClient.invalidateQueries([
-          'evaluation/questions',
-          createdQuestion.data.data.id,
-        ]);
+        queryClient.invalidateQueries(['evaluation/questions', evaluationId]);
       },
       onError: (error: any) => {
         toast.error(error.response.data.message);
@@ -367,7 +369,9 @@ export default function AdddEvaluationQuestions({
           </div>
 
           <div>
-            <Button onSubmit={submitForm}>save</Button>
+            <Button onSubmit={submitForm} disabled={createQuestionsLoader}>
+              save
+            </Button>
           </div>
         </div>
       </div>

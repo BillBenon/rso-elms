@@ -4,6 +4,7 @@ import { evaluationService } from '../../services/evaluation/evaluation.service'
 import {
   IEvaluationAction,
   IEvaluationOwnership,
+  IEvaluationStatus,
 } from '../../types/services/evaluation.types';
 
 class EvaluationStore {
@@ -139,6 +140,14 @@ class EvaluationStore {
     );
   }
 
+  getEvaluationQuestionsByStatus(id: string, status: IEvaluationStatus) {
+    return useQuery(
+      ['evaluation/questionsbystatus', id],
+      () => evaluationService.getEvaluationQuestionsByStatus(id, status),
+      { enabled: !!id },
+    );
+  }
+
   getEvaluationQuestions(id: string) {
     return useQuery(
       ['evaluation/questions', id],
@@ -187,6 +196,10 @@ class EvaluationStore {
   }
   studentEvaluationStart() {
     return useMutation(evaluationService.studentEvaluationStart);
+  }
+
+  updateEvaluationQuestion() {
+    return useMutation(evaluationService.updateQuestion);
   }
 }
 

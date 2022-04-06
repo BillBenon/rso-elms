@@ -106,7 +106,7 @@ export default function EvaluationDetails() {
             exact
             path={`${path}`}
             render={() => (
-              <EvaluationContent evaluationId={id} actionType="">
+              <EvaluationContent showActions={true} evaluationId={id} actionType="">
                 <div className="flex gap-4">
                   <Button
                     disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}

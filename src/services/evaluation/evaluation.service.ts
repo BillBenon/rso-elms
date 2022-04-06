@@ -1,5 +1,4 @@
 import { AxiosResponse } from 'axios';
-
 import { evaluationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
@@ -11,16 +10,16 @@ import {
   IEvaluationCreate,
   IEvaluationInfo,
   IEvaluationInfoCollected,
-  IEvaluationOwnership,
-  IEvaluationQuestionsInfo,
+  IEvaluationOwnership, IEvaluationQuestionsInfo,
   IEvaluationSectionBased,
   IEvaluationStatus,
   InstructorEvaluationAppprovalStatus,
   IStudentAnswer,
   IStudentEvaluationStart,
   IStudentEvaluationStartInfo,
-  IUpdateEvaluationApprovalStatus,
+  IUpdateEvaluationApprovalStatus
 } from '../../types/services/evaluation.types';
+
 
 class EvaluationService {
   public async createEvaluation(
@@ -51,7 +50,7 @@ class EvaluationService {
   // }
   public async createEvaluationQuestion(
     questionsInfo: ICreateEvaluationQuestions[],
-  ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
+  ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>> {
     return await evaluationAxios.post('/evaluationQuestions/update-multiple', {
       questions: questionsInfo,
     });
@@ -166,11 +165,18 @@ class EvaluationService {
     );
   }
 
-  public async getEvaluationQuestions(
+  public async getEvaluationQuestionsByStatus(
     id: string,
+    status: IEvaluationStatus
   ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>> {
-    return await evaluationAxios.get(`/evaluationQuestions/getEvaluationQuestions/${id}`);
+    return await evaluationAxios.get(`/evaluationQuestions/getEvaluationQuestions/${id}/settingStatus/${status}`);
   }
+
+  public async getEvaluationQuestions(id: string): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>>{
+      return await evaluationAxios.get(`/evaluationQuestions/getEvaluationQuestions/${id}`);
+  }
+
+
 
   public async getEvaluationQuestionsBySubject(
     evaluationId: string,
@@ -288,6 +294,15 @@ class EvaluationService {
   ): Promise<AxiosResponse<Response<IEvaluationSectionBased[]>>> {
     return await evaluationAxios.post('evaluation-module-subjects/add-bulk', evaluation);
   }
+
+   public async updateQuestion(
+     question: IEvaluationQuestionsInfo
+  ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo>>> {
+    return await evaluationAxios.put(`evaluationQuestions/editQuestion/${question.id}`,question);
+  }
+
+
+
 }
 
 export const evaluationService = new EvaluationService();

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import { subjectService } from '../../../services/administration/subject.service';
 import { evaluationService } from '../../../services/evaluation/evaluation.service';
@@ -14,6 +13,7 @@ import Heading from '../../Atoms/Text/Heading';
 import PopupMolecule from '../../Molecules/Popup';
 import TabNavigation, { TabType } from '../../Molecules/tabs/TabNavigation';
 import EvaluationSubjects from './EvaluationSubjects';
+
 
 export default function ModuleSubjectQuestion() {
   const [showSubjects, setshowSubjects] = useState(false);
@@ -32,17 +32,8 @@ export default function ModuleSubjectQuestion() {
 
   const { data: evaluationQuestions, isLoading: loading } =
     evaluationStore.getEvaluationQuestionsBySubject(evaluationId, subjectId);
-  // function updateStatus(questionId: string, status: IEvaluationStatus) {
-  //   evaluationService
-  //     .updateQuestionChoosen(questionId, status)
-  //     .then(() => {
-  //       toast.success('Successfully updated');
-  //       queryClient.invalidateQueries(['evaluation/questions', evaluationId]);
-  //     })
-  //     .catch((error: any) => {
-  //       toast.error('Failed to update', error.message);
-  //     });
-  // }
+  
+
   const subjectTabs: TabType[] = [];
 
   useEffect(() => {
@@ -104,47 +95,8 @@ export default function ModuleSubjectQuestion() {
                     {question.mark} marks
                   </Heading>
                 </div>
-                {/* <div className="self-end flex gap-4">
-                  <button
-                    className={
-                      question?.choosen_question === IEvaluationStatus.ACCEPTED
-                        ? 'right-button'
-                        : 'normal-button'
-                    }
-                    onClick={() => updateStatus(question.id, IEvaluationStatus.ACCEPTED)}>
-                    <Icon
-                      name={'tick'}
-                      size={18}
-                      stroke={
-                        question?.choosen_question === IEvaluationStatus.PENDING ||
-                        question?.choosen_question === IEvaluationStatus.REJECTED
-                          ? 'none'
-                          : 'main'
-                      }
-                      fill={'none'}
-                    />
-                  </button>
-
-                  <button
-                    className={
-                      question?.choosen_question === IEvaluationStatus.REJECTED
-                        ? 'wrong-button'
-                        : 'normal-button'
-                    }
-                    onClick={() => updateStatus(question.id, IEvaluationStatus.REJECTED)}>
-                    <Icon
-                      name={'cross'}
-                      size={18}
-                      fill={
-                        question?.choosen_question === IEvaluationStatus.PENDING ||
-                        question?.choosen_question === IEvaluationStatus.ACCEPTED
-                          ? 'none'
-                          : 'main'
-                      }
-                      // fill={'none'}
-                    />
-                  </button>
-                </div> */}
+                
+          
 
                 {/* <>
           <div>

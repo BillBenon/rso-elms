@@ -5,7 +5,6 @@ import useAuthenticator from '../../../hooks/useAuthenticator';
 import { subjectService } from '../../../services/administration/subject.service';
 import { evaluationService } from '../../../services/evaluation/evaluation.service';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
-import instructordeploymentStore from '../../../store/instructordeployment.store';
 import { ValueType } from '../../../types';
 import { IEvaluationStatus } from '../../../types/services/evaluation.types';
 import { SubjectInfo } from '../../../types/services/subject.types';
@@ -21,9 +20,6 @@ export default function EvaluationSubjects({
   action,
 }: IEvaluationSubjectsProps) {
   const userInfo = useAuthenticator();
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(
-    userInfo?.user?.id + '',
-  ).data?.data.data[0];
 
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationByIdAndInstructor(evaluationId, userInfo.user?.id + '')
@@ -39,9 +35,7 @@ export default function EvaluationSubjects({
 
     async function get() {
       if (evaluationInfo?.evaluation_module_subjects) {
-        //   alert('we fetched');
         for (let [index, subj] of evaluationInfo.evaluation_module_subjects.entries()) {
-          // request one
           const subjectData = await subjectService.getSubject(
             subj.subject_academic_year_period.toString(),
           );

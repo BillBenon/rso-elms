@@ -26,6 +26,7 @@ import {
   IEvaluationSectionBased,
   IEvaluationStatus,
   IEvaluationTypeEnum,
+  IMarkingType,
   IQuestionaireTypeEnum,
   ISubmissionTypeEnum,
 } from '../../../../types/services/evaluation.types';
@@ -91,6 +92,7 @@ export default function EvaluationInfoComponent({
   );
 
   const [students, setStudents] = useState<SelectData[]>([]);
+
   useEffect(() => {
     let studentsView: SelectData[] = [];
     studentsProgram?.data.data.forEach((stud) => {
@@ -108,7 +110,7 @@ export default function EvaluationInfoComponent({
   const [subjectData, setSubjectData] = useState({});
   const [instructorData, setInstructorData] = useState<IInstructorData>({});
 
-  const cachedData: IEvaluationInfo = getLocalStorageData('evaluationInfo') || {};
+  const cachedData: Partial<IEvaluationInfo> = {};
   //uncomment this to start with data cached in local storage
   // const cachedEvaluationModuleData: IEvaluationSectionBased[] = getLocalStorageData(
   //   'evaluationModule',
@@ -122,6 +124,7 @@ export default function EvaluationInfoComponent({
 
   const [details, setDetails] = useState<IEvaluationCreate>({
     access_type: cachedData?.access_type || IAccessTypeEnum.PUBLIC,
+    marking_type: IMarkingType.NOT_SET,
     academy_id: cachedData?.academy_id || '',
     private_attendees:
       evaluationInfo?.private_attendees?.toString() ||
@@ -162,6 +165,9 @@ export default function EvaluationInfoComponent({
       access_type:
         evaluationInfo?.access_type || cachedData?.access_type || IAccessTypeEnum.PUBLIC,
       academy_id: picked_role?.academy_id + '' || cachedData?.academy_id || '',
+      marking_type:
+        evaluationInfo?.marking_type || cachedData?.marking_type || IMarkingType.NOT_SET,
+
       private_attendees:
         evaluationInfo?.private_attendees.toString() ||
         cachedData?.private_attendees?.toString() ||
@@ -220,16 +226,16 @@ export default function EvaluationInfoComponent({
     });
   }, [
     evaluationInfo,
-    user?.id,
     intakePeriodId,
     subjectId,
     picked_role?.academy_id,
     classes?.data.data,
+    user?.id,
   ]);
 
-  useEffect(() => {
-    setLocalStorageData('evaluationInfo', details);
-  }, [details]);
+  // useEffect(() => {
+  //   setLocalStorageData('evaluationInfo', details);
+  // }, [details]);
 
   const { mutate } = evaluationStore.createEvaluation();
   const { mutateAsync } = evaluationStore.updateEvaluation();
@@ -343,14 +349,24 @@ export default function EvaluationInfoComponent({
       return;
     }
 
-    if (name === 'section_total_marks') {
-      // FIXME: on evaluation marks change, it will update the total marks of the evaluation
-      setDetails((details) => ({
-        ...details,
-        total_marks: details.total_mark + parseInt(value.toString()),
-      }));
-      return;
-    }
+    // if (name === 'section_total_marks') {
+    // FIXME: on evaluation marks change, it will update the total marks of the evaluation
+    // FIXME: up and down
+
+    // function getTotalMark() {
+    //   return evaluationModule.reduce((evaluation, currEvaluation) => {
+    //     return Number(evaluation) + Number(currEvaluation.section_total_marks);
+    //   }, 0);
+    // }
+
+    //TODO: Make input async with evaluation marks
+    // setDetails((details) => ({
+    //   ...details,
+    //   total_mark: getTotalMark(),
+    // }));
+
+    //   return;
+    // }
   }
 
   function handleAddModule() {
@@ -638,6 +654,15 @@ export default function EvaluationInfoComponent({
           handleChange={handleChange}>
           Questionaire type
         </RadioMolecule>
+        <SelectMolecule
+          value={'' + details?.marking_type}
+          width="64"
+          name="marking_type"
+          placeholder="Evaluation Type"
+          handleChange={handleChange}
+          options={getDropDownStatusOptions(IMarkingType)}>
+          Marking type
+        </SelectMolecule>
         {details?.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
           <>
             {/* <DropdownMolecule
@@ -690,7 +715,6 @@ export default function EvaluationInfoComponent({
         </div>
         <InputMolecule
           style={{ width: '6rem' }}
-          readonly
           type="number"
           name="total_mark"
           value={details?.total_mark}
