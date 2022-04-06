@@ -8,7 +8,7 @@ export default function Select({
   handleChange,
   name,
   placeholder,
-  options = [],
+  options,
   className = '',
   disabled = false,
   required = true,
@@ -24,7 +24,7 @@ export default function Select({
   const [filtered, setfiltered] = useState<SelectData[]>([]);
 
   const [_placeholder, set_placeholder] = useState(
-    placeholder || `Select ${name.replace('_', ' ').toLocaleLowerCase()}`,
+    placeholder || `Select ${name.replaceAll('_', ' ').toLocaleLowerCase()}`,
   );
 
   const input = useRef<HTMLInputElement>(null);
@@ -42,12 +42,17 @@ export default function Select({
   // when internal value changes, call handleChange
   useEffect(() => {
     handleChange({ name, value: internalValue });
-    if (internalValue.length > 0)
-      set_placeholder(
-        options.find((op) => op.value == internalValue)?.label || `Select ${name}`,
-      );
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [internalValue]);
+
+  useEffect(() => {
+    if (internalValue.length > 0) {
+      set_placeholder(
+        options.find((op) => op.value == internalValue)?.label || placeholder || '',
+      );
+    }
+  }, [internalValue, options, placeholder]);
 
   const handleSelect = (value: string) => {
     setInternalValue(value);

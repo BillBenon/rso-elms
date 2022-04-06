@@ -44,6 +44,8 @@ export default function EvaluationQuestionComponent({
       question_type: IQuestionType.OPEN,
       sub_questions: [],
       submitted: false,
+      answer: '',
+      evaluation_module_subject_id: '',
     };
   }, [evaluationId]);
 
@@ -232,6 +234,17 @@ export default function EvaluationQuestionComponent({
                   handleChange={(e: ValueType) => handleChange(index, e)}>
                   Question {index + 1}
                 </TextAreaMolecule>
+
+                {question.question_type === IQuestionType.OPEN && (
+                  <TextAreaMolecule
+                    readOnly={question.submitted}
+                    name={'answer'}
+                    value={question.question}
+                    placeholder="Enter question answer"
+                    handleChange={(e: ValueType) => handleChange(index, e)}>
+                    Question {index + 1} answer
+                  </TextAreaMolecule>
+                )}
                 {/* multiple choice answers here */}
                 {question.question_type === IQuestionType.MULTIPLE_CHOICE &&
                   question.choices.map((multipleQuestion, choiceIndex) => (

@@ -2,12 +2,12 @@ import { AxiosError } from 'axios';
 import { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
-
 import UserContext from '../context/UserContext';
 import { queryClient } from '../plugins/react-query';
 import { authenticatorStore } from '../store/administration';
 import { LoginInfo, Response } from '../types';
 import cookie from '../utils/cookie';
+
 let created = false;
 
 export default function useAuthenticator() {
@@ -24,20 +24,9 @@ export default function useAuthenticator() {
   const fetchData = useCallback(async () => {
     setIsUserLoading(true);
     const { data, isSuccess, isError, error } = await refetch();
-    console.log(
-      user?.id,
-      data?.data.data.id,
-      data?.data.data.id != user?.id,
-      isError,
-      isError,
-      data,
-      isUserLoading,
-    );
 
     if (isSuccess && data?.data.data.id != user?.id) {
-      console.log('confirmations');
       setUser((_old) => {
-        console.log('trapish', data?.data.data);
         return data?.data.data;
       });
       setUserAvailable(true);
@@ -54,7 +43,6 @@ export default function useAuthenticator() {
       fetchData();
       created = true;
     }
-    // console.log('authenticator triggered , useEffect');
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -77,7 +65,6 @@ export default function useAuthenticator() {
       },
       onError(error) {
         setIsLoggingIn(false);
-        console.log(error);
         toast.error('Authentication failed', { duration: 3000, id: toastId });
       },
     });
