@@ -8,6 +8,7 @@ import {
 
 
 class EvaluationStore {
+ 
   createEvaluation() {
     return useMutation(evaluationService.createEvaluation);
   }
@@ -142,14 +143,19 @@ class EvaluationStore {
 
   getEvaluationQuestionsByStatus(id: string, status: IEvaluationStatus) {
     return useQuery(
-      ['evaluation/questions', id],
-      () => evaluationService.getEvaluationQuestions(id, status),
+      ['evaluation/questionsbystatus', id],
+      () => evaluationService.getEvaluationQuestionsByStatus(id, status),
       { enabled: !!id },
     );
   }
 
-
-
+  getEvaluationQuestions(id: string) {
+    return useQuery(
+      ['evaluation/questions', id],
+      () => evaluationService.getEvaluationQuestions(id),
+      { enabled: !!id },
+    );
+  }
 
   getEvaluationQuestionsBySubject(evaluationId: string, subjectId: string) {
     return useQuery(

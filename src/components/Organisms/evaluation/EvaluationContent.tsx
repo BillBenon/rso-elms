@@ -58,7 +58,7 @@ export default function EvaluationContent({
       .updateQuestionChoosen(questionId, status)
       .then(() => {
         toast.success('Successfully updated');
-        queryClient.invalidateQueries(['evaluation/questions', evaluationId]);
+        queryClient.invalidateQueries(['evaluation/questionsbystatus', evaluationId]);
       })
       .catch((error: any) => {
         toast.error('Failed to update', error.message);

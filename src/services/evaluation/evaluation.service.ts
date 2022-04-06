@@ -165,12 +165,18 @@ class EvaluationService {
     );
   }
 
-  public async getEvaluationQuestions(
+  public async getEvaluationQuestionsByStatus(
     id: string,
     status: IEvaluationStatus
   ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>> {
     return await evaluationAxios.get(`/evaluationQuestions/getEvaluationQuestions/${id}/settingStatus/${status}`);
   }
+
+  public async getEvaluationQuestions(id: string): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>>{
+      return await evaluationAxios.get(`/evaluationQuestions/getEvaluationQuestions/${id}`);
+  }
+
+
 
   public async getEvaluationQuestionsBySubject(
     evaluationId: string,
