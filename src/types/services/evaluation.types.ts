@@ -161,7 +161,9 @@ export interface IEvaluationCreate {
   time_limit: number;
   total_mark: number;
   strict: boolean;
-  marking_type: IMarkingType
+  marking_type: IMarkingType,
+  intakeId: string,
+  intake_program_level: string 
 }
 
 export type IEvaluationSectionBased = {

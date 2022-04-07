@@ -1,3 +1,5 @@
+// TODO: Should be removed
+
 import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
@@ -10,7 +12,6 @@ import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
 import BreadCrumb from '../../../Molecules/BreadCrumb';
 import Stepper from '../../../Molecules/Stepper/Stepper';
-import EvaluationInfoComponent from './EvaluationInfoComponent';
 import EvaluationQuestionComponent from './EvaluationQuestionComponent';
 import EvaluationSettings from './EvaluationSettings';
 
@@ -66,12 +67,12 @@ export default function NewEvaluation() {
           isInline={false}
           navigateToStepHandler={() => {}}>
           <div className="w-2/4">
-            <EvaluationInfoComponent
+            {/* <EvaluationInfoComponent
               evaluationId={evaluationId}
               evaluationInfo={evaluationInfo}
               handleNext={handleSubmit}
               handleGoBack={handleBack}
-            />
+            /> */}
           </div>
 
           <div>
