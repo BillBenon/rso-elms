@@ -24,6 +24,7 @@ export enum IQuestionaireTypeEnum {
   FIELD = 'FIELD',
   OPEN = 'OPEN',
   HYBRID = 'HYBRID',
+  SECTION_BASED = 'SECTION_BASED',
 }
 
 export interface IEvaluationProps {

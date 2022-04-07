@@ -21,15 +21,20 @@ export default function EvaluationSettingProgress() {
   const { id } = useParams<ParamType>();
   const [isLoading, setIsloading] = useState(false);
   const [progress, setProgress] = useState<ProggresSettingsProps[]>([]);
-  const { data: evaluationInfo } = evaluationStore.getEvaluationById(id).data?.data || {};
+  const { data: evaluationInfo, isLoading: evaluationLoading } =
+    evaluationStore.getEvaluationById(id);
 
   useEffect(() => {
     let filteredInfo: ProggresSettingsProps[] = [];
 
     async function get() {
-      if (evaluationInfo?.evaluation_module_subjects) {
+      setIsloading(true);
+      if (evaluationInfo?.data.data.evaluation_module_subjects) {
         //   alert('we fetched');
-        for (let [index, subj] of evaluationInfo.evaluation_module_subjects.entries()) {
+        for (let [
+          index,
+          subj,
+        ] of evaluationInfo.data.data.evaluation_module_subjects.entries()) {
           // request one
           const subjectData = await subjectService.getSubject(
             subj.subject_academic_year_period.toString(),
@@ -58,27 +63,30 @@ export default function EvaluationSettingProgress() {
       }
     }
     get();
-    setIsloading(false);
-  }, [evaluationInfo?.evaluation_module_subjects]);
+  }, [evaluationInfo?.data.data.evaluation_module_subjects]);
 
   return (
     <div>
-      {progress.length > 0 ? (
-        <Table<ProggresSettingsProps>
-          handleSelect={() => {}}
-          statusColumn="status"
-          data={progress}
-          uniqueCol={'id'}
-          hide={['id']}
-        />
-      ) : isLoading ? (
+      {evaluationLoading || isLoading ? (
         <Loader />
       ) : (
-        <NoDataAvailable
-          title={'No data available'}
-          description={'Try creating sections on this evaluation'}
-          showButton={false}
-        />
+        <>
+          {progress.length > 0 ? (
+            <Table<ProggresSettingsProps>
+              handleSelect={() => {}}
+              statusColumn="status"
+              data={progress}
+              uniqueCol={'id'}
+              hide={['id']}
+            />
+          ) : (
+            <NoDataAvailable
+              title={'No data available'}
+              description={'Try creating sections on this evaluation'}
+              showButton={false}
+            />
+          )}
+        </>
       )}
     </div>
   );

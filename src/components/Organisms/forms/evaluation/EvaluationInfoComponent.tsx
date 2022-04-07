@@ -237,30 +237,29 @@ export default function EvaluationInfoComponent({
 
   const { mutate } = evaluationStore.createEvaluation();
   const { mutateAsync } = evaluationStore.updateEvaluation();
-  const { mutate: mutateSectionBased } = evaluationStore.createSectionBasedEvaluation();
+  // const { mutate: mutateSectionBased } = evaluationStore.createSectionBasedEvaluation();
 
   function handleChange({ name, value }: ValueType) {
-    if (name === ('due_on' || 'allow_submission_time') && typeof value === 'string') {
-      if (name === 'due_on') {
-        setTimeDifference(
-          moment(value).diff(moment(details.allow_submission_time), 'minutes'),
-        );
-      }
+    // if (name === ('due_on' || 'allow_submission_time') && typeof value === 'string') {
+    //   if (name === 'due_on') {
+    //     setTimeDifference(
+    //       moment(value).diff(moment(details.allow_submission_time), 'minutes'),
+    //     );
+    //   }
 
-      if (timeDifference < 0) toast.error('Due time cannot be less than start time!');
+    // if (timeDifference < 0) toast.error('Due time cannot be less than start time!');
 
-      setDetails((details) => ({
-        ...details,
-        ['time_limit']: timeDifference,
-      }));
+    // setDetails((details) => ({
+    //   ...details,
+    // }));
 
-      setDetails((details) => ({
-        ...details,
-        [name]: value,
-      }));
+    //   setDetails((details) => ({
+    //     ...details,
+    //     [name]: value,
+    //   }));
 
-      return;
-    }
+    //   return;
+    // }
 
     //set class ids and eligible group to empty since it's private
     if (name === 'private_attendees') {
@@ -427,32 +426,36 @@ export default function EvaluationInfoComponent({
         {
           onSuccess: (data) => {
             //update evaluation id in evaluation module
-            const modulesClone = [...evaluationModule];
+            // const modulesClone = [...evaluationModule];
 
-            const newEvaluation = modulesClone.map((evalMod) => {
-              evalMod.evaluation_id = data.data.data.id;
-              return evalMod;
-            });
+            // const newEvaluation = modulesClone.map((evalMod) => {
+            //   evalMod.evaluation_id = data.data.data.id;
+            //   return evalMod;
+            // });
 
-            mutateSectionBased(newEvaluation, {
-              onSuccess: () => {
-                toast.success('Evaluation created', { duration: 5000 });
-                setLocalStorageData('evaluationId', data.data.data.id); //should be removed at some point
-                if (
-                  details.questionaire_type === IQuestionaireTypeEnum.MANUAL ||
-                  details.evaluation_type === IEvaluationTypeEnum.SECTION_BASED
-                ) {
-                  setLocalStorageData('currentStep', 2);
-                  handleNext(2);
-                } else {
-                  setLocalStorageData('currentStep', 1);
-                  handleNext(1);
-                }
-              },
-              onError: (error: any) => {
-                toast.error(error.response.data.message);
-              },
-            });
+            setLocalStorageData('evaluationId', data.data.data.id);
+            toast.success('Evaluation created', { duration: 5000 });
+            setLocalStorageData('currentStep', 1);
+            handleNext(1);
+
+            // mutateSectionBased(newEvaluation, {
+            //   onSuccess: () => {
+            //     toast.success('Evaluation created', { duration: 5000 });
+            //      //should be removed at some point
+            //     if (
+            //       details.questionaire_type === IQuestionaireTypeEnum.MANUAL ||
+            //       details.evaluation_type === IEvaluationTypeEnum.SECTION_BASED
+            //     ) {
+
+            //     } else {
+            //       setLocalStorageData('currentStep', 1);
+            //       handleNext(1);
+            //     }
+            //   },
+            //   onError: (error: any) => {
+            //     toast.error(error.response.data.message);
+            //   },
+            // });
           },
           onError: (error: any) => {
             toast.error(error.response.data.data + '');
@@ -482,6 +485,16 @@ export default function EvaluationInfoComponent({
           handleChange={handleChange}
           options={getDropDownStatusOptions(IEvaluationTypeEnum)}>
           Evaluation type
+        </SelectMolecule>
+
+        <SelectMolecule
+          value={'' + details?.marking_type}
+          width="64"
+          name="marking_type"
+          placeholder="Evaluation Type"
+          handleChange={handleChange}
+          options={getDropDownStatusOptions(IMarkingType)}>
+          Marking type
         </SelectMolecule>
 
         {IEvaluationTypeEnum.SECTION_BASED === details.evaluation_type && (
@@ -593,7 +606,7 @@ export default function EvaluationInfoComponent({
           Accessibility
         </RadioMolecule>
 
-        {details.access_type === IAccessTypeEnum.PUBLIC && (
+        {/* {details.access_type === IAccessTypeEnum.PUBLIC && (
           <RadioMolecule
             type="block"
             defaultValue={details?.eligible_group}
@@ -607,7 +620,7 @@ export default function EvaluationInfoComponent({
             handleChange={handleChange}>
             Eligible Class
           </RadioMolecule>
-        )}
+        )} */}
 
         {details.access_type === IAccessTypeEnum.PUBLIC ? (
           <MultiselectMolecule
@@ -644,7 +657,8 @@ export default function EvaluationInfoComponent({
           value={details.questionaire_type}
           name="questionaire_type"
           options={[
-            { label: 'Open', value: IQuestionaireTypeEnum.OPEN },
+            { label: 'Default', value: IQuestionaireTypeEnum.OPEN },
+            { label: 'Section based', value: IQuestionaireTypeEnum.SECTION_BASED },
             // { label: 'Multiple choice', value: IQuestionaireTypeEnum.MULTIPLE },
             { label: 'Manual', value: IQuestionaireTypeEnum.MANUAL },
             { label: 'Field', value: IQuestionaireTypeEnum.FIELD },
@@ -652,15 +666,7 @@ export default function EvaluationInfoComponent({
           handleChange={handleChange}>
           Questionaire type
         </RadioMolecule>
-        <SelectMolecule
-          value={'' + details?.marking_type}
-          width="64"
-          name="marking_type"
-          placeholder="Evaluation Type"
-          handleChange={handleChange}
-          options={getDropDownStatusOptions(IMarkingType)}>
-          Marking type
-        </SelectMolecule>
+
         {details?.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
           <>
             {/* <DropdownMolecule
@@ -723,10 +729,7 @@ export default function EvaluationInfoComponent({
           <InputMolecule
             style={{ width: '8rem' }}
             type="number"
-            // step=".01"
-            readOnly
             name="time_limit"
-            // min={0}
             value={details?.time_limit}
             handleChange={handleChange}>
             Time limit (in mins)

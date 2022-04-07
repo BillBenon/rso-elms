@@ -33,8 +33,10 @@ export default function EvaluationQuestionComponent({
   };
 
   const initialState: ICreateEvaluationQuestions = useMemo(() => {
+    console.log(getLocalStorageData('evaluationId'), evaluationId);
+
     return {
-      evaluation_id: evaluationId || getLocalStorageData('evaluationId') || '',
+      evaluation_id: evaluationId ?? getLocalStorageData('evaluationId'),
       mark: 0,
       parent_question_id: '',
       choices: [],
@@ -65,7 +67,6 @@ export default function EvaluationQuestionComponent({
     if (evaluationQuestions?.length > 0) {
       evaluationQuestions.forEach((question) => {
         let questionData = { ...initialState };
-        //@ts-ignore
         questionData.choices = question.multiple_choice_answers || [];
         questionData.evaluation_id = question.evaluation_id;
         questionData.mark = question.mark;
@@ -77,9 +78,9 @@ export default function EvaluationQuestionComponent({
         allQuestions.push(questionData);
       });
       setQuestions(allQuestions);
-      setLocalStorageData('evaluationQuestions', allQuestions);
+      // setLocalStorageData('evaluationQuestions', allQuestions);
     } else {
-      setQuestions(getLocalStorageData('evaluationQuestions') || [initialState]);
+      setQuestions([initialState]);
     }
   }, [evaluationQuestions, initialState]);
 
@@ -88,7 +89,7 @@ export default function EvaluationQuestionComponent({
     newQuestion.choices = [];
     let questionsClone = [...questions];
     questionsClone.push(newQuestion);
-    setLocalStorageData('evaluationQuestions', questionsClone);
+    // setLocalStorageData('evaluationQuestions', questionsClone);
     setQuestions(questionsClone);
   }
 
@@ -129,7 +130,7 @@ export default function EvaluationQuestionComponent({
 
       questionsClone[questionIndex] = question;
 
-      setLocalStorageData('evaluationQuestions', questionsClone);
+      // setLocalStorageData('evaluationQuestions', questionsClone);
       setQuestions(questionsClone);
     }
   }
@@ -138,7 +139,7 @@ export default function EvaluationQuestionComponent({
     let questionsClone = [...questions];
     let questionChoices = questionsClone[index];
     questionChoices.choices.push(multipleChoiceContent);
-    setLocalStorageData('evaluationQuestions', questionsClone);
+    // setLocalStorageData('evaluationQuestions', questionsClone);
     setQuestions(questionsClone);
   }
 
@@ -218,8 +219,6 @@ export default function EvaluationQuestionComponent({
                   name="question_type"
                   placeholder="Question type"
                   handleChange={(e: ValueType) => handleChange(index, e)}
-                  /*@ts-ignore*/
-                  // defaultValue={evaluationQuestions[index]?.question_type || ''}
                   options={[
                     { label: 'OPEN', value: IQuestionType.OPEN },
                     { label: 'MULTIPLE CHOICE', value: IQuestionType.MULTIPLE_CHOICE },

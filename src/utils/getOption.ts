@@ -1,13 +1,13 @@
 import { RoleType, SelectData } from '../types';
 import { IEvaluationStatus } from '../types/services/evaluation.types';
-import { IntakeStatus } from '../types/services/intake.types';
 import { IntakeModuleStatus } from '../types/services/intake-program.types';
+import { IntakeStatus } from '../types/services/intake.types';
 import { UserTypes } from '../types/services/user.types';
 import { GenericStatus } from './../types/services/common.types';
 import {
   EnrollInstructorLevelInfo,
   EnrollmentStatus,
-  StudentApproval,
+  StudentApproval
 } from './../types/services/enrollment.types';
 import { ModuleParticipation } from './../types/services/intake-program.types';
 import { MaterialType } from './../types/services/module-material.types';

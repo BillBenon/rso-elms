@@ -14,9 +14,9 @@ import EvaluationInfoComponent from './EvaluationInfoComponent';
 import EvaluationQuestionComponent from './EvaluationQuestionComponent';
 import EvaluationSettings from './EvaluationSettings';
 
-const activeStep = getLocalStorageData('currentStep');
-
 export default function NewEvaluation() {
+  const activeStep = getLocalStorageData('currentStep');
+
   const list: LinkList[] = [
     { to: 'home', title: 'home' },
     { to: '/dashboard/evaluations', title: 'evaluations' },

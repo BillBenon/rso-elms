@@ -63,6 +63,14 @@ export default function EvaluationSettings({
   const [settings, setSettings] = useState<IEvaluationApproval>(initialState);
 
   function handleChange({ name, value }: ValueType) {
+    if (name == 'to_be_approved' && value == 'false') {
+      setSettings({ ...settings, approver_ids: '' });
+      return;
+    } else if (name == 'to_be_reviewed' && value == 'false') {
+      setSettings({ ...settings, reviewer_ids: '' });
+      return;
+    }
+
     setSettings({ ...settings, [name]: value.toString() });
 
     setLocalStorageData('evaluationSettings', { ...settings, [name]: value.toString() });
@@ -120,7 +128,7 @@ export default function EvaluationSettings({
           True
         </SwitchMolecule>
       </div>
-      {settings?.to_be_reviewed && (
+      {Boolean(settings?.to_be_reviewed) && (
         <div className="pt-6">
           <DropdownMolecule
             isMulti
@@ -138,6 +146,7 @@ export default function EvaluationSettings({
           </DropdownMolecule>
         </div>
       )}
+
       <div className="pt-6 flex-col">
         <ILabel>Evaluation Approval status</ILabel>
         <SwitchMolecule
@@ -149,7 +158,10 @@ export default function EvaluationSettings({
           True
         </SwitchMolecule>
       </div>
-      {settings?.to_be_approved && (
+      {/*
+      TODO: when show form when it's been toggled only
+      */}
+      {Boolean(settings?.to_be_approved) && (
         <div className="pt-6">
           <DropdownMolecule
             isMulti
@@ -168,7 +180,7 @@ export default function EvaluationSettings({
         </div>
       )}
 
-      {evaluationInfo?.marking_type !== IMarkingType.PER_QUESTION && (
+      {evaluationInfo?.marking_type !== IMarkingType.PER_SECTION && (
         <div className="pt-6">
           <DropdownMolecule
             isMulti
