@@ -62,6 +62,8 @@ export default function EvaluationInfoComponent() {
 
   const { user } = useAuthenticator();
 
+  const [programId, setProgramId] = useState('');
+
   const [details, setDetails] = useState<IEvaluationCreate>({
     access_type: IAccessTypeEnum.PUBLIC,
     academy_id: '',
@@ -82,7 +84,7 @@ export default function EvaluationInfoComponent() {
     maximum_file_size: 0,
     term_id: '',
     subject_academic_year_period_id: '',
-    questionaire_type: IQuestionaireTypeEnum.OPEN,
+    questionaire_type: IQuestionaireTypeEnum.SECTION_BASED,
     exam_instruction: '',
     name: '',
     submision_type: ISubmissionTypeEnum.ONLINE_TEXT,
@@ -115,7 +117,6 @@ export default function EvaluationInfoComponent() {
     () => new URLSearchParams(search).get('prd') || '',
     [search],
   );
-  const programId = useMemo(() => new URLSearchParams(search).get('prg') || '', [search]);
 
   const levelId = useMemo(() => new URLSearchParams(search).get('lvl') || '', [search]);
   const subjectId = useMemo(
@@ -148,7 +149,7 @@ export default function EvaluationInfoComponent() {
     setStudents(studentsView);
   }, [studentsProgram]);
 
-  const modules = moduleStore.getModulesByProgram(programId);
+  const modules = moduleStore.getModulesByProgram(programId, programId.length != 0);
 
   const [subjectData, setSubjectData] = useState({});
   const [instructorData, setInstructorData] = useState<IInstructorData>({});
@@ -261,12 +262,21 @@ export default function EvaluationInfoComponent() {
     //   }));
     //   return;
     // }
+
+    if (name === 'intake_program_level') {
+      console.log({ value, name });
+      const intakeProgramLevel = levels?.data.data.find((level) => {
+        console.log({ level });
+        return level.id === Number(value);
+      });
+      console.log({ intakeProgramLevel });
+      setProgramId(intakeProgramLevel?.intake_program.program.id + '');
+    }
+
     setDetails((details) => ({
       ...details,
       [name]: value.toString(),
     }));
-
-    console.log({ details });
   }
 
   async function getSubjectsByModule(module: string) {
@@ -577,101 +587,99 @@ export default function EvaluationInfoComponent() {
           Marking type
         </SelectMolecule>
 
-        {details && IEvaluationTypeEnum.SECTION_BASED === details.evaluation_type && (
-          <div className="flex flex-col gap pt-[2.3rem]">
-            {evaluationModule.map((evalMod, index) => (
-              <div
-                className="flex flex-col gap-4 pb-10"
-                key={`${evalMod.instructor_subject_assignment} ${index}`}>
-                <div className="flex gap-6">
-                  <SelectMolecule
-                    width="36"
-                    value={evalMod?.intake_program_level_module}
-                    name="intake_program_level_module"
-                    placeholder="select module"
-                    loading={modules.isLoading}
-                    handleChange={(e: ValueType) => handleModuleChange(index, e)}
-                    options={getDropDownOptions({
-                      inputs: modules.data?.data.data || [],
-                    })}>
-                    Select module
-                  </SelectMolecule>
+        <div className="flex flex-col gap pt-[2.3rem]">
+          {evaluationModule.map((evalMod, index) => (
+            <div
+              className="flex flex-col gap-4 pb-10"
+              key={`${evalMod.instructor_subject_assignment} ${index}`}>
+              <div className="flex gap-6">
+                <SelectMolecule
+                  width="36"
+                  value={evalMod?.intake_program_level_module}
+                  name="intake_program_level_module"
+                  placeholder="select module"
+                  loading={modules.isLoading}
+                  handleChange={(e: ValueType) => handleModuleChange(index, e)}
+                  options={getDropDownOptions({
+                    inputs: modules.data?.data.data || [],
+                  })}>
+                  Select module
+                </SelectMolecule>
 
-                  <SelectMolecule
-                    width="36"
-                    value={evalMod?.subject_academic_year_period?.toString() || ''}
-                    name="subject_academic_year_period"
-                    loading={false}
-                    placeholder="select subject"
-                    handleChange={(e: ValueType) => handleModuleChange(index, e)}
-                    options={getDropDownOptions({
-                      //@ts-ignore
-                      inputs: subjectData[evalMod.intake_program_level_module] || [],
-                      labelName: ['title'],
-                    })}>
-                    Select subject
-                  </SelectMolecule>
-                </div>
-
-                <div className="flex gap-6 items-center">
-                  <SelectMolecule
-                    className="pb-3"
-                    width="36"
-                    value={evalMod?.instructor_subject_assignment}
-                    name="instructor_subject_assignment"
-                    placeholder="select instructor"
-                    handleChange={(e: ValueType) => handleModuleChange(index, e)}
-                    options={
-                      (
-                        instructorData[evalMod.subject_academic_year_period.toString()] ||
-                        []
-                      ).map((instr) => ({
-                        label: `${instr.user.first_name} ${instr.user.last_name}`,
-                        value: instr.user.id,
-                      })) as SelectData[]
-                    }>
-                    Select Instructor
-                  </SelectMolecule>
-
-                  <SelectMolecule
-                    className="pb-3"
-                    width="36"
-                    value={evalMod?.marker_id}
-                    name="marker_id"
-                    placeholder="select instructor"
-                    handleChange={(e: ValueType) => handleModuleChange(index, e)}
-                    options={getDropDownOptions({
-                      inputs: markers,
-                      labelName: ['first_name', 'last_name'],
-                    })}>
-                    Select marker
-                  </SelectMolecule>
-
-                  <InputMolecule
-                    type="number"
-                    value={evalMod?.section_total_marks}
-                    handleChange={(e: ValueType) => handleModuleChange(index, e)}
-                    name="section_total_marks"
-                    style={{ width: '5.5rem' }}>
-                    Total marks
-                  </InputMolecule>
-                </div>
-
-                <div>
-                  <Button styleType="outline" onClick={() => handleRemoveModule(index)}>
-                    Remove
-                  </Button>
-                </div>
+                <SelectMolecule
+                  width="36"
+                  value={evalMod?.subject_academic_year_period?.toString() || ''}
+                  name="subject_academic_year_period"
+                  loading={false}
+                  placeholder="select subject"
+                  handleChange={(e: ValueType) => handleModuleChange(index, e)}
+                  options={getDropDownOptions({
+                    //@ts-ignore
+                    inputs: subjectData[evalMod.intake_program_level_module] || [],
+                    labelName: ['title'],
+                  })}>
+                  Select subject
+                </SelectMolecule>
               </div>
-            ))}
 
-            <div className="pt-10 pb-[1rem]">
-              <Button styleType="outline" onClick={handleAddModule}>
-                Add module
-              </Button>
+              <div className="flex gap-6 items-center">
+                <SelectMolecule
+                  className="pb-3"
+                  width="36"
+                  value={evalMod?.instructor_subject_assignment}
+                  name="instructor_subject_assignment"
+                  placeholder="select instructor"
+                  handleChange={(e: ValueType) => handleModuleChange(index, e)}
+                  options={
+                    (
+                      instructorData[evalMod.subject_academic_year_period.toString()] ||
+                      []
+                    ).map((instr) => ({
+                      label: `${instr.user.first_name} ${instr.user.last_name}`,
+                      value: instr.user.id,
+                    })) as SelectData[]
+                  }>
+                  Select Instructor
+                </SelectMolecule>
+
+                <SelectMolecule
+                  className="pb-3"
+                  width="36"
+                  value={evalMod?.marker_id}
+                  name="marker_id"
+                  placeholder="select instructor"
+                  handleChange={(e: ValueType) => handleModuleChange(index, e)}
+                  options={getDropDownOptions({
+                    inputs: markers,
+                    labelName: ['first_name', 'last_name'],
+                  })}>
+                  Select marker
+                </SelectMolecule>
+
+                <InputMolecule
+                  type="number"
+                  value={evalMod?.section_total_marks}
+                  handleChange={(e: ValueType) => handleModuleChange(index, e)}
+                  name="section_total_marks"
+                  style={{ width: '5.5rem' }}>
+                  Total marks
+                </InputMolecule>
+              </div>
+
+              <div>
+                <Button styleType="outline" onClick={() => handleRemoveModule(index)}>
+                  Remove
+                </Button>
+              </div>
             </div>
+          ))}
+
+          <div className="pt-10 pb-[1rem]">
+            <Button styleType="outline" onClick={handleAddModule}>
+              Add module
+            </Button>
           </div>
-        )}
+        </div>
 
         <RadioMolecule
           defaultValue={details?.access_type}
@@ -734,10 +742,10 @@ export default function EvaluationInfoComponent() {
         <RadioMolecule
           className="pb-4"
           name="questionaire_type"
+          value={details.questionaire_type}
           options={[
             { label: 'Default', value: IQuestionaireTypeEnum.OPEN },
             { label: 'Section based', value: IQuestionaireTypeEnum.SECTION_BASED },
-            // { label: 'Multiple choice', value: IQuestionaireTypeEnum.MULTIPLE },
             { label: 'Manual', value: IQuestionaireTypeEnum.MANUAL },
             { label: 'Field', value: IQuestionaireTypeEnum.FIELD },
           ]}
