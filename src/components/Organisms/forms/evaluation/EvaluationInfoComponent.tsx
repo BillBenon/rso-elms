@@ -29,7 +29,6 @@ import {
   IQuestionaireTypeEnum,
   ISubmissionTypeEnum,
 } from '../../../../types/services/evaluation.types';
-import { setLocalStorageData } from '../../../../utils/getLocalStorageItem';
 import {
   getDropDownOptions,
   getDropDownStatusOptions,
@@ -240,8 +239,7 @@ export default function EvaluationInfoComponent() {
   // ]);
 
   const { mutate } = evaluationStore.createEvaluation();
-  // const { mutateAsync } = evaluationStore.updateEvaluation();
-  // const { mutate: mutateSectionBased } = evaluationStore.createSectionBasedEvaluation();
+  const { mutate: mutateSectionBased } = evaluationStore.createSectionBasedEvaluation();
 
   function handleChange({ name, value }: ValueType) {
     // if (name === ('due_on' || 'allow_submission_time') && typeof value === 'string') {
@@ -337,7 +335,6 @@ export default function EvaluationInfoComponent() {
     let evaluationModuleInfo = [...evaluationModule];
     evaluationModuleInfo[index] = { ...evaluationModuleInfo[index], [name]: value };
     setEvaluationModule(evaluationModuleInfo);
-    setLocalStorageData('evaluationModule', evaluationModuleInfo);
 
     if (name === 'intake_program_level_module') {
       getSubjectsByModule(value.toString());
@@ -408,8 +405,8 @@ export default function EvaluationInfoComponent() {
   }
 
   function handleEditorChange(editor: Editor) {
-    // if (details)
-    //   setDetails((details) => ({ ...details, exam_instruction: editor.getHTML() }));
+    if (details)
+      setDetails((details) => ({ ...details, exam_instruction: editor.getHTML() }));
   }
 
   function submitForm(e: FormEvent) {
@@ -425,8 +422,20 @@ export default function EvaluationInfoComponent() {
       },
       {
         onSuccess: (data) => {
-          toast.success('Evaluation created successfully');
-          history.push(`/dashboard/evaluations/${data.data.data.id}/addquestions`);
+          const modulesClone = [...evaluationModule];
+          const newEvaluation = modulesClone.map((evalMod) => {
+            evalMod.evaluation_id = data.data.data.id;
+            return evalMod;
+          });
+          mutateSectionBased(newEvaluation, {
+            onSuccess: () => {
+              toast.success('Evaluation created successfully');
+              history.push(`/dashboard/evaluations/${data.data.data.id}/addquestions`);
+            },
+            onError: (error: any) => {
+              toast.error(error.response.data.message);
+            },
+          });
         },
         onError: (error: any) => {
           toast.error(error.response.data.message);
@@ -464,35 +473,7 @@ export default function EvaluationInfoComponent() {
     //     {
     //       onSuccess: (data) => {
     //update evaluation id in evaluation module
-    // const modulesClone = [...evaluationModule];
 
-    // const newEvaluation = modulesClone.map((evalMod) => {
-    //   evalMod.evaluation_id = data.data.data.id;
-    //   return evalMod;
-    // });
-
-    // setLocalStorageData('evaluationId', data.data.data.id);
-    // toast.success('Evaluation created', { duration: 5000 });
-    // setLocalStorageData('currentStep', 1);
-
-    // mutateSectionBased(newEvaluation, {
-    //   onSuccess: () => {
-    //     toast.success('Evaluation created', { duration: 5000 });
-    //      //should be removed at some point
-    //     if (
-    //       details.questionaire_type === IQuestionaireTypeEnum.MANUAL ||
-    //       details.evaluation_type === IEvaluationTypeEnum.SECTION_BASED
-    //     ) {
-
-    //     } else {
-    //       setLocalStorageData('currentStep', 1);
-    //       handleNext(1);
-    //     }
-    //   },
-    //   onError: (error: any) => {
-    //     toast.error(error.response.data.message);
-    //   },
-    // });
     // },
     // onError: (error: any) => {
     //   toast.error(error.response.data.data + '');

@@ -1,6 +1,8 @@
+import { Editor } from '@tiptap/react';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
+import { subjectService } from '../../../../services/administration/subject.service';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { SelectData, ValueType } from '../../../../types';
 import {
@@ -9,14 +11,12 @@ import {
   IMultipleChoice,
   IQuestionType,
 } from '../../../../types/services/evaluation.types';
-import {
-  getLocalStorageData,
-  setLocalStorageData,
-} from '../../../../utils/getLocalStorageItem';
+import { ExtendedSubjectInfo } from '../../../../types/services/subject.types';
 import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
 import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
+import Tiptap from '../../../Molecules/editor/Tiptap';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
@@ -25,6 +25,9 @@ export default function EvaluationQuestionComponent() {
   const history = useHistory();
 
   const { evaluationId } = useParams<{ evaluationId: string }>();
+
+  const { data: evaluationInfo } =
+    evaluationStore.getEvaluationById(evaluationId).data?.data || {};
 
   const multipleChoiceContent: IMultipleChoice = {
     answer_content: '',
@@ -48,10 +51,7 @@ export default function EvaluationQuestionComponent() {
     };
   }, [evaluationId]);
 
-  let evaluationQuestions: IEvaluationQuestionsInfo[] | ICreateEvaluationQuestions[] =
-    useMemo(() => {
-      return getLocalStorageData('evaluationQuestions') || [];
-    }, []);
+  let evaluationQuestions: IEvaluationQuestionsInfo[] | ICreateEvaluationQuestions[] = [];
 
   if (evaluationId) {
     evaluationQuestions =
@@ -76,7 +76,6 @@ export default function EvaluationQuestionComponent() {
         allQuestions.push(questionData);
       });
       setQuestions(allQuestions);
-      // setLocalStorageData('evaluationQuestions', allQuestions);
     } else {
       setQuestions([initialState]);
     }
@@ -87,7 +86,6 @@ export default function EvaluationQuestionComponent() {
     newQuestion.choices = [];
     let questionsClone = [...questions];
     questionsClone.push(newQuestion);
-    // setLocalStorageData('evaluationQuestions', questionsClone);
     setQuestions(questionsClone);
   }
 
@@ -104,10 +102,8 @@ export default function EvaluationQuestionComponent() {
           toast.success('Question deleted', { duration: 2000 });
           if (questionIndex > -1 && questionsClone.length > 1) {
             questionsClone.splice(questionIndex, 1);
-            setLocalStorageData('evaluationQuestions', questionsClone);
             setQuestions(questionsClone);
           }
-          history.push('/evaluation/questions');
         },
         onError: (error: any) => {
           toast.error(error.response.data.message);
@@ -126,10 +122,7 @@ export default function EvaluationQuestionComponent() {
 
     if (choiceIndex > -1 && question.choices.length > 2) {
       question.choices.splice(choiceIndex, 1);
-
       questionsClone[questionIndex] = question;
-
-      // setLocalStorageData('evaluationQuestions', questionsClone);
       setQuestions(questionsClone);
     }
   }
@@ -138,7 +131,6 @@ export default function EvaluationQuestionComponent() {
     let questionsClone = [...questions];
     let questionChoices = questionsClone[index];
     questionChoices.choices.push(multipleChoiceContent);
-    // setLocalStorageData('evaluationQuestions', questionsClone);
     setQuestions(questionsClone);
   }
 
@@ -151,8 +143,6 @@ export default function EvaluationQuestionComponent() {
     )
       questionInfo[index].choices = [];
     questionInfo[index] = { ...questionInfo[index], [name]: value };
-
-    setLocalStorageData('evaluationQuestions', questionInfo);
     setQuestions(questionInfo);
   }
 
@@ -164,8 +154,6 @@ export default function EvaluationQuestionComponent() {
     );
     question.choices.forEach((choice) => (choice.correct = false));
     question.choices[choiceIndex].correct = true;
-
-    setLocalStorageData('evaluationQuestions', questionsClone);
     setQuestions(questionsClone);
   }
 
@@ -180,7 +168,6 @@ export default function EvaluationQuestionComponent() {
     questionsClone[questionIndex] = question;
 
     setQuestions(questionsClone);
-    setLocalStorageData('evaluationQuestions', questionsClone);
   }
 
   const { mutate, isLoading: createQuestionLoader } =
@@ -193,14 +180,25 @@ export default function EvaluationQuestionComponent() {
     mutate(questions, {
       onSuccess: () => {
         toast.success('Questions added', { duration: 5000 });
-        setLocalStorageData('currentStep', 2);
-        history.push(`/dashboard/evaluation/${evaluationId}/settings`);
+        history.push(`/dashboard/evaluations/${evaluationId}/settings`);
       },
       onError: (error: any) => {
         toast.error(error.response.data.message);
       },
     });
   }
+
+  const [subjects, setSubjects] = useState<ExtendedSubjectInfo[]>([]);
+
+  useEffect(() => {
+    evaluationInfo?.evaluation_module_subjects.forEach(async (item) => {
+      const subject: ExtendedSubjectInfo = (
+        await subjectService.getSubject(item.subject_academic_year_period + '')
+      ).data.data;
+      subject.evaluation_module_subject_id = item.id;
+      setSubjects((prevState) => [...prevState, subject]);
+    });
+  }, [evaluationInfo]);
 
   return (
     <form className="flex flex-col" onSubmit={submitForm}>
@@ -211,6 +209,24 @@ export default function EvaluationQuestionComponent() {
               className="flex justify-between w-2/3 bg-main px-6 py-10 mt-8"
               key={index}>
               <div className="flex flex-col">
+                <SelectMolecule
+                  value={question.evaluation_module_subject_id}
+                  disabled={question.submitted}
+                  width="64"
+                  name="evaluation_module_subject_id"
+                  placeholder="select subject"
+                  handleChange={(e: ValueType) => handleChange(index, e)}
+                  options={
+                    subjects.map((item) => {
+                      return {
+                        value: item.evaluation_module_subject_id + '',
+                        label: item.title,
+                      };
+                    }) || []
+                  }>
+                  Select subject
+                </SelectMolecule>
+
                 <SelectMolecule
                   value={question.question_type}
                   disabled={question.submitted}
@@ -224,6 +240,26 @@ export default function EvaluationQuestionComponent() {
                   ]}>
                   Question type
                 </SelectMolecule>
+
+                <div className="my-2">
+                  <div className="my-1">
+                    <ILabel size="sm">Question {index + 1}</ILabel>
+                  </div>
+                  <Tiptap
+                    handleChange={function (_editor: Editor): void {
+                      let questionInfo = [...questions];
+
+                      questionInfo[index] = {
+                        ...questionInfo[index],
+                        question: _editor.getHTML(),
+                      };
+
+                      setQuestions(questionInfo);
+                    }}
+                    content={question.question}
+                  />
+                </div>
+                {/* 
                 <TextAreaMolecule
                   readOnly={question.submitted}
                   name={'question'}
@@ -231,17 +267,36 @@ export default function EvaluationQuestionComponent() {
                   placeholder="Enter question"
                   handleChange={(e: ValueType) => handleChange(index, e)}>
                   Question {index + 1}
-                </TextAreaMolecule>
+                </TextAreaMolecule> */}
 
                 {question.question_type === IQuestionType.OPEN && (
-                  <TextAreaMolecule
-                    readOnly={question.submitted}
-                    name={'answer'}
-                    value={question.question}
-                    placeholder="Enter question answer"
-                    handleChange={(e: ValueType) => handleChange(index, e)}>
-                    Question {index + 1} answer
-                  </TextAreaMolecule>
+                  // <TextAreaMolecule
+                  //   readOnly={question.submitted}
+                  //   name={'answer'}
+                  //   value={question.answer}
+                  //   placeholder="Enter question answer"
+                  //   handleChange={(e: ValueType) => handleChange(index, e)}>
+                  //   Question {index + 1} answer
+                  // </TextAreaMolecule>
+
+                  <div className="my-2">
+                    <div className="my-1">
+                      <ILabel size="sm">Question {index + 1} answer</ILabel>
+                    </div>
+                    <Tiptap
+                      handleChange={function (_editor: Editor): void {
+                        let questionInfo = [...questions];
+
+                        questionInfo[index] = {
+                          ...questionInfo[index],
+                          answer: _editor.getHTML(),
+                        };
+
+                        setQuestions(questionInfo);
+                      }}
+                      content={question.answer}
+                    />
+                  </div>
                 )}
                 {/* multiple choice answers here */}
                 {question.question_type === IQuestionType.MULTIPLE_CHOICE &&
@@ -311,7 +366,6 @@ export default function EvaluationQuestionComponent() {
                   readonly={question.submitted}
                   required={false}
                   type="number"
-                  // step=".01"
                   name={'mark'}
                   min={1}
                   style={{ width: '6rem' }}
