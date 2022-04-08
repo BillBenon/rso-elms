@@ -83,8 +83,7 @@ export default function AdddEvaluationQuestions({
     } else {
       setQuestions(getLocalStorageData('evaluationQuestions'));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [evaluationQuestions]);
+  }, [evaluationId, evaluationQuestions, initialState]);
 
   function handleAddQuestion() {
     let newQuestion = initialState;

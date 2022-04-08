@@ -16,7 +16,6 @@ import ReviewEvaluation from './ReviewEvaluation';
 import SectionBasedEvaluation from './SectionBasedEvaluation';
 import Unbeguns from './Unbeguns';
 
-
 export default function EvaluationDetails() {
   const { id } = useParams<ParamType>();
   const history = useHistory();
