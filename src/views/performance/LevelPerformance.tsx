@@ -2,6 +2,8 @@ import React from 'react';
 import { useParams } from 'react-router';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
+import Button from '../../components/Atoms/custom/Button';
+import Icon from '../../components/Atoms/custom/Icon';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
@@ -10,6 +12,7 @@ import { classStore } from '../../store/administration/class.store';
 import { CommonCardDataType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ClassPeriodPerformance from './ClassPeriodPerformance';
+import DSReportOnStudent from './DSReportOnStudent';
 import EndTermForm from './EndTermForm';
 import StudentAcademicReport from './StudentAcademicReport';
 
@@ -54,10 +57,37 @@ export default function LevelPerformance() {
           render={() => (
             <Tabs>
               <Tab label="Academic report">
+                <Button
+                  styleType={'text'}
+                  onClick={() => history.goBack()}
+                  icon
+                  className="flex items-center p-2 hover:underline">
+                  <Icon name="chevron-left" fill="primary" size={16} />
+                  Back
+                </Button>
                 <StudentAcademicReport />
               </Tab>
               <Tab label="Informative form">
+                <Button
+                  styleType={'text'}
+                  onClick={() => history.goBack()}
+                  icon
+                  className="flex items-center p-2 hover:underline">
+                  <Icon name="chevron-left" fill="primary" size={16} />
+                  Back
+                </Button>
                 <EndTermForm />
+              </Tab>
+              <Tab label="DS report">
+                <Button
+                  styleType={'text'}
+                  onClick={() => history.goBack()}
+                  icon
+                  className="flex items-center p-2 hover:underline">
+                  <Icon name="chevron-left" fill="primary" size={16} />
+                  Back
+                </Button>
+                <DSReportOnStudent />
               </Tab>
             </Tabs>
           )}

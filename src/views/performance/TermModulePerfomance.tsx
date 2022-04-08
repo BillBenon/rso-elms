@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
+import Button from '../../components/Atoms/custom/Button';
+import Icon from '../../components/Atoms/custom/Icon';
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
@@ -20,7 +22,7 @@ interface IParamType {
 export default function TermModulePerfomance() {
   const [moduleId, setModuleId] = useState<string | undefined>(undefined);
   const { levelId, classId } = useParams<IParamType>();
-
+  const history = useHistory();
   //   data from backend
   const { data: classInfo } = classStore.getClassById(classId);
   const periodId = classInfo?.data.data.intake_academic_year_period_id.toString();
@@ -60,7 +62,15 @@ export default function TermModulePerfomance() {
   });
 
   return (
-    <div>
+    <>
+      <Button
+        styleType={'text'}
+        onClick={() => history.goBack()}
+        icon
+        className="flex items-center p-2 hover:underline">
+        <Icon name="chevron-left" fill="primary" size={16} />
+        Back
+      </Button>
       <SelectMolecule
         loading={modulesLoading}
         value={moduleId}
@@ -81,6 +91,6 @@ export default function TermModulePerfomance() {
       ) : (
         <Table data={formattedData} hide={['id']} />
       )}
-    </div>
+    </>
   );
 }

@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Icon from '../../components/Atoms/custom/Icon';
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Table from '../../components/Molecules/table/Table';
@@ -111,6 +112,14 @@ function OveralClassPerformance() {
         />
       ) : (
         <>
+          <Button
+            styleType={'text'}
+            onClick={() => history.goBack()}
+            icon
+            className="flex items-center p-2 hover:underline">
+            <Icon name="chevron-left" fill="primary" size={16} />
+            Back
+          </Button>
           <TableHeader
             title={`${classInfo?.data.data.class_name || 'class'} Performance`}
             totalItems={data.length}
