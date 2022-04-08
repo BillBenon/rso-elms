@@ -58,6 +58,7 @@ const initialState: IEvaluationSectionBased = {
 type IInstructorData = { [key: string]: ModuleInstructors[] };
 
 export default function EvaluationInfoComponent() {
+  const picked_role = usePickedRole();
   const history = useHistory();
 
   const { user } = useAuthenticator();
@@ -66,7 +67,7 @@ export default function EvaluationInfoComponent() {
 
   const [details, setDetails] = useState<IEvaluationCreate>({
     access_type: IAccessTypeEnum.PUBLIC,
-    academy_id: '',
+    academy_id: picked_role?.academy_id + '',
     private_attendees: '',
     instructor_id: user?.id + '',
     allow_submission_time: '',
@@ -82,7 +83,6 @@ export default function EvaluationInfoComponent() {
     is_consider_on_report: true,
     marking_reminder_date: '',
     maximum_file_size: 0,
-    term_id: '',
     subject_academic_year_period_id: '',
     questionaire_type: IQuestionaireTypeEnum.SECTION_BASED,
     exam_instruction: '',
@@ -92,12 +92,22 @@ export default function EvaluationInfoComponent() {
     total_mark: 0,
     strict: true,
     intakeId: '',
+    intake_academic_year_period: '',
     intake_program_level: '',
   });
 
+  useEffect(() => {
+    if (picked_role?.academy_id) {
+      setDetails({
+        ...details,
+        academy_id: picked_role?.academy_id + '',
+      });
+    }
+  }, [picked_role]);
+
   const { data: classes } = classStore.getClassByPeriod(
-    details?.term_id + '',
-    details?.term_id?.length != 0,
+    details?.intake_academic_year_period + '',
+    details?.intake_academic_year_period?.length != 0,
   );
 
   // Update classes
@@ -123,8 +133,6 @@ export default function EvaluationInfoComponent() {
     () => new URLSearchParams(search).get('subj') || '',
     [search],
   );
-
-  const picked_role = usePickedRole();
 
   const markers =
     usersStore.getUsersByAcademy(user?.academy.id.toString() || '').data?.data.data
@@ -264,12 +272,9 @@ export default function EvaluationInfoComponent() {
     // }
 
     if (name === 'intake_program_level') {
-      console.log({ value, name });
       const intakeProgramLevel = levels?.data.data.find((level) => {
-        console.log({ level });
         return level.id === Number(value);
       });
-      console.log({ intakeProgramLevel });
       setProgramId(intakeProgramLevel?.intake_program.program.id + '');
     }
 
@@ -365,12 +370,6 @@ export default function EvaluationInfoComponent() {
   }
 
   const authUserId = user?.id;
-
-  // const studentInfo =
-  //   getStudentShipByUserId(
-  //     user?.id + '',
-  //     !!authUserId && user?.user_type === UserType.STUDENT,
-  //   ).data?.data.data || [];
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(authUserId + '')
     .data?.data.data[0];
@@ -543,9 +542,9 @@ export default function EvaluationInfoComponent() {
         </SelectMolecule>
 
         <SelectMolecule
-          value={details?.term_id + ''}
+          value={details?.intake_academic_year_period + ''}
           width="64 py-4"
-          name="term_id"
+          name="intake_academic_year_period"
           placeholder="Academic year"
           handleChange={handleChange}
           options={
@@ -744,7 +743,6 @@ export default function EvaluationInfoComponent() {
           name="questionaire_type"
           value={details.questionaire_type}
           options={[
-            { label: 'Default', value: IQuestionaireTypeEnum.OPEN },
             { label: 'Section based', value: IQuestionaireTypeEnum.SECTION_BASED },
             { label: 'Manual', value: IQuestionaireTypeEnum.MANUAL },
             { label: 'Field', value: IQuestionaireTypeEnum.FIELD },
@@ -856,7 +854,8 @@ export default function EvaluationInfoComponent() {
         </DateMolecule>
         <RadioMolecule
           className="pb-4"
-          name="status"
+          name="is_consider_on_report"
+          value={details?.is_consider_on_report + ''}
           options={[
             { label: 'Yes', value: 'true' },
             { label: 'No', value: 'false' },
