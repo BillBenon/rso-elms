@@ -62,11 +62,11 @@ export default function SubjectEvaluationSettings({
     setLocalStorageData('evaluationSettings', { ...settings, [name]: value.toString() });
   }
 
-  useEffect(() => {
-    const cachedData: IEvaluationApproval =
-      getLocalStorageData('evaluationSettings') || {};
-    setSettings(cachedData || {});
-  }, []);
+  // useEffect(() => {
+  //   const cachedData: IEvaluationApproval =
+  //     getLocalStorageData('evaluationSettings') || {};
+  //   setSettings(cachedData || {});
+  // }, []);
 
   const { mutate } = evaluationStore.createEvaluationSettings();
 

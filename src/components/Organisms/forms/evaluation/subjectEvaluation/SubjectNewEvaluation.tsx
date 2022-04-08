@@ -11,9 +11,9 @@ import Button from '../../../../Atoms/custom/Button';
 import Heading from '../../../../Atoms/Text/Heading';
 import BreadCrumb from '../../../../Molecules/BreadCrumb';
 import Stepper from '../../../../Molecules/Stepper/Stepper';
-import SubjectEvaluationSettings from './SubjectEvaluationComponent';
 import SubjectEvaluationInfoComponent from './SubjectEvaluationInfoComponent';
 import SubjectEvaluationQuestionComponent from './SubjectEvaluationQuestionsComponent';
+import SubjectEvaluationSettings from './SubjectEvaluationSettings';
 
 export default function SubjectNewEvaluation() {
   const list: LinkList[] = [
