@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
-
 import { classService } from '../../services/administration/class.service';
+
 
 class ClassStore {
   addClass() {
@@ -21,9 +21,10 @@ class ClassStore {
   getClassById(classId: string) {
     return useQuery(['class/id', classId], () => classService.getClassById(classId));
   }
-  getClassByPeriod(periodId: string) {
+  getClassByPeriod(periodId: string, enabled: boolean = false) {
     return useQuery(['class/periodId', periodId], () =>
       classService.getClassByPeriod(periodId),
+      {enabled}
     );
   }
   getClassByStudentAndLevel(studentId: string, levelId: string) {

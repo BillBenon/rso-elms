@@ -9,7 +9,6 @@ import {
   useLocation,
   useRouteMatch,
 } from 'react-router-dom';
-
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -26,18 +25,18 @@ import UpdateIntake from '../../components/Organisms/intake/UpdateIntake';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import usePickedRole from '../../hooks/usePickedRole';
 import enrollmentStore from '../../store/administration/enrollment.store';
-import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import {
   getIntakeProgramsByStudent,
   getStudentShipByUserId,
 } from '../../store/administration/intake-program.store';
+import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import registrationControlStore from '../../store/administration/registrationControl.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Link as LinkType, Privileges, ValueType } from '../../types';
 import { StudentApproval } from '../../types/services/enrollment.types';
 import { InstructorProgram } from '../../types/services/instructor.types';
-import { ExtendedIntakeInfo } from '../../types/services/intake.types';
 import { StudentIntakeProgram } from '../../types/services/intake-program.types';
+import { ExtendedIntakeInfo } from '../../types/services/intake.types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import IntakePrograms from '../intake-program/IntakePrograms';
@@ -161,7 +160,6 @@ export default function Intakes() {
           loadedIntakes.push(cardData);
         }
       });
-
       setIntakes(loadedIntakes);
     } else if (isError) toast.error('error occurred when loading intakes');
   }, [user?.user_type, data, isError, isSuccess]);

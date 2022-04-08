@@ -1,14 +1,13 @@
 import { useMutation, useQuery } from 'react-query';
+
 import { evaluationService } from '../../services/evaluation/evaluation.service';
 import {
   IEvaluationAction,
   IEvaluationOwnership,
-  IEvaluationStatus
+  IEvaluationStatus,
 } from '../../types/services/evaluation.types';
 
-
 class EvaluationStore {
- 
   createEvaluation() {
     return useMutation(evaluationService.createEvaluation);
   }
@@ -202,7 +201,6 @@ class EvaluationStore {
   updateEvaluationQuestion() {
     return useMutation(evaluationService.updateQuestion);
   }
-
 }
 
 export function getEvaluationFeedbacks(

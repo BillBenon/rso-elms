@@ -6,8 +6,9 @@ import {
   useHistory,
   useLocation,
   useParams,
-  useRouteMatch
+  useRouteMatch,
 } from 'react-router-dom';
+
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
@@ -27,7 +28,6 @@ import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import EvaluationCategories from '../evaluation/EvaluationCategories';
 import SubjectInstructorView from '../evaluation/SubjectInstructorView';
 import SubjectInstructors from './SubjectInstructors';
-
 
 interface ParamType {
   id: string;
@@ -89,21 +89,21 @@ export default function SubjectDetails() {
   });
 
   tabs.push({
+    label: 'Manage evaluations',
+    href: `${url}/evaluations/manage?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+    privilege: Privileges.CAN_MANAGE_EVALUATIONS,
+  });
+
+  tabs.push({
     label: 'Evaluations',
     href: `${url}/evaluations?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}&lvl=${level}`,
     privilege: Privileges.CAN_ACCESS_EVALUATIONS,
   });
 
   tabs.push({
-    label: 'Manage evaluations',
-    href: `${url}/evaluations/manage?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
-    privilege: Privileges.CAN_MANAGE_EVALUATIONS,
-  });
-  tabs.push({
     label: 'Instructors',
     href: `${url}/instructors?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
   });
-
 
   return (
     <main className="px-4">

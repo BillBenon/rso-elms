@@ -1,6 +1,5 @@
 import React from 'react';
 import { Redirect, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
-
 import Button from './components/Atoms/custom/Button';
 import Loader from './components/Atoms/custom/Loader';
 import PopupMolecule from './components/Molecules/Popup';
@@ -89,8 +88,6 @@ const RouterProtection = () => {
             <Route path={`${path}/privileges`} component={PrivilegesView} />
           )}
 
-          {/* end of institution routes */}
-
           {/* academic admin routes */}
           {hasPrivilege(Privileges.CAN_ACCESS_SUBJECTS) && (
             <Route path={`${path}/subjects`} component={Subjects} />
@@ -144,6 +141,7 @@ const RouterProtection = () => {
             hasPrivilege(Privileges.CAN_ANSWER_EVALUATION)) && (
             <Route path={`${path}/evaluations`} component={InstructorViewEvaluations} />
           )}
+
           <Route
             exact
             path={`${path}/account/update-password`}

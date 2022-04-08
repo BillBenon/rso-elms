@@ -1,44 +1,41 @@
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useParams } from 'react-router-dom';
 
-import { queryClient } from '../../../../plugins/react-query';
-import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
-import { ParamType, SelectData, ValueType } from '../../../../types';
+import { evaluationStore } from '../../../../../store/evaluation/evaluation.store';
+import { SelectData, ValueType } from '../../../../../types';
 import {
   ICreateEvaluationQuestions,
   IEvaluationProps,
   IEvaluationQuestionsInfo,
   IMultipleChoice,
   IQuestionType,
-} from '../../../../types/services/evaluation.types';
+} from '../../../../../types/services/evaluation.types';
 import {
   getLocalStorageData,
-  removeLocalStorageData,
   setLocalStorageData,
-} from '../../../../utils/getLocalStorageItem';
-import Button from '../../../Atoms/custom/Button';
-import Icon from '../../../Atoms/custom/Icon';
-import Heading from '../../../Atoms/Text/Heading';
-import ILabel from '../../../Atoms/Text/ILabel';
-import InputMolecule from '../../../Molecules/input/InputMolecule';
-import SelectMolecule from '../../../Molecules/input/SelectMolecule';
-import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
+} from '../../../../../utils/getLocalStorageItem';
+import Button from '../../../../Atoms/custom/Button';
+import Icon from '../../../../Atoms/custom/Icon';
+import Heading from '../../../../Atoms/Text/Heading';
+import ILabel from '../../../../Atoms/Text/ILabel';
+import InputMolecule from '../../../../Molecules/input/InputMolecule';
+import SelectMolecule from '../../../../Molecules/input/SelectMolecule';
+import TextAreaMolecule from '../../../../Molecules/input/TextAreaMolecule';
 
-const multipleChoiceContent: IMultipleChoice = {
-  answer_content: '',
-  correct: false,
-  id: '',
-};
-
-export default function AdddEvaluationQuestions({
+export default function SubjectEvaluationQuestionComponent({
   handleGoBack,
+  handleNext,
   evaluationId,
 }: IEvaluationProps) {
-  const { id: subjectId } = useParams<ParamType>();
+  const multipleChoiceContent: IMultipleChoice = {
+    answer_content: '',
+    correct: false,
+    id: '',
+  };
+
   const initialState: ICreateEvaluationQuestions = useMemo(() => {
     return {
-      evaluation_id: evaluationId || '',
+      evaluation_id: evaluationId || getLocalStorageData('evaluationId') || '',
       mark: 0,
       parent_question_id: '',
       choices: [],
@@ -48,17 +45,19 @@ export default function AdddEvaluationQuestions({
       sub_questions: [],
       submitted: false,
       answer: '',
-      evaluation_module_subject_id: subjectId || '',
+      evaluation_module_subject_id: '',
     };
-  }, [evaluationId, subjectId]);
+  }, [evaluationId]);
 
   let evaluationQuestions: IEvaluationQuestionsInfo[] | ICreateEvaluationQuestions[] =
     useMemo(() => {
       return getLocalStorageData('evaluationQuestions') || [];
     }, []);
 
-  evaluationQuestions =
-    evaluationStore.getEvaluationQuestions(evaluationId || '').data?.data.data || [];
+  if (evaluationId) {
+    evaluationQuestions =
+      evaluationStore.getEvaluationQuestions(evaluationId).data?.data.data || [];
+  }
 
   const [questions, setQuestions] = useState([initialState]);
 
@@ -67,11 +66,11 @@ export default function AdddEvaluationQuestions({
     if (evaluationQuestions?.length > 0) {
       evaluationQuestions.forEach((question) => {
         let questionData = { ...initialState };
+        //@ts-ignore
         questionData.choices = question.multiple_choice_answers || [];
-        questionData.evaluation_id = evaluationId ?? question.evaluation_id;
+        questionData.evaluation_id = question.evaluation_id;
         questionData.mark = question.mark;
         questionData.question = question.question;
-        questionData.answer = question.answer;
         questionData.question_type = question.question_type;
         questionData.submitted = false;
         questionData.id = question.id;
@@ -81,9 +80,9 @@ export default function AdddEvaluationQuestions({
       setQuestions(allQuestions);
       setLocalStorageData('evaluationQuestions', allQuestions);
     } else {
-      setQuestions(getLocalStorageData('evaluationQuestions'));
+      setQuestions(getLocalStorageData('evaluationQuestions') || [initialState]);
     }
-  }, [evaluationId, evaluationQuestions, initialState]);
+  }, [evaluationQuestions, initialState]);
 
   function handleAddQuestion() {
     let newQuestion = initialState;
@@ -115,10 +114,6 @@ export default function AdddEvaluationQuestions({
           toast.error(error.response.data.message);
         },
       });
-    } else {
-      questionsClone.splice(questionIndex, 1);
-      setLocalStorageData('evaluationQuestions', questionsClone);
-      setQuestions(questionsClone);
     }
   }
 
@@ -154,10 +149,8 @@ export default function AdddEvaluationQuestions({
       name === 'question_type' &&
       value === IQuestionType.OPEN &&
       questionInfo[index].choices.length > 0
-    ) {
+    )
       questionInfo[index].choices = [];
-      return;
-    }
     questionInfo[index] = { ...questionInfo[index], [name]: value };
 
     setLocalStorageData('evaluationQuestions', questionInfo);
@@ -191,8 +184,7 @@ export default function AdddEvaluationQuestions({
     setLocalStorageData('evaluationQuestions', questionsClone);
   }
 
-  const { mutate, isLoading: createQuestionsLoader } =
-    evaluationStore.createEvaluationQuestions();
+  const { mutate } = evaluationStore.createEvaluationQuestions();
   const { mutate: deleteQuestion } = evaluationStore.deleteEvaluationQuestionById();
 
   function submitForm(e: FormEvent) {
@@ -201,9 +193,8 @@ export default function AdddEvaluationQuestions({
     mutate(questions, {
       onSuccess: () => {
         toast.success('Questions added', { duration: 5000 });
-
-        removeLocalStorageData('evaluationQuestions');
-        queryClient.invalidateQueries(['evaluation/questions', evaluationId]);
+        setLocalStorageData('currentStep', 2);
+        handleNext(1);
       },
       onError: (error: any) => {
         toast.error(error.response.data.message);
@@ -215,7 +206,7 @@ export default function AdddEvaluationQuestions({
     <form className="flex flex-col" onSubmit={submitForm}>
       {questions.length ? (
         questions.map((question, index: number) => (
-          <React.Fragment key={`${question.id} ${index}`}>
+          <>
             <div
               className="flex justify-between w-2/3 bg-main px-6 py-10 mt-8"
               key={index}>
@@ -227,6 +218,8 @@ export default function AdddEvaluationQuestions({
                   name="question_type"
                   placeholder="Question type"
                   handleChange={(e: ValueType) => handleChange(index, e)}
+                  /*@ts-ignore*/
+                  // defaultValue={evaluationQuestions[index]?.question_type || ''}
                   options={[
                     { label: 'OPEN', value: IQuestionType.OPEN },
                     { label: 'MULTIPLE CHOICE', value: IQuestionType.MULTIPLE_CHOICE },
@@ -244,10 +237,9 @@ export default function AdddEvaluationQuestions({
 
                 {question.question_type === IQuestionType.OPEN && (
                   <TextAreaMolecule
-                    className="normal-case"
                     readOnly={question.submitted}
                     name={'answer'}
-                    value={question.answer}
+                    value={question.question}
                     placeholder="Enter question answer"
                     handleChange={(e: ValueType) => handleChange(index, e)}>
                     Question {index + 1} answer
@@ -302,6 +294,7 @@ export default function AdddEvaluationQuestions({
                 question.question_type === IQuestionType.MULTIPLE_CHOICE ? (
                   <SelectMolecule
                     value={question.choices.find((ch) => ch.correct)?.answer_content}
+                    // disabled={question.submitted}
                     width="64"
                     name="correct_answer"
                     placeholder="Choose correct answer"
@@ -320,6 +313,7 @@ export default function AdddEvaluationQuestions({
                   readonly={question.submitted}
                   required={false}
                   type="number"
+                  // step=".01"
                   name={'mark'}
                   min={1}
                   style={{ width: '6rem' }}
@@ -327,6 +321,13 @@ export default function AdddEvaluationQuestions({
                   handleChange={(e: ValueType) => handleChange(index, e)}>
                   Question marks
                 </InputMolecule>
+                {/* <div>
+                  {!question.submitted ? (
+                    <Button type="submit" onSubmit={submitForm}>
+                      save question
+                    </Button>
+                  ) : null}
+                </div> */}
 
                 <Button
                   type="button"
@@ -348,7 +349,7 @@ export default function AdddEvaluationQuestions({
                 </div>
               </div> */}
             </div>
-          </React.Fragment>
+          </>
         ))
       ) : (
         <Heading>No questions created for this evaluation</Heading>
@@ -356,6 +357,13 @@ export default function AdddEvaluationQuestions({
       <div>
         <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
           Back
+        </Button>{' '}
+        <Button
+          styleType="text"
+          color="gray"
+          className="mt-6"
+          onClick={() => handleNext(1)}>
+          Skip
         </Button>
         <div className="pt-6 flex flex-col">
           <div className="pb-6">
@@ -369,9 +377,7 @@ export default function AdddEvaluationQuestions({
           </div>
 
           <div>
-            <Button onSubmit={submitForm} disabled={createQuestionsLoader}>
-              save
-            </Button>
+            <Button onSubmit={submitForm}>save</Button>
           </div>
         </div>
       </div>

@@ -1,3 +1,5 @@
+// TODO: Should be removed
+
 import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 
@@ -11,18 +13,18 @@ import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
 import BreadCrumb from '../../../Molecules/BreadCrumb';
 import Stepper from '../../../Molecules/Stepper/Stepper';
-import EvaluationInfoComponent from './EvaluationInfoComponent';
-import EvaluationQuestionComponent from './EvaluationQuestionComponent';
 import EvaluationSettings from './EvaluationSettings';
 
 export default function NewEvaluation() {
+  const activeStep = getLocalStorageData('currentStep');
+
   const list: LinkList[] = [
     { to: 'home', title: 'home' },
     { to: '/dashboard/evaluations', title: 'evaluations' },
     { to: 'new', title: 'new evaluation' },
   ];
 
-  const [currentStep, setCurrentStep] = useState(getLocalStorageData('currentStep'));
+  const [currentStep, setCurrentStep] = useState(activeStep);
   const { search } = useLocation();
   const history = useHistory();
   const [evaluationId] = useState(new URLSearchParams(search).get('evaluation'));
@@ -65,20 +67,20 @@ export default function NewEvaluation() {
           isInline={false}
           navigateToStepHandler={() => {}}>
           <div className="w-2/4">
-            <EvaluationInfoComponent
+            {/* <EvaluationInfoComponent
               evaluationId={evaluationId}
               evaluationInfo={evaluationInfo}
               handleNext={handleSubmit}
               handleGoBack={handleBack}
-            />
+            /> */}
           </div>
 
           <div>
-            <EvaluationQuestionComponent
+            {/* <EvaluationQuestionComponent
               handleNext={handleSubmit}
               handleGoBack={handleBack}
               evaluationId={evaluationId}
-            />
+            /> */}
           </div>
 
           {!evaluationId || (evaluationId && !evaluationInfo?.['is_to_be_approved']) ? (

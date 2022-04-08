@@ -1,11 +1,11 @@
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { SelectData, ValueType } from '../../../../types';
 import {
   ICreateEvaluationQuestions,
-  IEvaluationProps,
   IEvaluationQuestionsInfo,
   IMultipleChoice,
   IQuestionType,
@@ -22,11 +22,11 @@ import InputMolecule from '../../../Molecules/input/InputMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-export default function EvaluationQuestionComponent({
-  handleGoBack,
-  handleNext,
-  evaluationId,
-}: IEvaluationProps) {
+export default function EvaluationQuestionComponent() {
+  const history = useHistory();
+
+  const { evaluationId } = useParams<{ evaluationId: string }>();
+
   const multipleChoiceContent: IMultipleChoice = {
     answer_content: '',
     correct: false,
@@ -35,7 +35,7 @@ export default function EvaluationQuestionComponent({
 
   const initialState: ICreateEvaluationQuestions = useMemo(() => {
     return {
-      evaluation_id: evaluationId || getLocalStorageData('evaluationId') || '',
+      evaluation_id: evaluationId,
       mark: 0,
       parent_question_id: '',
       choices: [],
@@ -66,7 +66,6 @@ export default function EvaluationQuestionComponent({
     if (evaluationQuestions?.length > 0) {
       evaluationQuestions.forEach((question) => {
         let questionData = { ...initialState };
-        //@ts-ignore
         questionData.choices = question.multiple_choice_answers || [];
         questionData.evaluation_id = question.evaluation_id;
         questionData.mark = question.mark;
@@ -78,9 +77,9 @@ export default function EvaluationQuestionComponent({
         allQuestions.push(questionData);
       });
       setQuestions(allQuestions);
-      setLocalStorageData('evaluationQuestions', allQuestions);
+      // setLocalStorageData('evaluationQuestions', allQuestions);
     } else {
-      setQuestions(getLocalStorageData('evaluationQuestions') || [initialState]);
+      setQuestions([initialState]);
     }
   }, [evaluationQuestions, initialState]);
 
@@ -89,7 +88,7 @@ export default function EvaluationQuestionComponent({
     newQuestion.choices = [];
     let questionsClone = [...questions];
     questionsClone.push(newQuestion);
-    setLocalStorageData('evaluationQuestions', questionsClone);
+    // setLocalStorageData('evaluationQuestions', questionsClone);
     setQuestions(questionsClone);
   }
 
@@ -109,6 +108,7 @@ export default function EvaluationQuestionComponent({
             setLocalStorageData('evaluationQuestions', questionsClone);
             setQuestions(questionsClone);
           }
+          history.push('/evaluation/questions');
         },
         onError: (error: any) => {
           toast.error(error.response.data.message);
@@ -130,7 +130,7 @@ export default function EvaluationQuestionComponent({
 
       questionsClone[questionIndex] = question;
 
-      setLocalStorageData('evaluationQuestions', questionsClone);
+      // setLocalStorageData('evaluationQuestions', questionsClone);
       setQuestions(questionsClone);
     }
   }
@@ -139,7 +139,7 @@ export default function EvaluationQuestionComponent({
     let questionsClone = [...questions];
     let questionChoices = questionsClone[index];
     questionChoices.choices.push(multipleChoiceContent);
-    setLocalStorageData('evaluationQuestions', questionsClone);
+    // setLocalStorageData('evaluationQuestions', questionsClone);
     setQuestions(questionsClone);
   }
 
@@ -184,7 +184,8 @@ export default function EvaluationQuestionComponent({
     setLocalStorageData('evaluationQuestions', questionsClone);
   }
 
-  const { mutate } = evaluationStore.createEvaluationQuestions();
+  const { mutate, isLoading: createQuestionLoader } =
+    evaluationStore.createEvaluationQuestions();
   const { mutate: deleteQuestion } = evaluationStore.deleteEvaluationQuestionById();
 
   function submitForm(e: FormEvent) {
@@ -194,7 +195,7 @@ export default function EvaluationQuestionComponent({
       onSuccess: () => {
         toast.success('Questions added', { duration: 5000 });
         setLocalStorageData('currentStep', 2);
-        handleNext(1);
+        history.push(`/dashboard/evaluation/${evaluationId}/settings`);
       },
       onError: (error: any) => {
         toast.error(error.response.data.message);
@@ -218,8 +219,6 @@ export default function EvaluationQuestionComponent({
                   name="question_type"
                   placeholder="Question type"
                   handleChange={(e: ValueType) => handleChange(index, e)}
-                  /*@ts-ignore*/
-                  // defaultValue={evaluationQuestions[index]?.question_type || ''}
                   options={[
                     { label: 'OPEN', value: IQuestionType.OPEN },
                     { label: 'MULTIPLE CHOICE', value: IQuestionType.MULTIPLE_CHOICE },
@@ -355,14 +354,22 @@ export default function EvaluationQuestionComponent({
         <Heading>No questions created for this evaluation</Heading>
       )}
       <div>
-        <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
+        <Button
+          styleType="text"
+          color="gray"
+          className="mt-6"
+          onClick={() => {
+            history.goBack();
+          }}>
           Back
         </Button>{' '}
         <Button
           styleType="text"
           color="gray"
           className="mt-6"
-          onClick={() => handleNext(1)}>
+          onClick={() => {
+            history.push(`/dashboard/evaluations/${evaluationId}/settings`);
+          }}>
           Skip
         </Button>
         <div className="pt-6 flex flex-col">
@@ -377,7 +384,9 @@ export default function EvaluationQuestionComponent({
           </div>
 
           <div>
-            <Button onSubmit={submitForm}>save</Button>
+            <Button onSubmit={submitForm} disabled={createQuestionLoader}>
+              save
+            </Button>
           </div>
         </div>
       </div>
