@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -11,12 +12,12 @@ import ConfirmationOrganism from '../../components/Organisms/ConfirmationOrganis
 import EvaluationInfoComponent from '../../components/Organisms/forms/evaluation/EvaluationInfoComponent';
 import EvaluationQuestionComponent from '../../components/Organisms/forms/evaluation/EvaluationQuestionComponent';
 import EvaluationSettings from '../../components/Organisms/forms/evaluation/EvaluationSettings';
-import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
+import SubjectNewEvaluation from '../../components/Organisms/forms/evaluation/subjectEvaluation/SubjectNewEvaluation';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { subjectService } from '../../services/administration/subject.service';
 import { evaluationService } from '../../services/evaluation/evaluation.service';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
-import instructordeploymentStore from '../../store/instructordeployment.store';
+// import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Link as LinkList, Privileges } from '../../types';
 import { IEvaluationOwnership, ISubjects } from '../../types/services/evaluation.types';
 import cookie from '../../utils/cookie';
@@ -41,8 +42,8 @@ export default function InstructorViewEvaluations() {
   const user_privileges = user_role?.role_privileges?.map((role) => role.name);
   const hasPrivilege = (privilege: Privileges) => user_privileges?.includes(privilege);
 
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
-    .data?.data.data[0];
+  // const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
+  //   .data?.data.data[0];
 
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId).data?.data || {};
@@ -220,7 +221,7 @@ export default function InstructorViewEvaluations() {
             </>
           )}
         />
-        <Route exact path={`${path}/new`} component={NewEvaluation} />
+        <Route exact path={`${path}/new`} component={SubjectNewEvaluation} />
 
         <Route exact path={`${path}/view/:id`} component={EvaluationNotiView} />
         {hasPrivilege(Privileges.CAN_ANSWER_EVALUATION) && (

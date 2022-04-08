@@ -8,6 +8,7 @@ import {
   useParams,
   useRouteMatch,
 } from 'react-router-dom';
+
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
@@ -85,6 +86,12 @@ export default function SubjectDetails() {
     label: `Lessons(${lessons.length})`,
     href: `${url}?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
     privilege: Privileges.CAN_ACCESS_LESSON,
+  });
+
+  tabs.push({
+    label: 'Manage evaluations',
+    href: `${url}/evaluations/manage?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+    privilege: Privileges.CAN_MANAGE_EVALUATIONS,
   });
 
   tabs.push({

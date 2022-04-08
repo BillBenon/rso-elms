@@ -1,8 +1,9 @@
 import { Editor } from '@tiptap/react';
 import moment from 'moment';
-import React, { FormEvent, useEffect, useMemo, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
+
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { enrollmentService } from '../../../../services/administration/enrollments.service';
@@ -120,18 +121,6 @@ export default function EvaluationInfoComponent() {
       });
     }
   }, [classes]);
-
-  const { search } = useLocation();
-  const intakePeriodId = useMemo(
-    () => new URLSearchParams(search).get('prd') || '',
-    [search],
-  );
-
-  const levelId = useMemo(() => new URLSearchParams(search).get('lvl') || '', [search]);
-  const subjectId = useMemo(
-    () => new URLSearchParams(search).get('subj') || '',
-    [search],
-  );
 
   const markers =
     usersStore.getUsersByAcademy(user?.academy.id.toString() || '').data?.data.data
@@ -371,8 +360,9 @@ export default function EvaluationInfoComponent() {
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(authUserId + '')
     .data?.data.data[0];
 
-  const { data: intakes, refetch: refetchIntakes } =
-    enrollmentStore.getInstructorIntakePrograms(instructorInfo?.id + '');
+  const { data: intakes } = enrollmentStore.getInstructorIntakePrograms(
+    instructorInfo?.id + '',
+  );
 
   const { data: levels } = intakeProgramStore.getLevelsByIntakeProgram(
     details?.intakeId || '',
