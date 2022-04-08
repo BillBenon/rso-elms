@@ -7,12 +7,13 @@ import instructordeploymentStore from '../../../../store/instructordeployment.st
 import { SelectData, ValueType } from '../../../../types';
 import {
   IEvaluationApproval,
-  IEvaluationProps
+  IEvaluationProps,
+  IMarkingType,
 } from '../../../../types/services/evaluation.types';
 import {
   getLocalStorageData,
   removeLocalStorageData,
-  setLocalStorageData
+  setLocalStorageData,
 } from '../../../../utils/getLocalStorageItem';
 import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
@@ -20,6 +21,8 @@ import ILabel from '../../../Atoms/Text/ILabel';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import SwitchMolecule from '../../../Molecules/input/SwitchMolecule';
 
+//getting the evaluation id in local storage of the evaluation that we've just created
+const createdEvaluationId = getLocalStorageData('evaluationId');
 
 export default function EvaluationSettings({
   handleGoBack,
@@ -32,8 +35,9 @@ export default function EvaluationSettings({
     picked_role?.academy_id + '',
   ).data?.data.data;
 
-  console.log(getLocalStorageData('evaluationId'));
-  
+  const { data: evaluationInfo } =
+    evaluationStore.getEvaluationById(createdEvaluationId).data?.data || {};
+
   const initialState = {
     approver_ids: '',
     evaluation_id: getLocalStorageData('evaluationId') || evaluationId,
@@ -59,6 +63,14 @@ export default function EvaluationSettings({
   const [settings, setSettings] = useState<IEvaluationApproval>(initialState);
 
   function handleChange({ name, value }: ValueType) {
+    if (name == 'to_be_approved' && value == 'false') {
+      setSettings({ ...settings, approver_ids: '' });
+      return;
+    } else if (name == 'to_be_reviewed' && value == 'false') {
+      setSettings({ ...settings, reviewer_ids: '' });
+      return;
+    }
+
     setSettings({ ...settings, [name]: value.toString() });
 
     setLocalStorageData('evaluationSettings', { ...settings, [name]: value.toString() });
@@ -70,18 +82,17 @@ export default function EvaluationSettings({
     setSettings(cachedData || {});
   }, []);
 
-  const { mutate } = evaluationStore.createEvaluationSettings();
+  const { mutate, isLoading } = evaluationStore.createEvaluationSettings();
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
-
     setSettings({
-       ...settings,
-       evaluation_id: getLocalStorageData('evaluationId') || evaluationId,
+      ...settings,
+      evaluation_id: getLocalStorageData('evaluationId') || evaluationId,
     });
 
-     getLocalStorageData('evaluationId')
+    getLocalStorageData('evaluationId');
 
     mutate(settings, {
       onSuccess: () => {
@@ -117,7 +128,7 @@ export default function EvaluationSettings({
           True
         </SwitchMolecule>
       </div>
-      {settings?.to_be_reviewed && (
+      {Boolean(settings?.to_be_reviewed) && (
         <div className="pt-6">
           <DropdownMolecule
             isMulti
@@ -135,6 +146,7 @@ export default function EvaluationSettings({
           </DropdownMolecule>
         </div>
       )}
+
       <div className="pt-6 flex-col">
         <ILabel>Evaluation Approval status</ILabel>
         <SwitchMolecule
@@ -146,7 +158,10 @@ export default function EvaluationSettings({
           True
         </SwitchMolecule>
       </div>
-      {settings?.to_be_approved && (
+      {/*
+      TODO: when show form when it's been toggled only
+      */}
+      {Boolean(settings?.to_be_approved) && (
         <div className="pt-6">
           <DropdownMolecule
             isMulti
@@ -164,28 +179,33 @@ export default function EvaluationSettings({
           </DropdownMolecule>
         </div>
       )}
-      <div className="pt-6">
-        <DropdownMolecule
-          isMulti
-          width="60"
-          placeholder="Marker"
-          options={
-            instructors?.map((instr) => ({
-              label: `${instr.user.first_name} ${instr.user.last_name}`,
-              value: instr.user.id,
-            })) as SelectData[]
-          }
-          name="marker_ids"
-          handleChange={handleChange}>
-          To be marked by
-        </DropdownMolecule>
-      </div>
+
+      {evaluationInfo?.marking_type !== IMarkingType.PER_SECTION && (
+        <div className="pt-6">
+          <DropdownMolecule
+            isMulti
+            width="60"
+            placeholder="Marker"
+            options={
+              instructors?.map((instr) => ({
+                label: `${instr.user.first_name} ${instr.user.last_name}`,
+                value: instr.user.id,
+              })) as SelectData[]
+            }
+            name="marker_ids"
+            handleChange={handleChange}>
+            To be marked by
+          </DropdownMolecule>
+        </div>
+      )}
       <div className="flex flex-col">
-        <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
+        {/* <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
           Back
-        </Button>
+        </Button> */}
         <div className="pt-4">
-          <Button type="submit">Finish</Button>
+          <Button type="submit" disabled={isLoading}>
+            Finish
+          </Button>
         </div>
       </div>
     </form>

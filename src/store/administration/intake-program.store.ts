@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from 'react-query';
-
 import { intakeProgramService } from '../../services/administration/IntakeProgram.service';
 import { StudentApproval } from '../../types/services/enrollment.types';
 import { IntakeModuleStatus } from '../../types/services/intake-program.types';
+
 
 class IntakeProgramStore {
   getStudentById(studentId: string) {
@@ -20,14 +20,17 @@ class IntakeProgramStore {
       intakeProgramService.getStudentsByIntakeProgramByStatus(intakeProgramId, status),
     );
   }
-  getStudentsByIntakeProgramLevel(intakeProgramlevelId: string) {
+  getStudentsByIntakeProgramLevel(intakeProgramlevelId: string, enabled: boolean = true) {
     return useQuery(['students/intakeProgramlevelId', intakeProgramlevelId], () =>
       intakeProgramService.getStudentsByIntakeProgramLevel(intakeProgramlevelId),
+      {
+        enabled
+      }
     );
   }
   getInstructorsByIntakeProgram(intakeProgramId: string) {
     return useQuery(['instructors/intakeprogramId', intakeProgramId], () =>
-      intakeProgramService.getInstructorsByIntakeProgram(intakeProgramId),
+      intakeProgramService.getInstructorsByIntakeProgram(intakeProgramId)
     );
   }
   getIntakeProgramLevelsByInstructorId(instructorId: string) {
@@ -47,9 +50,10 @@ class IntakeProgramStore {
       intakeProgramService.getStudentsByAcademy(academyId),
     );
   }
-  getLevelsByIntakeProgram(intakeProgramId: string) {
+  getLevelsByIntakeProgram(intakeProgramId: string, enabled: boolean = true) {
     return useQuery(['levels/intakeProgramId', intakeProgramId], () =>
       intakeProgramService.getLevelsByIntakeProgram(intakeProgramId),
+      { enabled },
     );
   }
   getIntakeLevelById(levelId: string) {
@@ -58,9 +62,12 @@ class IntakeProgramStore {
     );
   }
 
-  getPeriodsByLevel(levelId: number) {
+  getPeriodsByLevel(levelId: number, enabled: boolean = true) {
     return useQuery(['levels/periods', levelId], () =>
       intakeProgramService.getPeriodsByIntakeAcademicYearLevelId(levelId),
+      {
+enabled
+      }
     );
   }
   getModulesByLevel(levelId: number) {

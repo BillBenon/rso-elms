@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
-
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import TableHeader from '../../components/Molecules/table/TableHeader';

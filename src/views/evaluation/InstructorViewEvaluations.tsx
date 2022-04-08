@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -7,6 +8,9 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
 import ConfirmationOrganism from '../../components/Organisms/ConfirmationOrganism';
+import EvaluationInfoComponent from '../../components/Organisms/forms/evaluation/EvaluationInfoComponent';
+import EvaluationQuestionComponent from '../../components/Organisms/forms/evaluation/EvaluationQuestionComponent';
+import EvaluationSettings from '../../components/Organisms/forms/evaluation/EvaluationSettings';
 import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { subjectService } from '../../services/administration/subject.service';
@@ -21,7 +25,6 @@ import EvaluationDetails from './EvaluationDetails';
 import EvaluationNotiView from './EvaluationNotiView';
 import EvaluationTest from './EvaluationTest';
 import StudentReview from './StudentReview';
-
 
 export default function InstructorViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
@@ -45,10 +48,7 @@ export default function InstructorViewEvaluations() {
     evaluationStore.getEvaluationById(evaluationId).data?.data || {};
 
   const { data, isSuccess, isLoading, isError, refetch } =
-    evaluationStore.getEvaluationsByCategory(
-      ownerShipType,
-      user?.id.toString() || '',
-    );
+    evaluationStore.getEvaluationsByCategory(ownerShipType, user?.id.toString() || '');
 
   const list: LinkList[] = [
     { to: '/', title: 'home' },
@@ -154,16 +154,29 @@ export default function InstructorViewEvaluations() {
                 <Heading fontWeight="semibold" className="pt-7">
                   Evaluations
                 </Heading>
-                <SelectMolecule
-                  width="80"
-                  className=""
-                  value={ownerShipType}
-                  handleChange={(e) => setownerShipType(e.value as IEvaluationOwnership)}
-                  name={'type'}
-                  placeholder="Evaluation type"
-                  options={getDropDownStatusOptions(IEvaluationOwnership)}
-                />
+
+                <div className="flex justify-between  w-full">
+                  <SelectMolecule
+                    width="80"
+                    className=""
+                    value={ownerShipType}
+                    handleChange={(e) =>
+                      setownerShipType(e.value as IEvaluationOwnership)
+                    }
+                    name={'type'}
+                    placeholder="Evaluation type"
+                    options={getDropDownStatusOptions(IEvaluationOwnership)}
+                  />
+                  <Button
+                    className="self-start"
+                    onClick={() => {
+                      history.push(`${path}/create`);
+                    }}>
+                    New evaluation
+                  </Button>
+                </div>
               </div>
+
               <section className="flex flex-wrap justify-start gap-4 mt-2">
                 {isLoading && evaluations.length === 0 && <Loader />}
 
@@ -222,6 +235,28 @@ export default function InstructorViewEvaluations() {
             exact
             path={`${path}/completed/student-evaluation/:id/review`}
             component={StudentReview}
+          />
+        )}
+
+        {hasPrivilege(Privileges.CAN_CREATE_EVALUATIONS) && (
+          <Route path={`${path}/create`} component={EvaluationInfoComponent} />
+        )}
+
+        {/**
+         * Fix routes
+         *
+         */}
+        {hasPrivilege(Privileges.CAN_CREATE_EVALUATIONS) && (
+          <Route
+            path={`${path}/create/:evaluationId/addquestions`}
+            component={EvaluationQuestionComponent}
+          />
+        )}
+
+        {hasPrivilege(Privileges.CAN_CREATE_EVALUATIONS) && (
+          <Route
+            path={`${path}/create/:evaluationId/settings`}
+            component={EvaluationSettings}
           />
         )}
 

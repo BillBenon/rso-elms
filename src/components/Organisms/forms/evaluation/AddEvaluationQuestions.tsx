@@ -8,7 +8,6 @@ import {
   ICreateEvaluationQuestions,
   IEvaluationProps,
   IEvaluationQuestionsInfo,
-  IEvaluationStatus,
   IMultipleChoice,
   IQuestionType,
 } from '../../../../types/services/evaluation.types';
@@ -58,10 +57,7 @@ export default function AdddEvaluationQuestions({
     }, []);
 
   evaluationQuestions =
-    evaluationStore.getEvaluationQuestionsByStatus(
-      evaluationId || '',
-      IEvaluationStatus.COMPLETED,
-    ).data?.data.data || [];
+    evaluationStore.getEvaluationQuestions(evaluationId || '').data?.data.data || [];
 
   const [questions, setQuestions] = useState([initialState]);
 
@@ -195,7 +191,8 @@ export default function AdddEvaluationQuestions({
     setLocalStorageData('evaluationQuestions', questionsClone);
   }
 
-  const { mutate } = evaluationStore.createEvaluationQuestions();
+  const { mutate, isLoading: createQuestionsLoader } =
+    evaluationStore.createEvaluationQuestions();
   const { mutate: deleteQuestion } = evaluationStore.deleteEvaluationQuestionById();
 
   function submitForm(e: FormEvent) {
@@ -372,7 +369,9 @@ export default function AdddEvaluationQuestions({
           </div>
 
           <div>
-            <Button onSubmit={submitForm}>save</Button>
+            <Button onSubmit={submitForm} disabled={createQuestionsLoader}>
+              save
+            </Button>
           </div>
         </div>
       </div>
