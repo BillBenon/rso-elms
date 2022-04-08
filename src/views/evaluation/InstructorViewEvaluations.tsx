@@ -248,16 +248,13 @@ export default function InstructorViewEvaluations() {
          */}
         {hasPrivilege(Privileges.CAN_CREATE_EVALUATIONS) && (
           <Route
-            path={`${path}/create/:evaluationId/addquestions`}
+            path={`${path}/:evaluationId/addquestions`}
             component={EvaluationQuestionComponent}
           />
         )}
 
         {hasPrivilege(Privileges.CAN_CREATE_EVALUATIONS) && (
-          <Route
-            path={`${path}/create/:evaluationId/settings`}
-            component={EvaluationSettings}
-          />
+          <Route path={`${path}/:evaluationId/settings`} component={EvaluationSettings} />
         )}
 
         {hasPrivilege(Privileges.CAN_ANSWER_EVALUATION) && (

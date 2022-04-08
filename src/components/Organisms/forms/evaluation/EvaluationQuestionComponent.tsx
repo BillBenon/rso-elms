@@ -1,10 +1,10 @@
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useHistory, useParams } from 'react-router-dom';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { SelectData, ValueType } from '../../../../types';
 import {
   ICreateEvaluationQuestions,
-  IEvaluationProps,
   IEvaluationQuestionsInfo,
   IMultipleChoice,
   IQuestionType,
@@ -21,11 +21,11 @@ import InputMolecule from '../../../Molecules/input/InputMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
-export default function EvaluationQuestionComponent({
-  handleGoBack,
-  handleNext,
-  evaluationId,
-}: IEvaluationProps) {
+export default function EvaluationQuestionComponent() {
+  const history = useHistory();
+
+  const { evaluationId } = useParams<{ evaluationId: string }>();
+
   const multipleChoiceContent: IMultipleChoice = {
     answer_content: '',
     correct: false,
@@ -33,10 +33,8 @@ export default function EvaluationQuestionComponent({
   };
 
   const initialState: ICreateEvaluationQuestions = useMemo(() => {
-    console.log(getLocalStorageData('evaluationId'), evaluationId);
-
     return {
-      evaluation_id: evaluationId ?? getLocalStorageData('evaluationId'),
+      evaluation_id: evaluationId,
       mark: 0,
       parent_question_id: '',
       choices: [],
@@ -109,6 +107,7 @@ export default function EvaluationQuestionComponent({
             setLocalStorageData('evaluationQuestions', questionsClone);
             setQuestions(questionsClone);
           }
+          history.push('/evaluation/questions');
         },
         onError: (error: any) => {
           toast.error(error.response.data.message);
@@ -195,7 +194,7 @@ export default function EvaluationQuestionComponent({
       onSuccess: () => {
         toast.success('Questions added', { duration: 5000 });
         setLocalStorageData('currentStep', 2);
-        handleNext(1);
+        history.push(`/dashboard/evaluation/${evaluationId}/settings`);
       },
       onError: (error: any) => {
         toast.error(error.response.data.message);
@@ -354,14 +353,22 @@ export default function EvaluationQuestionComponent({
         <Heading>No questions created for this evaluation</Heading>
       )}
       <div>
-        <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
+        <Button
+          styleType="text"
+          color="gray"
+          className="mt-6"
+          onClick={() => {
+            history.goBack();
+          }}>
           Back
         </Button>{' '}
         <Button
           styleType="text"
           color="gray"
           className="mt-6"
-          onClick={() => handleNext(1)}>
+          onClick={() => {
+            history.push(`/dashboard/evaluations/${evaluationId}/settings`);
+          }}>
           Skip
         </Button>
         <div className="pt-6 flex flex-col">
