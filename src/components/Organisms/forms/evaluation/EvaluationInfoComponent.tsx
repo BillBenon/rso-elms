@@ -229,6 +229,7 @@ export default function EvaluationInfoComponent({
     subjectId,
     picked_role?.academy_id,
     classes?.data.data,
+    user?.id,
   ]);
 
   useEffect(() => {
