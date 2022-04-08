@@ -146,7 +146,6 @@ export interface IEvaluationCreate {
   subject_academic_year_period_id: string;
   classification: IEvaluationClassification;
   content_format: string;
-  term_id: string;
   due_on: string;
   eligible_group: string;
   evaluation_status: IEvaluationStatus;
@@ -161,6 +160,7 @@ export interface IEvaluationCreate {
   submision_type: ISubmissionTypeEnum;
   time_limit: number;
   total_mark: number;
+  intake_academic_year_period: string;
   strict: boolean;
   marking_type: IMarkingType,
   intakeId: string,
