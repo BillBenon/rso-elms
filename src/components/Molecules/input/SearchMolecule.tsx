@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
 import { CommonProps, ValueType } from '../../../types';
-import Icon from '../../Atoms/custom/Icon';
 import Input from '../../Atoms/Input/Input';
 
 interface ISearchMolecule<T> extends CommonProps<T> {
   handleChange: (_e: ValueType) => void;
+  value?: string;
   placeholder?: string;
   width?: string;
 }
@@ -13,13 +13,13 @@ interface ISearchMolecule<T> extends CommonProps<T> {
 export default function SearchMolecule<T>({
   handleChange,
   placeholder = 'Search here',
+  value = '',
   width = 'w-72',
 }: ISearchMolecule<T>) {
-  const [fcolor, setFcolor] = useState<string>('tertiary');
+  const [, setFcolor] = useState<string>('tertiary');
 
   return (
-    <div className={`rounded-lg border-2 border-${fcolor} flex items-center ${width}`}>
-      <Icon name="search" />
+    <div className={`flex items-center ${width}`}>
       <Input
         onFocus={() => setFcolor('primary-500')}
         onBlur={() => setFcolor('bcolor')}
@@ -27,11 +27,11 @@ export default function SearchMolecule<T>({
         placeholder={placeholder}
         fcolor="error"
         bcolor="none"
-        width="auto md:w-52"
+        width="auto md:w-72"
         padding="0"
-        value={''}
+        value={value}
         handleChange={handleChange}
-        className="-ml-1"
+        className={'-ml-1 px-4'}
       />
     </div>
   );

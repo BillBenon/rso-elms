@@ -93,6 +93,7 @@ export default function Ranks() {
         <TableHeader
           title="Ranks"
           totalItems={ranks && ranks.length > 0 ? ranks.length : 0}
+          showSearch={false}
           handleSearch={handleSearch}>
           <Link to={`${url}/add`}>
             <Permission privilege={Privileges.CAN_CREATE_RANKS}>

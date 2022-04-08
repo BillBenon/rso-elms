@@ -12,6 +12,15 @@ class PrivilegeStore {
   getPrivilege(id: string) {
     return useQuery(['privilege/id', id], () => privilegeService.getPrivilege(id));
   }
+  getPrivilegeBySearch(text: string, filter: boolean) {
+    return useQuery(
+      ['privileges/search', text],
+      () => privilegeService.getPrivilegeBySearch(text),
+      {
+        enabled: Boolean(filter),
+      },
+    );
+  }
 }
 
 export const privilegeStore = new PrivilegeStore();
