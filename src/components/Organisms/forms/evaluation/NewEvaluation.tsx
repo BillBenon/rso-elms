@@ -13,7 +13,6 @@ import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
 import BreadCrumb from '../../../Molecules/BreadCrumb';
 import Stepper from '../../../Molecules/Stepper/Stepper';
-import EvaluationQuestionComponent from './EvaluationQuestionComponent';
 import EvaluationSettings from './EvaluationSettings';
 
 export default function NewEvaluation() {
@@ -77,11 +76,11 @@ export default function NewEvaluation() {
           </div>
 
           <div>
-            <EvaluationQuestionComponent
+            {/* <EvaluationQuestionComponent
               handleNext={handleSubmit}
               handleGoBack={handleBack}
               evaluationId={evaluationId}
-            />
+            /> */}
           </div>
 
           {!evaluationId || (evaluationId && !evaluationInfo?.['is_to_be_approved']) ? (

@@ -416,7 +416,7 @@ export default function EvaluationInfoComponent() {
       {
         onSuccess: (data) => {
           toast.success('Evaluation created successfully');
-          history.push(`/evaluations/${data.data.data.id}/addquestions`);
+          history.push(`/dashboard/evaluations/${data.data.data.id}/addquestions`);
         },
         onError: (error: any) => {
           toast.error(error.response.data.message);
