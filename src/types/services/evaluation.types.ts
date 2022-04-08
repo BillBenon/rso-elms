@@ -9,7 +9,6 @@ export enum IEvaluationTypeEnum {
   GROUP_WORK = 'GROUP_WORK',
   QUIZ = 'QUIZ',
   RESEARCH_PAPER = 'RESEARCH_PAPER',
-  SECTION_BASED = 'SECTION_BASED',
   DS_ASSESSMENT = 'DS_ASSESSMENT',
 }
 
@@ -24,6 +23,7 @@ export enum IQuestionaireTypeEnum {
   FIELD = 'FIELD',
   OPEN = 'OPEN',
   HYBRID = 'HYBRID',
+  SECTION_BASED = 'SECTION_BASED',
 }
 
 export interface IEvaluationProps {
@@ -137,7 +137,6 @@ export interface IUpdateEvaluationApprovalStatus {
 export interface IEvaluationCreate {
   access_type: string;
   private_attendees: string;
-  intake_academic_year_period: string;
   academy_id: string;
   instructor_id: string;
   allow_submission_time: string;
@@ -159,8 +158,11 @@ export interface IEvaluationCreate {
   submision_type: ISubmissionTypeEnum;
   time_limit: number;
   total_mark: number;
+  intake_academic_year_period: string;
   strict: boolean;
-  marking_type: IMarkingType
+  marking_type: IMarkingType;
+  intakeId: string;
+  intake_program_level: string;
 }
 
 export type IEvaluationSectionBased = {
@@ -291,12 +293,12 @@ export interface IMultipleChoice {
 }
 
 export enum IMarkingType {
-  PER_STUDENT = 'PER_STUDENT', 
-  NOT_APPLICABLE = 'NOT_APPLICABLE', 
-  NOT_SET = 'NOT_SET', 
-  PER_SECTION = 'PER_SECTION', 
-  PER_QUESTION = 'PER_QUESTION'
-};
+  PER_STUDENT = 'PER_STUDENT',
+  NOT_APPLICABLE = 'NOT_APPLICABLE',
+  NOT_SET = 'NOT_SET',
+  PER_SECTION = 'PER_SECTION',
+  PER_QUESTION = 'PER_QUESTION',
+}
 
 export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
   sub_questions: IEvaluationQuestion[];

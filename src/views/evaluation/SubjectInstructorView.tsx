@@ -27,8 +27,6 @@ export default function SubjectInstructorView({
 
   const { user } = useAuthenticator();
 
-  console.log(user);
-
   const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
   const progId = new URLSearchParams(search).get('prog') || '';
   const level = new URLSearchParams(search).get('lvl') || '';

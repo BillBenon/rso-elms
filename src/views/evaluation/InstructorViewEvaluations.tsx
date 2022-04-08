@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
+import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -8,12 +9,15 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
 import ConfirmationOrganism from '../../components/Organisms/ConfirmationOrganism';
-import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
+import EvaluationInfoComponent from '../../components/Organisms/forms/evaluation/EvaluationInfoComponent';
+import EvaluationQuestionComponent from '../../components/Organisms/forms/evaluation/EvaluationQuestionComponent';
+import EvaluationSettings from '../../components/Organisms/forms/evaluation/EvaluationSettings';
+import SubjectNewEvaluation from '../../components/Organisms/forms/evaluation/subjectEvaluation/SubjectNewEvaluation';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { subjectService } from '../../services/administration/subject.service';
 import { evaluationService } from '../../services/evaluation/evaluation.service';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
-import instructordeploymentStore from '../../store/instructordeployment.store';
+// import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Link as LinkList, Privileges } from '../../types';
 import { IEvaluationOwnership, ISubjects } from '../../types/services/evaluation.types';
 import cookie from '../../utils/cookie';
@@ -38,8 +42,8 @@ export default function InstructorViewEvaluations() {
   const user_privileges = user_role?.role_privileges?.map((role) => role.name);
   const hasPrivilege = (privilege: Privileges) => user_privileges?.includes(privilege);
 
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
-    .data?.data.data[0];
+  // const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
+  //   .data?.data.data[0];
 
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId).data?.data || {};
@@ -151,16 +155,29 @@ export default function InstructorViewEvaluations() {
                 <Heading fontWeight="semibold" className="pt-7">
                   Evaluations
                 </Heading>
-                <SelectMolecule
-                  width="80"
-                  className=""
-                  value={ownerShipType}
-                  handleChange={(e) => setownerShipType(e.value as IEvaluationOwnership)}
-                  name={'type'}
-                  placeholder="Evaluation type"
-                  options={getDropDownStatusOptions(IEvaluationOwnership)}
-                />
+
+                <div className="flex justify-between  w-full">
+                  <SelectMolecule
+                    width="80"
+                    className=""
+                    value={ownerShipType}
+                    handleChange={(e) =>
+                      setownerShipType(e.value as IEvaluationOwnership)
+                    }
+                    name={'type'}
+                    placeholder="Evaluation type"
+                    options={getDropDownStatusOptions(IEvaluationOwnership)}
+                  />
+                  <Button
+                    className="self-start"
+                    onClick={() => {
+                      history.push(`${path}/create`);
+                    }}>
+                    New evaluation
+                  </Button>
+                </div>
               </div>
+
               <section className="flex flex-wrap justify-start gap-4 mt-2">
                 {isLoading && evaluations.length === 0 && <Loader />}
 
@@ -204,7 +221,7 @@ export default function InstructorViewEvaluations() {
             </>
           )}
         />
-        <Route exact path={`${path}/new`} component={NewEvaluation} />
+        <Route exact path={`${path}/new`} component={SubjectNewEvaluation} />
 
         <Route exact path={`${path}/view/:id`} component={EvaluationNotiView} />
         {hasPrivilege(Privileges.CAN_ANSWER_EVALUATION) && (
@@ -220,6 +237,25 @@ export default function InstructorViewEvaluations() {
             path={`${path}/completed/student-evaluation/:id/review`}
             component={StudentReview}
           />
+        )}
+
+        {hasPrivilege(Privileges.CAN_CREATE_EVALUATIONS) && (
+          <Route path={`${path}/create`} component={EvaluationInfoComponent} />
+        )}
+
+        {/**
+         * Fix routes
+         *
+         */}
+        {hasPrivilege(Privileges.CAN_CREATE_EVALUATIONS) && (
+          <Route
+            path={`${path}/:evaluationId/addquestions`}
+            component={EvaluationQuestionComponent}
+          />
+        )}
+
+        {hasPrivilege(Privileges.CAN_CREATE_EVALUATIONS) && (
+          <Route path={`${path}/:evaluationId/settings`} component={EvaluationSettings} />
         )}
 
         {hasPrivilege(Privileges.CAN_ANSWER_EVALUATION) && (
