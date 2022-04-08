@@ -1,6 +1,7 @@
 import moment from 'moment';
 import React, { ReactNode, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useHistory } from 'react-router-dom';
 import { queryClient } from '../../../plugins/react-query';
 import { evaluationService } from '../../../services/evaluation/evaluation.service';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
@@ -35,6 +36,7 @@ export default function EvaluationContent({
 }: IProps) {
   const [showPopup, setShowPopup] = useState(false);
   const [marks, setMarks] = useState(0);
+  const history = useHistory();
 
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId).data?.data || {};
@@ -188,9 +190,18 @@ export default function EvaluationContent({
       </div>
 
       {/* questions */}
-      <Heading fontWeight="semibold" fontSize="base" className="pt-6">
-        Evaluation questions
-      </Heading>
+      <div className="flex justify-between items-center py-5">
+        <Heading fontWeight="semibold" fontSize="base" className="pt-6">
+          Evaluation questions
+        </Heading>
+
+        <Button
+          onClick={() => {
+            history.push(`/dashboard/evaluations/${evaluationId}/addQuestions`);
+          }}>
+          Edit questions
+        </Button>
+      </div>
 
       <PopupMolecule
         open={showPopup}

@@ -1,5 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useHistory, useParams } from 'react-router-dom';
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
@@ -7,40 +8,33 @@ import instructordeploymentStore from '../../../../store/instructordeployment.st
 import { SelectData, ValueType } from '../../../../types';
 import {
   IEvaluationApproval,
-  IEvaluationProps,
   IMarkingType,
 } from '../../../../types/services/evaluation.types';
-import {
-  getLocalStorageData,
-  removeLocalStorageData,
-  setLocalStorageData,
-} from '../../../../utils/getLocalStorageItem';
 import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import SwitchMolecule from '../../../Molecules/input/SwitchMolecule';
 
-//getting the evaluation id in local storage of the evaluation that we've just created
-const createdEvaluationId = getLocalStorageData('evaluationId');
-
-export default function EvaluationSettings({
-  handleGoBack,
-  evaluationId,
-}: IEvaluationProps) {
+export default function EvaluationSettings() {
   const { user } = useAuthenticator();
   const picked_role = usePickedRole();
+  const history = useHistory();
+
+  const { evaluationId } = useParams<{ evaluationId: string }>();
+
+  console.log({ evaluationId });
 
   const instructors = instructordeploymentStore.getInstructorsDeployedInAcademy(
     picked_role?.academy_id + '',
   ).data?.data.data;
 
   const { data: evaluationInfo } =
-    evaluationStore.getEvaluationById(createdEvaluationId).data?.data || {};
+    evaluationStore.getEvaluationById(evaluationId + '').data?.data || {};
 
-  const initialState = {
+  const initialState: IEvaluationApproval = {
     approver_ids: '',
-    evaluation_id: getLocalStorageData('evaluationId') || evaluationId,
+    evaluation_id: evaluationId + '',
     id: '',
     reviewer_ids: '',
     marker_ids: user?.id.toString() || '',
@@ -51,7 +45,7 @@ export default function EvaluationSettings({
   useEffect(() => {
     setSettings({
       approver_ids: '',
-      evaluation_id: getLocalStorageData('evaluationId') || evaluationId,
+      evaluation_id: evaluationId + '',
       id: '',
       reviewer_ids: '',
       marker_ids: user?.id.toString() || '',
@@ -72,15 +66,13 @@ export default function EvaluationSettings({
     }
 
     setSettings({ ...settings, [name]: value.toString() });
-
-    setLocalStorageData('evaluationSettings', { ...settings, [name]: value.toString() });
   }
 
-  useEffect(() => {
-    const cachedData: IEvaluationApproval =
-      getLocalStorageData('evaluationSettings') || {};
-    setSettings(cachedData || {});
-  }, []);
+  // useEffect(() => {
+  //   const cachedData: IEvaluationApproval =
+  //     getLocalStorageData('evaluationSettings') || {};
+  //   setSettings(cachedData || {});
+  // }, []);
 
   const { mutate, isLoading } = evaluationStore.createEvaluationSettings();
 
@@ -89,22 +81,14 @@ export default function EvaluationSettings({
 
     setSettings({
       ...settings,
-      evaluation_id: getLocalStorageData('evaluationId') || evaluationId,
+      evaluation_id: evaluationId + '',
     });
-
-    getLocalStorageData('evaluationId');
 
     mutate(settings, {
       onSuccess: () => {
         toast.success('Settings added', { duration: 5000 });
         //remove all data that we have stored in local storage for caching
-        removeLocalStorageData('evaluationId');
-        removeLocalStorageData('evaluationInfo');
-        removeLocalStorageData('evaluationQuestions');
-        removeLocalStorageData('evaluationSettings');
-        removeLocalStorageData('evaluationModule');
-        setLocalStorageData('currentStep', 0);
-        window.location.href = '/dashboard/evaluations';
+        history.push('/dashboard/evaluations');
       },
       onError: (error: any) => {
         toast.error(error + '');
