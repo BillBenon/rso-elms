@@ -12,7 +12,7 @@ import ConfirmationOrganism from '../../components/Organisms/ConfirmationOrganis
 import EvaluationInfoComponent from '../../components/Organisms/forms/evaluation/EvaluationInfoComponent';
 import EvaluationQuestionComponent from '../../components/Organisms/forms/evaluation/EvaluationQuestionComponent';
 import EvaluationSettings from '../../components/Organisms/forms/evaluation/EvaluationSettings';
-import SubjectNewEvaluation from '../../components/Organisms/forms/evaluation/SubjectNewEvaluation';
+import SubjectNewEvaluation from '../../components/Organisms/forms/evaluation/subjectEvaluation/SubjectNewEvaluation';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { subjectService } from '../../services/administration/subject.service';
 import { evaluationService } from '../../services/evaluation/evaluation.service';

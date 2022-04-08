@@ -4,12 +4,12 @@ import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation } from 'react-router-dom';
 
-import useAuthenticator from '../../../../hooks/useAuthenticator';
-import usePickedRole from '../../../../hooks/usePickedRole';
-import { classStore } from '../../../../store/administration/class.store';
-import intakeProgramStore from '../../../../store/administration/intake-program.store';
-import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
-import { SelectData, ValueType } from '../../../../types';
+import useAuthenticator from '../../../../../hooks/useAuthenticator';
+import usePickedRole from '../../../../../hooks/usePickedRole';
+import { classStore } from '../../../../../store/administration/class.store';
+import intakeProgramStore from '../../../../../store/administration/intake-program.store';
+import { evaluationStore } from '../../../../../store/evaluation/evaluation.store';
+import { SelectData, ValueType } from '../../../../../types';
 import {
   IAccessTypeEnum,
   IContentFormatEnum,
@@ -23,24 +23,24 @@ import {
   IMarkingType,
   IQuestionaireTypeEnum,
   ISubmissionTypeEnum,
-} from '../../../../types/services/evaluation.types';
+} from '../../../../../types/services/evaluation.types';
 import {
   getLocalStorageData,
   setLocalStorageData,
-} from '../../../../utils/getLocalStorageItem';
+} from '../../../../../utils/getLocalStorageItem';
 import {
   getDropDownOptions,
   getDropDownStatusOptions,
-} from '../../../../utils/getOption';
-import Button from '../../../Atoms/custom/Button';
-import ILabel from '../../../Atoms/Text/ILabel';
-import Tiptap from '../../../Molecules/editor/Tiptap';
-import DateMolecule from '../../../Molecules/input/DateMolecule';
-import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
-import InputMolecule from '../../../Molecules/input/InputMolecule';
-import MultiselectMolecule from '../../../Molecules/input/MultiselectMolecule';
-import RadioMolecule from '../../../Molecules/input/RadioMolecule';
-import SelectMolecule from '../../../Molecules/input/SelectMolecule';
+} from '../../../../../utils/getOption';
+import Button from '../../../../Atoms/custom/Button';
+import ILabel from '../../../../Atoms/Text/ILabel';
+import Tiptap from '../../../../Molecules/editor/Tiptap';
+import DateMolecule from '../../../../Molecules/input/DateMolecule';
+import DropdownMolecule from '../../../../Molecules/input/DropdownMolecule';
+import InputMolecule from '../../../../Molecules/input/InputMolecule';
+import MultiselectMolecule from '../../../../Molecules/input/MultiselectMolecule';
+import RadioMolecule from '../../../../Molecules/input/RadioMolecule';
+import SelectMolecule from '../../../../Molecules/input/SelectMolecule';
 
 export default function SubjectEvaluationInfoComponent({
   handleNext,

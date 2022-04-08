@@ -1,18 +1,17 @@
 import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
 
-import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
-import { Link as LinkList } from '../../../../types';
+import { evaluationStore } from '../../../../../store/evaluation/evaluation.store';
+import { Link as LinkList } from '../../../../../types';
 import {
   getLocalStorageData,
   setLocalStorageData,
-} from '../../../../utils/getLocalStorageItem';
-import Button from '../../../Atoms/custom/Button';
-import Heading from '../../../Atoms/Text/Heading';
-import BreadCrumb from '../../../Molecules/BreadCrumb';
-import Stepper from '../../../Molecules/Stepper/Stepper';
-import EvaluationQuestionComponent from './EvaluationQuestionComponent';
-import EvaluationSettings from './EvaluationSettings';
+} from '../../../../../utils/getLocalStorageItem';
+import Button from '../../../../Atoms/custom/Button';
+import Heading from '../../../../Atoms/Text/Heading';
+import BreadCrumb from '../../../../Molecules/BreadCrumb';
+import Stepper from '../../../../Molecules/Stepper/Stepper';
+import SubjectEvaluationSettings from './SubjectEvaluationComponent';
 import SubjectEvaluationInfoComponent from './SubjectEvaluationInfoComponent';
 import SubjectEvaluationQuestionComponent from './SubjectEvaluationQuestionsComponent';
 

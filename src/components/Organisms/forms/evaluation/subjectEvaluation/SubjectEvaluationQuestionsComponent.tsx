@@ -1,26 +1,26 @@
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 
-import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
-import { SelectData, ValueType } from '../../../../types';
+import { evaluationStore } from '../../../../../store/evaluation/evaluation.store';
+import { SelectData, ValueType } from '../../../../../types';
 import {
   ICreateEvaluationQuestions,
   IEvaluationProps,
   IEvaluationQuestionsInfo,
   IMultipleChoice,
   IQuestionType,
-} from '../../../../types/services/evaluation.types';
+} from '../../../../../types/services/evaluation.types';
 import {
   getLocalStorageData,
   setLocalStorageData,
-} from '../../../../utils/getLocalStorageItem';
-import Button from '../../../Atoms/custom/Button';
-import Icon from '../../../Atoms/custom/Icon';
-import Heading from '../../../Atoms/Text/Heading';
-import ILabel from '../../../Atoms/Text/ILabel';
-import InputMolecule from '../../../Molecules/input/InputMolecule';
-import SelectMolecule from '../../../Molecules/input/SelectMolecule';
-import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
+} from '../../../../../utils/getLocalStorageItem';
+import Button from '../../../../Atoms/custom/Button';
+import Icon from '../../../../Atoms/custom/Icon';
+import Heading from '../../../../Atoms/Text/Heading';
+import ILabel from '../../../../Atoms/Text/ILabel';
+import InputMolecule from '../../../../Molecules/input/InputMolecule';
+import SelectMolecule from '../../../../Molecules/input/SelectMolecule';
+import TextAreaMolecule from '../../../../Molecules/input/TextAreaMolecule';
 
 export default function SubjectEvaluationQuestionComponent({
   handleGoBack,
