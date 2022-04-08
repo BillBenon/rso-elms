@@ -89,6 +89,12 @@ export default function SubjectDetails() {
   });
 
   tabs.push({
+    label: 'Manage evaluations',
+    href: `${url}/evaluations/manage?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+    privilege: Privileges.CAN_MANAGE_EVALUATIONS,
+  });
+
+  tabs.push({
     label: 'Evaluations',
     href: `${url}/evaluations?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}&lvl=${level}`,
     privilege: Privileges.CAN_ACCESS_EVALUATIONS,
