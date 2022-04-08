@@ -13,6 +13,7 @@ import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import { ParamType } from '../../../types';
 import {
   IEvaluationInfo,
+  IEvaluationTypeEnum,
   IQuestionaireTypeEnum,
 } from '../../../types/services/evaluation.types';
 import {
@@ -149,9 +150,10 @@ export default function Submissions() {
           </>
         )}
 
-        {evaluation?.questionaire_type === IQuestionaireTypeEnum.FIELD && (
-          <FieldMarking evaluationId={evaluation.id} />
-        )}
+        {evaluation?.questionaire_type === IQuestionaireTypeEnum.FIELD ||
+          (evaluation?.evaluation_type === IEvaluationTypeEnum.TEWT && (
+            <FieldMarking evaluationId={evaluation.id} />
+          ))}
 
         {isSuccess &&
         submissions.length === 0 &&

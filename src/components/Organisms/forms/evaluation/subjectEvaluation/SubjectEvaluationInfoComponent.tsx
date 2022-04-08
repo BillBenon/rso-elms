@@ -222,12 +222,9 @@ export default function SubjectEvaluationInfoComponent({
         );
       }
 
-      if (timeDifference < 0) toast.error('Due time cannot be less than start time!');
-
-      setDetails((details) => ({
-        ...details,
-        ['time_limit']: timeDifference,
-      }));
+      if (timeDifference < 0) {
+        toast.error('Due time cannot be less than start time!');
+      }
 
       setDetails((details) => ({
         ...details,
@@ -235,6 +232,21 @@ export default function SubjectEvaluationInfoComponent({
       }));
 
       return;
+    }
+
+    if (name == 'evaluation_type' && value == 'TEWT') {
+      setDetails((details) => ({
+        ...details,
+        subject_academic_year_period_id: '',
+        intake_level_class_ids: '',
+      }));
+    } else {
+      setDetails((details) => ({
+        ...details,
+        subject_academic_year_period_id: subjectId,
+        intake_level_class_ids:
+          classes?.data.data.map((cl) => cl.id.toString()).join(',') + '',
+      }));
     }
 
     //set class ids and eligible group to empty since it's private
@@ -487,10 +499,8 @@ export default function SubjectEvaluationInfoComponent({
           <InputMolecule
             style={{ width: '8rem' }}
             type="number"
-            // step=".01"
-            readOnly
             name="time_limit"
-            // min={0}
+            min={0}
             value={details?.time_limit}
             handleChange={handleChange}>
             Time limit (in mins)

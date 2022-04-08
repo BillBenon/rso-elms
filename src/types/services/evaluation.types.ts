@@ -10,6 +10,7 @@ export enum IEvaluationTypeEnum {
   QUIZ = 'QUIZ',
   RESEARCH_PAPER = 'RESEARCH_PAPER',
   DS_ASSESSMENT = 'DS_ASSESSMENT',
+  TEWT = 'TEWT',
 }
 
 export enum IQuestionType {
