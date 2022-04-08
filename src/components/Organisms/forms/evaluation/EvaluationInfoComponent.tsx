@@ -2,16 +2,14 @@ import { Editor } from '@tiptap/react';
 import moment from 'moment';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { enrollmentService } from '../../../../services/administration/enrollments.service';
 import { subjectService } from '../../../../services/administration/subject.service';
 import { classStore } from '../../../../store/administration/class.store';
 import enrollmentStore from '../../../../store/administration/enrollment.store';
-import intakeProgramStore, {
-  getStudentShipByUserId,
-} from '../../../../store/administration/intake-program.store';
+import intakeProgramStore from '../../../../store/administration/intake-program.store';
 import { moduleStore } from '../../../../store/administration/modules.store';
 import usersStore from '../../../../store/administration/users.store';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
@@ -21,6 +19,7 @@ import { ModuleInstructors } from '../../../../types/services/enrollment.types';
 import {
   IAccessTypeEnum,
   IContentFormatEnum,
+  IEligibleClassEnum,
   IEvaluationClassification,
   IEvaluationCreate,
   IEvaluationSectionBased,
@@ -30,7 +29,6 @@ import {
   IQuestionaireTypeEnum,
   ISubmissionTypeEnum,
 } from '../../../../types/services/evaluation.types';
-import { UserType } from '../../../../types/services/user.types';
 import { setLocalStorageData } from '../../../../utils/getLocalStorageItem';
 import {
   getDropDownOptions,
@@ -60,36 +58,58 @@ const initialState: IEvaluationSectionBased = {
 type IInstructorData = { [key: string]: ModuleInstructors[] };
 
 export default function EvaluationInfoComponent() {
+  const history = useHistory();
+
+  const { user } = useAuthenticator();
+
   const [details, setDetails] = useState<IEvaluationCreate>({
-    access_type: '',
-    private_attendees: '',
-    intake_academic_year_period: '',
+    access_type: IAccessTypeEnum.PUBLIC,
     academy_id: '',
-    instructor_id: '',
+    private_attendees: '',
+    instructor_id: user?.id + '',
     allow_submission_time: '',
     intake_level_class_ids: '',
-    subject_academic_year_period_id: '',
+    id: '',
     classification: IEvaluationClassification.MODULE,
-    content_format: '',
+    content_format: IContentFormatEnum.DOC,
     due_on: '',
-    eligible_group: '',
+    eligible_group: IEligibleClassEnum.MULTIPLE,
     evaluation_status: IEvaluationStatus.DRAFT,
     evaluation_type: IEvaluationTypeEnum.CAT,
-    exam_instruction: '',
-    is_consider_on_report: false,
+    marking_type: IMarkingType.NOT_SET,
+    is_consider_on_report: true,
     marking_reminder_date: '',
     maximum_file_size: 0,
+    term_id: '',
+    subject_academic_year_period_id: '',
+    questionaire_type: IQuestionaireTypeEnum.OPEN,
+    exam_instruction: '',
     name: '',
-    id: '',
-    questionaire_type: IQuestionaireTypeEnum.SECTION_BASED,
-    submision_type: ISubmissionTypeEnum.FILE,
-    time_limit: 0,
+    submision_type: ISubmissionTypeEnum.ONLINE_TEXT,
+    time_limit: 10,
     total_mark: 0,
-    strict: false,
-    marking_type: IMarkingType.NOT_SET,
+    strict: true,
     intakeId: '',
     intake_program_level: '',
   });
+
+  const { data: classes } = classStore.getClassByPeriod(
+    details?.term_id + '',
+    details?.term_id?.length != 0,
+  );
+
+  // Update classes
+  useEffect(() => {
+    if (classes?.data.data) {
+      setDetails({
+        ...details,
+        intake_level_class_ids: classes?.data.data
+          .map((cl) => cl.id.toString())
+          .join(','),
+      });
+    }
+  }, [classes]);
+
   const { search } = useLocation();
   const intakePeriodId = useMemo(
     () => new URLSearchParams(search).get('prd') || '',
@@ -103,7 +123,6 @@ export default function EvaluationInfoComponent() {
     [search],
   );
 
-  const { user } = useAuthenticator();
   const picked_role = usePickedRole();
 
   const markers =
@@ -138,11 +157,6 @@ export default function EvaluationInfoComponent() {
 
   const [evaluationModule, setEvaluationModule] = useState<IEvaluationSectionBased[]>(
     [cachedEvaluationModuleData].flat(),
-  );
-
-  const { data: classes } = classStore.getClassByPeriod(
-    details?.intake_academic_year_period + '',
-    details?.intake_academic_year_period?.length != 0,
   );
 
   // useEffect(() => {
@@ -215,10 +229,6 @@ export default function EvaluationInfoComponent() {
   //   picked_role?.academy_id,
   //   classes?.data.data,
   // ]);
-
-  // useEffect(() => {
-  //   setLocalStorageData('evaluationInfo', details);
-  // }, [details]);
 
   const { mutate } = evaluationStore.createEvaluation();
   // const { mutateAsync } = evaluationStore.updateEvaluation();
@@ -316,13 +326,11 @@ export default function EvaluationInfoComponent() {
 
     if (name === 'intake_program_level_module') {
       getSubjectsByModule(value.toString());
-
       return;
     }
 
     if (name === 'subject_academic_year_period') {
       getInstructorsBySubject(value.toString());
-
       return;
     }
 
@@ -348,22 +356,17 @@ export default function EvaluationInfoComponent() {
 
   const authUserId = user?.id;
 
-  const studentInfo =
-    getStudentShipByUserId(
-      user?.id + '',
-      !!authUserId && user?.user_type === UserType.STUDENT,
-    ).data?.data.data || [];
+  // const studentInfo =
+  //   getStudentShipByUserId(
+  //     user?.id + '',
+  //     !!authUserId && user?.user_type === UserType.STUDENT,
+  //   ).data?.data.data || [];
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(authUserId + '')
     .data?.data.data[0];
 
-  const {
-    isSuccess,
-    isError,
-    data: intakes,
-    isLoading,
-    refetch: refetchIntakes,
-  } = enrollmentStore.getInstructorIntakePrograms(instructorInfo?.id + '');
+  const { data: intakes, refetch: refetchIntakes } =
+    enrollmentStore.getInstructorIntakePrograms(instructorInfo?.id + '');
 
   const { data: levels } = intakeProgramStore.getLevelsByIntakeProgram(
     details?.intakeId || '',
@@ -388,7 +391,6 @@ export default function EvaluationInfoComponent() {
 
     if (evaluationModulesClone.length === 1) {
       toast.error('You must add at least one module');
-
       return;
     }
 
@@ -415,9 +417,7 @@ export default function EvaluationInfoComponent() {
       {
         onSuccess: (data) => {
           toast.success('Evaluation created successfully');
-
-          //TODO: redirect to evaluation intake_program_level
-          // history.push(`/evaluations/${data.data.data.id}/settings`);
+          history.push(`/evaluations/${data.data.data.id}/addquestions`);
         },
         onError: (error: any) => {
           toast.error(error.response.data.message);
@@ -533,16 +533,16 @@ export default function EvaluationInfoComponent() {
         </SelectMolecule>
 
         <SelectMolecule
-          value={details?.intake_academic_year_period + ''}
+          value={details?.term_id + ''}
           width="64 py-4"
-          name="intake_academic_year_period"
-          placeholder="program  level"
+          name="term_id"
+          placeholder="Academic year"
           handleChange={handleChange}
           options={
             periods?.data.data.map((item) => {
               return {
                 label: item.academic_period.name,
-                value: item.id + '',
+                value: item.id,
               };
             }) || []
           }>

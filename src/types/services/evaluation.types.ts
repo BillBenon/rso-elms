@@ -9,9 +9,10 @@ export enum IEvaluationTypeEnum {
   GROUP_WORK = 'GROUP_WORK',
   QUIZ = 'QUIZ',
   RESEARCH_PAPER = 'RESEARCH_PAPER',
-  SECTION_BASED = 'SECTION_BASED',
   DS_ASSESSMENT = 'DS_ASSESSMENT',
 }
+
+
 
 export enum IQuestionType {
   MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
@@ -138,7 +139,6 @@ export interface IUpdateEvaluationApprovalStatus {
 export interface IEvaluationCreate {
   access_type: string;
   private_attendees: string;
-  intake_academic_year_period: string;
   academy_id: string;
   instructor_id: string;
   allow_submission_time: string;
@@ -146,6 +146,7 @@ export interface IEvaluationCreate {
   subject_academic_year_period_id: string;
   classification: IEvaluationClassification;
   content_format: string;
+  term_id: string;
   due_on: string;
   eligible_group: string;
   evaluation_status: IEvaluationStatus;
