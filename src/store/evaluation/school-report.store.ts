@@ -6,6 +6,9 @@ class SchoolReportStore {
   createSubjective() {
     return useMutation(reportService.createSubjective);
   }
+  addTewt() {
+    return useMutation(reportService.addTewt);
+  }
   editSubjective() {
     return useMutation(reportService.editSubjective);
   }
@@ -45,6 +48,22 @@ export function getStudentInformativeReport(
     { enabled },
   );
 }
+
+export function getTewtReport(studentId: string, term: string, enabled = true) {
+  return useQuery(
+    ['reports/student/term/tewt', studentId, term],
+    () => reportService.getTewtReport(studentId, term),
+    { enabled },
+  );
+}
+
+// export function getTewtReport(studentId: string, term: string, enabled = true) {
+//   return useQuery(
+//     ['reports/student/term/tewt', studentId, term],
+//     () => reportService.getTewtReport(studentId, term),
+//     { enabled },
+//   );
+// }}
 
 export function getStudentFullReport(studentId?: string) {
   return useQuery(

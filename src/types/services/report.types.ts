@@ -146,6 +146,17 @@ export interface IEditSubjectiveForm extends ISubjectiveForm {
   id: string;
 }
 
+export interface TwetForm {
+  id: string;
+  pen_picture: string;
+  student_id: string;
+  term: string;
+}
+
+export interface TwetReport extends TwetForm {
+  student: EvStudent;
+}
+
 export enum TermFormSection {
   INTRODUCTION = 'INTRODUCTION',
   WRITTEN_WORK = 'WRITTEN_WORK',

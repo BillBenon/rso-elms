@@ -1,4 +1,6 @@
-import React, { useRef, useState } from 'react';
+import { Editor } from '@tiptap/react';
+import React, { FormEvent, useEffect, useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 
@@ -7,12 +9,16 @@ import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
 import Tiptap from '../../components/Molecules/editor/Tiptap';
 import usePickedRole from '../../hooks/usePickedRole';
+import { queryClient } from '../../plugins/react-query';
 import academyStore from '../../store/administration/academy.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
+import { getTewtReport, reportStore } from '../../store/evaluation/school-report.store';
 import { Privileges } from '../../types';
+import { TwetForm } from '../../types/services/report.types';
 
 interface DSRParamType {
   studentId: string;
+  periodId: string;
 }
 
 const areaAssess = [
@@ -69,8 +75,49 @@ export default function DSReportOnStudent() {
     onBeforeGetContent: () => setisPrinting(true),
     onAfterPrint: () => setisPrinting(false),
   });
-  const { studentId } = useParams<DSRParamType>();
+  const { studentId, periodId } = useParams<DSRParamType>();
   const { data: studentInfo } = intakeProgramStore.getStudentById(studentId);
+  const { mutate } = reportStore.addTewt();
+  const [details, setDetails] = useState<TwetForm>({
+    id: '',
+    pen_picture: '',
+    student_id: '',
+    term: '',
+  });
+
+  const [showPenPicture, setShowPenPicture] = useState(false);
+
+  const { data: reportData } = getTewtReport(studentId, periodId);
+
+  function handleEditorChange(editor: Editor) {
+    setDetails((details) => ({ ...details, pen_picture: editor.getHTML() }));
+  }
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (details.pen_picture === '') {
+      toast.error(`pen picture is required`);
+    } else {
+      mutate(details, {
+        onSuccess(data) {
+          toast.success(data.data.message);
+          queryClient.invalidateQueries([
+            'reports/student/term/tewt',
+            studentId,
+            periodId,
+          ]);
+          setShowPenPicture(false);
+        },
+        onError(error: any) {
+          toast.error(error.response.data.message || 'error occurred please try again');
+        },
+      });
+    }
+  };
+
+  useEffect(() => {
+    setDetails((details) => ({ ...details, student_id: studentId, term: periodId }));
+  }, [studentId, periodId]);
 
   return (
     <div className="max-w-4xl">
@@ -184,21 +231,38 @@ export default function DSReportOnStudent() {
           <Heading fontSize="base" fontWeight="semibold">
             3. <span className="underline pl-8">Pen picture.</span>
           </Heading>
-          <Tiptap
-            editable={false}
-            viewMenu={false}
-            handleChange={() => {}}
-            showBorder={false}
-            content={`The officer exhibited an excellent attitude during the Ex; his level of
-            preparation and organization was good. He was one of the key participants
-            during the discussions and he confidently presented his solutions. His
-            contributions and participation was educative and beneficial to his fellow
-            students within the syndicate, however, he was found wanting in terms of
-            employment of cbt sp arms. Etc etc. Give specific examples where a student was
-            strong or weak when possible. Pen picture should be detailed and it should
-            reflect the marks awarded above. DS may as well include (in the pen picture)
-            any other area of concern that is not in the table above.`}
-          />
+          {showPenPicture ? (
+            <form onSubmit={handleSubmit} className="py-4 reportHide">
+              <Tiptap content={details.pen_picture} handleChange={handleEditorChange} />
+              <Button type="submit" className="mt-4">
+                Save
+              </Button>
+            </form>
+          ) : reportData?.data.data ? (
+            <div className="py-4">
+              <Tiptap
+                editable={false}
+                viewMenu={false}
+                handleChange={() => {}}
+                showBorder={false}
+                content={reportData.data.data.pen_picture}
+              />
+            </div>
+          ) : (
+            <div className="h-48 flex items-center py-10 gap-2 reportHide">
+              <Heading fontSize="sm">No pen picture added</Heading>
+              <span>-</span>
+              <Button
+                styleType="text"
+                onClick={() => {
+                  setShowPenPicture(!showPenPicture);
+                }}>
+                <Heading fontSize="sm" color="primary" fontWeight="semibold">
+                  add one here
+                </Heading>
+              </Button>
+            </div>
+          )}
         </div>
         <div className="grid grid-cols-3">
           <p className="text-sm">

@@ -10,6 +10,8 @@ import {
   IOverallStudentPerformance,
   ISubjective,
   ISubjectiveForm,
+  TwetForm,
+  TwetReport,
 } from '../../types/services/report.types';
 
 class SchoolReportService {
@@ -40,6 +42,22 @@ class SchoolReportService {
     );
   }
 
+  public async getTewtReport(
+    studentId: string,
+    term: string,
+  ): Promise<AxiosResponse<Response<TwetReport>>> {
+    return await evaluationAxios.get(`/reports/tewt/student/${studentId}/term/${term}`);
+  }
+
+  public async getDSCriticsReport(
+    studentId: string,
+    term: string,
+  ): Promise<AxiosResponse<Response<TwetReport>>> {
+    return await evaluationAxios.get(
+      `/reports/course-critiques/student/${studentId}/term/${term}`,
+    );
+  }
+
   public async getStudentFullReport(
     studentId: string,
   ): Promise<AxiosResponse<Response<IOverallStudentPerformance[]>>> {
@@ -64,6 +82,9 @@ class SchoolReportService {
     subjective: ISubjectiveForm,
   ): Promise<AxiosResponse<Response<ISubjective>>> {
     return await evaluationAxios.post('reports/add-term-subjective', subjective);
+  }
+  public async addTewt(tewt: TwetForm): Promise<AxiosResponse<Response<TwetReport>>> {
+    return await evaluationAxios.post('reports/tewt/add', tewt);
   }
   public async editSubjective(
     subjective: IEditSubjectiveForm,

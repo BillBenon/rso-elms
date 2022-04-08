@@ -5,6 +5,7 @@ import { useReactToPrint } from 'react-to-print';
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
+import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import usePickedRole from '../../hooks/usePickedRole';
 import academyStore from '../../store/administration/academy.store';
 import { classStore } from '../../store/administration/class.store';
@@ -76,13 +77,15 @@ export default function StudentAcademicReport() {
 
   return (
     <div className="max-w-4xl">
-      <div className="text-right mb-5">
-        <Permission privilege={Privileges.CAN_DOWNLOAD_REPORTS}>
-          <Button disabled={isPrinting} onClick={() => handlePrint()}>
-            Download report
-          </Button>
-        </Permission>
-      </div>
+      {reportData?.data.data ? (
+        <div className="text-right mb-5">
+          <Permission privilege={Privileges.CAN_DOWNLOAD_REPORTS}>
+            <Button disabled={isPrinting} onClick={() => handlePrint()}>
+              Download report
+            </Button>
+          </Permission>
+        </div>
+      ) : null}
       <div
         ref={report}
         className="px-10 py-10 bg-white mx-auto max-w-4xl border border-gray-300 print:border-none">
@@ -151,222 +154,242 @@ export default function StudentAcademicReport() {
         </div>
         <h1 className="text-center font-bold underline my-10 text-base">SCHOOL REPORT</h1>
 
-        {/* new grid */}
-        <div className="grid grid-cols-6">
-          <div className="col-span-2 border border-gray-700 px-3 flex items-center">
-            <Heading fontSize="base" fontWeight="semibold">
-              Courses
-            </Heading>
-          </div>
-          <div className="col-span-4">
-            <Heading
-              fontSize="base"
-              fontWeight="semibold"
-              className="p-3 border border-gray-700 text-center uppercase">
-              term one
-            </Heading>
-
-            <div className="grid grid-cols-3">
-              <Heading
-                fontSize="base"
-                fontWeight="semibold"
-                className="p-2 border border-gray-700 text-center">
-                Cat
-              </Heading>
-              <Heading
-                fontSize="base"
-                fontWeight="semibold"
-                className="p-2 border border-gray-700 text-center">
-                Exam
-              </Heading>
-              <Heading
-                fontSize="base"
-                fontWeight="semibold"
-                className="p-2 border border-gray-700 text-center">
-                Tot
-              </Heading>
-            </div>
-          </div>
-        </div>
-
-        {/* module and obtained marks title */}
-        <div className="grid grid-cols-6">
-          <div className="col-span-2">
-            <Heading
-              fontSize="base"
-              fontWeight="semibold"
-              className="py-2 px-3 border border-gray-700">
-              Marks
-            </Heading>
-          </div>
-          <div className="col-span-4 grid grid-cols-6">
-            {[1, 2].map((i) => (
-              <React.Fragment key={i}>
-                <Heading
-                  fontSize="sm"
-                  fontWeight="semibold"
-                  className="p-1 border border-gray-700 text-center">
-                  Obt.
+        {reportData?.data.data ? (
+          <>
+            {/* new grid */}
+            <div className="grid grid-cols-6">
+              <div className="col-span-2 border border-gray-700 px-3 flex items-center">
+                <Heading fontSize="base" fontWeight="semibold">
+                  Courses
                 </Heading>
+              </div>
+              <div className="col-span-4">
                 <Heading
-                  fontSize="sm"
+                  fontSize="base"
                   fontWeight="semibold"
-                  className="p-1 border border-gray-700 text-center">
-                  Max.
+                  className="p-3 border border-gray-700 text-center uppercase">
+                  term one
                 </Heading>
-              </React.Fragment>
-            ))}
-            <div className="col-span-2 grid grid-cols-3 ">
-              <Heading
-                fontSize="sm"
-                fontWeight="semibold"
-                className="p-1 border border-gray-700 text-center">
-                Obt.
-              </Heading>
-              <Heading
-                fontSize="sm"
-                fontWeight="semibold"
-                className="p-1 border border-gray-700 text-center">
-                Max.
-              </Heading>
-              <Heading
-                fontSize="sm"
-                fontWeight="semibold"
-                className="p-1 border border-gray-700 text-center">
-                Grade
-              </Heading>
+
+                <div className="grid grid-cols-3">
+                  <Heading
+                    fontSize="base"
+                    fontWeight="semibold"
+                    className="p-2 border border-gray-700 text-center">
+                    Cat
+                  </Heading>
+                  <Heading
+                    fontSize="base"
+                    fontWeight="semibold"
+                    className="p-2 border border-gray-700 text-center">
+                    Exam
+                  </Heading>
+                  <Heading
+                    fontSize="base"
+                    fontWeight="semibold"
+                    className="p-2 border border-gray-700 text-center">
+                    Tot
+                  </Heading>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-        {/* modules map */}
-        {marks.map((m) => (
-          <div key={m.moduleId} className="grid grid-cols-3">
-            <p className="p-3 text-sm border border-gray-700">{m.moduleName}</p>
-            <div className="grid-cols-6 col-span-2 grid">
-              <p
-                className={`p-3 text-sm border border-gray-700 ${
-                  isFailure(m.catObtained, m.catMax) ? 'text-error-500' : ''
-                }`}>
-                {m.catObtained}
-              </p>
-              <p className="p-3 text-sm border border-gray-700">{m.catMax}</p>
-              <p
-                className={`p-3 text-sm border border-gray-700 
+
+            {/* module and obtained marks title */}
+            <div className="grid grid-cols-6">
+              <div className="col-span-2">
+                <Heading
+                  fontSize="base"
+                  fontWeight="semibold"
+                  className="py-2 px-3 border border-gray-700">
+                  Marks
+                </Heading>
+              </div>
+              <div className="col-span-4 grid grid-cols-6">
+                {[1, 2].map((i) => (
+                  <React.Fragment key={i}>
+                    <Heading
+                      fontSize="sm"
+                      fontWeight="semibold"
+                      className="p-1 border border-gray-700 text-center">
+                      Obt.
+                    </Heading>
+                    <Heading
+                      fontSize="sm"
+                      fontWeight="semibold"
+                      className="p-1 border border-gray-700 text-center">
+                      Max.
+                    </Heading>
+                  </React.Fragment>
+                ))}
+                <div className="col-span-2 grid grid-cols-3 ">
+                  <Heading
+                    fontSize="sm"
+                    fontWeight="semibold"
+                    className="p-1 border border-gray-700 text-center">
+                    Obt.
+                  </Heading>
+                  <Heading
+                    fontSize="sm"
+                    fontWeight="semibold"
+                    className="p-1 border border-gray-700 text-center">
+                    Max.
+                  </Heading>
+                  <Heading
+                    fontSize="sm"
+                    fontWeight="semibold"
+                    className="p-1 border border-gray-700 text-center">
+                    Grade
+                  </Heading>
+                </div>
+              </div>
+            </div>
+            {/* modules map */}
+            {marks.map((m) => (
+              <div key={m.moduleId} className="grid grid-cols-3">
+                <p className="p-3 text-sm border border-gray-700">{m.moduleName}</p>
+                <div className="grid-cols-6 col-span-2 grid">
+                  <p
+                    className={`p-3 text-sm border border-gray-700 ${
+                      isFailure(m.catObtained, m.catMax) ? 'text-error-500' : ''
+                    }`}>
+                    {m.catObtained}
+                  </p>
+                  <p className="p-3 text-sm border border-gray-700">{m.catMax}</p>
+                  <p
+                    className={`p-3 text-sm border border-gray-700 
                   ${isFailure(m.examObtained, m.examMax) ? 'text-error-500' : ''}`}>
-                {m.examObtained}
-              </p>
-              <p className="p-3 text-sm border border-gray-700">{m.examMax}</p>
-              <div className="col-span-2 grid grid-cols-3">
-                <p
-                  className={`p-3 text-sm border border-gray-700 
+                    {m.examObtained}
+                  </p>
+                  <p className="p-3 text-sm border border-gray-700">{m.examMax}</p>
+                  <div className="col-span-2 grid grid-cols-3">
+                    <p
+                      className={`p-3 text-sm border border-gray-700 
                 ${
                   isFailure(m.catObtained + m.examObtained, m.examMax + m.catMax)
                     ? 'text-error-500'
                     : ''
                 }`}>
-                  {m.catObtained + m.examObtained}
-                </p>
-                <p className="p-3 text-sm border border-gray-700">
-                  {m.examMax + m.catMax}
-                </p>
-                <p className="p-3 text-sm border border-gray-700">
-                  {calculateGrade(m.catObtained + m.examObtained, m.examMax + m.catMax)}
-                </p>
-              </div>
-            </div>
-          </div>
-        ))}
-        {/* totals row */}
-        <div className="grid grid-cols-3">
-          <div>
-            <Heading fontSize="sm" className="p-3 border border-gray-700">
-              Total
-            </Heading>
-          </div>
-
-          <div className="grid-cols-6 col-span-2 grid">
-            <p className="p-3 text-sm border border-gray-700">{totals.quizObtained}</p>
-            <p className="p-3 text-sm border border-gray-700">{totals.quizMax}</p>
-            <p className="p-3 text-sm border border-gray-700">{totals.examObtained}</p>
-            <p className="p-3 text-sm border border-gray-700">{totals.examMax}</p>
-
-            <div className="col-span-2 grid grid-cols-3">
-              <p className="p-3 text-sm border border-gray-700">
-                {totals.quizObtained + totals.examObtained}
-              </p>
-              <p className="p-3 text-sm border border-gray-700">
-                {totals.quizMax + totals.examMax}
-              </p>
-              <p className="p-3 text-sm border border-gray-700">
-                {calculateGrade(
-                  totals.quizObtained + totals.examObtained,
-                  totals.quizMax + totals.examMax,
-                )}
-              </p>
-            </div>
-          </div>
-        </div>
-        {/* percentage */}
-        <div className="grid grid-cols-6">
-          <Heading
-            fontSize="sm"
-            fontWeight="semibold"
-            className="p-3 col-span-2 border border-gray-700">
-            Percentage
-          </Heading>
-          <Heading
-            fontSize="sm"
-            fontWeight="semibold"
-            className="col-span-4 py-3 px-6 border border-gray-700 text-right">
-            {`${formatPercentage(
-              totals.quizObtained + totals.examObtained,
-              totals.quizMax + totals.examMax,
-            )} %`}
-          </Heading>
-        </div>
-        {/* Student position */}
-        <div className="grid grid-cols-6">
-          <Heading
-            fontSize="sm"
-            fontWeight="semibold"
-            className="p-3 col-span-2 border border-gray-700">
-            Position
-          </Heading>
-          <Heading
-            fontSize="sm"
-            fontWeight="normal"
-            className="col-span-4 py-3 px-6 border border-gray-700 text-right">
-            <span className="font-bold">{reportData?.data.data.position}</span> outof
-            <span className="font-bold"> {reportData?.data.data.total_students}</span>
-          </Heading>
-        </div>
-        {/* Digital signature */}
-        <div className="pt-8">
-          <div className="grid grid-cols-3 py-6">
-            <Heading fontSize="sm" fontWeight="semibold" className="px-3 py-2">
-              COMMANDANT
-            </Heading>
-            <Heading fontSize="sm" fontWeight="semibold" className="px-3 py-2">
-              CHIEF INSTRUCTOR
-            </Heading>
-            <Heading fontSize="sm" fontWeight="semibold" className="px-3 py-2">
-              SENIOR INSTRUCTOR
-            </Heading>
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-12 px-4">
-                <img
-                  src="https://i.stack.imgur.com/eUcfI.gif"
-                  alt="signature"
-                  className="block max-w-full max-h-12"
-                />
+                      {m.catObtained + m.examObtained}
+                    </p>
+                    <p className="p-3 text-sm border border-gray-700">
+                      {m.examMax + m.catMax}
+                    </p>
+                    <p className="p-3 text-sm border border-gray-700">
+                      {calculateGrade(
+                        m.catObtained + m.examObtained,
+                        m.examMax + m.catMax,
+                      )}
+                    </p>
+                  </div>
+                </div>
               </div>
             ))}
-          </div>
+            {/* totals row */}
+            <div className="grid grid-cols-3">
+              <div>
+                <Heading fontSize="sm" className="p-3 border border-gray-700">
+                  Total
+                </Heading>
+              </div>
 
-          <div className="text-xs text-right font-medium">
-            {new Date().toDateString()}
-          </div>
-        </div>
+              <div className="grid-cols-6 col-span-2 grid">
+                <p className="p-3 text-sm border border-gray-700">
+                  {totals.quizObtained}
+                </p>
+                <p className="p-3 text-sm border border-gray-700">{totals.quizMax}</p>
+                <p className="p-3 text-sm border border-gray-700">
+                  {totals.examObtained}
+                </p>
+                <p className="p-3 text-sm border border-gray-700">{totals.examMax}</p>
+
+                <div className="col-span-2 grid grid-cols-3">
+                  <p className="p-3 text-sm border border-gray-700">
+                    {totals.quizObtained + totals.examObtained}
+                  </p>
+                  <p className="p-3 text-sm border border-gray-700">
+                    {totals.quizMax + totals.examMax}
+                  </p>
+                  <p className="p-3 text-sm border border-gray-700">
+                    {calculateGrade(
+                      totals.quizObtained + totals.examObtained,
+                      totals.quizMax + totals.examMax,
+                    )}
+                  </p>
+                </div>
+              </div>
+            </div>
+            {/* percentage */}
+            <div className="grid grid-cols-6">
+              <Heading
+                fontSize="sm"
+                fontWeight="semibold"
+                className="p-3 col-span-2 border border-gray-700">
+                Percentage
+              </Heading>
+              <Heading
+                fontSize="sm"
+                fontWeight="semibold"
+                className="col-span-4 py-3 px-6 border border-gray-700 text-right">
+                {`${formatPercentage(
+                  totals.quizObtained + totals.examObtained,
+                  totals.quizMax + totals.examMax,
+                )} %`}
+              </Heading>
+            </div>
+            {/* Student position */}
+            <div className="grid grid-cols-6">
+              <Heading
+                fontSize="sm"
+                fontWeight="semibold"
+                className="p-3 col-span-2 border border-gray-700">
+                Position
+              </Heading>
+              <Heading
+                fontSize="sm"
+                fontWeight="normal"
+                className="col-span-4 py-3 px-6 border border-gray-700 text-right">
+                <span className="font-bold">{reportData?.data.data.position}</span> outof
+                <span className="font-bold"> {reportData?.data.data.total_students}</span>
+              </Heading>
+            </div>
+            {/* Digital signature */}
+            <div className="pt-8">
+              <div className="grid grid-cols-3 py-6">
+                <Heading fontSize="sm" fontWeight="semibold" className="px-3 py-2">
+                  COMMANDANT
+                </Heading>
+                <Heading fontSize="sm" fontWeight="semibold" className="px-3 py-2">
+                  CHIEF INSTRUCTOR
+                </Heading>
+                <Heading fontSize="sm" fontWeight="semibold" className="px-3 py-2">
+                  SENIOR INSTRUCTOR
+                </Heading>
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="h-12 px-4">
+                    <img
+                      src="https://i.stack.imgur.com/eUcfI.gif"
+                      alt="signature"
+                      className="block max-w-full max-h-12"
+                    />
+                  </div>
+                ))}
+              </div>
+
+              <div className="text-xs text-right font-medium">
+                {new Date().toDateString()}
+              </div>
+            </div>
+          </>
+        ) : (
+          <NoDataAvailable
+            icon="academy"
+            fill={false}
+            showButton={false}
+            title={'Report has not been processed'}
+            description="This report has not been processed yet or you are currently not allowed to see it"
+            privilege={Privileges.CAN_ACCESS_REPORTS}
+          />
+        )}
       </div>
     </div>
   );

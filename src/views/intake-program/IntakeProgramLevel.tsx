@@ -23,6 +23,7 @@ import {
   LevelIntakeProgram,
 } from '../../types/services/intake-program.types';
 import LevelPeriod from '../classes/LevelPeriod';
+import DSAssessmentSheet from '../performance/DSAssessmentSheet';
 import EnrollStudent from './EnrollStudent';
 import IntakeLevelModule from './IntakeLevelModule';
 import { NewIntakePeriod } from './NewIntakePeriod';
@@ -122,6 +123,11 @@ function IntakeProgramLevel({ action }: IntakeProgramLevelProp) {
           <TabNavigation tabs={tabs}>
             <Switch>
               <Route exact path={`${path}/:level`} render={() => <IntakeLevelModule />} />
+              <Route
+                exact
+                path={`${path}/:level/:critics-report`}
+                render={() => <DSAssessmentSheet />}
+              />
               {/* enroll student to intake program level */}
               <Route
                 exact
