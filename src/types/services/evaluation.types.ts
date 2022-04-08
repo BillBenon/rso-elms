@@ -12,8 +12,6 @@ export enum IEvaluationTypeEnum {
   DS_ASSESSMENT = 'DS_ASSESSMENT',
 }
 
-
-
 export enum IQuestionType {
   MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
   OPEN = 'OPEN',
@@ -162,9 +160,9 @@ export interface IEvaluationCreate {
   total_mark: number;
   intake_academic_year_period: string;
   strict: boolean;
-  marking_type: IMarkingType,
-  intakeId: string,
-  intake_program_level: string 
+  marking_type: IMarkingType;
+  intakeId: string;
+  intake_program_level: string;
 }
 
 export type IEvaluationSectionBased = {
@@ -295,12 +293,12 @@ export interface IMultipleChoice {
 }
 
 export enum IMarkingType {
-  PER_STUDENT = 'PER_STUDENT', 
-  NOT_APPLICABLE = 'NOT_APPLICABLE', 
-  NOT_SET = 'NOT_SET', 
-  PER_SECTION = 'PER_SECTION', 
-  PER_QUESTION = 'PER_QUESTION'
-};
+  PER_STUDENT = 'PER_STUDENT',
+  NOT_APPLICABLE = 'NOT_APPLICABLE',
+  NOT_SET = 'NOT_SET',
+  PER_SECTION = 'PER_SECTION',
+  PER_QUESTION = 'PER_QUESTION',
+}
 
 export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
   sub_questions: IEvaluationQuestion[];

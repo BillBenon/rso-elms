@@ -11,9 +11,10 @@ import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
 import BreadCrumb from '../../../Molecules/BreadCrumb';
 import Stepper from '../../../Molecules/Stepper/Stepper';
-import EvaluationInfoComponent from './EvaluationInfoComponent';
 import EvaluationQuestionComponent from './EvaluationQuestionComponent';
 import EvaluationSettings from './EvaluationSettings';
+import SubjectEvaluationInfoComponent from './SubjectEvaluationInfoComponent';
+import SubjectEvaluationQuestionComponent from './SubjectEvaluationQuestionsComponent';
 
 export default function SubjectNewEvaluation() {
   const list: LinkList[] = [
@@ -65,7 +66,7 @@ export default function SubjectNewEvaluation() {
           isInline={false}
           navigateToStepHandler={() => {}}>
           <div className="w-2/4">
-            <EvaluationInfoComponent
+            <SubjectEvaluationInfoComponent
               evaluationId={evaluationId}
               evaluationInfo={evaluationInfo}
               handleNext={handleSubmit}
@@ -74,7 +75,7 @@ export default function SubjectNewEvaluation() {
           </div>
 
           <div>
-            <EvaluationQuestionComponent
+            <SubjectEvaluationQuestionComponent
               handleNext={handleSubmit}
               handleGoBack={handleBack}
               evaluationId={evaluationId}
@@ -82,7 +83,7 @@ export default function SubjectNewEvaluation() {
           </div>
 
           {!evaluationId || (evaluationId && !evaluationInfo?.['is_to_be_approved']) ? (
-            <EvaluationSettings
+            <SubjectEvaluationSettings
               handleNext={handleSubmit}
               handleGoBack={handleBack}
               evaluationId={evaluationId}

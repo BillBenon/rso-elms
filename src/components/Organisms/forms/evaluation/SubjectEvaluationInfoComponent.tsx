@@ -6,15 +6,10 @@ import { useLocation } from 'react-router-dom';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
-import { enrollmentService } from '../../../../services/administration/enrollments.service';
-import { subjectService } from '../../../../services/administration/subject.service';
 import { classStore } from '../../../../store/administration/class.store';
 import intakeProgramStore from '../../../../store/administration/intake-program.store';
-import { moduleStore } from '../../../../store/administration/modules.store';
-import usersStore from '../../../../store/administration/users.store';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { SelectData, ValueType } from '../../../../types';
-import { ModuleInstructors } from '../../../../types/services/enrollment.types';
 import {
   IAccessTypeEnum,
   IContentFormatEnum,
@@ -23,7 +18,6 @@ import {
   IEvaluationCreate,
   IEvaluationInfo,
   IEvaluationProps,
-  IEvaluationSectionBased,
   IEvaluationStatus,
   IEvaluationTypeEnum,
   IMarkingType,
@@ -48,19 +42,6 @@ import MultiselectMolecule from '../../../Molecules/input/MultiselectMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 
-const initialState: IEvaluationSectionBased = {
-  evaluation_id: '',
-  marker_id: '',
-  instructor_subject_assignment: '',
-  intake_program_level_module: '',
-  questionaire_setting_status: IEvaluationStatus.PENDING,
-  section_total_marks: 0,
-  subject_academic_year_period: '',
-  id: '',
-};
-
-type IInstructorData = { [key: string]: ModuleInstructors[] };
-
 export default function SubjectEvaluationInfoComponent({
   handleNext,
   evaluationId,
@@ -71,7 +52,6 @@ export default function SubjectEvaluationInfoComponent({
     () => new URLSearchParams(search).get('prd') || '',
     [search],
   );
-  const programId = useMemo(() => new URLSearchParams(search).get('prg') || '', [search]);
 
   const levelId = useMemo(() => new URLSearchParams(search).get('lvl') || '', [search]);
   const subjectId = useMemo(
@@ -82,10 +62,6 @@ export default function SubjectEvaluationInfoComponent({
   const { user } = useAuthenticator();
   const picked_role = usePickedRole();
   const [timeDifference, setTimeDifference] = useState(0);
-
-  const markers =
-    usersStore.getUsersByAcademy(user?.academy.id.toString() || '').data?.data.data
-      .content || [];
 
   const { data: studentsProgram } = intakeProgramStore.getStudentsByIntakeProgramLevel(
     levelId || '',
@@ -105,9 +81,7 @@ export default function SubjectEvaluationInfoComponent({
   }, [studentsProgram]);
 
   const { data: classes } = classStore.getClassByPeriod(intakePeriodId + '');
-  const modules = moduleStore.getModulesByProgram(programId);
-  const [subjectData, setSubjectData] = useState({});
-  const [instructorData, setInstructorData] = useState<IInstructorData>({});
+  //   const [subjectData, setSubjectData] = useState({});
 
   const cachedData: IEvaluationInfo = getLocalStorageData('evaluationInfo') || {};
   //uncomment this to start with data cached in local storage
@@ -115,11 +89,7 @@ export default function SubjectEvaluationInfoComponent({
   //   'evaluationModule',
   // ) || [initialState];
 
-  const cachedEvaluationModuleData: IEvaluationSectionBased[] = [initialState];
-
-  const [evaluationModule, setEvaluationModule] = useState<IEvaluationSectionBased[]>(
-    [cachedEvaluationModuleData].flat(),
-  );
+  //   const cachedEvaluationModuleData: IEvaluationSectionBased[] = [initialState];
 
   const [details, setDetails] = useState<IEvaluationCreate>({
     access_type: cachedData?.access_type || IAccessTypeEnum.PUBLIC,
@@ -155,6 +125,8 @@ export default function SubjectEvaluationInfoComponent({
     time_limit: cachedData?.time_limit || 10,
     total_mark: cachedData?.total_mark || 0,
     strict: true,
+    intakeId: '',
+    intake_program_level: '',
   });
 
   useEffect(() => {
@@ -222,6 +194,8 @@ export default function SubjectEvaluationInfoComponent({
         ISubmissionTypeEnum.ONLINE_TEXT,
       time_limit: evaluationInfo?.time_limit || cachedData?.time_limit || 0,
       total_mark: evaluationInfo?.total_mark || cachedData?.total_mark || 0,
+      intakeId: '',
+      intake_program_level: '',
     });
   }, [
     evaluationInfo,
@@ -238,7 +212,7 @@ export default function SubjectEvaluationInfoComponent({
 
   const { mutate } = evaluationStore.createEvaluation();
   const { mutateAsync } = evaluationStore.updateEvaluation();
-  const { mutate: mutateSectionBased } = evaluationStore.createSectionBasedEvaluation();
+  //   const { mutate: mutateSectionBased } = evaluationStore.createSectionBasedEvaluation();
 
   function handleChange({ name, value }: ValueType) {
     if (name === ('due_on' || 'allow_submission_time') && typeof value === 'string') {
@@ -281,105 +255,6 @@ export default function SubjectEvaluationInfoComponent({
     }));
   }
 
-  async function getSubjectsByModule(module: string) {
-    try {
-      const objkeys = Object.keys(subjectData);
-
-      if (objkeys.length === 0) {
-        const subjects =
-          (await subjectService.getSubjectsByModule(module)).data.data || [];
-
-        setSubjectData({ ...subjectData, [module]: subjects });
-      } else {
-        for (let currKey of objkeys) {
-          if (currKey !== module) {
-            const subjects =
-              (await subjectService.getSubjectsByModule(module)).data.data || [];
-
-            setSubjectData({ ...subjectData, [module]: subjects });
-          }
-        }
-      }
-    } catch (error) {
-      return;
-    }
-  }
-
-  async function getInstructorsBySubject(subject: string) {
-    try {
-      const objkeys = Object.keys(instructorData);
-
-      if (objkeys.length === 0) {
-        const instructors =
-          (await enrollmentService.getInstructorsBySubjectId(subject)).data.data || [];
-
-        setInstructorData({ ...instructorData, [subject]: instructors });
-      } else {
-        for (let currKey of objkeys) {
-          if (currKey !== subject) {
-            const instructors =
-              (await enrollmentService.getInstructorsBySubjectId(subject)).data.data ||
-              [];
-
-            setInstructorData({ ...instructorData, [subject]: instructors });
-          }
-        }
-      }
-    } catch (error) {
-      return;
-    }
-  }
-
-  function handleModuleChange(index: number, { name, value }: ValueType) {
-    let evaluationModuleInfo = [...evaluationModule];
-    evaluationModuleInfo[index] = { ...evaluationModuleInfo[index], [name]: value };
-    setEvaluationModule(evaluationModuleInfo);
-    setLocalStorageData('evaluationModule', evaluationModuleInfo);
-
-    if (name === 'intake_program_level_module') {
-      getSubjectsByModule(value.toString());
-
-      return;
-    }
-
-    if (name === 'subject_academic_year_period') {
-      getInstructorsBySubject(value.toString());
-
-      return;
-    }
-
-    if (name === 'section_total_marks') {
-      // FIXME: on evaluation marks change, it will update the total marks of the evaluation
-      // FIXME: up and down
-      setDetails((details) => ({
-        ...details,
-        total_marks: details.total_mark + parseInt(value.toString()),
-      }));
-      return;
-    }
-  }
-
-  function handleAddModule() {
-    let newModule = initialState;
-    let modulesClone = [...evaluationModule];
-    modulesClone.push(newModule);
-
-    setEvaluationModule(modulesClone);
-  }
-
-  function handleRemoveModule(index: number) {
-    let evaluationModulesClone = [...evaluationModule];
-
-    if (evaluationModulesClone.length === 1) {
-      toast.error('You must add at least one module');
-
-      return;
-    }
-
-    evaluationModulesClone.splice(index, 1);
-    setEvaluationModule(evaluationModulesClone);
-  }
-
   function handleEditorChange(editor: Editor) {
     if (details)
       setDetails((details) => ({ ...details, exam_instruction: editor.getHTML() }));
@@ -419,32 +294,24 @@ export default function SubjectEvaluationInfoComponent({
         {
           onSuccess: (data) => {
             //update evaluation id in evaluation module
-            const modulesClone = [...evaluationModule];
+            // const modulesClone = [...evaluationModule];
 
-            const newEvaluation = modulesClone.map((evalMod) => {
-              evalMod.evaluation_id = data.data.data.id;
-              return evalMod;
-            });
+            // const newEvaluation = modulesClone.map((evalMod) => {
+            //   evalMod.evaluation_id = data.data.data.id;
+            //   return evalMod;
+            // });
 
-            mutateSectionBased(newEvaluation, {
-              onSuccess: () => {
-                toast.success('Evaluation created', { duration: 5000 });
-                setLocalStorageData('evaluationId', data.data.data.id); //should be removed at some point
-                if (
-                  details.questionaire_type === IQuestionaireTypeEnum.MANUAL ||
-                  details.evaluation_type === IEvaluationTypeEnum.SECTION_BASED
-                ) {
-                  setLocalStorageData('currentStep', 2);
-                  handleNext(2);
-                } else {
-                  setLocalStorageData('currentStep', 1);
-                  handleNext(1);
-                }
-              },
-              onError: (error: any) => {
-                toast.error(error.response.data.message);
-              },
-            });
+            // mutateSectionBased(newEvaluation, {
+            //   onSuccess: () => {
+            toast.success('Evaluation created', { duration: 5000 });
+            setLocalStorageData('evaluationId', data.data.data.id); //should be removed at some point
+            setLocalStorageData('currentStep', 1);
+            handleNext(1);
+            //   },
+            //   onError: (error: any) => {
+            //     toast.error(error.response.data.message);
+            //   },
+            // });
           },
           onError: (error: any) => {
             toast.error(error.response.data.data + '');
@@ -475,102 +342,6 @@ export default function SubjectEvaluationInfoComponent({
           options={getDropDownStatusOptions(IEvaluationTypeEnum)}>
           Evaluation type
         </SelectMolecule>
-
-        {IEvaluationTypeEnum.SECTION_BASED === details.evaluation_type && (
-          <div className="flex flex-col gap pt-[2.3rem]">
-            {evaluationModule.map((evalMod, index) => (
-              <div
-                className="flex flex-col gap-4 pb-10"
-                key={`${evalMod.instructor_subject_assignment} ${index}`}>
-                <div className="flex gap-6">
-                  <SelectMolecule
-                    width="36"
-                    value={evalMod?.intake_program_level_module}
-                    name="intake_program_level_module"
-                    placeholder="select module"
-                    loading={modules.isLoading}
-                    handleChange={(e: ValueType) => handleModuleChange(index, e)}
-                    options={getDropDownOptions({
-                      inputs: modules.data?.data.data || [],
-                    })}>
-                    Select module
-                  </SelectMolecule>
-
-                  <SelectMolecule
-                    width="36"
-                    value={evalMod?.subject_academic_year_period?.toString() || ''}
-                    name="subject_academic_year_period"
-                    loading={false}
-                    placeholder="select subject"
-                    handleChange={(e: ValueType) => handleModuleChange(index, e)}
-                    options={getDropDownOptions({
-                      //@ts-ignore
-                      inputs: subjectData[evalMod.intake_program_level_module] || [],
-                      labelName: ['title'],
-                    })}>
-                    Select subject
-                  </SelectMolecule>
-                </div>
-
-                <div className="flex gap-6 items-center">
-                  <SelectMolecule
-                    className="pb-3"
-                    width="36"
-                    value={evalMod?.instructor_subject_assignment}
-                    name="instructor_subject_assignment"
-                    placeholder="select instructor"
-                    handleChange={(e: ValueType) => handleModuleChange(index, e)}
-                    options={
-                      (
-                        instructorData[evalMod.subject_academic_year_period.toString()] ||
-                        []
-                      ).map((instr) => ({
-                        label: `${instr.user.first_name} ${instr.user.last_name}`,
-                        value: instr.user.id,
-                      })) as SelectData[]
-                    }>
-                    Select Instructor
-                  </SelectMolecule>
-
-                  <SelectMolecule
-                    className="pb-3"
-                    width="36"
-                    value={evalMod?.marker_id}
-                    name="marker_id"
-                    placeholder="select instructor"
-                    handleChange={(e: ValueType) => handleModuleChange(index, e)}
-                    options={getDropDownOptions({
-                      inputs: markers,
-                      labelName: ['first_name', 'last_name'],
-                    })}>
-                    Select marker
-                  </SelectMolecule>
-
-                  <InputMolecule
-                    type="number"
-                    value={evalMod?.section_total_marks}
-                    handleChange={(e: ValueType) => handleModuleChange(index, e)}
-                    name="section_total_marks"
-                    style={{ width: '5.5rem' }}>
-                    Total marks
-                  </InputMolecule>
-                </div>
-
-                <div>
-                  <Button styleType="outline" onClick={() => handleRemoveModule(index)}>
-                    Remove
-                  </Button>
-                </div>
-              </div>
-            ))}
-
-            <div className="pt-10 pb-[1rem]">
-              <Button styleType="outline" onClick={handleAddModule}>
-                Add module
-              </Button>
-            </div>
-          </div>
-        )}
 
         <RadioMolecule
           defaultValue={details?.access_type}
