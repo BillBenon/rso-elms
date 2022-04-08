@@ -35,6 +35,11 @@ export default function EvaluationQuestionComponent() {
     id: '',
   };
 
+  let evaluationQuestions: IEvaluationQuestionsInfo[] | ICreateEvaluationQuestions[] = [];
+
+  evaluationQuestions =
+    evaluationStore.getEvaluationQuestions(evaluationId).data?.data.data || [];
+
   const initialState: ICreateEvaluationQuestions = useMemo(() => {
     return {
       evaluation_id: evaluationId,
@@ -51,19 +56,12 @@ export default function EvaluationQuestionComponent() {
     };
   }, [evaluationId]);
 
-  let evaluationQuestions: IEvaluationQuestionsInfo[] | ICreateEvaluationQuestions[] = [];
-
-  if (evaluationId) {
-    evaluationQuestions =
-      evaluationStore.getEvaluationQuestions(evaluationId).data?.data.data || [];
-  }
-
   const [questions, setQuestions] = useState([initialState]);
 
   useEffect(() => {
     let allQuestions: any[] = [];
     if (evaluationQuestions?.length > 0) {
-      evaluationQuestions.forEach((question) => {
+      evaluationQuestions.forEach((question, index) => {
         let questionData = { ...initialState };
         questionData.choices = question.multiple_choice_answers || [];
         questionData.evaluation_id = question.evaluation_id;
@@ -75,6 +73,7 @@ export default function EvaluationQuestionComponent() {
         questionData.sub_questions = [];
         allQuestions.push(questionData);
       });
+      console.log({ allQuestions });
       setQuestions(allQuestions);
     } else {
       setQuestions([initialState]);
