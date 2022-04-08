@@ -2,6 +2,7 @@ import React from 'react';
 
 import Avatar from '../../../components/Atoms/custom/Avatar';
 import Badge from '../../../components/Atoms/custom/Badge';
+import Button from '../../../components/Atoms/custom/Button';
 import Heading from '../../../components/Atoms/Text/Heading';
 import ILabel from '../../../components/Atoms/Text/ILabel';
 import usernextkinStore from '../../../store/administration/usernextkin.store';
@@ -15,6 +16,9 @@ function NextOfKinCard({ user }: { user: UserInfo }) {
       <Heading fontWeight="semibold" fontSize="base" className="pt-6 pb-7">
         Next of Kin
       </Heading>
+      <div className="flex flex-col items-end -mt-16 mb-6">
+        <Button>Add Next of Kin</Button>
+      </div>
       {nextOfKin?.data.data.length === 0 ? (
         <Badge
           fontWeight="medium"
@@ -48,6 +52,9 @@ function NextOfKinCard({ user }: { user: UserInfo }) {
               <p className="text-txt-primary font-semibold py-2 text-sm">
                 {kin.nextOfKin.phone_number}
               </p>
+            </div>
+            <div className="flex flex-col items-end mt-2">
+              <Button styleType="outline">Edit</Button>
             </div>
           </div>
         ))
