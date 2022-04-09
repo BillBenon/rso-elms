@@ -60,7 +60,7 @@ export function getDropDownOptions({
   return options;
 }
 
-export function getDropDownStatusOptions(status: any): SelectData[] {
+export function getDropDownStatusOptions(status: any, hidden?: string[]): SelectData[] {
   let selectData: SelectData[] = [];
   if (status) {
     let stats = Object.keys(status).filter((key) => status[key]);
@@ -70,7 +70,13 @@ export function getDropDownStatusOptions(status: any): SelectData[] {
         label: titleCase(label),
         value: val.toString(),
       };
-      selectData.push(input);
+      if (hidden) {
+        if (!hidden.includes(val.toString())) {
+          selectData.push(input);
+        }
+      } else {
+        selectData.push(input);
+      }
     });
   }
   return selectData;

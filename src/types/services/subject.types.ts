@@ -3,7 +3,7 @@ import { Instructor } from './instructor.types';
 import {
   IntakeLevelModule,
   IntakeModuleStatus,
-  IntakeProgramLevelPeriodInfo,
+  IntakeProgramLevelPeriodInfo
 } from './intake-program.types';
 import { ModuleInfo } from './modules.types';
 
@@ -14,6 +14,7 @@ export interface SubjectInfo {
 }
 
 export interface ExtendedSubjectInfo extends Table, SubjectInfo {
+  evaluation_module_subject_id?: string;
   module: ModuleInfo;
 }
 

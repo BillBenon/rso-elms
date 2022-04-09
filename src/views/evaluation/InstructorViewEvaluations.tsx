@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
-
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -12,7 +11,7 @@ import ConfirmationOrganism from '../../components/Organisms/ConfirmationOrganis
 import EvaluationInfoComponent from '../../components/Organisms/forms/evaluation/EvaluationInfoComponent';
 import EvaluationQuestionComponent from '../../components/Organisms/forms/evaluation/EvaluationQuestionComponent';
 import EvaluationSettings from '../../components/Organisms/forms/evaluation/EvaluationSettings';
-import SubjectNewEvaluation from '../../components/Organisms/forms/evaluation/subjectEvaluation/SubjectNewEvaluation';
+import SubjectEvaluationInfoComponent from '../../components/Organisms/forms/evaluation/SubjectEvaluationInfoComponent';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { subjectService } from '../../services/administration/subject.service';
 import { evaluationService } from '../../services/evaluation/evaluation.service';
@@ -61,6 +60,7 @@ export default function InstructorViewEvaluations() {
     data?.data.data.forEach((evaluation) => {
       let formattedEvaluations = {
         questionaireType: evaluation.questionaire_type,
+        settingType: evaluation.setting_type,
         id: evaluation.id,
         title: evaluation.name,
         code: evaluation.evaluation_type.replaceAll('_', ' '),
@@ -195,16 +195,31 @@ export default function InstructorViewEvaluations() {
                         className="cursor-pointer"
                         data={info}
                         handleClick={() => handleClick(info.id + '')}>
-                        <div className="flex gap-4 pt-4">
-                          <Heading fontSize="sm" fontWeight="semibold">
-                            Type:{' '}
-                          </Heading>
-                          <Heading fontSize="sm" color="primary">
-                            {
-                              //@ts-ignore
-                              info.questionaireType
-                            }
-                          </Heading>
+                        <div>
+                          <div className="flex gap-4 pt-4">
+                            <Heading fontSize="sm" fontWeight="semibold">
+                              Type:{' '}
+                            </Heading>
+
+                            <Heading fontSize="sm" color="primary">
+                              {
+                                //@ts-ignore
+                                info.questionaireType
+                              }
+                            </Heading>
+                          </div>
+                          <div className="flex gap-4 pt-4">
+                            <Heading fontSize="sm" fontWeight="semibold">
+                              Setting type:{' '}
+                            </Heading>
+
+                            <Heading fontSize="sm" color="primary">
+                              {
+                                //@ts-ignore
+                                (info.settingType || '').replaceAll('_', ' ')
+                              }
+                            </Heading>
+                          </div>
                         </div>
                       </CommonCardMolecule>
                     </div>
@@ -221,7 +236,7 @@ export default function InstructorViewEvaluations() {
             </>
           )}
         />
-        <Route exact path={`${path}/new`} component={SubjectNewEvaluation} />
+        <Route exact path={`${path}/new`} component={SubjectEvaluationInfoComponent} />
 
         <Route exact path={`${path}/view/:id`} component={EvaluationNotiView} />
         {hasPrivilege(Privileges.CAN_ANSWER_EVALUATION) && (

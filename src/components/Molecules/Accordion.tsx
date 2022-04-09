@@ -1,5 +1,4 @@
 import React, { ReactElement, useState } from 'react';
-
 import Panel, { PanelProps } from '../Atoms/custom/Panel';
 
 type PanelChildrenType = ReactElement<PanelProps>[];
@@ -26,7 +25,7 @@ function Accordion({ children }: IProps) {
                 index={i}
                 show={panel.props.show}
                 bgColor={panelProps.bgColor}
-                key={panel.key}
+                key={panel.props.title}
                 active={activePanel === i}
                 handleOpen={(i) => handleOpen(i)}
                 title={panelProps.title}
