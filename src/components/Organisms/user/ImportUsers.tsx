@@ -93,6 +93,8 @@ export default function ImportUsers({ userType }: IProps) {
       ? roleStore.getRolesByAcademy(values.academyId)
       : roleStore.getRolesByInstitution(roleInfo.institution_id);
 
+  console.log('---------------------');
+
   const { data: userRoles } = usersStore.getUserRoles(user?.id + '');
 
   const userRolesId = userRoles?.data.data.map((role) => role.role.id) || [];
@@ -105,13 +107,19 @@ export default function ImportUsers({ userType }: IProps) {
   const intakes = intakeStore.getIntakesByProgram(values.program).data?.data.data || [];
 
   const picked_role = usePickedRole();
-  const { data: academy, isLoading: academyLoading } = academyStore.getAcademyById(
-    picked_role?.academy_id + '',
-  );
+
+  const {
+    data: academy,
+    isLoading: academyLoading,
+    refetch: refetchAcademy,
+  } = academyStore.getAcademyById(picked_role?.academy_id + '', true);
+
+  if (picked_role?.academyId && picked_role?.type === RoleType.ACADEMY) refetchAcademy();
 
   useEffect(() => {
-    setValues((prev) => ({ ...prev, academyId: picked_role?.academy_id + '' }));
-  }, [picked_role?.academy_id]);
+    if (picked_role?.academyId && picked_role?.type === RoleType.ACADEMY)
+      setValues((prev) => ({ ...prev, academyId: picked_role?.academy_id + '' }));
+  }, [picked_role]);
 
   const { mutateAsync, isLoading } = usersStore.importUsers();
 
