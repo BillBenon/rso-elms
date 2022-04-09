@@ -9,16 +9,14 @@ import { ValueType } from '../../../types';
 import {
   IEvaluationAction,
   IEvaluationQuestionsInfo,
+  IEvaluationSettingType,
   IEvaluationStatus,
 } from '../../../types/services/evaluation.types';
 import DisplayClasses from '../../../views/classes/DisplayClasses';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
-import MultipleChoiceAnswer from '../../../views/evaluation/MultipleChoiceAnswer';
-import Button from '../../Atoms/custom/Button';
-import Icon from '../../Atoms/custom/Icon';
 import Heading from '../../Atoms/Text/Heading';
-import InputMolecule from '../../Molecules/input/InputMolecule';
-import PopupMolecule from '../../Molecules/Popup';
+import EvaluationContentSectionBased from './EvaluationContentSectionBased';
+import EvaluationContentSubjectBased from './EvaluationContentSubjectBased';
 import EvaluationRemarks from './EvaluationRemarks';
 
 interface IProps {
@@ -44,10 +42,7 @@ export default function EvaluationContent({
   const { mutate: updateEvaluationQuestion } = evaluationStore.updateEvaluationQuestion();
 
   const { data: evaluationQuestions, isLoading: loading } =
-    evaluationStore.getEvaluationQuestionsByStatus(
-      evaluationId,
-      IEvaluationStatus.COMPLETED,
-    );
+    evaluationStore.getEvaluationQuestions(evaluationId);
 
   const [classes, setclasses] = useState([' ']);
 
@@ -196,135 +191,13 @@ export default function EvaluationContent({
         </Heading>
       </div>
 
-      <PopupMolecule
-        open={showPopup}
-        title="Add private attendee"
-        onClose={() => setShowPopup(false)}>
-        {evaluationInfo?.private_attendees &&
-        evaluationInfo?.private_attendees.length > 0 ? (
-          evaluationInfo?.private_attendees.map((attendee) => (
-            <p className="py-2" key={attendee.id}>
-              Attendees will go here
-            </p>
-          ))
-        ) : (
-          <p className="py-2">No private attendees</p>
-        )}
-        <Button onClick={() => setShowPopup(false)}>Done</Button>
-      </PopupMolecule>
-
-      <div
-        className={`${
-          !loading && 'bg-main'
-        }  px-7 pt-4 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
-        {evaluationQuestions?.data.data.length ? (
-          evaluationQuestions?.data.data.map((question, index: number) =>
-            question && question.multiple_choice_answers.length > 0 ? (
-              <div key={question.id}>
-                <div className="mt-3 flex justify-between">
-                  <ContentSpan title={`Question ${index + 1}`} className="gap-3">
-                    {question.question}
-                  </ContentSpan>
-
-                  <Heading fontWeight="semibold" fontSize="sm">
-                    {question.mark} marks
-                  </Heading>
-                </div>
-
-                {question.multiple_choice_answers.length
-                  ? question.multiple_choice_answers.map((choiceAnswer) => (
-                      <MultipleChoiceAnswer
-                        key={choiceAnswer.id}
-                        choiceId={choiceAnswer.id}
-                        answer_content={choiceAnswer.answer_content}
-                        correct={choiceAnswer.correct}
-                      />
-                    ))
-                  : null}
-              </div>
-            ) : (
-              <>
-                <div className="mt-3 flex justify-between">
-                  <div className="flex flex-col gap-4">
-                    <ContentSpan title={`Question ${index + 1}`} className="gap-3">
-                      {question.question}
-                    </ContentSpan>
-
-                    <ContentSpan title={`Question ${index + 1} answer`} className="gap-3">
-                      {question.answer}
-                    </ContentSpan>
-                  </div>
-
-                  <div className="flex justify-center items-center gap-2">
-                    <InputMolecule
-                      value={question.mark}
-                      name={'marks'}
-                      style={{ width: '4rem', height: '2.5rem' }}
-                      handleChange={updateMarks}
-                    />
-                    <Heading fontWeight="semibold" fontSize="sm">
-                      {question.mark === 1 ? 'mark' : 'marks'}
-                    </Heading>
-                  </div>
-                </div>
-
-                {showActions && (
-                  <div className="self-end flex gap-4">
-                    <button
-                      className={
-                        question?.choosen_question === IEvaluationStatus.ACCEPTED
-                          ? 'right-button'
-                          : 'normal-button'
-                      }
-                      onClick={() =>
-                        updateStatus(question.id, IEvaluationStatus.ACCEPTED)
-                      }>
-                      <Icon
-                        name={'tick'}
-                        size={18}
-                        stroke={
-                          question?.choosen_question === IEvaluationStatus.PENDING ||
-                          question?.choosen_question === IEvaluationStatus.REJECTED
-                            ? 'none'
-                            : 'main'
-                        }
-                        fill={'none'}
-                      />
-                    </button>
-
-                    <button
-                      className={
-                        question?.choosen_question === IEvaluationStatus.REJECTED
-                          ? 'wrong-button'
-                          : 'normal-button'
-                      }
-                      onClick={() =>
-                        updateStatus(question.id, IEvaluationStatus.REJECTED)
-                      }>
-                      <Icon
-                        name={'cross'}
-                        size={18}
-                        fill={
-                          question?.choosen_question === IEvaluationStatus.PENDING ||
-                          question?.choosen_question === IEvaluationStatus.ACCEPTED
-                            ? 'none'
-                            : 'main'
-                        }
-                      />
-                    </button>
-
-                    <Button onClick={() => saveUpdate(question)}>update marks</Button>
-                  </div>
-                )}
-              </>
-            ),
-          )
-        ) : (
-          <Heading fontWeight="semibold" fontSize="sm">
-            No questions attached
-          </Heading>
-        )}
-      </div>
+      {evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED ? (
+        <EvaluationContentSectionBased evaluation={evaluationInfo} />
+      ) : evaluationInfo?.setting_type === IEvaluationSettingType.SUBJECT_BASED ? (
+        <EvaluationContentSubjectBased evaluation={evaluationInfo} />
+      ) : (
+        <Heading>Nothing here</Heading>
+      )}
 
       {actionType && <EvaluationRemarks actionType={actionType} />}
     </div>

@@ -262,6 +262,7 @@ export interface IEvaluationInfo {
   evaluation_approvals: [];
   student_evaluations: [];
   evaluation_comments: [];
+  setting_type: IEvaluationSettingType;
 }
 
 export interface IEvaluationInfoCollected {
@@ -310,7 +311,7 @@ export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
   question_type: IQuestionType;
   id: string;
   answer: string;
-  evaluation_module_subject_id: string;
+  evaluation_module_subject_id?: string;
   choices: IMultipleChoice[];
 }
 
