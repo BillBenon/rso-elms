@@ -1,6 +1,5 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-
 import { useGetInstructor } from '../../../hooks/useGetInstructor';
 import { getEvaluationFeedbacks } from '../../../store/evaluation/evaluation.store';
 import { ParamType } from '../../../types';
@@ -24,7 +23,7 @@ export default function EvaluationRemarks({
       </Heading>
       <div className={`'bg-main  px-7 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
         <ul>
-          {feedbacks.map((feedback) => {
+          {feedbacks.map((feedback, index) => {
             let instructorInfo = useGetInstructor(feedback?.reviewer?.adminId)?.user;
 
             return feedback.remarks ? (
@@ -37,7 +36,7 @@ export default function EvaluationRemarks({
                   fontWeight="normal">{`=> ${feedback.remarks}`}</Heading>
               </div>
             ) : (
-              <Heading fontSize="base" fontWeight="semibold">
+              <Heading key={index} fontSize="base" fontWeight="semibold">
                 No remarks found
               </Heading>
             );

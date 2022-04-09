@@ -13,7 +13,6 @@ import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
 import BreadCrumb from '../../../Molecules/BreadCrumb';
 import Stepper from '../../../Molecules/Stepper/Stepper';
-import EvaluationSettings from './EvaluationSettings';
 
 export default function NewEvaluation() {
   const activeStep = getLocalStorageData('currentStep');
@@ -84,11 +83,12 @@ export default function NewEvaluation() {
           </div>
 
           {!evaluationId || (evaluationId && !evaluationInfo?.['is_to_be_approved']) ? (
-            <EvaluationSettings
-              handleNext={handleSubmit}
-              handleGoBack={handleBack}
-              evaluationId={evaluationId}
-            />
+            // <EvaluationSettings
+            //   handleNext={handleSubmit}
+            //   handleGoBack={handleBack}
+            //   evaluationId={evaluationId}
+            // />
+            <div />
           ) : (
             <>
               <Heading fontWeight="semibold" className="py-5">

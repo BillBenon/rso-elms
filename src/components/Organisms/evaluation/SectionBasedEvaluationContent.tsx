@@ -17,7 +17,6 @@ import TabNavigation, { TabType } from '../../Molecules/tabs/TabNavigation';
 import EvaluationRemarks from './EvaluationRemarks';
 import ModuleSubjectQuestion from './ModuleSubjectQuestion';
 
-
 interface IProps {
   evaluationId: string;
   children: ReactNode;
@@ -35,8 +34,8 @@ export default function SectionBasedEvaluationContent({
   const [tabs, setTabs] = useState<TabType[]>([]);
   const userInfo = useAuthenticator();
 
-
-  const { data: evaluationInfo } = evaluationStore.getEvaluationByIdAndInstructor(evaluationId, userInfo?.user?.id + '')
+  const { data: evaluationInfo } =
+    evaluationStore.getEvaluationByIdAndInstructor(evaluationId, userInfo?.user?.id + '')
       .data?.data || {};
 
   const [classes, setclasses] = useState([' ']);
@@ -48,12 +47,10 @@ export default function SectionBasedEvaluationContent({
   // const tabs: TabType[] = [];
 
   useEffect(() => {
-    
-          
     async function createTabs() {
       if (modules.length < 1) return;
 
-      const allTabs: TabType[] = [];
+      let allTabs: TabType[] = [];
 
       try {
         for (const mod of modules) {
@@ -71,6 +68,13 @@ export default function SectionBasedEvaluationContent({
         return;
       }
 
+      // remove duplicated from tabs base on tab.label
+      allTabs = allTabs.filter(
+        (value, index, self) =>
+          index ===
+          self.findIndex((t) => t.label === value.label && t.href === value.href),
+      );
+
       setTabs(allTabs);
     }
     createTabs();
@@ -80,14 +84,14 @@ export default function SectionBasedEvaluationContent({
     let filteredModules: IModules[] = [];
 
     async function getModules() {
-      if (evaluationInfo?.evaluation_module_subjects && evaluationInfo.evaluation_module_subjects.length > 0) {
-
-
+      if (
+        evaluationInfo?.evaluation_module_subjects &&
+        evaluationInfo.evaluation_module_subjects.length > 0
+      ) {
         for (const subj of evaluationInfo.evaluation_module_subjects) {
           const moduleData = await moduleService.getModuleById(
             subj.intake_program_level_module.toString(),
           );
-
 
           let temp = {
             id: '',
@@ -123,7 +127,7 @@ export default function SectionBasedEvaluationContent({
             {/*CAUTION: Don't touch this fragment
             It will break the accordion component
             Do it for your own risk*/}
-            <Fragment/>
+            <Fragment />
           </Panel>
           <Panel width="full" bgColor="main" title={'View Evaluation details'}>
             <div className="bg-main px-7 mt-7 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-3 pt-5">
