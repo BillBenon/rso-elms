@@ -29,7 +29,11 @@ const Pagination = ({ totalPages = 1, paginate, currentPage = 0 }: PaginationPro
     <div className="py-2">
       <nav className="my-2 flex justify-end">
         <ul className="flex pl-0 rounded list-none flex-wrap justify-center">
-          <button className="mr-3" onClick={onPrev} disabled={currentPage === 0}>
+          <button
+            aria-label="left-arrow"
+            className="mr-3"
+            onClick={onPrev}
+            disabled={currentPage === 0}>
             <Icon name="left-arrow" size={12} stroke="none" />
           </button>
           <li className="space-x-2">
@@ -46,6 +50,7 @@ const Pagination = ({ totalPages = 1, paginate, currentPage = 0 }: PaginationPro
             ))}
           </li>
           <button
+            aria-label="right-arrow"
             className="ml-3"
             onClick={onNext}
             disabled={currentPage === totalPages - 1}>

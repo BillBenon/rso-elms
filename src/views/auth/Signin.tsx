@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch, useRouteMatch } from 'react-router';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import AcademyProfileCard from '../../components/Molecules/cards/AcademyProfileCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';

@@ -18,6 +18,12 @@ class PrivilegeService {
   ): Promise<AxiosResponse<Response<PrivilegeRes>>> {
     return await adminstrationAxios.put('/privileges/modifyPrivilege', { ...privilege });
   }
+
+  public async getPrivilegeBySearch(
+    text: string,
+  ): Promise<AxiosResponse<Response<PrivilegeRes[]>>> {
+    return await adminstrationAxios.get(`/privileges/search?searchKey=${text}`);
+  }
 }
 
 export const privilegeService = new PrivilegeService();

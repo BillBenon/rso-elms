@@ -1,7 +1,6 @@
 {
   "name": "rso-elms",
-  "version": "0.0.0",
-  "license": "MIT",
+  "version": "1.0.0",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
@@ -19,6 +18,8 @@
     "@tiptap/react": "^2.0.0-beta.108",
     "@tiptap/starter-kit": "^2.0.0-beta.183",
     "axios": "0.26.1",
+    "i18next": "^21.6.14",
+    "i18next-browser-languagedetector": "^6.1.4",
     "lodash": "4.17.21",
     "moment": "^2.29.1",
     "react": "17.0.2",
@@ -28,9 +29,9 @@
     "react-country-region-selector": "^3.4.0",
     "react-dom": "17.0.2",
     "react-hot-toast": "2.2.0",
+    "react-i18next": "^11.16.2",
     "react-query": "3.34.19",
     "react-router-dom": "5.3.0",
-    "react-router-dom-v5-compat": "^6.3.0",
     "react-select": "5.2.2",
     "react-select-country-list": "^2.2.3",
     "react-svg": "14.1.16",
@@ -72,7 +73,8 @@
     "prettier": "2.6.1",
     "tailwindcss": "^3.0.23",
     "typescript": "4.6.3",
-    "vite": "2.6.14"
+    "vite": "2.6.14",
+    "vite-plugin-compression": "^0.5.1"
   },
   "engine": {
     "node": ">=14.x",
@@ -82,5 +84,6 @@
     "*": {
       "target": "http://192.168.1.112:8090/"
     }
-  }
+  },
+  "packageManager": "yarn@3.2.0"
 }

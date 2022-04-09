@@ -24,6 +24,12 @@ class UserStore {
     );
   }
 
+  getAllBySearch(text: string, filter: boolean) {
+    return useQuery(['users/search', text], () => userService.getAllBySearch(text), {
+      enabled: Boolean(filter),
+    });
+  }
+
   getUsersByAcademy(academyId: string, queryParams?: FilterOptions) {
     return useQuery(
       ['users/academy', academyId, formatQueryParameters(queryParams)],
@@ -79,6 +85,7 @@ class UserStore {
   downloadProfile(attachmentId: string) {
     return useQuery(['user/profile'], () => userService.downloadProfile(attachmentId));
   }
+
   getPersonalFiles(personId: string) {
     return useQuery(['user/personal_docs', personId], () =>
       userService.getUserFiles(personId),

@@ -1,6 +1,13 @@
 import moment from 'moment';
 import React from 'react';
-import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
+import {
+  Link,
+  Route,
+  Switch,
+  useHistory,
+  useParams,
+  useRouteMatch,
+} from 'react-router-dom';
 
 import Avatar from '../../../components/Atoms/custom/Avatar';
 import Badge from '../../../components/Atoms/custom/Badge';
@@ -43,7 +50,7 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
           </div>
         )}
         <div className="bg-secondary py-5 flex flex-col justify-center items-center">
-          <div className="relative">
+          <div className="relative  border-primary-400">
             <Avatar
               className="border-4 object-cover border-primary-500 -mt-20"
               size="120"
@@ -174,6 +181,11 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
               Chronic diseases are currently not specificied
             </Badge>
           </div>
+        </div>
+        <div className="flex flex-col items-end mt-8">
+          <Link to={`${url}/edit-compl-prof`}>
+            <Button styleType="outline">Edit</Button>
+          </Link>
         </div>
       </div>
       <Switch>

@@ -1,7 +1,7 @@
 // TODO: Should be removed
 
 import React, { useState } from 'react';
-import { useHistory, useLocation } from 'react-router';
+import { useHistory, useLocation } from 'react-router-dom';
 
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { Link as LinkList } from '../../../../types';
