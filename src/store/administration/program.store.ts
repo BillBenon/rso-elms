@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
-import { programService } from '../../services/administration/program.service';
 
+import { programService } from '../../services/administration/program.service';
 
 class ProgramStore {
   createProgram() {
@@ -17,7 +17,7 @@ class ProgramStore {
   }
   getProgramById(id: string, enabled: boolean = true) {
     return useQuery(['programs/id', id], () => programService.getProgramById(id), {
-      enabled
+      enabled,
     });
   }
   getModulesByProgram(program_id: string) {
@@ -32,9 +32,11 @@ class ProgramStore {
     );
   }
 
-  getProgramsByAcademy(program_id: string) {
-    return useQuery(['programs/program_id', program_id], () =>
-      programService.getProgramsByAcademy(program_id),
+  getProgramsByAcademy(program_id: string, enabled = true) {
+    return useQuery(
+      ['programs/program_id', program_id],
+      () => programService.getProgramsByAcademy(program_id),
+      { enabled },
     );
   }
 

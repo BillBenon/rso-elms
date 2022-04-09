@@ -163,10 +163,7 @@ function EnrollmentInfo({ values, handleChange, handleNext }: IProps) {
     });
 
     validatedForm
-      .then(() => {
-        handleNext(e);
-      })
-
+      .then(() => handleNext(e))
       .catch((err) => {
         const validatedErr: EnrollmentInfoErrors = initialErrorState;
         err.inner.map((el: { path: string | number; message: string }) => {

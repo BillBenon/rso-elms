@@ -34,9 +34,11 @@ class IntakeStore {
     );
   }
 
-  getIntakesByProgram(programId: string) {
-    return useQuery(['intakes/programs', programId], () =>
-      intakeService.getIntakesByProgram(programId),
+  getIntakesByProgram(programId: string, enabled = true) {
+    return useQuery(
+      ['intakes/programs', programId],
+      () => intakeService.getIntakesByProgram(programId),
+      { enabled },
     );
   }
 
