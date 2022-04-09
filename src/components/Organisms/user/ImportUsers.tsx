@@ -12,8 +12,8 @@ import programStore from '../../../store/administration/program.store';
 import usersStore from '../../../store/administration/users.store';
 import { RoleType, SelectData, ValueType } from '../../../types';
 import { AcademyInfo } from '../../../types/services/academy.types';
-import { IntakeProgramInfo } from '../../../types/services/intake-program.types';
-import { ProgramInfo } from '../../../types/services/program.types';
+// import { IntakeProgramInfo } from '../../../types/services/intake-program.types';
+// import { ProgramInfo } from '../../../types/services/program.types';
 import {
   AssignUserRole,
   IImportUser,
