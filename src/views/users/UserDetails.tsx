@@ -1,6 +1,13 @@
 import React from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useLocation, useParams } from 'react-router';
+import {
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+  useParams,
+  useRouteMatch,
+} from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -12,11 +19,13 @@ import enrollmentStore from '../../store/administration/enrollment.store';
 import usersStore from '../../store/administration/users.store';
 import { ParamType } from '../../types';
 import { ApproveStudents, StudentApproval } from '../../types/services/enrollment.types';
+import UpdateCompleteProfile from '../auth/UpdateCompleteProfile';
 import PersonalDocuments from './profile/PersonalDocuments';
 import ProfileOverview from './profile/ProfileOverview';
 
 export default function UserDetails() {
   const { id } = useParams<ParamType>();
+  const { path } = useRouteMatch();
   const { data: user, isLoading } = usersStore.getUserById(id);
   const { search } = useLocation();
   const intkStud = new URLSearchParams(search).get('intkStud');
@@ -95,34 +104,43 @@ export default function UserDetails() {
               </div>
             )}
           </div>
-          <Tabs>
-            <Tab label="Overview" className="pt-8">
-              <ProfileOverview user={user?.data.data} />
-            </Tab>
-            <Tab label="Performance" className="pt-8">
-              <NoDataAvailable
-                icon="academy"
-                fill={false}
-                showButton={false}
-                title={'User have no performance yet'}
-                description={
-                  'This user does not currently have any performance to display'
-                }
-              />
-            </Tab>
-            <Tab label="Log" className="pt-8">
-              <NoDataAvailable
-                icon="academy"
-                fill={false}
-                showButton={false}
-                title={'User have no logs yet'}
-                description={"This user's logs are not currently being recorded"}
-              />
-            </Tab>
-            <Tab label="Personal Documents" className="pt-8">
-              <PersonalDocuments user={user?.data.data} />
-            </Tab>
-          </Tabs>
+          <Switch>
+            <Route
+              exact
+              path={`${path}`}
+              render={() => (
+                <Tabs>
+                  <Tab label="Overview" className="pt-8">
+                    <ProfileOverview user={user?.data.data} />
+                  </Tab>
+                  <Tab label="Performance" className="pt-8">
+                    <NoDataAvailable
+                      icon="academy"
+                      fill={false}
+                      showButton={false}
+                      title={'User have no performance yet'}
+                      description={
+                        'This user does not currently have any performance to display'
+                      }
+                    />
+                  </Tab>
+                  <Tab label="Log" className="pt-8">
+                    <NoDataAvailable
+                      icon="academy"
+                      fill={false}
+                      showButton={false}
+                      title={'User have no logs yet'}
+                      description={"This user's logs are not currently being recorded"}
+                    />
+                  </Tab>
+                  <Tab label="Personal Documents" className="pt-8">
+                    <PersonalDocuments user={user?.data.data} />
+                  </Tab>
+                </Tabs>
+              )}
+            />
+            <Route path={`${path}/edit-compl-prof`} component={UpdateCompleteProfile} />
+          </Switch>
         </>
       ) : (
         <NoDataAvailable

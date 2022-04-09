@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router-dom';
 import countryList from 'react-select-country-list';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';

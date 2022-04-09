@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, useHistory, useRouteMatch } from 'react-router';
+import { Route, useHistory, useRouteMatch } from 'react-router-dom';
 import { Link, Switch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -93,10 +93,11 @@ export default function Academy() {
               <section>
                 <BreadCrumb list={list}></BreadCrumb>
               </section>
-              <div className="py-4">
+              <div>
                 <TableHeader
-                  title="Academy"
+                  title="Institution academies"
                   totalItems={academies.length}
+                  showSearch={false}
                   handleSearch={handleSearch}>
                   <Permission privilege={Privileges.CAN_CREATE_ACADEMY}>
                     <Link to={`${url}/add`}>
@@ -119,7 +120,7 @@ export default function Academy() {
                   privilege={Privileges.CAN_CREATE_ACADEMY}
                 />
               ) : (
-                <div className="mt-14">
+                <div>
                   {academyInfo && (
                     <Table<AcademyTypes>
                       statusColumn="status"

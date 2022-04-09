@@ -2,7 +2,7 @@ import { pick } from 'lodash';
 import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router-dom';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import academyStore from '../../../../store/administration/academy.store';

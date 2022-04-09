@@ -1,6 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useLocation, useParams } from 'react-router';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import Badge from '../../components/Atoms/custom/Badge';
 import Button from '../../components/Atoms/custom/Button';
