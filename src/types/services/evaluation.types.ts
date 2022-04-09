@@ -9,8 +9,6 @@ export enum IEvaluationTypeEnum {
   GROUP_WORK = 'GROUP_WORK',
   QUIZ = 'QUIZ',
   RESEARCH_PAPER = 'RESEARCH_PAPER',
-  DS_ASSESSMENT = 'DS_ASSESSMENT',
-  TEWT = 'TEWT',
 }
 
 export enum IQuestionType {
@@ -19,12 +17,10 @@ export enum IQuestionType {
 }
 
 export enum IQuestionaireTypeEnum {
-  MULTIPLE = 'MULTIPLE',
   MANUAL = 'MANUAL',
   FIELD = 'FIELD',
-  OPEN = 'OPEN',
+  DEFAULT = 'DEFAULT',
   HYBRID = 'HYBRID',
-  SECTION_BASED = 'SECTION_BASED',
 }
 
 export interface IEvaluationProps {
@@ -34,6 +30,12 @@ export interface IEvaluationProps {
   evaluationId: string | null;
   evaluationInfo?: IEvaluationInfo;
 }
+
+
+ export enum IEvaluationSettingType  {
+     SECTION_BASED = 'SECTION_BASED',
+     SUBJECT_BASED = 'SUBJECT_BASED',
+  }
 
 export enum ISubmissionTypeEnum {
   FILE = 'FILE',
@@ -164,6 +166,7 @@ export interface IEvaluationCreate {
   marking_type: IMarkingType;
   intakeId: string;
   intake_program_level: string;
+  setting_type: IEvaluationSettingType
 }
 
 export type IEvaluationSectionBased = {
@@ -337,7 +340,7 @@ export interface IEvaluationApproval {
   evaluation_id: string;
   id: string;
   reviewer_ids: string;
-  marker_ids: string;
+  marker_ids?: string | undefined;
   to_be_approved: boolean;
   to_be_reviewed: boolean;
 }

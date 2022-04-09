@@ -23,8 +23,6 @@ export default function EvaluationSettings() {
 
   const { evaluationId } = useParams<{ evaluationId: string }>();
 
-  console.log({ evaluationId });
-
   const instructors = instructordeploymentStore.getInstructorsDeployedInAcademy(
     picked_role?.academy_id + '',
   ).data?.data.data;
@@ -37,7 +35,7 @@ export default function EvaluationSettings() {
     evaluation_id: evaluationId + '',
     id: '',
     reviewer_ids: '',
-    marker_ids: user?.id.toString() || '',
+    marker_ids: undefined,
     to_be_approved: false,
     to_be_reviewed: false,
   };
@@ -48,7 +46,7 @@ export default function EvaluationSettings() {
       evaluation_id: evaluationId + '',
       id: '',
       reviewer_ids: '',
-      marker_ids: user?.id.toString() || '',
+      marker_ids: undefined,
       to_be_approved: false,
       to_be_reviewed: false,
     });
@@ -65,14 +63,8 @@ export default function EvaluationSettings() {
       return;
     }
 
-    setSettings({ ...settings, [name]: value.toString() });
+    setSettings({ ...settings, [name]: value });
   }
-
-  // useEffect(() => {
-  //   const cachedData: IEvaluationApproval =
-  //     getLocalStorageData('evaluationSettings') || {};
-  //   setSettings(cachedData || {});
-  // }, []);
 
   const { mutate, isLoading } = evaluationStore.createEvaluationSettings();
 
@@ -84,14 +76,26 @@ export default function EvaluationSettings() {
       evaluation_id: evaluationId + '',
     });
 
+    // Should remove marker_id property if marking type is set to section
+    // otherwise it will parse marker_ids from array to string for api compatibility
+    if (evaluationInfo?.marking_type === IMarkingType.PER_SECTION) {
+      Object.keys(settings).forEach(
+        (key) =>
+          settings[key as keyof IEvaluationApproval] == null &&
+          delete settings[key as keyof IEvaluationApproval],
+      );
+    } else {
+      settings.marker_ids = settings.marker_ids?.toString();
+    }
+
     mutate(settings, {
       onSuccess: () => {
         toast.success('Settings added', { duration: 5000 });
-        //remove all data that we have stored in local storage for caching
-        history.push('/dashboard/evaluations');
+        // To make sure that the evaluations are updated on the page
+        window.location.href = '/dashboard/evaluations';
       },
       onError: (error: any) => {
-        toast.error(error + '');
+        toast.error(error.response.data.message, { duration: 5000 });
       },
     });
   }

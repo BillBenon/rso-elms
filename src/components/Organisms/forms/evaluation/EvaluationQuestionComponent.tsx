@@ -1,5 +1,5 @@
 import { Editor } from '@tiptap/react';
-import React, { FormEvent, useEffect, useMemo, useState } from 'react';
+import React, { FormEvent, Fragment, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 import { subjectService } from '../../../../services/administration/subject.service';
@@ -145,6 +145,15 @@ export default function EvaluationQuestionComponent() {
     setQuestions(questionInfo);
   }
 
+  function handleChangeEditor(editor: Editor, index: number, name: string) {
+    let questionInfo = [...questions];
+
+    console.log(questionInfo[index]);
+
+    questionInfo[index] = { ...questionInfo[index], [name]: editor.getHTML() };
+    setQuestions(questionInfo);
+  }
+
   function handleCorrectAnswerCahnge(index: number, e: ValueType) {
     let questionsClone = [...questions];
     const question = questionsClone[index];
@@ -203,10 +212,8 @@ export default function EvaluationQuestionComponent() {
     <form className="flex flex-col" onSubmit={submitForm}>
       {questions.length ? (
         questions.map((question, index: number) => (
-          <>
-            <div
-              className="flex justify-between w-2/3 bg-main px-6 py-10 mt-8"
-              key={index}>
+          <Fragment key={index}>
+            <div className="flex justify-between w-2/3 bg-main px-6 py-10 mt-8">
               <div className="flex flex-col">
                 <SelectMolecule
                   value={question.evaluation_module_subject_id}
@@ -245,16 +252,9 @@ export default function EvaluationQuestionComponent() {
                     <ILabel size="sm">Question {index + 1}</ILabel>
                   </div>
                   <Tiptap
-                    handleChange={function (_editor: Editor): void {
-                      let questionInfo = [...questions];
-
-                      questionInfo[index] = {
-                        ...questionInfo[index],
-                        question: _editor.getHTML(),
-                      };
-
-                      setQuestions(questionInfo);
-                    }}
+                    handleChange={(editor) =>
+                      handleChangeEditor(editor, index, 'question')
+                    }
                     content={question.question}
                   />
                 </div>
@@ -283,16 +283,19 @@ export default function EvaluationQuestionComponent() {
                       <ILabel size="sm">Question {index + 1} answer</ILabel>
                     </div>
                     <Tiptap
-                      handleChange={function (_editor: Editor): void {
-                        let questionInfo = [...questions];
+                      // handleChange={function (_editor: Editor): void {
+                      //   let questionInfo = [...questions];
 
-                        questionInfo[index] = {
-                          ...questionInfo[index],
-                          answer: _editor.getHTML(),
-                        };
+                      //   questionInfo[index] = {
+                      //     ...questionInfo[index],
+                      //     answer: _editor.getHTML(),
+                      //   };
 
-                        setQuestions(questionInfo);
-                      }}
+                      //   setQuestions(questionInfo);
+                      // }}
+                      handleChange={(editor) =>
+                        handleChangeEditor(editor, index, 'answer')
+                      }
                       content={question.answer}
                     />
                   </div>
@@ -300,7 +303,7 @@ export default function EvaluationQuestionComponent() {
                 {/* multiple choice answers here */}
                 {question.question_type === IQuestionType.MULTIPLE_CHOICE &&
                   question.choices.map((multipleQuestion, choiceIndex) => (
-                    <>
+                    <Fragment key={choiceIndex}>
                       <TextAreaMolecule
                         key={`${choiceIndex}`}
                         readOnly={question.submitted}
@@ -319,7 +322,7 @@ export default function EvaluationQuestionComponent() {
                           </button>
                         </div>
                       </TextAreaMolecule>
-                    </>
+                    </Fragment>
                   ))}
 
                 {question.question_type === IQuestionType.MULTIPLE_CHOICE ? (
@@ -400,7 +403,7 @@ export default function EvaluationQuestionComponent() {
                 </div>
               </div> */}
             </div>
-          </>
+          </Fragment>
         ))
       ) : (
         <Heading>No questions created for this evaluation</Heading>

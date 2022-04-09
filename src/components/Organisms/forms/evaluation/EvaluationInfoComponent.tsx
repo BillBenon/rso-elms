@@ -3,7 +3,6 @@ import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
-
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { enrollmentService } from '../../../../services/administration/enrollments.service';
@@ -24,6 +23,7 @@ import {
   IEvaluationClassification,
   IEvaluationCreate,
   IEvaluationSectionBased,
+  IEvaluationSettingType,
   IEvaluationStatus,
   IEvaluationTypeEnum,
   IMarkingType,
@@ -84,7 +84,7 @@ export default function EvaluationInfoComponent() {
     marking_reminder_date: '',
     maximum_file_size: 0,
     subject_academic_year_period_id: '',
-    questionaire_type: IQuestionaireTypeEnum.SECTION_BASED,
+    questionaire_type: IQuestionaireTypeEnum.DEFAULT,
     exam_instruction: '',
     name: '',
     submision_type: ISubmissionTypeEnum.ONLINE_TEXT,
@@ -94,6 +94,7 @@ export default function EvaluationInfoComponent() {
     intakeId: '',
     intake_academic_year_period: '',
     intake_program_level: '',
+    setting_type: IEvaluationSettingType.SECTION_BASED,
   });
 
   useEffect(() => {
@@ -227,8 +228,10 @@ export default function EvaluationInfoComponent() {
   //   classes?.data.data,
   // ]);
 
-  const { mutate } = evaluationStore.createEvaluation();
-  const { mutate: mutateSectionBased } = evaluationStore.createSectionBasedEvaluation();
+  const { mutate, isLoading: createEvaluationLoader } =
+    evaluationStore.createEvaluation();
+  const { mutate: mutateSectionBased, isLoading: sectionBasedLoader } =
+    evaluationStore.createSectionBasedEvaluation();
 
   function handleChange({ name, value }: ValueType) {
     // if (name === ('due_on' || 'allow_submission_time') && typeof value === 'string') {
@@ -336,24 +339,36 @@ export default function EvaluationInfoComponent() {
     }
 
     // if (name === 'section_total_marks') {
-    // FIXME: on evaluation marks change, it will update the total marks of the evaluation
-    // FIXME: up and down
+    //   console.log({ evaluationModule });
+    //   let total_mark = 0;
+    //   // add all marks on evaluation module
+    //   evaluationModule.forEach((module) => {
+    //     total_mark += module.section_total_marks;
+    //   });
 
-    // function getTotalMark() {
-    //   return evaluationModule.reduce((evaluation, currEvaluation) => {
-    //     return Number(evaluation) + Number(currEvaluation.section_total_marks);
-    //   }, 0);
-    // }
-
-    //TODO: Make input async with evaluation marks
-    // setDetails((details) => ({
-    //   ...details,
-    //   total_mark: getTotalMark(),
-    // }));
+    //   setDetails((details) => ({
+    //     ...details,
+    //     total_mark,
+    //   }));
 
     //   return;
     // }
   }
+
+  useEffect(() => {
+    if (evaluationModule.length > 0) {
+      let total_mark = 0;
+      // add all marks on evaluation module
+      evaluationModule.forEach((module) => {
+        total_mark += Number(module.section_total_marks);
+      });
+
+      setDetails((details) => ({
+        ...details,
+        total_mark,
+      }));
+    }
+  }, [evaluationModule]);
 
   const authUserId = user?.id;
 
@@ -420,7 +435,7 @@ export default function EvaluationInfoComponent() {
           mutateSectionBased(newEvaluation, {
             onSuccess: () => {
               toast.success('Evaluation created successfully');
-              history.push(`/dashboard/evaluations/${data.data.data.id}/addquestions`);
+              history.push(`/dashboard/evaluations/${data.data.data.id}/settings`);
             },
             onError: (error: any) => {
               toast.error(error.response.data.message);
@@ -598,7 +613,7 @@ export default function EvaluationInfoComponent() {
                   width="36"
                   value={evalMod?.instructor_subject_assignment}
                   name="instructor_subject_assignment"
-                  placeholder="select instructor"
+                  placeholder="select setter"
                   handleChange={(e: ValueType) => handleModuleChange(index, e)}
                   options={
                     (
@@ -609,22 +624,24 @@ export default function EvaluationInfoComponent() {
                       value: instr.user.id,
                     })) as SelectData[]
                   }>
-                  Select Instructor
+                  Select Setter
                 </SelectMolecule>
 
-                <SelectMolecule
-                  className="pb-3"
-                  width="36"
-                  value={evalMod?.marker_id}
-                  name="marker_id"
-                  placeholder="select instructor"
-                  handleChange={(e: ValueType) => handleModuleChange(index, e)}
-                  options={getDropDownOptions({
-                    inputs: markers,
-                    labelName: ['first_name', 'last_name'],
-                  })}>
-                  Select marker
-                </SelectMolecule>
+                {details.marking_type === IMarkingType.PER_SECTION && (
+                  <SelectMolecule
+                    className="pb-3"
+                    width="36"
+                    value={evalMod?.marker_id}
+                    name="marker_id"
+                    placeholder="select instructor"
+                    handleChange={(e: ValueType) => handleModuleChange(index, e)}
+                    options={getDropDownOptions({
+                      inputs: markers,
+                      labelName: ['first_name', 'last_name'],
+                    })}>
+                    Select marker
+                  </SelectMolecule>
+                )}
 
                 <InputMolecule
                   type="number"
@@ -714,9 +731,10 @@ export default function EvaluationInfoComponent() {
           name="questionaire_type"
           value={details.questionaire_type}
           options={[
-            { label: 'Section based', value: IQuestionaireTypeEnum.SECTION_BASED },
+            { label: 'Default', value: IQuestionaireTypeEnum.DEFAULT },
             { label: 'Manual', value: IQuestionaireTypeEnum.MANUAL },
             { label: 'Field', value: IQuestionaireTypeEnum.FIELD },
+            { label: 'Hybrid', value: IQuestionaireTypeEnum.HYBRID },
           ]}
           handleChange={handleChange}>
           Questionaire type
@@ -779,6 +797,7 @@ export default function EvaluationInfoComponent() {
           style={{ width: '6rem' }}
           type="number"
           name="total_mark"
+          readOnly
           value={details?.total_mark}
           handleChange={handleChange}>
           Evaluation marks
@@ -835,7 +854,9 @@ export default function EvaluationInfoComponent() {
           Consider on report
         </RadioMolecule>
         <div className="pt-3">
-          <Button type="submit">Next</Button>
+          <Button type="submit" disabled={createEvaluationLoader || sectionBasedLoader}>
+            Next
+          </Button>
         </div>
       </form>
     </div>

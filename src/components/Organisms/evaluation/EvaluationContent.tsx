@@ -194,13 +194,6 @@ export default function EvaluationContent({
         <Heading fontWeight="semibold" fontSize="base" className="pt-6">
           Evaluation questions
         </Heading>
-
-        <Button
-          onClick={() => {
-            history.push(`/dashboard/evaluations/${evaluationId}/addQuestions`);
-          }}>
-          Edit questions
-        </Button>
       </div>
 
       <PopupMolecule
