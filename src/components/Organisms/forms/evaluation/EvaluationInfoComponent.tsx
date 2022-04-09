@@ -558,7 +558,10 @@ export default function EvaluationInfoComponent() {
           name="evaluation_type"
           placeholder="Evaluation Type"
           handleChange={handleChange}
-          options={getDropDownStatusOptions(IEvaluationTypeEnum)}>
+          options={getDropDownStatusOptions(IEvaluationTypeEnum, [
+            IEvaluationTypeEnum.DS_ASSESSMENT,
+            IEvaluationTypeEnum.TEWT,
+          ])}>
           Evaluation type
         </SelectMolecule>
 

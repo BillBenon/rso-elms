@@ -9,7 +9,11 @@ export enum IEvaluationTypeEnum {
   GROUP_WORK = 'GROUP_WORK',
   QUIZ = 'QUIZ',
   RESEARCH_PAPER = 'RESEARCH_PAPER',
+  DS_ASSESSMENT = 'DS_ASSESSMENT',
+  TEWT = 'TEWT',
 }
+
+
 
 export enum IQuestionType {
   MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
