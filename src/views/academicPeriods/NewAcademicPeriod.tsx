@@ -1,19 +1,18 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useParams } from 'react-router';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import { queryClient } from '../../plugins/react-query';
 import academicperiodStore from '../../store/administration/academicperiod.store';
-import { ValueType } from '../../types';
+import { ParamType, ValueType } from '../../types';
 import { ICreateAcademicPeriod } from '../../types/services/academicperiod.types';
 import { PeriodType } from '../../types/services/intake.types';
 import { getDropDownStatusOptions } from '../../utils/getOption';
 
 function NewAcademicPeriod() {
-  const { id: yearId } = useParams();
+  const { id: yearId } = useParams<ParamType>();
   const history = useHistory();
   const [period, setPeriod] = useState<ICreateAcademicPeriod>({
     start_on: '',
@@ -25,7 +24,7 @@ function NewAcademicPeriod() {
   });
 
   useEffect(() => {
-    setPeriod((period) => ({ ...period, academic_year_id: yearId as string }));
+    setPeriod((period) => ({ ...period, academic_year_id: yearId }));
   }, [yearId]);
 
   useEffect(() => {

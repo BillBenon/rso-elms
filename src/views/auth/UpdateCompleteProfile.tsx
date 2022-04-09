@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import Stepper from '../../components/Molecules/Stepper/Stepper';
 import UpdateEmploymentDetails from '../../components/Organisms/forms/auth/signup/personal/UpdateEmploymentDetails';
 import UpdatePersonalDetails from '../../components/Organisms/forms/auth/signup/personal/UpdatePersonalDetails';
-import useAuthenticator from '../../hooks/useAuthenticator';
+// import useAuthenticator from '../../hooks/useAuthenticator';
 import usersStore from '../../store/administration/users.store';
-import { ParamType } from '../../types';
+// import { ParamType } from '../../types';
 import {
   DocType,
   EducationLevel,
@@ -16,6 +16,7 @@ import {
   ProfileStatus,
   SendCommunicationMsg,
   UpdateUserInfo,
+  UserInfo,
   UserType,
 } from '../../types/services/user.types';
 import {
@@ -26,7 +27,7 @@ import {
 
 export default function UpdateCompleteProfile() {
   const history = useHistory();
-  const { user } = useAuthenticator();
+  // const { user } = useAuthenticator();
   const [currentStep, setCurrentStep] = useState(0);
   const [completeStep, setCompleteStep] = useState(0);
 
@@ -80,12 +81,12 @@ export default function UpdateCompleteProfile() {
     spouse_name: '',
   });
 
-  //   let foundUser: UserInfo = getLocalStorageData('user');
-  //   const user = usersStore.getUserById(foundUser.id.toString());
-  const { id } = useParams<ParamType>();
-  const { data } = usersStore.getUserById(id);
+  let foundUser: UserInfo = getLocalStorageData('user');
+  const user = usersStore.getUserById(foundUser.id.toString());
+  // const { id } = useParams<ParamType>();
+  // const { data } = usersStore.getUserById(id);
   useEffect(() => {
-    const userInfo = data?.data.data;
+    const userInfo = user.data?.data.data;
     // const deployedUser = userInfo?.person.doc_type === null;
 
     userInfo &&
@@ -154,7 +155,7 @@ export default function UpdateCompleteProfile() {
         spouse_name: userInfo.person ? userInfo.person.spouse_name : '',
         // institution_id: userInfo.institution_id,
       });
-  }, [data]);
+  }, [user.data]);
 
   useEffect(() => {
     let data: UpdateUserInfo = getLocalStorageData('user');
@@ -234,13 +235,13 @@ export default function UpdateCompleteProfile() {
           completeStep={completeStep}
           navigateToStepHandler={navigateToStepHandler}>
           <UpdatePersonalDetails
-            fetched_id={user?.id.toString()}
+            fetched_id={foundUser.id.toString()}
             display_label="Personal details"
             isVertical
             nextStep={nextStep}
           />
           <UpdateEmploymentDetails
-            fetched_id={user?.id.toString()}
+            fetched_id={foundUser.id.toString()}
             display_label="Employment details"
             isVertical
             prevStep={prevStep}

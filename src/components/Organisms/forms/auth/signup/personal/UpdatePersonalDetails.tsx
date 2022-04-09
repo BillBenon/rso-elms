@@ -3,7 +3,12 @@ import { useParams } from 'react-router-dom';
 import countryList from 'react-select-country-list';
 
 import usersStore from '../../../../../../store/administration/users.store';
-import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../types';
+import {
+  CommonFormProps,
+  CommonStepProps,
+  ParamType,
+  ValueType,
+} from '../../../../../../types';
 import {
   BloodGroup,
   DocType,
