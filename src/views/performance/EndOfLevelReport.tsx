@@ -17,6 +17,7 @@ import { calculateGrade, formatPercentage, isFailure } from '../../utils/school-
 
 interface IParamType {
   levelId: string;
+  periodId: string;
   classId: string;
   studentId: string;
 }
