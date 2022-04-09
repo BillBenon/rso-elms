@@ -12,6 +12,8 @@ import programStore from '../../../store/administration/program.store';
 import usersStore from '../../../store/administration/users.store';
 import { RoleType, SelectData, ValueType } from '../../../types';
 import { AcademyInfo } from '../../../types/services/academy.types';
+// import { IntakeProgramInfo } from '../../../types/services/intake-program.types';
+// import { ProgramInfo } from '../../../types/services/program.types';
 import {
   AssignUserRole,
   IImportUser,
@@ -102,16 +104,25 @@ export default function ImportUsers({ userType }: IProps) {
 
   const academic_programs =
     programStore.getProgramsByAcademy(values.academyId).data?.data.data || [];
+
   const intakes = intakeStore.getIntakesByProgram(values.program).data?.data.data || [];
 
   const picked_role = usePickedRole();
-  const { data: academy, isLoading: academyLoading } = academyStore.getAcademyById(
-    picked_role?.academy_id + '',
-  );
+
+  const {
+    data: academy,
+    isLoading: academyLoading,
+    refetch: refetchAcademy,
+  } = academyStore.getAcademyById(picked_role?.academy_id + '', true);
+
+  if (picked_role?.academyId && picked_role?.type === RoleType.ACADEMY) refetchAcademy();
 
   useEffect(() => {
-    setValues((prev) => ({ ...prev, academyId: picked_role?.academy_id + '' }));
-  }, [picked_role?.academy_id]);
+    if (picked_role?.academy_id && picked_role?.type === RoleType.ACADEMY)
+      setValues((prev) => ({ ...prev, academyId: picked_role?.academy_id + '' }));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [picked_role]);
 
   const { mutateAsync, isLoading } = usersStore.importUsers();
 
@@ -183,6 +194,7 @@ export default function ImportUsers({ userType }: IProps) {
           validatedErr[el.path as keyof ImportErrors] = el.message;
         });
         setErrors(validatedErr);
+        console.log('invalid', validatedErr);
       });
   }
 
@@ -191,6 +203,7 @@ export default function ImportUsers({ userType }: IProps) {
   };
 
   function handleChange(e: ValueType) {
+    console.log(values);
     setValues({ ...values, [e.name]: e.value });
   }
   return (
@@ -215,18 +228,17 @@ export default function ImportUsers({ userType }: IProps) {
             Academy
           </InputMolecule>
         )}
-        {userType === UserType.STUDENT ||
-          (UserType.INSTRUCTOR && (
-            <SelectMolecule
-              error={errors.roleId}
-              placeholder="Select role"
-              options={getDropDownOptions({ inputs: roleOptions })}
-              value={values.roleId}
-              name="roleId"
-              handleChange={handleChange}>
-              Select role
-            </SelectMolecule>
-          ))}
+
+        <SelectMolecule
+          error={errors.roleId}
+          placeholder="Select role"
+          options={getDropDownOptions({ inputs: roleOptions })}
+          value={values.roleId}
+          name="roleId"
+          handleChange={handleChange}>
+          Select role
+        </SelectMolecule>
+
         {userType === UserType.STUDENT ? (
           <div>
             <SelectMolecule

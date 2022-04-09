@@ -13,18 +13,18 @@ export enum IEvaluationTypeEnum {
   TEWT = 'TEWT',
 }
 
+
+
 export enum IQuestionType {
   MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
   OPEN = 'OPEN',
 }
 
 export enum IQuestionaireTypeEnum {
-  MULTIPLE = 'MULTIPLE',
   MANUAL = 'MANUAL',
   FIELD = 'FIELD',
-  OPEN = 'OPEN',
+  DEFAULT = 'DEFAULT',
   HYBRID = 'HYBRID',
-  SECTION_BASED = 'SECTION_BASED',
 }
 
 export interface IEvaluationProps {
@@ -34,6 +34,12 @@ export interface IEvaluationProps {
   evaluationId: string | null;
   evaluationInfo?: IEvaluationInfo;
 }
+
+
+ export enum IEvaluationSettingType  {
+     SECTION_BASED = 'SECTION_BASED',
+     SUBJECT_BASED = 'SUBJECT_BASED',
+  }
 
 export enum ISubmissionTypeEnum {
   FILE = 'FILE',
@@ -164,6 +170,7 @@ export interface IEvaluationCreate {
   marking_type: IMarkingType;
   intakeId: string;
   intake_program_level: string;
+  setting_type: IEvaluationSettingType
 }
 
 export type IEvaluationSectionBased = {
@@ -259,6 +266,7 @@ export interface IEvaluationInfo {
   evaluation_approvals: [];
   student_evaluations: [];
   evaluation_comments: [];
+  setting_type: IEvaluationSettingType;
 }
 
 export interface IEvaluationInfoCollected {
@@ -307,7 +315,7 @@ export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
   question_type: IQuestionType;
   id: string;
   answer: string;
-  evaluation_module_subject_id: string;
+  evaluation_module_subject_id?: string;
   choices: IMultipleChoice[];
 }
 
@@ -337,7 +345,7 @@ export interface IEvaluationApproval {
   evaluation_id: string;
   id: string;
   reviewer_ids: string;
-  marker_ids: string;
+  marker_ids?: string | undefined;
   to_be_approved: boolean;
   to_be_reviewed: boolean;
 }

@@ -1,8 +1,8 @@
 import { useMutation, useQuery } from 'react-query';
+
 import { intakeProgramService } from '../../services/administration/IntakeProgram.service';
 import { StudentApproval } from '../../types/services/enrollment.types';
 import { IntakeModuleStatus } from '../../types/services/intake-program.types';
-
 
 class IntakeProgramStore {
   getStudentById(studentId: string) {
@@ -21,16 +21,17 @@ class IntakeProgramStore {
     );
   }
   getStudentsByIntakeProgramLevel(intakeProgramlevelId: string, enabled: boolean = true) {
-    return useQuery(['students/intakeProgramlevelId', intakeProgramlevelId], () =>
-      intakeProgramService.getStudentsByIntakeProgramLevel(intakeProgramlevelId),
+    return useQuery(
+      ['students/intakeProgramlevelId', intakeProgramlevelId],
+      () => intakeProgramService.getStudentsByIntakeProgramLevel(intakeProgramlevelId),
       {
-        enabled
-      }
+        enabled,
+      },
     );
   }
   getInstructorsByIntakeProgram(intakeProgramId: string) {
     return useQuery(['instructors/intakeprogramId', intakeProgramId], () =>
-      intakeProgramService.getInstructorsByIntakeProgram(intakeProgramId)
+      intakeProgramService.getInstructorsByIntakeProgram(intakeProgramId),
     );
   }
   getIntakeProgramLevelsByInstructorId(instructorId: string) {
@@ -51,8 +52,9 @@ class IntakeProgramStore {
     );
   }
   getLevelsByIntakeProgram(intakeProgramId: string, enabled: boolean = true) {
-    return useQuery(['levels/intakeProgramId', intakeProgramId], () =>
-      intakeProgramService.getLevelsByIntakeProgram(intakeProgramId),
+    return useQuery(
+      ['levels/intakeProgramId', intakeProgramId],
+      () => intakeProgramService.getLevelsByIntakeProgram(intakeProgramId),
       { enabled },
     );
   }
@@ -63,11 +65,12 @@ class IntakeProgramStore {
   }
 
   getPeriodsByLevel(levelId: number, enabled: boolean = true) {
-    return useQuery(['levels/periods', levelId], () =>
-      intakeProgramService.getPeriodsByIntakeAcademicYearLevelId(levelId),
+    return useQuery(
+      ['levels/periods', levelId],
+      () => intakeProgramService.getPeriodsByIntakeAcademicYearLevelId(levelId),
       {
-enabled
-      }
+        enabled,
+      },
     );
   }
   getModulesByLevel(levelId: number) {

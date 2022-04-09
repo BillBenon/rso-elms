@@ -55,19 +55,19 @@ const nidRwandaValidation = (nid: string) => {
   const birth_year = tempDate.getFullYear();
 
   if (!(birth_year == parseInt(nid.substring(1, 5)))) {
-    return 'Invalid National ID - birth year part not valid';
+    return 'Invalid National ID';
   }
 
   // get the gender
   var genderCode = parseInt(nid.substring(5, 6));
   if (genderCode !== 7 && genderCode !== 8) {
-    return 'Invalid National ID - gender part not valid';
+    return 'Invalid National ID';
   }
 
   // get country ID for citzenship
   var first_time_received = parseInt(nid.substring(13, 14));
   if (first_time_received !== 0 && first_time_received !== 1) {
-    return 'Invalid National ID - check the digits again';
+    return 'Invalid National ID';
   } else {
     return '';
   }

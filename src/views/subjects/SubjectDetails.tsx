@@ -8,7 +8,6 @@ import {
   useParams,
   useRouteMatch,
 } from 'react-router-dom';
-
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
@@ -24,7 +23,6 @@ import { lessonStore } from '../../store/administration/lesson.store';
 import { subjectStore } from '../../store/administration/subject.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { Privileges } from '../../types';
-import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import EvaluationCategories from '../evaluation/EvaluationCategories';
 import SubjectInstructorView from '../evaluation/SubjectInstructorView';
 import SubjectInstructors from './SubjectInstructors';
@@ -74,7 +72,6 @@ export default function SubjectDetails() {
   };
 
   function goToNewEvaluation() {
-    setLocalStorageData('currentStep', 0);
     history.push(
       `/dashboard/evaluations/new?subj=${subjectId}&intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
     );

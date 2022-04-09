@@ -9,15 +9,10 @@ import {
   SelectData,
   ValueType,
 } from '../../../../types';
-import { addPrivilegeSchema } from '../../../../validations/privilege.validation';
 import Button from '../../../Atoms/custom/Button';
 import ILabel from '../../../Atoms/Text/ILabel';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
-
-interface PrivErrors {
-  privileges: string;
-}
 
 export default function AddPrivileges({ onSubmit, roleName, roleId }: RolePropType) {
   const [form, setForm] = useState<AddPrivilegeRoleType>({
@@ -29,50 +24,31 @@ export default function AddPrivileges({ onSubmit, roleName, roleId }: RolePropTy
   const { data } = getUnAssignedPrivileges(roleId);
   const [privileges, setPrivileges] = useState<SelectData[]>([{ label: '', value: '' }]);
 
-  const initialErrorState: PrivErrors = {
-    privileges: '',
-  };
-
-  const [errors, setErrors] = useState(initialErrorState);
-
   function handleChange({ name, value }: ValueType) {
     setForm((old) => ({ ...old, [name]: (value as string[]).join(',') }));
   }
   function submitForm<T>(e: FormEvent<T>) {
     const toastId = toast.loading('adding privileges to role');
 
+    console.log('making it happend', roleId);
     e.preventDefault();
 
-    const validatedForm = addPrivilegeSchema.validate(privileges, {
-      abortEarly: false,
-    });
-
-    validatedForm
-      .then(() => {
-        if (privileges.length === 0) {
-          toast.error('Please select privileges');
-        } else {
-          mutateAsync(form, {
-            onSuccess: () => {
-              onSubmit(e);
-              toast.success('Privilege(s) Added', { id: toastId });
-              history.goBack();
-            },
-            onError: () => {
-              toast.error('something wrong happened adding privileges on role', {
-                id: toastId,
-              });
-            },
+    if (form.privileges.length < 1) {
+      toast.error('Please select privileges', { id: toastId });
+    } else {
+      mutateAsync(form, {
+        onSuccess: () => {
+          onSubmit(e);
+          toast.success('Privilege(s) Added', { id: toastId });
+          history.goBack();
+        },
+        onError: () => {
+          toast.error('something wrong happened adding privileges on role', {
+            id: toastId,
           });
-        }
-      })
-      .catch((err) => {
-        const validatedErr: PrivErrors = initialErrorState;
-        err.inner.map((el: { path: string | number; message: string }) => {
-          validatedErr[el.path as keyof PrivErrors] = el.message;
-        });
-        setErrors(validatedErr);
+        },
       });
+    }
   }
 
   useEffect(() => {
@@ -83,6 +59,7 @@ export default function AddPrivileges({ onSubmit, roleName, roleId }: RolePropTy
       }));
       setPrivileges(privileges);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data?.data.data]);
 
   return (
@@ -99,8 +76,6 @@ export default function AddPrivileges({ onSubmit, roleName, roleId }: RolePropTy
       {/* model code
     {/* module description */}
       <DropdownMolecule
-        error={errors.privileges}
-        hasError={errors.privileges !== ''}
         handleChange={handleChange}
         options={privileges}
         isMulti

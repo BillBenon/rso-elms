@@ -115,6 +115,13 @@ function IntakeLevelModule() {
             }
           />
         </Permission>
+        <Permission privilege={Privileges.CAN_ACCESS_REPORTS}>
+          <Button
+            styleType="outline"
+            onClick={() => history.push(`/dashboard/intakes/peformance/${level}`)}>
+            View level reports
+          </Button>
+        </Permission>
         {prdLoading ? (
           <></>
         ) : periods?.data.data.length === 0 ? (

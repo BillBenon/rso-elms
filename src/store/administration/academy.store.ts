@@ -19,8 +19,10 @@ class AcademyStore {
     );
   }
 
-  getAcademyById(id: string) {
-    return useQuery(['academies/id', id], () => academyService.getAcademyById(id));
+  getAcademyById(id: string, enabled = true) {
+    return useQuery(['academies/id', id], () => academyService.getAcademyById(id), {
+      enabled,
+    });
   }
 
   modifyAcademy() {

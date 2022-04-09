@@ -43,8 +43,6 @@ export default function EnrollRetakingStudents<T>({
       PromotionStatus.RETAKE,
     );
 
-  console.log(retakingStudents);
-
   const programs = getProgramsByIntake(intakeId).data?.data.data;
 
   const intakeProgram = programs?.find((pr) => pr.id === intakeProg);

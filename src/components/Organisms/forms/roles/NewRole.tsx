@@ -50,13 +50,15 @@ export default function NewRole({ onSubmit }: FormPropType) {
   const [errors, setErrors] = useState(initialErrorState);
 
   useEffect(() => {
-    setForm({
-      name: '',
-      description: '',
-      academy_id: picked_role?.academy_id + '',
-      institution_id: user?.institution?.id.toString() || '',
-      type: RoleType.ACADEMY,
-    });
+    if (!form.academy_id || !form.institution_id)
+      setForm({
+        name: '',
+        description: '',
+        academy_id: picked_role?.academy_id + '',
+        institution_id: user?.institution?.id.toString() || '',
+        type: RoleType.ACADEMY,
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [picked_role?.academy_id, user?.institution?.id]);
 
   function handleChange({ name, value }: ValueType) {
