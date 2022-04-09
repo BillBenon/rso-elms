@@ -194,6 +194,7 @@ export default function ImportUsers({ userType }: IProps) {
           validatedErr[el.path as keyof ImportErrors] = el.message;
         });
         setErrors(validatedErr);
+        console.log('invalid', validatedErr);
       });
   }
 
@@ -227,18 +228,17 @@ export default function ImportUsers({ userType }: IProps) {
             Academy
           </InputMolecule>
         )}
-        {userType === UserType.STUDENT ||
-          (UserType.INSTRUCTOR && (
-            <SelectMolecule
-              error={errors.roleId}
-              placeholder="Select role"
-              options={getDropDownOptions({ inputs: roleOptions })}
-              value={values.roleId}
-              name="roleId"
-              handleChange={handleChange}>
-              Select role
-            </SelectMolecule>
-          ))}
+
+        <SelectMolecule
+          error={errors.roleId}
+          placeholder="Select role"
+          options={getDropDownOptions({ inputs: roleOptions })}
+          value={values.roleId}
+          name="roleId"
+          handleChange={handleChange}>
+          Select role
+        </SelectMolecule>
+
         {userType === UserType.STUDENT ? (
           <div>
             <SelectMolecule
