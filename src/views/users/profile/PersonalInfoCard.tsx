@@ -106,9 +106,7 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
             </div>
             <div className="font-medium text-sm">
               <p className="py-3">{moment(user.created_on).format('ddd, YYYY-MM-DD')}</p>
-              <p className="py-2">
-                {moment().diff(moment(user.person.birth_date), 'years')}
-              </p>
+              <p className="py-2">{user.person.birth_date}</p>
               <p className="py-2">{user.person.sex}</p>
               <p className="py-3">{user.person.nationality || 'Rwanda'}</p>
               <p className="py-2">{titleCase(user.person.marital_status)}</p>

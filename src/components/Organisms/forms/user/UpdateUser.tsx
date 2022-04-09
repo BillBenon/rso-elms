@@ -204,7 +204,6 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
     const validatedForm = editUserSchema.validate(cloneDetails, {
       abortEarly: false,
     });
-    console.log(errors);
 
     validatedForm
       .then(async () => {
@@ -236,7 +235,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
       })
       .catch((err) => {
         const validatedErr: EditUserErrors = initialErrorState;
-        err.inner.map((el: { path: string | number; message: string }) => {
+        err.inner?.map((el: { path: string | number; message: string }) => {
           //@ts-ignore
           validatedErr[el.path as keyof EditUserErrors] = el.message;
         });

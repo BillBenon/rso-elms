@@ -11,6 +11,7 @@ import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
 import EvaluationSettingProgress from '../EvaluationSettingProgress';
 import ApproveEvaluation from './ApproveEvaluation';
+import EvaluationPerformance from './EvaluationPerformance';
 import Submissions from './marking/Submissions';
 import ReviewEvaluation from './ReviewEvaluation';
 import SectionBasedEvaluation from './SectionBasedEvaluation';
@@ -32,13 +33,13 @@ export default function EvaluationDetails() {
       label: 'Submissions',
       href: `${url}/submissions`,
     },
-    // {
-    //   label: 'Ongoing',
-    //   href: `${url}/ongoing-submissions`,
-    // },
     {
       label: 'Not attempted',
       href: `${url}/unbeguns`,
+    },
+    {
+      label: 'Performance report',
+      href: `${url}/performance`,
     },
     {
       label: 'Evaluation sections',
@@ -102,6 +103,11 @@ export default function EvaluationDetails() {
               render={() => <EvaluationSettingProgress />}
             />
           </div>
+          <Route
+            exact
+            path={`${path}/performance`}
+            render={() => <EvaluationPerformance />}
+          />
           <Route
             exact
             path={`${path}`}
