@@ -32,6 +32,7 @@ interface IReportTable {
 }
 
 export default function EndOfLevelReport() {
+  console.log('ngaho');
   const [isPrinting, setisPrinting] = useState(false);
   const picked_role = usePickedRole();
   const { data: role_academy } = academyStore.getAcademyById(
@@ -90,7 +91,7 @@ export default function EndOfLevelReport() {
       ) : null}
       <div
         ref={report}
-        className="px-10 py-10 bg-white mx-auto max-w-4xl border border-gray-300 print:border-none">
+        className="px-10 py-10 bg-white mx-auto max-w-6xl border border-gray-300 print:border-none">
         <div className="flex justify-between">
           <div className="provider">
             <img
@@ -171,11 +172,40 @@ export default function EndOfLevelReport() {
                     Courses
                   </Heading>
                 </div>
-                <div className="col-span-4">
+                <div className="col-span-3">
                   <Heading
                     fontSize="base"
                     fontWeight="semibold"
-                    className="p-3 border border-gray-700 text-center uppercase">
+                    className="p-1 border border-gray-700 text-center uppercase">
+                    term one
+                  </Heading>
+
+                  <div className="grid grid-cols-3">
+                    <Heading
+                      fontSize="base"
+                      fontWeight="semibold"
+                      className="p-2 border border-gray-700 text-center">
+                      Cat
+                    </Heading>
+                    <Heading
+                      fontSize="base"
+                      fontWeight="semibold"
+                      className="p-2 border border-gray-700 text-center">
+                      Exam
+                    </Heading>
+                    <Heading
+                      fontSize="base"
+                      fontWeight="semibold"
+                      className="p-2 border border-gray-700 text-center">
+                      Tot
+                    </Heading>
+                  </div>
+                </div>
+                <div className="col-span-3">
+                  <Heading
+                    fontSize="base"
+                    fontWeight="semibold"
+                    className="p-1 border border-gray-700 text-center uppercase">
                     term one
                   </Heading>
 
@@ -204,7 +234,7 @@ export default function EndOfLevelReport() {
                   <Heading
                     fontSize="base"
                     fontWeight="semibold"
-                    className="p-3 border border-gray-700 text-center uppercase">
+                    className="p-1 border border-gray-700 text-center uppercase">
                     term one
                   </Heading>
 
@@ -241,20 +271,20 @@ export default function EndOfLevelReport() {
                     Marks
                   </Heading>
                 </div>
-                <div className="col-span-4 grid grid-cols-6">
+                <div className="col-span-3 grid grid-cols-6">
                   {[1, 2].map((i) => (
                     <React.Fragment key={i}>
                       <Heading
                         fontSize="sm"
                         fontWeight="semibold"
-                        className="p-1 border border-gray-700 text-center">
-                        Obt.
+                        className="p-1 border border-gray-700 text-center d-vertical">
+                        Obt
                       </Heading>
                       <Heading
                         fontSize="sm"
                         fontWeight="semibold"
-                        className="p-1 border border-gray-700 text-center">
-                        Max.
+                        className="p-1 border border-gray-700 text-center d-vertical">
+                        Max
                       </Heading>
                     </React.Fragment>
                   ))}
@@ -262,19 +292,57 @@ export default function EndOfLevelReport() {
                     <Heading
                       fontSize="sm"
                       fontWeight="semibold"
-                      className="p-1 border border-gray-700 text-center">
-                      Obt.
+                      className="p-1 border border-gray-700 text-center d-vertical">
+                      Obt
                     </Heading>
                     <Heading
                       fontSize="sm"
                       fontWeight="semibold"
-                      className="p-1 border border-gray-700 text-center">
-                      Max.
+                      className="p-1 border border-gray-700 text-center d-vertical">
+                      Max
                     </Heading>
                     <Heading
                       fontSize="sm"
                       fontWeight="semibold"
-                      className="p-1 border border-gray-700 text-center">
+                      className="p-1 border border-gray-700 text-center d-vertical">
+                      Grade
+                    </Heading>
+                  </div>
+                </div>
+                <div className="col-span-3 grid grid-cols-6">
+                  {[1, 2].map((i) => (
+                    <React.Fragment key={i}>
+                      <Heading
+                        fontSize="sm"
+                        fontWeight="semibold"
+                        className="p-1 border border-gray-700 text-center d-vertical">
+                        Obt
+                      </Heading>
+                      <Heading
+                        fontSize="sm"
+                        fontWeight="semibold"
+                        className="p-1 border border-gray-700 text-center d-vertical">
+                        Max
+                      </Heading>
+                    </React.Fragment>
+                  ))}
+                  <div className="col-span-2 grid grid-cols-3 ">
+                    <Heading
+                      fontSize="sm"
+                      fontWeight="semibold"
+                      className="p-1 border border-gray-700 text-center d-vertical">
+                      Obt
+                    </Heading>
+                    <Heading
+                      fontSize="sm"
+                      fontWeight="semibold"
+                      className="p-1 border border-gray-700 text-center d-vertical">
+                      Max
+                    </Heading>
+                    <Heading
+                      fontSize="sm"
+                      fontWeight="semibold"
+                      className="p-1 border border-gray-700 text-center d-vertical">
                       Grade
                     </Heading>
                   </div>
@@ -285,14 +353,14 @@ export default function EndOfLevelReport() {
                       <Heading
                         fontSize="sm"
                         fontWeight="semibold"
-                        className="p-1 border border-gray-700 text-center">
-                        Obt.
+                        className="p-1 border border-gray-700 text-center d-vertical">
+                        Obt
                       </Heading>
                       <Heading
                         fontSize="sm"
                         fontWeight="semibold"
-                        className="p-1 border border-gray-700 text-center">
-                        Max.
+                        className="p-1 border border-gray-700 text-center d-vertical">
+                        Max
                       </Heading>
                     </React.Fragment>
                   ))}
@@ -300,19 +368,19 @@ export default function EndOfLevelReport() {
                     <Heading
                       fontSize="sm"
                       fontWeight="semibold"
-                      className="p-1 border border-gray-700 text-center">
-                      Obt.
+                      className="p-1 border border-gray-700 text-center d-vertical">
+                      Obt
                     </Heading>
                     <Heading
                       fontSize="sm"
                       fontWeight="semibold"
-                      className="p-1 border border-gray-700 text-center">
-                      Max.
+                      className="p-1 border border-gray-700 text-center d-vertical">
+                      Max
                     </Heading>
                     <Heading
                       fontSize="sm"
                       fontWeight="semibold"
-                      className="p-1 border border-gray-700 text-center">
+                      className="p-1 border border-gray-700 text-center d-vertical">
                       Grade
                     </Heading>
                   </div>
@@ -321,25 +389,27 @@ export default function EndOfLevelReport() {
 
               {/* modules map */}
               {marks.map((m) => (
-                <div key={m.moduleId} className="grid grid-cols-6">
-                  <p className="p-3 text-sm border border-gray-700">{m.moduleName}</p>
-                  <div className="grid-cols-6 col-span-2 grid">
+                <div key={m.moduleId} className="grid grid-cols-12">
+                  <div className="col-span-2">
+                    <p className="p-1 text-sm border border-gray-700">{m.moduleName}</p>
+                  </div>
+                  <div className="col-span-3 grid grid-cols-6 ">
                     <p
-                      className={`p-3 text-sm border border-gray-700 ${
+                      className={`p-1 text-tiny text-center border border-gray-700 ${
                         isFailure(m.catObtained, m.catMax) ? 'text-error-500' : ''
                       }`}>
                       {m.catObtained}
                     </p>
-                    <p className="p-3 text-sm border border-gray-700">{m.catMax}</p>
+                    <p className="p-1 text-tiny text-center border border-gray-700">{m.catMax}</p>
                     <p
-                      className={`p-3 text-sm border border-gray-700 
+                      className={`p-1 text-tiny text-center border border-gray-700 
                     ${isFailure(m.examObtained, m.examMax) ? 'text-error-500' : ''}`}>
                       {m.examObtained}
                     </p>
-                    <p className="p-3 text-sm border border-gray-700">{m.examMax}</p>
+                    <p className="p-1 text-tiny text-center border border-gray-700">{m.examMax}</p>
                     <div className="col-span-2 grid grid-cols-3">
                       <p
-                        className={`p-3 text-sm border border-gray-700 
+                        className={`p-1 text-tiny text-center border border-gray-700 
                   ${
                     isFailure(m.catObtained + m.examObtained, m.examMax + m.catMax)
                       ? 'text-error-500'
@@ -347,10 +417,10 @@ export default function EndOfLevelReport() {
                   }`}>
                         {m.catObtained + m.examObtained}
                       </p>
-                      <p className="p-3 text-sm border border-gray-700">
+                      <p className="p-1 text-tiny text-center border border-gray-700">
                         {m.examMax + m.catMax}
                       </p>
-                      <p className="p-3 text-sm border border-gray-700">
+                      <p className="p-1 text-tiny text-center border border-gray-700">
                         {calculateGrade(
                           m.catObtained + m.examObtained,
                           m.examMax + m.catMax,
@@ -358,23 +428,23 @@ export default function EndOfLevelReport() {
                       </p>
                     </div>
                   </div>
-                  <div className="grid-cols-6 col-span-2 grid">
+                  <div className="col-span-3 grid grid-cols-6 ">
                     <p
-                      className={`p-3 text-sm border border-gray-700 ${
+                      className={`p-1 text-tiny text-center border border-gray-700 ${
                         isFailure(m.catObtained, m.catMax) ? 'text-error-500' : ''
                       }`}>
                       {m.catObtained}
                     </p>
-                    <p className="p-3 text-sm border border-gray-700">{m.catMax}</p>
+                    <p className="p-1 text-tiny text-center border border-gray-700">{m.catMax}</p>
                     <p
-                      className={`p-3 text-sm border border-gray-700 
+                      className={`p-1 text-tiny text-center border border-gray-700 
                     ${isFailure(m.examObtained, m.examMax) ? 'text-error-500' : ''}`}>
                       {m.examObtained}
                     </p>
-                    <p className="p-3 text-sm border border-gray-700">{m.examMax}</p>
+                    <p className="p-1 text-tiny text-center border border-gray-700">{m.examMax}</p>
                     <div className="col-span-2 grid grid-cols-3">
                       <p
-                        className={`p-3 text-sm border border-gray-700 
+                        className={`p-1 text-tiny text-center border border-gray-700 
                   ${
                     isFailure(m.catObtained + m.examObtained, m.examMax + m.catMax)
                       ? 'text-error-500'
@@ -382,10 +452,80 @@ export default function EndOfLevelReport() {
                   }`}>
                         {m.catObtained + m.examObtained}
                       </p>
-                      <p className="p-3 text-sm border border-gray-700">
+                      <p className="p-1 text-tiny text-center border border-gray-700">
                         {m.examMax + m.catMax}
                       </p>
-                      <p className="p-3 text-sm border border-gray-700">
+                      <p className="p-1 text-tiny text-center border border-gray-700">
+                        {calculateGrade(
+                          m.catObtained + m.examObtained,
+                          m.examMax + m.catMax,
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                  {/* <div className="grid-cols-6 col-span-1 grid">
+                    <p
+                      className={`p-1 text-tiny text-center border border-gray-700 ${
+                        isFailure(m.catObtained, m.catMax) ? 'text-error-500' : ''
+                      }`}>
+                      {m.catObtained}
+                    </p>
+                    <p className="p-1 text-tiny text-center border border-gray-700">{m.catMax}</p>
+                    <p
+                      className={`p-1 text-tiny text-center border border-gray-700 
+                    ${isFailure(m.examObtained, m.examMax) ? 'text-error-500' : ''}`}>
+                      {m.examObtained}
+                    </p>
+                    <p className="p-1 text-tiny text-center border border-gray-700">{m.examMax}</p>
+                    <div className="col-span-2 grid grid-cols-3">
+                      <p
+                        className={`p-1 text-tiny text-center border border-gray-700 
+                  ${
+                    isFailure(m.catObtained + m.examObtained, m.examMax + m.catMax)
+                      ? 'text-error-500'
+                      : ''
+                  }`}>
+                        {m.catObtained + m.examObtained}
+                      </p>
+                      <p className="p-1 text-tiny text-center border border-gray-700">
+                        {m.examMax + m.catMax}
+                      </p>
+                      <p className="p-1 text-tiny text-center border border-gray-700">
+                        {calculateGrade(
+                          m.catObtained + m.examObtained,
+                          m.examMax + m.catMax,
+                        )}
+                      </p>
+                    </div>
+                  </div> */}
+                  <div className="col-span-4 grid grid-cols-6 ">
+                    <p
+                      className={`p-1 text-tiny text-center border border-gray-700 ${
+                        isFailure(m.catObtained, m.catMax) ? 'text-error-500' : ''
+                      }`}>
+                      {m.catObtained}
+                    </p>
+                    <p className="p-1 text-tiny text-center border border-gray-700">{m.catMax}</p>
+                    <p
+                      className={`p-1 text-tiny text-center border border-gray-700 
+                    ${isFailure(m.examObtained, m.examMax) ? 'text-error-500' : ''}`}>
+                      {m.examObtained}
+                    </p>
+                    <p className="p-1 text-tiny text-center border border-gray-700">{m.examMax}</p>
+                    <div className="col-span-2 grid grid-cols-3">
+                      <p
+                        className={`p-1 text-tiny text-center border border-gray-700 
+                  ${
+                    isFailure(m.catObtained + m.examObtained, m.examMax + m.catMax)
+                      ? 'text-error-500'
+                      : ''
+                  }`}>
+                        {m.catObtained + m.examObtained}
+                      </p>
+                      <p className="p-1 text-tiny text-center border border-gray-700">
+                        {m.examMax + m.catMax}
+                      </p>
+                      <p className="p-1 text-tiny text-center border border-gray-700">
                         {calculateGrade(
                           m.catObtained + m.examObtained,
                           m.examMax + m.catMax,
@@ -396,31 +536,31 @@ export default function EndOfLevelReport() {
                 </div>
               ))}
               {/* totals row */}
-              <div className="grid grid-cols-6">
-                <div>
-                  <Heading fontSize="sm" className="p-3 border border-gray-700">
+              <div className="grid grid-cols-12">
+                <div className="col-span-2">
+                  <Heading fontSize="sm" className="p-1 border border-gray-700">
                     Total
                   </Heading>
                 </div>
 
-                <div className="grid-cols-6 col-span-2 grid">
-                  <p className="p-3 text-sm border border-gray-700">
+                <div className="col-span-3 grid grid-cols-6 ">
+                  <p className="p-1 text-tiny text-center border border-gray-700">
                     {totals.quizObtained}
                   </p>
-                  <p className="p-3 text-sm border border-gray-700">{totals.quizMax}</p>
-                  <p className="p-3 text-sm border border-gray-700">
+                  <p className="p-1 text-tiny text-center border border-gray-700">{totals.quizMax}</p>
+                  <p className="p-1 text-tiny text-center border border-gray-700">
                     {totals.examObtained}
                   </p>
-                  <p className="p-3 text-sm border border-gray-700">{totals.examMax}</p>
+                  <p className="p-1 text-tiny text-center border border-gray-700">{totals.examMax}</p>
 
                   <div className="col-span-2 grid grid-cols-3">
-                    <p className="p-3 text-sm border border-gray-700">
+                    <p className="p-1 text-tiny text-center border border-gray-700">
                       {totals.quizObtained + totals.examObtained}
                     </p>
-                    <p className="p-3 text-sm border border-gray-700">
+                    <p className="p-1 text-tiny text-center border border-gray-700">
                       {totals.quizMax + totals.examMax}
                     </p>
-                    <p className="p-3 text-sm border border-gray-700">
+                    <p className="p-1 text-tiny text-center border border-gray-700">
                       {calculateGrade(
                         totals.quizObtained + totals.examObtained,
                         totals.quizMax + totals.examMax,
@@ -428,6 +568,57 @@ export default function EndOfLevelReport() {
                     </p>
                   </div>
                 </div>
+                <div className="col-span-3 grid grid-cols-6 ">
+                  <p className="p-1 text-tiny text-center border border-gray-700">
+                    {totals.quizObtained}
+                  </p>
+                  <p className="p-1 text-tiny text-center border border-gray-700">{totals.quizMax}</p>
+                  <p className="p-1 text-tiny text-center border border-gray-700">
+                    {totals.examObtained}
+                  </p>
+                  <p className="p-1 text-tiny text-center border border-gray-700">{totals.examMax}</p>
+
+                  <div className="col-span-2 grid grid-cols-3">
+                    <p className="p-1 text-tiny text-center border border-gray-700">
+                      {totals.quizObtained + totals.examObtained}
+                    </p>
+                    <p className="p-1 text-tiny text-center border border-gray-700">
+                      {totals.quizMax + totals.examMax}
+                    </p>
+                    <p className="p-1 text-tiny text-center border border-gray-700">
+                      {calculateGrade(
+                        totals.quizObtained + totals.examObtained,
+                        totals.quizMax + totals.examMax,
+                      )}
+                    </p>
+                  </div>
+                </div>
+                <div className="col-span-4 grid grid-cols-6 ">
+                  <p className="p-1 text-tiny text-center border border-gray-700">
+                    {totals.quizObtained}
+                  </p>
+                  <p className="p-1 text-tiny text-center border border-gray-700">{totals.quizMax}</p>
+                  <p className="p-1 text-tiny text-center border border-gray-700">
+                    {totals.examObtained}
+                  </p>
+                  <p className="p-1 text-tiny text-center border border-gray-700">{totals.examMax}</p>
+
+                  <div className="col-span-2 grid grid-cols-3">
+                    <p className="p-1 text-tiny text-center border border-gray-700">
+                      {totals.quizObtained + totals.examObtained}
+                    </p>
+                    <p className="p-1 text-tiny text-center border border-gray-700">
+                      {totals.quizMax + totals.examMax}
+                    </p>
+                    <p className="p-1 text-tiny text-center border border-gray-700">
+                      {calculateGrade(
+                        totals.quizObtained + totals.examObtained,
+                        totals.quizMax + totals.examMax,
+                      )}
+                    </p>
+                  </div>
+                </div>
+              
               </div>
             </>
             {/* percentage */}
@@ -435,7 +626,7 @@ export default function EndOfLevelReport() {
               <Heading
                 fontSize="sm"
                 fontWeight="semibold"
-                className="p-3 col-span-2 border border-gray-700">
+                className="p-1 col-span-2 border border-gray-700">
                 Percentage
               </Heading>
               <Heading
@@ -453,7 +644,7 @@ export default function EndOfLevelReport() {
               <Heading
                 fontSize="sm"
                 fontWeight="semibold"
-                className="p-3 col-span-2 border border-gray-700">
+                className="p-1 col-span-2 border border-gray-700">
                 Position
               </Heading>
               <Heading
