@@ -80,12 +80,12 @@ function OveralClassPerformance() {
         history.push(`${url}/report/${id}/${periodOfThisClass}`); // go to view user profile
       },
     },
-    {
-      name: 'Edit student',
-      handleAction: (id: string | number | undefined) => {
-        history.push(`/dashboard/users/${id}/edit`); // go to edit user
-      },
-    },
+    // {
+    //   name: 'Edit student',
+    //   handleAction: (id: string | number | undefined) => {
+    //     history.push(`/dashboard/users/${id}/edit`); // go to edit user
+    //   },
+    // },
   ];
 
   return (

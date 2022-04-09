@@ -86,6 +86,7 @@ export default function DSReportOnStudent() {
   });
 
   const [showPenPicture, setShowPenPicture] = useState(false);
+  const [showEditPenPicture, setShowEditPenPicture] = useState(false);
 
   const { data: reportData } = getTewtReport(studentId, periodId);
 
@@ -136,7 +137,7 @@ export default function DSReportOnStudent() {
                 el.classList.remove('hidden');
               }
             }}>
-            Download form
+            Download report
           </Button>
         </Permission>
       </div>
@@ -241,15 +242,27 @@ export default function DSReportOnStudent() {
           ) : reportData?.data.data ? (
             <div className="py-4">
               <Tiptap
-                editable={false}
-                viewMenu={false}
-                handleChange={() => {}}
+                editable={showEditPenPicture}
+                viewMenu={showEditPenPicture}
+                handleChange={handleEditorChange}
                 showBorder={false}
                 content={reportData.data.data.pen_picture}
               />
+              <Button
+                styleType="outline"
+                className="mt-5 reportHide"
+                onClick={() => {
+                  setShowEditPenPicture(!showEditPenPicture);
+                }}>
+                {showEditPenPicture ? (
+                  <Heading fontSize="sm">Save</Heading>
+                ) : (
+                  <Heading fontSize="sm">Edit</Heading>
+                )}
+              </Button>
             </div>
           ) : (
-            <div className="h-48 flex items-center py-10 gap-2 reportHide">
+            <div className="h-48 max-h-48 flex items-center py-10 gap-2 reportHide">
               <Heading fontSize="sm">No pen picture added</Heading>
               <span>-</span>
               <Button

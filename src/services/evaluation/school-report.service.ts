@@ -7,6 +7,7 @@ import {
   IEvaluationPerformance,
   IModuleTermPerformance,
   InformativeReport,
+  IOverallLevelPerformance,
   IOverallStudentPerformance,
   ISubjective,
   ISubjectiveForm,
@@ -23,6 +24,11 @@ class SchoolReportService {
       `/reports/overall-report/class/${classId}/academic-year-period/${academicYearPeriodId}`,
     );
   }
+  public async getLevelTermlyOverallReport(
+    yearPeriods: string,
+  ): Promise<AxiosResponse<Response<IOverallLevelPerformance[]>>> {
+    return await evaluationAxios.get(`/reports/level/${yearPeriods}/get-all`);
+  }
 
   public async getStudentReportInTerm(
     studentID: string,
@@ -30,6 +36,14 @@ class SchoolReportService {
   ): Promise<AxiosResponse<Response<IOverallStudentPerformance>>> {
     return await evaluationAxios.get(
       `/reports/student/${studentID}/term/${academicYearPeriodId}`,
+    );
+  }
+  public async getStudentReportInLevel(
+    studentID: string,
+    YearPeriods: string,
+  ): Promise<AxiosResponse<Response<IOverallStudentPerformance>>> {
+    return await evaluationAxios.get(
+      `reports/student/${studentID}/year-periods/${YearPeriods}`,
     );
   }
 

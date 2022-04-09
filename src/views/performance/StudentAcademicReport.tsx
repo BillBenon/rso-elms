@@ -168,7 +168,9 @@ export default function StudentAcademicReport() {
                   fontSize="base"
                   fontWeight="semibold"
                   className="p-3 border border-gray-700 text-center uppercase">
-                  term one
+                  term{' '}
+                  {classInfo?.data.data.intake_academic_year_period?.academic_period
+                    .name || ''}
                 </Heading>
 
                 <div className="grid grid-cols-3">

@@ -1,4 +1,4 @@
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQueries, useQuery } from 'react-query';
 
 import { reportService } from '../../services/evaluation/school-report.service';
 
@@ -25,6 +25,14 @@ export function getClassTermlyOverallReport(
   );
 }
 
+export function getLevelTermlyOverallReport(levelId: string, enabled = true) {
+  return useQuery(
+    ['reports/overal/level', levelId],
+    () => reportService.getLevelTermlyOverallReport(levelId),
+    { enabled },
+  );
+}
+
 export function getStudentReportInTerm(
   studentID: string,
   academicYearPeriodId: string,
@@ -34,6 +42,15 @@ export function getStudentReportInTerm(
     ['reports/student/term', studentID, academicYearPeriodId],
     () => reportService.getStudentReportInTerm(studentID, academicYearPeriodId),
     { enabled },
+  );
+}
+
+export function getStudentReportInLevel(studentID: string, YearPeriods: string[]) {
+  return useQueries(
+    YearPeriods.map((prd) => ({
+      queryKey: ['reports/student/level', prd],
+      queryFn: () => reportService.getStudentReportInTerm(studentID, prd),
+    })),
   );
 }
 
@@ -57,13 +74,13 @@ export function getTewtReport(studentId: string, term: string, enabled = true) {
   );
 }
 
-// export function getTewtReport(studentId: string, term: string, enabled = true) {
-//   return useQuery(
-//     ['reports/student/term/tewt', studentId, term],
-//     () => reportService.getTewtReport(studentId, term),
-//     { enabled },
-//   );
-// }}
+export function getDSCriticsReport(studentId: string, term: string, enabled = true) {
+  return useQuery(
+    ['reports/student/term/critics', studentId, term],
+    () => reportService.getDSCriticsReport(studentId, term),
+    { enabled },
+  );
+}
 
 export function getStudentFullReport(studentId?: string) {
   return useQuery(

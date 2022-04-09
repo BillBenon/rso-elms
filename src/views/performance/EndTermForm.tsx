@@ -1,3 +1,4 @@
+import { Editor } from '@tiptap/react';
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
@@ -6,8 +7,9 @@ import { useReactToPrint } from 'react-to-print';
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
+import ILabel from '../../components/Atoms/Text/ILabel';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
+import Tiptap from '../../components/Molecules/editor/Tiptap';
 import PopupMolecule from '../../components/Molecules/Popup';
 import usePickedRole from '../../hooks/usePickedRole';
 import { queryClient } from '../../plugins/react-query';
@@ -18,7 +20,7 @@ import {
   getStudentInformativeReport,
   reportStore,
 } from '../../store/evaluation/school-report.store';
-import { Privileges, ValueType } from '../../types';
+import { Privileges } from '../../types';
 import {
   ISubjectiveForm,
   TermFormComment,
@@ -122,12 +124,8 @@ export default function EndTermForm() {
 
   const { mutate } = reportStore.createSubjective();
   const { mutateAsync } = reportStore.editSubjective();
-
-  function handleChange(e: ValueType) {
-    setDetails((details) => ({
-      ...details,
-      [e.name]: e.value,
-    }));
+  function handleEditorChange(editor: Editor) {
+    setDetails((details) => ({ ...details, subjectiveValue: editor.getHTML() }));
   }
 
   const returnSection = (label: string) => {
@@ -182,23 +180,26 @@ export default function EndTermForm() {
   const handleEditSubmit = (e: FormEvent) => {
     e.preventDefault();
     if (details.subjectiveValue === '') {
-      toast.error(`${details.subjectiveLabel.replaceAll('_', ' ')} is required`);
+      toast.error(`${section.replaceAll('_', ' ')} is required`);
     } else {
-      mutateAsync(Object.assign(details, { id: subjective.id }), {
-        onSuccess(data) {
-          toast.success(data.data.message);
-          queryClient.invalidateQueries([
-            'reports/student/term/informative',
-            studentId,
-            periodId,
-          ]);
-          setEditOpen(false);
-          setSubjective({ id: '', content: '' });
+      mutateAsync(
+        Object.assign(details, { id: subjective.id, subjectiveLabel: section }),
+        {
+          onSuccess(data) {
+            toast.success(data.data.message);
+            queryClient.invalidateQueries([
+              'reports/student/term/informative',
+              studentId,
+              periodId,
+            ]);
+            setEditOpen(false);
+            setSubjective({ id: '', content: '' });
+          },
+          onError(error: any) {
+            toast.error(error.response.data.message || 'error occurred please try again');
+          },
         },
-        onError(error: any) {
-          toast.error(error.response.data.message || 'error occurred please try again');
-        },
-      });
+      );
     }
   };
 
@@ -222,7 +223,7 @@ export default function EndTermForm() {
                   el.classList.remove('hidden');
                 }
               }}>
-              Download form
+              Download report
             </Button>
           </Permission>
         </div>
@@ -317,7 +318,12 @@ export default function EndTermForm() {
                     </Heading>
                     {subjective ? (
                       <div className="h-48 py-5">
-                        <p>{subjective.subjective_value}</p>
+                        <Tiptap
+                          content={subjective.subjective_value}
+                          editable={false}
+                          viewMenu={false}
+                          handleChange={() => {}}
+                        />
 
                         <Button
                           styleType="outline"
@@ -334,7 +340,7 @@ export default function EndTermForm() {
                         </Button>
                       </div>
                     ) : (
-                      <div className="h-48 flex items-center py-10 gap-2 reportHide">
+                      <div className="h-48 max-h-48 flex items-center py-10 gap-2 reportHide">
                         <Heading fontSize="sm">No subjective added</Heading>
                         <span>-</span>
                         <Button
@@ -358,7 +364,10 @@ export default function EndTermForm() {
                 </Heading>
                 <Heading fontWeight="semibold">
                   {calculateGrade(
-                    gradedExercises.reduce((acc, curr) => acc + curr.ob, 0),
+                    reportData.data.data.evaluationAttempts.reduce(
+                      (acc, curr) => acc + curr.obtained,
+                      0,
+                    ) + gradedExercises.reduce((acc, curr) => acc + curr.ob, 0),
                     gradedExercises.reduce((acc, curr) => acc + curr.hpm, 0),
                   )}
                 </Heading>
@@ -389,22 +398,22 @@ export default function EndTermForm() {
                   GRADE
                 </div>
                 {/* table body */}
-                {gradedExercises.map((exercise, index) => (
+                {reportData.data.data.evaluationAttempts.map((exercise, index) => (
                   <React.Fragment key={index}>
                     <div className="px-4 py-2 text-sm border border-black">
                       {index + 1}
                     </div>
                     <div className="px-4 py-2 text-sm border border-black col-span-5">
-                      {exercise.name}
+                      {exercise.evaluationName}
                     </div>
                     <div className="px-4 py-2 text-sm border border-black col-span-2">
-                      {exercise.hpm}
+                      {exercise.maximum}
                     </div>
                     <div className="px-4 py-2 text-sm border border-black col-span-2">
-                      {exercise.ob}
+                      {exercise.obtained}
                     </div>
                     <div className="px-4 py-2 text-sm border border-black col-span-2">
-                      {calculateGrade(exercise.ob, exercise.hpm)}
+                      {calculateGrade(exercise.obtained, exercise.maximum)}
                     </div>
                   </React.Fragment>
                 ))}
@@ -414,15 +423,27 @@ export default function EndTermForm() {
                   Total
                 </div>
                 <div className="px-4 py-2 text-sm border border-black col-span-2">
-                  {gradedExercises.reduce((acc, curr) => acc + curr.hpm, 0)}
+                  {reportData.data.data.evaluationAttempts.reduce(
+                    (acc, curr) => acc + curr.maximum,
+                    0,
+                  )}
                 </div>
                 <div className="px-4 py-2 text-sm border border-black col-span-2">
-                  {gradedExercises.reduce((acc, curr) => acc + curr.ob, 0)}
+                  {reportData.data.data.evaluationAttempts.reduce(
+                    (acc, curr) => acc + curr.obtained,
+                    0,
+                  )}
                 </div>
                 <div className="px-4 py-2 text-sm border border-black col-span-2">
                   {calculateGrade(
-                    gradedExercises.reduce((acc, curr) => acc + curr.ob, 0),
-                    gradedExercises.reduce((acc, curr) => acc + curr.hpm, 0),
+                    reportData.data.data.evaluationAttempts.reduce(
+                      (acc, curr) => acc + curr.obtained,
+                      0,
+                    ),
+                    reportData.data.data.evaluationAttempts.reduce(
+                      (acc, curr) => acc + curr.maximum,
+                      0,
+                    ),
                   )}
                 </div>
               </div>
@@ -531,20 +552,29 @@ export default function EndTermForm() {
                 {/* table body */}
                 <div className="h-8 border border-black"></div>
                 <div className="h-8 border border-black col-span-5 px-4">
-                  {gradedExercises.reduce((acc, curr) => acc + curr.ob, 0)}
+                  {reportData.data.data.evaluationAttempts.reduce(
+                    (acc, curr) => acc + curr.obtained,
+                    0,
+                  )}
                 </div>
                 <div className="h-8 border border-black col-span-2 px-4">
                   {gradedExercises.reduce((acc, curr) => acc + curr.ob, 0)}
                 </div>
                 <div className="h-8 border border-black col-span-2 px-4">
                   {formatPercentage(
-                    gradedExercises.reduce((acc, curr) => acc + curr.ob, 0) * 2,
+                    reportData.data.data.evaluationAttempts.reduce(
+                      (acc, curr) => acc + curr.obtained,
+                      0,
+                    ) + gradedExercises.reduce((acc, curr) => acc + curr.ob, 0),
                     gradedExercises.reduce((acc, curr) => acc + curr.hpm, 0),
                   )}
                 </div>
                 <div className="h-8 border border-black col-span-2 px-4">
                   {calculateGrade(
-                    gradedExercises.reduce((acc, curr) => acc + curr.ob, 0),
+                    reportData.data.data.evaluationAttempts.reduce(
+                      (acc, curr) => acc + curr.obtained,
+                      0,
+                    ) + gradedExercises.reduce((acc, curr) => acc + curr.ob, 0),
                     gradedExercises.reduce((acc, curr) => acc + curr.hpm, 0),
                   )}
                 </div>
@@ -568,8 +598,13 @@ export default function EndTermForm() {
                       {`${index + 1}. ${comment.replaceAll('_', ' ')}.`}
                     </Heading>
                     {subjective ? (
-                      <div className="h-48 py-5">
-                        <p>{subjective.subjective_value}</p>
+                      <div className="h-48  max-h-48 py-5">
+                        <Tiptap
+                          content={subjective.subjective_value}
+                          editable={false}
+                          viewMenu={false}
+                          handleChange={() => {}}
+                        />
 
                         <Button
                           styleType="outline"
@@ -586,7 +621,7 @@ export default function EndTermForm() {
                         </Button>
                       </div>
                     ) : (
-                      <div className="h-48 flex items-center py-10 gap-2 reportHide">
+                      <div className="h-48 max-h-48 flex items-center py-10 gap-2 reportHide">
                         <Heading fontSize="sm">No subjective added</Heading>
                         <span>-</span>
                         <Button
@@ -665,13 +700,14 @@ export default function EndTermForm() {
           open={open}
           onClose={() => setOpen(false)}>
           <form onSubmit={handleSubmit}>
-            <TextAreaMolecule
-              name={'subjectiveValue'}
-              handleChange={handleChange}
-              value={details.subjectiveValue}>
+            <ILabel className="py-4 font-semibold">
               {details.subjectiveLabel.replaceAll('_', ' ')}
-            </TextAreaMolecule>
-            <Button type="submit">Add</Button>
+            </ILabel>
+            <Tiptap handleChange={handleEditorChange} content={details.subjectiveValue} />
+
+            <Button className="mt-4" type="submit">
+              Add
+            </Button>
           </form>
         </PopupMolecule>
         <PopupMolecule
@@ -680,13 +716,8 @@ export default function EndTermForm() {
           open={editOpen}
           onClose={() => setEditOpen(false)}>
           <form onSubmit={handleEditSubmit}>
-            <TextAreaMolecule
-              // defaultValue={subjective.content}
-              name={'subjectiveValue'}
-              handleChange={handleChange}
-              value={subjective.content}>
-              {details.subjectiveLabel.replaceAll('_', ' ')}
-            </TextAreaMolecule>
+            <ILabel className="py-4 font-semibold">{section.replaceAll('_', ' ')}</ILabel>
+            <Tiptap handleChange={handleEditorChange} content={subjective.content} />
             <Button type="submit">Save</Button>
           </form>
         </PopupMolecule>

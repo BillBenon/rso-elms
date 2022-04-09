@@ -63,6 +63,42 @@ export interface IOverallStudentPerformance {
   promotion_status: PromotionStatus;
 }
 
+export interface IOverallLevelPerformance {
+  created_at: string;
+  exam_marks: number;
+  exam_obtained_marks: number;
+  id: string;
+  last_updated_at: string;
+  obtained_marks: number;
+  position: number;
+  promotion_status: PromotionStatus | null;
+  quiz_marks: number;
+  quiz_obtained_marks: number;
+  student: EvStudent;
+  subject_marks: ISubjectMarks[];
+  total_marks: number;
+  total_students: number;
+}
+
+interface ISubjectMarks {
+  created_at: string;
+  exam_marks: number;
+  exam_obtained_marks: number;
+  id: string;
+  last_updated_at: string;
+  obtained_marks: number;
+  quiz_marks: number;
+  quiz_obtained_marks: number;
+  subject: ISubject;
+  total_marks: number;
+}
+interface ISubject {
+  adminId: string;
+  id: string;
+  moduleEnrollmentId: string;
+  title: string;
+}
+
 export interface IPerformanceTable {
   id: string;
   reg_number: string;
@@ -129,7 +165,13 @@ export interface ISubjective {
 
 export interface InformativeReport {
   dsAssessments: [];
-  evaluationAttempts: [];
+  evaluationAttempts: {
+    evaluationId: string;
+    evaluationName: string;
+    id: string;
+    maximum: number;
+    obtained: number;
+  }[];
   student: EvStudent;
   studentSubjective: ISubjective[];
   term: string;
