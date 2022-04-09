@@ -280,6 +280,7 @@ export interface IEvaluationChoices {
 export interface IEvaluationQuestion {
   evaluation_id: string;
   multiple_choice_answers?: IMultipleChoice[];
+  evaluation_module_subject: IEvaluationSectionBased;
   mark: number;
   parent_question_id: string;
   question: string;
@@ -326,6 +327,7 @@ export interface IEvaluationQuestionsInfo {
   evaluation_id: string;
   choices: IMultipleChoice[];
   choosen_question: IEvaluationStatus;
+  evaluation_module_subject: IEvaluationSectionBased;
   mark: number;
   evaluationQuestions: [];
   question_type: IQuestionType;

@@ -1,6 +1,6 @@
 import '../../../styles/components/Molecules/correction/marking.scss';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 
@@ -13,15 +13,39 @@ import FinishMarking from '../../../components/Organisms/forms/evaluation/Finish
 import { markingStore } from '../../../store/administration/marking.store';
 import { Link as LinkList } from '../../../types';
 import { ParamType } from '../../../types';
-import { MarkingCorrection } from '../../../types/services/marking.types';
+import {
+  MarkingCorrection,
+  StudentMarkingAnswer,
+} from '../../../types/services/marking.types';
 
 export default function StudentAnswersMarking() {
   const { id } = useParams<ParamType>();
+  const [evaluationId, setEvaluationId] = useState<string>('');
+
   const studentAnswers = markingStore.getStudentEvaluationAnswers(id).data?.data.data;
   const { data: studentEvaluation, isLoading } =
     markingStore.getStudentEvaluationById(id);
+  const { data } = markingStore.getEvaluationMarkingModules(
+    evaluationId,
+    evaluationId.length == 36,
+  );
   const [totalMarks, setTotalMarks] = useState(0);
   const [correction, setCorrection] = useState<Array<MarkingCorrection>>([]);
+  const [markingModules, setMarkingModules] = useState<string[]>();
+
+  useEffect(() => {
+    setEvaluationId(studentEvaluation?.data.data.evaluation.id + '');
+  }, [studentEvaluation]);
+
+  useEffect(() => {
+    console.log(data);
+    let selectedModules: string[] = [];
+    data?.data.data.forEach((element) => {
+      selectedModules.push(element.id);
+    });
+    setMarkingModules(selectedModules);
+  }, [data]);
+
   // const [rowsOnPage] = useState(3);
   // const [currentPage, setCurrentPage] = useState(1);
   const [step, setStep] = useState(0);
@@ -49,8 +73,8 @@ export default function StudentAnswersMarking() {
   const list: LinkList[] = [
     { to: '/', title: 'Instructor' },
     { to: 'evaluations', title: 'evaluations' },
-    { to: '/evaluations/evaluation_id', title: 'Evaluation Details' },
-    { to: 'evaluations/evaluation_id/marking_studentEvaluation', title: 'Marking' },
+    { to: `/evaluations/${evaluationId}`, title: 'Evaluation Details' },
+    { to: `/evaluations/${evaluationId}/submissions`, title: 'Marking' },
   ];
 
   const { mutate } = markingStore.finishMarking();
@@ -62,6 +86,7 @@ export default function StudentAnswersMarking() {
     setTotalMarks(totalMarks + points);
     return { answerId: answer_id, markScored: points, marked: marked || false };
   }
+
   function updateQuestionPoints(answer_id: string, points: number) {
     var flag: number = 0;
 
@@ -94,6 +119,14 @@ export default function StudentAnswersMarking() {
       // }
     }
   }
+
+  const answersFilter = (studentAnswer: StudentMarkingAnswer) => {
+    if (studentAnswer.evaluation_question.evaluation_module_subject != null)
+      return markingModules?.includes(
+        studentAnswer.evaluation_question.evaluation_module_subject.id + '',
+      );
+    else return true;
+  };
 
   function submitMarking() {
     if (correction.length == (studentAnswers?.length || 0)) {
@@ -131,7 +164,7 @@ export default function StudentAnswersMarking() {
             </p>
           </TableHeader>
           <section className="flex flex-wrap justify-start gap-4 mt-2">
-            {studentAnswers?.map((studentAnswer, index: number) => {
+            {studentAnswers?.filter(answersFilter).map((studentAnswer, index: number) => {
               return (
                 <StudentAnswer
                   key={index}

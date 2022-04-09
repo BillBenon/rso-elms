@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import { evaluationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
+import { IEvaluationSectionBased } from '../../types/services/evaluation.types';
 import {
   IManualMarking,
   IManualMarkingInfo,
@@ -95,6 +96,14 @@ class MarkingService {
     id: string,
   ): Promise<AxiosResponse<Response<StudentMarkingAnswer[]>>> {
     return await evaluationAxios.get(`/student-answers/getAllByStudentEvaluation/${id}`);
+  }
+
+  public async getEvaluationMarkingModules(
+    id: string,
+  ): Promise<AxiosResponse<Response<IEvaluationSectionBased[]>>> {
+    return await evaluationAxios.get(
+      `/evaluation-module-subjects/getByEvaluation/${id}/marker`,
+    );
   }
 
   public async getAllStudentEvaluationsByEvaluation(
