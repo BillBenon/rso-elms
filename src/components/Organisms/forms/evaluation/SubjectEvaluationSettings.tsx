@@ -1,25 +1,24 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-
-import useAuthenticator from '../../../../../hooks/useAuthenticator';
-import usePickedRole from '../../../../../hooks/usePickedRole';
-import { evaluationStore } from '../../../../../store/evaluation/evaluation.store';
-import instructordeploymentStore from '../../../../../store/instructordeployment.store';
-import { SelectData, ValueType } from '../../../../../types';
+import useAuthenticator from '../../../../hooks/useAuthenticator';
+import usePickedRole from '../../../../hooks/usePickedRole';
+import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
+import instructordeploymentStore from '../../../../store/instructordeployment.store';
+import { SelectData, ValueType } from '../../../../types';
 import {
   IEvaluationApproval,
   IEvaluationProps,
-} from '../../../../../types/services/evaluation.types';
+} from '../../../../types/services/evaluation.types';
 import {
   getLocalStorageData,
   removeLocalStorageData,
   setLocalStorageData,
-} from '../../../../../utils/getLocalStorageItem';
-import Button from '../../../../Atoms/custom/Button';
-import Heading from '../../../../Atoms/Text/Heading';
-import ILabel from '../../../../Atoms/Text/ILabel';
-import DropdownMolecule from '../../../../Molecules/input/DropdownMolecule';
-import SwitchMolecule from '../../../../Molecules/input/SwitchMolecule';
+} from '../../../../utils/getLocalStorageItem';
+import Button from '../../../Atoms/custom/Button';
+import Heading from '../../../Atoms/Text/Heading';
+import ILabel from '../../../Atoms/Text/ILabel';
+import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
+import SwitchMolecule from '../../../Molecules/input/SwitchMolecule';
 
 export default function SubjectEvaluationSettings({
   handleGoBack,

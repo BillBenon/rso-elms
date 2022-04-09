@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router';
-
-import { evaluationStore } from '../../../../../store/evaluation/evaluation.store';
-import { Link as LinkList } from '../../../../../types';
+import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
+import { Link as LinkList } from '../../../../types';
 import {
   getLocalStorageData,
   setLocalStorageData,
-} from '../../../../../utils/getLocalStorageItem';
-import Button from '../../../../Atoms/custom/Button';
-import Heading from '../../../../Atoms/Text/Heading';
-import BreadCrumb from '../../../../Molecules/BreadCrumb';
-import Stepper from '../../../../Molecules/Stepper/Stepper';
+} from '../../../../utils/getLocalStorageItem';
+import Button from '../../../Atoms/custom/Button';
+import Heading from '../../../Atoms/Text/Heading';
+import BreadCrumb from '../../../Molecules/BreadCrumb';
+import Stepper from '../../../Molecules/Stepper/Stepper';
 import SubjectEvaluationInfoComponent from './SubjectEvaluationInfoComponent';
 import SubjectEvaluationQuestionComponent from './SubjectEvaluationQuestionsComponent';
 import SubjectEvaluationSettings from './SubjectEvaluationSettings';
@@ -65,12 +64,7 @@ export default function SubjectNewEvaluation() {
           isInline={false}
           navigateToStepHandler={() => {}}>
           <div className="w-2/4">
-            <SubjectEvaluationInfoComponent
-              evaluationId={evaluationId}
-              evaluationInfo={evaluationInfo}
-              handleNext={handleSubmit}
-              handleGoBack={handleBack}
-            />
+            <SubjectEvaluationInfoComponent />
           </div>
 
           <div>
