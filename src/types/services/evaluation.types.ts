@@ -302,11 +302,11 @@ export interface IMultipleChoice {
 }
 
 export enum IMarkingType {
-  PER_STUDENT = 'PER_STUDENT',
+  // PER_STUDENT = 'PER_STUDENT',
   NOT_APPLICABLE = 'NOT_APPLICABLE',
   NOT_SET = 'NOT_SET',
   PER_SECTION = 'PER_SECTION',
-  PER_QUESTION = 'PER_QUESTION',
+  // PER_QUESTION = 'PER_QUESTION',
 }
 
 export interface ICreateEvaluationQuestions extends IEvaluationQuestion {

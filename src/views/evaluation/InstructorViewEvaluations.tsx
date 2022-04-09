@@ -21,6 +21,7 @@ import { CommonCardDataType, Link as LinkList, Privileges } from '../../types';
 import {
   IEvaluationOwnership,
   IEvaluationSettingType,
+  IQuestionaireTypeEnum,
   ISubjects,
 } from '../../types/services/evaluation.types';
 import cookie from '../../utils/cookie';
@@ -116,12 +117,27 @@ export default function InstructorViewEvaluations() {
     if (evaluationInfo?.id === id) {
       switch (ownerShipType) {
         case IEvaluationOwnership.FOR_APPROVING:
+          if (
+            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.MANUAL ||
+            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.HYBRID
+          ) {
+            history.push(`${path}/details/${id}/approve`);
+
+            return;
+          }
           history.push(
             `${path}/details/${id}/approve/${evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module}/${subjects[0].id}`,
           );
           break;
 
         case IEvaluationOwnership.FOR_REVIEWING:
+          if (
+            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.MANUAL ||
+            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.HYBRID
+          ) {
+            history.push(`${path}/details/${id}/review`);
+            return;
+          }
           history.push(
             `${path}/details/${id}/review/${evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module}/${subjects[0].id}`,
           );
