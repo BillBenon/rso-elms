@@ -94,7 +94,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
     academy_id: '',
     birth_date: '',
     deployed_on: '',
-    deployment_number: '',
+    // deployment_number: '',
     doc_type: DocType.NID,
     education_level: EducationLevel.ILLITERATE,
     email: '',
@@ -137,7 +137,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
         academy_id: selectedUser.academy?.id,
         birth_date: selectedUser.person?.birth_date,
         deployed_on: '',
-        deployment_number: '',
+        // deployment_number: '',
         doc_type: selectedUser.person?.doc_type || DocType.NID,
         education_level:
           selectedUser.person?.education_level || EducationLevel.ILLITERATE,

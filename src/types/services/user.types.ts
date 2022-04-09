@@ -191,7 +191,7 @@ export interface EditUser {
   academy_id: string;
   birth_date: string;
   deployed_on: string;
-  deployment_number: string;
+  // deployment_number: string;
   doc_type: DocType;
   education_level: EducationLevel;
   email: string;
