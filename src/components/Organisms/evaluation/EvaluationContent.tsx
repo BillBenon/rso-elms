@@ -1,7 +1,6 @@
 import moment from 'moment';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { Fragment, ReactNode, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory } from 'react-router-dom';
 import { queryClient } from '../../../plugins/react-query';
 import { evaluationService } from '../../../services/evaluation/evaluation.service';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
@@ -14,7 +13,9 @@ import {
 } from '../../../types/services/evaluation.types';
 import DisplayClasses from '../../../views/classes/DisplayClasses';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
+import Panel from '../../Atoms/custom/Panel';
 import Heading from '../../Atoms/Text/Heading';
+import Accordion from '../../Molecules/Accordion';
 import EvaluationContentSectionBased from './EvaluationContentSectionBased';
 import EvaluationContentSubjectBased from './EvaluationContentSubjectBased';
 import EvaluationRemarks from './EvaluationRemarks';
@@ -24,6 +25,7 @@ interface IProps {
   children: ReactNode;
   actionType: IEvaluationAction;
   showActions?: boolean;
+  showSetQuestions?: boolean;
 }
 
 export default function EvaluationContent({
@@ -31,18 +33,14 @@ export default function EvaluationContent({
   children,
   actionType,
   showActions = false,
+  showSetQuestions = true,
 }: IProps) {
-  const [showPopup, setShowPopup] = useState(false);
   const [marks, setMarks] = useState(0);
-  const history = useHistory();
 
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId).data?.data || {};
 
   const { mutate: updateEvaluationQuestion } = evaluationStore.updateEvaluationQuestion();
-
-  const { data: evaluationQuestions, isLoading: loading } =
-    evaluationStore.getEvaluationQuestions(evaluationId);
 
   const [classes, setclasses] = useState([' ']);
 
@@ -94,94 +92,97 @@ export default function EvaluationContent({
 
         <div className="flex gap-4">{children}</div>
       </div>
-      <div className="bg-main px-7 mt-7 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-3 pt-5">
-        <div>
-          {/* first column */}
-          <div className="flex flex-col gap-4">
-            <ContentSpan title="Evaluation name">{evaluationInfo?.name}</ContentSpan>
 
-            <ContentSpan
-              title="Total number of questions"
-              subTitle={evaluationInfo?.number_of_questions}
-            />
-            <ContentSpan title="Access type" subTitle={evaluationInfo?.access_type} />
+      <div className="pt-6">
+        <Accordion>
+          <Panel show={false} title="">
+            {/*CAUTION: Don't touch this fragment
+            It will break the accordion component
+            Do it for your own risk*/}
+            <Fragment />
+          </Panel>
+          <Panel width="full" bgColor="main" title={'View Evaluation details'}>
+            <div className="bg-main px-7 mt-7 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 pb-3 pt-5">
+              <div>
+                {/* first column */}
+                <div className="flex flex-col gap-4">
+                  <ContentSpan title="Evaluation name">
+                    {evaluationInfo?.name}
+                  </ContentSpan>
 
-            {/* <div className="flex flex-col gap-4">
-              <Heading color="txt-secondary" fontSize="base">
-                Eligible Class
-              </Heading>
-              <div className="flex flex-col gap-2">
-                <div className="flex gap-9">
-                  <div>class A</div>
-                  <div>class B</div>
-                </div>
-
-                <div className="flex gap-9">
-                  <div>class A</div>
-                  <div>class B</div>
+                  <ContentSpan
+                    title="Total number of questions"
+                    subTitle={evaluationInfo?.number_of_questions}
+                  />
+                  <ContentSpan
+                    title="Access type"
+                    subTitle={evaluationInfo?.access_type}
+                  />
                 </div>
               </div>
-            </div> */}
-          </div>
-        </div>
-        {/* second column */}
-        <div className="flex flex-col gap-4">
-          <ContentSpan
-            title="Evaluation type"
-            subTitle={evaluationInfo?.evaluation_type.replace('_', ' ')}
-          />
-
-          <ContentSpan
-            title="Time Limit"
-            subTitle={moment
-              .utc()
-              .startOf('year')
-              .add({ minutes: evaluationInfo?.time_limit })
-              .format('H [h ]mm[ mins]')}
-          />
-        </div>
-
-        {/* third column */}
-        <div className="flex flex-col gap-4">
-          <ContentSpan
-            title="Start on"
-            subTitle={evaluationInfo?.allow_submission_time}
-          />
-          <ContentSpan
-            title="Questionaire type"
-            subTitle={evaluationInfo?.questionaire_type}
-          />{' '}
-          <ContentSpan
-            title="Total marks"
-            subTitle={evaluationInfo?.total_mark.toString()}
-          />
-        </div>
-
-        {/* third column */}
-        <div className="flex flex-col gap-4">
-          <ContentSpan title="Due on" subTitle={evaluationInfo?.due_on} />
-          <div className="flex flex-col gap-4">
-            <Heading color="txt-secondary" fontSize="base">
-              Eligible Class
-            </Heading>
-            <div className="flex gap-1">
-              {classes.map((cl, index) => (
-                <DisplayClasses
-                  isLast={index === classes.length - 1}
-                  classId={cl}
-                  key={cl}
+              {/* second column */}
+              <div className="flex flex-col gap-4">
+                <ContentSpan
+                  title="Evaluation type"
+                  subTitle={evaluationInfo?.evaluation_type.replace('_', ' ')}
                 />
-              ))}
-            </div>
-          </div>
-          <ContentSpan
-            title="Consider on report"
-            subTitle={evaluationInfo?.is_consider_on_report ? 'Yes' : 'No'}
-          />
-          {/* <Button styleType="outline" onClick={() => setShowPopup(true)}>
+
+                <ContentSpan
+                  title="Time Limit"
+                  subTitle={moment
+                    .utc()
+                    .startOf('year')
+                    .add({ minutes: evaluationInfo?.time_limit })
+                    .format('H [h ]mm[ mins]')}
+                />
+              </div>
+
+              {/* third column */}
+              <div className="flex flex-col gap-4">
+                <ContentSpan
+                  title="Start on"
+                  subTitle={evaluationInfo?.allow_submission_time}
+                />
+                <ContentSpan
+                  title="Questionaire type"
+                  subTitle={evaluationInfo?.questionaire_type}
+                />{' '}
+                <ContentSpan
+                  title="Total marks"
+                  subTitle={evaluationInfo?.total_mark.toString()}
+                />
+              </div>
+
+              {/* third column */}
+              <div className="flex flex-col gap-4">
+                <ContentSpan title="Due on" subTitle={evaluationInfo?.due_on} />
+                <div className="flex flex-col gap-4">
+                  <Heading color="txt-secondary" fontSize="base">
+                    Eligible Class
+                  </Heading>
+                  <div className="flex gap-1">
+                    {classes.map((cl, index) => (
+                      <DisplayClasses
+                        isLast={index === classes.length - 1}
+                        classId={cl}
+                        key={cl}
+                      />
+                    ))}
+                  </div>
+                </div>
+                <ContentSpan
+                  title="Consider on report"
+                  subTitle={evaluationInfo?.is_consider_on_report ? 'Yes' : 'No'}
+                />
+
+                {/* will be uncommented later */}
+                {/* <Button styleType="outline" onClick={() => setShowPopup(true)}>
             View personal attendees
           </Button> */}
-        </div>
+              </div>
+            </div>
+          </Panel>
+        </Accordion>
       </div>
 
       {/* questions */}
@@ -192,7 +193,11 @@ export default function EvaluationContent({
       </div>
 
       {evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED ? (
-        <EvaluationContentSectionBased evaluation={evaluationInfo} />
+        <EvaluationContentSectionBased
+          showActions={showActions}
+          evaluation={evaluationInfo}
+          showSetQuestions={showSetQuestions}
+        />
       ) : evaluationInfo?.setting_type === IEvaluationSettingType.SUBJECT_BASED ? (
         <EvaluationContentSubjectBased evaluation={evaluationInfo} />
       ) : (

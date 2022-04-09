@@ -21,12 +21,16 @@ interface IProps {
   evaluationId: string;
   children: ReactNode;
   actionType: IEvaluationAction;
+  showSetQuestions?: boolean;
+  showActions?: boolean;
 }
 
 export default function SectionBasedEvaluationContent({
   evaluationId,
   children,
   actionType,
+  showSetQuestions,
+  showActions,
 }: IProps) {
   const { path } = useRouteMatch();
   const [showPopup, setShowPopup] = useState(false);
@@ -225,7 +229,12 @@ export default function SectionBasedEvaluationContent({
             <Route
               exact
               path={`${path}/:moduleId/:subjectId`}
-              render={() => <ModuleSubjectQuestion />}
+              render={() => (
+                <ModuleSubjectQuestion
+                  showActions={showActions}
+                  showSetQuestions={showSetQuestions}
+                />
+              )}
             />
           </Switch>
         </TabNavigation>

@@ -2,7 +2,6 @@ import { pick } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
-
 import Button from '../../../components/Atoms/custom/Button';
 import Loader from '../../../components/Atoms/custom/Loader';
 import Heading from '../../../components/Atoms/Text/Heading';
@@ -25,6 +24,7 @@ import FieldMarking from './FieldMarking';
 import FieldStudentMarking from './FieldStudentMarking';
 import ManualMarking from './ManualMarking';
 import StudentAnswersMarking from './StudentAnswersMarking';
+
 export default function Submissions() {
   const history = useHistory();
   const { id } = useParams<ParamType>();
@@ -164,7 +164,7 @@ export default function Submissions() {
             buttonLabel="Go back"
             title={'No submissions has been made so far!'}
             handleClick={() =>
-              history.push(`/dashboard/evaluations/details/${evaluation?.id}`)
+              history.push(`/dashboard/evaluations/details/${evaluation?.id}/overview`)
             }
             description="It looks like there is any student who have submitted so far."
           />

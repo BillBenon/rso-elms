@@ -11,10 +11,16 @@ import ModuleSubjectQuestion from './ModuleSubjectQuestion';
 
 interface IProps {
   evaluation: IEvaluationInfo;
+  showSetQuestions: boolean;
+  showActions?: boolean;
 }
 
-export default function EvaluationContentSectionBased({ evaluation }: IProps) {
-  const { path } = useRouteMatch();
+export default function EvaluationContentSectionBased({
+  evaluation,
+  showSetQuestions,
+  showActions,
+}: IProps) {
+  const { path, url } = useRouteMatch();
   const [showPopup, setShowPopup] = useState(false);
   const [modules, setModules] = useState<IModules[]>([]);
   const [tabs, setTabs] = useState<TabType[]>([]);
@@ -25,8 +31,6 @@ export default function EvaluationContentSectionBased({ evaluation }: IProps) {
   useEffect(() => {
     setclasses(evaluation?.intake_level_class_ids.split(',') || [' ']);
   }, [evaluation?.intake_level_class_ids]);
-
-  // const tabs: TabType[] = [];
 
   useEffect(() => {
     async function createTabs() {
@@ -43,7 +47,7 @@ export default function EvaluationContentSectionBased({ evaluation }: IProps) {
 
           allTabs.push({
             label: `${mod.module}`,
-            href: `/dashboard/evaluations/details/${evaluation.id}/section/${mod.id}/${subjects.data.data[0].subject_academic_year_period}`,
+            href: `${url}/${mod.id}/${subjects.data.data[0].subject_academic_year_period}`,
           });
         }
       } catch (error) {
@@ -100,12 +104,17 @@ export default function EvaluationContentSectionBased({ evaluation }: IProps) {
             <Route
               exact
               path={`${path}/:moduleId/:subjectId`}
-              render={() => <ModuleSubjectQuestion />}
+              render={() => (
+                <ModuleSubjectQuestion
+                  showSetQuestions={showSetQuestions}
+                  showActions={showActions}
+                />
+              )}
             />
           </Switch>
         </TabNavigation>
       ) : (
-        <p>No parts/sections available in this evaluation</p>
+        <p>No sections available in this evaluation</p>
       )}
 
       <PopupMolecule

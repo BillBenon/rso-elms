@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-
 import Button from '../../components/Atoms/custom/Button';
 import PopupMolecule from '../../components/Molecules/Popup';
 import EvaluationSubjects from '../../components/Organisms/evaluation/EvaluationSubjects';
@@ -14,6 +13,7 @@ export default function SectionBasedEvaluation() {
   return (
     <>
       <SectionBasedEvaluationContent
+        showSetQuestions={true}
         evaluationId={evaluationId}
         actionType="section_based">
         <Button styleType="outline" onClick={() => setshowSubjects(true)}>
