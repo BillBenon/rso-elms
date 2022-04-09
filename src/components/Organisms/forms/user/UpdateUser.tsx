@@ -5,16 +5,15 @@ import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
-import academyStore from '../../../../store/administration/academy.store';
-import {
-  getIntakesByAcademy,
-  getProgramsByIntake,
-} from '../../../../store/administration/intake.store';
-import { getLevelsByAcademicProgram } from '../../../../store/administration/program.store';
+// import academyStore from '../../../../store/administration/academy.store';
+// import {
+//   getIntakesByAcademy,
+//   getProgramsByIntake,
+// } from '../../../../store/administration/intake.store';
+// import { getLevelsByAcademicProgram } from '../../../../store/administration/program.store';
 import usersStore from '../../../../store/administration/users.store';
 import { CommonFormProps, ParamType, ValueType } from '../../../../types';
-import { AcademyInfo } from '../../../../types/services/academy.types';
-import { IntakeProgramInfo } from '../../../../types/services/intake-program.types';
+// import { AcademyInfo } from '../../../../types/services/academy.types';
 import {
   DocType,
   EditUser,
@@ -26,7 +25,7 @@ import {
   UserType,
 } from '../../../../types/services/user.types';
 import {
-  getDropDownOptions,
+  // getDropDownOptions,
   getDropDownStatusOptions,
 } from '../../../../utils/getOption';
 import { validation } from '../../../../utils/validations';
@@ -170,10 +169,10 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
       });
   }, [data]);
 
-  const [otherDetails, setOtherDetails] = useState({
-    intake: '',
-    level: '',
-  });
+  // const [otherDetails, setOtherDetails] = useState({
+  //   intake: '',
+  //   level: '',
+  // });
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
@@ -182,12 +181,12 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
     }));
   }
 
-  function otherhandleChange(e: ValueType) {
-    setOtherDetails((details) => ({
-      ...details,
-      [e.name]: e.value,
-    }));
-  }
+  // function otherhandleChange(e: ValueType) {
+  //   setOtherDetails((details) => ({
+  //     ...details,
+  //     [e.name]: e.value,
+  //   }));
+  // }
 
   const { mutateAsync } = usersStore.modifyUser();
   async function addUser<T>(e: FormEvent<T>) {
@@ -245,32 +244,8 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
       });
   }
   // get all academies in an institution
-  const academies: AcademyInfo[] | undefined =
-    academyStore.fetchAcademies().data?.data.data;
-
-  // get intakes based on selected academy
-  let intakes = getIntakesByAcademy(details.academy_id, false, !!details.academy_id);
-
-  useEffect(() => {
-    intakes.refetch();
-  }, [details.academy_id, intakes]);
-
-  // get programs based on selected intake
-  let programs = getProgramsByIntake(otherDetails.intake, !!otherDetails.intake);
-  useEffect(() => {
-    programs.refetch();
-  }, [otherDetails.intake, programs]);
-
-  //get levels based on selected program
-  let selectedProgram = programs.data?.data.data.find(
-    (p) => p.id == details.intake_program_id,
-  );
-  let programId = selectedProgram?.program.id + '';
-  let levels = getLevelsByAcademicProgram(programId);
-
-  useEffect(() => {
-    levels.refetch();
-  }, [details.intake_program_id, levels]);
+  // const academies: AcademyInfo[] | undefined =
+  //   academyStore.fetchAcademies().data?.data.data;
 
   return (
     <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
@@ -407,7 +382,12 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Education level
         </SelectMolecule>
-        {user?.user_type === UserType.SUPER_ADMIN && details.user_type !== 'SUPER_ADMIN' && (
+
+        {/*NOTE:
+         user intake program and academy should not be edited
+        isntead he can be added/removed , bacause user can be in different academis/intake programs  */}
+
+        {/* {user?.user_type === UserType.SUPER_ADMIN && details.user_type !== 'SUPER_ADMIN' && (
           <SelectMolecule
             error={errors.academy_id}
             options={getDropDownOptions({ inputs: academies || [] })}
@@ -417,8 +397,9 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
             handleChange={handleChange}>
             Academy
           </SelectMolecule>
-        )}
-        {details.user_type === 'STUDENT' && (
+        )} */}
+
+        {/* {details.user_type === 'STUDENT' && (
           <>
             <SelectMolecule
               error={errors.intake_program_id}
@@ -446,20 +427,8 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
               handleChange={handleChange}>
               Programs
             </SelectMolecule>
-            {/* <SelectMolecule
-              options={getDropDownOptions({
-                inputs: levels.data?.data.data || [],
-                labelName: ['name'], //@ts-ignore
-                getOptionLabel: (level) => level.level && level.level.name,
-              })}
-              name="academic_program_level_id"
-              placeholder={'Program to be enrolled in'}
-              value={details.academic_program_level_id}
-              handleChange={handleChange}>
-              Levels
-            </SelectMolecule> */}
           </>
-        )}
+        )} */}
         <Button type="submit">Update</Button>
       </form>
     </div>
