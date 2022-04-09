@@ -12,6 +12,8 @@ import programStore from '../../../store/administration/program.store';
 import usersStore from '../../../store/administration/users.store';
 import { RoleType, SelectData, ValueType } from '../../../types';
 import { AcademyInfo } from '../../../types/services/academy.types';
+import { IntakeProgramInfo } from '../../../types/services/intake-program.types';
+import { ProgramInfo } from '../../../types/services/program.types';
 import {
   AssignUserRole,
   IImportUser,
@@ -93,8 +95,6 @@ export default function ImportUsers({ userType }: IProps) {
       ? roleStore.getRolesByAcademy(values.academyId)
       : roleStore.getRolesByInstitution(roleInfo.institution_id);
 
-  console.log('---------------------');
-
   const { data: userRoles } = usersStore.getUserRoles(user?.id + '');
 
   const userRolesId = userRoles?.data.data.map((role) => role.role.id) || [];
@@ -104,6 +104,7 @@ export default function ImportUsers({ userType }: IProps) {
 
   const academic_programs =
     programStore.getProgramsByAcademy(values.academyId).data?.data.data || [];
+
   const intakes = intakeStore.getIntakesByProgram(values.program).data?.data.data || [];
 
   const picked_role = usePickedRole();
@@ -117,8 +118,10 @@ export default function ImportUsers({ userType }: IProps) {
   if (picked_role?.academyId && picked_role?.type === RoleType.ACADEMY) refetchAcademy();
 
   useEffect(() => {
-    if (picked_role?.academyId && picked_role?.type === RoleType.ACADEMY)
+    if (picked_role?.academy_id && picked_role?.type === RoleType.ACADEMY)
       setValues((prev) => ({ ...prev, academyId: picked_role?.academy_id + '' }));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [picked_role]);
 
   const { mutateAsync, isLoading } = usersStore.importUsers();
@@ -199,6 +202,7 @@ export default function ImportUsers({ userType }: IProps) {
   };
 
   function handleChange(e: ValueType) {
+    console.log(values);
     setValues({ ...values, [e.name]: e.value });
   }
   return (
