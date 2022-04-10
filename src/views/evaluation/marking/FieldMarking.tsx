@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
@@ -28,7 +29,6 @@ export default function FieldMarking({ evaluationId }: PropsType) {
 
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId).data?.data || {};
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const markedStudents =
     markingStore.getEvaluationStudentEvaluations(evaluationId).data?.data.data || [];
 
@@ -41,7 +41,7 @@ export default function FieldMarking({ evaluationId }: PropsType) {
   //   );
 
   const [classes, setclasses] = useState(
-    evaluationInfo?.intake_level_class_ids.split(','),
+    evaluationInfo?.intake_level_class_ids.split(',').filter((item) => item != ''),
   );
   //   const { mutate } = markingStore.manualMarking();
 
@@ -81,7 +81,9 @@ export default function FieldMarking({ evaluationId }: PropsType) {
   ];
 
   useEffect(() => {
-    setclasses(evaluationInfo?.intake_level_class_ids.split(',') || ['']);
+    setclasses(
+      evaluationInfo?.intake_level_class_ids.split(',').filter((item) => item != ''),
+    );
   }, [evaluationInfo?.intake_level_class_ids]);
 
   useEffect(() => {
