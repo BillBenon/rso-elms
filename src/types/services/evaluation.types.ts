@@ -1,5 +1,6 @@
 import { Table } from '..';
 import { IClass, IClassStudent } from './class.types';
+import { ExtendedSubjectInfo } from './subject.types';
 import { Student } from './user.types';
 
 /* eslint-disable no-unused-vars */
@@ -175,6 +176,18 @@ export type IEvaluationSectionBased = {
   questionaire_setting_status: IEvaluationStatus;
   section_total_marks: number;
   subject_academic_year_period: number | string;
+};
+
+export type IEvaluationSectionBasedInfo = {
+  id: string;
+  marker_id: string;
+  evaluation_id: string;
+  instructor_subject_assignment: string;
+  intake_program_level_module: string;
+  questionaire_setting_status: IEvaluationStatus;
+  section_total_marks: number;
+  subject_academic_year_period: number | string;
+  module_subject: ExtendedSubjectInfo;
 };
 
 export interface IModules {

@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import { evaluationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
-import { IEvaluationSectionBased } from '../../types/services/evaluation.types';
+import { IEvaluationSectionBasedInfo } from '../../types/services/evaluation.types';
 import {
   IManualMarking,
   IManualMarkingInfo,
@@ -100,7 +100,7 @@ class MarkingService {
 
   public async getEvaluationMarkingModules(
     id: string,
-  ): Promise<AxiosResponse<Response<IEvaluationSectionBased[]>>> {
+  ): Promise<AxiosResponse<Response<IEvaluationSectionBasedInfo[]>>> {
     return await evaluationAxios.get(
       `/evaluation-module-subjects/getByEvaluation/${id}/marker`,
     );
