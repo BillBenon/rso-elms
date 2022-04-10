@@ -36,6 +36,14 @@ class MarkingStore {
     );
   }
 
+  getEvaluationMarkingModules(id: string, enabled: boolean = false) {
+    return useQuery(
+      ['markingModules', id],
+      () => markingService.getEvaluationMarkingModules(id),
+      { enabled },
+    );
+  }
+
   getManualMarkingMarks(evaluationId: string, classId: string) {
     return useQuery(['manualMarkingMarks', evaluationId, classId], () =>
       markingService.getManualMarkingMarks(evaluationId, classId),
