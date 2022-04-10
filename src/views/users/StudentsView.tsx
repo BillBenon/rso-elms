@@ -146,10 +146,10 @@ export default function StudentsView() {
   const { data: search } = usersStore.getAllBySearch(value, filter);
 
   useEffect(() => {
-    if (filter) {
-      setUsers(formatUserTable(search?.data.data.content || []));
-      setTotalElements(search?.data.data.totalElements || 0);
-      setTotalPages(search?.data.data.totalPages || 0);
+    if (filter && search) {
+      setUsers(formatUserTable(search.data.data.content || []));
+      setTotalElements(search.data.data.totalElements || 0);
+      setTotalPages(search.data.data.totalPages || 0);
       setFilter(false);
     }
   }, [filter, search]);
