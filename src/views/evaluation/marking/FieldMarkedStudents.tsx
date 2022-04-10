@@ -2,7 +2,6 @@ import { pick } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
-
 import Button from '../../../components/Atoms/custom/Button';
 import Loader from '../../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../../components/Molecules/cards/NoDataAvailable';
@@ -15,6 +14,7 @@ import {
   EvaluationStudent,
   StudentEvaluationInfo,
 } from '../../../types/services/marking.types';
+
 export default function Submissions() {
   const history = useHistory();
   const { id } = useParams<ParamType>();
@@ -93,7 +93,7 @@ export default function Submissions() {
           buttonLabel="Go back"
           title={'No submissions has been made so far!'}
           handleClick={() =>
-            history.push(`/dashboard/evaluations/details/${evaluation?.id}`)
+            history.push(`/dashboard/evaluations/details/${evaluation?.id}/overview`)
           }
           description="It looks like no student have submitted yet."
         />

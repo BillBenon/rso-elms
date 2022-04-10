@@ -222,7 +222,11 @@ export default function SubjectEvaluationInfoComponent() {
       {
         onSuccess: (data) => {
           toast.success('Evaluation created successfully!');
-          history.push(`/dashboard/evaluations/${data.data.data.id}/addquestions`);
+          if (data.data.data.questionaire_type === IQuestionaireTypeEnum.MANUAL) {
+            history.push(`/dashboard/evaluations/${data.data.data.id}/settings`);
+          } else {
+            history.push(`/dashboard/evaluations/${data.data.data.id}/addquestions`);
+          }
         },
         onError: (error: any) => {
           toast.error(error.response.data.message);

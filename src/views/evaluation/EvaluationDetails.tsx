@@ -1,7 +1,6 @@
 import React from 'react';
 import toast from 'react-hot-toast';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
-
 import Button from '../../components/Atoms/custom/Button';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import EvaluationContent from '../../components/Organisms/evaluation/EvaluationContent';
@@ -9,6 +8,7 @@ import AddEvaluationQuestions from '../../components/Organisms/forms/evaluation/
 import { queryClient } from '../../plugins/react-query';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
+import { IEvaluationSettingType } from '../../types/services/evaluation.types';
 import EvaluationSettingProgress from '../EvaluationSettingProgress';
 import ApproveEvaluation from './ApproveEvaluation';
 import EvaluationPerformance from './EvaluationPerformance';
@@ -20,6 +20,7 @@ import Unbeguns from './Unbeguns';
 export default function EvaluationDetails() {
   const { id } = useParams<ParamType>();
   const history = useHistory();
+  const { data: evaluationInfo } = evaluationStore.getEvaluationById(id).data?.data || {};
 
   const { url, path } = useRouteMatch();
 
@@ -27,7 +28,7 @@ export default function EvaluationDetails() {
   const tabs = [
     {
       label: 'Overview evaluation',
-      href: `${url}`,
+      href: `${url}/overview`,
     },
     {
       label: 'Submissions',
@@ -47,7 +48,12 @@ export default function EvaluationDetails() {
     },
   ];
 
-  const { data: evaluationInfo } = evaluationStore.getEvaluationById(id).data?.data || {};
+  if (evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED) {
+    tabs.push({
+      label: 'Evaluation sections',
+      href: `${url}/sections`,
+    });
+  }
 
   const publishEvaluation = (status: string) => {
     makeEvaluationPublic.mutate(
@@ -68,12 +74,10 @@ export default function EvaluationDetails() {
     <div className="block pr-24 pb-8 w-11/12">
       <Switch>
         <Route
-          exact
           path={`${path}/review`}
           render={() => <ReviewEvaluation evaluationId={id} />}
         />
         <Route
-          exact
           path={`${path}/approve`}
           render={() => <ApproveEvaluation evaluationId={id} />}
         />
@@ -91,18 +95,17 @@ export default function EvaluationDetails() {
         <Route path={`${path}/section`} render={() => <SectionBasedEvaluation />} />{' '}
         <TabNavigation tabs={tabs}>
           <div className="pt-8">
-            <Route path={`${path}/submissions`} render={() => <Submissions />} />
-          </div>
-          <div className="pt-8">
             <Route exact path={`${path}/unbeguns`} render={() => <Unbeguns />} />
           </div>{' '}
-          <div className="pt-8">
-            <Route
-              exact
-              path={`${path}/sections`}
-              render={() => <EvaluationSettingProgress />}
-            />
-          </div>
+          {evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED && (
+            <div className="pt-8">
+              <Route
+                exact
+                path={`${path}/sections`}
+                render={() => <EvaluationSettingProgress />}
+              />
+            </div>
+          )}
           <Route
             exact
             path={`${path}/performance`}
@@ -112,7 +115,11 @@ export default function EvaluationDetails() {
             exact
             path={`${path}`}
             render={() => (
-              <EvaluationContent showActions={true} evaluationId={id} actionType="">
+              <EvaluationContent
+                showActions={true}
+                showSetQuestions={false}
+                evaluationId={id}
+                actionType="">
                 <div className="flex gap-4">
                   <Button
                     disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
@@ -123,6 +130,27 @@ export default function EvaluationDetails() {
               </EvaluationContent>
             )}
           />
+          <Route
+            path={`${path}/overview`}
+            render={() => (
+              <EvaluationContent
+                showActions={true}
+                showSetQuestions={false}
+                evaluationId={id}
+                actionType="">
+                <div className="flex gap-4">
+                  <Button
+                    disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
+                    onClick={() => publishEvaluation('PUBLIC')}>
+                    Publish evaluation
+                  </Button>
+                </div>
+              </EvaluationContent>
+            )}
+          />
+          <div className="pt-8">
+            <Route path={`${path}/submissions`} render={() => <Submissions />} />
+          </div>
         </TabNavigation>
       </Switch>
     </div>

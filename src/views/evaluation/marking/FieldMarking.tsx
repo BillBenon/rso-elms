@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
-
 import Loader from '../../../components/Atoms/custom/Loader';
 import Heading from '../../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../../components/Molecules/cards/NoDataAvailable';
@@ -128,7 +127,7 @@ export default function FieldMarking({ evaluationId }: PropsType) {
           value={currentClassId}
           handleChange={handleClassChange}
           name={'type'}
-          placeholder="Evaluation type"
+          placeholder="Class name"
           options={classes?.map((cl) => useClasses(cl)) || []}
         />
       </div>

@@ -78,6 +78,7 @@ export default function EvaluationSettings() {
 
     // Should remove marker_id property if marking type is set to section
     // otherwise it will parse marker_ids from array to string for api compatibility
+
     if (evaluationInfo?.marking_type === IMarkingType.PER_SECTION) {
       Object.keys(settings).forEach(
         (key) =>
@@ -86,6 +87,19 @@ export default function EvaluationSettings() {
       );
     } else {
       settings.marker_ids = settings.marker_ids?.toString();
+      settings.approver_ids = settings.approver_ids?.toString();
+      settings.to_be_approved = true;
+      settings.to_be_reviewed = true;
+      settings.reviewer_ids = settings.reviewer_ids?.toString();
+    }
+
+    if (settings.to_be_approved == false || settings.to_be_reviewed == false) {
+      settings.approver_ids = user?.id.toString() || '';
+      settings.reviewer_ids = user?.id.toString() || '';
+    }
+
+    if (!settings.marker_ids) {
+      settings.marker_ids = user?.id.toString() || '';
     }
 
     mutate(settings, {

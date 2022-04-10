@@ -11,9 +11,8 @@ import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ValueType } from '../../types';
 import {
   IEvaluationOwnership,
-  UpdateEvaluationApprovalStatusEnum
+  UpdateEvaluationApprovalStatusEnum,
 } from '../../types/services/evaluation.types';
-
 
 interface IProps {
   evaluationId: string;
@@ -77,7 +76,10 @@ export default function ApproveEvaluation({ evaluationId }: IProps) {
 
   return (
     <>
-      <EvaluationContent evaluationId={evaluationId} actionType="approvals">
+      <EvaluationContent
+        evaluationId={evaluationId}
+        showSetQuestions={false}
+        actionType="approvals">
         <Button
           disabled={evaluationApprovals?.evaluation_approval_status + '' !== 'PENDING'}
           onClick={() => changeAction('approve')}>
