@@ -63,10 +63,6 @@ export default function EvaluationSubjects({
     setIsloading(false);
   }, [evaluationInfo?.evaluation_module_subjects]);
 
-  useEffect(() => {
-    console.log('subjects we have', subjects);
-  }, [subjects]);
-
   function handleChange(e: ValueType) {
     setSubjectId(
       evaluationInfo?.evaluation_module_subjects
@@ -83,13 +79,13 @@ export default function EvaluationSubjects({
   function handleAction() {
     if (action == 'finish_setting') {
       evaluationService
-        .updateEvaluationModuleSubject(subjectId, IEvaluationStatus.COMPLETED)
+        .updateEvaluationModuleSubject(moduleSubject, IEvaluationStatus.COMPLETED)
         .then(() => {
           toast.success('Marked setting status to completed');
           history.goBack();
         })
         .catch((err) => {
-          toast.error(err);
+          toast.error(err.response.data.message);
         });
     } else if (action == 'add_questions') {
       history.push(

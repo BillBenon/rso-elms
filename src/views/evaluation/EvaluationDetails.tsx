@@ -8,6 +8,7 @@ import AddEvaluationQuestions from '../../components/Organisms/forms/evaluation/
 import { queryClient } from '../../plugins/react-query';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
+import { IEvaluationSettingType } from '../../types/services/evaluation.types';
 import EvaluationSettingProgress from '../EvaluationSettingProgress';
 import ApproveEvaluation from './ApproveEvaluation';
 import Submissions from './marking/Submissions';
@@ -18,6 +19,7 @@ import Unbeguns from './Unbeguns';
 export default function EvaluationDetails() {
   const { id } = useParams<ParamType>();
   const history = useHistory();
+  const { data: evaluationInfo } = evaluationStore.getEvaluationById(id).data?.data || {};
 
   const { url, path } = useRouteMatch();
 
@@ -39,13 +41,14 @@ export default function EvaluationDetails() {
       label: 'Not attempted',
       href: `${url}/unbeguns`,
     },
-    {
-      label: 'Evaluation sections',
-      href: `${url}/sections`,
-    },
   ];
 
-  const { data: evaluationInfo } = evaluationStore.getEvaluationById(id).data?.data || {};
+  if (evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED) {
+    tabs.push({
+      label: 'Evaluation sections',
+      href: `${url}/sections`,
+    });
+  }
 
   const publishEvaluation = (status: string) => {
     makeEvaluationPublic.mutate(
@@ -89,13 +92,15 @@ export default function EvaluationDetails() {
           <div className="pt-8">
             <Route exact path={`${path}/unbeguns`} render={() => <Unbeguns />} />
           </div>{' '}
-          <div className="pt-8">
-            <Route
-              exact
-              path={`${path}/sections`}
-              render={() => <EvaluationSettingProgress />}
-            />
-          </div>
+          {evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED && (
+            <div className="pt-8">
+              <Route
+                exact
+                path={`${path}/sections`}
+                render={() => <EvaluationSettingProgress />}
+              />
+            </div>
+          )}
           <Route
             path={`${path}/overview`}
             render={() => (

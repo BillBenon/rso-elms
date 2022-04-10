@@ -28,8 +28,6 @@ export default function ModuleSubjectQuestion({
   showSetQuestions?: boolean;
   showActions?: boolean;
 }) {
-  const [showSubjects, setshowSubjects] = useState(false);
-
   const [subjects, setSubjects] = useState<ISubjects[]>([]);
   const { id: evaluationId } = useParams<ParamType>();
   const { moduleId } = useParams<EvaluationParamType>();

@@ -13,8 +13,6 @@ export enum IEvaluationTypeEnum {
   TEWT = 'TEWT',
 }
 
-
-
 export enum IQuestionType {
   MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
   OPEN = 'OPEN',
@@ -35,11 +33,10 @@ export interface IEvaluationProps {
   evaluationInfo?: IEvaluationInfo;
 }
 
-
- export enum IEvaluationSettingType  {
-     SECTION_BASED = 'SECTION_BASED',
-     SUBJECT_BASED = 'SUBJECT_BASED',
-  }
+export enum IEvaluationSettingType {
+  SECTION_BASED = 'SECTION_BASED',
+  SUBJECT_BASED = 'SUBJECT_BASED',
+}
 
 export enum ISubmissionTypeEnum {
   FILE = 'FILE',
@@ -170,7 +167,7 @@ export interface IEvaluationCreate {
   marking_type: IMarkingType;
   intakeId: string;
   intake_program_level: string;
-  setting_type: IEvaluationSettingType
+  setting_type: IEvaluationSettingType;
 }
 
 export type IEvaluationSectionBased = {
@@ -182,6 +179,12 @@ export type IEvaluationSectionBased = {
   questionaire_setting_status: IEvaluationStatus;
   section_total_marks: number;
   subject_academic_year_period: number | string;
+  module_subject?: {
+    adminId: string;
+    id: string;
+    moduleEnrollmentId: string;
+    title: string;
+  };
 };
 
 export interface IModules {
