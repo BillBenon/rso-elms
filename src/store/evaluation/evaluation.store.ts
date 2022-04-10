@@ -3,9 +3,8 @@ import { evaluationService } from '../../services/evaluation/evaluation.service'
 import {
   IEvaluationAction,
   IEvaluationOwnership,
-  IEvaluationStatus
+  IEvaluationStatus,
 } from '../../types/services/evaluation.types';
-
 
 class EvaluationStore {
   createEvaluation() {
@@ -166,6 +165,10 @@ class EvaluationStore {
 
   deleteEvaluationQuestionById() {
     return useMutation(evaluationService.deleteEvaluationQuestionById);
+  }
+
+  deleteEvaluationById() {
+    return useMutation(evaluationService.deleteEvaluationById);
   }
 
   updateEvaluationModuleSubject() {
