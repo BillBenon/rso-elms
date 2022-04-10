@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useCallback, useState } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 
 import useAuthenticator from '../../../../../hooks/useAuthenticator';
@@ -31,7 +31,7 @@ const SignInForm = () => {
     }));
   };
 
-  useEffect(() => logout(), []);
+  useCallback(logout, [logout]);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -92,7 +92,7 @@ const SignInForm = () => {
           </InputMolecule>
         </div>
         <div className="flex justify-end w-80">
-          <Link to="/">
+          <Link to={`${url}/forgot-pass`}>
             <span className="text-sm text-primary-500">Forgot password?</span>
           </Link>
         </div>

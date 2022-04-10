@@ -185,12 +185,12 @@ function NextOfKinDetails<E>({
                   ? '/dashboard/student'
                   : '/dashboard/users',
               );
+              nextStep(true);
             },
             onError(_error) {
               toast.error('Failed');
             },
           });
-          nextStep(true);
           if (onSubmit) onSubmit(e, details);
         }
       })
