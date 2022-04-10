@@ -8,7 +8,7 @@ import { InstitutionInfo } from './institution.types';
 import { UserType } from './user.types';
 
 interface ISubjectReport {
-  adminId: 'string';
+  adminId: string;
   classWorkGroups: IclassWorkGroupInfo[];
   id: string;
   title: string;
@@ -128,7 +128,7 @@ export interface IModuleTermPerformance {
   ];
 }
 
-interface Marker {
+interface EvUser {
   academy: AcademyInfo;
   academyId: string;
   adminId: string;
@@ -155,7 +155,7 @@ export interface ISubjective {
   created_on: string;
   id: string;
   last_modification_on: string;
-  marker: Marker;
+  marker: EvUser;
   student: EvStudent;
   subjective_label: TermFormSection;
   subjective_value: string;
@@ -184,6 +184,14 @@ export interface ISubjectiveForm {
   termId: string;
 }
 
+export interface DSAssessForm {
+  term: number;
+  label: string;
+  receiver: string;
+  value: string;
+  week: number;
+}
+
 export interface IEditSubjectiveForm extends ISubjectiveForm {
   id: string;
 }
@@ -197,6 +205,15 @@ export interface TwetForm {
 
 export interface TwetReport extends TwetForm {
   student: EvStudent;
+}
+
+export interface DSAssessReport {
+  term: number;
+  week: number;
+  author: EvUser;
+  critique_rows: { id: string; label: string; value: string }[];
+  id: string;
+  receiver: EvUser;
 }
 
 export enum TermFormSection {
