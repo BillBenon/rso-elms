@@ -1,15 +1,13 @@
 import { pick } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+import { Link, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../../components/Atoms/auth/Permission';
 import Button from '../../../components/Atoms/custom/Button';
 import Loader from '../../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../../components/Molecules/cards/NoDataAvailable';
-import PopupMolecule from '../../../components/Molecules/Popup';
 import Table from '../../../components/Molecules/table/Table';
-import NewPersonalDocument from '../../../components/Organisms/forms/user/NewPersonalDocument';
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import { queryClient } from '../../../plugins/react-query';
 import usersStore from '../../../store/administration/users.store';
@@ -23,7 +21,7 @@ import { downloadPersonalDoc } from '../../../utils/file-util';
 export default function PersonalDocuments({ user }: { user: UserInfo }) {
   const [attachments, setAttachments] = useState([]);
   const { user: currentUser } = useAuthenticator();
-  const { url, path } = useRouteMatch();
+  const { url } = useRouteMatch();
   const history = useHistory();
   const { data, isSuccess, isLoading, isError } = usersStore.getPersonalFiles(
     user.person.id + '',
@@ -107,12 +105,12 @@ export default function PersonalDocuments({ user }: { user: UserInfo }) {
       <div className="flex flex-col">
         <div className="mb-2">
           {user.id === currentUser?.id ? (
-            <Link to={`${url}/add-p-doc`}>
+            <Link to={`${url}/new-personal-doc`}>
               <Button className="flex float-right">Upload new file</Button>
             </Link>
           ) : (
             <Permission privilege={Privileges.CAN_CREATE_USERS_DOCUMENTS}>
-              <Link to={`${url}/add-p-doc`}>
+              <Link to={`${url}/new-personal-doc`}>
                 <Button className="flex float-right">Upload new file</Button>
               </Link>
             </Permission>
@@ -148,20 +146,6 @@ export default function PersonalDocuments({ user }: { user: UserInfo }) {
           ) : null}
         </div>
       </div>
-      <Switch>
-        {/* add new level popup */}
-        <Route
-          exact
-          path={`${path}/add-p-doc`}
-          render={() => {
-            return (
-              <PopupMolecule title="New Personal Document" open onClose={history.goBack}>
-                <NewPersonalDocument personId={user?.person.id + ''} />
-              </PopupMolecule>
-            );
-          }}
-        />
-      </Switch>
     </>
   );
 }
