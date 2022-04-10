@@ -191,7 +191,6 @@ export interface EditUser {
   academy_id: string;
   birth_date: string;
   deployed_on: string;
-  deployment_number: string;
   doc_type: DocType;
   education_level: EducationLevel;
   email: string;
@@ -223,6 +222,7 @@ export interface EditUser {
 }
 
 export interface CreateUserInfo extends EditUser {
+  deployment_number: string;
   password: string;
 }
 export interface UserView
