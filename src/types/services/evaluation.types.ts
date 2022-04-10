@@ -180,6 +180,12 @@ export type IEvaluationSectionBased = {
   questionaire_setting_status: IEvaluationStatus;
   section_total_marks: number;
   subject_academic_year_period: number | string;
+  module_subject?: {
+    adminId: string;
+    id: string;
+    moduleEnrollmentId: string;
+    title: string;
+  };
 };
 
 export type IEvaluationSectionBasedInfo = {

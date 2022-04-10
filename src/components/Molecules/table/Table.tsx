@@ -218,7 +218,9 @@ export default function Table2<T>({
               value={row[uniqueCol] + ''}></Checkbox>
           )}
         </td>
-        {showNumbering && <td className="pl-4"> {index + 1}</td>}
+        {showNumbering && (
+          <td className="pl-4"> {rowsPerPage * currentPage + index + 1}</td>
+        )}
 
         <Row
           key={index + Math.random() * 16}

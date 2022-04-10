@@ -156,7 +156,9 @@ export default function StudentsView() {
 
   useEffect(() => {
     refetch();
-  }, [currentPage, pageSize, refetch]);
+    console.log('refetching', currentPage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, pageSize]);
 
   return (
     <div>
@@ -202,7 +204,7 @@ export default function StudentsView() {
           currentPage={currentPage}
           onPaginate={(page) => setcurrentPage(page)}
           onChangePageSize={(size) => {
-            setcurrentPage(0);
+            setcurrentPage(currentPage);
             setPageSize(size);
           }}
         />

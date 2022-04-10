@@ -1,5 +1,5 @@
 import { Editor } from '@tiptap/react';
-import React, { FormEvent, Fragment, useEffect, useMemo, useState } from 'react';
+import React, { FormEvent, Fragment, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation, useParams } from 'react-router-dom';
 import { queryClient } from '../../../../plugins/react-query';
@@ -33,21 +33,19 @@ export default function AdddEvaluationQuestions({
   const { id: moduleSubject } = useParams<ParamType>();
   const { search } = useLocation();
   const subjectId = new URLSearchParams(String(search)).get('subject') || '';
-  const initialState: ICreateEvaluationQuestions = useMemo(() => {
-    return {
-      evaluation_id: evaluationId || '',
-      mark: 0,
-      parent_question_id: '',
-      choices: [],
-      id: '',
-      question: '',
-      question_type: IQuestionType.OPEN,
-      sub_questions: [],
-      submitted: false,
-      answer: '',
-      evaluation_module_subject_id: moduleSubject || '',
-    };
-  }, [evaluationId, moduleSubject]);
+  const initialState: ICreateEvaluationQuestions = {
+    evaluation_id: evaluationId || '',
+    mark: 0,
+    parent_question_id: '',
+    choices: [],
+    id: '',
+    question: '',
+    question_type: IQuestionType.OPEN,
+    sub_questions: [],
+    submitted: false,
+    answer: '',
+    evaluation_module_subject_id: moduleSubject || '',
+  };
 
   const evaluationQuestions =
     evaluationStore.getEvaluationQuestionsBySubject(evaluationId || '', subjectId).data
@@ -76,14 +74,25 @@ export default function AdddEvaluationQuestions({
       });
       setQuestions(allQuestions);
     }
-  }, [evaluationId, evaluationQuestions, initialState]);
+  }, [evaluationId, evaluationQuestions]);
 
   function handleAddQuestion() {
-    let newQuestion = initialState;
-    newQuestion.choices = [];
-    let questionsClone = [...questions];
-    questionsClone.push(newQuestion);
-    setQuestions(questionsClone);
+    setQuestions([
+      ...questions,
+      {
+        evaluation_id: evaluationId || '',
+        mark: 0,
+        parent_question_id: '',
+        choices: [],
+        id: '',
+        question: '',
+        question_type: IQuestionType.OPEN,
+        sub_questions: [],
+        submitted: false,
+        answer: '',
+        evaluation_module_subject_id: moduleSubject || '',
+      },
+    ]);
   }
 
   function handleRemoveQuestion(questionId: string, questionIndex: number) {
@@ -146,6 +155,24 @@ export default function AdddEvaluationQuestions({
       questionInfo[index].choices = [];
       return;
     }
+
+    if (name === 'mark') {
+      if (parseFloat(value.toString()) > 0) {
+        questionInfo[index] = {
+          ...questionInfo[index],
+          mark: parseFloat(value.toString()),
+        };
+        setQuestions(questionInfo);
+        return;
+      }
+      questionInfo[index] = {
+        ...questionInfo[index],
+        mark: 0,
+      };
+      setQuestions(questionInfo);
+      return;
+    }
+
     questionInfo[index] = { ...questionInfo[index], [name]: value };
 
     setQuestions(questionInfo);
@@ -358,7 +385,7 @@ export default function AdddEvaluationQuestions({
                     name={'mark'}
                     min={1}
                     style={{ width: '6rem' }}
-                    value={question.mark || 0}
+                    value={question.mark}
                     handleChange={(e: ValueType) => handleChange(index, e)}>
                     Question marks
                   </InputMolecule>

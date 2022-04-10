@@ -24,6 +24,7 @@ import { ApproveStudents, StudentApproval } from '../../types/services/enrollmen
 import UpdateCompleteProfile from '../auth/UpdateCompleteProfile';
 import PersonalDocuments from './profile/PersonalDocuments';
 import ProfileOverview from './profile/ProfileOverview';
+import UpdatePhotoProfile from './profile/UpdatePhotoProfile';
 
 export default function UserDetails() {
   const { id } = useParams<ParamType>();
@@ -157,6 +158,19 @@ export default function UserDetails() {
               }}
             />
             <Route path={`${path}/edit-compl-prof`} component={UpdateCompleteProfile} />
+            <Route
+              exact
+              path={`${path}/edit-prof`}
+              render={() => (
+                <PopupMolecule
+                  closeOnClickOutSide={false}
+                  title="Upload new profile picture"
+                  open={true}
+                  onClose={history.goBack}>
+                  <UpdatePhotoProfile user={user.data.data} />
+                </PopupMolecule>
+              )}
+            />
           </Switch>
         </>
       ) : (

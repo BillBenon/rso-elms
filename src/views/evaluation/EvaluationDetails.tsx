@@ -9,6 +9,7 @@ import AddEvaluationQuestions from '../../components/Organisms/forms/evaluation/
 import { queryClient } from '../../plugins/react-query';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
+import { IEvaluationSettingType } from '../../types/services/evaluation.types';
 import EvaluationSettingProgress from '../EvaluationSettingProgress';
 import ApproveEvaluation from './ApproveEvaluation';
 import EvaluationPerformance from './EvaluationPerformance';
@@ -20,8 +21,11 @@ import Unbeguns from './Unbeguns';
 export default function EvaluationDetails() {
   const { id } = useParams<ParamType>();
   const history = useHistory();
+  const { data: evaluationInfo } = evaluationStore.getEvaluationById(id).data?.data || {};
 
   const { url, path } = useRouteMatch();
+
+  const { mutate: deleteEvaluation } = evaluationStore.deleteEvaluationById();
 
   const makeEvaluationPublic = evaluationStore.publishEvaluation();
   const tabs = [
@@ -47,7 +51,12 @@ export default function EvaluationDetails() {
     },
   ];
 
-  const { data: evaluationInfo } = evaluationStore.getEvaluationById(id).data?.data || {};
+  if (evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED) {
+    tabs.push({
+      label: 'Evaluation sections',
+      href: `${url}/sections`,
+    });
+  }
 
   const publishEvaluation = (status: string) => {
     makeEvaluationPublic.mutate(
@@ -91,13 +100,15 @@ export default function EvaluationDetails() {
           <div className="pt-8">
             <Route exact path={`${path}/unbeguns`} render={() => <Unbeguns />} />
           </div>{' '}
-          <div className="pt-8">
-            <Route
-              exact
-              path={`${path}/sections`}
-              render={() => <EvaluationSettingProgress />}
-            />
-          </div>
+          {evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED && (
+            <div className="pt-8">
+              <Route
+                exact
+                path={`${path}/sections`}
+                render={() => <EvaluationSettingProgress />}
+              />
+            </div>
+          )}
           <Route
             exact
             path={`${path}/performance`}
@@ -105,7 +116,24 @@ export default function EvaluationDetails() {
           />
           <Route
             exact
-            // path={`${path}`}
+            path={`${path}`}
+            render={() => (
+              <EvaluationContent
+                showActions={true}
+                showSetQuestions={false}
+                evaluationId={id}
+                actionType="">
+                <div className="flex gap-4">
+                  <Button
+                    disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
+                    onClick={() => publishEvaluation('PUBLIC')}>
+                    Publish evaluation
+                  </Button>
+                </div>
+              </EvaluationContent>
+            )}
+          />
+          <Route
             path={`${path}/overview`}
             render={() => (
               <EvaluationContent
@@ -114,6 +142,27 @@ export default function EvaluationDetails() {
                 evaluationId={id}
                 actionType="">
                 <div className="flex gap-4">
+                  <Button
+                    color="main"
+                    className="bg-red-500"
+                    onClick={() => {
+                      if (confirm('Are you sure you want to delete this evaluation?')) {
+                        // start from here
+                        deleteEvaluation(evaluationInfo?.id + '', {
+                          onSuccess: () => {
+                            toast.success('Evaluation deleted successfully', {
+                              duration: 5000,
+                            });
+                            window.location.href = '/dashboard/evaluations';
+                          },
+                          onError: (error: any) => {
+                            toast.error(error.response.data.message);
+                          },
+                        });
+                      }
+                    }}>
+                    Delete evaluation
+                  </Button>
                   <Button
                     disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
                     onClick={() => publishEvaluation('PUBLIC')}>

@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
 import toast from 'react-hot-toast';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
-
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -34,6 +33,8 @@ export default function EvaluationTest() {
     isError,
   } = evaluationStore.getEvaluationQuestions(id);
 
+  const evaluationInfo = evaluationStore.getEvaluationById(id).data?.data.data;
+
   const { mutate } = evaluationStore.submitEvaluation();
 
   let studentEvaluationData = markingStore.getStudentEvaluationById(studentEvaluationId);
@@ -41,7 +42,7 @@ export default function EvaluationTest() {
 
   const autoSubmit = useCallback(() => {
     // setTimeout(() => {
-    setIsCheating(false);
+
     mutate(studentEvaluationId, {
       onSuccess: () => {
         toast.success('Evaluation submitted', { duration: 5000 });
@@ -79,21 +80,20 @@ export default function EvaluationTest() {
   ]);
 
   useEffect(() => {
-    // if (
-    //   !open &&
-    //   !isFullscreen &&
-    //   path === '/dashboard/evaluations/student-evaluation/:id'
-    // ) {
-    //   setIsCheating(true);
-    //   autoSubmit();
-    // }
+    if (
+      !open &&
+      !isFullscreen &&
+      path === '/dashboard/evaluations/student-evaluation/:id'
+    ) {
+      setIsCheating(true);
+      autoSubmit();
+    }
     const handleTabChange = () => {
       if (
         document['hidden'] &&
         path === '/dashboard/evaluations/student-evaluation/:id'
       ) {
         setIsCheating(true);
-
         autoSubmit();
       }
     };
@@ -150,9 +150,10 @@ export default function EvaluationTest() {
         </div>
       </div>
 
-      {questions && questions.data.data.length > 0 ? (
+      {evaluationInfo && questions && questions.data.data.length > 0 ? (
         questions?.data.data.map((question, index: number) => (
           <QuestionContainer
+            evaluationInfo={evaluationInfo}
             showCorrectAnswer={false}
             index={index}
             id={question.id}

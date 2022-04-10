@@ -1,5 +1,5 @@
 import { Editor } from '@tiptap/react';
-import React, { FormEvent, Fragment, useEffect, useMemo, useState } from 'react';
+import React, { FormEvent, Fragment, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
@@ -38,20 +38,18 @@ export default function EvaluationQuestionComponent() {
   evaluationQuestions =
     evaluationStore.getEvaluationQuestions(evaluationId).data?.data.data || [];
 
-  const initialState: ICreateEvaluationQuestions = useMemo(() => {
-    return {
-      evaluation_id: evaluationId,
-      mark: 0,
-      parent_question_id: '',
-      choices: [],
-      id: '',
-      question: '',
-      question_type: IQuestionType.OPEN,
-      sub_questions: [],
-      submitted: false,
-      answer: '',
-    };
-  }, [evaluationId]);
+  const initialState: ICreateEvaluationQuestions = {
+    evaluation_id: evaluationId,
+    mark: 0,
+    parent_question_id: '',
+    choices: [],
+    id: '',
+    question: '',
+    question_type: IQuestionType.OPEN,
+    sub_questions: [],
+    submitted: false,
+    answer: '',
+  };
 
   const [questions, setQuestions] = useState([initialState]);
 
@@ -75,7 +73,7 @@ export default function EvaluationQuestionComponent() {
     } else {
       setQuestions([initialState]);
     }
-  }, [evaluationQuestions, initialState]);
+  }, [evaluationQuestions]);
 
   function handleAddQuestion() {
     let newQuestion = initialState;
@@ -136,9 +134,30 @@ export default function EvaluationQuestionComponent() {
       name === 'question_type' &&
       value === IQuestionType.OPEN &&
       questionInfo[index].choices.length > 0
-    )
+    ) {
       questionInfo[index].choices = [];
+      return;
+    }
+
+    if (name === 'mark') {
+      if (parseFloat(value.toString()) > 0) {
+        questionInfo[index] = {
+          ...questionInfo[index],
+          mark: parseFloat(value.toString()),
+        };
+        setQuestions(questionInfo);
+        return;
+      }
+      questionInfo[index] = {
+        ...questionInfo[index],
+        mark: 0,
+      };
+      setQuestions(questionInfo);
+      return;
+    }
+
     questionInfo[index] = { ...questionInfo[index], [name]: value };
+
     setQuestions(questionInfo);
   }
 
@@ -196,13 +215,24 @@ export default function EvaluationQuestionComponent() {
     });
   }
 
+  function currentTotalMarks() {
+    let totalMarks = 0;
+    questions.forEach((question) => {
+      totalMarks += Number(question.mark);
+    });
+    return totalMarks;
+  }
+
   return (
     <Fragment>
-      <div className="flex justify-between w-[50rem] font-bold">
-        <Heading color="primary" fontWeight="bold">
-          {evaluationInfo?.name}
-        </Heading>
-        <Heading color="primary">Total marks: {evaluationInfo?.total_mark}</Heading>
+      <div className="sticky top-0 bg-primary-400 z-50 py-4 px-5 text-main rounded-sm flex justify-evenly">
+        <span>{evaluationInfo?.name}</span>
+        <span className="">
+          {questions.length} {questions.length > 1 ? 'questions' : 'question'}
+        </span>
+        <span>
+          {currentTotalMarks()} /{evaluationInfo?.total_mark} marks
+        </span>
       </div>
 
       <form className="flex flex-col" onSubmit={submitForm}>
@@ -349,7 +379,7 @@ export default function EvaluationQuestionComponent() {
                     name={'mark'}
                     min={1}
                     style={{ width: '6rem' }}
-                    value={question.mark || 0}
+                    value={question.mark}
                     handleChange={(e: ValueType) => handleChange(index, e)}>
                     Question marks
                   </InputMolecule>
