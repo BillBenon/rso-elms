@@ -1,15 +1,9 @@
 import moment from 'moment';
 import React, { Fragment, ReactNode, useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
-import { queryClient } from '../../../plugins/react-query';
-import { evaluationService } from '../../../services/evaluation/evaluation.service';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
-import { ValueType } from '../../../types';
 import {
   IEvaluationAction,
-  IEvaluationQuestionsInfo,
   IEvaluationSettingType,
-  IEvaluationStatus,
 } from '../../../types/services/evaluation.types';
 import DisplayClasses from '../../../views/classes/DisplayClasses';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
@@ -35,51 +29,14 @@ export default function EvaluationContent({
   showActions = false,
   showSetQuestions = true,
 }: IProps) {
-  const [marks, setMarks] = useState(0);
-
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId).data?.data || {};
-
-  const { mutate: updateEvaluationQuestion } = evaluationStore.updateEvaluationQuestion();
 
   const [classes, setclasses] = useState([' ']);
 
   useEffect(() => {
     setclasses(evaluationInfo?.intake_level_class_ids.split(',') || [' ']);
   }, [evaluationInfo?.intake_level_class_ids]);
-
-  function updateStatus(questionId: string, status: IEvaluationStatus) {
-    evaluationService
-      .updateQuestionChoosen(questionId, status)
-      .then(() => {
-        toast.success('Successfully updated');
-        queryClient.invalidateQueries(['evaluation/questionsbystatus', evaluationId]);
-      })
-      .catch((error: any) => {
-        toast.error('Failed to update', error.message);
-      });
-  }
-
-  function updateMarks({ value }: ValueType) {
-    setMarks(parseInt('' + value));
-  }
-
-  function saveUpdate(question: IEvaluationQuestionsInfo) {
-    // FIXME: Check if backend has been fixed
-    const data = {
-      ...question,
-      mark: marks,
-    };
-
-    updateEvaluationQuestion(data, {
-      onSuccess() {
-        toast.success('marks updated');
-      },
-      onError(error: any) {
-        toast.error(error.response.data.message);
-      },
-    });
-  }
 
   return (
     <div>

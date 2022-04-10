@@ -15,13 +15,12 @@ import {
 import ContentSpan from '../../../views/evaluation/ContentSpan';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
+import Loader from '../../Atoms/custom/Loader';
 import Panel from '../../Atoms/custom/Panel';
 import Heading from '../../Atoms/Text/Heading';
 import Accordion from '../../Molecules/Accordion';
 import InputMolecule from '../../Molecules/input/InputMolecule';
-import PopupMolecule from '../../Molecules/Popup';
 import { TabType } from '../../Molecules/tabs/TabNavigation';
-import EvaluationSubjects from './EvaluationSubjects';
 
 export default function ModuleSubjectQuestion({
   showSetQuestions,
@@ -35,7 +34,6 @@ export default function ModuleSubjectQuestion({
   const [subjects, setSubjects] = useState<ISubjects[]>([]);
   const { id: evaluationId } = useParams<ParamType>();
   const { moduleId } = useParams<EvaluationParamType>();
-  const { subjectId } = useParams<EvaluationParamType>();
 
   const userInfo = useAuthenticator();
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(
@@ -51,6 +49,7 @@ export default function ModuleSubjectQuestion({
   const subjectsPanel: TabType[] = [];
 
   const [refetchQuestions, setrefetchQuestions] = useState(true);
+  const [isLoadingSubjects, setisLoadingSubjects] = useState(true);
 
   useEffect(() => {
     let filteredSubjects: ISubjects[] = [];
@@ -80,6 +79,7 @@ export default function ModuleSubjectQuestion({
         }
 
         setSubjects(filteredSubjects);
+        setisLoadingSubjects(false);
         setrefetchQuestions(false);
       }
     }
@@ -133,118 +133,108 @@ export default function ModuleSubjectQuestion({
     });
   }
 
+  if (isLoadingSubjects) return <Loader />;
+
   return (
-    <Accordion>
-      {subjectsPanel.map((panel) => (
-        <Panel key={panel.label} title={panel.label} width="full" bgColor="main">
-          <div className={`px-7 pt-4 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
-            {panel.questions?.length ? (
-              panel.questions?.map(
-                (question, index: number) => (
-                  <Fragment key={index}>
-                    <div className="mt-3 flex justify-between divide-y">
-                      <div className="flex flex-col gap-4">
-                        <ContentSpan title={`Question ${index + 1}`} className="gap-3">
-                          {question.question}
-                        </ContentSpan>
+    <Fragment>
+      <Accordion>
+        {subjectsPanel.map((panel) => (
+          <Panel key={panel.label} title={panel.label} width="full" bgColor="main">
+            <div className={`px-7 pt-4 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
+              {panel.questions?.length ? (
+                panel.questions?.map(
+                  (question, index: number) => (
+                    <Fragment key={index}>
+                      <div className="mt-3 flex justify-between divide-y">
+                        <div className="flex flex-col gap-4">
+                          <ContentSpan title={`Question ${index + 1}`} className="gap-3">
+                            {question.question}
+                          </ContentSpan>
 
-                        <ContentSpan
-                          title={`Question ${index + 1} answer`}
-                          className="gap-3">
-                          {question.answer}
-                        </ContentSpan>
-                      </div>
-                      <div className="flex justify-center items-center gap-2">
-                        <InputMolecule
-                          value={question.mark}
-                          name={'marks'}
-                          style={{ width: '4rem', height: '2.5rem' }}
-                          handleChange={updateMarks}
-                        />
-                        <Heading fontWeight="semibold" fontSize="sm">
-                          {question.mark === 1 ? 'mark' : 'marks'}
-                        </Heading>
-                      </div>
-                    </div>
-
-                    {showActions && (
-                      <div className="self-end flex gap-4">
-                        <button
-                          className={
-                            question?.choosen_question === IEvaluationStatus.ACCEPTED
-                              ? 'right-button'
-                              : 'normal-button'
-                          }
-                          onClick={() =>
-                            updateStatus(question.id, IEvaluationStatus.ACCEPTED)
-                          }>
-                          <Icon
-                            name={'tick'}
-                            size={18}
-                            stroke={
-                              question?.choosen_question === IEvaluationStatus.PENDING ||
-                              question?.choosen_question === IEvaluationStatus.REJECTED
-                                ? 'none'
-                                : 'main'
-                            }
-                            fill={'none'}
+                          <ContentSpan
+                            title={`Question ${index + 1} answer`}
+                            className="gap-3">
+                            {question.answer}
+                          </ContentSpan>
+                        </div>
+                        <div className="flex justify-center items-center gap-2">
+                          <InputMolecule
+                            value={question.mark}
+                            name={'marks'}
+                            style={{ width: '4rem', height: '2.5rem' }}
+                            handleChange={updateMarks}
                           />
-                        </button>
+                          <Heading fontWeight="semibold" fontSize="sm">
+                            {question.mark === 1 ? 'mark' : 'marks'}
+                          </Heading>
+                        </div>
+                      </div>
 
-                        <button
-                          className={
-                            question?.choosen_question === IEvaluationStatus.REJECTED
-                              ? 'wrong-button'
-                              : 'normal-button'
-                          }
-                          onClick={() =>
-                            updateStatus(question.id, IEvaluationStatus.REJECTED)
-                          }>
-                          <Icon
-                            name={'cross'}
-                            size={18}
-                            fill={
-                              question?.choosen_question === IEvaluationStatus.PENDING ||
+                      {showActions && (
+                        <div className="self-end flex gap-4">
+                          <button
+                            className={
                               question?.choosen_question === IEvaluationStatus.ACCEPTED
-                                ? 'none'
-                                : 'main'
+                                ? 'right-button'
+                                : 'normal-button'
                             }
-                          />
-                        </button>
+                            onClick={() =>
+                              updateStatus(question.id, IEvaluationStatus.ACCEPTED)
+                            }>
+                            <Icon
+                              name={'tick'}
+                              size={18}
+                              stroke={
+                                question?.choosen_question ===
+                                  IEvaluationStatus.PENDING ||
+                                question?.choosen_question === IEvaluationStatus.REJECTED
+                                  ? 'none'
+                                  : 'main'
+                              }
+                              fill={'none'}
+                            />
+                          </button>
 
-                        <Button onClick={() => saveUpdate(question)}>update marks</Button>
-                      </div>
-                    )}
-                  </Fragment>
-                ),
-                // ),
-              )
-            ) : (
-              <Heading fontWeight="semibold" fontSize="sm">
-                No questions attached
-              </Heading>
-            )}
-          </div>
+                          <button
+                            className={
+                              question?.choosen_question === IEvaluationStatus.REJECTED
+                                ? 'wrong-button'
+                                : 'normal-button'
+                            }
+                            onClick={() =>
+                              updateStatus(question.id, IEvaluationStatus.REJECTED)
+                            }>
+                            <Icon
+                              name={'cross'}
+                              size={18}
+                              fill={
+                                question?.choosen_question ===
+                                  IEvaluationStatus.PENDING ||
+                                question?.choosen_question === IEvaluationStatus.ACCEPTED
+                                  ? 'none'
+                                  : 'main'
+                              }
+                            />
+                          </button>
 
-          {showSetQuestions && (
-            <div className="py-4">
-              <div>
-                <Button styleType="outline" onClick={() => setshowSubjects(true)}>
-                  Set questions
-                </Button>
-              </div>
-
-              <PopupMolecule
-                closeOnClickOutSide={false}
-                onClose={() => setshowSubjects(false)}
-                open={showSubjects}
-                title="Select subject to add questions">
-                <EvaluationSubjects evaluationId={evaluationId} action="add_questions" />
-              </PopupMolecule>
+                          <Button onClick={() => saveUpdate(question)}>
+                            update marks
+                          </Button>
+                        </div>
+                      )}
+                    </Fragment>
+                  ),
+                  // ),
+                )
+              ) : (
+                <Heading fontWeight="semibold" fontSize="sm">
+                  No questions attached
+                </Heading>
+              )}
             </div>
-          )}
-        </Panel>
-      ))}
-    </Accordion>
+          </Panel>
+        ))}
+      </Accordion>
+    </Fragment>
   );
 }

@@ -12,7 +12,6 @@ import { getDropDownOptions } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';
 import SelectMolecule from '../../Molecules/input/SelectMolecule';
 
-
 type IEvaluationSubjectsProps = { evaluationId: string; action: string };
 
 export default function EvaluationSubjects({
@@ -64,7 +63,6 @@ export default function EvaluationSubjects({
   }, [evaluationInfo?.evaluation_module_subjects]);
 
   function handleChange(e: ValueType) {
-    console.log(evaluationInfo?.evaluation_module_subjects);
     setSubjectId(
       evaluationInfo?.evaluation_module_subjects.find(
         (mod) => mod.subject_academic_year_period == e.value.toString(),

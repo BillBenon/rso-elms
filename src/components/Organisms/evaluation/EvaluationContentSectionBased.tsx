@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
-import useAuthenticator from '../../../hooks/useAuthenticator';
 import { moduleService } from '../../../services/administration/modules.service';
 import { evaluationService } from '../../../services/evaluation/evaluation.service';
 import { IEvaluationInfo, IModules } from '../../../types/services/evaluation.types';
 import Button from '../../Atoms/custom/Button';
+import Loader from '../../Atoms/custom/Loader';
 import PopupMolecule from '../../Molecules/Popup';
 import TabNavigation, { TabType } from '../../Molecules/tabs/TabNavigation';
 import ModuleSubjectQuestion from './ModuleSubjectQuestion';
@@ -24,17 +24,14 @@ export default function EvaluationContentSectionBased({
   const [showPopup, setShowPopup] = useState(false);
   const [modules, setModules] = useState<IModules[]>([]);
   const [tabs, setTabs] = useState<TabType[]>([]);
-  const userInfo = useAuthenticator();
 
-  const [classes, setclasses] = useState([' ']);
-
-  useEffect(() => {
-    setclasses(evaluation?.intake_level_class_ids.split(',') || [' ']);
-  }, [evaluation?.intake_level_class_ids]);
+  const [isLoadingModule, setIsLoadingModules] = useState(true);
 
   useEffect(() => {
     async function createTabs() {
       if (modules.length < 1) return;
+
+      setIsLoadingModules(true);
 
       let allTabs: TabType[] = [];
 
@@ -62,6 +59,7 @@ export default function EvaluationContentSectionBased({
       );
 
       setTabs(allTabs);
+      setIsLoadingModules(false);
     }
     createTabs();
   }, [evaluation.id, modules]);
@@ -98,7 +96,9 @@ export default function EvaluationContentSectionBased({
   return (
     <div className="py-4">
       {/* tabs here */}
-      {tabs.length != 0 ? (
+      {isLoadingModule ? (
+        <Loader />
+      ) : modules.length != 0 ? (
         <TabNavigation tabs={tabs}>
           <Switch>
             <Route
