@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-
 import { SelectData, SelectProps } from '../../../types';
 import { randomString } from '../../../utils/random';
 import Icon from '../custom/Icon';

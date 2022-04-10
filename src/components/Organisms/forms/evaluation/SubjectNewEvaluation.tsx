@@ -11,7 +11,6 @@ import Heading from '../../../Atoms/Text/Heading';
 import BreadCrumb from '../../../Molecules/BreadCrumb';
 import Stepper from '../../../Molecules/Stepper/Stepper';
 import SubjectEvaluationInfoComponent from './SubjectEvaluationInfoComponent';
-import SubjectEvaluationQuestionComponent from './SubjectEvaluationQuestionsComponent';
 import SubjectEvaluationSettings from './SubjectEvaluationSettings';
 
 export default function SubjectNewEvaluation() {
@@ -65,14 +64,6 @@ export default function SubjectNewEvaluation() {
           navigateToStepHandler={() => {}}>
           <div className="w-2/4">
             <SubjectEvaluationInfoComponent />
-          </div>
-
-          <div>
-            <SubjectEvaluationQuestionComponent
-              handleNext={handleSubmit}
-              handleGoBack={handleBack}
-              evaluationId={evaluationId}
-            />
           </div>
 
           {!evaluationId || (evaluationId && !evaluationInfo?.['is_to_be_approved']) ? (
