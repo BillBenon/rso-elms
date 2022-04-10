@@ -1,6 +1,7 @@
 import React from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
+
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
