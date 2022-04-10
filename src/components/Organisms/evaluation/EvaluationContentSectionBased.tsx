@@ -1,36 +1,37 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
-import useAuthenticator from '../../../hooks/useAuthenticator';
 import { moduleService } from '../../../services/administration/modules.service';
 import { evaluationService } from '../../../services/evaluation/evaluation.service';
 import { IEvaluationInfo, IModules } from '../../../types/services/evaluation.types';
 import Button from '../../Atoms/custom/Button';
+import Loader from '../../Atoms/custom/Loader';
 import PopupMolecule from '../../Molecules/Popup';
 import TabNavigation, { TabType } from '../../Molecules/tabs/TabNavigation';
 import ModuleSubjectQuestion from './ModuleSubjectQuestion';
 
 interface IProps {
   evaluation: IEvaluationInfo;
+  showSetQuestions: boolean;
+  showActions?: boolean;
 }
 
-export default function EvaluationContentSectionBased({ evaluation }: IProps) {
-  const { path } = useRouteMatch();
+export default function EvaluationContentSectionBased({
+  evaluation,
+  showSetQuestions,
+  showActions,
+}: IProps) {
+  const { path, url } = useRouteMatch();
   const [showPopup, setShowPopup] = useState(false);
   const [modules, setModules] = useState<IModules[]>([]);
   const [tabs, setTabs] = useState<TabType[]>([]);
-  const userInfo = useAuthenticator();
 
-  const [classes, setclasses] = useState([' ']);
-
-  useEffect(() => {
-    setclasses(evaluation?.intake_level_class_ids.split(',') || [' ']);
-  }, [evaluation?.intake_level_class_ids]);
-
-  // const tabs: TabType[] = [];
+  const [isLoadingModule, setIsLoadingModules] = useState(true);
 
   useEffect(() => {
     async function createTabs() {
       if (modules.length < 1) return;
+
+      setIsLoadingModules(true);
 
       let allTabs: TabType[] = [];
 
@@ -43,7 +44,7 @@ export default function EvaluationContentSectionBased({ evaluation }: IProps) {
 
           allTabs.push({
             label: `${mod.module}`,
-            href: `/dashboard/evaluations/details/${evaluation.id}/section/${mod.id}/${subjects.data.data[0].subject_academic_year_period}`,
+            href: `${url}/${mod.id}/${subjects.data.data[0].subject_academic_year_period}`,
           });
         }
       } catch (error) {
@@ -58,6 +59,7 @@ export default function EvaluationContentSectionBased({ evaluation }: IProps) {
       );
 
       setTabs(allTabs);
+      setIsLoadingModules(false);
     }
     createTabs();
   }, [evaluation.id, modules]);
@@ -94,18 +96,25 @@ export default function EvaluationContentSectionBased({ evaluation }: IProps) {
   return (
     <div className="py-4">
       {/* tabs here */}
-      {tabs.length != 0 ? (
+      {isLoadingModule ? (
+        <Loader />
+      ) : modules.length != 0 ? (
         <TabNavigation tabs={tabs}>
           <Switch>
             <Route
               exact
               path={`${path}/:moduleId/:subjectId`}
-              render={() => <ModuleSubjectQuestion />}
+              render={() => (
+                <ModuleSubjectQuestion
+                  showSetQuestions={showSetQuestions}
+                  showActions={showActions}
+                />
+              )}
             />
           </Switch>
         </TabNavigation>
       ) : (
-        <p>No parts/sections available in this evaluation</p>
+        <p>No sections available in this evaluation</p>
       )}
 
       <PopupMolecule

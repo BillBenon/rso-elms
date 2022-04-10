@@ -1,11 +1,11 @@
 import { useMutation, useQuery } from 'react-query';
-
 import { evaluationService } from '../../services/evaluation/evaluation.service';
 import {
   IEvaluationAction,
   IEvaluationOwnership,
-  IEvaluationStatus,
+  IEvaluationStatus
 } from '../../types/services/evaluation.types';
+
 
 class EvaluationStore {
   createEvaluation() {
@@ -158,7 +158,7 @@ class EvaluationStore {
 
   getEvaluationQuestionsBySubject(evaluationId: string, subjectId: string) {
     return useQuery(
-      ['evaluation/questions', [evaluationId, subjectId]],
+      ['evaluation/questionsBySubject', subjectId],
       () => evaluationService.getEvaluationQuestionsBySubject(evaluationId, subjectId),
       { enabled: !!evaluationId },
     );

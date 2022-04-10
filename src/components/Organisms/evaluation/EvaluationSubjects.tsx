@@ -12,7 +12,6 @@ import { getDropDownOptions } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';
 import SelectMolecule from '../../Molecules/input/SelectMolecule';
 
-
 type IEvaluationSubjectsProps = { evaluationId: string; action: string };
 
 export default function EvaluationSubjects({
@@ -29,6 +28,7 @@ export default function EvaluationSubjects({
   const [subjects, setSubjects] = useState<SubjectInfo[]>([]);
   const [isLoading, setIsloading] = useState(true);
   const [subjectId, setSubjectId] = useState('');
+  const [moduleSubject, setModuleSubject] = useState('');
 
   useEffect(() => {
     let filteredInfo: SubjectInfo[] = [];
@@ -63,9 +63,17 @@ export default function EvaluationSubjects({
     setIsloading(false);
   }, [evaluationInfo?.evaluation_module_subjects]);
 
+  useEffect(() => {
+    console.log('subjects we have', subjects);
+  }, [subjects]);
+
   function handleChange(e: ValueType) {
-    console.log(evaluationInfo?.evaluation_module_subjects);
     setSubjectId(
+      evaluationInfo?.evaluation_module_subjects
+        .find((mod) => mod.subject_academic_year_period == e.value.toString())
+        ?.subject_academic_year_period.toString() || '',
+    );
+    setModuleSubject(
       evaluationInfo?.evaluation_module_subjects.find(
         (mod) => mod.subject_academic_year_period == e.value.toString(),
       )?.id || '',
@@ -85,7 +93,7 @@ export default function EvaluationSubjects({
         });
     } else if (action == 'add_questions') {
       history.push(
-        `/dashboard/evaluations/details/${evaluationId}/section/${subjectId}/add-questions`,
+        `/dashboard/evaluations/details/${evaluationId}/section/${moduleSubject}/add-questions?subject=${subjectId}`,
       );
     } else {
       return;
@@ -104,12 +112,9 @@ export default function EvaluationSubjects({
       </SelectMolecule>
 
       <div className="py-6">
-        {/* <Link
-          to={`/dashboard/evaluations/details/${evaluationId}/section/${subjectId}/add-questions`}> */}
         <Button onClick={handleAction} disabled={!subjectId}>
           Continue
         </Button>
-        {/* </Link> */}
       </div>
     </>
   );

@@ -2,7 +2,6 @@ import { Editor } from '@tiptap/react';
 import React, { FormEvent, Fragment, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
-import { subjectService } from '../../../../services/administration/subject.service';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { SelectData, ValueType } from '../../../../types';
 import {
@@ -11,7 +10,6 @@ import {
   IMultipleChoice,
   IQuestionType,
 } from '../../../../types/services/evaluation.types';
-import { ExtendedSubjectInfo } from '../../../../types/services/subject.types';
 import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
 import Heading from '../../../Atoms/Text/Heading';
@@ -147,9 +145,12 @@ export default function EvaluationQuestionComponent() {
   function handleChangeEditor(editor: Editor, index: number, name: string) {
     let questionInfo = [...questions];
 
-    console.log(questionInfo[index]);
+    if (name == 'answer') {
+      questionInfo[index].answer = editor.getHTML();
+    } else if (name == 'question') {
+      questionInfo[index].question = editor.getHTML();
+    }
 
-    questionInfo[index] = { ...questionInfo[index], [name]: editor.getHTML() };
     setQuestions(questionInfo);
   }
 
@@ -194,18 +195,6 @@ export default function EvaluationQuestionComponent() {
       },
     });
   }
-
-  const [subjects, setSubjects] = useState<ExtendedSubjectInfo[]>([]);
-
-  useEffect(() => {
-    evaluationInfo?.evaluation_module_subjects.forEach(async (item) => {
-      const subject: ExtendedSubjectInfo = (
-        await subjectService.getSubject(item.subject_academic_year_period + '')
-      ).data.data;
-      subject.evaluation_module_subject_id = item.id;
-      setSubjects((prevState) => [...prevState, subject]);
-    });
-  }, [evaluationInfo]);
 
   return (
     <Fragment>

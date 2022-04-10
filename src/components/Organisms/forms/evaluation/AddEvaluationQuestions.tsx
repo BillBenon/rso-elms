@@ -1,26 +1,21 @@
-import React, { FormEvent, useEffect, useMemo, useState } from 'react';
+import { Editor } from '@tiptap/react';
+import React, { FormEvent, Fragment, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useParams } from 'react-router-dom';
-
+import { useLocation, useParams } from 'react-router-dom';
 import { queryClient } from '../../../../plugins/react-query';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { ParamType, SelectData, ValueType } from '../../../../types';
 import {
   ICreateEvaluationQuestions,
   IEvaluationProps,
-  IEvaluationQuestionsInfo,
   IMultipleChoice,
   IQuestionType,
 } from '../../../../types/services/evaluation.types';
-import {
-  getLocalStorageData,
-  removeLocalStorageData,
-  setLocalStorageData,
-} from '../../../../utils/getLocalStorageItem';
 import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
 import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
+import Tiptap from '../../../Molecules/editor/Tiptap';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
@@ -35,7 +30,9 @@ export default function AdddEvaluationQuestions({
   handleGoBack,
   evaluationId,
 }: IEvaluationProps) {
-  const { id: subjectId } = useParams<ParamType>();
+  const { id: moduleSubject } = useParams<ParamType>();
+  const { search } = useLocation();
+  const subjectId = new URLSearchParams(String(search)).get('subject') || '';
   const initialState: ICreateEvaluationQuestions = useMemo(() => {
     return {
       evaluation_id: evaluationId || '',
@@ -48,17 +45,16 @@ export default function AdddEvaluationQuestions({
       sub_questions: [],
       submitted: false,
       answer: '',
-      evaluation_module_subject_id: subjectId || '',
+      evaluation_module_subject_id: moduleSubject || '',
     };
-  }, [evaluationId, subjectId]);
+  }, [evaluationId, moduleSubject]);
 
-  let evaluationQuestions: IEvaluationQuestionsInfo[] | ICreateEvaluationQuestions[] =
-    useMemo(() => {
-      return getLocalStorageData('evaluationQuestions') || [];
-    }, []);
+  const evaluationQuestions =
+    evaluationStore.getEvaluationQuestionsBySubject(evaluationId || '', subjectId).data
+      ?.data.data || [];
 
-  evaluationQuestions =
-    evaluationStore.getEvaluationQuestions(evaluationId || '').data?.data.data || [];
+  const { data: evaluationInfo } =
+    evaluationStore.getEvaluationById(evaluationId + '').data?.data || {};
 
   const [questions, setQuestions] = useState([initialState]);
 
@@ -79,9 +75,6 @@ export default function AdddEvaluationQuestions({
         allQuestions.push(questionData);
       });
       setQuestions(allQuestions);
-      setLocalStorageData('evaluationQuestions', allQuestions);
-    } else {
-      setQuestions(getLocalStorageData('evaluationQuestions'));
     }
   }, [evaluationId, evaluationQuestions, initialState]);
 
@@ -90,7 +83,6 @@ export default function AdddEvaluationQuestions({
     newQuestion.choices = [];
     let questionsClone = [...questions];
     questionsClone.push(newQuestion);
-    setLocalStorageData('evaluationQuestions', questionsClone);
     setQuestions(questionsClone);
   }
 
@@ -107,7 +99,6 @@ export default function AdddEvaluationQuestions({
           toast.success('Question deleted', { duration: 2000 });
           if (questionIndex > -1 && questionsClone.length > 1) {
             questionsClone.splice(questionIndex, 1);
-            setLocalStorageData('evaluationQuestions', questionsClone);
             setQuestions(questionsClone);
           }
         },
@@ -117,7 +108,6 @@ export default function AdddEvaluationQuestions({
       });
     } else {
       questionsClone.splice(questionIndex, 1);
-      setLocalStorageData('evaluationQuestions', questionsClone);
       setQuestions(questionsClone);
     }
   }
@@ -135,7 +125,6 @@ export default function AdddEvaluationQuestions({
 
       questionsClone[questionIndex] = question;
 
-      setLocalStorageData('evaluationQuestions', questionsClone);
       setQuestions(questionsClone);
     }
   }
@@ -144,7 +133,6 @@ export default function AdddEvaluationQuestions({
     let questionsClone = [...questions];
     let questionChoices = questionsClone[index];
     questionChoices.choices.push(multipleChoiceContent);
-    setLocalStorageData('evaluationQuestions', questionsClone);
     setQuestions(questionsClone);
   }
 
@@ -160,7 +148,6 @@ export default function AdddEvaluationQuestions({
     }
     questionInfo[index] = { ...questionInfo[index], [name]: value };
 
-    setLocalStorageData('evaluationQuestions', questionInfo);
     setQuestions(questionInfo);
   }
 
@@ -173,7 +160,6 @@ export default function AdddEvaluationQuestions({
     question.choices.forEach((choice) => (choice.correct = false));
     question.choices[choiceIndex].correct = true;
 
-    setLocalStorageData('evaluationQuestions', questionsClone);
     setQuestions(questionsClone);
   }
 
@@ -188,7 +174,6 @@ export default function AdddEvaluationQuestions({
     questionsClone[questionIndex] = question;
 
     setQuestions(questionsClone);
-    setLocalStorageData('evaluationQuestions', questionsClone);
   }
 
   const { mutate, isLoading: createQuestionsLoader } =
@@ -201,9 +186,7 @@ export default function AdddEvaluationQuestions({
     mutate(questions, {
       onSuccess: () => {
         toast.success('Questions added', { duration: 5000 });
-
-        removeLocalStorageData('evaluationQuestions');
-        queryClient.invalidateQueries(['evaluation/questions', evaluationId]);
+        queryClient.invalidateQueries(['evaluation/questionsBySubject', subjectId]);
       },
       onError: (error: any) => {
         toast.error(error.response.data.message);
@@ -211,135 +194,187 @@ export default function AdddEvaluationQuestions({
     });
   }
 
+  function currentTotalMarks() {
+    let totalMarks = 0;
+    questions.forEach((question) => {
+      totalMarks += Number(question.mark);
+    });
+    return totalMarks;
+  }
+
+  function handleChangeEditor(editor: Editor, index: number, name: string) {
+    let questionInfo = [...questions];
+
+    if (name == 'answer') {
+      questionInfo[index].answer = editor.getHTML();
+    } else if (name == 'question') {
+      questionInfo[index].question = editor.getHTML();
+    }
+
+    setQuestions(questionInfo);
+  }
+
   return (
-    <form className="flex flex-col" onSubmit={submitForm}>
-      {questions.length ? (
-        questions.map((question, index: number) => (
-          <React.Fragment key={`${question.id} ${index}`}>
-            <div
-              className="flex justify-between w-2/3 bg-main px-6 py-10 mt-8"
-              key={index}>
-              <div className="flex flex-col">
-                <SelectMolecule
-                  value={question.question_type}
-                  disabled={question.submitted}
-                  width="64"
-                  name="question_type"
-                  placeholder="Question type"
-                  handleChange={(e: ValueType) => handleChange(index, e)}
-                  options={[
-                    { label: 'OPEN', value: IQuestionType.OPEN },
-                    { label: 'MULTIPLE CHOICE', value: IQuestionType.MULTIPLE_CHOICE },
-                  ]}>
-                  Question type
-                </SelectMolecule>
-                <TextAreaMolecule
-                  readOnly={question.submitted}
-                  name={'question'}
-                  value={question.question}
-                  placeholder="Enter question"
-                  handleChange={(e: ValueType) => handleChange(index, e)}>
-                  Question {index + 1}
-                </TextAreaMolecule>
+    <Fragment>
+      <div className="sticky top-0 bg-primary-400 z-50 py-4 px-5 text-main rounded-sm flex justify-evenly">
+        <span>{evaluationInfo?.name}</span>
+        <span className="">
+          {questions.length} {questions.length > 1 ? 'questions' : 'question'}
+        </span>
+        <span>
+          {currentTotalMarks()} /
+          {
+            evaluationInfo?.evaluation_module_subjects.find(
+              (subject) => subject.id === moduleSubject,
+            )?.section_total_marks
+          }{' '}
+          marks
+        </span>
+      </div>
 
-                {question.question_type === IQuestionType.OPEN && (
-                  <TextAreaMolecule
-                    className="normal-case"
-                    readOnly={question.submitted}
-                    name={'answer'}
-                    value={question.answer}
-                    placeholder="Enter question answer"
-                    handleChange={(e: ValueType) => handleChange(index, e)}>
-                    Question {index + 1} answer
-                  </TextAreaMolecule>
-                )}
-                {/* multiple choice answers here */}
-                {question.question_type === IQuestionType.MULTIPLE_CHOICE &&
-                  question.choices.map((multipleQuestion, choiceIndex) => (
-                    <>
-                      <TextAreaMolecule
-                        key={`${choiceIndex}`}
-                        readOnly={question.submitted}
-                        name={'answer_content'}
-                        value={multipleQuestion.answer_content}
-                        placeholder="Enter answer"
-                        handleChange={(e: ValueType) =>
-                          handleChoiceChange(index, choiceIndex, e)
-                        }>
-                        <div className="flex items-center justify-between">
-                          Answer choice {choiceIndex + 1}
-                          <button
-                            type="button"
-                            onClick={() => handleRemoveChoice(index, choiceIndex)}>
-                            <Icon name="close" size={12} />
-                          </button>
-                        </div>
-                      </TextAreaMolecule>
-                    </>
-                  ))}
-
-                {question.question_type === IQuestionType.MULTIPLE_CHOICE ? (
-                  <div className="-mt-4 mb-1">
-                    <Button
-                      type="button"
-                      className="flex items-center pl-0"
-                      styleType="text"
-                      onClick={() => handleAddMultipleMultipleChoiceAnswer(index)}>
-                      <Icon
-                        name="add"
-                        size={17}
-                        useheightandpadding={false}
-                        stroke="primary"
-                      />
-                      <ILabel size="sm" className="cursor-pointer">
-                        Add choice
-                      </ILabel>
-                    </Button>
-                  </div>
-                ) : null}
-
-                {question.choices.length > 0 &&
-                question.question_type === IQuestionType.MULTIPLE_CHOICE ? (
+      <form className="flex flex-col" onSubmit={submitForm}>
+        {questions.length ? (
+          questions.map((question, index: number) => (
+            <React.Fragment key={`${question.id} ${index}`}>
+              <div
+                className="flex justify-between w-2/3 bg-main px-6 py-10 mt-8"
+                key={index}>
+                <div className="flex flex-col">
                   <SelectMolecule
-                    value={question.choices.find((ch) => ch.correct)?.answer_content}
+                    value={question.question_type}
+                    disabled={question.submitted}
                     width="64"
-                    name="correct_answer"
-                    placeholder="Choose correct answer"
-                    handleChange={(e: ValueType) => handleCorrectAnswerCahnge(index, e)}
-                    options={
-                      question.choices.map((ch) => ({
-                        label: ch.answer_content,
-                        value: ch.answer_content,
-                      })) as SelectData[]
-                    }>
-                    Correct answer
+                    name="question_type"
+                    placeholder="Question type"
+                    handleChange={(e: ValueType) => handleChange(index, e)}
+                    options={[
+                      { label: 'OPEN', value: IQuestionType.OPEN },
+                      { label: 'MULTIPLE CHOICE', value: IQuestionType.MULTIPLE_CHOICE },
+                    ]}>
+                    Question type
                   </SelectMolecule>
-                ) : null}
+                  {/* <TextAreaMolecule
+                    readOnly={question.submitted}
+                    name={'question'}
+                    value={question.question}
+                    placeholder="Enter question"
+                    handleChange={(e: ValueType) => handleChange(index, e)}>
+                    Question {index + 1}
+                  </TextAreaMolecule> */}
+                  <div className="my-2">
+                    <div className="mb-2">
+                      <ILabel size="sm">Question {index + 1}</ILabel>
+                    </div>
+                    <Tiptap
+                      handleChange={(editor) =>
+                        handleChangeEditor(editor, index, 'question')
+                      }
+                      content={question.question}
+                    />
+                  </div>
 
-                <InputMolecule
-                  readonly={question.submitted}
-                  required={false}
-                  type="number"
-                  name={'mark'}
-                  min={1}
-                  style={{ width: '6rem' }}
-                  value={question.mark || 0}
-                  handleChange={(e: ValueType) => handleChange(index, e)}>
-                  Question marks
-                </InputMolecule>
+                  {question.question_type === IQuestionType.OPEN && (
+                    <div className="my-2 bg-gray-100 rounded-md p-2">
+                      <div className="mb-2">
+                        <ILabel weight="bold" size="sm">
+                          Question {index + 1} answer
+                        </ILabel>
+                      </div>
+                      <Tiptap
+                        handleChange={(editor) =>
+                          handleChangeEditor(editor, index, 'answer')
+                        }
+                        content={question.question}
+                      />
+                    </div>
+                  )}
+                  {/* multiple choice answers here */}
+                  {question.question_type === IQuestionType.MULTIPLE_CHOICE &&
+                    question.choices.map((multipleQuestion, choiceIndex) => (
+                      <>
+                        <TextAreaMolecule
+                          key={`${choiceIndex}`}
+                          readOnly={question.submitted}
+                          name={'answer_content'}
+                          value={multipleQuestion.answer_content}
+                          placeholder="Enter answer"
+                          handleChange={(e: ValueType) =>
+                            handleChoiceChange(index, choiceIndex, e)
+                          }>
+                          <div className="flex items-center justify-between">
+                            Answer choice {choiceIndex + 1}
+                            <button
+                              type="button"
+                              onClick={() => handleRemoveChoice(index, choiceIndex)}>
+                              <Icon name="close" size={12} />
+                            </button>
+                          </div>
+                        </TextAreaMolecule>
+                      </>
+                    ))}
 
-                <Button
-                  type="button"
-                  onClick={() => handleRemoveQuestion(question.id, index)}
-                  styleType="text"
-                  className="self-start flex justify-center items-center"
-                  icon>
-                  <Icon name="close" size={12} fill="primary" />
-                  Remove question
-                </Button>
-              </div>
+                  {question.question_type === IQuestionType.MULTIPLE_CHOICE ? (
+                    <div className="-mt-4 mb-1">
+                      <Button
+                        type="button"
+                        className="flex items-center pl-0"
+                        styleType="text"
+                        onClick={() => handleAddMultipleMultipleChoiceAnswer(index)}>
+                        <Icon
+                          name="add"
+                          size={17}
+                          useheightandpadding={false}
+                          stroke="primary"
+                        />
+                        <ILabel size="sm" className="cursor-pointer">
+                          Add choice
+                        </ILabel>
+                      </Button>
+                    </div>
+                  ) : null}
 
-              {/* <div className="pr-14">
+                  {question.choices.length > 0 &&
+                  question.question_type === IQuestionType.MULTIPLE_CHOICE ? (
+                    <SelectMolecule
+                      value={question.choices.find((ch) => ch.correct)?.answer_content}
+                      width="64"
+                      name="correct_answer"
+                      placeholder="Choose correct answer"
+                      handleChange={(e: ValueType) => handleCorrectAnswerCahnge(index, e)}
+                      options={
+                        question.choices.map((ch) => ({
+                          label: ch.answer_content,
+                          value: ch.answer_content,
+                        })) as SelectData[]
+                      }>
+                      Correct answer
+                    </SelectMolecule>
+                  ) : null}
+
+                  <InputMolecule
+                    readonly={question.submitted}
+                    required={false}
+                    type="number"
+                    name={'mark'}
+                    min={1}
+                    style={{ width: '6rem' }}
+                    value={question.mark || 0}
+                    handleChange={(e: ValueType) => handleChange(index, e)}>
+                    Question marks
+                  </InputMolecule>
+
+                  <Button
+                    type="button"
+                    onClick={() => handleRemoveQuestion(question.id, index)}
+                    styleType="text"
+                    className="self-start flex justify-center items-center"
+                    icon>
+                    <Icon name="close" size={12} fill="primary" />
+                    Remove question
+                  </Button>
+                </div>
+
+                {/* <div className="pr-14">
                 <div className="flex items-center">
                   <Icon name="attach" size={17} fill="primary" />
                   <Heading color="primary" fontSize="base">
@@ -347,34 +382,35 @@ export default function AdddEvaluationQuestions({
                   </Heading>
                 </div>
               </div> */}
+              </div>
+            </React.Fragment>
+          ))
+        ) : (
+          <Heading>No questions created for this evaluation</Heading>
+        )}
+        <div>
+          <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
+            Finish
+          </Button>
+          <div className="pt-6 flex flex-col">
+            <div className="pb-6">
+              <Button
+                styleType="outline"
+                type="button"
+                title="test"
+                onClick={handleAddQuestion}>
+                Add question
+              </Button>
             </div>
-          </React.Fragment>
-        ))
-      ) : (
-        <Heading>No questions created for this evaluation</Heading>
-      )}
-      <div>
-        <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
-          Back
-        </Button>
-        <div className="pt-6 flex flex-col">
-          <div className="pb-6">
-            <Button
-              styleType="outline"
-              type="button"
-              title="test"
-              onClick={handleAddQuestion}>
-              Add question
-            </Button>
-          </div>
 
-          <div>
-            <Button onSubmit={submitForm} disabled={createQuestionsLoader}>
-              save
-            </Button>
+            <div>
+              <Button onSubmit={submitForm} disabled={createQuestionsLoader}>
+                save
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </Fragment>
   );
 }
