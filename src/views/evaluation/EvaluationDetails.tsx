@@ -11,6 +11,7 @@ import { ParamType } from '../../types';
 import { IEvaluationSettingType } from '../../types/services/evaluation.types';
 import EvaluationSettingProgress from '../EvaluationSettingProgress';
 import ApproveEvaluation from './ApproveEvaluation';
+import EvaluationPerformance from './EvaluationPerformance';
 import Submissions from './marking/Submissions';
 import ReviewEvaluation from './ReviewEvaluation';
 import SectionBasedEvaluation from './SectionBasedEvaluation';
@@ -33,13 +34,17 @@ export default function EvaluationDetails() {
       label: 'Submissions',
       href: `${url}/submissions`,
     },
-    // {
-    //   label: 'Ongoing',
-    //   href: `${url}/ongoing-submissions`,
-    // },
     {
       label: 'Not attempted',
       href: `${url}/unbeguns`,
+    },
+    {
+      label: 'Performance report',
+      href: `${url}/performance`,
+    },
+    {
+      label: 'Evaluation sections',
+      href: `${url}/sections`,
     },
   ];
 
@@ -101,6 +106,30 @@ export default function EvaluationDetails() {
               />
             </div>
           )}
+          <Route
+            exact
+            path={`${path}/performance`}
+            render={() => <EvaluationPerformance />}
+          />
+          <Route
+            exact
+            path={`${path}`}
+            render={() => (
+              <EvaluationContent
+                showActions={true}
+                showSetQuestions={false}
+                evaluationId={id}
+                actionType="">
+                <div className="flex gap-4">
+                  <Button
+                    disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
+                    onClick={() => publishEvaluation('PUBLIC')}>
+                    Publish evaluation
+                  </Button>
+                </div>
+              </EvaluationContent>
+            )}
+          />
           <Route
             path={`${path}/overview`}
             render={() => (

@@ -2,8 +2,8 @@ import React from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
+import Icon from '../../components/Atoms/custom/Icon';
 import Loader from '../../components/Atoms/custom/Loader';
-import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
@@ -92,17 +92,6 @@ export default function ClassFullYearDeliberation() {
           }}
         />
       </Switch>
-      <Heading fontSize="lg" fontWeight="bold" className="py-2">
-        {`${
-          classInfo?.data.data.academic_year_program_intake_level.academic_program_level
-            .program.name || ''
-        } - 
-        ${
-          classInfo?.data.data.academic_year_program_intake_level.academic_program_level
-            .level.name || ''
-        } 
-       `}
-      </Heading>
       {isIdle || isLoading ? (
         <Loader />
       ) : isError ? (
@@ -125,6 +114,14 @@ export default function ClassFullYearDeliberation() {
         />
       ) : (
         <>
+          <Button
+            styleType={'text'}
+            onClick={() => history.goBack()}
+            icon
+            className="flex items-center p-2 hover:underline">
+            <Icon name="chevron-left" fill="primary" size={16} />
+            Back
+          </Button>
           <TableHeader
             title={`${classInfo?.data.data.class_name || 'class'} Promotions`}
             totalItems={data.length}
