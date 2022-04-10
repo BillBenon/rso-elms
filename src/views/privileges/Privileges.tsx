@@ -53,8 +53,8 @@ export default function PrivilegesView() {
   }
 
   useEffect(() => {
-    if (filter) {
-      setPrivileges(search?.data.data || []);
+    if (filter && search) {
+      setPrivileges(search.data.data || []);
       setFilter(false);
       console.log(search);
     }
