@@ -6,6 +6,9 @@ class SchoolReportStore {
   createSubjective() {
     return useMutation(reportService.createSubjective);
   }
+  addDSCritique() {
+    return useMutation(reportService.addDSCritique);
+  }
   addTewt() {
     return useMutation(reportService.addTewt);
   }
@@ -74,10 +77,10 @@ export function getTewtReport(studentId: string, term: string, enabled = true) {
   );
 }
 
-export function getDSCriticsReport(studentId: string, term: string, enabled = true) {
+export function getDSCriticsReport(term: number, enabled = true) {
   return useQuery(
-    ['reports/student/term/critics', studentId, term],
-    () => reportService.getDSCriticsReport(studentId, term),
+    ['reports/student/level/critics', term],
+    () => reportService.getDSCriticsReport(term),
     { enabled },
   );
 }
