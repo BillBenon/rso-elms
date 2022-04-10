@@ -77,10 +77,10 @@ export function getTewtReport(studentId: string, term: string, enabled = true) {
   );
 }
 
-export function getDSCriticsReport(level: number, enabled = true) {
+export function getDSCriticsReport(term: number, enabled = true) {
   return useQuery(
-    ['reports/student/level/critics', level],
-    () => reportService.getDSCriticsReport(level),
+    ['reports/student/level/critics', term],
+    () => reportService.getDSCriticsReport(term),
     { enabled },
   );
 }

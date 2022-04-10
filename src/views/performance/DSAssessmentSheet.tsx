@@ -11,10 +11,12 @@ import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Tiptap from '../../components/Molecules/editor/Tiptap';
+import InputMolecule from '../../components/Molecules/input/InputMolecule';
 import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import usePickedRole from '../../hooks/usePickedRole';
 import { queryClient } from '../../plugins/react-query';
+import academicperiodStore from '../../store/administration/academicperiod.store';
 import academyStore from '../../store/administration/academy.store';
 import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
@@ -24,7 +26,7 @@ import {
   reportStore,
 } from '../../store/evaluation/school-report.store';
 import { Privileges, ValueType } from '../../types';
-import { DSAssessForm, DSAssessReport } from '../../types/services/report.types';
+import { DSAssessForm } from '../../types/services/report.types';
 import { getDropDownOptions } from '../../utils/getOption';
 
 interface IParamType {
@@ -63,8 +65,7 @@ export default function DSAssessmentSheet() {
   const { data } = getDSCriticsReport(periodOfThisClass || 0);
   const reportData = data?.data.data || [];
 
-  //@ts-ignore
-  const rpt: DSAssessReport = reportData[dsid] || {};
+  const rpt = reportData.find((rpt) => rpt.id === dsid);
 
   let elements = document.getElementsByClassName('reportHide');
   const handlePrint = useReactToPrint({
@@ -82,7 +83,7 @@ export default function DSAssessmentSheet() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (details.receiver === '') {
+    if (details.receiver === '' && isCreating) {
       toast.error(`Please select recipient is required`);
     } else if (details.label === '') {
       toast.error(`Please enter item of instruction`);
@@ -92,7 +93,12 @@ export default function DSAssessmentSheet() {
       toast.error(`Please enter week number`);
     } else {
       mutate(
-        { ...details, term: periodOfThisClass || 0 },
+        {
+          ...details,
+          term: periodOfThisClass || 0,
+          receiver: !isCreating ? rpt?.receiver.adminId || '' : details.receiver,
+          week: !isCreating ? rpt?.week || 0 : details.week,
+        },
         {
           onSuccess(data) {
             toast.success(data.data.message);
@@ -217,7 +223,7 @@ export default function DSAssessmentSheet() {
                   <Heading fontSize="lg" className="uppercase" fontWeight="semibold">
                     Term
                   </Heading>
-                  <Heading fontSize="base">{rpt.intake_program_level || ''}</Heading>
+                  <Heading fontSize="base">{''}</Heading>
                 </div>
               </div>
               <div className="grid grid-cols-12">
@@ -301,6 +307,15 @@ export default function DSAssessmentSheet() {
                   labelName: ['first_name', 'last_name'],
                 })}
               />
+              <div>
+                <ILabel className="py-4 font-semibold">Week number</ILabel>
+                <InputMolecule
+                  type="number"
+                  name={'week'}
+                  handleChange={handleChange}
+                  value={details.week}
+                />
+              </div>
             </div>
           ) : null}
           <div>

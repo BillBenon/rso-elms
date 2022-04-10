@@ -208,10 +208,11 @@ export interface TwetReport extends TwetForm {
 }
 
 export interface DSAssessReport {
+  term: number;
+  week: number;
   author: EvUser;
   critique_rows: { id: string; label: string; value: string }[];
   id: string;
-  intake_program_level: string;
   receiver: EvUser;
 }
 

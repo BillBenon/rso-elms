@@ -16,7 +16,6 @@ import { UserType } from '../../types/services/user.types';
 import { calculateGrade } from '../../utils/school-report';
 import AllDSAssessment from './AllDSAssessment';
 import ClassFullYearDeliberation from './ClassFullYearDeliberation';
-import DSAssessmentSheet from './DSAssessmentSheet';
 import TermModulePerfomance from './TermModulePerfomance';
 
 interface IParamType {
@@ -162,11 +161,10 @@ export default function ClassPeriodPerformance() {
   return (
     <TabNavigation tabs={tabs}>
       <Switch>
-        <Route path={`${path}/deliberation`} component={ClassFullYearDeliberation} />
+        <Route path={`${path}`} exact component={OveralClassPerformance} />
         <Route path={`${path}/all-critics`} component={AllDSAssessment} />
-        <Route path={`${path}/critics/:dsid`} component={DSAssessmentSheet} />
+        <Route path={`${path}/deliberation`} component={ClassFullYearDeliberation} />
         <Route path={`${path}/by-module`} component={TermModulePerfomance} />
-        <Route path={path} exact component={OveralClassPerformance} />
       </Switch>
     </TabNavigation>
   );

@@ -66,9 +66,9 @@ class SchoolReportService {
   }
 
   public async getDSCriticsReport(
-    level: number,
+    term: number,
   ): Promise<AxiosResponse<Response<DSAssessReport[]>>> {
-    return await evaluationAxios.get(`reports/course-critiques/level/${level}`);
+    return await evaluationAxios.get(`reports/course-critiques/term/${term}`);
   }
 
   public async getStudentFullReport(
