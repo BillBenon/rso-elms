@@ -1,20 +1,12 @@
 import moment from 'moment';
 import React from 'react';
-import {
-  Link,
-  Route,
-  Switch,
-  useHistory,
-  useParams,
-  useRouteMatch,
-} from 'react-router-dom';
+import { Link, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Avatar from '../../../components/Atoms/custom/Avatar';
 import Badge from '../../../components/Atoms/custom/Badge';
 import Button from '../../../components/Atoms/custom/Button';
 import Icon from '../../../components/Atoms/custom/Icon';
 import Heading from '../../../components/Atoms/Text/Heading';
-import PopupMolecule from '../../../components/Molecules/Popup';
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import hobbiesStore from '../../../store/administration/hobbies.store';
 import locationStore from '../../../store/administration/location.store';
@@ -22,12 +14,11 @@ import { ParamType } from '../../../types';
 import { UserInfo } from '../../../types/services/user.types';
 import { usePicture } from '../../../utils/file-util';
 import { advancedTypeChecker, titleCase } from '../../../utils/getOption';
-import UpdatePhotoProfile from './UpdatePhotoProfile';
 
 function PersonalInfoCard({ user }: { user: UserInfo }) {
   const { id } = useParams<ParamType>();
 
-  const { url, path } = useRouteMatch();
+  const { url } = useRouteMatch();
   const history = useHistory();
 
   const { user: authUser } = useAuthenticator();
@@ -186,21 +177,6 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
           </Link>
         </div>
       </div>
-      <Switch>
-        <Route
-          exact
-          path={`${path}/edit-prof`}
-          render={() => (
-            <PopupMolecule
-              closeOnClickOutSide={false}
-              title="Upload new profile picture"
-              open={true}
-              onClose={history.goBack}>
-              <UpdatePhotoProfile user={user} />
-            </PopupMolecule>
-          )}
-        />
-      </Switch>
     </>
   );
 }
