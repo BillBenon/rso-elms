@@ -188,18 +188,6 @@ export type IEvaluationSectionBased = {
   };
 };
 
-export type IEvaluationSectionBasedInfo = {
-  id: string;
-  marker_id: string;
-  evaluation_id: string;
-  instructor_subject_assignment: string;
-  intake_program_level_module: string;
-  questionaire_setting_status: IEvaluationStatus;
-  section_total_marks: number;
-  subject_academic_year_period: number | string;
-  module_subject: ExtendedSubjectInfo;
-};
-
 export interface IModules {
   id: string;
   module: string;
@@ -305,7 +293,6 @@ export interface IEvaluationChoices {
 export interface IEvaluationQuestion {
   evaluation_id: string;
   multiple_choice_answers?: IMultipleChoice[];
-  evaluation_module_subject: IEvaluationSectionBased;
   mark: number;
   parent_question_id: string;
   question: string;
@@ -352,12 +339,24 @@ export interface IEvaluationQuestionsInfo {
   evaluation_id: string;
   choices: IMultipleChoice[];
   choosen_question: IEvaluationStatus;
-  evaluation_module_subject: IEvaluationSectionBased;
   mark: number;
   evaluationQuestions: [];
   question_type: IQuestionType;
   multiple_choice_answers: IMultipleChoiceAnswers[];
+  evaluation_module_subject: IEvaluationSectionBased;
 }
+
+export type IEvaluationSectionBasedInfo = {
+  id: string;
+  marker_id: string;
+  evaluation_id: string;
+  instructor_subject_assignment: string;
+  intake_program_level_module: string;
+  questionaire_setting_status: IEvaluationStatus;
+  section_total_marks: number;
+  subject_academic_year_period: number | string;
+  module_subject: ExtendedSubjectInfo;
+};
 
 export interface IEvaluationApproval {
   approver_ids: string;
