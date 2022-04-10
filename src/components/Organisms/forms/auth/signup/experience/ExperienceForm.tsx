@@ -92,7 +92,7 @@ function ExperienceForm<E>({
   }, [type]);
 
   const { mutateAsync } = experienceStore.create();
-  async function saveData(
+  function saveData(
     mutateAsync: UseMutateAsyncFunction<
       AxiosResponse<Response<ExperienceInfo>>,
       unknown,
@@ -100,8 +100,6 @@ function ExperienceForm<E>({
       unknown
     >,
   ) {
-    let isSuccess: boolean = false;
-
     if (file) {
       let formData = new FormData();
       formData.append('file', file);
@@ -115,10 +113,23 @@ function ExperienceForm<E>({
               attachment_id: data.data.data.id + '',
             },
             {
-              async onSuccess(data) {
+              onSuccess(data) {
                 toast.success(data.data.message);
                 queryClient.invalidateQueries(['experience/id', user?.person.id]);
-                isSuccess = true;
+                setExperience({
+                  attachment_id: '',
+                  description: '',
+                  end_date: '',
+                  level: '',
+                  location: '',
+                  occupation: '',
+                  person_id: user?.person.id.toString() || '',
+                  proof: '',
+                  start_date: '',
+                  type: experience.type,
+                });
+                setTotalExperience([]);
+                nextStep(true);
               },
               onError(error: any) {
                 toast.error(error.response.data.message);
@@ -135,15 +146,26 @@ function ExperienceForm<E>({
         onSuccess(data) {
           toast.success(data.data.message);
           queryClient.invalidateQueries(['experience/id', user?.person.id]);
-          isSuccess = true;
+          setExperience({
+            attachment_id: '',
+            description: '',
+            end_date: '',
+            level: '',
+            location: '',
+            occupation: '',
+            person_id: user?.person.id.toString() || '',
+            proof: '',
+            start_date: '',
+            type: experience.type,
+          });
+          setTotalExperience([]);
+          nextStep(true);
         },
         onError(error: any) {
           toast.error(error.response.data.message);
-          isSuccess = false;
         },
       });
     }
-    return isSuccess;
   }
 
   const handleChange = (e: ValueType) => {
@@ -164,25 +186,9 @@ function ExperienceForm<E>({
     });
 
     validatedForm
-      .then(async () => {
+      .then(() => {
         if (saveData) {
-          const isSuccess = await saveData(mutateAsync);
-          if (isSuccess) {
-            setExperience({
-              attachment_id: '',
-              description: '',
-              end_date: '',
-              level: '',
-              location: '',
-              occupation: '',
-              person_id: user?.person.id.toString() || '',
-              proof: '',
-              start_date: '',
-              type: experience.type,
-            });
-            setTotalExperience([]);
-            nextStep(true);
-          }
+          saveData(mutateAsync);
         }
       })
       .catch((err) => {
