@@ -129,9 +129,12 @@ export default function ImportUsers({ userType }: IProps) {
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
 
-    const validatedForm = importUserSchema.validate(values, {
-      abortEarly: false,
-    });
+    const validatedForm = importUserSchema.validate(
+      Object.assign({ ...values, is_student: user?.user_type === UserType.STUDENT }),
+      {
+        abortEarly: false,
+      },
+    );
 
     validatedForm
       .then(async () => {
@@ -194,7 +197,7 @@ export default function ImportUsers({ userType }: IProps) {
           validatedErr[el.path as keyof ImportErrors] = el.message;
         });
         setErrors(validatedErr);
-        console.log('invalid', validatedErr);
+        console.log('invalid', err.inner);
       });
   }
 

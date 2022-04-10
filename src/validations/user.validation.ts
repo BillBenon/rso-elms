@@ -94,7 +94,7 @@ export const editUserSchema = yup.object().shape({
   nid: yup.string().required('ID number is required'),
   phone: yup.string().required('Phone number is required').min(10),
   username: yup.string().required('Username is required').min(3),
-  nationality: yup.string().required('Nationality is required'),
+  // nationality: yup.string().required('Nationality is required'),
   document_expire_on: yup.string().when('has_passport', {
     is: (has_passport: any) => has_passport === true,
     then: yup.string().required('Passport expiry date is required'),
@@ -146,6 +146,15 @@ export const deployInstSchema = yup.object().shape({
 export const importUserSchema = yup.object().shape({
   academyId: yup.string().required('Academy is required'),
   roleId: yup.string().required('Role is required'),
-  program: yup.string().required('Program is required'),
-  intakeProgramId: yup.string().required('Intake is required'),
+  program: yup.string().when('is_student', {
+    is: (is_student: any) => is_student === true,
+    then: yup.string().required('Program is required'),
+    otherwise: yup.string(),
+  }),
+  intakeProgramId: yup.string().when('is_student', {
+    is: (is_student: any) => is_student === true,
+    then: yup.string().required('Intake is required'),
+    otherwise: yup.string(),
+  }),
+  is_student: yup.boolean(),
 });

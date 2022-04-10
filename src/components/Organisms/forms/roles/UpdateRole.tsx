@@ -50,7 +50,7 @@ export default function UpdateRole({ onSubmit }: FormPropType) {
     e.preventDefault();
     const validatedForm = updateSchema.validate(
       {
-        names: form.name,
+        name: form.name,
       },
       {
         abortEarly: false,
