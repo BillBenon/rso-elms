@@ -74,6 +74,7 @@ export default function AdddEvaluationQuestions({
       });
       setQuestions(allQuestions);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [evaluationId, evaluationQuestions]);
 
   function handleAddQuestion() {
