@@ -50,34 +50,38 @@ export default function AddPrerequesitesForm() {
   const modules = academyModules.filter((mod) => !modulePrereqIds?.includes(mod.id + ''));
 
   const handleSubmit = async () => {
-    let data: CreatePrerequisites = {
-      modele_id: values.module_id,
-      prerequistis: [],
-    };
+    if (values.prerequistis.length === 0) {
+      toast.error('You must select module prerequisites');
+    } else {
+      let data: CreatePrerequisites = {
+        modele_id: values.module_id,
+        prerequistis: [],
+      };
 
-    for (let i = 0; i < values.prerequistis.length; i++) {
-      data.prerequistis.push({
-        description: values.description,
-        module_id: values.module_id,
-        prerequisite_id: values.prerequistis[i],
-        status: GenericStatus.ACTIVE,
+      for (let i = 0; i < values.prerequistis.length; i++) {
+        data.prerequistis.push({
+          description: values.description,
+          module_id: values.module_id,
+          prerequisite_id: values.prerequistis[i],
+          status: GenericStatus.ACTIVE,
+        });
+      }
+
+      await mutateAsync(data, {
+        async onSuccess(res) {
+          toast.success(res.data.message);
+          queryClient.invalidateQueries(['prereqs/moduleid']);
+          showMenu && intakeProg
+            ? history.push(
+                `/dashboard/modules/${moduleId}/prereqs?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+              )
+            : history.push(`/dashboard/modules/${moduleId}/prereqs`);
+        },
+        onError(error: any) {
+          toast.error(error.response.data.message);
+        },
       });
     }
-
-    await mutateAsync(data, {
-      async onSuccess(res) {
-        toast.success(res.data.message);
-        queryClient.invalidateQueries(['prereqs/moduleid']);
-        showMenu && intakeProg
-          ? history.push(
-              `/dashboard/modules/${moduleId}/prereqs?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-            )
-          : history.push(`/dashboard/modules/${moduleId}/prereqs`);
-      },
-      onError(error: any) {
-        toast.error(error.response.data.message);
-      },
-    });
   };
 
   return (

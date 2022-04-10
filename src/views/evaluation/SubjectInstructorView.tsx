@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
-
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -8,7 +7,6 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
-import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Privileges } from '../../types';
 import { IEvaluationOwnership } from '../../types/services/evaluation.types';
 import cookie from '../../utils/cookie';
@@ -29,11 +27,6 @@ export default function SubjectInstructorView({
 
   const { user } = useAuthenticator();
 
-  const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
-    .data?.data.data[0];
-
-  console.log(user);
-
   const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
   const progId = new URLSearchParams(search).get('prog') || '';
   const level = new URLSearchParams(search).get('lvl') || '';
@@ -49,7 +42,7 @@ export default function SubjectInstructorView({
   )
     ? evaluationStore.getEvaluationsByCategory(
         IEvaluationOwnership.CREATED_BY_ME,
-        instructorInfo?.id.toString() || '',
+        user?.id.toString() || '',
       )
     : evaluationStore.getEvaluationsBySubject(subjectId);
 
@@ -115,7 +108,9 @@ export default function SubjectInstructorView({
                             <Button
                               styleType="text"
                               onClick={() =>
-                                history.push(`/dashboard/evaluations/details/${info.id}`)
+                                history.push(
+                                  `/dashboard/evaluations/details/${info.id}/overview`,
+                                )
                               }>
                               View
                             </Button>

@@ -1,7 +1,7 @@
 import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -20,10 +20,15 @@ import {
   ProgressStatus,
 } from '../../types/services/intake-program.types';
 import { getDropDownStatusOptions } from '../../utils/getOption';
+import { periodSchema } from '../../validations/level.validation';
 
 interface PeriodStep {
   checked: number;
   level_id?: string;
+}
+interface PrdErrors
+  extends Pick<AddIntakeProgramLevelPeriod, 'planed_start_on' | 'planed_end_on'> {
+  status: string;
 }
 
 export function NewIntakePeriod({ level_id, checked }: PeriodStep) {
@@ -75,30 +80,51 @@ export function NewIntakePeriod({ level_id, checked }: PeriodStep) {
     setvalues({ ...values, [e.name]: e.value });
   }
 
+  const initialErrorState: PrdErrors = {
+    planed_start_on: '',
+    planed_end_on: '',
+    status: '',
+  };
+
+  const [errors, setErrors] = useState<PrdErrors>(initialErrorState);
+
   const { mutateAsync } = intakeProgramStore.addPeriodsToLevel();
 
   async function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault(); // prevent page to reload:
-    await mutateAsync(
-      {
-        ...values,
-        academic_period_id: document.getElementById('academic_period_id')?.title || '',
-        academic_program_intake_level_id: parseInt(level_id ? level_id : levelId),
-      },
-      {
-        onSuccess: (data) => {
-          toast.success(data.data.message);
-          queryClient.invalidateQueries(['levels/periods']);
-          nextStep(true);
-        },
-        onError: (error: any) => {
-          toast.error(error.response.data.message);
-        },
-      },
-    );
-  }
+    const validatedForm = periodSchema.validate(values, {
+      abortEarly: false,
+    });
 
-  console.log(values.planed_start_on);
+    validatedForm
+      .then(() => {
+        mutateAsync(
+          {
+            ...values,
+            academic_period_id:
+              document.getElementById('academic_period_id')?.title || '',
+            academic_program_intake_level_id: parseInt(level_id ? level_id : levelId),
+          },
+          {
+            onSuccess: (data) => {
+              toast.success(data.data.message);
+              queryClient.invalidateQueries(['levels/periods']);
+              nextStep(true);
+            },
+            onError: (error: any) => {
+              toast.error(error.response.data.message);
+            },
+          },
+        );
+      })
+      .catch((err) => {
+        const validatedErr: PrdErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof PrdErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
+  }
 
   return done !== checked ? (
     <div className="pt-4">
@@ -133,6 +159,7 @@ export function NewIntakePeriod({ level_id, checked }: PeriodStep) {
                 {prd.name}
               </Heading>
               <DateMolecule
+                error={errors.planed_start_on}
                 startYear={moment(
                   prd.academic_year.planned_start_on === ''
                     ? undefined
@@ -146,6 +173,7 @@ export function NewIntakePeriod({ level_id, checked }: PeriodStep) {
               </DateMolecule>
               <div className="pt-4">
                 <DateMolecule
+                  error={errors.planed_end_on}
                   startYear={moment(
                     values.planed_start_on === '' ? undefined : values.planed_start_on,
                   ).year()}
@@ -157,6 +185,8 @@ export function NewIntakePeriod({ level_id, checked }: PeriodStep) {
                 </DateMolecule>
               </div>
               <DropdownMolecule
+                error={errors.status}
+                hasError={errors.status != ''}
                 handleChange={handleChange}
                 name="status"
                 placeholder="intake period status"

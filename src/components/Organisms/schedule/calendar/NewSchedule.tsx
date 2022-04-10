@@ -25,6 +25,11 @@ import {
   scheduleAppliesTo,
 } from '../../../../types/services/schedule.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
+import {
+  firstScheduleSchema,
+  secondScheduleSchema,
+  thirdScheduleSchema,
+} from '../../../../validations/calendar.validation';
 import Button from '../../../Atoms/custom/Button';
 import CheckboxMolecule from '../../../Molecules/input/CheckboxMolecule';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
@@ -37,6 +42,20 @@ interface IStepProps {
   setCurrentStep: Function;
   values: CreateEventSchedule;
   handleSubmit?: (_e: FormEvent) => any;
+}
+
+interface FirstScheduleErrors extends Pick<CreateEventSchedule, 'event' | 'venue'> {
+  user_in_charge: string;
+}
+
+interface SecondScheduleErrors
+  extends Pick<CreateEventSchedule, 'plannedStartHour' | 'plannedEndHour'> {
+  plannedScheduleStartDate: string;
+  plannedScheduleEndDate: string;
+}
+interface ThirdScheduleErrors extends Pick<CreateEventSchedule, 'intake' | 'program'> {
+  appliesTo: string;
+  beneficiaries: string;
 }
 
 export default function NewSchedule() {
@@ -141,10 +160,32 @@ function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
     pageSize: 1000,
     sortyBy: 'username',
   });
+
+  const initialErrorState: FirstScheduleErrors = {
+    event: '',
+    venue: '',
+    user_in_charge: '',
+  };
+
+  const [errors, setErrors] = useState(initialErrorState);
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setCurrentStep(1);
+    const validatedForm = firstScheduleSchema.validate(values, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => setCurrentStep(1))
+      .catch((err) => {
+        const validatedErr: FirstScheduleErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof FirstScheduleErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   };
+
   return (
     <form onSubmit={handleSubmit} className="-mb-6">
       <div className="hidden">
@@ -155,6 +196,7 @@ function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
       <div className="pb-1">
         <DropdownMolecule
           name="event"
+          error={errors.event}
           handleChange={handleChange}
           options={
             events?.map((vn) => ({ label: vn.name, value: vn.id })) as SelectData[]
@@ -166,6 +208,7 @@ function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
       <div className="pb-1">
         <DropdownMolecule
           name="venue"
+          error={errors.venue}
           handleChange={handleChange}
           options={
             venues?.map((vn) => ({ label: vn.name, value: vn.id })) as SelectData[]
@@ -177,6 +220,7 @@ function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
       <div className="pb-1">
         <DropdownMolecule
           name="user_in_charge"
+          error={errors.user_in_charge}
           handleChange={handleChange}
           options={
             users?.data.data.content?.map((user) => ({
@@ -204,9 +248,34 @@ function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
 }
 
 function SecondStep({ handleChange, setCurrentStep, values }: IStepProps) {
+  const initialErrorState: SecondScheduleErrors = {
+    plannedStartHour: '',
+    plannedEndHour: '',
+    plannedScheduleStartDate: '',
+    plannedScheduleEndDate: '',
+  };
+
+  const [errors, setErrors] = useState(initialErrorState);
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    setCurrentStep(2);
+    const cloneValues = { ...values };
+    Object.assign(cloneValues, {
+      has_date_range: values.frequencyType === frequencyType.DATE_RANGE,
+    });
+    const validatedForm = secondScheduleSchema.validate(cloneValues, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => setCurrentStep(2))
+      .catch((err) => {
+        const validatedErr: SecondScheduleErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof SecondScheduleErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   };
 
   return (
@@ -216,22 +285,28 @@ function SecondStep({ handleChange, setCurrentStep, values }: IStepProps) {
         placeholder="Intake title"
         type="time"
         value={values.plannedStartHour}
+        error={errors.plannedStartHour}
+        required={false}
         handleChange={handleChange}>
         Planned start hour
       </InputMolecule>
       <InputMolecule
         type="time"
         value={values.plannedEndHour}
+        error={errors.plannedEndHour}
         name="plannedEndHour"
         placeholder="End time"
+        required={false}
         handleChange={handleChange}>
         Planned end hour
       </InputMolecule>
       <InputMolecule
         name="plannedScheduleStartDate"
+        error={errors.plannedScheduleStartDate}
         placeholder="Intake title"
         type="date"
         value={values.plannedScheduleStartDate.toLocaleString()}
+        required={false}
         handleChange={handleChange}>
         Schedule Start date
       </InputMolecule>
@@ -246,6 +321,8 @@ function SecondStep({ handleChange, setCurrentStep, values }: IStepProps) {
         />
       ) : values.frequencyType === frequencyType.DATE_RANGE ? (
         <InputMolecule
+          error={errors.plannedScheduleEndDate}
+          required={false}
           name="plannedScheduleEndDate"
           placeholder="Intake title"
           type="date"
@@ -305,9 +382,37 @@ function ThirdStep({ values, handleChange, handleSubmit, setCurrentStep }: IStep
       value: cls.id,
     })) as SelectData[];
 
+  const initialErrorState: ThirdScheduleErrors = {
+    appliesTo: '',
+    intake: '',
+    program: '',
+    beneficiaries: '',
+  };
+
+  const [errors, setErrors] = useState(initialErrorState);
+
+  const handleFinish = (e: FormEvent) => {
+    e.preventDefault();
+    const validatedForm = thirdScheduleSchema.validate(values, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => handleSubmit)
+      .catch((err) => {
+        const validatedErr: ThirdScheduleErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof ThirdScheduleErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
+  };
+
   return (
-    <form onSubmit={handleSubmit} className="max-w-sm -mb-6">
+    <form onSubmit={handleFinish} className="max-w-sm -mb-6">
       <DropdownMolecule
+        error={errors.appliesTo}
+        hasError={errors.appliesTo !== ''}
         name="appliesTo"
         handleChange={handleChange}
         options={getDropDownStatusOptions(scheduleAppliesTo)}
@@ -319,6 +424,8 @@ function ThirdStep({ values, handleChange, handleSubmit, setCurrentStep }: IStep
         values.appliesTo == scheduleAppliesTo.APPLIES_TO_CLASS) && (
         <>
           <DropdownMolecule
+            error={errors.intake}
+            hasError={errors.intake !== ''}
             name="intake"
             handleChange={handleChange}
             options={intakes}
@@ -326,6 +433,8 @@ function ThirdStep({ values, handleChange, handleSubmit, setCurrentStep }: IStep
             Intake
           </DropdownMolecule>
           <DropdownMolecule
+            error={errors.program}
+            hasError={errors.program !== ''}
             name="program"
             handleChange={handleChange}
             options={programIntakes}
@@ -337,6 +446,7 @@ function ThirdStep({ values, handleChange, handleSubmit, setCurrentStep }: IStep
 
       <DropdownMolecule
         name="beneficiaries"
+        error={errors.beneficiaries}
         isMulti
         handleChange={handleChange}
         options={

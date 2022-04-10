@@ -85,6 +85,7 @@ function SignInWithSearch<E>({ onSubmit }: CommonFormProps<E>) {
               options={getDropDownStatusOptions(DocType)}
             />
             <InputMolecule
+              required
               name="searchInput"
               value={details.searchInput}
               handleChange={(e) => handleChange(e)}>

@@ -9,12 +9,16 @@ class ProgramStore {
   addProgramToLevel() {
     return useMutation(programService.addProgramToLevel);
   }
-
+  addProgramSyllabus() {
+    return useMutation(programService.addProgramSyllabus);
+  }
   fetchPrograms() {
     return useQuery('programs', programService.fetchPrograms);
   }
-  getProgramById(id: string) {
-    return useQuery(['programs/id', id], () => programService.getProgramById(id));
+  getProgramById(id: string, enabled: boolean = true) {
+    return useQuery(['programs/id', id], () => programService.getProgramById(id), {
+      enabled,
+    });
   }
   getModulesByProgram(program_id: string) {
     return useQuery(['modules/program_id', program_id], () =>
@@ -28,9 +32,11 @@ class ProgramStore {
     );
   }
 
-  getProgramsByAcademy(program_id: string) {
-    return useQuery(['programs/program_id', program_id], () =>
-      programService.getProgramsByAcademy(program_id),
+  getProgramsByAcademy(program_id: string, enabled = true) {
+    return useQuery(
+      ['programs/program_id', program_id],
+      () => programService.getProgramsByAcademy(program_id),
+      { enabled },
     );
   }
 

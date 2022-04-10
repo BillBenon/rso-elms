@@ -1,6 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-
+import { useHistory, useParams } from 'react-router-dom';
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
@@ -8,36 +8,34 @@ import instructordeploymentStore from '../../../../store/instructordeployment.st
 import { SelectData, ValueType } from '../../../../types';
 import {
   IEvaluationApproval,
-  IEvaluationProps,
+  IMarkingType,
 } from '../../../../types/services/evaluation.types';
-import {
-  getLocalStorageData,
-  removeLocalStorageData,
-  setLocalStorageData,
-} from '../../../../utils/getLocalStorageItem';
 import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import SwitchMolecule from '../../../Molecules/input/SwitchMolecule';
 
-export default function EvaluationSettings({
-  handleGoBack,
-  evaluationId,
-}: IEvaluationProps) {
+export default function EvaluationSettings() {
   const { user } = useAuthenticator();
   const picked_role = usePickedRole();
+  const history = useHistory();
+
+  const { evaluationId } = useParams<{ evaluationId: string }>();
 
   const instructors = instructordeploymentStore.getInstructorsDeployedInAcademy(
     picked_role?.academy_id + '',
   ).data?.data.data;
 
-  const initialState = {
+  const { data: evaluationInfo } =
+    evaluationStore.getEvaluationById(evaluationId + '').data?.data || {};
+
+  const initialState: IEvaluationApproval = {
     approver_ids: '',
-    evaluation_id: getLocalStorageData('evaluationId') || evaluationId,
+    evaluation_id: evaluationId + '',
     id: '',
     reviewer_ids: '',
-    marker_ids: user?.id.toString() || '',
+    marker_ids: undefined,
     to_be_approved: false,
     to_be_reviewed: false,
   };
@@ -45,10 +43,10 @@ export default function EvaluationSettings({
   useEffect(() => {
     setSettings({
       approver_ids: '',
-      evaluation_id: getLocalStorageData('evaluationId') || evaluationId,
+      evaluation_id: evaluationId + '',
       id: '',
       reviewer_ids: '',
-      marker_ids: user?.id.toString() || '',
+      marker_ids: undefined,
       to_be_approved: false,
       to_be_reviewed: false,
     });
@@ -57,34 +55,61 @@ export default function EvaluationSettings({
   const [settings, setSettings] = useState<IEvaluationApproval>(initialState);
 
   function handleChange({ name, value }: ValueType) {
-    setSettings({ ...settings, [name]: value.toString() });
+    if (name == 'to_be_approved' && value == 'false') {
+      setSettings({ ...settings, approver_ids: '' });
+      return;
+    } else if (name == 'to_be_reviewed' && value == 'false') {
+      setSettings({ ...settings, reviewer_ids: '' });
+      return;
+    }
 
-    setLocalStorageData('evaluationSettings', { ...settings, [name]: value.toString() });
+    setSettings({ ...settings, [name]: value });
   }
 
-  useEffect(() => {
-    const cachedData: IEvaluationApproval =
-      getLocalStorageData('evaluationSettings') || {};
-    setSettings(cachedData || {});
-  }, []);
-
-  const { mutate } = evaluationStore.createEvaluationSettings();
+  const { mutate, isLoading } = evaluationStore.createEvaluationSettings();
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
+    setSettings({
+      ...settings,
+      evaluation_id: evaluationId + '',
+    });
+
+    // Should remove marker_id property if marking type is set to section
+    // otherwise it will parse marker_ids from array to string for api compatibility
+
+    if (evaluationInfo?.marking_type === IMarkingType.PER_SECTION) {
+      Object.keys(settings).forEach(
+        (key) =>
+          settings[key as keyof IEvaluationApproval] == null &&
+          delete settings[key as keyof IEvaluationApproval],
+      );
+    } else {
+      settings.marker_ids = settings.marker_ids?.toString();
+      settings.approver_ids = settings.approver_ids?.toString();
+      settings.to_be_approved = true;
+      settings.to_be_reviewed = true;
+      settings.reviewer_ids = settings.reviewer_ids?.toString();
+    }
+
+    if (settings.to_be_approved == false || settings.to_be_reviewed == false) {
+      settings.approver_ids = user?.id.toString() || '';
+      settings.reviewer_ids = user?.id.toString() || '';
+    }
+
+    if (!settings.marker_ids) {
+      settings.marker_ids = user?.id.toString() || '';
+    }
+
     mutate(settings, {
       onSuccess: () => {
         toast.success('Settings added', { duration: 5000 });
-        removeLocalStorageData('evaluationId');
-        removeLocalStorageData('evaluationInfo');
-        removeLocalStorageData('evaluationQuestions');
-        removeLocalStorageData('evaluationSettings');
-        setLocalStorageData('currentStep', 0);
+        // To make sure that the evaluations are updated on the page
         window.location.href = '/dashboard/evaluations';
       },
       onError: (error: any) => {
-        toast.error(error + '');
+        toast.error(error.response.data.message, { duration: 5000 });
       },
     });
   }
@@ -105,7 +130,7 @@ export default function EvaluationSettings({
           True
         </SwitchMolecule>
       </div>
-      {settings?.to_be_reviewed && (
+      {Boolean(settings?.to_be_reviewed) && (
         <div className="pt-6">
           <DropdownMolecule
             isMulti
@@ -114,7 +139,7 @@ export default function EvaluationSettings({
             options={
               instructors?.map((instr) => ({
                 label: `${instr.user.first_name} ${instr.user.last_name}`,
-                value: instr.id,
+                value: instr.user.id,
               })) as SelectData[]
             }
             name="reviewer_ids"
@@ -123,6 +148,7 @@ export default function EvaluationSettings({
           </DropdownMolecule>
         </div>
       )}
+
       <div className="pt-6 flex-col">
         <ILabel>Evaluation Approval status</ILabel>
         <SwitchMolecule
@@ -134,7 +160,10 @@ export default function EvaluationSettings({
           True
         </SwitchMolecule>
       </div>
-      {settings?.to_be_approved && (
+      {/*
+      TODO: when show form when it's been toggled only
+      */}
+      {Boolean(settings?.to_be_approved) && (
         <div className="pt-6">
           <DropdownMolecule
             isMulti
@@ -143,7 +172,7 @@ export default function EvaluationSettings({
             options={
               instructors?.map((instr) => ({
                 label: `${instr.user.first_name} ${instr.user.last_name}`,
-                value: instr.id,
+                value: instr.user.id,
               })) as SelectData[]
             }
             name="approver_ids"
@@ -152,56 +181,35 @@ export default function EvaluationSettings({
           </DropdownMolecule>
         </div>
       )}
-      {/* <div className="pt-6 flex-col">
-        <ILabel>Marking status</ILabel>
-        <SwitchMolecule
-          showLabelFirst
-          loading={false}
-          name="shuffle"
-          value={false}
-          handleChange={handleChange}>
-          True
-        </SwitchMolecule>
-      </div> */}
-      <div className="pt-6">
-        <DropdownMolecule
-          isMulti
-          width="60"
-          placeholder="Marker"
-          options={
-            instructors?.map((instr) => ({
-              label: `${instr.user.first_name} ${instr.user.last_name}`,
-              value: instr.id,
-            })) as SelectData[]
-          }
-          name="marker_ids"
-          handleChange={handleChange}>
-          To be marked by
-        </DropdownMolecule>
-      </div>
+
+      {evaluationInfo?.marking_type !== IMarkingType.PER_SECTION && (
+        <div className="pt-6">
+          <DropdownMolecule
+            isMulti
+            width="60"
+            placeholder="Marker"
+            options={
+              instructors?.map((instr) => ({
+                label: `${instr.user.first_name} ${instr.user.last_name}`,
+                value: instr.user.id,
+              })) as SelectData[]
+            }
+            name="marker_ids"
+            handleChange={handleChange}>
+            To be marked by
+          </DropdownMolecule>
+        </div>
+      )}
       <div className="flex flex-col">
-        <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
+        {/* <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
           Back
-        </Button>
+        </Button> */}
         <div className="pt-4">
-          <Button type="submit">Finish</Button>
+          <Button type="submit" disabled={isLoading}>
+            Finish
+          </Button>
         </div>
       </div>
-      {/* <div className="flex flex-col">
-        <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
-          Back
-        </Button>
-        <div className="pt-4">
-          <Button type="submit">Finish</Button>
-        </div>
-      </div> */}
-      {/* <SwitchMolecule
-        loading={false}
-        name="shuffle"
-        value={false}
-        handleChange={handleChange}>
-        Evaluation Reviewing status
-      </SwitchMolecule> */}
     </form>
   );
 }

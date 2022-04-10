@@ -5,8 +5,12 @@ import { useHistory, useParams } from 'react-router-dom';
 import { queryClient } from '../../../../plugins/react-query';
 import { divisionStore } from '../../../../store/administration/divisions.store';
 import { IDivisionsAcademyType, ParamType, ValueType } from '../../../../types';
-import { DivisionCreateInfo } from '../../../../types/services/division.types';
+import {
+  DepartErrors,
+  DivisionCreateInfo,
+} from '../../../../types/services/division.types';
 import { getDropDownOptions } from '../../../../utils/getOption';
+import { departSchema } from '../../../../validations/division.validation';
 import Button from '../../../Atoms/custom/Button';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
@@ -41,6 +45,13 @@ export default function UpdateDepartment({ onSubmit }: IDivisionsAcademyType) {
     parent_id: division.parent_id,
   };
 
+  const initialErrorState: DepartErrors = {
+    name: '',
+    description: '',
+    faculty: '',
+  };
+
+  const [errors, setErrors] = useState<DepartErrors>(initialErrorState);
   useEffect(() => {
     data?.data && setDivision(data?.data.data);
   }, [data]);
@@ -52,38 +63,58 @@ export default function UpdateDepartment({ onSubmit }: IDivisionsAcademyType) {
   }
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
-    mutateAsync(updateDivisionInfo, {
-      onSuccess: () => {
-        toast.success('Department updated');
-        queryClient.invalidateQueries(['divisions/type', division.division_type]);
 
-        history.goBack();
-      },
-      onError: (error: any) => {
-        toast.error(error.response.data.message);
-      },
+    const cloneDivision = { ...division };
+    Object.assign(cloneDivision, { has_faculty: true });
+
+    const validatedForm = departSchema.validate(cloneDivision, {
+      abortEarly: false,
     });
-    if (onSubmit) onSubmit(e);
+
+    validatedForm
+      .then(() => {
+        mutateAsync(updateDivisionInfo, {
+          onSuccess: () => {
+            toast.success('Department updated');
+            queryClient.invalidateQueries(['divisions/type', division.division_type]);
+
+            history.goBack();
+          },
+          onError: (error: any) => {
+            toast.error(error.response.data.message);
+          },
+        });
+        if (onSubmit) onSubmit(e);
+      })
+      .catch((err) => {
+        const validatedErr: DepartErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof DepartErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
   return (
     <form onSubmit={submitForm}>
       <InputMolecule
-        required
+        required={false}
+        error={errors.name}
         value={division.name}
-        error=""
         handleChange={handleChange}
         name="name">
         Department name
       </InputMolecule>
       <TextAreaMolecule
+        required={false}
+        error={errors.description}
         value={division.description}
         name="description"
-        required
         handleChange={handleChange}>
         Descripiton
       </TextAreaMolecule>
 
       <DropdownMolecule
+        error={errors.faculty}
         width="82"
         placeholder="Select faculty"
         options={getDropDownOptions({ inputs: departments || [] })}

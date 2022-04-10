@@ -21,9 +21,11 @@ class ClassStore {
   getClassById(classId: string) {
     return useQuery(['class/id', classId], () => classService.getClassById(classId));
   }
-  getClassByPeriod(periodId: string) {
-    return useQuery(['class/periodId', periodId], () =>
-      classService.getClassByPeriod(periodId),
+  getClassByPeriod(periodId: string, enabled: boolean = true) {
+    return useQuery(
+      ['class/periodId', periodId],
+      () => classService.getClassByPeriod(periodId),
+      { enabled },
     );
   }
   getClassByStudentAndLevel(studentId: string, levelId: string) {

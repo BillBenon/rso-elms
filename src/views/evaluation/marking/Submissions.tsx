@@ -13,6 +13,7 @@ import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import { ParamType } from '../../../types';
 import {
   IEvaluationInfo,
+  IEvaluationTypeEnum,
   IQuestionaireTypeEnum,
 } from '../../../types/services/evaluation.types';
 import {
@@ -24,6 +25,7 @@ import FieldMarking from './FieldMarking';
 import FieldStudentMarking from './FieldStudentMarking';
 import ManualMarking from './ManualMarking';
 import StudentAnswersMarking from './StudentAnswersMarking';
+
 export default function Submissions() {
   const history = useHistory();
   const { id } = useParams<ParamType>();
@@ -149,20 +151,25 @@ export default function Submissions() {
           </>
         )}
 
-        {evaluation?.questionaire_type === IQuestionaireTypeEnum.FIELD && (
+        {evaluation?.questionaire_type === IQuestionaireTypeEnum.FIELD ||
+        evaluation?.evaluation_type === IEvaluationTypeEnum.TEWT ? (
           <FieldMarking evaluationId={evaluation.id} />
+        ) : (
+          <></>
         )}
 
         {isSuccess &&
         submissions.length === 0 &&
         evaluation?.questionaire_type !==
-          (IQuestionaireTypeEnum.MANUAL || IQuestionaireTypeEnum.FIELD) ? (
+          (IQuestionaireTypeEnum.MANUAL ||
+            IQuestionaireTypeEnum.FIELD ||
+            IEvaluationTypeEnum.TEWT) ? (
           <NoDataAvailable
             icon="evaluation"
             buttonLabel="Go back"
             title={'No submissions has been made so far!'}
             handleClick={() =>
-              history.push(`/dashboard/evaluations/details/${evaluation?.id}`)
+              history.push(`/dashboard/evaluations/details/${evaluation?.id}/overview`)
             }
             description="It looks like there is any student who have submitted so far."
           />

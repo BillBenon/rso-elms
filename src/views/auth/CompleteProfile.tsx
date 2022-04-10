@@ -21,6 +21,7 @@ import {
 } from '../../types/services/user.types';
 import {
   getLocalStorageData,
+  removeLocalStorageData,
   setLocalStorageData,
 } from '../../utils/getLocalStorageItem';
 import SupAdminProfile from './SupAdminProfile';
@@ -170,6 +171,12 @@ function CompleteProfile() {
     setLocalStorageData('user', { ...data, person });
   }, [personalInfo]);
 
+  useEffect(() => {
+    return () => {
+      removeLocalStorageData('user');
+    };
+  }, []);
+
   const { mutateAsync } = usersStore.updateUser();
 
   async function saveInfo(isComplete: boolean) {
@@ -177,14 +184,13 @@ function CompleteProfile() {
 
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
     if (personalInfo) {
-      console.log(userFromLocalStorage.doc_type);
-
       await mutateAsync(
         {
           ...userFromLocalStorage,
           profile_status: ProfileStatus.COMPLETD,
           doc_type: userFromLocalStorage.doc_type,
           nid: userFromLocalStorage.person.id,
+          birth_date: personalInfo.birth_date,
         },
         {
           onSuccess() {
@@ -224,7 +230,10 @@ function CompleteProfile() {
   return (
     <div className="bg-main p-8 md:px-24 md:py-14">
       <CompleteProfileHeader />
-      {foundUser.user_type === UserType.SUPER_ADMIN ? (
+      {foundUser.first_name &&
+      foundUser.email &&
+      foundUser.last_name &&
+      foundUser.person.nid == null ? (
         <>
           <Stepper
             isDisabled={false}
@@ -234,7 +243,7 @@ function CompleteProfile() {
             navigateToStepHandler={navigateToStepHandler}>
             <SupAdminProfile
               fetched_id={foundUser.id.toString()}
-              display_label="Super Profile"
+              display_label="Basic Profile"
               isVertical
               nextStep={nextStep}
             />
@@ -267,7 +276,7 @@ function CompleteProfile() {
             isVertical
             currentStep={currentStep}
             completeStep={completeStep}
-            navigateToStepHandler={navigateToStepHandler}>
+            navigateToStepHandler={() => {}}>
             <PersonalDetails
               fetched_id={foundUser.id.toString()}
               display_label="Personal details"

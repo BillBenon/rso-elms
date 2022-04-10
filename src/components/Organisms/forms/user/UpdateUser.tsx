@@ -2,19 +2,19 @@ import { pick } from 'lodash';
 import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router-dom';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
-import academyStore from '../../../../store/administration/academy.store';
-import {
-  getIntakesByAcademy,
-  getProgramsByIntake,
-} from '../../../../store/administration/intake.store';
-import { getLevelsByAcademicProgram } from '../../../../store/administration/program.store';
+// import academyStore from '../../../../store/administration/academy.store';
+// import {
+//   getIntakesByAcademy,
+//   getProgramsByIntake,
+// } from '../../../../store/administration/intake.store';
+// import { getLevelsByAcademicProgram } from '../../../../store/administration/program.store';
 import usersStore from '../../../../store/administration/users.store';
 import { CommonFormProps, ParamType, ValueType } from '../../../../types';
-import { AcademyInfo } from '../../../../types/services/academy.types';
-import { IntakeProgramInfo } from '../../../../types/services/intake-program.types';
+// import { AcademyInfo } from '../../../../types/services/academy.types';
+// import { IntakeProgramInfo } from '../../../../types/services/intake-program.types';
 import {
   DocType,
   EditUser,
@@ -26,9 +26,11 @@ import {
   UserType,
 } from '../../../../types/services/user.types';
 import {
-  getDropDownOptions,
+  // getDropDownOptions,
   getDropDownStatusOptions,
 } from '../../../../utils/getOption';
+import { validation } from '../../../../utils/validations';
+import { editUserSchema } from '../../../../validations/user.validation';
 import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
 import DateMolecule from '../../../Molecules/input/DateMolecule';
@@ -36,18 +38,63 @@ import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 
+export interface EditUserErrors
+  extends Pick<
+    EditUser,
+    | 'spouse_name'
+    | 'academy_id'
+    | 'birth_date'
+    | 'email'
+    | 'first_name'
+    | 'intake_program_id'
+    | 'last_name'
+    | 'mother_names'
+    | 'nid'
+    | 'phone'
+    | 'username'
+    | 'nationality'
+    | 'document_expire_on'
+  > {
+  is_student: boolean;
+  has_spouse: boolean;
+  has_academy: boolean;
+  has_passport: boolean;
+}
+
 export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
   const updateUserType = pick(UserType, ['ADMIN', 'INSTRUCTOR', 'STUDENT']);
   const updateUserTypeWithSuper = { ...updateUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
   const { user } = useAuthenticator();
 
+  const initialErrorState: EditUserErrors = {
+    spouse_name: '',
+    academy_id: '',
+    birth_date: '',
+    email: '',
+    first_name: '',
+    intake_program_id: '',
+    last_name: '',
+    mother_names: '',
+    nid: '',
+    phone: '',
+    username: '',
+    nationality: '',
+    document_expire_on: '',
+    is_student: false,
+    has_spouse: false,
+    has_academy: false,
+    has_passport: false,
+  };
+
+  const [errors, setErrors] = useState<EditUserErrors>(initialErrorState);
+
   const [details, setDetails] = useState<EditUser>({
     activation_key: '',
     academy_id: '',
     birth_date: '',
     deployed_on: '',
-    deployment_number: '',
+    // deployment_number: '',
     doc_type: DocType.NID,
     education_level: EducationLevel.ILLITERATE,
     email: '',
@@ -90,7 +137,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
         academy_id: selectedUser.academy?.id,
         birth_date: selectedUser.person?.birth_date,
         deployed_on: '',
-        deployment_number: '',
+        // deployment_number: '',
         doc_type: selectedUser.person?.doc_type || DocType.NID,
         education_level:
           selectedUser.person?.education_level || EducationLevel.ILLITERATE,
@@ -123,10 +170,10 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
       });
   }, [data]);
 
-  const [otherDetails, setOtherDetails] = useState({
-    intake: '',
-    level: '',
-  });
+  // const [otherDetails, setOtherDetails] = useState({
+  //   intake: '',
+  //   level: '',
+  // });
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
@@ -135,61 +182,95 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
     }));
   }
 
-  function otherhandleChange(e: ValueType) {
-    setOtherDetails((details) => ({
-      ...details,
-      [e.name]: e.value,
-    }));
-  }
+  // function otherhandleChange(e: ValueType) {
+  //   setOtherDetails((details) => ({
+  //     ...details,
+  //     [e.name]: e.value,
+  //   }));
+  // }
 
   const { mutateAsync } = usersStore.modifyUser();
   async function addUser<T>(e: FormEvent<T>) {
     e.preventDefault();
-
-    if (onSubmit) onSubmit(e);
-
-    Object.keys(details).map((val) => {
-      //@ts-ignore
-      if (!details[val]) details[val] = '';
+    const cloneDetails = { ...details };
+    Object.assign(cloneDetails, {
+      is_student: details.user_type === UserType.STUDENT,
+      has_spouse:
+        details.marital_status === MaritalStatus.MARRIED ||
+        details.marital_status === MaritalStatus.WIDOWED,
+      has_academy: details.user_type !== UserType.SUPER_ADMIN,
+      has_passport: details.doc_type == DocType.PASSPORT,
     });
 
-    await mutateAsync(details, {
-      onSuccess(data) {
-        toast.success(data.data.message);
-        history.goBack();
-      },
-      onError(error: any) {
-        toast.error(error.response.data.message);
-      },
+    const validatedForm = editUserSchema.validate(cloneDetails, {
+      abortEarly: false,
     });
+    console.log(errors);
+
+    validatedForm
+      .then(async () => {
+        if (
+          details.doc_type === DocType.NID &&
+          validation.nidRwandaValidation(details.nid) !== ''
+        ) {
+          setErrors({
+            ...errors,
+            nid: validation.nidRwandaValidation(details.nid),
+          });
+        } else {
+          Object.keys(details).map((val) => {
+            //@ts-ignore
+            if (!details[val]) details[val] = '';
+          });
+
+          await mutateAsync(details, {
+            onSuccess(data) {
+              toast.success(data.data.message);
+              history.goBack();
+            },
+            onError(error: any) {
+              toast.error(error.response.data.message);
+            },
+          });
+          if (onSubmit) onSubmit(e);
+        }
+      })
+      .catch((err) => {
+        const validatedErr: EditUserErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          //@ts-ignore
+          validatedErr[el.path as keyof EditUserErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
   // get all academies in an institution
-  const academies: AcademyInfo[] | undefined =
-    academyStore.fetchAcademies().data?.data.data;
+  // const academies: AcademyInfo[] | undefined =
+  //   academyStore.fetchAcademies().data?.data.data;
 
   // get intakes based on selected academy
-  let intakes = getIntakesByAcademy(details.academy_id, false, !!details.academy_id);
+  // let intakes = getIntakesByAcademy(details.academy_id, false, !!details.academy_id);
 
-  useEffect(() => {
-    intakes.refetch();
-  }, [details.academy_id, intakes]);
+  // useEffect(() => {
+  //   intakes.refetch();
+  // }, [details.academy_id, intakes]);
 
   // get programs based on selected intake
-  let programs = getProgramsByIntake(otherDetails.intake, !!otherDetails.intake);
-  useEffect(() => {
-    programs.refetch();
-  }, [otherDetails.intake, programs]);
+  // let programs = getProgramsByIntake(otherDetails.intake, !!otherDetails.intake);
+  // useEffect(() => {
+  //   programs.refetch();
+  // }, [otherDetails.intake, programs]);
 
   //get levels based on selected program
-  let selectedProgram = programs.data?.data.data.find(
-    (p) => p.id == details.intake_program_id,
-  );
-  let programId = selectedProgram?.program.id + '';
-  let levels = getLevelsByAcademicProgram(programId);
+  // let selectedProgram = programs.data?.data.data.find(
+  //   (p) => p.id == details.intake_program_id,
+  // );
+  // let programId = selectedProgram?.program.id + '';
+  // let levels = getLevelsByAcademicProgram(programId);
 
-  useEffect(() => {
-    levels.refetch();
-  }, [details.intake_program_id, levels]);
+  // useEffect(() => {
+  //   levels.refetch();
+  // }, [details.intake_program_id, levels]);
 
   return (
     <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
@@ -212,6 +293,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           User type
         </SelectMolecule>
         <InputMolecule
+          error={errors.first_name}
           name="first_name"
           placeholder="eg: Kabera"
           value={details.first_name}
@@ -219,6 +301,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           First name
         </InputMolecule>
         <InputMolecule
+          error={errors.last_name}
           name="last_name"
           placeholder="eg: Claude"
           value={details.last_name}
@@ -226,6 +309,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           Last name
         </InputMolecule>
         <InputMolecule
+          error={errors.email}
           name="email"
           placeholder="Enter email"
           value={details.email}
@@ -233,6 +317,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           Email
         </InputMolecule>
         <DateMolecule
+          error={errors.birth_date}
           startYear={moment().year() - 100}
           defaultValue={(moment().year() - 16).toString()}
           endYear={moment().year() - 16}
@@ -250,6 +335,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           Place of residence
         </InputMolecule> */}
         <InputMolecule
+          error={errors.phone}
           name="phone"
           placeholder="Enter phone number"
           value={details.phone}
@@ -275,6 +361,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           Reference Number
         </SelectMolecule>
         <InputMolecule
+          error={errors.nid}
           name="nid"
           type="text"
           value={details.nid}
@@ -284,6 +371,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
         </InputMolecule>
         {details.doc_type == DocType.PASSPORT && (
           <DateMolecule
+            error={errors.document_expire_on}
             startYear={moment().year() - 7}
             defaultValue={moment().toString()}
             endYear={moment().year() + 7}
@@ -304,6 +392,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
         {(details.marital_status === MaritalStatus.MARRIED ||
           details.marital_status === MaritalStatus.WIDOWED) && (
           <InputMolecule
+            error={errors.spouse_name}
             name="spouse_name"
             required={false}
             value={details.spouse_name}
@@ -318,8 +407,9 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Education level
         </SelectMolecule>
-        {user?.user_type === UserType.SUPER_ADMIN && (
+        {/* {user?.user_type === UserType.SUPER_ADMIN && details.user_type !== 'SUPER_ADMIN' && (
           <SelectMolecule
+            error={errors.academy_id}
             options={getDropDownOptions({ inputs: academies || [] })}
             name="academy_id"
             value={details?.academy_id}
@@ -327,10 +417,11 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
             handleChange={handleChange}>
             Academy
           </SelectMolecule>
-        )}
-        {details.user_type === 'STUDENT' && (
+        )} */}
+        {/* {details.user_type === 'STUDENT' && (
           <>
             <SelectMolecule
+              error={errors.intake_program_id}
               options={getDropDownOptions({
                 inputs: intakes.data?.data.data || [],
                 labelName: ['code'],
@@ -342,6 +433,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
               Intake
             </SelectMolecule>
             <SelectMolecule
+              error={errors.intake_program_id}
               options={getDropDownOptions({
                 inputs: programs.data?.data.data || [],
                 labelName: ['name'],
@@ -354,7 +446,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
               handleChange={handleChange}>
               Programs
             </SelectMolecule>
-            {/* <SelectMolecule
+            <SelectMolecule
               options={getDropDownOptions({
                 inputs: levels.data?.data.data || [],
                 labelName: ['name'], //@ts-ignore
@@ -365,9 +457,9 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
               value={details.academic_program_level_id}
               handleChange={handleChange}>
               Levels
-            </SelectMolecule> */}
+            </SelectMolecule>
           </>
-        )}
+        )} */}
         <Button type="submit">Update</Button>
       </form>
     </div>

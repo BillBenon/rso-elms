@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -14,6 +14,8 @@ import { advancedTypeChecker } from '../../utils/getOption';
 function SubjectPeriod() {
   const { intakeId, id, intakeProg, level, period, classId } =
     useParams<IntakeClassParam>();
+
+  const { path } = useRouteMatch();
   const { data: subjects, isLoading } = intakeProgramStore.getClassSubjects(
     classId,
     period,
@@ -53,9 +55,19 @@ function SubjectPeriod() {
           icon="subject"
           title={'No subjects available in this period'}
           handleClick={() =>
-            history.push(
-              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${period}/view-class/${classId}/add-subject`,
-            )
+            path.includes('learn')
+              ? history.push(
+                  `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${level}/view-period/${period}/view-class/${classId}/add-subject`,
+                )
+              : path.includes('teach')
+              ? history.push(
+                  `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${level}/view-period/${period}/view-class/${classId}/add-subject`,
+                )
+              : path.includes('manage')
+              ? history.push(
+                  `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${level}/view-period/${period}/view-class/${classId}/add-subject`,
+                )
+              : {}
           }
           description="There are no subjects assigned to this period, click on the below button to add them!"
         />
@@ -65,9 +77,19 @@ function SubjectPeriod() {
             <AddCard
               title={'Add new subject'}
               onClick={() =>
-                history.push(
-                  `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${period}/view-class/${classId}/add-subject`,
-                )
+                path.includes('learn')
+                  ? history.push(
+                      `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${level}/view-period/${period}/view-class/${classId}/add-subject`,
+                    )
+                  : path.includes('teach')
+                  ? history.push(
+                      `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${level}/view-period/${period}/view-class/${classId}/add-subject`,
+                    )
+                  : path.includes('manage')
+                  ? history.push(
+                      `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${level}/view-period/${period}/view-class/${classId}/add-subject`,
+                    )
+                  : {}
               }
             />
           </Permission>

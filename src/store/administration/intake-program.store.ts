@@ -20,9 +20,13 @@ class IntakeProgramStore {
       intakeProgramService.getStudentsByIntakeProgramByStatus(intakeProgramId, status),
     );
   }
-  getStudentsByIntakeProgramLevel(intakeProgramlevelId: string) {
-    return useQuery(['students/intakeProgramlevelId', intakeProgramlevelId], () =>
-      intakeProgramService.getStudentsByIntakeProgramLevel(intakeProgramlevelId),
+  getStudentsByIntakeProgramLevel(intakeProgramlevelId: string, enabled: boolean = true) {
+    return useQuery(
+      ['students/intakeProgramlevelId', intakeProgramlevelId],
+      () => intakeProgramService.getStudentsByIntakeProgramLevel(intakeProgramlevelId),
+      {
+        enabled,
+      },
     );
   }
   getInstructorsByIntakeProgram(intakeProgramId: string) {
@@ -47,9 +51,11 @@ class IntakeProgramStore {
       intakeProgramService.getStudentsByAcademy(academyId),
     );
   }
-  getLevelsByIntakeProgram(intakeProgramId: string) {
-    return useQuery(['levels/intakeProgramId', intakeProgramId], () =>
-      intakeProgramService.getLevelsByIntakeProgram(intakeProgramId),
+  getLevelsByIntakeProgram(intakeProgramId: string, enabled: boolean = true) {
+    return useQuery(
+      ['levels/intakeProgramId', intakeProgramId],
+      () => intakeProgramService.getLevelsByIntakeProgram(intakeProgramId),
+      { enabled },
     );
   }
   getIntakeLevelById(levelId: string) {
@@ -58,9 +64,13 @@ class IntakeProgramStore {
     );
   }
 
-  getPeriodsByLevel(levelId: number) {
-    return useQuery(['levels/periods', levelId], () =>
-      intakeProgramService.getPeriodsByIntakeAcademicYearLevelId(levelId),
+  getPeriodsByLevel(levelId: number, enabled: boolean = true) {
+    return useQuery(
+      ['levels/periods', levelId],
+      () => intakeProgramService.getPeriodsByIntakeAcademicYearLevelId(levelId),
+      {
+        enabled,
+      },
     );
   }
   getModulesByLevel(levelId: number) {

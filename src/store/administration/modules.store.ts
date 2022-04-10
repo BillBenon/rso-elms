@@ -1,6 +1,6 @@
 import { useMutation, useQuery } from 'react-query';
-
 import { moduleService } from '../../services/administration/modules.service';
+
 
 class ModuleStore {
   addModule() {
@@ -22,9 +22,12 @@ class ModuleStore {
     );
   }
 
-  getModulesByProgram(programId: string) {
+  getModulesByProgram(programId: string, enabled: boolean = true) {
     return useQuery(['modules/program/id', programId], () =>
       moduleService.getModulesByProgram(programId),
+      {
+        enabled
+      }
     );
   }
 

@@ -1,9 +1,9 @@
 import { useMutation, useQuery } from 'react-query';
-
 import { evaluationService } from '../../services/evaluation/evaluation.service';
 import {
-  IEvaluationFeedback,
+  IEvaluationAction,
   IEvaluationOwnership,
+  IEvaluationStatus,
 } from '../../types/services/evaluation.types';
 
 class EvaluationStore {
@@ -33,6 +33,10 @@ class EvaluationStore {
 
   createEvaluationSettings() {
     return useMutation(evaluationService.createEvaluationSettings);
+  }
+
+  createSectionBasedEvaluation() {
+    return useMutation(evaluationService.createSectionBasedEvaluation);
   }
 
   // getEvaluations(academy: string, instructor: string) {
@@ -91,6 +95,16 @@ class EvaluationStore {
     });
   }
 
+  getEvaluationByIdAndInstructor(id: string, instructor: string) {
+    return useQuery(
+      ['evaluation', [id, instructor]],
+      () => evaluationService.getEvaluationByIdAndInstructor(id, instructor),
+      {
+        enabled: !!id,
+      },
+    );
+  }
+
   getEvaluationApprovalByEvaluationAndInstructor(
     evaluationId: string,
     instructorId: string,
@@ -125,6 +139,14 @@ class EvaluationStore {
     );
   }
 
+  getEvaluationQuestionsByStatus(id: string, status: IEvaluationStatus) {
+    return useQuery(
+      ['evaluation/questionsbystatus', id],
+      () => evaluationService.getEvaluationQuestionsByStatus(id, status),
+      { enabled: !!id },
+    );
+  }
+
   getEvaluationQuestions(id: string) {
     return useQuery(
       ['evaluation/questions', id],
@@ -133,8 +155,24 @@ class EvaluationStore {
     );
   }
 
+  getEvaluationQuestionsBySubject(evaluationId: string, subjectId: string) {
+    return useQuery(
+      ['evaluation/questionsBySubject', subjectId],
+      () => evaluationService.getEvaluationQuestionsBySubject(evaluationId, subjectId),
+      { enabled: !!evaluationId },
+    );
+  }
+
   deleteEvaluationQuestionById() {
     return useMutation(evaluationService.deleteEvaluationQuestionById);
+  }
+
+  deleteEvaluationById() {
+    return useMutation(evaluationService.deleteEvaluationById);
+  }
+
+  updateEvaluationModuleSubject() {
+    evaluationService.updateEvaluationModuleSubject;
   }
 
   addQuestionAnswer() {
@@ -162,16 +200,20 @@ class EvaluationStore {
   studentEvaluationStart() {
     return useMutation(evaluationService.studentEvaluationStart);
   }
+
+  updateEvaluationQuestion() {
+    return useMutation(evaluationService.updateQuestion);
+  }
 }
 
 export function getEvaluationFeedbacks(
   evaluationId: string,
-  feedbackType: IEvaluationFeedback,
+  actionType: IEvaluationAction,
 ) {
   return useQuery(
     ['evaluationApprovals', evaluationId],
-    () => evaluationService.getEvaluationFeedbacks(evaluationId, feedbackType),
-    { enabled: !!feedbackType },
+    () => evaluationService.getEvaluationFeedbacks(evaluationId, actionType),
+    { enabled: !!actionType },
   );
 }
 

@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
-
 import { MultiselectProps, SelectData } from '../../../types';
 import { arrayEquals } from '../../../utils/array';
 import { randomString } from '../../../utils/random';
@@ -84,11 +83,14 @@ export default function Multiselect({
               className={`flex flex-wrap w-full gap-1 ${
                 internalValue.length > 0 ? 'pt-1' : ''
               }`}>
-              {internalValue.map((val) => (
-                <div key={val} className="inline p-2 text-sm bg-gray-200 rounded">
-                  {options.find((op) => op.value === val)?.label || val}
-                </div>
-              ))}
+              {internalValue.map(
+                (val) =>
+                  val.length > 0 && (
+                    <div key={val} className="inline p-2 text-sm bg-gray-200 rounded">
+                      {options.find((op) => op.value == val)?.label || val}
+                    </div>
+                  ),
+              )}
             </div>
 
             {/* filter options input with placeholder */}
@@ -98,7 +100,7 @@ export default function Multiselect({
               ref={input}
               value={searchQuery}
               onFocus={() => setisMenuOpen(true)}
-              placeholder={placeholder || `Select ${name}`}
+              placeholder={placeholder || `Select ${name.replaceAll('_', '')}`}
               onChange={handleSearch}
               id={selectId}
               onBlur={() => setisMenuOpen(false)}

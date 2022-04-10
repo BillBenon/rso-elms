@@ -9,8 +9,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import AssignRole from '../../components/Organisms/forms/user/AssignRole';
-import ViewUserRole from '../../components/Organisms/forms/user/ViewUserRole';
+import AssignRole from '../../components/Organisms/forms/roles/AssignRole';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { authenticatorStore } from '../../store/administration';
 import usersStore from '../../store/administration/users.store';
@@ -20,11 +19,13 @@ import { UserType, UserTypes } from '../../types/services/user.types';
 import { formatUserTable } from '../../utils/array';
 import DeployInstructors from '../DeployInstructors';
 import EnrollStudents from '../EnrollStudents';
+import ViewUserRole from '../roles/ViewUserRole';
 
 export default function SuperAdminView() {
   const { url, path } = useRouteMatch();
   const { user } = useAuthenticator();
   const history = useHistory();
+  const [value, setValue] = useState('');
   const { mutateAsync } = authenticatorStore.resetPassword();
 
   const [currentPage, setcurrentPage] = useState(0);
@@ -37,7 +38,13 @@ export default function SuperAdminView() {
     sortyBy: 'username',
   });
 
-  const users = formatUserTable(data?.data.data.content || []);
+  const [users, setUsers] = useState<UserTypes[]>([]);
+
+  useEffect(() => {
+    setUsers(formatUserTable(data?.data.data.content || []));
+    setTotalElements(data?.data.data.totalElements || 0);
+    setTotalPages(data?.data.data.totalPages || 0);
+  }, [data]);
 
   let actions: ActionsType<UserTypes>[] = [];
   actions?.push({
@@ -100,7 +107,39 @@ export default function SuperAdminView() {
     privilege: Privileges.CAN_RESET_USER_PASSWORD,
   });
 
-  function handleSearch(_e: ValueType) {}
+  const [totalElements, setTotalElements] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
+  function handleSearch(_e: ValueType) {
+    const value = _e.value + '';
+
+    if (value.length === 0) {
+      setUsers(formatUserTable(data?.data.data.content || []));
+      setTotalElements(data?.data.data.totalElements || 0);
+      setTotalPages(data?.data.data.totalPages || 0);
+      setValue('');
+      return;
+    }
+
+    setValue(value);
+  }
+  const [filter, setFilter] = useState(false);
+
+  const handleClick = () => {
+    setFilter(!filter);
+  };
+
+  // useEffect(() => {
+  const { data: search } = usersStore.getAllBySearch(value, filter);
+
+  useEffect(() => {
+    if (filter && search) {
+      setUsers(formatUserTable(search.data.data.content || []));
+      setTotalElements(search.data.data.totalElements || 0);
+      setTotalPages(search.data.data.totalPages || 0);
+      setFilter(false);
+    }
+  }, [filter, search]);
 
   useEffect(() => {
     refetch();
@@ -110,8 +149,9 @@ export default function SuperAdminView() {
     <div>
       <TableHeader
         title="Super Admins"
-        totalItems={data?.data.data.totalElements || 0}
-        handleSearch={handleSearch}>
+        totalItems={totalElements}
+        handleSearch={handleSearch}
+        handleClick={handleClick}>
         {user?.user_type === UserType.SUPER_ADMIN && (
           <Link to={`/dashboard/users/add/${UserType.SUPER_ADMIN}`}>
             <Permission privilege={Privileges.CAN_CREATE_USER}>
@@ -142,7 +182,7 @@ export default function SuperAdminView() {
           selectorActions={[]}
           uniqueCol="id"
           rowsPerPage={pageSize}
-          totalPages={data?.data.data.totalPages || 1}
+          totalPages={totalPages}
           currentPage={currentPage}
           onPaginate={(page) => setcurrentPage(page)}
           onChangePageSize={(size) => {

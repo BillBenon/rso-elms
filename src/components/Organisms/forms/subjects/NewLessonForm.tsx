@@ -7,10 +7,12 @@ import { lessonStore } from '../../../../store/administration/lesson.store';
 import { subjectStore } from '../../../../store/administration/subject.store';
 import { ValueType } from '../../../../types';
 import { Lesson } from '../../../../types/services/lesson.types';
+import { lessonSchema } from '../../../../validations/lesson.validation';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
-import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
+
+interface LessonError extends Pick<Lesson, 'title' | 'content'> {}
 
 export default function NewLessonForm() {
   const { url } = useRouteMatch();
@@ -21,6 +23,13 @@ export default function NewLessonForm() {
   const subject = subjectStore.getSubject(subjectId).data?.data.data;
   const { mutateAsync } = lessonStore.addLesson();
   const history = useHistory();
+
+  const initialErrorState: LessonError = {
+    title: '',
+    content: '',
+  };
+
+  const [errors, setErrors] = useState<LessonError>(initialErrorState);
 
   const [lesson, setlesson] = useState<Lesson>({
     content: '',
@@ -33,19 +42,36 @@ export default function NewLessonForm() {
     setlesson({ ...lesson, [e.name]: e.value });
   }
 
-  async function submitForm(e: FormEvent) {
+  function submitForm(e: FormEvent) {
     e.preventDefault(); // prevent page to reload:
 
-    await mutateAsync(lesson, {
-      async onSuccess(data) {
-        toast.success(data.data.message);
-        queryClient.invalidateQueries(['lessons/subject/id']);
-        history.go(-1);
+    const validatedForm = lessonSchema.validate(
+      { title: lesson.title, content: lesson.content },
+      {
+        abortEarly: false,
       },
-      onError(error: any) {
-        toast.error(error.response.data.message || 'error occurred please try again');
-      },
-    });
+    );
+
+    validatedForm
+      .then(() => {
+        mutateAsync(lesson, {
+          async onSuccess(data) {
+            toast.success(data.data.message);
+            queryClient.invalidateQueries(['lessons/subject/id']);
+            history.go(-1);
+          },
+          onError(error: any) {
+            toast.error(error.response.data.message || 'error occurred please try again');
+          },
+        });
+      })
+      .catch((err) => {
+        const validatedErr: LessonError = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof LessonError] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
 
   return (
@@ -59,20 +85,22 @@ export default function NewLessonForm() {
         Subject
       </InputMolecule>
       <InputMolecule
+        error={errors.title}
+        required={false}
         value={lesson.title}
-        required
         handleChange={handleChange}
         name="title">
         Lesson title
       </InputMolecule>
       <TextAreaMolecule
-        required
+        error={errors.content}
+        required={false}
         value={lesson.content}
         name="content"
         handleChange={handleChange}>
         Lesson description
       </TextAreaMolecule>
-      <RadioMolecule
+      {/* <RadioMolecule
         className="mt-4"
         value="ACTIVE"
         name="status"
@@ -82,7 +110,7 @@ export default function NewLessonForm() {
         ]}
         handleChange={handleChange}>
         Status
-      </RadioMolecule>
+      </RadioMolecule> */}
       <div className="mt-5">
         <Button type="submit" full>
           Add

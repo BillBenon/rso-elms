@@ -8,6 +8,7 @@ import {
   CreateProgramInfo,
   ProgramInfo,
 } from '../../types/services/program.types';
+import { FileAttachment } from '../../types/services/user.types';
 import { AcademicProgramLevel } from './../../types/services/program.types';
 
 class ProgramService {
@@ -15,6 +16,15 @@ class ProgramService {
     programInfo: CreateProgramInfo,
   ): Promise<AxiosResponse<Response<ProgramInfo>>> {
     return await adminstrationAxios.post('/programs/addAcademicProgram', programInfo);
+  }
+
+  public async addProgramSyllabus(
+    data: FileAttachment,
+  ): Promise<AxiosResponse<Response<ProgramInfo>>> {
+    return await adminstrationAxios.post(
+      `/attachments/addProgramSyllabus/${data.id}`,
+      data.docInfo,
+    );
   }
   public async fetchPrograms(): Promise<AxiosResponse<Response<ProgramInfo[]>>> {
     return await adminstrationAxios.get('/programs/getPrograms');

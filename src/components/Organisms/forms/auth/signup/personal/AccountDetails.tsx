@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import usersStore from '../../../../../../store/administration/users.store';
@@ -6,12 +6,14 @@ import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../t
 import {
   AccountDetail,
   SendCommunicationMsg,
+  UserInfo,
 } from '../../../../../../types/services/user.types';
 import {
   getLocalStorageData,
   setLocalStorageData,
 } from '../../../../../../utils/getLocalStorageItem';
 import { getDropDownStatusOptions } from '../../../../../../utils/getOption';
+import { accountDetailsSchema } from '../../../../../../validations/complete-profile/complete-profile.validation';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
@@ -20,6 +22,18 @@ import PopupMolecule from '../../../../../Molecules/Popup';
 import UpdatePassword from './UpdatePassword';
 
 interface Account<E> extends CommonStepProps, CommonFormProps<E> {}
+
+interface AccountDetailsErrors {
+  username: string;
+  pin: string;
+  send_communication_msg: string;
+}
+
+const initialErrorState: AccountDetailsErrors = {
+  username: '',
+  pin: '',
+  send_communication_msg: '',
+};
 
 function AccountDetails<E>({
   display_label,
@@ -30,6 +44,7 @@ function AccountDetails<E>({
 }: Account<E>) {
   const { url, path } = useRouteMatch();
   const history = useHistory();
+
   const [accountDetails, setAccountDetails] = useState<AccountDetail>({
     username: '',
     pin: 0,
@@ -38,38 +53,66 @@ function AccountDetails<E>({
     // confirm_password: '',
     send_communication_msg: SendCommunicationMsg.EMAIL,
   });
+
+  const [errors, setErrors] = useState<AccountDetailsErrors>({
+    username: '',
+    pin: '',
+    send_communication_msg: '',
+  });
+
   const handleChange = (e: ValueType) => {
     setAccountDetails({ ...accountDetails, [e.name]: e.value });
   };
   const moveBack = () => {
     prevStep && prevStep();
   };
-  const moveForward = (e: any) => {
+  const moveForward = (e: FormEvent) => {
     e.preventDefault();
     let data: any = getLocalStorageData('user');
     let newObj = Object.assign({}, data, accountDetails);
 
     Object.keys(newObj).map((val) => {
-      //@ts-ignore
       if (!newObj[val]) newObj[val] = '';
     });
-    setLocalStorageData('user', newObj);
-    nextStep(true);
+
+    const validatedForm = accountDetailsSchema.validate(accountDetails, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => {
+        setLocalStorageData('user', newObj);
+        nextStep(true);
+      })
+      .catch((err) => {
+        const validatedErr: AccountDetailsErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof AccountDetailsErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   };
   const user = usersStore.getUserById(fetched_id.toString());
+  const [userInfo] = useState<UserInfo>(getLocalStorageData('user'));
+
+  //when information change from the backend
   useEffect(() => {
     let personInfo = user.data?.data.data;
-
     personInfo &&
-      setAccountDetails({
-        username: personInfo.username,
-        pin: personInfo.pin,
-        // password: personInfo.password,
-        // confirm_password: personInfo.password,
-        // doc_type: personInfo.person ? personInfo.person.doc_type : '',
-        send_communication_msg: personInfo.send_communication_msg,
+      !userInfo &&
+      setAccountDetails((old) => {
+        return { ...old, ...personInfo };
       });
-  }, [user.data?.data.data]);
+  }, [user.data?.data.data, userInfo]);
+
+  //when user comes back to this step
+  useEffect(() => {
+    setAccountDetails((old) => {
+      {
+        return { ...old, ...userInfo };
+      }
+    });
+  }, [userInfo]);
 
   return (
     <div className="flex flex-col gap-4">
@@ -81,6 +124,8 @@ function AccountDetails<E>({
       <form onSubmit={moveForward}>
         <div className="flex flex-col gap-4">
           <DropdownMolecule
+            error={errors.send_communication_msg}
+            hasError={errors.send_communication_msg !== ''}
             handleChange={handleChange}
             name="send_communication_msg"
             placeholder="Select way of communication"
@@ -91,6 +136,8 @@ function AccountDetails<E>({
             How would you like to be communicated?
           </DropdownMolecule>
           <InputMolecule
+            required={false}
+            error={errors.username}
             name="username"
             placeholder="username"
             value={accountDetails.username}

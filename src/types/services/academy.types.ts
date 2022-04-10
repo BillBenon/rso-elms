@@ -39,3 +39,14 @@ export interface AcademyCreateInfo {
   short_name: string;
   website_link: string;
 }
+
+export interface AcademyInfoErrors
+  extends Pick<AcademyCreateInfo, 'name' | 'moto' | 'mission' | 'short_name'> {}
+
+export interface AcademyLocationErrors
+  extends Pick<
+    AcademyCreateInfo,
+    'email' | 'phone_number' | 'fax_number' | 'website_link' | 'full_address'
+  > {
+  head_office_location_id: string;
+}

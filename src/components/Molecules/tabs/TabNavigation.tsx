@@ -1,14 +1,15 @@
 import React, { ReactNode } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
-
 import { colorStyle, fontSizeStyle, fontWeightStyle } from '../../../global/global-vars';
 import { Privileges } from '../../../types';
+import { IEvaluationQuestionsInfo } from '../../../types/services/evaluation.types';
 import Permission from '../../Atoms/auth/Permission';
 
 export interface TabType {
   label: string;
   href: string;
   privilege?: Privileges;
+  questions?: IEvaluationQuestionsInfo[];
 }
 
 type tabEventTypes = {

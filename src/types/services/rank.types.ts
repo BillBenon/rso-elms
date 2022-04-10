@@ -8,6 +8,10 @@ export interface CreateRankReq {
   institution_id?: string;
   priority: number;
 }
+export interface RankErrors
+  extends Pick<CreateRankReq, 'name' | 'description' | 'abbreviation'> {
+  priority: string;
+}
 
 export interface UpdateRankReq extends CreateRankReq {
   id: string;
