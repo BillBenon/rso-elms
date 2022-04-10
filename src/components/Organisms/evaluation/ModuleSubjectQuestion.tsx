@@ -2,7 +2,6 @@ import React, { Fragment, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
 import useAuthenticator from '../../../hooks/useAuthenticator';
-import { queryClient } from '../../../plugins/react-query';
 import { subjectService } from '../../../services/administration/subject.service';
 import { evaluationService } from '../../../services/evaluation/evaluation.service';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
@@ -31,8 +30,6 @@ export default function ModuleSubjectQuestion({
   showSetQuestions?: boolean;
   showActions?: boolean;
 }) {
-  console.log(showSetQuestions);
-
   const [showSubjects, setshowSubjects] = useState(false);
 
   const [subjects, setSubjects] = useState<ISubjects[]>([]);
@@ -48,13 +45,12 @@ export default function ModuleSubjectQuestion({
     evaluationStore.getEvaluationByIdAndInstructor(evaluationId, instructorInfo?.id + '')
       .data?.data || {};
 
-  const { data: evaluationQuestions, isLoading: loading } =
-    evaluationStore.getEvaluationQuestionsBySubject(evaluationId, subjectId);
-
   const [marks, setMarks] = useState(0);
   const { mutate: updateEvaluationQuestion } = evaluationStore.updateEvaluationQuestion();
 
   const subjectsPanel: TabType[] = [];
+
+  const [refetchQuestions, setrefetchQuestions] = useState(true);
 
   useEffect(() => {
     let filteredSubjects: ISubjects[] = [];
@@ -70,22 +66,36 @@ export default function ModuleSubjectQuestion({
           const subject = await subjectService.getSubject(
             subj.subject_academic_year_period.toString(),
           );
+
+          const questionsData = await evaluationService.getEvaluationQuestionsBySubject(
+            evaluationId,
+            subject.data.data.id.toString(),
+          );
+
           filteredSubjects.push({
             subject: subject.data.data.title,
             id: subject.data.data.id.toString(),
+            questions: questionsData.data.data,
           });
         }
 
         setSubjects(filteredSubjects);
+        setrefetchQuestions(false);
       }
     }
 
     getSubjects();
-  }, [evaluationId, evaluationInfo?.evaluation_module_subjects, moduleId]);
+  }, [
+    evaluationId,
+    evaluationInfo?.evaluation_module_subjects,
+    moduleId,
+    refetchQuestions,
+  ]);
 
   subjects.map((subj) => {
     subjectsPanel.push({
       label: `${subj.subject}`,
+      questions: subj.questions,
       href: `/dashboard/evaluations/details/${evaluationId}/section/${moduleId}/${subj.id}`,
     });
   });
@@ -95,7 +105,7 @@ export default function ModuleSubjectQuestion({
       .updateQuestionChoosen(questionId, status)
       .then(() => {
         toast.success('Successfully updated');
-        queryClient.invalidateQueries(['evaluation/questionsbystatus', evaluationId]);
+        setrefetchQuestions(true);
       })
       .catch((error: any) => {
         toast.error('Failed to update', error.message);
@@ -127,15 +137,12 @@ export default function ModuleSubjectQuestion({
     <Accordion>
       {subjectsPanel.map((panel) => (
         <Panel key={panel.label} title={panel.label} width="full" bgColor="main">
-          <div
-            className={`${
-              !loading && 'bg-main'
-            }  px-7 pt-4 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
-            {evaluationQuestions?.data.data.length ? (
-              evaluationQuestions?.data.data.map(
+          <div className={`px-7 pt-4 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
+            {panel.questions?.length ? (
+              panel.questions?.map(
                 (question, index: number) => (
                   <Fragment key={index}>
-                    <div className="mt-3 flex justify-between">
+                    <div className="mt-3 flex justify-between divide-y">
                       <div className="flex flex-col gap-4">
                         <ContentSpan title={`Question ${index + 1}`} className="gap-3">
                           {question.question}
@@ -240,14 +247,4 @@ export default function ModuleSubjectQuestion({
       ))}
     </Accordion>
   );
-}
-function setMarks(arg0: number) {
-  throw new Error('Function not implemented.');
-}
-
-function updateEvaluationQuestion(
-  data: any,
-  arg1: { onSuccess(): void; onError(error: any): void },
-) {
-  throw new Error('Function not implemented.');
 }

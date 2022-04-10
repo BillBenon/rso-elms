@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -119,7 +120,8 @@ export default function InstructorViewEvaluations() {
         case IEvaluationOwnership.FOR_APPROVING:
           if (
             evaluationInfo.questionaire_type === IQuestionaireTypeEnum.MANUAL ||
-            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.HYBRID
+            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.HYBRID ||
+            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.FIELD
           ) {
             history.push(`${path}/details/${id}/approve`);
 
@@ -131,9 +133,11 @@ export default function InstructorViewEvaluations() {
           break;
 
         case IEvaluationOwnership.FOR_REVIEWING:
+          console.log(evaluationInfo.questionaire_type);
           if (
             evaluationInfo.questionaire_type === IQuestionaireTypeEnum.MANUAL ||
-            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.HYBRID
+            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.HYBRID ||
+            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.FIELD
           ) {
             history.push(`${path}/details/${id}/review`);
             return;
@@ -199,13 +203,15 @@ export default function InstructorViewEvaluations() {
                     placeholder="Evaluation type"
                     options={getDropDownStatusOptions(IEvaluationOwnership)}
                   />
-                  <Button
-                    className="self-start"
-                    onClick={() => {
-                      history.push(`${path}/create`);
-                    }}>
-                    New evaluation
-                  </Button>
+                  <Permission privilege={Privileges.CAN_CREATE_EVALUATIONS}>
+                    <Button
+                      className="self-start"
+                      onClick={() => {
+                        history.push(`${path}/create`);
+                      }}>
+                      New evaluation
+                    </Button>
+                  </Permission>
                 </div>
               </div>
 

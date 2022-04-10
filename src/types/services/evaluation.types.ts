@@ -192,6 +192,7 @@ export interface IModules {
 export interface ISubjects {
   id: string;
   subject: string;
+  questions?: IEvaluationQuestionsInfo[];
 }
 
 export type IEvaluationAction =
