@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router-dom';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { rankStore } from '../../../../store/administration/rank.store';

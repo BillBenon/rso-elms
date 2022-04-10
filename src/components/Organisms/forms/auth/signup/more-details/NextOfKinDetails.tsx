@@ -133,7 +133,8 @@ function NextOfKinDetails<E>({
         spouse_name: data?.data.data.spouse_name || prevState.spouse_name,
       };
     });
-  }, [nationality.residence, user?.id, data?.data]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id, data?.data]);
 
   const handleChange = (e: ValueType) => {
     setDetails({ ...details, [e.name]: e.value });
@@ -282,8 +283,8 @@ function NextOfKinDetails<E>({
             handleChange={handleChange}>
             Last Name
           </InputMolecule>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 ">
+          {/* </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 "> */}
           <InputMolecule
             error={errors.email}
             readOnly={data?.data.data.email ? details.email !== '' : false}
@@ -294,6 +295,16 @@ function NextOfKinDetails<E>({
             placeholder="username@example.com"
             handleChange={handleChange}>
             Email
+          </InputMolecule>
+          <InputMolecule
+            error={errors.phone_number}
+            required={false}
+            readOnly={data?.data.data.phone_number ? details.phone_number !== '' : false}
+            name="phone_number"
+            value={details.phone_number}
+            placeholder="250 ---------"
+            handleChange={handleChange}>
+            Phone number
           </InputMolecule>
           <DropdownMolecule
             defaultValue={getDropDownStatusOptions(MaritalStatus).find(
@@ -316,18 +327,8 @@ function NextOfKinDetails<E>({
               Spouse Name
             </InputMolecule>
           )}
-          <InputMolecule
-            error={errors.phone_number}
-            required={false}
-            readOnly={data?.data.data.phone_number ? details.phone_number !== '' : false}
-            name="phone_number"
-            value={details.phone_number}
-            placeholder="250 ---------"
-            handleChange={handleChange}>
-            Phone number
-          </InputMolecule>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2">
+          {/* </div>
+        <div className="grid grid-cols-1 md:grid-cols-2"> */}
           <RadioMolecule
             className="pb-2"
             defaultValue={details.sex}
@@ -345,8 +346,8 @@ function NextOfKinDetails<E>({
             handleChange={handleChange}>
             Relationship
           </InputMolecule>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2">
+          {/* </div>
+        <div className="grid grid-cols-1 md:grid-cols-2"> */}
           <DropdownMolecule
             width="60 md:w-80"
             name="residence"

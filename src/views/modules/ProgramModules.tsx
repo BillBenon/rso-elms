@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useRouteMatch } from 'react-router';
+import { useHistory, useRouteMatch } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';

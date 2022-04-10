@@ -17,14 +17,14 @@ const CompleteProfileHeader = ({
 }: IHeader) => {
   const institution = institutionStore.getAll();
   return (
-    <div className="flex justify-between mb-14">
+    <div className="flex justify-between mb-4">
       <div>
         <Heading fontSize="lg" className="md:2xl" fontWeight="semibold">
           {title}
         </Heading>
         <p className="text-txt-secondary text-sm md:text-base pt-2">{details}</p>
         <Button styleType="text">
-          <Link to="/login" className="flex items-center justify-center">
+          <Link to="/login" className="flex items-center justify-center mt-2">
             <Icon
               size={16}
               name="chevron-left"

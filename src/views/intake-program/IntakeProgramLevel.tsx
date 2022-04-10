@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
+import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -23,6 +23,7 @@ import {
   LevelIntakeProgram,
 } from '../../types/services/intake-program.types';
 import LevelPeriod from '../classes/LevelPeriod';
+import DSAssessmentSheet from '../performance/DSAssessmentSheet';
 import EnrollStudent from './EnrollStudent';
 import IntakeLevelModule from './IntakeLevelModule';
 import { NewIntakePeriod } from './NewIntakePeriod';
@@ -122,6 +123,11 @@ function IntakeProgramLevel({ action }: IntakeProgramLevelProp) {
           <TabNavigation tabs={tabs}>
             <Switch>
               <Route exact path={`${path}/:level`} render={() => <IntakeLevelModule />} />
+              <Route
+                exact
+                path={`${path}/:level/:critics-report`}
+                render={() => <DSAssessmentSheet />}
+              />
               {/* enroll student to intake program level */}
               <Route
                 exact

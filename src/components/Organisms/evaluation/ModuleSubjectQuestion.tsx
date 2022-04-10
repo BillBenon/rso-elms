@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import { subjectService } from '../../../services/administration/subject.service';
@@ -9,11 +9,12 @@ import { EvaluationParamType, ParamType } from '../../../types';
 import { ISubjects } from '../../../types/services/evaluation.types';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
 import Button from '../../Atoms/custom/Button';
+import Panel from '../../Atoms/custom/Panel';
 import Heading from '../../Atoms/Text/Heading';
+import Accordion from '../../Molecules/Accordion';
 import PopupMolecule from '../../Molecules/Popup';
-import TabNavigation, { TabType } from '../../Molecules/tabs/TabNavigation';
+import { TabType } from '../../Molecules/tabs/TabNavigation';
 import EvaluationSubjects from './EvaluationSubjects';
-
 
 export default function ModuleSubjectQuestion() {
   const [showSubjects, setshowSubjects] = useState(false);
@@ -32,9 +33,8 @@ export default function ModuleSubjectQuestion() {
 
   const { data: evaluationQuestions, isLoading: loading } =
     evaluationStore.getEvaluationQuestionsBySubject(evaluationId, subjectId);
-  
 
-  const subjectTabs: TabType[] = [];
+  const subjectsPanel: TabType[] = [];
 
   useEffect(() => {
     let filteredSubjects: ISubjects[] = [];
@@ -64,41 +64,43 @@ export default function ModuleSubjectQuestion() {
   }, [evaluationId, evaluationInfo?.evaluation_module_subjects, moduleId]);
 
   subjects.map((subj) => {
-    subjectTabs.push({
+    subjectsPanel.push({
       label: `${subj.subject}`,
       href: `/dashboard/evaluations/details/${evaluationId}/section/${moduleId}/${subj.id}`,
     });
   });
 
   return (
-    <TabNavigation tabs={subjectTabs}>
-      <div
-        className={`${
-          !loading && 'bg-main'
-        }  px-7 pt-4 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
-        {evaluationQuestions?.data.data.length ? (
-          evaluationQuestions?.data.data.map(
-            (question, index: number) => (
-              <>
-                <div className="mt-3 flex justify-between">
-                  <div className="flex flex-col gap-4">
-                    <ContentSpan title={`Question ${index + 1}`} className="gap-3">
-                      {question.question}
-                    </ContentSpan>
+    <Accordion>
+      {subjectsPanel.map((panel) => (
+        <Panel key={panel.label} title={panel.label} width="full" bgColor="main">
+          <div
+            className={`${
+              !loading && 'bg-main'
+            }  px-7 pt-4 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
+            {evaluationQuestions?.data.data.length ? (
+              evaluationQuestions?.data.data.map(
+                (question, index: number) => (
+                  <Fragment key={index}>
+                    <div className="mt-3 flex justify-between">
+                      <div className="flex flex-col gap-4">
+                        <ContentSpan title={`Question ${index + 1}`} className="gap-3">
+                          {question.question}
+                        </ContentSpan>
 
-                    <ContentSpan title={`Question ${index + 1} answer`} className="gap-3">
-                      {question.answer}
-                    </ContentSpan>
-                  </div>
+                        <ContentSpan
+                          title={`Question ${index + 1} answer`}
+                          className="gap-3">
+                          {question.answer}
+                        </ContentSpan>
+                      </div>
 
-                  <Heading fontWeight="semibold" fontSize="sm">
-                    {question.mark} marks
-                  </Heading>
-                </div>
-                
-          
+                      <Heading fontWeight="semibold" fontSize="sm">
+                        {question.mark} marks
+                      </Heading>
+                    </div>
 
-                {/* <>
+                    {/* <>
           <div>
             <Button styleType="outline" onClick={() => setshowSubjects(true)}>
               Set questions
@@ -115,31 +117,34 @@ export default function ModuleSubjectQuestion() {
             />
           </PopupMolecule>
         </> */}
-              </>
-            ),
-            // ),
-          )
-        ) : (
-          <Heading fontWeight="semibold" fontSize="sm">
-            No questions attached
-          </Heading>
-        )}
-      </div>
+                  </Fragment>
+                ),
+                // ),
+              )
+            ) : (
+              <Heading fontWeight="semibold" fontSize="sm">
+                No questions attached
+              </Heading>
+            )}
+          </div>
 
-      <div className="py-4">
-        <div>
-          <Button styleType="outline" onClick={() => setshowSubjects(true)}>
-            Set questions
-          </Button>
-        </div>
+          <div className="py-4">
+            <div>
+              <Button styleType="outline" onClick={() => setshowSubjects(true)}>
+                Set questions
+              </Button>
+            </div>
 
-        <PopupMolecule
-          onClose={() => setshowSubjects(false)}
-          open={showSubjects}
-          title="Select subject to add questions">
-          <EvaluationSubjects evaluationId={evaluationId} action="add_questions" />
-        </PopupMolecule>
-      </div>
-    </TabNavigation>
+            <PopupMolecule
+              closeOnClickOutSide={false}
+              onClose={() => setshowSubjects(false)}
+              open={showSubjects}
+              title="Select subject to add questions">
+              <EvaluationSubjects evaluationId={evaluationId} action="add_questions" />
+            </PopupMolecule>
+          </div>
+        </Panel>
+      ))}
+    </Accordion>
   );
 }

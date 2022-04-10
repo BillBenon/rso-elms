@@ -278,7 +278,7 @@ export default function ProgramDetailsMolecule() {
                                     to={`${url}/programSyllabus/add`}
                                     className="flex items-center justify-end">
                                     <Icon name="add" size={12} fill="primary" />
-                                    Edit Program Syllabus
+                                    Add new Program Syllabus
                                   </Link>
                                 </div>
                                 <div className="flex space-x-4">

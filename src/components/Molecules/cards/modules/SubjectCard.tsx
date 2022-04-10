@@ -8,10 +8,11 @@ import CommonCardMolecule from '../CommonCardMolecule';
 
 interface IProps {
   subject: CommonCardDataType;
+  showMenu?: string;
   intakeProg?: string;
 }
 
-export default function SubjectCard({ subject, intakeProg = '' }: IProps) {
+export default function SubjectCard({ subject, intakeProg = '', showMenu }: IProps) {
   const history = useHistory();
   const [privileges, setPrivileges] = useState<string[]>();
 
@@ -28,20 +29,22 @@ export default function SubjectCard({ subject, intakeProg = '' }: IProps) {
     <CommonCardMolecule
       data={subject}
       handleClick={() =>
-        privileges?.includes(Privileges.CAN_ACCESS_LESSON)
-          ? history.push({
-              pathname: `/dashboard/modules/subjects/${subject.id}`,
-              search: `?intkPrg=${intakeProg}`,
-            })
-          : privileges?.includes(Privileges.CAN_ACCESS_EVALUATIONS)
-          ? history.push({
-              pathname: `/dashboard/modules/subjects/${subject.id}/evaluations`,
-              search: `?intkPrg=${intakeProg}`,
-            })
-          : history.push({
-              pathname: `/dashboard/modules/subjects/${subject.id}/instructors`,
-              search: `?intkPrg=${intakeProg}`,
-            })
+        showMenu && showMenu === 'true'
+          ? privileges?.includes(Privileges.CAN_ACCESS_LESSON)
+            ? history.push({
+                pathname: `/dashboard/modules/subjects/${subject.id}`,
+                search: `?intkPrg=${intakeProg}`,
+              })
+            : privileges?.includes(Privileges.CAN_ACCESS_EVALUATIONS)
+            ? history.push({
+                pathname: `/dashboard/modules/subjects/${subject.id}/evaluations`,
+                search: `?intkPrg=${intakeProg}`,
+              })
+            : history.push({
+                pathname: `/dashboard/modules/subjects/${subject.id}/instructors`,
+                search: `?intkPrg=${intakeProg}`,
+              })
+          : {}
       }>
       {/* <p className="pt-3">
         Total subjects:

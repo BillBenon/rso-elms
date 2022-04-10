@@ -2,7 +2,7 @@
 
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router-dom';
 import { useRouteMatch } from 'react-router-dom';
 
 import { queryClient } from '../../../../plugins/react-query';
@@ -186,7 +186,10 @@ function AcademyInfoComponent({
     });
 
     validatedForm
-      .then(() => handleNext)
+      .then(() => {
+        handleNext(e);
+      })
+
       .catch((err) => {
         const validatedErr: AcademyInfoErrors = initialErrorState;
         err.inner.map((el: { path: string | number; message: string }) => {
@@ -263,13 +266,17 @@ function AcademyLocationComponent({ details, handleChange, handleNext }: IProps)
 
   const [errors, setErrors] = useState<AcademyLocationErrors>(initialErrorState);
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
     const validatedForm = academyLocationSchema.validate(details, {
       abortEarly: false,
     });
 
     validatedForm
-      .then(() => handleNext)
+      .then(() => {
+        handleNext(e);
+      })
+
       .catch((err) => {
         const validatedErr: AcademyLocationErrors = initialErrorState;
         err.inner.map((el: { path: string | number; message: string }) => {

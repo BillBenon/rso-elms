@@ -19,5 +19,5 @@ export const lessonPlanTextAreaSchema = yup.object().shape({
 
 export const newSubjectSchema = yup.object().shape({
   title: yup.string().required('Subject name is required'),
-  //content: yup.string().required('Subject remarks must be provided'),
+  // content: yup.string().required('Subject remarks must be provided'),
 });

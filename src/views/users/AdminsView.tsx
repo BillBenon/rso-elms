@@ -26,6 +26,8 @@ export default function AdminsView() {
   const { user } = useAuthenticator();
   const history = useHistory();
   const { path, url } = useRouteMatch();
+  const [value, setValue] = useState('');
+
   const { mutateAsync } = authenticatorStore.resetPassword();
 
   const [currentPage, setcurrentPage] = useState(0);
@@ -46,7 +48,13 @@ export default function AdminsView() {
           { page: currentPage, pageSize, sortyBy: 'username' },
         );
 
-  const users = formatUserTable(data?.data.data.content || []);
+  const [users, setUsers] = useState<UserTypes[]>([]);
+
+  useEffect(() => {
+    setUsers(formatUserTable(data?.data.data.content || []));
+    setTotalElements(data?.data.data.totalElements || 0);
+    setTotalPages(data?.data.data.totalPages || 0);
+  }, [data]);
 
   let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
 
@@ -113,7 +121,39 @@ export default function AdminsView() {
     privilege: Privileges.CAN_RESET_USER_PASSWORD,
   });
 
-  function handleSearch(_e: ValueType) {}
+  const [totalElements, setTotalElements] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
+  function handleSearch(_e: ValueType) {
+    const value = _e.value + '';
+
+    if (value.length === 0) {
+      setUsers(formatUserTable(data?.data.data.content || []));
+      setTotalElements(data?.data.data.totalElements || 0);
+      setTotalPages(data?.data.data.totalPages || 0);
+      setValue('');
+      return;
+    }
+
+    setValue(value);
+  }
+  const [filter, setFilter] = useState(false);
+
+  const handleClick = () => {
+    setFilter(!filter);
+  };
+
+  // useEffect(() => {
+  const { data: search } = usersStore.getAllBySearch(value, filter);
+
+  useEffect(() => {
+    if (filter && search) {
+      setUsers(formatUserTable(search.data.data.content || []));
+      setTotalElements(search.data.data.totalElements || 0);
+      setTotalPages(search.data.data.totalPages || 0);
+      setFilter(false);
+    }
+  }, [filter, search]);
 
   useEffect(() => {
     refetch();
@@ -123,8 +163,9 @@ export default function AdminsView() {
     <div>
       <TableHeader
         title="Admins"
-        totalItems={data?.data.data.totalElements || 0}
-        handleSearch={handleSearch}>
+        totalItems={totalElements}
+        handleSearch={handleSearch}
+        handleClick={handleClick}>
         <Permission privilege={Privileges.CAN_CREATE_USER}>
           <Link to={`/dashboard/users/add/${UserType.ADMIN}`}>
             <Button>New admin</Button>
@@ -153,7 +194,7 @@ export default function AdminsView() {
             selectorActions={[]}
             uniqueCol="id"
             rowsPerPage={pageSize}
-            totalPages={data?.data.data.totalPages || 1}
+            totalPages={totalPages}
             currentPage={currentPage}
             onPaginate={(page) => setcurrentPage(page)}
             onChangePageSize={(size) => {

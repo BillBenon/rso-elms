@@ -1,6 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-
+import { useHistory, useParams } from 'react-router-dom';
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
@@ -8,43 +8,34 @@ import instructordeploymentStore from '../../../../store/instructordeployment.st
 import { SelectData, ValueType } from '../../../../types';
 import {
   IEvaluationApproval,
-  IEvaluationProps,
   IMarkingType,
 } from '../../../../types/services/evaluation.types';
-import {
-  getLocalStorageData,
-  removeLocalStorageData,
-  setLocalStorageData,
-} from '../../../../utils/getLocalStorageItem';
 import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import SwitchMolecule from '../../../Molecules/input/SwitchMolecule';
 
-//getting the evaluation id in local storage of the evaluation that we've just created
-const createdEvaluationId = getLocalStorageData('evaluationId');
-
-export default function EvaluationSettings({
-  handleGoBack,
-  evaluationId,
-}: IEvaluationProps) {
+export default function EvaluationSettings() {
   const { user } = useAuthenticator();
   const picked_role = usePickedRole();
+  const history = useHistory();
+
+  const { evaluationId } = useParams<{ evaluationId: string }>();
 
   const instructors = instructordeploymentStore.getInstructorsDeployedInAcademy(
     picked_role?.academy_id + '',
   ).data?.data.data;
 
   const { data: evaluationInfo } =
-    evaluationStore.getEvaluationById(createdEvaluationId).data?.data || {};
+    evaluationStore.getEvaluationById(evaluationId + '').data?.data || {};
 
-  const initialState = {
+  const initialState: IEvaluationApproval = {
     approver_ids: '',
-    evaluation_id: getLocalStorageData('evaluationId') || evaluationId,
+    evaluation_id: evaluationId + '',
     id: '',
     reviewer_ids: '',
-    marker_ids: user?.id.toString() || '',
+    marker_ids: undefined,
     to_be_approved: false,
     to_be_reviewed: false,
   };
@@ -52,10 +43,10 @@ export default function EvaluationSettings({
   useEffect(() => {
     setSettings({
       approver_ids: '',
-      evaluation_id: getLocalStorageData('evaluationId') || evaluationId,
+      evaluation_id: evaluationId + '',
       id: '',
       reviewer_ids: '',
-      marker_ids: user?.id.toString() || '',
+      marker_ids: undefined,
       to_be_approved: false,
       to_be_reviewed: false,
     });
@@ -72,16 +63,8 @@ export default function EvaluationSettings({
       return;
     }
 
-    setSettings({ ...settings, [name]: value.toString() });
-
-    setLocalStorageData('evaluationSettings', { ...settings, [name]: value.toString() });
+    setSettings({ ...settings, [name]: value });
   }
-
-  useEffect(() => {
-    const cachedData: IEvaluationApproval =
-      getLocalStorageData('evaluationSettings') || {};
-    setSettings(cachedData || {});
-  }, []);
 
   const { mutate, isLoading } = evaluationStore.createEvaluationSettings();
 
@@ -90,25 +73,29 @@ export default function EvaluationSettings({
 
     setSettings({
       ...settings,
-      evaluation_id: getLocalStorageData('evaluationId') || evaluationId,
+      evaluation_id: evaluationId + '',
     });
 
-    getLocalStorageData('evaluationId');
+    // Should remove marker_id property if marking type is set to section
+    // otherwise it will parse marker_ids from array to string for api compatibility
+    if (evaluationInfo?.marking_type === IMarkingType.PER_SECTION) {
+      Object.keys(settings).forEach(
+        (key) =>
+          settings[key as keyof IEvaluationApproval] == null &&
+          delete settings[key as keyof IEvaluationApproval],
+      );
+    } else {
+      settings.marker_ids = settings.marker_ids?.toString();
+    }
 
     mutate(settings, {
       onSuccess: () => {
         toast.success('Settings added', { duration: 5000 });
-        //remove all data that we have stored in local storage for caching
-        removeLocalStorageData('evaluationId');
-        removeLocalStorageData('evaluationInfo');
-        removeLocalStorageData('evaluationQuestions');
-        removeLocalStorageData('evaluationSettings');
-        removeLocalStorageData('evaluationModule');
-        setLocalStorageData('currentStep', 0);
+        // To make sure that the evaluations are updated on the page
         window.location.href = '/dashboard/evaluations';
       },
       onError: (error: any) => {
-        toast.error(error + '');
+        toast.error(error.response.data.message, { duration: 5000 });
       },
     });
   }

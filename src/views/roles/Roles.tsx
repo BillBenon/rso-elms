@@ -114,6 +114,7 @@ export default function Roles() {
         <TableHeader
           title="Roles"
           totalItems={roles && roles.length > 0 ? roles.length : 0}
+          showSearch={false}
           handleSearch={handleSearch}>
           <Permission privilege={Privileges.CAN_CREATE_ROLES}>
             <Link to={`${url}/add`}>

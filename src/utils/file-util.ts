@@ -94,7 +94,7 @@ export const downloadPersonalDoc = async (
   file_type: string,
   downloadPath: string,
 ) => {
-  let appsType = ['doc', 'xlxs', 'pptx', 'pdf', 'docx'];
+  let appsType = ['doc', 'xlsx', 'pptx', 'pdf', 'docx'];
   // eslint-disable-next-line no-undef
   const headers: HeadersInit = {};
   const token = cookie.getCookie('jwt_info');

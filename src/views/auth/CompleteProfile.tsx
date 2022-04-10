@@ -230,7 +230,10 @@ function CompleteProfile() {
   return (
     <div className="bg-main p-8 md:px-24 md:py-14">
       <CompleteProfileHeader />
-      {foundUser.user_type === UserType.SUPER_ADMIN ? (
+      {foundUser.first_name &&
+      foundUser.email &&
+      foundUser.last_name &&
+      foundUser.person.nid == null ? (
         <>
           <Stepper
             isDisabled={false}
@@ -240,7 +243,7 @@ function CompleteProfile() {
             navigateToStepHandler={navigateToStepHandler}>
             <SupAdminProfile
               fetched_id={foundUser.id.toString()}
-              display_label="Super Profile"
+              display_label="Basic Profile"
               isVertical
               nextStep={nextStep}
             />

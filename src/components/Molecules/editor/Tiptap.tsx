@@ -37,7 +37,7 @@ export default function Tiptap({
           <MenuBar editor={editor} />
         </article>
       )}
-      <article>
+      <article className="text-sm">
         <EditorContent editor={editor} />
       </article>
     </section>

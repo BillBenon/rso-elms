@@ -1,6 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 
 import { queryClient } from '../../../../plugins/react-query';
 import { lessonStore } from '../../../../store/administration/lesson.store';
@@ -136,7 +136,10 @@ function LessonTimeComponent({ lessonPlan, handleChange, handleNext }: IProps) {
     });
 
     validatedForm
-      .then(() => handleNext)
+      .then(() => {
+        handleNext(e);
+      })
+
       .catch((err) => {
         const validatedErr: LessonTimeErrors = initialErrorState;
         err.inner.map((el: { path: string | number; message: string }) => {
@@ -204,7 +207,10 @@ function LessonTextArea({ lessonPlan, handleChange, handleNext }: IProps) {
     });
 
     validatedForm
-      .then(() => handleNext)
+      .then(() => {
+        handleNext(e);
+      })
+
       .catch((err) => {
         const validatedErr: LessonTextAreaErrors = initialErrorState;
         err.inner.map((el: { path: string | number; message: string }) => {

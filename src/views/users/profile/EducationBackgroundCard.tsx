@@ -2,6 +2,7 @@ import moment from 'moment';
 import React from 'react';
 
 import Badge from '../../../components/Atoms/custom/Badge';
+import Button from '../../../components/Atoms/custom/Button';
 import Icon from '../../../components/Atoms/custom/Icon';
 import Heading from '../../../components/Atoms/Text/Heading';
 import { experienceStore } from '../../../store/administration/experience.store';
@@ -16,6 +17,9 @@ function EducationBackgroundCard({ person }: { person: PersonInfo }) {
       <Heading fontWeight="semibold" fontSize="base" className="pt-6 pb-7">
         Experiences
       </Heading>
+      <div className="flex flex-col items-end -mt-16 mb-6">
+        <Button>Add Experience</Button>
+      </div>
       {experience.length === 0 ? (
         <Badge
           fontWeight="medium"
@@ -27,12 +31,12 @@ function EducationBackgroundCard({ person }: { person: PersonInfo }) {
         </Badge>
       ) : (
         experience.map((exp) => (
-          <div key={exp.id} className="flex flex-col gap-3 w-full">
+          <div key={exp.id} className="flex flex-col gap-3 w-full ">
             <Badge
               badgecolor="secondary"
               badgetxtcolor="txt-secondary"
               fontSize="sm"
-              className="flex items-center">
+              className="flex items-center mt-4">
               <Icon name="chevron-right" /> {titleCase(exp.type.replaceAll('_', ' '))}
             </Badge>
             <div className="flex text-sm">
@@ -52,6 +56,9 @@ function EducationBackgroundCard({ person }: { person: PersonInfo }) {
               <p className="text-txt-primary px-2">
                 {moment(exp.end_date).format('ddd, YYYY-MM-DD')}
               </p>
+            </div>
+            <div className="flex flex-col items-end mt-2">
+              <Button styleType="outline">Edit</Button>
             </div>
           </div>
         ))

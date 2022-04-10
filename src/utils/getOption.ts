@@ -1,13 +1,16 @@
 import { RoleType, SelectData } from '../types';
 import { IEvaluationStatus } from '../types/services/evaluation.types';
-import { IntakeModuleStatus } from '../types/services/intake-program.types';
 import { IntakeStatus } from '../types/services/intake.types';
+import {
+  IntakeModuleStatus,
+  ProgressStatus,
+} from '../types/services/intake-program.types';
 import { UserTypes } from '../types/services/user.types';
 import { GenericStatus } from './../types/services/common.types';
 import {
   EnrollInstructorLevelInfo,
   EnrollmentStatus,
-  StudentApproval
+  StudentApproval,
 } from './../types/services/enrollment.types';
 import { ModuleParticipation } from './../types/services/intake-program.types';
 import { MaterialType } from './../types/services/module-material.types';
@@ -57,7 +60,7 @@ export function getDropDownOptions({
   return options;
 }
 
-export function getDropDownStatusOptions(status: any): SelectData[] {
+export function getDropDownStatusOptions(status: any, hidden?: string[]): SelectData[] {
   let selectData: SelectData[] = [];
   if (status) {
     let stats = Object.keys(status).filter((key) => status[key]);
@@ -67,7 +70,13 @@ export function getDropDownStatusOptions(status: any): SelectData[] {
         label: titleCase(label),
         value: val.toString(),
       };
-      selectData.push(input);
+      if (hidden) {
+        if (!hidden.includes(val.toString())) {
+          selectData.push(input);
+        }
+      } else {
+        selectData.push(input);
+      }
     });
   }
   return selectData;
@@ -84,6 +93,7 @@ export function advancedTypeChecker(
     | EnrollmentStatus
     | StudentApproval
     | ProgramStatus
+    | ProgressStatus
     | RoleType,
 ): 'success' | 'warning' | 'error' | 'info' {
   let successStatus = ['active', 'completed', 'opened', 'started'];

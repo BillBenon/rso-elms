@@ -26,7 +26,7 @@ function Accordion({ children }: IProps) {
                 index={i}
                 show={panel.props.show}
                 bgColor={panelProps.bgColor}
-                key={panel.key}
+                key={panel.props.title}
                 active={activePanel === i}
                 handleOpen={(i) => handleOpen(i)}
                 title={panelProps.title}
