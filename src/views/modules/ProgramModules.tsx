@@ -54,7 +54,6 @@ function ProgramModules() {
           ) : (
             <>
               <AddCard
-                className="w-full"
                 title={'Add new module'}
                 onClick={() => history.push(`/dashboard/programs/${id}/modules/add`)}
                 privilege={Privileges.CAN_CREATE_MODULES}
