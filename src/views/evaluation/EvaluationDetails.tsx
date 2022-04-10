@@ -140,12 +140,6 @@ export default function EvaluationDetails() {
                 actionType="">
                 <div className="flex gap-4">
                   <Button
-                    onClick={() => {
-                      history.push(`/dashboard/evaluations/create/?evaluation=${id}`);
-                    }}>
-                    Edit evaluation
-                  </Button>
-                  <Button
                     disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
                     onClick={() => publishEvaluation('PUBLIC')}>
                     Publish evaluation
