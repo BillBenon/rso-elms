@@ -2,7 +2,6 @@ import { Editor } from '@tiptap/react';
 import React, { FormEvent, Fragment, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation, useParams } from 'react-router-dom';
-
 import { queryClient } from '../../../../plugins/react-query';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { ParamType, SelectData, ValueType } from '../../../../types';
@@ -313,7 +312,7 @@ export default function AdddEvaluationQuestions({
                         handleChange={(editor) =>
                           handleChangeEditor(editor, index, 'answer')
                         }
-                        content={question.question}
+                        content={question.answer}
                       />
                     </div>
                   )}

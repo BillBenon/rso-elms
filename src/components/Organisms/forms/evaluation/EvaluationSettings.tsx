@@ -88,7 +88,6 @@ export default function EvaluationSettings() {
     } else {
       settings.marker_ids = settings.marker_ids?.toString();
       settings.approver_ids = settings.approver_ids?.toString();
-
       settings.reviewer_ids = settings.reviewer_ids?.toString();
     }
 
@@ -99,7 +98,10 @@ export default function EvaluationSettings() {
       settings.to_be_reviewed = true;
     }
 
-    if (!settings.marker_ids) {
+    if (
+      !settings.marker_ids &&
+      evaluationInfo?.marking_type !== IMarkingType.PER_SECTION
+    ) {
       settings.marker_ids = user?.id.toString() || '';
     }
 
