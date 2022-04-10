@@ -88,14 +88,15 @@ export default function EvaluationSettings() {
     } else {
       settings.marker_ids = settings.marker_ids?.toString();
       settings.approver_ids = settings.approver_ids?.toString();
-      settings.to_be_approved = true;
-      settings.to_be_reviewed = true;
+
       settings.reviewer_ids = settings.reviewer_ids?.toString();
     }
 
     if (settings.to_be_approved == false || settings.to_be_reviewed == false) {
       settings.approver_ids = user?.id.toString() || '';
       settings.reviewer_ids = user?.id.toString() || '';
+      settings.to_be_approved = true;
+      settings.to_be_reviewed = true;
     }
 
     if (!settings.marker_ids) {
@@ -127,7 +128,7 @@ export default function EvaluationSettings() {
           name="to_be_reviewed"
           value={settings.to_be_reviewed}
           handleChange={handleChange}>
-          True
+          {settings.to_be_reviewed}
         </SwitchMolecule>
       </div>
       {Boolean(settings?.to_be_reviewed) && (
@@ -157,7 +158,7 @@ export default function EvaluationSettings() {
           name="to_be_approved"
           value={settings.to_be_approved}
           handleChange={handleChange}>
-          True
+          {settings.to_be_approved}
         </SwitchMolecule>
       </div>
       {/*
