@@ -91,6 +91,11 @@ export default function EvaluationSettings() {
       settings.reviewer_ids = settings.reviewer_ids?.toString();
     }
 
+    if (settings.to_be_approved == false || settings.to_be_reviewed == false) {
+      settings.approver_ids = user?.id.toString() || '';
+      settings.reviewer_ids = user?.id.toString() || '';
+    }
+
     mutate(settings, {
       onSuccess: () => {
         toast.success('Settings added', { duration: 5000 });
