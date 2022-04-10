@@ -2,6 +2,7 @@ import { pick } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
+
 import Button from '../../../components/Atoms/custom/Button';
 import Loader from '../../../components/Atoms/custom/Loader';
 import Heading from '../../../components/Atoms/Text/Heading';
@@ -151,14 +152,18 @@ export default function Submissions() {
         )}
 
         {evaluation?.questionaire_type === IQuestionaireTypeEnum.FIELD ||
-          (evaluation?.evaluation_type === IEvaluationTypeEnum.TEWT && (
-            <FieldMarking evaluationId={evaluation.id} />
-          ))}
+        evaluation?.evaluation_type === IEvaluationTypeEnum.TEWT ? (
+          <FieldMarking evaluationId={evaluation.id} />
+        ) : (
+          <></>
+        )}
 
         {isSuccess &&
         submissions.length === 0 &&
         evaluation?.questionaire_type !==
-          (IQuestionaireTypeEnum.MANUAL || IQuestionaireTypeEnum.FIELD) ? (
+          (IQuestionaireTypeEnum.MANUAL ||
+            IQuestionaireTypeEnum.FIELD ||
+            IEvaluationTypeEnum.TEWT) ? (
           <NoDataAvailable
             icon="evaluation"
             buttonLabel="Go back"

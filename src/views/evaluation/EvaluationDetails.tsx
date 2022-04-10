@@ -1,6 +1,7 @@
 import React from 'react';
 import toast from 'react-hot-toast';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
+
 import Button from '../../components/Atoms/custom/Button';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import EvaluationContent from '../../components/Organisms/evaluation/EvaluationContent';
@@ -24,6 +25,8 @@ export default function EvaluationDetails() {
 
   const { url, path } = useRouteMatch();
 
+  const { mutate: deleteEvaluation } = evaluationStore.deleteEvaluationById();
+
   const makeEvaluationPublic = evaluationStore.publishEvaluation();
   const tabs = [
     {
@@ -41,10 +44,6 @@ export default function EvaluationDetails() {
     {
       label: 'Performance report',
       href: `${url}/performance`,
-    },
-    {
-      label: 'Evaluation sections',
-      href: `${url}/sections`,
     },
   ];
 
@@ -139,6 +138,27 @@ export default function EvaluationDetails() {
                 evaluationId={id}
                 actionType="">
                 <div className="flex gap-4">
+                  <Button
+                    color="main"
+                    className="bg-red-500"
+                    onClick={() => {
+                      if (confirm('Are you sure you want to delete this evaluation?')) {
+                        // start from here
+                        deleteEvaluation(evaluationInfo?.id + '', {
+                          onSuccess: () => {
+                            toast.success('Evaluation deleted successfully', {
+                              duration: 5000,
+                            });
+                            window.location.href = '/dashboard/evaluations';
+                          },
+                          onError: (error: any) => {
+                            toast.error(error.response.data.message);
+                          },
+                        });
+                      }
+                    }}>
+                    Delete evaluation
+                  </Button>
                   <Button
                     disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
                     onClick={() => publishEvaluation('PUBLIC')}>

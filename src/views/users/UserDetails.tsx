@@ -15,6 +15,7 @@ import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
+import NewPersonalDocument from '../../components/Organisms/forms/user/NewPersonalDocument';
 import { queryClient } from '../../plugins/react-query';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import usersStore from '../../store/administration/users.store';
@@ -27,11 +28,12 @@ import UpdatePhotoProfile from './profile/UpdatePhotoProfile';
 
 export default function UserDetails() {
   const { id } = useParams<ParamType>();
-  const { path } = useRouteMatch();
+
   const { data: user, isLoading } = usersStore.getUserById(id);
   const { search } = useLocation();
   const intkStud = new URLSearchParams(search).get('intkStud');
   const stat = new URLSearchParams(search).get('stat');
+  const { path } = useRouteMatch();
 
   const history = useHistory();
 
@@ -140,6 +142,20 @@ export default function UserDetails() {
                   </Tab>
                 </Tabs>
               )}
+            />
+            <Route
+              exact
+              path={`${path}/new-personal-doc`}
+              render={() => {
+                return (
+                  <PopupMolecule
+                    title="New Personal Document"
+                    open
+                    onClose={history.goBack}>
+                    <NewPersonalDocument personId={user.data.data.person.id + ''} />
+                  </PopupMolecule>
+                );
+              }}
             />
             <Route path={`${path}/edit-compl-prof`} component={UpdateCompleteProfile} />
             <Route

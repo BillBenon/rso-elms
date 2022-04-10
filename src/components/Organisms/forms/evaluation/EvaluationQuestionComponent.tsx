@@ -266,41 +266,15 @@ export default function EvaluationQuestionComponent() {
                       content={question.question}
                     />
                   </div>
-                  {/* 
-                <TextAreaMolecule
-                  readOnly={question.submitted}
-                  name={'question'}
-                  value={question.question}
-                  placeholder="Enter question"
-                  handleChange={(e: ValueType) => handleChange(index, e)}>
-                  Question {index + 1}
-                </TextAreaMolecule> */}
 
                   {question.question_type === IQuestionType.OPEN && (
-                    // <TextAreaMolecule
-                    //   readOnly={question.submitted}
-                    //   name={'answer'}
-                    //   value={question.answer}
-                    //   placeholder="Enter question answer"
-                    //   handleChange={(e: ValueType) => handleChange(index, e)}>
-                    //   Question {index + 1} answer
-                    // </TextAreaMolecule>
-
-                    <div className="my-2">
-                      <div className="my-1">
-                        <ILabel size="sm">Question {index + 1} answer</ILabel>
+                    <div className="my-2 bg-gray-100 rounded-md p-2">
+                      <div className="mb-2">
+                        <ILabel weight="bold" size="sm">
+                          Question {index + 1} answer
+                        </ILabel>
                       </div>
                       <Tiptap
-                        // handleChange={function (_editor: Editor): void {
-                        //   let questionInfo = [...questions];
-
-                        //   questionInfo[index] = {
-                        //     ...questionInfo[index],
-                        //     answer: _editor.getHTML(),
-                        //   };
-
-                        //   setQuestions(questionInfo);
-                        // }}
                         handleChange={(editor) =>
                           handleChangeEditor(editor, index, 'answer')
                         }

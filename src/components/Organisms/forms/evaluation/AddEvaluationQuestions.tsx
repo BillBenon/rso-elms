@@ -74,6 +74,7 @@ export default function AdddEvaluationQuestions({
       });
       setQuestions(allQuestions);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [evaluationId, evaluationQuestions]);
 
   function handleAddQuestion() {
@@ -311,7 +312,7 @@ export default function AdddEvaluationQuestions({
                         handleChange={(editor) =>
                           handleChangeEditor(editor, index, 'answer')
                         }
-                        content={question.question}
+                        content={question.answer}
                       />
                     </div>
                   )}
