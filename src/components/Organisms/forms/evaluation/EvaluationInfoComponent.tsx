@@ -2,7 +2,7 @@ import { Editor } from '@tiptap/react';
 import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { enrollmentService } from '../../../../services/administration/enrollments.service';
@@ -35,6 +35,7 @@ import {
   getDropDownStatusOptions,
 } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
+import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
 import Tiptap from '../../../Molecules/editor/Tiptap';
 import DateMolecule from '../../../Molecules/input/DateMolecule';
@@ -61,12 +62,18 @@ export default function EvaluationInfoComponent() {
   const picked_role = usePickedRole();
   const history = useHistory();
 
+  const { search } = useLocation();
+
+  const evaluationId = new URLSearchParams(search).get('evaluation') || '';
+
+  const evaluationInfo = evaluationStore.getEvaluationById(evaluationId).data?.data.data;
+
   const { user } = useAuthenticator();
 
   const [programId, setProgramId] = useState('');
 
   const [details, setDetails] = useState<IEvaluationCreate>({
-    access_type: IAccessTypeEnum.PUBLIC,
+    access_type: evaluationInfo?.access_type || IAccessTypeEnum.PUBLIC,
     academy_id: picked_role?.academy_id + '',
     private_attendees: '',
     instructor_id: user?.id + '',
@@ -157,76 +164,43 @@ export default function EvaluationInfoComponent() {
     [cachedEvaluationModuleData].flat(),
   );
 
-  // useEffect(() => {
-  //   setDetails({
-  //     access_type:
-  //       evaluationInfo?.access_type || cachedData?.access_type || IAccessTypeEnum.PUBLIC,
-  //     academy_id: picked_role?.academy_id + '' || cachedData?.academy_id || '',
-  //     marking_type:
-  //       evaluationInfo?.marking_type || cachedData?.marking_type || IMarkingType.NOT_SET,
-  //     private_attendees:
-  //       evaluationInfo?.private_attendees.toString() ||
-  //       cachedData?.private_attendees?.toString() ||
-  //       '',
-  //     instructor_id: user?.id.toString() || '',
-  //     intake_academic_year_period: intakePeriodId,
-  //     allow_submission_time:
-  //       evaluationInfo?.allow_submission_time || cachedData?.allow_submission_time || '',
-  //     intake_level_class_ids:
-  //       evaluationInfo?.intake_level_class_ids ||
-  //       cachedData?.intake_level_class_ids ||
-  //       classes?.data.data.map((cl) => cl.id.toString()).join(',') ||
-  //       '',
-  //     id: evaluationInfo?.id || cachedData?.id || '',
-  //     classification:
-  //       evaluationInfo?.classification ||
-  //       cachedData?.classification ||
-  //       IEvaluationClassification.MODULE,
-  //     content_format:
-  //       evaluationInfo?.content_format ||
-  //       cachedData?.content_format ||
-  //       IContentFormatEnum.DOC,
-  //     due_on: evaluationInfo?.due_on || cachedData?.due_on || '',
-  //     strict: true,
-  //     eligible_group: IEligibleClassEnum.MULTIPLE,
-  //     evaluation_status:
-  //       evaluationInfo?.evaluation_status ||
-  //       cachedData?.evaluation_status ||
-  //       IEvaluationStatus.DRAFT,
-  //     evaluation_type:
-  //       evaluationInfo?.evaluation_type ||
-  //       cachedData?.evaluation_type ||
-  //       IEvaluationTypeEnum.CAT,
-  //     exam_instruction:
-  //       evaluationInfo?.exam_instruction || cachedData?.exam_instruction || '',
-  //     is_consider_on_report:
-  //       evaluationInfo?.is_consider_on_report ||
-  //       cachedData?.is_consider_on_report ||
-  //       true,
-  //     marking_reminder_date:
-  //       evaluationInfo?.marking_reminder_date || cachedData?.marking_reminder_date || '',
-  //     maximum_file_size:
-  //       evaluationInfo?.maximum_file_size || cachedData?.maximum_file_size || '',
-  //     name: evaluationInfo?.name || cachedData?.name || '',
-  //     questionaire_type:
-  //       evaluationInfo?.questionaire_type ||
-  //       cachedData?.questionaire_type ||
-  //       IQuestionaireTypeEnum.OPEN,
-  //     subject_academic_year_period_id: subjectId,
-  //     submision_type:
-  //       evaluationInfo?.submision_type ||
-  //       cachedData?.submision_type ||
-  //       ISubmissionTypeEnum.ONLINE_TEXT,
-  //     time_limit: evaluationInfo?.time_limit || cachedData?.time_limit || 0,
-  //     total_mark: evaluationInfo?.total_mark || cachedData?.total_mark || 0,
-  //   });
-  // }, [
-  //   // evaluationInfo,
-  //   intakePeriodId,
-  //   subjectId,
-  //   picked_role?.academy_id,
-  //   classes?.data.data,
-  // ]);
+  useEffect(() => {
+    setDetails({
+      access_type: evaluationInfo?.access_type || IAccessTypeEnum.PUBLIC,
+      academy_id: picked_role?.academy_id + '',
+      private_attendees: evaluationInfo?.private_attendees.toString() || '',
+      instructor_id: user?.id + '',
+      allow_submission_time: evaluationInfo?.allow_submission_time || '',
+      intake_level_class_ids: evaluationInfo?.intake_level_class_ids || '',
+      id: evaluationInfo?.id || '',
+      classification: evaluationInfo?.classification || IEvaluationClassification.MODULE,
+      content_format: evaluationInfo?.content_format || IContentFormatEnum.DOC,
+      due_on: evaluationInfo?.due_on || '',
+      eligible_group: evaluationInfo?.eligible_group || IEligibleClassEnum.MULTIPLE,
+      evaluation_status: evaluationInfo?.evaluation_status || IEvaluationStatus.DRAFT,
+      evaluation_type: evaluationInfo?.evaluation_type || IEvaluationTypeEnum.CAT,
+      marking_type: evaluationInfo?.marking_type || IMarkingType.NOT_SET,
+      is_consider_on_report: evaluationInfo?.is_consider_on_report || true,
+      marking_reminder_date: evaluationInfo?.marking_reminder_date || '',
+      maximum_file_size: evaluationInfo?.maximum_file_size || 0,
+      subject_academic_year_period_id:
+        evaluationInfo?.subject_academic_year_period_id || '',
+      questionaire_type:
+        evaluationInfo?.questionaire_type || IQuestionaireTypeEnum.DEFAULT,
+      exam_instruction: evaluationInfo?.exam_instruction || '',
+      name: evaluationInfo?.name || '',
+      submision_type: evaluationInfo?.submision_type || ISubmissionTypeEnum.ONLINE_TEXT,
+      time_limit: evaluationInfo?.time_limit || 10,
+      total_mark: evaluationInfo?.total_mark || 0,
+      strict: evaluationInfo?.strict || true,
+      intakeId: '',
+      intake_academic_year_period: evaluationInfo?.intake_academic_year_period || '',
+      intake_program_level: '',
+      setting_type: IEvaluationSettingType.SECTION_BASED,
+    });
+
+    setEvaluationModule(evaluationInfo?.evaluation_module_subjects || []);
+  }, [evaluationInfo]);
 
   const { mutate, isLoading: createEvaluationLoader } =
     evaluationStore.createEvaluation();
@@ -337,22 +311,6 @@ export default function EvaluationInfoComponent() {
       getInstructorsBySubject(value.toString());
       return;
     }
-
-    // if (name === 'section_total_marks') {
-    //   console.log({ evaluationModule });
-    //   let total_mark = 0;
-    //   // add all marks on evaluation module
-    //   evaluationModule.forEach((module) => {
-    //     total_mark += module.section_total_marks;
-    //   });
-
-    //   setDetails((details) => ({
-    //     ...details,
-    //     total_mark,
-    //   }));
-
-    //   return;
-    // }
   }
 
   useEffect(() => {
@@ -490,6 +448,14 @@ export default function EvaluationInfoComponent() {
 
   return (
     <div className="bg-main p-8">
+      <Heading color="primary" fontWeight="bold">
+        {evaluationId ? (
+          <span className="font-bold">Edit Evaluation</span>
+        ) : (
+          <span>Create evaluation</span>
+        )}
+      </Heading>
+
       <form className="pt-6" onSubmit={submitForm}>
         <div className="border-none border-transparent"></div>
 
