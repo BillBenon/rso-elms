@@ -105,6 +105,7 @@ export default function UpdatePersonalDetails<E>({
         first_name: selectedUser.first_name,
         last_name: selectedUser.last_name,
         phone_number: selectedUser.phone,
+        phone: selectedUser.phone,
         sex: selectedUser.person.sex || GenderStatus.MALE,
         place_of_birth: selectedUser.person.place_of_birth,
         place_of_birth_description: selectedUser.person.place_of_birth_description,
