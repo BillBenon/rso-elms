@@ -2,7 +2,6 @@ import { Editor } from '@tiptap/react';
 import React, { FormEvent, Fragment, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation, useParams } from 'react-router-dom';
-
 import { queryClient } from '../../../../plugins/react-query';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { ParamType, SelectData, ValueType } from '../../../../types';
@@ -16,7 +15,6 @@ import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
 import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
-import Tiptap from '../../../Molecules/editor/Tiptap';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
@@ -282,16 +280,18 @@ export default function AdddEvaluationQuestions({
                     ]}>
                     Question type
                   </SelectMolecule>
-                  {/* <TextAreaMolecule
+
+                  <TextAreaMolecule
                     readOnly={question.submitted}
                     name={'question'}
                     value={question.question}
                     placeholder="Enter question"
                     handleChange={(e: ValueType) => handleChange(index, e)}>
                     Question {index + 1}
-                  </TextAreaMolecule> */}
-                  <div className="my-2">
-                    <div className="mb-2">
+                  </TextAreaMolecule>
+
+                  {/* <div className="my-2"> */}
+                  {/* <div className="mb-2">
                       <ILabel size="sm">Question {index + 1}</ILabel>
                     </div>
                     <Tiptap
@@ -299,22 +299,31 @@ export default function AdddEvaluationQuestions({
                         handleChangeEditor(editor, index, 'question')
                       }
                       content={question.question}
-                    />
-                  </div>
+                    /> */}
+                  {/* </div> */}
 
                   {question.question_type === IQuestionType.OPEN && (
-                    <div className="my-2 bg-gray-100 rounded-md p-2">
-                      <div className="mb-2">
+                    <div className="my-2  rounded-md p-2">
+                      {/* <div className="mb-2">
                         <ILabel weight="bold" size="sm">
                           Question {index + 1} answer
                         </ILabel>
-                      </div>
-                      <Tiptap
+                      </div> */}
+                      {/* <Tiptap
                         handleChange={(editor) =>
                           handleChangeEditor(editor, index, 'answer')
                         }
                         content={question.question}
-                      />
+                      /> */}
+
+                      <TextAreaMolecule
+                        readOnly={question.submitted}
+                        name={'answer'}
+                        value={question.answer}
+                        placeholder="Enter answer"
+                        handleChange={(e: ValueType) => handleChange(index, e)}>
+                        Question {index + 1} answer
+                      </TextAreaMolecule>
                     </div>
                   )}
                   {/* multiple choice answers here */}
