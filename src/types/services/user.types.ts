@@ -285,7 +285,9 @@ export interface PersonDetail
     | 'place_of_residence'
     | 'doc_type'
     | 'nationality'
-  > {}
+  > {
+    phone: string;
+  }
 export interface EmploymentDetail
   extends Pick<
     PersonInfo,
