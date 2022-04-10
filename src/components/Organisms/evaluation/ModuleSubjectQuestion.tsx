@@ -12,7 +12,6 @@ import {
   IEvaluationStatus,
   ISubjects,
 } from '../../../types/services/evaluation.types';
-import ContentSpan from '../../../views/evaluation/ContentSpan';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import Loader from '../../Atoms/custom/Loader';
@@ -142,90 +141,104 @@ export default function ModuleSubjectQuestion({
           <Panel key={panel.label} title={panel.label} width="full" bgColor="main">
             <div className={`px-7 pt-4 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
               {panel.questions?.length ? (
-                panel.questions?.map(
-                  (question, index: number) => (
-                    <Fragment key={index}>
-                      <div className="mt-3 flex justify-between divide-y">
-                        <div className="flex flex-col gap-4">
-                          <ContentSpan title={`Question ${index + 1}`} className="gap-3">
-                            {question.question}
-                          </ContentSpan>
+                panel.questions?.map((question, index: number) => (
+                  <Fragment key={index}>
+                    <div className="mt-3 flex justify-between">
+                      <div className="flex flex-col gap-4">
+                        <Heading color="txt-secondary" fontSize="base">{`Question ${
+                          index + 1
+                        }`}</Heading>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: question.question,
+                          }}
+                        />
 
-                          <ContentSpan
+                        {/* <ContentSpan
                             title={`Question ${index + 1} answer`}
                             className="gap-3">
                             {question.answer}
-                          </ContentSpan>
-                        </div>
-                        <div className="flex justify-center items-center gap-2">
+                          </ContentSpan> */}
+                        <Heading color="txt-secondary" fontSize="base">{`Question ${
+                          index + 1
+                        } answer`}</Heading>
+                        <div
+                          dangerouslySetInnerHTML={{
+                            __html: question.answer,
+                          }}
+                        />
+                      </div>
+                      <div className="flex justify-center items-center gap-2">
+                        {showActions ? (
                           <InputMolecule
                             value={question.mark}
                             name={'marks'}
                             style={{ width: '4rem', height: '2.5rem' }}
                             handleChange={updateMarks}
                           />
-                          <Heading fontWeight="semibold" fontSize="sm">
-                            {question.mark === 1 ? 'mark' : 'marks'}
-                          </Heading>
-                        </div>
+                        ) : (
+                          <Heading fontSize="sm">{question.mark}</Heading>
+                        )}
+                        <Heading fontWeight="semibold" fontSize="sm">
+                          {question.mark === 1 ? 'mark' : 'marks'}
+                        </Heading>
                       </div>
+                    </div>
 
-                      {showActions && (
-                        <div className="self-end flex gap-4">
-                          <button
-                            className={
-                              question?.choosen_question === IEvaluationStatus.ACCEPTED
-                                ? 'right-button'
-                                : 'normal-button'
-                            }
-                            onClick={() =>
-                              updateStatus(question.id, IEvaluationStatus.ACCEPTED)
-                            }>
-                            <Icon
-                              name={'tick'}
-                              size={18}
-                              stroke={
-                                question?.choosen_question ===
-                                  IEvaluationStatus.PENDING ||
-                                question?.choosen_question === IEvaluationStatus.REJECTED
-                                  ? 'none'
-                                  : 'main'
-                              }
-                              fill={'none'}
-                            />
-                          </button>
-
-                          <button
-                            className={
+                    {showActions && (
+                      <div className="self-end flex gap-4">
+                        <button
+                          className={
+                            question?.choosen_question === IEvaluationStatus.ACCEPTED
+                              ? 'right-button'
+                              : 'normal-button'
+                          }
+                          onClick={() =>
+                            updateStatus(question.id, IEvaluationStatus.ACCEPTED)
+                          }>
+                          <Icon
+                            name={'tick'}
+                            size={18}
+                            stroke={
+                              question?.choosen_question === IEvaluationStatus.PENDING ||
                               question?.choosen_question === IEvaluationStatus.REJECTED
-                                ? 'wrong-button'
-                                : 'normal-button'
+                                ? 'none'
+                                : 'main'
                             }
-                            onClick={() =>
-                              updateStatus(question.id, IEvaluationStatus.REJECTED)
-                            }>
-                            <Icon
-                              name={'cross'}
-                              size={18}
-                              fill={
-                                question?.choosen_question ===
-                                  IEvaluationStatus.PENDING ||
-                                question?.choosen_question === IEvaluationStatus.ACCEPTED
-                                  ? 'none'
-                                  : 'main'
-                              }
-                            />
-                          </button>
+                            fill={'none'}
+                          />
+                        </button>
 
-                          <Button onClick={() => saveUpdate(question)}>
-                            update marks
-                          </Button>
-                        </div>
-                      )}
-                    </Fragment>
-                  ),
-                  // ),
-                )
+                        <button
+                          className={
+                            question?.choosen_question === IEvaluationStatus.REJECTED
+                              ? 'wrong-button'
+                              : 'normal-button'
+                          }
+                          onClick={() =>
+                            updateStatus(question.id, IEvaluationStatus.REJECTED)
+                          }>
+                          <Icon
+                            name={'cross'}
+                            size={18}
+                            fill={
+                              question?.choosen_question === IEvaluationStatus.PENDING ||
+                              question?.choosen_question === IEvaluationStatus.ACCEPTED
+                                ? 'none'
+                                : 'main'
+                            }
+                          />
+                        </button>
+
+                        <Button onClick={() => saveUpdate(question)}>update marks</Button>
+                      </div>
+                    )}
+
+                    {panel.questions && panel.questions?.length - 1 !== index && (
+                      <hr className="my-4" />
+                    )}
+                  </Fragment>
+                ))
               ) : (
                 <Heading fontWeight="semibold" fontSize="sm">
                   No questions attached

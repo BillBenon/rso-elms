@@ -1,6 +1,7 @@
+import { Editor } from '@tiptap/react';
 import React, { FormEvent, Fragment, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import { queryClient } from '../../../../plugins/react-query';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { ParamType, SelectData, ValueType } from '../../../../types';
@@ -14,6 +15,7 @@ import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
 import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
+import Tiptap from '../../../Molecules/editor/Tiptap';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
@@ -28,7 +30,9 @@ export default function AdddEvaluationQuestions({
   handleGoBack,
   evaluationId,
 }: IEvaluationProps) {
-  const { id: subjectId } = useParams<ParamType>();
+  const { id: moduleSubject } = useParams<ParamType>();
+  const { search } = useLocation();
+  const subjectId = new URLSearchParams(String(search)).get('subject') || '';
   const initialState: ICreateEvaluationQuestions = useMemo(() => {
     return {
       evaluation_id: evaluationId || '',
@@ -41,12 +45,12 @@ export default function AdddEvaluationQuestions({
       sub_questions: [],
       submitted: false,
       answer: '',
-      evaluation_module_subject_id: subjectId || '',
+      evaluation_module_subject_id: moduleSubject || '',
     };
-  }, [evaluationId, subjectId]);
+  }, [evaluationId, moduleSubject]);
 
   const evaluationQuestions =
-    evaluationStore.getEvaluationQuestionsBySubject(evaluationId + '', subjectId).data
+    evaluationStore.getEvaluationQuestionsBySubject(evaluationId || '', subjectId).data
       ?.data.data || [];
 
   const { data: evaluationInfo } =
@@ -182,7 +186,7 @@ export default function AdddEvaluationQuestions({
     mutate(questions, {
       onSuccess: () => {
         toast.success('Questions added', { duration: 5000 });
-        queryClient.invalidateQueries(['evaluation/questions', evaluationId]);
+        queryClient.invalidateQueries(['evaluation/questionsBySubject', subjectId]);
       },
       onError: (error: any) => {
         toast.error(error.response.data.message);
@@ -198,15 +202,30 @@ export default function AdddEvaluationQuestions({
     return totalMarks;
   }
 
+  function handleChangeEditor(editor: Editor, index: number, name: string) {
+    let questionInfo = [...questions];
+
+    if (name == 'answer') {
+      questionInfo[index].answer = editor.getHTML();
+    } else if (name == 'question') {
+      questionInfo[index].question = editor.getHTML();
+    }
+
+    setQuestions(questionInfo);
+  }
+
   return (
     <Fragment>
-      <div className="sticky top-0 bg-primary-400 z-50 py-4 px-5 text-main rounded-sm flex justify-between">
+      <div className="sticky top-0 bg-primary-400 z-50 py-4 px-5 text-main rounded-sm flex justify-evenly">
         <span>{evaluationInfo?.name}</span>
+        <span className="">
+          {questions.length} {questions.length > 1 ? 'questions' : 'question'}
+        </span>
         <span>
           {currentTotalMarks()} /
           {
             evaluationInfo?.evaluation_module_subjects.find(
-              (subject) => subject.id === subjectId,
+              (subject) => subject.id === moduleSubject,
             )?.section_total_marks
           }{' '}
           marks
@@ -234,25 +253,40 @@ export default function AdddEvaluationQuestions({
                     ]}>
                     Question type
                   </SelectMolecule>
-                  <TextAreaMolecule
+                  {/* <TextAreaMolecule
                     readOnly={question.submitted}
                     name={'question'}
                     value={question.question}
                     placeholder="Enter question"
                     handleChange={(e: ValueType) => handleChange(index, e)}>
                     Question {index + 1}
-                  </TextAreaMolecule>
+                  </TextAreaMolecule> */}
+                  <div className="my-2">
+                    <div className="mb-2">
+                      <ILabel size="sm">Question {index + 1}</ILabel>
+                    </div>
+                    <Tiptap
+                      handleChange={(editor) =>
+                        handleChangeEditor(editor, index, 'question')
+                      }
+                      content={question.question}
+                    />
+                  </div>
 
                   {question.question_type === IQuestionType.OPEN && (
-                    <TextAreaMolecule
-                      className="normal-case"
-                      readOnly={question.submitted}
-                      name={'answer'}
-                      value={question.answer}
-                      placeholder="Enter question answer"
-                      handleChange={(e: ValueType) => handleChange(index, e)}>
-                      Question {index + 1} answer
-                    </TextAreaMolecule>
+                    <div className="my-2 bg-gray-100 rounded-md p-2">
+                      <div className="mb-2">
+                        <ILabel weight="bold" size="sm">
+                          Question {index + 1} answer
+                        </ILabel>
+                      </div>
+                      <Tiptap
+                        handleChange={(editor) =>
+                          handleChangeEditor(editor, index, 'answer')
+                        }
+                        content={question.question}
+                      />
+                    </div>
                   )}
                   {/* multiple choice answers here */}
                   {question.question_type === IQuestionType.MULTIPLE_CHOICE &&
