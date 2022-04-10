@@ -45,10 +45,6 @@ export default function EvaluationDetails() {
       label: 'Performance report',
       href: `${url}/performance`,
     },
-    {
-      label: 'Evaluation sections',
-      href: `${url}/sections`,
-    },
   ];
 
   if (evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED) {
