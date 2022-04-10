@@ -61,6 +61,7 @@ export default function UpdatePersonalDetails<E>({
     last_name: '',
     phone_number: '',
     sex: GenderStatus.MALE,
+    phone: '',
     place_of_birth: '',
     place_of_birth_description: '',
     birth_date: '',
