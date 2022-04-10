@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import { evaluationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
+  DSAssessReport,
   IEditSubjectiveForm,
   IEvaluationPerformance,
   IModuleTermPerformance,
@@ -14,6 +15,7 @@ import {
   TwetForm,
   TwetReport,
 } from '../../types/services/report.types';
+import { DSAssessForm } from './../../types/services/report.types';
 
 class SchoolReportService {
   public async getClassTermlyOverallReport(
@@ -64,12 +66,9 @@ class SchoolReportService {
   }
 
   public async getDSCriticsReport(
-    studentId: string,
-    term: string,
-  ): Promise<AxiosResponse<Response<TwetReport>>> {
-    return await evaluationAxios.get(
-      `/reports/course-critiques/student/${studentId}/term/${term}`,
-    );
+    level: number,
+  ): Promise<AxiosResponse<Response<DSAssessReport[]>>> {
+    return await evaluationAxios.get(`reports/course-critiques/level/${level}`);
   }
 
   public async getStudentFullReport(
@@ -96,6 +95,11 @@ class SchoolReportService {
     subjective: ISubjectiveForm,
   ): Promise<AxiosResponse<Response<ISubjective>>> {
     return await evaluationAxios.post('reports/add-term-subjective', subjective);
+  }
+  public async addDSCritique(
+    subjective: DSAssessForm,
+  ): Promise<AxiosResponse<Response<DSAssessForm>>> {
+    return await evaluationAxios.post('reports/course-critiques/add', subjective);
   }
   public async addTewt(tewt: TwetForm): Promise<AxiosResponse<Response<TwetReport>>> {
     return await evaluationAxios.post('reports/tewt/add', tewt);
