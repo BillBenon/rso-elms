@@ -14,8 +14,6 @@ export enum IEvaluationTypeEnum {
   TEWT = 'TEWT',
 }
 
-
-
 export enum IQuestionType {
   MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
   OPEN = 'OPEN',
@@ -36,11 +34,10 @@ export interface IEvaluationProps {
   evaluationInfo?: IEvaluationInfo;
 }
 
-
- export enum IEvaluationSettingType  {
-     SECTION_BASED = 'SECTION_BASED',
-     SUBJECT_BASED = 'SUBJECT_BASED',
-  }
+export enum IEvaluationSettingType {
+  SECTION_BASED = 'SECTION_BASED',
+  SUBJECT_BASED = 'SUBJECT_BASED',
+}
 
 export enum ISubmissionTypeEnum {
   FILE = 'FILE',
@@ -171,7 +168,7 @@ export interface IEvaluationCreate {
   marking_type: IMarkingType;
   intakeId: string;
   intake_program_level: string;
-  setting_type: IEvaluationSettingType
+  setting_type: IEvaluationSettingType;
 }
 
 export type IEvaluationSectionBased = {
