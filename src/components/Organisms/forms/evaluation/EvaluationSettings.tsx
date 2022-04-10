@@ -128,7 +128,7 @@ export default function EvaluationSettings() {
           name="to_be_reviewed"
           value={settings.to_be_reviewed}
           handleChange={handleChange}>
-          True
+          {settings.to_be_reviewed}
         </SwitchMolecule>
       </div>
       {Boolean(settings?.to_be_reviewed) && (
@@ -158,7 +158,7 @@ export default function EvaluationSettings() {
           name="to_be_approved"
           value={settings.to_be_approved}
           handleChange={handleChange}>
-          True
+          {settings.to_be_approved}
         </SwitchMolecule>
       </div>
       {/*
