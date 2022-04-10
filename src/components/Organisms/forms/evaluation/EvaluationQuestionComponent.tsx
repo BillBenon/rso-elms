@@ -278,7 +278,7 @@ export default function EvaluationQuestionComponent() {
                         handleChange={(editor) =>
                           handleChangeEditor(editor, index, 'answer')
                         }
-                        content={question.question}
+                        content={question.answer}
                       />
                     </div>
                   )}
