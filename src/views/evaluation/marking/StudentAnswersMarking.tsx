@@ -2,7 +2,7 @@ import '../../../styles/components/Molecules/correction/marking.scss';
 
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '../../../components/Atoms/custom/Button';
 import Loader from '../../../components/Atoms/custom/Loader';
@@ -25,6 +25,7 @@ export default function StudentAnswersMarking() {
   const { id } = useParams<ParamType>();
   const [evaluationId, setEvaluationId] = useState<string>('');
   const { mutate } = markingStore.finishMarking();
+  const history = useHistory();
 
   const studentAnswers = markingStore.getStudentEvaluationAnswers(id).data?.data.data;
   const { data: studentEvaluation, isLoading } =
@@ -36,10 +37,16 @@ export default function StudentAnswersMarking() {
   const [markingModules, setMarkingModules] = useState<SelectData[]>([]);
   const [currentModule, setCurrentModule] = useState<string>('');
   const [step, setStep] = useState<number>(0);
+  const [answersLength, setAnswersLength] = useState<number>(0);
 
   useEffect(() => {
     setEvaluationId(studentEvaluation?.data.data.evaluation.id + '');
   }, [studentEvaluation]);
+
+  useEffect(() => {
+    setAnswersLength(studentAnswers?.filter(answersFilter).length || 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentModule, studentAnswers]);
 
   useEffect(() => {
     console.log(data);
@@ -182,15 +189,18 @@ export default function StudentAnswersMarking() {
                 options={markingModules}
               />
             </div>
-            <TableHeader
-              title={studentEvaluation?.data.data.code + ' submission'}
-              showBadge={false}
-              showSearch={false}>
-              <p className="text-gray-400">
-                Marks obtained:{' '}
-                <span className="text-green-300 font-semibold">{totalMarks}</span>
-              </p>
-            </TableHeader>
+            {answersLength > 0 && (
+              <TableHeader
+                title={studentEvaluation?.data.data.code + ' submission'}
+                showBadge={false}
+                showSearch={false}>
+                <p className="text-gray-400">
+                  Marks obtained:{' '}
+                  <span className="text-green-300 font-semibold">{totalMarks}</span>
+                </p>
+              </TableHeader>
+            )}
+
             <section className="flex flex-wrap justify-start gap-4 mt-2">
               {studentAnswers
                 ?.filter(answersFilter)
@@ -217,9 +227,21 @@ export default function StudentAnswersMarking() {
                 totalPages={1}
               />
             </div> */}
-              <div className="w-full flex justify-end">
-                <Button onClick={submitMarking}>Complete Marking</Button>
-              </div>
+              {answersLength > 0 && (
+                <div className="w-full flex justify-end">
+                  <Button onClick={submitMarking}>Complete Marking</Button>
+                </div>
+              )}
+              {answersLength == 0 && (
+                <div className="w-full flex justify-end">
+                  <Button
+                    onClick={() => {
+                      history.goBack();
+                    }}>
+                    Go back
+                  </Button>
+                </div>
+              )}
             </section>
           </div>
         );
@@ -227,7 +249,7 @@ export default function StudentAnswersMarking() {
         return (
           <div className="w-full flex justify-center items-center">
             <NoDataAvailable
-              title={'No Marking Modules'}
+              title={'No marking modules'}
               description={"You don't have any marking module for this evaluation"}
             />
           </div>
