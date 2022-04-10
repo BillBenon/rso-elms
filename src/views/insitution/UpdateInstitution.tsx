@@ -74,7 +74,7 @@ export default function UpdateInstitution() {
         current_admin_id: institution.current_admin_id,
         head_office_location_id: 17445,
         email: institution.email,
-        fax_number: institution.fax_number,
+        fax_number: institution.fax_number || '',
         full_address: institution.full_address,
         generic_status: institution.generic_status,
         mission: institution.mission,
@@ -242,7 +242,7 @@ export default function UpdateInstitution() {
               <InputMolecule
                 error={errors.fax_number}
                 required={false}
-                name="fax number"
+                name="fax_number"
                 value={values.fax_number}
                 placeholder="Fax number"
                 handleChange={(e) => handleChange(e)}>
