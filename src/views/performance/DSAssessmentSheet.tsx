@@ -16,7 +16,6 @@ import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import usePickedRole from '../../hooks/usePickedRole';
 import { queryClient } from '../../plugins/react-query';
-import academicperiodStore from '../../store/administration/academicperiod.store';
 import academyStore from '../../store/administration/academy.store';
 import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
