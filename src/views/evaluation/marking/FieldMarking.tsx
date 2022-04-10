@@ -115,11 +115,7 @@ export default function FieldMarking({ evaluationId }: PropsType) {
   }, [evaluationInfo?.total_mark, markedStudents, studentsData?.data]);
 
   return (
-    <div className="flex flex-col gap-8">
-      <Heading fontWeight="semibold" className="pt-7">
-        {useClasses(currentClassId).label || 'No choosen class'}{' '}
-      </Heading>
-
+    <div className="flex flex-col gap-8 -mt-20">
       <div>
         <Heading fontWeight="medium" fontSize="sm">
           Select class

@@ -99,7 +99,7 @@ export default function Submissions() {
           description="It looks like no student have submitted yet."
         />
       ) : isSuccess && submissions.length > 0 ? (
-        <div>
+        <div className="-mt-16">
           <div className="w-full flex justify-end mb-4">
             <Button onClick={publishEvaluationResults}>Publish all results</Button>
           </div>
