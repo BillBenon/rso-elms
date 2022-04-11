@@ -1,4 +1,5 @@
-import React, { FormEvent, useCallback, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
+import { useEffect } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 
 import useAuthenticator from '../../../../../hooks/useAuthenticator';
@@ -22,6 +23,7 @@ const SignInForm = () => {
     username: '',
     password: '',
   };
+
   const [errors, setErrors] = useState(initialErrorState);
 
   const handleChange = (e: ValueType) => {
@@ -31,7 +33,8 @@ const SignInForm = () => {
     }));
   };
 
-  useCallback(logout, [logout]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(logout, []);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();

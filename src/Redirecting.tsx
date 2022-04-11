@@ -12,7 +12,6 @@ import NotApproved from './views/NotApproved';
 
 export default function Redirecting() {
   const [hasNoAcademy, setHasNoAcademy] = useState(false);
-  const [userNotAllowed, setUserNotAllowed] = useState(false);
   const [userNoRoles, setUserNoRoles] = useState(false);
   const { user, userLoading } = useAuthenticator();
 
@@ -31,8 +30,6 @@ export default function Redirecting() {
   );
 
   useEffect(() => {
-    const notAllowed = !Object.keys(UserType).includes(user?.user_type + '');
-
     if (user) {
       // setLocalStorageData('user', user?);
       localStorage.setItem('user', JSON.stringify(user));
@@ -81,7 +78,6 @@ export default function Redirecting() {
       }
     }
 
-    setUserNotAllowed(notAllowed && !userLoading);
     // }, [user?, isLoading]);
   }, [
     user,
@@ -101,9 +97,7 @@ export default function Redirecting() {
         <NotApproved />
       ) : hasNoAcademy ? (
         <NotApproved />
-      ) : userNotAllowed ? (
-        <NotApproved />
-      ) : !hasNoAcademy && !userNotAllowed ? (
+      ) : !hasNoAcademy ? (
         <div className="redirecing-loader full-height grid place-items-center">
           <div className="typewriter text-xl font-bold w-44">
             <h1>Redirecting....</h1>

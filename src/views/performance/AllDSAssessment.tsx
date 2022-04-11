@@ -14,6 +14,7 @@ import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import usePickedRole from '../../hooks/usePickedRole';
 import { queryClient } from '../../plugins/react-query';
 import { classStore } from '../../store/administration/class.store';
@@ -43,6 +44,7 @@ export default function AllDSAssessment() {
 
   const { path, url } = useRouteMatch();
   const { classId } = useParams<IParamType>();
+  const { user } = useAuthenticator();
   const { data: classInfo } = classStore.getClassById(classId);
 
   let periodOfThisClass = classInfo?.data.data.intake_academic_year_period_id;
@@ -55,14 +57,15 @@ export default function AllDSAssessment() {
   let data: DSTable[] = [];
 
   performance?.data.data.forEach((record) => {
-    let processed: DSTable = {
-      id: record.id,
-      author: record.author.username,
-      receiver: record.receiver.username,
-      //   week_number: record.week_number,
-      week_number: 0,
-    };
-    data.push(processed);
+    if (record.receiver.adminId === user?.id || record.author.adminId === user?.id) {
+      let processed: DSTable = {
+        id: record.id,
+        author: record.author.username,
+        receiver: record.receiver.username,
+        week_number: record.week,
+      };
+      data.push(processed);
+    }
   });
 
   const picked_role = usePickedRole();
