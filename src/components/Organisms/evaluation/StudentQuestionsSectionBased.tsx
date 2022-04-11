@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
+
 import { evaluationService } from '../../../services/evaluation/evaluation.service';
+import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import { ValueType } from '../../../types';
 import {
   IEvaluationInfo,
@@ -20,23 +23,34 @@ export default function StudentQuestionsSectionBased({
   marks,
   previousAnswers,
   answer,
-  submitForm,
+  // submitForm,
   setQuestionToSubmit,
   questionId,
-  handleChange,
 }: {
   evaluationInfo: IEvaluationInfo;
   question: string;
   marks: number;
   questionId: string;
   previousAnswers: StudentMarkingAnswer[];
-  answer: IStudentAnswer;
-  submitForm: (answer: string) => void;
-  setQuestionToSubmit: (id: string) => void;
-  handleChange: ({ name, value }: ValueType) => void;
+  answer?: IStudentAnswer;
+  // submitForm: (answer: string) => void;
+  // setQuestionToSubmit: (id: string) => void;
 }) {
   const [subjects, setSubjects] = useState<ISubjects[]>([]);
   const [isLoadingSubjects, setIsLoadingSubjects] = useState(true);
+  const { mutate } = evaluationStore.addQuestionAnswer();
+
+  const submitForm = () => {
+    mutate(localAnswer, {
+      onSuccess: () => {
+        toast.success('Update saved');
+        setQuestionToSubmit('');
+      },
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
+      },
+    });
+  };
 
   useEffect(() => {
     let filteredSubjects: ISubjects[] = [];
@@ -67,6 +81,21 @@ export default function StudentQuestionsSectionBased({
   function disableCopyPaste(e: any) {
     e.preventDefault();
     return false;
+  }
+
+  const [localAnswer, setLocalAnswer] = useState<IStudentAnswer>(
+    answer || {
+      answer_attachment: '',
+      evaluation_question: questionId,
+      mark_scored: 0,
+      multiple_choice_answer: '',
+      open_answer: '',
+      student_evaluation: '',
+    },
+  );
+
+  function handleChange({ name, value }: ValueType) {
+    setLocalAnswer((localAnswer) => ({ ...localAnswer, [name]: value }));
   }
 
   if (isLoadingSubjects) return <Loader />;
