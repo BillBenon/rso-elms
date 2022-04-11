@@ -7,7 +7,7 @@ module.exports = {
       fontWeight: ['hover', 'focus'],
       opacity: ['disabled'],
       fontSize: {
-        tiny: '11px'
+        tiny: '11px',
       },
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],

@@ -32,7 +32,6 @@ interface IReportTable {
 }
 
 export default function EndOfLevelReport() {
-  console.log('ngaho');
   const [isPrinting, setisPrinting] = useState(false);
   const picked_role = usePickedRole();
   const { data: role_academy } = academyStore.getAcademyById(
@@ -44,6 +43,11 @@ export default function EndOfLevelReport() {
 
   const { data: level } = intakeProgramStore.getIntakeLevelById(levelId);
   const { data: periods } = academicperiodStore.getPeriodsByIntakeLevelId(levelId);
+
+  console.log('These are periods', periods?.data.data[0].academic_period.name);
+  const totalPeriods = periods?.data?.data?.length;
+  console.log(totalPeriods);
+
   const { data: studentInfo } = intakeProgramStore.getStudentById(studentId);
   const { data: reportData } = getStudentReportInTerm(studentId, periodId);
 
@@ -167,7 +171,7 @@ export default function EndOfLevelReport() {
             {/* new grid */}
             <>
               <div className="grid grid-cols-12">
-                <div className="col-span-2 border border-gray-700 px-3 flex items-center">
+                <div className="col-span-3 border border-gray-700 px-3 flex items-center">
                   <Heading fontSize="base" fontWeight="semibold">
                     Courses
                   </Heading>
@@ -230,7 +234,7 @@ export default function EndOfLevelReport() {
                     </Heading>
                   </div>
                 </div>
-                <div className="col-span-4">
+                <div className="col-span-3">
                   <Heading
                     fontSize="base"
                     fontWeight="semibold"
@@ -263,7 +267,7 @@ export default function EndOfLevelReport() {
 
               {/* module and obtained marks title */}
               <div className="grid grid-cols-12">
-                <div className="col-span-2">
+                <div className="col-span-3">
                   <Heading
                     fontSize="base"
                     fontWeight="semibold"
@@ -288,7 +292,7 @@ export default function EndOfLevelReport() {
                       </Heading>
                     </React.Fragment>
                   ))}
-                  <div className="col-span-2 grid grid-cols-3 ">
+                  <div className="col-span-2 grid grid-cols-2 ">
                     <Heading
                       fontSize="sm"
                       fontWeight="semibold"
@@ -301,12 +305,12 @@ export default function EndOfLevelReport() {
                       className="p-1 border border-gray-700 text-center d-vertical">
                       Max
                     </Heading>
-                    <Heading
+                    {/* <Heading
                       fontSize="sm"
                       fontWeight="semibold"
                       className="p-1 border border-gray-700 text-center d-vertical">
                       Grade
-                    </Heading>
+                    </Heading> */}
                   </div>
                 </div>
                 <div className="col-span-3 grid grid-cols-6">
@@ -326,7 +330,7 @@ export default function EndOfLevelReport() {
                       </Heading>
                     </React.Fragment>
                   ))}
-                  <div className="col-span-2 grid grid-cols-3 ">
+                  <div className="col-span-2 grid grid-cols-2 ">
                     <Heading
                       fontSize="sm"
                       fontWeight="semibold"
@@ -339,15 +343,15 @@ export default function EndOfLevelReport() {
                       className="p-1 border border-gray-700 text-center d-vertical">
                       Max
                     </Heading>
-                    <Heading
+                    {/* <Heading
                       fontSize="sm"
                       fontWeight="semibold"
                       className="p-1 border border-gray-700 text-center d-vertical">
                       Grade
-                    </Heading>
+                    </Heading> */}
                   </div>
                 </div>
-                <div className="col-span-4 grid grid-cols-6">
+                <div className="col-span-3 grid grid-cols-6">
                   {[1, 2].map((i) => (
                     <React.Fragment key={i}>
                       <Heading
@@ -364,7 +368,7 @@ export default function EndOfLevelReport() {
                       </Heading>
                     </React.Fragment>
                   ))}
-                  <div className="col-span-2 grid grid-cols-3 ">
+                  <div className="col-span-2 grid grid-cols-2 ">
                     <Heading
                       fontSize="sm"
                       fontWeight="semibold"
@@ -377,12 +381,12 @@ export default function EndOfLevelReport() {
                       className="p-1 border border-gray-700 text-center d-vertical">
                       Max
                     </Heading>
-                    <Heading
+                    {/* <Heading
                       fontSize="sm"
                       fontWeight="semibold"
                       className="p-1 border border-gray-700 text-center d-vertical">
                       Grade
-                    </Heading>
+                    </Heading> */}
                   </div>
                 </div>
               </div>
@@ -390,7 +394,7 @@ export default function EndOfLevelReport() {
               {/* modules map */}
               {marks.map((m) => (
                 <div key={m.moduleId} className="grid grid-cols-12">
-                  <div className="col-span-2">
+                  <div className="col-span-3">
                     <p className="p-1 text-sm border border-gray-700">{m.moduleName}</p>
                   </div>
                   <div className="col-span-3 grid grid-cols-6 ">
@@ -407,7 +411,7 @@ export default function EndOfLevelReport() {
                       {m.examObtained}
                     </p>
                     <p className="p-1 text-tiny text-center border border-gray-700">{m.examMax}</p>
-                    <div className="col-span-2 grid grid-cols-3">
+                    <div className="col-span-2 grid grid-cols-2">
                       <p
                         className={`p-1 text-tiny text-center border border-gray-700 
                   ${
@@ -420,12 +424,12 @@ export default function EndOfLevelReport() {
                       <p className="p-1 text-tiny text-center border border-gray-700">
                         {m.examMax + m.catMax}
                       </p>
-                      <p className="p-1 text-tiny text-center border border-gray-700">
+                      {/* <p className="p-1 text-tiny text-center border border-gray-700">
                         {calculateGrade(
                           m.catObtained + m.examObtained,
                           m.examMax + m.catMax,
                         )}
-                      </p>
+                      </p> */}
                     </div>
                   </div>
                   <div className="col-span-3 grid grid-cols-6 ">
@@ -442,7 +446,7 @@ export default function EndOfLevelReport() {
                       {m.examObtained}
                     </p>
                     <p className="p-1 text-tiny text-center border border-gray-700">{m.examMax}</p>
-                    <div className="col-span-2 grid grid-cols-3">
+                    <div className="col-span-2 grid grid-cols-2">
                       <p
                         className={`p-1 text-tiny text-center border border-gray-700 
                   ${
@@ -455,12 +459,12 @@ export default function EndOfLevelReport() {
                       <p className="p-1 text-tiny text-center border border-gray-700">
                         {m.examMax + m.catMax}
                       </p>
-                      <p className="p-1 text-tiny text-center border border-gray-700">
+                      {/* <p className="p-1 text-tiny text-center border border-gray-700">
                         {calculateGrade(
                           m.catObtained + m.examObtained,
                           m.examMax + m.catMax,
                         )}
-                      </p>
+                      </p> */}
                     </div>
                   </div>
                   {/* <div className="grid-cols-6 col-span-1 grid">
@@ -498,7 +502,7 @@ export default function EndOfLevelReport() {
                       </p>
                     </div>
                   </div> */}
-                  <div className="col-span-4 grid grid-cols-6 ">
+                  <div className="col-span-3 grid grid-cols-6 ">
                     <p
                       className={`p-1 text-tiny text-center border border-gray-700 ${
                         isFailure(m.catObtained, m.catMax) ? 'text-error-500' : ''
@@ -512,7 +516,7 @@ export default function EndOfLevelReport() {
                       {m.examObtained}
                     </p>
                     <p className="p-1 text-tiny text-center border border-gray-700">{m.examMax}</p>
-                    <div className="col-span-2 grid grid-cols-3">
+                    <div className="col-span-2 grid grid-cols-2">
                       <p
                         className={`p-1 text-tiny text-center border border-gray-700 
                   ${
@@ -525,19 +529,19 @@ export default function EndOfLevelReport() {
                       <p className="p-1 text-tiny text-center border border-gray-700">
                         {m.examMax + m.catMax}
                       </p>
-                      <p className="p-1 text-tiny text-center border border-gray-700">
+                      {/* <p className="p-1 text-tiny text-center border border-gray-700">
                         {calculateGrade(
                           m.catObtained + m.examObtained,
                           m.examMax + m.catMax,
                         )}
-                      </p>
+                      </p> */}
                     </div>
                   </div>
                 </div>
               ))}
               {/* totals row */}
               <div className="grid grid-cols-12">
-                <div className="col-span-2">
+                <div className="col-span-3">
                   <Heading fontSize="sm" className="p-1 border border-gray-700">
                     Total
                   </Heading>
@@ -553,19 +557,19 @@ export default function EndOfLevelReport() {
                   </p>
                   <p className="p-1 text-tiny text-center border border-gray-700">{totals.examMax}</p>
 
-                  <div className="col-span-2 grid grid-cols-3">
+                  <div className="col-span-2 grid grid-cols-2">
                     <p className="p-1 text-tiny text-center border border-gray-700">
                       {totals.quizObtained + totals.examObtained}
                     </p>
                     <p className="p-1 text-tiny text-center border border-gray-700">
                       {totals.quizMax + totals.examMax}
                     </p>
-                    <p className="p-1 text-tiny text-center border border-gray-700">
+                    {/* <p className="p-1 text-tiny text-center border border-gray-700">
                       {calculateGrade(
                         totals.quizObtained + totals.examObtained,
                         totals.quizMax + totals.examMax,
                       )}
-                    </p>
+                    </p> */}
                   </div>
                 </div>
                 <div className="col-span-3 grid grid-cols-6 ">
@@ -578,22 +582,22 @@ export default function EndOfLevelReport() {
                   </p>
                   <p className="p-1 text-tiny text-center border border-gray-700">{totals.examMax}</p>
 
-                  <div className="col-span-2 grid grid-cols-3">
+                  <div className="col-span-2 grid grid-cols-2">
                     <p className="p-1 text-tiny text-center border border-gray-700">
                       {totals.quizObtained + totals.examObtained}
                     </p>
                     <p className="p-1 text-tiny text-center border border-gray-700">
                       {totals.quizMax + totals.examMax}
                     </p>
-                    <p className="p-1 text-tiny text-center border border-gray-700">
+                    {/* <p className="p-1 text-tiny text-center border border-gray-700">
                       {calculateGrade(
                         totals.quizObtained + totals.examObtained,
                         totals.quizMax + totals.examMax,
                       )}
-                    </p>
+                    </p> */}
                   </div>
                 </div>
-                <div className="col-span-4 grid grid-cols-6 ">
+                <div className="col-span-3 grid grid-cols-6 ">
                   <p className="p-1 text-tiny text-center border border-gray-700">
                     {totals.quizObtained}
                   </p>
@@ -603,19 +607,19 @@ export default function EndOfLevelReport() {
                   </p>
                   <p className="p-1 text-tiny text-center border border-gray-700">{totals.examMax}</p>
 
-                  <div className="col-span-2 grid grid-cols-3">
+                  <div className="col-span-2 grid grid-cols-2">
                     <p className="p-1 text-tiny text-center border border-gray-700">
                       {totals.quizObtained + totals.examObtained}
                     </p>
                     <p className="p-1 text-tiny text-center border border-gray-700">
                       {totals.quizMax + totals.examMax}
                     </p>
-                    <p className="p-1 text-tiny text-center border border-gray-700">
+                    {/* <p className="p-1 text-tiny text-center border border-gray-700">
                       {calculateGrade(
                         totals.quizObtained + totals.examObtained,
                         totals.quizMax + totals.examMax,
                       )}
-                    </p>
+                    </p> */}
                   </div>
                 </div>
               
