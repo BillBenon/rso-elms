@@ -110,6 +110,7 @@ export default function Sidebar() {
         icon: 'module',
         privilege: Privileges.CAN_ACCESS_MODULES,
       },
+      // for the students access subject
       {
         title: 'Evaluations',
         to: '/dashboard/evaluations',
