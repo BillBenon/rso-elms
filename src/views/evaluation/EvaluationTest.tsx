@@ -41,8 +41,6 @@ export default function EvaluationTest() {
   let studentWorkTimer = evaluationStore.getEvaluationWorkTime(studentEvaluationId);
 
   const autoSubmit = useCallback(() => {
-    // setTimeout(() => {
-
     mutate(studentEvaluationId, {
       onSuccess: () => {
         toast.success('Evaluation submitted', { duration: 5000 });
@@ -52,7 +50,6 @@ export default function EvaluationTest() {
         toast.error(error + '');
       },
     });
-    // }, 2000);
   }, [history, mutate, studentEvaluationId]);
 
   async function updateWorkTime(value: any) {
@@ -86,7 +83,7 @@ export default function EvaluationTest() {
       path === '/dashboard/evaluations/student-evaluation/:id'
     ) {
       setIsCheating(true);
-      autoSubmit();
+      // autoSubmit();
     }
     const handleTabChange = () => {
       if (
@@ -94,7 +91,7 @@ export default function EvaluationTest() {
         path === '/dashboard/evaluations/student-evaluation/:id'
       ) {
         setIsCheating(true);
-        autoSubmit();
+        // autoSubmit();
       }
     };
 
