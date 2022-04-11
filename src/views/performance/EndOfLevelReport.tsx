@@ -221,7 +221,7 @@ export default function EndOfLevelReport() {
                     Marks
                   </Heading>
                 </div>
-                {[0, 1, 2].map((i) => (
+                {[...Array(totalPeriods).keys()].map((i) => (
                     <div className={tableColumns.markHeaderClassNames[i]}>
                           {[1, 2].map((i) => (
                             <React.Fragment key={i}>
@@ -269,7 +269,7 @@ export default function EndOfLevelReport() {
                   <div className="col-span-3">
                     <p className="p-1 text-sm border border-gray-700">{m.moduleName}</p>
                   </div>
-                  {[0, 1, 2].map((i) => (
+                  {[...Array(totalPeriods).keys()].map((i) => (
                   <div className={tableColumns.dataClassNames[i]}>
                           <p
                             className={`p-1 text-tiny text-center border border-gray-700 ${
