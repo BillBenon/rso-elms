@@ -46,9 +46,6 @@ export default function EndOfLevelReport() {
   const { data: periods } = academicperiodStore.getPeriodsByIntakeLevelId(levelId);
   
   let totalPeriods: number = (periods?.data?.data?.length) as number;
-  totalPeriods = 2;
-
-  console.log(periods?.data?.data.splice(2));
   const tableColumns: DynamicColumns = getDynamicColumns(totalPeriods);
 
   const { data: studentInfo } = intakeProgramStore.getStudentById(studentId);
@@ -229,13 +226,13 @@ export default function EndOfLevelReport() {
                               <Heading
                                 fontSize="sm"
                                 fontWeight="semibold"
-                                className="p-1 border border-gray-700 text-center d-vertical">
+                                className={`p-1 border border-gray-700 text-center ${tableColumns.customClassNames}`}>
                                 Obt
                               </Heading>
                               <Heading
                                 fontSize="sm"
                                 fontWeight="semibold"
-                                className="p-1 border border-gray-700 text-center d-vertical">
+                                className={`p-1 border border-gray-700 text-center ${tableColumns.customClassNames}`}>
                                 Max
                               </Heading>
                             </React.Fragment>
@@ -244,13 +241,13 @@ export default function EndOfLevelReport() {
                             <Heading
                               fontSize="sm"
                               fontWeight="semibold"
-                              className="p-1 border border-gray-700 text-center d-vertical">
+                              className={`p-1 border border-gray-700 text-center ${tableColumns.customClassNames}`}>
                               Obt
                             </Heading>
                             <Heading
                               fontSize="sm"
                               fontWeight="semibold"
-                              className="p-1 border border-gray-700 text-center d-vertical">
+                              className={`p-1 border border-gray-700 text-center ${tableColumns.customClassNames}`}>
                               Max
                             </Heading>
                             {/* <Heading
@@ -350,17 +347,17 @@ export default function EndOfLevelReport() {
               </div>
             </>
             {/* percentage */}
-            <div className="grid grid-cols-6">
+            <div className="grid grid-cols-12">
               <Heading
                 fontSize="sm"
                 fontWeight="semibold"
-                className="p-1 col-span-2 border border-gray-700">
+                className={`p-1 ${tableColumns.totalsClassNames[0]} border border-gray-700`}>
                 Percentage
               </Heading>
               <Heading
                 fontSize="sm"
                 fontWeight="semibold"
-                className="col-span-4 py-3 px-6 border border-gray-700 text-right">
+                className={`${tableColumns.totalsClassNames[1]} py-3 px-6 border border-gray-700 text-right`}>
                 {`${formatPercentage(
                   totals.quizObtained + totals.examObtained,
                   totals.quizMax + totals.examMax,
@@ -368,17 +365,17 @@ export default function EndOfLevelReport() {
               </Heading>
             </div>
             {/* Student position */}
-            <div className="grid grid-cols-6">
+            <div className="grid grid-cols-12">
               <Heading
                 fontSize="sm"
                 fontWeight="semibold"
-                className="p-1 col-span-2 border border-gray-700">
+                className={`p-1 ${tableColumns.totalsClassNames[0]} border border-gray-700`}>
                 Position
               </Heading>
               <Heading
                 fontSize="sm"
                 fontWeight="normal"
-                className="col-span-4 py-3 px-6 border border-gray-700 text-right">
+                className={`${tableColumns.totalsClassNames[1]} py-3 px-6 border border-gray-700 text-right`}>
                 <span className="font-bold">{reportData?.data.data.position}</span> outof
                 <span className="font-bold"> {reportData?.data.data.total_students}</span>
               </Heading>
