@@ -52,6 +52,7 @@ export interface NewUserErrors
     | 'intake_program_id'
     | 'last_name'
     | 'mother_names'
+    | 'father_names'
     | 'nid'
     | 'password'
     | 'phone'
@@ -121,6 +122,7 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
     intake_program_id: '',
     last_name: '',
     mother_names: '',
+    father_names: '',
     nid: '',
     password: '',
     phone: '',

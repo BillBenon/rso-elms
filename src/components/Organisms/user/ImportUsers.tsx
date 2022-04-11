@@ -129,9 +129,12 @@ export default function ImportUsers({ userType }: IProps) {
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
 
-    const validatedForm = importUserSchema.validate(values, {
-      abortEarly: false,
-    });
+    const validatedForm = importUserSchema.validate(
+      Object.assign({ ...values, is_student: user?.user_type === UserType.STUDENT }),
+      {
+        abortEarly: false,
+      },
+    );
 
     validatedForm
       .then(async () => {
@@ -194,6 +197,7 @@ export default function ImportUsers({ userType }: IProps) {
           validatedErr[el.path as keyof ImportErrors] = el.message;
         });
         setErrors(validatedErr);
+        console.log('invalid', err.inner);
       });
   }
 
@@ -227,18 +231,17 @@ export default function ImportUsers({ userType }: IProps) {
             Academy
           </InputMolecule>
         )}
-        {userType === UserType.STUDENT ||
-          (UserType.INSTRUCTOR && (
-            <SelectMolecule
-              error={errors.roleId}
-              placeholder="Select role"
-              options={getDropDownOptions({ inputs: roleOptions })}
-              value={values.roleId}
-              name="roleId"
-              handleChange={handleChange}>
-              Select role
-            </SelectMolecule>
-          ))}
+
+        <SelectMolecule
+          error={errors.roleId}
+          placeholder="Select role"
+          options={getDropDownOptions({ inputs: roleOptions })}
+          value={values.roleId}
+          name="roleId"
+          handleChange={handleChange}>
+          Select role
+        </SelectMolecule>
+
         {userType === UserType.STUDENT ? (
           <div>
             <SelectMolecule

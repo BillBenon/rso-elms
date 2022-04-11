@@ -241,10 +241,7 @@ function EnrollmentAcademy({ values, user_roles, handleChange, handleNext }: IPr
     });
 
     validatedForm
-      .then(() => {
-        handleNext(e);
-      })
-
+      .then(() => handleNext(e))
       .catch((err) => {
         const validatedErr: EnrollmentAcademyErrors = initialErrorState;
         err.inner.map((el: { path: string | number; message: string }) => {

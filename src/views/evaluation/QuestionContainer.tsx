@@ -1,15 +1,17 @@
 import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
-
 import Button from '../../components/Atoms/custom/Button';
 import Input from '../../components/Atoms/Input/Input';
 import Heading from '../../components/Atoms/Text/Heading';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
+import StudentQuestionsSectionBased from '../../components/Organisms/evaluation/StudentQuestionsSectionBased';
 import { markingStore } from '../../store/administration/marking.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ValueType } from '../../types';
 import {
+  IEvaluationInfo,
+  IEvaluationSettingType,
   IMultipleChoiceAnswers,
   IStudentAnswer,
 } from '../../types/services/evaluation.types';
@@ -27,6 +29,7 @@ interface IQuestionContainerProps {
   showCorrectAnswer: boolean;
   choices?: IMultipleChoiceAnswers[];
   isMultipleChoice: boolean;
+  evaluationInfo: IEvaluationInfo;
 }
 
 export default function QuestionContainer({
@@ -37,6 +40,7 @@ export default function QuestionContainer({
   marks,
   choices,
   isMultipleChoice,
+  evaluationInfo,
 }: IQuestionContainerProps) {
   const history = useHistory();
 
@@ -160,16 +164,21 @@ export default function QuestionContainer({
 
   return (
     <form onSubmit={submitEvaluation}>
-      <div className="bg-main px-16 pt-5 flex flex-col gap-4 mt-8 w-12/12 pb-5 unselectable">
-        <div className="mt-7 flex justify-between">
-          <ContentSpan title={`Question ${index + 1}`} className="gap-3">
-            {question || question}
-          </ContentSpan>
+      <div
+        className={`bg-main px-16 flex flex-col gap-4 mt-8 w-12/12  unselectable ${
+          evaluationInfo?.setting_type === IEvaluationSettingType.SUBJECT_BASED
+        } ? 'pt - 5 pb - 5' : ''`}>
+        {evaluationInfo?.setting_type === IEvaluationSettingType.SUBJECT_BASED && (
+          <div className="mt-7 flex justify-between">
+            <ContentSpan title={`Question ${index + 1}`} className="gap-3">
+              {question || question}
+            </ContentSpan>
 
-          <Heading fontWeight="semibold" fontSize="sm">
-            {marks} marks
-          </Heading>
-        </div>
+            <Heading fontWeight="semibold" fontSize="sm">
+              {marks} marks
+            </Heading>
+          </div>
+        )}
         {isMultipleChoice ? (
           <div className="flex flex-col gap-4">
             {questionChoices && questionChoices?.length > 0
@@ -186,6 +195,18 @@ export default function QuestionContainer({
                 ))
               : null}
           </div>
+        ) : evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED ? (
+          <StudentQuestionsSectionBased
+            question={question}
+            marks={marks}
+            questionId={id}
+            previousAnswers={previousAnswers}
+            answer={answer}
+            submitForm={submitForm}
+            setQuestionToSubmit={setQuestionToSubmit}
+            handleChange={handleChange}
+            {...{ evaluationInfo }}
+          />
         ) : (
           <TextAreaMolecule
             onPaste={(e: any) => disableCopyPaste(e)}

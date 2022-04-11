@@ -13,7 +13,6 @@ import academicperiodStore from '../../store/administration/academicperiod.store
 import { getLevelTermlyOverallReport } from '../../store/evaluation/school-report.store';
 import { Privileges, ValueType } from '../../types';
 import { IPerformanceTable } from '../../types/services/report.types';
-import { calculateGrade } from '../../utils/school-report';
 import ClassPeriodPerformance from './ClassPeriodPerformance';
 import DSReportOnStudent from './DSReportOnStudent';
 import EndOfLevelReport from './EndOfLevelReport';
@@ -45,8 +44,6 @@ export default function LevelPerformance() {
   let performance: IPerformanceTable[] = [];
 
   data?.data.data?.forEach((record) => {
-    console.log(record);
-
     let processed: IPerformanceTable = {
       term: 'term one',
       reg_number: record.student.reg_number,
@@ -120,7 +117,6 @@ export default function LevelPerformance() {
       name: 'term 3',
     },
   ];
-
   return (
     <>
       <BreadCrumb list={list} />
@@ -182,7 +178,15 @@ export default function LevelPerformance() {
         <Route
           path={`${path}`}
           render={() => (
-            <>
+            <Tab label="Overall level performance">
+              <Button
+                styleType={'text'}
+                onClick={() => history.goBack()}
+                icon
+                className="flex items-center p-2 hover:underline">
+                <Icon name="chevron-left" fill="primary" size={16} />
+                Back
+              </Button>
               {isLoading ? (
                 <Loader />
               ) : // <section className="flex flex-wrap justify-start gap-4 mt-2">
@@ -204,19 +208,11 @@ export default function LevelPerformance() {
                 />
               ) : (
                 <>
-                  <Button
-                    styleType={'text'}
-                    onClick={() => history.goBack()}
-                    icon
-                    className="flex items-center p-2 hover:underline">
-                    <Icon name="chevron-left" fill="primary" size={16} />
-                    Back
-                  </Button>
                   {/* <TableHeader
-                    title={`${level?.data.data.class_name || 'class'} Performance`}
-                    totalItems={data.length}
-                    handleSearch={handleSearch}
-                  /> */}
+                  title={`${level?.data.data.class_name || 'class'} Performance`}
+                  totalItems={data.length}
+                  handleSearch={handleSearch}
+                /> */}
 
                   <Table<IPerformanceTable>
                     statusColumn="status"
@@ -234,7 +230,7 @@ export default function LevelPerformance() {
                   />
                 </>
               )}
-            </>
+            </Tab>
           )}
         />
       </Switch>

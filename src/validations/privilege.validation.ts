@@ -10,7 +10,3 @@ export const privilegeSchema = yup.object().shape({
     .required('Privilege Feature type is required')
     .oneOf(Object.values(PrivilegeFeatureType)),
 });
-
-export const addPrivilegeSchema = yup.object().shape({
-  // privileges: yup.array().required('selecting privileges is required'),
-});

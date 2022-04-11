@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from 'react-query';
-
 import { evaluationService } from '../../services/evaluation/evaluation.service';
 import {
   IEvaluationAction,
@@ -158,7 +157,7 @@ class EvaluationStore {
 
   getEvaluationQuestionsBySubject(evaluationId: string, subjectId: string) {
     return useQuery(
-      ['evaluation/questions', [evaluationId, subjectId]],
+      ['evaluation/questionsBySubject', subjectId],
       () => evaluationService.getEvaluationQuestionsBySubject(evaluationId, subjectId),
       { enabled: !!evaluationId },
     );
@@ -166,6 +165,10 @@ class EvaluationStore {
 
   deleteEvaluationQuestionById() {
     return useMutation(evaluationService.deleteEvaluationQuestionById);
+  }
+
+  deleteEvaluationById() {
+    return useMutation(evaluationService.deleteEvaluationById);
   }
 
   updateEvaluationModuleSubject() {

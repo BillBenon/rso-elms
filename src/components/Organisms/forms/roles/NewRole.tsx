@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
@@ -30,7 +30,7 @@ export default function NewRole({ onSubmit }: FormPropType) {
   const picked_role = usePickedRole();
   const history = useHistory();
   const { data: academy, isLoading } = academyStore.getAcademyById(
-    picked_role?.academy_id + '',
+    picked_role?.academy_id || '',
   );
 
   const [form, setForm] = useState<CreateRoleReq>({
@@ -50,13 +50,16 @@ export default function NewRole({ onSubmit }: FormPropType) {
   const [errors, setErrors] = useState(initialErrorState);
 
   useEffect(() => {
+    if (picked_role?.type !== RoleType.INSTITUTION) return;
+
     setForm({
       name: '',
       description: '',
-      academy_id: picked_role?.academy_id + '',
+      academy_id: picked_role?.academy_id || '',
       institution_id: user?.institution?.id.toString() || '',
       type: RoleType.ACADEMY,
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [picked_role?.academy_id, user?.institution?.id]);
 
   function handleChange({ name, value }: ValueType) {
@@ -64,10 +67,14 @@ export default function NewRole({ onSubmit }: FormPropType) {
   }
 
   function submitForm<T>(e: FormEvent<T>) {
+    console.log('herrereere');
+
     e.preventDefault();
+    console.log('gooooooooooooooo');
+
     const validatedForm = newRoleSchema.validate(
       {
-        names: form.name,
+        name: form.name,
         academy_id: form.academy_id,
         chose_academy: form.type === RoleType.ACADEMY,
       },
@@ -75,12 +82,14 @@ export default function NewRole({ onSubmit }: FormPropType) {
         abortEarly: false,
       },
     );
+    console.log('fdsdfsdfdf');
 
     validatedForm
       .then(() => {
         mutateAsync(form, {
           onSuccess: () => {
             toast.success('Role created');
+
             history.goBack();
           },
           onError: (error: any) => {
@@ -90,6 +99,8 @@ export default function NewRole({ onSubmit }: FormPropType) {
         if (onSubmit) onSubmit(e);
       })
       .catch((err) => {
+        console.log(err);
+
         const validatedErr: NewRoleErrors = initialErrorState;
         err.inner.map((el: { path: string | number; message: string }) => {
           //@ts-ignore

@@ -9,6 +9,7 @@ import { IEvaluationAction, IModules } from '../../../types/services/evaluation.
 import DisplayClasses from '../../../views/classes/DisplayClasses';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
 import Button from '../../Atoms/custom/Button';
+import Loader from '../../Atoms/custom/Loader';
 import Panel from '../../Atoms/custom/Panel';
 import Heading from '../../Atoms/Text/Heading';
 import Accordion from '../../Molecules/Accordion';
@@ -21,18 +22,23 @@ interface IProps {
   evaluationId: string;
   children: ReactNode;
   actionType: IEvaluationAction;
+  showSetQuestions?: boolean;
+  showActions?: boolean;
 }
 
 export default function SectionBasedEvaluationContent({
   evaluationId,
   children,
   actionType,
+  showSetQuestions,
+  showActions,
 }: IProps) {
   const { path } = useRouteMatch();
   const [showPopup, setShowPopup] = useState(false);
   const [modules, setModules] = useState<IModules[]>([]);
   const [tabs, setTabs] = useState<TabType[]>([]);
   const userInfo = useAuthenticator();
+  const [isLoadingModules, setIsLoadingModules] = useState(true);
 
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationByIdAndInstructor(evaluationId, userInfo?.user?.id + '')
@@ -76,6 +82,7 @@ export default function SectionBasedEvaluationContent({
       );
 
       setTabs(allTabs);
+      setIsLoadingModules(false);
     }
     createTabs();
   }, [evaluationId, modules]);
@@ -219,13 +226,20 @@ export default function SectionBasedEvaluationContent({
       </Heading>
 
       {/* tabs here */}
-      {tabs.length != 0 ? (
+      {isLoadingModules ? (
+        <Loader />
+      ) : tabs.length != 0 ? (
         <TabNavigation tabs={tabs}>
           <Switch>
             <Route
               exact
               path={`${path}/:moduleId/:subjectId`}
-              render={() => <ModuleSubjectQuestion />}
+              render={() => (
+                <ModuleSubjectQuestion
+                  showActions={showActions}
+                  showSetQuestions={showSetQuestions}
+                />
+              )}
             />
           </Switch>
         </TabNavigation>

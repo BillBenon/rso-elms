@@ -1,5 +1,6 @@
 import { Table } from '..';
 import { IClass, IClassStudent } from './class.types';
+import { ExtendedSubjectInfo } from './subject.types';
 import { Student } from './user.types';
 
 /* eslint-disable no-unused-vars */
@@ -12,8 +13,6 @@ export enum IEvaluationTypeEnum {
   DS_ASSESSMENT = 'DS_ASSESSMENT',
   TEWT = 'TEWT',
 }
-
-
 
 export enum IQuestionType {
   MULTIPLE_CHOICE = 'MULTIPLE_CHOICE',
@@ -35,11 +34,10 @@ export interface IEvaluationProps {
   evaluationInfo?: IEvaluationInfo;
 }
 
-
- export enum IEvaluationSettingType  {
-     SECTION_BASED = 'SECTION_BASED',
-     SUBJECT_BASED = 'SUBJECT_BASED',
-  }
+export enum IEvaluationSettingType {
+  SECTION_BASED = 'SECTION_BASED',
+  SUBJECT_BASED = 'SUBJECT_BASED',
+}
 
 export enum ISubmissionTypeEnum {
   FILE = 'FILE',
@@ -170,7 +168,7 @@ export interface IEvaluationCreate {
   marking_type: IMarkingType;
   intakeId: string;
   intake_program_level: string;
-  setting_type: IEvaluationSettingType
+  setting_type: IEvaluationSettingType;
 }
 
 export type IEvaluationSectionBased = {
@@ -182,6 +180,12 @@ export type IEvaluationSectionBased = {
   questionaire_setting_status: IEvaluationStatus;
   section_total_marks: number;
   subject_academic_year_period: number | string;
+  module_subject?: {
+    adminId: string;
+    id: string;
+    moduleEnrollmentId: string;
+    title: string;
+  };
 };
 
 export interface IModules {
@@ -192,6 +196,7 @@ export interface IModules {
 export interface ISubjects {
   id: string;
   subject: string;
+  questions?: IEvaluationQuestionsInfo[];
 }
 
 export type IEvaluationAction =
@@ -302,11 +307,11 @@ export interface IMultipleChoice {
 }
 
 export enum IMarkingType {
-  PER_STUDENT = 'PER_STUDENT',
+  // PER_STUDENT = 'PER_STUDENT',
   NOT_APPLICABLE = 'NOT_APPLICABLE',
   NOT_SET = 'NOT_SET',
   PER_SECTION = 'PER_SECTION',
-  PER_QUESTION = 'PER_QUESTION',
+  // PER_QUESTION = 'PER_QUESTION',
 }
 
 export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
@@ -338,7 +343,20 @@ export interface IEvaluationQuestionsInfo {
   evaluationQuestions: [];
   question_type: IQuestionType;
   multiple_choice_answers: IMultipleChoiceAnswers[];
+  evaluation_module_subject: IEvaluationSectionBased;
 }
+
+export type IEvaluationSectionBasedInfo = {
+  id: string;
+  marker_id: string;
+  evaluation_id: string;
+  instructor_subject_assignment: string;
+  intake_program_level_module: string;
+  questionaire_setting_status: IEvaluationStatus;
+  section_total_marks: number;
+  subject_academic_year_period: number | string;
+  module_subject: ExtendedSubjectInfo;
+};
 
 export interface IEvaluationApproval {
   approver_ids: string;

@@ -15,6 +15,7 @@ import {
   EvaluationStudent,
   StudentEvaluationInfo,
 } from '../../../types/services/marking.types';
+
 export default function Submissions() {
   const history = useHistory();
   const { id } = useParams<ParamType>();
@@ -93,12 +94,12 @@ export default function Submissions() {
           buttonLabel="Go back"
           title={'No submissions has been made so far!'}
           handleClick={() =>
-            history.push(`/dashboard/evaluations/details/${evaluation?.id}`)
+            history.push(`/dashboard/evaluations/details/${evaluation?.id}/overview`)
           }
           description="It looks like no student have submitted yet."
         />
       ) : isSuccess && submissions.length > 0 ? (
-        <div>
+        <div className="-mt-16">
           <div className="w-full flex justify-end mb-4">
             <Button onClick={publishEvaluationResults}>Publish all results</Button>
           </div>

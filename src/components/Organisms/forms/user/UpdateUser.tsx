@@ -14,6 +14,7 @@ import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usersStore from '../../../../store/administration/users.store';
 import { CommonFormProps, ParamType, ValueType } from '../../../../types';
 // import { AcademyInfo } from '../../../../types/services/academy.types';
+// import { IntakeProgramInfo } from '../../../../types/services/intake-program.types';
 import {
   DocType,
   EditUser,
@@ -93,7 +94,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
     academy_id: '',
     birth_date: '',
     deployed_on: '',
-    deployment_number: '',
+    // deployment_number: '',
     doc_type: DocType.NID,
     education_level: EducationLevel.ILLITERATE,
     email: '',
@@ -136,7 +137,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
         academy_id: selectedUser.academy?.id,
         birth_date: selectedUser.person?.birth_date,
         deployed_on: '',
-        deployment_number: '',
+        // deployment_number: '',
         doc_type: selectedUser.person?.doc_type || DocType.NID,
         education_level:
           selectedUser.person?.education_level || EducationLevel.ILLITERATE,
@@ -204,6 +205,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
     const validatedForm = editUserSchema.validate(cloneDetails, {
       abortEarly: false,
     });
+    console.log(errors);
 
     validatedForm
       .then(async () => {
@@ -235,7 +237,7 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
       })
       .catch((err) => {
         const validatedErr: EditUserErrors = initialErrorState;
-        err.inner?.map((el: { path: string | number; message: string }) => {
+        err.inner.map((el: { path: string | number; message: string }) => {
           //@ts-ignore
           validatedErr[el.path as keyof EditUserErrors] = el.message;
         });
@@ -245,6 +247,30 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
   // get all academies in an institution
   // const academies: AcademyInfo[] | undefined =
   //   academyStore.fetchAcademies().data?.data.data;
+
+  // get intakes based on selected academy
+  // let intakes = getIntakesByAcademy(details.academy_id, false, !!details.academy_id);
+
+  // useEffect(() => {
+  //   intakes.refetch();
+  // }, [details.academy_id, intakes]);
+
+  // get programs based on selected intake
+  // let programs = getProgramsByIntake(otherDetails.intake, !!otherDetails.intake);
+  // useEffect(() => {
+  //   programs.refetch();
+  // }, [otherDetails.intake, programs]);
+
+  //get levels based on selected program
+  // let selectedProgram = programs.data?.data.data.find(
+  //   (p) => p.id == details.intake_program_id,
+  // );
+  // let programId = selectedProgram?.program.id + '';
+  // let levels = getLevelsByAcademicProgram(programId);
+
+  // useEffect(() => {
+  //   levels.refetch();
+  // }, [details.intake_program_id, levels]);
 
   return (
     <div className="p-6 w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
@@ -381,11 +407,6 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
           handleChange={handleChange}>
           Education level
         </SelectMolecule>
-
-        {/*NOTE:
-         user intake program and academy should not be edited
-        isntead he can be added/removed , bacause user can be in different academis/intake programs  */}
-
         {/* {user?.user_type === UserType.SUPER_ADMIN && details.user_type !== 'SUPER_ADMIN' && (
           <SelectMolecule
             error={errors.academy_id}
@@ -397,7 +418,6 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
             Academy
           </SelectMolecule>
         )} */}
-
         {/* {details.user_type === 'STUDENT' && (
           <>
             <SelectMolecule
@@ -425,6 +445,18 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
               placeholder={'Program to be enrolled in'}
               handleChange={handleChange}>
               Programs
+            </SelectMolecule>
+            <SelectMolecule
+              options={getDropDownOptions({
+                inputs: levels.data?.data.data || [],
+                labelName: ['name'], //@ts-ignore
+                getOptionLabel: (level) => level.level && level.level.name,
+              })}
+              name="academic_program_level_id"
+              placeholder={'Program to be enrolled in'}
+              value={details.academic_program_level_id}
+              handleChange={handleChange}>
+              Levels
             </SelectMolecule>
           </>
         )} */}

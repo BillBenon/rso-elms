@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-
 import Badge from '../../../components/Atoms/custom/Badge';
 import Loader from '../../../components/Atoms/custom/Loader';
 import Heading from '../../../components/Atoms/Text/Heading';
@@ -49,7 +48,7 @@ export default function ManualMarking({ evaluationId }: PropsType) {
       let studentsClone = [...students];
       let studentMark = studentsClone[index];
 
-      studentMark.marks = parseInt(e.value.toString()) || 0;
+      studentMark.marks = parseFloat(e.value.toString()) || 0;
       setStudents(studentsClone);
     }
   }

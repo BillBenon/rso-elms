@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -18,7 +20,12 @@ import { evaluationService } from '../../services/evaluation/evaluation.service'
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 // import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Link as LinkList, Privileges } from '../../types';
-import { IEvaluationOwnership, ISubjects } from '../../types/services/evaluation.types';
+import {
+  IEvaluationOwnership,
+  IEvaluationSettingType,
+  IQuestionaireTypeEnum,
+  ISubjects,
+} from '../../types/services/evaluation.types';
 import cookie from '../../utils/cookie';
 import { advancedTypeChecker, getDropDownStatusOptions } from '../../utils/getOption';
 import EvaluationDetails from './EvaluationDetails';
@@ -112,11 +119,33 @@ export default function InstructorViewEvaluations() {
     if (evaluationInfo?.id === id) {
       switch (ownerShipType) {
         case IEvaluationOwnership.FOR_APPROVING:
-          history.push(`${path}/details/${id}/approve`);
+          if (
+            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.MANUAL ||
+            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.HYBRID ||
+            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.FIELD
+          ) {
+            history.push(`${path}/details/${id}/approve`);
+
+            return;
+          }
+          history.push(
+            `${path}/details/${id}/approve/${evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module}/${subjects[0].id}`,
+          );
           break;
 
         case IEvaluationOwnership.FOR_REVIEWING:
-          history.push(`${path}/details/${id}/review`);
+          console.log(evaluationInfo.questionaire_type);
+          if (
+            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.MANUAL ||
+            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.HYBRID ||
+            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.FIELD
+          ) {
+            history.push(`${path}/details/${id}/review`);
+            return;
+          }
+          history.push(
+            `${path}/details/${id}/review/${evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module}/${subjects[0].id}`,
+          );
           break;
 
         case IEvaluationOwnership.FOR_MARKING:
@@ -130,7 +159,14 @@ export default function InstructorViewEvaluations() {
           break;
 
         default:
-          history.push(`${path}/details/${id}`);
+          if (evaluationInfo.setting_type === IEvaluationSettingType.SUBJECT_BASED) {
+            history.push(`${path}/details/${id}/overview`);
+            return;
+          }
+
+          history.push(
+            `${path}/details/${id}/overview/${evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module}/${subjects[0].id}`,
+          );
           break;
       }
     }
@@ -168,13 +204,15 @@ export default function InstructorViewEvaluations() {
                     placeholder="Evaluation type"
                     options={getDropDownStatusOptions(IEvaluationOwnership)}
                   />
-                  <Button
-                    className="self-start"
-                    onClick={() => {
-                      history.push(`${path}/create`);
-                    }}>
-                    New evaluation
-                  </Button>
+                  <Permission privilege={Privileges.CAN_CREATE_EVALUATIONS}>
+                    <Button
+                      className="self-start"
+                      onClick={() => {
+                        history.push(`${path}/create`);
+                      }}>
+                      New evaluation
+                    </Button>
+                  </Permission>
                 </div>
               </div>
 
