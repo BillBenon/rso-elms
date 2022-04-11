@@ -11,22 +11,19 @@ import Heading from '../../components/Atoms/Text/Heading';
 import ILabel from '../../components/Atoms/Text/ILabel';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Tiptap from '../../components/Molecules/editor/Tiptap';
-import InputMolecule from '../../components/Molecules/input/InputMolecule';
-import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import usePickedRole from '../../hooks/usePickedRole';
 import { queryClient } from '../../plugins/react-query';
 import academyStore from '../../store/administration/academy.store';
 import { classStore } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
-import usersStore from '../../store/administration/users.store';
 import {
   getDSCriticsReport,
   reportStore,
 } from '../../store/evaluation/school-report.store';
-import { Privileges, ValueType } from '../../types';
+import { Privileges } from '../../types';
 import { DSAssessForm } from '../../types/services/report.types';
-import { getDropDownOptions } from '../../utils/getOption';
 
 interface IParamType {
   levelId: string;
@@ -43,9 +40,9 @@ export default function DSAssessmentSheet() {
   );
   const history = useHistory();
 
-  const recipients =
-    usersStore.getUsersByAcademy(picked_role?.academy_id.toString() || '').data?.data.data
-      .content || [];
+  // const recipients =
+  //   usersStore.getUsersByAcademy(picked_role?.academy_id.toString() || '').data?.data.data
+  //     .content || [];
 
   const [details, setDetails] = useState<DSAssessForm>({
     term: 0,
@@ -57,6 +54,7 @@ export default function DSAssessmentSheet() {
 
   const { levelId, classId, dsid } = useParams<IParamType>();
 
+  const { user } = useAuthenticator();
   const { data: classInfo } = classStore.getClassById(classId);
 
   let periodOfThisClass = classInfo?.data.data.intake_academic_year_period_id;
@@ -76,13 +74,13 @@ export default function DSAssessmentSheet() {
   });
 
   const [open, setOpen] = useState(false);
-  const [isCreating, setCreating] = useState(false);
+  // const [isCreating, setCreating] = useState(false);
 
   const { mutate } = reportStore.addDSCritique();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (details.receiver === '' && isCreating) {
+    if (details.receiver === '') {
       toast.error(`Please select recipient is required`);
     } else if (details.label === '') {
       toast.error(`Please enter item of instruction`);
@@ -95,8 +93,12 @@ export default function DSAssessmentSheet() {
         {
           ...details,
           term: periodOfThisClass || 0,
-          receiver: !isCreating ? rpt?.receiver.adminId || '' : details.receiver,
-          week: !isCreating ? rpt?.week || 0 : details.week,
+          receiver:
+            // !isCreating ? rpt?.receiver.adminId || '' :
+            details.receiver,
+          week:
+            // !isCreating ? rpt?.week || 0 :
+            details.week,
         },
         {
           onSuccess(data) {
@@ -106,7 +108,7 @@ export default function DSAssessmentSheet() {
               periodOfThisClass,
             ]);
             setOpen(false);
-            setCreating(false);
+            // setCreating(false);
           },
           onError(error: any) {
             toast.error(error.response.data.message || 'error occurred please try again');
@@ -116,12 +118,12 @@ export default function DSAssessmentSheet() {
     }
   };
 
-  function handleChange(e: ValueType) {
-    setDetails((details) => ({
-      ...details,
-      [e.name]: e.value,
-    }));
-  }
+  // function handleChange(e: ValueType) {
+  //   setDetails((details) => ({
+  //     ...details,
+  //     [e.name]: e.value,
+  //   }));
+  // }
 
   function handleLabelChange(editor: Editor) {
     setDetails((details) => ({ ...details, label: editor.getHTML() }));
@@ -141,15 +143,21 @@ export default function DSAssessmentSheet() {
         Back
       </Button>
       <div className="max-w-4xl">
-        <div className="flex justify-between mb-5">
-          {/* <Permission privilege={Privileges.CAN_WRITE_DS_CRITIQUE}> */}
-          <Button
-            styleType="outline"
-            onClick={() => {
-              setOpen(!open), setCreating(!isCreating);
-            }}>
-            Write DS Critics
-          </Button>
+        <div
+          className={`${
+            rpt?.author.adminId === user?.id ? 'flex justify-between' : ''
+          } mb-5`}>
+          {/* <Permission privilege={Privileges.CAN_WRITE_WEEKLY_CRITICS}> */}
+          {/* {rpt?.author.adminId === user?.id && (
+            <Button
+              styleType="outline"
+              onClick={() => {
+                setOpen(!open), 
+                setCreating(!isCreating);
+              }}>
+              Write DS Critics
+            </Button>
+          )} */}
           {/* </Permission> */}
           <Permission privilege={Privileges.CAN_DOWNLOAD_REPORTS}>
             <Button
@@ -266,16 +274,19 @@ export default function DSAssessmentSheet() {
                   </React.Fragment>
                 ))}
               </div>
-              <div className="reportHide flex justify-center py-2">
-                <Button
-                  icon
-                  onClick={() => {
-                    setOpen(!open), setCreating(false);
-                  }}
-                  className="rounded-sm">
-                  <Icon name="add" fill="main" size={12} />
-                </Button>
-              </div>
+              {rpt.author.adminId === user?.id && (
+                <div className="reportHide flex justify-center py-2">
+                  <Button
+                    icon
+                    onClick={() => {
+                      setOpen(!open);
+                      // setCreating(false);
+                    }}
+                    className="rounded-sm">
+                    <Icon name="add" fill="main" size={12} />
+                  </Button>
+                </div>
+              )}
             </>
           ) : (
             <NoDataAvailable
@@ -295,7 +306,7 @@ export default function DSAssessmentSheet() {
         open={open}
         onClose={() => setOpen(false)}>
         <form onSubmit={handleSubmit}>
-          {isCreating ? (
+          {/* {isCreating ? (
             <div>
               <ILabel className="py-4 font-semibold">To (Recipient)</ILabel>
               <SelectMolecule
@@ -316,7 +327,7 @@ export default function DSAssessmentSheet() {
                 />
               </div>
             </div>
-          ) : null}
+          ) : null} */}
           <div>
             <ILabel className="py-4 font-semibold">Item of instruction</ILabel>
             <Tiptap handleChange={handleLabelChange} content={details.label} />

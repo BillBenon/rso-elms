@@ -68,7 +68,7 @@ export default function useAuthenticator() {
         toast.success(data.data.message, { duration: 1200, id: toastId });
         redirectTo('/redirecting');
       },
-      onError(error) {
+      onError(__error) {
         setIsLoggingIn(false);
         toast.error('Authentication failed', { duration: 3000, id: toastId });
       },
