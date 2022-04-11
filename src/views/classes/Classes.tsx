@@ -106,11 +106,11 @@ function Classes() {
                       ? history.push(
                           `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/add-class`,
                         )
-                      : path.includes('learn')
+                      : path.includes('teach')
                       ? history.push(
                           `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/add-class`,
                         )
-                      : path.includes('learn')
+                      : path.includes('manage')
                       ? history.push(
                           `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/add-class`,
                         )
