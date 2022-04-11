@@ -42,6 +42,7 @@ interface PersonalDetailErrors
   > {
   blood_group: string;
   residence_location_id: string;
+  phone: string;
 }
 
 function PersonalDetails<E>({
@@ -67,6 +68,7 @@ function PersonalDetails<E>({
     residence_location_id: null,
     place_of_residence: '',
     doc_type: DocType.NID,
+    phone: '',
     nationality: '',
   });
 
@@ -82,6 +84,7 @@ function PersonalDetails<E>({
     residence_location_id: '',
     place_of_residence: '',
     nationality: '',
+    phone: '',
     spouse_name: '',
   };
 
@@ -208,6 +211,15 @@ function PersonalDetails<E>({
               value={personalDetails.mother_names}
               handleChange={handleChange}>
               Mother&apos;s names
+            </InputMolecule>
+            <InputMolecule
+              required={false}
+              error={errors.phone}
+              name="phone"
+              placeholder="Enter phone number"
+              value={personalDetails.phone}
+              handleChange={handleChange}>
+              Phone number
             </InputMolecule>
             <DropdownMolecule
               error={errors.blood_group}

@@ -2,7 +2,6 @@ import { Editor } from '@tiptap/react';
 import React, { FormEvent, Fragment, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation, useParams } from 'react-router-dom';
-
 import { queryClient } from '../../../../plugins/react-query';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { ParamType, SelectData, ValueType } from '../../../../types';
@@ -245,13 +244,20 @@ export default function AdddEvaluationQuestions({
 
   return (
     <Fragment>
-      <div className="sticky top-0 bg-primary-400 z-50 py-4 px-5 text-main rounded-sm flex justify-evenly">
+      <div
+        className={`${
+          evaluationInfo?.evaluation_module_subjects.find(
+            (subject) => subject.id === moduleSubject,
+          )?.section_total_marks === currentTotalMarks()
+            ? 'bg-primary-400'
+            : 'bg-red-500'
+        } + sticky top-0  z-50 py-4 px-5 text-main rounded-sm flex justify-evenly`}>
         <span>{evaluationInfo?.name}</span>
         <span className="">
           {questions.length} {questions.length > 1 ? 'questions' : 'question'}
         </span>
         <span>
-          {currentTotalMarks()} /
+          {currentTotalMarks()}/
           {
             evaluationInfo?.evaluation_module_subjects.find(
               (subject) => subject.id === moduleSubject,
@@ -313,7 +319,7 @@ export default function AdddEvaluationQuestions({
                         handleChange={(editor) =>
                           handleChangeEditor(editor, index, 'answer')
                         }
-                        content={question.question}
+                        content={question.answer}
                       />
                     </div>
                   )}
@@ -418,9 +424,6 @@ export default function AdddEvaluationQuestions({
           <Heading>No questions created for this evaluation</Heading>
         )}
         <div>
-          <Button styleType="text" color="gray" className="mt-6" onClick={handleGoBack}>
-            Finish
-          </Button>
           <div className="pt-6 flex flex-col">
             <div className="pb-6">
               <Button
@@ -432,10 +435,11 @@ export default function AdddEvaluationQuestions({
               </Button>
             </div>
 
-            <div>
+            <div className="flex gap-2">
               <Button onSubmit={submitForm} disabled={createQuestionsLoader}>
                 save
               </Button>
+              <Button onClick={handleGoBack}>Finish</Button>
             </div>
           </div>
         </div>

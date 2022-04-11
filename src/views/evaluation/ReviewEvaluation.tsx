@@ -49,7 +49,7 @@ export default function ReviewEvaluation({ evaluationId }: IProps) {
     if ((remarks && action === 'reject') || action === 'review') {
       mutateAsync(udpateEvaluationStatus, {
         onSuccess: () => {
-          toast.success('Feedback is recorded');
+          toast.success('Evaluation has been approved waiter for review');
           queryClient.invalidateQueries([
             'evaluations',
             user?.id,
