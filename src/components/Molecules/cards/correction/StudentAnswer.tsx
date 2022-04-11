@@ -62,7 +62,10 @@ export default function StudentAnswer({
     <div className={`answer-card-molecule bg-main p-6 rounded-lg `}>
       <div className="mt-3 flex justify-between">
         <ContentSpan title={`Question ${index + 1}`} className="gap-3">
-          {data.evaluation_question?.question}
+          <div
+            dangerouslySetInnerHTML={{
+              __html: data.evaluation_question?.question,
+            }}></div>
         </ContentSpan>
 
         <Heading fontWeight="semibold" fontSize="sm">
@@ -104,9 +107,21 @@ export default function StudentAnswer({
                 )}
               </div>
             ) : (
-              <div className="min-h-8 rounded-md border-2 border-primary-500 px-2 py-3 mt-4 answer-box text-primary-500">
-                {data?.open_answer}
-              </div>
+              <>
+                <div
+                  className="min-h-8 rounded-md border-2 border-primary-500 px-2 py-3 mt-4 answer-box text-primary-500"
+                  dangerouslySetInnerHTML={{ __html: data?.open_answer }}>
+                  {/* {parse(data?.open_answer)} */}
+                </div>
+                <div className="min-h-4 rounded-md border-2 border-black px-2 py-3 mt-4 answer-box text-black">
+                  <p className="font-bold text-lg text-primary-600">Referral answer:</p>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: data?.evaluation_question.answer,
+                    }}></div>
+                  {/* {} */}
+                </div>
+              </>
             )}
           </div>
           <div className="flex gap-2 h-12 items-center mt-4 self-start">
