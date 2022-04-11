@@ -44,10 +44,11 @@ export default function EndOfLevelReport() {
 
   const { data: level } = intakeProgramStore.getIntakeLevelById(levelId);
   const { data: periods } = academicperiodStore.getPeriodsByIntakeLevelId(levelId);
+  
+  let totalPeriods: number = (periods?.data?.data?.length) as number;
+  totalPeriods = 2;
 
-  console.log('These are periods', periods?.data.data[0].academic_period.name);
-  const totalPeriods: number = (periods?.data?.data?.length) as number;
-
+  console.log(periods?.data?.data.splice(2));
   const tableColumns: DynamicColumns = getDynamicColumns(totalPeriods);
 
   const { data: studentInfo } = intakeProgramStore.getStudentById(studentId);
@@ -173,7 +174,7 @@ export default function EndOfLevelReport() {
             {/* new grid */}
             <>
               <div className="grid grid-cols-12">
-                <div className="col-span-3 border border-gray-700 px-3 flex items-center">
+                <div className={`${tableColumns.titleClassName} col-span-3 border border-gray-700 px-3 flex items-center`}>
                   <Heading fontSize="base" fontWeight="semibold">
                     Courses
                   </Heading>
@@ -213,7 +214,7 @@ export default function EndOfLevelReport() {
 
               {/* module and obtained marks title */}
               <div className="grid grid-cols-12">
-                <div className="col-span-3">
+                <div className={`${tableColumns.titleClassName}`}>
                   <Heading
                     fontSize="base"
                     fontWeight="semibold"
@@ -266,7 +267,7 @@ export default function EndOfLevelReport() {
               {/* modules map */}
               {marks.map((m) => (
                 <div key={m.moduleId} className="grid grid-cols-12">
-                  <div className="col-span-3">
+                  <div className={`${tableColumns.titleClassName}`}>
                     <p className="p-1 text-sm border border-gray-700">{m.moduleName}</p>
                   </div>
                   {[...Array(totalPeriods).keys()].map((i) => (
@@ -312,88 +313,40 @@ export default function EndOfLevelReport() {
               ))}
               {/* totals row */}
               <div className="grid grid-cols-12">
-                <div className="col-span-3">
+                <div className={`${tableColumns.titleClassName}`}>
                   <Heading fontSize="sm" className="p-1 border border-gray-700">
                     Total
                   </Heading>
                 </div>
 
-                <div className="col-span-3 grid grid-cols-6 ">
-                  <p className="p-1 text-tiny text-center border border-gray-700">
-                    {totals.quizObtained}
-                  </p>
-                  <p className="p-1 text-tiny text-center border border-gray-700">{totals.quizMax}</p>
-                  <p className="p-1 text-tiny text-center border border-gray-700">
-                    {totals.examObtained}
-                  </p>
-                  <p className="p-1 text-tiny text-center border border-gray-700">{totals.examMax}</p>
+                {[...Array(totalPeriods).keys()].map((i) => (
+                     <div className={tableColumns.dataClassNames[i]}>
+                     <p className="p-1 text-tiny text-center border border-gray-700">
+                       {totals.quizObtained}
+                     </p>
+                     <p className="p-1 text-tiny text-center border border-gray-700">{totals.quizMax}</p>
+                     <p className="p-1 text-tiny text-center border border-gray-700">
+                       {totals.examObtained}
+                     </p>
+                     <p className="p-1 text-tiny text-center border border-gray-700">{totals.examMax}</p>
+   
+                     <div className="col-span-2 grid grid-cols-2">
+                       <p className="p-1 text-tiny text-center border border-gray-700">
+                         {totals.quizObtained + totals.examObtained}
+                       </p>
+                       <p className="p-1 text-tiny text-center border border-gray-700">
+                         {totals.quizMax + totals.examMax}
+                       </p>
+                       {/* <p className="p-1 text-tiny text-center border border-gray-700">
+                         {calculateGrade(
+                           totals.quizObtained + totals.examObtained,
+                           totals.quizMax + totals.examMax,
+                         )}
+                       </p> */}
+                     </div>
+                   </div>
+                ))}
 
-                  <div className="col-span-2 grid grid-cols-2">
-                    <p className="p-1 text-tiny text-center border border-gray-700">
-                      {totals.quizObtained + totals.examObtained}
-                    </p>
-                    <p className="p-1 text-tiny text-center border border-gray-700">
-                      {totals.quizMax + totals.examMax}
-                    </p>
-                    {/* <p className="p-1 text-tiny text-center border border-gray-700">
-                      {calculateGrade(
-                        totals.quizObtained + totals.examObtained,
-                        totals.quizMax + totals.examMax,
-                      )}
-                    </p> */}
-                  </div>
-                </div>
-                <div className="col-span-3 grid grid-cols-6 ">
-                  <p className="p-1 text-tiny text-center border border-gray-700">
-                    {totals.quizObtained}
-                  </p>
-                  <p className="p-1 text-tiny text-center border border-gray-700">{totals.quizMax}</p>
-                  <p className="p-1 text-tiny text-center border border-gray-700">
-                    {totals.examObtained}
-                  </p>
-                  <p className="p-1 text-tiny text-center border border-gray-700">{totals.examMax}</p>
-
-                  <div className="col-span-2 grid grid-cols-2">
-                    <p className="p-1 text-tiny text-center border border-gray-700">
-                      {totals.quizObtained + totals.examObtained}
-                    </p>
-                    <p className="p-1 text-tiny text-center border border-gray-700">
-                      {totals.quizMax + totals.examMax}
-                    </p>
-                    {/* <p className="p-1 text-tiny text-center border border-gray-700">
-                      {calculateGrade(
-                        totals.quizObtained + totals.examObtained,
-                        totals.quizMax + totals.examMax,
-                      )}
-                    </p> */}
-                  </div>
-                </div>
-                <div className="col-span-3 grid grid-cols-6 ">
-                  <p className="p-1 text-tiny text-center border border-gray-700">
-                    {totals.quizObtained}
-                  </p>
-                  <p className="p-1 text-tiny text-center border border-gray-700">{totals.quizMax}</p>
-                  <p className="p-1 text-tiny text-center border border-gray-700">
-                    {totals.examObtained}
-                  </p>
-                  <p className="p-1 text-tiny text-center border border-gray-700">{totals.examMax}</p>
-
-                  <div className="col-span-2 grid grid-cols-2">
-                    <p className="p-1 text-tiny text-center border border-gray-700">
-                      {totals.quizObtained + totals.examObtained}
-                    </p>
-                    <p className="p-1 text-tiny text-center border border-gray-700">
-                      {totals.quizMax + totals.examMax}
-                    </p>
-                    {/* <p className="p-1 text-tiny text-center border border-gray-700">
-                      {calculateGrade(
-                        totals.quizObtained + totals.examObtained,
-                        totals.quizMax + totals.examMax,
-                      )}
-                    </p> */}
-                  </div>
-                </div>
-              
               </div>
             </>
             {/* percentage */}
