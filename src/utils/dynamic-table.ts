@@ -19,7 +19,7 @@ export const getDynamicColumns = (num: number): DynamicColumns => {
             markHeaderClassNames: populate('col-span-8 grid grid-cols-6', 3),
             dataClassNames: populate('col-span-8 grid grid-cols-6', 3),
             customClassNames: '',
-            totalsClassNames:  ['col-span-3', 'col-span-9']
+            totalsClassNames:  ['col-span-4', 'col-span-8']
         };
     }
     else if (num === 2) {
@@ -30,7 +30,7 @@ export const getDynamicColumns = (num: number): DynamicColumns => {
             markHeaderClassNames: populate('col-span-4 grid grid-cols-6', 3),
             dataClassNames: populate('col-span-4 grid grid-cols-6', 3),
             customClassNames: 'd-vertical',
-            totalsClassNames:  ['col-span-3', 'col-span-9']
+            totalsClassNames:  ['col-span-4', 'col-span-8']
         };
     }
     else if (num === 3) {

@@ -46,6 +46,7 @@ export default function EndOfLevelReport() {
   const { data: periods } = academicperiodStore.getPeriodsByIntakeLevelId(levelId);
   
   let totalPeriods: number = (periods?.data?.data?.length) as number;
+
   const tableColumns: DynamicColumns = getDynamicColumns(totalPeriods);
 
   const { data: studentInfo } = intakeProgramStore.getStudentById(studentId);
