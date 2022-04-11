@@ -41,9 +41,7 @@ export default function useAuthenticator() {
 
   useEffect(() => {
     if (!created) {
-      logout();
       fetchData();
-      console.log('fetching data');
       created = true;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -60,11 +58,7 @@ export default function useAuthenticator() {
       async onSuccess(data) {
         cookie.setCookie('jwt_info', JSON.stringify(data?.data.data));
         setIsLoggingIn(false);
-        console.log('before', user);
-
         await fetchData();
-        console.log('after', user);
-
         toast.success(data.data.message, { duration: 1200, id: toastId });
         redirectTo('/redirecting');
       },
