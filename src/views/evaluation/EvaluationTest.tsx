@@ -2,12 +2,9 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
 import toast from 'react-hot-toast';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
-import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import PopupMolecule from '../../components/Molecules/Popup';
-import useFullscreenStatus from '../../hooks/useFullscreenStatus';
 import { evaluationService } from '../../services/evaluation/evaluation.service';
 import { markingStore } from '../../store/administration/marking.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
@@ -25,7 +22,7 @@ export default function EvaluationTest() {
   const [studentEvaluationId, setStudentEvaluationId] = useState('');
   const [, setIsCheating] = useState(false);
   const [timeLimit, SetTimeLimit] = useState(0);
-  const [isFullscreen, setIsFullscreen] = useFullscreenStatus(maximizableElement);
+  // const [isFullscreen, setIsFullscreen] = useFullscreenStatus(maximizableElement);
   const { data: evaluationData } = evaluationStore.getEvaluationById(id);
   const {
     data: questions,
@@ -77,13 +74,9 @@ export default function EvaluationTest() {
   ]);
 
   useEffect(() => {
-    if (
-      !open &&
-      !isFullscreen &&
-      path === '/dashboard/evaluations/student-evaluation/:id'
-    ) {
+    if (!open && path === '/dashboard/evaluations/student-evaluation/:id') {
       setIsCheating(true);
-      // autoSubmit();
+      autoSubmit();
     }
     const handleTabChange = () => {
       if (
@@ -91,7 +84,7 @@ export default function EvaluationTest() {
         path === '/dashboard/evaluations/student-evaluation/:id'
       ) {
         setIsCheating(true);
-        // autoSubmit();
+        autoSubmit();
       }
     };
 
@@ -101,13 +94,11 @@ export default function EvaluationTest() {
     }
 
     return () => window.removeEventListener('visibilitychange', handleTabChange);
-  }, [isFullscreen, path, open, autoSubmit]);
+  }, [path, open, autoSubmit]);
 
   return (
-    <div
-      ref={maximizableElement}
-      className={`${isFullscreen && 'bg-secondary p-12 overflow-y-auto'}`}>
-      <PopupMolecule
+    <div ref={maximizableElement} className={`${'bg-secondary p-12 overflow-y-auto'}`}>
+      {/* <PopupMolecule
         closeOnClickOutSide={false}
         open={open}
         title="Do you want to continue?"
@@ -126,7 +117,7 @@ export default function EvaluationTest() {
             </div>
           </div>
         </div>
-      </PopupMolecule>
+      </PopupMolecule> */}
       <div className="flex justify-between">
         <Heading fontWeight="semibold">{evaluationData?.data.data.name}</Heading>
         <div className="pr-28 flex justify-center items-center gap-2">
