@@ -2,14 +2,15 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
 import toast from 'react-hot-toast';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
-
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import StudentQuestionsSectionBased from '../../components/Organisms/evaluation/StudentQuestionsSectionBased';
 import { evaluationService } from '../../services/evaluation/evaluation.service';
 import { markingStore } from '../../store/administration/marking.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
+import { IEvaluationSettingType } from '../../types/services/evaluation.types';
 import { getLocalStorageData } from '../../utils/getLocalStorageItem';
 import QuestionContainer from './QuestionContainer';
 
@@ -139,7 +140,9 @@ export default function EvaluationTest() {
         </div>
       </div>
 
-      {evaluationInfo && questions && questions.data.data.length > 0 ? (
+      {evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED ? (
+        <StudentQuestionsSectionBased evaluationInfo={evaluationInfo} />
+      ) : evaluationInfo && questions && questions.data.data.length > 0 ? (
         questions?.data.data.map((question, index: number) => (
           <QuestionContainer
             evaluationInfo={evaluationInfo}
@@ -176,6 +179,8 @@ export default function EvaluationTest() {
       ) : (
         <Loader />
       )}
+
+      {/* :  */}
     </div>
   );
 }

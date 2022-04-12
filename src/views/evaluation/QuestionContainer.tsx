@@ -1,7 +1,6 @@
 import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
-
 import Button from '../../components/Atoms/custom/Button';
 import Input from '../../components/Atoms/Input/Input';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -198,11 +197,6 @@ export default function QuestionContainer({
           </div>
         ) : evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED ? (
           <StudentQuestionsSectionBased
-            question={question}
-            marks={marks}
-            questionId={id}
-            previousAnswers={previousAnswers}
-            answer={answer}
             // submitForm={submitForm}
             // setQuestionToSubmit={setQuestionToSubmit}
             // handleChange={handleChange}
