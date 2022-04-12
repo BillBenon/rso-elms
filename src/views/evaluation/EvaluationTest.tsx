@@ -2,6 +2,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
 import toast from 'react-hot-toast';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
+
+import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
