@@ -1,6 +1,7 @@
 import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
+
 import Button from '../../components/Atoms/custom/Button';
 import Input from '../../components/Atoms/Input/Input';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -71,10 +72,6 @@ export default function QuestionContainer({
   const [questionChoices, setChoices] = useState(choices);
   const [answer, setAnswer] = useState(initialState);
 
-  function handleChange({ name, value }: ValueType) {
-    setAnswer((answer) => ({ ...answer, [name]: value }));
-  }
-
   const { mutate } = evaluationStore.addQuestionAnswer();
   const { mutateAsync } = evaluationStore.submitEvaluation();
 
@@ -107,6 +104,10 @@ export default function QuestionContainer({
   function disableCopyPaste(e: any) {
     e.preventDefault();
     return false;
+  }
+
+  function handleChange({ name, value }: ValueType) {
+    setAnswer((answer) => ({ ...answer, [name]: value }));
   }
 
   const submitForm = useCallback(
@@ -202,9 +203,9 @@ export default function QuestionContainer({
             questionId={id}
             previousAnswers={previousAnswers}
             answer={answer}
-            submitForm={submitForm}
-            setQuestionToSubmit={setQuestionToSubmit}
-            handleChange={handleChange}
+            // submitForm={submitForm}
+            // setQuestionToSubmit={setQuestionToSubmit}
+            // handleChange={handleChange}
             {...{ evaluationInfo }}
           />
         ) : (
