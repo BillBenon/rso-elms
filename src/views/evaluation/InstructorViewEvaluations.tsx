@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
-
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -204,6 +203,7 @@ export default function InstructorViewEvaluations() {
                     placeholder="Evaluation type"
                     options={getDropDownStatusOptions(IEvaluationOwnership)}
                   />
+
                   <Permission privilege={Privileges.CAN_CREATE_EVALUATIONS}>
                     <Button
                       className="self-start"
@@ -218,7 +218,6 @@ export default function InstructorViewEvaluations() {
 
               <section className="flex flex-wrap justify-start gap-4 mt-2">
                 {isLoading && evaluations.length === 0 && <Loader />}
-
                 {isSuccess && evaluations.length === 0 ? (
                   <NoDataAvailable
                     icon="evaluation"

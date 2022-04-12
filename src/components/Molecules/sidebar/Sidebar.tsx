@@ -1,5 +1,4 @@
 import React from 'react';
-
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import academyStore from '../../../store/administration/academy.store';
 import { institutionStore } from '../../../store/administration/institution.store';
@@ -115,7 +114,7 @@ export default function Sidebar() {
         title: 'Evaluations',
         to: '/dashboard/evaluations',
         icon: 'evaluation',
-        privilege: Privileges.CAN_ACCESS_EVALUATIONS,
+        privilege: Privileges.CAN_MANAGE_EVALUATIONS,
       },
       {
         title: 'Schedule',
