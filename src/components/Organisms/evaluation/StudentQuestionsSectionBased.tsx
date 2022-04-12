@@ -23,8 +23,6 @@ export default function StudentQuestionsSectionBased({
   marks,
   previousAnswers,
   answer,
-  // submitForm,
-  // setQuestionToSubmit,
   questionId,
 }: {
   evaluationInfo: IEvaluationInfo;
@@ -34,7 +32,6 @@ export default function StudentQuestionsSectionBased({
   previousAnswers: StudentMarkingAnswer[];
   answer?: IStudentAnswer;
   // submitForm: (answer: string) => void;
-  // setQuestionToSubmit: (id: string) => void;
 }) {
   const [subjects, setSubjects] = useState<ISubjects[]>([]);
   const [isLoadingSubjects, setIsLoadingSubjects] = useState(true);
@@ -44,7 +41,6 @@ export default function StudentQuestionsSectionBased({
     mutate(localAnswer, {
       onSuccess: () => {
         toast.success('Update saved');
-        setQuestionToSubmit('');
       },
       onError: (error: any) => {
         toast.error(error.response.data.message);
@@ -133,7 +129,7 @@ export default function StudentQuestionsSectionBased({
                     placeholder="Type your answer here"
                     onBlur={() => submitForm()}
                     name="open_answer"
-                    onFocus={() => setQuestionToSubmit(questionId)}
+                    // onFocus={() => setQuestionToSubmit(questionId)}
                     handleChange={handleChange}
                   />
                 </div>
