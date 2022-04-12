@@ -18,7 +18,10 @@ export default function AnswerReview({ data, index }: PropTypes) {
     <div className={`answer-card-molecule bg-main p-6 rounded-lg `}>
       <div className="mt-3 flex justify-between">
         <ContentSpan title={`Question ${index + 1}`} className="gap-3">
-          {data.evaluation_question?.question}
+          <div
+            dangerouslySetInnerHTML={{
+              __html: data.evaluation_question?.question,
+            }}></div>
         </ContentSpan>
 
         <Heading fontWeight="semibold" fontSize="sm">
@@ -50,17 +53,20 @@ export default function AnswerReview({ data, index }: PropTypes) {
                       </div>
                       <div
                         className={`w-auto h-12 border-2 rounded-tr-md rounded-br-md flex items-center px-4`}
-                        style={{ minWidth: '20rem' }}>
-                        {choice.answer_content}
-                      </div>
+                        style={{ minWidth: '20rem' }}
+                        dangerouslySetInnerHTML={{
+                          __html: choice.answer_content,
+                        }}></div>
                     </div>
                   ),
               )}
             </div>
           ) : (
-            <div className="min-h-8 rounded-md border-2 border-primary-500 px-2 py-3 mt-4 answer-box text-primary-500">
-              {data?.open_answer}
-            </div>
+            <div
+              className="min-h-8 rounded-md border-2 border-primary-500 px-2 py-3 mt-4 answer-box text-primary-500"
+              dangerouslySetInnerHTML={{
+                __html: data?.open_answer,
+              }}></div>
           )}
         </div>
 
