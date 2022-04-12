@@ -145,7 +145,8 @@ export default function DSAssessmentSheet() {
       <div className="max-w-4xl">
         <div
           className={`${
-            rpt?.author.adminId === user?.id ? 'flex justify-between' : ''
+            // rpt?.author.adminId === user?.id ? 'flex justify-between' :
+            'text-right'
           } mb-5`}>
           {/* <Permission privilege={Privileges.CAN_WRITE_WEEKLY_CRITICS}> */}
           {/* {rpt?.author.adminId === user?.id && (

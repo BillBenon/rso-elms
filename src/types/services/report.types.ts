@@ -63,11 +63,23 @@ export interface IOverallStudentPerformance {
   promotion_status: PromotionStatus;
 }
 
+interface EvClass {
+  adminId: string;
+  className: string;
+  id: string;
+}
+
+interface EvPeriod {
+  id: string;
+  adminId: string;
+}
 export interface IOverallLevelPerformance {
   created_at: string;
   exam_marks: number;
   exam_obtained_marks: number;
   id: string;
+  intake_academic_year_period: EvPeriod;
+  intake_level_class: EvClass;
   last_updated_at: string;
   obtained_marks: number;
   position: number;
