@@ -9,9 +9,10 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { classStore } from '../../store/administration/class.store';
 import { getClassTermlyOverallReport } from '../../store/evaluation/school-report.store';
-import { ValueType } from '../../types';
+import { Privileges, ValueType } from '../../types';
 import { UserType } from '../../types/services/user.types';
 import { calculateGrade } from '../../utils/school-report';
 import AllDSAssessment from './AllDSAssessment';
@@ -151,19 +152,32 @@ function OveralClassPerformance() {
 
 export default function ClassPeriodPerformance() {
   const { url, path } = useRouteMatch();
+
+  const user_role = usePickedRole();
+  const user_privileges = user_role?.role_privileges?.map((role) => role.name);
+  const hasPrivilege = (privilege: Privileges) => user_privileges?.includes(privilege);
+
   const tabs: TabType[] = [
     { label: 'Overal performance', href: url },
     { label: 'Performance per module', href: `${url}/by-module` },
     { label: 'Deliberation', href: `${url}/deliberation` },
-    { label: 'DS Weekly Critics', href: `${url}/all-critics` },
+    {
+      label: 'DS Weekly Critics',
+      href: `${url}/all-critics`,
+      // privilege: Privileges.CAN_RECEIVE_WEEKLY_CRITICS,
+    },
   ];
 
   return (
     <TabNavigation tabs={tabs}>
       <Switch>
         <Route path={`${path}`} exact component={OveralClassPerformance} />
+        {/* {hasPrivilege(Privileges.CAN_RECEIVE_WEEKLY_CRITICS) && ( */}
         <Route path={`${path}/all-critics`} component={AllDSAssessment} />
+        {/* )} */}
+        {/* {hasPrivilege(Privileges.CAN_RECEIVE_WEEKLY_CRITICS) && ( */}
         <Route path={`${path}/deliberation`} component={ClassFullYearDeliberation} />
+        {/* )} */}
         <Route path={`${path}/by-module`} component={TermModulePerfomance} />
       </Switch>
     </TabNavigation>

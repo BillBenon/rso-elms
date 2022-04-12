@@ -76,6 +76,7 @@ export default function StudentQuestionsSectionBased({
     }
 
     getSubjects();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [evaluationInfo.evaluation_module_subjects]);
 
   function disableCopyPaste(e: any) {
@@ -130,7 +131,7 @@ export default function StudentQuestionsSectionBased({
                     style={{ height: '7rem' }}
                     value={previousAnswers[index]?.open_answer || answer?.open_answer}
                     placeholder="Type your answer here"
-                    onBlur={() => submitForm(previousAnswers[index]?.open_answer)}
+                    onBlur={() => submitForm()}
                     name="open_answer"
                     onFocus={() => setQuestionToSubmit(questionId)}
                     handleChange={handleChange}

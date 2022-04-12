@@ -1,5 +1,5 @@
 import { AxiosError } from 'axios';
-import { FormEvent, useCallback, useContext, useEffect, useState } from 'react';
+import { FormEvent, useContext, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
@@ -22,7 +22,7 @@ export default function useAuthenticator() {
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const history = useHistory();
 
-  const fetchData = useCallback(async () => {
+  const fetchData = async () => {
     setIsUserLoading(true);
     const { data, isSuccess, isError, error } = await refetch();
 
@@ -37,7 +37,7 @@ export default function useAuthenticator() {
 
     setIsError(isError);
     setIsUserLoading(false);
-  }, [isUserLoading, refetch, setUser, user?.id]);
+  };
 
   useEffect(() => {
     if (!created) {
@@ -47,15 +47,13 @@ export default function useAuthenticator() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  useEffect(() => {}, [user]);
+  // useEffect(() => {}, [user]);
 
   async function login<T>(e: FormEvent<T>, details: LoginInfo) {
     e.preventDefault();
 
     setIsLoggingIn(true);
     const toastId = toast.loading('Authenticating...');
-    logout();
-
     await mutateAsync(details, {
       async onSuccess(data) {
         cookie.setCookie('jwt_info', JSON.stringify(data?.data.data));
@@ -64,7 +62,7 @@ export default function useAuthenticator() {
         toast.success(data.data.message, { duration: 1200, id: toastId });
         redirectTo('/redirecting');
       },
-      onError(error) {
+      onError(__error) {
         setIsLoggingIn(false);
         toast.error('Authentication failed', { duration: 3000, id: toastId });
       },
