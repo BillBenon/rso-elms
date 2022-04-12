@@ -225,7 +225,12 @@ export default function EvaluationQuestionComponent() {
 
   return (
     <Fragment>
-      <div className="sticky top-0 bg-primary-400 z-50 py-4 px-5 text-main rounded-sm flex justify-evenly">
+      <div
+        className={`${
+          evaluationInfo?.total_mark !== currentTotalMarks()
+            ? 'bg-error-500'
+            : 'bg-primary-400'
+        }  sticky top-0 z-50 py-4 px-5 text-main rounded-sm flex justify-evenly`}>
         <span>{evaluationInfo?.name}</span>
         <span className="">
           {questions.length} {questions.length > 1 ? 'questions' : 'question'}

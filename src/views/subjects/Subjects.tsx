@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
-
 import Permission from '../../components/Atoms/auth/Permission';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -82,7 +81,7 @@ function Subjects() {
         )}
       </Permission>
       <Permission privilege={Privileges.CAN_ACCESS_SUBJECTS}>
-        <Heading className="py-2">Manage these ubjects</Heading>
+        <Heading className="py-2">Manage these subjects</Heading>
         {subjectData.isLoading ? (
           <Loader />
         ) : subjects.length === 0 && subjectData.isSuccess ? (
