@@ -4,19 +4,16 @@ import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
-import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
-import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import Table from '../../components/Molecules/table/Table';
 import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
 import academicperiodStore from '../../store/administration/academicperiod.store';
 import { getLevelTermlyOverallReport } from '../../store/evaluation/school-report.store';
-import { Privileges, ValueType } from '../../types';
 import { IPerformanceTable } from '../../types/services/report.types';
 import ClassPeriodPerformance from './ClassPeriodPerformance';
 import DSReportOnStudent from './DSReportOnStudent';
 import EndOfLevelReport from './EndOfLevelReport';
 import EndTermForm from './EndTermForm';
+import LevelPerformanceReport from './LevelPerformanceReport';
 import StudentAcademicReport from './StudentAcademicReport';
 
 interface ParamType {
@@ -34,8 +31,7 @@ export default function LevelPerformance() {
   const history = useHistory();
   const { path } = useRouteMatch();
 
-  const { data: prds, isLoading } =
-    academicperiodStore.getPeriodsByIntakeLevelId(levelId);
+  const { data: prds } = academicperiodStore.getPeriodsByIntakeLevelId(levelId);
 
   const prdIds = prds?.data.data.map((prd) => prd.id).join(',');
 
@@ -95,28 +91,6 @@ export default function LevelPerformance() {
   //     },
   //   })) || [];
 
-  function handleSearch(_e: ValueType) {}
-
-  const studentActions = [
-    {
-      name: 'View report',
-      handleAction: (_id: string | number | undefined) => {
-        history.push(``);
-      },
-    },
-  ];
-
-  const terms = [
-    {
-      name: 'term 1',
-    },
-    {
-      name: 'term 2',
-    },
-    {
-      name: 'term 3',
-    },
-  ];
   return (
     <>
       <BreadCrumb list={list} />
@@ -187,49 +161,7 @@ export default function LevelPerformance() {
                 <Icon name="chevron-left" fill="primary" size={16} />
                 Back
               </Button>
-              {isLoading ? (
-                <Loader />
-              ) : // <section className="flex flex-wrap justify-start gap-4 mt-2">
-              //   {classes.map((cl) => (
-              //     <CommonCardMolecule
-              //       key={cl.id}
-              //       data={cl}
-              //       handleClick={() => history.push(`${url}/${cl.id}`)}
-              //     />
-              // ))} :
-              performance.length === 0 ? (
-                <NoDataAvailable
-                  icon="academy"
-                  fill={false}
-                  showButton={false}
-                  title={'Report has not been processed'}
-                  description="Overall report for this level has not been processed yet or you are currently not allowed to see it"
-                  privilege={Privileges.CAN_ACCESS_REPORTS}
-                />
-              ) : (
-                <>
-                  {/* <TableHeader
-                  title={`${level?.data.data.class_name || 'class'} Performance`}
-                  totalItems={data.length}
-                  handleSearch={handleSearch}
-                /> */}
-
-                  <Table<IPerformanceTable>
-                    statusColumn="status"
-                    data={performance}
-                    actions={studentActions}
-                    hide={['id']}
-                    uniqueCol="id"
-                  />
-                  <Table<IPerformanceTable>
-                    statusColumn="status"
-                    data={performance}
-                    actions={studentActions}
-                    hide={['id']}
-                    uniqueCol="id"
-                  />
-                </>
-              )}
+              <LevelPerformanceReport />
             </Tab>
           )}
         />

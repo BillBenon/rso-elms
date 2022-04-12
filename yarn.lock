@@ -6058,7 +6058,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.5.10, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -6337,6 +6337,17 @@ __metadata:
     react: ">=16"
     react-dom: ">=16"
   checksum: bb34ddc8ada14cbd75a37f14d2563412174e23276eb05e9fb23a031b6d8374ca190cefa1940692f4371529ddafeb2d4b8d3e5023187c2851ec8cb247461553ee
+  languageName: node
+  linkType: hard
+
+"react-html-table-to-excel@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "react-html-table-to-excel@npm:2.0.0"
+  dependencies:
+    prop-types: ^15.5.10
+  peerDependencies:
+    react: ^15.x.x
+  checksum: 5af86588b83751f332a4bda53fd05a42f7090e9363a86599b951dd8677aa5b697f2d1046751a9f5fbb32f7b854a4ca8c9ad1aee19e0c830905c18425427ab256
   languageName: node
   linkType: hard
 
@@ -6942,6 +6953,7 @@ __metadata:
     react-country-region-selector: ^3.4.0
     react-dom: 17.0.2
     react-hot-toast: 2.2.0
+    react-html-table-to-excel: ^2.0.0
     react-i18next: ^11.16.2
     react-query: 3.34.19
     react-router-dom: 5.3.0
