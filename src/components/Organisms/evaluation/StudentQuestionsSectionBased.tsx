@@ -19,12 +19,12 @@ import TextAreaMolecule from '../../Molecules/input/TextAreaMolecule';
 
 export default function StudentQuestionsSectionBased({
   evaluationInfo,
-  question,
+  // question,
   marks,
   previousAnswers,
   answer,
   // submitForm,
-  setQuestionToSubmit,
+  // setQuestionToSubmit,
   questionId,
 }: {
   evaluationInfo: IEvaluationInfo;
