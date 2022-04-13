@@ -21,6 +21,8 @@ export function EvaluationChangeMarker({
 }) {
   const [marker, setMarker] = useState(module.marker?.id);
 
+  console.log({ evaluation });
+
   function handleChange({ value }: ValueType) {
     setMarker(value as string);
   }
@@ -44,8 +46,6 @@ export function EvaluationChangeMarker({
       <Button
         className="my-5"
         onClick={() => {
-          console.log(marker, module.module_subject?.id);
-
           mutate(
             {
               markerId: marker + '',
