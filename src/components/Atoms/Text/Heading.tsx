@@ -1,5 +1,6 @@
-import React, { ReactNode } from 'react';
+import '../../../styles/components/Atoms/text/heading.scss'
 
+import React, { ReactNode } from 'react';
 import { colorStyle } from '../../../global/global-vars';
 import { Color, fontSize, fontWeight } from '../../../types';
 
@@ -16,7 +17,7 @@ const Heading = ({
   fontWeight = 'medium',
   color = 'txt-primary',
   className,
-  children,
+  children
 }: HeadingProps) => {
   return (
     <h2
