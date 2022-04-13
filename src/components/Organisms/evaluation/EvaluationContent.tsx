@@ -10,6 +10,7 @@ import ContentSpan from '../../../views/evaluation/ContentSpan';
 import Panel from '../../Atoms/custom/Panel';
 import Heading from '../../Atoms/Text/Heading';
 import Accordion from '../../Molecules/Accordion';
+import SelectMolecule from '../../Molecules/input/SelectMolecule';
 import EvaluationContentSectionBased from './EvaluationContentSectionBased';
 import EvaluationContentSubjectBased from './EvaluationContentSubjectBased';
 import EvaluationRemarks from './EvaluationRemarks';
@@ -53,7 +54,7 @@ export default function EvaluationContent({
       <div className="pt-6">
         <Accordion>
           <Panel show={false} title="">
-            {/*CAUTION: Don't touch this fragment
+            {/*FIXME: Don't touch this fragment
             It will break the accordion component
             Do it for your own risk*/}
             <Fragment />
@@ -134,9 +135,34 @@ export default function EvaluationContent({
 
                 {/* will be uncommented later */}
                 {/* <Button styleType="outline" onClick={() => setShowPopup(true)}>
-            View personal attendees
-          </Button> */}
+                  View personal attendees
+                </Button> */}
               </div>
+
+              {evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED && (
+                <section className="py-6">
+                  <Heading color="primary" className="text-sm">
+                    Settings update
+                  </Heading>
+
+                  {/* <pre>
+                    <code>{JSON.stringify(evaluationInfo, null, 2)}</code>
+                  </pre> */}
+
+                  <SelectMolecule
+                    handleChange={() => {
+                      console.log('handle change');
+                    }}
+                    name={'module'}
+                    options={evaluationInfo.evaluation_module_subjects.map((item) => {
+                      return {
+                        label: item.module_subject?.title + '',
+                        value: item.marker_id,
+                      };
+                    })}
+                  />
+                </section>
+              )}
             </div>
           </Panel>
         </Accordion>

@@ -80,7 +80,6 @@ export default function QuestionContainer({
       onSuccess: () => {
         toast.success('Evaluation submitted', { duration: 5000 });
         localStorage.removeItem('studentEvaluationId');
-
         history.push('/dashboard/student');
       },
       onError: (error) => {

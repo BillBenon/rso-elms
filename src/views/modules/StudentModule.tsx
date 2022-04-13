@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useLocation, useRouteMatch } from 'react-router-dom';
 import Modules from '.';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -48,19 +49,18 @@ function StudentModule() {
     setSelectedLevel(e.value + '');
   }
 
-  // Un comment this
-  // useEffect(() => {
-  //   if (forceReload === 'true') {
-  //     toast.error(
-  //       'The exam was auto submitted because you tried to exit full screen or changed tab',
-  //       { duration: 30000 },
-  //     );
+  useEffect(() => {
+    if (forceReload === 'true') {
+      toast.error(
+        'The exam was auto submitted because you tried to exit full screen or changed tab',
+        { duration: 30000 },
+      );
 
-  //     setTimeout(() => {
-  //       window.location.href = '/dashboard/student';
-  //     }, 30000);
-  //   }
-  // }, [forceReload]);
+      setTimeout(() => {
+        window.location.href = '/dashboard/student';
+      }, 30000);
+    }
+  }, [forceReload]);
 
   useEffect(() => {
     setSelectedLevel(
