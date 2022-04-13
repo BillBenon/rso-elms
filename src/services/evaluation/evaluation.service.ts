@@ -311,6 +311,15 @@ class EvaluationService {
       question,
     );
   }
+
+  public async updateQuestionInfo(
+    question: IEvaluationQuestionsInfo,
+  ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo>>> {
+    return await evaluationAxios.put(
+      `evaluationQuestions/editQuestion/${question.id}`,
+      question,
+    );
+  }
 }
 
 export const evaluationService = new EvaluationService();

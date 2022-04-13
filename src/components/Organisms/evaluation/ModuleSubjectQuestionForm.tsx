@@ -55,7 +55,7 @@ export default function ModuleSubjectQuestionForm({
       });
   }
 
-  function saveUpdate(question: IEvaluationQuestionsInfo) {
+  function saveUpdate() {
     updateEvaluationQuestion(questionData, {
       onSuccess() {
         toast.success(`Question ${index + 1} updated`);
@@ -184,7 +184,7 @@ export default function ModuleSubjectQuestionForm({
             />
           </button>
 
-          <Button onClick={() => saveUpdate(question)}>update question</Button>
+          <Button onClick={() => saveUpdate()}>update question</Button>
         </div>
       )}
 

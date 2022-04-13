@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import toast from 'react-hot-toast';
 import { useLocation, useRouteMatch } from 'react-router-dom';
-
+import Modules from '.';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -12,7 +11,6 @@ import enrollmentStore from '../../store/administration/enrollment.store';
 import { getStudentShipByUserId } from '../../store/administration/intake-program.store';
 import { ValueType } from '../../types';
 import { getDropDownOptions } from '../../utils/getOption';
-import Modules from '.';
 
 function StudentModule() {
   const [selectedLevel, setSelectedLevel] = useState('');
@@ -50,18 +48,19 @@ function StudentModule() {
     setSelectedLevel(e.value + '');
   }
 
-  useEffect(() => {
-    if (forceReload === 'true') {
-      toast.error(
-        'The exam was auto submitted because you tried to exit full screen or changed tab',
-        { duration: 30000 },
-      );
+  // Un comment this
+  // useEffect(() => {
+  //   if (forceReload === 'true') {
+  //     toast.error(
+  //       'The exam was auto submitted because you tried to exit full screen or changed tab',
+  //       { duration: 30000 },
+  //     );
 
-      setTimeout(() => {
-        window.location.href = '/dashboard/student';
-      }, 30000);
-    }
-  }, [forceReload]);
+  //     setTimeout(() => {
+  //       window.location.href = '/dashboard/student';
+  //     }, 30000);
+  //   }
+  // }, [forceReload]);
 
   useEffect(() => {
     setSelectedLevel(

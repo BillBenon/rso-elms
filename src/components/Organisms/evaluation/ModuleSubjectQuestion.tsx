@@ -15,7 +15,6 @@ import { TabType } from '../../Molecules/tabs/TabNavigation';
 import ModuleSubjectQuestionForm from './ModuleSubjectQuestionForm';
 
 export default function ModuleSubjectQuestion({
-  showSetQuestions,
   showActions,
 }: {
   showSetQuestions?: boolean;
@@ -33,15 +32,12 @@ export default function ModuleSubjectQuestion({
     evaluationStore.getEvaluationByIdAndInstructor(evaluationId, instructorInfo?.id + '')
       .data?.data || {};
 
-  const [marks, setMarks] = useState(0);
-
   const subjectsPanel: TabType[] = [];
 
   const [refetchQuestions, setrefetchQuestions] = useState(true);
   const [isLoadingSubjects, setisLoadingSubjects] = useState(true);
 
   useEffect(() => {
-    console.log('refetch triggered');
     let filteredSubjects: ISubjects[] = [];
 
     async function getSubjects() {

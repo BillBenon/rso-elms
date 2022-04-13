@@ -35,7 +35,7 @@ export function SingleQuestionSectionBased({
   const submitForm = () => {
     mutate(localAnswer, {
       onSuccess: () => {
-        toast.success('Update saved');
+        toast.success(`Saved answer for ${localAnswer.evaluation_question}`);
       },
       onError: (error: any) => {
         toast.error(error.response.data.message);
@@ -78,6 +78,25 @@ export function SingleQuestionSectionBased({
         name="open_answer" // onFocus={() => setQuestionToSubmit(questionId)}
         handleChange={handleChange}
       />
+
+      {/*
+        FIXME: We should have used a titap component for text editor but we couldn't get it working with the time we had.
+      <Tiptap
+        handleChange={function (_editor: Editor): void {
+          if (_editor.commands.blur()) {
+            submitForm();
+            return;
+          }
+
+          // function handleChange({ name, value }: ValueType) {
+          setLocalAnswer((localAnswer) => ({
+            ...localAnswer,
+            open_answer: _editor.getHTML(),
+          }));
+          // }
+        }}
+        content={localAnswer.open_answer}
+      /> */}
     </div>
   );
 }
