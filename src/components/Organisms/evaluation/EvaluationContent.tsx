@@ -1,15 +1,19 @@
 import moment from 'moment';
 import React, { Fragment, ReactNode, useEffect, useState } from 'react';
+import useAuthenticator from '../../../hooks/useAuthenticator';
+import usersStore from '../../../store/administration/users.store';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import {
   IEvaluationAction,
   IEvaluationSettingType,
+  IMarkingType,
 } from '../../../types/services/evaluation.types';
 import DisplayClasses from '../../../views/classes/DisplayClasses';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
 import Panel from '../../Atoms/custom/Panel';
 import Heading from '../../Atoms/Text/Heading';
 import Accordion from '../../Molecules/Accordion';
+import { EvaluationChangeMarker } from './EvaluationChangeMarker';
 import EvaluationContentSectionBased from './EvaluationContentSectionBased';
 import EvaluationContentSubjectBased from './EvaluationContentSubjectBased';
 import EvaluationRemarks from './EvaluationRemarks';
@@ -38,6 +42,12 @@ export default function EvaluationContent({
     setclasses(evaluationInfo?.intake_level_class_ids.split(',') || [' ']);
   }, [evaluationInfo?.intake_level_class_ids]);
 
+  const { user } = useAuthenticator();
+
+  const markers =
+    usersStore.getUsersByAcademy(user?.academy.id.toString() || '').data?.data.data
+      .content || [];
+
   return (
     <div>
       <div className="flex justify-between h-12">
@@ -53,7 +63,7 @@ export default function EvaluationContent({
       <div className="pt-6">
         <Accordion>
           <Panel show={false} title="">
-            {/*CAUTION: Don't touch this fragment
+            {/*FIXME: Don't touch this fragment
             It will break the accordion component
             Do it for your own risk*/}
             <Fragment />
@@ -134,9 +144,29 @@ export default function EvaluationContent({
 
                 {/* will be uncommented later */}
                 {/* <Button styleType="outline" onClick={() => setShowPopup(true)}>
-            View personal attendees
-          </Button> */}
+                  View personal attendees
+                </Button> */}
               </div>
+
+              {evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED &&
+                evaluationInfo.marking_type === IMarkingType.PER_SECTION && (
+                  <section className="py-6">
+                    <Heading color="primary" className="text-sm">
+                      Update markers
+                    </Heading>
+
+                    <p className="py-4">
+                      {evaluationInfo.evaluation_module_subjects.map((module, index) => (
+                        <EvaluationChangeMarker
+                          key={index}
+                          module={module}
+                          evaluation={evaluationInfo}
+                          markers={markers}
+                        />
+                      ))}
+                    </p>
+                  </section>
+                )}
             </div>
           </Panel>
         </Accordion>

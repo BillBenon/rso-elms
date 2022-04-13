@@ -311,6 +311,27 @@ class EvaluationService {
       question,
     );
   }
+
+  public async updateMarkersOnModule({
+    markerId,
+    id,
+  }: {
+    markerId: string;
+    id: string;
+  }): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo>>> {
+    return await evaluationAxios.put(`evaluation-module-subjects/modifyById/${id}`, {
+      marker_id: markerId,
+    });
+  }
+
+  public async updateQuestionInfo(
+    question: IEvaluationQuestionsInfo,
+  ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo>>> {
+    return await evaluationAxios.put(
+      `evaluationQuestions/editQuestion/${question.id}`,
+      question,
+    );
+  }
 }
 
 export const evaluationService = new EvaluationService();

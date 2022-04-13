@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation, useRouteMatch } from 'react-router-dom';
-
+import Modules from '.';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -12,7 +12,6 @@ import enrollmentStore from '../../store/administration/enrollment.store';
 import { getStudentShipByUserId } from '../../store/administration/intake-program.store';
 import { ValueType } from '../../types';
 import { getDropDownOptions } from '../../utils/getOption';
-import Modules from '.';
 
 function StudentModule() {
   const [selectedLevel, setSelectedLevel] = useState('');
