@@ -1,16 +1,19 @@
 import moment from 'moment';
 import React, { Fragment, ReactNode, useEffect, useState } from 'react';
+import useAuthenticator from '../../../hooks/useAuthenticator';
+import usersStore from '../../../store/administration/users.store';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import {
   IEvaluationAction,
   IEvaluationSettingType,
+  IMarkingType,
 } from '../../../types/services/evaluation.types';
 import DisplayClasses from '../../../views/classes/DisplayClasses';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
 import Panel from '../../Atoms/custom/Panel';
 import Heading from '../../Atoms/Text/Heading';
 import Accordion from '../../Molecules/Accordion';
-import SelectMolecule from '../../Molecules/input/SelectMolecule';
+import { EvaluationChangeMarker } from './EvaluationChangeMarker';
 import EvaluationContentSectionBased from './EvaluationContentSectionBased';
 import EvaluationContentSubjectBased from './EvaluationContentSubjectBased';
 import EvaluationRemarks from './EvaluationRemarks';
@@ -38,6 +41,12 @@ export default function EvaluationContent({
   useEffect(() => {
     setclasses(evaluationInfo?.intake_level_class_ids.split(',') || [' ']);
   }, [evaluationInfo?.intake_level_class_ids]);
+
+  const { user } = useAuthenticator();
+
+  const markers =
+    usersStore.getUsersByAcademy(user?.academy.id.toString() || '').data?.data.data
+      .content || [];
 
   return (
     <div>
@@ -139,30 +148,25 @@ export default function EvaluationContent({
                 </Button> */}
               </div>
 
-              {evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED && (
-                <section className="py-6">
-                  <Heading color="primary" className="text-sm">
-                    Settings update
-                  </Heading>
+              {evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED &&
+                evaluationInfo.marking_type === IMarkingType.PER_SECTION && (
+                  <section className="py-6">
+                    <Heading color="primary" className="text-sm">
+                      Update markers
+                    </Heading>
 
-                  {/* <pre>
-                    <code>{JSON.stringify(evaluationInfo, null, 2)}</code>
-                  </pre> */}
-
-                  <SelectMolecule
-                    handleChange={() => {
-                      console.log('handle change');
-                    }}
-                    name={'module'}
-                    options={evaluationInfo.evaluation_module_subjects.map((item) => {
-                      return {
-                        label: item.module_subject?.title + '',
-                        value: item.marker_id,
-                      };
-                    })}
-                  />
-                </section>
-              )}
+                    <p className="py-4">
+                      {evaluationInfo.evaluation_module_subjects.map((module, index) => (
+                        <EvaluationChangeMarker
+                          key={index}
+                          module={module}
+                          evaluation={evaluationInfo}
+                          markers={markers}
+                        />
+                      ))}
+                    </p>
+                  </section>
+                )}
             </div>
           </Panel>
         </Accordion>

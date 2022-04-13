@@ -204,6 +204,10 @@ class EvaluationStore {
   updateEvaluationQuestion() {
     return useMutation(evaluationService.updateQuestion);
   }
+
+  updateMarkersOnModule() {
+    return useMutation(evaluationService.updateMarkersOnModule);
+  }
 }
 
 export function getEvaluationFeedbacks(
