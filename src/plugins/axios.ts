@@ -64,7 +64,6 @@ const interceptAdminResError = (error: Error | AxiosError<AxiosResponse<Response
 
     if (import.meta.env.DEV) {
       if (e?.status === 400) toast.error(`Bad Request on, ${e.config.url}`);
-      // @ts-ignore
       // else toast.error((e?.data.message || e?.data?.data?.error) + '');
     }
 
@@ -77,7 +76,7 @@ const interceptAdminResError = (error: Error | AxiosError<AxiosResponse<Response
 };
 
 adminstrationAxios.interceptors.request.use(interceptAdminReq);
-// adminstrationAxios.interceptors.response.use((config) => config, interceptAdminResError);
+adminstrationAxios.interceptors.response.use((config) => config, interceptAdminResError);
 
 evaluationAxios.interceptors.request.use(interceptAdminReq);
 evaluationAxios.interceptors.response.use((config) => config, interceptAdminResError);

@@ -1,7 +1,6 @@
 import React from 'react';
 import toast from 'react-hot-toast';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
-
 import Button from '../../components/Atoms/custom/Button';
 import TabNavigation from '../../components/Molecules/tabs/TabNavigation';
 import EvaluationContent from '../../components/Organisms/evaluation/EvaluationContent';
@@ -115,7 +114,7 @@ export default function EvaluationDetails() {
             path={`${path}`}
             render={() => (
               <EvaluationContent
-                showActions={true}
+                showActions={false}
                 showSetQuestions={false}
                 evaluationId={id}
                 actionType="">
@@ -133,7 +132,7 @@ export default function EvaluationDetails() {
             path={`${path}/overview`}
             render={() => (
               <EvaluationContent
-                showActions={true}
+                showActions={false}
                 showSetQuestions={false}
                 evaluationId={id}
                 actionType="">

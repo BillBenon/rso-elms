@@ -186,6 +186,7 @@ export type IEvaluationSectionBased = {
     moduleEnrollmentId: string;
     title: string;
   };
+  marker?: { id: string; username: string };
 };
 
 export interface IModules {
