@@ -29,7 +29,7 @@ export function EvaluationChangeMarker({
 
   return (
     <div className="py-5">
-      <p className="w-full"> {module.module_subject?.title} </p>
+      <p className="w-full">{module.module_subject?.title}</p>
       <SelectMolecule
         handleChange={handleChange}
         name={'module'}
@@ -44,8 +44,6 @@ export function EvaluationChangeMarker({
       <Button
         className="my-5"
         onClick={() => {
-          console.log(marker, module.module_subject?.id);
-
           mutate(
             {
               markerId: marker + '',

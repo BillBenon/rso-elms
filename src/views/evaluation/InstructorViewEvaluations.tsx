@@ -21,7 +21,6 @@ import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { CommonCardDataType, Link as LinkList, Privileges } from '../../types';
 import {
   IEvaluationOwnership,
-  IEvaluationSettingType,
   IQuestionaireTypeEnum,
   ISubjects,
 } from '../../types/services/evaluation.types';
@@ -89,7 +88,10 @@ export default function InstructorViewEvaluations() {
     async function getSubjects() {
       let filteredSubjects: ISubjects[] = [];
 
-      if (evaluationInfo?.evaluation_module_subjects) {
+      if (
+        evaluationInfo?.evaluation_module_subjects &&
+        evaluationInfo.evaluation_module_subjects.length > 1
+      ) {
         const subjectData = await evaluationService.getEvaluationModuleSubjectsByModule(
           evaluationId,
           evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module,
@@ -158,14 +160,18 @@ export default function InstructorViewEvaluations() {
           break;
 
         default:
-          if (evaluationInfo.setting_type === IEvaluationSettingType.SUBJECT_BASED) {
-            history.push(`${path}/details/${id}/overview`);
-            return;
-          }
+          // if (
+          //   evaluationInfo.setting_type === IEvaluationSettingType.SUBJECT_BASED ||
+          //   evaluationInfo.evaluation_module_subjects.length < 1
+          // ) {
+          //   console.log(evaluationInfo.setting_type);
+          history.push(`${path}/details/${id}/overview`);
+          //   return;
+          // }
 
-          history.push(
-            `${path}/details/${id}/overview/${evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module}/${subjects[0].id}`,
-          );
+          // history.push(
+          //   `${path}/details/${id}/overview/${evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module}/${subjects[0].id}`,
+          // );
           break;
       }
     }
