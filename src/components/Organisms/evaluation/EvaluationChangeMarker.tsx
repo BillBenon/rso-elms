@@ -21,8 +21,6 @@ export function EvaluationChangeMarker({
 }) {
   const [marker, setMarker] = useState(module.marker?.id);
 
-  console.log({ evaluation });
-
   function handleChange({ value }: ValueType) {
     setMarker(value as string);
   }
@@ -31,7 +29,7 @@ export function EvaluationChangeMarker({
 
   return (
     <div className="py-5">
-      <p className="w-full"> {module.module_subject?.title} </p>
+      <p className="w-full">{module.module_subject?.title}</p>
       <SelectMolecule
         handleChange={handleChange}
         name={'module'}
