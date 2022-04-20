@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
-
 import { moduleService } from '../../../services/administration/modules.service';
 import { evaluationService } from '../../../services/evaluation/evaluation.service';
 import { IEvaluationInfo, IModules } from '../../../types/services/evaluation.types';
@@ -30,9 +29,10 @@ export default function EvaluationContentSectionBased({
 
   useEffect(() => {
     async function createTabs() {
-      if (modules.length < 1) return;
-
-      setIsLoadingModules(true);
+      if (modules.length < 1) {
+        setIsLoadingModules(false);
+        return;
+      }
 
       let allTabs: TabType[] = [];
 

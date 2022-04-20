@@ -149,7 +149,8 @@ export default function EvaluationContent({
               </div>
 
               {evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED &&
-                evaluationInfo.marking_type === IMarkingType.PER_SECTION && (
+                evaluationInfo.marking_type === IMarkingType.PER_SECTION &&
+                evaluationInfo.evaluation_module_subjects.length > 1 && (
                   <section className="py-6">
                     <Heading color="primary" className="text-sm">
                       Update markers
