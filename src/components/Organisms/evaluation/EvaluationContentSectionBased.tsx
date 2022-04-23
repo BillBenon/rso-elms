@@ -4,6 +4,7 @@ import { moduleService } from '../../../services/administration/modules.service'
 import { evaluationService } from '../../../services/evaluation/evaluation.service';
 import { IEvaluationInfo, IModules } from '../../../types/services/evaluation.types';
 import Button from '../../Atoms/custom/Button';
+import Icon from '../../Atoms/custom/Icon';
 import Loader from '../../Atoms/custom/Loader';
 import PopupMolecule from '../../Molecules/Popup';
 import TabNavigation, { TabType } from '../../Molecules/tabs/TabNavigation';
@@ -99,7 +100,7 @@ export default function EvaluationContentSectionBased({
       {/* tabs here */}
       {isLoadingModule ? (
         <Loader />
-      ) : modules.length != 0 ? (
+      ) : tabs.length != 0 ? (
         <TabNavigation tabs={tabs}>
           <Switch>
             <Route
@@ -116,6 +117,13 @@ export default function EvaluationContentSectionBased({
         </TabNavigation>
       ) : (
         <p>No sections available in this evaluation</p>
+      )}
+
+      {modules.length > 0 && (
+        <div className="flex gap-2 items-center py-5">
+          <Icon name="alert" stroke="primary" useheightandpadding={false} />
+          <span className="text-primary-600">Tap on module to view sections</span>
+        </div>
       )}
 
       <PopupMolecule

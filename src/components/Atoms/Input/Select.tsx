@@ -29,7 +29,8 @@ export default function Select({
   const input = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    setfiltered([...options] || []);
+    const opts = options.filter((opt) => opt.value.toString().length > 1);
+    setfiltered([...opts] || []);
   }, [options]);
 
   //if value prop changes, update internalValue

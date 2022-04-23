@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
-
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
 import Table from '../../components/Molecules/table/Table';
 import { useClasses } from '../../hooks/useClasses';
-import { classStore } from '../../store/administration/class.store';
+import { getStudentsByClass } from '../../store/administration/class.store';
 import { markingStore } from '../../store/administration/marking.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType, ValueType } from '../../types';
@@ -31,7 +30,7 @@ export default function UnBeguns() {
     markingStore.getEvaluationStudentEvaluations(evaluationId).data?.data.data || [];
 
   const { data: studentsData, isLoading } =
-    classStore.getStudentsByClass(currentClassId + '') || [];
+    getStudentsByClass(currentClassId.trim()) || [];
 
   const [classes, setclasses] = useState(
     evaluationInfo?.intake_level_class_ids.split(',') || [' '],
@@ -82,6 +81,8 @@ export default function UnBeguns() {
     setStudents(newState);
   }, [evaluationInfo?.total_mark, markedStudents, studentsData?.data]);
 
+  console.log({ isLoading, currentClassId });
+
   return (
     <div className="flex flex-col gap-8">
       <Heading fontWeight="semibold" className="pt-7">
@@ -98,7 +99,7 @@ export default function UnBeguns() {
           value={currentClassId}
           handleChange={handleClassChange}
           name={'type'}
-          placeholder="Evaluation type"
+          placeholder="Select class"
           options={classes?.map((cl) => useClasses(cl)) || []}
         />
       </div>
@@ -115,7 +116,7 @@ export default function UnBeguns() {
                   showButton={false}
                   icon="user"
                   buttonLabel="Add new student"
-                  title={'All students started attempted this evaluation.'}
+                  title={'All students attempted this evaluation.'}
                   description="There seems to be no students left who haven't attempted this evaluation"
                 />
               ) : (

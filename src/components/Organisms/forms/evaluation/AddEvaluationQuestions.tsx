@@ -103,7 +103,7 @@ export default function AdddEvaluationQuestions({
       toast.error('You must add at least one question');
     }
 
-    if (questionsClone[questionIndex].question) {
+    if (questionId) {
       deleteQuestion(questionId, {
         onSuccess: () => {
           toast.success('Question deleted', { duration: 2000 });
@@ -117,8 +117,10 @@ export default function AdddEvaluationQuestions({
         },
       });
     } else {
-      questionsClone.splice(questionIndex, 1);
-      setQuestions(questionsClone);
+      if (questionIndex > -1 && questionsClone.length > 1) {
+        questionsClone.splice(questionIndex, 1);
+        setQuestions(questionsClone);
+      }
     }
   }
 
