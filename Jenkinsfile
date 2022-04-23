@@ -14,7 +14,7 @@ pipeline {
     stages {
         stage('Install') { 
             steps {
-                sh 'npm install' 
+                sh 'yarn install' 
             }
         }
         stage('Build') { 
@@ -22,13 +22,13 @@ pipeline {
                 script {
                     if (env.PRODUCTION_ENV == 'staging') {
                         echo 'Executing for staging'
-                        sh 'npm run build -- --mode=staging' 
+                        sh 'yarn run build -- --mode=staging' 
                     } else if (env.PRODUCTION_ENV == 'production') {
                         echo 'Executing production'
-                        sh 'npm run build -- --mode=production' 
+                        sh 'yarn run build -- --mode=production' 
                     } else {
                         echo "Not sure about productin envoromnet"
-                        sh 'npm run build ' 
+                        sh 'yarn run build ' 
                     }
                 }
             }
