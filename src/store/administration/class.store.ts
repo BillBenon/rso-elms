@@ -1,5 +1,4 @@
 import { useMutation, useQuery } from 'react-query';
-
 import { classService } from '../../services/administration/class.service';
 
 class ClassStore {
@@ -33,10 +32,13 @@ class ClassStore {
       classService.getClassByStudentAndLevel(studentId, levelId),
     );
   }
-  getStudentsByClass(classId: string) {
-    return useQuery(['class/students', classId], () =>
-      classService.getStudentsByClass(classId),
-    );
-  }
+}
+
+export function getStudentsByClass(classId: string) {
+  return useQuery(
+    ['class/students', classId],
+    () => classService.getStudentsByClass(classId),
+    { enabled: !!classId },
+  );
 }
 export const classStore = new ClassStore();

@@ -8,7 +8,7 @@ import SelectMolecule from '../../../components/Molecules/input/SelectMolecule';
 import Table from '../../../components/Molecules/table/Table';
 import TabNavigation from '../../../components/Molecules/tabs/TabNavigation';
 import { useClasses } from '../../../hooks/useClasses';
-import { classStore } from '../../../store/administration/class.store';
+import { getStudentsByClass } from '../../../store/administration/class.store';
 import { markingStore } from '../../../store/administration/marking.store';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import { ValueType } from '../../../types';
@@ -31,8 +31,7 @@ export default function FieldMarking({ evaluationId }: PropsType) {
   const markedStudents =
     markingStore.getEvaluationStudentEvaluations(evaluationId).data?.data.data || [];
 
-  const { data: studentsData, isLoading } =
-    classStore.getStudentsByClass(currentClassId + '') || [];
+  const { data: studentsData, isLoading } = getStudentsByClass(currentClassId) || [];
 
   //   const { data: manualMarkingData } = markingStore.getManualMarkingMarks(
   //     evaluationId,
