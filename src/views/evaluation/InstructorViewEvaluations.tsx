@@ -21,6 +21,7 @@ import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { CommonCardDataType, Link as LinkList, Privileges } from '../../types';
 import {
   IEvaluationOwnership,
+  IEvaluationSettingType,
   IQuestionaireTypeEnum,
   ISubjects,
 } from '../../types/services/evaluation.types';
@@ -135,11 +136,11 @@ export default function InstructorViewEvaluations() {
           break;
 
         case IEvaluationOwnership.FOR_REVIEWING:
-          console.log(evaluationInfo.questionaire_type);
           if (
             evaluationInfo.questionaire_type === IQuestionaireTypeEnum.MANUAL ||
             evaluationInfo.questionaire_type === IQuestionaireTypeEnum.HYBRID ||
-            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.FIELD
+            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.FIELD ||
+            evaluationInfo.setting_type === IEvaluationSettingType.SUBJECT_BASED
           ) {
             history.push(`${path}/details/${id}/review`);
             return;
@@ -160,18 +161,17 @@ export default function InstructorViewEvaluations() {
           break;
 
         default:
-          // if (
-          //   evaluationInfo.setting_type === IEvaluationSettingType.SUBJECT_BASED ||
-          //   evaluationInfo.evaluation_module_subjects.length < 1
-          // ) {
-          //   console.log(evaluationInfo.setting_type);
-          history.push(`${path}/details/${id}/overview`);
-          //   return;
-          // }
+          if (
+            evaluationInfo.setting_type === IEvaluationSettingType.SUBJECT_BASED ||
+            evaluationInfo.evaluation_module_subjects.length < 1
+          ) {
+            history.push(`${path}/details/${id}/overview`);
+            return;
+          }
 
-          // history.push(
-          //   `${path}/details/${id}/overview/${evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module}/${subjects[0].id}`,
-          // );
+          history.push(
+            `${path}/details/${id}/overview/${evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module}/${subjects[0].id}`,
+          );
           break;
       }
     }

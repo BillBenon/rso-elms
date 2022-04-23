@@ -96,6 +96,7 @@ export default function ModuleSubjectQuestionForm({
               handleChange={function (_editor: Editor): void {
                 handleChangeEditor(_editor, 'question');
               }}
+              editable={false}
               content={question.question}
             />
           ) : (
@@ -115,6 +116,7 @@ export default function ModuleSubjectQuestionForm({
               handleChange={function (_editor: Editor): void {
                 handleChangeEditor(_editor, 'answer');
               }}
+              editable={false}
               content={question.answer}
             />
           ) : (
@@ -142,7 +144,6 @@ export default function ModuleSubjectQuestionForm({
           </Heading>
         </div>
       </div>
-      <hr />
 
       {showActions && (
         <div className="self-end flex gap-4">
@@ -189,9 +190,7 @@ export default function ModuleSubjectQuestionForm({
         </div>
       )}
 
-      {/* {panel.questions && panel.questions?.length - 1 !== index && (
-        <hr className="my-4" />
-      )} */}
+      <hr className="my-4" />
     </Fragment>
   );
 }

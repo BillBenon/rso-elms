@@ -114,7 +114,7 @@ export default function FieldMarking({ evaluationId }: PropsType) {
 
   return (
     <div className="flex flex-col gap-8 -mt-20">
-      <div>
+      <div className="pt-8">
         <Heading fontWeight="medium" fontSize="sm">
           Select class
         </Heading>

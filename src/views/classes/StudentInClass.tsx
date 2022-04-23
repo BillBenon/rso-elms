@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useRouteMatch } from 'react-router-dom';
-import { Route, Switch, useParams } from 'react-router-dom';
-
+import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -12,7 +10,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import { Tab } from '../../components/Molecules/tabs/tabs';
 import Students from '../../components/Organisms/user/Students';
 import { queryClient } from '../../plugins/react-query';
-import { classStore } from '../../store/administration/class.store';
+import { classStore, getStudentsByClass } from '../../store/administration/class.store';
 import { ParamType, Privileges } from '../../types';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import { SelectorActionType } from '../../types/services/table.types';
@@ -38,7 +36,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
   const { id: programId } = useParams<ParamType>();
 
   const [students, setStudents] = useState<UserTypes[]>([]);
-  const { data: studentsData, isLoading } = classStore.getStudentsByClass(classId) || [];
+  const { data: studentsData, isLoading } = getStudentsByClass(classId) || [];
   const { mutate } = classStore.removeStudentInClass();
   const history = useHistory();
 

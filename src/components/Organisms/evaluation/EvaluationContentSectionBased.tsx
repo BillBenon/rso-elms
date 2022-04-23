@@ -119,10 +119,12 @@ export default function EvaluationContentSectionBased({
         <p>No sections available in this evaluation</p>
       )}
 
-      <div className="flex gap-2 items-center py-5">
-        <Icon name="alert" stroke="primary" useheightandpadding={false} />
-        <span className="text-primary-600">Tap on module to view sections</span>
-      </div>
+      {modules.length > 0 && (
+        <div className="flex gap-2 items-center py-5">
+          <Icon name="alert" stroke="primary" useheightandpadding={false} />
+          <span className="text-primary-600">Tap on module to view sections</span>
+        </div>
+      )}
 
       <PopupMolecule
         open={showPopup}
