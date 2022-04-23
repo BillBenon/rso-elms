@@ -1,13 +1,11 @@
 pipeline {
-    //  agent {
-    //     docker {
-    //         image 'node:14'
-    //         args '-p 3010:5000'
-    //     }
-    // }
-    agent any
-
-    tools {nodejs "node"}
+     agent {
+        docker {
+            image 'node:16-alpine'
+            args '-p 3010:5000'
+        }
+    }
+    // tools {nodejs "node"}
     
     environment {
         HOME = '.'
