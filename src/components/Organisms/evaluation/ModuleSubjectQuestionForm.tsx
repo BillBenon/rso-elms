@@ -142,6 +142,7 @@ export default function ModuleSubjectQuestionForm({
           </Heading>
         </div>
       </div>
+      <hr />
 
       {showActions && (
         <div className="self-end flex gap-4">

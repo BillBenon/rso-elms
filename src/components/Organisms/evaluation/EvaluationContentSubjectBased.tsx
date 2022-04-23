@@ -18,7 +18,7 @@ export default function SubjectBasedEvaluationContent({ evaluation }: IProps) {
       <div
         className={`${
           !loading && 'bg-main'
-        }  px-7 pt-4 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
+        }  px-7 pt-4 flex flex-col gap-4 mt-8 border border-primary-400 rounded-sm w-12/12 pb-5`}>
         {evaluationQuestions?.data.data.length ? (
           evaluationQuestions?.data.data.map((question, index: number) =>
             question && question.multiple_choice_answers.length > 0 ? (
@@ -43,6 +43,7 @@ export default function SubjectBasedEvaluationContent({ evaluation }: IProps) {
                       />
                     ))
                   : null}
+                {evaluationQuestions?.data.data.length - 1 !== index && <hr />}
               </div>
             ) : (
               <>
@@ -71,6 +72,7 @@ export default function SubjectBasedEvaluationContent({ evaluation }: IProps) {
                     </Heading>
                   </div>
                 </div>
+                {evaluationQuestions?.data.data.length - 1 !== index && <hr />}
               </>
             ),
           )
