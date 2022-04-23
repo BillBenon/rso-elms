@@ -8,6 +8,7 @@ import {
   ICreateEvaluationQuestions,
   IEvaluationQuestionsInfo,
   IMultipleChoice,
+  IQuestionaireTypeEnum,
   IQuestionType,
 } from '../../../../types/services/evaluation.types';
 import Button from '../../../Atoms/custom/Button';
@@ -89,20 +90,26 @@ export default function EvaluationQuestionComponent() {
     if (questionsClone.length === 1) {
       toast.error('You must add at least one question');
     }
-
-    if (questionsClone[questionIndex].question) {
-      deleteQuestion(questionId, {
-        onSuccess: () => {
-          toast.success('Question deleted', { duration: 2000 });
-          if (questionIndex > -1 && questionsClone.length > 1) {
-            questionsClone.splice(questionIndex, 1);
-            setQuestions(questionsClone);
-          }
-        },
-        onError: (error: any) => {
-          toast.error(error.response.data.message);
-        },
-      });
+    if (!questionId) {
+      if (questionIndex > -1 && questionsClone.length > 1) {
+        questionsClone.splice(questionIndex, 1);
+        setQuestions(questionsClone);
+      }
+    } else {
+      if (questionsClone[questionIndex].question) {
+        deleteQuestion(questionId, {
+          onSuccess: () => {
+            toast.success('Question deleted', { duration: 2000 });
+            if (questionIndex > -1 && questionsClone.length > 1) {
+              questionsClone.splice(questionIndex, 1);
+              setQuestions(questionsClone);
+            }
+          },
+          onError: (error: any) => {
+            toast.error(error.response.data.message);
+          },
+        });
+      }
     }
   }
 
@@ -272,21 +279,22 @@ export default function EvaluationQuestionComponent() {
                     />
                   </div>
 
-                  {question.question_type === IQuestionType.OPEN && (
-                    <div className="my-2 bg-gray-100 rounded-md p-2">
-                      <div className="mb-2">
-                        <ILabel weight="bold" size="sm">
-                          Question {index + 1} answer
-                        </ILabel>
+                  {question.question_type === IQuestionType.OPEN &&
+                    evaluationInfo?.questionaire_type !== IQuestionaireTypeEnum.FIELD && (
+                      <div className="my-2 bg-gray-100 rounded-md p-2">
+                        <div className="mb-2">
+                          <ILabel weight="bold" size="sm">
+                            Question {index + 1} answer
+                          </ILabel>
+                        </div>
+                        <Tiptap
+                          handleChange={(editor) =>
+                            handleChangeEditor(editor, index, 'answer')
+                          }
+                          content={question.answer}
+                        />
                       </div>
-                      <Tiptap
-                        handleChange={(editor) =>
-                          handleChangeEditor(editor, index, 'answer')
-                        }
-                        content={question.answer}
-                      />
-                    </div>
-                  )}
+                    )}
                   {/* multiple choice answers here */}
                   {question.question_type === IQuestionType.MULTIPLE_CHOICE &&
                     question.choices.map((multipleQuestion, choiceIndex) => (

@@ -78,7 +78,6 @@ export default function ReviewEvaluation({ evaluationId }: IProps) {
     <>
       <EvaluationContent
         showSetQuestions={false}
-        showActions={true}
         evaluationId={evaluationId}
         actionType="reviews">
         <Button
