@@ -2,7 +2,6 @@ pipeline {
      agent {
         docker {
             image 'node:16-alpine'
-            args '-p 3010:5000'
         }
     }
     // tools {nodejs "node"}
