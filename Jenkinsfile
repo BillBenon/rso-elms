@@ -1,10 +1,12 @@
 pipeline {
-     agent {
-        docker {
-            image 'node:16-alpine'
-        }
-    }
-    // tools {nodejs "node"}
+    //  agent {
+    //     docker {
+    //         image 'node:16-alpine'
+    //     }
+    // }
+    
+    agent any
+    tools {nodejs "node"}
     
     environment {
         HOME = '.'
