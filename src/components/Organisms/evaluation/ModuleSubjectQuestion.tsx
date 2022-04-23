@@ -91,7 +91,12 @@ export default function ModuleSubjectQuestion({
     <Fragment>
       <Accordion>
         {subjectsPanel.map((panel) => (
-          <Panel key={panel.label} title={panel.label} width="full" bgColor="main">
+          <Panel
+            key={panel.label}
+            title={panel.label}
+            width="full"
+            className="border border-primary-400"
+            bgColor="main">
             <div className={`px-7 pt-4 flex flex-col gap-4 mt-8 w-12/12 pb-5`}>
               {panel.questions?.length ? (
                 panel.questions?.map((question, index: number) => (

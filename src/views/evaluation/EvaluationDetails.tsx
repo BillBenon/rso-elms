@@ -113,11 +113,7 @@ export default function EvaluationDetails() {
             exact
             path={`${path}`}
             render={() => (
-              <EvaluationContent
-                showActions={false}
-                showSetQuestions={false}
-                evaluationId={id}
-                actionType="">
+              <EvaluationContent showSetQuestions={false} evaluationId={id} actionType="">
                 <div className="flex gap-4">
                   <Button
                     disabled={evaluationInfo?.evaluation_status !== 'APPROVED'}
@@ -132,7 +128,7 @@ export default function EvaluationDetails() {
             path={`${path}/overview`}
             render={() => (
               <EvaluationContent
-                showActions={false}
+                showActions={true}
                 showSetQuestions={false}
                 evaluationId={id}
                 actionType="">

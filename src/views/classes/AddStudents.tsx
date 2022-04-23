@@ -1,12 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
-
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import RightSidebar from '../../components/Organisms/RightSidebar';
 import { queryClient } from '../../plugins/react-query';
-import { classStore } from '../../store/administration/class.store';
+import { classStore, getStudentsByClass } from '../../store/administration/class.store';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import { IClassStudent } from '../../types/services/class.types';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
@@ -24,7 +23,7 @@ function AddStudents({ classId }: IAddStudent) {
     level,
     period,
   );
-  const studentsInClass = classStore.getStudentsByClass(classId.toString());
+  const studentsInClass = getStudentsByClass(classId.toString());
 
   const [students, setStudents] = useState<UserView[]>([]);
   useEffect(() => {

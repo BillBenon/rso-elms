@@ -164,7 +164,7 @@ export default function QuestionContainer({
   return (
     <form onSubmit={submitEvaluation}>
       <div
-        className={`bg-main px-16 flex flex-col gap-4 mt-8 w-12/12  unselectable ${
+        className={`bg-main px-16 flex flex-col gap-4 mt-8 w-12/12 border border-primary-400  unselectable ${
           evaluationInfo?.setting_type === IEvaluationSettingType.SUBJECT_BASED
         } ? 'pt - 5 pb - 5' : ''`}>
         {evaluationInfo?.setting_type === IEvaluationSettingType.SUBJECT_BASED && (
