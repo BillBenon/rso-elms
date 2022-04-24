@@ -34,9 +34,6 @@ export function SingleQuestionSectionBased({
 
   const submitForm = () => {
     mutate(localAnswer, {
-      onSuccess: () => {
-        toast.success(`Saved answer for ${localAnswer.evaluation_question}`);
-      },
       onError: (error: any) => {
         toast.error(error.response.data.message);
       },
@@ -97,6 +94,7 @@ export function SingleQuestionSectionBased({
         }}
         content={localAnswer.open_answer}
       /> */}
+      <hr className="my-4" />
     </div>
   );
 }

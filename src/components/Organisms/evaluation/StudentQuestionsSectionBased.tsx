@@ -51,7 +51,12 @@ export default function StudentQuestionsSectionBased({
     <div>
       <Accordion>
         {subjects.map((subject, index) => (
-          <Panel title={subject.subject} key={index} width="full" bgColor="main">
+          <Panel
+            title={subject.subject}
+            key={index}
+            width="full"
+            bgColor="main"
+            className="px-12 py-8">
             {subject.questions &&
               subject.questions.map((question, index) => (
                 <SingleQuestionSectionBased

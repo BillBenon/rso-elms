@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
-import toast from 'react-hot-toast';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
+import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import PopupMolecule from '../../components/Molecules/Popup';
 import StudentQuestionsSectionBased from '../../components/Organisms/evaluation/StudentQuestionsSectionBased';
+import useFullscreenStatus from '../../hooks/useFullscreenStatus';
 import { evaluationService } from '../../services/evaluation/evaluation.service';
 import { markingStore } from '../../store/administration/marking.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
@@ -24,7 +26,7 @@ export default function EvaluationTest() {
   const [studentEvaluationId, setStudentEvaluationId] = useState('');
   const [, setIsCheating] = useState(false);
   const [timeLimit, SetTimeLimit] = useState(0);
-  // const [isFullscreen, setIsFullscreen] = useFullscreenStatus(maximizableElement);
+  const [isFullscreen, setIsFullscreen] = useFullscreenStatus(maximizableElement);
   const { data: evaluationData } = evaluationStore.getEvaluationById(id);
   const {
     data: questions,
@@ -40,15 +42,17 @@ export default function EvaluationTest() {
   let studentWorkTimer = evaluationStore.getEvaluationWorkTime(studentEvaluationId);
 
   const autoSubmit = useCallback(() => {
-    mutate(studentEvaluationId, {
-      onSuccess: () => {
-        toast.success('Evaluation submitted', { duration: 5000 });
-        history.push({ pathname: '/dashboard/student', search: '?forceReload=true' });
-      },
-      onError: (error) => {
-        toast.error(error + '');
-      },
-    });
+    // mutate(studentEvaluationId, {
+    //   onSuccess: () => {
+    //     toast.success('Evaluation submitted', { duration: 5000 });
+    //     history.push({ pathname: '/dashboard/student', search: '?forceReload=true' });
+    //   },
+    //   onError: (error) => {
+    //     toast.error(error + '');
+    //   },
+    // });
+
+    alert('about to auto submit');
   }, [history, mutate, studentEvaluationId]);
 
   async function updateWorkTime(value: any) {
@@ -100,7 +104,7 @@ export default function EvaluationTest() {
 
   return (
     <div ref={maximizableElement} className={`${'bg-secondary p-12 overflow-y-auto'}`}>
-      {/* <PopupMolecule
+      <PopupMolecule
         closeOnClickOutSide={false}
         open={open}
         title="Do you want to continue?"
@@ -113,14 +117,14 @@ export default function EvaluationTest() {
             get zero
           </p>
 
-          <div className="flex justify-between">
+          <div className="flex justify-between pt-3">
             <div>
               <Button onClick={() => setOpen(false)}>Enable</Button>
             </div>
           </div>
         </div>
-      </PopupMolecule> */}
-      <div className="flex justify-between">
+      </PopupMolecule>
+      <div className="flex justify-between py-4">
         <Heading fontWeight="semibold">{evaluationData?.data.data.name}</Heading>
         <div className="pr-28 flex justify-center items-center gap-2">
           <Heading color="txt-secondary" fontSize="base">

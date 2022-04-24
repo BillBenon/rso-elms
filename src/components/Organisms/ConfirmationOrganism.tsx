@@ -1,7 +1,6 @@
 import React from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
-
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
@@ -68,11 +67,11 @@ export default function ConfirmationOrganism({
       onClose={onConfirmationClose}>
       <div>
         <Heading fontWeight="semibold">{evaluation?.name || ''}</Heading>
-        <p
+        <div
           dangerouslySetInnerHTML={{
             __html: evaluation?.exam_instruction || '',
           }}
-          className="course-card-description leading-5 pb-6 w-96 text-txt-secondary text-sm mt-4"></p>
+          className="leading-5 pb-6 w-96 text-txt-secondary text-sm mt-4"></div>
 
         <div className="flex justify-starg">
           <Button disabled={isLoading} onClick={generateStudentCode}>
