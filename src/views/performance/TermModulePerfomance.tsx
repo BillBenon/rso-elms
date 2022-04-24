@@ -7,7 +7,7 @@ import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
 import Table from '../../components/Molecules/table/Table';
-import { classStore } from '../../store/administration/class.store';
+import { classStore, getStudentsByClass } from '../../store/administration/class.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { getModuleTermPerformance } from '../../store/evaluation/school-report.store';
 import { SelectData } from '../../types';
@@ -29,6 +29,7 @@ export default function TermModulePerfomance() {
   const { data, isLoading } = getModuleTermPerformance(moduleId, periodId);
   const { data: modules, isLoading: modulesLoading } =
     intakeProgramStore.getModulesByLevel(parseInt(levelId));
+  const { data: studentsData } = getStudentsByClass(classId) || [];
   // auto select first module
   useEffect(() => {
     if (modules?.data && modules?.data.data?.length > 0 && !moduleId)
@@ -36,29 +37,34 @@ export default function TermModulePerfomance() {
   }, [moduleId, modules]);
 
   const formattedData: IPerformanceTable[] = [];
+  studentsData?.data.data.forEach((student) => {
+    data?.data.data.map((record) => {
+      let total = {
+        obtained: 0,
+        max: 0,
+      };
+      if (record.student.admin_id === student.student.id) {
+        let processed: IPerformanceTable = {
+          rank: student.student.user.person.current_rank?.name || '',
+          first_name: student.student.user.first_name,
+          last_name: student.student.user.last_name,
+          // reg_number: record.student.reg_number,
+          id: record.student.admin_id,
+        };
 
-  data?.data.data.map((record) => {
-    let total = {
-      obtained: 0,
-      max: 0,
-    };
+        record.evaluationAttempts?.forEach((evaluation) => {
+          total.max += evaluation.maximum;
+          total.obtained += evaluation.obtained;
 
-    let processed: IPerformanceTable = {
-      reg_number: record.student.reg_number,
-      id: record.student.admin_id,
-    };
+          processed[`${evaluation.evaluationName} /${evaluation.maximum}`] =
+            evaluation.obtained.toString();
+        });
 
-    record.evaluationAttempts?.forEach((evaluation) => {
-      total.max += evaluation.maximum;
-      total.obtained += evaluation.obtained;
-
-      processed[`${evaluation.evaluationName} /${evaluation.maximum}`] =
-        evaluation.obtained.toString();
+        processed[`total /${total.max}`] = total.obtained;
+        processed['grade'] = calculateGrade(total.obtained, total.max);
+        formattedData.push(processed);
+      }
     });
-
-    processed[`total /${total.max}`] = total.obtained;
-    processed['grade'] = calculateGrade(total.obtained, total.max);
-    formattedData.push(processed);
   });
 
   return (

@@ -8,6 +8,7 @@ import {
   IEvaluationPerformance,
   IModuleTermPerformance,
   InformativeReport,
+  IOverallEvaluationStudentPerformance,
   IOverallLevelPerformance,
   IOverallStudentPerformance,
   ISubjective,
@@ -24,6 +25,14 @@ class SchoolReportService {
   ): Promise<AxiosResponse<Response<IOverallStudentPerformance[]>>> {
     return await evaluationAxios.get(
       `/reports/overall-report/class/${classId}/academic-year-period/${academicYearPeriodId}`,
+    );
+  }
+  public async getClassTermlyEvaluationReport(
+    classId: string,
+    academicYearPeriodId: string,
+  ): Promise<AxiosResponse<Response<IOverallEvaluationStudentPerformance[]>>> {
+    return await evaluationAxios.get(
+      `/reports/overall-evaluations-report/class/${classId}/academic-year-period/${academicYearPeriodId}`,
     );
   }
   public async getLevelTermlyOverallReport(

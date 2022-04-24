@@ -149,22 +149,7 @@ export default function LevelPerformance() {
           )}
         />
         <Route path={`${path}/:classId`} component={ClassPeriodPerformance} />
-        <Route
-          path={`${path}`}
-          render={() => (
-            <Tab label="Overall level performance">
-              <Button
-                styleType={'text'}
-                onClick={() => history.goBack()}
-                icon
-                className="flex items-center p-2 hover:underline">
-                <Icon name="chevron-left" fill="primary" size={16} />
-                Back
-              </Button>
-              <LevelPerformanceReport />
-            </Tab>
-          )}
-        />
+        <Route path={`${path}`} render={() => <LevelPerformanceReport />} />
       </Switch>
     </>
   );

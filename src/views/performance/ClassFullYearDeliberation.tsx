@@ -9,20 +9,15 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import Promote from '../../components/Organisms/forms/deliberation/Promote';
-import { classStore } from '../../store/administration/class.store';
+import { classStore, getStudentsByClass } from '../../store/administration/class.store';
 import { getClassTermlyOverallReport } from '../../store/evaluation/school-report.store';
 import { ValueType } from '../../types';
+import { IPerformanceTable } from '../../types/services/report.types';
 import { calculateGrade } from '../../utils/school-report';
 
 interface IParamType {
   levelId: string;
   classId: string;
-}
-
-interface IPerformanceTable {
-  id: string;
-  reg_number: string;
-  [index: string]: string | number;
 }
 
 export default function ClassFullYearDeliberation() {
@@ -31,6 +26,7 @@ export default function ClassFullYearDeliberation() {
 
   const { classId } = useParams<IParamType>();
   const { data: classInfo } = classStore.getClassById(classId);
+  const { data: studentsData } = getStudentsByClass(classId) || [];
 
   let periodOfThisClass = classInfo?.data.data.intake_academic_year_period_id;
 
@@ -42,25 +38,31 @@ export default function ClassFullYearDeliberation() {
   } = getClassTermlyOverallReport(classId, periodOfThisClass + '', !!periodOfThisClass);
 
   let data: IPerformanceTable[] = [];
+  studentsData?.data.data.forEach((student) => {
+    performance?.data.data.forEach((record) => {
+      if (record.student.admin_id === student.student.id) {
+        let processed: IPerformanceTable = {
+          rank: student.student.user.person.current_rank?.name || '',
+          first_name: student.student.user.first_name,
+          last_name: student.student.user.last_name,
+          // reg_number: record.student.reg_number,
+          id: record.student.admin_id,
+        };
 
-  performance?.data.data.forEach((record) => {
-    let processed: IPerformanceTable = {
-      reg_number: record.student.reg_number,
-      id: record.id,
-    };
+        processed[`total /${record.total_marks}`] = `${
+          record.quiz_obtained_marks + record.exam_obtained_marks
+        }`;
 
-    processed[`total /${record.total_marks}`] = `${
-      record.quiz_obtained_marks + record.exam_obtained_marks
-    }`;
+        processed['Grade'] = calculateGrade(
+          record.quiz_obtained_marks + record.exam_obtained_marks,
+          record.total_marks,
+        );
 
-    processed['Grade'] = calculateGrade(
-      record.quiz_obtained_marks + record.exam_obtained_marks,
-      record.total_marks,
-    );
-
-    processed['position'] = record.position;
-    processed['promotion_status'] = record.promotion_status;
-    data.push(processed);
+        processed['position'] = record.position;
+        processed['promotion_status'] = record.promotion_status;
+        data.push(processed);
+      }
+    });
   });
 
   function handleSearch(_e: ValueType) {}
