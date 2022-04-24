@@ -163,7 +163,7 @@ export default function AdddEvaluationQuestions({
       if (parseFloat(value.toString()) > 0) {
         questionInfo[index] = {
           ...questionInfo[index],
-          mark: parseFloat(value.toString()),
+          mark: parseFloat(value.toString()) || 0,
         };
         setQuestions(questionInfo);
         return;
@@ -391,7 +391,6 @@ export default function AdddEvaluationQuestions({
                   <InputMolecule
                     readonly={question.submitted}
                     required={false}
-                    type="number"
                     name={'mark'}
                     min={1}
                     style={{ width: '6rem' }}

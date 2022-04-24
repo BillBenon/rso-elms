@@ -40,7 +40,7 @@ export default function FieldMarker({
   );
 
   function updateCorrectionMarks(e: ValueType) {
-    setObtainedMarks(Number(e.value));
+    setObtainedMarks(parseFloat(e.value.toString()) || 0);
     updateQuestionPoints(data.id, obtainedMarks);
   }
 
@@ -82,7 +82,6 @@ export default function FieldMarker({
         <InputMolecule
           handleChange={(e: ValueType) => updateCorrectionMarks(e)}
           onBlur={submitUpdatesOnQuestions}
-          type="number"
           defaultValue={obtainedMarks + ''}
           min={0}
           style={{ width: '80px' }}

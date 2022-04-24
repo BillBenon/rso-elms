@@ -242,6 +242,13 @@ export default function EvaluationInfoComponent() {
       setProgramId(intakeProgramLevel?.intake_program.program.id + '');
     }
 
+    if (name === 'time_limit') {
+      setDetails((details) => ({
+        ...details,
+        time_limit: parseInt(value.toString()) || 0,
+      }));
+      return;
+    }
     setDetails((details) => ({
       ...details,
       [name]: value.toString(),
@@ -299,7 +306,16 @@ export default function EvaluationInfoComponent() {
 
   function handleModuleChange(index: number, { name, value }: ValueType) {
     let evaluationModuleInfo = [...evaluationModule];
-    evaluationModuleInfo[index] = { ...evaluationModuleInfo[index], [name]: value };
+
+    if (name === 'section_total_marks') {
+      evaluationModuleInfo[index] = {
+        ...evaluationModuleInfo[index],
+        section_total_marks: parseFloat(value.toString()) || 0,
+      };
+    } else {
+      evaluationModuleInfo[index] = { ...evaluationModuleInfo[index], [name]: value };
+    }
+
     setEvaluationModule(evaluationModuleInfo);
 
     if (name === 'intake_program_level_module') {
@@ -613,7 +629,6 @@ export default function EvaluationInfoComponent() {
                 )}
 
                 <InputMolecule
-                  type="number"
                   value={evalMod?.section_total_marks}
                   handleChange={(e: ValueType) => handleModuleChange(index, e)}
                   name="section_total_marks"
@@ -701,7 +716,7 @@ export default function EvaluationInfoComponent() {
           value={details.questionaire_type}
           options={[
             { label: 'Default', value: IQuestionaireTypeEnum.DEFAULT },
-            { label: 'Manual', value: IQuestionaireTypeEnum.MANUAL },
+            // { label: 'Manual', value: IQuestionaireTypeEnum.MANUAL },
             { label: 'Field', value: IQuestionaireTypeEnum.FIELD },
             { label: 'Hybrid', value: IQuestionaireTypeEnum.HYBRID },
           ]}
@@ -774,7 +789,6 @@ export default function EvaluationInfoComponent() {
         <>
           <InputMolecule
             style={{ width: '8rem' }}
-            type="number"
             name="time_limit"
             value={details?.time_limit}
             handleChange={handleChange}>
