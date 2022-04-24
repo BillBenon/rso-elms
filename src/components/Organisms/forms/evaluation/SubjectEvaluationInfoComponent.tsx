@@ -197,10 +197,17 @@ export default function SubjectEvaluationInfoComponent() {
     evaluationStore.createEvaluation();
 
   function handleChange({ name, value }: ValueType) {
-    setDetails((details) => ({
-      ...details,
-      [name]: value.toString(),
-    }));
+    if (name === 'time_limit' || name === 'total_mark') {
+      setDetails((details) => ({
+        ...details,
+        [name]: parseFloat(value.toString()) || 0,
+      }));
+    } else {
+      setDetails((details) => ({
+        ...details,
+        [name]: value.toString(),
+      }));
+    }
   }
 
   function handleEditorChange(editor: Editor) {
@@ -421,7 +428,6 @@ export default function SubjectEvaluationInfoComponent() {
           </div>
           <InputMolecule
             style={{ width: '6rem' }}
-            type="number"
             name="total_mark"
             value={details?.total_mark}
             handleChange={handleChange}>
@@ -430,7 +436,6 @@ export default function SubjectEvaluationInfoComponent() {
           <>
             <InputMolecule
               style={{ width: '8rem' }}
-              type="number"
               name="time_limit"
               value={details?.time_limit}
               handleChange={handleChange}>
