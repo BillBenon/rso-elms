@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { evaluationStore } from '../store/evaluation/evaluation.store';
 import { ValueType } from '../types';
@@ -13,9 +13,11 @@ import TextAreaMolecule from './Molecules/input/TextAreaMolecule';
 export function SingleQuestionSectionBased({
   question,
   index,
+  previousAnswer,
 }: {
   question: IEvaluationQuestionsInfo;
   index: number;
+  previousAnswer: IStudentAnswer;
 }) {
   const [localAnswer, setLocalAnswer] = useState<IStudentAnswer>({
     answer_attachment: '',
@@ -25,6 +27,10 @@ export function SingleQuestionSectionBased({
     open_answer: '',
     student_evaluation: getLocalStorageData('studentEvaluationId'),
   });
+
+  useEffect(() => {
+    setLocalAnswer(previousAnswer);
+  }, [localAnswer]);
 
   function handleChange({ name, value }: ValueType) {
     setLocalAnswer((localAnswer) => ({ ...localAnswer, [name]: value }));
@@ -38,6 +44,12 @@ export function SingleQuestionSectionBased({
         toast.error(error.response.data.message);
       },
     });
+  };
+
+  const submitAfter = () => {
+    setInterval(() => {
+      submitForm();
+    }, 30000);
   };
 
   function disableCopyPaste(e: any) {
@@ -69,10 +81,11 @@ export function SingleQuestionSectionBased({
         style={{
           height: '7rem',
         }}
-        value={localAnswer.open_answer} // value={previousAnswers[index]?.open_answer || answer?.open_answer}
+        value={localAnswer.open_answer}
         placeholder="Type your answer here"
         onBlur={() => submitForm()}
-        name="open_answer" // onFocus={() => setQuestionToSubmit(questionId)}
+        name="open_answer"
+        onFocus={() => submitAfter()}
         handleChange={handleChange}
       />
 
