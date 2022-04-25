@@ -1,42 +1,45 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useParams } from 'react-router-dom';
+
+import { markingStore } from '../store/administration/marking.store';
 import { evaluationStore } from '../store/evaluation/evaluation.store';
-import { ValueType } from '../types';
+import { ParamType, ValueType } from '../types';
 import {
   IEvaluationQuestionsInfo,
   IStudentAnswer,
 } from '../types/services/evaluation.types';
-import { getLocalStorageData } from '../utils/getLocalStorageItem';
 import ContentSpan from '../views/evaluation/ContentSpan';
 import Heading from './Atoms/Text/Heading';
 import TextAreaMolecule from './Molecules/input/TextAreaMolecule';
 export function SingleQuestionSectionBased({
   question,
   index,
-  previousAnswer,
 }: {
   question: IEvaluationQuestionsInfo;
   index: number;
-  previousAnswer: IStudentAnswer;
 }) {
+  const { id: studentEvaluationId } = useParams<ParamType>();
   const [localAnswer, setLocalAnswer] = useState<IStudentAnswer>({
     answer_attachment: '',
     evaluation_question: question.id,
     mark_scored: 0,
     multiple_choice_answer: '',
     open_answer: '',
-    student_evaluation: getLocalStorageData('studentEvaluationId'),
+    student_evaluation: studentEvaluationId,
   });
 
-  useEffect(() => {
-    setLocalAnswer(previousAnswer);
-  }, [localAnswer]);
+  // useEffect(() => {
+  //   setLocalAnswer(previousAnswer);
+  // }, [localAnswer]);
 
   function handleChange({ name, value }: ValueType) {
     setLocalAnswer((localAnswer) => ({ ...localAnswer, [name]: value }));
   }
 
   const { mutate } = evaluationStore.addQuestionAnswer();
+  let previoustudentAnswers =
+    markingStore.getStudentEvaluationAnswers(studentEvaluationId).data?.data.data || [];
 
   const submitForm = () => {
     mutate(localAnswer, {
@@ -81,7 +84,11 @@ export function SingleQuestionSectionBased({
         style={{
           height: '7rem',
         }}
-        value={localAnswer.open_answer}
+        value={
+          previoustudentAnswers.find(
+            (answer) => answer.evaluation_question.id == question.id,
+          )?.open_answer || localAnswer.open_answer
+        }
         placeholder="Type your answer here"
         onBlur={() => submitForm()}
         name="open_answer"

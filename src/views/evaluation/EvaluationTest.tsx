@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
+import toast from 'react-hot-toast';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -13,29 +14,31 @@ import { evaluationService } from '../../services/evaluation/evaluation.service'
 import { markingStore } from '../../store/administration/marking.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
-import { IEvaluationSettingType } from '../../types/services/evaluation.types';
-import { getLocalStorageData } from '../../utils/getLocalStorageItem';
+import {
+  IEvaluationSettingType,
+  StudentEvalParamType,
+} from '../../types/services/evaluation.types';
 import QuestionContainer from './QuestionContainer';
 
 export default function EvaluationTest() {
-  const { id } = useParams<ParamType>();
+  const { evaluationId } = useParams<StudentEvalParamType>();
+  const { id: studentEvaluationId } = useParams<ParamType>();
   const history = useHistory();
   const { path } = useRouteMatch();
   const [time, SetTime] = useState(0);
   const [open, setOpen] = useState(true);
   const maximizableElement = React.useRef(null);
-  const [studentEvaluationId, setStudentEvaluationId] = useState('');
   const [isCheating, setIsCheating] = useState(false);
   const [timeLimit, SetTimeLimit] = useState(0);
   const [isFullscreen, setIsFullscreen] = useFullscreenStatus(maximizableElement);
-  const { data: evaluationData } = evaluationStore.getEvaluationById(id);
+  const { data: evaluationData } = evaluationStore.getEvaluationById(evaluationId);
   const {
     data: questions,
     isSuccess,
     isError,
-  } = evaluationStore.getEvaluationQuestions(id);
+  } = evaluationStore.getEvaluationQuestions(evaluationId);
 
-  const evaluationInfo = evaluationStore.getEvaluationById(id).data?.data.data;
+  const evaluationInfo = evaluationStore.getEvaluationById(evaluationId).data?.data.data;
 
   const { mutate } = evaluationStore.submitEvaluation();
 
@@ -43,17 +46,15 @@ export default function EvaluationTest() {
   let studentWorkTimer = evaluationStore.getEvaluationWorkTime(studentEvaluationId);
 
   const autoSubmit = useCallback(() => {
-    // mutate(studentEvaluationId, {
-    //   onSuccess: () => {
-    //     toast.success('Evaluation submitted', { duration: 5000 });
-    //     history.push({ pathname: '/dashboard/student', search: '?forceReload=true' });
-    //   },
-    //   onError: (error) => {
-    //     toast.error(error + '');
-    //   },
-    // });
-
-    console.log('about to auto submit');
+    mutate(studentEvaluationId, {
+      onSuccess: () => {
+        toast.success('Evaluation submitted', { duration: 5000 });
+        history.push({ pathname: '/dashboard/student', search: '?forceReload=true' });
+      },
+      onError: (error) => {
+        toast.error(error + '');
+      },
+    });
   }, [history, mutate, studentEvaluationId]);
 
   async function updateWorkTime(value: any) {
@@ -65,8 +66,6 @@ export default function EvaluationTest() {
   }
 
   useEffect(() => {
-    setStudentEvaluationId(getLocalStorageData('studentEvaluationId'));
-
     SetTimeLimit(evaluationData?.data?.data?.time_limit || 0);
     SetTime(
       ((evaluationData?.data?.data?.time_limit || 0) * 60 -
@@ -82,7 +81,6 @@ export default function EvaluationTest() {
 
   useEffect(() => {
     if (!open && isCheating && path === '/dashboard/evaluations/student-evaluation/:id') {
-      console.log('we catched that here');
       setIsCheating(true);
       autoSubmit();
     }
@@ -102,7 +100,7 @@ export default function EvaluationTest() {
     }
 
     return () => window.removeEventListener('visibilitychange', handleTabChange);
-  }, [path, open, autoSubmit, isCheating]);
+  }, [path, open, autoSubmit, isCheating, isFullscreen]);
 
   return (
     <div ref={maximizableElement} className={`${'bg-secondary p-12 overflow-y-auto'}`}>
@@ -139,7 +137,7 @@ export default function EvaluationTest() {
                 date={Date.now() + time}
                 onComplete={() => autoSubmit()}
                 renderer={Renderer}
-                // onTick={(value) => updateWorkTime(value)}
+                onTick={(value) => updateWorkTime(value)}
               />
             ) : null}
           </Heading>

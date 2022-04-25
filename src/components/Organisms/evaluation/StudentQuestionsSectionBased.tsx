@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { useHistory, useParams } from 'react-router-dom';
 
 import { evaluationService } from '../../../services/evaluation/evaluation.service';
-import { markingStore } from '../../../store/administration/marking.store';
+import { evaluationStore } from '../../../store/evaluation/evaluation.store';
+import { ParamType } from '../../../types';
 import { IEvaluationInfo, ISubjects } from '../../../types/services/evaluation.types';
+import Button from '../../Atoms/custom/Button';
 import Loader from '../../Atoms/custom/Loader';
 import Panel from '../../Atoms/custom/Panel';
 import Accordion from '../../Molecules/Accordion';
@@ -16,12 +19,10 @@ export default function StudentQuestionsSectionBased({
   // submitForm: (answer: string) => void;
 }) {
   const [subjects, setSubjects] = useState<ISubjects[]>([]);
+  const history = useHistory();
+  const { id: studentEvaluationId } = useParams<ParamType>();
   const [isLoadingSubjects, setIsLoadingSubjects] = useState(true);
-
-  const { id: studentEvaluationId } = useParams<{ id: string }>();
-
-  let previoustudentAnswers =
-    markingStore.getStudentEvaluationAnswers(studentEvaluationId).data?.data.data || [];
+  const { mutateAsync } = evaluationStore.submitEvaluation();
 
   useEffect(() => {
     let filteredSubjects: ISubjects[] = [];
@@ -52,6 +53,19 @@ export default function StudentQuestionsSectionBased({
 
   if (isLoadingSubjects) return <Loader />;
 
+  function submitEvaluation() {
+    mutateAsync(studentEvaluationId, {
+      onSuccess: () => {
+        toast.success('Evaluation submitted', { duration: 5000 });
+        localStorage.removeItem('studentEvaluationId');
+        history.push('/dashboard/student');
+      },
+      onError: (error) => {
+        toast.error(error + '');
+      },
+    });
+  }
+
   return (
     <div>
       <Accordion>
@@ -67,21 +81,15 @@ export default function StudentQuestionsSectionBased({
                 <SingleQuestionSectionBased
                   question={question}
                   key={index}
-                  previousAnswer={{
-                    answer_attachment: '',
-                    evaluation_question: question.id,
-                    mark_scored: previoustudentAnswers[index].mark_scored,
-                    multiple_choice_answer:
-                      previoustudentAnswers[index].multiple_choice_answer.answer_content,
-                    open_answer: previoustudentAnswers[index].open_answer,
-                    student_evaluation: studentEvaluationId,
-                  }}
-                  {...{ studentEvaluationId, index }}
+                  {...{ index }}
                 />
               ))}
           </Panel>
         ))}
       </Accordion>
+      <div className="py-7">
+        <Button onClick={submitEvaluation}>End evaluation</Button>
+      </div>
     </div>
   );
 }
