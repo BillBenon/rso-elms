@@ -2,37 +2,43 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
 import toast from 'react-hot-toast';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
+
+import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import PopupMolecule from '../../components/Molecules/Popup';
 import StudentQuestionsSectionBased from '../../components/Organisms/evaluation/StudentQuestionsSectionBased';
+import useFullscreenStatus from '../../hooks/useFullscreenStatus';
 import { evaluationService } from '../../services/evaluation/evaluation.service';
 import { markingStore } from '../../store/administration/marking.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
-import { IEvaluationSettingType } from '../../types/services/evaluation.types';
-import { getLocalStorageData } from '../../utils/getLocalStorageItem';
+import {
+  IEvaluationSettingType,
+  StudentEvalParamType,
+} from '../../types/services/evaluation.types';
 import QuestionContainer from './QuestionContainer';
 
 export default function EvaluationTest() {
-  const { id } = useParams<ParamType>();
+  const { evaluationId } = useParams<StudentEvalParamType>();
+  const { id: studentEvaluationId } = useParams<ParamType>();
   const history = useHistory();
   const { path } = useRouteMatch();
   const [time, SetTime] = useState(0);
   const [open, setOpen] = useState(true);
   const maximizableElement = React.useRef(null);
-  const [studentEvaluationId, setStudentEvaluationId] = useState('');
-  const [, setIsCheating] = useState(false);
+  const [isCheating, setIsCheating] = useState(false);
   const [timeLimit, SetTimeLimit] = useState(0);
-  // const [isFullscreen, setIsFullscreen] = useFullscreenStatus(maximizableElement);
-  const { data: evaluationData } = evaluationStore.getEvaluationById(id);
+  const [isFullscreen, setIsFullscreen] = useFullscreenStatus(maximizableElement);
+  const { data: evaluationData } = evaluationStore.getEvaluationById(evaluationId);
   const {
     data: questions,
     isSuccess,
     isError,
-  } = evaluationStore.getEvaluationQuestions(id);
+  } = evaluationStore.getEvaluationQuestions(evaluationId);
 
-  const evaluationInfo = evaluationStore.getEvaluationById(id).data?.data.data;
+  const evaluationInfo = evaluationStore.getEvaluationById(evaluationId).data?.data.data;
 
   const { mutate } = evaluationStore.submitEvaluation();
 
@@ -60,8 +66,6 @@ export default function EvaluationTest() {
   }
 
   useEffect(() => {
-    setStudentEvaluationId(getLocalStorageData('studentEvaluationId'));
-
     SetTimeLimit(evaluationData?.data?.data?.time_limit || 0);
     SetTime(
       ((evaluationData?.data?.data?.time_limit || 0) * 60 -
@@ -76,7 +80,7 @@ export default function EvaluationTest() {
   ]);
 
   useEffect(() => {
-    if (!open && path === '/dashboard/evaluations/student-evaluation/:id') {
+    if (!open && isCheating && path === '/dashboard/evaluations/student-evaluation/:id') {
       setIsCheating(true);
       autoSubmit();
     }
@@ -96,11 +100,11 @@ export default function EvaluationTest() {
     }
 
     return () => window.removeEventListener('visibilitychange', handleTabChange);
-  }, [path, open, autoSubmit]);
+  }, [path, open, autoSubmit, isCheating, isFullscreen]);
 
   return (
     <div ref={maximizableElement} className={`${'bg-secondary p-12 overflow-y-auto'}`}>
-      {/* <PopupMolecule
+      <PopupMolecule
         closeOnClickOutSide={false}
         open={open}
         title="Do you want to continue?"
@@ -113,14 +117,14 @@ export default function EvaluationTest() {
             get zero
           </p>
 
-          <div className="flex justify-between">
+          <div className="flex justify-between pt-3">
             <div>
               <Button onClick={() => setOpen(false)}>Enable</Button>
             </div>
           </div>
         </div>
-      </PopupMolecule> */}
-      <div className="flex justify-between">
+      </PopupMolecule>
+      <div className="flex justify-between py-4">
         <Heading fontWeight="semibold">{evaluationData?.data.data.name}</Heading>
         <div className="pr-28 flex justify-center items-center gap-2">
           <Heading color="txt-secondary" fontSize="base">

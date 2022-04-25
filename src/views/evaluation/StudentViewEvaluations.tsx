@@ -99,7 +99,7 @@ export default function StudentViewEvaluations({
     } else if (isOngoing) {
       history.push({
         pathname: `/dashboard/evaluations/attempt/${id}`,
-        search: `?studentEval=${studEvaluation}`,
+        search: `?studentEval=${studEvaluation}?evaluation=${id}`,
       });
     } else {
       if (isAllowedToAnswer) {

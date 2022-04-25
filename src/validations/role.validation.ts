@@ -12,7 +12,7 @@ export const userAssignRoleSchema = yup.object().shape({
 export const newRoleSchema = yup.object().shape({
   name: yup.string().required('role name is required'),
   academy_id: yup.string().when('chose_academy', {
-    is: (has_academy: any) => has_academy === true,
+    is: (chose_academy: any) => chose_academy === true,
     then: yup.string().required('Academy is required'),
     otherwise: yup.string(),
   }),
