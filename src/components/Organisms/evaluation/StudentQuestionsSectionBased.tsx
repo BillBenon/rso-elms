@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { evaluationService } from '../../../services/evaluation/evaluation.service';
+import { markingStore } from '../../../store/administration/marking.store';
 import { IEvaluationInfo, ISubjects } from '../../../types/services/evaluation.types';
 import Loader from '../../Atoms/custom/Loader';
 import Panel from '../../Atoms/custom/Panel';
@@ -18,6 +19,9 @@ export default function StudentQuestionsSectionBased({
   const [isLoadingSubjects, setIsLoadingSubjects] = useState(true);
 
   const { id: studentEvaluationId } = useParams<{ id: string }>();
+
+  let previoustudentAnswers =
+    markingStore.getStudentEvaluationAnswers(studentEvaluationId).data?.data.data || [];
 
   useEffect(() => {
     let filteredSubjects: ISubjects[] = [];
@@ -63,6 +67,15 @@ export default function StudentQuestionsSectionBased({
                 <SingleQuestionSectionBased
                   question={question}
                   key={index}
+                  previousAnswer={{
+                    answer_attachment: '',
+                    evaluation_question: question.id,
+                    mark_scored: previoustudentAnswers[index].mark_scored,
+                    multiple_choice_answer:
+                      previoustudentAnswers[index].multiple_choice_answer.answer_content,
+                    open_answer: previoustudentAnswers[index].open_answer,
+                    student_evaluation: studentEvaluationId,
+                  }}
                   {...{ studentEvaluationId, index }}
                 />
               ))}
