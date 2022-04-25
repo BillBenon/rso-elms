@@ -44,6 +44,9 @@ export default function LevelPerformance() {
       term: 'term one',
       reg_number: record.student.reg_number,
       id: record.student.admin_id,
+      first_name: '',
+      last_name: '',
+      rank: '',
     };
 
     record.subject_marks?.forEach((mark) => {
