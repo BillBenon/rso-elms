@@ -86,10 +86,10 @@ export default function ModuleDetails() {
         label: 'Evaluation',
         href: `${url}/evaluations?showMenus=${showMenu}&intkPrg=${intakeProg}`,
       },
-      {
-        label: 'Performance',
-        href: `${url}/performances?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-      },
+      // {
+      //   label: 'Performance',
+      //   href: `${url}/performances?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+      // },
     );
   }
 
