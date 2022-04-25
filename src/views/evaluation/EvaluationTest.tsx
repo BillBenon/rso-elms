@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
+
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -24,7 +25,7 @@ export default function EvaluationTest() {
   const [open, setOpen] = useState(true);
   const maximizableElement = React.useRef(null);
   const [studentEvaluationId, setStudentEvaluationId] = useState('');
-  const [, setIsCheating] = useState(false);
+  const [isCheating, setIsCheating] = useState(false);
   const [timeLimit, SetTimeLimit] = useState(0);
   const [isFullscreen, setIsFullscreen] = useFullscreenStatus(maximizableElement);
   const { data: evaluationData } = evaluationStore.getEvaluationById(id);
@@ -52,7 +53,7 @@ export default function EvaluationTest() {
     //   },
     // });
 
-    alert('about to auto submit');
+    console.log('about to auto submit');
   }, [history, mutate, studentEvaluationId]);
 
   async function updateWorkTime(value: any) {
@@ -80,7 +81,8 @@ export default function EvaluationTest() {
   ]);
 
   useEffect(() => {
-    if (!open && path === '/dashboard/evaluations/student-evaluation/:id') {
+    if (!open && isCheating && path === '/dashboard/evaluations/student-evaluation/:id') {
+      console.log('we catched that here');
       setIsCheating(true);
       autoSubmit();
     }
@@ -100,7 +102,7 @@ export default function EvaluationTest() {
     }
 
     return () => window.removeEventListener('visibilitychange', handleTabChange);
-  }, [path, open, autoSubmit]);
+  }, [path, open, autoSubmit, isCheating]);
 
   return (
     <div ref={maximizableElement} className={`${'bg-secondary p-12 overflow-y-auto'}`}>
@@ -137,7 +139,7 @@ export default function EvaluationTest() {
                 date={Date.now() + time}
                 onComplete={() => autoSubmit()}
                 renderer={Renderer}
-                onTick={(value) => updateWorkTime(value)}
+                // onTick={(value) => updateWorkTime(value)}
               />
             ) : null}
           </Heading>
