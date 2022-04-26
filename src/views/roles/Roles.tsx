@@ -13,8 +13,9 @@ import Permission from '../../components/Atoms/auth/Permission';
 // import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
-import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import InputMolecule from '../../components/Molecules/input/InputMolecule';
+import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
@@ -22,10 +23,12 @@ import NewRole from '../../components/Organisms/forms/roles/NewRole';
 import UpdateRole from '../../components/Organisms/forms/roles/UpdateRole';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import usePickedRole from '../../hooks/usePickedRole';
-import { roleStore } from '../../store/administration';
-import { Privileges, RoleRes } from '../../types';
+import { getRolesByAcademy, getRolesByInstitution } from '../../store/administration';
+import academyStore from '../../store/administration/academy.store';
+import { Privileges, RoleRes, RoleType } from '../../types';
 import { ActionsType } from '../../types/services/table.types';
 import { UserType } from '../../types/services/user.types';
+import { getDropDownOptions } from '../../utils/getOption';
 
 interface FilteredRoles
   extends Pick<RoleRes, 'id' | 'name' | 'description' | 'type' | 'status'> {}
@@ -37,6 +40,11 @@ export default function Roles() {
   const { user } = useAuthenticator();
   const picked_role = usePickedRole();
   const location = useLocation();
+  const [selectedAcademy, setSelectedAcademy] = useState('');
+  const [selectedInstitution, setSelectedInstitution] = useState('');
+  const academies = academyStore.getAcademiesByInstitution(
+    user?.institution.id.toString() || '',
+  );
 
   // const { user } = useAuthenticator();
   // const { data, isSuccess, isLoading, refetch } =
@@ -44,24 +52,34 @@ export default function Roles() {
   //     ? roleStore.getRolesByInstitution(user.institution.id + '')
   //     : roleStore.getRolesByAcademy(user?.academy.id + ''); // fetch roles
 
-  const { data, isSuccess, isLoading, refetch } = roleStore.getRoles();
+  const { data, isSuccess, isLoading, refetch } = selectedInstitution
+    ? getRolesByInstitution(selectedInstitution)
+    : getRolesByAcademy(selectedAcademy);
+
+  useEffect(() => {
+    if (user?.user_type !== UserType.SUPER_ADMIN) {
+      setSelectedAcademy(picked_role?.academy_id || '');
+    }
+  }, [picked_role?.academy_id, user?.user_type]);
 
   useEffect(() => {
     // filter data to display
     const filterdData: FilteredRoles[] = [];
-    data?.data.data.forEach((element) => {
-      if (
-        user?.user_type === UserType.SUPER_ADMIN ||
-        element?.academy_id === picked_role?.academy_id
-      ) {
-        filterdData.push(
-          _.pick(element, ['id', 'name', 'description', 'type', 'status']),
-        );
-      }
+
+    const institutionRoles = data?.data.data.filter(
+      (role) => role.type === RoleType.INSTITUTION,
+    );
+
+    //loop through roles from institution if we selected an institution else loop through mixed roles
+    const roles = selectedInstitution ? institutionRoles : data?.data.data;
+    roles?.forEach((element) => {
+      // if (element?.academy_id === picked_role?.academy_id) {
+      filterdData.push(_.pick(element, ['id', 'name', 'description', 'type', 'status']));
+      // }
     });
 
     data?.data.data && setRoles(filterdData);
-  }, [data, picked_role?.academy_id, user]);
+  }, [data, picked_role?.academy_id, selectedInstitution, user]);
 
   // re fetch data whenever user come back on this page
   useEffect(() => {
@@ -108,19 +126,52 @@ export default function Roles() {
   return (
     <main>
       <section>
-        <BreadCrumb list={[{ title: 'Roles', to: 'roles' }]} />
-      </section>
-      <section>
         <TableHeader
           title="Roles"
           totalItems={roles && roles.length > 0 ? roles.length : 0}
+          showSearch={false}
           handleSearch={handleSearch}>
-          <Permission privilege={Privileges.CAN_CREATE_ROLES}>
-            <Link to={`${url}/add`}>
-              <Button>Add Role</Button>
-            </Link>
-          </Permission>
+          <div className="flex items-end">
+            <Permission privilege={Privileges.CAN_CREATE_ROLES}>
+              <Link to={`${url}/add`}>
+                <Button>Add Role</Button>
+              </Link>
+            </Permission>
+          </div>
         </TableHeader>
+        {user?.user_type === UserType.SUPER_ADMIN ? (
+          <div className="flex items-center gap-4">
+            <SelectMolecule
+              width="80"
+              className=""
+              loading={academies.isLoading}
+              value={academies.data?.data.data[0].id}
+              handleChange={(e) => {
+                setSelectedInstitution('');
+                setSelectedAcademy(e.value.toString());
+              }}
+              name={'type'}
+              options={getDropDownOptions({ inputs: academies.data?.data.data || [] })}
+            />
+            <div>
+              <Button
+                onClick={() =>
+                  setSelectedInstitution(user?.institution.id.toString() || '')
+                }
+                styleType="outline">
+                View institution roles
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <InputMolecule
+            readOnly
+            value={user?.academy.name}
+            name={'academy_id'}
+            placeholder={isLoading ? 'Loading academy...' : ''}>
+            Academy
+          </InputMolecule>
+        )}
       </section>
       <section>
         {isLoading && <Loader />}

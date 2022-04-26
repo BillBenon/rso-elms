@@ -13,6 +13,7 @@ import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import { ParamType } from '../../../types';
 import {
   IEvaluationInfo,
+  IEvaluationTypeEnum,
   IQuestionaireTypeEnum,
 } from '../../../types/services/evaluation.types';
 import {
@@ -24,6 +25,7 @@ import FieldMarking from './FieldMarking';
 import FieldStudentMarking from './FieldStudentMarking';
 import ManualMarking from './ManualMarking';
 import StudentAnswersMarking from './StudentAnswersMarking';
+
 export default function Submissions() {
   const history = useHistory();
   const { id } = useParams<ParamType>();
@@ -65,7 +67,7 @@ export default function Submissions() {
   useEffect(() => {
     let formattedSubs: any = [];
 
-    if (isSuccess && data?.data.data) {
+    if (isSuccess && data) {
       const filteredInfo = data?.data.data.map((submission: any) =>
         pick(submission, [
           'id',
@@ -89,9 +91,9 @@ export default function Submissions() {
         formattedSubs.push(filteredData);
       });
 
-      data?.data.data && setSubmissions(formattedSubs);
+      data && setSubmissions(formattedSubs);
     }
-  }, [data?.data.data, isSuccess]);
+  }, [data, isSuccess]);
 
   const actions = [
     {
@@ -149,47 +151,48 @@ export default function Submissions() {
           </>
         )}
 
-        {evaluation?.questionaire_type === IQuestionaireTypeEnum.FIELD && (
+        {evaluation?.questionaire_type === IQuestionaireTypeEnum.FIELD ||
+        evaluation?.evaluation_type === IEvaluationTypeEnum.TEWT ? (
           <FieldMarking evaluationId={evaluation.id} />
+        ) : evaluation?.questionaire_type === IQuestionaireTypeEnum.MANUAL ? (
+          <></>
+        ) : (
+          <>
+            {isSuccess && submissions.length === 0 ? (
+              <NoDataAvailable
+                icon="evaluation"
+                buttonLabel="Go back"
+                title={'No submissions has been made so far!'}
+                handleClick={() =>
+                  history.push(
+                    `/dashboard/evaluations/details/${evaluation?.id}/overview`,
+                  )
+                }
+                description="It looks like there is any student who have submitted so far."
+              />
+            ) : isSuccess && submissions.length > 0 ? (
+              <div>
+                <div className="w-full flex justify-end mb-4">
+                  <Button onClick={publishEvaluationResults}>Publish all results</Button>
+                </div>
+                <Table<StudentEvaluationInfo>
+                  statusColumn="status"
+                  data={submissions}
+                  hide={['id']}
+                  uniqueCol={'id'}
+                  actions={actions}
+                />
+              </div>
+            ) : isError ? (
+              <NoDataAvailable
+                icon="evaluation"
+                showButton={false}
+                title={'Something went wrong'}
+                description="Something went wrong, try reloading the page or check your internet connection"
+              />
+            ) : null}
+          </>
         )}
-
-        {isSuccess &&
-        submissions.length === 0 &&
-        evaluation?.questionaire_type !==
-          (IQuestionaireTypeEnum.MANUAL || IQuestionaireTypeEnum.FIELD) ? (
-          <NoDataAvailable
-            icon="evaluation"
-            buttonLabel="Go back"
-            title={'No submissions has been made so far!'}
-            handleClick={() =>
-              history.push(`/dashboard/evaluations/details/${evaluation?.id}`)
-            }
-            description="It looks like there is any student who have submitted so far."
-          />
-        ) : isSuccess &&
-          submissions.length > 0 &&
-          evaluation?.questionaire_type !==
-            (IQuestionaireTypeEnum.MANUAL || IQuestionaireTypeEnum.FIELD) ? (
-          <div>
-            <div className="w-full flex justify-end mb-4">
-              <Button onClick={publishEvaluationResults}>Publish all results</Button>
-            </div>
-            <Table<StudentEvaluationInfo>
-              statusColumn="status"
-              data={submissions}
-              hide={['id']}
-              uniqueCol={'id'}
-              actions={actions}
-            />
-          </div>
-        ) : isError ? (
-          <NoDataAvailable
-            icon="evaluation"
-            showButton={false}
-            title={'Something went wrong'}
-            description="Something went wrong, try reloading the page or check your internet connection"
-          />
-        ) : null}
       </Switch>
     </div>
   );

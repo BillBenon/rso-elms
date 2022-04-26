@@ -5,7 +5,11 @@ import { useHistory, useParams } from 'react-router-dom';
 import { queryClient } from '../../../../plugins/react-query';
 import { divisionStore } from '../../../../store/administration/divisions.store';
 import { IDivisionsAcademyType, ParamType, ValueType } from '../../../../types';
-import { DivisionCreateInfo } from '../../../../types/services/division.types';
+import {
+  DivisionCreateInfo,
+  FacultyErrors,
+} from '../../../../types/services/division.types';
+import { facultySchema } from '../../../../validations/division.validation';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
@@ -38,6 +42,12 @@ export default function UpdateDepartment({ onSubmit }: IDivisionsAcademyType) {
     name: division.name,
     parent_id: division.parent_id,
   };
+  const initialErrorState: FacultyErrors = {
+    name: '',
+    description: '',
+  };
+
+  const [errors, setErrors] = useState<FacultyErrors>(initialErrorState);
 
   useEffect(() => {
     data?.data && setDivision(data?.data.data);
@@ -48,36 +58,52 @@ export default function UpdateDepartment({ onSubmit }: IDivisionsAcademyType) {
   }
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
-    mutateAsync(updateDivisionInfo, {
-      onSuccess: (data) => {
-        toast.success(data.data.message);
-        queryClient.invalidateQueries([
-          'division',
-          division.division_type,
-          division.academy_id,
-        ]);
-        history.push('/dashboard/divisions');
-      },
-      onError: (error: any) => {
-        toast.error(error.response.data.message);
-      },
+
+    const validatedForm = facultySchema.validate(division, {
+      abortEarly: false,
     });
-    if (onSubmit) onSubmit(e);
+
+    validatedForm
+      .then(() => {
+        mutateAsync(updateDivisionInfo, {
+          onSuccess: (data) => {
+            toast.success(data.data.message);
+            queryClient.invalidateQueries([
+              'division',
+              division.division_type,
+              division.academy_id,
+            ]);
+            history.push('/dashboard/divisions');
+          },
+          onError: (error: any) => {
+            toast.error(error.response.data.message);
+          },
+        });
+        if (onSubmit) onSubmit(e);
+      })
+      .catch((err) => {
+        const validatedErr: FacultyErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof FacultyErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
   return (
     <form onSubmit={submitForm}>
       <InputMolecule
-        required
+        required={false}
+        error={errors.name}
         value={division.name}
-        error=""
         handleChange={handleChange}
         name="name">
         Faculty name
       </InputMolecule>
       <TextAreaMolecule
+        required={false}
+        error={errors.description}
         value={division.description}
         name="description"
-        required
         handleChange={handleChange}>
         Descripiton
       </TextAreaMolecule>

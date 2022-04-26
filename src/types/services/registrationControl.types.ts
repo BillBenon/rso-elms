@@ -9,6 +9,12 @@ export interface IRegistrationControlCreateInfo {
   academy?: AcademyInfo;
 }
 
+export interface RegErrors
+  extends Pick<
+    IRegistrationControlCreateInfo,
+    'description' | 'expected_start_date' | 'expected_end_date'
+  > {}
+
 export interface IRegistrationControlInfo
   extends IRegistrationControlCreateInfo,
     Table,

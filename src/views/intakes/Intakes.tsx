@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -161,7 +162,6 @@ export default function Intakes() {
           loadedIntakes.push(cardData);
         }
       });
-
       setIntakes(loadedIntakes);
     } else if (isError) toast.error('error occurred when loading intakes');
   }, [user?.user_type, data, isError, isSuccess]);
@@ -181,6 +181,13 @@ export default function Intakes() {
     refetchIntakes();
     history.goBack();
   }
+
+  const goToEdit = (e: Event, intakeId: string, IntakeRegId: string) => {
+    e.stopPropagation();
+    e.preventDefault();
+
+    history.push(`${url}/${intakeId}/edit/${IntakeRegId}`);
+  };
 
   return (
     <Switch>
@@ -209,6 +216,7 @@ export default function Intakes() {
                     ? `${intakes.length} intakes`
                     : `${intakes.length}`
                 }
+                showSearch={false}
                 handleSearch={handleSearch}>
                 {registrationControlId && (
                   <Permission privilege={Privileges.CAN_CREATE_INTAKE}>
@@ -248,9 +256,16 @@ export default function Intakes() {
                               </div>
                             </div>
                             <Permission privilege={Privileges.CAN_MODIFY_INTAKE}>
-                              <div className="mt-4 space-x-4">
+                              <div className="mt-4 space-x-4 z-30">
                                 <Link
-                                  to={`${url}/${intake.id}/edit/${intake.registrationControlId}`}>
+                                  //@ts-ignore
+                                  onClick={(e: Event) =>
+                                    goToEdit(
+                                      e,
+                                      intake.id + '',
+                                      intake.registrationControlId,
+                                    )
+                                  }>
                                   <Button>Edit Intake</Button>
                                 </Link>
                                 {/* <Button styleType="outline">Change Status</Button> */}

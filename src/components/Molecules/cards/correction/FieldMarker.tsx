@@ -1,6 +1,5 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import toast from 'react-hot-toast';
-
 import { markingStore } from '../../../../store/administration/marking.store';
 import { ValueType } from '../../../../types';
 import { IEvaluationQuestionsInfo } from '../../../../types/services/evaluation.types';
@@ -41,7 +40,7 @@ export default function FieldMarker({
   );
 
   function updateCorrectionMarks(e: ValueType) {
-    setObtainedMarks(Number(e.value));
+    setObtainedMarks(parseFloat(e.value.toString()) || 0);
     updateQuestionPoints(data.id, obtainedMarks);
   }
 
@@ -61,7 +60,7 @@ export default function FieldMarker({
     <div className={`answer-card-molecule bg-main p-6 rounded-lg `}>
       <div className="mt-3 flex justify-between">
         <ContentSpan title={`Question ${index + 1}`} className="gap-3">
-          {data.question}
+          <div dangerouslySetInnerHTML={{ __html: `${data.question}` }} />
         </ContentSpan>
 
         <Heading fontWeight="semibold" fontSize="sm">
@@ -83,7 +82,6 @@ export default function FieldMarker({
         <InputMolecule
           handleChange={(e: ValueType) => updateCorrectionMarks(e)}
           onBlur={submitUpdatesOnQuestions}
-          type="number"
           defaultValue={obtainedMarks + ''}
           min={0}
           style={{ width: '80px' }}

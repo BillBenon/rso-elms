@@ -1,6 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
@@ -13,6 +13,21 @@ import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule'
 import { institutionStore } from '../../store/administration/institution.store';
 import { GenericStatus, ParamType, ValueType } from '../../types';
 import { BasicInstitutionInfo } from '../../types/services/institution.types';
+import { institutionSchema } from '../../validations/academy.validation';
+
+interface InstitutionError
+  extends Pick<
+    BasicInstitutionInfo,
+    | 'name'
+    | 'short_name'
+    | 'email'
+    | 'phone_number'
+    | 'website_link'
+    | 'moto'
+    | 'mission'
+    | 'fax_number'
+    | 'full_address'
+  > {}
 
 export default function UpdateInstitution() {
   const history = useHistory();
@@ -36,6 +51,19 @@ export default function UpdateInstitution() {
     id: '',
   });
 
+  const initialErrorState: InstitutionError = {
+    name: '',
+    short_name: '',
+    email: '',
+    phone_number: '',
+    website_link: '',
+    moto: '',
+    mission: '',
+    fax_number: '',
+    full_address: '',
+  };
+  const [errors, setErrors] = useState(initialErrorState);
+
   const [logoFile, setlogoFile] = useState<File | null>(null);
 
   useEffect(() => {
@@ -46,7 +74,7 @@ export default function UpdateInstitution() {
         current_admin_id: institution.current_admin_id,
         head_office_location_id: 17445,
         email: institution.email,
-        fax_number: institution.fax_number,
+        fax_number: institution.fax_number || '',
         full_address: institution.full_address,
         generic_status: institution.generic_status,
         mission: institution.mission,
@@ -71,19 +99,33 @@ export default function UpdateInstitution() {
   const { mutateAsync } = institutionStore.updateInstitution();
   const { mutateAsync: mutateAddLogo } = institutionStore.addLogo();
 
-  async function handleSubmit<T>(e: FormEvent<T>) {
+  function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
-    let toastId = toast.loading('Updating insitution');
-    await mutateAsync(values, {
-      onSuccess(data) {
-        toast.success(data.data.message, { duration: 1200, id: toastId });
-        addLogo(data.data.data.id + '');
-        history.goBack();
-      },
-      onError(error: any) {
-        toast.error(error.response.data.message, { id: toastId });
-      },
+    const validatedForm = institutionSchema.validate(values, {
+      abortEarly: false,
     });
+
+    validatedForm
+      .then(() => {
+        let toastId = toast.loading('Updating insitution');
+        mutateAsync(values, {
+          onSuccess(data) {
+            toast.success(data.data.message, { duration: 1200, id: toastId });
+            addLogo(data.data.data.id + '');
+            history.goBack();
+          },
+          onError(error: any) {
+            toast.error(error.response.data.message, { id: toastId });
+          },
+        });
+      })
+      .catch((err) => {
+        const validatedErr: InstitutionError = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof InstitutionError] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
 
   async function addLogo(institutionId: string) {
@@ -119,6 +161,8 @@ export default function UpdateInstitution() {
           <>
             <div className="py-2">
               <InputMolecule
+                error={errors.name}
+                required={false}
                 name="name"
                 value={values.name}
                 placeholder="institution name"
@@ -128,6 +172,8 @@ export default function UpdateInstitution() {
             </div>
             <div className="py-2">
               <InputMolecule
+                error={errors.short_name}
+                required={false}
                 name="short_name"
                 value={values.short_name}
                 placeholder="institution short name"
@@ -137,15 +183,19 @@ export default function UpdateInstitution() {
             </div>
             <div className="py-2">
               <InputMolecule
+                error={errors.email}
+                required={false}
                 name="email"
                 value={values.email}
-                placeholder="rnp@gov.rw"
+                placeholder="email@example.com"
                 handleChange={(e) => handleChange(e)}>
                 Institution email
               </InputMolecule>
             </div>
             <div className="py-2">
               <InputMolecule
+                error={errors.phone_number}
+                required={false}
                 name="phone_number"
                 value={values.phone_number}
                 placeholder="Phone number"
@@ -157,16 +207,19 @@ export default function UpdateInstitution() {
           <>
             <div className="py-2">
               <InputMolecule
+                error={errors.website_link}
                 name="website_link"
                 required={false}
                 value={values.website_link}
-                placeholder="www.rnp.gov.rw"
+                placeholder="www.example.com"
                 handleChange={(e) => handleChange(e)}>
                 Institution website(optional)
               </InputMolecule>
             </div>
             <div className="py-2">
               <TextAreaMolecule
+                error={errors.moto}
+                required={false}
                 name="moto"
                 value={values.moto}
                 placeholder="Motto"
@@ -176,6 +229,8 @@ export default function UpdateInstitution() {
             </div>
             <div className="py-2">
               <TextAreaMolecule
+                error={errors.mission}
+                required={false}
                 name="mission"
                 value={values.mission}
                 placeholder="Mission"
@@ -185,7 +240,9 @@ export default function UpdateInstitution() {
             </div>
             <div className="py-2">
               <InputMolecule
-                name="fax number"
+                error={errors.fax_number}
+                required={false}
+                name="fax_number"
                 value={values.fax_number}
                 placeholder="Fax number"
                 handleChange={(e) => handleChange(e)}>
@@ -194,6 +251,7 @@ export default function UpdateInstitution() {
             </div>
             <div className="py-2">
               <LocationMolecule
+                error={errors.full_address}
                 name="full_address"
                 value={values.full_address}
                 handleChange={(e) => handleChange(e)}>
@@ -219,9 +277,7 @@ export default function UpdateInstitution() {
           </FileUploader>
         </div>
         <div className="py-4 col-span-2">
-          <Button onClick={() => handleSubmit} type="submit">
-            Save
-          </Button>
+          <Button type="submit">Save</Button>
         </div>
       </form>
     </div>

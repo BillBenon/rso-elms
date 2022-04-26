@@ -9,16 +9,17 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewPrivilege from '../../components/Organisms/forms/privilege/NewPrivilege';
 import { privilegeStore } from '../../store/administration';
-import { PrivilegeRes } from '../../types';
+import { PrivilegeRes, ValueType } from '../../types';
 
 export default function PrivilegesView() {
   const { path } = useRouteMatch();
   const location = useLocation();
-
+  const [value, setValue] = useState('');
   const [privileges, setPrivileges] = useState<PrivilegeRes[]>([]);
   const history = useHistory();
-
+  const [filter, setFilter] = useState(false);
   const { data, isSuccess, isLoading, refetch } = privilegeStore.getPrivileges(); // get privileges
+  const { data: search } = privilegeStore.getPrivilegeBySearch(value, filter);
 
   useEffect(() => {
     data?.data?.data && setPrivileges(data?.data?.data);
@@ -31,9 +32,6 @@ export default function PrivilegesView() {
     }
   }, [location, path, refetch]);
 
-  function submited() {}
-  function handleSearch() {}
-
   const actions = [
     {
       name: 'Edit Privillege',
@@ -41,13 +39,30 @@ export default function PrivilegesView() {
         history.push(`${path}/${id}/edit`); // go to edit page
       },
     },
-    // {
-    //   name: 'Disable/Enable',
-    //   handleAction: (_id: string | undefined) => {
-    //     // history.push(`/${id}/edit`);
-    //   },
-    // },
   ];
+
+  function submited() {}
+  function handleSearch(_e: ValueType) {
+    const value = _e.value + '';
+    if (value.length === 0) {
+      setPrivileges(data?.data.data || []);
+      setValue('');
+      return;
+    }
+    setValue(value);
+  }
+
+  useEffect(() => {
+    if (filter && search) {
+      setPrivileges(search.data.data || []);
+      setFilter(false);
+      console.log(search);
+    }
+  }, [filter, search]);
+
+  const handleClick = () => {
+    setFilter(!filter);
+  };
 
   return (
     <main>
@@ -58,7 +73,8 @@ export default function PrivilegesView() {
         <TableHeader
           title="Privileges"
           totalItems={privileges && privileges.length > 0 ? privileges.length : 0}
-          handleSearch={handleSearch}></TableHeader>
+          handleSearch={handleSearch}
+          handleClick={handleClick}></TableHeader>
       </section>
       <section>
         {isLoading && <Loader />}
@@ -66,6 +82,7 @@ export default function PrivilegesView() {
           <Table<PrivilegeRes>
             uniqueCol="id"
             statusColumn="status"
+            hide={['id']}
             data={privileges}
             actions={actions}
           />

@@ -58,7 +58,10 @@ export type Status =
   | 'approved'
   | 'deleted'
   | 'rejected'
-  | 'dismissed';
+  | 'dismissed'
+  | 'completed'
+  | 'pending'
+  | 'error';
 
 export type Page =
   | 'personalDetails'
@@ -222,6 +225,11 @@ export interface FormPropType {
 
 export interface ParamType {
   id: string;
+}
+
+export interface EvaluationParamType {
+  moduleId: string;
+  subjectId: string;
 }
 
 export interface IntakeParamType {

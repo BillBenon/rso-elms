@@ -218,7 +218,9 @@ export default function Table2<T>({
               value={row[uniqueCol] + ''}></Checkbox>
           )}
         </td>
-        {showNumbering && <td className="pl-4"> {index + 1}</td>}
+        {showNumbering && (
+          <td className="pl-4"> {rowsPerPage * currentPage + index + 1}</td>
+        )}
 
         <Row
           key={index + Math.random() * 16}
@@ -235,7 +237,7 @@ export default function Table2<T>({
               position="left center"
               on="click"
               trigger={
-                <button type="button" onClick={() => {}}>
+                <button aria-label="more" type="button" onClick={() => {}}>
                   <Icon name="more" stroke={'txt-secondary'} fill={'txt-secondary'} />
                 </button>
               }

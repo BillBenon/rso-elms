@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
+import {
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+  useParams,
+  useRouteMatch,
+} from 'react-router-dom';
 
 import Loader from '../../../components/Atoms/custom/Loader';
 import Heading from '../../../components/Atoms/Text/Heading';
 import ModuleCard from '../../../components/Molecules/cards/modules/ModuleCard';
 import NoDataAvailable from '../../../components/Molecules/cards/NoDataAvailable';
+import PopupMolecule from '../../../components/Molecules/Popup';
+import AddPrerequesitesForm from '../../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import { moduleStore } from '../../../store/administration/modules.store';
 import { CommonCardDataType, ParamType, Privileges } from '../../../types';
 import { advancedTypeChecker } from '../../../utils/getOption';
@@ -14,7 +23,10 @@ import NewModuleMaterialAttach from '../../module-material/NewModuleMaterialAtta
 function Prerequisites() {
   const { id } = useParams<ParamType>();
   const history = useHistory();
-  const { path } = useRouteMatch();
+  const { search } = useLocation();
+  const showMenu = new URLSearchParams(search).get('showMenus');
+  const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
+  const { path, url } = useRouteMatch();
   const { data: modulePrereqs, isLoading } = moduleStore.getModulePrereqsByModule(id);
   const [prerequisiteModule, setPrerequisiteModule] = useState<CommonCardDataType[]>([]);
 
@@ -37,6 +49,10 @@ function Prerequisites() {
     setPrerequisiteModule(newPrereqs);
   }, [modulePrereqs?.data.data]);
 
+  function handleClose() {
+    history.goBack();
+  }
+
   return (
     <Switch>
       <Route
@@ -58,7 +74,11 @@ function Prerequisites() {
                 icon="subject"
                 title={'No prerequisites are available'}
                 description={'There are no prerequisites currently added on this module'}
-                handleClick={() => history.push(`/dashboard/modules/${id}/add-prereq`)}
+                handleClick={() =>
+                  history.push(
+                    `${url}/${id}/add-prereq?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+                  )
+                }
               />
             ) : (
               <section className="flex flex-wrap justify-start gap-2">
@@ -114,6 +134,22 @@ function Prerequisites() {
         path={`${path}/add-material/:materialId`}
         render={() => {
           return <NewModuleMaterialAttach />;
+        }}
+      />
+      {/* add prerequesite popup */}
+      <Route
+        exact
+        path={`${path}/:moduleId/add-prereq`}
+        render={() => {
+          return (
+            <PopupMolecule
+              closeOnClickOutSide={false}
+              title="Add Prerequesite"
+              open
+              onClose={handleClose}>
+              <AddPrerequesitesForm />
+            </PopupMolecule>
+          );
         }}
       />
     </Switch>

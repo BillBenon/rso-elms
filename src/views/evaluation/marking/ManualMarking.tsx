@@ -9,7 +9,7 @@ import InputMolecule from '../../../components/Molecules/input/InputMolecule';
 import SelectMolecule from '../../../components/Molecules/input/SelectMolecule';
 import { statusColors } from '../../../global/global-vars';
 import { useClasses } from '../../../hooks/useClasses';
-import { classStore } from '../../../store/administration/class.store';
+import { getStudentsByClass } from '../../../store/administration/class.store';
 import { markingStore } from '../../../store/administration/marking.store';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import { Color, Status, ValueType } from '../../../types';
@@ -27,8 +27,7 @@ export default function ManualMarking({ evaluationId }: PropsType) {
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId).data?.data || {};
 
-  const { data: studentsData, isLoading } =
-    classStore.getStudentsByClass(currentClassId + '') || [];
+  const { data: studentsData, isLoading } = getStudentsByClass(currentClassId) || [];
 
   const { data: manualMarkingData } = markingStore.getManualMarkingMarks(
     evaluationId,
@@ -49,7 +48,7 @@ export default function ManualMarking({ evaluationId }: PropsType) {
       let studentsClone = [...students];
       let studentMark = studentsClone[index];
 
-      studentMark.marks = parseInt(e.value.toString()) || 0;
+      studentMark.marks = parseFloat(e.value.toString()) || 0;
       setStudents(studentsClone);
     }
   }
@@ -125,7 +124,7 @@ export default function ManualMarking({ evaluationId }: PropsType) {
           value={currentClassId}
           handleChange={handleClassChange}
           name={'type'}
-          placeholder="Evaluation type"
+          placeholder="Select class"
           options={classes?.map((cl) => useClasses(cl)) || []}
         />
       </div>
@@ -139,6 +138,12 @@ export default function ManualMarking({ evaluationId }: PropsType) {
         />
       ))} */}
       {isLoading && <Loader />}
+      {!isLoading && !currentClassId && (
+        <NoDataAvailable
+          title={'No selected class'}
+          description={'Select class to view '}
+        />
+      )}
       {studentsData?.data.data && (
         <div>
           {studentsData?.data.data.length <= 0 ? (

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
@@ -20,6 +20,7 @@ import LevelStudents from './LevelStudents';
 
 function IntakeLevelModule() {
   const history = useHistory();
+  const { path } = useRouteMatch();
   const { id, intakeId, intakeProg, level } = useParams<IntakeLevelParam>();
 
   const [levelModules, setlevelModules] = useState<CommonCardDataType[]>([]);
@@ -114,6 +115,13 @@ function IntakeLevelModule() {
             }
           />
         </Permission>
+        <Permission privilege={Privileges.CAN_ACCESS_REPORTS}>
+          <Button
+            styleType="outline"
+            onClick={() => history.push(`/dashboard/intakes/peformance/${level}`)}>
+            View level reports
+          </Button>
+        </Permission>
         {prdLoading ? (
           <></>
         ) : periods?.data.data.length === 0 ? (
@@ -121,9 +129,19 @@ function IntakeLevelModule() {
             <Button
               styleType="outline"
               onClick={() =>
-                history.push(
-                  `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/add-period`,
-                )
+                path.includes('learn')
+                  ? history.push(
+                      `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${level}/add-period`,
+                    )
+                  : path.includes('teach')
+                  ? history.push(
+                      `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${level}/add-period`,
+                    )
+                  : path.includes('manage')
+                  ? history.push(
+                      `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${level}/add-period`,
+                    )
+                  : {}
               }>
               Add period
             </Button>
@@ -132,9 +150,19 @@ function IntakeLevelModule() {
           <Button
             styleType="outline"
             onClick={() =>
-              history.push(
-                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/${level}/view-period/${periods?.data.data[0].id}/view-class`,
-              )
+              path.includes('learn')
+                ? history.push(
+                    `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${level}/view-period/${periods?.data.data[0].id}/view-class`,
+                  )
+                : path.includes('teach')
+                ? history.push(
+                    `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${level}/view-period/${periods?.data.data[0].id}/view-class`,
+                  )
+                : path.includes('manage')
+                ? history.push(
+                    `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${level}/view-period/${periods?.data.data[0].id}/view-class`,
+                  )
+                : {}
             }>
             View periods
           </Button>

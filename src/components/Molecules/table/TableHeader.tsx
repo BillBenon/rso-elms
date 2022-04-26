@@ -11,8 +11,10 @@ type ITableHeader = {
   totalItems?: number | string;
   children?: React.ReactNode;
   showSearch?: boolean;
+  value?: string;
   showBadge?: boolean;
   usePadding?: boolean;
+  handleClick?: () => void;
   handleSearch?: (_e: ValueType) => void;
 };
 
@@ -20,6 +22,8 @@ export default function TableHeader({
   title,
   totalItems,
   handleSearch,
+  handleClick,
+  value = '',
   children,
   showBadge = true,
   showSearch = true,
@@ -28,6 +32,7 @@ export default function TableHeader({
   const handleChange = (e: ValueType) => {
     if (showSearch && handleSearch) {
       handleSearch(e);
+      // setValue(e.value + '');
     }
   };
 
@@ -51,9 +56,12 @@ export default function TableHeader({
         </div>
         {showSearch && (
           <div className="flex flex-wrap justify-start items-center">
-            <SearchMolecule handleChange={handleChange} />
-            <button className="border p-0 rounded-md mx-2">
-              <Icon name="filter" />
+            <SearchMolecule value={value} handleChange={handleChange} />
+            <button
+              onClick={handleClick}
+              aria-label="search"
+              className="border p-0 bg-primary-400 rounded-md hover:bg-primary-500 hover:shadow-lg focus:bg-primary-600 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-primary active:shadow-md transition duration-150 ease-in-out flex items-center">
+              <Icon name="search" stroke={'main'} />
             </button>
           </div>
         )}

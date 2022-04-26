@@ -1,4 +1,7 @@
+import '../../translations/i18n';
+
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import Icon from '../../components/Atoms/custom/Icon';
@@ -15,18 +18,19 @@ import SuperAdminView from './SuperAdminView';
 export default function Users() {
   const { url, path } = useRouteMatch();
   const [userType, setUserType] = useState('Students');
+  const { t } = useTranslation();
 
   const tabs = [
     {
-      label: 'Students',
+      label: t('Students'),
       href: `${url}`,
     },
     {
-      label: 'DS',
+      label: t('Instructor'),
       href: `${url}/instructors`,
     },
     {
-      label: 'Admins',
+      label: t('Admins'),
       href: `${url}/admins`,
     },
   ];

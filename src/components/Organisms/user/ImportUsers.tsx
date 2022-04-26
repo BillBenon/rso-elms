@@ -5,13 +5,15 @@ import { useHistory } from 'react-router-dom';
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import usePickedRole from '../../../hooks/usePickedRole';
 import { queryClient } from '../../../plugins/react-query';
-import { roleStore } from '../../../store/administration';
+import { getRolesByAcademy, getRolesByInstitution } from '../../../store/administration';
 import academyStore from '../../../store/administration/academy.store';
 import { intakeStore } from '../../../store/administration/intake.store';
 import programStore from '../../../store/administration/program.store';
 import usersStore from '../../../store/administration/users.store';
 import { RoleType, SelectData, ValueType } from '../../../types';
 import { AcademyInfo } from '../../../types/services/academy.types';
+// import { IntakeProgramInfo } from '../../../types/services/intake-program.types';
+// import { ProgramInfo } from '../../../types/services/program.types';
 import {
   AssignUserRole,
   IImportUser,
@@ -19,6 +21,7 @@ import {
   UserType,
 } from '../../../types/services/user.types';
 import { getDropDownOptions } from '../../../utils/getOption';
+import { importUserSchema } from '../../../validations/user.validation';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
 import FileUploader from '../../Atoms/Input/FileUploader';
@@ -30,6 +33,9 @@ import PopupMolecule from '../../Molecules/Popup';
 interface IProps {
   userType: UserType;
 }
+
+interface ImportErrors
+  extends Pick<IImportUser, 'academyId' | 'roleId' | 'program' | 'intakeProgramId'> {}
 
 export default function ImportUsers({ userType }: IProps) {
   const history = useHistory();
@@ -59,6 +65,15 @@ export default function ImportUsers({ userType }: IProps) {
     file: null,
   });
 
+  const initialErrorState: ImportErrors = {
+    academyId: '',
+    roleId: '',
+    program: '',
+    intakeProgramId: '',
+  };
+
+  const [errors, setErrors] = useState<ImportErrors>(initialErrorState);
+
   const [importReport, setimportReport] = useState<IImportUserRes | undefined>(undefined);
 
   const academies: AcademyInfo[] | undefined =
@@ -77,87 +92,112 @@ export default function ImportUsers({ userType }: IProps) {
 
   const { data } =
     roleInfo.type === RoleType.ACADEMY
-      ? roleStore.getRolesByAcademy(values.academyId)
-      : roleStore.getRolesByInstitution(roleInfo.institution_id);
+      ? getRolesByAcademy(values.academyId)
+      : getRolesByInstitution(roleInfo.institution_id);
 
-  const { data: userRoles } = usersStore.getUserRoles(user?.id + '');
+  // const { data: userRoles } = usersStore.getUserRoles(user?.id + '');
 
-  const userRolesId = userRoles?.data.data.map((role) => role.role.id) || [];
+  // const userRolesId = userRoles?.data.data.map((role) => role.role.id) || [];
 
-  const roleOptions =
-    data?.data.data.filter((role) => !userRolesId.includes(role.id)) || [];
+  const roleOptions = data?.data.data || [];
 
   const academic_programs =
     programStore.getProgramsByAcademy(values.academyId).data?.data.data || [];
+
   const intakes = intakeStore.getIntakesByProgram(values.program).data?.data.data || [];
 
   const picked_role = usePickedRole();
-  const { data: academy, isLoading: academyLoading } = academyStore.getAcademyById(
-    picked_role?.academy_id + '',
-  );
+
+  const {
+    data: academy,
+    isLoading: academyLoading,
+    refetch: refetchAcademy,
+  } = academyStore.getAcademyById(picked_role?.academy_id + '', true);
+
+  if (picked_role?.academyId && picked_role?.type === RoleType.ACADEMY) refetchAcademy();
 
   useEffect(() => {
-    setValues((prev) => ({ ...prev, academyId: picked_role?.academy_id + '' }));
-  }, [picked_role?.academy_id]);
+    if (picked_role?.academy_id && picked_role?.type === RoleType.ACADEMY)
+      setValues((prev) => ({ ...prev, academyId: picked_role?.academy_id + '' }));
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [picked_role]);
 
   const { mutateAsync, isLoading } = usersStore.importUsers();
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
 
-    if (values.file) {
-      // let academicYearId =
-      // levels.find((l) => l.academic_program_level.id == values.academicProgramLevelId)
-      //   ?.academic_year.id || '';
+    const validatedForm = importUserSchema.validate(
+      Object.assign({ ...values, is_student: user?.user_type === UserType.STUDENT }),
+      {
+        abortEarly: false,
+      },
+    );
 
-      let formData = new FormData();
-      formData.append('file', values.file);
-      //   formData.append('academicProgramLevelId', values.academicProgramLevelId);
-      formData.append('academyId', values.academyId);
-      formData.append('intakeProgramId', values.intakeProgramId);
-      formData.append('userType', values.userType);
-      //   formData.append('academicYearId', academicYearId?.toString());
+    validatedForm
+      .then(async () => {
+        if (values.file) {
+          // let academicYearId =
+          // levels.find((l) => l.academic_program_level.id == values.academicProgramLevelId)
+          //   ?.academic_year.id || '';
 
-      await mutateAsync(formData, {
-        onSuccess(data) {
-          const successfullyImportedUsers: AssignUserRole[] = data.data.data.success.map(
-            (success) => {
-              return {
-                user_id: success.id.toString(),
-                role_id: parseInt(values.roleId),
-                description: '',
-                id: '',
-              };
+          let formData = new FormData();
+          formData.append('file', values.file);
+          //   formData.append('academicProgramLevelId', values.academicProgramLevelId);
+          formData.append('academyId', values.academyId);
+          formData.append('intakeProgramId', values.intakeProgramId);
+          formData.append('userType', values.userType);
+          //   formData.append('academicYearId', academicYearId?.toString());
+
+          await mutateAsync(formData, {
+            onSuccess(data) {
+              const successfullyImportedUsers: AssignUserRole[] =
+                data.data.data.success.map((success) => {
+                  return {
+                    user_id: success.id.toString(),
+                    role_id: parseInt(values.roleId),
+                    description: '',
+                    id: '',
+                  };
+                });
+
+              if (values.roleId) {
+                mutate(successfullyImportedUsers, {
+                  onSuccess() {
+                    toast.success('Users role assigned successfully');
+                  },
+
+                  onError(error: any) {
+                    toast.error('Error assigning users role', error.response.message);
+                  },
+                });
+              }
+
+              queryClient.invalidateQueries(['users']);
+              queryClient.invalidateQueries(['users/institution']);
+              queryClient.invalidateQueries([
+                'users/academy/type',
+                values.academyId,
+                values.userType,
+              ]);
+
+              setimportReport(data.data.data);
             },
-          );
-
-          if (values.roleId) {
-            mutate(successfullyImportedUsers, {
-              onSuccess() {
-                toast.success('Users role assigned successfully');
-              },
-
-              onError(error: any) {
-                toast.error('Error assigning users role', error.response.message);
-              },
-            });
-          }
-
-          queryClient.invalidateQueries(['users']);
-          queryClient.invalidateQueries(['users/institution']);
-          queryClient.invalidateQueries([
-            'users/academy/type',
-            values.academyId,
-            values.userType,
-          ]);
-
-          setimportReport(data.data.data);
-        },
-        onError(error: any) {
-          toast.error(error.response.data.message);
-        },
+            onError(error: any) {
+              toast.error(error.response.data.message);
+            },
+          });
+        } else toast.error('Please attach excel file.');
+      })
+      .catch((err) => {
+        const validatedErr: ImportErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof ImportErrors] = el.message;
+        });
+        setErrors(validatedErr);
+        console.log('invalid', err.inner);
       });
-    } else toast.error('Please attach excel file.');
   }
 
   const handleUpload = (files: FileList | null) => {
@@ -165,6 +205,7 @@ export default function ImportUsers({ userType }: IProps) {
   };
 
   function handleChange(e: ValueType) {
+    console.log(values);
     setValues({ ...values, [e.name]: e.value });
   }
   return (
@@ -172,6 +213,7 @@ export default function ImportUsers({ userType }: IProps) {
       <form onSubmit={handleSubmit}>
         {user?.user_type === UserType.SUPER_ADMIN ? (
           <SelectMolecule
+            error={errors.academyId}
             options={getDropDownOptions({ inputs: academies || [] })}
             name="academyId"
             value={values.academyId}
@@ -188,20 +230,21 @@ export default function ImportUsers({ userType }: IProps) {
             Academy
           </InputMolecule>
         )}
-        {userType === UserType.STUDENT ||
-          (UserType.INSTRUCTOR && (
-            <SelectMolecule
-              placeholder="Select role"
-              options={getDropDownOptions({ inputs: roleOptions })}
-              value={values.roleId}
-              name="roleId"
-              handleChange={handleChange}>
-              Select role
-            </SelectMolecule>
-          ))}
+
+        <SelectMolecule
+          error={errors.roleId}
+          placeholder="Select role"
+          options={getDropDownOptions({ inputs: roleOptions })}
+          value={values.roleId}
+          name="roleId"
+          handleChange={handleChange}>
+          Select role
+        </SelectMolecule>
+
         {userType === UserType.STUDENT ? (
           <div>
             <SelectMolecule
+              error={errors.program}
               options={
                 academic_programs.map((p) => ({
                   value: p.id,
@@ -215,6 +258,7 @@ export default function ImportUsers({ userType }: IProps) {
               Program
             </SelectMolecule>
             <SelectMolecule
+              error={errors.intakeProgramId}
               options={
                 intakes?.map((intk) => ({
                   value: intk.id,

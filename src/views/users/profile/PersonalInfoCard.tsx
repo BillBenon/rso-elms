@@ -1,13 +1,12 @@
 import moment from 'moment';
 import React from 'react';
-import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
+import { Link, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Avatar from '../../../components/Atoms/custom/Avatar';
 import Badge from '../../../components/Atoms/custom/Badge';
 import Button from '../../../components/Atoms/custom/Button';
 import Icon from '../../../components/Atoms/custom/Icon';
 import Heading from '../../../components/Atoms/Text/Heading';
-import PopupMolecule from '../../../components/Molecules/Popup';
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import hobbiesStore from '../../../store/administration/hobbies.store';
 import locationStore from '../../../store/administration/location.store';
@@ -15,12 +14,11 @@ import { ParamType } from '../../../types';
 import { UserInfo } from '../../../types/services/user.types';
 import { usePicture } from '../../../utils/file-util';
 import { advancedTypeChecker, titleCase } from '../../../utils/getOption';
-import UpdatePhotoProfile from './UpdatePhotoProfile';
 
 function PersonalInfoCard({ user }: { user: UserInfo }) {
   const { id } = useParams<ParamType>();
 
-  const { url, path } = useRouteMatch();
+  const { url } = useRouteMatch();
   const history = useHistory();
 
   const { user: authUser } = useAuthenticator();
@@ -43,7 +41,7 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
           </div>
         )}
         <div className="bg-secondary py-5 flex flex-col justify-center items-center">
-          <div className="relative">
+          <div className="relative  border-primary-400">
             <Avatar
               className="border-4 object-cover border-primary-500 -mt-20"
               size="120"
@@ -99,9 +97,7 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
             </div>
             <div className="font-medium text-sm">
               <p className="py-3">{moment(user.created_on).format('ddd, YYYY-MM-DD')}</p>
-              <p className="py-2">
-                {moment().diff(moment(user.person.birth_date), 'years')}
-              </p>
+              <p className="py-2">{user.person.birth_date}</p>
               <p className="py-2">{user.person.sex}</p>
               <p className="py-3">{user.person.nationality || 'Rwanda'}</p>
               <p className="py-2">{titleCase(user.person.marital_status)}</p>
@@ -175,22 +171,12 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
             </Badge>
           </div>
         </div>
+        <div className="flex flex-col items-end mt-8">
+          <Link to={`${url}/edit-compl-prof`}>
+            <Button styleType="outline">Edit</Button>
+          </Link>
+        </div>
       </div>
-      <Switch>
-        <Route
-          exact
-          path={`${path}/edit-prof`}
-          render={() => (
-            <PopupMolecule
-              closeOnClickOutSide={false}
-              title="Upload new profile picture"
-              open={true}
-              onClose={history.goBack}>
-              <UpdatePhotoProfile user={user} />
-            </PopupMolecule>
-          )}
-        />
-      </Switch>
     </>
   );
 }

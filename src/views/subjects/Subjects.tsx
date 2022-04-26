@@ -22,6 +22,7 @@ function Subjects() {
   const { search } = useLocation();
   const history = useHistory();
   const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
+  const showMenu = new URLSearchParams(search).get('showMenus') || '';
   const instructorInfo =
     instructordeploymentStore.getInstructorByUserId(user?.id + '').data?.data.data || [];
 
@@ -81,7 +82,7 @@ function Subjects() {
         )}
       </Permission>
       <Permission privilege={Privileges.CAN_ACCESS_SUBJECTS}>
-        <Heading className="py-2">Manage these ubjects</Heading>
+        <Heading className="py-2">Manage these subjects</Heading>
         {subjectData.isLoading ? (
           <Loader />
         ) : subjects.length === 0 && subjectData.isSuccess ? (
@@ -97,7 +98,11 @@ function Subjects() {
           <section className="flex flex-wrap justify-start gap-4 mt-2">
             {subjects.map((subject) => (
               <div key={subject.id} className="p-1 mt-3">
-                <SubjectCard subject={subject} intakeProg={intakeProg} />
+                <SubjectCard
+                  subject={subject}
+                  showMenu={showMenu}
+                  intakeProg={intakeProg}
+                />
               </div>
             ))}
           </section>

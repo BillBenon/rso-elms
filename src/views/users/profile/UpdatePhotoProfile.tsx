@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
+import Avatar from '../../../components/Atoms/custom/Avatar';
 import Button from '../../../components/Atoms/custom/Button';
 import Icon from '../../../components/Atoms/custom/Icon';
 import FileUploader from '../../../components/Atoms/Input/FileUploader';
@@ -70,12 +71,12 @@ function UpdatePhotoProfile({ user }: { user: UserInfo }) {
         {user.first_name + ' ' + user.last_name}&apos;s profile
       </Heading>
       <div className="flex flex-col items-center w-32">
-        {/* <Avatar
+        <Avatar
           className="border-4 object-cover border-primary-500"
           size="120"
           src={profileSrc}
           alt="photo"
-        /> */}
+        />
         <FileUploader
           allowPreview={false}
           handleUpload={handleUpload}

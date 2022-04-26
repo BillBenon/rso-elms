@@ -8,31 +8,37 @@ import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
+import StudentQuestionsSectionBased from '../../components/Organisms/evaluation/StudentQuestionsSectionBased';
 import useFullscreenStatus from '../../hooks/useFullscreenStatus';
 import { evaluationService } from '../../services/evaluation/evaluation.service';
 import { markingStore } from '../../store/administration/marking.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
-import { getLocalStorageData } from '../../utils/getLocalStorageItem';
+import {
+  IEvaluationSettingType,
+  StudentEvalParamType,
+} from '../../types/services/evaluation.types';
 import QuestionContainer from './QuestionContainer';
 
 export default function EvaluationTest() {
-  const { id } = useParams<ParamType>();
+  const { evaluationId } = useParams<StudentEvalParamType>();
+  const { id: studentEvaluationId } = useParams<ParamType>();
   const history = useHistory();
   const { path } = useRouteMatch();
   const [time, SetTime] = useState(0);
   const [open, setOpen] = useState(true);
   const maximizableElement = React.useRef(null);
-  const [studentEvaluationId, setStudentEvaluationId] = useState('');
-  const [, setIsCheating] = useState(false);
+  const [isCheating, setIsCheating] = useState(false);
   const [timeLimit, SetTimeLimit] = useState(0);
   const [isFullscreen, setIsFullscreen] = useFullscreenStatus(maximizableElement);
-  const { data: evaluationData } = evaluationStore.getEvaluationById(id);
+  const { data: evaluationData } = evaluationStore.getEvaluationById(evaluationId);
   const {
     data: questions,
     isSuccess,
     isError,
-  } = evaluationStore.getEvaluationQuestions(id);
+  } = evaluationStore.getEvaluationQuestions(evaluationId);
+
+  const evaluationInfo = evaluationStore.getEvaluationById(evaluationId).data?.data.data;
 
   const { mutate } = evaluationStore.submitEvaluation();
 
@@ -40,8 +46,6 @@ export default function EvaluationTest() {
   let studentWorkTimer = evaluationStore.getEvaluationWorkTime(studentEvaluationId);
 
   const autoSubmit = useCallback(() => {
-    // setTimeout(() => {
-    setIsCheating(false);
     mutate(studentEvaluationId, {
       onSuccess: () => {
         toast.success('Evaluation submitted', { duration: 5000 });
@@ -51,7 +55,6 @@ export default function EvaluationTest() {
         toast.error(error + '');
       },
     });
-    // }, 2000);
   }, [history, mutate, studentEvaluationId]);
 
   async function updateWorkTime(value: any) {
@@ -63,8 +66,6 @@ export default function EvaluationTest() {
   }
 
   useEffect(() => {
-    setStudentEvaluationId(getLocalStorageData('studentEvaluationId'));
-
     SetTimeLimit(evaluationData?.data?.data?.time_limit || 0);
     SetTime(
       ((evaluationData?.data?.data?.time_limit || 0) * 60 -
@@ -79,21 +80,16 @@ export default function EvaluationTest() {
   ]);
 
   useEffect(() => {
-    // if (
-    //   !open &&
-    //   !isFullscreen &&
-    //   path === '/dashboard/evaluations/student-evaluation/:id'
-    // ) {
-    //   setIsCheating(true);
-    //   autoSubmit();
-    // }
+    if (!open && isCheating && path === '/dashboard/evaluations/student-evaluation/:id') {
+      setIsCheating(true);
+      autoSubmit();
+    }
     const handleTabChange = () => {
       if (
         document['hidden'] &&
         path === '/dashboard/evaluations/student-evaluation/:id'
       ) {
         setIsCheating(true);
-
         autoSubmit();
       }
     };
@@ -104,12 +100,10 @@ export default function EvaluationTest() {
     }
 
     return () => window.removeEventListener('visibilitychange', handleTabChange);
-  }, [isFullscreen, path, open, autoSubmit]);
+  }, [path, open, autoSubmit, isCheating, isFullscreen]);
 
   return (
-    <div
-      ref={maximizableElement}
-      className={`${isFullscreen && 'bg-secondary p-12 overflow-y-auto'}`}>
+    <div ref={maximizableElement} className={`${'bg-secondary p-12 overflow-y-auto'}`}>
       <PopupMolecule
         closeOnClickOutSide={false}
         open={open}
@@ -123,14 +117,14 @@ export default function EvaluationTest() {
             get zero
           </p>
 
-          <div className="flex justify-between">
+          <div className="flex justify-between pt-3">
             <div>
               <Button onClick={() => setOpen(false)}>Enable</Button>
             </div>
           </div>
         </div>
       </PopupMolecule>
-      <div className="flex justify-between">
+      <div className="flex justify-between py-4">
         <Heading fontWeight="semibold">{evaluationData?.data.data.name}</Heading>
         <div className="pr-28 flex justify-center items-center gap-2">
           <Heading color="txt-secondary" fontSize="base">
@@ -150,9 +144,12 @@ export default function EvaluationTest() {
         </div>
       </div>
 
-      {questions && questions.data.data.length > 0 ? (
+      {evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED ? (
+        <StudentQuestionsSectionBased evaluationInfo={evaluationInfo} />
+      ) : evaluationInfo && questions && questions.data.data.length > 0 ? (
         questions?.data.data.map((question, index: number) => (
           <QuestionContainer
+            evaluationInfo={evaluationInfo}
             showCorrectAnswer={false}
             index={index}
             id={question.id}
@@ -186,6 +183,8 @@ export default function EvaluationTest() {
       ) : (
         <Loader />
       )}
+
+      {/* :  */}
     </div>
   );
 }

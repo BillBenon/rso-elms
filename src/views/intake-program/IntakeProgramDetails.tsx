@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router';
+import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -158,9 +158,9 @@ function IntakeProgramDetails() {
   if (studentLevels?.data.data && studentLevels?.data.data.length > 0) {
     tabs.push({
       label: 'Student Program levels',
-      href: `${url}/levels/${
+      href: `${url}/levels/learn/${
         studentLevels.data.data[0].academic_year_program_level.id || ''
-      }?priv=learn`,
+      }`,
       privilege: Privileges.CAN_LEARN_IN_INTAKE_PROGRAM_LEVELS,
     });
   }
@@ -183,14 +183,14 @@ function IntakeProgramDetails() {
   if (instructorProgLevels && instructorProgLevels?.length > 0) {
     tabs.push({
       label: 'Instructor Program levels',
-      href: `${url}/levels/${instructorProgLevels[0]?.id || ''}?priv=teach`,
+      href: `${url}/levels/teach/${instructorProgLevels[0]?.id || ''}`,
       privilege: Privileges.CAN_TEACH_IN_INTAKE_PROGRAM_LEVELS,
     });
   }
   if (getLevels && getLevels?.length > 0) {
     tabs.push({
       label: 'Manage Program levels',
-      href: `${url}/levels/${getLevels[0]?.id || ''}?priv=manage`,
+      href: `${url}/levels/manage/${getLevels[0]?.id || ''}`,
       privilege: Privileges.CAN_ACCESS_INTAKE_PROGRAM_LEVELS,
     });
   }
@@ -403,7 +403,18 @@ function IntakeProgramDetails() {
               path={`${path}/modules`}
               render={() => <IntakeProgramModules />}
             />
-            <Route path={`${path}/levels`} render={() => <IntakeProgramLevel />} />
+            <Route
+              path={`${path}/levels/learn`}
+              render={() => <IntakeProgramLevel action="learn" />}
+            />
+            <Route
+              path={`${path}/levels/manage`}
+              render={() => <IntakeProgramLevel action="manage" />}
+            />
+            <Route
+              path={`${path}/levels/teach`}
+              render={() => <IntakeProgramLevel action="teach" />}
+            />
             <Route exact path={`${path}/approve`} render={() => <ApproveStudent />} />
           </Switch>
         </TabNavigation>

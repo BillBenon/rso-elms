@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, useHistory, useRouteMatch } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Route } from 'react-router';
+import { Link, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import usePickedRole from '../../../hooks/usePickedRole';
 import { divisionStore } from '../../../store/administration/divisions.store';

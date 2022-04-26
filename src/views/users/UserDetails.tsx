@@ -1,26 +1,39 @@
 import React from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useLocation, useParams } from 'react-router';
+import {
+  Route,
+  Switch,
+  useHistory,
+  useLocation,
+  useParams,
+  useRouteMatch,
+} from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import PopupMolecule from '../../components/Molecules/Popup';
 import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
+import NewPersonalDocument from '../../components/Organisms/forms/user/NewPersonalDocument';
 import { queryClient } from '../../plugins/react-query';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import usersStore from '../../store/administration/users.store';
 import { ParamType } from '../../types';
 import { ApproveStudents, StudentApproval } from '../../types/services/enrollment.types';
+import UpdateCompleteProfile from '../auth/UpdateCompleteProfile';
 import PersonalDocuments from './profile/PersonalDocuments';
 import ProfileOverview from './profile/ProfileOverview';
+import UpdatePhotoProfile from './profile/UpdatePhotoProfile';
 
 export default function UserDetails() {
   const { id } = useParams<ParamType>();
+
   const { data: user, isLoading } = usersStore.getUserById(id);
   const { search } = useLocation();
   const intkStud = new URLSearchParams(search).get('intkStud');
   const stat = new URLSearchParams(search).get('stat');
+  const { path } = useRouteMatch();
 
   const history = useHistory();
 
@@ -95,34 +108,70 @@ export default function UserDetails() {
               </div>
             )}
           </div>
-          <Tabs>
-            <Tab label="Overview" className="pt-8">
-              <ProfileOverview user={user?.data.data} />
-            </Tab>
-            <Tab label="Performance" className="pt-8">
-              <NoDataAvailable
-                icon="academy"
-                fill={false}
-                showButton={false}
-                title={'User have no performance yet'}
-                description={
-                  'This user does not currently have any performance to display'
-                }
-              />
-            </Tab>
-            <Tab label="Log" className="pt-8">
-              <NoDataAvailable
-                icon="academy"
-                fill={false}
-                showButton={false}
-                title={'User have no logs yet'}
-                description={"This user's logs are not currently being recorded"}
-              />
-            </Tab>
-            <Tab label="Personal Documents" className="pt-8">
-              <PersonalDocuments user={user?.data.data} />
-            </Tab>
-          </Tabs>
+          <Switch>
+            <Route
+              exact
+              path={`${path}`}
+              render={() => (
+                <Tabs>
+                  <Tab label="Overview" className="pt-8">
+                    <ProfileOverview user={user?.data.data} />
+                  </Tab>
+                  <Tab label="Performance" className="pt-8">
+                    <NoDataAvailable
+                      icon="academy"
+                      fill={false}
+                      showButton={false}
+                      title={'User have no performance yet'}
+                      description={
+                        'This user does not currently have any performance to display'
+                      }
+                    />
+                  </Tab>
+                  <Tab label="Log" className="pt-8">
+                    <NoDataAvailable
+                      icon="academy"
+                      fill={false}
+                      showButton={false}
+                      title={'User have no logs yet'}
+                      description={"This user's logs are not currently being recorded"}
+                    />
+                  </Tab>
+                  <Tab label="Personal Documents" className="pt-8">
+                    <PersonalDocuments user={user?.data.data} />
+                  </Tab>
+                </Tabs>
+              )}
+            />
+            <Route
+              exact
+              path={`${path}/new-personal-doc`}
+              render={() => {
+                return (
+                  <PopupMolecule
+                    title="New Personal Document"
+                    open
+                    onClose={history.goBack}>
+                    <NewPersonalDocument personId={user.data.data.person.id + ''} />
+                  </PopupMolecule>
+                );
+              }}
+            />
+            <Route path={`${path}/edit-compl-prof`} component={UpdateCompleteProfile} />
+            <Route
+              exact
+              path={`${path}/edit-prof`}
+              render={() => (
+                <PopupMolecule
+                  closeOnClickOutSide={false}
+                  title="Upload new profile picture"
+                  open={true}
+                  onClose={history.goBack}>
+                  <UpdatePhotoProfile user={user.data.data} />
+                </PopupMolecule>
+              )}
+            />
+          </Switch>
         </>
       ) : (
         <NoDataAvailable

@@ -40,6 +40,8 @@ export interface CreateModuleInfo {
   program_id: string;
 }
 
+export interface ModuleError extends Pick<CreateModuleInfo, 'name'> {}
+
 export interface ModulePrerequisites {
   prerequisite: Prerequisite;
   module: ModuleInfo;

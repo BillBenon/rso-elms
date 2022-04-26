@@ -1,14 +1,16 @@
 import React from 'react';
-import { Route, Switch, useRouteMatch } from 'react-router';
+import { Route, Switch, useRouteMatch } from 'react-router-dom';
 
 import AcademyProfileCard from '../../components/Molecules/cards/AcademyProfileCard';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import ConfirmResetPassword from '../../components/Organisms/ConfirmResetPassword';
 import SignInForm from '../../components/Organisms/forms/auth/signin/SignInForm';
 import SignInWithSearch from '../../components/Organisms/forms/auth/signin/SignInWithSearch';
 import { institutionStore } from '../../store/administration/institution.store';
 
 function SignIn() {
   const { path } = useRouteMatch();
+
   const institution = institutionStore.getAll();
 
   return (
@@ -48,6 +50,11 @@ function SignIn() {
             <Switch>
               <Route exact path={`${path}`} render={() => <SignInForm />} />
               <Route exact path={`${path}/search`} render={() => <SignInWithSearch />} />
+              <Route
+                exact
+                path={`${path}/forgot-pass`}
+                render={() => <ConfirmResetPassword />}
+              />
             </Switch>
           </div>
         </div>

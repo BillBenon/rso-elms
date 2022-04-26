@@ -1,18 +1,19 @@
 import { AxiosResponse } from 'axios';
-
 import { evaluationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
   IAddprivateAttendee,
   ICreateEvaluationQuestions,
+  IEvaluationAction,
+  IEvaluationActionInfo,
   IEvaluationApproval,
   IEvaluationCreate,
-  IEvaluationFeedback,
-  IEvaluationFeedbackInfo,
   IEvaluationInfo,
   IEvaluationInfoCollected,
   IEvaluationOwnership,
   IEvaluationQuestionsInfo,
+  IEvaluationSectionBased,
+  IEvaluationStatus,
   InstructorEvaluationAppprovalStatus,
   IStudentAnswer,
   IStudentEvaluationStart,
@@ -49,7 +50,7 @@ class EvaluationService {
   // }
   public async createEvaluationQuestion(
     questionsInfo: ICreateEvaluationQuestions[],
-  ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
+  ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>> {
     return await evaluationAxios.post('/evaluationQuestions/update-multiple', {
       questions: questionsInfo,
     });
@@ -113,12 +114,21 @@ class EvaluationService {
     return await evaluationAxios.get(`/evaluations/getById/${id}`);
   }
 
+  public async getEvaluationByIdAndInstructor(
+    id: string,
+    instructor: string,
+  ): Promise<AxiosResponse<Response<IEvaluationInfo>>> {
+    return await evaluationAxios.get(
+      `/evaluations/getById/${id}/instructor/${instructor}`,
+    );
+  }
+
   public async getEvaluationFeedbacks(
     evaluationId: string,
-    feedbackType: IEvaluationFeedback,
-  ): Promise<AxiosResponse<Response<IEvaluationFeedbackInfo[]>>> {
+    actionType: IEvaluationAction,
+  ): Promise<AxiosResponse<Response<IEvaluationActionInfo[]>>> {
     return await evaluationAxios.get(
-      `/evaluations/getByFeedback/${evaluationId}/feedback?feedback_type=${feedbackType}`,
+      `/evaluations/getByFeedback/${evaluationId}/feedback?feedback_type=${actionType}`,
     );
   }
 
@@ -155,16 +165,58 @@ class EvaluationService {
     );
   }
 
+  public async getEvaluationQuestionsByStatus(
+    id: string,
+    status: IEvaluationStatus,
+  ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>> {
+    return await evaluationAxios.get(
+      `/evaluationQuestions/getEvaluationQuestions/${id}/settingStatus/${status}`,
+    );
+  }
+
   public async getEvaluationQuestions(
     id: string,
   ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>> {
     return await evaluationAxios.get(`/evaluationQuestions/getEvaluationQuestions/${id}`);
   }
 
+  public async getEvaluationQuestionsBySubject(
+    evaluationId: string,
+    subjectId: string,
+  ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>> {
+    return await evaluationAxios.get(
+      `/evaluationQuestions/getEvaluationQuestions/evaluation/${evaluationId}/subject/${subjectId}`,
+    );
+  }
+
   public async deleteEvaluationQuestionById(
     id: string,
   ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>> {
     return await evaluationAxios.delete(`/evaluationQuestions/deleteQuestion/${id}`);
+  }
+
+  public async deleteEvaluationById(
+    id: string,
+  ): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
+    return await evaluationAxios.delete(`/evaluations/deleteById/${id}`);
+  }
+
+  public async getEvaluationModuleSubjectsByModule(
+    evaluationId: string,
+    moduleId: string,
+  ): Promise<AxiosResponse<Response<IEvaluationSectionBased[]>>> {
+    return await evaluationAxios.get(
+      `/evaluation-module-subjects/getByEvaluationAndModule/${evaluationId}/module/${moduleId}`,
+    );
+  }
+
+  public async updateEvaluationModuleSubject(
+    id: string,
+    status: IEvaluationStatus,
+  ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo[]>>> {
+    return await evaluationAxios.put(
+      `evaluation-module-subjects/${id}/changeSettingStatus/${status}`,
+    );
   }
 
   public async modifyEvaluation(
@@ -196,6 +248,15 @@ class EvaluationService {
     answer: IStudentAnswer,
   ): Promise<AxiosResponse<Response<IStudentAnswer>>> {
     return await evaluationAxios.post('student-answers/add', answer);
+  }
+
+  public async updateQuestionChoosen(
+    id: string,
+    status: IEvaluationStatus,
+  ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo>>> {
+    return await evaluationAxios.put(
+      `/evaluationQuestions/${id}/changeChooseStatus/${status}`,
+    );
   }
 
   public async submitEvaluation(studentEvaluationId: string): Promise<void> {
@@ -234,6 +295,42 @@ class EvaluationService {
     student: IStudentEvaluationStart,
   ): Promise<AxiosResponse<Response<IStudentEvaluationStartInfo>>> {
     return await evaluationAxios.post('studentEvaluations/start', student);
+  }
+
+  public async createSectionBasedEvaluation(
+    evaluation: IEvaluationSectionBased[],
+  ): Promise<AxiosResponse<Response<IEvaluationSectionBased[]>>> {
+    return await evaluationAxios.post('evaluation-module-subjects/add-bulk', evaluation);
+  }
+
+  public async updateQuestion(
+    question: IEvaluationQuestionsInfo,
+  ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo>>> {
+    return await evaluationAxios.put(
+      `evaluationQuestions/editQuestion/${question.id}`,
+      question,
+    );
+  }
+
+  public async updateMarkersOnModule({
+    markerId,
+    id,
+  }: {
+    markerId: string;
+    id: string;
+  }): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo>>> {
+    return await evaluationAxios.put(`evaluation-module-subjects/modifyById/${id}`, {
+      marker_id: markerId,
+    });
+  }
+
+  public async updateQuestionInfo(
+    question: IEvaluationQuestionsInfo,
+  ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo>>> {
+    return await evaluationAxios.put(
+      `evaluationQuestions/editQuestion/${question.id}`,
+      question,
+    );
   }
 }
 

@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
+import { useEffect } from 'react';
 import { Link, useRouteMatch } from 'react-router-dom';
 
 import useAuthenticator from '../../../../../hooks/useAuthenticator';
 import { ValueType } from '../../../../../types';
 import { LoginInfo } from '../../../../../types';
+import { loginSchema } from '../../../../../validations/user.validation';
 import Button from '../../../../Atoms/custom/Button';
 import Heading from '../../../../Atoms/Text/Heading';
 import InputMolecule from '../../../../Molecules/input/InputMolecule';
@@ -17,6 +19,13 @@ const SignInForm = () => {
     password: '',
   });
 
+  const initialErrorState: LoginInfo = {
+    username: '',
+    password: '',
+  };
+
+  const [errors, setErrors] = useState(initialErrorState);
+
   const handleChange = (e: ValueType) => {
     setDetails((details) => ({
       ...details,
@@ -24,7 +33,26 @@ const SignInForm = () => {
     }));
   };
 
-  useEffect(() => logout(), []);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(logout, []);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const validatedForm = loginSchema.validate(details, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => login(e, details))
+      .catch((err) => {
+        const validatedErr: LoginInfo = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof LoginInfo] = el.message;
+        });
+        setErrors(validatedErr);
+      });
+  };
+
   return (
     <>
       <div className="py-11">
@@ -40,9 +68,11 @@ const SignInForm = () => {
         </p>
       </div>
 
-      <form onSubmit={(e) => login(e, details)}>
+      <form onSubmit={handleSubmit}>
         <div className="flex flex-col gap-2">
           <InputMolecule
+            required={false}
+            error={errors.username}
             onCopy={(e: any) => {
               e.preventDefault();
               return false;
@@ -51,9 +81,11 @@ const SignInForm = () => {
             placeholder="Enter your username"
             value={details.username}
             handleChange={handleChange}>
-            Usernames
+            Username
           </InputMolecule>
           <InputMolecule
+            required={false}
+            error={errors.password}
             type="password"
             name="password"
             placeholder="Enter your password"
@@ -63,7 +95,7 @@ const SignInForm = () => {
           </InputMolecule>
         </div>
         <div className="flex justify-end w-80">
-          <Link to="/">
+          <Link to={`${url}/forgot-pass`}>
             <span className="text-sm text-primary-500">Forgot password?</span>
           </Link>
         </div>

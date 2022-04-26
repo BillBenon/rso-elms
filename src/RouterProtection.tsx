@@ -89,8 +89,6 @@ const RouterProtection = () => {
             <Route path={`${path}/privileges`} component={PrivilegesView} />
           )}
 
-          {/* end of institution routes */}
-
           {/* academic admin routes */}
           {hasPrivilege(Privileges.CAN_ACCESS_SUBJECTS) && (
             <Route path={`${path}/subjects`} component={Subjects} />
@@ -144,6 +142,7 @@ const RouterProtection = () => {
             hasPrivilege(Privileges.CAN_ANSWER_EVALUATION)) && (
             <Route path={`${path}/evaluations`} component={InstructorViewEvaluations} />
           )}
+
           <Route
             exact
             path={`${path}/account/update-password`}

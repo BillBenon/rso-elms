@@ -38,4 +38,19 @@ export interface AcademyCreateInfo {
   postal_code: string;
   short_name: string;
   website_link: string;
+  translation_preset: string;
+}
+
+export interface AcademyInfoErrors
+  extends Pick<
+    AcademyCreateInfo,
+    'name' | 'moto' | 'mission' | 'short_name' | 'translation_preset'
+  > {}
+
+export interface AcademyLocationErrors
+  extends Pick<
+    AcademyCreateInfo,
+    'email' | 'phone_number' | 'fax_number' | 'website_link' | 'full_address'
+  > {
+  head_office_location_id: string;
 }

@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 
 import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../types';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
-import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../../Molecules/input/InputMolecule';
 import LocationMolecule from '../../../../../Molecules/input/LocationMolecule';
 
@@ -30,7 +29,7 @@ function KinAddressDetails<E>({
   const moveBack = () => {
     prevStep && prevStep();
   };
-  const moveForward = (e: any) => {
+  const moveForward = (e: FormEvent) => {
     e.preventDefault();
     nextStep(true);
     if (onSubmit) onSubmit(e, details);

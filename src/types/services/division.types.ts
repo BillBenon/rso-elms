@@ -23,6 +23,11 @@ export interface DivisionCreateInfo {
   academy?: AcademyInfo;
 }
 
+export interface FacultyErrors extends Pick<DivisionCreateInfo, 'name' | 'description'> {}
+export interface DepartErrors extends Pick<DivisionCreateInfo, 'name' | 'description'> {
+  faculty: string;
+}
+
 export enum Status {
   ACTIVE,
   INACTIVE,

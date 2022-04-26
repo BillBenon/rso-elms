@@ -81,6 +81,11 @@ class UserService {
   public async getUserByid(id: string): Promise<AxiosResponse<Response<UserInfo>>> {
     return await adminstrationAxios.get(`/users/getUserById/${id}`);
   }
+  public async getAllBySearch(
+    text: string,
+  ): Promise<AxiosResponse<Response<SortedContent<UserInfo[]>>>> {
+    return await adminstrationAxios.get(`/users/getAllBySearch?q=${text}`);
+  }
   public async getUsersByInstitution(
     institutionId: string,
   ): Promise<AxiosResponse<Response<UserInfo[]>>> {

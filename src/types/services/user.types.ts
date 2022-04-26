@@ -83,6 +83,11 @@ export interface FileAttachment {
   docInfo: FormData;
   id: string;
 }
+
+export interface DocErrors {
+  purpose: string;
+  file: string;
+}
 export interface IntakeLevelProgramInfo extends Table {
   student: Student;
 }
@@ -186,7 +191,6 @@ export interface EditUser {
   academy_id: string;
   birth_date: string;
   deployed_on: string;
-  deployment_number: string;
   doc_type: DocType;
   education_level: EducationLevel;
   email: string;
@@ -218,6 +222,7 @@ export interface EditUser {
 }
 
 export interface CreateUserInfo extends EditUser {
+  deployment_number: string;
   password: string;
 }
 export interface UserView
@@ -280,7 +285,9 @@ export interface PersonDetail
     | 'place_of_residence'
     | 'doc_type'
     | 'nationality'
-  > {}
+  > {
+    phone: string;
+  }
 export interface EmploymentDetail
   extends Pick<
     PersonInfo,

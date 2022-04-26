@@ -9,10 +9,8 @@ import {
   IEvaluationStatus,
   IStudentEvaluationStart,
 } from '../../types/services/evaluation.types';
-import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import Button from '../Atoms/custom/Button';
 import Heading from '../Atoms/Text/Heading';
-import Tiptap from '../Molecules/editor/Tiptap';
 import PopupMolecule from '../Molecules/Popup';
 
 interface IConfirmationProps {
@@ -29,11 +27,14 @@ export default function ConfirmationOrganism({
 
   const evaluation = evaluationStore.getEvaluationById(id).data?.data.data;
   const studentEval = new URLSearchParams(search).get('studentEval');
+  const evalId = new URLSearchParams(search).get('evaluation');
 
   const { mutate, isLoading } = evaluationStore.studentEvaluationStart();
 
-  function goToNext(id: string) {
-    history.push(`/dashboard/evaluations/student-evaluation/${id}`);
+  function goToNext(studentEval: string, evaluationId: string) {
+    history.push(
+      `/dashboard/evaluations/student-evaluation/${studentEval}/${evaluationId}`,
+    );
   }
 
   function generateStudentCode() {
@@ -43,16 +44,16 @@ export default function ConfirmationOrganism({
       student_id: user?.id + '',
     };
 
-    if (studentEval) {
-      setLocalStorageData('studentEvaluationId', studentEval);
+    if (studentEval && evalId) {
+      //TODO: remove this once doing evaluation is working well setLocalStorageData('studentEvaluationId', studentEval);
       toast.success('Recovered evaluation code', { duration: 5000 });
-      goToNext(studentEvaluationStart.evaluation_id);
+      goToNext(studentEval, evalId);
     } else {
       mutate(studentEvaluationStart, {
         onSuccess: (studentInfo) => {
-          setLocalStorageData('studentEvaluationId', studentInfo.data.data.id);
+          //TODO: remove this once doing evaluation is working well setLocalStorageData('studentEvaluationId', studentEval);
           toast.success('Started evaluation', { duration: 5000 });
-          goToNext(studentEvaluationStart.evaluation_id);
+          goToNext(studentInfo.data.data.id, studentEvaluationStart.evaluation_id);
         },
         onError: (error: any) => {
           toast.error(error.response.data.message);
@@ -69,15 +70,11 @@ export default function ConfirmationOrganism({
       onClose={onConfirmationClose}>
       <div>
         <Heading fontWeight="semibold">{evaluation?.name || ''}</Heading>
-        <p className="course-card-description leading-5 pb-6 w-96 text-txt-secondary text-sm mt-4">
-          <Tiptap
-            showBorder={false}
-            handleChange={() => {}}
-            editable={false}
-            viewMenu={false}
-            content={evaluation?.exam_instruction || ''}
-          />
-        </p>
+        <div
+          dangerouslySetInnerHTML={{
+            __html: evaluation?.exam_instruction || '',
+          }}
+          className="leading-5 pb-6 w-96 text-txt-secondary text-sm mt-4"></div>
 
         <div className="flex justify-starg">
           <Button disabled={isLoading} onClick={generateStudentCode}>

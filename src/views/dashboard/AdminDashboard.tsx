@@ -1,4 +1,8 @@
-import React from 'react';
+import 'react-calendar/dist/Calendar.css';
+import '../../styles/components/Molecules/timetable/calendar.css';
+
+import React, { useState } from 'react';
+import Calendar from 'react-calendar';
 import { Link as BrowserLink } from 'react-router-dom';
 
 import Heading from '../../components/Atoms/Text/Heading';
@@ -19,6 +23,8 @@ const list: Link[] = [
 ];
 
 export default function AdminDashboard() {
+  const [scheduleDate, setscheduleDate] = useState(new Date());
+
   const picked_role = usePickedRole();
   const users =
     usersStore.getUsersByAcademy(picked_role?.academy_id + '', {
@@ -36,6 +42,10 @@ export default function AdminDashboard() {
   const faculties =
     divisionStore.getDivisionsByAcademy('FACULTY', picked_role?.academy_id + '').data
       ?.data.data || [];
+
+  const handleScheduleDate = (date: Date) => {
+    setscheduleDate(date);
+  };
 
   return (
     <div className="py-2">
@@ -117,7 +127,51 @@ export default function AdminDashboard() {
             />
           </div>
         </div>
-        <div className="col-span-2 h-56 rounded"></div>
+        <div className="col-span-2 p-3">
+          <Heading fontSize="lg" className="pb-3" fontWeight="medium">
+            Calendar
+          </Heading>
+          <Calendar onChange={handleScheduleDate} value={scheduleDate} />
+          <div className="py-3">
+            <Heading fontSize="lg" fontWeight="medium">
+              Schedule
+            </Heading>
+            <div className="flex flex-col gap-2 pt-2">
+              <div className="flex w-full">
+                <div className="bg-primary-500 rounded-l-lg text-white p-6">
+                  <p className="text-sm font-medium">{new Date().getDate()}</p>
+                  <p className="text-sm font-medium">
+                    {new Date().toDateString().split(' ')[1]}
+                  </p>
+                </div>
+                <div className="bg-gray-50 w-full py-5">
+                  <p className="text-gray-400 text-sm font-medium px-4">
+                    10:00 AM - 12:00 PM
+                  </p>
+                  <div className="pt-2 text-sm font-medium px-4">
+                    Conference with the academy principals
+                  </div>
+                </div>
+              </div>
+              <div className="flex w-full">
+                <div className="bg-gray-300 rounded-l-lg p-6">
+                  <p className="text-sm font-medium">{new Date().getDate()}</p>
+                  <p className="text-sm font-medium">
+                    {new Date().toDateString().split(' ')[1]}
+                  </p>
+                </div>
+                <div className="bg-gray-50 w-full py-5">
+                  <p className="text-gray-400 text-sm font-medium px-4">
+                    10:00 AM - 12:00 PM
+                  </p>
+                  <div className="pt-2 text-sm font-medium px-4">
+                    Conference with the academy principals
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -17,12 +17,14 @@ export default function MenuBar({ editor }: IProps) {
   return (
     <div id="editor-menubar" className="mt-2 mb-3  border-b border-solid">
       <button
+        aria-label="bold"
         type="button"
         onClick={() => editor.chain().focus().toggleBold().run()}
         className={editor.isActive('bold') ? 'is-active' : ''}>
         <Icon size={18} name="bold" />
       </button>
       <button
+        aria-label="text-italic"
         type="button"
         onClick={() => editor.chain().focus().toggleItalic().run()}
         className={editor.isActive('italic') ? 'is-active' : ''}>
@@ -30,6 +32,7 @@ export default function MenuBar({ editor }: IProps) {
       </button>
       <button
         type="button"
+        aria-label="text-strikethrough"
         onClick={() => editor.chain().focus().toggleStrike().run()}
         className={editor.isActive('strike') ? 'is-active' : ''}>
         <Icon size={18} name="text-strikethrough" />
@@ -47,6 +50,7 @@ export default function MenuBar({ editor }: IProps) {
       </button> */}
       <button
         type="button"
+        aria-label="heading-one"
         onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
         className={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}>
         <Icon size={18} name="heading-h1" />

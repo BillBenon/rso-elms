@@ -13,11 +13,16 @@ import {
   getDropDownOptions,
   getDropDownStatusOptions,
 } from '../../../../utils/getOption';
+import { newRoleSchema } from '../../../../validations/role.validation';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
+
+interface NewRoleErrors extends Pick<CreateRoleReq, 'academy_id' | 'name'> {
+  chose_academy: boolean;
+}
 
 export default function NewRole({ onSubmit }: FormPropType) {
   const { mutateAsync } = roleStore.addRole();
@@ -25,7 +30,7 @@ export default function NewRole({ onSubmit }: FormPropType) {
   const picked_role = usePickedRole();
   const history = useHistory();
   const { data: academy, isLoading } = academyStore.getAcademyById(
-    picked_role?.academy_id + '',
+    picked_role?.academy_id || '',
   );
 
   const [form, setForm] = useState<CreateRoleReq>({
@@ -36,15 +41,24 @@ export default function NewRole({ onSubmit }: FormPropType) {
     type: RoleType.ACADEMY,
   });
 
+  const initialErrorState: NewRoleErrors = {
+    academy_id: '',
+    name: '',
+    chose_academy: false,
+  };
+
+  const [errors, setErrors] = useState(initialErrorState);
+
   useEffect(() => {
     setForm({
       name: '',
       description: '',
-      academy_id: picked_role?.academy_id + '',
+      academy_id:
+        picked_role?.type !== RoleType.INSTITUTION ? picked_role?.academy_id || '' : '',
       institution_id: user?.institution?.id.toString() || '',
       type: RoleType.ACADEMY,
     });
-  }, [picked_role?.academy_id, user?.institution?.id]);
+  }, [picked_role?.academy_id, picked_role?.type, user?.institution?.id]);
 
   function handleChange({ name, value }: ValueType) {
     setForm((old) => ({ ...old, [name]: value }));
@@ -52,16 +66,41 @@ export default function NewRole({ onSubmit }: FormPropType) {
 
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
-    mutateAsync(form, {
-      onSuccess: () => {
-        toast.success('Role created');
-        history.goBack();
+
+    const validatedForm = newRoleSchema.validate(
+      {
+        name: form.name,
+        academy_id: form.academy_id,
+        chose_academy: form.type === RoleType.ACADEMY,
       },
-      onError: (error: any) => {
-        toast.error(error.response.data.message);
+      {
+        abortEarly: false,
       },
-    });
-    if (onSubmit) onSubmit(e);
+    );
+    validatedForm
+      .then(() => {
+        mutateAsync(form, {
+          onSuccess: () => {
+            toast.success('Role created');
+
+            history.goBack();
+          },
+          onError: (error: any) => {
+            toast.error(error.response.data.message);
+          },
+        });
+        if (onSubmit) onSubmit(e);
+      })
+      .catch((err) => {
+        console.log(err);
+
+        const validatedErr: NewRoleErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          //@ts-ignore
+          validatedErr[el.path as keyof NewRoleErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
   const academies: AcademyInfo[] | undefined =
     academyStore.fetchAcademies().data?.data.data || [];
@@ -82,6 +121,8 @@ export default function NewRole({ onSubmit }: FormPropType) {
           </RadioMolecule>
           {form.type === RoleType.ACADEMY ? (
             <SelectMolecule
+              error={errors.academy_id}
+              hasError={errors.academy_id !== ''}
               options={getDropDownOptions({ inputs: academies || [] })}
               name="academy_id"
               placeholder="select academy"
@@ -109,9 +150,9 @@ export default function NewRole({ onSubmit }: FormPropType) {
         </InputMolecule>
       )}
       <InputMolecule
-        required
+        required={false}
+        error={errors.name}
         value={form.name}
-        error=""
         handleChange={handleChange}
         name="name">
         Role name
@@ -119,9 +160,9 @@ export default function NewRole({ onSubmit }: FormPropType) {
       {/* model code
     {/* module description */}
       <TextAreaMolecule
+        required={false}
         value={form.description}
         name="description"
-        required
         handleChange={handleChange}>
         Descripiton
       </TextAreaMolecule>

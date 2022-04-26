@@ -1,30 +1,74 @@
 import '../../../styles/components/Molecules/correction/marking.scss';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '../../../components/Atoms/custom/Button';
 import Loader from '../../../components/Atoms/custom/Loader';
+import Heading from '../../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../../components/Molecules/BreadCrumb';
 import StudentAnswer from '../../../components/Molecules/cards/correction/StudentAnswer';
+import NoDataAvailable from '../../../components/Molecules/cards/NoDataAvailable';
+import SelectMolecule from '../../../components/Molecules/input/SelectMolecule';
 import TableHeader from '../../../components/Molecules/table/TableHeader';
 import FinishMarking from '../../../components/Organisms/forms/evaluation/FinishMarking';
 import { markingStore } from '../../../store/administration/marking.store';
-import { Link as LinkList } from '../../../types';
+import { Link as LinkList, SelectData, ValueType } from '../../../types';
 import { ParamType } from '../../../types';
-import { MarkingCorrection } from '../../../types/services/marking.types';
+import {
+  MarkingCorrection,
+  StudentMarkingAnswer,
+} from '../../../types/services/marking.types';
 
 export default function StudentAnswersMarking() {
   const { id } = useParams<ParamType>();
+  const [evaluationId, setEvaluationId] = useState<string>('');
+  const { mutate } = markingStore.finishMarking();
+  const history = useHistory();
+
   const studentAnswers = markingStore.getStudentEvaluationAnswers(id).data?.data.data;
   const { data: studentEvaluation, isLoading } =
     markingStore.getStudentEvaluationById(id);
+  const { data, isLoading: markingModulesLoader } =
+    markingStore.getEvaluationMarkingModules(evaluationId, evaluationId.length == 36);
   const [totalMarks, setTotalMarks] = useState(0);
   const [correction, setCorrection] = useState<Array<MarkingCorrection>>([]);
+  const [markingModules, setMarkingModules] = useState<SelectData[]>([]);
+  const [currentModule, setCurrentModule] = useState<string>('');
+  const [step, setStep] = useState<number>(0);
+  const [answersLength, setAnswersLength] = useState<number>(0);
+
+  useEffect(() => {
+    setEvaluationId(studentEvaluation?.data.data.evaluation.id + '');
+  }, [studentEvaluation]);
+
+  useEffect(() => {
+    setAnswersLength(studentAnswers?.filter(answersFilter).length || 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentModule, studentAnswers]);
+
+  useEffect(() => {
+    console.log(data);
+
+    let selectedModules: SelectData[] = [];
+    data?.data.data.forEach((element) => {
+      selectedModules.push({
+        value: element.id,
+        label: element.module_subject.title,
+      });
+    });
+    console.log(selectedModules);
+
+    setMarkingModules(selectedModules);
+  }, [data]);
+
+  function handleMarkingModuleChange(e: ValueType) {
+    setCurrentModule(e.value.toString());
+  }
+
   // const [rowsOnPage] = useState(3);
   // const [currentPage, setCurrentPage] = useState(1);
-  const [step, setStep] = useState(0);
   // const indexOfLastRow = currentPage * rowsOnPage;
   // const indexOfFirstRow = indexOfLastRow - rowsOnPage;
   // const [currentRows, setCurrentRows] = useState(
@@ -49,11 +93,10 @@ export default function StudentAnswersMarking() {
   const list: LinkList[] = [
     { to: '/', title: 'Instructor' },
     { to: 'evaluations', title: 'evaluations' },
-    { to: '/evaluations/evaluation_id', title: 'Evaluation Details' },
-    { to: 'evaluations/evaluation_id/marking_studentEvaluation', title: 'Marking' },
+    { to: `/evaluations/${evaluationId}`, title: 'Evaluation Details' },
+    { to: `/evaluations/${evaluationId}/submissions`, title: 'Marking' },
   ];
 
-  const { mutate } = markingStore.finishMarking();
   function createCreateNewCorrection(answer_id: string, points: number, marked: boolean) {
     setCorrection([
       ...correction,
@@ -62,6 +105,7 @@ export default function StudentAnswersMarking() {
     setTotalMarks(totalMarks + points);
     return { answerId: answer_id, markScored: points, marked: marked || false };
   }
+
   function updateQuestionPoints(answer_id: string, points: number) {
     var flag: number = 0;
 
@@ -95,6 +139,15 @@ export default function StudentAnswersMarking() {
     }
   }
 
+  const answersFilter = (studentAnswer: StudentMarkingAnswer) => {
+    if (studentAnswer.evaluation_question.evaluation_module_subject != null)
+      return (
+        currentModule ===
+        studentAnswer.evaluation_question.evaluation_module_subject.id + ''
+      );
+    else return true;
+  };
+
   function submitMarking() {
     if (correction.length == (studentAnswers?.length || 0)) {
       mutate(
@@ -115,37 +168,57 @@ export default function StudentAnswersMarking() {
     }
   }
   if (step == 0)
-    if (!isLoading)
-      return (
-        <div className={`flex flex-col gap-4`}>
-          <section>
-            <BreadCrumb list={list}></BreadCrumb>
-          </section>
-          <TableHeader
-            title={studentEvaluation?.data.data.code + ' submission'}
-            showBadge={false}
-            showSearch={false}>
-            <p className="text-gray-400">
-              Marks obtained:{' '}
-              <span className="text-green-300 font-semibold">{totalMarks}</span>
-            </p>
-          </TableHeader>
-          <section className="flex flex-wrap justify-start gap-4 mt-2">
-            {studentAnswers?.map((studentAnswer, index: number) => {
-              return (
-                <StudentAnswer
-                  key={index}
-                  index={index}
-                  correction={correction}
-                  updateQuestionPoints={updateQuestionPoints}
-                  data={studentAnswer}
-                  totalMarks={totalMarks}
-                  setTotalMarks={setTotalMarks}
-                  createCreateNewCorrection={createCreateNewCorrection}
-                />
-              );
-            })}
-            {/* <div className="flex item-center mx-auto">
+    if (!isLoading && !markingModulesLoader)
+      if (markingModules?.length || 0 > 0)
+        return (
+          <div className={`flex flex-col gap-4`}>
+            <section>
+              <BreadCrumb list={list}></BreadCrumb>
+            </section>
+            <div>
+              <Heading fontWeight="medium" fontSize="sm">
+                Select section
+              </Heading>
+              <SelectMolecule
+                width="80"
+                className=""
+                value={currentModule}
+                handleChange={handleMarkingModuleChange}
+                name={'type'}
+                placeholder="marking section"
+                options={markingModules}
+              />
+            </div>
+            {answersLength > 0 && (
+              <TableHeader
+                title={studentEvaluation?.data.data.code + ' submission'}
+                showBadge={false}
+                showSearch={false}>
+                <p className="text-gray-400">
+                  Marks obtained:{' '}
+                  <span className="text-green-300 font-semibold">{totalMarks}</span>
+                </p>
+              </TableHeader>
+            )}
+
+            <section className="flex flex-wrap justify-start gap-4 mt-2">
+              {studentAnswers
+                ?.filter(answersFilter)
+                .map((studentAnswer, index: number) => {
+                  return (
+                    <StudentAnswer
+                      key={index}
+                      index={index}
+                      correction={correction}
+                      updateQuestionPoints={updateQuestionPoints}
+                      data={studentAnswer}
+                      totalMarks={totalMarks}
+                      setTotalMarks={setTotalMarks}
+                      createCreateNewCorrection={createCreateNewCorrection}
+                    />
+                  );
+                })}
+              {/* <div className="flex item-center mx-auto">
               <Pagination
                 rowsPerPage={rowsOnPage}
                 totalElements={studentAnswers?.length || 5}
@@ -154,12 +227,33 @@ export default function StudentAnswersMarking() {
                 totalPages={1}
               />
             </div> */}
-            <div className="w-full flex justify-end">
-              <Button onClick={submitMarking}>Complete Marking</Button>
-            </div>
-          </section>
-        </div>
-      );
+              {answersLength > 0 && (
+                <div className="w-full flex justify-end">
+                  <Button onClick={submitMarking}>Complete Marking</Button>
+                </div>
+              )}
+              {answersLength == 0 && (
+                <div className="w-full flex justify-end">
+                  <Button
+                    onClick={() => {
+                      history.goBack();
+                    }}>
+                    Go back
+                  </Button>
+                </div>
+              )}
+            </section>
+          </div>
+        );
+      else
+        return (
+          <div className="w-full flex justify-center items-center">
+            <NoDataAvailable
+              title={'No marking modules'}
+              description={"You don't have any marking module for this evaluation"}
+            />
+          </div>
+        );
     else return <Loader />;
   else
     return (

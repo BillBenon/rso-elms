@@ -20,6 +20,16 @@ import {
 } from '../../types/services/intake-program.types';
 import { ExtendedSubjectInfo } from '../../types/services/subject.types';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
+import { subjectPrdSchema } from '../../validations/program.validation';
+
+interface SubjectPeriodError
+  extends Pick<
+    AddSubjectPeriod,
+    'subjectId' | 'inchargeId' | 'plannedStartOn' | 'plannedEndOn'
+  > {
+  intakeProgramModuleLevelId: string;
+  satus: string;
+}
 
 function AddSubjectToPeriod() {
   const history = useHistory();
@@ -48,6 +58,17 @@ function AddSubjectToPeriod() {
     subjectId: '',
   });
 
+  const initialErrorState: SubjectPeriodError = {
+    intakeProgramModuleLevelId: '',
+    subjectId: '',
+    inchargeId: '',
+    plannedStartOn: '',
+    plannedEndOn: '',
+    satus: '',
+  };
+
+  const [errors, setErrors] = useState<SubjectPeriodError>(initialErrorState);
+
   const { mutateAsync } = intakeProgramStore.addSubjectToPeriod();
 
   function handleChange(e: ValueType) {
@@ -65,32 +86,48 @@ function AddSubjectToPeriod() {
   const { data: instructors, isLoading: instLoading } =
     enrollmentStore.getInstructorsByModule(pickedModule?.module.id + '');
 
-  async function submitForm<T>(e: FormEvent<T>) {
+  function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault(); // prevent page to reload:
-    await mutateAsync(
-      {
-        ...subjectPrd,
-        intakeLevelClassId: parseInt(classId),
-        intakeAcademicYearPeriodId: parseInt(period),
-      },
-      {
-        onSuccess: (data) => {
-          toast.success(data.data.message);
-          queryClient.invalidateQueries(['subjects/period']);
-          history.push(
-            `/dashboard/modules/subjects/${subjectPrd.subjectId}/instructors?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
-          );
-        },
-        onError: (error: any) => {
-          toast.error(error.response.data.message);
-        },
-      },
-    );
+    const validatedForm = subjectPrdSchema.validate(subjectPrd, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => {
+        mutateAsync(
+          {
+            ...subjectPrd,
+            intakeLevelClassId: parseInt(classId),
+            intakeAcademicYearPeriodId: parseInt(period),
+          },
+          {
+            onSuccess: (data) => {
+              toast.success(data.data.message);
+              queryClient.invalidateQueries(['subjects/period']);
+              history.push(
+                `/dashboard/modules/subjects/${subjectPrd.subjectId}/instructors?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
+              );
+            },
+            onError: (error: any) => {
+              toast.error(error.response.data.message);
+            },
+          },
+        );
+      })
+      .catch((err) => {
+        const validatedErr: SubjectPeriodError = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof SubjectPeriodError] = el.message;
+        });
+        setErrors(validatedErr);
+      });
   }
 
   return (
     <form onSubmit={submitForm}>
       <DropdownMolecule
+        error={errors.intakeProgramModuleLevelId}
+        hasError={errors.intakeProgramModuleLevelId !== ''}
         handleChange={handleChange}
         name="intakeProgramModuleLevelId"
         placeholder={LevelLoading ? 'Loading modules' : 'select module'}
@@ -102,6 +139,8 @@ function AddSubjectToPeriod() {
         Module
       </DropdownMolecule>
       <DropdownMolecule
+        error={errors.subjectId}
+        hasError={errors.subjectId !== ''}
         handleChange={handleChange}
         name="subjectId"
         placeholder={subjectLoading ? 'Loading subject' : 'select subject'}
@@ -120,6 +159,8 @@ function AddSubjectToPeriod() {
         Marks
       </InputMolecule> */}
       <DropdownMolecule
+        error={errors.inchargeId}
+        hasError={errors.inchargeId !== ''}
         handleChange={handleChange}
         name="inchargeId"
         placeholder={instLoading ? 'Loading instructors' : 'select incharge'}
@@ -132,6 +173,7 @@ function AddSubjectToPeriod() {
         Incharge
       </DropdownMolecule>
       <DateMolecule
+        error={errors.plannedStartOn}
         startYear={moment(
           pickedModule?.planned_start_on === ''
             ? undefined
@@ -146,6 +188,7 @@ function AddSubjectToPeriod() {
         Start Date
       </DateMolecule>
       <DateMolecule
+        error={errors.plannedEndOn}
         startYear={moment(
           subjectPrd.plannedStartOn === '' ? undefined : subjectPrd.plannedStartOn,
         ).year()}
@@ -157,6 +200,8 @@ function AddSubjectToPeriod() {
         End Date
       </DateMolecule>
       <DropdownMolecule
+        error={errors.satus}
+        hasError={errors.satus !== ''}
         handleChange={handleChange}
         name="satus"
         placeholder="subject status"

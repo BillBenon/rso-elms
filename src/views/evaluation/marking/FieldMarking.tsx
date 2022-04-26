@@ -1,6 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
-
 import Loader from '../../../components/Atoms/custom/Loader';
 import Heading from '../../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../../components/Molecules/cards/NoDataAvailable';
@@ -8,7 +8,7 @@ import SelectMolecule from '../../../components/Molecules/input/SelectMolecule';
 import Table from '../../../components/Molecules/table/Table';
 import TabNavigation from '../../../components/Molecules/tabs/TabNavigation';
 import { useClasses } from '../../../hooks/useClasses';
-import { classStore } from '../../../store/administration/class.store';
+import { getStudentsByClass } from '../../../store/administration/class.store';
 import { markingStore } from '../../../store/administration/marking.store';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import { ValueType } from '../../../types';
@@ -28,12 +28,10 @@ export default function FieldMarking({ evaluationId }: PropsType) {
 
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId).data?.data || {};
-  // eslint-disable-next-line react-hooks/exhaustive-deps
   const markedStudents =
     markingStore.getEvaluationStudentEvaluations(evaluationId).data?.data.data || [];
 
-  const { data: studentsData, isLoading } =
-    classStore.getStudentsByClass(currentClassId + '') || [];
+  const { data: studentsData, isLoading } = getStudentsByClass(currentClassId) || [];
 
   //   const { data: manualMarkingData } = markingStore.getManualMarkingMarks(
   //     evaluationId,
@@ -41,7 +39,7 @@ export default function FieldMarking({ evaluationId }: PropsType) {
   //   );
 
   const [classes, setclasses] = useState(
-    evaluationInfo?.intake_level_class_ids.split(','),
+    evaluationInfo?.intake_level_class_ids.split(',').filter((item) => item != ''),
   );
   //   const { mutate } = markingStore.manualMarking();
 
@@ -81,7 +79,9 @@ export default function FieldMarking({ evaluationId }: PropsType) {
   ];
 
   useEffect(() => {
-    setclasses(evaluationInfo?.intake_level_class_ids.split(',') || ['']);
+    setclasses(
+      evaluationInfo?.intake_level_class_ids.split(',').filter((item) => item != ''),
+    );
   }, [evaluationInfo?.intake_level_class_ids]);
 
   useEffect(() => {
@@ -113,12 +113,8 @@ export default function FieldMarking({ evaluationId }: PropsType) {
   }, [evaluationInfo?.total_mark, markedStudents, studentsData?.data]);
 
   return (
-    <div className="flex flex-col gap-8">
-      <Heading fontWeight="semibold" className="pt-7">
-        {useClasses(currentClassId).label || 'No choosen class'}{' '}
-      </Heading>
-
-      <div>
+    <div className="flex flex-col gap-8 -mt-20">
+      <div className="pt-8">
         <Heading fontWeight="medium" fontSize="sm">
           Select class
         </Heading>
@@ -128,7 +124,7 @@ export default function FieldMarking({ evaluationId }: PropsType) {
           value={currentClassId}
           handleChange={handleClassChange}
           name={'type'}
-          placeholder="Evaluation type"
+          placeholder="Class name"
           options={classes?.map((cl) => useClasses(cl)) || []}
         />
       </div>

@@ -5,8 +5,17 @@ import { useHistory, useRouteMatch } from 'react-router-dom';
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import { queryClient } from '../../../../plugins/react-query';
 import academyStore from '../../../../store/administration/academy.store';
+import { TranslationPresets } from '../../../../translations/i18n';
 import { Link, ValueType } from '../../../../types';
-import { AcademyCreateInfo } from '../../../../types/services/academy.types';
+import {
+  AcademyCreateInfo,
+  AcademyInfoErrors,
+  AcademyLocationErrors,
+} from '../../../../types/services/academy.types';
+import {
+  academyInfoSchema,
+  academyLocationSchema,
+} from '../../../../validations/academy.validation';
 import Button from '../../../Atoms/custom/Button';
 import FileUploader from '../../../Atoms/Input/FileUploader';
 import Heading from '../../../Atoms/Text/Heading';
@@ -14,6 +23,7 @@ import ILabel from '../../../Atoms/Text/ILabel';
 import BreadCrumb from '../../../Molecules/BreadCrumb';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import LocationMolecule from '../../../Molecules/input/LocationMolecule';
+import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import Stepper from '../../../Molecules/Stepper/Stepper';
 
 interface IProps {
@@ -52,6 +62,7 @@ export default function NewAcademy() {
     postal_code: '',
     short_name: '',
     website_link: '',
+    translation_preset: 'default',
   });
 
   const [logoFile, setlogoFile] = useState<File | null>(null);
@@ -159,9 +170,41 @@ function AcademyInfoComponent({
   handleNext,
   handleUpload,
 }: IProps) {
+  const initialErrorState: AcademyInfoErrors = {
+    name: '',
+    short_name: '',
+    mission: '',
+    moto: '',
+    translation_preset: '',
+  };
+
+  const [errors, setErrors] = useState<AcademyInfoErrors>(initialErrorState);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const validatedForm = academyInfoSchema.validate(details, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => {
+        handleNext(e);
+      })
+
+      .catch((err) => {
+        const validatedErr: AcademyInfoErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof AcademyInfoErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
+  };
+
   return (
-    <form onSubmit={handleNext}>
+    <form onSubmit={handleSubmit}>
       <InputMolecule
+        required={false}
+        error={errors.name}
         name="name"
         placeholder="Type academy name"
         value={details.name}
@@ -169,6 +212,8 @@ function AcademyInfoComponent({
         academy name
       </InputMolecule>
       <InputMolecule
+        required={false}
+        error={errors.short_name}
         name="short_name"
         placeholder="Type short name"
         value={details.short_name}
@@ -176,17 +221,30 @@ function AcademyInfoComponent({
         academy short name
       </InputMolecule>
       <InputMolecule
+        required={false}
+        error={errors.mission}
         name="mission"
         value={details.mission}
         handleChange={(e) => handleChange(e)}>
         academy mission
       </InputMolecule>
       <InputMolecule
+        required={false}
+        error={errors.moto}
         name="moto"
         value={details.moto}
         handleChange={(e) => handleChange(e)}>
         academy motto
       </InputMolecule>
+      <SelectMolecule
+        error={errors.translation_preset}
+        options={TranslationPresets.map((preset) => ({ label: preset, value: preset }))}
+        name="translation_preset"
+        value={details.translation_preset}
+        placeholder={'Language to the academy uses'}
+        handleChange={handleChange}>
+        Translation Language
+      </SelectMolecule>
       <div>
         <div className="mb-3">
           <ILabel weight="bold">academy logo</ILabel>
@@ -201,18 +259,49 @@ function AcademyInfoComponent({
         </FileUploader>
       </div>
       <div className="pt-3">
-        <Button type="submit" onClick={() => handleNext}>
-          Next
-        </Button>
+        <Button type="submit">Next</Button>
       </div>
     </form>
   );
 }
 
 function AcademyLocationComponent({ details, handleChange, handleNext }: IProps) {
+  const initialErrorState: AcademyLocationErrors = {
+    email: '',
+    phone_number: '',
+    fax_number: '',
+    website_link: '',
+    head_office_location_id: '',
+    full_address: '',
+  };
+
+  const [errors, setErrors] = useState<AcademyLocationErrors>(initialErrorState);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    const validatedForm = academyLocationSchema.validate(details, {
+      abortEarly: false,
+    });
+
+    validatedForm
+      .then(() => {
+        handleNext(e);
+      })
+
+      .catch((err) => {
+        const validatedErr: AcademyLocationErrors = initialErrorState;
+        err.inner.map((el: { path: string | number; message: string }) => {
+          validatedErr[el.path as keyof AcademyLocationErrors] = el.message;
+        });
+        setErrors(validatedErr);
+      });
+  };
+
   return (
-    <form onSubmit={handleNext}>
+    <form onSubmit={handleSubmit}>
       <InputMolecule
+        required={false}
+        error={errors.email}
         name="email"
         type="email"
         value={details.email}
@@ -221,6 +310,8 @@ function AcademyLocationComponent({ details, handleChange, handleNext }: IProps)
         academy email
       </InputMolecule>
       <InputMolecule
+        required={false}
+        error={errors.phone_number}
         name="phone_number"
         type="tel"
         value={details.phone_number}
@@ -229,12 +320,16 @@ function AcademyLocationComponent({ details, handleChange, handleNext }: IProps)
         academy phone number
       </InputMolecule>
       <InputMolecule
+        required={false}
+        error={errors.fax_number}
         name="fax_number"
         value={details.fax_number}
         handleChange={(e) => handleChange(e)}>
         academy fax number
       </InputMolecule>
       <InputMolecule
+        required={false}
+        error={errors.website_link}
         name="website_link"
         value={details.website_link}
         placeholder="Type website url"
@@ -242,12 +337,15 @@ function AcademyLocationComponent({ details, handleChange, handleNext }: IProps)
         academy website
       </InputMolecule>
       <LocationMolecule
+        error={errors.head_office_location_id}
         placeholder="Select head office location"
         name="head_office_location_id"
         handleChange={handleChange}>
         Head office location
       </LocationMolecule>
       <InputMolecule
+        required={false}
+        error={errors.full_address}
         className="w-60 md:w-80"
         name="full_address"
         value={details.full_address}
@@ -255,9 +353,7 @@ function AcademyLocationComponent({ details, handleChange, handleNext }: IProps)
         academy physical address
       </InputMolecule>
       <div className="pt-3 flex justify-between w-60 md:w-80">
-        <Button type="submit" onClick={() => handleNext}>
-          Save
-        </Button>
+        <Button type="submit">Save</Button>
       </div>
     </form>
   );

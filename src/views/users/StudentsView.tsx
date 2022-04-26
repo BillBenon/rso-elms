@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -9,8 +10,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import AssignRole from '../../components/Organisms/forms/user/AssignRole';
-import ViewUserRole from '../../components/Organisms/forms/user/ViewUserRole';
+import AssignRole from '../../components/Organisms/forms/roles/AssignRole';
 import ImportUsers from '../../components/Organisms/user/ImportUsers';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import usePickedRole from '../../hooks/usePickedRole';
@@ -22,12 +22,15 @@ import { AcademyUserType, UserType, UserTypes } from '../../types/services/user.
 import { formatUserTable } from '../../utils/array';
 import DeployInstructors from '../DeployInstructors';
 import EnrollStudents from '../EnrollStudents';
+import ViewUserRole from '../roles/ViewUserRole';
 
 export default function StudentsView() {
   const { url, path } = useRouteMatch();
   const { user } = useAuthenticator();
   const history = useHistory();
   const { mutateAsync } = authenticatorStore.resetPassword();
+  const [value, setValue] = useState('');
+  const { t } = useTranslation();
 
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
@@ -47,11 +50,17 @@ export default function StudentsView() {
           { page: currentPage, pageSize, sortyBy: 'username' },
         );
 
-  const users = formatUserTable(data?.data.data.content || []);
+  const [users, setUsers] = useState<UserTypes[]>([]);
+
+  useEffect(() => {
+    setUsers(formatUserTable(data?.data.data.content || []));
+    setTotalElements(data?.data.data.totalElements || 0);
+    setTotalPages(data?.data.data.totalPages || 0);
+  }, [data]);
 
   let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
   actions?.push({
-    name: 'View Student',
+    name: 'View ' + t('Students'),
     handleAction: (id: string | number | undefined) => {
       history.push(`/dashboard/user/${id}/profile`); // go to view user profile
     },
@@ -59,14 +68,14 @@ export default function StudentsView() {
   });
 
   actions?.push({
-    name: 'Edit student',
+    name: 'Edit ' + t('Students'),
     handleAction: (id: string | number | undefined) => {
       history.push(`/dashboard/users/${id}/edit`); // go to edit user
     },
     privilege: Privileges.CAN_MODIFY_USER,
   });
   actions?.push({
-    name: 'Deploy instructor',
+    name: 'Deploy ' + t('Instructor'),
     handleAction: (id: string | number | undefined) => {
       history.push(`${url}/${id}/deploy`); // go to assign role
     },
@@ -74,7 +83,7 @@ export default function StudentsView() {
   });
 
   actions?.push({
-    name: 'Enroll student',
+    name: 'Enroll ' + t('Students'),
     handleAction: (id: string | number | undefined) => {
       history.push(`${url}/${id}/enroll`); // go to assign role
     },
@@ -111,25 +120,60 @@ export default function StudentsView() {
     privilege: Privileges.CAN_RESET_USER_PASSWORD,
   });
 
-  function handleSearch(_e: ValueType) {}
+  const [totalElements, setTotalElements] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
+  function handleSearch(_e: ValueType) {
+    const value = _e.value + '';
+
+    if (value.length === 0) {
+      setUsers(formatUserTable(data?.data.data.content || []));
+      setTotalElements(data?.data.data.totalElements || 0);
+      setTotalPages(data?.data.data.totalPages || 0);
+      setValue('');
+      return;
+    }
+
+    setValue(value);
+  }
+  const [filter, setFilter] = useState(false);
+
+  const handleClick = () => {
+    setFilter(!filter);
+  };
+
+  // useEffect(() => {
+  const { data: search } = usersStore.getAllBySearch(value, filter);
+
+  useEffect(() => {
+    if (filter && search) {
+      setUsers(formatUserTable(search.data.data.content || []));
+      setTotalElements(search.data.data.totalElements || 0);
+      setTotalPages(search.data.data.totalPages || 0);
+      setFilter(false);
+    }
+  }, [filter, search]);
 
   useEffect(() => {
     refetch();
-  }, [currentPage, pageSize, refetch]);
+    console.log('refetching', currentPage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentPage, pageSize]);
 
   return (
     <div>
       <TableHeader
-        title="Students"
-        totalItems={data?.data.data.totalElements || 0}
-        handleSearch={handleSearch}>
+        title={t('Students')}
+        totalItems={totalElements}
+        handleSearch={handleSearch}
+        handleClick={handleClick}>
         <Permission privilege={Privileges.CAN_CREATE_USER}>
           <div className="flex gap-3">
             <Link to={`${url}/import`}>
-              <Button styleType="outline">Import students</Button>
+              <Button styleType="outline">Import {t('Students')}</Button>
             </Link>
             <Link to={`${url}/add/${UserType.STUDENT}`}>
-              <Button>New student</Button>
+              <Button>New {t('Students')}</Button>
             </Link>
           </div>
         </Permission>
@@ -140,10 +184,10 @@ export default function StudentsView() {
       ) : users.length <= 0 ? (
         <NoDataAvailable
           icon="user"
-          buttonLabel="Add new student"
-          title={'No students available'}
+          buttonLabel={'Add new student'}
+          title={'No ' + t('Students') + ' available'}
           handleClick={() => history.push(`/dashboard/users/add/STUDENT`)}
-          description="There are no students added into the system yet"
+          description={`There are no ${t('Students')} students added into the system yet`}
           privilege={Privileges.CAN_CREATE_USER}
         />
       ) : (
@@ -156,11 +200,11 @@ export default function StudentsView() {
           selectorActions={[]}
           uniqueCol="id"
           rowsPerPage={pageSize}
-          totalPages={data?.data.data.totalPages || 1}
+          totalPages={totalPages}
           currentPage={currentPage}
           onPaginate={(page) => setcurrentPage(page)}
           onChangePageSize={(size) => {
-            setcurrentPage(0);
+            setcurrentPage(currentPage);
             setPageSize(size);
           }}
         />
