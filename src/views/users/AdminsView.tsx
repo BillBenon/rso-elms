@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -27,6 +28,7 @@ export default function AdminsView() {
   const history = useHistory();
   const { path, url } = useRouteMatch();
   const [value, setValue] = useState('');
+  const { t } = useTranslation();
 
   const { mutateAsync } = authenticatorStore.resetPassword();
 
@@ -74,7 +76,7 @@ export default function AdminsView() {
   });
 
   actions?.push({
-    name: 'Deploy instructor',
+    name: 'Deploy as an ' + t('Instructor'),
     handleAction: (id: string | number | undefined) => {
       history.push(`${url}/${id}/deploy`); // go to assign role
     },
@@ -224,7 +226,7 @@ export default function AdminsView() {
           render={() => (
             <PopupMolecule
               closeOnClickOutSide={false}
-              title="Deploy as an instructor"
+              title={'Deploy as an ' + t('Instructor')}
               open={true}
               onClose={history.goBack}>
               <DeployInstructors />

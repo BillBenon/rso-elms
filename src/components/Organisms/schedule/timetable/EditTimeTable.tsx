@@ -1,5 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
 
 import usePickedRole from '../../../../hooks/usePickedRole';
@@ -44,11 +45,9 @@ interface SecondTimeTableErrors
   extends Pick<IUpdateClassTimetable, 'venue' | 'startHour' | 'endHour'> {
   dayOfWeek: string;
 }
-
 export default function EditTimeTable() {
   const { classId, itemId } = useParams<ParamType>();
   const history = useHistory();
-
   //state varibales
   const [currentStep, setcurrentStep] = useState(0);
   const [values, setvalues] = useState<IUpdateClassTimetable>({
@@ -127,6 +126,7 @@ export default function EditTimeTable() {
 
 function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepProps) {
   const picked_role = usePickedRole();
+  const { t } = useTranslation();
   const users =
     instructordeploymentStore.getInstructorsDeployedInAcademy(
       picked_role?.academy_id + '',
@@ -170,7 +170,7 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
           readOnly
           disabled
           value={`${classInfo?.academic_year_program_intake_level.academic_program_level.program.name} - ${classInfo?.academic_year_program_intake_level.academic_program_level.level.name} - ${classInfo?.class_name}`}>
-          Program - Level - class
+          Program - Level - {t('Class')}
         </InputMolecule>
         <div className="pb-1">
           <SelectMolecule
@@ -201,7 +201,7 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
               })) as SelectData[]
             }
             placeholder="Select someone">
-            Instructor
+            {t('Instructor')}
           </SelectMolecule>
         </div>
         <Button type="submit">Next</Button>

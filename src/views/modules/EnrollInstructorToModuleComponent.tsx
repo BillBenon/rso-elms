@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useLocation, useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -22,6 +23,7 @@ function EnrollInstructorToModuleComponent<T>({ existing }: AssignModuleType<T>)
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { search } = useLocation();
   const { id } = useParams<ParamType>();
+  const { t } = useTranslation();
   const intakeProg = new URLSearchParams(search).get('intkPrg');
 
   const { data: instructorsInProgram, isLoading } =
@@ -79,15 +81,15 @@ function EnrollInstructorToModuleComponent<T>({ existing }: AssignModuleType<T>)
       <RightSidebar
         open={sidebarOpen}
         handleClose={() => setSidebarOpen(false)}
-        label="Enroll instructor to this module"
+        label={'Enroll ' + t('Instructor') + ' to this module'}
         data={instructors}
         selectorActions={[
           {
-            name: 'enroll instructors',
+            name: 'enroll ' + t('Instructor'),
             handleAction: (data?: string[]) => add(data),
           },
         ]}
-        dataLabel={'Instructors in this program'}
+        dataLabel={t('Instructor') + ' in this program'}
         isLoading={isLoading}
         unselectAll={!sidebarOpen}
       />

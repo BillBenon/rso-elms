@@ -1,5 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -30,6 +31,7 @@ interface ClassError
 function NewClass() {
   const history = useHistory();
   const { path } = useRouteMatch();
+  const { t } = useTranslation();
 
   const [form, setForm] = useState<ICreateClass>({
     class_group_type: ClassGroupType.CLASS,
@@ -175,8 +177,8 @@ function NewClass() {
             (cl) => cl.value === form.class_group_type,
           )}
           options={getDropDownStatusOptions(ClassGroupType)}
-          placeholder="Choose class type">
-          Class Type
+          placeholder={'Choose ' + t('Class') + ' type'}>
+          {t('Class')} Type
         </DropdownMolecule>
 
         <InputMolecule
@@ -184,7 +186,7 @@ function NewClass() {
           value={form.class_name}
           handleChange={handleChange}
           name="class_name">
-          Class name
+          {t('Class')} name
         </InputMolecule>
         <DropdownMolecule
           error={errors.instructor_class_in_charge_id}
@@ -199,10 +201,10 @@ function NewClass() {
           })}
           placeholder={
             instLoading
-              ? 'Loading instructor representatives...'
-              : 'Choose instructor representative'
+              ? 'Loading ' + t('Instructor representative') + ' ...'
+              : 'Choose ' + t('Instructor representative') + ' representative'
           }>
-          Instructor representative
+          {t('Instructor representative')}
         </DropdownMolecule>
 
         <DropdownMolecule
@@ -213,8 +215,8 @@ function NewClass() {
             inputs: studentsInProgram,
             labelName: ['first_name', 'last_name'],
           })}
-          placeholder="Choose class representative">
-          Class representative
+          placeholder={'Choose ' + t('Class representative') + ' representative'}>
+          {t('Class representative')}
         </DropdownMolecule>
 
         <div className="mt-5">

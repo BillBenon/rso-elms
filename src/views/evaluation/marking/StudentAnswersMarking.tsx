@@ -2,6 +2,7 @@ import '../../../styles/components/Molecules/correction/marking.scss';
 
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '../../../components/Atoms/custom/Button';
@@ -26,6 +27,7 @@ export default function StudentAnswersMarking() {
   const [evaluationId, setEvaluationId] = useState<string>('');
   const { mutate } = markingStore.finishMarking();
   const history = useHistory();
+  const { t } = useTranslation();
 
   const studentAnswers = markingStore.getStudentEvaluationAnswers(id).data?.data.data;
   const { data: studentEvaluation, isLoading } =
@@ -91,7 +93,7 @@ export default function StudentAnswersMarking() {
   // }, [studentAnswers, indexOfFirstRow, indexOfLastRow]);
   // const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   const list: LinkList[] = [
-    { to: '/', title: 'Instructor' },
+    { to: '/', title: t('Instructor') },
     { to: 'evaluations', title: 'evaluations' },
     { to: `/evaluations/${evaluationId}`, title: 'Evaluation Details' },
     { to: `/evaluations/${evaluationId}/submissions`, title: 'Marking' },

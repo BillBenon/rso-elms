@@ -3,6 +3,7 @@ import '../../styles/components/Molecules/timetable/calendar.css';
 
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
+import { useTranslation } from 'react-i18next';
 import { Link as BrowserLink } from 'react-router-dom';
 
 import Heading from '../../components/Atoms/Text/Heading';
@@ -24,6 +25,7 @@ const list: Link[] = [
 
 export default function AdminDashboard() {
   const [scheduleDate, setscheduleDate] = useState(new Date());
+  const { t } = useTranslation();
 
   const picked_role = usePickedRole();
   const users =
@@ -68,7 +70,7 @@ export default function AdminDashboard() {
             <BrowserLink to={'/dashboard/users/instructors'}>
               <div className="bg-main shadow-sm rounded-lg p-6 hover:border cursor-pointer">
                 <Heading fontSize="sm" color="txt-secondary" fontWeight="medium">
-                  Total instructors
+                  Total {t('Instructor')}
                 </Heading>
                 <Heading className="pt-4" fontSize="sm" fontWeight="bold">
                   {users.filter((user) => user.user_type === UserType.INSTRUCTOR).length}

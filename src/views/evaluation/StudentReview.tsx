@@ -1,6 +1,7 @@
 import '../../styles/components/Molecules/correction/marking.scss';
 
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router-dom';
 
@@ -16,6 +17,7 @@ import { ParamType } from '../../types';
 
 export default function StudentReview() {
   const { id } = useParams<ParamType>();
+  const { t } = useTranslation();
   const studentAnswers = markingStore.getStudentEvaluationAnswers(id).data?.data.data;
   const {
     data: studentEvaluation,
@@ -39,7 +41,7 @@ export default function StudentReview() {
 
   // const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
   const list: LinkList[] = [
-    { to: '/', title: 'Instructor' },
+    { to: '/', title: t('Instructor') },
     { to: 'evaluations', title: 'evaluations' },
     { to: '/evaluations/evaluation_id', title: 'Evaluation Details' },
     { to: 'evaluations/evaluation_id/marking_studentEvaluation', title: 'Marking' },
@@ -72,7 +74,7 @@ export default function StudentReview() {
             })}
             <div className="bg-main flex flex-col gap-4 p-4 w-full rounded">
               <Heading fontWeight="semibold" fontSize="base">
-                Instructor&apos;s remarks
+                {t('Instructor')}&apos;s remarks
               </Heading>
               <p className="text-md">-&gt;{' ' + studentEvaluation.data.data.remark}</p>
             </div>

@@ -175,6 +175,8 @@ export default function UpdateUser<E>({ onSubmit }: CommonFormProps<E>) {
   //   level: '',
   // });
 
+  console.log(errors);
+
   function handleChange(e: ValueType) {
     setDetails((details) => ({
       ...details,
