@@ -42,6 +42,7 @@ function AssignAdminToAcademy() {
     postal_code: '',
     short_name: '',
     website_link: '',
+    translation_preset: '',
   });
 
   useEffect(() => {
