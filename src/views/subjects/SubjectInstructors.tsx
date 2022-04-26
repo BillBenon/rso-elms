@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch, useLocation, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -22,6 +23,7 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
   const { data: subjectData } = subjectStore.getSubject(subjectId);
   const { data: instructorInfos, isLoading } =
     enrollmentStore.getInstructorsBySubject(subjectId);
+  const { t } = useTranslation();
 
   let instrs: UserTypes[] = [];
   instructorInfos?.data.data.map((obj) => {
@@ -60,7 +62,7 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
           <div className="flex flex-col gap-4 z-0 pt-6">
             <div className="flex justify-between items-center">
               <Heading fontSize="base" fontWeight="semibold">
-                Instructors ({0})
+                {t('Instructor')} ({0})
               </Heading>
               {intakeProg && (
                 <Permission privilege={Privileges.CAN_ENROLL_INSTRUCTORS_ON_SUBJECT}>
@@ -80,9 +82,11 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
                 <NoDataAvailable
                   showButton={false}
                   icon="user"
-                  title={'No instructors available'}
+                  title={'No ' + t('Instructor') + ' available'}
                   description={
-                    'There are no instructors currently assigned to this subject'
+                    'There are no ' +
+                    t('Instructor') +
+                    ' currently assigned to this subject'
                   }
                   privilege={Privileges.CAN_ENROLL_INSTRUCTORS_ON_SUBJECT}
                   handleClick={() => (
@@ -100,7 +104,7 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
                   data={instrs}
                   selectorActions={[
                     {
-                      name: 'Remove instructors from subject',
+                      name: 'Remove ' + t('Instructor') + ' from subject',
                       handleAction: () => {},
                       privilege: Privileges.CAN_REMOVE_INSTRUCTORS_ON_SUBJECT,
                     },

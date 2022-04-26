@@ -3,6 +3,7 @@ import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useLocation } from 'react-router-dom';
+
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { classStore } from '../../../../store/administration/class.store';
@@ -82,9 +83,11 @@ export default function SubjectEvaluationInfoComponent() {
 
   useEffect(() => {
     if (picked_role?.academy_id) {
-      setDetails({
-        ...details,
-        academy_id: picked_role?.academy_id + '',
+      setDetails((prevState) => {
+        return {
+          ...prevState,
+          academy_id: picked_role?.academy_id + '',
+        };
       });
     }
   }, [picked_role]);

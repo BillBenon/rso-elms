@@ -1,6 +1,7 @@
 import { Editor } from '@tiptap/react';
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 
@@ -91,6 +92,7 @@ const gradedExercises = [
 export default function EndTermForm() {
   const [isPrinting, setisPrinting] = useState(false);
   const report = useRef(null);
+  const { t } = useTranslation();
 
   const picked_role = usePickedRole();
   const { data: role_academy } = academyStore.getAcademyById(
@@ -665,7 +667,7 @@ export default function EndTermForm() {
             </div>
             {/* chief instructor */}
             <Heading className="underline py-2" fontSize="sm" fontWeight="semibold">
-              Chief Instructor
+              Chief {t('Instructor')}
             </Heading>
             <div className="grid grid-cols-3 pt-4">
               <p className="text-sm">
