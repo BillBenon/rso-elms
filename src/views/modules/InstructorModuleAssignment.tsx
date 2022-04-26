@@ -10,12 +10,12 @@ import enrollmentStore from '../../store/administration/enrollment.store';
 import { InstructorAssignModule } from '../../types/services/enrollment.types';
 import { UserView } from '../../types/services/user.types';
 
-interface Props<T> {
+interface Props {
   module_id: string | number;
   intake_program_id: string | number;
 }
 
-function InstructorModuleAssignment<T>({ module_id, intake_program_id }: Props<T>) {
+function InstructorModuleAssignment({ module_id, intake_program_id }: Props) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { t } = useTranslation();
 

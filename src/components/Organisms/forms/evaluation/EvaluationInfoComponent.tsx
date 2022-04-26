@@ -107,9 +107,11 @@ export default function EvaluationInfoComponent() {
 
   useEffect(() => {
     if (picked_role?.academy_id) {
-      setDetails({
-        ...details,
-        academy_id: picked_role?.academy_id + '',
+      setDetails((prevDetails) => {
+        return {
+          ...prevDetails,
+          academy_id: picked_role?.academy_id + '',
+        };
       });
     }
   }, [picked_role]);
@@ -122,11 +124,13 @@ export default function EvaluationInfoComponent() {
   // Update classes
   useEffect(() => {
     if (classes?.data.data) {
-      setDetails({
-        ...details,
-        intake_level_class_ids: classes?.data.data
-          .map((cl) => cl.id.toString())
-          .join(','),
+      setDetails((prevState) => {
+        return {
+          ...prevState,
+          intake_level_class_ids: classes?.data.data
+            .map((cl) => cl.id.toString())
+            .join(','),
+        };
       });
     }
   }, [classes]);

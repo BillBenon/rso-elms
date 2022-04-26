@@ -83,9 +83,11 @@ export default function SubjectEvaluationInfoComponent() {
 
   useEffect(() => {
     if (picked_role?.academy_id) {
-      setDetails({
-        ...details,
-        academy_id: picked_role?.academy_id + '',
+      setDetails((prevState) => {
+        return {
+          ...prevState,
+          academy_id: picked_role?.academy_id + '',
+        };
       });
     }
   }, [picked_role]);
