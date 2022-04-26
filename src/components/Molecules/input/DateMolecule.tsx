@@ -121,7 +121,7 @@ function DateMolecule({
       Hours: dV.hours() < 10 ? `0${dV.hours()}` : `${dV.hours()}`,
       Minutes: dV.minutes() < 10 ? `0${dV.minutes()}` : `${dV.minutes()}`,
     }));
-  }, [defaultValue]);
+  }, []);
 
   useEffect(() => {
     initiateDate();
