@@ -1,4 +1,4 @@
-import React, { FormEvent, useCallback, useEffect, useState } from 'react';
+import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory } from 'react-router-dom';
 
@@ -67,10 +67,7 @@ export default function NewRole({ onSubmit }: FormPropType) {
   }
 
   function submitForm<T>(e: FormEvent<T>) {
-    console.log('herrereere');
-
     e.preventDefault();
-    console.log('gooooooooooooooo');
 
     const validatedForm = newRoleSchema.validate(
       {
@@ -82,7 +79,6 @@ export default function NewRole({ onSubmit }: FormPropType) {
         abortEarly: false,
       },
     );
-    console.log('fdsdfsdfdf');
 
     validatedForm
       .then(() => {

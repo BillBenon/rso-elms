@@ -10,15 +10,21 @@ import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolec
 import useAuthenticator from '../../hooks/useAuthenticator';
 import academyStore from '../../store/administration/academy.store';
 import { institutionStore } from '../../store/administration/institution.store';
+import { i18n } from '../../translations/i18n';
 import { CommonCardDataType, RoleType } from '../../types';
 import { UserType } from '../../types/services/user.types';
 import cookie from '../../utils/cookie';
 import { advancedTypeChecker } from '../../utils/getOption';
 
+interface PickedData extends CommonCardDataType {
+  academy_trans: string;
+}
+
 export default function ChooseRole() {
   const { user } = useAuthenticator();
-  const [user_roles, setUserRoles] = useState<CommonCardDataType[]>([]);
+  const [user_roles, setUserRoles] = useState<PickedData[]>([]);
   const [picked_role, setPickedRole] = useState<string>('');
+  const [translation, setTranslation] = useState('');
 
   const institution = institutionStore.getAll();
   const academy_info = academyStore.fetchAcademies();
@@ -33,7 +39,7 @@ export default function ChooseRole() {
   );
 
   useEffect(() => {
-    let roles: CommonCardDataType[] = [];
+    let roles: PickedData[] = [];
     user?.user_roles.forEach((role) => {
       roles.push({
         code:
@@ -56,6 +62,9 @@ export default function ChooseRole() {
           type: advancedTypeChecker(role.type),
           text: role.type,
         },
+        academy_trans:
+          academy_info.data?.data.data.find((ac) => ac.id === role.academy_id)
+            ?.translation_preset || 'default',
       });
     });
 
@@ -68,9 +77,15 @@ export default function ChooseRole() {
     user?.user_roles,
   ]);
 
+  const handleChoose = (user_role: PickedData) => {
+    setPickedRole(user_role.id + '');
+    setTranslation(user_role.academy_trans);
+  };
+
   const pickRole = () => {
     if (picked_role) {
       cookie.setCookie('user_role', picked_role);
+      i18n.changeLanguage(translation);
       redirectTo(
         user?.user_type === UserType.INSTRUCTOR
           ? '/dashboard/inst-module'
@@ -128,7 +143,7 @@ export default function ChooseRole() {
               active={picked_role == user_role.id}
               data={user_role}
               key={user_role.id}
-              handleClick={() => setPickedRole(user_role.id + '')}
+              handleClick={() => handleChoose(user_role)}
             />
           ))}
         </div>

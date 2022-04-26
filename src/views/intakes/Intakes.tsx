@@ -216,6 +216,7 @@ export default function Intakes() {
                     ? `${intakes.length} intakes`
                     : `${intakes.length}`
                 }
+                showSearch={false}
                 handleSearch={handleSearch}>
                 {registrationControlId && (
                   <Permission privilege={Privileges.CAN_CREATE_INTAKE}>
