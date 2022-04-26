@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
@@ -16,6 +17,7 @@ interface Props<T> {
 
 function InstructorModuleAssignment<T>({ module_id, intake_program_id }: Props<T>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { t } = useTranslation();
 
   const { data: instructorsProgram, isLoading: instLoading } =
     enrollmentStore.getInstructorsInProgram(intake_program_id);
@@ -62,20 +64,20 @@ function InstructorModuleAssignment<T>({ module_id, intake_program_id }: Props<T
         onClick={() => setSidebarOpen(true)}
         className="flex -mt-6 items-center justify-end text-primary-500">
         <Icon name="add" size={12} fill="primary" />
-        Assign instructors
+        Assign {t('Instructor')}
       </Button>
       <RightSidebar
         open={sidebarOpen}
         handleClose={() => setSidebarOpen(false)}
-        label="Enroll instructor to program"
+        label={'Enroll ' + t('Instructor') + ' to program'}
         data={instructors}
         selectorActions={[
           {
-            name: 'assign instructors',
+            name: 'assign ' + t('Instructor'),
             handleAction: (data?: string[]) => add(data),
           },
         ]}
-        dataLabel={'Instructors in this intake program'}
+        dataLabel={t('Instructor') + ' in this intake program'}
         isLoading={instLoading}
         unselectAll={!sidebarOpen}
       />

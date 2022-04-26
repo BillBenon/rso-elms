@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Link as BrowserLink,
   Route,
@@ -43,6 +44,7 @@ export default function SubjectDetails() {
   const { subjectId } = useParams<ParamType>();
   const { url } = useRouteMatch();
   const history = useHistory();
+  const { t } = useTranslation();
 
   const subjectData = subjectStore.getSubject(subjectId);
   const {
@@ -99,7 +101,7 @@ export default function SubjectDetails() {
   });
 
   tabs.push({
-    label: 'Instructors',
+    label: t('Instructor'),
     href: `${url}/instructors?intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
   });
 

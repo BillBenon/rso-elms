@@ -1,6 +1,7 @@
 import moment from 'moment';
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -32,6 +33,7 @@ interface SubjectPeriodError
 }
 
 function AddSubjectToPeriod() {
+  const { t } = useTranslation();
   const history = useHistory();
   const {
     level,
@@ -163,7 +165,7 @@ function AddSubjectToPeriod() {
         hasError={errors.inchargeId !== ''}
         handleChange={handleChange}
         name="inchargeId"
-        placeholder={instLoading ? 'Loading instructors' : 'select incharge'}
+        placeholder={instLoading ? 'Loading ' + t('Instructor') : 'select incharge'}
         options={getDropDownOptions({
           inputs: instructors?.data.data || [],
           //@ts-ignore

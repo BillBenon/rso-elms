@@ -1,5 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -30,6 +31,7 @@ interface ClassError
 function NewClass() {
   const history = useHistory();
   const { path } = useRouteMatch();
+  const { t } = useTranslation();
 
   const [form, setForm] = useState<ICreateClass>({
     class_group_type: ClassGroupType.CLASS,
@@ -202,7 +204,7 @@ function NewClass() {
               ? 'Loading instructor representatives...'
               : 'Choose instructor representative'
           }>
-          Instructor representative
+          {t('Instructor')} representative
         </DropdownMolecule>
 
         <DropdownMolecule
