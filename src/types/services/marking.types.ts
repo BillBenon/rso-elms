@@ -7,7 +7,6 @@ import {
   IEvaluationStatus,
   IMultipleChoice,
 } from './evaluation.types';
-import { Student } from './user.types';
 
 export interface SampleQuestionInfo {
   question: string;

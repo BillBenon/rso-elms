@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -285,7 +286,7 @@ export default function InstructorViewEvaluations() {
         {hasPrivilege(Privileges.CAN_ANSWER_EVALUATION) && (
           <Route
             exact
-            path={`${path}/student-evaluation/:id`}
+            path={`${path}/student-evaluation/:id/:evaluationId`}
             component={EvaluationTest}
           />
         )}

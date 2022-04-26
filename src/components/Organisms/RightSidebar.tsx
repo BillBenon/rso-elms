@@ -13,7 +13,7 @@ import Loader from '../Atoms/custom/Loader';
 import Checkbox from '../Atoms/Input/CheckBox';
 import Heading from '../Atoms/Text/Heading';
 import NoDataAvailable from '../Molecules/cards/NoDataAvailable';
-import SearchMolecule from '../Molecules/input/SearchMolecule';
+// import SearchMolecule from '../Molecules/input/SearchMolecule';
 
 interface IRightSidebar {
   label: string;
@@ -36,7 +36,7 @@ function RightSidebar({
   dataLabel = '',
   unselectAll,
 }: IRightSidebar) {
-  const handleSearch = () => {};
+  // const handleSearch = () => {};
   const [selected, setSelected] = useState(new Set(''));
 
   const changeSelect = useCallback(
@@ -152,13 +152,13 @@ function RightSidebar({
             </div>
           </div>
         )}
-        <div className="py-4">
+        {/* <div className="py-4">
           <SearchMolecule
             placeholder="Search students"
             handleChange={handleSearch}
             width="w-48"
           />
-        </div>
+        </div> */}
 
         <Heading fontSize="sm" fontWeight="semibold" color="primary" className="pb-4">
           {dataLabel}

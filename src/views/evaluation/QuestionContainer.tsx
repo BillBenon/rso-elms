@@ -1,6 +1,7 @@
 import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+
 import Button from '../../components/Atoms/custom/Button';
 import Input from '../../components/Atoms/Input/Input';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -8,7 +9,7 @@ import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule'
 import StudentQuestionsSectionBased from '../../components/Organisms/evaluation/StudentQuestionsSectionBased';
 import { markingStore } from '../../store/administration/marking.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
-import { ValueType } from '../../types';
+import { ParamType, ValueType } from '../../types';
 import {
   IEvaluationInfo,
   IEvaluationSettingType,
@@ -16,7 +17,6 @@ import {
   IStudentAnswer,
 } from '../../types/services/evaluation.types';
 import { StudentMarkingAnswer } from '../../types/services/marking.types';
-import { getLocalStorageData } from '../../utils/getLocalStorageItem';
 import ContentSpan from './ContentSpan';
 import MultipleChoiceAnswer from './MultipleChoiceAnswer';
 
@@ -44,7 +44,7 @@ export default function QuestionContainer({
 }: IQuestionContainerProps) {
   const history = useHistory();
 
-  const [studentEvaluationId, setStudentEvaluationId] = useState('');
+  const { id: studentEvaluationId } = useParams<ParamType>();
   const [previousAnswers, setPreviousAnswers] = useState<StudentMarkingAnswer[]>([]);
   let previoustudentAnswers =
     markingStore.getStudentEvaluationAnswers(studentEvaluationId);
@@ -63,9 +63,9 @@ export default function QuestionContainer({
           previousAnswers[index]?.multiple_choice_answer.id) ||
         '',
       open_answer: '',
-      student_evaluation: getLocalStorageData('studentEvaluationId'),
+      student_evaluation: studentEvaluationId,
     };
-  }, [id, index, previousAnswers]);
+  }, [id, index, previousAnswers, studentEvaluationId]);
 
   const [questionToSubmit, setQuestionToSubmit] = useState('');
   const [questionChoices, setChoices] = useState(choices);
@@ -89,7 +89,6 @@ export default function QuestionContainer({
   }
 
   useEffect(() => {
-    setStudentEvaluationId(getLocalStorageData('studentEvaluationId'));
     setAnswer(initialState);
     if (previousAnswers[index]?.multiple_choice_answer) {
       setAnswer((answer) => ({
@@ -195,12 +194,14 @@ export default function QuestionContainer({
               : null}
           </div>
         ) : evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED ? (
-          <StudentQuestionsSectionBased
-            // submitForm={submitForm}
-            // setQuestionToSubmit={setQuestionToSubmit}
-            // handleChange={handleChange}
-            {...{ evaluationInfo }}
-          />
+          <>
+            <StudentQuestionsSectionBased
+              // submitForm={submitForm}
+              // setQuestionToSubmit={setQuestionToSubmit}
+              // handleChange={handleChange}
+              {...{ evaluationInfo }}
+            />
+          </>
         ) : (
           <TextAreaMolecule
             onPaste={(e: any) => disableCopyPaste(e)}

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
+
 import Permission from '../../components/Atoms/auth/Permission';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';

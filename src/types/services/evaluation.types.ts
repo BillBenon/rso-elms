@@ -378,6 +378,9 @@ export interface IStudentAnswer {
   student_evaluation: string;
 }
 
+export interface StudentEvalParamType {
+  evaluationId: string;
+}
 export interface IStudentEvaluationStart {
   attachment: string;
   evaluation_id: string;
