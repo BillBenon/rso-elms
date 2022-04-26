@@ -4,8 +4,10 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 
 import useAuthenticator from './hooks/useAuthenticator';
+import { academyService } from './services/administration/academy.service';
 import { getPersonExperiences } from './store/administration/experience.store';
 import { getHisNextKinById } from './store/administration/usernextkin.store';
+import { i18n } from './translations/i18n';
 import { ProfileStatus, UserType } from './types/services/user.types';
 import cookie from './utils/cookie';
 import NotApproved from './views/NotApproved';
@@ -49,15 +51,20 @@ export default function Redirecting() {
             setHasNoAcademy(true);
           } else if (user.user_roles !== null && user.user_roles.length === 1) {
             cookie.setCookie('user_role', user.user_roles[0].id + '');
-            redirectTo(
-              user?.user_type === UserType.INSTRUCTOR
-                ? '/dashboard/inst-module'
-                : user?.user_type === UserType.STUDENT
-                ? '/dashboard/student'
-                : user.user_type === UserType.ADMIN
-                ? '/dashboard/admin'
-                : '/dashboard/users',
-            );
+
+            academyService.getAcademyById(user.user_roles[0].academy_id).then((ac) => {
+              i18n.changeLanguage(ac.data.data.translation_preset);
+
+              redirectTo(
+                user?.user_type === UserType.INSTRUCTOR
+                  ? '/dashboard/inst-module'
+                  : user?.user_type === UserType.STUDENT
+                  ? '/dashboard/student'
+                  : user.user_type === UserType.ADMIN
+                  ? '/dashboard/admin'
+                  : '/dashboard/users',
+              );
+            });
           } else if (user.user_roles !== null && user.user_roles.length > 1) {
             redirectTo('/choose-role');
           } else if (

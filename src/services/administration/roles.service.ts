@@ -16,7 +16,7 @@ class RoleService {
   }
 
   public async getRoles(): Promise<AxiosResponse<Response<RoleRes[]>>> {
-    return await adminstrationAxios.get('/roles/getRoles');
+    return await adminstrationAxios.get('/roles/getRoles?type=INSTITUTION');
   }
 
   public async getRole(id: string): Promise<AxiosResponse<Response<RoleRes>>> {

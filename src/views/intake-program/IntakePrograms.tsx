@@ -12,14 +12,11 @@ import {
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
-import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
-import CardHeadMolecule from '../../components/Molecules/CardHeadMolecule';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
-import Tooltip from '../../components/Molecules/Tooltip';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import {
@@ -191,113 +188,28 @@ function IntakePrograms() {
                     programs.map((Common, index: number) => {
                       let intakeProg = programInfo[index];
                       return (
-                        <Tooltip
-                          key={Common.code}
-                          trigger={
-                            <div className="p-1 mt-3">
-                              <CommonCardMolecule
-                                className="cursor-pointer"
-                                data={Common}
-                                handleClick={() =>
-                                  user?.user_type === UserType.STUDENT
-                                    ? ((intakeProg = intakeProg as StudentIntakeProgram),
-                                      history.push(
-                                        `${url}/${Common.id}/${intakeProg.intake_program.id}`,
-                                      ))
-                                    : user?.user_type === UserType.INSTRUCTOR
-                                    ? ((intakeProg = intakeProg as InstructorProgram),
-                                      history.push(
-                                        `${url}/${Common.id}/${intakeProg.intake_program.id}`,
-                                      ))
-                                    : history.push(`${url}/${Common.id}/${intakeProg.id}`)
-                                }
-                              />
-                            </div>
-                          }
-                          open>
-                          <div className="w-96">
-                            <CardHeadMolecule
-                              title={Common.title}
-                              code={Common.code}
-                              status={Common.status}
-                              description={''}
-                            />
-
-                            {/* first column */}
-
-                            <div className="flex flex-col gap-6">
-                              <div className="flex flex-col gap-2">
-                                <Heading color="txt-secondary" fontSize="sm">
-                                  {Common.department.division_type}
-                                </Heading>
-                                <Heading fontSize="sm" fontWeight="semibold">
-                                  {Common.department.name}
-                                </Heading>
-                              </div>
-                              <div className="flex flex-col gap-2">
-                                <Heading color="txt-secondary" fontSize="sm">
-                                  Modules
-                                </Heading>
-                                <Heading fontSize="sm" fontWeight="semibold">
-                                  {Common.total_num_modules || 0}
-                                </Heading>
-                              </div>
-
-                              <div className="flex flex-col gap-2">
-                                <Heading color="txt-secondary" fontSize="sm">
-                                  Program Type
-                                </Heading>
-                                <Heading fontSize="sm" fontWeight="semibold">
-                                  {Common.subTitle}
-                                </Heading>
-                              </div>
-                              {/* <div className="flex flex-col gap-2">
-                              <Heading color="txt-secondary" fontSize="sm">
-                                Instructor in charge
-                              </Heading>
-                              <div className="flex items-center">
-                                <div className="">
-                                  <Avatar
-                                    size="24"
-                                    alt="user1 profile"
-                                    className=" rounded-full  border-2 border-main transform hover:scale-125"
-                                    src="https://randomuser.me/api/portraits/men/1.jpg"
-                                  />
-                                </div>
-                                <Heading fontSize="sm" fontWeight="semibold">
-                                  {Common.incharge}
-                                </Heading>
-                              </div>
-                            </div> */}
-                            </div>
-
-                            {/* remarks section */}
-                            <div className="flex flex-col mt-8 gap-4">
-                              <Heading fontSize="sm" fontWeight="semibold">
-                                Remarks
-                              </Heading>
-                              <Heading fontSize="sm" color="txt-secondary">
-                                {Common.description}
-                              </Heading>
-                            </div>
-                            <div className="my-4">
-                              <Link
-                                to={`/dashboard/schedule/programs/${intakeId}/${Common.id}/edit`}>
-                                <Button styleType="text">View schedule</Button>
-                              </Link>
-                            </div>
-                            <Permission
-                              privilege={Privileges.CAN_MODIFY_PROGRAMS_IN_INTAKE}>
-                              <div className="space-x-4">
-                                <Link
-                                  to={`/dashboard/intakes/programs/${intakeId}/${Common.id}/edit`}>
-                                  <Button>Edit program</Button>
-                                </Link>
-                                <Button styleType="outline">Change Status</Button>
-                              </div>
-                            </Permission>
-                          </div>
-                        </Tooltip>
+                        // <Tooltip
+                        //   key={Common.code}
+                        //   trigger={
+                        <div className="p-1 mt-3" key={Common.id}>
+                          <CommonCardMolecule
+                            className="cursor-pointer"
+                            data={Common}
+                            handleClick={() =>
+                              user?.user_type === UserType.STUDENT
+                                ? ((intakeProg = intakeProg as StudentIntakeProgram),
+                                  history.push(
+                                    `${url}/${Common.id}/${intakeProg.intake_program.id}`,
+                                  ))
+                                : user?.user_type === UserType.INSTRUCTOR
+                                ? ((intakeProg = intakeProg as InstructorProgram),
+                                  history.push(
+                                    `${url}/${Common.id}/${intakeProg.intake_program.id}`,
+                                  ))
+                                : history.push(`${url}/${Common.id}/${intakeProg.id}`)
+                            }
+                          />
+                        </div>
                       );
                     })
                   ) : (

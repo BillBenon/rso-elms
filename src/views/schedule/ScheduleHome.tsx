@@ -99,7 +99,10 @@ function ScheduleIntakes() {
 
   return (
     <div>
-      <TableHeader totalItems={`${intakes.length} intakes`} title={'Schedule'}>
+      <TableHeader
+        showSearch={false}
+        totalItems={`${intakes.length} intakes`}
+        title={'Schedule'}>
         <Permission privilege={Privileges.CAN_CREATE_SCHEDULE}>
           <BrowserLink to={`${path}/schedule/new`}>
             <Button>New Schedule</Button>

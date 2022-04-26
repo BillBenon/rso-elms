@@ -10,10 +10,8 @@ import {
 
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
-import Icon from '../../components/Atoms/custom/Icon';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
-import SearchMolecule from '../../components/Molecules/input/SearchMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
@@ -136,7 +134,7 @@ export default function ModuleDetails() {
     }).observe(document, { subtree: true, childList: true });
   }, [id]);
 
-  function handleSearch() {}
+  // function handleSearch() {}
   function handleClose() {
     history.goBack();
   }
@@ -165,12 +163,12 @@ export default function ModuleDetails() {
                 {moduleData?.title} module
               </Heading>
             </div>
-            <div className="flex flex-wrap justify-start items-center">
+            {/* <div className="flex flex-wrap justify-start items-center">
               <SearchMolecule handleChange={handleSearch} />
               <button className="border p-0 rounded-md mx-2">
                 <Icon name="filter" />
               </button>
-            </div>
+            </div> */}
 
             {route == 'SUBJECTS' && (
               <Permission privilege={Privileges.CAN_CREATE_SUBJECTS}>
