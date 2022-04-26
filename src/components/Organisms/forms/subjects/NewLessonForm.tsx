@@ -39,6 +39,7 @@ export default function NewLessonForm() {
   });
 
   function handleChange(e: ValueType) {
+    console.log(e);
     setlesson({ ...lesson, [e.name]: e.value });
   }
 
@@ -79,7 +80,9 @@ export default function NewLessonForm() {
       <InputMolecule
         name="subject_id"
         readOnly
-        handleChange={handleChange}
+        // this is commented due to it is an input and it is overiding the subject id with the subject name which can't be accepted on backend
+        // in order to have subject id we had to use select input or show subject id in the input which could be not right
+        // handleChange={handleChange}
         value={subject?.title || ''}
         disabled>
         Subject

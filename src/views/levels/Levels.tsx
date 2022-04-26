@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -57,7 +58,7 @@ function Levels() {
         <BreadCrumb list={list}></BreadCrumb>
       </section>
       <section className="">
-        <TableHeader title="Levels" totalItems={levels?.length || 0}>
+        <TableHeader title="Levels" showSearch={false} totalItems={levels?.length || 0}>
           <Link to={`${url}/add`}>
             <Button>Add Level</Button>
           </Link>

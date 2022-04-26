@@ -30,7 +30,7 @@ export default function Users() {
       href: `${url}/instructors`,
     },
     {
-      label: 'Admins',
+      label: t('Admins'),
       href: `${url}/admins`,
     },
   ];

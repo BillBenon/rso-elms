@@ -121,6 +121,7 @@ export default function RegistrationControl() {
             <TableHeader
               title="Registration control"
               totalItems={RegistrationControls.length}
+              showSearch={false}
               handleSearch={handleSearch}>
               <Permission privilege={Privileges.CAN_CREATE_REG_CONTROL}>
                 <Link to={`${url}/add`}>

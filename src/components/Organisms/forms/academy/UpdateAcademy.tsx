@@ -7,6 +7,7 @@ import { useRouteMatch } from 'react-router-dom';
 
 import { queryClient } from '../../../../plugins/react-query';
 import academyStore from '../../../../store/administration/academy.store';
+import { TranslationPresets } from '../../../../translations/i18n';
 import { Link, ParamType, ValueType } from '../../../../types';
 import {
   AcademyCreateInfo,
@@ -24,6 +25,7 @@ import ILabel from '../../../Atoms/Text/ILabel';
 import BreadCrumb from '../../../Molecules/BreadCrumb';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import LocationMolecule from '../../../Molecules/input/LocationMolecule';
+import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import Stepper from '../../../Molecules/Stepper/Stepper';
 
 interface IProps {
@@ -55,6 +57,7 @@ export default function UpdateAcademy() {
     postal_code: '',
     short_name: '',
     website_link: '',
+    translation_preset: '',
   });
 
   const [logoFile, setlogoFile] = useState<File | null>(null);
@@ -175,6 +178,7 @@ function AcademyInfoComponent({
     short_name: '',
     mission: '',
     moto: '',
+    translation_preset: '',
   };
 
   const [errors, setErrors] = useState<AcademyInfoErrors>(initialErrorState);
@@ -234,6 +238,15 @@ function AcademyInfoComponent({
         handleChange={handleChange}>
         academy motto
       </InputMolecule>
+      <SelectMolecule
+        error={errors.translation_preset}
+        options={TranslationPresets.map((preset) => ({ label: preset, value: preset }))}
+        name="translation_preset"
+        value={details.translation_preset || 'default'}
+        placeholder={'Language to the academy uses'}
+        handleChange={handleChange}>
+        Translation Language
+      </SelectMolecule>
       <div>
         <div className="mb-3">
           <ILabel weight="bold">academy logo</ILabel>
