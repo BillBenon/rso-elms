@@ -81,11 +81,11 @@ export const editUserSchema = yup.object().shape({
   //   .required('names of father/legal guardian are required')
   //   .min(3),
   first_name: yup.string().required('first name is required').min(3),
-  intake_program_id: yup.string().when('is_student', {
-    is: (is_student: any) => is_student === true,
-    then: yup.string().required('Student intake and program are required fields'),
-    otherwise: yup.string(),
-  }),
+  // intake_program_id: yup.string().when('is_student', {
+  //   is: (is_student: any) => is_student === true,
+  //   then: yup.string().required('Student intake and program are required fields'),
+  //   otherwise: yup.string(),
+  // }),
   last_name: yup.string().required('last name is required').min(3),
   // mother_names: yup
   //   .string()
