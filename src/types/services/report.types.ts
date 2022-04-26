@@ -63,6 +63,27 @@ export interface IOverallStudentPerformance {
   promotion_status: PromotionStatus;
 }
 
+interface AttemptedEvaluation {
+  createdAt: string;
+  evaluation: string;
+  id: string;
+  lastUpdatedAt: string;
+  obtainedMarks: number;
+  totalMarks: number;
+}
+export interface IOverallEvaluationStudentPerformance {
+  attemptedEvaluations: AttemptedEvaluation[];
+  createdAt: string;
+  id: string;
+  intakeAcademicYearPeriod: EvPeriod;
+  intakeLevelClass: EvClass;
+  lastUpdatedAt: string;
+  obtainedMarks: number;
+  position: number;
+  student: EvStudent;
+  totalMarks: number;
+}
+
 interface EvClass {
   adminId: string;
   className: string;
@@ -113,9 +134,12 @@ interface ISubject {
 
 export interface IPerformanceTable {
   id: string;
-  reg_number: string;
+  first_name: string;
+  last_name: string;
+  rank: string;
   [index: string]: string | number;
 }
+
 export interface IQuestionPerformance {
   obtainedTotal: number;
   question: string;
@@ -155,7 +179,7 @@ interface EvUser {
   username: string;
 }
 
-interface EvStudent {
+export interface EvStudent {
   admin_id: string;
   id: string;
   reg_number: string;
@@ -176,7 +200,13 @@ export interface ISubjective {
 }
 
 export interface InformativeReport {
-  dsAssessments: [];
+  dsAssessments: {
+    evaluationId: string;
+    evaluationName: string;
+    id: string;
+    maximum: number;
+    obtained: number;
+  }[];
   evaluationAttempts: {
     evaluationId: string;
     evaluationName: string;

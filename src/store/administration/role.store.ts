@@ -18,18 +18,6 @@ class RoleStore {
     );
   }
 
-  getRolesByInstitution(institutionId: string) {
-    return useQuery(['role/institutionId', institutionId], () =>
-      roleService.getRolesByInstitution(institutionId),
-    );
-  }
-
-  getRolesByAcademy(academyId: string) {
-    return useQuery(['role/academyId', academyId], () =>
-      roleService.getRolesByAcademy(academyId),
-    );
-  }
-
   modifyRole() {
     return useMutation(roleService.modifyRole);
   }
@@ -58,5 +46,21 @@ export const getPrivilegesByRole = (roleId: string, enabled = true) => {
     { enabled },
   );
 };
+
+export function getRolesByAcademy(academyId: string) {
+  return useQuery(
+    ['role/academyId', academyId],
+    () => roleService.getRolesByAcademy(academyId),
+    { enabled: !!academyId },
+  );
+}
+
+export function getRolesByInstitution(institutionId: string) {
+  return useQuery(
+    ['role/institutionId', institutionId],
+    () => roleService.getRolesByInstitution(institutionId),
+    { enabled: !!institutionId },
+  );
+}
 
 export const roleStore = new RoleStore();

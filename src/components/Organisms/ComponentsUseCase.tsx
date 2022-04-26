@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Button from '../Atoms/custom/Button';
 import Checkbox from '../Atoms/Input/CheckBox';
@@ -11,6 +12,7 @@ import { Tab, Tabs } from '../Molecules/tabs/tabs';
 
 export default function CreatedBySandberg() {
   const [checked, setChecked] = useState(false);
+  const { t } = useTranslation();
 
   const options = [
     {
@@ -67,7 +69,7 @@ export default function CreatedBySandberg() {
             <h1 className="text-3xl text-primary-500">Students</h1>
           </Tab>
           <Tab label="Instructors">
-            <h2 className="text-3xl text-green-400">Instructors</h2>
+            <h2 className="text-3xl text-green-400">{t('Instructor')}</h2>
           </Tab>
           <Tab label="Admins" disabled={false}>
             <h2 className="text-3xl text-yellow-300 font-bold">Admins here</h2>

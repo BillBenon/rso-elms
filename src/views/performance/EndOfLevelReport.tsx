@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 
@@ -44,6 +45,7 @@ export default function EndOfLevelReport() {
 
   const { data: level } = intakeProgramStore.getIntakeLevelById(levelId);
   const { data: periods } = academicperiodStore.getPeriodsByIntakeLevelId(levelId);
+  const { t } = useTranslation();
 
   let totalPeriods: number = periods?.data?.data?.length as number;
 
@@ -430,10 +432,10 @@ export default function EndOfLevelReport() {
                   COMMANDANT
                 </Heading>
                 <Heading fontSize="sm" fontWeight="semibold" className="px-3 py-2">
-                  CHIEF INSTRUCTOR
+                  CHIEF {t('Instructor')}
                 </Heading>
                 <Heading fontSize="sm" fontWeight="semibold" className="px-3 py-2">
-                  SENIOR INSTRUCTOR
+                  SENIOR {t('Instructor')}
                 </Heading>
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="h-12 px-4">

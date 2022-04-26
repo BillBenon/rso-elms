@@ -1,6 +1,7 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
@@ -19,7 +20,6 @@ import SwitchMolecule from '../../../Molecules/input/SwitchMolecule';
 export default function EvaluationSettings() {
   const { user } = useAuthenticator();
   const picked_role = usePickedRole();
-  const history = useHistory();
 
   const { evaluationId } = useParams<{ evaluationId: string }>();
 

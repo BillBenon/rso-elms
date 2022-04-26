@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
@@ -15,6 +16,7 @@ function LevelPeriod() {
     parseInt(level),
   );
   const history = useHistory();
+  const { t } = useTranslation();
   const { path } = useRouteMatch();
 
   const prds = periods?.data.data || [];
@@ -51,7 +53,7 @@ function LevelPeriod() {
               path={`${path}/add-class`}
               render={() => (
                 <PopupMolecule
-                  title="New Class"
+                  title={'New ' + t('Class')}
                   closeOnClickOutSide={false}
                   open
                   onClose={history.goBack}>

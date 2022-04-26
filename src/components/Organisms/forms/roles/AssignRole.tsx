@@ -5,7 +5,10 @@ import { useHistory, useParams } from 'react-router-dom';
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { queryClient } from '../../../../plugins/react-query';
-import { roleStore } from '../../../../store/administration';
+import {
+  getRolesByAcademy,
+  getRolesByInstitution,
+} from '../../../../store/administration';
 import academyStore from '../../../../store/administration/academy.store';
 import usersStore from '../../../../store/administration/users.store';
 import { ParamType, RoleType, ValueType } from '../../../../types';
@@ -58,10 +61,10 @@ export default function AssignRole() {
 
   const { data, isLoading } =
     picked_role?.type === RoleType.ACADEMY
-      ? roleStore.getRolesByAcademy(picked_role.academy_id)
+      ? getRolesByAcademy(picked_role.academy_id)
       : roleInfo.type === RoleType.ACADEMY
-      ? roleStore.getRolesByAcademy(roleInfo.academy_id)
-      : roleStore.getRolesByInstitution(roleInfo.institution_id);
+      ? getRolesByAcademy(roleInfo.academy_id)
+      : getRolesByInstitution(roleInfo.institution_id);
 
   const { mutate } = usersStore.assignRole();
 

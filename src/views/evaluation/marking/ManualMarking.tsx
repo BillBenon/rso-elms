@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
+
 import Badge from '../../../components/Atoms/custom/Badge';
 import Loader from '../../../components/Atoms/custom/Loader';
 import Heading from '../../../components/Atoms/Text/Heading';
@@ -36,6 +38,7 @@ export default function ManualMarking({ evaluationId }: PropsType) {
   const [classes, setclasses] = useState(
     evaluationInfo?.intake_level_class_ids.split(','),
   );
+  const { t } = useTranslation();
   const { mutate } = markingStore.manualMarking();
 
   function handleClassChange(e: ValueType) {
@@ -115,7 +118,7 @@ export default function ManualMarking({ evaluationId }: PropsType) {
     <div className="flex flex-col gap-8">
       <div>
         <Heading fontWeight="medium" fontSize="sm">
-          Select class
+          Select {t('Class')}
         </Heading>
         <SelectMolecule
           width="80"
@@ -123,7 +126,7 @@ export default function ManualMarking({ evaluationId }: PropsType) {
           value={currentClassId}
           handleChange={handleClassChange}
           name={'type'}
-          placeholder="Select class"
+          placeholder={'Select ' + t('Class')}
           options={classes?.map((cl) => useClasses(cl)) || []}
         />
       </div>
@@ -139,8 +142,8 @@ export default function ManualMarking({ evaluationId }: PropsType) {
       {isLoading && <Loader />}
       {!isLoading && !currentClassId && (
         <NoDataAvailable
-          title={'No selected class'}
-          description={'Select class to view '}
+          title={'No selected ' + t('Class')}
+          description={'Select ' + t('Class') + ' to view '}
         />
       )}
       {studentsData?.data.data && (

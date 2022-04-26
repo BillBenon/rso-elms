@@ -1,6 +1,7 @@
 import React from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useLocation, useParams } from 'react-router-dom';
+
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
@@ -8,7 +9,6 @@ import {
   IEvaluationStatus,
   IStudentEvaluationStart,
 } from '../../types/services/evaluation.types';
-import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import Button from '../Atoms/custom/Button';
 import Heading from '../Atoms/Text/Heading';
 import PopupMolecule from '../Molecules/Popup';
@@ -27,11 +27,14 @@ export default function ConfirmationOrganism({
 
   const evaluation = evaluationStore.getEvaluationById(id).data?.data.data;
   const studentEval = new URLSearchParams(search).get('studentEval');
+  const evalId = new URLSearchParams(search).get('evaluation');
 
   const { mutate, isLoading } = evaluationStore.studentEvaluationStart();
 
-  function goToNext(id: string) {
-    history.push(`/dashboard/evaluations/student-evaluation/${id}`);
+  function goToNext(studentEval: string, evaluationId: string) {
+    history.push(
+      `/dashboard/evaluations/student-evaluation/${studentEval}/${evaluationId}`,
+    );
   }
 
   function generateStudentCode() {
@@ -41,16 +44,16 @@ export default function ConfirmationOrganism({
       student_id: user?.id + '',
     };
 
-    if (studentEval) {
-      setLocalStorageData('studentEvaluationId', studentEval);
+    if (studentEval && evalId) {
+      //TODO: remove this once doing evaluation is working well setLocalStorageData('studentEvaluationId', studentEval);
       toast.success('Recovered evaluation code', { duration: 5000 });
-      goToNext(studentEvaluationStart.evaluation_id);
+      goToNext(studentEval, evalId);
     } else {
       mutate(studentEvaluationStart, {
         onSuccess: (studentInfo) => {
-          setLocalStorageData('studentEvaluationId', studentInfo.data.data.id);
+          //TODO: remove this once doing evaluation is working well setLocalStorageData('studentEvaluationId', studentEval);
           toast.success('Started evaluation', { duration: 5000 });
-          goToNext(studentEvaluationStart.evaluation_id);
+          goToNext(studentInfo.data.data.id, studentEvaluationStart.evaluation_id);
         },
         onError: (error: any) => {
           toast.error(error.response.data.message);

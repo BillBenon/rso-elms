@@ -1,6 +1,7 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -128,6 +129,7 @@ function NewIntakeLevelModule() {
   }
 
   let level = levels.find((lv) => (lv.id = levelId));
+  const { t } = useTranslation();
 
   return (
     <div className="grid lg:grid-cols-2 grid-cols-1 w-full mx-auto">
@@ -161,7 +163,7 @@ function NewIntakeLevelModule() {
             })}
             name="incharge_id"
             handleChange={handleChange}>
-            <p className="font-medium">Instructor Incharge</p>
+            <p className="font-medium">{t('Instructor')} Incharge</p>
           </DropdownMolecule>
         </div>
         <div className="flex flex-col gap-3">

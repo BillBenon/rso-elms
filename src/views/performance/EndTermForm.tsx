@@ -1,6 +1,7 @@
 import { Editor } from '@tiptap/react';
 import React, { FormEvent, useEffect, useRef, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 
@@ -91,13 +92,16 @@ const gradedExercises = [
 export default function EndTermForm() {
   const [isPrinting, setisPrinting] = useState(false);
   const report = useRef(null);
+  const { t } = useTranslation();
 
   const picked_role = usePickedRole();
   const { data: role_academy } = academyStore.getAcademyById(
     picked_role?.academy_id + '',
   );
   //path params
-  const { classId, studentId, periodId } = useParams<EoTParamType>();
+  const { classId, studentId, periodId, levelId } = useParams<EoTParamType>();
+
+  const { data: period } = intakeProgramStore.getPeriodsByLevel(+levelId);
 
   const { data: reportData } = getStudentInformativeReport(studentId, periodId);
 
@@ -140,6 +144,9 @@ export default function EndTermForm() {
 
   const { data: classInfo } = classStore.getClassById(classId);
   const { data: studentInfo } = intakeProgramStore.getStudentById(studentId);
+
+  const termName =
+    period?.data.data.find((prd) => prd.id == periodId)?.academic_period.name || '';
 
   const handlePrint = useReactToPrint({
     content: () => report.current,
@@ -249,7 +256,7 @@ export default function EndTermForm() {
         {reportData?.data.data ? (
           <>
             <h1 className="text-center font-bold underline my-8 text-base">
-              STUDENT TERM {reportData?.data.data.term || ''} REPORT
+              STUDENT {termName} REPORT
             </h1>
             {/* Part one */}
             <div className="part-one">
@@ -261,9 +268,9 @@ export default function EndTermForm() {
               </Heading>
               <div className="my-4">
                 <div className="flex">
-                  <div className="border border-black py-1 text-center w-40">Term</div>
+                  <div className="border border-black py-1 text-center w-40">Period</div>
                   <div className="border border-black py-1 text-center w-32">
-                    {reportData?.data.data.term || ''}
+                    {termName}
                   </div>
                 </div>
                 <div className="flex">
@@ -468,16 +475,16 @@ export default function EndTermForm() {
                 </div>
 
                 {/* table body */}
-                {gradedExercises.map((exercise, index) => (
+                {reportData.data.data.dsAssessments.map((dsAssessment, index) => (
                   <React.Fragment key={index}>
                     <div className="px-4 py-2 text-sm border border-black">
                       {index + 1}
                     </div>
                     <div className="px-4 py-2 text-sm border border-black col-span-7">
-                      {exercise.name}
+                      {dsAssessment.evaluationName}
                     </div>
                     <div className="px-4 py-2 text-sm border border-black col-span-4">
-                      {exercise.hpm}
+                      {dsAssessment.obtained}
                     </div>
                   </React.Fragment>
                 ))}
@@ -487,40 +494,10 @@ export default function EndTermForm() {
                   Total
                 </div>
                 <div className="px-4 py-2 text-sm border border-black col-span-4">
-                  {gradedExercises.reduce((acc, curr) => acc + curr.hpm, 0)}
-                </div>
-              </div>
-              <div className="grid grid-cols-12 pt-8">
-                {/* table header */}
-                <div className="p-1 border border-black text-sm font-bold">Sr</div>
-                <div className="py-1 px-4 col-span-7 border border-black text-sm font-bold">
-                  INTELLECTUAL ABILITY
-                </div>
-                <div className="p-2 col-span-4 border border-black text-sm font-bold">
-                  MARK (1) 1 to 5
-                </div>
-
-                {/* table body */}
-                {gradedExercises.map((exercise, index) => (
-                  <React.Fragment key={index}>
-                    <div className="px-4 py-2 text-sm border border-black">
-                      {index + 1}
-                    </div>
-                    <div className="px-4 py-2 text-sm border border-black col-span-7">
-                      {exercise.name}
-                    </div>
-                    <div className="px-4 py-2 text-sm border border-black col-span-4">
-                      {exercise.hpm}
-                    </div>
-                  </React.Fragment>
-                ))}
-                {/* total */}
-                <div className="border border-black" />
-                <div className="px-4 py-2 text-sm border border-black uppercase col-span-7 font-bold">
-                  Total
-                </div>
-                <div className="px-4 py-2 text-sm border border-black col-span-4">
-                  {gradedExercises.reduce((acc, curr) => acc + curr.hpm, 0)}
+                  {reportData.data.data.dsAssessments.reduce(
+                    (acc, curr) => acc + curr.obtained,
+                    0,
+                  )}
                 </div>
               </div>
             </div>
@@ -558,15 +535,29 @@ export default function EndTermForm() {
                   )}
                 </div>
                 <div className="h-8 border border-black col-span-2 px-4">
-                  {gradedExercises.reduce((acc, curr) => acc + curr.ob, 0)}
+                  {reportData.data.data.dsAssessments.reduce(
+                    (acc, curr) => acc + curr.obtained,
+                    0,
+                  )}
                 </div>
                 <div className="h-8 border border-black col-span-2 px-4">
                   {formatPercentage(
                     reportData.data.data.evaluationAttempts.reduce(
                       (acc, curr) => acc + curr.obtained,
                       0,
-                    ) + gradedExercises.reduce((acc, curr) => acc + curr.ob, 0),
-                    gradedExercises.reduce((acc, curr) => acc + curr.hpm, 0),
+                    ) +
+                      reportData.data.data.dsAssessments.reduce(
+                        (acc, curr) => acc + curr.obtained,
+                        0,
+                      ),
+                    reportData.data.data.evaluationAttempts.reduce(
+                      (acc, curr) => acc + curr.maximum,
+                      0,
+                    ) +
+                      reportData.data.data.dsAssessments.reduce(
+                        (acc, curr) => acc + curr.maximum,
+                        0,
+                      ),
                   )}
                 </div>
                 <div className="h-8 border border-black col-span-2 px-4">
@@ -574,8 +565,19 @@ export default function EndTermForm() {
                     reportData.data.data.evaluationAttempts.reduce(
                       (acc, curr) => acc + curr.obtained,
                       0,
-                    ) + gradedExercises.reduce((acc, curr) => acc + curr.ob, 0),
-                    gradedExercises.reduce((acc, curr) => acc + curr.hpm, 0),
+                    ) +
+                      reportData.data.data.dsAssessments.reduce(
+                        (acc, curr) => acc + curr.obtained,
+                        0,
+                      ),
+                    reportData.data.data.evaluationAttempts.reduce(
+                      (acc, curr) => acc + curr.maximum,
+                      0,
+                    ) +
+                      reportData.data.data.dsAssessments.reduce(
+                        (acc, curr) => acc + curr.maximum,
+                        0,
+                      ),
                   )}
                 </div>
               </div>
@@ -665,7 +667,7 @@ export default function EndTermForm() {
             </div>
             {/* chief instructor */}
             <Heading className="underline py-2" fontSize="sm" fontWeight="semibold">
-              Chief Instructor
+              Chief {t('Instructor')}
             </Heading>
             <div className="grid grid-cols-3 pt-4">
               <p className="text-sm">

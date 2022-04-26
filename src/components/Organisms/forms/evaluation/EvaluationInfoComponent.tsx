@@ -2,7 +2,9 @@ import { Editor } from '@tiptap/react';
 import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
+
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { enrollmentService } from '../../../../services/administration/enrollments.service';
@@ -63,6 +65,7 @@ export default function EvaluationInfoComponent() {
   const history = useHistory();
 
   const { search } = useLocation();
+  const { t } = useTranslation();
 
   const evaluationId = new URLSearchParams(search).get('evaluation') || '';
 
@@ -106,9 +109,11 @@ export default function EvaluationInfoComponent() {
 
   useEffect(() => {
     if (picked_role?.academy_id) {
-      setDetails({
-        ...details,
-        academy_id: picked_role?.academy_id + '',
+      setDetails((prevDetails) => {
+        return {
+          ...prevDetails,
+          academy_id: picked_role?.academy_id + '',
+        };
       });
     }
   }, [picked_role]);
@@ -121,11 +126,13 @@ export default function EvaluationInfoComponent() {
   // Update classes
   useEffect(() => {
     if (classes?.data.data) {
-      setDetails({
-        ...details,
-        intake_level_class_ids: classes?.data.data
-          .map((cl) => cl.id.toString())
-          .join(','),
+      setDetails((prevState) => {
+        return {
+          ...prevState,
+          intake_level_class_ids: classes?.data.data
+            .map((cl) => cl.id.toString())
+            .join(','),
+        };
       });
     }
   }, [classes]);
@@ -685,7 +692,7 @@ export default function EvaluationInfoComponent() {
           <MultiselectMolecule
             width="64"
             name="intake_level_class_ids"
-            placeholder="Select class"
+            placeholder={'Select ' + t('Class')}
             handleChange={handleChange}
             value={
               // details.intake_level_class_ids.split(',') || []

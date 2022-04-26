@@ -27,6 +27,17 @@ export function getClassTermlyOverallReport(
     { enabled },
   );
 }
+export function getClassTermlyEvaluationReport(
+  classId: string,
+  periodId: string,
+  enabled = true,
+) {
+  return useQuery(
+    ['reports/overal/class/period', classId, periodId],
+    () => reportService.getClassTermlyEvaluationReport(classId, periodId),
+    { enabled },
+  );
+}
 
 export function getLevelTermlyOverallReport(levelId: string, enabled = true) {
   return useQuery(

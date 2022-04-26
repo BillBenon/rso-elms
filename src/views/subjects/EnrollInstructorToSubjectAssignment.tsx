@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 
 import Button from '../../components/Atoms/custom/Button';
 import RightSidebar from '../../components/Organisms/RightSidebar';
@@ -31,6 +32,8 @@ export default function EnrollInstructorToSubjectComponent({
   const { data: instructorsInProgram } = enrollmentStore.getInstructorsInProgram(
     intakeProg + '',
   );
+
+  const { t } = useTranslation();
 
   const [instructors, setInstructors] = useState<UserView[]>([]);
 
@@ -81,20 +84,20 @@ export default function EnrollInstructorToSubjectComponent({
   return (
     <div className="cursor-pointer">
       <Button styleType="outline" onClick={() => setSidebarOpen(true)}>
-        Enroll instructor
+        Enroll {t('Instructor')}
       </Button>
       <RightSidebar
         open={sidebarOpen}
         handleClose={() => setSidebarOpen(false)}
-        label="Enroll instructor to this subject"
+        label={'Enroll ' + t('Instructor') + ' to this subject'}
         data={instructors || []}
         selectorActions={[
           {
-            name: 'enroll instructors',
+            name: 'enroll ' + t('Instructor'),
             handleAction: (data?: string[]) => add(data),
           },
         ]}
-        dataLabel={'Instructors in this module'}
+        dataLabel={t('Instructor') + ' in this module'}
         isLoading={instructorLoading}
         unselectAll={!sidebarOpen}
       />

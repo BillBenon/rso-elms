@@ -1,9 +1,12 @@
 {
   "Instructor": "Directing Staff",
-  "Students": "Trainies",
-  "class": "Syndicate",
-  "division": "Academy Head Quarter",
-  "faculty": "Wing"
+  "Students": "Students",
+  "Program": "Course",
+  "Admins" : "Admins",
+  "faculty": "Wing",
+  "Class": "Syndicate",
+  "Instructor representative": "Syndicate DS",
+  "Class representative": "Syndicate leader"
 }
 
 

@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 
@@ -62,6 +63,7 @@ export default function StudentAcademicReport() {
   };
 
   const report = useRef(null);
+  const { t } = useTranslation();
 
   const handlePrint = useReactToPrint({
     content: () => report.current,
@@ -361,10 +363,10 @@ export default function StudentAcademicReport() {
                   COMMANDANT
                 </Heading>
                 <Heading fontSize="sm" fontWeight="semibold" className="px-3 py-2">
-                  CHIEF INSTRUCTOR
+                  CHIEF {t('Instructor')}
                 </Heading>
                 <Heading fontSize="sm" fontWeight="semibold" className="px-3 py-2">
-                  SENIOR INSTRUCTOR
+                  SENIOR {t('Instructor')}
                 </Heading>
                 {[1, 2, 3].map((i) => (
                   <div key={i} className="h-12 px-4">
