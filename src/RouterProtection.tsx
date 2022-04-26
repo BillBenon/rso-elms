@@ -98,7 +98,7 @@ const RouterProtection = () => {
           )}
           {hasPrivilege(Privileges.CAN_ACCESS_REG_CONTROLS) && (
             <Route
-              path={`${path}/registration-control`}
+              path={`${path}/registration-periods`}
               component={RegistrationControl}
             />
           )}
