@@ -41,8 +41,7 @@ export default function RegControlDetails() {
 
       setIntakes(loadedIntakes);
     } else if (isError) toast.error('error occurred when loading intakes');
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data]);
+  }, [data, isError, isSuccess]);
 
   return (
     <div>
@@ -56,7 +55,7 @@ export default function RegControlDetails() {
         </Button>
       </div>
 
-      <section className="flex flex-wrap justify-between mt-2">
+      <section className="flex flex-wrap justify-start gap-4 mt-2">
         {intakes.map((course) => (
           <div key={course.code} className="p-1 mt-3">
             <CommonCardMolecule data={course} />
