@@ -305,7 +305,7 @@ export default function Intakes() {
                       buttonLabel={
                         registrationControlId
                           ? 'Add Intake '
-                          : 'Go to registration control'
+                          : 'Go to registration period'
                       }
                       title={
                         registrationControlId
@@ -316,7 +316,7 @@ export default function Intakes() {
                       handleClick={() => {
                         if (registrationControlId)
                           history.push(`${url}/${registrationControlId}/add-intake`);
-                        else history.push('/dashboard/registration-control');
+                        else history.push('/dashboard/registration-periods');
                       }}
                       description={`${
                         user?.user_type === UserType.STUDENT

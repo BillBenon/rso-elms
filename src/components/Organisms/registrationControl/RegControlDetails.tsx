@@ -12,7 +12,7 @@ import CommonCardMolecule from '../../Molecules/cards/CommonCardMolecule';
 
 const list: Link[] = [
   { to: 'home', title: 'Institution Admin' },
-  { to: 'registration-control', title: 'Registration control' },
+  { to: 'registration-periods', title: 'Registration period' },
   { to: 'intakes', title: 'Intakes' },
 ];
 
@@ -48,7 +48,7 @@ export default function RegControlDetails() {
       <BreadCrumb list={list} />
       <div className="flex gap-2 justify-between items-center py-3">
         <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
-          Registration control details
+          Registration period details
         </Heading>
         <Button onClick={() => history.push(`/dashboard/intakes?regId=${id}`)}>
           Manage intake

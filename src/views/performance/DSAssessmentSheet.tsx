@@ -80,41 +80,42 @@ export default function DSAssessmentSheet() {
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
-    if (details.receiver === '') {
-      toast.error(`Please select recipient is required`);
-    } else if (details.label === '') {
+    // if (details.receiver === '') {
+    //   toast.error(`Please select recipient is required`);
+    //} else
+    if (details.label === '') {
       toast.error(`Please enter item of instruction`);
     } else if (details.value === '') {
       toast.error(`Please enter comment`);
-    } else if (details.week === 0) {
-      toast.error(`Please enter week number`);
+      // } else if (details.week === 0) {
+      //   toast.error(`Please enter week number`);
     } else {
-      mutate(
-        {
-          ...details,
-          term: periodOfThisClass || 0,
-          receiver:
-            // !isCreating ? rpt?.receiver.adminId || '' :
-            details.receiver,
-          week:
-            // !isCreating ? rpt?.week || 0 :
-            details.week,
-        },
-        {
-          onSuccess(data) {
-            toast.success(data.data.message);
-            queryClient.invalidateQueries([
-              'reports/student/level/critics',
-              periodOfThisClass,
-            ]);
-            setOpen(false);
-            // setCreating(false);
+      if (rpt) {
+        mutate(
+          {
+            ...details,
+            term: periodOfThisClass || 0,
+            receiver: rpt?.receiver.adminId,
+            week: rpt?.week,
           },
-          onError(error: any) {
-            toast.error(error.response.data.message || 'error occurred please try again');
+          {
+            onSuccess(data) {
+              toast.success(data.data.message);
+              queryClient.invalidateQueries([
+                'reports/student/level/critics',
+                periodOfThisClass,
+              ]);
+              setOpen(false);
+              // setCreating(false);
+            },
+            onError(error: any) {
+              toast.error(
+                error.response.data.message || 'error occurred please try again',
+              );
+            },
           },
-        },
-      );
+        );
+      }
     }
   };
 

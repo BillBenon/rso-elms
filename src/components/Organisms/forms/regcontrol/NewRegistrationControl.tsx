@@ -54,10 +54,10 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
 
     validatedForm
       .then(() => {
-        let toastId = toast.loading('Creating registration control');
+        let toastId = toast.loading('Creating registration period');
         mutateAsync(regControl, {
           onSuccess: () => {
-            toast.success('Registration control created', { id: toastId });
+            toast.success('Registration period created', { id: toastId });
             queryClient.invalidateQueries(['regControl/academyId']);
             history.goBack();
           },
@@ -85,7 +85,7 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
         value={regControl.description}
         name="description"
         handleChange={handleChange}>
-        Registration control description
+        Registration period description
       </TextAreaMolecule>
       <DateMolecule
         error={errors.expected_start_date}
