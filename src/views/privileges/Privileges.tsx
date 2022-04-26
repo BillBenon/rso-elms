@@ -82,6 +82,7 @@ export default function PrivilegesView() {
           <Table<PrivilegeRes>
             uniqueCol="id"
             statusColumn="status"
+            hide={['id']}
             data={privileges}
             actions={actions}
           />

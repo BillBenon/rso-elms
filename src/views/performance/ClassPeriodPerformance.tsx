@@ -9,25 +9,20 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import useAuthenticator from '../../hooks/useAuthenticator';
-import usePickedRole from '../../hooks/usePickedRole';
-import { classStore } from '../../store/administration/class.store';
+import { classStore, getStudentsByClass } from '../../store/administration/class.store';
 import { getClassTermlyOverallReport } from '../../store/evaluation/school-report.store';
-import { Privileges, ValueType } from '../../types';
+import { ValueType } from '../../types';
+import { IPerformanceTable } from '../../types/services/report.types';
 import { UserType } from '../../types/services/user.types';
 import { calculateGrade } from '../../utils/school-report';
 import AllDSAssessment from './AllDSAssessment';
+import ClassEvaluationPerformance from './ClassEvaluationPerformance';
 import ClassFullYearDeliberation from './ClassFullYearDeliberation';
 import TermModulePerfomance from './TermModulePerfomance';
 
 interface IParamType {
   levelId: string;
   classId: string;
-}
-
-interface IPerformanceTable {
-  id: string;
-  reg_number: string;
-  [index: string]: string | number;
 }
 
 function OveralClassPerformance() {
@@ -39,7 +34,7 @@ function OveralClassPerformance() {
   const { data: classInfo } = classStore.getClassById(classId);
 
   let periodOfThisClass = classInfo?.data.data.intake_academic_year_period_id;
-
+  const { data: studentsData } = getStudentsByClass(classId) || [];
   const {
     data: performance,
     isIdle,
@@ -49,28 +44,35 @@ function OveralClassPerformance() {
 
   let data: IPerformanceTable[] = [];
 
-  performance?.data.data.forEach((record) => {
-    let processed: IPerformanceTable = {
-      reg_number: record.student.reg_number,
-      id: record.student.admin_id,
-    };
+  studentsData?.data.data.forEach((student) => {
+    performance?.data.data.forEach((record) => {
+      if (record.student.admin_id === student.student.id) {
+        let processed: IPerformanceTable = {
+          rank: student.student.user.person.current_rank?.name || '',
+          first_name: student.student.user.first_name,
+          last_name: student.student.user.last_name,
+          // reg_number: record.student.reg_number,
+          id: record.student.admin_id,
+        };
 
-    record.subject_marks?.forEach((mark) => {
-      processed[`${mark.subject.title} /${mark.total_marks}`] =
-        mark.obtained_marks.toString();
+        record.subject_marks?.forEach((mark) => {
+          processed[`${mark.subject.title} /${mark.total_marks}`] =
+            mark.obtained_marks.toString();
+        });
+
+        processed[`total /${record.total_marks}`] = `${
+          record.quiz_obtained_marks + record.exam_obtained_marks
+        }`;
+
+        processed['Grade'] = calculateGrade(
+          record.quiz_obtained_marks + record.exam_obtained_marks,
+          record.total_marks,
+        );
+
+        processed['position'] = record.position;
+        data.push(processed);
+      }
     });
-
-    processed[`total /${record.total_marks}`] = `${
-      record.quiz_obtained_marks + record.exam_obtained_marks
-    }`;
-
-    processed['Grade'] = calculateGrade(
-      record.quiz_obtained_marks + record.exam_obtained_marks,
-      record.total_marks,
-    );
-
-    processed['position'] = record.position;
-    data.push(processed);
   });
 
   function handleSearch(_e: ValueType) {}
@@ -153,12 +155,13 @@ function OveralClassPerformance() {
 export default function ClassPeriodPerformance() {
   const { url, path } = useRouteMatch();
 
-  const user_role = usePickedRole();
-  const user_privileges = user_role?.role_privileges?.map((role) => role.name);
-  const hasPrivilege = (privilege: Privileges) => user_privileges?.includes(privilege);
+  // const user_role = usePickedRole();
+  // const user_privileges = user_role?.role_privileges?.map((role) => role.name);
+  // const hasPrivilege = (privilege: Privileges) => user_privileges?.includes(privilege);
 
   const tabs: TabType[] = [
-    { label: 'Overal performance', href: url },
+    { label: 'Performance per subject', href: url },
+    { label: 'Performance per evaluation', href: `${url}/by-evaluation` },
     { label: 'Performance per module', href: `${url}/by-module` },
     { label: 'Deliberation', href: `${url}/deliberation` },
     {
@@ -179,6 +182,11 @@ export default function ClassPeriodPerformance() {
         <Route path={`${path}/deliberation`} component={ClassFullYearDeliberation} />
         {/* )} */}
         <Route path={`${path}/by-module`} component={TermModulePerfomance} />
+        <Route
+          path={`${path}/by-evaluation`}
+          exact
+          component={ClassEvaluationPerformance}
+        />
       </Switch>
     </TabNavigation>
   );

@@ -286,7 +286,7 @@ export default function InstructorViewEvaluations() {
         {hasPrivilege(Privileges.CAN_ANSWER_EVALUATION) && (
           <Route
             exact
-            path={`${path}/student-evaluation/:id`}
+            path={`${path}/student-evaluation/:id/:evaluationId`}
             component={EvaluationTest}
           />
         )}
