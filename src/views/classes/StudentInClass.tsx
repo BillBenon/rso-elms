@@ -8,7 +8,6 @@ import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
-import { Tab } from '../../components/Molecules/tabs/tabs';
 import Students from '../../components/Organisms/user/Students';
 import { queryClient } from '../../plugins/react-query';
 import { classStore, getStudentsByClass } from '../../store/administration/class.store';
@@ -80,213 +79,210 @@ function StudentInClass({ classObject }: IStudentClass) {
   ];
 
   return (
-    <Tab label={classObject.class_name || 'kdfjd'}>
-      <div className="flex flex-col">
-        <Switch>
-          <Route
-            exact
-            path={`${path}`}
-            render={() => {
-              return (
-                <>
-                  <div className="flex gap-4 self-end">
-                    <Permission privilege={Privileges.CAN_CREATE_CLASSES}>
-                      <Button
-                        styleType="outline"
-                        onClick={() =>
-                          path.includes('learn')
-                            ? history.push(
-                                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/add-class`,
-                              )
-                            : path.includes('teach')
-                            ? history.push(
-                                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/add-class`,
-                              )
-                            : path.includes('manage')
-                            ? history.push(
-                                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/add-class`,
-                              )
-                            : {}
-                        }>
-                        Add class
-                      </Button>
-                    </Permission>
-
+    <div className="flex flex-col">
+      <Switch>
+        <Route
+          exact
+          path={`${path}`}
+          render={() => {
+            return (
+              <>
+                <div className="flex gap-4 self-end">
+                  <Permission privilege={Privileges.CAN_CREATE_CLASSES}>
                     <Button
                       styleType="outline"
                       onClick={() =>
                         path.includes('learn')
                           ? history.push(
-                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/view-class/${classObject.id}/subject`,
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/add-class`,
                             )
                           : path.includes('teach')
                           ? history.push(
-                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/view-class/${classObject.id}/subject`,
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/add-class`,
                             )
                           : path.includes('manage')
                           ? history.push(
-                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/view-class/${classObject.id}/subject`,
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/add-class`,
                             )
                           : {}
                       }>
-                      View subjects
+                      Add class
                     </Button>
-                    <Permission privilege={Privileges.CAN_ACCESS_REPORTS}>
-                      <Button
-                        styleType="outline"
-                        onClick={() =>
-                          history.push(
-                            `/dashboard/intakes/peformance/${levelId}/${classObject.id}`,
+                  </Permission>
+
+                  <Button
+                    styleType="outline"
+                    onClick={() =>
+                      path.includes('learn')
+                        ? history.push(
+                            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/view-class/${classObject.id}/subject`,
                           )
-                        }>
-                        View performance
-                      </Button>
-                    </Permission>
-                    <Permission privilege={Privileges.CAN_CREATE_CLASSES_MEMBERS}>
-                      <AddStudents classId={parseInt(classObject.id + '')} />
-                    </Permission>
-                  </div>
-                  <section>
-                    {isLoading ? (
-                      <Loader />
-                    ) : studentsData?.data.data &&
-                      studentsData?.data.data?.length <= 0 ? (
-                      <NoDataAvailable
-                        showButton={false}
-                        icon="user"
-                        buttonLabel="Add new students"
-                        title={'No students available in this class'}
-                        handleClick={() => history.push(``)}
-                        description="This class has not received any students. you can add one from the button on the top left."
-                      />
-                    ) : (
-                      <div className="mt-10">
-                        <div className="grid grid-cols-1 md:grid-cols-2">
-                          <div className="flex gap-4 pb-2 items-center">
-                            <Heading fontWeight="semibold" fontSize="sm" color="primary">
-                              Instructor representative :
-                            </Heading>
-                            <Heading fontSize="sm">
-                              {classObject.instructor_class_incharge_name}
-                            </Heading>
-                          </div>
-                          <div className="flex gap-4 pb-2 items-center">
-                            <Heading fontWeight="semibold" fontSize="sm" color="primary">
-                              Instructor representative backup 1 :
-                            </Heading>
-                            <Heading fontSize="sm">
-                              {classObject.instructor_class_incharge_name}
-                            </Heading>
-                          </div>
+                        : path.includes('teach')
+                        ? history.push(
+                            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/view-class/${classObject.id}/subject`,
+                          )
+                        : path.includes('manage')
+                        ? history.push(
+                            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/view-class/${classObject.id}/subject`,
+                          )
+                        : {}
+                    }>
+                    View subjects
+                  </Button>
+                  <Permission privilege={Privileges.CAN_ACCESS_REPORTS}>
+                    <Button
+                      styleType="outline"
+                      onClick={() =>
+                        history.push(
+                          `/dashboard/intakes/peformance/${levelId}/${classObject.id}`,
+                        )
+                      }>
+                      View performance
+                    </Button>
+                  </Permission>
+                  <Permission privilege={Privileges.CAN_CREATE_CLASSES_MEMBERS}>
+                    <AddStudents classId={parseInt(classObject.id + '')} />
+                  </Permission>
+                </div>
+                <section>
+                  {isLoading ? (
+                    <Loader />
+                  ) : studentsData?.data.data && studentsData?.data.data?.length <= 0 ? (
+                    <NoDataAvailable
+                      showButton={false}
+                      icon="user"
+                      buttonLabel="Add new students"
+                      title={'No students available in this class'}
+                      handleClick={() => history.push(``)}
+                      description="This class has not received any students. you can add one from the button on the top left."
+                    />
+                  ) : (
+                    <div className="mt-10">
+                      <div className="grid grid-cols-1 md:grid-cols-2">
+                        <div className="flex gap-4 pb-2 items-center">
+                          <Heading fontWeight="semibold" fontSize="sm" color="primary">
+                            Instructor representative :
+                          </Heading>
+                          <Heading fontSize="sm">
+                            {classObject.instructor_class_incharge_name}
+                          </Heading>
                         </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2">
-                          <div className="flex gap-4 pb-2 items-center">
-                            <Heading fontWeight="semibold" fontSize="sm" color="primary">
-                              Class representative :
-                            </Heading>
-                            <Heading fontSize="sm">
-                              {classObject.instructor_class_incharge_name}
-                            </Heading>
-                          </div>
-                          <div className="flex gap-4 pb-2 items-center">
-                            <Heading fontWeight="semibold" fontSize="sm" color="primary">
-                              Instructor representative backup 2 :
-                            </Heading>
-                            <Heading fontSize="sm">
-                              {classObject.instructor_class_incharge_name}
-                            </Heading>
-                          </div>
+                        <div className="flex gap-4 pb-2 items-center">
+                          <Heading fontWeight="semibold" fontSize="sm" color="primary">
+                            Instructor representative backup 1 :
+                          </Heading>
+                          <Heading fontSize="sm">
+                            {classObject.instructor_class_incharge_name}
+                          </Heading>
                         </div>
-
-                        <Students
-                          students={students}
-                          showTableHeader={false}
-                          selectorActions={actions}
-                          enumtype={'UserTypes'}
-                        />
                       </div>
-                    )}
-                  </section>
-                </>
-              );
-            }}
-          />
-          <Route
-            exact
-            path={`${path}/:classId/subject`}
-            render={() => {
-              return (
-                <>
-                  <div className="flex gap-4 self-end">
-                    <Permission privilege={Privileges.CAN_CREATE_CLASSES}>
-                      <Button
-                        styleType="outline"
-                        onClick={() =>
-                          path.includes('learn')
-                            ? history.push(
-                                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/add-class`,
-                              )
-                            : path.includes('teach')
-                            ? history.push(
-                                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/add-class`,
-                              )
-                            : path.includes('learn')
-                            ? history.push(
-                                `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/add-class`,
-                              )
-                            : {}
-                        }>
-                        Add class
-                      </Button>
-                    </Permission>
+                      <div className="grid grid-cols-1 md:grid-cols-2">
+                        <div className="flex gap-4 pb-2 items-center">
+                          <Heading fontWeight="semibold" fontSize="sm" color="primary">
+                            Class representative :
+                          </Heading>
+                          <Heading fontSize="sm">
+                            {classObject.instructor_class_incharge_name}
+                          </Heading>
+                        </div>
+                        <div className="flex gap-4 pb-2 items-center">
+                          <Heading fontWeight="semibold" fontSize="sm" color="primary">
+                            Instructor representative backup 2 :
+                          </Heading>
+                          <Heading fontSize="sm">
+                            {classObject.instructor_class_incharge_name}
+                          </Heading>
+                        </div>
+                      </div>
 
+                      <Students
+                        students={students}
+                        showTableHeader={false}
+                        selectorActions={actions}
+                        enumtype={'UserTypes'}
+                      />
+                    </div>
+                  )}
+                </section>
+              </>
+            );
+          }}
+        />
+        <Route
+          exact
+          path={`${path}/:classId/subject`}
+          render={() => {
+            return (
+              <>
+                <div className="flex gap-4 self-end">
+                  <Permission privilege={Privileges.CAN_CREATE_CLASSES}>
                     <Button
                       styleType="outline"
                       onClick={() =>
                         path.includes('learn')
                           ? history.push(
-                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/view-class`,
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/add-class`,
                             )
                           : path.includes('teach')
                           ? history.push(
-                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/view-class`,
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/add-class`,
                             )
-                          : path.includes('manage')
+                          : path.includes('learn')
                           ? history.push(
-                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/view-class`,
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/add-class`,
                             )
                           : {}
                       }>
-                      View students
+                      Add class
                     </Button>
-                  </div>
-                  <div className="flex justify-between space-x-4">
-                    <Heading fontWeight="semibold" fontSize="xl" className="py-2">
-                      Subjects
-                    </Heading>
-                  </div>
-                  <SubjectPeriod />
-                </>
-              );
-            }}
-          />
-          {/* add subject to period */}
-          <Route
-            exact
-            path={`${path}/:classId/add-subject`}
-            render={() => (
-              <PopupMolecule
-                title="Add subject to period"
-                closeOnClickOutSide={false}
-                open
-                onClose={history.goBack}>
-                <AddSubjectToPeriod />
-              </PopupMolecule>
-            )}
-          />
-        </Switch>
-      </div>
-    </Tab>
+                  </Permission>
+
+                  <Button
+                    styleType="outline"
+                    onClick={() =>
+                      path.includes('learn')
+                        ? history.push(
+                            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/view-class`,
+                          )
+                        : path.includes('teach')
+                        ? history.push(
+                            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/view-class`,
+                          )
+                        : path.includes('manage')
+                        ? history.push(
+                            `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/view-class`,
+                          )
+                        : {}
+                    }>
+                    View students
+                  </Button>
+                </div>
+                <div className="flex justify-between space-x-4">
+                  <Heading fontWeight="semibold" fontSize="xl" className="py-2">
+                    Subjects
+                  </Heading>
+                </div>
+                <SubjectPeriod />
+              </>
+            );
+          }}
+        />
+        {/* add subject to period */}
+        <Route
+          exact
+          path={`${path}/:classId/add-subject`}
+          render={() => (
+            <PopupMolecule
+              title="Add subject to period"
+              closeOnClickOutSide={false}
+              open
+              onClose={history.goBack}>
+              <AddSubjectToPeriod />
+            </PopupMolecule>
+          )}
+        />
+      </Switch>
+    </div>
   );
 }
 
