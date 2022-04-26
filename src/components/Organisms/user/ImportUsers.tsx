@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import usePickedRole from '../../../hooks/usePickedRole';
 import { queryClient } from '../../../plugins/react-query';
-import { roleStore } from '../../../store/administration';
+import { getRolesByAcademy, getRolesByInstitution } from '../../../store/administration';
 import academyStore from '../../../store/administration/academy.store';
 import { intakeStore } from '../../../store/administration/intake.store';
 import programStore from '../../../store/administration/program.store';
@@ -92,15 +92,14 @@ export default function ImportUsers({ userType }: IProps) {
 
   const { data } =
     roleInfo.type === RoleType.ACADEMY
-      ? roleStore.getRolesByAcademy(values.academyId)
-      : roleStore.getRolesByInstitution(roleInfo.institution_id);
+      ? getRolesByAcademy(values.academyId)
+      : getRolesByInstitution(roleInfo.institution_id);
 
-  const { data: userRoles } = usersStore.getUserRoles(user?.id + '');
+  // const { data: userRoles } = usersStore.getUserRoles(user?.id + '');
 
-  const userRolesId = userRoles?.data.data.map((role) => role.role.id) || [];
+  // const userRolesId = userRoles?.data.data.map((role) => role.role.id) || [];
 
-  const roleOptions =
-    data?.data.data.filter((role) => !userRolesId.includes(role.id)) || [];
+  const roleOptions = data?.data.data || [];
 
   const academic_programs =
     programStore.getProgramsByAcademy(values.academyId).data?.data.data || [];

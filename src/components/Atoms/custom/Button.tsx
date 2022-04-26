@@ -13,17 +13,20 @@ type ButtonStyleType = {
 
 interface PropTypes<T> extends ButtonHTMLAttributes<DOMAttributes<T>> {
   children: ReactNode;
+  disabled?: boolean;
   full?: boolean;
   icon?: boolean;
   styleType?: ButtonType;
   color?: Color;
   hoverStyle?: TextDecoration;
   className?: string;
+  isLoading?: boolean;
   onClick?: () => void;
 }
 
 export default function Button<T>({
   children,
+  disabled,
   styleType = 'fill',
   color = 'primary',
   full,
@@ -31,6 +34,7 @@ export default function Button<T>({
   className = '',
   hoverStyle = 'underline',
   onClick,
+  isLoading,
   ...attrs
 }: PropTypes<T>) {
   const buttonStyle: ButtonStyleType = {
@@ -49,12 +53,32 @@ export default function Button<T>({
   return (
     <button
       {...attrs}
+      disabled={disabled || isLoading}
       onClick={onClick}
-      className={`${buttonStyle[styleType]} rounded-lg font-semibold text-sm outline-none 
+      className={`${
+        buttonStyle[styleType]
+      } rounded-lg font-semibold text-sm outline-none flex space-x-2 transition ease-in-out 
       ${full && 'w-full'}
       ${padding} ${className}
       disabled:opacity-50`}>
-      {children}
+      <span className="flex space-x-2 transition ease-in-out">
+        {isLoading && (
+          <span className="animate-spin ">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              width="24"
+              height="24">
+              <path fill="none" d="M0 0h24v24H0z" />
+              <path
+                className="fill-current"
+                d="M18.364 5.636L16.95 7.05A7 7 0 1 0 19 12h2a9 9 0 1 1-2.636-6.364z"
+              />
+            </svg>
+          </span>
+        )}
+        <span>{children}</span>
+      </span>
     </button>
   );
 }
