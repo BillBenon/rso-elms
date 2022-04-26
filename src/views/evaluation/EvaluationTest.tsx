@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
+import toast from 'react-hot-toast';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -42,17 +43,15 @@ export default function EvaluationTest() {
   let studentWorkTimer = evaluationStore.getEvaluationWorkTime(studentEvaluationId);
 
   const autoSubmit = useCallback(() => {
-    // mutate(studentEvaluationId, {
-    //   onSuccess: () => {
-    //     toast.success('Evaluation submitted', { duration: 5000 });
-    //     history.push({ pathname: '/dashboard/student', search: '?forceReload=true' });
-    //   },
-    //   onError: (error) => {
-    //     toast.error(error + '');
-    //   },
-    // });
-
-    alert('about to auto submit');
+    mutate(studentEvaluationId, {
+      onSuccess: () => {
+        toast.success('Evaluation submitted', { duration: 5000 });
+        history.push({ pathname: '/dashboard/student', search: '?forceReload=true' });
+      },
+      onError: (error) => {
+        toast.error(error + '');
+      },
+    });
   }, [history, mutate, studentEvaluationId]);
 
   async function updateWorkTime(value: any) {
