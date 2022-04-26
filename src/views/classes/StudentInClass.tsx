@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
+
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -11,7 +12,8 @@ import { Tab } from '../../components/Molecules/tabs/tabs';
 import Students from '../../components/Organisms/user/Students';
 import { queryClient } from '../../plugins/react-query';
 import { classStore, getStudentsByClass } from '../../store/administration/class.store';
-import { ParamType, Privileges } from '../../types';
+import { Privileges } from '../../types';
+import { IClass } from '../../types/services/class.types';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import { SelectorActionType } from '../../types/services/table.types';
 import { UserTypes } from '../../types/services/user.types';
@@ -20,11 +22,10 @@ import SubjectPeriod from '../subjects/SubjectPeriod';
 import AddStudents from './AddStudents';
 
 type IStudentClass = {
-  classId: string;
-  label: string;
+  classObject: IClass;
 };
 
-function StudentInClass({ classId, label }: IStudentClass) {
+function StudentInClass({ classObject }: IStudentClass) {
   const {
     level: levelId,
     intakeId,
@@ -33,10 +34,9 @@ function StudentInClass({ classId, label }: IStudentClass) {
     period,
   } = useParams<IntakePeriodParam>();
   const { path } = useRouteMatch();
-  const { id: programId } = useParams<ParamType>();
 
   const [students, setStudents] = useState<UserTypes[]>([]);
-  const { data: studentsData, isLoading } = getStudentsByClass(classId) || [];
+  const { data: studentsData, isLoading } = getStudentsByClass(classObject.id + '') || [];
   const { mutate } = classStore.removeStudentInClass();
   const history = useHistory();
 
@@ -80,7 +80,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
   ];
 
   return (
-    <Tab label={label}>
+    <Tab label={classObject.class_name || 'kdfjd'}>
       <div className="flex flex-col">
         <Switch>
           <Route
@@ -117,15 +117,15 @@ function StudentInClass({ classId, label }: IStudentClass) {
                       onClick={() =>
                         path.includes('learn')
                           ? history.push(
-                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/view-class/${classId}/subject`,
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/view-class/${classObject.id}/subject`,
                             )
                           : path.includes('teach')
                           ? history.push(
-                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/view-class/${classId}/subject`,
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/view-class/${classObject.id}/subject`,
                             )
                           : path.includes('manage')
                           ? history.push(
-                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/view-class/${classId}/subject`,
+                              `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/view-class/${classObject.id}/subject`,
                             )
                           : {}
                       }>
@@ -136,14 +136,14 @@ function StudentInClass({ classId, label }: IStudentClass) {
                         styleType="outline"
                         onClick={() =>
                           history.push(
-                            `/dashboard/intakes/peformance/${levelId}/${classId}`,
+                            `/dashboard/intakes/peformance/${levelId}/${classObject.id}`,
                           )
                         }>
                         View performance
                       </Button>
                     </Permission>
                     <Permission privilege={Privileges.CAN_CREATE_CLASSES_MEMBERS}>
-                      <AddStudents classId={parseInt(classId)} />
+                      <AddStudents classId={parseInt(classObject.id + '')} />
                     </Permission>
                   </div>
                   <section>
@@ -160,12 +160,51 @@ function StudentInClass({ classId, label }: IStudentClass) {
                         description="This class has not received any students. you can add one from the button on the top left."
                       />
                     ) : (
-                      <Students
-                        students={students}
-                        showTableHeader={false}
-                        selectorActions={actions}
-                        enumtype={'UserTypes'}
-                      />
+                      <div className="mt-10">
+                        <div className="grid grid-cols-1 md:grid-cols-2">
+                          <div className="flex gap-4 pb-2 items-center">
+                            <Heading fontWeight="semibold" fontSize="sm" color="primary">
+                              Instructor representative :
+                            </Heading>
+                            <Heading fontSize="sm">
+                              {classObject.instructor_class_incharge_name}
+                            </Heading>
+                          </div>
+                          <div className="flex gap-4 pb-2 items-center">
+                            <Heading fontWeight="semibold" fontSize="sm" color="primary">
+                              Instructor representative backup 1 :
+                            </Heading>
+                            <Heading fontSize="sm">
+                              {classObject.instructor_class_incharge_name}
+                            </Heading>
+                          </div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2">
+                          <div className="flex gap-4 pb-2 items-center">
+                            <Heading fontWeight="semibold" fontSize="sm" color="primary">
+                              Class representative :
+                            </Heading>
+                            <Heading fontSize="sm">
+                              {classObject.instructor_class_incharge_name}
+                            </Heading>
+                          </div>
+                          <div className="flex gap-4 pb-2 items-center">
+                            <Heading fontWeight="semibold" fontSize="sm" color="primary">
+                              Instructor representative backup 2 :
+                            </Heading>
+                            <Heading fontSize="sm">
+                              {classObject.instructor_class_incharge_name}
+                            </Heading>
+                          </div>
+                        </div>
+
+                        <Students
+                          students={students}
+                          showTableHeader={false}
+                          selectorActions={actions}
+                          enumtype={'UserTypes'}
+                        />
+                      </div>
                     )}
                   </section>
                 </>

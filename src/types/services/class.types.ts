@@ -14,6 +14,8 @@ export interface ICreateClass {
   class_representative_tree_id: string;
   class_representative_two_id: string;
   instructor_class_in_charge_id: string;
+  instructor_class_in_charge_two_id: string;
+  instructor_class_in_charge_three_id: string;
   intake_academic_year_period_id: number;
   intake_level_id: number;
 }
@@ -47,7 +49,8 @@ export interface IClass extends Table, ICreateClass {
   class_representative_one_id: string;
   class_representative_two_id: string;
   class_representative_tree_id: string;
-  instructor_class_incharge: Instructor;
+  instructor_class_incharge_id: string;
+  instructor_class_incharge_name: string;
   class_group_type: ClassGroupType;
   class_name: string;
 }

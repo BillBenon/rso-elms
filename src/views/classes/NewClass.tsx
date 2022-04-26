@@ -22,7 +22,10 @@ import { classSchema } from '../../validations/level.validation';
 interface ClassError
   extends Pick<
     ICreateClass,
-    'class_name' | 'instructor_class_in_charge_id' | 'class_representative_one_id'
+    | 'class_name'
+    | 'instructor_class_in_charge_id'
+    | 'class_representative_one_id'
+    | 'instructor_class_in_charge_two_id'
   > {
   class_group_type: string;
 }
@@ -38,6 +41,8 @@ function NewClass() {
     class_representative_tree_id: '',
     class_representative_two_id: '',
     instructor_class_in_charge_id: '',
+    instructor_class_in_charge_two_id: '',
+    instructor_class_in_charge_three_id: '',
     intake_academic_year_period_id: 0,
     intake_level_id: 0,
   });
@@ -46,6 +51,7 @@ function NewClass() {
     class_group_type: '',
     class_name: '',
     instructor_class_in_charge_id: '',
+    instructor_class_in_charge_two_id: '',
     class_representative_one_id: '',
   };
 
@@ -203,6 +209,48 @@ function NewClass() {
               : 'Choose instructor representative'
           }>
           Instructor representative
+        </DropdownMolecule>
+
+        <DropdownMolecule
+          error={errors.instructor_class_in_charge_two_id}
+          name="instructor_class_in_charge_two_id"
+          handleChange={handleChange}
+          options={getDropDownOptions({
+            inputs: instructors.filter(
+              (inst) => inst.id !== form.instructor_class_in_charge_id,
+            ),
+            labelName: ['first_name', 'last_name'],
+            //@ts-ignore
+            getOptionLabel: (inst: Instructor) =>
+              inst.user.first_name + ' ' + inst.user.last_name,
+          })}
+          placeholder={
+            instLoading
+              ? 'Loading instructor representatives...'
+              : 'Choose instructor representative'
+          }>
+          Instructor representative backup 1
+        </DropdownMolecule>
+        <DropdownMolecule
+          name="instructor_class_in_charge_three_id"
+          handleChange={handleChange}
+          options={getDropDownOptions({
+            inputs: instructors.filter(
+              (inst) =>
+                inst.id !== form.instructor_class_in_charge_id &&
+                inst.id !== form.instructor_class_in_charge_two_id,
+            ),
+            labelName: ['first_name', 'last_name'],
+            //@ts-ignore
+            getOptionLabel: (inst: Instructor) =>
+              inst.user.first_name + ' ' + inst.user.last_name,
+          })}
+          placeholder={
+            instLoading
+              ? 'Loading instructor representatives...'
+              : 'Choose instructor representative'
+          }>
+          Instructor representative backup 2
         </DropdownMolecule>
 
         <DropdownMolecule

@@ -85,11 +85,7 @@ function Classes() {
                 ) : (
                   <Tabs>
                     {studentClasses.map((cl) => (
-                      <StudentInClass
-                        key={cl.id}
-                        classId={cl.id.toString()}
-                        label={cl.class_name}
-                      />
+                      <StudentInClass key={cl.id} classObject={cl} />
                     ))}
                   </Tabs>
                 )
@@ -126,11 +122,7 @@ function Classes() {
               ) : (
                 <Tabs>
                   {classGroups.map((cl) => (
-                    <StudentInClass
-                      key={cl.id}
-                      classId={cl.id.toString()}
-                      label={cl.class_name}
-                    />
+                    <StudentInClass key={cl.id} classObject={cl} />
                   ))}
                 </Tabs>
               )}
