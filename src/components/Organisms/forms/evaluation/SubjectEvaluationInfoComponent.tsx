@@ -2,6 +2,7 @@ import { Editor } from '@tiptap/react';
 import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
@@ -41,6 +42,7 @@ import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 export default function SubjectEvaluationInfoComponent() {
   const picked_role = usePickedRole();
   const history = useHistory();
+  const { t } = useTranslation();
 
   const { user } = useAuthenticator();
 
@@ -340,7 +342,7 @@ export default function SubjectEvaluationInfoComponent() {
             <MultiselectMolecule
               width="64"
               name="intake_level_class_ids"
-              placeholder="Select class"
+              placeholder={'Select ' + t('Class')}
               handleChange={handleChange}
               value={
                 details.intake_level_class_ids.split(',') || []

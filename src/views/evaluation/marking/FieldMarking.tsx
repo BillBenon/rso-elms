@@ -1,6 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+
 import Loader from '../../../components/Atoms/custom/Loader';
 import Heading from '../../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../../components/Molecules/cards/NoDataAvailable';
@@ -66,6 +68,7 @@ export default function FieldMarking({ evaluationId }: PropsType) {
       },
     },
   ];
+  const { t } = useTranslation();
 
   const tabs = [
     {
@@ -116,7 +119,7 @@ export default function FieldMarking({ evaluationId }: PropsType) {
     <div className="flex flex-col gap-8 -mt-20">
       <div className="pt-8">
         <Heading fontWeight="medium" fontSize="sm">
-          Select class
+          Select {t('Class')}
         </Heading>
         <SelectMolecule
           width="80"

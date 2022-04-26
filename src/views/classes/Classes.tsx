@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
@@ -37,6 +38,7 @@ function Classes() {
   const classGroups = classes?.data.data || [];
 
   const studentClassIds = studClasses?.data.data.map((std) => std.id);
+  const { t } = useTranslation();
 
   const studentClasses = classGroups.filter((cl) => studentClassIds?.includes(cl.id));
 
@@ -56,10 +58,10 @@ function Classes() {
                   <Loader />
                 ) : studentClasses.length === 0 ? (
                   <NoDataAvailable
-                    buttonLabel="Add new class"
+                    buttonLabel={'Add new ' + t('Class')}
                     icon="academy"
                     fill={false}
-                    title={'No classes available in this period'}
+                    title={'No ' + t('Class') + 'available in this period'}
                     handleClick={() =>
                       path.includes('learn')
                         ? history.push(
@@ -97,10 +99,10 @@ function Classes() {
                 <Loader />
               ) : classGroups.length === 0 ? (
                 <NoDataAvailable
-                  buttonLabel="Add new class"
+                  buttonLabel={'Add new ' + t('Class')}
                   icon="academy"
                   fill={false}
-                  title={'No classes available in this period'}
+                  title={'No ' + t('Class') + ' available in this period'}
                   handleClick={() =>
                     path.includes('learn')
                       ? history.push(
@@ -116,11 +118,15 @@ function Classes() {
                         )
                       : {}
                   }
-                  description={`There are no classes added yet ${
-                    hasPrivilege(Privileges.CAN_CREATE_CLASSES)
-                      ? ', click on the below button to add some!'
-                      : ''
-                  }  `}
+                  description={
+                    `There are no` +
+                    t('Class') +
+                    ` added yet ${
+                      hasPrivilege(Privileges.CAN_CREATE_CLASSES)
+                        ? ', click on the below button to add some!'
+                        : ''
+                    }  `
+                  }
                   privilege={Privileges.CAN_CREATE_CLASSES}
                 />
               ) : (

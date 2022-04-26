@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
+
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
@@ -41,6 +43,7 @@ export default function UnBeguns() {
   }
 
   const { path } = useRouteMatch();
+  const { t } = useTranslation();
 
   const actions = [
     {
@@ -86,12 +89,12 @@ export default function UnBeguns() {
   return (
     <div className="flex flex-col gap-8">
       <Heading fontWeight="semibold" className="pt-7">
-        {useClasses(currentClassId).label || 'No choosen class'}{' '}
+        {useClasses(currentClassId).label || 'No choosen ' + t('Class')}{' '}
       </Heading>
 
       <div>
         <Heading fontWeight="medium" fontSize="sm">
-          Select class
+          Select {t('Class')}
         </Heading>
         <SelectMolecule
           width="80"
@@ -99,7 +102,7 @@ export default function UnBeguns() {
           value={currentClassId}
           handleChange={handleClassChange}
           name={'type'}
-          placeholder="Select class"
+          placeholder={'Select ' + t('Class')}
           options={classes?.map((cl) => useClasses(cl)) || []}
         />
       </div>

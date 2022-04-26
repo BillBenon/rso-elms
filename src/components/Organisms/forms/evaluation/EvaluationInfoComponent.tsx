@@ -2,6 +2,7 @@ import { Editor } from '@tiptap/react';
 import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
@@ -64,6 +65,7 @@ export default function EvaluationInfoComponent() {
   const history = useHistory();
 
   const { search } = useLocation();
+  const { t } = useTranslation();
 
   const evaluationId = new URLSearchParams(search).get('evaluation') || '';
 
@@ -690,7 +692,7 @@ export default function EvaluationInfoComponent() {
           <MultiselectMolecule
             width="64"
             name="intake_level_class_ids"
-            placeholder="Select class"
+            placeholder={'Select ' + t('Class')}
             handleChange={handleChange}
             value={
               // details.intake_level_class_ids.split(',') || []

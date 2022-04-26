@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -24,6 +25,7 @@ export default function ClassEvaluationPerformance() {
   const history = useHistory();
   const { url } = useRouteMatch();
   const { user } = useAuthenticator();
+  const { t } = useTranslation();
 
   const { classId } = useParams<IParamType>();
   const { data: classInfo } = classStore.getClassById(classId);
@@ -78,8 +80,8 @@ export default function ClassEvaluationPerformance() {
       ) : isError ? (
         <div>
           <h2 className="text-error-500 py-2 mb-3 font-medium tracking-widest">
-            That was an error! May be this class has no students or no assignments done
-            het!
+            That was an error! May be this {t('Class')} has no students or no assignments
+            done het!
           </h2>
           <Button styleType="outline" onClick={() => window.location.reload()}>
             Reload
@@ -89,7 +91,9 @@ export default function ClassEvaluationPerformance() {
         <NoDataAvailable
           title={'No marks for this association found'}
           description={
-            'No data associated with this class an this period found. try changing the period'
+            'No data associated with this ' +
+            t('Class') +
+            ' an this period found. try changing the period'
           }
           showButton={false}
         />
@@ -105,7 +109,7 @@ export default function ClassEvaluationPerformance() {
           </Button>
           <TableHeader
             title={`${
-              classInfo?.data.data.class_name || 'class'
+              classInfo?.data.data.class_name || t('Class')
             } Termly Evaluation Performance`}
             totalItems={data.length}
             handleSearch={handleSearch}>
