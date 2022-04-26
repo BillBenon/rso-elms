@@ -141,7 +141,9 @@ export default function SubjectDetails() {
                           privilege={Privileges.CAN_CREATE_LESSON}
                           title={'No lessons available'}
                           description={
-                            'A lesson or class is a structured period of time where learning is intended to occur. It involves one or more students being taught by a teacher or instructor.'
+                            'A lesson or ' +
+                            t('Class') +
+                            ' is a structured period of time where learning is intended to occur. It involves one or more students being taught by a teacher or instructor.'
                           }
                           handleClick={() => history.push(`${url}/add-lesson`)}
                         />

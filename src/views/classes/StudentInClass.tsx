@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
+
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -78,6 +80,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
       privilege: Privileges.CAN_DELETE_CLASSES_MEMBERS,
     },
   ];
+  const { t } = useTranslation();
 
   return (
     <Tab label={label}>
@@ -108,7 +111,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
                               )
                             : {}
                         }>
-                        Add class
+                        Add {t('Class')}
                       </Button>
                     </Permission>
 
@@ -157,7 +160,11 @@ function StudentInClass({ classId, label }: IStudentClass) {
                         buttonLabel="Add new students"
                         title={'No students available in this class'}
                         handleClick={() => history.push(``)}
-                        description="This class has not received any students. you can add one from the button on the top left."
+                        description={
+                          'This ' +
+                          t('Class') +
+                          ' has not received any students. you can add one from the button on the top left.'
+                        }
                       />
                     ) : (
                       <Students
@@ -197,7 +204,7 @@ function StudentInClass({ classId, label }: IStudentClass) {
                               )
                             : {}
                         }>
-                        Add class
+                        Add {t('Class')}
                       </Button>
                     </Permission>
 

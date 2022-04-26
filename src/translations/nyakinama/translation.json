@@ -2,10 +2,11 @@
   "Instructor": "Directing Staff",
   "Students": "Students",
   "Program": "Course",
-  "Admins" : "Ministers",
-  "class": "Syndicate",
-  "division": "Academy Head Quarter",
-  "faculty": "Wing"
+  "Admins" : "Admins",
+  "faculty": "Wing",
+  "Class": "Syndicate",
+  "Instructor representative": "Syndicate DS",
+  "Class representative": "Syndicate leader"
 }
 
 
