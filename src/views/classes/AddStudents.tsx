@@ -36,10 +36,18 @@ function AddStudents({ classId }: IAddStudent) {
       (std) => !studentsInClassIds?.includes(std.intake_program_student.student.id),
     );
 
+    studentsToDisplay?.sort(function (a, b) {
+      return (
+        a.intake_program_student.student.user.person.current_rank?.priority -
+        b.intake_program_student.student.user.person.current_rank?.priority
+      );
+    });
+
     studentsToDisplay &&
       studentsToDisplay.forEach((stud) => {
         let studentView: UserView = {
           id: stud.intake_program_student.student.id,
+          rank: stud.intake_program_student.student.user.person.current_rank?.name,
           first_name: stud.intake_program_student.student.user.first_name,
           last_name: stud.intake_program_student.student.user.last_name,
           image_url: stud.intake_program_student.student.user.image_url,

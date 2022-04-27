@@ -44,10 +44,19 @@ function EnrollStudent({ showSidebar, handleShowSidebar }: IEnrollStudent) {
       student_ids.push(studLevel.intake_program_student.id + '');
     });
     let studentsView: UserView[] = [];
+
+    studentsProgram?.data.data.sort(function (a, b) {
+      return (
+        a.student.user.person.current_rank?.priority -
+        b.student.user.person.current_rank?.priority
+      );
+    });
+
     studentsProgram?.data.data.forEach((stud) => {
       if (!student_ids.includes(stud.id + '')) {
         let studentView: UserView = {
           id: stud.id,
+          rank: stud.student.user.person.current_rank?.name,
           first_name: stud.student.user.first_name,
           last_name: stud.student.user.last_name,
           image_url: stud.student.user.image_url,

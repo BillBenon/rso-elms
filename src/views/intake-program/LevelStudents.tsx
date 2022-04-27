@@ -26,9 +26,18 @@ function LevelStudents({ showSidebar, handleShowSidebar }: ILevelStudent) {
   const [students, setStudents] = useState<UserView[]>([]);
   useEffect(() => {
     let studentsView: UserView[] = [];
+
+    studentsProgram?.data.data.sort(function (a, b) {
+      return (
+        a.intake_program_student.student.user.person.current_rank?.priority -
+        b.intake_program_student.student.user.person.current_rank?.priority
+      );
+    });
+
     studentsProgram?.data.data.forEach((stud) => {
       let studentView: UserView = {
         id: stud.id,
+        rank: stud.intake_program_student.student.user.person.current_rank?.name,
         first_name: stud.intake_program_student.student.user.first_name,
         last_name: stud.intake_program_student.student.user.last_name,
         image_url: stud.intake_program_student.student.user.image_url,

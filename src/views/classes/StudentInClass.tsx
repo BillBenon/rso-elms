@@ -60,9 +60,18 @@ function StudentInClass({ classObject }: IStudentClass) {
 
   useEffect(() => {
     let tempStuds: UserTypes[] = [];
+
+    studentsData?.data.data.sort(function (a, b) {
+      return (
+        a.student.user.person.current_rank?.priority -
+        b.student.user.person.current_rank?.priority
+      );
+    });
+
     studentsData?.data.data.forEach((stud) => {
       tempStuds.push({
         id: stud.id.toString(),
+        rank: stud.student.user.person.current_rank?.name,
         username: stud.student.user.username,
         'full name': stud.student.user.first_name + ' ' + stud.student.user.last_name,
         email: stud.student.user.email,

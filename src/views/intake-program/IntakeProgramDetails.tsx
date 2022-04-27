@@ -76,9 +76,18 @@ function IntakeProgramDetails() {
 
   useEffect(() => {
     let studentsView: UserView[] = [];
+
+    studentsProgram?.data.data.sort(function (a, b) {
+      return (
+        a.student.user.person.current_rank?.priority -
+        b.student.user.person.current_rank?.priority
+      );
+    });
+
     studentsProgram?.data.data.forEach((stud) => {
       let studentView: UserView = {
         id: stud.id,
+        rank: stud.student.user.person.current_rank?.name,
         first_name: stud.student.user.first_name,
         last_name: stud.student.user.last_name,
         image_url: stud.student.user.image_url,
@@ -90,9 +99,18 @@ function IntakeProgramDetails() {
 
   useEffect(() => {
     let demoInstructors: UserView[] = [];
+
+    instructorsProgram?.data.data.sort(function (a, b) {
+      return (
+        a.instructor.user.person.current_rank?.priority -
+        b.instructor.user.person.current_rank?.priority
+      );
+    });
+
     instructorsProgram?.data.data.map((inst) => {
       demoInstructors.push({
         id: inst.id,
+        rank: inst.instructor.user.person.current_rank?.name,
         first_name: inst.instructor.user.first_name,
         last_name: inst.instructor.user.last_name,
         image_url: inst.instructor.user.image_url,
@@ -256,6 +274,14 @@ function IntakeProgramDetails() {
     { to: 'intakes/programs', title: t('Program') },
     { to: `${url}`, title: 'details' },
   ];
+
+  const incharge_inst = instructorsProgram?.data.data.find(
+    (inst) => inst.instructor.id === intakeProgram?.data.data.incharge_instructor,
+  );
+
+  const incharge_stud = studentsProgram?.data.data.find(
+    (stud) => stud.student.id === intakeProgram?.data.data.student_in_lead,
+  );
 
   return (
     <>
@@ -421,14 +447,20 @@ function IntakeProgramDetails() {
                                   color="txt-primary"
                                   fontSize="sm"
                                   fontWeight="semibold">
-                                  Instructor in charge
+                                  Instructor in charge :
                                 </Heading>
                                 {intakeProgram?.data.data.incharge_instructor ? (
-                                  <Heading
-                                    color="txt-primary"
-                                    fontSize="sm"
-                                    fontWeight="semibold">
-                                    {intakeProgram.data.data.incharge_instructor}
+                                  <Heading color="txt-primary" fontSize="sm">
+                                    {`${
+                                      incharge_inst?.instructor.user.person.current_rank
+                                        ?.name || ''
+                                    } ${
+                                      incharge_inst?.instructor.user.person.first_name ||
+                                      ''
+                                    }  ${
+                                      incharge_inst?.instructor.user.person.last_name ||
+                                      ''
+                                    }`}
                                   </Heading>
                                 ) : (
                                   <Permission
@@ -449,14 +481,18 @@ function IntakeProgramDetails() {
                                   color="txt-primary"
                                   fontSize="sm"
                                   fontWeight="semibold">
-                                  Student in charge
+                                  Student in charge :
                                 </Heading>
                                 {intakeProgram?.data.data.student_in_lead ? (
-                                  <Heading
-                                    color="txt-primary"
-                                    fontSize="sm"
-                                    fontWeight="semibold">
-                                    {intakeProgram?.data.data.student_in_lead}
+                                  <Heading color="txt-primary" fontSize="sm">
+                                    {`${
+                                      incharge_stud?.student.user.person.current_rank
+                                        ?.name || ''
+                                    } ${
+                                      incharge_stud?.student.user.person.first_name || ''
+                                    }  ${
+                                      incharge_stud?.student.user.person.last_name || ''
+                                    }`}
                                   </Heading>
                                 ) : (
                                   <Permission

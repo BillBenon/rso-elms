@@ -24,9 +24,18 @@ function LevelInstructors<T>({
   const [instructors, setInstructors] = useState<UserView[]>([]);
   useEffect(() => {
     let instructorView: UserView[] = [];
+
+    instructorsData.sort(function (a, b) {
+      return (
+        a.intake_program_instructor.instructor.user.person.current_rank?.priority -
+        b.intake_program_instructor.instructor.user.person.current_rank?.priority
+      );
+    });
+
     instructorsData.forEach((stud) => {
       let studentView: UserView = {
         id: stud.id,
+        rank: stud.intake_program_instructor.instructor.user.person.current_rank?.name,
         first_name: stud.intake_program_instructor.instructor.user.first_name,
         last_name: stud.intake_program_instructor.instructor.user.last_name,
         image_url: stud.intake_program_instructor.instructor.user.image_url,

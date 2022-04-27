@@ -26,6 +26,17 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
   const { t } = useTranslation();
 
   let instrs: UserTypes[] = [];
+
+  console.log(
+    instructorInfos?.data.data.sort(function (a, b) {
+      return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    }),
+  );
+
+  instructorInfos?.data.data.sort(function (a, b) {
+    return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+  });
+
   instructorInfos?.data.data.map((obj) => {
     let {
       id,
@@ -41,6 +52,7 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
 
     let user: UserTypes = {
       id: id,
+      rank: person?.current_rank?.name,
       username: username,
       'full name': first_name + ' ' + last_name,
       email: email,
