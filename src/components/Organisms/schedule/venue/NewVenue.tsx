@@ -13,7 +13,7 @@ import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 
-interface VenueErrors extends Pick<CreateVenue, 'name'> {
+interface VenueErrors extends Pick<CreateVenue, 'name' | 'code'> {
   venueType: string;
 }
 
@@ -25,6 +25,7 @@ export default function NewVenue() {
   const [values, setvalues] = useState<CreateVenue>({
     venueType: venueType.CLASS,
     name: '',
+    code: '',
     status: GenericStatus.ACTIVE,
     academyId: picked_role?.academy_id + '',
   });
@@ -40,6 +41,7 @@ export default function NewVenue() {
   const initialErrorState: VenueErrors = {
     name: '',
     venueType: '',
+    code: '',
   };
   const [errors, setErrors] = useState<VenueErrors>(initialErrorState);
 
@@ -79,12 +81,19 @@ export default function NewVenue() {
       <form onSubmit={handleSubmit}>
         <InputMolecule
           error={errors.name}
-          required={false}
           name="name"
           placeholder="Venue name"
           value={values.name}
           handleChange={handleChange}>
           Venue name
+        </InputMolecule>
+        <InputMolecule
+          error={errors.code}
+          name="code"
+          placeholder="Venue abbreviation"
+          value={values.name}
+          handleChange={handleChange}>
+          Venue code/abbr
         </InputMolecule>
         <SelectMolecule
           error={errors.venueType}

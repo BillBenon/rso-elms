@@ -2,6 +2,7 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import {
   Link,
   Route,
@@ -44,13 +45,6 @@ import { advancedTypeChecker } from '../../utils/getOption';
 import IntakePrograms from '../intake-program/IntakePrograms';
 import LevelPerformance from '../performance/LevelPerformance';
 
-const list: LinkType[] = [
-  { to: 'home', title: 'Institution Admin' },
-  { to: 'faculty', title: 'Faculty' },
-  { to: 'programs', title: 'Programs' },
-  { to: 'intakes', title: 'Intakes' },
-];
-
 interface IntakeCardType extends CommonCardDataType {
   registrationControlId: string;
 }
@@ -58,6 +52,15 @@ interface IntakeCardType extends CommonCardDataType {
 export default function Intakes() {
   const [intakes, setIntakes] = useState<IntakeCardType[]>([]);
   const { user } = useAuthenticator();
+
+  const { t } = useTranslation();
+
+  const list: LinkType[] = [
+    { to: 'home', title: 'Institution Admin' },
+    { to: 'faculty', title: t('Faculty') },
+    { to: 'programs', title: 'Programs' },
+    { to: 'intakes', title: 'Intakes' },
+  ];
 
   const history = useHistory();
   const { url, path } = useRouteMatch();
@@ -116,7 +119,7 @@ export default function Intakes() {
                 type: advancedTypeChecker(intake.intake_program.intake.intake_status),
                 text: intake.intake_program.intake.intake_status.toString(),
               },
-              code: intake.intake_program.intake.code,
+              code: intake.intake_program.intake.title,
               title: intake.intake_program.intake.title,
               description: intake.intake_program.intake.description,
               footerTitle: intake.intake_program.intake.total_num_students,
@@ -135,8 +138,8 @@ export default function Intakes() {
               type: advancedTypeChecker(intake.intake_program.intake.intake_status),
               text: intake.intake_program.intake.intake_status.toString(),
             },
-            code: intake.intake_program.intake.code,
-            title: intake.intake_program.intake.title,
+            code: intake.intake_program.intake.title,
+            title: intake.intake_program.intake.description,
             description: intake.intake_program.intake.description,
             footerTitle: intake.intake_program.intake.total_num_students,
             registrationControlId:
@@ -149,9 +152,21 @@ export default function Intakes() {
           let intake = intk as ExtendedIntakeInfo;
           let cardData: IntakeCardType = {
             id: intake.id,
-            code: intake.code.toUpperCase(),
-            description: intake.description,
-            title: intake.title || `------`,
+            code: intake.title.toUpperCase(),
+            description: `${
+              moment(intake.expected_start_date).day() +
+              '/' +
+              moment(intake.expected_start_date).month() +
+              '/' +
+              moment(intake.expected_start_date).year()
+            } - ${
+              moment(intake.expected_end_date).day() +
+              '/' +
+              moment(intake.expected_end_date).month() +
+              '/' +
+              moment(intake.expected_end_date).year()
+            }`,
+            title: intake.description || ``,
             status: {
               type: advancedTypeChecker(intake.intake_status),
               text: intake.intake_status.toString(),

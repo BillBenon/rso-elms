@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Link,
   Route,
@@ -38,11 +39,12 @@ export default function AcademicProgram() {
   const history = useHistory();
   const { search } = useLocation();
   const location = useLocation();
+  const { t } = useTranslation();
 
   const list: LinkList[] = [
     { to: 'home', title: 'home' },
     { to: 'users', title: 'users' },
-    { to: 'faculty', title: 'Faculty' },
+    { to: 'faculty', title: t('Faculty') },
     { to: `${url}`, title: 'Programs' },
   ];
 
@@ -219,7 +221,7 @@ export default function AcademicProgram() {
           path={`${url}/add-program-to-intake`}
           render={() => {
             return (
-              <PopupMolecule title="Programs" open={true} onClose={history.goBack}>
+              <PopupMolecule title="Program" open={true} onClose={history.goBack}>
                 <AddAcademicProgramToIntake submited={submited} />
               </PopupMolecule>
             );

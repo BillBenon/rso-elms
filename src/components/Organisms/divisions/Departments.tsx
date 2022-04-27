@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
+
 import usePickedRole from '../../../hooks/usePickedRole';
 import { divisionStore } from '../../../store/administration/divisions.store';
 import { Privileges } from '../../../types';
@@ -127,6 +128,7 @@ export default function Departments({ fetchType }: IDepartment) {
                   }`}
                   totalItems={departments?.length}
                   handleSearch={() => {}}
+                  showSearch={false}
                 />
               </section>
             ) : null}
