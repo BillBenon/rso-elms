@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -9,7 +9,6 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewVenue from '../../components/Organisms/schedule/venue/NewVenue';
-import useAuthenticator from '../../hooks/useAuthenticator';
 import usePickedRole from '../../hooks/usePickedRole';
 import { getAllVenues } from '../../store/timetable/venue.store';
 import { Privileges } from '../../types';
@@ -18,20 +17,14 @@ export default function Venues() {
   const history = useHistory();
   const { path } = useRouteMatch();
 
-  const { user } = useAuthenticator();
-
   const handleClose = () => {
     history.goBack();
   };
 
   const picked_role = usePickedRole();
 
-  const { data, isLoading, refetch } = getAllVenues(picked_role?.academy_id + '', false);
+  const { data, isLoading } = getAllVenues(picked_role?.academy_id);
   const venues = data?.data.data;
-
-  useEffect(() => {
-    user && refetch();
-  }, [refetch, user]);
 
   return (
     <Permission privilege={Privileges.CAN_ACCESS_VENUES}>
