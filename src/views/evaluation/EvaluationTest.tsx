@@ -79,27 +79,36 @@ export default function EvaluationTest() {
   ]);
 
   useEffect(() => {
-    if (!open && isCheating && path === '/dashboard/evaluations/student-evaluation/:id') {
+    if (
+      !open &&
+      isCheating &&
+      path === '/dashboard/evaluations/student-evaluation/:id' &&
+      evaluationInfo?.strict
+    ) {
       setIsCheating(true);
       autoSubmit();
     }
     const handleTabChange = () => {
       if (
         document['hidden'] &&
-        path === '/dashboard/evaluations/student-evaluation/:id'
+        path === '/dashboard/evaluations/student-evaluation/:id' &&
+        evaluationInfo?.strict
       ) {
         setIsCheating(true);
         autoSubmit();
       }
     };
 
-    if (path === '/dashboard/evaluations/student-evaluation/:id') {
+    if (
+      path === '/dashboard/evaluations/student-evaluation/:id' &&
+      evaluationInfo?.strict
+    ) {
       // Handle page visibility change
       document.addEventListener('visibilitychange', handleTabChange, false);
     }
 
     return () => window.removeEventListener('visibilitychange', handleTabChange);
-  }, [path, open, autoSubmit, isCheating, isFullscreen]);
+  }, [path, open, autoSubmit, isCheating, isFullscreen, evaluationInfo?.strict]);
 
   return (
     <div ref={maximizableElement} className={`${'bg-secondary p-12 overflow-y-auto'}`}>
