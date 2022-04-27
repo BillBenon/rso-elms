@@ -17,7 +17,6 @@ import useAuthenticator from '../../hooks/useAuthenticator';
 import { subjectService } from '../../services/administration/subject.service';
 import { evaluationService } from '../../services/evaluation/evaluation.service';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
-// import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Link as LinkList, Privileges } from '../../types';
 import {
   IEvaluationOwnership,
@@ -90,10 +89,7 @@ export default function InstructorViewEvaluations() {
     async function getSubjects() {
       let filteredSubjects: ISubjects[] = [];
 
-      if (
-        evaluationInfo?.evaluation_module_subjects &&
-        evaluationInfo.evaluation_module_subjects.length > 1
-      ) {
+      if (evaluationInfo?.evaluation_module_subjects) {
         const subjectData = await evaluationService.getEvaluationModuleSubjectsByModule(
           evaluationId,
           evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module,
@@ -156,6 +152,7 @@ export default function InstructorViewEvaluations() {
           break;
 
         case IEvaluationOwnership.FOR_SETTING:
+          console.log({ subjects });
           history.push(
             `${path}/details/${id}/section/${evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module}/${subjects[0].id}`,
           );
@@ -247,7 +244,7 @@ export default function InstructorViewEvaluations() {
                   />
                 ) : isSuccess && evaluations.length > 0 ? (
                   evaluations?.map((info: CommonCardDataType, index: number) => (
-                    <div key={index}>
+                    <div key={info.id}>
                       <CommonCardMolecule
                         className="cursor-pointer"
                         data={info}

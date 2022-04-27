@@ -69,7 +69,6 @@ export default function EvaluationQuestionComponent() {
         questionData.sub_questions = [];
         allQuestions.push(questionData);
       });
-      console.log({ allQuestions });
       setQuestions(allQuestions);
     } else {
       setQuestions([initialState]);
