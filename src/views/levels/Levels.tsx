@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -37,11 +38,12 @@ function Levels() {
 
     data?.data.data && setLevels(filterdData);
   }, [data, data?.data.data]);
+  const { t } = useTranslation();
 
   const list = [
     { to: '', title: 'Academy Admin' },
     { to: 'users', title: 'Users' },
-    { to: 'faculties', title: 'Faculty' },
+    { to: 'faculties', title: t('Faculty') },
     { to: 'levels', title: 'Programs' },
     { to: 'levels', title: 'Level' },
   ];

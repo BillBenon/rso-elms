@@ -201,10 +201,10 @@ function NewClass() {
           })}
           placeholder={
             instLoading
-              ? 'Loading ' + t('Instructor representative') + ' ...'
-              : 'Choose ' + t('Instructor representative') + ' representative'
+              ? 'Loading ' + t('Instructor_representative') + ' ...'
+              : 'Choose ' + t('Instructor_representative')
           }>
-          {t('Instructor representative')}
+          {t('Instructor_representative')}
         </DropdownMolecule>
 
         <DropdownMolecule
@@ -215,8 +215,8 @@ function NewClass() {
             inputs: studentsInProgram,
             labelName: ['first_name', 'last_name'],
           })}
-          placeholder={'Choose ' + t('Class representative') + ' representative'}>
-          {t('Class representative')}
+          placeholder={'Choose ' + t('Class_representative')}>
+          {t('Class_representative')}
         </DropdownMolecule>
 
         <div className="mt-5">

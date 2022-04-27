@@ -95,7 +95,7 @@ export default function SuperAdminView() {
   });
 
   actions?.push({
-    name: 'Reset Pawssword',
+    name: 'Reset Password',
     handleAction: (id: string | number | undefined) => {
       //call a reset password api
       mutateAsync(id?.toString() || '', {
