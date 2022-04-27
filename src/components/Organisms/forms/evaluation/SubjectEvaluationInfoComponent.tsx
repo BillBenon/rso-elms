@@ -279,17 +279,17 @@ export default function SubjectEvaluationInfoComponent() {
           </RadioMolecule>
           {details?.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
             <>
-              {/* <DropdownMolecule
-              width="64"
-              name="submision_type"
-              placeholder="Select submission type"
-              handleChange={handleChange}
-              options={[
-                { label: 'File', value: ISubmissionTypeEnum.FILE },
-                { label: 'Online text', value: ISubmissionTypeEnum.ONLINE_TEXT },
-              ]}>
-              Submission type
-            </DropdownMolecule> */}
+              <DropdownMolecule
+                width="64"
+                name="submision_type"
+                placeholder="Select submission type"
+                handleChange={handleChange}
+                options={[
+                  { label: 'File', value: ISubmissionTypeEnum.FILE },
+                  { label: 'Online text', value: ISubmissionTypeEnum.ONLINE_TEXT },
+                ]}>
+                Submission type
+              </DropdownMolecule>
               {details?.submision_type === ISubmissionTypeEnum.FILE && (
                 <>
                   <SelectMolecule
@@ -374,6 +374,17 @@ export default function SubjectEvaluationInfoComponent() {
             name={'marking_reminder_date'}>
             Marking reminder date
           </DateMolecule>
+          <RadioMolecule
+            className="pb-4"
+            name="strict"
+            value={details?.strict + ''}
+            options={[
+              { label: 'Yes', value: 'true' },
+              { label: 'No', value: 'false' },
+            ]}
+            handleChange={handleChange}>
+            strict
+          </RadioMolecule>
           <RadioMolecule
             className="pb-4"
             name="is_consider_on_report"

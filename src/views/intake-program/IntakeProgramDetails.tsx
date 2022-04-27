@@ -193,20 +193,20 @@ function IntakeProgramDetails() {
   const programData = getProgramData();
   let tabs: TabType[] = [
     {
-      label: 'Program info',
+      label: t('Program') + ' information',
       href: `${url}`,
     },
   ];
 
   tabs.push({
-    label: 'Program modules',
+    label: t('Program') + ' modules',
     href: `${url}/modules`,
     privilege: Privileges.CAN_ACCESS_INTAKE_PROGRAM_MODULES,
   });
 
   if (studentLevels?.data.data && studentLevels?.data.data.length > 0) {
     tabs.push({
-      label: 'Student Program levels',
+      label: 'Student ' + t('Program') + ' levels',
       href: `${url}/levels/learn/${
         studentLevels.data.data[0].academic_year_program_level.id || ''
       }`,
@@ -231,14 +231,14 @@ function IntakeProgramDetails() {
   // );
   if (instructorProgLevels && instructorProgLevels?.length > 0) {
     tabs.push({
-      label: t('Instructor') + ' Program levels',
+      label: t('Instructor') + t('Program') + ' levels',
       href: `${url}/levels/teach/${instructorProgLevels[0]?.id || ''}`,
       privilege: Privileges.CAN_TEACH_IN_INTAKE_PROGRAM_LEVELS,
     });
   }
   if (getLevels && getLevels?.length > 0) {
     tabs.push({
-      label: 'Manage Program levels',
+      label: 'Manage ' + t('Program') + ' levels',
       href: `${url}/levels/manage/${getLevels[0]?.id || ''}`,
       privilege: Privileges.CAN_ACCESS_INTAKE_PROGRAM_LEVELS,
     });
@@ -253,7 +253,7 @@ function IntakeProgramDetails() {
   const list: Links[] = [
     { to: 'home', title: 'home' },
     { to: 'intakes', title: 'intakes' },
-    { to: 'intakes/programs', title: 'Programs' },
+    { to: 'intakes/programs', title: t('Program') },
     { to: `${url}`, title: 'details' },
   ];
 
@@ -273,7 +273,7 @@ function IntakeProgramDetails() {
                 <div className="text-right">
                   <Link
                     to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
-                    <Button>Add level to program</Button>
+                    <Button>Add level to {t('Program')}</Button>
                   </Link>
                 </div>
               </Permission>
@@ -289,7 +289,7 @@ function IntakeProgramDetails() {
                 return (
                   <PopupMolecule
                     closeOnClickOutSide={false}
-                    title="Add level to program"
+                    title={'Add level to ' + t('Program')}
                     open={true}
                     onClose={() => history.goBack()}>
                     <AddLevelToProgram />
@@ -311,7 +311,7 @@ function IntakeProgramDetails() {
                           <CommonCardMolecule data={programData}>
                             <div className="flex flex-col mt-8 gap-7 pb-2">
                               <Heading color="txt-secondary" fontSize="sm">
-                                Program Type
+                                {t('Program')} Type
                               </Heading>
                               <Heading fontSize="sm">
                                 {programData.subTitle?.replaceAll('_', ' ')}
@@ -326,7 +326,7 @@ function IntakeProgramDetails() {
                                       `/dashboard/intakes/programs/${intakeId}/${id}/edit`,
                                     )
                                   }>
-                                  Edit program
+                                  Edit {t('Program')}
                                 </Button>
                                 {/* <Button styleType="outline">Change Status</Button> */}
                               </div>

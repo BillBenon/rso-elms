@@ -331,6 +331,7 @@ export interface ICreateEvaluationQuestions extends IEvaluationQuestion {
   answer: string;
   evaluation_module_subject_id?: string;
   choices: IMultipleChoice[];
+  attachments?: AttachementInfo[];
 }
 
 export interface IMultipleChoiceAnswers {
@@ -351,8 +352,21 @@ export interface IEvaluationQuestionsInfo {
   mark: number;
   evaluationQuestions: [];
   question_type: IQuestionType;
+  attachments: AttachementInfo[];
   multiple_choice_answers: IMultipleChoiceAnswers[];
   evaluation_module_subject: IEvaluationSectionBased;
+}
+
+export interface AttachementInfo extends Table {
+  attachment_type: string;
+  name: string;
+  path: string;
+  size: number;
+  size_type: string;
+  status: string;
+  type: string;
+  updated_by: string;
+  url: string;
 }
 
 export type IEvaluationSectionBasedInfo = {

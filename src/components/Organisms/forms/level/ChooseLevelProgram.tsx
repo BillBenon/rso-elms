@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { ValueType } from '../../../../types';
 import Button from '../../../Atoms/custom/Button';
@@ -6,12 +7,12 @@ import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 
 function ChooseLevelProgram() {
   function handleChange(_e: ValueType) {}
-
+  const { t } = useTranslation();
   return (
     <form>
       <DropdownMolecule
-        placeholder="Select Program"
-        name="program"
+        placeholder={'Select ' + t('Program')}
+        name={t('Program')}
         handleChange={handleChange}
         options={[
           { value: 'cadetteprogram', label: 'Cadette Program' },
@@ -19,7 +20,7 @@ function ChooseLevelProgram() {
           { value: 'cadette', label: 'Cadette' },
           { value: 'progra', label: 'Progra' },
         ]}>
-        Choose Program
+        Choose {t('Program')}
       </DropdownMolecule>
       <div className="py-6 ">
         <Button type="button">Save</Button>

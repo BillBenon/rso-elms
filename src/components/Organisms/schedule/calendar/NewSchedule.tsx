@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
 
 import usePickedRole from '../../../../hooks/usePickedRole';
@@ -345,6 +346,7 @@ function SecondStep({ handleChange, setCurrentStep, values }: IStepProps) {
 function ThirdStep({ values, handleChange, handleSubmit, setCurrentStep }: IStepProps) {
   const picked_role = usePickedRole();
   let academyId = picked_role?.academy_id + '';
+  const { t } = useTranslation();
 
   const programs = (programStore.fetchPrograms().data?.data.data || []).map((pr) => ({
     value: pr.id + '',
@@ -436,8 +438,8 @@ function ThirdStep({ values, handleChange, handleSubmit, setCurrentStep }: IStep
             name="program"
             handleChange={handleChange}
             options={programIntakes}
-            placeholder="Select program">
-            Program
+            placeholder={'Select ' + t('Program')}>
+            {t('Program')}
           </DropdownMolecule>
         </>
       )}

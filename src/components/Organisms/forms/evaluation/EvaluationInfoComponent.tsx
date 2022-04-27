@@ -4,6 +4,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
+
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { enrollmentService } from '../../../../services/administration/enrollments.service';
@@ -404,7 +405,7 @@ export default function EvaluationInfoComponent() {
           value={details?.intake_program_level + ''}
           width="64 py-4"
           name="intake_program_level"
-          placeholder="program  level"
+          placeholder={t('Program') + ' level'}
           handleChange={handleChange}
           loading={levelsLoading}
           options={
@@ -652,7 +653,7 @@ export default function EvaluationInfoComponent() {
 
         {details?.questionaire_type !== IQuestionaireTypeEnum.FIELD ? (
           <>
-            {/* <DropdownMolecule
+            <DropdownMolecule
               width="64"
               name="submision_type"
               placeholder="Select submission type"
@@ -662,7 +663,7 @@ export default function EvaluationInfoComponent() {
                 { label: 'Online text', value: ISubmissionTypeEnum.ONLINE_TEXT },
               ]}>
               Submission type
-            </DropdownMolecule> */}
+            </DropdownMolecule>
             {details?.submision_type === ISubmissionTypeEnum.FILE && (
               <>
                 <SelectMolecule
@@ -751,6 +752,17 @@ export default function EvaluationInfoComponent() {
           name={'marking_reminder_date'}>
           Marking reminder date
         </DateMolecule>
+        <RadioMolecule
+          className="pb-4"
+          name="strict"
+          value={details?.strict + ''}
+          options={[
+            { label: 'Yes', value: 'true' },
+            { label: 'No', value: 'false' },
+          ]}
+          handleChange={handleChange}>
+          strict
+        </RadioMolecule>
         <RadioMolecule
           className="pb-4"
           name="is_consider_on_report"

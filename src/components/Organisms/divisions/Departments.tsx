@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
 
 import usePickedRole from '../../../hooks/usePickedRole';
@@ -28,6 +29,8 @@ interface IDepartment {
 export default function Departments({ fetchType }: IDepartment) {
   const { path } = useRouteMatch();
   const history = useHistory();
+  const { t } = useTranslation();
+
   const [departments, setDepartments] = useState<FilteredData[]>([]);
   const { search } = useLocation();
   const facultyId = new URLSearchParams(search).get('fac');
@@ -90,7 +93,7 @@ export default function Departments({ fetchType }: IDepartment) {
   });
 
   actions.push({
-    name: 'View Programs',
+    name: 'View ' + t('Program'),
     handleAction: (id: string | number | undefined) => {
       history.push({ pathname: `/dashboard/programs/`, search: `?dp=${id}` });
     },
@@ -98,7 +101,7 @@ export default function Departments({ fetchType }: IDepartment) {
   });
 
   actions.push({
-    name: 'Add Program',
+    name: 'Add ' + t('Program'),
     handleAction: (id: string | number | undefined) => {
       history.push({ pathname: `/dashboard/programs/add`, search: `?dp=${id}` });
     },

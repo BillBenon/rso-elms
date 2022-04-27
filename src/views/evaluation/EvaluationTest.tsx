@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
 import toast from 'react-hot-toast';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
-
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -104,26 +103,28 @@ export default function EvaluationTest() {
 
   return (
     <div ref={maximizableElement} className={`${'bg-secondary p-12 overflow-y-auto'}`}>
-      <PopupMolecule
-        closeOnClickOutSide={false}
-        open={open}
-        title="Do you want to continue?"
-        onClose={setIsFullscreen as () => void}>
-        <div>
-          <Heading fontWeight="semibold">Enable Full screen</Heading>
-          <p className="course-card-description leading-5 pb-6 w-96 text-txt-secondary text-sm mt-4">
-            You are about to attempt this evaluation test.Full screeen should be enabled
-            to avoid cheating. If you disable it or change tabs/desktop then you&apos;ll
-            get zero
-          </p>
+      {evaluationInfo?.strict && (
+        <PopupMolecule
+          closeOnClickOutSide={false}
+          open={open}
+          title="Do you want to continue?"
+          onClose={setIsFullscreen as () => void}>
+          <div>
+            <Heading fontWeight="semibold">Enable Full screen</Heading>
+            <p className="course-card-description leading-5 pb-6 w-96 text-txt-secondary text-sm mt-4">
+              You are about to attempt this evaluation test.Full screeen should be enabled
+              to avoid cheating. If you disable it or change tabs/desktop then you&apos;ll
+              get zero
+            </p>
 
-          <div className="flex justify-between pt-3">
-            <div>
-              <Button onClick={() => setOpen(false)}>Enable</Button>
+            <div className="flex justify-between pt-3">
+              <div>
+                <Button onClick={() => setOpen(false)}>Enable</Button>
+              </div>
             </div>
           </div>
-        </div>
-      </PopupMolecule>
+        </PopupMolecule>
+      )}
       <div className="flex justify-between py-4">
         <Heading fontWeight="semibold">{evaluationData?.data.data.name}</Heading>
         <div className="pr-28 flex justify-center items-center gap-2">

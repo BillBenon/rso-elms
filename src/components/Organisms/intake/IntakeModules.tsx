@@ -12,7 +12,7 @@ export default function IntakeModules() {
   const list: Link[] = [
     { to: 'home', title: 'Institution Admin' },
     { to: 'faculty', title: t('Faculty') },
-    { to: 'programs', title: 'Programs' },
+    { to: 'programs', title: t('Program') },
     { to: 'intakes', title: 'Intakes' },
     { to: 'modules', title: 'Modules' },
   ];
@@ -74,10 +74,10 @@ export default function IntakeModules() {
         </InputMolecule>
         <InputMolecule
           name="program"
-          placeholder="Select program"
+          placeholder={'Select ' + t('Program')}
           value={''}
           handleChange={(e) => handleChange(e)}>
-          Program
+          {t('Program')}
         </InputMolecule>
       </div>
       <Table statusColumn="status" data={data} actions={intakeActions} />

@@ -1,6 +1,7 @@
 import moment from 'moment';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
 import countryList from 'react-select-country-list';
 
@@ -68,6 +69,7 @@ export interface NewUserErrors
 
 export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
   const history = useHistory();
+  const { t } = useTranslation();
 
   // const newUserType = pick(UserType, ['ADMIN', 'INSTRUCTOR', 'STUDENT']);
   // const newUserTypeWithSuper = { ...newUserType, SUPER_ADMIN: 'SUPER_ADMIN' };
@@ -439,10 +441,12 @@ export default function NewUser<E>({ onSubmit }: CommonFormProps<E>) {
               }
               name="program"
               placeholder={
-                programs.isLoading ? 'Loading programs...' : 'Program to be enrolled in'
+                programs.isLoading
+                  ? 'Loading programs...'
+                  : t('Program') + ' to be enrolled in'
               }
               handleChange={otherhandleChange}>
-              Programs
+              {t('Program')}
             </DropdownMolecule>
             <DropdownMolecule
               error={errors.intake_program_id}

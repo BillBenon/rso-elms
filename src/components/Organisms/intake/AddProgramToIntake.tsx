@@ -24,7 +24,7 @@ export default function AddProgramToIntake() {
   return (
     <form>
       <Heading fontSize="lg" fontWeight="semibold" className="pb-5">
-        Add a program to this intake
+        Add a {t('Program')} to this intake
       </Heading>
 
       <DropdownMolecule
@@ -32,7 +32,7 @@ export default function AddProgramToIntake() {
         handleChange={(_e: any) => {}}
         options={options}
         placeholder="Select period type">
-        Choose Program
+        Choose {t('Program')}
       </DropdownMolecule>
       <DropdownMolecule
         name="academicYear"

@@ -44,7 +44,7 @@ function Levels() {
     { to: '', title: 'Academy Admin' },
     { to: 'users', title: 'Users' },
     { to: 'faculties', title: t('Faculty') },
-    { to: 'levels', title: 'Programs' },
+    { to: 'levels', title: t('Program') },
     { to: 'levels', title: 'Level' },
   ];
   actions?.push({

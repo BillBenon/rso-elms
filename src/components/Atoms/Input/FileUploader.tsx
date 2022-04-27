@@ -1,8 +1,8 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { ChangeEvent, ReactNode, useRef, useState } from 'react';
-
 import Error from '../../Atoms/Text/Error';
+
 interface IProps {
   maxNumberOfFiles?: number;
   maxFileSizeInBytes?: number;
@@ -11,6 +11,7 @@ interface IProps {
   handleUpload: (_files: FileList | null) => any;
   children: ReactNode;
   error?: string;
+  handleBlur?: () => void;
 }
 
 export default function FileUploader(props: IProps) {
@@ -30,6 +31,7 @@ export default function FileUploader(props: IProps) {
         className="hidden"
         ref={fileInputField}
         onChange={changeHandler}
+        onBlur={props.handleBlur}
         accept={props.accept}
       />
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
