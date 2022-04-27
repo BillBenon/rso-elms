@@ -221,7 +221,7 @@ export default function AcademicProgram() {
           path={`${url}/add-program-to-intake`}
           render={() => {
             return (
-              <PopupMolecule title="Programs" open={true} onClose={history.goBack}>
+              <PopupMolecule title="Program" open={true} onClose={history.goBack}>
                 <AddAcademicProgramToIntake submited={submited} />
               </PopupMolecule>
             );
