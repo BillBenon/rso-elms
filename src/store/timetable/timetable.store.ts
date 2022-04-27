@@ -29,23 +29,23 @@ class TimetableStore {
 
   // timetable weeks
 
-  public async createTimetableWeek() {
+  createTimetableWeek() {
     return useMutation(timetableService.createTimetableWeek);
   }
 
-  public async getWeekAndActivitiesByWeekId(id: string) {
+  getWeekAndActivitiesByWeekId(id: string) {
     return useQuery(['timetable/week/:id', id], () =>
       timetableService.getActivitiesByWeekId(id),
     );
   }
 
-  public async getCurrentWeek(currentDate: string, intakeLevelId: string) {
+  getCurrentWeek(currentDate: string, intakeLevelId: string) {
     return useQuery(['timetable/week/current/:id', currentDate, intakeLevelId], () =>
       timetableService.getCurrentWeek(currentDate, intakeLevelId),
     );
   }
 
-  public async getWeeksByIntakeLevel(intakeLevelId: string) {
+  getWeeksByIntakeLevel(intakeLevelId: string) {
     return useQuery(['timetable/weeks', intakeLevelId], () =>
       timetableService.getWeeksByIntakeLevel(intakeLevelId),
     );

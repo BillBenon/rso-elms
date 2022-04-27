@@ -188,4 +188,7 @@ export interface ITimeTableWeekInfo extends Table {
   status: TimetableStatus;
   activities: ITimeTableActivityInfo[];
   academic_program_intake_level: Table;
+  end_date: string;
+  start_date: string;
+  week_name: string;
 }

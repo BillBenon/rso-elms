@@ -298,7 +298,6 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
 
   return (
     <form onSubmit={handleFinish} className="max-w-sm -mb-6">
-      <div className="pb-1"></div>
       <InputMolecule
         error={errors.startHour}
         required={false}
