@@ -197,3 +197,8 @@ export interface ITimeTableWeekInfo extends Table {
   start_date: string;
   week_name: string;
 }
+
+export interface ICreateFootNote {
+  activityId: string;
+  footNote: string;
+}

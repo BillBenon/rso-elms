@@ -7,6 +7,10 @@ class TimetableStore {
     return useMutation(timetableService.createLevelTimetable);
   }
 
+  createTimetableActivityFootnote() {
+    return useMutation(timetableService.createLevelTimetableFootnote);
+  }
+
   getClassTimetableByIntakeLevelClass(id: string) {
     return useQuery(['timetable/intakeclassid/:id', id], () =>
       timetableService.getClassTimetableByIntakeLevelClass(id),

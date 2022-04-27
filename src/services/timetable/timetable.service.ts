@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import { timetableAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
+  ICreateFootNote,
   ICreateTimeTableActivity,
   ICreateTimeTableWeek,
   ITimeTableActivityInfo,
@@ -21,6 +22,12 @@ class TimetableService {
     tt: ICreateTimeTableActivity,
   ): Promise<AxiosResponse<Response<ITimeTableActivityInfo>>> {
     return await timetableAxios.post('/weekly-timetable-activity', tt);
+  }
+
+  public async createLevelTimetableFootnote(
+    tt: ICreateFootNote,
+  ): Promise<AxiosResponse<Response<ITimeTableActivityInfo>>> {
+    return await timetableAxios.post('/activity-footnotes', tt);
   }
 
   public async getClassTimetableByIntakeLevelClass(

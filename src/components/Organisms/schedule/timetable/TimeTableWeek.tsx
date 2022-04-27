@@ -18,6 +18,7 @@ import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
 import PopupMolecule from '../../../Molecules/Popup';
 import EditTimeTable from './EditTimeTable';
+import NewFootNote from './NewFootNote';
 import NewTimeTable from './NewTimeTable';
 
 interface IProps {
@@ -145,10 +146,15 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
                         {`${instructor?.user.first_name} ${instructor?.user.last_name}`}
                       </p>
                       <Permission privilege={Privileges.CAN_MODIFY_TIMETABLE}>
-                        <div className="actions hidden absolute top-0 right-0 -mt-3">
-                          <Link to={`${url}/item/${activity.id}/edit`}>
-                            <Icon name={'edit'} stroke="primary" />
-                          </Link>
+                        <div className="actions hidden absolute top-0 right-0">
+                          <div className="flex gap-0">
+                            <Link to={`${url}/item/${activity.id}/add-footnote`}>
+                              <Icon name={'add'} size={14} stroke="primary" />
+                            </Link>
+                            <Link to={`${url}/item/${activity.id}/edit`}>
+                              <Icon name={'edit'} size={16} stroke="primary" />
+                            </Link>
+                          </div>
                         </div>
                       </Permission>
                     </div>
@@ -176,6 +182,15 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
           render={() => (
             <PopupMolecule title="Update timetable" open onClose={handleClose}>
               <EditTimeTable />
+            </PopupMolecule>
+          )}
+        />
+        <Route
+          exact
+          path={`${path}/item/:itemId/add-footnote`}
+          render={() => (
+            <PopupMolecule title="Add Footnote" open onClose={handleClose}>
+              <NewFootNote />
             </PopupMolecule>
           )}
         />
