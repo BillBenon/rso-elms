@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
 
 import Table from '../../components/Molecules/table/Table';
@@ -17,6 +18,7 @@ interface FilteredData
 export default function ViewDepartmentsInFaculty() {
   const { id } = useParams<ParamType>();
   const history = useHistory();
+  const { t } = useTranslation();
   const { data, isLoading, isSuccess } = divisionStore.getDepartmentsInFaculty(id);
   const { data: facultyInfo } = divisionStore.getDivisionByType('FACULTY');
   const [departments, setDepartments] = useState<FilteredData[]>();
@@ -33,7 +35,7 @@ export default function ViewDepartmentsInFaculty() {
       },
     },
     {
-      name: 'View Programs',
+      name: 'View ' + t('Program'),
       handleAction: (id: string | number | undefined) => {
         history.push(`/dashboard/programs/${id}/view-program`); // go to edit role
       },

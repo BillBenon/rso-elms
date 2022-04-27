@@ -101,7 +101,7 @@ export default function InstructorsView() {
     privilege: Privileges.CAN_ASSIGN_ROLE,
   });
   actions?.push({
-    name: 'Reset Pawssword',
+    name: 'Reset Password',
     handleAction: (id: string | number | undefined) => {
       //call a reset password api
       mutateAsync(id?.toString() || '', {

@@ -80,7 +80,7 @@ export default function AdminDashboard() {
             <BrowserLink to={'/dashboard/divisions'}>
               <div className="bg-main shadow-sm rounded-lg p-6 hover:border cursor-pointer">
                 <Heading fontSize="sm" color="txt-secondary" fontWeight="medium">
-                  Total Faculties
+                  Total {t('Faculty')}
                 </Heading>
                 <Heading className="pt-4" fontSize="sm" fontWeight="bold">
                   {faculties?.length}
@@ -110,7 +110,7 @@ export default function AdminDashboard() {
             <BrowserLink to={'/dashboard/divisions'}>
               <div className="bg-main shadow-sm rounded-lg p-6 hover:border cursor-pointer">
                 <Heading fontSize="sm" color="txt-secondary" fontWeight="medium">
-                  Total divisions
+                  Total {t('Division')}
                 </Heading>
                 <Heading className="pt-4" fontSize="sm" fontWeight="bold">
                   {(departments?.length || 0) + (faculties?.length || 0)}

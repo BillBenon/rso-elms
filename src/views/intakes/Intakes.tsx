@@ -2,6 +2,7 @@
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import {
   Link,
   Route,
@@ -44,13 +45,6 @@ import { advancedTypeChecker } from '../../utils/getOption';
 import IntakePrograms from '../intake-program/IntakePrograms';
 import LevelPerformance from '../performance/LevelPerformance';
 
-const list: LinkType[] = [
-  { to: 'home', title: 'Institution Admin' },
-  { to: 'faculty', title: 'Faculty' },
-  { to: 'programs', title: 'Programs' },
-  { to: 'intakes', title: 'Intakes' },
-];
-
 interface IntakeCardType extends CommonCardDataType {
   registrationControlId: string;
 }
@@ -58,6 +52,15 @@ interface IntakeCardType extends CommonCardDataType {
 export default function Intakes() {
   const [intakes, setIntakes] = useState<IntakeCardType[]>([]);
   const { user } = useAuthenticator();
+
+  const { t } = useTranslation();
+
+  const list: LinkType[] = [
+    { to: 'home', title: 'Institution Admin' },
+    { to: 'faculty', title: t('Faculty') },
+    { to: 'programs', title: 'Programs' },
+    { to: 'intakes', title: 'Intakes' },
+  ];
 
   const history = useHistory();
   const { url, path } = useRouteMatch();

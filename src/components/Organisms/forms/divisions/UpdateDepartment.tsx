@@ -1,5 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { queryClient } from '../../../../plugins/react-query';
@@ -10,7 +11,7 @@ import {
   DivisionCreateInfo,
 } from '../../../../types/services/division.types';
 import { getDropDownOptions } from '../../../../utils/getOption';
-import { departSchema } from '../../../../validations/division.validation';
+import { useDivisionValidation } from '../../../../validations/division.validation';
 import Button from '../../../Atoms/custom/Button';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
@@ -20,6 +21,9 @@ export default function UpdateDepartment({ onSubmit }: IDivisionsAcademyType) {
   const history = useHistory();
 
   const { id } = useParams<ParamType>();
+  const { t } = useTranslation();
+
+  const { departSchema } = useDivisionValidation();
 
   const { data } = divisionStore.getDivision(id);
 
@@ -116,11 +120,11 @@ export default function UpdateDepartment({ onSubmit }: IDivisionsAcademyType) {
       <DropdownMolecule
         error={errors.faculty}
         width="82"
-        placeholder="Select faculty"
+        placeholder={'Select ' + t('Faculty')}
         options={getDropDownOptions({ inputs: departments || [] })}
         name="parent_id"
         handleChange={handleChange}>
-        Faculty
+        {t('Faculty')}
       </DropdownMolecule>
       <div className="mt-5">
         <Button type="submit" full>
