@@ -50,6 +50,10 @@ class TimetableStore {
       timetableService.getWeeksByIntakeLevel(intakeLevelId),
     );
   }
+
+  changeWeekStatus() {
+    return useMutation(timetableService.changeWeekStatus);
+  }
 }
 
 export const timetableStore = new TimetableStore();
