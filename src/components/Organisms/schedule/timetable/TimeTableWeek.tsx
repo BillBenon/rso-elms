@@ -142,7 +142,7 @@ export default function TimeTableWeek({ week }: IProps) {
           exact
           path={`${path}/new-activity`}
           render={() => (
-            <PopupMolecule title="Create timetable" open onClose={handleClose}>
+            <PopupMolecule title="Add timetable activity" open onClose={handleClose}>
               <NewTimeTable />
             </PopupMolecule>
           )}

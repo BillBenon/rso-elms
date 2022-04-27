@@ -1,7 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { queryClient } from '../../../../plugins/react-query';
@@ -18,6 +18,7 @@ import {
   ICreateTimeTableActivity,
   methodOfInstruction,
 } from '../../../../types/services/schedule.types';
+import { formatDateToYyMmDd } from '../../../../utils/date-helper';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import { randomString } from '../../../../utils/random';
 import {
@@ -49,6 +50,10 @@ interface SecondTimeTableErrors
 export default function NewTimeTable() {
   const { id } = useParams<ParamType>();
   const history = useHistory();
+  const { search } = useLocation();
+
+  // query parameters
+  const weekId = new URLSearchParams(search).get('week');
 
   //levelInfo
   const levelInfo = intakeProgramStore.getIntakeLevelById(id).data?.data.data;
@@ -62,14 +67,14 @@ export default function NewTimeTable() {
     // repeatingDays: [daysOfWeek.MONDAY],
     courseModuleId: '',
     venueId: '',
-    activityDate: '',
+    activityDate: new Date().toString(),
     courseCode: randomString(6),
     dayOfWeek: daysOfWeek.MONDAY,
     dressCode: '',
     eventId: '',
     methodOfInstruction: methodOfInstruction.LEC,
     periods: 1,
-    weeklyTimetableId: '',
+    weeklyTimetableId: weekId || '',
   });
 
   function handleChange(e: ValueType) {
@@ -88,6 +93,7 @@ export default function NewTimeTable() {
 
     let data: ICreateTimeTableActivity = {
       ...values,
+      activityDate: formatDateToYyMmDd(values.activityDate),
     };
 
     mutateAsync(data, {
@@ -247,7 +253,7 @@ function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) 
           options={
             users?.map((user) => ({
               label: `${user.user.first_name} ${user.user.last_name}`,
-              value: user.id,
+              value: user.user.id,
             })) as SelectData[]
           }
           placeholder="Select someone">
