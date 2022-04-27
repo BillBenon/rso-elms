@@ -1,6 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
 import toast from 'react-hot-toast';
-
 import { LoginRes, Response } from '../types';
 import cookie from '../utils/cookie';
 
