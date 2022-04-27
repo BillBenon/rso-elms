@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
-
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -18,7 +17,6 @@ import useAuthenticator from '../../hooks/useAuthenticator';
 import { subjectService } from '../../services/administration/subject.service';
 import { evaluationService } from '../../services/evaluation/evaluation.service';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
-// import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Link as LinkList, Privileges } from '../../types';
 import {
   IEvaluationOwnership,
@@ -32,6 +30,7 @@ import EvaluationDetails from './EvaluationDetails';
 import EvaluationNotiView from './EvaluationNotiView';
 import EvaluationTest from './EvaluationTest';
 import StudentReview from './StudentReview';
+import Templates from './Templates';
 
 export default function InstructorViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
@@ -90,10 +89,7 @@ export default function InstructorViewEvaluations() {
     async function getSubjects() {
       let filteredSubjects: ISubjects[] = [];
 
-      if (
-        evaluationInfo?.evaluation_module_subjects &&
-        evaluationInfo.evaluation_module_subjects.length > 1
-      ) {
+      if (evaluationInfo?.evaluation_module_subjects) {
         const subjectData = await evaluationService.getEvaluationModuleSubjectsByModule(
           evaluationId,
           evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module,
@@ -156,6 +152,7 @@ export default function InstructorViewEvaluations() {
           break;
 
         case IEvaluationOwnership.FOR_SETTING:
+          console.log({ subjects });
           history.push(
             `${path}/details/${id}/section/${evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module}/${subjects[0].id}`,
           );
@@ -211,15 +208,28 @@ export default function InstructorViewEvaluations() {
                     options={getDropDownStatusOptions(IEvaluationOwnership)}
                   />
 
-                  <Permission privilege={Privileges.CAN_CREATE_EVALUATIONS}>
-                    <Button
-                      className="self-start"
-                      onClick={() => {
-                        history.push(`${path}/create`);
-                      }}>
-                      New evaluation
-                    </Button>
-                  </Permission>
+                  <div className="flex gap-4">
+                    <Permission privilege={Privileges.CAN_CREATE_EVALUATION_TEMPLATE}>
+                      <Button
+                        className="self-start"
+                        styleType="outline"
+                        onClick={() => {
+                          history.push(`${path}/templates`);
+                        }}>
+                        New evaluation preset
+                      </Button>
+                    </Permission>
+
+                    <Permission privilege={Privileges.CAN_CREATE_EVALUATIONS}>
+                      <Button
+                        className="self-start"
+                        onClick={() => {
+                          history.push(`${path}/create`);
+                        }}>
+                        New evaluation
+                      </Button>
+                    </Permission>
+                  </div>
                 </div>
               </div>
 
@@ -234,7 +244,7 @@ export default function InstructorViewEvaluations() {
                   />
                 ) : isSuccess && evaluations.length > 0 ? (
                   evaluations?.map((info: CommonCardDataType, index: number) => (
-                    <div key={index}>
+                    <div key={info.id}>
                       <CommonCardMolecule
                         className="cursor-pointer"
                         data={info}
@@ -298,14 +308,14 @@ export default function InstructorViewEvaluations() {
           />
         )}
 
+        {hasPrivilege(Privileges.CAN_CREATE_EVALUATION_TEMPLATE) && (
+          <Route path={`${path}/templates`} component={Templates} />
+        )}
+
         {hasPrivilege(Privileges.CAN_CREATE_EVALUATIONS) && (
           <Route path={`${path}/create`} component={EvaluationInfoComponent} />
         )}
 
-        {/**
-         * Fix routes
-         *
-         */}
         {hasPrivilege(Privileges.CAN_CREATE_EVALUATIONS) && (
           <Route
             path={`${path}/:evaluationId/addquestions`}

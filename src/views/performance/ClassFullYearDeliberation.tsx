@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -75,6 +76,7 @@ export default function ClassFullYearDeliberation() {
       },
     },
   ];
+  const { t } = useTranslation();
 
   return (
     <div>
@@ -100,7 +102,7 @@ export default function ClassFullYearDeliberation() {
         <div>
           <h2 className="text-error-500 py-2 mb-3 font-medium tracking-widest">
             Error Occurred: Class Deliberation can&apos;t take place as there are no
-            students in class
+            students in {t('Class')}
           </h2>
           <Button styleType="outline" onClick={() => window.location.reload()}>
             Reload
@@ -110,7 +112,9 @@ export default function ClassFullYearDeliberation() {
         <NoDataAvailable
           title={'No marks for this association found'}
           description={
-            'No data associated with this class an this period found. try changing the period'
+            'No data associated with this ' +
+            t('Class') +
+            ' an this period found. try changing the period'
           }
           showButton={false}
         />

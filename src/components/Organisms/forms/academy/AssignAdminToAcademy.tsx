@@ -64,7 +64,7 @@ function AssignAdminToAcademy() {
   function saveAdmin<T>(e: FormEvent<T>) {
     e.preventDefault();
     if (details.current_admin_id === '') {
-      toast.error('Please select an admin');
+      toast.error('Please select an academy admin');
     } else {
       mutateAsync(details, {
         onSuccess(data) {

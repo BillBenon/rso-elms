@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -91,6 +92,7 @@ function OveralClassPerformance() {
     //   },
     // },
   ];
+  const { t } = useTranslation();
 
   return (
     <div>
@@ -99,8 +101,8 @@ function OveralClassPerformance() {
       ) : isError ? (
         <div>
           <h2 className="text-error-500 py-2 mb-3 font-medium tracking-widest">
-            That was an error! May be this class has no students or no assignments done
-            het!
+            That was an error! May be this {t('Class')} has no students or no assignments
+            done het!
           </h2>
           <Button styleType="outline" onClick={() => window.location.reload()}>
             Reload
@@ -110,7 +112,9 @@ function OveralClassPerformance() {
         <NoDataAvailable
           title={'No marks for this association found'}
           description={
-            'No data associated with this class an this period found. try changing the period'
+            'No data associated with this ' +
+            t('Class') +
+            ' an this period found. try changing the period'
           }
           showButton={false}
         />
@@ -125,7 +129,7 @@ function OveralClassPerformance() {
             Back
           </Button>
           <TableHeader
-            title={`${classInfo?.data.data.class_name || 'class'} Performance`}
+            title={`${classInfo?.data.data.class_name || t('Class')} Performance`}
             totalItems={data.length}
             handleSearch={handleSearch}>
             {user?.user_type === UserType.ADMIN && (

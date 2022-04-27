@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch, useParams, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -14,6 +15,7 @@ import EnrollInstructorToModuleComponent from '../modules/EnrollInstructorToModu
 function InstructorsOnModule() {
   const { id } = useParams<ParamType>();
   const { path } = useRouteMatch();
+  const { t } = useTranslation();
   const { data: instructorInfos, isLoading } = enrollmentStore.getInstructorsByModule(id);
 
   let instrs: UserTypes[] = [];
@@ -54,7 +56,7 @@ function InstructorsOnModule() {
           <div className="flex flex-col gap-4 z-0 pt-6">
             <div className="flex justify-between items-center">
               <Heading fontSize="base" fontWeight="semibold">
-                Instructors ({instructorInfos?.data.data.length || 0})
+                {t('Instructor')} ({instructorInfos?.data.data.length || 0})
               </Heading>
               <Permission privilege={Privileges.CAN_ENROLL_INSTRUCTORS_ON_MODULE}>
                 <EnrollInstructorToModuleComponent
@@ -69,9 +71,11 @@ function InstructorsOnModule() {
                 <NoDataAvailable
                   showButton={false}
                   icon="user"
-                  title={'No instructors available'}
+                  title={'No ' + t('Instructor') + ' available'}
                   description={
-                    'There are no instructors currently assigned to this module'
+                    'There are no ' +
+                    t('Instructor') +
+                    ' currently assigned to this module'
                   }
                   privilege={Privileges.CAN_ENROLL_INSTRUCTORS_ON_MODULE}
                   handleClick={() => (

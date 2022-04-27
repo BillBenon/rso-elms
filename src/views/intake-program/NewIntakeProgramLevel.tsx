@@ -1,6 +1,7 @@
 import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -143,6 +144,8 @@ export default function NewIntakeProgramLevel() {
 
   let academic_year = academicYears.find((yr) => yr.id == values.academic_year_id);
 
+  const { t } = useTranslation();
+
   return (
     <div className="p-10 w-3/5">
       <Heading fontWeight="semibold" fontSize="2xl" className="pb-8">
@@ -184,7 +187,7 @@ export default function NewIntakeProgramLevel() {
                     })}
                     name="incharge_id"
                     handleChange={handleChange}>
-                    Instructor Incharge
+                    {t('Instructor')} Incharge
                   </DropdownMolecule>
                   <DropdownMolecule
                     error={errors.academic_year_id}

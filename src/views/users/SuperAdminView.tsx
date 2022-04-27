@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -38,6 +39,8 @@ export default function SuperAdminView() {
     sortyBy: 'username',
   });
 
+  const { t } = useTranslation();
+
   const [users, setUsers] = useState<UserTypes[]>([]);
 
   useEffect(() => {
@@ -62,7 +65,7 @@ export default function SuperAdminView() {
     privilege: Privileges.CAN_MODIFY_USER,
   });
   actions?.push({
-    name: 'Deploy instructor',
+    name: 'Deploy ' + t('Instructor'),
     handleAction: (id: string | number | undefined) => {
       history.push(`${url}/${id}/deploy`); // go to assign role
     },
@@ -92,7 +95,7 @@ export default function SuperAdminView() {
   });
 
   actions?.push({
-    name: 'Reset Pawssword',
+    name: 'Reset Password',
     handleAction: (id: string | number | undefined) => {
       //call a reset password api
       mutateAsync(id?.toString() || '', {
@@ -226,7 +229,7 @@ export default function SuperAdminView() {
           render={() => (
             <PopupMolecule
               closeOnClickOutSide={false}
-              title="Deploy as an instructor"
+              title={'Deploy as an ' + t('Instructor')}
               open={true}
               onClose={history.goBack}>
               <DeployInstructors />

@@ -14,6 +14,7 @@ import {
   IEvaluationQuestionsInfo,
   IEvaluationSectionBased,
   IEvaluationStatus,
+  IEvaluationTemplateInfo,
   InstructorEvaluationAppprovalStatus,
   IStudentAnswer,
   IStudentEvaluationStart,
@@ -331,6 +332,45 @@ class EvaluationService {
       `evaluationQuestions/editQuestion/${question.id}`,
       question,
     );
+  }
+
+  public async getEvaliationTemplates(
+    academyId: string,
+  ): Promise<AxiosResponse<Response<IEvaluationTemplateInfo[]>>> {
+    return await evaluationAxios.get(`evaluation-templates/getByAcademyId/${academyId}`);
+  }
+
+  public async uploadQuestionFile({
+    questionId,
+    file,
+  }: {
+    questionId: string;
+    file: FormData;
+  }): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo>>> {
+    return await evaluationAxios.post(
+      `evaluationQuestions/${questionId}/uploadQuestionFile`,
+      file,
+    );
+  }
+
+  public async deleteTemplate(
+    id: string,
+  ): Promise<AxiosResponse<Response<IEvaluationTemplateInfo>>> {
+    return await evaluationAxios.delete(`evaluation-templates/deleteById/${id}`);
+  }
+
+  public getTemplateById(
+    id: string,
+  ): Promise<AxiosResponse<Response<IEvaluationTemplateInfo>>> {
+    return evaluationAxios.get(`evaluation-templates/getById/${id}`);
+  }
+
+  public async createTemplate(
+    template: Partial<IEvaluationInfo>,
+  ): Promise<AxiosResponse<Response<IEvaluationTemplateInfo>>> {
+    return await evaluationAxios.post('evaluation-templates/add', {
+      ...template,
+    });
   }
 }
 

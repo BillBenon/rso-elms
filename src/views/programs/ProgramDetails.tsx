@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import React from 'react';
 import {
   Link,
@@ -23,16 +24,11 @@ import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleFor
 import programStore, {
   getLevelsByAcademicProgram,
 } from '../../store/administration/program.store';
-import { CommonCardDataType, Link as Links, ParamType, Privileges } from '../../types';
+import { Link as Links, ParamType, Privileges } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ProgramModules from '../modules/ProgramModules';
 import { IProgramData } from './AcademicPrograms';
 import AddLevelToProgram from './AddLevelToProgram';
-
-export interface IProgramFile extends CommonCardDataType, IProgramData {
-  attachment_file_name: string;
-  attachment_id: string;
-}
 
 export default function ProgramDetailsMolecule() {
   const history = useHistory();
@@ -42,11 +38,9 @@ export default function ProgramDetailsMolecule() {
   const programLevels = getLevelsByAcademicProgram(id).data?.data.data;
 
   const getProgramData = () => {
-    let programData: IProgramFile | undefined;
+    let programData: IProgramData | undefined;
     if (program) {
       programData = {
-        attachment_id: program.attachment_id,
-        attachment_file_name: program.attachment_file_name,
         status: {
           type: advancedTypeChecker(program.generic_status),
           text: program.generic_status.toString(),
@@ -83,7 +77,7 @@ export default function ProgramDetailsMolecule() {
   };
   const list: Links[] = [
     { to: 'home', title: 'home' },
-    { to: 'divisions', title: 'Faculty' },
+    { to: 'divisions', title: t('Faculty') },
     { to: 'programs', title: 'Programs' },
     { to: `${url}`, title: 'details' },
   ];

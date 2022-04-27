@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
@@ -46,6 +47,7 @@ import IntakeProgramModules from './IntakeProgramModules';
 
 function IntakeProgramDetails() {
   const history = useHistory();
+  const { t } = useTranslation();
   const { path, url } = useRouteMatch();
   const { id, intakeId, intakeProg } = useParams<IntakeProgParam>();
 
@@ -229,7 +231,7 @@ function IntakeProgramDetails() {
   // );
   if (instructorProgLevels && instructorProgLevels?.length > 0) {
     tabs.push({
-      label: 'Instructor Program levels',
+      label: t('Instructor') + ' Program levels',
       href: `${url}/levels/teach/${instructorProgLevels[0]?.id || ''}`,
       privilege: Privileges.CAN_TEACH_IN_INTAKE_PROGRAM_LEVELS,
     });
@@ -377,8 +379,8 @@ function IntakeProgramDetails() {
                               Privileges.CAN_ACCESS_INSTRUCTORS_ON_LEVEL_PROGRAM
                             }>
                             <UsersPreview
-                              title="Instructors"
-                              label={`Instructors in ${programData.title}`}
+                              title={t('Instructor')}
+                              label={t('Instructor') + ` in ${programData.title}`}
                               data={instructors}
                               totalUsers={instructors.length || 0}
                               dataLabel={''}

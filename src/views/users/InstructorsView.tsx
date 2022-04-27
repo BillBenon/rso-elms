@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -30,6 +31,7 @@ export default function InstructorsView() {
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
   const picked_role = usePickedRole();
+  const { t } = useTranslation();
 
   const { mutateAsync } = authenticatorStore.resetPassword();
 
@@ -52,7 +54,7 @@ export default function InstructorsView() {
   let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
 
   actions?.push({
-    name: 'View instructor',
+    name: 'View ' + t('Instructor'),
     handleAction: (id: string | number | undefined) => {
       history.push(`/dashboard/user/${id}/profile`); // go to view user profile
     },
@@ -60,7 +62,7 @@ export default function InstructorsView() {
   });
 
   actions?.push({
-    name: 'Edit instructor',
+    name: 'Edit ' + t('Instructor'),
     handleAction: (id: string | number | undefined) => {
       history.push(`/dashboard/users/${id}/edit`); // go to edit user
     },
@@ -68,7 +70,7 @@ export default function InstructorsView() {
   });
 
   actions?.push({
-    name: 'Deploy instructor',
+    name: 'Deploy ' + t('Instructor'),
     handleAction: (id: string | number | undefined) => {
       history.push(`${url}/${id}/deploy`); // go to assign role
     },
@@ -99,7 +101,7 @@ export default function InstructorsView() {
     privilege: Privileges.CAN_ASSIGN_ROLE,
   });
   actions?.push({
-    name: 'Reset Pawssword',
+    name: 'Reset Password',
     handleAction: (id: string | number | undefined) => {
       //call a reset password api
       mutateAsync(id?.toString() || '', {
@@ -123,16 +125,16 @@ export default function InstructorsView() {
   return (
     <div>
       <TableHeader
-        title="Instructors"
+        title={t('Instructor')}
         totalItems={data?.data.data.totalElements || 0}
         handleSearch={handleSearch}>
         <Permission privilege={Privileges.CAN_CREATE_USER}>
           <div className="flex gap-3">
             <Link to={`${url}/import`}>
-              <Button styleType="outline">Import instructors</Button>
+              <Button styleType="outline">Import {t('Instructor')}</Button>
             </Link>
             <Link to={`/dashboard/users/add/${UserType.INSTRUCTOR}`}>
-              <Button>New instructor</Button>
+              <Button>New {t('Instructor')}</Button>
             </Link>
           </div>
         </Permission>
@@ -142,10 +144,10 @@ export default function InstructorsView() {
       ) : users.length <= 0 ? (
         <NoDataAvailable
           icon="user"
-          buttonLabel="Add new instructor"
-          title={'No instructor available'}
+          buttonLabel={'Add new ' + t('Instructor')}
+          title={'No ' + t('Instructor') + ' available'}
           handleClick={() => history.push(`/dashboard/users/add/${UserType.INSTRUCTOR}`)}
-          description="There are no instructors added into the system yet"
+          description={'There are no ' + t('Instructor') + ' added into the system yet'}
           privilege={Privileges.CAN_CREATE_USER}
         />
       ) : (
@@ -174,7 +176,7 @@ export default function InstructorsView() {
           path={`${url}/import`}
           render={() => (
             <PopupMolecule
-              title="Import instructors"
+              title={'Import ' + t('Instructor')}
               open={true}
               onClose={history.goBack}>
               <ImportUsers userType={UserType.INSTRUCTOR} />
@@ -200,7 +202,7 @@ export default function InstructorsView() {
           render={() => (
             <PopupMolecule
               closeOnClickOutSide={false}
-              title="Deploy as an instructor"
+              title={'Deploy as an ' + t('Instructor')}
               open={true}
               onClose={history.goBack}>
               <DeployInstructors />

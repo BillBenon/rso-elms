@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -95,6 +96,7 @@ function StudentInClass({ classObject }: IStudentClass) {
       privilege: Privileges.CAN_DELETE_CLASSES_MEMBERS,
     },
   ];
+  const { t } = useTranslation();
 
   useEffect(() => {
     setLeaders((leader) => ({
@@ -157,7 +159,7 @@ function StudentInClass({ classObject }: IStudentClass) {
                             )
                           : {}
                       }>
-                      Add class
+                      Add {t('Class')}
                     </Button>
                   </Permission>
 
@@ -209,7 +211,7 @@ function StudentInClass({ classObject }: IStudentClass) {
                   {leaders.instructor_in_charge_two ? (
                     <div className="flex gap-4 pb-2 items-center">
                       <Heading fontWeight="semibold" fontSize="sm" color="primary">
-                        Instructor representative backup 1 :
+                        {t('Instructor_representative')} backup 1 :
                       </Heading>
                       <Heading fontSize="sm">
                         {`${leaders.instructor_in_charge_two.first_name || '---'} ${
@@ -222,7 +224,7 @@ function StudentInClass({ classObject }: IStudentClass) {
                 <div className="grid grid-cols-1 md:grid-cols-2">
                   <div className="flex gap-4 pb-2 items-center">
                     <Heading fontWeight="semibold" fontSize="sm" color="primary">
-                      Class representative :
+                      {t('Class_representative')} :
                     </Heading>
                     <Heading fontSize="sm">
                       {`${leaders.class_representative_one?.first_name || '---'} ${
@@ -233,7 +235,7 @@ function StudentInClass({ classObject }: IStudentClass) {
                   {leaders.instructor_in_charge_three ? (
                     <div className="flex gap-4 pb-2 items-center">
                       <Heading fontWeight="semibold" fontSize="sm" color="primary">
-                        Instructor representative backup 2 :
+                        {t('Instructor_representative')} backup 2 :
                       </Heading>
                       <Heading fontSize="sm">
                         {`${leaders.instructor_in_charge_three.first_name || '---'} ${
@@ -253,7 +255,11 @@ function StudentInClass({ classObject }: IStudentClass) {
                       buttonLabel="Add new students"
                       title={'No students available in this class'}
                       handleClick={() => history.push(``)}
-                      description="This class has not received any students. you can add one from the button on the top left."
+                      description={
+                        'This ' +
+                        t('Class') +
+                        ' has not received any students. you can add one from the button on the top left.'
+                      }
                     />
                   ) : (
                     <Students
@@ -293,7 +299,7 @@ function StudentInClass({ classObject }: IStudentClass) {
                             )
                           : {}
                       }>
-                      Add class
+                      Add {t('Class')}
                     </Button>
                   </Permission>
 

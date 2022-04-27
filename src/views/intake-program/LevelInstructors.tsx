@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Button from '../../components/Atoms/custom/Button';
 import RightSidebar from '../../components/Organisms/RightSidebar';
@@ -43,18 +44,19 @@ function LevelInstructors<T>({
     //   privilege: Privileges.CAN_DELETE_INSTRUCTORS_ON_LEVEL_PROGRAM,
     // },
   ];
+  const { t } = useTranslation();
 
   return (
     <div className="flex flex-col cursor-pointer">
       <Button styleType="outline" onClick={handleShowSidebar}>
-        View instructors
+        View {t('Instructor')}
       </Button>
       <RightSidebar
         open={showSidebar}
         handleClose={handleShowSidebar}
-        label="All Level Instructors"
+        label={'All Level ' + t('Instructor')}
         data={instructors}
-        dataLabel={'Instructors enrolled'}
+        dataLabel={t('Instructor') + ' enrolled'}
         isLoading={isLoading}
         unselectAll={!showSidebar}
         selectorActions={actions}
