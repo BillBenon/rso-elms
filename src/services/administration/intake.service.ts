@@ -7,6 +7,7 @@ import {
   IntakeInfo,
   IntakePrograms,
   IntakeProgramsCreate,
+  UpdateIntakeProgram,
 } from '../../types/services/intake.types';
 import { IntakeProgramInfo } from '../../types/services/intake-program.types';
 
@@ -24,7 +25,11 @@ class IntakeService {
   ): Promise<AxiosResponse<Response<IntakePrograms>>> {
     return await adminstrationAxios.post('/intakes/addPrograms', intakePrograms);
   }
-
+  public async modifyIntakeProgram(
+    intakeProgram: UpdateIntakeProgram,
+  ): Promise<AxiosResponse<Response<IntakePrograms>>> {
+    return await adminstrationAxios.put('/intakes/updateIntakeProgram', intakeProgram);
+  }
   public async fetchAll(): Promise<AxiosResponse<Response<ExtendedIntakeInfo[]>>> {
     return await adminstrationAxios.get('/intakes/getIntakes');
   }

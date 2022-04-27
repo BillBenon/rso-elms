@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import toast from 'react-hot-toast';
+import React from 'react';
 import {
   Link,
   Route,
@@ -20,20 +19,15 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
-import { queryClient } from '../../plugins/react-query';
-import { attachementStore } from '../../store/administration/attachment.store';
 // import { attachementStore } from '../../store/administration/attachment.store';
 import programStore, {
   getLevelsByAcademicProgram,
 } from '../../store/administration/program.store';
 import { CommonCardDataType, Link as Links, ParamType, Privileges } from '../../types';
-import { ProgramInfo } from '../../types/services/program.types';
-import { downloadPersonalDoc } from '../../utils/file-util';
 import { advancedTypeChecker } from '../../utils/getOption';
 import ProgramModules from '../modules/ProgramModules';
 import { IProgramData } from './AcademicPrograms';
 import AddLevelToProgram from './AddLevelToProgram';
-import AddProgramSyllabus from './AddProgramSyllabus';
 
 export interface IProgramFile extends CommonCardDataType, IProgramData {
   attachment_file_name: string;
@@ -46,41 +40,6 @@ export default function ProgramDetailsMolecule() {
   const { id } = useParams<ParamType>();
   const program = programStore.getProgramById(id).data?.data.data;
   const programLevels = getLevelsByAcademicProgram(id).data?.data.data;
-  const [fileUrl, setUrl] = useState('');
-  const { mutate } = attachementStore.deleteAttachmentById();
-
-  async function downloadProgramAttachment(data: ProgramInfo | undefined) {
-    await setUrl(
-      await downloadPersonalDoc(
-        data?.attachment_id + '',
-        'pdf',
-        '/attachments/download/',
-      ),
-    );
-    var element = document.createElement('a');
-    element.setAttribute('href', fileUrl);
-    element.setAttribute('download', data?.attachment_file_name + '');
-
-    document.body.appendChild(element);
-
-    element.click();
-
-    document.body.removeChild(element);
-  }
-
-  console.log(program);
-
-  function deleteSyllabus(id: string) {
-    mutate(id, {
-      onSuccess() {
-        toast.success('successfully deleted');
-        queryClient.invalidateQueries(['programs/id', id]);
-      },
-      onError(error: any) {
-        toast.error(error.response.data.message);
-      },
-    });
-  }
 
   const getProgramData = () => {
     let programData: IProgramFile | undefined;
@@ -243,97 +202,10 @@ export default function ProgramDetailsMolecule() {
                       </div>
                     </div>
                   </Permission>
-
-                  <div className="flex flex-col gap-8">
-                    <Permission privilege={Privileges.CAN_ACCESS_PROGRAM_LEVELS}>
-                      <div className="mr-20 rounded border-2 border-[#e9ecef] flex flex-col gap-7 w-354 p-6 bg-main">
-                        <Heading color="txt-secondary" fontSize="base">
-                          Program Syllabus
-                        </Heading>
-                        <div className="flex flex-col gap-4">
-                          {program?.attachment_id == null ? (
-                            <Permission privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}>
-                              <div className="text-primary-500 py-2 text-sm mr-3 flex space-x-4">
-                                <Link
-                                  to={`${url}/programSyllabus/add`}
-                                  className="bg-secondary px-2 rounded-sm hover:bg-tertiary flex items-center justify-end">
-                                  <Icon name="add" size={12} fill="primary" />
-                                  Add Program Syllabus
-                                </Link>
-                              </div>
-                            </Permission>
-                          ) : (
-                            <>
-                              <Heading
-                                key={program?.attachment_id}
-                                color="txt-primary"
-                                fontSize="base"
-                                fontWeight="semibold">
-                                {program?.name + ' Syllabus'}
-                              </Heading>
-                              <Permission
-                                privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}>
-                                <div className="text-primary-500 py-1 text-sm mr-3 flex space-x-4">
-                                  <Link
-                                    to={`${url}/programSyllabus/add`}
-                                    className="flex items-center justify-end">
-                                    <Icon name="add" size={12} fill="primary" />
-                                    Add new Program Syllabus
-                                  </Link>
-                                </div>
-                                <div className="flex space-x-4">
-                                  <Button
-                                    onClick={() => downloadProgramAttachment(program)}>
-                                    Download
-                                  </Button>
-                                  <Button
-                                    onClick={() => deleteSyllabus(program.id + '')}
-                                    styleType="outline">
-                                    Delete
-                                  </Button>
-                                </div>
-                              </Permission>
-                            </>
-                          )}
-                        </div>
-                      </div>
-                    </Permission>
-
-                    {/* intakes */}
-                    {/* <div className="flex flex-col gap-8"> */}
-                    <div className="rounded border-2 border-[#e9ecef] flex flex-col gap-7 bg-main w-60 p-6">
-                      <Heading color="txt-secondary" fontSize="base">
-                        Intakes
-                      </Heading>
-                      <div className="flex flex-col gap-8">
-                        <Heading color="primary" fontSize="base" fontWeight="semibold">
-                          Active Intakes
-                        </Heading>
-                        <Heading color="primary" fontSize="base" fontWeight="semibold">
-                          Passive Intakes
-                        </Heading>
-                      </div>
-                    </div>
-                  </div>
                 </div>
                 // </div>
                 // </div>
               )}
-            />
-            {/* add syllabus */}
-            <Route
-              exact
-              path={`${path}/programSyllabus/add`}
-              render={() => {
-                return (
-                  <PopupMolecule
-                    title="New Program Syllabus"
-                    open
-                    onClose={history.goBack}>
-                    <AddProgramSyllabus programId={program?.id + ''} />
-                  </PopupMolecule>
-                );
-              }}
             />
             {/* add module popup */}
             <Route

@@ -12,6 +12,9 @@ class IntakeStore {
   addPrograms() {
     return useMutation(intakeService.addPrograms);
   }
+  modifyIntakeProgram() {
+    return useMutation(intakeService.modifyIntakeProgram);
+  }
 
   getAll(registrationControlId?: string) {
     if (registrationControlId)
