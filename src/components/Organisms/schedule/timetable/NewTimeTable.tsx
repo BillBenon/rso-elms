@@ -1,7 +1,7 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { queryClient } from '../../../../plugins/react-query';
@@ -18,6 +18,7 @@ import {
   ICreateTimeTableActivity,
   methodOfInstruction,
 } from '../../../../types/services/schedule.types';
+import { formatDateToYyMmDd } from '../../../../utils/date-helper';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import { randomString } from '../../../../utils/random';
 import {
@@ -39,16 +40,17 @@ interface IStepProps {
 }
 
 interface FirstTimeTableErrors
-  extends Pick<
-    ICreateTimeTableActivity,
-    'courseModuleId' | 'venueId' | 'inChargeId' | 'eventId'
-  > {}
+  extends Pick<ICreateTimeTableActivity, 'venueId' | 'inChargeId'> {}
 interface SecondTimeTableErrors
   extends Pick<ICreateTimeTableActivity, 'startHour' | 'endHour' | 'dressCode'> {}
 
 export default function NewTimeTable() {
   const { id } = useParams<ParamType>();
   const history = useHistory();
+  const { search } = useLocation();
+
+  // query parameters
+  const weekId = new URLSearchParams(search).get('week');
 
   //levelInfo
   const levelInfo = intakeProgramStore.getIntakeLevelById(id).data?.data.data;
@@ -62,14 +64,14 @@ export default function NewTimeTable() {
     // repeatingDays: [daysOfWeek.MONDAY],
     courseModuleId: '',
     venueId: '',
-    activityDate: '',
+    activityDate: new Date().toString(),
     courseCode: randomString(6),
     dayOfWeek: daysOfWeek.MONDAY,
     dressCode: '',
     eventId: '',
     methodOfInstruction: methodOfInstruction.LEC,
     periods: 1,
-    weeklyTimetableId: '',
+    weeklyTimetableId: weekId || '',
   });
 
   function handleChange(e: ValueType) {
@@ -88,12 +90,13 @@ export default function NewTimeTable() {
 
     let data: ICreateTimeTableActivity = {
       ...values,
+      activityDate: formatDateToYyMmDd(values.activityDate),
     };
 
     mutateAsync(data, {
       async onSuccess(_data) {
         toast.success('Timetable was created successfully');
-        queryClient.invalidateQueries(['timetable/intakeclassid/:id', id]);
+        queryClient.invalidateQueries(['timetable/weeks', id]);
         history.goBack();
       },
       onError(error: any) {
@@ -145,10 +148,8 @@ function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) 
   const venues = getAllVenues(picked_role?.academy_id).data?.data.data || [];
 
   const initialErrorState: FirstTimeTableErrors = {
-    courseModuleId: '',
     inChargeId: '',
     venueId: '',
-    eventId: '',
   };
 
   const [errors, setErrors] = useState<FirstTimeTableErrors>(initialErrorState);
@@ -190,7 +191,6 @@ function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) 
         </SelectMolecule>
         {useModule ? (
           <SelectMolecule
-            error={errors.courseModuleId}
             name="courseModuleId"
             value={values.courseModuleId}
             handleChange={handleChange}
@@ -205,7 +205,6 @@ function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) 
           </SelectMolecule>
         ) : (
           <SelectMolecule
-            error={errors.eventId}
             name="eventId"
             value={values.eventId}
             handleChange={handleChange}
@@ -247,7 +246,7 @@ function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) 
           options={
             users?.map((user) => ({
               label: `${user.user.first_name} ${user.user.last_name}`,
-              value: user.id,
+              value: user.user.id,
             })) as SelectData[]
           }
           placeholder="Select someone">
@@ -321,7 +320,7 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
         name="periods"
         placeholder="Periods"
         type="number"
-        value={values.startHour}
+        value={values.periods}
         handleChange={handleChange}>
         Number of periods
       </InputMolecule>

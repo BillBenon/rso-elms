@@ -1,3 +1,8 @@
+/**
+ * Everything related to Timetable and Calendar
+ * was written by Jacques Twizeyimana
+ */
+
 import React from 'react';
 import {
   Link as BrowserLink,

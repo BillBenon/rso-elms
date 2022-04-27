@@ -5,13 +5,13 @@ import { useHistory, useParams } from 'react-router-dom';
 
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { queryClient } from '../../../../plugins/react-query';
-import { classStore } from '../../../../store/administration/class.store';
+import intakeProgramStore from '../../../../store/administration/intake-program.store';
 import { moduleStore } from '../../../../store/administration/modules.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
 import { timetableStore } from '../../../../store/timetable/timetable.store';
 import { getAllVenues } from '../../../../store/timetable/venue.store';
 import { SelectData, ValueType } from '../../../../types';
-import { IClass } from '../../../../types/services/class.types';
+import { LevelIntakeProgram } from '../../../../types/services/intake-program.types';
 import {
   daysOfWeek,
   IUpdateTimetableActivity,
@@ -32,11 +32,11 @@ interface IStepProps {
   setCurrentStep: Function;
   values: IUpdateTimetableActivity;
   handleSubmit?: (_e: FormEvent) => any;
-  classInfo?: IClass;
+  level?: LevelIntakeProgram;
 }
 
 interface ParamType {
-  classId: string;
+  id: string;
   itemId: string;
 }
 
@@ -47,7 +47,7 @@ interface SecondTimeTableErrors
   dayOfWeek: string;
 }
 export default function EditTimeTable() {
-  const { classId, itemId } = useParams<ParamType>();
+  const { id, itemId } = useParams<ParamType>();
   const history = useHistory();
   //state varibales
   const [currentStep, setcurrentStep] = useState(0);
@@ -69,7 +69,7 @@ export default function EditTimeTable() {
   });
 
   //classinfo
-  const classInfo = classStore.getClassById(classId).data?.data.data;
+  const levelInfo = intakeProgramStore.getIntakeLevelById(id).data?.data.data;
   const { data } = timetableStore.getTimetableActivityById(itemId);
 
   useEffect(() => {
@@ -83,13 +83,13 @@ export default function EditTimeTable() {
       courseModuleId: data?.data.data.course_module?.id.toString() || '',
       dressCode: data?.data.data.dress_code || '',
       eventId: data?.data.data.event.id.toString() || '',
-      inChargeId: data?.data.data.in_charge.id.toString() || '',
+      inChargeId: data?.data.data.in_charge.adminId || '',
       methodOfInstruction: methodOfInstruction.LEC,
       periods: data?.data.data.periods || 1,
       venueId: data?.data.data.venue.id.toString() || '',
       weeklyTimetableId: '',
     });
-  }, [classId, data?.data, itemId]);
+  }, [data?.data, itemId]);
 
   function handleChange(e: ValueType) {
     setvalues((val) => ({ ...val, [e.name]: e.value }));
@@ -103,7 +103,7 @@ export default function EditTimeTable() {
     (await store).mutateAsync(values, {
       async onSuccess(_data) {
         toast.success('Timetable updated successfully');
-        queryClient.invalidateQueries(['timetable/intakeclassid/:id', classId]);
+        queryClient.invalidateQueries(['timetable/weeks', id]);
         history.goBack();
       },
       onError(error: any) {
@@ -124,20 +124,20 @@ export default function EditTimeTable() {
         values={values}
         handleChange={handleChange}
         setCurrentStep={setcurrentStep}
-        classInfo={classInfo}
+        level={levelInfo}
       />
       <SecondStep
         values={values}
         handleChange={handleChange}
         setCurrentStep={setcurrentStep}
         handleSubmit={handleSubmit}
-        classInfo={classInfo}
+        level={levelInfo}
       />
     </Stepper>
   );
 }
 
-function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepProps) {
+function FirstStep({ handleChange, setCurrentStep, values, level }: IStepProps) {
   const picked_role = usePickedRole();
   const { t } = useTranslation();
   const users =
@@ -146,10 +146,8 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
     ).data?.data.data || [];
 
   const modules =
-    moduleStore.getModulesByProgram(
-      classInfo?.academic_year_program_intake_level.academic_program_level.program.id +
-        '',
-    ).data?.data.data || [];
+    moduleStore.getModulesByProgram(level?.academic_program_level.program.id + '').data
+      ?.data.data || [];
 
   const initialErrorState: FirstTimeTableErrors = {
     courseModuleId: '',
@@ -182,8 +180,8 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
           name=""
           readOnly
           disabled
-          value={`${classInfo?.academic_year_program_intake_level.academic_program_level.program.name} - ${classInfo?.academic_year_program_intake_level.academic_program_level.level.name} - ${classInfo?.class_name}`}>
-          {t('Program')} - Level - {t('Class')}
+          value={`${level?.intake_program.program.name} - ${level?.academic_program_level.level.name}`}>
+          Program - Level
         </InputMolecule>
         <div className="pb-1">
           <SelectMolecule
@@ -210,7 +208,7 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
             options={
               users?.map((user) => ({
                 label: `${user.user.first_name} ${user.user.last_name}`,
-                value: user.id,
+                value: user.user.id,
               })) as SelectData[]
             }
             placeholder="Select someone">

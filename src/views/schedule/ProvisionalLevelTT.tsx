@@ -10,11 +10,12 @@ import {
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
-import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
+import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
 import NewWeek from '../../components/Organisms/schedule/timetable/NewWeek';
+import TimeTableWeek from '../../components/Organisms/schedule/timetable/TimeTableWeek';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { timetableStore } from '../../store/timetable/timetable.store';
 import { ParamType, Privileges } from '../../types';
@@ -41,9 +42,7 @@ export default function ProvisionalLevelTT() {
         title={`${levelInfo?.academic_program_level.program.name} - ${levelInfo?.academic_program_level.level.name}`}>
         <div className="flex gap-3">
           <Link to={`${url}/new-week`}>
-            <Button type="button" styleType="outline">
-              New week
-            </Button>
+            <Button type="button">New week</Button>
           </Link>
         </div>
       </TableHeader>
@@ -60,20 +59,14 @@ export default function ProvisionalLevelTT() {
           privilege={Privileges.CAN_CREATE_VENUE}
         />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6">
-          {weeks?.map((event) => (
-            <div
-              key={event.id}
-              className="bg-main rounded-md p-4 border-1 border-transparent hover:border-primary-500 cursor-pointer">
-              <Heading fontSize="sm" color="txt-secondary" fontWeight="semibold">
-                {event.week_name}
-              </Heading>
-              <Heading className="pt-6" fontSize="sm" fontWeight="bold">
-                {event.start_date}
-              </Heading>
-            </div>
+        // @ts-ignore
+        <Tabs>
+          {weeks?.map((week) => (
+            <Tab label={week.week_name} key={week.id}>
+              <TimeTableWeek week={week} levelId={id} />
+            </Tab>
           ))}
-        </div>
+        </Tabs>
       )}
       <Switch>
         <Route
