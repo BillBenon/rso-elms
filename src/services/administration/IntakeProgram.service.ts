@@ -4,6 +4,7 @@ import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import { StudentApproval, StudentLevel } from '../../types/services/enrollment.types';
 import { InstructorProgram } from '../../types/services/instructor.types';
+import { IntakeProgram } from '../../types/services/intake.types';
 import {
   AddIntakeProgramLevelPeriod,
   AddLevelToModule,
@@ -20,6 +21,13 @@ import { InstructorModule } from './../../types/services/modules.types';
 import { SubjectPeriodInfo } from './../../types/services/subject.types';
 
 class IntakeProgramService {
+  public async getIntakeProgramId(
+    intakeProgramId: string,
+  ): Promise<AxiosResponse<Response<IntakeProgram>>> {
+    return await adminstrationAxios.get(
+      `/intakes/getIntakeProgramById/${intakeProgramId}`,
+    );
+  }
   public async getStudentById(
     studentId: string,
   ): Promise<AxiosResponse<Response<Student>>> {

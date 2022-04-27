@@ -4,7 +4,7 @@ import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-route
 
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import { Tabs } from '../../components/Molecules/tabs/tabs';
+import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import usePickedRole from '../../hooks/usePickedRole';
 import { classStore } from '../../store/administration/class.store';
@@ -87,11 +87,7 @@ function Classes() {
                 ) : (
                   <Tabs>
                     {studentClasses.map((cl) => (
-                      <StudentInClass
-                        key={cl.id}
-                        classId={cl.id.toString()}
-                        label={cl.class_name}
-                      />
+                      <StudentInClass key={cl.id} classObject={cl} />
                     ))}
                   </Tabs>
                 )
@@ -132,11 +128,9 @@ function Classes() {
               ) : (
                 <Tabs>
                   {classGroups.map((cl) => (
-                    <StudentInClass
-                      key={cl.id}
-                      classId={cl.id.toString()}
-                      label={cl.class_name}
-                    />
+                    <Tab label={cl.class_name} key={cl.id}>
+                      <StudentInClass key={cl.id} classObject={cl} />
+                    </Tab>
                   ))}
                 </Tabs>
               )}

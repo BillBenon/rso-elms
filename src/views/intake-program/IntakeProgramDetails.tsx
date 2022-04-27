@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
+import Icon from '../../components/Atoms/custom/Icon';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
@@ -15,23 +17,27 @@ import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavig
 import AddPrerequesitesForm from '../../components/Organisms/forms/modules/AddPrerequisiteForm';
 import NewModuleForm from '../../components/Organisms/forms/modules/NewModuleForm';
 import useAuthenticator from '../../hooks/useAuthenticator';
+import { queryClient } from '../../plugins/react-query';
+import { attachementStore } from '../../store/administration/attachment.store';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore, {
   getIntakeProgramsByStudent,
   getStudentLevels,
   getStudentShipByUserId,
 } from '../../store/administration/intake-program.store';
-import programStore, {
-  getLevelsByAcademicProgram,
-} from '../../store/administration/program.store';
+import { getLevelsByAcademicProgram } from '../../store/administration/program.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { Link as Links, Privileges } from '../../types';
 import { StudentApproval } from '../../types/services/enrollment.types';
+import { IntakeProgram } from '../../types/services/intake.types';
 import { IntakeProgParam } from '../../types/services/intake-program.types';
 import { UserView } from '../../types/services/user.types';
+import { downloadPersonalDoc } from '../../utils/file-util';
 import { advancedTypeChecker } from '../../utils/getOption';
 import { IProgramData } from '../programs/AcademicPrograms';
 import AddLevelToProgram from '../programs/AddLevelToProgram';
+import AddProgramLeader from '../programs/AddProgramLeader';
+import AddProgramSyllabus from '../programs/AddProgramSyllabus';
 import ApproveStudent from '../users/ApproveStudent';
 import EnrollInstructorIntakeProgram from './EnrollInstructorIntakeProgram';
 import EnrollRetakingStudents from './EnrollRetakingStudents';
@@ -44,6 +50,8 @@ function IntakeProgramDetails() {
   const { t } = useTranslation();
   const { path, url } = useRouteMatch();
   const { id, intakeId, intakeProg } = useParams<IntakeProgParam>();
+
+  const [fileUrl, setUrl] = useState('');
 
   const { data: studentsProgram, isLoading: studLoading } =
     intakeProgramStore.getStudentsByIntakeProgramByStatus(
@@ -93,8 +101,30 @@ function IntakeProgramDetails() {
     setInstructors(demoInstructors);
   }, [instructorsProgram]);
 
-  const { data: programs, isLoading } = programStore.getProgramById(id);
-  const program = programs?.data.data;
+  const { data: intakeProgram, isLoading } =
+    intakeProgramStore.getIntakeProgramId(intakeProg);
+
+  const program = intakeProgram?.data.data.program;
+  const { mutate } = attachementStore.deleteAttachmentById();
+
+  async function downloadProgramAttachment(data: IntakeProgram | undefined) {
+    await setUrl(
+      await downloadPersonalDoc(
+        data?.attachment_id + '',
+        'pdf',
+        '/attachments/download/',
+      ),
+    );
+    var element = document.createElement('a');
+    element.setAttribute('href', fileUrl);
+    element.setAttribute('download', data?.attachment_file_name + '');
+
+    document.body.appendChild(element);
+
+    element.click();
+
+    document.body.removeChild(element);
+  }
 
   const getProgramData = () => {
     let programData: IProgramData | undefined;
@@ -115,6 +145,23 @@ function IntakeProgramDetails() {
 
     return programData;
   };
+
+  const handleClose = () => {
+    history.goBack();
+  };
+
+  function deleteSyllabus(id: string) {
+    mutate(id, {
+      onSuccess() {
+        toast.success('successfully deleted');
+        queryClient.invalidateQueries(['intake-program/id', id]);
+      },
+      onError(error: any) {
+        toast.error(error.response.data.message);
+      },
+    });
+  }
+
   //
   const getLevels =
     intakeProgramStore.getLevelsByIntakeProgram(intakeProg).data?.data.data || [];
@@ -146,20 +193,20 @@ function IntakeProgramDetails() {
   const programData = getProgramData();
   let tabs: TabType[] = [
     {
-      label: 'Program info',
+      label: t('Program') + ' information',
       href: `${url}`,
     },
   ];
 
   tabs.push({
-    label: 'Program modules',
+    label: t('Program') + ' modules',
     href: `${url}/modules`,
     privilege: Privileges.CAN_ACCESS_INTAKE_PROGRAM_MODULES,
   });
 
   if (studentLevels?.data.data && studentLevels?.data.data.length > 0) {
     tabs.push({
-      label: 'Student Program levels',
+      label: 'Student ' + t('Program') + ' levels',
       href: `${url}/levels/learn/${
         studentLevels.data.data[0].academic_year_program_level.id || ''
       }`,
@@ -184,14 +231,14 @@ function IntakeProgramDetails() {
   // );
   if (instructorProgLevels && instructorProgLevels?.length > 0) {
     tabs.push({
-      label: t('Instructor') + ' Program levels',
+      label: t('Instructor') + t('Program') + ' levels',
       href: `${url}/levels/teach/${instructorProgLevels[0]?.id || ''}`,
       privilege: Privileges.CAN_TEACH_IN_INTAKE_PROGRAM_LEVELS,
     });
   }
   if (getLevels && getLevels?.length > 0) {
     tabs.push({
-      label: 'Manage Program levels',
+      label: 'Manage ' + t('Program') + ' levels',
       href: `${url}/levels/manage/${getLevels[0]?.id || ''}`,
       privilege: Privileges.CAN_ACCESS_INTAKE_PROGRAM_LEVELS,
     });
@@ -203,14 +250,10 @@ function IntakeProgramDetails() {
     privilege: Privileges.CAN_APPROVE_STUDENT,
   });
 
-  const handleClose = () => {
-    history.goBack();
-  };
-
   const list: Links[] = [
     { to: 'home', title: 'home' },
     { to: 'intakes', title: 'intakes' },
-    { to: 'intakes/programs', title: 'Programs' },
+    { to: 'intakes/programs', title: t('Program') },
     { to: `${url}`, title: 'details' },
   ];
 
@@ -230,7 +273,7 @@ function IntakeProgramDetails() {
                 <div className="text-right">
                   <Link
                     to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
-                    <Button>Add level to program</Button>
+                    <Button>Add level to {t('Program')}</Button>
                   </Link>
                 </div>
               </Permission>
@@ -246,7 +289,7 @@ function IntakeProgramDetails() {
                 return (
                   <PopupMolecule
                     closeOnClickOutSide={false}
-                    title="Add level to program"
+                    title={'Add level to ' + t('Program')}
                     open={true}
                     onClose={() => history.goBack()}>
                     <AddLevelToProgram />
@@ -263,12 +306,12 @@ function IntakeProgramDetails() {
                     <Loader />
                   ) : (
                     programData && (
-                      <div className="flex py-9">
+                      <div className="flex gap-8 py-9">
                         <div className="mr-24">
                           <CommonCardMolecule data={programData}>
                             <div className="flex flex-col mt-8 gap-7 pb-2">
                               <Heading color="txt-secondary" fontSize="sm">
-                                Program Type
+                                {t('Program')} Type
                               </Heading>
                               <Heading fontSize="sm">
                                 {programData.subTitle?.replaceAll('_', ' ')}
@@ -283,7 +326,7 @@ function IntakeProgramDetails() {
                                       `/dashboard/intakes/programs/${intakeId}/${id}/edit`,
                                     )
                                   }>
-                                  Edit program
+                                  Edit {t('Program')}
                                 </Button>
                                 {/* <Button styleType="outline">Change Status</Button> */}
                               </div>
@@ -351,6 +394,7 @@ function IntakeProgramDetails() {
                               }
                             />
                           </Permission>
+
                           <Permission
                             privilege={Privileges.CAN_ENROLL_INSTRUCTORS_ON_PROGRAM}>
                             <EnrollInstructorIntakeProgram
@@ -365,13 +409,167 @@ function IntakeProgramDetails() {
                             />
                           </Permission>
                         </div>
+                        <div className="flex flex-col gap-8">
+                          <Permission
+                            privilege={Privileges.CAN_ACCESS_PROGRAMS_IN_INTAKE}>
+                            <div className="rounded border-2 border-[#e9ecef] flex flex-col p-6 bg-main">
+                              <Heading color="txt-secondary" fontSize="base">
+                                Leaders
+                              </Heading>
+                              <div className="flex gap-2 items-center">
+                                <Heading
+                                  color="txt-primary"
+                                  fontSize="sm"
+                                  fontWeight="semibold">
+                                  Instructor in charge
+                                </Heading>
+                                {intakeProgram?.data.data.incharge_instructor ? (
+                                  <Heading
+                                    color="txt-primary"
+                                    fontSize="sm"
+                                    fontWeight="semibold">
+                                    {intakeProgram.data.data.incharge_instructor}
+                                  </Heading>
+                                ) : (
+                                  <Permission
+                                    privilege={Privileges.CAN_CREATE_PROGRAMS_IN_INTAKE}>
+                                    <div className="text-primary-500 py-2 text-sm mr-3 flex space-x-4">
+                                      <Link
+                                        to={`${url}/leader/add?type=instructor`}
+                                        className="bg-secondary px-2 rounded-sm hover:bg-tertiary flex items-center justify-end">
+                                        <Icon name="add" size={12} fill="primary" />
+                                        Add instructor incharge
+                                      </Link>
+                                    </div>
+                                  </Permission>
+                                )}
+                              </div>
+                              <div className="flex gap-2 items-center">
+                                <Heading
+                                  color="txt-primary"
+                                  fontSize="sm"
+                                  fontWeight="semibold">
+                                  Student in charge
+                                </Heading>
+                                {intakeProgram?.data.data.student_in_lead ? (
+                                  <Heading
+                                    color="txt-primary"
+                                    fontSize="sm"
+                                    fontWeight="semibold">
+                                    {intakeProgram?.data.data.student_in_lead}
+                                  </Heading>
+                                ) : (
+                                  <Permission
+                                    privilege={Privileges.CAN_CREATE_PROGRAMS_IN_INTAKE}>
+                                    <div className="text-primary-500 py-2 text-sm mr-3 flex space-x-4">
+                                      <Link
+                                        to={`${url}/leader/add?type=student`}
+                                        className="bg-secondary px-2 rounded-sm hover:bg-tertiary flex items-center justify-end">
+                                        <Icon name="add" size={12} fill="primary" />
+                                        Add student incharge
+                                      </Link>
+                                    </div>
+                                  </Permission>
+                                )}
+                              </div>
+                            </div>
+                            <div className="mr-20 rounded border-2 border-[#e9ecef] flex flex-col gap-7 p-6 bg-main">
+                              <Heading color="txt-secondary" fontSize="base">
+                                Program Syllabus
+                              </Heading>
+                              <div className="flex flex-col gap-4">
+                                {intakeProgram?.data.data?.attachment_id == null ? (
+                                  <Permission
+                                    privilege={Privileges.CAN_CREATE_PROGRAMS_IN_INTAKE}>
+                                    <div className="text-primary-500 py-2 text-sm mr-3 flex space-x-4">
+                                      <Link
+                                        to={`${url}/programSyllabus/add`}
+                                        className="bg-secondary px-2 rounded-sm hover:bg-tertiary flex items-center justify-end">
+                                        <Icon name="add" size={12} fill="primary" />
+                                        Add Program Syllabus
+                                      </Link>
+                                    </div>
+                                  </Permission>
+                                ) : (
+                                  <>
+                                    <Heading
+                                      key={intakeProgram?.data.data?.attachment_id}
+                                      color="txt-primary"
+                                      fontSize="base"
+                                      fontWeight="semibold">
+                                      {program?.name + ' Syllabus'}
+                                    </Heading>
+                                    <Permission
+                                      privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}>
+                                      <div className="text-primary-500 py-1 text-sm mr-3 flex space-x-4">
+                                        <Link
+                                          to={`${url}/programSyllabus/add`}
+                                          className="flex items-center justify-end">
+                                          <Icon name="add" size={12} fill="primary" />
+                                          Add new Program Syllabus
+                                        </Link>
+                                      </div>
+                                      <div className="flex space-x-4">
+                                        <Button
+                                          onClick={() =>
+                                            downloadProgramAttachment(
+                                              intakeProgram.data.data,
+                                            )
+                                          }>
+                                          Download
+                                        </Button>
+                                        <Button
+                                          onClick={() => deleteSyllabus(intakeProg)}
+                                          styleType="outline">
+                                          Delete
+                                        </Button>
+                                      </div>
+                                    </Permission>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+                          </Permission>
+                        </div>
                       </div>
                     )
                   )}
                 </>
               )}
             />
-
+            {/* add intake program leader */}
+            <Route
+              exact
+              path={`${path}/leader/add`}
+              render={() => {
+                return (
+                  <PopupMolecule
+                    title="New Program Syllabus"
+                    open
+                    onClose={history.goBack}>
+                    <AddProgramLeader
+                      intakeProg={intakeProg}
+                      intakeProgram={intakeProgram?.data.data}
+                    />
+                  </PopupMolecule>
+                );
+              }}
+            />
+            {/* add syllabus */}
+            <Route
+              exact
+              path={`${path}/programSyllabus/add`}
+              render={() => {
+                return (
+                  <PopupMolecule
+                    title="New Program Syllabus"
+                    open
+                    onClose={history.goBack}>
+                    <AddProgramSyllabus programId={intakeProg} />
+                  </PopupMolecule>
+                );
+              }}
+            />
             {/* add module popup */}
             <Route
               exact

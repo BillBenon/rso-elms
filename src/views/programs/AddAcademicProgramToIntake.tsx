@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useLocation } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -29,6 +30,7 @@ export default function AddAcademicProgramToIntake({ submited }: PropType) {
   const intakeId = new URLSearchParams(search).get('intakeId');
   const intake = intakeStore.getIntakeById(intakeId!);
   const [departmentId, setDepartmentId] = useState('');
+  const { t } = useTranslation();
 
   const addProgram = intakeStore.addPrograms();
 
@@ -110,15 +112,15 @@ export default function AddAcademicProgramToIntake({ submited }: PropType) {
       </DropdownMolecule>
       <DropdownMolecule
         name="programs"
-        placeholder="Program"
+        placeholder={t('Program')}
         handleChange={handlePrograms}
         isMulti
         options={getDropDownOptions({ inputs: programs || [] })}>
-        Programs in this intake
+        {t('Program')} in this intake
       </DropdownMolecule>
       <div className="pt-3">
         <Button disabled={formLoading} type="submit">
-          Add Programs
+          Add {t('Program')}
         </Button>
       </div>
     </form>

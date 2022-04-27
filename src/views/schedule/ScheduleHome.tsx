@@ -21,9 +21,10 @@ import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import { CommonCardDataType, Link, Privileges } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import CalendarView from './CalendarView';
-import ClassTimeTable from './ClassTimeTable';
 import Events from './Events';
 import IntakePrograms from './IntakePrograms';
+import LevelTimeTable from './LevelTimeTable';
+import ProvisionalLevelTT from './ProvisionalLevelTT';
 import StudentCalendar from './StudentCalendar';
 import Venues from './Venues';
 
@@ -60,7 +61,12 @@ export default function ScheduleHome() {
 
         <Route path={`${path}/intake/:id`} component={IntakePrograms} />
         <Route path={`${path}/calendar/:id`} component={CalendarView} />
-        <Route path={`${path}/timetable/:id`} component={ClassTimeTable} />
+
+        <Route exact path={`${path}/timetable/:id`} component={LevelTimeTable} />
+        <Route
+          path={`${path}/timetable/:id/provisional`}
+          component={ProvisionalLevelTT}
+        />
 
         <TabNavigation tabs={tabs}>
           <Switch>

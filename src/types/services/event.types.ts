@@ -30,6 +30,7 @@ export enum venueType {
 }
 export interface CreateVenue {
   name: string;
+  code: string;
   status: GenericStatus;
   venueType: venueType;
   academyId: string;

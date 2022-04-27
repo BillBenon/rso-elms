@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import moment from 'moment';
 import React from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
@@ -79,7 +80,7 @@ export default function RegistrationControl() {
   });
 
   controlActions.push({
-    name: 'View period',
+    name: t('View_period'),
     handleAction: (id: string | number | undefined) => {
       history.push(`${url}/${id}`); // go to add new intake to this reg control
     },
