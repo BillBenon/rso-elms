@@ -98,7 +98,7 @@ export default function TimeTableWeek({ week }: IProps) {
                   {formatDateToYyMmDd(monday.toDateString())}
                 </p>
               </div>
-              <div className="col-span-4">
+              <div className="col-span-10">
                 {groupedActivities[day].map((activity) => {
                   let instructor = instructors?.find(
                     (inst) => inst.id == activity.in_charge.id,
@@ -106,10 +106,10 @@ export default function TimeTableWeek({ week }: IProps) {
                   return (
                     <div
                       key={activity.id}
-                      className="timetable-item relative col-span-4 grid grid-cols-4 gap-3 cursor-pointer hover:bg-lightgreen px-2 hover:text-primary-600">
+                      className="timetable-item relative col-span-4 grid grid-cols-10 gap-3 cursor-pointer hover:bg-lightgreen px-2 hover:text-primary-600">
                       <p className=" uppercase">
-                        {/* {activity.start_hour.substring(0, 5)} -
-                    {' ' + activity.end_hour.substring(0, 5)} */}
+                        {activity.start_hour.substring(0, 5)} -
+                        {' ' + activity.end_hour.substring(0, 5)}
                       </p>
                       <p className="col-span-3">
                         {activity.course_module?.name || activity.event.name}
