@@ -56,10 +56,19 @@ export default function EnrollRetakingStudents<T>({
       existing_ids.push(existing[index].student.id + '');
     }
     let studentsView: UserView[] = [];
+
+    retakingStudents?.data.data.sort(function (a, b) {
+      return (
+        a.student.user.person.current_rank?.priority -
+        b.student.user.person.current_rank?.priority
+      );
+    });
+
     retakingStudents?.data.data.forEach((stud) => {
       if (!existing_ids.includes(stud.student.id + '')) {
         let studentView: UserView = {
           id: stud.student.id,
+          rank: stud.student.user.person.current_rank?.name,
           first_name: stud.student.user.first_name,
           last_name: stud.student.user.last_name,
           image_url: stud.student.user.image_url,
@@ -67,7 +76,6 @@ export default function EnrollRetakingStudents<T>({
         studentsView.push(studentView);
       }
     });
-    console.log(retakingStudents);
     setStudents(studentsView);
   }, [existing, retakingStudents, retakingStudents?.data.data]);
 

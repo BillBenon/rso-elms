@@ -42,10 +42,19 @@ function EnrollInstructorToLevel<T>({
       instructor_ids.push(insLevel.intake_program_instructor.id);
     });
     let instructorsView: UserView[] = [];
+
+    instructorsInProgram?.data.data.sort(function (a, b) {
+      return (
+        a.instructor.user.person.current_rank?.priority -
+        b.instructor.user.person.current_rank?.priority
+      );
+    });
+
     instructorsInProgram?.data.data.forEach((inst) => {
       if (!instructor_ids.includes(inst.id)) {
         let instructorView: UserView = {
           id: inst.id,
+          rank: inst.instructor.user.person.current_rank?.name,
           first_name: inst.instructor.user.first_name,
           last_name: inst.instructor.user.last_name,
           image_url: inst.instructor.user.image_url,
@@ -85,7 +94,7 @@ function EnrollInstructorToLevel<T>({
       <RightSidebar
         open={showSidebar}
         handleClose={handleShowSidebar}
-        label={'Enroll ' + t('Instructor') + ' to program'}
+        label={'Enroll ' + t('Instructor') + ' to level'}
         data={instructors}
         selectorActions={[
           {
@@ -93,7 +102,7 @@ function EnrollInstructorToLevel<T>({
             handleAction: (data?: string[]) => add(data),
           },
         ]}
-        dataLabel={t('Instructor') + ' in this program'}
+        dataLabel={t('Instructor') + ' in this level'}
         isLoading={isLoading}
         unselectAll={!showSidebar}
       />

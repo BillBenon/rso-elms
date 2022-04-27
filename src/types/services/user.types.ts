@@ -227,12 +227,14 @@ export interface CreateUserInfo extends EditUser {
 }
 export interface UserView
   extends Pick<UserInfo, 'id' | 'first_name' | 'last_name' | 'image_url'> {
+  rank?: string;
   selected?: boolean;
 }
 
 export interface AcademyUserType {
   id: string | number;
   username: string;
+  rank?: string;
   'full name': string;
   email: string;
   'ID Card': string;
@@ -286,8 +288,8 @@ export interface PersonDetail
     | 'doc_type'
     | 'nationality'
   > {
-    phone: string;
-  }
+  phone: string;
+}
 export interface EmploymentDetail
   extends Pick<
     PersonInfo,

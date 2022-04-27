@@ -45,12 +45,18 @@ function EnrollInstructorIntakeProgram({
       existing_ids.push(existing[index].instructor.id + '');
     }
     let instructorsView: UserView[] = [];
+
+    instructorsInAcademy?.data.data.sort(function (a, b) {
+      return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    });
+
     instructorsInAcademy?.data.data
       .filter((inst) => inst.user.academy.id === picked_role?.academy_id)
       .forEach((inst) => {
         if (!existing_ids.includes(inst.id + '')) {
           let instructorView: UserView = {
             id: inst.id,
+            rank: inst.user.person.current_rank?.name,
             first_name: inst.user.first_name,
             last_name: inst.user.last_name,
             image_url: inst.user.image_url,

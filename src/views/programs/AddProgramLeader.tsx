@@ -76,9 +76,11 @@ export default function AddProgramLeader({
               ? instLoading
                 ? 'Loading instructors...'
                 : 'Choose instructor'
-              : studLoading
-              ? 'Loading students...'
-              : 'Choose student'
+              : type === 'student'
+              ? studLoading
+                ? 'Loading students...'
+                : 'Choose student'
+              : ''
           }
           options={
             type === 'instructor'

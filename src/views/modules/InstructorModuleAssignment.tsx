@@ -25,9 +25,18 @@ function InstructorModuleAssignment({ module_id, intake_program_id }: Props) {
   const [instructors, setInstructors] = useState<UserView[]>([]);
   useEffect(() => {
     let users: UserView[] = [];
+
+    instructorsProgram?.data.data.sort(function (a, b) {
+      return (
+        a.instructor.user.person.current_rank?.priority -
+        b.instructor.user.person.current_rank?.priority
+      );
+    });
+
     instructorsProgram?.data.data.map((inst) =>
       users.push({
         id: inst.id,
+        rank: inst.instructor.user.person.current_rank?.name,
         first_name: inst.instructor.user.first_name,
         last_name: inst.instructor.user.last_name,
         image_url: inst.instructor.user.image_url,
