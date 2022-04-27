@@ -2,7 +2,9 @@ import { Editor } from '@tiptap/react';
 import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
+
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { classStore } from '../../../../store/administration/class.store';
@@ -40,6 +42,7 @@ import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 export default function SubjectEvaluationInfoComponent() {
   const picked_role = usePickedRole();
   const history = useHistory();
+  const { t } = useTranslation();
 
   const { user } = useAuthenticator();
 
@@ -82,9 +85,11 @@ export default function SubjectEvaluationInfoComponent() {
 
   useEffect(() => {
     if (picked_role?.academy_id) {
-      setDetails({
-        ...details,
-        academy_id: picked_role?.academy_id + '',
+      setDetails((prevState) => {
+        return {
+          ...prevState,
+          academy_id: picked_role?.academy_id + '',
+        };
       });
     }
   }, [picked_role]);
@@ -337,7 +342,7 @@ export default function SubjectEvaluationInfoComponent() {
             <MultiselectMolecule
               width="64"
               name="intake_level_class_ids"
-              placeholder="Select class"
+              placeholder={'Select ' + t('Class')}
               handleChange={handleChange}
               value={
                 details.intake_level_class_ids.split(',') || []

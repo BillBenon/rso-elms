@@ -57,11 +57,11 @@ export default function Button<T>({
       onClick={onClick}
       className={`${
         buttonStyle[styleType]
-      } rounded-lg font-semibold text-sm outline-none flex space-x-2 transition ease-in-out 
+      } rounded-lg font-semibold text-sm outline-none transition ease-in-out 
       ${full && 'w-full'}
       ${padding} ${className}
       disabled:opacity-50`}>
-      <span className="flex space-x-2 transition ease-in-out">
+      <span className="flex w-full space-x-2 transition ease-in-out">
         {isLoading && (
           <span className="animate-spin ">
             <svg
@@ -77,7 +77,7 @@ export default function Button<T>({
             </svg>
           </span>
         )}
-        <span>{children}</span>
+        <span className="grow items-center text-center justify-center">{children}</span>
       </span>
     </button>
   );

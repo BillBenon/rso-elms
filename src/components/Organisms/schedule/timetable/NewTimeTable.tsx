@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
 
 import usePickedRole from '../../../../hooks/usePickedRole';
@@ -130,6 +131,7 @@ function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) 
   const [useModule, setuseModule] = useState(true);
   const picked_role = usePickedRole();
 
+  const { t } = useTranslation();
   const users =
     instructordeploymentStore.getInstructorsDeployedInAcademy(
       picked_role?.academy_id + '',
@@ -249,7 +251,7 @@ function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) 
             })) as SelectData[]
           }
           placeholder="Select someone">
-          Instructor
+          {t('instructor')}
         </SelectMolecule>
         <div className="pt-4">
           <Button type="submit">Next</Button>

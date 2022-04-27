@@ -71,7 +71,7 @@ export default function RegistrationControl() {
   const controlActions: ActionsType<IRegistrationInfo>[] = [];
 
   controlActions.push({
-    name: 'Edit control',
+    name: 'Edit period',
     handleAction: (id: string | number | undefined) => {
       history.push(`${url}/${id}/edit`); // go to edit reg control
     },
@@ -79,7 +79,7 @@ export default function RegistrationControl() {
   });
 
   controlActions.push({
-    name: 'View control',
+    name: 'View period',
     handleAction: (id: string | number | undefined) => {
       history.push(`${url}/${id}`); // go to add new intake to this reg control
     },
@@ -115,11 +115,11 @@ export default function RegistrationControl() {
               </ILabel>
               <Icon name="chevron-right" fill="gray" />
               <Heading fontSize="sm" color="primary" fontWeight="medium">
-                Registration control
+                Registration period
               </Heading>
             </div>
             <TableHeader
-              title="Registration control"
+              title="Registration period"
               totalItems={RegistrationControls.length}
               showSearch={false}
               handleSearch={handleSearch}>
@@ -147,9 +147,9 @@ export default function RegistrationControl() {
               {!isLoading && RegistrationControls.length < 1 && (
                 <NoDataAvailable
                   icon="reg-control"
-                  buttonLabel="Add new Registration Control"
+                  buttonLabel="Add new Registration period"
                   privilege={Privileges.CAN_CREATE_REG_CONTROL}
-                  title={'No Registration Control Available'}
+                  title={'No Registration Period Available'}
                   handleClick={() => {
                     history.push(`${url}/add`);
                   }}
@@ -167,7 +167,7 @@ export default function RegistrationControl() {
         path={`${url}/add`}
         render={() => {
           return (
-            <PopupMolecule title="New Registration Control" open onClose={handleClose}>
+            <PopupMolecule title="New Registration Period" open onClose={handleClose}>
               <NewRegistrationControl />
             </PopupMolecule>
           );

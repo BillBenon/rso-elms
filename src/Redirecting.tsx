@@ -52,19 +52,22 @@ export default function Redirecting() {
           } else if (user.user_roles !== null && user.user_roles.length === 1) {
             cookie.setCookie('user_role', user.user_roles[0].id + '');
 
-            academyService.getAcademyById(user.user_roles[0].academy_id).then((ac) => {
-              i18n.changeLanguage(ac.data.data.translation_preset);
-
-              redirectTo(
-                user?.user_type === UserType.INSTRUCTOR
-                  ? '/dashboard/inst-module'
-                  : user?.user_type === UserType.STUDENT
-                  ? '/dashboard/student'
-                  : user.user_type === UserType.ADMIN
-                  ? '/dashboard/admin'
-                  : '/dashboard/users',
-              );
-            });
+            if (user.user_roles[0].academy_id) {
+              academyService.getAcademyById(user.user_roles[0].academy_id).then((ac) => {
+                i18n.changeLanguage(ac.data.data.translation_preset);
+              });
+            } else {
+              i18n.changeLanguage('default');
+            }
+            redirectTo(
+              user?.user_type === UserType.INSTRUCTOR
+                ? '/dashboard/inst-module'
+                : user?.user_type === UserType.STUDENT
+                ? '/dashboard/student'
+                : user.user_type === UserType.ADMIN
+                ? '/dashboard/admin'
+                : '/dashboard/users',
+            );
           } else if (user.user_roles !== null && user.user_roles.length > 1) {
             redirectTo('/choose-role');
           } else if (

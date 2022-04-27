@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
+
 import Loader from '../../components/Atoms/custom/Loader';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import TableHeader from '../../components/Molecules/table/TableHeader';
@@ -31,6 +33,8 @@ export default function LevelUsers() {
   const { data, isSuccess, isLoading } = usersStore.getUsersByAcademy(
     picked_role?.academy_id + '',
   );
+
+  const { t } = useTranslation();
 
   const userInfo = data?.data.data.content;
 
@@ -89,7 +93,7 @@ export default function LevelUsers() {
       href: `${url}`,
     },
     {
-      label: 'Instructors',
+      label: t('Instructor'),
       href: `${url}/instructors`,
     },
   ];

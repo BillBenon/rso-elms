@@ -1,5 +1,6 @@
 import moment from 'moment';
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -24,6 +25,7 @@ function LessonPlan() {
   const { id } = useParams<ParamType>();
   const { data, isLoading } = lessonStore.getLessonPlanByLesson(id);
   const plan = data?.data.data || [];
+  const { t } = useTranslation();
   const { path, url } = useRouteMatch();
   const list: Link[] = [
     { to: '/dashboard/inst-program', title: 'Dashboard' },
@@ -125,7 +127,7 @@ function LessonPlan() {
                       </div>
                       <div className="flex flex-col gap-2">
                         <Heading fontSize="base" color="txt-secondary">
-                          Instructor
+                          {t('Instructor')}
                         </Heading>
                         <div className="flex gap-2 items-center">
                           <Avatar src="/images/default-pic.png" alt="profile" size="34" />

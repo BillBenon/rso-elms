@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Route,
   Switch,
@@ -38,6 +39,7 @@ export default function ModuleDetails() {
   const history = useHistory();
   let moduleData: IProgramData | undefined;
   const module = moduleStore.getModuleById(id).data?.data.data;
+  const { t } = useTranslation();
 
   let tabs: TabType[] = [];
   // {
@@ -65,7 +67,7 @@ export default function ModuleDetails() {
 
   if (showMenu && showMenu == 'true') {
     tabs.push({
-      label: 'Instructors',
+      label: t('Instructor'),
       href: `${url}/instructors?showMenus=${showMenu}&intkPrg=${intakeProg}`,
     });
 

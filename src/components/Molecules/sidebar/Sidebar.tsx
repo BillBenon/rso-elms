@@ -1,4 +1,5 @@
 import React from 'react';
+
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import academyStore from '../../../store/administration/academy.store';
 import { institutionStore } from '../../../store/administration/institution.store';
@@ -85,8 +86,8 @@ export default function Sidebar() {
         privilege: Privileges.CAN_ACCESS_ACADEMIC_YEARS,
       },
       {
-        title: 'Registration Control',
-        to: '/dashboard/registration-control',
+        title: 'Registration Periods',
+        to: '/dashboard/registration-periods',
         icon: 'reg-control',
         privilege: Privileges.CAN_ACCESS_REG_CONTROLS,
       },

@@ -1,10 +1,12 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import Button from '../../Atoms/custom/Button';
 import Heading from '../../Atoms/Text/Heading';
 import DropdownMolecule from '../../Molecules/input/DropdownMolecule';
 
 export default function AddProgramToIntake() {
+  const { t } = useTranslation();
   let options = [
     {
       label: 'English',
@@ -39,7 +41,7 @@ export default function AddProgramToIntake() {
         Choose Academic Year
       </DropdownMolecule>
       <DropdownMolecule name="oic" handleChange={(_e: any) => {}} options={options}>
-        Choose Instructor Incharge
+        Choose {t('Instructor')} Incharge
       </DropdownMolecule>
       <div className="pt-3">
         <Button type="submit">Save</Button>
