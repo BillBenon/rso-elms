@@ -4,7 +4,6 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
-
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { classStore } from '../../../../store/administration/class.store';
@@ -17,6 +16,7 @@ import {
   IEligibleClassEnum,
   IEvaluationClassification,
   IEvaluationCreate,
+  IEvaluationMode,
   IEvaluationSettingType,
   IEvaluationStatus,
   IEvaluationTypeEnum,
@@ -81,6 +81,7 @@ export default function SubjectEvaluationInfoComponent() {
     intake_academic_year_period: intake_period_id,
     intake_program_level: '',
     setting_type: IEvaluationSettingType.SUBJECT_BASED,
+    evaluation_mode: IEvaluationMode.INDOOR,
   });
 
   useEffect(() => {
@@ -309,6 +310,15 @@ export default function SubjectEvaluationInfoComponent() {
             handleChange={handleChange}
             options={getDropDownStatusOptions(IEvaluationTypeEnum)}>
             Evaluation type
+          </SelectMolecule>
+
+          <SelectMolecule
+            value={details.evaluation_mode}
+            name="evaluation_mode"
+            width="64"
+            handleChange={handleChange}
+            options={getDropDownStatusOptions(IEvaluationMode)}>
+            Evaluation mode
           </SelectMolecule>
 
           <RadioMolecule

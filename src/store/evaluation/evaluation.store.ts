@@ -208,6 +208,10 @@ class EvaluationStore {
   updateMarkersOnModule() {
     return useMutation(evaluationService.updateMarkersOnModule);
   }
+
+  uploadEvaluationQuestionFile() {
+    return useMutation(evaluationService.uploadQuestionFile);
+  }
 }
 
 export function getEvaluationFeedbacks(

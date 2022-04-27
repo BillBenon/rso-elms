@@ -13,6 +13,7 @@ import {
 } from '../../../../types/services/evaluation.types';
 import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
+import FileUploader from '../../../Atoms/Input/FileUploader';
 import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
 import Tiptap from '../../../Molecules/editor/Tiptap';
@@ -55,6 +56,12 @@ export default function AdddEvaluationQuestions({
     evaluationStore.getEvaluationById(evaluationId + '').data?.data || {};
 
   const [questions, setQuestions] = useState([initialState]);
+
+  const [file, setFile] = useState<File | null>(null);
+
+  const handleUpload = (files: FileList | null) => {
+    setFile(files ? files[0] : null);
+  };
 
   useEffect(() => {
     let allQuestions: any[] = [];
@@ -210,9 +217,7 @@ export default function AdddEvaluationQuestions({
     evaluationStore.createEvaluationQuestions();
   const { mutate: deleteQuestion } = evaluationStore.deleteEvaluationQuestionById();
 
-  function submitForm(e: FormEvent) {
-    e.preventDefault();
-
+  function saveQuestions() {
     mutate(questions, {
       onSuccess: () => {
         toast.success('Questions added', { duration: 5000 });
@@ -222,6 +227,11 @@ export default function AdddEvaluationQuestions({
         toast.error(error.response.data.message);
       },
     });
+  }
+
+  function submitForm(e: FormEvent) {
+    e.preventDefault();
+    saveQuestions();
   }
 
   function currentTotalMarks() {
@@ -321,6 +331,10 @@ export default function AdddEvaluationQuestions({
                         handleChange={(editor) =>
                           handleChangeEditor(editor, index, 'answer')
                         }
+                        handleBlur={(editor) => {
+                          if (editor) handleChangeEditor(editor, index, 'answer');
+                          saveQuestions();
+                        }}
                         content={question.answer}
                       />
                     </div>
@@ -388,6 +402,30 @@ export default function AdddEvaluationQuestions({
                     </SelectMolecule>
                   ) : null}
 
+                  <div className="flex items-center py-10">
+                    {/* <input
+                      type="file"
+                      name="file"
+                      className="block w-full text-sm text-slate-500
+      file:mr-4 file:py-2 file:px-4
+      file:rounded-full file:border-0
+      file:text-sm file:font-semibold
+      bg-opacity-10
+      file:bg-primary-400 file:text-main
+      hover:file:bg-primary-400
+    "
+                    /> */}
+                    <FileUploader
+                      allowPreview={false}
+                      handleUpload={handleUpload}
+                      accept={'*'}
+                      error={''}>
+                      <Button styleType="outline" type="button">
+                        upload file
+                      </Button>
+                    </FileUploader>
+                  </div>
+
                   <InputMolecule
                     readonly={question.submitted}
                     required={false}
@@ -405,8 +443,10 @@ export default function AdddEvaluationQuestions({
                     styleType="text"
                     className="self-start flex justify-center items-center"
                     icon>
-                    <Icon name="close" size={12} fill="primary" />
-                    Remove question
+                    <div className="flex items-center">
+                      <Icon name="close" size={12} fill="primary" />
+                      <span>Remove question</span>
+                    </div>
                   </Button>
                 </div>
 

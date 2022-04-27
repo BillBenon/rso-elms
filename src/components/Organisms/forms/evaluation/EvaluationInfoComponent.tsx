@@ -4,7 +4,6 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
-
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { enrollmentService } from '../../../../services/administration/enrollments.service';
@@ -24,6 +23,7 @@ import {
   IEligibleClassEnum,
   IEvaluationClassification,
   IEvaluationCreate,
+  IEvaluationMode,
   IEvaluationSectionBased,
   IEvaluationSettingType,
   IEvaluationStatus,
@@ -105,6 +105,7 @@ export default function EvaluationInfoComponent() {
     intake_academic_year_period: '',
     intake_program_level: '',
     setting_type: IEvaluationSettingType.SECTION_BASED,
+    evaluation_mode: IEvaluationMode.INDOOR,
   });
 
   useEffect(() => {
@@ -360,15 +361,17 @@ export default function EvaluationInfoComponent() {
     instructorInfo?.id + '',
   );
 
-  const { data: levels } = intakeProgramStore.getLevelsByIntakeProgram(
-    details?.intakeId || '',
-    details?.intakeId?.length === 36,
-  );
+  const { data: levels, isLoading: levelsLoading } =
+    intakeProgramStore.getLevelsByIntakeProgram(
+      details?.intakeId || '',
+      details?.intakeId?.length === 36,
+    );
 
-  const { data: periods } = intakeProgramStore.getPeriodsByLevel(
-    Number(details?.intake_program_level),
-    details?.intake_program_level.length !== 0,
-  );
+  const { data: periods, isLoading: periodsLoading } =
+    intakeProgramStore.getPeriodsByLevel(
+      Number(details?.intake_program_level),
+      details?.intake_program_level.length !== 0,
+    );
 
   function handleAddModule() {
     let newModule = initialState;
@@ -505,6 +508,7 @@ export default function EvaluationInfoComponent() {
           name="intake_program_level"
           placeholder="program  level"
           handleChange={handleChange}
+          loading={levelsLoading}
           options={
             levels?.data.data.map((item) => {
               return {
@@ -521,6 +525,7 @@ export default function EvaluationInfoComponent() {
           width="64 py-4"
           name="intake_academic_year_period"
           placeholder="Academic year"
+          loading={periodsLoading}
           handleChange={handleChange}
           options={
             periods?.data.data.map((item) => {
@@ -541,6 +546,7 @@ export default function EvaluationInfoComponent() {
           handleChange={handleChange}>
           Evaluation Name
         </InputMolecule>
+
         <SelectMolecule
           value={details?.evaluation_type}
           width="64"
@@ -549,9 +555,17 @@ export default function EvaluationInfoComponent() {
           handleChange={handleChange}
           options={getDropDownStatusOptions(IEvaluationTypeEnum, [
             IEvaluationTypeEnum.DS_ASSESSMENT,
-            IEvaluationTypeEnum.TEWT,
           ])}>
           Evaluation type
+        </SelectMolecule>
+
+        <SelectMolecule
+          value={details.evaluation_mode}
+          name="evaluation_mode"
+          width="64"
+          handleChange={handleChange}
+          options={getDropDownStatusOptions(IEvaluationMode)}>
+          Evaluation mode
         </SelectMolecule>
 
         <SelectMolecule

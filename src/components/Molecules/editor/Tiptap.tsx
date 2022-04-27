@@ -1,9 +1,7 @@
-import '../../../styles/components/Molecules/editor/tiptap.scss';
-
 import { Editor, EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import React from 'react';
-
+import '../../../styles/components/Molecules/editor/tiptap.scss';
 import MenuBar from './Menubar';
 
 interface IProps {
@@ -12,10 +10,12 @@ interface IProps {
   editable?: boolean;
   viewMenu?: boolean;
   showBorder?: boolean;
+  handleBlur?: (_editor?: Editor) => void;
 }
 
 export default function Tiptap({
   handleChange,
+  handleBlur = () => {},
   content,
   editable = true,
   viewMenu = true,
@@ -24,6 +24,9 @@ export default function Tiptap({
   const editor = useEditor({
     onUpdate({ editor }) {
       handleChange(editor as Editor);
+    },
+    onBlur({ editor }) {
+      handleBlur(editor as Editor);
     },
     extensions: [StarterKit],
     content,

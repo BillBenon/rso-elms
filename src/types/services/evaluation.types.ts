@@ -12,6 +12,7 @@ export enum IEvaluationTypeEnum {
   RESEARCH_PAPER = 'RESEARCH_PAPER',
   DS_ASSESSMENT = 'DS_ASSESSMENT',
   TEWT = 'TEWT',
+  RIC = 'RIC',
 }
 
 export enum IQuestionType {
@@ -169,6 +170,7 @@ export interface IEvaluationCreate {
   intakeId: string;
   intake_program_level: string;
   setting_type: IEvaluationSettingType;
+  evaluation_mode: IEvaluationMode;
 }
 
 export type IEvaluationSectionBased = {
@@ -273,6 +275,12 @@ export interface IEvaluationInfo {
   student_evaluations: [];
   evaluation_comments: [];
   setting_type: IEvaluationSettingType;
+  evaluation_module: IEvaluationMode;
+}
+
+export enum IEvaluationMode {
+  'INDOOR' = 'INDOOR',
+  'OUTDOOR' = 'OUTDOOR',
 }
 
 export interface IEvaluationInfoCollected {

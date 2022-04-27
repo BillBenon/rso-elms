@@ -1,5 +1,4 @@
 import { AxiosResponse } from 'axios';
-
 import { evaluationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
@@ -331,6 +330,19 @@ class EvaluationService {
     return await evaluationAxios.put(
       `evaluationQuestions/editQuestion/${question.id}`,
       question,
+    );
+  }
+
+  public async uploadQuestionFile({
+    questionId,
+    file,
+  }: {
+    questionId: string;
+    file: FormData;
+  }): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo>>> {
+    return await evaluationAxios.post(
+      `evaluationQuestions/${questionId}/uploadQuestionFile`,
+      file,
     );
   }
 }
