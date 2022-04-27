@@ -217,16 +217,18 @@ export default function AdddEvaluationQuestions({
     evaluationStore.createEvaluationQuestions();
   const { mutate: deleteQuestion } = evaluationStore.deleteEvaluationQuestionById();
 
-  function saveQuestions() {
-    mutate(questions, {
-      onSuccess: () => {
-        toast.success('Questions added', { duration: 5000 });
-        queryClient.invalidateQueries(['evaluation/questionsBySubject', subjectId]);
-      },
-      onError: (error: any) => {
-        toast.error(error.response.data.message);
-      },
-    });
+  function saveQuestions(showToast = true) {
+    if (questions[0].mark != 0 && questions[0].question) {
+      mutate(questions, {
+        onSuccess: () => {
+          if (showToast) toast.success('Questions added', { duration: 5000 });
+          queryClient.invalidateQueries(['evaluation/questionsBySubject', subjectId]);
+        },
+        onError: (error: any) => {
+          toast.error(error.response.data.message);
+        },
+      });
+    }
   }
 
   function submitForm(e: FormEvent) {
@@ -244,6 +246,8 @@ export default function AdddEvaluationQuestions({
 
   function handleChangeEditor(editor: Editor, index: number, name: string) {
     let questionInfo = [...questions];
+
+    console.log(editor.getHTML());
 
     if (name == 'answer') {
       questionInfo[index].answer = editor.getHTML();
@@ -300,14 +304,7 @@ export default function AdddEvaluationQuestions({
                     ]}>
                     Question type
                   </SelectMolecule>
-                  {/* <TextAreaMolecule
-                    readOnly={question.submitted}
-                    name={'question'}
-                    value={question.question}
-                    placeholder="Enter question"
-                    handleChange={(e: ValueType) => handleChange(index, e)}>
-                    Question {index + 1}
-                  </TextAreaMolecule> */}
+
                   <div className="my-2">
                     <div className="mb-2">
                       <ILabel size="sm">Question {index + 1}</ILabel>
@@ -316,6 +313,10 @@ export default function AdddEvaluationQuestions({
                       handleChange={(editor) =>
                         handleChangeEditor(editor, index, 'question')
                       }
+                      handleBlur={(editor) => {
+                        if (editor) handleChangeEditor(editor, index, 'question');
+                        saveQuestions(false);
+                      }}
                       content={question.question}
                     />
                   </div>
@@ -333,7 +334,7 @@ export default function AdddEvaluationQuestions({
                         }
                         handleBlur={(editor) => {
                           if (editor) handleChangeEditor(editor, index, 'answer');
-                          saveQuestions();
+                          saveQuestions(false);
                         }}
                         content={question.answer}
                       />
@@ -433,7 +434,10 @@ export default function AdddEvaluationQuestions({
                     min={1}
                     style={{ width: '6rem' }}
                     value={question.mark}
-                    handleChange={(e: ValueType) => handleChange(index, e)}>
+                    handleChange={(e: ValueType) => handleChange(index, e)}
+                    onBlur={() => {
+                      saveQuestions(false);
+                    }}>
                     Question marks
                   </InputMolecule>
 
