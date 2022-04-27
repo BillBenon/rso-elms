@@ -223,6 +223,10 @@ class EvaluationStore {
     return useMutation(evaluationService.deleteTemplate);
   }
 
+  addQuestionDoc() {
+    return useMutation(evaluationService.addQuestionDoc);
+  }
+
   getTemplateById(id: string) {
     return useQuery(['template', id], () => evaluationService.getTemplateById(id), {
       enabled: !!id,
