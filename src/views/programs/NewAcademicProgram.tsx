@@ -2,6 +2,7 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -70,6 +71,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
   const [errors, setErrors] = useState<NewProgramErrors>(initialErrorState);
 
   const { mutateAsync } = programStore.createProgram();
+  const { t } = useTranslation();
 
   function handleChange(e: ValueType) {
     setDetails((details) => ({
@@ -82,7 +84,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
     { to: '/', title: 'Home' },
     { to: 'dashboard/divisions', title: 'Divisions' },
     { to: '/dashboard/divisions/departments', title: 'Departments' },
-    { to: '/', title: 'New Program' },
+    { to: '/', title: 'New ' + t('Program') },
   ];
 
   function createProgram<T>(e: FormEvent<T>) {
@@ -99,7 +101,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
       .then(() => {
         mutateAsync(cloneDetails, {
           onSuccess(newProgram) {
-            toast.success('Program created');
+            toast.success(t('Program') + ' created');
             history.push(`/dashboard/programs/${newProgram.data.data.id}/level/add`);
           },
           onError(error: any) {
@@ -126,7 +128,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
         <div className="p-6 w-auto lg:w-5/12 pl-8 gap-3 rounded-lg bg-main mt-8 flex-col">
           <div className="py-5 mb-3 capitalize">
             <Heading color="txt-primary" fontWeight="bold">
-              New Program
+              New {t('Program')}
             </Heading>
           </div>
           <InputMolecule
@@ -135,7 +137,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
             value={details.name}
             handleChange={handleChange}
             name="name">
-            program name
+            {t('Program')} name
           </InputMolecule>
           <InputMolecule
             value={details.code}
@@ -143,7 +145,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
             error={errors.code}
             handleChange={handleChange}
             name="code">
-            Program code
+            {t('Program')} code
           </InputMolecule>
           <RadioMolecule
             className="pb-2"
@@ -152,14 +154,14 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
             name="type"
             options={getDropDownStatusOptions(ProgramType)}
             handleChange={handleChange}>
-            Program Type
+            {t('Program')} Type
           </RadioMolecule>
           <TextAreaMolecule
             error={errors.description}
             value={details.description}
             name="description"
             handleChange={handleChange}>
-            Program description
+            {t('Program')} description
           </TextAreaMolecule>
           <DropdownMolecule
             error={errors.in_charge_id}

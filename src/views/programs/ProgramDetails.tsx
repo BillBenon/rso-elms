@@ -61,13 +61,13 @@ export default function ProgramDetailsMolecule() {
   const programData = getProgramData();
   const tabs: TabType[] = [
     {
-      label: 'Program info',
+      label: t('Program') + ' information',
       href: `${url}`,
     },
   ];
 
   tabs.push({
-    label: 'Program modules',
+    label: t('Program') + ' modules',
     href: `${url}/modules`,
     privilege: Privileges.CAN_ACCESS_MODULES,
   });
@@ -78,7 +78,7 @@ export default function ProgramDetailsMolecule() {
   const list: Links[] = [
     { to: 'home', title: 'home' },
     { to: 'divisions', title: t('Faculty') },
-    { to: 'programs', title: 'Programs' },
+    { to: 'programs', title: t('Program') },
     { to: `${url}`, title: 'details' },
   ];
 
@@ -99,7 +99,7 @@ export default function ProgramDetailsMolecule() {
                 return (
                   <PopupMolecule
                     closeOnClickOutSide={false}
-                    title="Add level to program"
+                    title={'Add level to ' + t('Program')}
                     open={true}
                     onClose={() => history.goBack()}>
                     <AddLevelToProgram />
@@ -117,7 +117,7 @@ export default function ProgramDetailsMolecule() {
                       <CommonCardMolecule data={programData}>
                         <div className="flex flex-col mt-8 gap-7 pb-2">
                           <Heading color="txt-secondary" fontSize="sm">
-                            Program Type
+                            {t('Program')} Type
                           </Heading>
                           <Heading fontSize="sm">
                             {programData.subTitle?.replaceAll('_', ' ')}
@@ -135,7 +135,7 @@ export default function ProgramDetailsMolecule() {
                         </div>
                         <div className="mt-4 flex space-x-4">
                           <Button onClick={() => history.push(`${url}/edit`)}>
-                            Edit program
+                            Edit {t('Program')}
                           </Button>
                           <Button styleType="outline">Change Status</Button>
                         </div>

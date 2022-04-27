@@ -1,5 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { queryClient } from '../../../../plugins/react-query';
@@ -17,6 +18,7 @@ interface ParamType {
 }
 function UpdateModuleForm() {
   const history = useHistory();
+  const { t } = useTranslation();
 
   const { moduleId } = useParams<ParamType>();
   const module = moduleStore.getModuleById(moduleId).data?.data.data;
@@ -96,7 +98,7 @@ function UpdateModuleForm() {
         name={'program_id'}
         readOnly
         disabled>
-        Program
+        {t('Program')}
       </InputMolecule>
       <RadioMolecule
         className="mt-4"

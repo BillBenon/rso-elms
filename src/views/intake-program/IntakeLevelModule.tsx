@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -20,6 +21,8 @@ import LevelStudents from './LevelStudents';
 
 function IntakeLevelModule() {
   const history = useHistory();
+  const { t } = useTranslation();
+
   const { path } = useRouteMatch();
   const { id, intakeId, intakeProg, level } = useParams<IntakeLevelParam>();
 
@@ -164,7 +167,7 @@ function IntakeLevelModule() {
                   )
                 : {}
             }>
-            View periods
+            {t('View_period')}
           </Button>
         )}
       </TableHeader>

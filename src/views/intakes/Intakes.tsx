@@ -58,7 +58,7 @@ export default function Intakes() {
   const list: LinkType[] = [
     { to: 'home', title: 'Institution Admin' },
     { to: 'faculty', title: t('Faculty') },
-    { to: 'programs', title: 'Programs' },
+    { to: 'programs', title: t('Program') },
     { to: 'intakes', title: 'Intakes' },
   ];
 

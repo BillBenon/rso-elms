@@ -4,6 +4,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
+
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { enrollmentService } from '../../../../services/administration/enrollments.service';
@@ -404,7 +405,7 @@ export default function EvaluationInfoComponent() {
           value={details?.intake_program_level + ''}
           width="64 py-4"
           name="intake_program_level"
-          placeholder="program  level"
+          placeholder={t('Program') + ' level'}
           handleChange={handleChange}
           loading={levelsLoading}
           options={
