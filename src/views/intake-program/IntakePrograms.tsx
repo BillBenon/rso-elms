@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Link,
   Route,
@@ -49,10 +50,12 @@ function IntakePrograms() {
   const history = useHistory();
   const { intakeId } = useParams<IntakeParamType>();
   const location = useLocation();
+  const { t } = useTranslation();
+
   const list: LinkList[] = [
     { to: 'home', title: 'home' },
     { to: 'intakes', title: 'intakes' },
-    { to: `${url}`, title: 'Programs' },
+    { to: `${url}`, title: t('Program') },
   ];
   const { user } = useAuthenticator();
 
@@ -170,12 +173,12 @@ function IntakePrograms() {
                 <section>
                   <TableHeader
                     totalItems={programs.length}
-                    title={`${intakeId ? intake?.data?.data.data.title : 'Programs'}`}
+                    title={`${intakeId ? intake?.data?.data.data.title : t('Program')}`}
                     showSearch={false}>
                     {user?.user_type === UserType.ADMIN && (
                       <Permission privilege={Privileges.CAN_CREATE_PROGRAMS_IN_INTAKE}>
                         <Link to={`${url}/add-program-to-intake?intakeId=${intakeId}`}>
-                          <Button>Add Program To Intake</Button>
+                          <Button>Add {t('Program')} To Intake</Button>
                         </Link>
                       </Permission>
                     )}
@@ -239,7 +242,7 @@ function IntakePrograms() {
           path={`${url}/add-program-to-intake`}
           render={() => {
             return (
-              <PopupMolecule title="Program" open={true} onClose={history.goBack}>
+              <PopupMolecule title={t('Program')} open={true} onClose={history.goBack}>
                 <AddAcademicProgramToIntake submited={submited} />
               </PopupMolecule>
             );

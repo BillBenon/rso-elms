@@ -1,6 +1,7 @@
 import moment from 'moment';
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 
 import Button from '../components/Atoms/custom/Button';
@@ -221,6 +222,7 @@ function EnrollmentAcademy({ values, user_roles, handleChange, handleNext }: IPr
   const academies = academyStore.fetchAcademies();
   const programs = programStore.getProgramsByAcademy(values.academy_id) || [];
   const intakes = intakeStore.getIntakesByProgram(values.program_id) || [];
+  const { t } = useTranslation();
 
   const initialErrorState: EnrollmentAcademyErrors = {
     academy_id: '',
@@ -271,11 +273,13 @@ function EnrollmentAcademy({ values, user_roles, handleChange, handleNext }: IPr
         options={getDropDownOptions({ inputs: programs.data?.data.data || [] })}
         name="program_id"
         placeholder={
-          programs.isLoading ? 'Loading programs...' : 'Program to be enrolled in'
+          programs.isLoading
+            ? 'Loading' + t('Program') + '...'
+            : t('Program') + ' to be enrolled in'
         }
         value={values.program_id}
         handleChange={handleChange}>
-        Programs
+        {t('Program')}
       </SelectMolecule>
       <SelectMolecule
         error={errors.intake_id}

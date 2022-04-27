@@ -183,7 +183,7 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
           readOnly
           disabled
           value={`${classInfo?.academic_year_program_intake_level.academic_program_level.program.name} - ${classInfo?.academic_year_program_intake_level.academic_program_level.level.name} - ${classInfo?.class_name}`}>
-          Program - Level - {t('Class')}
+          {t('Program')} - Level - {t('Class')}
         </InputMolecule>
         <div className="pb-1">
           <SelectMolecule
