@@ -83,7 +83,7 @@ export default function EditTimeTable() {
       courseModuleId: data?.data.data.course_module?.id.toString() || '',
       dressCode: data?.data.data.dress_code || '',
       eventId: data?.data.data.event.id.toString() || '',
-      inChargeId: data?.data.data.in_charge.id.toString() || '',
+      inChargeId: data?.data.data.in_charge.adminId || '',
       methodOfInstruction: methodOfInstruction.LEC,
       periods: data?.data.data.periods || 1,
       venueId: data?.data.data.venue.id.toString() || '',
@@ -208,7 +208,7 @@ function FirstStep({ handleChange, setCurrentStep, values, level }: IStepProps) 
             options={
               users?.map((user) => ({
                 label: `${user.user.first_name} ${user.user.last_name}`,
-                value: user.id,
+                value: user.user.id,
               })) as SelectData[]
             }
             placeholder="Select someone">

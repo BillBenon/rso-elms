@@ -1,8 +1,11 @@
 import React, { useRef, useState } from 'react';
+import toast from 'react-hot-toast';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 import { useReactToPrint } from 'react-to-print';
 
+import { queryClient } from '../../../../plugins/react-query';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
+import { timetableStore } from '../../../../store/timetable/timetable.store';
 import { Privileges } from '../../../../types';
 import {
   ITimeTableWeekInfo,
@@ -28,9 +31,10 @@ export default function TimeTableWeek({ week }: IProps) {
   const [isPrinting, setisPrinting] = useState(false);
   const groupedActivities = groupTimeTableByDay(week.activities || []);
 
+  const { mutateAsync, isLoading } = timetableStore.changeWeekStatus();
   const instructors = instructordeploymentStore.getInstructors().data?.data.data;
-  const monday = new Date(getWeekBorderDays().monday);
 
+  const monday = new Date(getWeekBorderDays().monday);
   const timetableRef = useRef(null);
 
   const handlePrint = useReactToPrint({
@@ -40,6 +44,24 @@ export default function TimeTableWeek({ week }: IProps) {
     onAfterPrint: () => setisPrinting(false),
     copyStyles: true,
   });
+
+  const handleConfirm = () => {
+    mutateAsync(
+      { id: week.id.toString(), status: TimetableStatus.CONFIRMED },
+      {
+        async onSuccess(_data) {
+          toast.success('Timetable was confirmed successfully');
+          queryClient.invalidateQueries([
+            'timetable/weeks',
+            week.academic_program_intake_level.id,
+          ]);
+        },
+        onError(error: any) {
+          toast.error(error.response.data.message || 'Error occurred please try again');
+        },
+      },
+    );
+  };
 
   const handleClose = () => {
     history.goBack();
@@ -52,8 +74,9 @@ export default function TimeTableWeek({ week }: IProps) {
           <Button
             type="button"
             styleType="outline"
-            onClick={handlePrint}
-            disabled={isPrinting}>
+            onClick={handleConfirm}
+            isLoading={isLoading}
+            disabled={isLoading}>
             Confirm
           </Button>
         )}
@@ -67,7 +90,9 @@ export default function TimeTableWeek({ week }: IProps) {
         </Button>
         <Permission privilege={Privileges.CAN_CREATE_TIMETABLE}>
           <Link to={`${url}/new-activity?week=${week.id}`}>
-            <Button type="button">Add Activity</Button>
+            <Button type="button" styleType="outline">
+              Add Activity
+            </Button>
           </Link>
         </Permission>
       </div>
@@ -90,7 +115,7 @@ export default function TimeTableWeek({ week }: IProps) {
               className={`py-6 px-8 text-sm print:text-xs rounded grid grid-cols-11 border-2 ${
                 week.status == TimetableStatus.PROVISIONAL
                   ? 'bg-yellow-50'
-                  : 'bg-blue-100 border-primary-500'
+                  : 'bg-blue-100 border-blue-200'
               }   my-4 gap-3`}>
               <div>
                 <h2 className="font-semibold text-sm print:text-xs"> {day}</h2>
@@ -101,12 +126,12 @@ export default function TimeTableWeek({ week }: IProps) {
               <div className="col-span-10">
                 {groupedActivities[day].map((activity) => {
                   let instructor = instructors?.find(
-                    (inst) => inst.user.id == activity.in_charge.admin_id,
+                    (inst) => inst.user.id == activity.in_charge.adminId,
                   );
                   return (
                     <div
                       key={activity.id}
-                      className="timetable-item relative col-span-4 grid grid-cols-10 gap-3 cursor-pointer hover:bg-lightgreen px-2 hover:text-primary-600">
+                      className="timetable-item relative col-span-4 grid grid-cols-10 gap-3 pb-2 py-1 rounded cursor-pointer hover:bg-white px-2 hover:text-primary-600">
                       <p className=" uppercase">
                         {activity.start_hour.substring(0, 5)} -
                         {' ' + activity.end_hour.substring(0, 5)}
@@ -122,7 +147,7 @@ export default function TimeTableWeek({ week }: IProps) {
                         {`${instructor?.user.first_name} ${instructor?.user.last_name}`}
                       </p>
                       <Permission privilege={Privileges.CAN_MODIFY_TIMETABLE}>
-                        <div className="actions hidden absolute top-0 right-0 -mt-2">
+                        <div className="actions hidden absolute top-0 right-0 -mt-3">
                           <Link to={`${url}/item/${activity.id}/edit`}>
                             <Icon name={'edit'} stroke="primary" />
                           </Link>

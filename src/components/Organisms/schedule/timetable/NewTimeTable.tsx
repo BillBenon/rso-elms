@@ -40,10 +40,7 @@ interface IStepProps {
 }
 
 interface FirstTimeTableErrors
-  extends Pick<
-    ICreateTimeTableActivity,
-    'courseModuleId' | 'venueId' | 'inChargeId' | 'eventId'
-  > {}
+  extends Pick<ICreateTimeTableActivity, 'venueId' | 'inChargeId'> {}
 interface SecondTimeTableErrors
   extends Pick<ICreateTimeTableActivity, 'startHour' | 'endHour' | 'dressCode'> {}
 
@@ -151,10 +148,8 @@ function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) 
   const venues = getAllVenues(picked_role?.academy_id).data?.data.data || [];
 
   const initialErrorState: FirstTimeTableErrors = {
-    courseModuleId: '',
     inChargeId: '',
     venueId: '',
-    eventId: '',
   };
 
   const [errors, setErrors] = useState<FirstTimeTableErrors>(initialErrorState);
@@ -196,7 +191,6 @@ function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) 
         </SelectMolecule>
         {useModule ? (
           <SelectMolecule
-            error={errors.courseModuleId}
             name="courseModuleId"
             value={values.courseModuleId}
             handleChange={handleChange}
@@ -211,7 +205,6 @@ function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) 
           </SelectMolecule>
         ) : (
           <SelectMolecule
-            error={errors.eventId}
             name="eventId"
             value={values.eventId}
             handleChange={handleChange}
@@ -327,7 +320,7 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
         name="periods"
         placeholder="Periods"
         type="number"
-        value={values.startHour}
+        value={values.periods}
         handleChange={handleChange}>
         Number of periods
       </InputMolecule>

@@ -6,7 +6,6 @@ export const venueSchema = yup.object().shape({
 });
 
 export const firstTimetableSchema = yup.object().shape({
-  courseModuleId: yup.string().required('module is required'),
   inChargeId: yup.string().required('instructor is required'),
 });
 
