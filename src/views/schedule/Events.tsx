@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link, Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -10,23 +10,17 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import NewEvent from '../../components/Organisms/schedule/event/NewEvent';
-import useAuthenticator from '../../hooks/useAuthenticator';
 import usePickedRole from '../../hooks/usePickedRole';
 import { getAllEvents } from '../../store/timetable/event.store';
 import { Privileges } from '../../types';
 
 export default function Events() {
-  const { user } = useAuthenticator();
   const picked_role = usePickedRole();
-  const { data, isLoading, refetch } = getAllEvents(picked_role?.academy_id + '', false);
+  const { data, isLoading } = getAllEvents(picked_role?.academy_id);
   const events = data?.data.data;
 
   const history = useHistory();
   const { path } = useRouteMatch();
-
-  useEffect(() => {
-    user && refetch();
-  }, [refetch, user]);
 
   const handleClose = () => {
     history.goBack();

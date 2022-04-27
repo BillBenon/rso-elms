@@ -151,10 +151,8 @@ export default function NewSchedule() {
 function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
   const picked_role = usePickedRole();
 
-  const events = getAllEvents(picked_role?.academy_id + '', !!picked_role?.academy_id)
-    .data?.data.data;
-  const venues = getAllVenues(picked_role?.academy_id + '', !!picked_role?.academy_id)
-    .data?.data.data;
+  const events = getAllEvents(picked_role?.academy_id).data?.data.data;
+  const venues = getAllVenues(picked_role?.academy_id).data?.data.data;
 
   const { data: users } = usersStore.getUsersByAcademy(picked_role?.academy_id || '', {
     page: 0,

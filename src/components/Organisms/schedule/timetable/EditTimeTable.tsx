@@ -14,7 +14,8 @@ import { SelectData, ValueType } from '../../../../types';
 import { IClass } from '../../../../types/services/class.types';
 import {
   daysOfWeek,
-  IUpdateClassTimetable,
+  IUpdateTimetableActivity,
+  methodOfInstruction,
 } from '../../../../types/services/schedule.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import {
@@ -29,7 +30,7 @@ import Stepper from '../../../Molecules/Stepper/Stepper';
 interface IStepProps {
   handleChange: (_e: ValueType) => any;
   setCurrentStep: Function;
-  values: IUpdateClassTimetable;
+  values: IUpdateTimetableActivity;
   handleSubmit?: (_e: FormEvent) => any;
   classInfo?: IClass;
 }
@@ -40,9 +41,9 @@ interface ParamType {
 }
 
 interface FirstTimeTableErrors
-  extends Pick<IUpdateClassTimetable, 'courseModule' | 'instructor'> {}
+  extends Pick<IUpdateTimetableActivity, 'courseModuleId' | 'inChargeId'> {}
 interface SecondTimeTableErrors
-  extends Pick<IUpdateClassTimetable, 'venue' | 'startHour' | 'endHour'> {
+  extends Pick<IUpdateTimetableActivity, 'venueId' | 'startHour' | 'endHour'> {
   dayOfWeek: string;
 }
 export default function EditTimeTable() {
@@ -50,31 +51,43 @@ export default function EditTimeTable() {
   const history = useHistory();
   //state varibales
   const [currentStep, setcurrentStep] = useState(0);
-  const [values, setvalues] = useState<IUpdateClassTimetable>({
+  const [values, setvalues] = useState<IUpdateTimetableActivity>({
     id: itemId,
     dayOfWeek: daysOfWeek.MONDAY,
-    intakeLevelClass: classId,
-    courseModule: '',
     endHour: '',
-    instructor: '',
     startHour: '',
-    venue: '',
+    activityDate: new Date().toLocaleDateString(),
+    courseCode: '',
+    courseModuleId: '',
+    dressCode: '',
+    eventId: '',
+    inChargeId: '',
+    methodOfInstruction: methodOfInstruction.LEC,
+    periods: 0,
+    venueId: '',
+    weeklyTimetableId: '',
   });
 
   //classinfo
   const classInfo = classStore.getClassById(classId).data?.data.data;
-  const { data } = timetableStore.getClassTimetableById(itemId);
+  const { data } = timetableStore.getTimetableActivityById(itemId);
 
   useEffect(() => {
     setvalues({
       id: itemId,
       dayOfWeek: data?.data.data.day_of_week as daysOfWeek,
-      intakeLevelClass: classId,
-      courseModule: data?.data.data.course_module.id + '',
-      endHour: data?.data.data.end_hour + '',
-      instructor: data?.data.data.instructor.id + '',
-      startHour: data?.data.data.start_hour + '',
-      venue: data?.data.data.venue.id + '',
+      endHour: data?.data.data.end_hour || '',
+      startHour: data?.data.data.start_hour || '',
+      activityDate: data?.data.data.activity_date || new Date().toLocaleDateString(),
+      courseCode: data?.data.data.course_code || '',
+      courseModuleId: data?.data.data.course_module?.id.toString() || '',
+      dressCode: data?.data.data.dress_code || '',
+      eventId: data?.data.data.event.id.toString() || '',
+      inChargeId: data?.data.data.in_charge.id.toString() || '',
+      methodOfInstruction: methodOfInstruction.LEC,
+      periods: data?.data.data.periods || 1,
+      venueId: data?.data.data.venue.id.toString() || '',
+      weeklyTimetableId: '',
     });
   }, [classId, data?.data, itemId]);
 
@@ -82,7 +95,7 @@ export default function EditTimeTable() {
     setvalues((val) => ({ ...val, [e.name]: e.value }));
   }
 
-  const store = timetableStore.updateClassTimetableById();
+  const store = timetableStore.updateTimetableActivityById();
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
@@ -139,8 +152,8 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
     ).data?.data.data || [];
 
   const initialErrorState: FirstTimeTableErrors = {
-    courseModule: '',
-    instructor: '',
+    courseModuleId: '',
+    inChargeId: '',
   };
 
   const [errors, setErrors] = useState<FirstTimeTableErrors>(initialErrorState);
@@ -174,8 +187,8 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
         </InputMolecule>
         <div className="pb-1">
           <SelectMolecule
-            error={errors.courseModule}
-            name="courseModule"
+            error={errors.courseModuleId}
+            name="courseModuleId"
             handleChange={handleChange}
             options={
               modules?.map((mod) => ({
@@ -184,15 +197,15 @@ function FirstStep({ handleChange, setCurrentStep, values, classInfo }: IStepPro
               })) as SelectData[]
             }
             placeholder="Select module"
-            value={values.courseModule}>
+            value={values.courseModuleId}>
             Module
           </SelectMolecule>
         </div>
         <div className="pb-4">
           <SelectMolecule
-            error={errors.instructor}
+            error={errors.inChargeId}
             name="instructor"
-            value={values.instructor}
+            value={values.inChargeId}
             handleChange={handleChange}
             options={
               users?.map((user) => ({
@@ -215,7 +228,7 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
   const venues = getAllVenues(picked_role?.academy_id + '').data?.data.data || [];
 
   const initialErrorState: SecondTimeTableErrors = {
-    venue: '',
+    venueId: '',
     startHour: '',
     endHour: '',
     dayOfWeek: '',
@@ -245,8 +258,8 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
     <form onSubmit={handleFinish} className="max-w-sm -mb-6">
       <SelectMolecule
         name="venue"
-        error={errors.venue}
-        value={values.venue}
+        error={errors.venueId}
+        value={values.venueId}
         handleChange={handleChange}
         options={venues?.map((vn) => ({ label: vn.name, value: vn.id })) as SelectData[]}
         placeholder="Select venue">

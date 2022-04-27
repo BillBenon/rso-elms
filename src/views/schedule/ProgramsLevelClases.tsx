@@ -64,10 +64,9 @@ export default function PrograsmLevelClasses() {
               label={lvl.academic_program_level.level.name}>
               <div>
                 <Permission privilege={Privileges.CAN_ACCESS_CALENDER}>
-                  <Link
-                    to={`/dashboard/schedule/calendar/${programInfo?.id}?in_level_id=${lvl.id}`}>
+                  <Link to={`/dashboard/schedule/timetable/${lvl.id}`}>
                     <span className="text-primary-500 font-medium block text-right">
-                      View calendar for this level
+                      View timetable for this level
                     </span>
                   </Link>
                 </Permission>
@@ -108,7 +107,7 @@ export default function PrograsmLevelClasses() {
                             </Link>
                           </Permission>
                         </div>
-                        <div className="">
+                        {/* <div className="">
                           <Permission privilege={Privileges.CAN_ACCESS_TIMETABLE}>
                             <Link
                               className="outline-none"
@@ -118,7 +117,7 @@ export default function PrograsmLevelClasses() {
                               </span>
                             </Link>
                           </Permission>
-                        </div>
+                        </div> */}
                       </div>
                     ))
                   )}

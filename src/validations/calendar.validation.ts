@@ -6,12 +6,12 @@ export const venueSchema = yup.object().shape({
 });
 
 export const firstTimetableSchema = yup.object().shape({
-  courseModule: yup.string().required('module is required'),
-  instructor: yup.string().required('instructor is required'),
+  courseModuleId: yup.string().required('module is required'),
+  inChargeId: yup.string().required('instructor is required'),
 });
 
 export const secondTimetableSchema = yup.object().shape({
-  venue: yup.string().required('venue is required'),
+  venueId: yup.string().required('venue is required'),
   startHour: yup.string().required('start hour is required'),
   endHour: yup.string().required('end hour is required'),
 });
