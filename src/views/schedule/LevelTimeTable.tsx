@@ -44,7 +44,7 @@ export default function ClassTimeTable() {
           </p>
         </div>
       ) : null}
-      {data?.data.data && <TimeTableWeek week={data?.data.data} />}
+      {data?.data.data && <TimeTableWeek levelId={id} week={data?.data.data} />}
     </div>
   );
 }

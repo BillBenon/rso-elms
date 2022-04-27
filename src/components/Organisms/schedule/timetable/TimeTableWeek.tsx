@@ -22,9 +22,10 @@ import NewTimeTable from './NewTimeTable';
 
 interface IProps {
   week: ITimeTableWeekInfo;
+  levelId: string;
 }
 
-export default function TimeTableWeek({ week }: IProps) {
+export default function TimeTableWeek({ week, levelId }: IProps) {
   const { url, path } = useRouteMatch();
   const history = useHistory();
 
@@ -51,10 +52,7 @@ export default function TimeTableWeek({ week }: IProps) {
       {
         async onSuccess(_data) {
           toast.success('Timetable was confirmed successfully');
-          queryClient.invalidateQueries([
-            'timetable/weeks',
-            week.academic_program_intake_level.id,
-          ]);
+          queryClient.invalidateQueries(['timetable/weeks', levelId]);
         },
         onError(error: any) {
           toast.error(error.response.data.message || 'Error occurred please try again');

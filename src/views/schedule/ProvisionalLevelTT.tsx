@@ -63,7 +63,7 @@ export default function ProvisionalLevelTT() {
         <Tabs>
           {weeks?.map((week) => (
             <Tab label={week.week_name} key={week.id}>
-              <TimeTableWeek week={week} />
+              <TimeTableWeek week={week} levelId={id} />
             </Tab>
           ))}
         </Tabs>
