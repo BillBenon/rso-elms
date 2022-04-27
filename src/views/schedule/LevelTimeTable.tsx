@@ -18,7 +18,7 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import EditTimeTable from '../../components/Organisms/schedule/timetable/EditTimeTable';
 import NewTimeTable from '../../components/Organisms/schedule/timetable/NewTimeTable';
-import { classStore } from '../../store/administration/class.store';
+import intakeProgramStore from '../../store/administration/intake-program.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { timetableStore } from '../../store/timetable/timetable.store';
 import { ParamType, Privileges } from '../../types';
@@ -32,14 +32,20 @@ export default function ClassTimeTable() {
 
   const [isPrinting, setisPrinting] = useState(false);
 
-  const classInfo = classStore.getClassById(id).data?.data.data;
+  const levelInfo = intakeProgramStore.getIntakeLevelById(id).data?.data.data;
 
   const handleClose = () => {
     history.goBack();
   };
 
+  const { data } = timetableStore.getCurrentWeek(
+    formatDateToYyMmDd(new Date().toISOString()),
+    id,
+  );
+
   const groupedTimeTable = groupTimeTableByDay(
-    timetableStore.getClassTimetableByIntakeLevelClass(id).data?.data.data || [],
+    data?.data.data.activities || [],
+    // timetableStore.getClassTimetableByIntakeLevelClass(id).data?.data.data || [],
   );
 
   const instructors = instructordeploymentStore.getInstructors().data?.data.data;
@@ -49,7 +55,7 @@ export default function ClassTimeTable() {
 
   const handlePrint = useReactToPrint({
     content: () => timetableRef.current,
-    documentTitle: `${classInfo?.class_name}-timetable`,
+    documentTitle: `${levelInfo?.academic_program_level.level.name}-timetable`,
     onBeforeGetContent: () => setisPrinting(true),
     onAfterPrint: () => setisPrinting(false),
     copyStyles: true,
@@ -60,8 +66,11 @@ export default function ClassTimeTable() {
       <TableHeader
         showBadge={false}
         showSearch={false}
-        title={`${classInfo?.academic_year_program_intake_level.academic_program_level.program.name} - ${classInfo?.academic_year_program_intake_level.academic_program_level.level.name} - ${classInfo?.class_name}`}>
+        title={`${levelInfo?.academic_program_level.program.name} - ${levelInfo?.academic_program_level.level.name}`}>
         <div className="flex gap-3">
+          <Button type="button" styleType="outline">
+            <Link to={`${url}/provisional`}>View provisional</Link>
+          </Button>
           <Button
             type="button"
             styleType="outline"
@@ -72,51 +81,55 @@ export default function ClassTimeTable() {
 
           <Permission privilege={Privileges.CAN_CREATE_TIMETABLE}>
             <Link to={`${url}/new-schedule`}>
-              <Button type="button">New timetable</Button>
+              <Button type="button">Add Activity</Button>
             </Link>
           </Permission>
         </div>
       </TableHeader>
       <div className="tt print:px-10 print:py-8 print:bg-main" ref={timetableRef}>
-        <div className="bg-primary-500 py-4  px-8 text-sm print:text-xs text-white rounded grid grid-cols-5">
-          <p className="px-2">DAYS</p>
-          <p className="px-2">TIME</p>
-          <p className="px-2">ACTIVITY</p>
-          <p className="px-2">VENUE</p>
-          <p className="px-2">RESOURCES</p>
+        <div className="bg-primary-500 py-4 uppercase px-8 text-sm text-center print:text-xs text-white grid grid-cols-11">
+          <p className="px-2 text-left">days</p>
+          <p className="px-2">time</p>
+          <p className="px-2 col-span-3">subject detail</p>
+          <p className="px-2">code</p>
+          <p className="px-2">pds</p>
+          <p className="px-2">moi</p>
+          <p className="px-2">location</p>
+          <p className="px-2 col-span-2">ds/lecturer</p>
         </div>
         {Object.keys(groupedTimeTable).map((day, i) => {
           monday.setDate(monday.getDate() + i);
           return (
             <div
               key={day}
-              className="py-6 px-8 text-sm print:text-xs rounded grid grid-cols-5 border-2 border-primary-500 my-4 gap-3">
+              className="py-6 px-8 text-sm print:text-xs rounded grid grid-cols-11 border-2 bg-blue-100 border-primary-500 my-4 gap-3">
               <div>
                 <h2 className="font-semibold text-sm print:text-xs"> {day}</h2>
-                <p className="py-2 text-sm print:text-xs font-medium print:hidden">
+                <p className=" print:hidden">
                   {formatDateToYyMmDd(monday.toDateString())}
                 </p>
               </div>
               <div className="col-span-4">
                 {groupedTimeTable[day].map((activity) => {
                   let instructor = instructors?.find(
-                    (inst) => inst.id == activity.instructor.id,
+                    (inst) => inst.id == activity.in_charge.id,
                   );
                   return (
                     <div
                       key={activity.id}
                       className="timetable-item relative col-span-4 grid grid-cols-4 gap-3 cursor-pointer hover:bg-lightgreen px-2 hover:text-primary-600">
-                      <p className="py-2 text-sm print:text-xs font-medium uppercase">
-                        {activity.start_hour.substring(0, 5)} -
-                        {' ' + activity.end_hour.substring(0, 5)}
+                      <p className=" uppercase">
+                        {/* {activity.start_hour.substring(0, 5)} -
+                        {' ' + activity.end_hour.substring(0, 5)} */}
                       </p>
-                      <p className="py-2 text-sm print:text-xs font-medium">
-                        {activity.course_module.name}
+                      <p className="col-span-3">
+                        {activity.course_module?.name || activity.event.name}
                       </p>
-                      <p className="py-2 text-sm print:text-xs font-medium">
-                        {activity.venue.name}
-                      </p>
-                      <p className="py-2 text-sm print:text-xs font-medium">
+                      <p className="">{activity.course_code}</p>
+                      <p className="">{activity.periods}</p>
+                      <p className="">{activity.method_of_instruction}</p>
+                      <p className="">{activity.venue.name}</p>
+                      <p className=" col-span-2">
                         {`${instructor?.user.first_name} ${instructor?.user.last_name}`}
                       </p>
                       <Permission privilege={Privileges.CAN_MODIFY_TIMETABLE}>
