@@ -38,8 +38,14 @@ export default function ClassTimeTable() {
     history.goBack();
   };
 
+  const { data } = timetableStore.getCurrentWeek(
+    formatDateToYyMmDd(new Date().toISOString()),
+    id,
+  );
+
   const groupedTimeTable = groupTimeTableByDay(
-    timetableStore.getClassTimetableByIntakeLevelClass(id).data?.data.data || [],
+    data?.data.data.activities || [],
+    // timetableStore.getClassTimetableByIntakeLevelClass(id).data?.data.data || [],
   );
 
   const instructors = instructordeploymentStore.getInstructors().data?.data.data;
@@ -62,6 +68,9 @@ export default function ClassTimeTable() {
         showSearch={false}
         title={`${levelInfo?.academic_program_level.program.name} - ${levelInfo?.academic_program_level.level.name}`}>
         <div className="flex gap-3">
+          <Button type="button" styleType="outline">
+            <Link to={`${url}/provisional`}>View provisional</Link>
+          </Button>
           <Button
             type="button"
             styleType="outline"

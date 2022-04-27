@@ -24,6 +24,7 @@ import CalendarView from './CalendarView';
 import Events from './Events';
 import IntakePrograms from './IntakePrograms';
 import LevelTimeTable from './LevelTimeTable';
+import ProvisionalLevelTT from './ProvisionalLevelTT';
 import StudentCalendar from './StudentCalendar';
 import Venues from './Venues';
 
@@ -60,7 +61,12 @@ export default function ScheduleHome() {
 
         <Route path={`${path}/intake/:id`} component={IntakePrograms} />
         <Route path={`${path}/calendar/:id`} component={CalendarView} />
-        <Route path={`${path}/timetable/:id`} component={LevelTimeTable} />
+
+        <Route exact path={`${path}/timetable/:id`} component={LevelTimeTable} />
+        <Route
+          path={`${path}/timetable/:id/provisional`}
+          component={ProvisionalLevelTT}
+        />
 
         <TabNavigation tabs={tabs}>
           <Switch>
