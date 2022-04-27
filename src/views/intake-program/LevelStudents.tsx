@@ -27,14 +27,25 @@ function LevelStudents({ showSidebar, handleShowSidebar }: ILevelStudent) {
   useEffect(() => {
     let studentsView: UserView[] = [];
 
-    studentsProgram?.data.data.sort(function (a, b) {
+    const rankedStudents =
+      studentsProgram?.data.data.filter(
+        (inst) => inst.intake_program_student.student.user.person.current_rank,
+      ) || [];
+    const unrankedStudents =
+      studentsProgram?.data.data.filter(
+        (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedStudents.sort(function (a, b) {
       return (
         a.intake_program_student.student.user.person.current_rank?.priority -
         b.intake_program_student.student.user.person.current_rank?.priority
       );
     });
 
-    studentsProgram?.data.data.forEach((stud) => {
+    const finalStudents = rankedStudents.concat(unrankedStudents);
+
+    finalStudents.forEach((stud) => {
       let studentView: UserView = {
         id: stud.id,
         rank: stud.intake_program_student.student.user.person.current_rank?.name,

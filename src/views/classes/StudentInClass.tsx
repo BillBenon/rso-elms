@@ -61,14 +61,24 @@ function StudentInClass({ classObject }: IStudentClass) {
   useEffect(() => {
     let tempStuds: UserTypes[] = [];
 
-    studentsData?.data.data.sort(function (a, b) {
+    const rankedStudents =
+      studentsData?.data.data.filter((inst) => inst.student.user.person.current_rank) ||
+      [];
+    const unrankedStudents =
+      studentsData?.data.data.filter(
+        (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedStudents.sort(function (a, b) {
       return (
         a.student.user.person.current_rank?.priority -
         b.student.user.person.current_rank?.priority
       );
     });
 
-    studentsData?.data.data.forEach((stud) => {
+    const finalStudents = rankedStudents.concat(unrankedStudents);
+
+    finalStudents.forEach((stud) => {
       tempStuds.push({
         id: stud.id.toString(),
         rank: stud.student.user.person.current_rank?.name,

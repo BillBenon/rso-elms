@@ -25,14 +25,25 @@ function LevelInstructors<T>({
   useEffect(() => {
     let instructorView: UserView[] = [];
 
-    instructorsData.sort(function (a, b) {
+    const rankedInstructors =
+      instructorsData.filter(
+        (inst) => inst.intake_program_instructor.instructor.user.person.current_rank,
+      ) || [];
+    const unrankedInstructors =
+      instructorsData.filter(
+        (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedInstructors.sort(function (a, b) {
       return (
         a.intake_program_instructor.instructor.user.person.current_rank?.priority -
         b.intake_program_instructor.instructor.user.person.current_rank?.priority
       );
     });
 
-    instructorsData.forEach((stud) => {
+    const finalInstructors = rankedInstructors.concat(unrankedInstructors);
+
+    finalInstructors.forEach((stud) => {
       let studentView: UserView = {
         id: stud.id,
         rank: stud.intake_program_instructor.instructor.user.person.current_rank?.name,
