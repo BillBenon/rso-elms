@@ -5,17 +5,15 @@ import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
-import usePickedRole from '../../hooks/usePickedRole';
 import { queryClient } from '../../plugins/react-query';
 import { classStore } from '../../store/administration/class.store';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
-import usersStore from '../../store/administration/users.store';
 import { ValueType } from '../../types';
 import { ClassGroupType, ICreateClass } from '../../types/services/class.types';
 import { Instructor } from '../../types/services/instructor.types';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
-import { UserType } from '../../types/services/user.types';
+import { Student } from '../../types/services/user.types';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
 import { classSchema } from '../../validations/level.validation';
 
@@ -57,7 +55,6 @@ function NewClass() {
 
   const [errors, setErrors] = useState(initialErrorState);
 
-  const picked_role = usePickedRole();
   const levelIdTitle = document.getElementById('intake_level_id')?.title;
   const {
     level: levelId,
@@ -77,16 +74,6 @@ function NewClass() {
     [levelIdTitle],
   );
 
-  useEffect(() => {
-    setForm((frm) => {
-      return {
-        ...frm,
-        class_representative_two_id: form.class_representative_one_id,
-        class_representative_tree_id: form.class_representative_one_id,
-      };
-    });
-  }, [form.class_representative_one_id]);
-
   const { data: levelInstructors, isLoading: instLoading } =
     enrollmentStore.getInstructorsInProgramLevel(levelId);
 
@@ -98,19 +85,7 @@ function NewClass() {
   const students =
     intakeProgramStore.getStudentsByIntakeProgramLevel(levelId).data?.data.data || [];
 
-  const users =
-    usersStore
-      .getUsersByAcademyAndUserType(picked_role?.academy_id + '', UserType.STUDENT, {
-        page: 0,
-        pageSize: 1000,
-        sortyBy: 'username',
-      })
-      .data?.data.data.content.filter((stud) => stud.user_type === UserType.STUDENT) ||
-    [];
-
-  const studentsInProgram = users.filter((us) =>
-    students.some((st) => st.intake_program_student.student.user.id === us.id),
-  );
+  const studentsInProgram = students.map((stu) => stu.intake_program_student.student);
 
   function handleChange(e: ValueType) {
     setForm({ ...form, [e.name]: e.value });
@@ -136,15 +111,15 @@ function NewClass() {
 
               path.includes('learn')
                 ? history.push(
-                    `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-class`,
+                    `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/view-class`,
                   )
                 : path.includes('teach')
                 ? history.push(
-                    `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-class`,
+                    `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/view-class`,
                   )
                 : path.includes('manage')
                 ? history.push(
-                    `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-class`,
+                    `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/view-class`,
                   )
                 : {};
             },
@@ -260,8 +235,11 @@ function NewClass() {
           options={getDropDownOptions({
             inputs: studentsInProgram,
             labelName: ['first_name', 'last_name'],
+            //@ts-ignore
+            getOptionLabel: (stu: Student) =>
+              stu.user.first_name + ' ' + stu.user.last_name,
           })}
-          placeholder="Choose class representative">
+          placeholder="class representative">
           Class representative
         </DropdownMolecule>
 

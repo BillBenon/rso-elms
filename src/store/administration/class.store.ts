@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from 'react-query';
+
 import { classService } from '../../services/administration/class.service';
 
 class ClassStore {

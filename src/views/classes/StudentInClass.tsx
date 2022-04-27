@@ -11,11 +11,13 @@ import PopupMolecule from '../../components/Molecules/Popup';
 import Students from '../../components/Organisms/user/Students';
 import { queryClient } from '../../plugins/react-query';
 import { classStore, getStudentsByClass } from '../../store/administration/class.store';
+import enrollmentStore from '../../store/administration/enrollment.store';
+import intakeProgramStore from '../../store/administration/intake-program.store';
 import { Privileges } from '../../types';
 import { IClass } from '../../types/services/class.types';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import { SelectorActionType } from '../../types/services/table.types';
-import { UserTypes } from '../../types/services/user.types';
+import { UserInfo, UserTypes } from '../../types/services/user.types';
 import AddSubjectToPeriod from '../subjects/AddSubjectToPeriod';
 import SubjectPeriod from '../subjects/SubjectPeriod';
 import AddStudents from './AddStudents';
@@ -35,9 +37,25 @@ function StudentInClass({ classObject }: IStudentClass) {
   const { path } = useRouteMatch();
 
   const [students, setStudents] = useState<UserTypes[]>([]);
+  const [leaders, setLeaders] = useState<{
+    instructor_in_charge_one?: UserInfo;
+    instructor_in_charge_two?: UserInfo;
+    instructor_in_charge_three?: UserInfo;
+    class_representative_one?: UserInfo;
+  }>({
+    instructor_in_charge_one: undefined,
+    instructor_in_charge_two: undefined,
+    instructor_in_charge_three: undefined,
+    class_representative_one: undefined,
+  });
   const { data: studentsData, isLoading } = getStudentsByClass(classObject.id + '') || [];
   const { mutate } = classStore.removeStudentInClass();
   const history = useHistory();
+  const { data: instructorProgramLevel } =
+    enrollmentStore.getInstructorsInProgramLevel(levelId);
+
+  const { data: studentsProgramLevel } =
+    intakeProgramStore.getStudentsByIntakeProgramLevel(levelId);
 
   useEffect(() => {
     let tempStuds: UserTypes[] = [];
@@ -77,6 +95,39 @@ function StudentInClass({ classObject }: IStudentClass) {
       privilege: Privileges.CAN_DELETE_CLASSES_MEMBERS,
     },
   ];
+
+  useEffect(() => {
+    setLeaders((leader) => ({
+      ...leader,
+      instructor_in_charge_one: instructorProgramLevel?.data.data.find(
+        (inst) =>
+          inst.intake_program_instructor.instructor.id ===
+          classObject.instructor_class_incharge_id,
+      )?.intake_program_instructor.instructor.user,
+      instructor_in_charge_two: instructorProgramLevel?.data.data.find(
+        (inst) =>
+          inst.intake_program_instructor.instructor.id ===
+          classObject.instructor_class_incharge_two_id,
+      )?.intake_program_instructor.instructor.user,
+      instructor_in_charge_three: instructorProgramLevel?.data.data.find(
+        (inst) =>
+          inst.intake_program_instructor.instructor.id ===
+          classObject.instructor_class_incharge_three_id,
+      )?.intake_program_instructor.instructor.user,
+      class_representative_one: studentsProgramLevel?.data.data.find(
+        (stud) =>
+          stud.intake_program_student.student.id ===
+          classObject.class_representative_one_id,
+      )?.intake_program_student.student.user,
+    }));
+  }, [
+    classObject.class_representative_one_id,
+    classObject.instructor_class_incharge_id,
+    classObject.instructor_class_incharge_three_id,
+    classObject.instructor_class_incharge_two_id,
+    instructorProgramLevel?.data.data,
+    studentsProgramLevel?.data.data,
+  ]);
 
   return (
     <div className="flex flex-col">
@@ -144,6 +195,54 @@ function StudentInClass({ classObject }: IStudentClass) {
                     <AddStudents classId={parseInt(classObject.id + '')} />
                   </Permission>
                 </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 mt-10">
+                  <div className="flex gap-4 pb-2 items-center">
+                    <Heading fontWeight="semibold" fontSize="sm" color="primary">
+                      Instructor representative :
+                    </Heading>
+                    <Heading fontSize="sm">
+                      {`${leaders.instructor_in_charge_one?.first_name || '---'} ${
+                        leaders.instructor_in_charge_one?.last_name || '---'
+                      }`}
+                    </Heading>
+                  </div>
+                  {leaders.instructor_in_charge_two ? (
+                    <div className="flex gap-4 pb-2 items-center">
+                      <Heading fontWeight="semibold" fontSize="sm" color="primary">
+                        Instructor representative backup 1 :
+                      </Heading>
+                      <Heading fontSize="sm">
+                        {`${leaders.instructor_in_charge_two.first_name || '---'} ${
+                          leaders.instructor_in_charge_two.last_name || '---'
+                        }`}
+                      </Heading>
+                    </div>
+                  ) : null}
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2">
+                  <div className="flex gap-4 pb-2 items-center">
+                    <Heading fontWeight="semibold" fontSize="sm" color="primary">
+                      Class representative :
+                    </Heading>
+                    <Heading fontSize="sm">
+                      {`${leaders.class_representative_one?.first_name || '---'} ${
+                        leaders.class_representative_one?.last_name || '---'
+                      }`}
+                    </Heading>
+                  </div>
+                  {leaders.instructor_in_charge_three ? (
+                    <div className="flex gap-4 pb-2 items-center">
+                      <Heading fontWeight="semibold" fontSize="sm" color="primary">
+                        Instructor representative backup 2 :
+                      </Heading>
+                      <Heading fontSize="sm">
+                        {`${leaders.instructor_in_charge_three.first_name || '---'} ${
+                          leaders.instructor_in_charge_three.last_name || '---'
+                        }`}
+                      </Heading>
+                    </div>
+                  ) : null}
+                </div>
                 <section>
                   {isLoading ? (
                     <Loader />
@@ -157,51 +256,12 @@ function StudentInClass({ classObject }: IStudentClass) {
                       description="This class has not received any students. you can add one from the button on the top left."
                     />
                   ) : (
-                    <div className="mt-10">
-                      <div className="grid grid-cols-1 md:grid-cols-2">
-                        <div className="flex gap-4 pb-2 items-center">
-                          <Heading fontWeight="semibold" fontSize="sm" color="primary">
-                            Instructor representative :
-                          </Heading>
-                          <Heading fontSize="sm">
-                            {classObject.instructor_class_incharge_name}
-                          </Heading>
-                        </div>
-                        <div className="flex gap-4 pb-2 items-center">
-                          <Heading fontWeight="semibold" fontSize="sm" color="primary">
-                            Instructor representative backup 1 :
-                          </Heading>
-                          <Heading fontSize="sm">
-                            {classObject.instructor_class_incharge_name}
-                          </Heading>
-                        </div>
-                      </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2">
-                        <div className="flex gap-4 pb-2 items-center">
-                          <Heading fontWeight="semibold" fontSize="sm" color="primary">
-                            Class representative :
-                          </Heading>
-                          <Heading fontSize="sm">
-                            {classObject.instructor_class_incharge_name}
-                          </Heading>
-                        </div>
-                        <div className="flex gap-4 pb-2 items-center">
-                          <Heading fontWeight="semibold" fontSize="sm" color="primary">
-                            Instructor representative backup 2 :
-                          </Heading>
-                          <Heading fontSize="sm">
-                            {classObject.instructor_class_incharge_name}
-                          </Heading>
-                        </div>
-                      </div>
-
-                      <Students
-                        students={students}
-                        showTableHeader={false}
-                        selectorActions={actions}
-                        enumtype={'UserTypes'}
-                      />
-                    </div>
+                    <Students
+                      students={students}
+                      showTableHeader={false}
+                      selectorActions={actions}
+                      enumtype={'UserTypes'}
+                    />
                   )}
                 </section>
               </>

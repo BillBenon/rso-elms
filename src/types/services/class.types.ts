@@ -43,7 +43,7 @@ export interface StudentsInClass extends Table {
   intake_level_class: IClass;
 }
 
-export interface IClass extends Table, ICreateClass {
+export interface IClass extends Table {
   academic_year_program_intake_level: LevelIntakeProgram;
   intake_academic_year_period: IntakeProgramLevelPeriodInfo;
   class_representative_one_id: string;
@@ -53,6 +53,9 @@ export interface IClass extends Table, ICreateClass {
   instructor_class_incharge_name: string;
   class_group_type: ClassGroupType;
   class_name: string;
+  instructor_class_incharge_three_id: string;
+  instructor_class_incharge_two_id: string;
+  intake_academic_year_period_id: number;
 }
 
 export enum ClassGroupType {
