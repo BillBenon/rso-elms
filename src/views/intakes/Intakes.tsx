@@ -58,7 +58,7 @@ export default function Intakes() {
   const list: LinkType[] = [
     { to: 'home', title: 'Institution Admin' },
     { to: 'faculty', title: t('Faculty') },
-    { to: 'programs', title: 'Programs' },
+    { to: 'programs', title: t('Program') },
     { to: 'intakes', title: 'Intakes' },
   ];
 
@@ -119,7 +119,7 @@ export default function Intakes() {
                 type: advancedTypeChecker(intake.intake_program.intake.intake_status),
                 text: intake.intake_program.intake.intake_status.toString(),
               },
-              code: intake.intake_program.intake.code,
+              code: intake.intake_program.intake.title,
               title: intake.intake_program.intake.title,
               description: intake.intake_program.intake.description,
               footerTitle: intake.intake_program.intake.total_num_students,
@@ -138,8 +138,8 @@ export default function Intakes() {
               type: advancedTypeChecker(intake.intake_program.intake.intake_status),
               text: intake.intake_program.intake.intake_status.toString(),
             },
-            code: intake.intake_program.intake.code,
-            title: intake.intake_program.intake.title,
+            code: intake.intake_program.intake.title,
+            title: intake.intake_program.intake.description,
             description: intake.intake_program.intake.description,
             footerTitle: intake.intake_program.intake.total_num_students,
             registrationControlId:
@@ -152,9 +152,21 @@ export default function Intakes() {
           let intake = intk as ExtendedIntakeInfo;
           let cardData: IntakeCardType = {
             id: intake.id,
-            code: intake.code.toUpperCase(),
-            description: intake.description,
-            title: intake.title || `------`,
+            code: intake.title.toUpperCase(),
+            description: `${
+              moment(intake.expected_start_date).day() +
+              '/' +
+              moment(intake.expected_start_date).month() +
+              '/' +
+              moment(intake.expected_start_date).year()
+            } - ${
+              moment(intake.expected_end_date).day() +
+              '/' +
+              moment(intake.expected_end_date).month() +
+              '/' +
+              moment(intake.expected_end_date).year()
+            }`,
+            title: intake.description || ``,
             status: {
               type: advancedTypeChecker(intake.intake_status),
               text: intake.intake_status.toString(),

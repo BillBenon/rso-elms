@@ -112,9 +112,9 @@ export default function SubjectDetails() {
       </section> */}
       <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-5 pt-4 md:pt-11">
         <div className="w-44">
-          <button className="outline-none" onClick={goBack}>
+          <Button className="outline-none" onClick={goBack}>
             <Icon name={'back-arrow'} bgColor="gray" />
-          </button>
+          </Button>
         </div>
         <div className="md:col-span-3 pt-4 md:pt-0">
           <Heading fontSize="2xl" fontWeight="semibold">

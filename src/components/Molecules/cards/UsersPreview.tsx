@@ -38,7 +38,7 @@ export default function UsersPreview({
   return (
     <>
       <div
-        className="flex flex-col gap-6 w-60 py-4 px-6 h-32 z-1 bg-main cursor-pointer"
+        className="flex flex-col gap-6 w-60 py-4 px-6 h-32 z-1 bg-main cursor-pointer border-2 border-[#e9ecef]"
         onClick={handleShowSidebar}>
         <div className="flex flex-col gap-2">
           <Heading color="txt-secondary" fontSize="base">

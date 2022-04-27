@@ -143,7 +143,7 @@ export default function ModuleDetails() {
   const list: Link[] = [
     { to: 'home', title: 'home' },
     { to: 'subjects', title: t('Faculty') },
-    { to: 'subjects', title: 'Programs' },
+    { to: 'subjects', title: t('Program') },
     { to: 'modules', title: 'Modules' },
     {
       to: moduleData?.id + '',

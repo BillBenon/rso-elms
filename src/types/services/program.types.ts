@@ -3,9 +3,8 @@ import { Table } from '..';
 import { DivisionInfo } from './division.types';
 import { Instructor } from './instructor.types';
 import { ILevel } from './levels.types';
-export interface ProgramInfo extends CreateProgramInfo, Table, ProgramFile {
+export interface ProgramInfo extends CreateProgramInfo, Table {
   department: DivisionInfo;
-  incharge: Instructor;
   current_admin_names: string;
   total_num_modules: number;
   current_admin_id: string;

@@ -1,5 +1,6 @@
 import { Table } from '..';
 import { EventInfo, VenueInfo } from './event.types';
+import { UserInfo } from './user.types';
 
 /* eslint-disable no-unused-vars */
 export enum scheduleAppliesTo {
@@ -37,6 +38,11 @@ export enum ScheduleStatus {
   COMPLETED = 'COMPLETED',
   CANCELED = 'CANCELED',
   ON_HOLD = 'ON_HOLD',
+}
+
+export enum TimetableStatus {
+  PROVISIONAL = 'PROVISIONAL',
+  CONFIRMED = 'CONFIRMED',
 }
 
 export interface Hour {
@@ -117,39 +123,51 @@ export interface ScheduleInfo extends Table, CommonScheduleProperties {
   period: 1;
 }
 
-export interface ICreateClassTimeTable {
-  instructor: string;
-  timetable: createRecurringSchedule[];
-  repeatingDays: string[];
+export interface ICreateTimeTableActivity {
+  inChargeId: string;
+  // timetable: createRecurringSchedule[];
+  // repeatingDays: string[];
   startHour: string;
   endHour: string;
-  courseModule: string;
-  venue: string;
-  intakeLevelClass: string;
+  courseModuleId: string;
+  venueId: string;
+  // intakeLevelClass: string;
+  activityDate: string;
+  courseCode: string;
+  dayOfWeek: daysOfWeek;
+  dressCode: string;
+  eventId: string;
+  methodOfInstruction: methodOfInstruction;
+  periods: number;
+  weeklyTimetableId: string;
 }
 
-export interface IUpdateClassTimetable {
+export interface IUpdateTimetableActivity extends ICreateTimeTableActivity {
   id: string;
-  courseModule: string;
-  dayOfWeek: daysOfWeek;
-  endHour: string;
-  instructor: string;
-  intakeLevelClass: string;
-  startHour: string;
-  venue: string;
 }
 
 interface courseModule extends Table {
   name: string;
 }
-export interface ClassTimeTableInfo extends Table {
-  course_module: courseModule;
+
+interface TTUser extends UserInfo {
+  adminId: string;
+}
+
+export interface ITimeTableActivityInfo extends Table {
+  activity_date: string;
+  activity_foot_notes: IActivityFootNote[];
+  activity_status: TimetableStatus;
+  course_code: string;
+  course_module?: courseModule;
   day_of_week: daysOfWeek;
+  dress_code: string;
   end_hour: string;
-  instructor: Table;
-  intake_level_class: Table;
+  event: EventInfo;
+  in_charge: TTUser;
+  method_of_instruction: methodOfInstruction;
+  periods: number;
   start_hour: string;
-  timetable_status: ScheduleStatus;
   venue: VenueInfo;
 }
 
@@ -158,4 +176,24 @@ export interface BigCalendarEvent {
   title: string;
   start: Date;
   end: Date;
+}
+
+export interface IActivityFootNote extends Table {
+  foot_note: string;
+}
+
+export interface ICreateTimeTableWeek {
+  endDate: string;
+  intakeLevelId: number;
+  startDate: string;
+  weekName: string;
+}
+
+export interface ITimeTableWeekInfo extends Table {
+  status: TimetableStatus;
+  activities: ITimeTableActivityInfo[];
+  academic_program_intake_level: Table;
+  end_date: string;
+  start_date: string;
+  week_name: string;
 }

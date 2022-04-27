@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -28,6 +29,7 @@ export default function AddProgramSyllabus({ programId }: DocParams) {
   });
 
   const [file, setFile] = useState<File | null>(null);
+  const { t } = useTranslation();
 
   const handleUpload = (files: FileList | null) => {
     setFile(files ? files[0] : null);
@@ -64,7 +66,7 @@ export default function AddProgramSyllabus({ programId }: DocParams) {
             {
               onSuccess() {
                 toast.success('Document uploaded successfully');
-                queryClient.invalidateQueries(['programs/id', programId]);
+                queryClient.invalidateQueries(['intake-program/id', programId]);
                 history.goBack();
               },
               onError(error: any) {
@@ -92,7 +94,7 @@ export default function AddProgramSyllabus({ programId }: DocParams) {
           handleChange={handleChange}
           placeholder="Enter attachment purpose"
           name="purpose">
-          Program Syllabus Title
+          {t('Program')} Syllabus Title
         </InputMolecule>
 
         <TextAreaMolecule
