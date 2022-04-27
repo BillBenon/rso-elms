@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 
 import { queryClient } from '../../../../plugins/react-query';
@@ -9,7 +10,7 @@ import {
   DivisionCreateInfo,
   FacultyErrors,
 } from '../../../../types/services/division.types';
-import { facultySchema } from '../../../../validations/division.validation';
+import { useDivisionValidation } from '../../../../validations/division.validation';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
@@ -24,6 +25,8 @@ export default function NewFaculty({ onSubmit, academy_id }: IDivisionsAcademyTy
     name: '',
   });
 
+  const { facultySchema } = useDivisionValidation();
+
   const initialErrorState: FacultyErrors = {
     name: '',
     description: '',
@@ -33,6 +36,7 @@ export default function NewFaculty({ onSubmit, academy_id }: IDivisionsAcademyTy
 
   const { mutateAsync } = divisionStore.createDivision();
   const history = useHistory();
+  const { t } = useTranslation();
 
   function handleChange({ name, value }: ValueType) {
     setDivision((old) => ({ ...old, [name]: value }));
@@ -80,7 +84,7 @@ export default function NewFaculty({ onSubmit, academy_id }: IDivisionsAcademyTy
         value={division.name}
         handleChange={handleChange}
         name="name">
-        Faculty name
+        {t('Faculty')} name
       </InputMolecule>
       {/* model code
     {/* module description */}

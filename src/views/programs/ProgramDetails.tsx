@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import {
   Link,
   Route,
@@ -48,6 +49,7 @@ export default function ProgramDetailsMolecule() {
   const programLevels = getLevelsByAcademicProgram(id).data?.data.data;
   const [fileUrl, setUrl] = useState('');
   const { mutate } = attachementStore.deleteAttachmentById();
+  const { t } = useTranslation();
 
   async function downloadProgramAttachment(data: ProgramInfo | undefined) {
     await setUrl(
@@ -124,7 +126,7 @@ export default function ProgramDetailsMolecule() {
   };
   const list: Links[] = [
     { to: 'home', title: 'home' },
-    { to: 'divisions', title: 'Faculty' },
+    { to: 'divisions', title: t('Faculty') },
     { to: 'programs', title: 'Programs' },
     { to: `${url}`, title: 'details' },
   ];
