@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
@@ -20,17 +21,17 @@ interface ParamType {
   levelId: string;
 }
 
-const list = [
-  { to: 'home', title: 'Institution Admin' },
-  { to: 'programs', title: 'Programs' },
-  { to: 'level', title: 'Performance' },
-];
-
 export default function LevelPerformance() {
   const { levelId } = useParams<ParamType>();
   const history = useHistory();
   const { path } = useRouteMatch();
+  const { t } = useTranslation();
 
+  const list = [
+    { to: 'home', title: 'Institution Admin' },
+    { to: 'programs', title: t('Program') },
+    { to: 'level', title: 'Performance' },
+  ];
   const { data: prds } = academicperiodStore.getPeriodsByIntakeLevelId(levelId);
 
   const prdIds = prds?.data.data.map((prd) => prd.id).join(',');

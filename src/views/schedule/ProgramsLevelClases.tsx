@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
@@ -27,6 +28,7 @@ export default function PrograsmLevelClasses() {
 
   let programInfo = levels?.data.data[0]?.intake_program.program || undefined;
   const { data, isLoading } = classStore.getAllClasses();
+  const { t } = useTranslation();
 
   function filterClassByLevel(levelId: string | number) {
     return (data?.data.data || [])?.filter(
@@ -36,10 +38,12 @@ export default function PrograsmLevelClasses() {
 
   return (
     <div>
-      <TableHeader showBadge={false} title={programInfo?.name || 'Program levels'}>
+      <TableHeader
+        showBadge={false}
+        title={programInfo?.name || t('Program') + ' levels'}>
         <Permission privilege={Privileges.CAN_ACCESS_CALENDER}>
           <Link to={`/dashboard/schedule/calendar/${programInfo?.id}`}>
-            <Button styleType="outline">Program calendar</Button>
+            <Button styleType="outline">{t('Program')} calendar</Button>
           </Link>
         </Permission>
       </TableHeader>

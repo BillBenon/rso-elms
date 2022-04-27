@@ -1,5 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -31,6 +32,7 @@ export default function UpdateAcademicProgram<E>({
 }: IUpdateAcademicProgram<E>) {
   const history = useHistory();
   const { id } = useParams<ParamType>();
+  const { t } = useTranslation();
 
   const picked_role = usePickedRole();
   const { data: users } = usersStore.getUsersByAcademyAndUserType(
@@ -137,7 +139,7 @@ export default function UpdateAcademicProgram<E>({
         <div className="p-6 w-auto lg:w-5/12 pl-6 gap-3 rounded-lg bg-main mt-8">
           <div className="py-5 mb-3 capitalize">
             <Heading color="txt-primary" fontWeight="bold">
-              Edit Program
+              Edit {t('Program')}
             </Heading>
           </div>
           <InputMolecule
@@ -146,7 +148,7 @@ export default function UpdateAcademicProgram<E>({
             error={errors.name}
             handleChange={(e) => handleChange(e)}
             name="name">
-            program name
+            {t('Program')} name
           </InputMolecule>
           <InputMolecule
             value={details.code}
@@ -154,7 +156,7 @@ export default function UpdateAcademicProgram<E>({
             error={errors.code}
             handleChange={(e) => handleChange(e)}
             name="code">
-            Program code
+            {t('Program')} code
           </InputMolecule>
           <RadioMolecule
             className="pb-2"
@@ -162,14 +164,14 @@ export default function UpdateAcademicProgram<E>({
             name="type"
             options={getDropDownStatusOptions(ProgramType)}
             handleChange={(e) => handleChange(e)}>
-            Program Type
+            {t('Program')} Type
           </RadioMolecule>
           <TextAreaMolecule
             error={errors.description}
             value={details.description}
             name="description"
             handleChange={(e) => handleChange(e)}>
-            Program description
+            {t('Program')} description
           </TextAreaMolecule>
           <DropdownMolecule
             error={errors.in_charge_id}

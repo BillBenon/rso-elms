@@ -110,13 +110,13 @@ export default function ProgramDetailsMolecule() {
   const programData = getProgramData();
   const tabs: TabType[] = [
     {
-      label: 'Program info',
+      label: t('Program') + ' information',
       href: `${url}`,
     },
   ];
 
   tabs.push({
-    label: 'Program modules',
+    label: t('Program') + ' modules',
     href: `${url}/modules`,
     privilege: Privileges.CAN_ACCESS_MODULES,
   });
@@ -127,7 +127,7 @@ export default function ProgramDetailsMolecule() {
   const list: Links[] = [
     { to: 'home', title: 'home' },
     { to: 'divisions', title: t('Faculty') },
-    { to: 'programs', title: 'Programs' },
+    { to: 'programs', title: t('Program') },
     { to: `${url}`, title: 'details' },
   ];
 
@@ -148,7 +148,7 @@ export default function ProgramDetailsMolecule() {
                 return (
                   <PopupMolecule
                     closeOnClickOutSide={false}
-                    title="Add level to program"
+                    title={'Add level to ' + t('Program')}
                     open={true}
                     onClose={() => history.goBack()}>
                     <AddLevelToProgram />
@@ -166,7 +166,7 @@ export default function ProgramDetailsMolecule() {
                       <CommonCardMolecule data={programData}>
                         <div className="flex flex-col mt-8 gap-7 pb-2">
                           <Heading color="txt-secondary" fontSize="sm">
-                            Program Type
+                            {t('Program')} Type
                           </Heading>
                           <Heading fontSize="sm">
                             {programData.subTitle?.replaceAll('_', ' ')}
@@ -184,7 +184,7 @@ export default function ProgramDetailsMolecule() {
                         </div>
                         <div className="mt-4 flex space-x-4">
                           <Button onClick={() => history.push(`${url}/edit`)}>
-                            Edit program
+                            Edit {t('Program')}
                           </Button>
                           <Button styleType="outline">Change Status</Button>
                         </div>
@@ -250,7 +250,7 @@ export default function ProgramDetailsMolecule() {
                     <Permission privilege={Privileges.CAN_ACCESS_PROGRAM_LEVELS}>
                       <div className="mr-20 rounded border-2 border-[#e9ecef] flex flex-col gap-7 w-354 p-6 bg-main">
                         <Heading color="txt-secondary" fontSize="base">
-                          Program Syllabus
+                          {t('Program')} Syllabus
                         </Heading>
                         <div className="flex flex-col gap-4">
                           {program?.attachment_id == null ? (
@@ -260,7 +260,7 @@ export default function ProgramDetailsMolecule() {
                                   to={`${url}/programSyllabus/add`}
                                   className="bg-secondary px-2 rounded-sm hover:bg-tertiary flex items-center justify-end">
                                   <Icon name="add" size={12} fill="primary" />
-                                  Add Program Syllabus
+                                  Add {t('Program')} Syllabus
                                 </Link>
                               </div>
                             </Permission>
@@ -280,7 +280,7 @@ export default function ProgramDetailsMolecule() {
                                     to={`${url}/programSyllabus/add`}
                                     className="flex items-center justify-end">
                                     <Icon name="add" size={12} fill="primary" />
-                                    Add new Program Syllabus
+                                    Add new {t('Program')} Syllabus
                                   </Link>
                                 </div>
                                 <div className="flex space-x-4">
@@ -329,7 +329,7 @@ export default function ProgramDetailsMolecule() {
               render={() => {
                 return (
                   <PopupMolecule
-                    title="New Program Syllabus"
+                    title={'New ' + t('Program') + ' Syllabus'}
                     open
                     onClose={history.goBack}>
                     <AddProgramSyllabus programId={program?.id + ''} />
