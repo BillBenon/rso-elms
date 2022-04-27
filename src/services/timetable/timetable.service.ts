@@ -8,7 +8,13 @@ import {
   ITimeTableActivityInfo,
   ITimeTableWeekInfo,
   IUpdateTimetableActivity,
+  TimetableStatus,
 } from '../../types/services/schedule.types';
+
+type ChangeStatusType = {
+  id: string;
+  status: TimetableStatus;
+};
 
 class TimetableService {
   public async createLevelTimetable(
@@ -70,6 +76,13 @@ class TimetableService {
     intakeLevelId: string,
   ): Promise<AxiosResponse<Response<ITimeTableWeekInfo[]>>> {
     return await timetableAxios.get(`/weekly-timetable/intakeLevel/${intakeLevelId}`);
+  }
+
+  public async changeWeekStatus({
+    id,
+    status,
+  }: ChangeStatusType): Promise<AxiosResponse<Response<ITimeTableWeekInfo>>> {
+    return await timetableAxios.put(`/weekly-timetable/${id}/change-status/${status}`);
   }
 }
 
