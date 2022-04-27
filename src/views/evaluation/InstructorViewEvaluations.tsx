@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
-
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -32,6 +31,7 @@ import EvaluationDetails from './EvaluationDetails';
 import EvaluationNotiView from './EvaluationNotiView';
 import EvaluationTest from './EvaluationTest';
 import StudentReview from './StudentReview';
+import Templates from './Templates';
 
 export default function InstructorViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
@@ -211,15 +211,28 @@ export default function InstructorViewEvaluations() {
                     options={getDropDownStatusOptions(IEvaluationOwnership)}
                   />
 
-                  <Permission privilege={Privileges.CAN_CREATE_EVALUATIONS}>
-                    <Button
-                      className="self-start"
-                      onClick={() => {
-                        history.push(`${path}/create`);
-                      }}>
-                      New evaluation
-                    </Button>
-                  </Permission>
+                  <div className="flex gap-4">
+                    <Permission privilege={Privileges.CAN_CREATE_EVALUATION_TEMPLATE}>
+                      <Button
+                        className="self-start"
+                        styleType="outline"
+                        onClick={() => {
+                          history.push(`${path}/templates`);
+                        }}>
+                        New evaluation preset
+                      </Button>
+                    </Permission>
+
+                    <Permission privilege={Privileges.CAN_CREATE_EVALUATIONS}>
+                      <Button
+                        className="self-start"
+                        onClick={() => {
+                          history.push(`${path}/create`);
+                        }}>
+                        New evaluation
+                      </Button>
+                    </Permission>
+                  </div>
                 </div>
               </div>
 
@@ -298,14 +311,14 @@ export default function InstructorViewEvaluations() {
           />
         )}
 
+        {hasPrivilege(Privileges.CAN_CREATE_EVALUATION_TEMPLATE) && (
+          <Route path={`${path}/templates`} component={Templates} />
+        )}
+
         {hasPrivilege(Privileges.CAN_CREATE_EVALUATIONS) && (
           <Route path={`${path}/create`} component={EvaluationInfoComponent} />
         )}
 
-        {/**
-         * Fix routes
-         *
-         */}
         {hasPrivilege(Privileges.CAN_CREATE_EVALUATIONS) && (
           <Route
             path={`${path}/:evaluationId/addquestions`}

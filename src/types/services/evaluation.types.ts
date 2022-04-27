@@ -412,3 +412,11 @@ export interface IclassWorkGroupInfo extends Table {
   team_leader: IClassStudent;
   team_leader_id: string;
 }
+
+export interface IEvaluationTemplateInfo extends Table {
+  name: string;
+  academy_id: string;
+  allow_submission_time: string;
+  due_on: string;
+  marking_reminder_date: null;
+}

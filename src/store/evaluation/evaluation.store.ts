@@ -212,6 +212,26 @@ class EvaluationStore {
   uploadEvaluationQuestionFile() {
     return useMutation(evaluationService.uploadQuestionFile);
   }
+
+  getTemplates(academyId: string) {
+    return useQuery(['templates', academyId], () =>
+      evaluationService.getEvaliationTemplates(academyId),
+    );
+  }
+
+  deleteTemplate() {
+    return useMutation(evaluationService.deleteTemplate);
+  }
+
+  getTemplateById(id: string) {
+    return useQuery(['template', id], () => evaluationService.getTemplateById(id), {
+      enabled: !!id,
+    });
+  }
+
+  createTemplate() {
+    return useMutation(evaluationService.createTemplate);
+  }
 }
 
 export function getEvaluationFeedbacks(
