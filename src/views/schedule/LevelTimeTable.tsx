@@ -49,7 +49,7 @@ export default function ClassTimeTable() {
 
   const handlePrint = useReactToPrint({
     content: () => timetableRef.current,
-    documentTitle: `${levelInfo?.class_name}-timetable`,
+    documentTitle: `${levelInfo?.academic_program_level.level.name}-timetable`,
     onBeforeGetContent: () => setisPrinting(true),
     onAfterPrint: () => setisPrinting(false),
     copyStyles: true,
@@ -72,7 +72,7 @@ export default function ClassTimeTable() {
 
           <Permission privilege={Privileges.CAN_CREATE_TIMETABLE}>
             <Link to={`${url}/new-schedule`}>
-              <Button type="button">New timetable</Button>
+              <Button type="button">Add Activity</Button>
             </Link>
           </Permission>
         </div>
@@ -103,24 +103,22 @@ export default function ClassTimeTable() {
               <div className="col-span-4">
                 {groupedTimeTable[day].map((activity) => {
                   let instructor = instructors?.find(
-                    (inst) => inst.id == activity.instructor.id,
+                    (inst) => inst.id == activity.in_charge.id,
                   );
                   return (
                     <div
                       key={activity.id}
                       className="timetable-item relative col-span-4 grid grid-cols-4 gap-3 cursor-pointer hover:bg-lightgreen px-2 hover:text-primary-600">
                       <p className=" uppercase">
-                        {activity.start_hour.substring(0, 5)} -
-                        {' ' + activity.end_hour.substring(0, 5)}
+                        {/* {activity.start_hour.substring(0, 5)} -
+                        {' ' + activity.end_hour.substring(0, 5)} */}
                       </p>
-                      <p className="col-span-3">{activity.course_module.name}</p>
-                      <p className="">{activity.course_module.id}</p>
-                      {/* 
-                      above is course code
-                      below is course period
-                      */}
-                      <p className="">{2}</p>
-                      <p className="">{'PRAC'}</p>
+                      <p className="col-span-3">
+                        {activity.course_module?.name || activity.event.name}
+                      </p>
+                      <p className="">{activity.course_code}</p>
+                      <p className="">{activity.periods}</p>
+                      <p className="">{activity.method_of_instruction}</p>
                       <p className="">{activity.venue.name}</p>
                       <p className=" col-span-2">
                         {`${instructor?.user.first_name} ${instructor?.user.last_name}`}
