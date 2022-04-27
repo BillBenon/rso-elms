@@ -26,14 +26,25 @@ function InstructorModuleAssignment({ module_id, intake_program_id }: Props) {
   useEffect(() => {
     let users: UserView[] = [];
 
-    instructorsProgram?.data.data.sort(function (a, b) {
+    const rankedInstructors =
+      instructorsProgram?.data.data.filter(
+        (inst) => inst.instructor.user.person.current_rank,
+      ) || [];
+    const unrankedInstructors =
+      instructorsProgram?.data.data.filter(
+        (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedInstructors.sort(function (a, b) {
       return (
         a.instructor.user.person.current_rank?.priority -
         b.instructor.user.person.current_rank?.priority
       );
     });
 
-    instructorsProgram?.data.data.map((inst) =>
+    const finalInstructors = rankedInstructors.concat(unrankedInstructors);
+
+    finalInstructors.map((inst) =>
       users.push({
         id: inst.id,
         rank: inst.instructor.user.person.current_rank?.name,

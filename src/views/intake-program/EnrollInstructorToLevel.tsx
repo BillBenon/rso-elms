@@ -43,14 +43,25 @@ function EnrollInstructorToLevel<T>({
     });
     let instructorsView: UserView[] = [];
 
-    instructorsInProgram?.data.data.sort(function (a, b) {
+    const rankedInstructors =
+      instructorsInProgram?.data.data.filter(
+        (inst) => inst.instructor.user.person.current_rank,
+      ) || [];
+    const unrankedInstructors =
+      instructorsInProgram?.data.data.filter(
+        (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedInstructors.sort(function (a, b) {
       return (
         a.instructor.user.person.current_rank?.priority -
         b.instructor.user.person.current_rank?.priority
       );
     });
 
-    instructorsInProgram?.data.data.forEach((inst) => {
+    const finalInstructors = rankedInstructors.concat(unrankedInstructors);
+
+    finalInstructors.forEach((inst) => {
       if (!instructor_ids.includes(inst.id)) {
         let instructorView: UserView = {
           id: inst.id,

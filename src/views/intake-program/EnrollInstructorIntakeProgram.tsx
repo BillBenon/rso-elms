@@ -46,11 +46,21 @@ function EnrollInstructorIntakeProgram({
     }
     let instructorsView: UserView[] = [];
 
-    instructorsInAcademy?.data.data.sort(function (a, b) {
+    const rankedInstructors =
+      instructorsInAcademy?.data.data.filter((inst) => inst.user.person.current_rank) ||
+      [];
+    const unrankedInstructors =
+      instructorsInAcademy?.data.data.filter(
+        (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedInstructors.sort(function (a, b) {
       return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
     });
 
-    instructorsInAcademy?.data.data
+    const finalInstructors = rankedInstructors.concat(unrankedInstructors);
+
+    finalInstructors
       .filter((inst) => inst.user.academy.id === picked_role?.academy_id)
       .forEach((inst) => {
         if (!existing_ids.includes(inst.id + '')) {

@@ -57,14 +57,25 @@ export default function EnrollRetakingStudents<T>({
     }
     let studentsView: UserView[] = [];
 
-    retakingStudents?.data.data.sort(function (a, b) {
+    const rankedStudents =
+      retakingStudents?.data.data.filter(
+        (inst) => inst.student.user.person.current_rank,
+      ) || [];
+    const unrankedStudents =
+      retakingStudents?.data.data.filter(
+        (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedStudents.sort(function (a, b) {
       return (
         a.student.user.person.current_rank?.priority -
         b.student.user.person.current_rank?.priority
       );
     });
 
-    retakingStudents?.data.data.forEach((stud) => {
+    const finalStudents = rankedStudents.concat(unrankedStudents);
+
+    finalStudents.forEach((stud) => {
       if (!existing_ids.includes(stud.student.id + '')) {
         let studentView: UserView = {
           id: stud.student.id,

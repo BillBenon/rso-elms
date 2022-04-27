@@ -63,14 +63,25 @@ function EnrollStudentIntakeProgram<T>({
     }
     let studentsView: UserView[] = [];
 
-    studentsInAcademy?.data.data.sort(function (a, b) {
+    const rankedStudents =
+      studentsInAcademy?.data.data.filter(
+        (inst) => inst.student.user.person.current_rank,
+      ) || [];
+    const unrankedStudents =
+      studentsInAcademy?.data.data.filter(
+        (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedStudents.sort(function (a, b) {
       return (
         a.student.user.person.current_rank?.priority -
         b.student.user.person.current_rank?.priority
       );
     });
 
-    studentsInAcademy?.data.data.forEach((stud) => {
+    const finalInstructors = rankedStudents.concat(unrankedStudents);
+
+    finalInstructors.forEach((stud) => {
       if (!existing_ids.includes(stud.student.id + '')) {
         let studentView: UserView = {
           id: stud.student.id,

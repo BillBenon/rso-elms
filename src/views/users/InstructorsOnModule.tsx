@@ -20,11 +20,20 @@ function InstructorsOnModule() {
 
   let instrs: UserTypes[] = [];
 
-  instructorInfos?.data.data.sort(function (a, b) {
+  const rankedInstructors =
+    instructorInfos?.data.data.filter((inst) => inst.user.person.current_rank) || [];
+  const unrankedInstructors =
+    instructorInfos?.data.data.filter(
+      (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+    ) || [];
+
+  rankedInstructors.sort(function (a, b) {
     return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
   });
 
-  instructorInfos?.data.data.map((obj) => {
+  const finalInstructors = rankedInstructors.concat(unrankedInstructors);
+
+  finalInstructors.map((obj) => {
     let {
       id,
       username,

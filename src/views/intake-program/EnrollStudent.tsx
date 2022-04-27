@@ -45,14 +45,25 @@ function EnrollStudent({ showSidebar, handleShowSidebar }: IEnrollStudent) {
     });
     let studentsView: UserView[] = [];
 
-    studentsProgram?.data.data.sort(function (a, b) {
+    const rankedStudents =
+      studentsProgram?.data.data.filter(
+        (inst) => inst.student.user.person.current_rank,
+      ) || [];
+    const unrankedStudents =
+      studentsProgram?.data.data.filter(
+        (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    unrankedStudents.sort(function (a, b) {
       return (
         a.student.user.person.current_rank?.priority -
         b.student.user.person.current_rank?.priority
       );
     });
 
-    studentsProgram?.data.data.forEach((stud) => {
+    const finalStudents = rankedStudents.concat(unrankedStudents);
+
+    finalStudents.forEach((stud) => {
       if (!student_ids.includes(stud.id + '')) {
         let studentView: UserView = {
           id: stud.id,
