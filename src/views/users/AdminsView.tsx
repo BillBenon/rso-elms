@@ -61,14 +61,14 @@ export default function AdminsView() {
   let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
 
   actions?.push({
-    name: 'View admin',
+    name: 'View ' + t('Admins'),
     handleAction: (id: string | number | undefined) => {
       history.push(`/dashboard/user/${id}/profile`); // go to view user profile
     },
     privilege: Privileges.CAN_ACCESS_USERS,
   });
   actions?.push({
-    name: 'Edit admin',
+    name: 'Edit ' + t('Admins'),
     handleAction: (id: string | number | undefined) => {
       history.push(`/dashboard/users/${id}/edit`); // go to edit user
     },
@@ -108,7 +108,7 @@ export default function AdminsView() {
   });
 
   actions?.push({
-    name: 'Reset Pawssword',
+    name: 'Reset Password',
     handleAction: (id: string | number | undefined) => {
       //call a reset password api
       mutateAsync(id?.toString() || '', {
@@ -170,7 +170,7 @@ export default function AdminsView() {
         handleClick={handleClick}>
         <Permission privilege={Privileges.CAN_CREATE_USER}>
           <Link to={`/dashboard/users/add/${UserType.ADMIN}`}>
-            <Button>New admin</Button>
+            <Button>New {t('Admins')}</Button>
           </Link>
         </Permission>
       </TableHeader>
@@ -179,7 +179,7 @@ export default function AdminsView() {
       ) : users.length <= 0 ? (
         <NoDataAvailable
           icon="user"
-          buttonLabel="Add new admin"
+          buttonLabel={'Add new ' + t('Admins')}
           title={'No admins available'}
           handleClick={() => history.push(`/dashboard/users/add/${UserType.ADMIN}`)}
           description="There are no admins added into the system yet"

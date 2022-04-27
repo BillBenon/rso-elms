@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch, useLocation, useRouteMatch } from 'react-router-dom';
 
 import Icon from '../../components/Atoms/custom/Icon';
@@ -12,6 +13,7 @@ import Faculties from '../../components/Organisms/divisions/Faculties';
 export default function Divisions() {
   const { url, path } = useRouteMatch();
   const location = useLocation();
+  const { t } = useTranslation();
   const [fetchType, setFetchType] = useState<string>('');
 
   useEffect(() => {
@@ -24,7 +26,7 @@ export default function Divisions() {
 
   const tabs = [
     {
-      label: 'Faculty',
+      label: t('Faculty'),
       href: `${url}`,
     },
     {
@@ -51,7 +53,7 @@ export default function Divisions() {
       </div>
       <div className="flex gap-2 items-center py-3">
         <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
-          divisions
+          {t('Division')}
         </Heading>
         {/* <Badge
           badgetxtcolor="main"

@@ -4,7 +4,6 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
-
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { enrollmentService } from '../../../../services/administration/enrollments.service';
@@ -24,6 +23,7 @@ import {
   IEligibleClassEnum,
   IEvaluationClassification,
   IEvaluationCreate,
+  IEvaluationMode,
   IEvaluationSectionBased,
   IEvaluationSettingType,
   IEvaluationStatus,
@@ -75,6 +75,8 @@ export default function EvaluationInfoComponent() {
 
   const [programId, setProgramId] = useState('');
 
+  const templates = evaluationStore.getTemplates(user?.academy.id + '').data?.data.data;
+
   const [details, setDetails] = useState<IEvaluationCreate>({
     access_type: evaluationInfo?.access_type || IAccessTypeEnum.PUBLIC,
     academy_id: picked_role?.academy_id + '',
@@ -105,6 +107,7 @@ export default function EvaluationInfoComponent() {
     intake_academic_year_period: '',
     intake_program_level: '',
     setting_type: IEvaluationSettingType.SECTION_BASED,
+    evaluation_mode: IEvaluationMode.INDOOR,
   });
 
   useEffect(() => {
@@ -171,77 +174,12 @@ export default function EvaluationInfoComponent() {
     [cachedEvaluationModuleData].flat(),
   );
 
-  // useEffect(() => {
-  //   setDetails({
-  //     access_type: evaluationInfo?.access_type || IAccessTypeEnum.PUBLIC,
-  //     academy_id: picked_role?.academy_id + '',
-  //     private_attendees: evaluationInfo?.private_attendees.toString() || '',
-  //     instructor_id: user?.id + '',
-  //     allow_submission_time: evaluationInfo?.allow_submission_time || '',
-  //     intake_level_class_ids: evaluationInfo?.intake_level_class_ids || '',
-  //     id: evaluationInfo?.id || '',
-  //     classification: evaluationInfo?.classification || IEvaluationClassification.MODULE,
-  //     content_format: evaluationInfo?.content_format || IContentFormatEnum.DOC,
-  //     due_on: evaluationInfo?.due_on || '',
-  //     eligible_group: evaluationInfo?.eligible_group || IEligibleClassEnum.MULTIPLE,
-  //     evaluation_status: evaluationInfo?.evaluation_status || IEvaluationStatus.DRAFT,
-  //     evaluation_type: evaluationInfo?.evaluation_type || IEvaluationTypeEnum.CAT,
-  //     marking_type: evaluationInfo?.marking_type || IMarkingType.NOT_SET,
-  //     is_consider_on_report: evaluationInfo?.is_consider_on_report || true,
-  //     marking_reminder_date: evaluationInfo?.marking_reminder_date || '',
-  //     maximum_file_size: evaluationInfo?.maximum_file_size || 0,
-  //     subject_academic_year_period_id:
-  //       evaluationInfo?.subject_academic_year_period_id || '',
-  //     questionaire_type:
-  //       evaluationInfo?.questionaire_type || IQuestionaireTypeEnum.DEFAULT,
-  //     exam_instruction: evaluationInfo?.exam_instruction || '',
-  //     name: evaluationInfo?.name || '',
-  //     submision_type: evaluationInfo?.submision_type || ISubmissionTypeEnum.ONLINE_TEXT,
-  //     time_limit: evaluationInfo?.time_limit || 10,
-  //     total_mark: evaluationInfo?.total_mark || 0,
-  //     strict: evaluationInfo?.strict || true,
-  //     intakeId: '',
-  //     intake_academic_year_period: evaluationInfo?.intake_academic_year_period || '',
-  //     intake_program_level: '',
-  //     setting_type: IEvaluationSettingType.SECTION_BASED,
-  //   });
-
-  //   setEvaluationModule(evaluationInfo?.evaluation_module_subjects || []);
-  // }, [evaluationInfo, picked_role?.academy_id, user?.id]);
-
   const { mutate, isLoading: createEvaluationLoader } =
     evaluationStore.createEvaluation();
   const { mutate: mutateSectionBased, isLoading: sectionBasedLoader } =
     evaluationStore.createSectionBasedEvaluation();
 
   function handleChange({ name, value }: ValueType) {
-    // if (name === ('due_on' || 'allow_submission_time') && typeof value === 'string') {
-    //   if (name === 'due_on') {
-    //     setTimeDifference(
-    //       moment(value).diff(moment(details.allow_submission_time), 'minutes'),
-    //     );
-    //   }
-    // if (timeDifference < 0) toast.error('Due time cannot be less than start time!');
-    // setDetails((details) => ({
-    //   ...details,
-    // }));
-    //   setDetails((details) => ({
-    //     ...details,
-    //     [name]: value,
-    //   }));
-    //   return;
-    // }
-    //set class ids and eligible group to empty since it's private
-    // if (name === 'private_attendees') {
-    //   setDetails((details) => ({
-    //     ...details,
-    //     eligible_group: '',
-    //     intake_level_class_ids: '',
-    //     private_attendees: value.toString(),
-    //   }));
-    //   return;
-    // }
-
     if (name === 'intake_program_level') {
       const intakeProgramLevel = levels?.data.data.find((level) => {
         return level.id === Number(value);
@@ -360,15 +298,17 @@ export default function EvaluationInfoComponent() {
     instructorInfo?.id + '',
   );
 
-  const { data: levels } = intakeProgramStore.getLevelsByIntakeProgram(
-    details?.intakeId || '',
-    details?.intakeId?.length === 36,
-  );
+  const { data: levels, isLoading: levelsLoading } =
+    intakeProgramStore.getLevelsByIntakeProgram(
+      details?.intakeId || '',
+      details?.intakeId?.length === 36,
+    );
 
-  const { data: periods } = intakeProgramStore.getPeriodsByLevel(
-    Number(details?.intake_program_level),
-    details?.intake_program_level.length !== 0,
-  );
+  const { data: periods, isLoading: periodsLoading } =
+    intakeProgramStore.getPeriodsByLevel(
+      Number(details?.intake_program_level),
+      details?.intake_program_level.length !== 0,
+    );
 
   function handleAddModule() {
     let newModule = initialState;
@@ -428,45 +368,6 @@ export default function EvaluationInfoComponent() {
         },
       },
     );
-
-    // if (details.time_limit > 0) {
-    //   mutateAsync(
-    //     {
-    //       ...details,
-    //       ['due_on']: moment(details.due_on).format('YYYY-MM-DD HH:mm:ss'),
-    //       ['allow_submission_time']: moment(details.allow_submission_time).format(
-    //         'YYYY-MM-DD HH:mm:ss',
-    //       ),
-    //     },
-    //     {
-    //       onSuccess: () => {
-    //         toast.success('Evaluation updated', { duration: 5000 });
-    //       },
-    //       onError: (error: any) => {
-    //         toast.error(error.response.data.message);
-    //       },
-    //     },
-    //   );
-    // } else {
-    //   mutate(
-    //     {
-    //       ...details,
-    //       ['due_on']: moment(details.due_on).format('YYYY-MM-DD HH:mm:ss'),
-    //       ['allow_submission_time']: moment(details.allow_submission_time).format(
-    //         'YYYY-MM-DD HH:mm:ss',
-    //       ),
-    //     },
-    //     {
-    //       onSuccess: (data) => {
-    //update evaluation id in evaluation module
-
-    // },
-    // onError: (error: any) => {
-    //   toast.error(error.response.data.data + '');
-    // },
-    // },
-    // );
-    // }
   }
 
   return (
@@ -505,6 +406,7 @@ export default function EvaluationInfoComponent() {
           name="intake_program_level"
           placeholder="program  level"
           handleChange={handleChange}
+          loading={levelsLoading}
           options={
             levels?.data.data.map((item) => {
               return {
@@ -521,6 +423,7 @@ export default function EvaluationInfoComponent() {
           width="64 py-4"
           name="intake_academic_year_period"
           placeholder="Academic year"
+          loading={periodsLoading}
           handleChange={handleChange}
           options={
             periods?.data.data.map((item) => {
@@ -533,14 +436,22 @@ export default function EvaluationInfoComponent() {
           Select academic year period
         </SelectMolecule>
 
-        <InputMolecule
-          width="80"
-          name="name"
-          placeholder="Evaluation Name"
+        <SelectMolecule
           value={details?.name}
-          handleChange={handleChange}>
+          placeholder="Evaluation Name"
+          name="name"
+          handleChange={handleChange}
+          options={
+            templates?.map((item) => {
+              return {
+                label: item.name,
+                value: item.name,
+              };
+            }) || []
+          }>
           Evaluation Name
-        </InputMolecule>
+        </SelectMolecule>
+
         <SelectMolecule
           value={details?.evaluation_type}
           width="64"
@@ -549,9 +460,17 @@ export default function EvaluationInfoComponent() {
           handleChange={handleChange}
           options={getDropDownStatusOptions(IEvaluationTypeEnum, [
             IEvaluationTypeEnum.DS_ASSESSMENT,
-            IEvaluationTypeEnum.TEWT,
           ])}>
           Evaluation type
+        </SelectMolecule>
+
+        <SelectMolecule
+          value={details.evaluation_mode}
+          name="evaluation_mode"
+          width="64"
+          handleChange={handleChange}
+          options={getDropDownStatusOptions(IEvaluationMode)}>
+          Evaluation mode
         </SelectMolecule>
 
         <SelectMolecule

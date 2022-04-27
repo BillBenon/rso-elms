@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import academyStore from '../../../store/administration/academy.store';
@@ -12,6 +13,7 @@ import AcademyProfileCard from '../cards/AcademyProfileCard';
 
 export default function Sidebar() {
   const { user } = useAuthenticator();
+  const { t } = useTranslation();
   const defaultLinks = (): linkProps[] => {
     const routes: linkProps[] = [];
     const institutionAdminLinks: linkProps[] = [];
@@ -68,7 +70,7 @@ export default function Sidebar() {
         privilege: Privileges.CAN_ACCESS_ACADEMY,
       },
       {
-        title: 'College HQ',
+        title: t('Division'),
         to: '/dashboard/divisions',
         icon: 'faculty',
         privilege: Privileges.CAN_ACCESS_DIVISIONS,

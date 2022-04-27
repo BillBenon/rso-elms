@@ -1,7 +1,7 @@
 {
-  "instructor": "Teacher",
-  "student": "Student",
-  "class": "Class",
-  "division": "Division",
-  "faculty": "Faculty"
+  "Instructor": "Teacher",
+  "Student": "Student",
+  "Class": "Class",
+  "Division": "Division",
+  "Faculty": "Faculty"
 }
