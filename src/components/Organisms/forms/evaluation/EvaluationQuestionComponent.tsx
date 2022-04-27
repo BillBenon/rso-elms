@@ -2,6 +2,7 @@ import { Editor } from '@tiptap/react';
 import React, { FormEvent, Fragment, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
+import { queryClient } from '../../../../plugins/react-query';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
 import { SelectData, ValueType } from '../../../../types';
 import {
@@ -13,6 +14,7 @@ import {
 } from '../../../../types/services/evaluation.types';
 import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
+import FileUploader from '../../../Atoms/Input/FileUploader';
 import Heading from '../../../Atoms/Text/Heading';
 import ILabel from '../../../Atoms/Text/ILabel';
 import Tiptap from '../../../Molecules/editor/Tiptap';
@@ -52,6 +54,42 @@ export default function EvaluationQuestionComponent() {
     answer: '',
   };
 
+  const [file, setFile] = useState<File | null>(null);
+  const [currentId, setCurrentId] = useState('');
+
+  const { mutate: addQuestionDoc } = evaluationStore.addQuestionDoc();
+
+  const handleUpload = (file: FileList | null, id: string) => {
+    setFile(file ? file[0] : null);
+    setCurrentId(id);
+  };
+
+  useEffect(() => {
+    const handleSubmittingFile = (id: string) => {
+      const data = new FormData();
+
+      if (file) data.append('file', file);
+
+      addQuestionDoc(
+        {
+          id,
+          docInfo: data,
+        },
+        {
+          onSuccess() {
+            setFile(null);
+            setCurrentId('');
+            toast.success('File uploaded successfully');
+            queryClient.invalidateQueries(['evaluation/questions', evaluationId]);
+          },
+        },
+      );
+    };
+    if (file) {
+      handleSubmittingFile(currentId);
+    }
+  }, [currentId, file]);
+
   const [questions, setQuestions] = useState([initialState]);
 
   useEffect(() => {
@@ -66,6 +104,7 @@ export default function EvaluationQuestionComponent() {
         questionData.question_type = question.question_type;
         questionData.submitted = false;
         questionData.id = question.id;
+        questionData.attachments = question.attachments;
         questionData.sub_questions = [];
         allQuestions.push(questionData);
       });
@@ -357,6 +396,38 @@ export default function EvaluationQuestionComponent() {
                       Correct answer
                     </SelectMolecule>
                   ) : null}
+
+                  <div className="flex items-center py-5">
+                    <FileUploader
+                      allowPreview={false}
+                      handleUpload={(filelist) => {
+                        handleUpload(filelist, question.id);
+                      }}
+                      accept={'*'}
+                      error={''}>
+                      <Button styleType="outline" type="button">
+                        upload file
+                      </Button>
+                    </FileUploader>
+                  </div>
+
+                  <div className="flex flex-col py-5">
+                    {question.attachments &&
+                      question.attachments?.length > 0 &&
+                      question.attachments?.map((attachment, index) => (
+                        <a
+                          href={`${
+                            import.meta.env.VITE_API_URL
+                          }/evaluation-service/api/evaluationQuestions/${
+                            attachment.id
+                          }/loadAttachment`}
+                          key={attachment.id}
+                          target="_blank"
+                          download>
+                          {index + 1}. {attachment.name}
+                        </a>
+                      ))}
+                  </div>
 
                   <InputMolecule
                     readonly={question.submitted}

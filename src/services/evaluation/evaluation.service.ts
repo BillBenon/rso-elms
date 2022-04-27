@@ -21,6 +21,7 @@ import {
   IStudentEvaluationStartInfo,
   IUpdateEvaluationApprovalStatus,
 } from '../../types/services/evaluation.types';
+import { FileAttachment } from '../../types/services/user.types';
 
 class EvaluationService {
   public async createEvaluation(
@@ -208,6 +209,15 @@ class EvaluationService {
   ): Promise<AxiosResponse<Response<IEvaluationSectionBased[]>>> {
     return await evaluationAxios.get(
       `/evaluation-module-subjects/getByEvaluationAndModule/${evaluationId}/module/${moduleId}`,
+    );
+  }
+
+  public async addQuestionDoc(
+    data: FileAttachment,
+  ): Promise<AxiosResponse<Response<IEvaluationQuestionsInfo>>> {
+    return await evaluationAxios.post(
+      `/evaluationQuestions/${data.id}/uploadQuestionFile`,
+      data.docInfo,
     );
   }
 

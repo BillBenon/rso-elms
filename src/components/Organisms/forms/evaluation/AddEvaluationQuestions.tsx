@@ -55,13 +55,43 @@ export default function AdddEvaluationQuestions({
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId + '').data?.data || {};
 
+  const { mutate: addQuestionDoc } = evaluationStore.addQuestionDoc();
+
   const [questions, setQuestions] = useState([initialState]);
 
   const [file, setFile] = useState<File | null>(null);
+  const [currentId, setCurrentId] = useState('');
 
-  const handleUpload = (files: FileList | null) => {
-    setFile(files ? files[0] : null);
+  const handleUpload = (file: FileList | null, id: string) => {
+    setFile(file ? file[0] : null);
+    setCurrentId(id);
   };
+
+  useEffect(() => {
+    const handleSubmittingFile = (id: string) => {
+      const data = new FormData();
+
+      if (file) data.append('file', file);
+
+      addQuestionDoc(
+        {
+          id,
+          docInfo: data,
+        },
+        {
+          onSuccess() {
+            setFile(null);
+            setCurrentId('');
+            toast.success('File uploaded successfully');
+            queryClient.invalidateQueries(['evaluation/questionsBySubject', subjectId]);
+          },
+        },
+      );
+    };
+    if (file) {
+      handleSubmittingFile(currentId);
+    }
+  }, [currentId, file]);
 
   useEffect(() => {
     let allQuestions: any[] = [];
@@ -76,6 +106,7 @@ export default function AdddEvaluationQuestions({
         questionData.question_type = question.question_type;
         questionData.submitted = false;
         questionData.id = question.id;
+        questionData.attachments = question.attachments;
         questionData.sub_questions = [];
         allQuestions.push(questionData);
       });
@@ -258,6 +289,8 @@ export default function AdddEvaluationQuestions({
     setQuestions(questionInfo);
   }
 
+  console.log(questions);
+
   return (
     <Fragment>
       <div
@@ -403,28 +436,36 @@ export default function AdddEvaluationQuestions({
                     </SelectMolecule>
                   ) : null}
 
-                  <div className="flex items-center py-10">
-                    {/* <input
-                      type="file"
-                      name="file"
-                      className="block w-full text-sm text-slate-500
-      file:mr-4 file:py-2 file:px-4
-      file:rounded-full file:border-0
-      file:text-sm file:font-semibold
-      bg-opacity-10
-      file:bg-primary-400 file:text-main
-      hover:file:bg-primary-400
-    "
-                    /> */}
+                  <div className="flex items-center py-5">
                     <FileUploader
                       allowPreview={false}
-                      handleUpload={handleUpload}
+                      handleUpload={(filelist) => {
+                        handleUpload(filelist, question.id);
+                      }}
                       accept={'*'}
                       error={''}>
                       <Button styleType="outline" type="button">
                         upload file
                       </Button>
                     </FileUploader>
+                  </div>
+
+                  <div className="flex flex-col py-5">
+                    {question.attachments &&
+                      question.attachments?.length > 0 &&
+                      question.attachments?.map((attachment, index) => (
+                        <a
+                          href={`${
+                            import.meta.env.VITE_API_URL
+                          }/evaluation-service/api/evaluationQuestions/${
+                            attachment.id
+                          }/loadAttachment`}
+                          key={attachment.id}
+                          target="_blank"
+                          download>
+                          {index + 1}. {attachment.name}
+                        </a>
+                      ))}
                   </div>
 
                   <InputMolecule
