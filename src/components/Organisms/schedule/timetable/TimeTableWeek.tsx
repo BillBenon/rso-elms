@@ -101,7 +101,7 @@ export default function TimeTableWeek({ week }: IProps) {
               <div className="col-span-10">
                 {groupedActivities[day].map((activity) => {
                   let instructor = instructors?.find(
-                    (inst) => inst.id == activity.in_charge.id,
+                    (inst) => inst.user.id == activity.in_charge.admin_id,
                   );
                   return (
                     <div
@@ -114,7 +114,7 @@ export default function TimeTableWeek({ week }: IProps) {
                       <p className="col-span-3">
                         {activity.course_module?.name || activity.event.name}
                       </p>
-                      <p className="">{activity.course_code}</p>
+                      <p className="uppercase">{activity.course_code}</p>
                       <p className="">{activity.periods}</p>
                       <p className="">{activity.method_of_instruction}</p>
                       <p className="">{activity.venue.name}</p>

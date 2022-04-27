@@ -1,6 +1,6 @@
 import { Table } from '..';
 import { EventInfo, VenueInfo } from './event.types';
-import { UserInfo } from './user.types';
+import { EvaluationStudent } from './marking.types';
 
 /* eslint-disable no-unused-vars */
 export enum scheduleAppliesTo {
@@ -159,7 +159,7 @@ export interface ITimeTableActivityInfo extends Table {
   dress_code: string;
   end_hour: string;
   event: EventInfo;
-  in_charge: UserInfo;
+  in_charge: EvaluationStudent;
   method_of_instruction: methodOfInstruction;
   periods: number;
   start_hour: string;
