@@ -13,7 +13,7 @@ import { SelectData, ValueType } from '../../../../types';
 import { IClass } from '../../../../types/services/class.types';
 import {
   daysOfWeek,
-  IUpdateClassTimetable,
+  IUpdateTimetableActivity,
 } from '../../../../types/services/schedule.types';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import {
@@ -28,7 +28,7 @@ import Stepper from '../../../Molecules/Stepper/Stepper';
 interface IStepProps {
   handleChange: (_e: ValueType) => any;
   setCurrentStep: Function;
-  values: IUpdateClassTimetable;
+  values: IUpdateTimetableActivity;
   handleSubmit?: (_e: FormEvent) => any;
   classInfo?: IClass;
 }
@@ -39,9 +39,9 @@ interface ParamType {
 }
 
 interface FirstTimeTableErrors
-  extends Pick<IUpdateClassTimetable, 'courseModule' | 'instructor'> {}
+  extends Pick<IUpdateTimetableActivity, 'courseModule' | 'instructor'> {}
 interface SecondTimeTableErrors
-  extends Pick<IUpdateClassTimetable, 'venue' | 'startHour' | 'endHour'> {
+  extends Pick<IUpdateTimetableActivity, 'venue' | 'startHour' | 'endHour'> {
   dayOfWeek: string;
 }
 
@@ -51,7 +51,7 @@ export default function EditTimeTable() {
 
   //state varibales
   const [currentStep, setcurrentStep] = useState(0);
-  const [values, setvalues] = useState<IUpdateClassTimetable>({
+  const [values, setvalues] = useState<IUpdateTimetableActivity>({
     id: itemId,
     dayOfWeek: daysOfWeek.MONDAY,
     intakeLevelClass: classId,

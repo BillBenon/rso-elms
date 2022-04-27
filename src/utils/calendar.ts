@@ -1,8 +1,8 @@
 import {
   BigCalendarEvent,
-  ClassTimeTableInfo,
   daysOfWeek,
   ScheduleInfo,
+  WeeklyTimeTableInfo,
 } from '../types/services/schedule.types';
 
 export function formatCalendarEvents(schedules: ScheduleInfo[] = []): BigCalendarEvent[] {
@@ -51,10 +51,10 @@ export function formatCalendarEvents(schedules: ScheduleInfo[] = []): BigCalenda
 }
 
 interface IDayTimeTable {
-  [index: string]: ClassTimeTableInfo[];
+  [index: string]: WeeklyTimeTableInfo[];
 }
 
-export function groupTimeTableByDay(arr: ClassTimeTableInfo[]): IDayTimeTable {
+export function groupTimeTableByDay(arr: WeeklyTimeTableInfo[]): IDayTimeTable {
   let grouped: IDayTimeTable = {};
 
   Object.keys(daysOfWeek)
