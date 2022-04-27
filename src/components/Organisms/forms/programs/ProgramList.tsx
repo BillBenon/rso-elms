@@ -1,4 +1,5 @@
 import React, { FormEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { CommonFormProps, SigninPropTypes, ValueType } from '../../../../types';
 import Button from '../../../Atoms/custom/Button';
@@ -11,6 +12,7 @@ interface PropType<K> extends CommonFormProps<K> {
 
 function ProgramList<E>({ academy, onSubmit }: PropType<E>) {
   function handleChange(_e: ValueType) {}
+  const { t } = useTranslation();
 
   function submitForm(e: FormEvent) {
     e.preventDefault(); // prevent page to reload:
@@ -29,7 +31,7 @@ function ProgramList<E>({ academy, onSubmit }: PropType<E>) {
         type="block"
         options={academy.programs}
         handleChange={handleChange}
-        name="program"
+        name={t('Program')}
       />
       <div className="mt-5">
         <Button type="submit">Register</Button>

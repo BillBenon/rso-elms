@@ -1,12 +1,10 @@
-import { StudentApproval } from './enrollment.types';
-import { GenericStatus, RoleRes, RoleResWithPrevilages } from '..';
-/* eslint-disable no-unused-vars */
-import { Table } from '..';
+import { GenericStatus, RoleRes, RoleResWithPrevilages, Table } from '..';
 import { AcademyInfo } from './academy.types';
-import { RankRes } from './rank.types';
-import { StudentIntakeProgram } from './intake-program.types';
+import { StudentApproval } from './enrollment.types';
 import { InstitutionInfo } from './institution.types';
+import { StudentIntakeProgram } from './intake-program.types';
 import { ModuleAttachment } from './module-material.types';
+import { RankRes } from './rank.types';
 export interface Student extends Table {
   reg_number: string;
   user: UserInfo;

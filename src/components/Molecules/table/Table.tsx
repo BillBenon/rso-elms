@@ -208,7 +208,7 @@ export default function Table2<T>({
     let keys = getKeys();
 
     return currentRows.map((row, index) => (
-      <tr key={index} className="hover:bg-secondary cursor-pointer">
+      <tr key={index} className="hover:bg-[#e7edec] cursor-pointer">
         <td className="pl-4">
           {uniqueCol && (
             <Checkbox
@@ -279,7 +279,7 @@ export default function Table2<T>({
   return (
     <div className="overflow-x-auto rounded-lg text-sm">
       {selected.size > 0 && (
-        <div className="rounded mb-3 py-2 bg-main flex justify-between">
+        <div className="rounded mb-3 py-2 bg-main flex justify-between text-primary-600">
           <div>
             <p className=" px-4 py-2">
               <strong>{selected.size}</strong> rows selected
@@ -311,10 +311,10 @@ export default function Table2<T>({
 
       <table className="table-auto border-collapse font-medium bg-main w-full m-auto">
         <thead>
-          <tr className="text-left text-txt-secondary border-b border-silver">
+          <tr className="text-left text-primary-500 border-b border-[#255d57] bg-[#e7edec]">
             {getHeader()}
             {actions && actions.length > 0 ? (
-              <th className="px-4 py-2">Actions</th>
+              <th className="px-4 py-2 text-primary-500">Actions</th>
             ) : null}
           </tr>
         </thead>

@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { queryClient } from '../../../../plugins/react-query';
@@ -15,6 +16,7 @@ import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function NewModuleForm() {
   const history = useHistory();
+  const { t } = useTranslation();
 
   const { id } = useParams<ParamType>();
   const program = programStore.getProgramById(id);
@@ -94,7 +96,7 @@ export default function NewModuleForm() {
         name={'program_id'}
         readOnly
         disabled>
-        Program
+        {t('Program')}
       </InputMolecule>
       <RadioMolecule
         className="mt-4"

@@ -3,8 +3,8 @@ import { useMutation, useQuery } from 'react-query';
 import { timetableService } from '../../services/timetable/timetable.service';
 
 class TimetableStore {
-  createClassTimetable() {
-    return useMutation(timetableService.createClassTimetable);
+  createTimetableActivity() {
+    return useMutation(timetableService.createLevelTimetable);
   }
 
   getClassTimetableByIntakeLevelClass(id: string) {
@@ -13,18 +13,46 @@ class TimetableStore {
     );
   }
 
-  getClassTimetableById(id: string) {
+  getTimetableActivityById(id: string) {
     return useQuery(['timetable/:id', id], () =>
-      timetableService.getClassTimetableById(id),
+      timetableService.getTimetableActivityById(id),
     );
   }
 
-  public async updateClassTimetableById() {
-    return useMutation(timetableService.updateClassTimetableById);
+  public async updateTimetableActivityById() {
+    return useMutation(timetableService.updateTimetableActivityById);
   }
 
-  public async delete() {
-    return useMutation(timetableService.delete);
+  public async deleteActivity() {
+    return useMutation(timetableService.deleteActivity);
+  }
+
+  // timetable weeks
+
+  createTimetableWeek() {
+    return useMutation(timetableService.createTimetableWeek);
+  }
+
+  getWeekAndActivitiesByWeekId(id: string) {
+    return useQuery(['timetable/week/:id', id], () =>
+      timetableService.getActivitiesByWeekId(id),
+    );
+  }
+
+  getCurrentWeek(currentDate: string, intakeLevelId: string) {
+    return useQuery(['timetable/week/current/:id', currentDate, intakeLevelId], () =>
+      timetableService.getCurrentWeek(currentDate, intakeLevelId),
+    );
+  }
+
+  getWeeksByIntakeLevel(intakeLevelId: string) {
+    return useQuery(['timetable/weeks', intakeLevelId], () =>
+      timetableService.getWeeksByIntakeLevel(intakeLevelId),
+    );
+  }
+
+  changeWeekStatus() {
+    return useMutation(timetableService.changeWeekStatus);
   }
 }
 

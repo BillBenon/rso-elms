@@ -149,14 +149,14 @@ export default function NewIntakeProgramLevel() {
   return (
     <div className="p-10 w-3/5">
       <Heading fontWeight="semibold" fontSize="2xl" className="pb-8">
-        Add Levels to Program Intake
+        Add Levels to {t('Program')} Intake
       </Heading>
       <InputMolecule
         readOnly
         name="intake_program_id"
         value={` ${intakeProgram?.program.name} - ${intakeProgram?.intake.code}`}
         handleChange={(_e: ValueType) => {}}>
-        Intake Program
+        Intake {t('Program')}
       </InputMolecule>
       <Heading fontSize="sm" className="py-4">
         Levels

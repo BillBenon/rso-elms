@@ -45,7 +45,7 @@ export default function AcademicProgram() {
     { to: 'home', title: 'home' },
     { to: 'users', title: 'users' },
     { to: 'faculty', title: t('Faculty') },
-    { to: `${url}`, title: 'Programs' },
+    { to: `${url}`, title: t('Program') },
   ];
 
   const dp = new URLSearchParams(search).get('dp');
@@ -104,7 +104,7 @@ export default function AcademicProgram() {
                 <section>
                   <TableHeader
                     totalItems={programs.length}
-                    title="Programs"
+                    title={t('Program')}
                     showSearch={false}
                   />
                 </section>
@@ -157,7 +157,7 @@ export default function AcademicProgram() {
 
                             <div className="flex flex-col gap-2">
                               <Heading color="txt-secondary" fontSize="sm">
-                                Program Type
+                                {t('Program')} Type
                               </Heading>
                               <Heading fontSize="sm" fontWeight="semibold">
                                 {Common.subTitle}
@@ -221,7 +221,7 @@ export default function AcademicProgram() {
           path={`${url}/add-program-to-intake`}
           render={() => {
             return (
-              <PopupMolecule title="Program" open={true} onClose={history.goBack}>
+              <PopupMolecule title={t('Program')} open={true} onClose={history.goBack}>
                 <AddAcademicProgramToIntake submited={submited} />
               </PopupMolecule>
             );

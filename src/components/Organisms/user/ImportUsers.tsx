@@ -1,5 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory } from 'react-router-dom';
 
 import useAuthenticator from '../../../hooks/useAuthenticator';
@@ -40,6 +41,7 @@ interface ImportErrors
 export default function ImportUsers({ userType }: IProps) {
   const history = useHistory();
   const { user } = useAuthenticator();
+  const { t } = useTranslation();
 
   const { mutate } = usersStore.assignRoles();
 
@@ -253,9 +255,9 @@ export default function ImportUsers({ userType }: IProps) {
               }
               value={values.program}
               name="program"
-              placeholder={'Program'}
+              placeholder={t('Program')}
               handleChange={handleChange}>
-              Program
+              {t('Program')}
             </SelectMolecule>
             <SelectMolecule
               error={errors.intakeProgramId}

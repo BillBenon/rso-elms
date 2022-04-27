@@ -1,29 +1,32 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
-import { useHistory, useParams } from 'react-router-dom';
+import { useHistory, useLocation, useParams } from 'react-router-dom';
 
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { queryClient } from '../../../../plugins/react-query';
-import { classStore } from '../../../../store/administration/class.store';
+import intakeProgramStore from '../../../../store/administration/intake-program.store';
 import { moduleStore } from '../../../../store/administration/modules.store';
 import instructordeploymentStore from '../../../../store/instructordeployment.store';
+import { getAllEvents } from '../../../../store/timetable/event.store';
 import { timetableStore } from '../../../../store/timetable/timetable.store';
 import { getAllVenues } from '../../../../store/timetable/venue.store';
 import { ParamType, SelectData, ValueType } from '../../../../types';
-import { IClass } from '../../../../types/services/class.types';
+import { LevelIntakeProgram } from '../../../../types/services/intake-program.types';
 import {
-  createRecurringSchedule,
   daysOfWeek,
-  ICreateClassTimeTable,
+  ICreateTimeTableActivity,
+  methodOfInstruction,
 } from '../../../../types/services/schedule.types';
+import { formatDateToYyMmDd } from '../../../../utils/date-helper';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
+import { randomString } from '../../../../utils/random';
 import {
   firstTimetableSchema,
   secondTimetableSchema,
 } from '../../../../validations/calendar.validation';
 import Button from '../../../Atoms/custom/Button';
-import CheckboxMolecule from '../../../Molecules/input/CheckboxMolecule';
+import Checkbox from '../../../Atoms/Input/CheckBox';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import Stepper from '../../../Molecules/Stepper/Stepper';
@@ -31,59 +34,69 @@ import Stepper from '../../../Molecules/Stepper/Stepper';
 interface IStepProps {
   handleChange: (_e: ValueType) => any;
   setCurrentStep: Function;
-  values: ICreateClassTimeTable;
+  values: ICreateTimeTableActivity;
   handleSubmit?: (_e: FormEvent) => any;
-  classInfo?: IClass;
+  level?: LevelIntakeProgram;
 }
 
 interface FirstTimeTableErrors
-  extends Pick<ICreateClassTimeTable, 'courseModule' | 'instructor'> {}
+  extends Pick<ICreateTimeTableActivity, 'venueId' | 'inChargeId'> {}
 interface SecondTimeTableErrors
-  extends Pick<ICreateClassTimeTable, 'venue' | 'startHour' | 'endHour'> {}
+  extends Pick<ICreateTimeTableActivity, 'startHour' | 'endHour' | 'dressCode'> {}
 
 export default function NewTimeTable() {
   const { id } = useParams<ParamType>();
   const history = useHistory();
+  const { search } = useLocation();
 
-  //classinfo
-  const classInfo = classStore.getClassById(id).data?.data.data;
+  // query parameters
+  const weekId = new URLSearchParams(search).get('week');
+
+  //levelInfo
+  const levelInfo = intakeProgramStore.getIntakeLevelById(id).data?.data.data;
 
   //state varibales
   const [currentStep, setcurrentStep] = useState(0);
-  const [values, setvalues] = useState<ICreateClassTimeTable>({
-    instructor: '',
-    timetable: [],
+  const [values, setvalues] = useState<ICreateTimeTableActivity>({
+    inChargeId: '',
     startHour: '',
     endHour: '',
-    repeatingDays: [daysOfWeek.MONDAY],
-    courseModule: '',
-    venue: '',
-    intakeLevelClass: id,
+    // repeatingDays: [daysOfWeek.MONDAY],
+    courseModuleId: '',
+    venueId: '',
+    activityDate: new Date().toString(),
+    courseCode: randomString(6),
+    dayOfWeek: daysOfWeek.MONDAY,
+    dressCode: '',
+    eventId: '',
+    methodOfInstruction: methodOfInstruction.LEC,
+    periods: 1,
+    weeklyTimetableId: weekId || '',
   });
 
   function handleChange(e: ValueType) {
     setvalues((val) => ({ ...val, [e.name]: e.value }));
   }
 
-  const { mutateAsync } = timetableStore.createClassTimetable();
+  const { mutateAsync } = timetableStore.createTimetableActivity();
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
-    let timetable = values.repeatingDays.map((d) => ({
-      dayOfWeek: d,
-      endHour: values.endHour,
-      startHour: values.startHour,
-    })) as createRecurringSchedule[];
+    // let timetable = values.repeatingDays.map((d) => ({
+    //   dayOfWeek: d,
+    //   endHour: values.endHour,
+    //   startHour: values.startHour,
+    // })) as createRecurringSchedule[];
 
-    let data: ICreateClassTimeTable = {
+    let data: ICreateTimeTableActivity = {
       ...values,
-      timetable,
+      activityDate: formatDateToYyMmDd(values.activityDate),
     };
 
     mutateAsync(data, {
       async onSuccess(_data) {
         toast.success('Timetable was created successfully');
-        queryClient.invalidateQueries(['timetable/intakeclassid/:id', id]);
+        queryClient.invalidateQueries(['timetable/weeks', id]);
         history.goBack();
       },
       onError(error: any) {
@@ -104,21 +117,23 @@ export default function NewTimeTable() {
         values={values}
         handleChange={handleChange}
         setCurrentStep={setcurrentStep}
-        classInfo={classInfo}
+        level={levelInfo}
       />
       <SecondStep
         values={values}
         handleChange={handleChange}
         setCurrentStep={setcurrentStep}
         handleSubmit={handleSubmit}
-        classInfo={classInfo}
+        level={levelInfo}
       />
     </Stepper>
   );
 }
 
-function FirstStep({ values, handleChange, setCurrentStep, classInfo }: IStepProps) {
+function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) {
+  const [useModule, setuseModule] = useState(true);
   const picked_role = usePickedRole();
+
   const { t } = useTranslation();
   const users =
     instructordeploymentStore.getInstructorsDeployedInAcademy(
@@ -126,14 +141,15 @@ function FirstStep({ values, handleChange, setCurrentStep, classInfo }: IStepPro
     ).data?.data.data || [];
 
   const modules =
-    moduleStore.getModulesByProgram(
-      classInfo?.academic_year_program_intake_level.academic_program_level.program.id +
-        '',
-    ).data?.data.data || [];
+    moduleStore.getModulesByProgram(level?.intake_program.program.id + '').data?.data
+      .data || [];
+
+  const events = getAllEvents(picked_role?.academy_id).data?.data.data;
+  const venues = getAllVenues(picked_role?.academy_id).data?.data.data || [];
 
   const initialErrorState: FirstTimeTableErrors = {
-    courseModule: '',
-    instructor: '',
+    inChargeId: '',
+    venueId: '',
   };
 
   const [errors, setErrors] = useState<FirstTimeTableErrors>(initialErrorState);
@@ -143,10 +159,10 @@ function FirstStep({ values, handleChange, setCurrentStep, classInfo }: IStepPro
     const validatedForm = firstTimetableSchema.validate(values, {
       abortEarly: false,
     });
-
     validatedForm
       .then(() => setCurrentStep(1))
       .catch((err) => {
+        console.log(err.inner);
         const validatedErr: FirstTimeTableErrors = initialErrorState;
         err.inner.map((el: { path: string | number; message: string }) => {
           validatedErr[el.path as keyof FirstTimeTableErrors] = el.message;
@@ -158,18 +174,25 @@ function FirstStep({ values, handleChange, setCurrentStep, classInfo }: IStepPro
   return (
     <div>
       <form onSubmit={handleSubmit} className="-mb-6">
-        <InputMolecule
+        {/* <InputMolecule
           name=""
           readOnly
           disabled
-          value={`${classInfo?.academic_year_program_intake_level.academic_program_level.program.name} - ${classInfo?.academic_year_program_intake_level.academic_program_level.level.name} - ${classInfo?.class_name}`}>
-          Program - Level - {t('Class')}
-        </InputMolecule>
-        <div className="pb-1">
+          value={`${level?.intake_program.program.name} - ${level?.academic_program_level.level.name}`}>
+          Program - Level
+        </InputMolecule> */}
+        <SelectMolecule
+          options={getDropDownStatusOptions(daysOfWeek).slice(0, 5)}
+          name="dayOfWeek"
+          placeholder="Day of week"
+          handleChange={handleChange}
+          value={values.dayOfWeek}>
+          Day of week
+        </SelectMolecule>
+        {useModule ? (
           <SelectMolecule
-            error={errors.courseModule}
-            name="courseModule"
-            value={values.courseModule}
+            name="courseModuleId"
+            value={values.courseModuleId}
             handleChange={handleChange}
             options={
               modules?.map((mod) => ({
@@ -180,39 +203,68 @@ function FirstStep({ values, handleChange, setCurrentStep, classInfo }: IStepPro
             placeholder="Select module">
             Module
           </SelectMolecule>
-        </div>
-        <div className="pb-4">
+        ) : (
           <SelectMolecule
-            error={errors.instructor}
-            name="instructor"
-            value={values.instructor}
+            name="eventId"
+            value={values.eventId}
             handleChange={handleChange}
             options={
-              users?.map((user) => ({
-                label: `${user.user.first_name} ${user.user.last_name}`,
-                value: user.id,
+              events?.map((event) => ({
+                label: event.name,
+                value: event.id,
               })) as SelectData[]
             }
-            placeholder="Select someone">
-            {t('Instructor')}
+            placeholder="Select module">
+            Event
           </SelectMolecule>
+        )}
+        <div className="text-right">
+          <Checkbox
+            name="module"
+            value="va"
+            checked={!useModule}
+            label="Choose event instead"
+            handleChange={() => setuseModule(!useModule)}
+          />
         </div>
-        <Button type="submit">Next</Button>
+        <SelectMolecule
+          error={errors.venueId}
+          name="venueId"
+          value={values.venueId}
+          handleChange={handleChange}
+          options={
+            venues?.map((vn) => ({ label: vn.name, value: vn.id })) as SelectData[]
+          }
+          placeholder="Select venue">
+          Venue
+        </SelectMolecule>
+        <SelectMolecule
+          error={errors.inChargeId}
+          name="inChargeId"
+          value={values.inChargeId}
+          handleChange={handleChange}
+          options={
+            users?.map((user) => ({
+              label: `${user.user.first_name} ${user.user.last_name}`,
+              value: user.user.id,
+            })) as SelectData[]
+          }
+          placeholder="Select someone">
+          {t('instructor')}
+        </SelectMolecule>
+        <div className="pt-4">
+          <Button type="submit">Next</Button>
+        </div>
       </form>
     </div>
   );
 }
 
 function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: IStepProps) {
-  const picked_role = usePickedRole();
-  const venues =
-    getAllVenues(picked_role?.academy_id + '', !!picked_role?.academy_id).data?.data
-      .data || [];
-
   const initialErrorState: SecondTimeTableErrors = {
-    venue: '',
     startHour: '',
     endHour: '',
+    dressCode: '',
   };
 
   const [errors, setErrors] = useState<SecondTimeTableErrors>(initialErrorState);
@@ -225,8 +277,11 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
     });
 
     validatedForm
-      .then(() => handleSubmit)
+      .then(() => {
+        if (handleSubmit) handleSubmit(e);
+      })
       .catch((err) => {
+        console.log(err.inner);
         const validatedErr: SecondTimeTableErrors = initialErrorState;
         err.inner.map((el: { path: string | number; message: string }) => {
           validatedErr[el.path as keyof SecondTimeTableErrors] = el.message;
@@ -235,21 +290,15 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
       });
   };
 
+  /**
+    activityDate: '',
+    courseCode: '',
+    methodOfInstruction: methodOfInstruction.LEC,
+    weeklyTimetableId: '',
+   */
+
   return (
     <form onSubmit={handleFinish} className="max-w-sm -mb-6">
-      <div className="pb-1">
-        <SelectMolecule
-          error={errors.venue}
-          name="venue"
-          value={values.venue}
-          handleChange={handleChange}
-          options={
-            venues?.map((vn) => ({ label: vn.name, value: vn.id })) as SelectData[]
-          }
-          placeholder="Select venue">
-          Venue
-        </SelectMolecule>
-      </div>
       <InputMolecule
         error={errors.startHour}
         required={false}
@@ -261,21 +310,36 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
       </InputMolecule>
       <InputMolecule
         error={errors.endHour}
-        required={false}
         type="time"
         value={values.endHour}
         name="endHour"
         handleChange={handleChange}>
         End hour
       </InputMolecule>
-      <CheckboxMolecule
-        isFlex
-        options={getDropDownStatusOptions(daysOfWeek).slice(0, 7)}
-        name="repeatingDays"
-        placeholder="Repeat days:"
+      <InputMolecule
+        name="periods"
+        placeholder="Periods"
+        type="number"
+        value={values.periods}
+        handleChange={handleChange}>
+        Number of periods
+      </InputMolecule>
+      <InputMolecule
+        error={errors.dressCode}
+        required={false}
+        name="dressCode"
+        placeholder="Dressing code"
+        value={values.dressCode}
+        handleChange={handleChange}>
+        Dress code
+      </InputMolecule>
+      <SelectMolecule
+        name="methodOfInstruction"
+        value={values.methodOfInstruction}
         handleChange={handleChange}
-        values={values.repeatingDays}
-      />
+        options={getDropDownStatusOptions(methodOfInstruction)}>
+        Method of instruction
+      </SelectMolecule>
       <div className="pt-4 flex justify-between w-80">
         <Button styleType="text" onClick={() => setCurrentStep(0)}>
           Back
