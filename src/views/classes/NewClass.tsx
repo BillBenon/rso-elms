@@ -6,24 +6,25 @@ import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import Button from '../../components/Atoms/custom/Button';
 import DropdownMolecule from '../../components/Molecules/input/DropdownMolecule';
 import InputMolecule from '../../components/Molecules/input/InputMolecule';
-import usePickedRole from '../../hooks/usePickedRole';
 import { queryClient } from '../../plugins/react-query';
 import { classStore } from '../../store/administration/class.store';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import intakeProgramStore from '../../store/administration/intake-program.store';
-import usersStore from '../../store/administration/users.store';
 import { ValueType } from '../../types';
 import { ClassGroupType, ICreateClass } from '../../types/services/class.types';
 import { Instructor } from '../../types/services/instructor.types';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
-import { UserType } from '../../types/services/user.types';
+import { Student } from '../../types/services/user.types';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
 import { classSchema } from '../../validations/level.validation';
 
 interface ClassError
   extends Pick<
     ICreateClass,
-    'class_name' | 'instructor_class_in_charge_id' | 'class_representative_one_id'
+    | 'class_name'
+    | 'instructor_class_in_charge_id'
+    | 'class_representative_one_id'
+    | 'instructor_class_in_charge_two_id'
   > {
   class_group_type: string;
 }
@@ -40,6 +41,8 @@ function NewClass() {
     class_representative_tree_id: '',
     class_representative_two_id: '',
     instructor_class_in_charge_id: '',
+    instructor_class_in_charge_two_id: '',
+    instructor_class_in_charge_three_id: '',
     intake_academic_year_period_id: 0,
     intake_level_id: 0,
   });
@@ -48,12 +51,12 @@ function NewClass() {
     class_group_type: '',
     class_name: '',
     instructor_class_in_charge_id: '',
+    instructor_class_in_charge_two_id: '',
     class_representative_one_id: '',
   };
 
   const [errors, setErrors] = useState(initialErrorState);
 
-  const picked_role = usePickedRole();
   const levelIdTitle = document.getElementById('intake_level_id')?.title;
   const {
     level: levelId,
@@ -73,16 +76,6 @@ function NewClass() {
     [levelIdTitle],
   );
 
-  useEffect(() => {
-    setForm((frm) => {
-      return {
-        ...frm,
-        class_representative_two_id: form.class_representative_one_id,
-        class_representative_tree_id: form.class_representative_one_id,
-      };
-    });
-  }, [form.class_representative_one_id]);
-
   const { data: levelInstructors, isLoading: instLoading } =
     enrollmentStore.getInstructorsInProgramLevel(levelId);
 
@@ -94,19 +87,7 @@ function NewClass() {
   const students =
     intakeProgramStore.getStudentsByIntakeProgramLevel(levelId).data?.data.data || [];
 
-  const users =
-    usersStore
-      .getUsersByAcademyAndUserType(picked_role?.academy_id + '', UserType.STUDENT, {
-        page: 0,
-        pageSize: 1000,
-        sortyBy: 'username',
-      })
-      .data?.data.data.content.filter((stud) => stud.user_type === UserType.STUDENT) ||
-    [];
-
-  const studentsInProgram = users.filter((us) =>
-    students.some((st) => st.intake_program_student.student.user.id === us.id),
-  );
+  const studentsInProgram = students.map((stu) => stu.intake_program_student.student);
 
   function handleChange(e: ValueType) {
     setForm({ ...form, [e.name]: e.value });
@@ -132,15 +113,15 @@ function NewClass() {
 
               path.includes('learn')
                 ? history.push(
-                    `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-class`,
+                    `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/learn/${levelId}/view-period/${period}/view-class`,
                   )
                 : path.includes('teach')
                 ? history.push(
-                    `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-class`,
+                    `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/teach/${levelId}/view-period/${period}/view-class`,
                   )
                 : path.includes('manage')
                 ? history.push(
-                    `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-class`,
+                    `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/levels/manage/${levelId}/view-period/${period}/view-class`,
                   )
                 : {};
             },
@@ -201,10 +182,52 @@ function NewClass() {
           })}
           placeholder={
             instLoading
-              ? 'Loading ' + t('Instructor representative') + ' ...'
-              : 'Choose ' + t('Instructor representative') + ' representative'
+              ? 'Loading ' + t('Instructor_representative') + ' ...'
+              : 'Choose ' + t('Instructor_representative')
           }>
-          {t('Instructor representative')}
+          {t('Instructor_representative')}
+        </DropdownMolecule>
+
+        <DropdownMolecule
+          error={errors.instructor_class_in_charge_two_id}
+          name="instructor_class_in_charge_two_id"
+          handleChange={handleChange}
+          options={getDropDownOptions({
+            inputs: instructors.filter(
+              (inst) => inst.id !== form.instructor_class_in_charge_id,
+            ),
+            labelName: ['first_name', 'last_name'],
+            //@ts-ignore
+            getOptionLabel: (inst: Instructor) =>
+              inst.user.first_name + ' ' + inst.user.last_name,
+          })}
+          placeholder={
+            instLoading
+              ? 'Loading instructor representatives...'
+              : 'Choose instructor representative'
+          }>
+          Instructor representative backup 1
+        </DropdownMolecule>
+        <DropdownMolecule
+          name="instructor_class_in_charge_three_id"
+          handleChange={handleChange}
+          options={getDropDownOptions({
+            inputs: instructors.filter(
+              (inst) =>
+                inst.id !== form.instructor_class_in_charge_id &&
+                inst.id !== form.instructor_class_in_charge_two_id,
+            ),
+            labelName: ['first_name', 'last_name'],
+            //@ts-ignore
+            getOptionLabel: (inst: Instructor) =>
+              inst.user.first_name + ' ' + inst.user.last_name,
+          })}
+          placeholder={
+            instLoading
+              ? 'Loading instructor representatives...'
+              : 'Choose instructor representative'
+          }>
+          Instructor representative backup 2
         </DropdownMolecule>
 
         <DropdownMolecule
@@ -214,9 +237,12 @@ function NewClass() {
           options={getDropDownOptions({
             inputs: studentsInProgram,
             labelName: ['first_name', 'last_name'],
+            //@ts-ignore
+            getOptionLabel: (stu: Student) =>
+              stu.user.first_name + ' ' + stu.user.last_name,
           })}
-          placeholder={'Choose ' + t('Class representative') + ' representative'}>
-          {t('Class representative')}
+          placeholder={t('Class_representative')}>
+          {t('Class_representative')}
         </DropdownMolecule>
 
         <div className="mt-5">

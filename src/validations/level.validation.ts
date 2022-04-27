@@ -25,6 +25,9 @@ export const classSchema = yup.object().shape({
   instructor_class_in_charge_id: yup
     .string()
     .required('an instructor in charge is required'),
+  instructor_class_in_charge_two_id: yup
+    .string()
+    .required('an instructor in charge backup 1 is required'),
   class_representative_one_id: yup
     .string()
     .required('a class representative is required'),

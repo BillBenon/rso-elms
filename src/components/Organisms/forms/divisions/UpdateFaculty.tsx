@@ -1,5 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { queryClient } from '../../../../plugins/react-query';
@@ -9,7 +10,7 @@ import {
   DivisionCreateInfo,
   FacultyErrors,
 } from '../../../../types/services/division.types';
-import { facultySchema } from '../../../../validations/division.validation';
+import { useDivisionValidation } from '../../../../validations/division.validation';
 import Button from '../../../Atoms/custom/Button';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
@@ -20,6 +21,8 @@ export default function UpdateDepartment({ onSubmit }: IDivisionsAcademyType) {
   const { id } = useParams<ParamType>();
 
   const { data } = divisionStore.getDivision(id);
+
+  const { facultySchema } = useDivisionValidation();
 
   const [division, setDivision] = useState<DivisionCreateInfo>({
     academy_id: '',
@@ -46,6 +49,7 @@ export default function UpdateDepartment({ onSubmit }: IDivisionsAcademyType) {
     name: '',
     description: '',
   };
+  const { t } = useTranslation();
 
   const [errors, setErrors] = useState<FacultyErrors>(initialErrorState);
 
@@ -97,7 +101,7 @@ export default function UpdateDepartment({ onSubmit }: IDivisionsAcademyType) {
         value={division.name}
         handleChange={handleChange}
         name="name">
-        Faculty name
+        {t('Faculty')} name
       </InputMolecule>
       <TextAreaMolecule
         required={false}

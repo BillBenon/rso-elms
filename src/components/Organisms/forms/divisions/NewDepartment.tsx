@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
 
 import { divisionStore } from '../../../../store/administration/divisions.store';
@@ -9,7 +10,7 @@ import {
   DivisionCreateInfo,
 } from '../../../../types/services/division.types';
 import { getDropDownOptions } from '../../../../utils/getOption';
-import { departSchema } from '../../../../validations/division.validation';
+import { useDivisionValidation } from '../../../../validations/division.validation';
 import Button from '../../../Atoms/custom/Button';
 import DropdownMolecule from '../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
@@ -17,6 +18,8 @@ import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 export default function NewDepartment({ onSubmit, academy_id }: IDivisionsAcademyType) {
   const { id: facultyId } = useParams<ParamType>();
+
+  const { departSchema } = useDivisionValidation();
 
   const [division, setDivision] = useState<DivisionCreateInfo>({
     academy_id: academy_id || '',
@@ -38,6 +41,7 @@ export default function NewDepartment({ onSubmit, academy_id }: IDivisionsAcadem
 
   const { mutateAsync } = divisionStore.createDivision();
   const history = useHistory();
+  const { t } = useTranslation();
 
   function handleChange({ name, value }: ValueType) {
     setDivision((old) => ({ ...old, [name]: value }));
@@ -111,7 +115,7 @@ export default function NewDepartment({ onSubmit, academy_id }: IDivisionsAcadem
           options={getDropDownOptions({ inputs: faculties || [] })}
           name="parent_id"
           handleChange={handleChange}>
-          Faculty
+          {t('Faculty')}
         </DropdownMolecule>
       )}
 

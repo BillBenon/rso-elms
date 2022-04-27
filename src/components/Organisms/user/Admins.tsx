@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useHistory } from 'react-router-dom';
 
 import { Privileges, ValueType } from '../../../types';
@@ -11,18 +12,20 @@ import TableHeader from '../../Molecules/table/TableHeader';
 
 export default function Admins({ admins }: { admins: UserTypes[] }) {
   const history = useHistory();
+  const { t } = useTranslation();
+
   function handleSearch(_e: ValueType) {}
 
   const adminActions = [
     { name: 'Add Role', handleAction: () => {} },
     {
-      name: 'Edit admin',
+      name: 'Edit ' + t('Admins'),
       handleAction: (id: string | number | undefined) => {
         history.push(`/dashboard/users/${id}/edit`); // go to edit user
       },
     },
     {
-      name: 'View admin',
+      name: 'View ' + t('Admins'),
       handleAction: (id: string | number | undefined) => {
         history.push(`/dashboard/user/${id}/profile`); // go to view user profile
       },
@@ -39,7 +42,7 @@ export default function Admins({ admins }: { admins: UserTypes[] }) {
           <div className="flex gap-3">
             <div className="flex gap-3">
               <Link to={`/dashboard/users/add/${UserType.ADMIN}`}>
-                <Button>New admin</Button>
+                <Button>New {t('Admins')}</Button>
               </Link>
             </div>
           </div>
@@ -50,10 +53,10 @@ export default function Admins({ admins }: { admins: UserTypes[] }) {
           {admins.length <= 0 ? (
             <NoDataAvailable
               icon="user"
-              buttonLabel="Add new admin"
-              title={'No admin available'}
+              buttonLabel={'Add new ' + t('Admins')}
+              title={'No ' + t('Admin') + ' available'}
               handleClick={() => history.push(`/dashboard/users/add`)}
-              description="There are no admins added into the system yet."
+              description={'There are no ' + t('Admins') + ' added into the system yet.'}
               privilege={Privileges.CAN_CREATE_USER}
             />
           ) : (
