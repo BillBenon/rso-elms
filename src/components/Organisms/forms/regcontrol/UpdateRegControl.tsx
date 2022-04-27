@@ -61,7 +61,7 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
 
     validatedForm
       .then(() => {
-        let toastId = toast.loading('Creating registration control');
+        let toastId = toast.loading('Creating registration period');
         mutateAsync(regControlUpdateInfo, {
           onSuccess: () => {
             toast.success('Control updated', { id: toastId });
@@ -88,7 +88,7 @@ export default function UpdateRegControl({ onSubmit }: FormPropType) {
         value={regControl.description}
         name="description"
         handleChange={handleChange}>
-        Registration control description
+        Registration period description
       </TextAreaMolecule>
       <DateMolecule
         error={errors.expected_start_date}

@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import RightSidebar from '../../components/Organisms/RightSidebar';
@@ -18,6 +20,7 @@ type IAddStudent = {
 function AddStudents({ classId }: IAddStudent) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { level, period } = useParams<IntakePeriodParam>();
+  const { t } = useTranslation();
 
   const unaddedStudents = enrollmentStore.getStudentsWhoAreNotInAnyClassInLevel(
     level,
@@ -79,7 +82,7 @@ function AddStudents({ classId }: IAddStudent) {
         <RightSidebar
           open={sidebarOpen}
           handleClose={() => setSidebarOpen(false)}
-          label="Add Students to class"
+          label={'Add Students to ' + t('Class')}
           data={students}
           selectorActions={[
             {

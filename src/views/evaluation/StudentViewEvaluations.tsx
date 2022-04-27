@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
@@ -31,6 +32,7 @@ export default function StudentViewEvaluations({
   const [evaluations, setEvaluations] = useState<any[]>([]);
   const history = useHistory();
   const { path } = useRouteMatch();
+  const { t } = useTranslation();
 
   const isAllowedToAnswer = usePrivilege(Privileges.CAN_ANSWER_EVALUATION);
 
@@ -140,7 +142,11 @@ export default function StudentViewEvaluations({
                     icon="evaluation"
                     showButton={false}
                     title={'No evaluations available'}
-                    description="There seems to be no evaluations added to this module yet. Please wait for instructors to add them or contact the administrators if you think there's a mistake!"
+                    description={
+                      'There seems to be no evaluations added to this module yet. Please wait for' +
+                      t('Instructor') +
+                      " to add them or contact the administrators if you think there's a mistake!"
+                    }
                   />
                 )}
               </section>

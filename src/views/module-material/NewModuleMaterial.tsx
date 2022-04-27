@@ -1,6 +1,7 @@
 import { Editor } from '@tiptap/react';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -27,6 +28,7 @@ function NewModuleMaterial() {
   });
 
   const { mutateAsync } = moduleMaterialStore.addModuleMaterial();
+  const { t } = useTranslation();
 
   function handleChange(e: ValueType) {
     setMaterial({ ...material, [e.name]: e.value });
@@ -73,7 +75,7 @@ function NewModuleMaterial() {
             (cl) => cl.value === material.type,
           )}
           options={getDropDownStatusOptions(MaterialType)}
-          placeholder="Choose class type">
+          placeholder={'Choose ' + t('Class') + ' type'}>
           Material Type
         </DropdownMolecule>
         <div className="flex flex-col gap-2 py-2">

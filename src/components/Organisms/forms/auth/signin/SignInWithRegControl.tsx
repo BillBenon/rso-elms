@@ -19,7 +19,7 @@ interface IRegistrationInfo extends CommonCardDataType {
 
 //   status: { type: 'success', text: 'Active' },
 //   code: 'RMA Gako',
-//   title: 'A short description of registration control',
+//   title: 'A short description of registration period',
 //   description: '02 Sep 2021 - 02 Nov 2021',
 //   programs: [
 //     { value: 'cadetteprogram', label: 'Cadette Program' },

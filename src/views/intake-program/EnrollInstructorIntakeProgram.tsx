@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -31,6 +32,7 @@ function EnrollInstructorIntakeProgram({
     instructordeploymentStore.getInstructors();
 
   const picked_role = usePickedRole();
+  const { t } = useTranslation();
 
   const programs = getProgramsByIntake(intakeId).data?.data.data;
 
@@ -87,20 +89,20 @@ function EnrollInstructorIntakeProgram({
         onClick={handleShowSidebar}
         className="flex -mt-6 items-center justify-end text-primary-500">
         <Icon name="add" size={12} fill="primary" />
-        Enroll instructors
+        Enroll {t('Instructor')}
       </Button>
       <RightSidebar
         open={showSidebar}
         handleClose={handleShowSidebar}
-        label="Enroll instructor to program"
+        label={'Enroll ' + t('Instructor') + 'to program'}
         data={instructors}
         selectorActions={[
           {
-            name: 'enroll instructors',
+            name: 'enroll ' + t('Instructor'),
             handleAction: (data?: string[]) => add(data),
           },
         ]}
-        dataLabel={'Instructors in this academy'}
+        dataLabel={t('Instructor') + ' in this academy'}
         isLoading={isLoading}
         unselectAll={!showSidebar}
       />

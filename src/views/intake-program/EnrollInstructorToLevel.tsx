@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -32,6 +33,7 @@ function EnrollInstructorToLevel<T>({
     enrollmentStore.getInstructorsInProgram(intakeProg);
 
   const level = intakeProgramStore.getIntakeLevelById(levelId).data?.data.data;
+  const { t } = useTranslation();
 
   const [instructors, setInstructors] = useState<UserView[]>([]);
   useEffect(() => {
@@ -78,20 +80,20 @@ function EnrollInstructorToLevel<T>({
   return (
     <div className="cursor-pointer">
       <Button styleType="outline" onClick={handleShowSidebar}>
-        Enroll instructor
+        Enroll {t('Instructor')}
       </Button>
       <RightSidebar
         open={showSidebar}
         handleClose={handleShowSidebar}
-        label="Enroll instructor to program"
+        label={'Enroll ' + t('Instructor') + ' to program'}
         data={instructors}
         selectorActions={[
           {
-            name: 'enroll instructors',
+            name: 'enroll ' + t('Instructor'),
             handleAction: (data?: string[]) => add(data),
           },
         ]}
-        dataLabel={'Instructors in this program'}
+        dataLabel={t('Instructor') + ' in this program'}
         isLoading={isLoading}
         unselectAll={!showSidebar}
       />

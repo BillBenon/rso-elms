@@ -12,7 +12,7 @@ import CommonCardMolecule from '../../Molecules/cards/CommonCardMolecule';
 
 const list: Link[] = [
   { to: 'home', title: 'Institution Admin' },
-  { to: 'registration-control', title: 'Registration control' },
+  { to: 'registration-periods', title: 'Registration period' },
   { to: 'intakes', title: 'Intakes' },
 ];
 
@@ -41,21 +41,21 @@ export default function RegControlDetails() {
 
       setIntakes(loadedIntakes);
     } else if (isError) toast.error('error occurred when loading intakes');
-  }, [data]);
+  }, [data, isError, isSuccess]);
 
   return (
     <div>
       <BreadCrumb list={list} />
       <div className="flex gap-2 justify-between items-center py-3">
         <Heading className="capitalize" fontSize="2xl" fontWeight="bold">
-          Registration control details
+          Registration period details
         </Heading>
         <Button onClick={() => history.push(`/dashboard/intakes?regId=${id}`)}>
           Manage intake
         </Button>
       </div>
 
-      <section className="flex flex-wrap justify-between mt-2">
+      <section className="flex flex-wrap justify-start gap-4 mt-2">
         {intakes.map((course) => (
           <div key={course.code} className="p-1 mt-3">
             <CommonCardMolecule data={course} />
