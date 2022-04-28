@@ -56,10 +56,30 @@ export default function EnrollRetakingStudents<T>({
       existing_ids.push(existing[index].student.id + '');
     }
     let studentsView: UserView[] = [];
-    retakingStudents?.data.data.forEach((stud) => {
+
+    const rankedStudents =
+      retakingStudents?.data.data.filter(
+        (inst) => inst.student.user.person.current_rank,
+      ) || [];
+    const unrankedStudents =
+      retakingStudents?.data.data.filter(
+        (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedStudents.sort(function (a, b) {
+      return (
+        a.student.user.person.current_rank?.priority -
+        b.student.user.person.current_rank?.priority
+      );
+    });
+
+    const finalStudents = rankedStudents.concat(unrankedStudents);
+
+    finalStudents.forEach((stud) => {
       if (!existing_ids.includes(stud.student.id + '')) {
         let studentView: UserView = {
           id: stud.student.id,
+          rank: stud.student.user.person.current_rank?.name,
           first_name: stud.student.user.first_name,
           last_name: stud.student.user.last_name,
           image_url: stud.student.user.image_url,
@@ -67,7 +87,6 @@ export default function EnrollRetakingStudents<T>({
         studentsView.push(studentView);
       }
     });
-    console.log(retakingStudents);
     setStudents(studentsView);
   }, [existing, retakingStudents, retakingStudents?.data.data]);
 
