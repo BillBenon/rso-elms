@@ -64,7 +64,7 @@ export default function PrograsmLevelClasses() {
               label={lvl.academic_program_level.level.name}>
               <div>
                 <Permission privilege={Privileges.CAN_ACCESS_CALENDER}>
-                  <Link to={`/dashboard/schedule/timetable/${lvl.id}`}>
+                  <Link to={`/dashboard/schedule/timetable/${lvl.id}/current`}>
                     <span className="text-primary-500 font-medium block text-right">
                       View timetable for this level
                     </span>
