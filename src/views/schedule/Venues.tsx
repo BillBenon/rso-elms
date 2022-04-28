@@ -52,7 +52,7 @@ export default function Venues() {
           {venues?.map((event) => (
             <div
               key={event.id}
-              className="bg-main rounded-md p-4 border-1 border-transparent hover:border-primary-500 cursor-pointer">
+              className="bg-main shadow rounded-md p-4 border-1 border-transparent hover:border-primary-500 cursor-pointer">
               <Heading fontSize="sm" color="txt-secondary" fontWeight="semibold">
                 {event.venue_type}
               </Heading>
