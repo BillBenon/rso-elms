@@ -219,7 +219,7 @@ function StudentInClass({ classObject }: IStudentClass) {
                 <div className="grid grid-cols-1 md:grid-cols-2 mt-10">
                   <div className="flex gap-4 pb-2 items-center">
                     <Heading fontWeight="semibold" fontSize="sm" color="primary">
-                      Instructor representative :
+                      {t('Instructor_representative')} :
                     </Heading>
                     <Heading fontSize="sm">
                       {`${leaders.instructor_in_charge_one?.first_name || '---'} ${
@@ -272,7 +272,7 @@ function StudentInClass({ classObject }: IStudentClass) {
                       showButton={false}
                       icon="user"
                       buttonLabel="Add new students"
-                      title={'No students available in this class'}
+                      title={'No students available in this ' + t('Class')}
                       handleClick={() => history.push(``)}
                       description={
                         'This ' +
@@ -358,7 +358,7 @@ function StudentInClass({ classObject }: IStudentClass) {
           path={`${path}/:classId/add-subject`}
           render={() => (
             <PopupMolecule
-              title="Add subject to period"
+              title={'Add subject to ' + t('Period')}
               closeOnClickOutSide={false}
               open
               onClose={history.goBack}>

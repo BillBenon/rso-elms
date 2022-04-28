@@ -1,5 +1,6 @@
 import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import useAuthenticator from '../../../../hooks/useAuthenticator';
@@ -184,6 +185,7 @@ function LessonTextArea({ lessonPlan, handleChange, handleNext }: IProps) {
   };
 
   const [errors, setErrors] = useState<LessonTextAreaErrors>(initialErrorState);
+  const { t } = useTranslation();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -233,7 +235,7 @@ function LessonTextArea({ lessonPlan, handleChange, handleNext }: IProps) {
         name="class_policy"
         value={lessonPlan.class_policy}
         handleChange={handleChange}>
-        Class Policy
+        {t('Class')} Policy
       </TextAreaMolecule>
       <div className="mt-5">
         <Button type="submit">Save</Button>
