@@ -144,7 +144,7 @@ function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) 
     moduleStore.getModulesByProgram(level?.intake_program.program.id + '').data?.data
       .data || [];
 
-  const events = getAllEvents(picked_role?.academy_id).data?.data.data;
+  const events = getAllEvents(picked_role?.academy_id).data?.data.data || [];
   const venues = getAllVenues(picked_role?.academy_id).data?.data.data || [];
 
   const initialErrorState: FirstTimeTableErrors = {
@@ -171,6 +171,26 @@ function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) 
       });
   };
 
+  function handleSelectModule(e: ValueType) {
+    handleChange({ name: 'courseModuleId', value: e.value });
+    let course_code = modules.find((m) => m.id === e.value)?.code;
+    handleChange({
+      name: 'courseCode',
+      value: course_code?.toString() || values.courseCode,
+    });
+    handleChange({ name: 'eventId', value: '' });
+  }
+
+  function handleSelectEvent(e: ValueType) {
+    handleChange({ name: 'eventId', value: e.value });
+    let course_code = events.find((ev) => ev.id === e.value)?.code;
+    handleChange({
+      name: 'courseCode',
+      value: course_code?.toString() || values.courseCode,
+    });
+    handleChange({ name: 'courseModuleId', value: '' });
+  }
+
   return (
     <div>
       <form onSubmit={handleSubmit} className="-mb-6">
@@ -193,7 +213,7 @@ function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) 
           <SelectMolecule
             name="courseModuleId"
             value={values.courseModuleId}
-            handleChange={handleChange}
+            handleChange={handleSelectModule}
             options={
               modules?.map((mod) => ({
                 label: mod.name,
@@ -207,7 +227,7 @@ function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) 
           <SelectMolecule
             name="eventId"
             value={values.eventId}
-            handleChange={handleChange}
+            handleChange={handleSelectEvent}
             options={
               events?.map((event) => ({
                 label: event.name,
