@@ -112,10 +112,15 @@ export function getEvaluationPerformance(evaluationId?: string) {
   );
 }
 
-export function getModuleTermPerformance(moduleId?: string, termId?: string) {
+export function getModuleTermPerformance(
+  moduleId?: string,
+  termId?: string,
+  classes?: string,
+) {
   return useQuery(
     ['evaluation/module-performance/', moduleId],
-    () => reportService.getModuleTermPerformance(moduleId || '', termId || ''),
+    () =>
+      reportService.getModuleTermPerformance(moduleId || '', termId || '', classes || ''),
     { enabled: !!moduleId && !!termId },
   );
 }
