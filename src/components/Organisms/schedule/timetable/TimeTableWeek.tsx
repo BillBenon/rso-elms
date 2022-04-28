@@ -151,7 +151,7 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
                             <Link to={`${url}/item/${activity.id}/add-footnote`}>
                               <Icon name={'add'} size={14} stroke="primary" />
                             </Link>
-                            <Link to={`${url}/item/${activity.id}/edit`}>
+                            <Link to={`${url}/item/${activity.id}/edit?week=${week.id}`}>
                               <Icon name={'edit'} size={16} stroke="primary" />
                             </Link>
                           </div>
