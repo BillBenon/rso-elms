@@ -143,7 +143,7 @@ export interface ICreateTimeTableActivity {
 }
 
 export interface IUpdateTimetableActivity extends ICreateTimeTableActivity {
-  id: string;
+  id?: string;
 }
 
 interface courseModule extends Table {

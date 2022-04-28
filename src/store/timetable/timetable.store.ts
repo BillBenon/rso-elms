@@ -17,17 +17,11 @@ class TimetableStore {
     );
   }
 
-  getTimetableActivityById(id: string) {
-    return useQuery(['timetable/:id', id], () =>
-      timetableService.getTimetableActivityById(id),
-    );
-  }
-
-  public async updateTimetableActivityById() {
+  updateTimetableActivityById() {
     return useMutation(timetableService.updateTimetableActivityById);
   }
 
-  public async deleteActivity() {
+  deleteActivity() {
     return useMutation(timetableService.deleteActivity);
   }
 
@@ -58,6 +52,14 @@ class TimetableStore {
   changeWeekStatus() {
     return useMutation(timetableService.changeWeekStatus);
   }
+}
+
+export function getTimetableActivityById(id?: string) {
+  return useQuery(
+    ['timetable/:id', id],
+    () => timetableService.getTimetableActivityById(id || ''),
+    { enabled: !!id },
+  );
 }
 
 export const timetableStore = new TimetableStore();
