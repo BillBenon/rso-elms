@@ -1,7 +1,9 @@
+import '../../../styles/components/Molecules/editor/tiptap.scss';
+
 import { Editor, EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import React from 'react';
-import '../../../styles/components/Molecules/editor/tiptap.scss';
+
 import MenuBar from './Menubar';
 
 interface IProps {
