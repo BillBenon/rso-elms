@@ -96,15 +96,15 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
         </Permission>
       </div>
       <div className="tt print:px-10 print:py-8 print:bg-main" ref={timetableRef}>
-        <div className="bg-primary-500 py-4 uppercase px-8 text-sm text-center print:text-xs text-white grid grid-cols-11">
-          <p className="px-2 text-left">days</p>
-          <p className="px-2">time</p>
-          <p className="px-2 col-span-3">subject detail</p>
-          <p className="px-2">code</p>
-          <p className="px-2">pds</p>
-          <p className="px-2">moi</p>
-          <p className="px-2">location</p>
-          <p className="px-2 col-span-2">ds/lecturer</p>
+        <div className="bg-primary-500 py-4 uppercase px-8 text-sm text- print:text-xs text-white grid grid-cols-11 gap-2">
+          <p>days</p>
+          <p>time</p>
+          <p className="col-span-3">subject detail</p>
+          <p>code</p>
+          <p>pds</p>
+          <p>moi</p>
+          <p>location</p>
+          <p className="col-span-2">ds/lecturer</p>
         </div>
         {Object.keys(groupedActivities).map((day, i) => {
           monday.setDate(monday.getDate() + i);
@@ -130,7 +130,7 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
                   return (
                     <div
                       key={activity.id}
-                      className="timetable-item relative col-span-4 grid grid-cols-10 gap-3 pb-2 py-1 rounded cursor-pointer hover:bg-white px-2 hover:text-primary-600">
+                      className="timetable-item relative col-span-4 grid grid-cols-10 gap-2 py-2 rounded cursor-pointer hover:bg-white px-2 hover:text-primary-600">
                       <p className=" uppercase">
                         {activity.start_hour.substring(0, 5)} -
                         {' ' + activity.end_hour.substring(0, 5)}
@@ -139,9 +139,9 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
                         {activity.course_module?.name || activity.event.name}
                       </p>
                       <p className="uppercase">{activity.course_code}</p>
-                      <p className="">{activity.periods}</p>
-                      <p className="">{activity.method_of_instruction}</p>
-                      <p className="">{activity.venue.name}</p>
+                      <p>{activity.periods}</p>
+                      <p>{activity.method_of_instruction}</p>
+                      <p>{activity.venue.name}</p>
                       <p className=" col-span-2">
                         {`${instructor?.user.first_name} ${instructor?.user.last_name}`}
                       </p>
