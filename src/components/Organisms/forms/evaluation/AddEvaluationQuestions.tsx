@@ -9,7 +9,7 @@ import {
   ICreateEvaluationQuestions,
   IEvaluationProps,
   IMultipleChoice,
-  IQuestionType,
+  IQuestionType
 } from '../../../../types/services/evaluation.types';
 import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
@@ -294,13 +294,12 @@ export default function AdddEvaluationQuestions({
   return (
     <Fragment>
       <div
-        className={`${
-          evaluationInfo?.evaluation_module_subjects.find(
-            (subject) => subject.id === moduleSubject,
-          )?.section_total_marks === currentTotalMarks()
+        className={`${evaluationInfo?.evaluation_module_subjects.find(
+          (subject) => subject.id === moduleSubject,
+        )?.section_total_marks === currentTotalMarks()
             ? 'bg-primary-400'
             : 'bg-red-500'
-        } + sticky top-0  z-50 py-4 px-5 text-main rounded-sm flex justify-evenly`}>
+          } + sticky top-0  z-50 py-4 px-5 text-main rounded-sm flex justify-evenly`}>
         <span>{evaluationInfo?.name}</span>
         <span className="">
           {questions.length} {questions.length > 1 ? 'questions' : 'question'}
@@ -419,7 +418,7 @@ export default function AdddEvaluationQuestions({
                   ) : null}
 
                   {question.choices.length > 0 &&
-                  question.question_type === IQuestionType.MULTIPLE_CHOICE ? (
+                    question.question_type === IQuestionType.MULTIPLE_CHOICE ? (
                     <SelectMolecule
                       value={question.choices.find((ch) => ch.correct)?.answer_content}
                       width="64"
@@ -455,11 +454,10 @@ export default function AdddEvaluationQuestions({
                       question.attachments?.length > 0 &&
                       question.attachments?.map((attachment, index) => (
                         <a
-                          href={`${
-                            import.meta.env.VITE_API_URL
-                          }/evaluation-service/api/evaluationQuestions/${
-                            attachment.id
-                          }/loadAttachment`}
+                          className='text-blue-800 hover:underline'
+                          href={`${import.meta.env.VITE_API_URL
+                            }/evaluation-service/api/evaluationQuestions/${attachment.id
+                            }/loadAttachment`}
                           key={attachment.id}
                           target="_blank"
                           download>

@@ -221,6 +221,15 @@ class EvaluationService {
     );
   }
 
+  public async addQuestionDocAnswer(
+    data: FileAttachment,
+  ): Promise<AxiosResponse<Response<IStudentAnswer>>> {
+    return await evaluationAxios.post(
+      `/student-answers/student-answer${data.id}/addAttachment`,
+      data.docInfo,
+    );
+  }
+
   public async updateEvaluationModuleSubject(
     id: string,
     status: IEvaluationStatus,

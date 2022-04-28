@@ -307,6 +307,7 @@ export interface IEvaluationQuestion {
   question: string;
   submitted: boolean;
   question_type: IQuestionType;
+  attachments?: AttachementInfo[];
 }
 
 export interface IMultipleChoice {

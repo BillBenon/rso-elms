@@ -22,11 +22,11 @@ import {
   IEvaluationTypeEnum,
   IMarkingType,
   IQuestionaireTypeEnum,
-  ISubmissionTypeEnum,
+  ISubmissionTypeEnum
 } from '../../../../types/services/evaluation.types';
 import {
   getDropDownOptions,
-  getDropDownStatusOptions,
+  getDropDownStatusOptions
 } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';

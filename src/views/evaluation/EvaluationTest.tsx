@@ -165,7 +165,7 @@ export default function EvaluationTest() {
             id={question.id}
             key={question.id}
             isLast={questions.data.data.length - 1 === index}
-            question={question.question}
+            question={question}
             marks={question.mark}
             choices={question.multiple_choice_answers}
             isMultipleChoice={

@@ -1,8 +1,8 @@
 import React, { FormEvent, useCallback, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
-
 import Button from '../../components/Atoms/custom/Button';
+import FileUploader from '../../components/Atoms/Input/FileUploader';
 import Input from '../../components/Atoms/Input/Input';
 import Heading from '../../components/Atoms/Text/Heading';
 import TextAreaMolecule from '../../components/Molecules/input/TextAreaMolecule';
@@ -12,16 +12,18 @@ import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType, ValueType } from '../../types';
 import {
   IEvaluationInfo,
+  IEvaluationQuestionsInfo,
   IEvaluationSettingType,
   IMultipleChoiceAnswers,
   IStudentAnswer,
+  ISubmissionTypeEnum,
 } from '../../types/services/evaluation.types';
 import { StudentMarkingAnswer } from '../../types/services/marking.types';
 import ContentSpan from './ContentSpan';
 import MultipleChoiceAnswer from './MultipleChoiceAnswer';
 
 interface IQuestionContainerProps {
-  question: string;
+  question: IEvaluationQuestionsInfo;
   id: string;
   marks: number;
   isLast: boolean;
@@ -73,7 +75,7 @@ export default function QuestionContainer({
 
   const { mutate } = evaluationStore.addQuestionAnswer();
   const { mutateAsync } = evaluationStore.submitEvaluation();
-
+  const { mutate: addQuestionDocAnswer } = evaluationStore.addQuestionDocAnswer();
   function submitEvaluation(e: FormEvent) {
     e?.preventDefault();
     mutateAsync(answer.student_evaluation, {
@@ -97,6 +99,38 @@ export default function QuestionContainer({
       }));
     }
   }, [index, initialState, previousAnswers]);
+
+  const [file, setFile] = useState<File | null>(null);
+
+  const handleUpload = (file: FileList | null) => {
+    setFile(file ? file[0] : null);
+  };
+
+  useEffect(() => {
+    const handleSubmittingFile = () => {
+      const data = new FormData();
+
+      if (file) data.append('file', file);
+
+      addQuestionDocAnswer(
+        {
+          id: studentEvaluationId,
+          docInfo: data,
+        },
+        {
+          onSuccess() {
+            setFile(null);
+            toast.success('File uploaded successfully');
+            //TODO: invalidate student answers store
+            //  queryClient.invalidateQueries(['evaluation/questionsBySubject', subjectId]);
+          },
+        },
+      );
+    };
+    if (file) {
+      handleSubmittingFile();
+    }
+  }, [studentEvaluationId, file]);
 
   function disableCopyPaste(e: any) {
     e.preventDefault();
@@ -150,7 +184,7 @@ export default function QuestionContainer({
   }
 
   useEffect(() => {
-    if (question !== '') {
+    if (question.question !== '') {
       const interval = setInterval(() => {
         if (questionToSubmit) submitForm();
       }, 30000);
@@ -169,11 +203,11 @@ export default function QuestionContainer({
         {evaluationInfo?.setting_type === IEvaluationSettingType.SUBJECT_BASED && (
           <div className="mt-7 flex justify-between">
             <ContentSpan title={`Question ${index + 1}`} className="gap-3">
-              {question || question}
+              {question.question}
             </ContentSpan>
 
             <Heading fontWeight="semibold" fontSize="sm">
-              {marks} marks
+              {question.mark} marks
             </Heading>
           </div>
         )}
@@ -195,12 +229,7 @@ export default function QuestionContainer({
           </div>
         ) : evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED ? (
           <>
-            <StudentQuestionsSectionBased
-              // submitForm={submitForm}
-              // setQuestionToSubmit={setQuestionToSubmit}
-              // handleChange={handleChange}
-              {...{ evaluationInfo }}
-            />
+            <StudentQuestionsSectionBased {...{ evaluationInfo }} />
           </>
         ) : (
           <TextAreaMolecule
@@ -216,6 +245,45 @@ export default function QuestionContainer({
             handleChange={handleChange}
           />
         )}
+
+        {question.attachments?.length > 0 && (
+          <div className="flex flex-col py-5">
+            <Heading fontWeight="medium" fontSize="sm">
+              Question documents
+            </Heading>
+            {question.attachments &&
+              question.attachments?.map((attachment, index) => (
+                <a
+                  href={`${
+                    import.meta.env.VITE_API_URL
+                  }/evaluation-service/api/evaluationQuestions/${
+                    attachment.id
+                  }/loadAttachment`}
+                  key={attachment.id}
+                  target="_blank"
+                  download>
+                  {index + 1}. {attachment.name}
+                </a>
+              ))}
+          </div>
+        )}
+
+        {evaluationInfo.submision_type === ISubmissionTypeEnum.FILE && (
+          <div className="flex items-center py-5">
+            <FileUploader
+              allowPreview={false}
+              handleUpload={(filelist) => {
+                handleUpload(filelist);
+              }}
+              accept={'*'}
+              error={''}>
+              <Button styleType="outline" type="button">
+                upload answer file
+              </Button>
+            </FileUploader>
+          </div>
+        )}
+
         <Input value={id} name="evaluation_question" handleChange={handleChange} hidden />
         {/* <div className="py-7">
           <Button type="submit" onSubmit={(e: FormEvent) => submitForm(id, e)}>
