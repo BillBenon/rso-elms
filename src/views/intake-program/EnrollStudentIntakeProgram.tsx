@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -54,6 +55,7 @@ function EnrollStudentIntakeProgram<T>({
   // );
 
   const [students, setStudents] = useState<UserView[]>([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     let existing_ids: string[] = [];
@@ -62,10 +64,30 @@ function EnrollStudentIntakeProgram<T>({
       existing_ids.push(existing[index].student.id + '');
     }
     let studentsView: UserView[] = [];
-    studentsInAcademy?.data.data.forEach((stud) => {
+
+    const rankedStudents =
+      studentsInAcademy?.data.data.filter(
+        (inst) => inst.student.user.person.current_rank,
+      ) || [];
+    const unrankedStudents =
+      studentsInAcademy?.data.data.filter(
+        (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedStudents.sort(function (a, b) {
+      return (
+        a.student.user.person.current_rank?.priority -
+        b.student.user.person.current_rank?.priority
+      );
+    });
+
+    const finalInstructors = rankedStudents.concat(unrankedStudents);
+
+    finalInstructors.forEach((stud) => {
       if (!existing_ids.includes(stud.student.id + '')) {
         let studentView: UserView = {
           id: stud.student.id,
+          rank: stud.student.user.person.current_rank?.name,
           first_name: stud.student.user.first_name,
           last_name: stud.student.user.last_name,
           image_url: stud.student.user.image_url,
@@ -127,7 +149,7 @@ function EnrollStudentIntakeProgram<T>({
       <RightSidebar
         open={showSidebar}
         handleClose={handleShowSidebar}
-        label="Enroll students to program"
+        label={'Enroll students to ' + t('Program')}
         data={students}
         selectorActions={[
           {

@@ -62,8 +62,6 @@ export default function LevelPerformanceReport() {
     setUsedStudents([...usedStudents, studentId]);
     const reports = performance?.filter((prd) => prd.student.admin_id == studentId);
 
-    console.log(reports);
-
     return reports;
   };
   useEffect(() => {

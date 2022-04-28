@@ -16,7 +16,7 @@ import { Instructor } from '../../types/services/instructor.types';
 import { IntakePeriodParam } from '../../types/services/intake-program.types';
 import { Student } from '../../types/services/user.types';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
-import { classSchema } from '../../validations/level.validation';
+import { useClassValidation } from '../../validations/level.validation';
 
 interface ClassError
   extends Pick<
@@ -33,6 +33,8 @@ function NewClass() {
   const history = useHistory();
   const { path } = useRouteMatch();
   const { t } = useTranslation();
+
+  const { classSchema } = useClassValidation();
 
   const [form, setForm] = useState<ICreateClass>({
     class_group_type: ClassGroupType.CLASS,
@@ -203,10 +205,10 @@ function NewClass() {
           })}
           placeholder={
             instLoading
-              ? 'Loading instructor representatives...'
-              : 'Choose instructor representative'
+              ? t('Instructor_representative') + ' backup 1 ...'
+              : 'Choose ' + t('Instructor_representative')
           }>
-          Instructor representative backup 1
+          {t('Instructor_representative')} backup 1
         </DropdownMolecule>
         <DropdownMolecule
           name="instructor_class_in_charge_three_id"
@@ -224,10 +226,10 @@ function NewClass() {
           })}
           placeholder={
             instLoading
-              ? 'Loading instructor representatives...'
-              : 'Choose instructor representative'
+              ? t('Instructor_representative') + ' backup 2...'
+              : 'Choose ' + t('Instructor_representative')
           }>
-          Instructor representative backup 2
+          {t('Instructor_representative')} backup 2
         </DropdownMolecule>
 
         <DropdownMolecule
@@ -245,7 +247,7 @@ function NewClass() {
           {t('Class_representative')}
         </DropdownMolecule>
 
-        <div className="mt-5">
+        <div>
           <Button type="submit">Save</Button>
         </div>
       </form>

@@ -324,7 +324,7 @@ export default function Intakes() {
                       }
                       title={
                         registrationControlId
-                          ? 'No intake available in this reg Control'
+                          ? 'No intake available in this registration Period'
                           : 'No intake available'
                       }
                       privilege={Privileges.CAN_CREATE_INTAKE}
