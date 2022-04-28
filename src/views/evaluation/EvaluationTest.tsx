@@ -15,7 +15,7 @@ import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
 import {
   IEvaluationSettingType,
-  StudentEvalParamType,
+  StudentEvalParamType
 } from '../../types/services/evaluation.types';
 import QuestionContainer from './QuestionContainer';
 
@@ -69,7 +69,7 @@ export default function EvaluationTest() {
     SetTime(
       ((evaluationData?.data?.data?.time_limit || 0) * 60 -
         studentWorkTimer?.data?.data.data) *
-        1000,
+      1000,
     );
   }, [
     evaluationData?.data?.data?.time_limit,

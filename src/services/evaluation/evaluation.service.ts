@@ -2,6 +2,7 @@ import { AxiosResponse } from 'axios';
 import { evaluationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
+  AttachementInfo,
   IAddprivateAttendee,
   ICreateEvaluationQuestions,
   IEvaluationAction,
@@ -19,7 +20,7 @@ import {
   IStudentAnswer,
   IStudentEvaluationStart,
   IStudentEvaluationStartInfo,
-  IUpdateEvaluationApprovalStatus,
+  IUpdateEvaluationApprovalStatus
 } from '../../types/services/evaluation.types';
 import { FileAttachment } from '../../types/services/user.types';
 
@@ -223,9 +224,9 @@ class EvaluationService {
 
   public async addQuestionDocAnswer(
     data: FileAttachment,
-  ): Promise<AxiosResponse<Response<IStudentAnswer>>> {
+  ): Promise<AxiosResponse<Response<AttachementInfo>>> {
     return await evaluationAxios.post(
-      `/student-answers/student-answer${data.id}/addAttachment`,
+      `/student-answers/student-answer/addAttachmentAnswer`,
       data.docInfo,
     );
   }

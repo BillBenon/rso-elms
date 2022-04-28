@@ -296,7 +296,7 @@ export default function SubjectEvaluationInfoComponent() {
                     /*@ts-ignore */
                     value={details?.content_format}
                     width="64"
-                    name="submision_type"
+                    name="content_format"
                     placeholder="Select submission type"
                     handleChange={handleChange}
                     options={[
@@ -308,14 +308,17 @@ export default function SubjectEvaluationInfoComponent() {
                     Content format
                   </SelectMolecule>
 
+                  {/* <div className="w-[8rem]"> */}
                   <InputMolecule
-                    width="24"
+                    style={{ width: '8rem' }}
+                    // width="24"
                     type="number"
                     name="maximum_file_size"
                     value={details?.maximum_file_size}
                     handleChange={handleChange}>
                     Maximum file size (Mbs)
                   </InputMolecule>
+                  {/* </div> */}
                 </>
               )}
             </>

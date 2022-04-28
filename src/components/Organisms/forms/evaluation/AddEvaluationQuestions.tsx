@@ -297,8 +297,8 @@ export default function AdddEvaluationQuestions({
         className={`${evaluationInfo?.evaluation_module_subjects.find(
           (subject) => subject.id === moduleSubject,
         )?.section_total_marks === currentTotalMarks()
-            ? 'bg-primary-400'
-            : 'bg-red-500'
+          ? 'bg-primary-400'
+          : 'bg-red-500'
           } + sticky top-0  z-50 py-4 px-5 text-main rounded-sm flex justify-evenly`}>
         <span>{evaluationInfo?.name}</span>
         <span className="">
@@ -441,7 +441,7 @@ export default function AdddEvaluationQuestions({
                       handleUpload={(filelist) => {
                         handleUpload(filelist, question.id);
                       }}
-                      accept={'*'}
+                      accept={`${evaluationInfo?.content_format}`}
                       error={''}>
                       <Button styleType="outline" type="button">
                         upload file

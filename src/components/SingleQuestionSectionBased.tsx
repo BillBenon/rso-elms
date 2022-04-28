@@ -8,7 +8,7 @@ import { ParamType, ValueType } from '../types';
 import {
   IEvaluationQuestionsInfo,
   IStudentAnswer,
-  ISubmissionTypeEnum,
+  ISubmissionTypeEnum
 } from '../types/services/evaluation.types';
 import ContentSpan from '../views/evaluation/ContentSpan';
 import Button from './Atoms/custom/Button';
@@ -62,8 +62,17 @@ export function SingleQuestionSectionBased({
           docInfo: data,
         },
         {
-          onSuccess() {
+          onSuccess(attachmeInfo) {
             setFile(null);
+            setLocalAnswer((localAnswer) => ({
+              ...localAnswer,
+              answer_attachment: attachmeInfo.data.data.id.toString(),
+            }));
+
+            mutate({
+              ...localAnswer,
+              answer_attachment: attachmeInfo.data.data.id.toString(),
+            })
             toast.success('File uploaded successfully');
             //TODO: invalidate student answers store
             queryClient.invalidateQueries([
@@ -142,11 +151,9 @@ export function SingleQuestionSectionBased({
           {question.attachments &&
             question.attachments?.map((attachment, index) => (
               <a
-                href={`${
-                  import.meta.env.VITE_API_URL
-                }/evaluation-service/api/evaluationQuestions/${
-                  attachment.id
-                }/loadAttachment`}
+                href={`${import.meta.env.VITE_API_URL
+                  }/evaluation-service/api/evaluationQuestions/${attachment.id
+                  }/loadAttachment`}
                 key={attachment.id}
                 target="_blank"
                 download>
@@ -169,6 +176,17 @@ export function SingleQuestionSectionBased({
               upload answer file
             </Button>
           </FileUploader>
+          {previoustudentAnswers.find(item => item.evaluation_question.id == question.id)?.attachments.map(attachment => (
+            <a
+              href={`${import.meta.env.VITE_API_URL
+                }/evaluation-service/api/evaluationQuestions/${attachment.id
+                }/loadAttachment`}
+              key={attachment.id}
+              target="_blank"
+              download>
+              {index + 1}. {attachment.name}
+            </a>
+          ))}
         </div>
       )}
 

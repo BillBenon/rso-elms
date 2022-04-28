@@ -13,6 +13,8 @@ export default function SubjectBasedEvaluationContent({ evaluation }: IProps) {
   const { data: evaluationQuestions, isLoading: loading } =
     evaluationStore.getEvaluationQuestions(evaluation.id);
 
+  console.log({ evaluationQuestions })
+
   return (
     <div>
       <div
@@ -45,7 +47,6 @@ export default function SubjectBasedEvaluationContent({ evaluation }: IProps) {
                 {evaluationQuestions?.data.data.length - 1 !== index && <hr />}
 
                 {question.attachments?.length > 0 && (
-
                   <div className="flex flex-col py-3">
                     <Heading fontSize='sm' color='primary' className='py-2'>Question attachments</Heading>
                     {question.attachments &&
