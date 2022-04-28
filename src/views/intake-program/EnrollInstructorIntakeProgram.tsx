@@ -110,7 +110,7 @@ function EnrollInstructorIntakeProgram({
       <RightSidebar
         open={showSidebar}
         handleClose={handleShowSidebar}
-        label={'Enroll ' + t('Instructor') + 'to program'}
+        label={'Enroll ' + t('Instructor') + ' to ' + t('Program')}
         data={instructors}
         selectorActions={[
           {

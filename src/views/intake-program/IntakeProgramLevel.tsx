@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 
@@ -38,6 +39,7 @@ function IntakeProgramLevel({ action }: IntakeProgramLevelProp) {
   const [instLevels, setInstLevels] = useState<LevelIntakeProgram[]>([]);
 
   const { user } = useAuthenticator();
+  const { t } = useTranslation();
 
   const userId = user?.id;
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(userId + '').data
@@ -99,7 +101,7 @@ function IntakeProgramLevel({ action }: IntakeProgramLevelProp) {
           privilege={Privileges.CAN_CREATE_PROGRAM_LEVELS}
           buttonLabel="Add new level"
           icon="level"
-          title={'No levels available in this program'}
+          title={'No levels available in this ' + t('Program')}
           handleClick={() =>
             history.push(
               `/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`,
@@ -114,7 +116,7 @@ function IntakeProgramLevel({ action }: IntakeProgramLevelProp) {
               <div className="text-right">
                 <Link
                   to={`/dashboard/intakes/programs/${intakeId}/${id}/${intakeProg}/add-level`}>
-                  <Button>Add level to program</Button>
+                  <Button>Add level to {t('Program')}</Button>
                 </Link>
               </div>
             </Permission>
@@ -145,7 +147,7 @@ function IntakeProgramLevel({ action }: IntakeProgramLevelProp) {
                 path={`${path}/:level/add-period`}
                 render={() => (
                   <PopupMolecule
-                    title="Add period to level"
+                    title={'Add ' + t('Period') + ' to level'}
                     closeOnClickOutSide={false}
                     open
                     onClose={history.goBack}>

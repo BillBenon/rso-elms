@@ -108,7 +108,7 @@ function EnrollInstructorToModuleComponent<T>({ existing }: AssignModuleType<T>)
             handleAction: (data?: string[]) => add(data),
           },
         ]}
-        dataLabel={t('Instructor') + ' in this program'}
+        dataLabel={t('Instructor') + ' in this ' + t('Program')}
         isLoading={isLoading}
         unselectAll={!sidebarOpen}
       />

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -22,6 +23,7 @@ function IntakeProgramModules() {
   const [instModules, setInstModules] = useState<CommonCardDataType[]>([]);
   const { id, intakeProg } = useParams<IntakeProgParam>();
   const { user } = useAuthenticator();
+  const { t } = useTranslation();
 
   const instructorInfo = instructordeploymentStore.getInstructorByUserId(user?.id + '')
     .data?.data.data[0];
@@ -68,9 +70,13 @@ function IntakeProgramModules() {
             <NoDataAvailable
               privilege={Privileges.CAN_CREATE_INTAKE_PROGRAM_MODULES}
               buttonLabel="Add new modules"
-              title={'No modules available in this program'}
+              title={'No modules available in this ' + t('Program')}
               handleClick={() => history.push(`${url}/add`)}
-              description="Looks like there are no modules assigned to this intake program yet!"
+              description={
+                'Looks like there are no modules assigned to this intake ' +
+                t('Program') +
+                ' yet!'
+              }
             />
           ) : (
             <>
