@@ -1,7 +1,7 @@
 import '../../styles/components/Molecules/timetable/timetable.scss';
 
 import React from 'react';
-import { Link, useParams, useRouteMatch } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -14,7 +14,6 @@ import { formatDateToYyMmDd } from '../../utils/date-helper';
 
 export default function ClassTimeTable() {
   const { id } = useParams<ParamType>();
-  const { url } = useRouteMatch();
 
   const levelInfo = intakeProgramStore.getIntakeLevelById(id).data?.data.data;
   const { data, isLoading, isError } = timetableStore.getCurrentWeek(
@@ -29,7 +28,7 @@ export default function ClassTimeTable() {
         showSearch={false}
         title={`${levelInfo?.academic_program_level.program.name} - ${levelInfo?.academic_program_level.level.name} (current)`}>
         <div className="flex gap-3">
-          <Link to={`${url}/provisional`}>
+          <Link to={`/dashboard/schedule/timetable/${id}/provisional`}>
             <Button type="button">View provisional</Button>
           </Link>
         </div>
