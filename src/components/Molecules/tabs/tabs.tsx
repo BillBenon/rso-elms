@@ -20,6 +20,7 @@ interface TabsProps {
   children: TabChildrenType;
   onTabChange?: (_event: tabEventTypes) => any;
   headerComponent?: React.ReactNode;
+  horizontalScroll?: boolean;
 }
 
 export type tabEventTypes = {
@@ -34,6 +35,7 @@ export function Tabs({
   children,
   onTabChange,
   headerComponent,
+  horizontalScroll = true,
 }: TabsProps) {
   const [activeTabIndex, setActivetabIndex] = useState(activeIndex);
 
@@ -50,23 +52,30 @@ export function Tabs({
 
   const TabHeadings = () => {
     return (
-      <div className="flex flex-wrap justify-start">
-        {children.map((tab, i) => {
-          const tProps: any = tab.props;
-          return tProps.label && tProps.label.length > 0 ? (
-            <button
-              key={i}
-              className={`pr-5 pl-3 py-4 ${
-                activeTabIndex === i ? 'border-b-3' : 'border-b-2'
-              } m-0 rounded-none
+      <div className="tab-headings overflow-auto">
+        <div
+          className={`flex ${
+            horizontalScroll ? 'flex-nowrap' : 'flex-wrap'
+          } justify-start`}>
+          {children.map((tab, i) => {
+            const tProps: any = tab.props;
+            return tProps.label && tProps.label.length > 0 ? (
+              <div className="flex-none">
+                <button
+                  key={i}
+                  className={`pr-5 pl-3 py-4 ${
+                    activeTabIndex === i ? 'border-b-3' : 'border-b-2'
+                  } m-0 rounded-none
             ${fontSizeStyle['sm']} ${fontWeightStyle['bold']} text-${
-                colorStyle[activeTabIndex == i ? 'primary' : 'gray']
-              } border-${colorStyle[activeTabIndex == i ? 'primary' : 'lightgray']}`}
-              onClick={() => slideTo(i)}>
-              {tProps.label}
-            </button>
-          ) : null;
-        })}
+                    colorStyle[activeTabIndex == i ? 'primary' : 'gray']
+                  } border-${colorStyle[activeTabIndex == i ? 'primary' : 'lightgray']}`}
+                  onClick={() => slideTo(i)}>
+                  {tProps.label}
+                </button>
+              </div>
+            ) : null;
+          })}
+        </div>
       </div>
     );
   };

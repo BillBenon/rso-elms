@@ -97,8 +97,11 @@ class SchoolReportService {
   public async getModuleTermPerformance(
     moduleID: string,
     termID: string,
+    classes: string,
   ): Promise<AxiosResponse<Response<IModuleTermPerformance[]>>> {
-    return await evaluationAxios.get(`/reports/module/${moduleID}/term/${termID}`);
+    return await evaluationAxios.get(
+      `/reports/module/${moduleID}/term/${termID}/classes/${classes}`,
+    );
   }
   public async createSubjective(
     subjective: ISubjectiveForm,

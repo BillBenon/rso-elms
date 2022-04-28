@@ -52,7 +52,7 @@ export default function Events() {
           {events?.map((event) => (
             <div
               key={event.id}
-              className="bg-main rounded-md py-5 px-6 border-2 border-transparent hover:border-primary-500 cursor-pointer">
+              className="bg-main shadow rounded-md py-5 px-6 border-2 border-transparent hover:border-primary-500 cursor-pointer">
               <div className="flex justify-between">
                 <Badge badgecolor={'info'}>
                   <span className="text-primary-500">{event.event_category}</span>

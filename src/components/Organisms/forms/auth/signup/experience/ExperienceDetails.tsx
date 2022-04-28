@@ -50,7 +50,7 @@ function ExperienceDetails() {
         <ExperienceStep
           type={ExperienceType.GENERAL_EDUCATION}
           isVertical
-          display_label={'General Education'}
+          display_label={'Formal Education'}
           nextStep={nextStep}
           skip={skip}
           fetched_id={''}
@@ -58,7 +58,7 @@ function ExperienceDetails() {
         <ExperienceStep
           type={ExperienceType.CURRIER_COURSE_EDUCATION}
           isVertical
-          display_label={'Carrier Course Education'}
+          display_label={'Carrier Course Attended'}
           nextStep={nextStep}
           prevStep={back}
           skip={skip}
@@ -67,7 +67,7 @@ function ExperienceDetails() {
         <ExperienceStep
           type={ExperienceType.INTERNATIONAL_CERTIFICATION}
           isVertical
-          display_label={'International Certification'}
+          display_label={'Appointments Held (achievements)'}
           nextStep={nextStep}
           prevStep={back}
           skip={skip}
@@ -76,7 +76,7 @@ function ExperienceDetails() {
         <ExperienceStep
           type={ExperienceType.INTERNATIONAL_MISSION}
           isVertical
-          display_label={'International Mission'}
+          display_label={'International Missions'}
           nextStep={nextStep}
           prevStep={back}
           skip={skip}
@@ -85,7 +85,7 @@ function ExperienceDetails() {
         <ExperienceStep
           type={ExperienceType.TRAINING}
           isVertical
-          display_label={'Training'}
+          display_label={'Decorations'}
           nextStep={nextStep}
           prevStep={back}
           skip={skip}
