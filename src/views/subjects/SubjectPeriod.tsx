@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
@@ -22,6 +23,7 @@ function SubjectPeriod() {
   );
   const [subj, setsubj] = useState<CommonCardDataType[]>();
   const history = useHistory();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (subjects?.data.data) {
@@ -53,7 +55,7 @@ function SubjectPeriod() {
           privilege={Privileges.CAN_CREATE_LEVEL_MODULE_SUBJECTS}
           buttonLabel="Add new subject"
           icon="subject"
-          title={'No subjects available in this period'}
+          title={'No subjects available in this ' + t('Period')}
           handleClick={() =>
             path.includes('learn')
               ? history.push(
@@ -69,7 +71,11 @@ function SubjectPeriod() {
                 )
               : {}
           }
-          description="There are no subjects assigned to this period, click on the below button to add them!"
+          description={
+            'There are no subjects assigned to this ' +
+            t('Period') +
+            ', click on the below button to add them!'
+          }
         />
       ) : (
         <section className="mt-4 flex flex-wrap justify-start gap-4">

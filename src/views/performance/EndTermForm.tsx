@@ -268,14 +268,16 @@ export default function EndTermForm() {
               </Heading>
               <div className="my-4">
                 <div className="flex">
-                  <div className="border border-black py-1 text-center w-40">Period</div>
+                  <div className="border border-black py-1 text-center w-40">
+                    {t('Period')}
+                  </div>
                   <div className="border border-black py-1 text-center w-32">
                     {termName}
                   </div>
                 </div>
                 <div className="flex">
                   <div className="border border-black py-1 text-center w-40">
-                    Syndicate
+                    {t('Class')}
                   </div>
                   <div className="border border-black py-1 text-center w-32">
                     {classInfo?.data.data.class_name}

@@ -219,16 +219,20 @@ function IntakePrograms() {
                     <NoDataAvailable
                       privilege={Privileges.CAN_CREATE_PROGRAMS_IN_INTAKE}
                       icon="program"
-                      buttonLabel="Add new program to intake"
-                      title={'No program available in this intake'}
+                      buttonLabel={'Add new ' + t('Program') + ' to intake'}
+                      title={'No ' + t('Program') + ' available in this intake'}
                       handleClick={() =>
                         history.push(`${url}/add-program-to-intake?intakeId=${intakeId}`)
                       }
-                      description={`There are no programs added yet${
-                        user?.user_type === UserType.ADMIN
-                          ? ', click on the below button to add some!'
-                          : ''
-                      }`}
+                      description={
+                        `There are no ` +
+                        t('Program') +
+                        ` added yet${
+                          user?.user_type === UserType.ADMIN
+                            ? ', click on the below button to add some!'
+                            : ''
+                        }`
+                      }
                     />
                   )}
                 </section>

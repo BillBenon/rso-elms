@@ -457,7 +457,7 @@ function IntakeProgramDetails() {
                                   color="txt-primary"
                                   fontSize="sm"
                                   fontWeight="semibold">
-                                  Instructor in charge :
+                                  {t('Instructor')} in charge :
                                 </Heading>
                                 {intakeProgram?.data.data.incharge_instructor ? (
                                   <Heading color="txt-primary" fontSize="sm">
@@ -480,7 +480,7 @@ function IntakeProgramDetails() {
                                         to={`${url}/leader/add?type=instructor`}
                                         className="bg-secondary px-2 rounded-sm hover:bg-tertiary flex items-center justify-end">
                                         <Icon name="add" size={12} fill="primary" />
-                                        Add instructor incharge
+                                        Add {t('Instructor')} incharge
                                       </Link>
                                     </div>
                                   </Permission>
@@ -521,7 +521,7 @@ function IntakeProgramDetails() {
                             </div>
                             <div className="mr-20 rounded border-2 border-[#e9ecef] flex flex-col gap-7 p-6 bg-main">
                               <Heading color="txt-secondary" fontSize="base">
-                                Program Syllabus
+                                {t('Program')} Syllabus
                               </Heading>
                               <div className="flex flex-col gap-4">
                                 {intakeProgram?.data.data?.attachment_id == null ? (
@@ -532,7 +532,7 @@ function IntakeProgramDetails() {
                                         to={`${url}/programSyllabus/add`}
                                         className="bg-secondary px-2 rounded-sm hover:bg-tertiary flex items-center justify-end">
                                         <Icon name="add" size={12} fill="primary" />
-                                        Add Program Syllabus
+                                        Add {t('Program')} Syllabus
                                       </Link>
                                     </div>
                                   </Permission>
@@ -552,7 +552,7 @@ function IntakeProgramDetails() {
                                           to={`${url}/programSyllabus/add`}
                                           className="flex items-center justify-end">
                                           <Icon name="add" size={12} fill="primary" />
-                                          Add new Program Syllabus
+                                          Add new {t('Program')} Syllabus
                                         </Link>
                                       </div>
                                       <div className="flex space-x-4">
@@ -590,7 +590,7 @@ function IntakeProgramDetails() {
               render={() => {
                 return (
                   <PopupMolecule
-                    title="New Program Syllabus"
+                    title={'New ' + t('Program') + ' Syllabus'}
                     open
                     onClose={history.goBack}>
                     <AddProgramLeader
@@ -608,7 +608,7 @@ function IntakeProgramDetails() {
               render={() => {
                 return (
                   <PopupMolecule
-                    title="New Program Syllabus"
+                    title={'New ' + t('Program') + ' Syllabus'}
                     open
                     onClose={history.goBack}>
                     <AddProgramSyllabus programId={intakeProg} />

@@ -89,7 +89,7 @@ function InstructorModuleAssignment({ module_id, intake_program_id }: Props) {
       <RightSidebar
         open={sidebarOpen}
         handleClose={() => setSidebarOpen(false)}
-        label={'Enroll ' + t('Instructor') + ' to program'}
+        label={'Enroll ' + t('Instructor') + ' to ' + t('Program')}
         data={instructors}
         selectorActions={[
           {
@@ -97,7 +97,7 @@ function InstructorModuleAssignment({ module_id, intake_program_id }: Props) {
             handleAction: (data?: string[]) => add(data),
           },
         ]}
-        dataLabel={t('Instructor') + ' in this intake program'}
+        dataLabel={t('Instructor') + ' in this intake ' + t('Program')}
         isLoading={instLoading}
         unselectAll={!sidebarOpen}
       />

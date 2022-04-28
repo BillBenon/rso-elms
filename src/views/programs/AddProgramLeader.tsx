@@ -1,5 +1,6 @@
 import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -24,6 +25,7 @@ export default function AddProgramLeader({
   const { mutateAsync } = intakeStore.modifyIntakeProgram();
   const { search } = useLocation();
   const history = useHistory();
+  const { t } = useTranslation();
 
   const type = new URLSearchParams(search).get('type');
 
@@ -74,8 +76,8 @@ export default function AddProgramLeader({
           placeholder={
             type === 'instructor'
               ? instLoading
-                ? 'Loading instructors...'
-                : 'Choose instructor'
+                ? 'Loading ' + t('Instructor') + '...'
+                : 'Choose ' + t('Instructor')
               : type === 'student'
               ? studLoading
                 ? 'Loading students...'

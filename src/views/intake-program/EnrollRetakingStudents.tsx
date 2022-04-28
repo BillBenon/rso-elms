@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -36,6 +37,7 @@ export default function EnrollRetakingStudents<T>({
   const { intakeProg, intakeId } = useParams<IntakeProgParam>();
 
   const { data } = authenticatorStore.authUser(true);
+  const { t } = useTranslation();
 
   const { data: retakingStudents, isLoading } =
     enrollmentStore.getAllStudentEnrollmentsByPromotionStatus(
@@ -141,7 +143,7 @@ export default function EnrollRetakingStudents<T>({
       <RightSidebar
         open={showSidebar}
         handleClose={handleShowSidebar}
-        label="Enroll students to program"
+        label={'Enroll students to ' + t('Program')}
         data={students}
         selectorActions={[
           {
@@ -149,7 +151,7 @@ export default function EnrollRetakingStudents<T>({
             handleAction: (data?: string[]) => add(data),
           },
         ]}
-        dataLabel={'Students retaking this program'}
+        dataLabel={'Students retaking this ' + t('Program')}
         isLoading={isLoading}
         unselectAll={!showSidebar}
       />
