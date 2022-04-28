@@ -3,7 +3,7 @@ import { Instructor } from './instructor.types';
 import {
   IntakeLevelModule,
   IntakeModuleStatus,
-  IntakeProgramLevelPeriodInfo
+  IntakeProgramLevelPeriodInfo,
 } from './intake-program.types';
 import { ModuleInfo } from './modules.types';
 
