@@ -3,7 +3,6 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import { rankStore } from '../../../../../../store/administration/rank.store';
 import usersStore from '../../../../../../store/administration/users.store';
 import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../types';
-import { RankRes } from '../../../../../../types/services/rank.types';
 import { EmploymentDetail, UserInfo } from '../../../../../../types/services/user.types';
 import { getLocalStorageData } from '../../../../../../utils/getLocalStorageItem';
 import { getDropDownOptions } from '../../../../../../utils/getOption';
@@ -11,8 +10,8 @@ import { employmentDetailsSchema } from '../../../../../../validations/complete-
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
 import DateMolecule from '../../../../../Molecules/input/DateMolecule';
-import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../../Molecules/input/InputMolecule';
+import SelectMolecule from '../../../../../Molecules/input/SelectMolecule';
 
 interface Employment<E> extends CommonStepProps, CommonFormProps<E> {}
 
@@ -50,9 +49,9 @@ function EmploymentDetails<E>({
   const [userInfo] = useState<UserInfo>(getLocalStorageData('user'));
   //get all ranks in an institution
 
-  const ranks: RankRes[] | undefined = rankStore.getRankByInstitution(
+  const { data: ranks, isLoading: loadRanks } = rankStore.getRankByInstitution(
     user.data?.data.data.institution_id + '',
-  ).data?.data.data;
+  );
 
   const moveForward = (e: FormEvent) => {
     e.preventDefault();
@@ -105,19 +104,20 @@ function EmploymentDetails<E>({
       <form onSubmit={moveForward}>
         <div className="grid grid-cols-1 md:grid-cols-2">
           {/* <div className="flex flex-col gap-4"> */}
-          <DropdownMolecule
+          <SelectMolecule
             error={errors.current_rank_id}
-            placeholder="Select current rank"
+            placeholder="Select your current rank"
             name="current_rank_id"
-            options={getDropDownOptions({ inputs: ranks || [] })}
+            loading={loadRanks}
+            options={getDropDownOptions({ inputs: ranks?.data.data || [] })}
             handleChange={handleChange}>
-            Current Title
-          </DropdownMolecule>
+            Current Rank Title
+          </SelectMolecule>
           <InputMolecule
             required={false}
             error={errors.other_rank}
             name="other_rank"
-            placeholder="other ranks u might hold"
+            placeholder="Other ranks u might hold"
             value={employmentDetails.other_rank}
             handleChange={handleChange}>
             Other Title
@@ -141,7 +141,7 @@ function EmploymentDetails<E>({
             name="date_of_commission"
             date_time_type={false}
             width="60 md:w-80">
-            Date of commission
+            Date of commission (started the career)
           </DateMolecule>
           {/* </div>
 
@@ -172,7 +172,7 @@ function EmploymentDetails<E>({
             error={errors.place_of_issue}
             name="place_of_issue"
             value={employmentDetails.place_of_issue}
-            placeholder={`Enter the place the document was issued`}
+            placeholder={`Enter the place you got your ID`}
             handleChange={handleChange}>
             Place of issue
           </InputMolecule>

@@ -20,7 +20,7 @@ class RankService {
   public async getRankByInstitution(
     id: string,
   ): Promise<AxiosResponse<Response<RankRes[]>>> {
-    return await adminstrationAxios.get(`/ranks/getRankByInstitution/${id}`);
+    return await adminstrationAxios.get(`/ranks/getRanksByInstitution/${id}`);
   }
 
   public async modifyRank(
