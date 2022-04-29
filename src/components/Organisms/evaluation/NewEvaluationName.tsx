@@ -48,7 +48,7 @@ export default function NewTemplate() {
       },
       {
         onSuccess: () => {
-          toast.success('Template created successfully');
+          toast.success('Preset created successfully');
           queryClient.invalidateQueries(['templates', user?.academy.id]);
           history.push('/dashboard/evaluations/templates');
         },
@@ -62,7 +62,7 @@ export default function NewTemplate() {
   return (
     <form className="bg-main w-2/3 px-8 py-6" onSubmit={handleSubmit}>
       <Heading className="py-12" color="primary" fontWeight="bold">
-        New Template
+        New Evaluation name 
       </Heading>
 
       <InputMolecule
@@ -73,7 +73,7 @@ export default function NewTemplate() {
         Name
       </InputMolecule>
 
-      <InputMolecule
+      {/* <InputMolecule
         value={details.allow_submission_time}
         name="allow_submission_time"
         handleChange={handleChange}
@@ -94,7 +94,7 @@ export default function NewTemplate() {
         name={'marking_reminder_date'}
         type="datetime-local">
         Marking reminder date
-      </InputMolecule>
+      </InputMolecule> */}
 
       <Button type="submit">save</Button>
     </form>

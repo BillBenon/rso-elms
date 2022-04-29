@@ -1,13 +1,12 @@
 import moment from 'moment';
 import React, { Fragment, ReactNode, useEffect, useState } from 'react';
-
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import usersStore from '../../../store/administration/users.store';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import {
   IEvaluationAction,
   IEvaluationSettingType,
-  IMarkingType,
+  IMarkingType
 } from '../../../types/services/evaluation.types';
 import DisplayClasses from '../../../views/classes/DisplayClasses';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
@@ -18,6 +17,7 @@ import { EvaluationChangeMarker } from './EvaluationChangeMarker';
 import EvaluationContentSectionBased from './EvaluationContentSectionBased';
 import EvaluationContentSubjectBased from './EvaluationContentSubjectBased';
 import EvaluationRemarks from './EvaluationRemarks';
+
 
 interface IProps {
   evaluationId: string;
@@ -96,6 +96,11 @@ export default function EvaluationContent({
                 />
 
                 <ContentSpan
+                  title="Evaluation mode"
+                  subTitle={evaluationInfo?.evaluation_mode}
+                />
+
+                <ContentSpan
                   title="Time Limit"
                   subTitle={moment
                     .utc()
@@ -141,6 +146,10 @@ export default function EvaluationContent({
                 <ContentSpan
                   title="Consider on report"
                   subTitle={evaluationInfo?.is_consider_on_report ? 'Yes' : 'No'}
+                />
+                <ContentSpan
+                  title="Strict"
+                  subTitle={evaluationInfo?.strict ? 'Yes' : 'No'}
                 />
 
                 {/* will be uncommented later */}

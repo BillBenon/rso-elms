@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
-
 import { evaluationService } from '../../../services/evaluation/evaluation.service';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import { ParamType } from '../../../types';
@@ -16,7 +15,6 @@ export default function StudentQuestionsSectionBased({
   evaluationInfo,
 }: {
   evaluationInfo: IEvaluationInfo;
-  // submitForm: (answer: string) => void;
 }) {
   const [subjects, setSubjects] = useState<ISubjects[]>([]);
   const history = useHistory();
@@ -79,6 +77,7 @@ export default function StudentQuestionsSectionBased({
             {subject.questions &&
               subject.questions.map((question, index) => (
                 <SingleQuestionSectionBased
+                  submissionType={evaluationInfo.submision_type}
                   question={question}
                   key={index}
                   {...{ index }}

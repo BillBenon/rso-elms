@@ -9,13 +9,11 @@ import {
   Switch,
   useHistory,
   useLocation,
-  useRouteMatch,
+  useRouteMatch
 } from 'react-router-dom';
-
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
-import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CardHeadMolecule from '../../components/Molecules/CardHeadMolecule';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
@@ -28,22 +26,23 @@ import UpdateIntake from '../../components/Organisms/intake/UpdateIntake';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import usePickedRole from '../../hooks/usePickedRole';
 import enrollmentStore from '../../store/administration/enrollment.store';
-import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import {
   getIntakeProgramsByStudent,
-  getStudentShipByUserId,
+  getStudentShipByUserId
 } from '../../store/administration/intake-program.store';
+import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import registrationControlStore from '../../store/administration/registrationControl.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Link as LinkType, Privileges, ValueType } from '../../types';
 import { StudentApproval } from '../../types/services/enrollment.types';
 import { InstructorProgram } from '../../types/services/instructor.types';
-import { ExtendedIntakeInfo } from '../../types/services/intake.types';
 import { StudentIntakeProgram } from '../../types/services/intake-program.types';
+import { ExtendedIntakeInfo } from '../../types/services/intake.types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import IntakePrograms from '../intake-program/IntakePrograms';
 import LevelPerformance from '../performance/LevelPerformance';
+
 
 interface IntakeCardType extends CommonCardDataType {
   registrationControlId: string;
@@ -94,17 +93,17 @@ export default function Intakes() {
     isLoading,
     refetch: refetchIntakes,
   } = user?.user_type === UserType.STUDENT
-    ? getIntakeProgramsByStudent(
+      ? getIntakeProgramsByStudent(
         studentInfo[0]?.id.toString() || '',
         !!studentInfo[0]?.id,
       )
-    : user?.user_type === UserType.INSTRUCTOR
-    ? enrollmentStore.getInstructorIntakePrograms(instructorInfo?.id + '')
-    : getIntakesByAcademy(
-        registrationControlId || picked_role?.academy_id + '',
-        !!registrationControlId,
-        true,
-      );
+      : user?.user_type === UserType.INSTRUCTOR
+        ? enrollmentStore.getInstructorIntakePrograms(instructorInfo?.id + '')
+        : getIntakesByAcademy(
+          registrationControlId || picked_role?.academy_id + '',
+          !!registrationControlId,
+          true,
+        );
 
   useEffect(() => {
     if (isSuccess && data?.data) {
@@ -153,19 +152,17 @@ export default function Intakes() {
           let cardData: IntakeCardType = {
             id: intake.id,
             code: intake.title.toUpperCase(),
-            description: `${
-              moment(intake.expected_start_date).day() +
+            description: `${moment(intake.expected_start_date).day() +
               '/' +
               moment(intake.expected_start_date).month() +
               '/' +
               moment(intake.expected_start_date).year()
-            } - ${
-              moment(intake.expected_end_date).day() +
+              } - ${moment(intake.expected_end_date).day() +
               '/' +
               moment(intake.expected_end_date).month() +
               '/' +
               moment(intake.expected_end_date).year()
-            }`,
+              }`,
             title: intake.description || ``,
             status: {
               type: advancedTypeChecker(intake.intake_status),
@@ -181,7 +178,7 @@ export default function Intakes() {
     } else if (isError) toast.error('error occurred when loading intakes');
   }, [user?.user_type, data, isError, isSuccess]);
 
-  function handleSearch(_e: ValueType) {}
+  function handleSearch(_e: ValueType) { }
   function handleClose() {
     history.goBack();
   }
@@ -203,6 +200,7 @@ export default function Intakes() {
 
     history.push(`${url}/${intakeId}/edit/${IntakeRegId}`);
   };
+
 
   return (
     <Switch>
@@ -262,12 +260,12 @@ export default function Intakes() {
                             }>
                             <div className="flex flex-col gap-6">
                               <div className="flex gap-2">
-                                <Heading color="txt-secondary" fontSize="sm">
+                                {/* <Heading color="txt-secondary" fontSize="sm">
                                   Total Students Enrolled:
-                                </Heading>
-                                <Heading fontSize="sm" fontWeight="semibold">
+                                </Heading> */}
+                                {/* <Heading fontSize="sm" fontWeight="semibold">
                                   {intake.footerTitle}
-                                </Heading>
+                                </Heading> */}
                               </div>
                             </div>
                             <Permission privilege={Privileges.CAN_MODIFY_INTAKE}>
@@ -297,14 +295,14 @@ export default function Intakes() {
                           status={intake.status}
                           description={intake.description}
                         />
-                        <div className="flex gap-2 mt-4">
+                        {/* <div className="flex gap-2 mt-4">
                           <Heading color="txt-secondary" fontSize="sm">
                             Total Students Enrolled:
                           </Heading>
                           <Heading fontSize="sm" fontWeight="semibold">
                             {intake.footerTitle}
                           </Heading>
-                        </div>
+                        </div> */}
                       </div>
                     </Tooltip>
                   </div>
@@ -333,13 +331,12 @@ export default function Intakes() {
                           history.push(`${url}/${registrationControlId}/add-intake`);
                         else history.push('/dashboard/registration-periods');
                       }}
-                      description={`${
-                        user?.user_type === UserType.STUDENT
-                          ? 'You have not been approved to any intake yet!'
-                          : user?.user_type === UserType.INSTRUCTOR
+                      description={`${user?.user_type === UserType.STUDENT
+                        ? 'You have not been approved to any intake yet!'
+                        : user?.user_type === UserType.INSTRUCTOR
                           ? 'You have not been enrolled to teach any intake yet!'
                           : "There haven't been any intakes added yet! try adding some from the button below."
-                      }`}
+                        }`}
                     />
                   )
                 )}
