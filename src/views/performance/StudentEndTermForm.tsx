@@ -28,23 +28,8 @@ import {
   TermFormSection,
 } from '../../types/services/report.types';
 import { usePicture } from '../../utils/file-util';
-import { calculateGrade, formatPercentage } from '../../utils/school-report';
+import { calculateGrade } from '../../utils/school-report';
 
-// const sections = [
-//   'Introduction',
-//   'Written Work',
-//   'Oral work',
-//   'Attitude to Work',
-//   'Practical Ability',
-//   'Extra-Curricular Activities',
-//   'Summary',
-// ];
-
-// const comments = [
-//   'Intellectual Competence',
-//   'Professional Competence',
-//   'Personal Qualities',
-// ];
 interface EoTParamType {
   levelId: string;
   classId: string;
@@ -56,40 +41,7 @@ type TermFormSectionValue = `${TermFormSection}`;
 
 const sections: TermFormSectionValue[] = Object.values(TermFormSection);
 
-type TermFormCommentValue = `${TermFormComment}`;
-
-const comments: TermFormCommentValue[] = Object.values(TermFormComment);
-
-const gradedExercises = [
-  { name: 'Fast Track (FTX)', hpm: 20.0, ob: 10 },
-  {
-    name: 'Intnl Study Tour',
-    hpm: 40.0,
-    ob: 10,
-  },
-  {
-    name: 'Campaign Analysis',
-    hpm: 20.0,
-    ob: 15,
-  },
-  {
-    name: 'College Research Paper',
-    hpm: 50.0,
-    ob: 35,
-  },
-  {
-    name: 'Op Estimate',
-    hpm: 30.0,
-    ob: 30,
-  },
-  {
-    name: 'Final Exam',
-    hpm: 30,
-    ob: 30,
-  },
-];
-
-export default function EndTermForm() {
+export default function StudentEndTermForm() {
   const [isPrinting, setisPrinting] = useState(false);
   const report = useRef(null);
   const { t } = useTranslation();
@@ -150,7 +102,7 @@ export default function EndTermForm() {
 
   const handlePrint = useReactToPrint({
     content: () => report.current,
-    bodyClass: 'bg-warning-400',
+    bodyClass: 'bg-blue-100',
     documentTitle: 'student-end-term-report',
     onBeforeGetContent: () => setisPrinting(true),
     onAfterPrint: () => setisPrinting(false),
@@ -237,7 +189,7 @@ export default function EndTermForm() {
       ) : null}
       <div
         ref={report}
-        className="px-10 py-10 bg-red-100 mx-auto max-w-4xl border border-gray-300 print:border-none">
+        className="px-10 py-10 bg-blue-100 mx-auto max-w-4xl border border-gray-300 print:border-none">
         <div className="provider">
           <Heading fontWeight="medium" fontSize="lg" className="text-center uppercase">
             {role_academy?.data.data.name}
@@ -268,16 +220,14 @@ export default function EndTermForm() {
               </Heading>
               <div className="my-4">
                 <div className="flex">
-                  <div className="border border-black py-1 text-center w-40">
-                    {t('Period')}
-                  </div>
+                  <div className="border border-black py-1 text-center w-40">Period</div>
                   <div className="border border-black py-1 text-center w-32">
                     {termName}
                   </div>
                 </div>
                 <div className="flex">
                   <div className="border border-black py-1 text-center w-40">
-                    {t('Class')}
+                    Syndicate
                   </div>
                   <div className="border border-black py-1 text-center w-32">
                     {classInfo?.data.data.class_name}
@@ -318,14 +268,14 @@ export default function EndTermForm() {
                 let subjective = returnSection(section);
 
                 return (
-                  <div key={index}>
+                  <div key={index} className="py-10">
                     <Heading
                       className="underline my-4"
                       fontSize="sm"
                       fontWeight="semibold">
                       {`${index + 1}. ${section.replaceAll('_', ' ')}.`}
                     </Heading>
-                    {subjective ? (
+                    {subjective && (
                       <div className="h-48 py-5">
                         <Tiptap
                           showBorder={false}
@@ -350,21 +300,6 @@ export default function EndTermForm() {
                           <Heading fontSize="sm">Edit</Heading>
                         </Button>
                       </div>
-                    ) : (
-                      <div className="h-48 max-h-48 flex items-center py-10 gap-2 reportHide">
-                        <Heading fontSize="sm">No subjective added</Heading>
-                        <span>-</span>
-                        <Button
-                          styleType="text"
-                          onClick={() => {
-                            setOpen(!open);
-                            setSection(TermFormSection[section]);
-                          }}>
-                          <Heading fontSize="sm" color="primary" fontWeight="semibold">
-                            add one here
-                          </Heading>
-                        </Button>
-                      </div>
                     )}
                   </div>
                 );
@@ -378,8 +313,12 @@ export default function EndTermForm() {
                     reportData.data.data.evaluationAttempts.reduce(
                       (acc, curr) => acc + curr.obtained,
                       0,
-                    ) + gradedExercises.reduce((acc, curr) => acc + curr.ob, 0),
-                    gradedExercises.reduce((acc, curr) => acc + curr.hpm, 0),
+                    ),
+                    // + gradedExercises.reduce((acc, curr) => acc + curr.ob, 0),
+                    reportData.data.data.evaluationAttempts.reduce(
+                      (acc, curr) => acc + curr.maximum,
+                      0,
+                    ),
                   )}
                 </Heading>
               </div>
@@ -460,191 +399,28 @@ export default function EndTermForm() {
               </div>
             </div>
 
-            {/* Part 4 */}
-            <div className="part-two py-10">
-              <Heading
-                className="underline mb-4 uppercase"
-                fontSize="base"
-                fontWeight="semibold">
-                PART 4: DS ASSESSMENT
-              </Heading>
-              <div className="grid grid-cols-12 pt-8">
-                {/* table header */}
-                <div className="p-1 border border-black text-sm font-bold">Sr</div>
-                <div className="py-1 px-4 col-span-7 border border-black text-sm font-bold">
-                  STAFF WORK
-                </div>
-                <div className="p-2 col-span-4 border border-black text-sm font-bold">
-                  MARK (1) 1 to 5
-                </div>
-
-                {/* table body */}
-                {reportData.data.data.dsAssessments.map((dsAssessment, index) => (
-                  <React.Fragment key={index}>
-                    <div className="px-4 py-2 text-sm border border-black">
-                      {index + 1}
-                    </div>
-                    <div className="px-4 py-2 text-sm border border-black col-span-7">
-                      {dsAssessment.evaluationName}
-                    </div>
-                    <div className="px-4 py-2 text-sm border border-black col-span-4">
-                      {dsAssessment.obtained}
-                    </div>
-                  </React.Fragment>
-                ))}
-                {/* total */}
-                <div className="border border-black" />
-                <div className="px-4 py-2 text-sm border border-black uppercase col-span-7 font-bold">
-                  Total
-                </div>
-                <div className="px-4 py-2 text-sm border border-black col-span-4">
-                  {reportData.data.data.dsAssessments.reduce(
-                    (acc, curr) => acc + curr.obtained,
-                    0,
-                  )}
-                </div>
+            {/* approval */}
+            <div className="grid grid-cols-3">
+              <div className="col-span-2 flex gap-14">
+                <p className="text-sm">
+                  <span className="font-semibold">Date: </span>
+                  {new Date().toDateString()}
+                </p>
+                <p className="text-sm">
+                  <span className="font-semibold">Rank and Names:</span>{' '}
+                  {studentInfo?.data.data.user.person.current_rank?.name}{' '}
+                  {studentInfo?.data.data.user.first_name}{' '}
+                  {studentInfo?.data.data.user.last_name}
+                </p>
               </div>
-            </div>
-
-            {/* Part 5 */}
-            <div className="part-two py-10">
-              <Heading
-                className="underline mb-8 uppercase"
-                fontSize="base"
-                fontWeight="semibold">
-                PART 5: TERM ASSESSMENT
-              </Heading>
-
-              <div className="grid grid-cols-12">
-                {/* table header */}
-                <div className="p-1 border border-black text-sm font-bold">Sr</div>
-                <div className="py-1 px-4 col-span-5 border border-black text-sm font-bold">
-                  GRADED EXERCISES
-                </div>
-                <div className="p-2 col-span-2 border border-black text-sm font-bold">
-                  DS ASSESSMENT
-                </div>
-                <div className="p-2 col-span-2 border border-black text-sm font-bold">
-                  TOTAL MARK AS % OF HPM
-                </div>
-                <div className="p-2 col-span-2 border border-black text-sm font-bold">
-                  OVERALL GRADE FOR TERM
-                </div>
-                {/* table body */}
-                <div className="h-8 border border-black"></div>
-                <div className="h-8 border border-black col-span-5 px-4">
-                  {reportData.data.data.evaluationAttempts.reduce(
-                    (acc, curr) => acc + curr.obtained,
-                    0,
-                  )}
-                </div>
-                <div className="h-8 border border-black col-span-2 px-4">
-                  {reportData.data.data.dsAssessments.reduce(
-                    (acc, curr) => acc + curr.obtained,
-                    0,
-                  )}
-                </div>
-                <div className="h-8 border border-black col-span-2 px-4">
-                  {formatPercentage(
-                    reportData.data.data.evaluationAttempts.reduce(
-                      (acc, curr) => acc + curr.obtained,
-                      0,
-                    ) +
-                      reportData.data.data.dsAssessments.reduce(
-                        (acc, curr) => acc + curr.obtained,
-                        0,
-                      ),
-                    reportData.data.data.evaluationAttempts.reduce(
-                      (acc, curr) => acc + curr.maximum,
-                      0,
-                    ) +
-                      reportData.data.data.dsAssessments.reduce(
-                        (acc, curr) => acc + curr.maximum,
-                        0,
-                      ),
-                  )}
-                </div>
-                <div className="h-8 border border-black col-span-2 px-4">
-                  {calculateGrade(
-                    reportData.data.data.evaluationAttempts.reduce(
-                      (acc, curr) => acc + curr.obtained,
-                      0,
-                    ) +
-                      reportData.data.data.dsAssessments.reduce(
-                        (acc, curr) => acc + curr.obtained,
-                        0,
-                      ),
-                    reportData.data.data.evaluationAttempts.reduce(
-                      (acc, curr) => acc + curr.maximum,
-                      0,
-                    ) +
-                      reportData.data.data.dsAssessments.reduce(
-                        (acc, curr) => acc + curr.maximum,
-                        0,
-                      ),
-                  )}
-                </div>
+              <div className="h-12 px-4 flex">
+                <p className="text-sm font-semibold">Signature: </p>
+                <img
+                  src="https://i.stack.imgur.com/eUcfI.gif"
+                  alt="signature"
+                  className="block max-w-full max-h-12"
+                />
               </div>
-
-              <Heading
-                className="underline my-8 uppercase"
-                fontSize="sm"
-                fontWeight="semibold">
-                DS COMMENTS
-              </Heading>
-              {comments.map((comment, index) => {
-                let subjective = returnSection(comment);
-
-                return (
-                  <div key={index}>
-                    <Heading
-                      className="underline my-4"
-                      fontSize="sm"
-                      fontWeight="semibold">
-                      {`${index + 1}. ${comment.replaceAll('_', ' ')}.`}
-                    </Heading>
-                    {subjective ? (
-                      <div className="h-48  max-h-48 py-5">
-                        <Tiptap
-                          content={subjective.subjective_value}
-                          editable={false}
-                          viewMenu={false}
-                          handleChange={() => {}}
-                        />
-
-                        <Button
-                          styleType="outline"
-                          className="mt-5 reportHide"
-                          onClick={() => {
-                            setSubjective({
-                              id: subjective?.id + '',
-                              content: subjective?.subjective_value + '',
-                            });
-                            setSection(TermFormComment[comment]);
-                            setEditOpen(!editOpen);
-                          }}>
-                          <Heading fontSize="sm">Edit</Heading>
-                        </Button>
-                      </div>
-                    ) : (
-                      <div className="h-48 max-h-48 flex items-center py-10 gap-2 reportHide">
-                        <Heading fontSize="sm">No subjective added</Heading>
-                        <span>-</span>
-                        <Button
-                          styleType="text"
-                          onClick={() => {
-                            setOpen(!open);
-                            setSection(TermFormComment[comment]);
-                          }}>
-                          <Heading fontSize="sm" color="primary" fontWeight="semibold">
-                            add one here
-                          </Heading>
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
             </div>
             {/* chief instructor */}
             <Heading className="underline py-2" fontSize="sm" fontWeight="semibold">
