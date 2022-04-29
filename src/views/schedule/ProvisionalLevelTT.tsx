@@ -61,11 +61,16 @@ export default function ProvisionalLevelTT() {
       ) : (
         // @ts-ignore
         <Tabs>
-          {weeks?.map((week) => (
-            <Tab label={week.week_name} key={week.id}>
-              <TimeTableWeek week={week} levelId={id} />
-            </Tab>
-          ))}
+          {weeks
+            ?.sort(
+              (a, b) =>
+                new Date(b.start_date).getTime() - new Date(a.start_date).getTime(),
+            )
+            .map((week) => (
+              <Tab label={week.week_name} key={week.id}>
+                <TimeTableWeek week={week} levelId={id} />
+              </Tab>
+            ))}
         </Tabs>
       )}
       <Switch>
