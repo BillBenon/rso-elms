@@ -1,11 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-import { institutionStore } from '../../store/administration/institution.store';
+// import { institutionStore } from '../../store/administration/institution.store';
 import Button from '../Atoms/custom/Button';
 import Icon from '../Atoms/custom/Icon';
 import Heading from '../Atoms/Text/Heading';
-import AcademyProfileCard from './cards/AcademyProfileCard';
+// import AcademyProfileCard from './cards/AcademyProfileCard';
+import Navigation from './navigation/Navigation';
 
 type IHeader = {
   title?: string;
@@ -15,10 +16,12 @@ const CompleteProfileHeader = ({
   title = 'Complete Profile',
   details = 'Fill in the form credentials to complete your profile',
 }: IHeader) => {
-  const institution = institutionStore.getAll();
+  // const institution = institutionStore.getAll();
   return (
-    <div className="flex justify-between mb-4">
-      <div>
+    <div className="">
+      <Navigation hasProfile={false} hasSetting={false} hasChangePassword={false} />
+
+      <div className="md:px-24 md:py-7">
         <Heading fontSize="lg" className="md:2xl" fontWeight="semibold">
           {title}
         </Heading>
@@ -35,7 +38,8 @@ const CompleteProfileHeader = ({
           </Link>
         </Button>
       </div>
-      <div>
+    </div>
+    /* <div>
         <AcademyProfileCard
           src="/images/rdf-logo.png"
           alt="institution logo"
@@ -47,8 +51,7 @@ const CompleteProfileHeader = ({
           subtitle={institution.data?.data.data[0].moto}>
           {institution.data?.data.data[0].name}
         </AcademyProfileCard>
-      </div>
-    </div>
+      </div> */
   );
 };
 

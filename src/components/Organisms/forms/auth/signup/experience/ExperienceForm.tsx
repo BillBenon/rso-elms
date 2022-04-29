@@ -61,6 +61,7 @@ function ExperienceForm<E>({
     end_date: '',
     location: '',
     occupation: '',
+    description: '',
     proof: '',
     description: '',
   };
@@ -277,24 +278,21 @@ function ExperienceForm<E>({
                 required={false}
                 error={errors.level}
                 name="level"
-                placeholder="Name"
+                placeholder="Enter Institution Name"
                 value={experience.level}
                 handleChange={handleChange}>
                 {display_label.replaceAll('_', ' ')}
-                <span className="text-txt-secondary normal-case">
-                  ( Write in full abbreviation )
-                </span>
               </InputMolecule>
             </div>
             <div className="flex flex-col gap-4">
               <InputMolecule
                 required={false}
                 error={errors.occupation}
-                placeholder={`Enter your occupation`}
+                placeholder={`Enter your faculty / option / position`}
                 name="occupation"
                 value={experience.occupation}
                 handleChange={handleChange}>
-                Occupation
+                Course / Option / Position / Achievement
               </InputMolecule>
               <InputMolecule
                 required={false}
@@ -308,6 +306,7 @@ function ExperienceForm<E>({
               <TextAreaMolecule
                 error={errors.description}
                 name="description"
+                error={errors.description}
                 value={experience.description}
                 handleChange={handleChange}>
                 Description

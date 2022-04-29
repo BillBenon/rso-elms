@@ -15,7 +15,6 @@ import {
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
-import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import CardHeadMolecule from '../../components/Molecules/CardHeadMolecule';
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
@@ -252,12 +251,12 @@ export default function Intakes() {
                             }>
                             <div className="flex flex-col gap-6">
                               <div className="flex gap-2">
-                                <Heading color="txt-secondary" fontSize="sm">
+                                {/* <Heading color="txt-secondary" fontSize="sm">
                                   Total Students Enrolled:
-                                </Heading>
-                                <Heading fontSize="sm" fontWeight="semibold">
+                                </Heading> */}
+                                {/* <Heading fontSize="sm" fontWeight="semibold">
                                   {intake.footerTitle}
-                                </Heading>
+                                </Heading> */}
                               </div>
                             </div>
                             <Permission privilege={Privileges.CAN_MODIFY_INTAKE}>
@@ -287,14 +286,14 @@ export default function Intakes() {
                           status={intake.status}
                           description={intake.description}
                         />
-                        <div className="flex gap-2 mt-4">
+                        {/* <div className="flex gap-2 mt-4">
                           <Heading color="txt-secondary" fontSize="sm">
                             Total Students Enrolled:
                           </Heading>
                           <Heading fontSize="sm" fontWeight="semibold">
                             {intake.footerTitle}
                           </Heading>
-                        </div>
+                        </div> */}
                       </div>
                     </Tooltip>
                   </div>

@@ -2,10 +2,11 @@
 
 import { Table } from '..';
 import {
+  AttachementInfo,
   IEvaluationInfo,
   IEvaluationQuestionsInfo,
   IEvaluationStatus,
-  IMultipleChoice,
+  IMultipleChoice
 } from './evaluation.types';
 
 export interface SampleQuestionInfo {
@@ -78,6 +79,7 @@ export interface StudentMarkingAnswer extends Table {
   marked: boolean;
   evaluation_question: IEvaluationQuestionsInfo;
   multiple_choice_answer: IMultipleChoice;
+  attachments: AttachementInfo[]
   open_answer: string;
 }
 

@@ -276,6 +276,7 @@ export interface IEvaluationInfo {
   evaluation_comments: [];
   setting_type: IEvaluationSettingType;
   evaluation_module: IEvaluationMode;
+  evaluation_mode: IEvaluationMode;
 }
 
 export enum IEvaluationMode {
@@ -307,6 +308,7 @@ export interface IEvaluationQuestion {
   question: string;
   submitted: boolean;
   question_type: IQuestionType;
+  attachments?: AttachementInfo[];
 }
 
 export interface IMultipleChoice {
