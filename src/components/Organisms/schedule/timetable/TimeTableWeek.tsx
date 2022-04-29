@@ -212,7 +212,7 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
           path={`${path}/item/:itemId/add-footnote`}
           render={() => (
             <PopupMolecule title="Add Footnote" open onClose={handleClose}>
-              <NewFootNote />
+              <NewFootNote levelId={levelId} />
             </PopupMolecule>
           )}
         />
