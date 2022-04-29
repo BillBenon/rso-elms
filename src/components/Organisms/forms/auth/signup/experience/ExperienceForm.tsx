@@ -63,7 +63,6 @@ function ExperienceForm<E>({
     occupation: '',
     description: '',
     proof: '',
-    description: '',
   };
 
   const [errors, setErrors] = useState<ExperienceInfoErrors>(initialErrorState);
@@ -306,7 +305,6 @@ function ExperienceForm<E>({
               <TextAreaMolecule
                 error={errors.description}
                 name="description"
-                error={errors.description}
                 value={experience.description}
                 handleChange={handleChange}>
                 Description
