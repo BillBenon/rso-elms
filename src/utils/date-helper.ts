@@ -57,14 +57,12 @@ export function formatDateToIso(date: string): string {
   return formatedDate.substring(0, formatedDate.length - 5);
 }
 
-export function getWeekBorderDays() {
-  let dayOfToday = new Date().getDay();
+export function getWeekBorderDays(startDate = new Date()) {
+  let monday = new Date(startDate);
+  monday.setDate(monday.getDate() - monday.getDay() + 1);
 
-  let monday = new Date();
-  monday.setDate(new Date().getDate() - dayOfToday);
-
-  let sunday = new Date();
-  sunday.setDate(new Date().getDate() + 6 - dayOfToday);
+  let sunday = new Date(monday);
+  sunday.setDate(sunday.getDate() + 6);
 
   return {
     monday: formatDateToYyMmDd(monday.toDateString()),
@@ -77,4 +75,12 @@ export function getNextWeekDayDate(day: number) {
   d.setDate(d.getDate() + ((day + 7 - d.getDay()) % 7 || 7));
 
   return d;
+}
+
+export function formatDateLikeGoogle(date: string) {
+  let formatedDate = new Date(date).toDateString().split(' ');
+  formatedDate.pop();
+  formatedDate.shift();
+
+  return formatedDate.join(' ');
 }
