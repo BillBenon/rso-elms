@@ -12,6 +12,7 @@ interface IProps {
   editable?: boolean;
   viewMenu?: boolean;
   showBorder?: boolean;
+  backgroundColor?: string;
   handleBlur?: (_editor?: Editor) => void;
 }
 
@@ -21,6 +22,7 @@ export default function Tiptap({
   content,
   editable = true,
   viewMenu = true,
+  backgroundColor = 'bg-main',
   showBorder = true,
 }: IProps) {
   const editor = useEditor({
@@ -36,7 +38,9 @@ export default function Tiptap({
   });
 
   return (
-    <section id="tiptap-editor" className={`${showBorder ? 'show-border' : ''}`}>
+    <section
+      id="tiptap-editor"
+      className={`${showBorder ? 'show-border' : ''} ${backgroundColor}`}>
       {viewMenu && (
         <article>
           <MenuBar editor={editor} />

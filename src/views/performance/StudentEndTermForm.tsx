@@ -278,6 +278,8 @@ export default function StudentEndTermForm() {
                     {subjective && (
                       <div className="h-48 py-5">
                         <Tiptap
+                          showBorder={false}
+                          backgroundColor={'bg-transparent'}
                           content={subjective.subjective_value}
                           editable={false}
                           viewMenu={false}

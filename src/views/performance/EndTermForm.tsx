@@ -237,7 +237,7 @@ export default function EndTermForm() {
       ) : null}
       <div
         ref={report}
-        className="px-10 py-10 bg-warning-400 mx-auto max-w-4xl border border-gray-300 print:border-none">
+        className="px-10 py-10 bg-red-100 mx-auto max-w-4xl border border-gray-300 print:border-none">
         <div className="provider">
           <Heading fontWeight="medium" fontSize="lg" className="text-center uppercase">
             {role_academy?.data.data.name}
@@ -326,6 +326,8 @@ export default function EndTermForm() {
                     {subjective ? (
                       <div className="h-48 py-5">
                         <Tiptap
+                          showBorder={false}
+                          backgroundColor={'bg-transparent'}
                           content={subjective.subjective_value}
                           editable={false}
                           viewMenu={false}
