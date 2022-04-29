@@ -7,9 +7,9 @@ import { institutionStore } from '../../../store/administration/institution.stor
 import { Privileges, RoleType } from '../../../types';
 import { UserType } from '../../../types/services/user.types';
 import cookie from '../../../utils/cookie';
-import { usePicture } from '../../../utils/file-util';
+// import { usePicture } from '../../../utils/file-util';
 import SidebarLinks, { linkProps } from '../../Atoms/custom/SidebarLinks';
-import AcademyProfileCard from '../cards/AcademyProfileCard';
+// import AcademyProfileCard from '../cards/AcademyProfileCard';
 
 export default function Sidebar() {
   const { user } = useAuthenticator();
@@ -190,8 +190,8 @@ export default function Sidebar() {
       : institution?.find((ac) => ac.id === user_role?.institution_id)?.name;
 
   return (
-    <div className="bg-white md:h-screen overflow-y-scroll">
-      <div className="px-4 py-4">
+    <div className="bg-white md:h-screen overflow-y-scroll p-0">
+      {/* <div className="px-4 py-4">
         <AcademyProfileCard
           src={usePicture(
             display_attach_id
@@ -207,7 +207,7 @@ export default function Sidebar() {
           alt="insitution logo">
           {display_name || user?.institution_name}
         </AcademyProfileCard>
-      </div>
+      </div> */}
       <SidebarLinks links={defaultLinks()} />
     </div>
   );
