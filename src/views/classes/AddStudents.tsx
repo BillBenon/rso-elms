@@ -36,16 +36,33 @@ function AddStudents({ classId }: IAddStudent) {
       (std) => !studentsInClassIds?.includes(std.intake_program_student.student.id),
     );
 
-    studentsToDisplay &&
-      studentsToDisplay.forEach((stud) => {
-        let studentView: UserView = {
-          id: stud.intake_program_student.student.id,
-          first_name: stud.intake_program_student.student.user.first_name,
-          last_name: stud.intake_program_student.student.user.last_name,
-          image_url: stud.intake_program_student.student.user.image_url,
-        };
-        studentsView.push(studentView);
-      });
+    const rankedStudents =
+      studentsToDisplay?.filter(
+        (inst) => inst.intake_program_student.student.user.person.current_rank,
+      ) || [];
+    const unrankedStudents =
+      studentsToDisplay?.filter(
+        (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedStudents.sort(function (a, b) {
+      return (
+        a.intake_program_student.student.user.person.current_rank?.priority -
+        b.intake_program_student.student.user.person.current_rank?.priority
+      );
+    });
+
+    const finalStudents = rankedStudents.concat(unrankedStudents);
+    finalStudents.forEach((stud) => {
+      let studentView: UserView = {
+        id: stud.intake_program_student.student.id,
+        rank: stud.intake_program_student.student.user.person.current_rank?.name,
+        first_name: stud.intake_program_student.student.user.first_name,
+        last_name: stud.intake_program_student.student.user.last_name,
+        image_url: stud.intake_program_student.student.user.image_url,
+      };
+      studentsView.push(studentView);
+    });
     setStudents(studentsView);
   }, [studentsInClass.data?.data.data, unaddedStudents.data?.data.data]);
 

@@ -202,7 +202,7 @@ function RightSidebar({
                   alt=""
                 />
                 <Heading fontSize="sm" fontWeight="semibold" className="text-center">
-                  {user.first_name} {user.last_name}
+                  {user.rank || null} {user.first_name} {user.last_name}
                 </Heading>
               </div>
             ))}

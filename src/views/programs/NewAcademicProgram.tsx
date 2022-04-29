@@ -82,7 +82,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
 
   const list: LinkList[] = [
     { to: '/', title: 'Home' },
-    { to: 'dashboard/divisions', title: 'Divisions' },
+    { to: 'dashboard/divisions', title: t('Division') },
     { to: '/dashboard/divisions/departments', title: 'Departments' },
     { to: '/', title: 'New ' + t('Program') },
   ];

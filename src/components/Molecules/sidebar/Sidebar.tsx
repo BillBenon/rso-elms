@@ -2,14 +2,14 @@ import React from 'react';
 import { useTranslation } from 'react-i18next';
 
 import useAuthenticator from '../../../hooks/useAuthenticator';
-import academyStore from '../../../store/administration/academy.store';
-import { institutionStore } from '../../../store/administration/institution.store';
-import { Privileges, RoleType } from '../../../types';
+// import academyStore from '../../../store/administration/academy.store';
+// import { institutionStore } from '../../../store/administration/institution.store';
+import { Privileges } from '../../../types';
 import { UserType } from '../../../types/services/user.types';
-import cookie from '../../../utils/cookie';
-import { usePicture } from '../../../utils/file-util';
+// import cookie from '../../../utils/cookie';
+// import { usePicture } from '../../../utils/file-util';
 import SidebarLinks, { linkProps } from '../../Atoms/custom/SidebarLinks';
-import AcademyProfileCard from '../cards/AcademyProfileCard';
+// import AcademyProfileCard from '../cards/AcademyProfileCard';
 
 export default function Sidebar() {
   const { user } = useAuthenticator();
@@ -167,31 +167,31 @@ export default function Sidebar() {
     return routes;
   };
 
-  const user_role_cookie = cookie.getCookie('user_role') || '';
-  const user_role = user?.user_roles?.find((role) => role.id + '' === user_role_cookie);
+  // const user_role_cookie = cookie.getCookie('user_role') || '';
+  // const user_role = user?.user_roles?.find((role) => role.id + '' === user_role_cookie);
 
-  const institution = institutionStore.getAll().data?.data.data;
-  const academy_info = academyStore.fetchAcademies().data?.data.data;
+  // const institution = institutionStore.getAll().data?.data.data;
+  // const academy_info = academyStore.fetchAcademies().data?.data.data;
 
-  const display_attach_id =
-    user_role?.type === RoleType.ACADEMY
-      ? academy_info?.find((ac) => ac.id === user_role?.academy_id)?.logo_attachment_id
-      : institution?.find((ac) => ac.id === user_role?.institution_id)
-          ?.logo_attachment_id || undefined;
+  // const display_attach_id =
+  //   user_role?.type === RoleType.ACADEMY
+  //     ? academy_info?.find((ac) => ac.id === user_role?.academy_id)?.logo_attachment_id
+  //     : institution?.find((ac) => ac.id === user_role?.institution_id)
+  //         ?.logo_attachment_id || undefined;
 
-  const display_id =
-    user_role?.type === RoleType.ACADEMY
-      ? academy_info?.find((ac) => ac.id === user_role?.academy_id)?.id
-      : institution?.find((ac) => ac.id === user_role?.institution_id)?.id + '';
+  // const display_id =
+  //   user_role?.type === RoleType.ACADEMY
+  //     ? academy_info?.find((ac) => ac.id === user_role?.academy_id)?.id
+  //     : institution?.find((ac) => ac.id === user_role?.institution_id)?.id + '';
 
-  const display_name =
-    user_role?.type === RoleType.ACADEMY
-      ? academy_info?.find((ac) => ac.id === user_role?.academy_id)?.name
-      : institution?.find((ac) => ac.id === user_role?.institution_id)?.name;
+  // const display_name =
+  //   user_role?.type === RoleType.ACADEMY
+  //     ? academy_info?.find((ac) => ac.id === user_role?.academy_id)?.name
+  //     : institution?.find((ac) => ac.id === user_role?.institution_id)?.name;
 
   return (
-    <div className="bg-white md:h-screen overflow-y-scroll">
-      <div className="px-4 py-4">
+    <div className="bg-[#e7edec] md:h-screen overflow-y-scroll p-0">
+      {/* <div className="px-4 py-4">
         <AcademyProfileCard
           src={usePicture(
             display_attach_id
@@ -207,7 +207,7 @@ export default function Sidebar() {
           alt="insitution logo">
           {display_name || user?.institution_name}
         </AcademyProfileCard>
-      </div>
+      </div> */}
       <SidebarLinks links={defaultLinks()} />
     </div>
   );

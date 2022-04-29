@@ -38,10 +38,29 @@ function EnrollInstructorToModuleComponent<T>({ existing }: AssignModuleType<T>)
       ids.push(existing[i].id + '');
     }
 
-    instructorsInProgram?.data.data.forEach((inst) => {
+    const rankedInstructors =
+      instructorsInProgram?.data.data.filter(
+        (inst) => inst.instructor.user.person.current_rank,
+      ) || [];
+    const unrankedInstructors =
+      instructorsInProgram?.data.data.filter(
+        (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedInstructors.sort(function (a, b) {
+      return (
+        a.instructor.user.person.current_rank?.priority -
+        b.instructor.user.person.current_rank?.priority
+      );
+    });
+
+    const finalInstructors = rankedInstructors.concat(unrankedInstructors);
+
+    finalInstructors.forEach((inst) => {
       if (!ids.includes(inst.instructor.id + '')) {
         let instructorView: UserView = {
           id: inst.id,
+          rank: inst.instructor.user.person.current_rank?.name,
           first_name: inst.instructor.user.first_name,
           last_name: inst.instructor.user.last_name,
           image_url: inst.instructor.user.image_url,
@@ -76,7 +95,7 @@ function EnrollInstructorToModuleComponent<T>({ existing }: AssignModuleType<T>)
   return (
     <div className="cursor-pointer">
       <Button styleType="outline" onClick={() => setSidebarOpen(true)}>
-        Enroll instructor
+        Enroll {t('Instructor')}
       </Button>
       <RightSidebar
         open={sidebarOpen}
@@ -89,7 +108,7 @@ function EnrollInstructorToModuleComponent<T>({ existing }: AssignModuleType<T>)
             handleAction: (data?: string[]) => add(data),
           },
         ]}
-        dataLabel={t('Instructor') + ' in this program'}
+        dataLabel={t('Instructor') + ' in this ' + t('Program')}
         isLoading={isLoading}
         unselectAll={!sidebarOpen}
       />

@@ -41,6 +41,7 @@ module.exports = {
         success: {
           400: '#E9F6F2',
           500: '#3CD278',
+          600: '#106938',
         },
         'txt-primary': '#050825',
         'txt-secondary': '#97A0A8',

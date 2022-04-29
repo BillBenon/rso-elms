@@ -623,7 +623,7 @@ export default function EvaluationInfoComponent() {
               inputs: classes?.data.data || [],
               labelName: ['class_name'],
             })}>
-            Select Class(es)
+            Select {t('Class')}
           </MultiselectMolecule>
         ) : details?.access_type === IAccessTypeEnum.PRIVATE ? (
           <DropdownMolecule
