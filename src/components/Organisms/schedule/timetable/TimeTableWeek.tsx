@@ -137,6 +137,17 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
                       </p>
                       <p className="col-span-3">
                         {activity.course_module?.name || activity.event.name}
+                        {activity.activity_foot_notes.length > 0 && (
+                          <span className="px-1 text-xs">
+                            (
+                            {activity.activity_foot_notes.map((fnote, i, array) => (
+                              <a href={`#foot-note-${fnote.id}`} key={fnote.id}>{`${
+                                fnote.id
+                              }${i < array.length - 1 ? ', ' : ''}`}</a>
+                            ))}
+                            )
+                          </span>
+                        )}
                       </p>
                       <p className="uppercase">{activity.course_code}</p>
                       <p>{activity.periods}</p>
@@ -164,6 +175,17 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
             </div>
           );
         })}
+        <div className="foot-notes text-sm">
+          {week.activities.map((act) => (
+            <div key={act.id} id={`fnotes-for-${act.id}`}>
+              {act.activity_foot_notes.map((footNote) => (
+                <p
+                  id={`foot-note-${footNote.id}`}
+                  key={footNote.id}>{`${footNote.id}. ${footNote.foot_note}`}</p>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
       {/* timetable actions */}
       <Switch>

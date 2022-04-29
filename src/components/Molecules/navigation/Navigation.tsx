@@ -106,7 +106,7 @@ export default function Navigation({ hasProfile = true }: Iprops) {
                           className="rounded-full flex text-gray-400"
                           onClick={() => setSwitchMenu(!showSwitchMenu)}>
                           <div className="relative">
-                            <Icon name="switch" />
+                            <Icon fill="main" name="switch" />
                           </div>
                         </button>
                       }>
