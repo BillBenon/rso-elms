@@ -167,7 +167,7 @@ function IntakeLevelModule() {
                   )
                 : {}
             }>
-            {t('View_period')}
+            {t('View_period').replace('_', ' ')}
           </Button>
         )}
       </TableHeader>
