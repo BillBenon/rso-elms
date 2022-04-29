@@ -50,7 +50,7 @@ function ExperienceDetails() {
         <ExperienceStep
           type={ExperienceType.GENERAL_EDUCATION}
           isVertical
-          display_label={'Formal Education'}
+          display_label={'Formal Education (School and Certificate)'}
           nextStep={nextStep}
           skip={skip}
           fetched_id={''}
