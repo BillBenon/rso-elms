@@ -17,7 +17,6 @@ import {
 } from '../../../../../../types/services/user.types';
 import { CreateNextOfKin } from '../../../../../../types/services/usernextkin.types';
 import { getDropDownStatusOptions } from '../../../../../../utils/getOption';
-import { validation } from '../../../../../../utils/validations';
 import { nextOfKinSchema } from '../../../../../../validations/complete-profile/more-info.validation';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
@@ -165,34 +164,34 @@ function NextOfKinDetails<E>({
           next_of_kins: [details],
         };
 
-        if (
-          details.doc_type === DocType.NID &&
-          validation.nidRwandaValidation(details.nid) !== ''
-        ) {
-          setErrors({
-            ...errors,
-            nid: validation.nidRwandaValidation(details.nid),
-          });
-        } else {
-          mutate(data, {
-            onSuccess(data) {
-              toast.success(data.data.message);
-              queryClient.invalidateQueries(['next/user_id', user?.id]);
-              history.push(
-                user?.user_type === UserType.INSTRUCTOR
-                  ? '/dashboard/inst-module'
-                  : user?.user_type === UserType.STUDENT
-                  ? '/dashboard/student'
-                  : '/dashboard/users',
-              );
-              nextStep(true);
-            },
-            onError(_error) {
-              toast.error('Failed');
-            },
-          });
-          if (onSubmit) onSubmit(e, details);
-        }
+        // if (
+        //   details.doc_type === DocType.NID &&
+        //   validation.nidRwandaValidation(details.nid) !== ''
+        // ) {
+        //   setErrors({
+        //     ...errors,
+        //     nid: validation.nidRwandaValidation(details.nid),
+        //   });
+        // } else {
+        mutate(data, {
+          onSuccess(data) {
+            toast.success(data.data.message);
+            queryClient.invalidateQueries(['next/user_id', user?.id]);
+            history.push(
+              user?.user_type === UserType.INSTRUCTOR
+                ? '/dashboard/inst-module'
+                : user?.user_type === UserType.STUDENT
+                ? '/dashboard/student'
+                : '/dashboard/users',
+            );
+            nextStep(true);
+          },
+          onError(_error) {
+            toast.error('Failed');
+          },
+        });
+        if (onSubmit) onSubmit(e, details);
+        // }
       })
       .catch((err: any) => {
         const validatedErr: NextOfKinErrors = initialErrorState;
@@ -268,7 +267,7 @@ function NextOfKinDetails<E>({
             readOnly={data?.data.data.first_name ? details.first_name !== '' : false}
             required={false}
             name="first_name"
-            placeholder="eg: John"
+            placeholder="Next of Kin's First name"
             value={details.first_name}
             handleChange={handleChange}>
             First Name
@@ -278,7 +277,7 @@ function NextOfKinDetails<E>({
             readOnly={data?.data.data.last_name ? details.last_name !== '' : false}
             required={false}
             name="last_name"
-            placeholder="eg: Doe"
+            placeholder="Next of Kin's Last name"
             value={details.last_name}
             handleChange={handleChange}>
             Last Name
@@ -302,7 +301,7 @@ function NextOfKinDetails<E>({
             readOnly={data?.data.data.phone_number ? details.phone_number !== '' : false}
             name="phone_number"
             value={details.phone_number}
-            placeholder="250 ---------"
+            placeholder="07---------"
             handleChange={handleChange}>
             Phone number
           </InputMolecule>
@@ -342,6 +341,7 @@ function NextOfKinDetails<E>({
             error={errors.relationship}
             required={false}
             name="relationship"
+            placeholder="Relationship between you and next of kin"
             value={details.relationship}
             handleChange={handleChange}>
             Relationship
@@ -375,6 +375,7 @@ function NextOfKinDetails<E>({
             }
             required={false}
             name="place_of_residence"
+            placeholder="Location of next of kin"
             value={details.place_of_residence}
             handleChange={handleChange}>
             Other Location
