@@ -111,7 +111,7 @@ function LessonPlan() {
                       </div>
                       <div className="flex flex-col gap-2">
                         <Heading fontSize="base" color="txt-secondary">
-                          Class Policy
+                          {t('Class')} Policy
                         </Heading>
                         <Heading fontSize="base">{lp.class_policy}</Heading>
                       </div>

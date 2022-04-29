@@ -29,12 +29,31 @@ function ApproveStudent() {
 
   useEffect(() => {
     let pushedStud: AcademyUser[] = [];
-    studentProg?.data.data?.map((stud) => {
+
+    const rankedStudents =
+      studentProg?.data.data.filter((stud) => stud.student.user.person.current_rank) ||
+      [];
+    const unrankedStudents =
+      studentProg?.data.data.filter(
+        (stud) => stud !== rankedStudents.find((ranked) => ranked.id === stud.id),
+      ) || [];
+
+    rankedStudents.sort(function (a, b) {
+      return (
+        a.student.user.person.current_rank?.priority -
+        b.student.user.person.current_rank?.priority
+      );
+    });
+
+    const finalStudents = rankedStudents.concat(unrankedStudents);
+
+    finalStudents?.map((stud) => {
       let { id, username, first_name, last_name, email, person, user_type } =
         stud.student.user;
       let student: AcademyUser = {
         id: stud.id,
         user_id: id + '',
+        rank: person?.current_rank?.name,
         username: username,
         'full name': first_name + ' ' + last_name,
         email: email,

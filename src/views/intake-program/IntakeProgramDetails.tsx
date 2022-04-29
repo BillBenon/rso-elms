@@ -76,9 +76,18 @@ function IntakeProgramDetails() {
 
   useEffect(() => {
     let studentsView: UserView[] = [];
+
+    studentsProgram?.data.data.sort(function (a, b) {
+      return (
+        a.student.user.person.current_rank?.priority -
+        b.student.user.person.current_rank?.priority
+      );
+    });
+
     studentsProgram?.data.data.forEach((stud) => {
       let studentView: UserView = {
         id: stud.id,
+        rank: stud.student.user.person.current_rank?.name,
         first_name: stud.student.user.first_name,
         last_name: stud.student.user.last_name,
         image_url: stud.student.user.image_url,
@@ -90,9 +99,28 @@ function IntakeProgramDetails() {
 
   useEffect(() => {
     let demoInstructors: UserView[] = [];
-    instructorsProgram?.data.data.map((inst) => {
+    const rankedInstructors =
+      instructorsProgram?.data.data.filter(
+        (inst) => inst.instructor.user.person.current_rank,
+      ) || [];
+    const unrankedInstructors =
+      instructorsProgram?.data.data.filter(
+        (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedInstructors.sort(function (a, b) {
+      return (
+        a.instructor.user.person.current_rank?.priority -
+        b.instructor.user.person.current_rank?.priority
+      );
+    });
+
+    const finalInstructors = rankedInstructors.concat(unrankedInstructors);
+
+    finalInstructors.map((inst) => {
       demoInstructors.push({
         id: inst.id,
+        rank: inst.instructor.user.person.current_rank?.name,
         first_name: inst.instructor.user.first_name,
         last_name: inst.instructor.user.last_name,
         image_url: inst.instructor.user.image_url,
@@ -256,6 +284,14 @@ function IntakeProgramDetails() {
     { to: 'intakes/programs', title: t('Program') },
     { to: `${url}`, title: 'details' },
   ];
+
+  const incharge_inst = instructorsProgram?.data.data.find(
+    (inst) => inst.instructor.id === intakeProgram?.data.data.incharge_instructor,
+  );
+
+  const incharge_stud = studentsProgram?.data.data.find(
+    (stud) => stud.student.id === intakeProgram?.data.data.student_in_lead,
+  );
 
   return (
     <>
@@ -421,14 +457,20 @@ function IntakeProgramDetails() {
                                   color="txt-primary"
                                   fontSize="sm"
                                   fontWeight="semibold">
-                                  Instructor in charge
+                                  {t('Instructor')} in charge :
                                 </Heading>
                                 {intakeProgram?.data.data.incharge_instructor ? (
-                                  <Heading
-                                    color="txt-primary"
-                                    fontSize="sm"
-                                    fontWeight="semibold">
-                                    {intakeProgram.data.data.incharge_instructor}
+                                  <Heading color="txt-primary" fontSize="sm">
+                                    {`${
+                                      incharge_inst?.instructor.user.person.current_rank
+                                        ?.name || ''
+                                    } ${
+                                      incharge_inst?.instructor.user.person.first_name ||
+                                      ''
+                                    }  ${
+                                      incharge_inst?.instructor.user.person.last_name ||
+                                      ''
+                                    }`}
                                   </Heading>
                                 ) : (
                                   <Permission
@@ -438,7 +480,7 @@ function IntakeProgramDetails() {
                                         to={`${url}/leader/add?type=instructor`}
                                         className="bg-secondary px-2 rounded-sm hover:bg-tertiary flex items-center justify-end">
                                         <Icon name="add" size={12} fill="primary" />
-                                        Add instructor incharge
+                                        Add {t('Instructor')} incharge
                                       </Link>
                                     </div>
                                   </Permission>
@@ -449,14 +491,18 @@ function IntakeProgramDetails() {
                                   color="txt-primary"
                                   fontSize="sm"
                                   fontWeight="semibold">
-                                  Student in charge
+                                  Student in charge :
                                 </Heading>
                                 {intakeProgram?.data.data.student_in_lead ? (
-                                  <Heading
-                                    color="txt-primary"
-                                    fontSize="sm"
-                                    fontWeight="semibold">
-                                    {intakeProgram?.data.data.student_in_lead}
+                                  <Heading color="txt-primary" fontSize="sm">
+                                    {`${
+                                      incharge_stud?.student.user.person.current_rank
+                                        ?.name || ''
+                                    } ${
+                                      incharge_stud?.student.user.person.first_name || ''
+                                    }  ${
+                                      incharge_stud?.student.user.person.last_name || ''
+                                    }`}
                                   </Heading>
                                 ) : (
                                   <Permission
@@ -475,7 +521,7 @@ function IntakeProgramDetails() {
                             </div>
                             <div className="mr-20 rounded border-2 border-[#e9ecef] flex flex-col gap-7 p-6 bg-main">
                               <Heading color="txt-secondary" fontSize="base">
-                                Program Syllabus
+                                {t('Program')} Syllabus
                               </Heading>
                               <div className="flex flex-col gap-4">
                                 {intakeProgram?.data.data?.attachment_id == null ? (
@@ -486,7 +532,7 @@ function IntakeProgramDetails() {
                                         to={`${url}/programSyllabus/add`}
                                         className="bg-secondary px-2 rounded-sm hover:bg-tertiary flex items-center justify-end">
                                         <Icon name="add" size={12} fill="primary" />
-                                        Add Program Syllabus
+                                        Add {t('Program')} Syllabus
                                       </Link>
                                     </div>
                                   </Permission>
@@ -506,7 +552,7 @@ function IntakeProgramDetails() {
                                           to={`${url}/programSyllabus/add`}
                                           className="flex items-center justify-end">
                                           <Icon name="add" size={12} fill="primary" />
-                                          Add new Program Syllabus
+                                          Add new {t('Program')} Syllabus
                                         </Link>
                                       </div>
                                       <div className="flex space-x-4">
@@ -544,7 +590,7 @@ function IntakeProgramDetails() {
               render={() => {
                 return (
                   <PopupMolecule
-                    title="New Program Syllabus"
+                    title={'New ' + t('Program') + ' Syllabus'}
                     open
                     onClose={history.goBack}>
                     <AddProgramLeader
@@ -562,7 +608,7 @@ function IntakeProgramDetails() {
               render={() => {
                 return (
                   <PopupMolecule
-                    title="New Program Syllabus"
+                    title={'New ' + t('Program') + ' Syllabus'}
                     open
                     onClose={history.goBack}>
                     <AddProgramSyllabus programId={intakeProg} />

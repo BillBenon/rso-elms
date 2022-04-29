@@ -5,15 +5,18 @@ import { useHistory } from 'react-router-dom';
 
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { queryClient } from '../../../../plugins/react-query';
+import academicyearsStore from '../../../../store/administration/academicyears.store';
 import registrationControlStore from '../../../../store/administration/registrationControl.store';
 import { CommonFormProps, ValueType } from '../../../../types';
 import {
   IRegistrationControlCreateInfo,
   RegErrors,
 } from '../../../../types/services/registrationControl.types';
+import { getDropDownOptions } from '../../../../utils/getOption';
 import { newRegControlSchema } from '../../../../validations/regcontrol.validation';
 import Button from '../../../Atoms/custom/Button';
 import DateMolecule from '../../../Molecules/input/DateMolecule';
+import SelectMolecule from '../../../Molecules/input/SelectMolecule';
 import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
 
 interface PropType<K> extends CommonFormProps<K> {}
@@ -27,6 +30,7 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
     description: '',
     expected_start_date: '',
     expected_end_date: '',
+    academic_year_id: '',
   };
 
   const [errors, setErrors] = useState(initialErrorState);
@@ -36,6 +40,7 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
     description: '',
     expected_start_date: '',
     expected_end_date: '',
+    academic_year_id: '',
   });
 
   useEffect(() => {
@@ -45,6 +50,9 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
   function handleChange(e: ValueType) {
     setRegControl((regControl) => ({ ...regControl, [e.name]: e.value }));
   }
+
+  const { data: academy_years, isLoading: loadYears } =
+    academicyearsStore.fetchAcademicYears(regControl.academy_id);
 
   function submitForm(e: FormEvent) {
     e.preventDefault();
@@ -79,6 +87,18 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
 
   return (
     <form onSubmit={submitForm}>
+      <SelectMolecule
+        error={errors.academic_year_id}
+        hasError={errors.academic_year_id !== ''}
+        options={getDropDownOptions({ inputs: academy_years?.data.data || [] })}
+        name="academic_year_id"
+        placeholder="Select Academy year Period"
+        loading={loadYears}
+        value={regControl.academic_year_id}
+        handleChange={handleChange}>
+        Academy year Period
+      </SelectMolecule>
+
       <TextAreaMolecule
         required={false}
         error={errors.description}
@@ -87,6 +107,7 @@ export default function NewRegistrationControl<E>({ onSubmit }: PropType<E>) {
         handleChange={handleChange}>
         Registration period description
       </TextAreaMolecule>
+
       <DateMolecule
         error={errors.expected_start_date}
         startYear={moment().year() - 15}

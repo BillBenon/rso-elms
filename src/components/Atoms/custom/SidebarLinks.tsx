@@ -28,7 +28,7 @@ export const SidebarLink = ({
     <Permission privilege={privilege}>
       <div
         className={`px-8 cursor-pointer py-0 border-l-4 ${
-          active ? 'border-primary-500' : 'border-transparent'
+          active ? 'border-primary-500 bg-main border-b-2' : 'border-transparent'
         }`}>
         <Link to={to} className="flex items-center">
           <Icon

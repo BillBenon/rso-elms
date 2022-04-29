@@ -3,6 +3,7 @@ import { AcademyCreateInfo, AcademyInfo } from './academy.types';
 
 export interface IRegistrationControlCreateInfo {
   academy_id: string;
+  academic_year_id: string;
   description: string;
   expected_end_date: string;
   expected_start_date: string;
@@ -12,7 +13,7 @@ export interface IRegistrationControlCreateInfo {
 export interface RegErrors
   extends Pick<
     IRegistrationControlCreateInfo,
-    'description' | 'expected_start_date' | 'expected_end_date'
+    'description' | 'expected_start_date' | 'expected_end_date' | 'academic_year_id'
   > {}
 
 export interface IRegistrationControlInfo

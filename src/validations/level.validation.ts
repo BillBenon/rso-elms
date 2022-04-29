@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 
 export const levelSchema = yup.object().shape({
@@ -18,17 +19,21 @@ export const periodSchema = yup.object().shape({
   planed_end_on: yup.string().required('Planned end date is required'),
   status: yup.string().required('status is required'),
 });
-
-export const classSchema = yup.object().shape({
-  class_group_type: yup.string().required('class group type is required'),
-  class_name: yup.string().required('class name is required'),
-  instructor_class_in_charge_id: yup
-    .string()
-    .required('an instructor in charge is required'),
-  instructor_class_in_charge_two_id: yup
-    .string()
-    .required('an instructor in charge backup 1 is required'),
-  class_representative_one_id: yup
-    .string()
-    .required('a class representative is required'),
-});
+export function useClassValidation() {
+  const { t } = useTranslation();
+  // const classes = t('Class');
+  const classSchema = yup.object().shape({
+    class_group_type: yup.string().required(t('Class') + ' group type is required'),
+    class_name: yup.string().required(t('Class') + ' name is required'),
+    instructor_class_in_charge_id: yup
+      .string()
+      .required(t('Instructor_representative') + ' is required'),
+    instructor_class_in_charge_two_id: yup
+      .string()
+      .required(t('Instructor_representative') + 'backup 1 is required'),
+    class_representative_one_id: yup
+      .string()
+      .required(t('Class_representative') + ' is required'),
+  });
+  return { classSchema };
+}

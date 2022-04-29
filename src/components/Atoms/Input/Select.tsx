@@ -30,7 +30,7 @@ export default function Select({
   const input = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    const opts = options.filter((opt) => opt.value.toString().length > 1);
+    const opts = options.filter((opt) => opt.value.toString().length > 0);
     setfiltered([...opts] || []);
   }, [options]);
 

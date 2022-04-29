@@ -56,6 +56,7 @@ export default function LevelUsers() {
 
       let user: UserTypes = {
         id: id.toString(),
+        rank: person?.current_rank?.name,
         username: username,
         'full name': first_name + ' ' + last_name,
         email: email,
