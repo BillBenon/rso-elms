@@ -72,7 +72,7 @@ export default function Navigation() {
 
   return (
     <div>
-      <nav className="text-main bg-[url('/images/logo.png')] bg-[#B8B351] bg-no-repeat bg-left bg-contain">
+      <nav className="text-main bg-[url('/images/logo.png')] bg-[#B8B351] bg-no-repeat bg-left-2 bg-contain">
         <div className=" mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-end h-14">
             {/* Disabled Global search just for the while its not functioning css will be justify-center 
@@ -305,8 +305,10 @@ export default function Navigation() {
           </div>
         </div>
       </nav>
-      <div className="bg-success-600 h-10 px-9 text-gray-200">
-        <p className="uppercase text-sm py-3">{user?.academy.name}</p>
+      <div className="bg-success-600 min-h-10 text-gray-200">
+        <p className="uppercase text-sm py-3 w-72 text-center">
+          RWANDA DEFENCE FORCE COMMAND AND STAFF COLLEGE
+        </p>
       </div>
     </div>
   );
