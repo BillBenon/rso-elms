@@ -21,7 +21,6 @@ import {
 } from '../../types/services/user.types';
 import {
   getLocalStorageData,
-  removeLocalStorageData,
   setLocalStorageData,
 } from '../../utils/getLocalStorageItem';
 
@@ -81,8 +80,11 @@ export default function UpdateCompleteProfile() {
     spouse_name: '',
   });
 
-  let foundUser: UserInfo = getLocalStorageData('user');
-  const user = usersStore.getUserById(foundUser.id.toString());
+  const storedUser = getLocalStorageData('user');
+
+  let foundUser: UserInfo | undefined =
+    Object.keys(storedUser).length === 0 ? undefined : storedUser;
+  const user = usersStore.getUserById(foundUser?.id + '');
   // const { id } = useParams<ParamType>();
   // const { data } = usersStore.getUserById(id);
   useEffect(() => {
@@ -169,12 +171,6 @@ export default function UpdateCompleteProfile() {
     setLocalStorageData('user', { ...data, person });
   }, [personalInfo]);
 
-  useEffect(() => {
-    return () => {
-      removeLocalStorageData('user');
-    };
-  }, []);
-
   const { mutateAsync } = usersStore.updateUser();
 
   async function saveInfo(isComplete: boolean) {
@@ -224,38 +220,40 @@ export default function UpdateCompleteProfile() {
       setCurrentStep(index);
     }
   };
-
   return (
-    <div className="bg-main p-8 md:px-24 md:py-14">
-      <>
-        <Stepper
-          isDisabled={false}
-          isVertical
-          currentStep={currentStep}
-          completeStep={completeStep}
-          navigateToStepHandler={navigateToStepHandler}>
-          <UpdatePersonalDetails
-            fetched_id={foundUser.id.toString()}
-            display_label="Personal details"
+    <>
+      {foundUser && (
+        <div className="bg-main p-8 md:px-24 md:py-14">
+          <Stepper
+            isDisabled={false}
             isVertical
-            nextStep={nextStep}
-          />
-          <UpdateEmploymentDetails
-            fetched_id={foundUser.id.toString()}
-            display_label="Employment details"
-            isVertical
-            prevStep={prevStep}
-            nextStep={saveInfo}
-          />
-          {/* <AccountDetails
+            currentStep={currentStep}
+            completeStep={completeStep}
+            navigateToStepHandler={navigateToStepHandler}>
+            <UpdatePersonalDetails
+              fetched_id={foundUser.id.toString()}
+              display_label="Personal details"
+              isVertical
+              nextStep={nextStep}
+            />
+            <UpdateEmploymentDetails
+              fetched_id={foundUser.id.toString()}
+              display_label="Employment details"
+              isVertical
+              prevStep={prevStep}
+              nextStep={saveInfo}
+            />
+            {/* <AccountDetails
+      }
             fetched_id={user?.id.toString}
             display_label="Account details"
             isVertical
             prevStep={prevStep}
             nextStep={saveInfo}
           /> */}
-        </Stepper>
-      </>
-    </div>
+          </Stepper>
+        </div>
+      )}
+    </>
   );
 }

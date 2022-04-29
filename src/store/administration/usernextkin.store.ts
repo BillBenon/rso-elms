@@ -6,6 +6,9 @@ class UserNextKinStore {
   createUserNextKin() {
     return useMutation(userNextKinService.createUserNextKin);
   }
+  updateUserNextKin() {
+    return useMutation(userNextKinService.updateUserNextKin);
+  }
   getHisNextKinById(id: string) {
     return useQuery(['next/user_id', id], () => userNextKinService.getHisNextById(id));
   }
