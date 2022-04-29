@@ -112,7 +112,7 @@ export default function Navigation({
                           className="rounded-full flex text-gray-400"
                           onClick={() => setSwitchMenu(!showSwitchMenu)}>
                           <div className="relative">
-                            <Icon name="switch" />
+                            <Icon fill="main" name="switch" />
                           </div>
                         </button>
                       }>
