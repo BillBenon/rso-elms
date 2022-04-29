@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
 import toast from 'react-hot-toast';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
+
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -15,7 +16,7 @@ import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
 import {
   IEvaluationSettingType,
-  StudentEvalParamType
+  StudentEvalParamType,
 } from '../../types/services/evaluation.types';
 import QuestionContainer from './QuestionContainer';
 
@@ -69,7 +70,7 @@ export default function EvaluationTest() {
     SetTime(
       ((evaluationData?.data?.data?.time_limit || 0) * 60 -
         studentWorkTimer?.data?.data.data) *
-      1000,
+        1000,
     );
   }, [
     evaluationData?.data?.data?.time_limit,
@@ -145,9 +146,9 @@ export default function EvaluationTest() {
               <Countdown
                 key={time}
                 date={Date.now() + time}
-                onComplete={() => autoSubmit()}
+                // onComplete={() => autoSubmit()}
                 renderer={Renderer}
-                onTick={(value) => updateWorkTime(value)}
+                // onTick={(value) => updateWorkTime(value)}
               />
             ) : null}
           </Heading>
@@ -166,7 +167,6 @@ export default function EvaluationTest() {
             key={question.id}
             isLast={questions.data.data.length - 1 === index}
             question={question}
-            marks={question.mark}
             choices={question.multiple_choice_answers}
             isMultipleChoice={
               question.multiple_choice_answers &&
