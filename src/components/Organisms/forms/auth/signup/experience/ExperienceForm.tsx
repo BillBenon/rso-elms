@@ -36,7 +36,13 @@ interface IExperienceForm<E> extends CommonStepProps, CommonFormProps<E> {
 interface ExperienceInfoErrors
   extends Pick<
     ExperienceInfo,
-    'end_date' | 'level' | 'location' | 'occupation' | 'proof' | 'start_date'
+    | 'end_date'
+    | 'level'
+    | 'location'
+    | 'occupation'
+    | 'proof'
+    | 'start_date'
+    | 'description'
   > {}
 
 function ExperienceForm<E>({
@@ -55,6 +61,7 @@ function ExperienceForm<E>({
     end_date: '',
     location: '',
     occupation: '',
+    description: '',
     proof: '',
   };
 
@@ -297,6 +304,7 @@ function ExperienceForm<E>({
               </InputMolecule>
               <TextAreaMolecule
                 name="description"
+                error={errors.description}
                 value={experience.description}
                 handleChange={handleChange}>
                 Description
