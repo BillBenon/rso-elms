@@ -45,12 +45,28 @@ function EnrollInstructorIntakeProgram({
       existing_ids.push(existing[index].instructor.id + '');
     }
     let instructorsView: UserView[] = [];
-    instructorsInAcademy?.data.data
+
+    const rankedInstructors =
+      instructorsInAcademy?.data.data.filter((inst) => inst.user.person.current_rank) ||
+      [];
+    const unrankedInstructors =
+      instructorsInAcademy?.data.data.filter(
+        (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedInstructors.sort(function (a, b) {
+      return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    });
+
+    const finalInstructors = rankedInstructors.concat(unrankedInstructors);
+
+    finalInstructors
       .filter((inst) => inst.user.academy.id === picked_role?.academy_id)
       .forEach((inst) => {
         if (!existing_ids.includes(inst.id + '')) {
           let instructorView: UserView = {
             id: inst.id,
+            rank: inst.user.person.current_rank?.name,
             first_name: inst.user.first_name,
             last_name: inst.user.last_name,
             image_url: inst.user.image_url,
@@ -94,7 +110,7 @@ function EnrollInstructorIntakeProgram({
       <RightSidebar
         open={showSidebar}
         handleClose={handleShowSidebar}
-        label={'Enroll ' + t('Instructor') + 'to program'}
+        label={'Enroll ' + t('Instructor') + ' to ' + t('Program')}
         data={instructors}
         selectorActions={[
           {

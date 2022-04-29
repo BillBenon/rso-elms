@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useRouteMatch } from 'react-router-dom';
 import { useParams } from 'react-router-dom';
 
@@ -15,6 +16,7 @@ function ProgramModules() {
   const { url } = useRouteMatch();
   const [programModules, setProgramModules] = useState<CommonCardDataType[]>([]);
   const { id } = useParams<ParamType>();
+  const { t } = useTranslation();
 
   const getAllModuleStore = moduleStore.getModulesByProgram(id);
 
@@ -47,9 +49,11 @@ function ProgramModules() {
             <NoDataAvailable
               privilege={Privileges.CAN_CREATE_MODULES}
               buttonLabel="Add new modules"
-              title={'No Modules available in this program'}
+              title={'No Modules available in this ' + t('Program')}
               handleClick={() => history.push(`${url}/add`)}
-              description="There are no modules available for this program yet"
+              description={
+                'There are no modules available for this ' + t('Program') + ' yet'
+              }
             />
           ) : (
             <>

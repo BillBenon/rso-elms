@@ -26,7 +26,12 @@ export default function TermModulePerfomance() {
   //   data from backend
   const { data: classInfo } = classStore.getClassById(classId);
   const periodId = classInfo?.data.data.intake_academic_year_period_id.toString();
-  const { data, isLoading } = getModuleTermPerformance(moduleId, periodId);
+
+  const classesPeriod = classStore.getClassByPeriod(periodId || '');
+
+  const classes = classesPeriod.data?.data.data.map((cl) => cl.id).join(',');
+
+  const { data, isLoading } = getModuleTermPerformance(moduleId, periodId, classes);
   const { data: modules, isLoading: modulesLoading } =
     intakeProgramStore.getModulesByLevel(parseInt(levelId));
   const { data: studentsData } = getStudentsByClass(classId) || [];

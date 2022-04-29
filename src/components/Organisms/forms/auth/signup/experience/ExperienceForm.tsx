@@ -2,7 +2,6 @@ import { AxiosResponse } from 'axios';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { UseMutateAsyncFunction } from 'react-query';
-import { useHistory } from 'react-router-dom';
 
 import useAuthenticator from '../../../../../../hooks/useAuthenticator';
 import { queryClient } from '../../../../../../plugins/react-query';
@@ -37,7 +36,13 @@ interface IExperienceForm<E> extends CommonStepProps, CommonFormProps<E> {
 interface ExperienceInfoErrors
   extends Pick<
     ExperienceInfo,
-    'end_date' | 'level' | 'location' | 'occupation' | 'proof' | 'start_date'
+    | 'end_date'
+    | 'level'
+    | 'location'
+    | 'occupation'
+    | 'proof'
+    | 'start_date'
+    | 'description'
   > {}
 
 function ExperienceForm<E>({
@@ -49,7 +54,6 @@ function ExperienceForm<E>({
   type,
 }: IExperienceForm<E>) {
   const { user } = useAuthenticator();
-  const history = useHistory();
 
   const initialErrorState: ExperienceInfoErrors = {
     level: '',
@@ -57,6 +61,7 @@ function ExperienceForm<E>({
     end_date: '',
     location: '',
     occupation: '',
+    description: '',
     proof: '',
   };
 
@@ -219,7 +224,6 @@ function ExperienceForm<E>({
                   duration: 1200,
                 },
               );
-              history.goBack();
             },
             onError(error: any) {
               toast.error(error.response.data.message);
@@ -273,24 +277,21 @@ function ExperienceForm<E>({
                 required={false}
                 error={errors.level}
                 name="level"
-                placeholder="Name"
+                placeholder="Enter Institution Name"
                 value={experience.level}
                 handleChange={handleChange}>
                 {display_label.replaceAll('_', ' ')}
-                <span className="text-txt-secondary normal-case">
-                  ( Write in full abbreviation )
-                </span>
               </InputMolecule>
             </div>
             <div className="flex flex-col gap-4">
               <InputMolecule
                 required={false}
                 error={errors.occupation}
-                placeholder={`Enter your occupation`}
+                placeholder={`Enter your faculty / option / position`}
                 name="occupation"
                 value={experience.occupation}
                 handleChange={handleChange}>
-                Occupation
+                Course / Option / Position / Achievement
               </InputMolecule>
               <InputMolecule
                 required={false}
@@ -303,6 +304,7 @@ function ExperienceForm<E>({
               </InputMolecule>
               <TextAreaMolecule
                 name="description"
+                error={errors.description}
                 value={experience.description}
                 handleChange={handleChange}>
                 Description

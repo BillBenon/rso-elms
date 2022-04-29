@@ -37,68 +37,70 @@ function ExperienceDetails() {
     // history.push('/complete-more');
   }
   return (
-    <div className="bg-main p-8 md:px-20">
+    <div className="bg-main">
       <CompleteProfileHeader
         title={'Add your experiences'}
         details={'Fill in the form with all your experiences'}
       />
-      <Stepper
-        isVertical
-        currentStep={currentStep}
-        completeStep={completeStep}
-        navigateToStepHandler={navigateToStepHandler}>
-        <ExperienceStep
-          type={ExperienceType.GENERAL_EDUCATION}
+      <div className="p-10 md:px-24 md:py-3">
+        <Stepper
           isVertical
-          display_label={'General Education'}
-          nextStep={nextStep}
-          skip={skip}
-          fetched_id={''}
-        />
-        <ExperienceStep
-          type={ExperienceType.CURRIER_COURSE_EDUCATION}
-          isVertical
-          display_label={'Carrier Course Education'}
-          nextStep={nextStep}
-          prevStep={back}
-          skip={skip}
-          fetched_id={''}
-        />
-        <ExperienceStep
-          type={ExperienceType.INTERNATIONAL_CERTIFICATION}
-          isVertical
-          display_label={'International Certification'}
-          nextStep={nextStep}
-          prevStep={back}
-          skip={skip}
-          fetched_id={''}
-        />
-        <ExperienceStep
-          type={ExperienceType.INTERNATIONAL_MISSION}
-          isVertical
-          display_label={'International Mission'}
-          nextStep={nextStep}
-          prevStep={back}
-          skip={skip}
-          fetched_id={''}
-        />
-        <ExperienceStep
-          type={ExperienceType.TRAINING}
-          isVertical
-          display_label={'Training'}
-          nextStep={nextStep}
-          prevStep={back}
-          skip={skip}
-          fetched_id={''}
-        />
-        <OtherDetails
-          fetched_id={''}
-          display_label="Other details"
-          isVertical
-          nextStep={finishSteps}
-          prevStep={back}
-        />
-      </Stepper>
+          currentStep={currentStep}
+          completeStep={completeStep}
+          navigateToStepHandler={navigateToStepHandler}>
+          <ExperienceStep
+            type={ExperienceType.GENERAL_EDUCATION}
+            isVertical
+            display_label={'Formal Education (School and Certificate)'}
+            nextStep={nextStep}
+            skip={skip}
+            fetched_id={''}
+          />
+          <ExperienceStep
+            type={ExperienceType.CURRIER_COURSE_EDUCATION}
+            isVertical
+            display_label={'Carrier Course Attended'}
+            nextStep={nextStep}
+            prevStep={back}
+            skip={skip}
+            fetched_id={''}
+          />
+          <ExperienceStep
+            type={ExperienceType.INTERNATIONAL_CERTIFICATION}
+            isVertical
+            display_label={'Appointments Held (achievements)'}
+            nextStep={nextStep}
+            prevStep={back}
+            skip={skip}
+            fetched_id={''}
+          />
+          <ExperienceStep
+            type={ExperienceType.INTERNATIONAL_MISSION}
+            isVertical
+            display_label={'International Missions'}
+            nextStep={nextStep}
+            prevStep={back}
+            skip={skip}
+            fetched_id={''}
+          />
+          <ExperienceStep
+            type={ExperienceType.TRAINING}
+            isVertical
+            display_label={'Decorations'}
+            nextStep={nextStep}
+            prevStep={back}
+            skip={skip}
+            fetched_id={''}
+          />
+          <OtherDetails
+            fetched_id={''}
+            display_label="Other details"
+            isVertical
+            nextStep={finishSteps}
+            prevStep={back}
+          />
+        </Stepper>
+      </div>
     </div>
   );
 }

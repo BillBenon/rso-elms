@@ -146,7 +146,7 @@ function IntakeLevelModule() {
                     )
                   : {}
               }>
-              Add period
+              Add {t('Period')}
             </Button>
           </Permission>
         ) : (

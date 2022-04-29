@@ -42,6 +42,7 @@ export enum ScheduleStatus {
 
 export enum TimetableStatus {
   PROVISIONAL = 'PROVISIONAL',
+  CONFIRMED = 'CONFIRMED',
 }
 
 export interface Hour {
@@ -142,11 +143,15 @@ export interface ICreateTimeTableActivity {
 }
 
 export interface IUpdateTimetableActivity extends ICreateTimeTableActivity {
-  id: string;
+  id?: string;
 }
 
 interface courseModule extends Table {
   name: string;
+}
+
+interface TTUser extends UserInfo {
+  adminId: string;
 }
 
 export interface ITimeTableActivityInfo extends Table {
@@ -159,7 +164,7 @@ export interface ITimeTableActivityInfo extends Table {
   dress_code: string;
   end_hour: string;
   event: EventInfo;
-  in_charge: UserInfo;
+  in_charge: TTUser;
   method_of_instruction: methodOfInstruction;
   periods: number;
   start_hour: string;
@@ -191,4 +196,9 @@ export interface ITimeTableWeekInfo extends Table {
   end_date: string;
   start_date: string;
   week_name: string;
+}
+
+export interface ICreateFootNote {
+  activityId: string;
+  footNote: string;
 }

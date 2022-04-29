@@ -25,9 +25,29 @@ function InstructorModuleAssignment({ module_id, intake_program_id }: Props) {
   const [instructors, setInstructors] = useState<UserView[]>([]);
   useEffect(() => {
     let users: UserView[] = [];
-    instructorsProgram?.data.data.map((inst) =>
+
+    const rankedInstructors =
+      instructorsProgram?.data.data.filter(
+        (inst) => inst.instructor.user.person.current_rank,
+      ) || [];
+    const unrankedInstructors =
+      instructorsProgram?.data.data.filter(
+        (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedInstructors.sort(function (a, b) {
+      return (
+        a.instructor.user.person.current_rank?.priority -
+        b.instructor.user.person.current_rank?.priority
+      );
+    });
+
+    const finalInstructors = rankedInstructors.concat(unrankedInstructors);
+
+    finalInstructors.map((inst) =>
       users.push({
         id: inst.id,
+        rank: inst.instructor.user.person.current_rank?.name,
         first_name: inst.instructor.user.first_name,
         last_name: inst.instructor.user.last_name,
         image_url: inst.instructor.user.image_url,
@@ -69,7 +89,7 @@ function InstructorModuleAssignment({ module_id, intake_program_id }: Props) {
       <RightSidebar
         open={sidebarOpen}
         handleClose={() => setSidebarOpen(false)}
-        label={'Enroll ' + t('Instructor') + ' to program'}
+        label={'Enroll ' + t('Instructor') + ' to ' + t('Program')}
         data={instructors}
         selectorActions={[
           {
@@ -77,7 +97,7 @@ function InstructorModuleAssignment({ module_id, intake_program_id }: Props) {
             handleAction: (data?: string[]) => add(data),
           },
         ]}
-        dataLabel={t('Instructor') + ' in this intake program'}
+        dataLabel={t('Instructor') + ' in this intake ' + t('Program')}
         isLoading={instLoading}
         unselectAll={!sidebarOpen}
       />

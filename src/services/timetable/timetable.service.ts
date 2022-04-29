@@ -3,18 +3,31 @@ import { AxiosResponse } from 'axios';
 import { timetableAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
+  ICreateFootNote,
   ICreateTimeTableActivity,
   ICreateTimeTableWeek,
   ITimeTableActivityInfo,
   ITimeTableWeekInfo,
   IUpdateTimetableActivity,
+  TimetableStatus,
 } from '../../types/services/schedule.types';
+
+type ChangeStatusType = {
+  id: string;
+  status: TimetableStatus;
+};
 
 class TimetableService {
   public async createLevelTimetable(
     tt: ICreateTimeTableActivity,
   ): Promise<AxiosResponse<Response<ITimeTableActivityInfo>>> {
     return await timetableAxios.post('/weekly-timetable-activity', tt);
+  }
+
+  public async createLevelTimetableFootnote(
+    tt: ICreateFootNote,
+  ): Promise<AxiosResponse<Response<ITimeTableActivityInfo>>> {
+    return await timetableAxios.post('/activity-footnotes', tt);
   }
 
   public async getClassTimetableByIntakeLevelClass(
@@ -70,6 +83,13 @@ class TimetableService {
     intakeLevelId: string,
   ): Promise<AxiosResponse<Response<ITimeTableWeekInfo[]>>> {
     return await timetableAxios.get(`/weekly-timetable/intakeLevel/${intakeLevelId}`);
+  }
+
+  public async changeWeekStatus({
+    id,
+    status,
+  }: ChangeStatusType): Promise<AxiosResponse<Response<ITimeTableWeekInfo>>> {
+    return await timetableAxios.put(`/weekly-timetable/${id}/change-status/${status}`);
   }
 }
 

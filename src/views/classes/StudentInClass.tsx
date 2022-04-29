@@ -60,9 +60,28 @@ function StudentInClass({ classObject }: IStudentClass) {
 
   useEffect(() => {
     let tempStuds: UserTypes[] = [];
-    studentsData?.data.data.forEach((stud) => {
+
+    const rankedStudents =
+      studentsData?.data.data.filter((inst) => inst.student.user.person.current_rank) ||
+      [];
+    const unrankedStudents =
+      studentsData?.data.data.filter(
+        (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedStudents.sort(function (a, b) {
+      return (
+        a.student.user.person.current_rank?.priority -
+        b.student.user.person.current_rank?.priority
+      );
+    });
+
+    const finalStudents = rankedStudents.concat(unrankedStudents);
+
+    finalStudents.forEach((stud) => {
       tempStuds.push({
         id: stud.id.toString(),
+        rank: stud.student.user.person.current_rank?.name,
         username: stud.student.user.username,
         'full name': stud.student.user.first_name + ' ' + stud.student.user.last_name,
         email: stud.student.user.email,
@@ -200,7 +219,7 @@ function StudentInClass({ classObject }: IStudentClass) {
                 <div className="grid grid-cols-1 md:grid-cols-2 mt-10">
                   <div className="flex gap-4 pb-2 items-center">
                     <Heading fontWeight="semibold" fontSize="sm" color="primary">
-                      Instructor representative :
+                      {t('Instructor_representative')} :
                     </Heading>
                     <Heading fontSize="sm">
                       {`${leaders.instructor_in_charge_one?.first_name || '---'} ${
@@ -253,7 +272,7 @@ function StudentInClass({ classObject }: IStudentClass) {
                       showButton={false}
                       icon="user"
                       buttonLabel="Add new students"
-                      title={'No students available in this class'}
+                      title={'No students available in this ' + t('Class')}
                       handleClick={() => history.push(``)}
                       description={
                         'This ' +
@@ -339,7 +358,7 @@ function StudentInClass({ classObject }: IStudentClass) {
           path={`${path}/:classId/add-subject`}
           render={() => (
             <PopupMolecule
-              title="Add subject to period"
+              title={'Add subject to ' + t('Period')}
               closeOnClickOutSide={false}
               open
               onClose={history.goBack}>

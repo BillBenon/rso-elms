@@ -4,6 +4,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
+
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { classStore } from '../../../../store/administration/class.store';
@@ -251,7 +252,7 @@ export default function SubjectEvaluationInfoComponent() {
                 inputs: classes?.data.data || [],
                 labelName: ['class_name'],
               })}>
-              Select Class(es)
+              Select {t('Class')}
             </MultiselectMolecule>
           ) : details?.access_type === IAccessTypeEnum.PRIVATE ? (
             <DropdownMolecule

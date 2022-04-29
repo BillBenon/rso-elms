@@ -1,3 +1,8 @@
+/**
+ * Everything related to Timetable and Calendar
+ * was written by Jacques Twizeyimana
+ */
+
 import React from 'react';
 import {
   Link as BrowserLink,
@@ -62,7 +67,7 @@ export default function ScheduleHome() {
         <Route path={`${path}/intake/:id`} component={IntakePrograms} />
         <Route path={`${path}/calendar/:id`} component={CalendarView} />
 
-        <Route exact path={`${path}/timetable/:id`} component={LevelTimeTable} />
+        <Route path={`${path}/timetable/:id/current`} component={LevelTimeTable} />
         <Route
           path={`${path}/timetable/:id/provisional`}
           component={ProvisionalLevelTT}
