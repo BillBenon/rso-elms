@@ -280,11 +280,11 @@ function ExperienceForm<E>({
               <InputMolecule
                 required={false}
                 error={errors.occupation}
-                placeholder={`Enter your faculty / option`}
+                placeholder={`Enter your faculty / option / position`}
                 name="occupation"
                 value={experience.occupation}
                 handleChange={handleChange}>
-                Course / Option
+                Course / Option / Position / Achievement
               </InputMolecule>
               <InputMolecule
                 required={false}
