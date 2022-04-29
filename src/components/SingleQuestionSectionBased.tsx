@@ -1,14 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
+
 import { queryClient } from '../plugins/react-query';
 import { markingStore } from '../store/administration/marking.store';
 import { evaluationStore } from '../store/evaluation/evaluation.store';
 import { ParamType, ValueType } from '../types';
 import {
+  IEvaluationInfo,
   IEvaluationQuestionsInfo,
   IStudentAnswer,
-  ISubmissionTypeEnum
+  ISubmissionTypeEnum,
 } from '../types/services/evaluation.types';
 import ContentSpan from '../views/evaluation/ContentSpan';
 import Button from './Atoms/custom/Button';
@@ -19,11 +21,11 @@ import TextAreaMolecule from './Molecules/input/TextAreaMolecule';
 export function SingleQuestionSectionBased({
   question,
   index,
-  submissionType,
+  evaluation,
 }: {
   question: IEvaluationQuestionsInfo;
   index: number;
-  submissionType: string;
+  evaluation: IEvaluationInfo;
 }) {
   const { id: studentEvaluationId } = useParams<ParamType>();
   const [localAnswer, setLocalAnswer] = useState<IStudentAnswer>({
@@ -69,10 +71,29 @@ export function SingleQuestionSectionBased({
               answer_attachment: attachmeInfo.data.data.id.toString(),
             }));
 
+            let data: IStudentAnswer;
+
+            if (evaluation.submision_type === ISubmissionTypeEnum.FILE) {
+              console.log('submission type is file here');
+              //remove empty attributes
+              data = {
+                ...localAnswer,
+                answer_attachment: attachmeInfo.data.data.id.toString(),
+              };
+
+              Object.keys(data).forEach(
+                (key) =>
+                  data[key as keyof IStudentAnswer] == null &&
+                  delete data[key as keyof IStudentAnswer],
+              );
+            } else {
+              data = localAnswer;
+            }
+
             mutate({
               ...localAnswer,
               answer_attachment: attachmeInfo.data.data.id.toString(),
-            })
+            });
             toast.success('File uploaded successfully');
             //TODO: invalidate student answers store
             queryClient.invalidateQueries([
@@ -86,7 +107,8 @@ export function SingleQuestionSectionBased({
     if (file) {
       handleSubmittingFile();
     }
-  }, [studentEvaluationId, file]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [studentEvaluationId, file, addQuestionDocAnswer, mutate]);
 
   const submitForm = () => {
     mutate(localAnswer, {
@@ -151,19 +173,22 @@ export function SingleQuestionSectionBased({
           {question.attachments &&
             question.attachments?.map((attachment, index) => (
               <a
-                href={`${import.meta.env.VITE_API_URL
-                  }/evaluation-service/api/evaluationQuestions/${attachment.id
-                  }/loadAttachment`}
+                href={`${
+                  import.meta.env.VITE_API_URL
+                }/evaluation-service/api/evaluationQuestions/${
+                  attachment.id
+                }/loadAttachment`}
                 key={attachment.id}
                 target="_blank"
-                download>
+                download
+                rel="noreferrer">
                 {index + 1}. {attachment.name}
               </a>
             ))}
         </div>
       )}
 
-      {submissionType == ISubmissionTypeEnum.FILE && (
+      {evaluation.submision_type == ISubmissionTypeEnum.FILE && (
         <div className="flex items-center py-5">
           <FileUploader
             allowPreview={false}
@@ -176,17 +201,22 @@ export function SingleQuestionSectionBased({
               upload answer file
             </Button>
           </FileUploader>
-          {previoustudentAnswers.find(item => item.evaluation_question.id == question.id)?.attachments.map(attachment => (
-            <a
-              href={`${import.meta.env.VITE_API_URL
-                }/evaluation-service/api/evaluationQuestions/${attachment.id
+          {previoustudentAnswers
+            .find((item) => item.evaluation_question.id == question.id)
+            ?.student_answer_attachments.map((attachment) => (
+              <a
+                href={`${
+                  import.meta.env.VITE_API_URL
+                }/evaluation-service/api/evaluationQuestions/${
+                  attachment.id
                 }/loadAttachment`}
-              key={attachment.id}
-              target="_blank"
-              download>
-              {index + 1}. {attachment.name}
-            </a>
-          ))}
+                key={attachment.id}
+                target="_blank"
+                download
+                rel="noreferrer">
+                {index + 1}. {attachment.name}
+              </a>
+            ))}
         </div>
       )}
 

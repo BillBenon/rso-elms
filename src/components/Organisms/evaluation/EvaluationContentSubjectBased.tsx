@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import { IEvaluationInfo } from '../../../types/services/evaluation.types';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
@@ -13,13 +14,12 @@ export default function SubjectBasedEvaluationContent({ evaluation }: IProps) {
   const { data: evaluationQuestions, isLoading: loading } =
     evaluationStore.getEvaluationQuestions(evaluation.id);
 
-  console.log({ evaluationQuestions })
-
   return (
     <div>
       <div
-        className={`${!loading && 'bg-main'
-          }  px-7 pt-4 flex flex-col gap-4 mt-8 border border-primary-400 rounded-sm w-12/12 pb-5`}>
+        className={`${
+          !loading && 'bg-main'
+        }  px-7 pt-4 flex flex-col gap-4 mt-8 border border-primary-400 rounded-sm w-12/12 pb-5`}>
         {evaluationQuestions?.data.data.length ? (
           evaluationQuestions?.data.data.map((question, index: number) =>
             question && question.multiple_choice_answers.length > 0 ? (
@@ -36,29 +36,34 @@ export default function SubjectBasedEvaluationContent({ evaluation }: IProps) {
 
                 {question.multiple_choice_answers.length
                   ? question.multiple_choice_answers.map((choiceAnswer) => (
-                    <MultipleChoiceAnswer
-                      key={choiceAnswer.id}
-                      choiceId={choiceAnswer.id}
-                      answer_content={choiceAnswer.answer_content}
-                      correct={choiceAnswer.correct}
-                    />
-                  ))
+                      <MultipleChoiceAnswer
+                        key={choiceAnswer.id}
+                        choiceId={choiceAnswer.id}
+                        answer_content={choiceAnswer.answer_content}
+                        correct={choiceAnswer.correct}
+                      />
+                    ))
                   : null}
                 {evaluationQuestions?.data.data.length - 1 !== index && <hr />}
 
                 {question.attachments?.length > 0 && (
                   <div className="flex flex-col py-3">
-                    <Heading fontSize='sm' color='primary' className='py-2'>Question attachments</Heading>
+                    <Heading fontSize="sm" color="primary" className="py-2">
+                      Question attachments
+                    </Heading>
                     {question.attachments &&
                       question.attachments?.map((attachment, index) => (
                         <a
-                          className='text-blue-800 hover:underline'
-                          href={`${import.meta.env.VITE_API_URL
-                            }/evaluation-service/api/evaluationQuestions/${attachment.id
-                            }/loadAttachment`}
+                          className="text-blue-800 hover:underline"
+                          href={`${
+                            import.meta.env.VITE_API_URL
+                          }/evaluation-service/api/evaluationQuestions/${
+                            attachment.id
+                          }/loadAttachment`}
                           key={attachment.id}
                           target="_blank"
-                          download>
+                          download
+                          rel="noreferrer">
                           {index + 1}. {attachment.name}
                         </a>
                       ))}
@@ -94,19 +99,23 @@ export default function SubjectBasedEvaluationContent({ evaluation }: IProps) {
                 </div>
 
                 {question.attachments?.length > 0 && (
-
                   <div className="flex flex-col py-3">
-                    <Heading fontSize='sm' color='primary' className='py-2'>Question attachments</Heading>
+                    <Heading fontSize="sm" color="primary" className="py-2">
+                      Question attachments
+                    </Heading>
                     {question.attachments &&
                       question.attachments?.map((attachment, index) => (
                         <a
-                          className='text-blue-800 hover:underline'
-                          href={`${import.meta.env.VITE_API_URL
-                            }/evaluation-service/api/evaluationQuestions/${attachment.id
-                            }/loadAttachment`}
+                          className="text-blue-800 hover:underline"
+                          href={`${
+                            import.meta.env.VITE_API_URL
+                          }/evaluation-service/api/evaluationQuestions/${
+                            attachment.id
+                          }/loadAttachment`}
                           key={attachment.id}
                           target="_blank"
-                          download>
+                          download
+                          rel="noreferrer">
                           {index + 1}. {attachment.name}
                         </a>
                       ))}
@@ -115,7 +124,6 @@ export default function SubjectBasedEvaluationContent({ evaluation }: IProps) {
                 {evaluationQuestions?.data.data.length - 1 !== index && <hr />}
               </>
             ),
-
           )
         ) : (
           <Heading fontWeight="semibold" fontSize="sm">
