@@ -16,7 +16,6 @@ export default function StudentQuestionsSectionBased({
   evaluationInfo,
 }: {
   evaluationInfo: IEvaluationInfo;
-  // submitForm: (answer: string) => void;
 }) {
   const [subjects, setSubjects] = useState<ISubjects[]>([]);
   const history = useHistory();
@@ -79,6 +78,7 @@ export default function StudentQuestionsSectionBased({
             {subject.questions &&
               subject.questions.map((question, index) => (
                 <SingleQuestionSectionBased
+                  evaluation={evaluationInfo}
                   question={question}
                   key={index}
                   {...{ index }}

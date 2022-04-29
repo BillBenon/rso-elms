@@ -14,8 +14,9 @@ export default function DisplayClasses({
 
   return (
     <Heading fontWeight="semibold" fontSize="sm">
-      {data?.data.data.class_name}
-      {!isLast ? ' , ' : null}
+      {data?.data.data.class_name
+        ? `${data?.data.data.class_name} ${isLast ? '' : ','}`
+        : ''}
     </Heading>
   );
 }

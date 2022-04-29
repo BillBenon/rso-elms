@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
+
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -27,10 +28,10 @@ import {
 import cookie from '../../utils/cookie';
 import { advancedTypeChecker, getDropDownStatusOptions } from '../../utils/getOption';
 import EvaluationDetails from './EvaluationDetails';
+import EvaluationNames from './EvaluationNames';
 import EvaluationNotiView from './EvaluationNotiView';
 import EvaluationTest from './EvaluationTest';
 import StudentReview from './StudentReview';
-import Templates from './Templates';
 
 export default function InstructorViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
@@ -89,7 +90,7 @@ export default function InstructorViewEvaluations() {
     async function getSubjects() {
       let filteredSubjects: ISubjects[] = [];
 
-      if (evaluationInfo?.evaluation_module_subjects) {
+      if (evaluationInfo?.evaluation_module_subjects.length) {
         const subjectData = await evaluationService.getEvaluationModuleSubjectsByModule(
           evaluationId,
           evaluationInfo?.evaluation_module_subjects[0].intake_program_level_module,
@@ -121,7 +122,8 @@ export default function InstructorViewEvaluations() {
           if (
             evaluationInfo.questionaire_type === IQuestionaireTypeEnum.MANUAL ||
             evaluationInfo.questionaire_type === IQuestionaireTypeEnum.HYBRID ||
-            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.FIELD
+            evaluationInfo.questionaire_type === IQuestionaireTypeEnum.FIELD ||
+            evaluationInfo.setting_type === IEvaluationSettingType.SUBJECT_BASED
           ) {
             history.push(`${path}/details/${id}/approve`);
 
@@ -216,7 +218,7 @@ export default function InstructorViewEvaluations() {
                         onClick={() => {
                           history.push(`${path}/templates`);
                         }}>
-                        New evaluation preset
+                        New evaluation name
                       </Button>
                     </Permission>
 
@@ -243,7 +245,7 @@ export default function InstructorViewEvaluations() {
                     description="Consider adding some evaluation to see them here!"
                   />
                 ) : isSuccess && evaluations.length > 0 ? (
-                  evaluations?.map((info: CommonCardDataType, index: number) => (
+                  evaluations?.map((info: CommonCardDataType) => (
                     <div key={info.id}>
                       <CommonCardMolecule
                         className="cursor-pointer"
@@ -309,7 +311,7 @@ export default function InstructorViewEvaluations() {
         )}
 
         {hasPrivilege(Privileges.CAN_CREATE_EVALUATION_TEMPLATE) && (
-          <Route path={`${path}/templates`} component={Templates} />
+          <Route path={`${path}/templates`} component={EvaluationNames} />
         )}
 
         {hasPrivilege(Privileges.CAN_CREATE_EVALUATIONS) && (
