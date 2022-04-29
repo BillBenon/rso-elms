@@ -16,6 +16,7 @@ import EndOfLevelReport from './EndOfLevelReport';
 import EndTermForm from './EndTermForm';
 import LevelPerformanceReport from './LevelPerformanceReport';
 import StudentAcademicReport from './StudentAcademicReport';
+import StudentEndTermForm from './StudentEndTermForm';
 
 interface ParamType {
   levelId: string;
@@ -116,7 +117,18 @@ export default function LevelPerformance() {
                 </Button>
                 <StudentAcademicReport />
               </Tab>
-              <Tab label="Informative report">
+              <Tab label="(Student) Informative report">
+                <Button
+                  styleType={'text'}
+                  onClick={() => history.goBack()}
+                  icon
+                  className="flex items-center p-2 hover:underline">
+                  <Icon name="chevron-left" fill="primary" size={16} />
+                  Back
+                </Button>
+                <StudentEndTermForm />
+              </Tab>
+              <Tab label="(Manage) Informative report">
                 <Button
                   styleType={'text'}
                   onClick={() => history.goBack()}
