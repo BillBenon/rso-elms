@@ -153,18 +153,8 @@ export default function Intakes() {
           let cardData: IntakeCardType = {
             id: intake.id,
             code: intake.title.toUpperCase(),
-            description: `${
-              moment(intake.expected_start_date).day() +
-              '/' +
-              moment(intake.expected_start_date).month() +
-              '/' +
-              moment(intake.expected_start_date).year()
-            } - ${
-              moment(intake.expected_end_date).day() +
-              '/' +
-              moment(intake.expected_end_date).month() +
-              '/' +
-              moment(intake.expected_end_date).year()
+            description: `${intake.expected_start_date.toString().split(' ')[0]} - ${
+              intake.expected_end_date.toString().split(' ')[0]
             }`,
             title: intake.description || ``,
             status: {
