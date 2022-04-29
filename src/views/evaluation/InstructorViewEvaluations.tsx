@@ -22,15 +22,15 @@ import {
   IEvaluationOwnership,
   IEvaluationSettingType,
   IQuestionaireTypeEnum,
-  ISubjects,
+  ISubjects
 } from '../../types/services/evaluation.types';
 import cookie from '../../utils/cookie';
 import { advancedTypeChecker, getDropDownStatusOptions } from '../../utils/getOption';
 import EvaluationDetails from './EvaluationDetails';
+import EvaluationNames from './EvaluationNames';
 import EvaluationNotiView from './EvaluationNotiView';
 import EvaluationTest from './EvaluationTest';
 import StudentReview from './StudentReview';
-import Templates from './Templates';
 
 export default function InstructorViewEvaluations() {
   const [evaluations, setEvaluations] = useState<any>([]);
@@ -216,7 +216,7 @@ export default function InstructorViewEvaluations() {
                         onClick={() => {
                           history.push(`${path}/templates`);
                         }}>
-                        New evaluation preset
+                        New evaluation name 
                       </Button>
                     </Permission>
 
@@ -309,7 +309,7 @@ export default function InstructorViewEvaluations() {
         )}
 
         {hasPrivilege(Privileges.CAN_CREATE_EVALUATION_TEMPLATE) && (
-          <Route path={`${path}/templates`} component={Templates} />
+          <Route path={`${path}/templates`} component={EvaluationNames} />
         )}
 
         {hasPrivilege(Privileges.CAN_CREATE_EVALUATIONS) && (

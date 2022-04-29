@@ -1,23 +1,29 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
-
+import { queryClient } from '../plugins/react-query';
 import { markingStore } from '../store/administration/marking.store';
 import { evaluationStore } from '../store/evaluation/evaluation.store';
 import { ParamType, ValueType } from '../types';
 import {
   IEvaluationQuestionsInfo,
   IStudentAnswer,
+  ISubmissionTypeEnum
 } from '../types/services/evaluation.types';
 import ContentSpan from '../views/evaluation/ContentSpan';
+import Button from './Atoms/custom/Button';
+import FileUploader from './Atoms/Input/FileUploader';
 import Heading from './Atoms/Text/Heading';
 import TextAreaMolecule from './Molecules/input/TextAreaMolecule';
+
 export function SingleQuestionSectionBased({
   question,
   index,
+  submissionType,
 }: {
   question: IEvaluationQuestionsInfo;
   index: number;
+  submissionType: string;
 }) {
   const { id: studentEvaluationId } = useParams<ParamType>();
   const [localAnswer, setLocalAnswer] = useState<IStudentAnswer>({
@@ -29,10 +35,6 @@ export function SingleQuestionSectionBased({
     student_evaluation: studentEvaluationId,
   });
 
-  // useEffect(() => {
-  //   setLocalAnswer(previousAnswer);
-  // }, [localAnswer]);
-
   function handleChange({ name, value }: ValueType) {
     setLocalAnswer((localAnswer) => ({ ...localAnswer, [name]: value }));
   }
@@ -40,6 +42,51 @@ export function SingleQuestionSectionBased({
   const { mutate } = evaluationStore.addQuestionAnswer();
   let previoustudentAnswers =
     markingStore.getStudentEvaluationAnswers(studentEvaluationId).data?.data.data || [];
+  const { mutate: addQuestionDocAnswer } = evaluationStore.addQuestionDocAnswer();
+
+  const [file, setFile] = useState<File | null>(null);
+
+  const handleUpload = (file: FileList | null) => {
+    setFile(file ? file[0] : null);
+  };
+
+  useEffect(() => {
+    const handleSubmittingFile = () => {
+      const data = new FormData();
+
+      if (file) data.append('file', file);
+
+      addQuestionDocAnswer(
+        {
+          id: studentEvaluationId,
+          docInfo: data,
+        },
+        {
+          onSuccess(attachmeInfo) {
+            setFile(null);
+            setLocalAnswer((localAnswer) => ({
+              ...localAnswer,
+              answer_attachment: attachmeInfo.data.data.id.toString(),
+            }));
+
+            mutate({
+              ...localAnswer,
+              answer_attachment: attachmeInfo.data.data.id.toString(),
+            })
+            toast.success('File uploaded successfully');
+            //TODO: invalidate student answers store
+            queryClient.invalidateQueries([
+              'studentEvaluation/answers',
+              studentEvaluationId,
+            ]);
+          },
+        },
+      );
+    };
+    if (file) {
+      handleSubmittingFile();
+    }
+  }, [studentEvaluationId, file]);
 
   const submitForm = () => {
     mutate(localAnswer, {
@@ -95,6 +142,53 @@ export function SingleQuestionSectionBased({
         onFocus={() => submitAfter()}
         handleChange={handleChange}
       />
+
+      {question.attachments?.length > 0 && (
+        <div className="flex flex-col py-5">
+          <Heading fontWeight="medium" fontSize="sm">
+            Question documents
+          </Heading>
+          {question.attachments &&
+            question.attachments?.map((attachment, index) => (
+              <a
+                href={`${import.meta.env.VITE_API_URL
+                  }/evaluation-service/api/evaluationQuestions/${attachment.id
+                  }/loadAttachment`}
+                key={attachment.id}
+                target="_blank"
+                download>
+                {index + 1}. {attachment.name}
+              </a>
+            ))}
+        </div>
+      )}
+
+      {submissionType == ISubmissionTypeEnum.FILE && (
+        <div className="flex items-center py-5">
+          <FileUploader
+            allowPreview={false}
+            handleUpload={(filelist) => {
+              handleUpload(filelist);
+            }}
+            accept={'*'}
+            error={''}>
+            <Button styleType="outline" type="button">
+              upload answer file
+            </Button>
+          </FileUploader>
+          {previoustudentAnswers.find(item => item.evaluation_question.id == question.id)?.attachments.map(attachment => (
+            <a
+              href={`${import.meta.env.VITE_API_URL
+                }/evaluation-service/api/evaluationQuestions/${attachment.id
+                }/loadAttachment`}
+              key={attachment.id}
+              target="_blank"
+              download>
+              {index + 1}. {attachment.name}
+            </a>
+          ))}
+        </div>
+      )}
 
       {/*
         FIXME: We should have used a titap component for text editor but we couldn't get it working with the time we had.
