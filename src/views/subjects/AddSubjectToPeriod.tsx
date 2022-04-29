@@ -172,7 +172,7 @@ function AddSubjectToPeriod() {
           getOptionLabel: (inst: ModuleInstructors) =>
             inst.user.first_name + ' ' + inst.user.last_name,
         })}>
-        Incharge
+        {t('Instructor')} Incharge
       </DropdownMolecule>
       <DateMolecule
         error={errors.plannedStartOn}

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import countryList from 'react-select-country-list';
 
@@ -19,6 +20,7 @@ import { getDropDownStatusOptions } from '../../../../../../utils/getOption';
 import { personalDetailsSchema } from '../../../../../../validations/complete-profile/complete-profile.validation';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
+import DateMolecule from '../../../../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../../Molecules/input/InputMolecule';
 import LocationMolecule from '../../../../../Molecules/input/LocationMolecule';
@@ -198,7 +200,7 @@ function PersonalDetails<E>({
               required={false}
               error={errors.father_names}
               name="father_names"
-              placeholder="eg: John"
+              placeholder="Enter your father's names"
               value={personalDetails.father_names}
               handleChange={handleChange}>
               Father&apos;s names
@@ -207,7 +209,7 @@ function PersonalDetails<E>({
               required={false}
               error={errors.mother_names}
               name="mother_names"
-              placeholder="eg: Doe"
+              placeholder="Enter your mother's names"
               value={personalDetails.mother_names}
               handleChange={handleChange}>
               Mother&apos;s names
@@ -224,25 +226,48 @@ function PersonalDetails<E>({
             <DropdownMolecule
               error={errors.blood_group}
               hasError={errors.blood_group !== ''}
-              placeholder="Select your blood type"
+              placeholder="Select your blood group"
               name="blood_group"
               defaultValue={getDropDownStatusOptions(BloodGroup).find(
                 (grp) => grp.value === personalDetails.blood_group,
               )}
               handleChange={handleChange}
               options={getDropDownStatusOptions(BloodGroup)}>
-              Blood type
+              Blood group
+            </DropdownMolecule>
+            <DropdownMolecule
+              defaultValue={getDropDownStatusOptions(MaritalStatus).find(
+                (marital_status) =>
+                  marital_status.value === personalDetails.marital_status,
+              )}
+              options={getDropDownStatusOptions(MaritalStatus)}
+              name="marital_status"
+              placeholder={'Select your marital status'}
+              handleChange={handleChange}>
+              Marital Status
             </DropdownMolecule>
             {(personalDetails.marital_status === MaritalStatus.MARRIED ||
               personalDetails.marital_status === MaritalStatus.WIDOWED) && (
               <InputMolecule
                 error={errors.spouse_name}
+                required={false}
                 name="spouse_name"
                 value={personalDetails.spouse_name}
                 handleChange={handleChange}>
                 Spouse Name
               </InputMolecule>
             )}
+            {/* {(personalDetails.marital_status === MaritalStatus.MARRIED ||
+              personalDetails.marital_status === MaritalStatus.WIDOWED) && (
+              <InputMolecule
+                error={errors.spouse_name}
+                name="spouse_name"
+                value={personalDetails.spouse_name}
+                placeholder="Enter your spouse's name"
+                handleChange={handleChange}>
+                Spouse Name
+              </InputMolecule>
+            )} */}
             <InputMolecule
               required={false}
               error={errors.religion}
@@ -254,6 +279,16 @@ function PersonalDetails<E>({
             </InputMolecule>
           </div>
           <div>
+            <DateMolecule
+              startYear={moment().year() - 100}
+              defaultValue={(moment().year() - 16).toString()}
+              endYear={moment().year() - 16}
+              handleChange={handleChange}
+              name="birth_date"
+              width="60 md:w-80"
+              date_time_type={false}>
+              Date of Birth
+            </DateMolecule>
             <DropdownMolecule
               error={errors.place_of_birth}
               hasError={errors.place_of_birth !== ''}
@@ -265,11 +300,11 @@ function PersonalDetails<E>({
               )}
               handleChange={nationhandleChange}
               options={options}>
-              Place of birth
+              Origin
             </DropdownMolecule>
             {nationality.birth == 'Rwanda' && (
               <LocationMolecule
-                placeholder="Select place of birth"
+                placeholder="Select origin"
                 name="place_of_birth"
                 handleChange={handleChange}
                 isRequired={errors.place_of_birth !== ''}
@@ -295,11 +330,11 @@ function PersonalDetails<E>({
               )}
               handleChange={nationhandleChange}
               options={options}>
-              Place of residence
+              Family Address
             </DropdownMolecule>
             {nationality.residence == 'Rwanda' && (
               <LocationMolecule
-                placeholder="Select place of residence"
+                placeholder="Select family address"
                 name="residence_location_id"
                 handleChange={handleChange}
                 isRequired={errors.residence_location_id !== ''}
@@ -312,7 +347,7 @@ function PersonalDetails<E>({
               name="place_of_residence"
               value={personalDetails.place_of_residence}
               handleChange={handleChange}>
-              Place of residence description (optional)
+              Family Address description (optional)
             </TextAreaMolecule>
           </div>
         </div>

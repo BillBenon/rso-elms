@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
@@ -22,6 +23,7 @@ export default function AcademicPeriod() {
   const { id: yearId } = useParams<ParamType>();
   const history = useHistory();
   const location = useLocation();
+  const { t } = useTranslation();
 
   const { data, isSuccess, isLoading, refetch } =
     academicperiodStore.getAcademicPeriodsByAcademicYear(yearId); // fetch periods
@@ -76,12 +78,16 @@ export default function AcademicPeriod() {
         ) : isSuccess && periods?.length === 0 ? (
           <NoDataAvailable
             icon="program"
-            buttonLabel="Add academic period "
-            title="No academic period available"
+            buttonLabel={'Add academic ' + t('Period')}
+            title={'No academic ' + t('Period') + ' available'}
             handleClick={() => {
               history.push(`/dashboard/academic-years/${yearId}/period/add`);
             }}
-            description="You might have forgotten to add the academic period these academic year will have! Add some"
+            description={
+              'You might have forgotten to add the academic ' +
+              t('Class') +
+              ' these academic year will have! Add some'
+            }
             privilege={Privileges.CAN_CREATE_ACADEMIC_YEAR}
           />
         ) : null}

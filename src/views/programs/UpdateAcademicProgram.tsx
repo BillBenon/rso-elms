@@ -94,9 +94,9 @@ export default function UpdateAcademicProgram<E>({
   // eslint-disable-next-line no-undef
   const list: LinkList[] = [
     { to: '/', title: 'Home' },
-    { to: 'dashboard/divisions', title: 'Divisions' },
+    { to: 'dashboard/divisions', title: t('Division') },
     { to: '/dashboard/divisions/departments', title: 'Departments' },
-    { to: `dashboard/programs/${id}/edit`, title: 'Edit Program' },
+    { to: `dashboard/programs/${id}/edit`, title: 'Edit ' + t('Program') },
   ];
 
   function updateProgram<T>(e: FormEvent<T>) {
@@ -110,7 +110,7 @@ export default function UpdateAcademicProgram<E>({
       .then(() => {
         mutate(details, {
           onSuccess() {
-            toast.success('Successfully updated program', { duration: 1200 });
+            toast.success('Successfully updated ' + t('Program'), { duration: 1200 });
             setTimeout(() => {
               history.goBack();
             }, 900);

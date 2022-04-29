@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -32,6 +33,7 @@ function EnrollStudent({ showSidebar, handleShowSidebar }: IEnrollStudent) {
       intakeProg,
       StudentApproval.APPROVED,
     );
+  const { t } = useTranslation();
 
   const { data: enrolledStudentsLevel } =
     intakeProgramStore.getStudentsByIntakeProgramLevel(levelId);
@@ -121,7 +123,7 @@ function EnrollStudent({ showSidebar, handleShowSidebar }: IEnrollStudent) {
             handleAction: (data?: string[]) => add(data),
           },
         ]}
-        dataLabel={'Students in this program'}
+        dataLabel={'Students in this ' + t('Program')}
         isLoading={isLoading}
         unselectAll={!showSidebar}
       />

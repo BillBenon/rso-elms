@@ -143,7 +143,7 @@ export interface ICreateTimeTableActivity {
 }
 
 export interface IUpdateTimetableActivity extends ICreateTimeTableActivity {
-  id: string;
+  id?: string;
 }
 
 interface courseModule extends Table {
@@ -196,4 +196,9 @@ export interface ITimeTableWeekInfo extends Table {
   end_date: string;
   start_date: string;
   week_name: string;
+}
+
+export interface ICreateFootNote {
+  activityId: string;
+  footNote: string;
 }

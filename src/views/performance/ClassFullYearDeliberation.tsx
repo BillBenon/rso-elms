@@ -101,8 +101,8 @@ export default function ClassFullYearDeliberation() {
       ) : isError ? (
         <div>
           <h2 className="text-error-500 py-2 mb-3 font-medium tracking-widest">
-            Error Occurred: Class Deliberation can&apos;t take place as there are no
-            students in {t('Class')}
+            Error Occurred: {t('Class')} Deliberation can&apos;t take place as there are
+            no students in {t('Class')}
           </h2>
           <Button styleType="outline" onClick={() => window.location.reload()}>
             Reload
@@ -114,7 +114,10 @@ export default function ClassFullYearDeliberation() {
           description={
             'No data associated with this ' +
             t('Class') +
-            ' an this period found. try changing the period'
+            ' an this ' +
+            t('Period') +
+            ' found. try changing the ' +
+            t('Period')
           }
           showButton={false}
         />
@@ -129,7 +132,7 @@ export default function ClassFullYearDeliberation() {
             Back
           </Button>
           <TableHeader
-            title={`${classInfo?.data.data.class_name || 'class'} Promotions`}
+            title={`${classInfo?.data.data.class_name || t('Class')} Promotions`}
             totalItems={data.length}
             handleSearch={handleSearch}
           />

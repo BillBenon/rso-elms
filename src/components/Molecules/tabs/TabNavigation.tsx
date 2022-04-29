@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
+
 import { colorStyle, fontSizeStyle, fontWeightStyle } from '../../../global/global-vars';
 import { Privileges } from '../../../types';
 import { IEvaluationQuestionsInfo } from '../../../types/services/evaluation.types';

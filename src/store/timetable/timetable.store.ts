@@ -7,23 +7,21 @@ class TimetableStore {
     return useMutation(timetableService.createLevelTimetable);
   }
 
+  createTimetableActivityFootnote() {
+    return useMutation(timetableService.createLevelTimetableFootnote);
+  }
+
   getClassTimetableByIntakeLevelClass(id: string) {
     return useQuery(['timetable/intakeclassid/:id', id], () =>
       timetableService.getClassTimetableByIntakeLevelClass(id),
     );
   }
 
-  getTimetableActivityById(id: string) {
-    return useQuery(['timetable/:id', id], () =>
-      timetableService.getTimetableActivityById(id),
-    );
-  }
-
-  public async updateTimetableActivityById() {
+  updateTimetableActivityById() {
     return useMutation(timetableService.updateTimetableActivityById);
   }
 
-  public async deleteActivity() {
+  deleteActivity() {
     return useMutation(timetableService.deleteActivity);
   }
 
@@ -54,6 +52,14 @@ class TimetableStore {
   changeWeekStatus() {
     return useMutation(timetableService.changeWeekStatus);
   }
+}
+
+export function getTimetableActivityById(id?: string) {
+  return useQuery(
+    ['timetable/:id', id],
+    () => timetableService.getTimetableActivityById(id || ''),
+    { enabled: !!id },
+  );
 }
 
 export const timetableStore = new TimetableStore();

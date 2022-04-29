@@ -2,7 +2,6 @@ import { AxiosResponse } from 'axios';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { UseMutateAsyncFunction } from 'react-query';
-import { useHistory } from 'react-router-dom';
 
 import useAuthenticator from '../../../../../../hooks/useAuthenticator';
 import { queryClient } from '../../../../../../plugins/react-query';
@@ -49,7 +48,6 @@ function ExperienceForm<E>({
   type,
 }: IExperienceForm<E>) {
   const { user } = useAuthenticator();
-  const history = useHistory();
 
   const initialErrorState: ExperienceInfoErrors = {
     level: '',
@@ -219,7 +217,6 @@ function ExperienceForm<E>({
                   duration: 1200,
                 },
               );
-              history.goBack();
             },
             onError(error: any) {
               toast.error(error.response.data.message);

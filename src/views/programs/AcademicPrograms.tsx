@@ -194,7 +194,7 @@ export default function AcademicProgram() {
                           </div>
                           <div className="mt-4 space-x-4">
                             <Link to={`/dashboard/programs/${Common.id}/edit`}>
-                              <Button>Edit program</Button>
+                              <Button>Edit {t('Program')}</Button>
                             </Link>
                             <Button styleType="outline">Change Status</Button>
                           </div>
@@ -203,11 +203,15 @@ export default function AcademicProgram() {
                     ))
                   ) : (
                     <NoDataAvailable
-                      buttonLabel="Add new program"
+                      buttonLabel={'Add new ' + t('Program')}
                       showButton={false}
-                      title={'No program available'}
+                      title={'No ' + t('Program') + ' available'}
                       handleClick={() => history.push(`/dashboard/programs/add?dp=${dp}`)}
-                      description="There are no programs added yet, click on the below button to add some!"
+                      description={
+                        'There are no ' +
+                        t('Program') +
+                        ' added yet, click on the below button to add some!'
+                      }
                     />
                   )}
                 </section>

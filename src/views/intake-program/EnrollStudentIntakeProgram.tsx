@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
@@ -54,6 +55,7 @@ function EnrollStudentIntakeProgram<T>({
   // );
 
   const [students, setStudents] = useState<UserView[]>([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     let existing_ids: string[] = [];
@@ -147,7 +149,7 @@ function EnrollStudentIntakeProgram<T>({
       <RightSidebar
         open={showSidebar}
         handleClose={handleShowSidebar}
-        label="Enroll students to program"
+        label={'Enroll students to ' + t('Program')}
         data={students}
         selectorActions={[
           {
