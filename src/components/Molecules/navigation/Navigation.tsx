@@ -25,9 +25,15 @@ import Tooltip from '../Tooltip';
 
 interface Iprops {
   hasProfile: boolean;
+  hasSetting: boolean;
+  hasChangePassword: boolean;
 }
 
-export default function Navigation({ hasProfile = true }: Iprops) {
+export default function Navigation({
+  hasProfile = true,
+  hasChangePassword = true,
+  hasSetting = true,
+}: Iprops) {
   const history = useHistory();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotificationMenu, setNotificationMenu] = useState(false);
@@ -143,7 +149,7 @@ export default function Navigation({ hasProfile = true }: Iprops) {
                         <div className="relative">
                           <Icon fill="main" name="notification" />
                           {hasSomeUnreadNotifications && (
-                            <div className="rounded-full h-3 w-3 absolute top-3 right-4 flex items-center justify-center">
+                            <div className="rounded-full h-3 w-3 absolute top-3 right-3 flex items-center justify-center">
                               <span className="absolute  w-2 h-2  bg-red-600 self-center rounded-full"></span>
                             </div>
                           )}
@@ -190,11 +196,13 @@ export default function Navigation({ hasProfile = true }: Iprops) {
                         role="menu"
                         aria-orientation="vertical"
                         aria-labelledby="user-menu">
-                        <Link
-                          to={`/dashboard/account/update-password`}
-                          className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100">
-                          Change password
-                        </Link>
+                        {hasChangePassword && (
+                          <Link
+                            to={`/dashboard/account/update-password`}
+                            className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100">
+                            Change password
+                          </Link>
+                        )}
                         {hasProfile && (
                           <Link
                             to={`/dashboard/user/${user?.id}/profile?me=true`}
@@ -202,12 +210,14 @@ export default function Navigation({ hasProfile = true }: Iprops) {
                             Your Profile
                           </Link>
                         )}
-                        <a
-                          href="#"
-                          className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100"
-                          role="menuitem">
-                          Settings
-                        </a>
+                        {hasSetting && (
+                          <a
+                            href="#"
+                            className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100"
+                            role="menuitem">
+                            Settings
+                          </a>
+                        )}
                         <button
                           disabled={logoutFn.isLoading}
                           onClick={() => logout()}
@@ -297,11 +307,13 @@ export default function Navigation({ hasProfile = true }: Iprops) {
                   Your Profile
                 </Link>
               )}
-              <a
-                href="#"
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">
-                Settings
-              </a>
+              {hasSetting && (
+                <a
+                  href="#"
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">
+                  Settings
+                </a>
+              )}
               <button
                 disabled={logoutFn.isLoading}
                 onClick={() => logout()}
