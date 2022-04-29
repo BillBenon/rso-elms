@@ -228,13 +228,13 @@ function CompleteProfile() {
   };
 
   return (
-    <div className="bg-main p-8 md:px-24 md:py-14">
+    <div className="bg-main ">
       <CompleteProfileHeader />
       {foundUser.first_name &&
       foundUser.email &&
       foundUser.last_name &&
       foundUser.person.nid == null ? (
-        <>
+        <div className="md:px-24 md:py-5">
           <Stepper
             isDisabled={false}
             isVertical
@@ -268,9 +268,9 @@ function CompleteProfile() {
               nextStep={saveInfo}
             />
           </Stepper>
-        </>
+        </div>
       ) : (
-        <>
+        <div className="md:px-24 md:py-5">
           <Stepper
             isDisabled={false}
             isVertical
@@ -298,7 +298,7 @@ function CompleteProfile() {
               nextStep={saveInfo}
             />
           </Stepper>
-        </>
+        </div>
       )}
     </div>
   );
