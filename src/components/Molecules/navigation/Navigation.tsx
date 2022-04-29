@@ -23,7 +23,11 @@ import Notification from '../Notification';
 import Tooltip from '../Tooltip';
 // import SearchMolecule from '../input/SearchMolecule';
 
-export default function Navigation() {
+interface Iprops {
+  hasProfile: boolean;
+}
+
+export default function Navigation({ hasProfile = true }: Iprops) {
   const history = useHistory();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotificationMenu, setNotificationMenu] = useState(false);
@@ -191,11 +195,13 @@ export default function Navigation() {
                           className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100">
                           Change password
                         </Link>
-                        <Link
-                          to={`/dashboard/user/${user?.id}/profile?me=true`}
-                          className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100">
-                          Your Profile
-                        </Link>
+                        {hasProfile && (
+                          <Link
+                            to={`/dashboard/user/${user?.id}/profile?me=true`}
+                            className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100">
+                            Your Profile
+                          </Link>
+                        )}
                         <a
                           href="#"
                           className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100"
@@ -284,11 +290,13 @@ export default function Navigation() {
               </div>
             </div>
             <div className="mt-3 px-2 space-y-1">
-              <Link
-                to={`/dashboard/user/${user?.id}/profile`}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">
-                Your Profile
-              </Link>
+              {hasProfile && (
+                <Link
+                  to={`/dashboard/user/${user?.id}/profile`}
+                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">
+                  Your Profile
+                </Link>
+              )}
               <a
                 href="#"
                 className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">
