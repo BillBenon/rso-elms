@@ -6,7 +6,7 @@ import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
 import ActionableList from '../../components/Molecules/ActionableList';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import NewTemplate from '../../components/Organisms/evaluation/NewTemplate';
+import NewTemplate from '../../components/Organisms/evaluation/NewEvaluationName';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import { queryClient } from '../../plugins/react-query';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
@@ -51,14 +51,14 @@ export default function Templates() {
                   onClick={() => {
                     history.push(`${path}/new`);
                   }}>
-                  Add template
+                  Add new name 
                 </Button>
               </div>
 
               {template?.data.data.length ? (
                 <div>
                   <Heading color="primary" className="bg-main py-4 px-2 w-[28rem]">
-                    Evaluation presets
+                    Evaluation names 
                   </Heading>
                   {template.data.data.map((item) => (
                     <ActionableList
