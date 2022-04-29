@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
 
+import { queryClient } from '../../../../plugins/react-query';
 import { timetableStore } from '../../../../store/timetable/timetable.store';
 import { ValueType } from '../../../../types';
 import { ICreateFootNote } from '../../../../types/services/schedule.types';
@@ -12,7 +13,11 @@ interface ParamType {
   itemId: string;
 }
 
-export default function NewFootNote() {
+interface IProps {
+  levelId?: string;
+}
+
+export default function NewFootNote({ levelId }: IProps) {
   const { itemId } = useParams<ParamType>();
   const history = useHistory();
 
@@ -31,6 +36,7 @@ export default function NewFootNote() {
     e.preventDefault();
     mutateAsync(values, {
       async onSuccess(_data) {
+        queryClient.invalidateQueries(['timetable/weeks', levelId]);
         toast.success('Footnote was created successfully');
         history.goBack();
       },
