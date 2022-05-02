@@ -90,6 +90,7 @@ export default function UserDetails() {
         <>
           <div className="flex justify-between">
             <Heading className="py-3" fontWeight="bold" fontSize="2xl">
+              {user?.data.data.person?.current_rank?.name || ''}{' '}
               {user?.data.data.first_name + ' ' + user?.data.data.last_name} Profile
             </Heading>
             {intkStud && stat && (

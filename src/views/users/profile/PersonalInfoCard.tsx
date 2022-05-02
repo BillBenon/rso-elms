@@ -69,6 +69,7 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
           </div>
           <div className="flex flex-col justify-center items-center py-7">
             <Heading fontSize="lg" fontWeight="semibold">
+              {user.person?.current_rank?.name || ''}{' '}
               {user.first_name + ' ' + user.last_name}
             </Heading>
             <p className="py-2 font-normal text-sm border-b-2 text-txt-secondary">
