@@ -303,8 +303,8 @@ function ExperienceForm<E>({
                 Location
               </InputMolecule>
               <TextAreaMolecule
-                name="description"
                 error={errors.description}
+                name="description"
                 value={experience.description}
                 handleChange={handleChange}>
                 Description

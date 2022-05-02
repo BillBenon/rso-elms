@@ -15,6 +15,9 @@ import Heading from '../../components/Atoms/Text/Heading';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
+import ExperienceDetails from '../../components/Organisms/forms/auth/signup/experience/ExperienceDetails';
+import UpdateExperience from '../../components/Organisms/forms/auth/signup/experience/UpdateExperience';
+import MoreInfo from '../../components/Organisms/forms/auth/signup/more-details/MoreInfo';
 import NewPersonalDocument from '../../components/Organisms/forms/user/NewPersonalDocument';
 import { queryClient } from '../../plugins/react-query';
 import enrollmentStore from '../../store/administration/enrollment.store';
@@ -158,6 +161,21 @@ export default function UserDetails() {
               }}
             />
             <Route path={`${path}/edit-compl-prof`} component={UpdateCompleteProfile} />
+            <Route
+              exact
+              path={`${path}/new-experience`}
+              render={() => <ExperienceDetails showHeader={false} />}
+            />
+            <Route
+              exact
+              path={`${path}/edit-experience/:expId`}
+              render={() => <UpdateExperience />}
+            />
+            <Route
+              exact
+              path={`${path}/edit-next-kin`}
+              render={() => <MoreInfo showHeader={false} />}
+            />
             <Route
               exact
               path={`${path}/edit-prof`}

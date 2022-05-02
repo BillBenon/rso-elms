@@ -1,13 +1,20 @@
+import { AxiosResponse } from 'axios';
 import moment from 'moment';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory } from 'react-router-dom';
+import { UseMutateFunction } from 'react-query';
+import { useHistory, useParams } from 'react-router-dom';
 import countryList from 'react-select-country-list';
 
 import useAuthenticator from '../../../../../../hooks/useAuthenticator';
 import { queryClient } from '../../../../../../plugins/react-query';
 import usernextkinStore from '../../../../../../store/administration/usernextkin.store';
-import { CommonFormProps, CommonStepProps, ValueType } from '../../../../../../types';
+import {
+  CommonFormProps,
+  CommonStepProps,
+  Response,
+  ValueType,
+} from '../../../../../../types';
 import {
   BasicPersonInfo,
   DocType,
@@ -15,7 +22,10 @@ import {
   MaritalStatus,
   UserType,
 } from '../../../../../../types/services/user.types';
-import { CreateNextOfKin } from '../../../../../../types/services/usernextkin.types';
+import {
+  CreateNextOfKin,
+  NextKinInfo,
+} from '../../../../../../types/services/usernextkin.types';
 import { getDropDownStatusOptions } from '../../../../../../utils/getOption';
 import { nextOfKinSchema } from '../../../../../../validations/complete-profile/more-info.validation';
 import Button from '../../../../../Atoms/custom/Button';
@@ -26,7 +36,14 @@ import InputMolecule from '../../../../../Molecules/input/InputMolecule';
 import LocationMolecule from '../../../../../Molecules/input/LocationMolecule';
 import RadioMolecule from '../../../../../Molecules/input/RadioMolecule';
 
-interface NextOfKin<E> extends CommonStepProps, CommonFormProps<E> {}
+interface NextOfKin<E> extends CommonStepProps, CommonFormProps<E> {
+  mutate: UseMutateFunction<
+    AxiosResponse<Response<NextKinInfo>, any>,
+    unknown,
+    CreateNextOfKin,
+    unknown
+  >;
+}
 
 interface NextOfKinErrors
   extends Pick<
@@ -43,17 +60,22 @@ interface NextOfKinErrors
   residence_location_id: string;
 }
 
+interface ParamType {
+  kinid: string;
+}
+
 function NextOfKinDetails<E>({
   display_label,
   isVertical,
   prevStep,
   nextStep,
   onSubmit,
+  mutate,
 }: NextOfKin<E>) {
   const { user } = useAuthenticator();
-  const { mutate } = usernextkinStore.createUserNextKin();
+  const { kinid } = useParams<ParamType>();
+
   const history = useHistory();
-  // const inputRef = useRef<HTMLInputElement>(null);
 
   const initialErrorState: NextOfKinErrors = {
     first_name: '',
@@ -68,6 +90,7 @@ function NextOfKinDetails<E>({
   };
 
   const [details, setDetails] = useState<BasicPersonInfo>({
+    id: '',
     first_name: '',
     last_name: '',
     email: '',
@@ -88,7 +111,9 @@ function NextOfKinDetails<E>({
 
   const [errors, setErrors] = useState(initialErrorState);
 
-  const { data } = usernextkinStore.getPersonByNid(details.nid);
+  const { data: nextOfKin } = usernextkinStore.getHisNextKinById(user?.id + '');
+
+  const nextKinToUpdate = nextOfKin?.data.data.find((kin) => kin.id == kinid);
 
   const [nationality, setnationality] = useState({
     residence: '',
@@ -102,38 +127,56 @@ function NextOfKinDetails<E>({
     setDetails((prevState) => {
       return {
         ...prevState,
+        id: kinid || '',
         user_id: user?.id + '',
-        first_name: data?.data.data.first_name || prevState.first_name,
-        last_name: data?.data.data.last_name || prevState.last_name,
-        email: data?.data.data.email || prevState.email,
-        phone_number: data?.data.data.phone_number || prevState.phone_number,
+        first_name: nextKinToUpdate?.nextOfKin.first_name || prevState.first_name,
+        last_name: nextKinToUpdate?.nextOfKin.last_name || prevState.last_name,
+        email: nextKinToUpdate?.nextOfKin.email || prevState.email,
+        phone_number: nextKinToUpdate?.nextOfKin.phone_number || prevState.phone_number,
         sex:
-          data?.data.data.sex == null
+          nextKinToUpdate?.nextOfKin.sex == null
             ? GenderStatus.MALE
-            : data?.data.data.sex || prevState.sex == null
+            : nextKinToUpdate?.nextOfKin.sex || prevState.sex == null
             ? GenderStatus.MALE
             : prevState.sex,
-        birth_date: data?.data.data.birth_date || prevState.birth_date,
-        relationship: data?.data.data.relationship || prevState.relationship,
+        birth_date: nextKinToUpdate?.nextOfKin.birth_date || prevState.birth_date,
+        relationship: nextKinToUpdate?.nextOfKin.relationship || prevState.relationship,
         residence_location_id: prevState.residence_location_id,
         nationality: nationality.residence || prevState.nationality,
         doc_type:
-          data?.data.data.doc_type == null
+          nextKinToUpdate?.nextOfKin.doc_type == null
             ? DocType.NID
-            : data?.data.data.doc_type || prevState.doc_type == null
+            : nextKinToUpdate?.nextOfKin.doc_type || prevState.doc_type == null
             ? DocType.NID
             : prevState.doc_type,
         document_expire_on:
-          data?.data.data.document_expire_on || prevState.document_expire_on,
-        nid: data?.data.data.nid || prevState.nid,
+          nextKinToUpdate?.nextOfKin.document_expire_on || prevState.document_expire_on,
+        nid: nextKinToUpdate?.nextOfKin.nid || prevState.nid,
         place_of_residence:
-          data?.data.data.place_of_residence || prevState.place_of_residence,
-        marital_status: data?.data.data.marital_status || prevState.marital_status,
-        spouse_name: data?.data.data.spouse_name || prevState.spouse_name,
+          nextKinToUpdate?.nextOfKin.place_of_residence || prevState.place_of_residence,
+        marital_status:
+          nextKinToUpdate?.nextOfKin.marital_status || prevState.marital_status,
+        spouse_name: nextKinToUpdate?.nextOfKin.spouse_name || prevState.spouse_name,
       };
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id, data?.data]);
+  }, [
+    kinid,
+    nationality.residence,
+    nextKinToUpdate?.nextOfKin.birth_date,
+    nextKinToUpdate?.nextOfKin.doc_type,
+    nextKinToUpdate?.nextOfKin.document_expire_on,
+    nextKinToUpdate?.nextOfKin.email,
+    nextKinToUpdate?.nextOfKin.first_name,
+    nextKinToUpdate?.nextOfKin.last_name,
+    nextKinToUpdate?.nextOfKin.marital_status,
+    nextKinToUpdate?.nextOfKin.nid,
+    nextKinToUpdate?.nextOfKin.phone_number,
+    nextKinToUpdate?.nextOfKin.place_of_residence,
+    nextKinToUpdate?.nextOfKin.relationship,
+    nextKinToUpdate?.nextOfKin.sex,
+    nextKinToUpdate?.nextOfKin.spouse_name,
+    user?.id,
+  ]);
 
   const handleChange = (e: ValueType) => {
     setDetails({ ...details, [e.name]: e.value });
@@ -264,7 +307,6 @@ function NextOfKinDetails<E>({
 
           <InputMolecule
             error={errors.first_name}
-            readOnly={data?.data.data.first_name ? details.first_name !== '' : false}
             required={false}
             name="first_name"
             placeholder="Next of Kin's First name"
@@ -274,7 +316,6 @@ function NextOfKinDetails<E>({
           </InputMolecule>
           <InputMolecule
             error={errors.last_name}
-            readOnly={data?.data.data.last_name ? details.last_name !== '' : false}
             required={false}
             name="last_name"
             placeholder="Next of Kin's Last name"
@@ -286,7 +327,7 @@ function NextOfKinDetails<E>({
         <div className="grid grid-cols-1 md:grid-cols-2 "> */}
           <InputMolecule
             error={errors.email}
-            readOnly={data?.data.data.email ? details.email !== '' : false}
+            readOnly={nextKinToUpdate?.nextOfKin.email ? details.email !== '' : false}
             required={false}
             name="email"
             value={details.email}
@@ -298,7 +339,11 @@ function NextOfKinDetails<E>({
           <InputMolecule
             error={errors.phone_number}
             required={false}
-            readOnly={data?.data.data.phone_number ? details.phone_number !== '' : false}
+            readOnly={
+              nextKinToUpdate?.nextOfKin.phone_number
+                ? details.phone_number !== ''
+                : false
+            }
             name="phone_number"
             value={details.phone_number}
             placeholder="07---------"
@@ -369,7 +414,7 @@ function NextOfKinDetails<E>({
           )}
           <InputMolecule
             readOnly={
-              data?.data.data.place_of_residence
+              nextKinToUpdate?.nextOfKin.place_of_residence
                 ? details.place_of_residence !== ''
                 : false
             }

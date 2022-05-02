@@ -9,8 +9,9 @@ import {
   Switch,
   useHistory,
   useLocation,
-  useRouteMatch
+  useRouteMatch,
 } from 'react-router-dom';
+
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -26,23 +27,22 @@ import UpdateIntake from '../../components/Organisms/intake/UpdateIntake';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import usePickedRole from '../../hooks/usePickedRole';
 import enrollmentStore from '../../store/administration/enrollment.store';
+import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import {
   getIntakeProgramsByStudent,
-  getStudentShipByUserId
+  getStudentShipByUserId,
 } from '../../store/administration/intake-program.store';
-import { getIntakesByAcademy } from '../../store/administration/intake.store';
 import registrationControlStore from '../../store/administration/registrationControl.store';
 import instructordeploymentStore from '../../store/instructordeployment.store';
 import { CommonCardDataType, Link as LinkType, Privileges, ValueType } from '../../types';
 import { StudentApproval } from '../../types/services/enrollment.types';
 import { InstructorProgram } from '../../types/services/instructor.types';
-import { StudentIntakeProgram } from '../../types/services/intake-program.types';
 import { ExtendedIntakeInfo } from '../../types/services/intake.types';
+import { StudentIntakeProgram } from '../../types/services/intake-program.types';
 import { UserType } from '../../types/services/user.types';
 import { advancedTypeChecker } from '../../utils/getOption';
 import IntakePrograms from '../intake-program/IntakePrograms';
 import LevelPerformance from '../performance/LevelPerformance';
-
 
 interface IntakeCardType extends CommonCardDataType {
   registrationControlId: string;
@@ -93,17 +93,17 @@ export default function Intakes() {
     isLoading,
     refetch: refetchIntakes,
   } = user?.user_type === UserType.STUDENT
-      ? getIntakeProgramsByStudent(
+    ? getIntakeProgramsByStudent(
         studentInfo[0]?.id.toString() || '',
         !!studentInfo[0]?.id,
       )
-      : user?.user_type === UserType.INSTRUCTOR
-        ? enrollmentStore.getInstructorIntakePrograms(instructorInfo?.id + '')
-        : getIntakesByAcademy(
-          registrationControlId || picked_role?.academy_id + '',
-          !!registrationControlId,
-          true,
-        );
+    : user?.user_type === UserType.INSTRUCTOR
+    ? enrollmentStore.getInstructorIntakePrograms(instructorInfo?.id + '')
+    : getIntakesByAcademy(
+        registrationControlId || picked_role?.academy_id + '',
+        !!registrationControlId,
+        true,
+      );
 
   useEffect(() => {
     if (isSuccess && data?.data) {
@@ -152,17 +152,9 @@ export default function Intakes() {
           let cardData: IntakeCardType = {
             id: intake.id,
             code: intake.title.toUpperCase(),
-            description: `${moment(intake.expected_start_date).day() +
-              '/' +
-              moment(intake.expected_start_date).month() +
-              '/' +
-              moment(intake.expected_start_date).year()
-              } - ${moment(intake.expected_end_date).day() +
-              '/' +
-              moment(intake.expected_end_date).month() +
-              '/' +
-              moment(intake.expected_end_date).year()
-              }`,
+            description: `${intake.expected_start_date.toString().split(' ')[0]} - ${
+              intake.expected_end_date.toString().split(' ')[0]
+            }`,
             title: intake.description || ``,
             status: {
               type: advancedTypeChecker(intake.intake_status),
@@ -178,7 +170,7 @@ export default function Intakes() {
     } else if (isError) toast.error('error occurred when loading intakes');
   }, [user?.user_type, data, isError, isSuccess]);
 
-  function handleSearch(_e: ValueType) { }
+  function handleSearch(_e: ValueType) {}
   function handleClose() {
     history.goBack();
   }
@@ -200,7 +192,6 @@ export default function Intakes() {
 
     history.push(`${url}/${intakeId}/edit/${IntakeRegId}`);
   };
-
 
   return (
     <Switch>
@@ -331,12 +322,13 @@ export default function Intakes() {
                           history.push(`${url}/${registrationControlId}/add-intake`);
                         else history.push('/dashboard/registration-periods');
                       }}
-                      description={`${user?.user_type === UserType.STUDENT
-                        ? 'You have not been approved to any intake yet!'
-                        : user?.user_type === UserType.INSTRUCTOR
+                      description={`${
+                        user?.user_type === UserType.STUDENT
+                          ? 'You have not been approved to any intake yet!'
+                          : user?.user_type === UserType.INSTRUCTOR
                           ? 'You have not been enrolled to teach any intake yet!'
                           : "There haven't been any intakes added yet! try adding some from the button below."
-                        }`}
+                      }`}
                     />
                   )
                 )}
