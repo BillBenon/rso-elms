@@ -18,6 +18,7 @@ import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
 import ExperienceDetails from '../../components/Organisms/forms/auth/signup/experience/ExperienceDetails';
 import UpdateExperience from '../../components/Organisms/forms/auth/signup/experience/UpdateExperience';
 import MoreInfo from '../../components/Organisms/forms/auth/signup/more-details/MoreInfo';
+import UpdateNextKin from '../../components/Organisms/forms/auth/signup/more-details/UpdateNextKin';
 import NewPersonalDocument from '../../components/Organisms/forms/user/NewPersonalDocument';
 import { queryClient } from '../../plugins/react-query';
 import enrollmentStore from '../../store/administration/enrollment.store';
@@ -174,8 +175,13 @@ export default function UserDetails() {
             />
             <Route
               exact
-              path={`${path}/edit-next-kin`}
+              path={`${path}/add-next-kin`}
               render={() => <MoreInfo showHeader={false} />}
+            />
+            <Route
+              exact
+              path={`${path}/edit-next-kin/:kinid`}
+              render={() => <UpdateNextKin />}
             />
             <Route
               exact
