@@ -18,17 +18,19 @@ function MoreInfo(props: any) {
   }
 
   return (
-    <div className="bg-main p-8 md:px-40 md:py-16 ">
+    <div className="bg-main  ">
       <CompleteProfileHeader
         title={'Add your Next of Kin'}
         details={'Fill in the form with all your next of kin information'}
       />
-      <NextOfKinDetails
-        fetched_id={props.location.state ? props.location.state.detail.person_id : ''}
-        display_label="Next of kin details"
-        isVertical
-        nextStep={finishSteps}
-      />
+      <div className=" md:px-40 md:py-3">
+        <NextOfKinDetails
+          fetched_id={props.location.state ? props.location.state.detail.person_id : ''}
+          display_label="Next of kin details"
+          isVertical
+          nextStep={finishSteps}
+        />
+      </div>
     </div>
   );
 }
