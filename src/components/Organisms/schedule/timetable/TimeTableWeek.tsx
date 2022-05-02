@@ -12,10 +12,15 @@ import {
   TimetableStatus,
 } from '../../../../types/services/schedule.types';
 import { groupTimeTableByDay } from '../../../../utils/calendar';
-import { formatDateToYyMmDd, getWeekBorderDays } from '../../../../utils/date-helper';
+import {
+  formatDateLikeGoogle,
+  formatDateToYyMmDd,
+  getWeekBorderDays,
+} from '../../../../utils/date-helper';
 import Permission from '../../../Atoms/auth/Permission';
 import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
+import Heading from '../../../Atoms/Text/Heading';
 import PopupMolecule from '../../../Molecules/Popup';
 import EditTimeTable from './EditTimeTable';
 import NewFootNote from './NewFootNote';
@@ -36,7 +41,7 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
   const { mutateAsync, isLoading } = timetableStore.changeWeekStatus();
   const instructors = instructordeploymentStore.getInstructors().data?.data.data;
 
-  const monday = new Date(getWeekBorderDays().monday);
+  const monday = new Date(getWeekBorderDays(new Date(week.start_date)).monday);
   const timetableRef = useRef(null);
 
   const handlePrint = useReactToPrint({
@@ -62,38 +67,51 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
     );
   };
 
+  formatDateLikeGoogle(week.start_date);
+
   const handleClose = () => {
     history.goBack();
   };
 
   return (
     <div>
-      <div className="py-4 flex gap-4 justify-end">
-        {week.status === TimetableStatus.PROVISIONAL && (
+      <div className="tt-header flex justify-between items-center">
+        <Heading fontSize="lg" fontWeight="semibold">
+          {week.week_name}
+          <span className="text-txt-secondary px-1 text-base capitalize">
+            (
+            {`${formatDateLikeGoogle(week.start_date)} - ${formatDateLikeGoogle(
+              week.end_date,
+            )})`}
+          </span>
+        </Heading>
+        <div className="tt-actions py-4 flex gap-4 justify-end">
+          {week.status === TimetableStatus.PROVISIONAL && (
+            <Button
+              type="button"
+              styleType="outline"
+              onClick={handleConfirm}
+              isLoading={isLoading}
+              disabled={isLoading}>
+              Confirm
+            </Button>
+          )}
           <Button
             type="button"
-            styleType="outline"
-            onClick={handleConfirm}
-            isLoading={isLoading}
-            disabled={isLoading}>
-            Confirm
+            styleType="text"
+            className="bg-gray-300 text-black px-10"
+            onClick={handlePrint}
+            isLoading={isPrinting}>
+            Download
           </Button>
-        )}
-        <Button
-          type="button"
-          styleType="text"
-          className="bg-gray-300 text-black px-10"
-          onClick={handlePrint}
-          isLoading={isPrinting}>
-          Download
-        </Button>
-        <Permission privilege={Privileges.CAN_CREATE_TIMETABLE}>
-          <Link to={`${url}/new-activity?week=${week.id}`}>
-            <Button type="button" styleType="outline">
-              Add Activity
-            </Button>
-          </Link>
-        </Permission>
+          <Permission privilege={Privileges.CAN_CREATE_TIMETABLE}>
+            <Link to={`${url}/new-activity?week=${week.id}`}>
+              <Button type="button" styleType="outline">
+                Add Activity
+              </Button>
+            </Link>
+          </Permission>
+        </div>
       </div>
       <div className="tt print:px-10 print:py-8 print:bg-main" ref={timetableRef}>
         <div className="bg-primary-500 py-4 uppercase px-8 text-sm text- print:text-xs text-white grid grid-cols-11 gap-2">

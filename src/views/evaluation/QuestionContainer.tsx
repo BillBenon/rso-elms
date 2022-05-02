@@ -318,6 +318,7 @@ export default function QuestionContainer({
           <Fragment>
             <div className="flex items-center py-5">
               <FileUploader
+                multiple
                 allowPreview={false}
                 handleUpload={(filelist) => {
                   handleUpload(filelist);
@@ -330,18 +331,19 @@ export default function QuestionContainer({
               </FileUploader>
             </div>
 
-            {previousAnswers[index]?.student_answer_attachments.map((attachment) => (
+            {previousAnswers[index]?.student_answer_attachments.map((ans) => (
               <a
                 href={`${
                   import.meta.env.VITE_API_URL
                 }/evaluation-service/api/evaluationQuestions/${
-                  attachment.id
+                  ans.attachment.id
                 }/loadAttachment`}
-                key={attachment.id}
+                key={ans.attachment.id}
                 target="_blank"
                 download
+                className="pb-5"
                 rel="noreferrer">
-                {index + 1}. {attachment.name}
+                {index + 1}. {ans.attachment.name}
               </a>
             ))}
           </Fragment>
