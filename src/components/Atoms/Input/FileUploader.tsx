@@ -9,6 +9,7 @@ interface IProps {
   maxFileSizeInBytes?: number;
   allowPreview?: boolean;
   accept: string;
+  multiple?: boolean;
   handleUpload: (_files: FileList | null) => any;
   children: ReactNode;
   error?: string;
@@ -34,6 +35,7 @@ export default function FileUploader(props: IProps) {
         onChange={changeHandler}
         onBlur={props.handleBlur}
         accept={props.accept}
+        multiple={props.multiple}
       />
       {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
       <div

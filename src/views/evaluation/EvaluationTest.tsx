@@ -146,9 +146,9 @@ export default function EvaluationTest() {
               <Countdown
                 key={time}
                 date={Date.now() + time}
-                // onComplete={() => autoSubmit()}
+                onComplete={() => autoSubmit()}
                 renderer={Renderer}
-                // onTick={(value) => updateWorkTime(value)}
+                onTick={(value) => updateWorkTime(value)}
               />
             ) : null}
           </Heading>
