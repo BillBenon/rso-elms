@@ -191,6 +191,7 @@ export function SingleQuestionSectionBased({
       {evaluation.submision_type == ISubmissionTypeEnum.FILE && (
         <div className="flex items-center py-5">
           <FileUploader
+            multiple
             allowPreview={false}
             handleUpload={(filelist) => {
               handleUpload(filelist);
@@ -203,18 +204,18 @@ export function SingleQuestionSectionBased({
           </FileUploader>
           {previoustudentAnswers
             .find((item) => item.evaluation_question.id == question.id)
-            ?.student_answer_attachments.map((attachment) => (
+            ?.student_answer_attachments.map((ans) => (
               <a
                 href={`${
                   import.meta.env.VITE_API_URL
                 }/evaluation-service/api/evaluationQuestions/${
-                  attachment.id
+                  ans.attachment.id
                 }/loadAttachment`}
-                key={attachment.id}
+                key={ans.attachment.id}
                 target="_blank"
                 download
                 rel="noreferrer">
-                {index + 1}. {attachment.name}
+                {index + 1}. {ans.attachment.name}
               </a>
             ))}
         </div>
