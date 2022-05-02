@@ -141,7 +141,9 @@ export default function EvaluationSettings() {
             placeholder="Reviewer"
             options={
               instructors?.map((instr) => ({
-                label: `${instr.user.first_name} ${instr.user.last_name}`,
+                label: `${instr.user.person?.current_rank?.name || ''} ${
+                  instr.user.first_name
+                } ${instr.user.last_name}`,
                 value: instr.user.id,
               })) as SelectData[]
             }
@@ -174,7 +176,9 @@ export default function EvaluationSettings() {
             placeholder="Approver"
             options={
               instructors?.map((instr) => ({
-                label: `${instr.user.first_name} ${instr.user.last_name}`,
+                label: `${instr.user.person?.current_rank?.name || ''}  ${
+                  instr.user.first_name
+                } ${instr.user.last_name}`,
                 value: instr.user.id,
               })) as SelectData[]
             }
@@ -193,7 +197,9 @@ export default function EvaluationSettings() {
             placeholder="Marker"
             options={
               instructors?.map((instr) => ({
-                label: `${instr.user.first_name} ${instr.user.last_name}`,
+                label: `${instr.user.person?.current_rank?.name || ''}  ${
+                  instr.user.first_name
+                } ${instr.user.last_name}`,
                 value: instr.user.id,
               })) as SelectData[]
             }

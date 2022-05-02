@@ -44,8 +44,23 @@ export default function ClassEvaluationPerformance() {
     !!periodOfThisClass,
   );
 
+  const rankedStudents =
+    studentsData?.data.data.filter((stud) => stud.student.user.person.current_rank) || [];
+  const unrankedStudents =
+    studentsData?.data.data.filter(
+      (stud) => stud !== rankedStudents.find((ranked) => ranked.id === stud.id),
+    ) || [];
+
+  rankedStudents.sort(function (a, b) {
+    return (
+      a.student.user.person.current_rank?.priority -
+      b.student.user.person.current_rank?.priority
+    );
+  });
+  const finalStudents = rankedStudents.concat(unrankedStudents);
+
   let data: IPerformanceTable[] = [];
-  studentsData?.data.data.forEach((student) => {
+  finalStudents.forEach((student) => {
     performance?.data.data.forEach((record) => {
       if (record.student.admin_id === student.student.id) {
         let processed: IPerformanceTable = {

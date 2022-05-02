@@ -24,7 +24,7 @@ import {
   ProgramStatus,
   ProgramType,
 } from '../../types/services/program.types';
-import { UserType } from '../../types/services/user.types';
+import { UserInfo, UserType } from '../../types/services/user.types';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
 import { newProgramSchema } from '../../validations/program.validation';
 
@@ -45,7 +45,17 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
     { page: 0, pageSize: 1000, sortyBy: 'username' },
   );
 
-  const instructors = inCharge?.data.data.content;
+  const instructors = inCharge?.data.data.content || [];
+  const rankedInstructors = instructors.filter((inst) => inst.person.current_rank) || [];
+  const unrankedInstructors =
+    instructors.filter(
+      (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+    ) || [];
+
+  rankedInstructors.sort(function (a, b) {
+    return a.person.current_rank?.priority - b.person.current_rank?.priority;
+  });
+  const finalInstructors = rankedInstructors.concat(unrankedInstructors);
 
   const departments = divisionStore.getDivisionByType('DEPARTMENT').data?.data.data;
   // const { data: levelsInfo } = levelStore.getLevels(); // fetch levels
@@ -169,8 +179,12 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
             width="60 md:w-80"
             placeholder="Select incharge"
             options={getDropDownOptions({
-              inputs: instructors || [],
+              inputs: finalInstructors || [],
               labelName: ['first_name', 'last_name'],
+              //@ts-ignore
+              getOptionLabel: (inst: UserInfo) =>
+                inst.person.current_rank.name ||
+                '' + ' ' + inst.first_name + ' ' + inst.last_name,
             })}
             name="in_charge_id"
             handleChange={handleChange}>

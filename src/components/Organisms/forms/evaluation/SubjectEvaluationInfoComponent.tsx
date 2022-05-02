@@ -23,11 +23,11 @@ import {
   IEvaluationTypeEnum,
   IMarkingType,
   IQuestionaireTypeEnum,
-  ISubmissionTypeEnum
+  ISubmissionTypeEnum,
 } from '../../../../types/services/evaluation.types';
 import {
   getDropDownOptions,
-  getDropDownStatusOptions
+  getDropDownStatusOptions,
 } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
@@ -109,10 +109,32 @@ export default function SubjectEvaluationInfoComponent() {
 
   useEffect(() => {
     let studentsView: SelectData[] = [];
-    studentsProgram?.data.data.forEach((stud) => {
+
+    const rankedStudents =
+      studentsProgram?.data.data.filter(
+        (stud) => stud.intake_program_student.student.user.person.current_rank,
+      ) || [];
+    const unrankedStudents =
+      studentsProgram?.data.data.filter(
+        (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedStudents.sort(function (a, b) {
+      return (
+        a.intake_program_student.student.user.person.current_rank?.priority -
+        b.intake_program_student.student.user.person.current_rank?.priority
+      );
+    });
+    const finalStudents = rankedStudents.concat(unrankedStudents);
+
+    finalStudents.forEach((stud) => {
       let studentView: SelectData = {
         value: stud.intake_program_student.student.id + '',
-        label: `${stud.intake_program_student.student.user.first_name} ${stud.intake_program_student.student.user.last_name}`,
+        label: `${
+          stud.intake_program_student.student.user.person?.current_rank?.name || ''
+        }  ${stud.intake_program_student.student.user.first_name} ${
+          stud.intake_program_student.student.user.last_name
+        }`,
       };
       studentsView.push(studentView);
     });

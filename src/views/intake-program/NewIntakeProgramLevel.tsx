@@ -61,6 +61,18 @@ export default function NewIntakeProgramLevel() {
 
   const instructors = instructorsProgram?.data.data.map((inst) => inst.instructor) || [];
 
+  const rankedInstructors =
+    instructors.filter((inst) => inst.user.person.current_rank) || [];
+  const unrankedInstructors =
+    instructors.filter(
+      (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+    ) || [];
+
+  rankedInstructors.sort(function (a, b) {
+    return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+  });
+  const finalInstructors = rankedInstructors.concat(unrankedInstructors);
+
   const [values, setvalues] = useState<CreateLevelIntakeProgram>({
     academic_program_level_id: '',
     academic_year_id: '',
@@ -179,11 +191,12 @@ export default function NewIntakeProgramLevel() {
                     width="72"
                     placeholder={instLoading ? 'Loading incharge...' : 'Select incharge'}
                     options={getDropDownOptions({
-                      inputs: instructors,
+                      inputs: finalInstructors,
                       labelName: ['first_name', 'last_name'],
                       //@ts-ignore
                       getOptionLabel: (instr: Instructor) =>
-                        instr.user.first_name + ' ' + instr.user.last_name,
+                        instr.user.person?.current_rank?.name ||
+                        '' + ' ' + instr.user.first_name + ' ' + instr.user.last_name,
                     })}
                     name="incharge_id"
                     handleChange={handleChange}>

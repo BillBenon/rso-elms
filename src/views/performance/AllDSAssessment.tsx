@@ -25,6 +25,7 @@ import {
 } from '../../store/evaluation/school-report.store';
 import { Privileges, ValueType } from '../../types';
 import { DSAssessForm } from '../../types/services/report.types';
+import { UserInfo } from '../../types/services/user.types';
 import { getDropDownOptions } from '../../utils/getOption';
 import DSAssessmentSheet from './DSAssessmentSheet';
 
@@ -211,6 +212,10 @@ export default function AllDSAssessment() {
                     options={getDropDownOptions({
                       inputs: recipients,
                       labelName: ['first_name', 'last_name'],
+                      //@ts-ignore
+                      getOptionLabel: (rec: UserInfo) =>
+                        rec.person?.current_rank?.name ||
+                        '' + ' ' + rec.first_name + ' ' + rec.last_name,
                     })}
                   />
                 </div>

@@ -28,9 +28,22 @@ export default function SubjectEvaluationSettings({
   const { user } = useAuthenticator();
   const picked_role = usePickedRole();
 
-  const instructors = instructordeploymentStore.getInstructorsDeployedInAcademy(
-    picked_role?.academy_id + '',
-  ).data?.data.data;
+  const instructors =
+    instructordeploymentStore.getInstructorsDeployedInAcademy(
+      picked_role?.academy_id + '',
+    ).data?.data.data || [];
+
+  const rankedInstructors =
+    instructors.filter((inst) => inst.user.person.current_rank) || [];
+  const unrankedInstructors =
+    instructors.filter(
+      (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+    ) || [];
+
+  rankedInstructors.sort(function (a, b) {
+    return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+  });
+  const finalInstructors = rankedInstructors.concat(unrankedInstructors);
 
   const initialState = {
     approver_ids: '',
@@ -112,8 +125,10 @@ export default function SubjectEvaluationSettings({
             width="60"
             placeholder="Reviewer"
             options={
-              instructors?.map((instr) => ({
-                label: `${instr.user.first_name} ${instr.user.last_name}`,
+              finalInstructors?.map((instr) => ({
+                label: `${instr.user.person?.current_rank?.name || ''}  ${
+                  instr.user.first_name
+                } ${instr.user.last_name}`,
                 value: instr.id,
               })) as SelectData[]
             }
@@ -141,8 +156,10 @@ export default function SubjectEvaluationSettings({
             width="60"
             placeholder="Approver"
             options={
-              instructors?.map((instr) => ({
-                label: `${instr.user.first_name} ${instr.user.last_name}`,
+              finalInstructors?.map((instr) => ({
+                label: `${instr.user.person?.current_rank?.name || ''}  ${
+                  instr.user.first_name
+                } ${instr.user.last_name}`,
                 value: instr.id,
               })) as SelectData[]
             }
@@ -169,8 +186,10 @@ export default function SubjectEvaluationSettings({
           width="60"
           placeholder="Marker"
           options={
-            instructors?.map((instr) => ({
-              label: `${instr.user.first_name} ${instr.user.last_name}`,
+            finalInstructors?.map((instr) => ({
+              label: `${instr.user.person?.current_rank?.name || ''}  ${
+                instr.user.first_name
+              } ${instr.user.last_name}`,
               value: instr.id,
             })) as SelectData[]
           }

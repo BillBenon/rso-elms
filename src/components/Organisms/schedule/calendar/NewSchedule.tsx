@@ -223,7 +223,9 @@ function FirstStep({ handleChange, setCurrentStep, values }: IStepProps) {
           handleChange={handleChange}
           options={
             users?.data.data.content?.map((user) => ({
-              label: `${user.person.first_name} ${user.person.last_name}`,
+              label: `${user.person?.current_rank?.name || ''} ${
+                user.person.first_name
+              } ${user.person.last_name}`,
               value: user.id,
             })) as SelectData[]
           }

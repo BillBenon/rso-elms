@@ -38,6 +38,30 @@ export default function AddProgramLeader({
   const instructorsToShow = instructors?.data.data.map((inst) => inst.instructor);
   const studentsToShow = students?.data.data.map((inst) => inst.student);
 
+  const rankedInstructors =
+    instructorsToShow?.filter((inst) => inst.user.person.current_rank) || [];
+  const unrankedInstructors =
+    instructorsToShow?.filter(
+      (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+    ) || [];
+
+  rankedInstructors.sort(function (a, b) {
+    return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+  });
+  const finalInstructors = rankedInstructors.concat(unrankedInstructors);
+
+  const rankedStudents =
+    studentsToShow?.filter((stud) => stud.user.person.current_rank) || [];
+  const unrankedStudents =
+    studentsToShow?.filter(
+      (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
+    ) || [];
+
+  rankedStudents.sort(function (a, b) {
+    return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+  });
+  const finalStudents = rankedStudents.concat(unrankedStudents);
+
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault();
 
@@ -87,7 +111,7 @@ export default function AddProgramLeader({
           options={
             type === 'instructor'
               ? getDropDownOptions({
-                  inputs: instructorsToShow || [],
+                  inputs: finalInstructors || [],
                   labelName: ['first_name', 'last_name'],
                   //@ts-ignore
                   getOptionLabel: (inst: Instructor) =>
@@ -95,11 +119,12 @@ export default function AddProgramLeader({
                 })
               : type === 'student'
               ? getDropDownOptions({
-                  inputs: studentsToShow || [],
+                  inputs: finalStudents || [],
                   labelName: ['first_name', 'last_name'],
                   //@ts-ignore
                   getOptionLabel: (stud: Student) =>
-                    stud.user.first_name + ' ' + stud.user.last_name,
+                    stud.user.person?.current_rank?.name ||
+                    '' + ' ' + stud.user.first_name + ' ' + stud.user.last_name,
                 })
               : []
           }>

@@ -34,6 +34,7 @@ export interface IManualMarking {
 
 export interface UnMarkedStudent {
   id: string;
+  rank: string;
   first_name: string;
   last_name: string;
   obtained: string;
