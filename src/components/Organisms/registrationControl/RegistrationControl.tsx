@@ -154,7 +154,7 @@ export default function RegistrationControl() {
                   handleClick={() => {
                     history.push(`${url}/add`);
                   }}
-                  description="And the web just isn't the same without you. Lets get you back online!"
+                  description="No registration period currently added. Please add some or wait for the admin to add them"
                 />
               )}
             </div>

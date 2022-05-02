@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link, useRouteMatch } from 'react-router-dom';
 
 import Avatar from '../../../components/Atoms/custom/Avatar';
 import Badge from '../../../components/Atoms/custom/Badge';
@@ -9,6 +10,7 @@ import usernextkinStore from '../../../store/administration/usernextkin.store';
 import { UserInfo } from '../../../types/services/user.types';
 
 function NextOfKinCard({ user }: { user: UserInfo }) {
+  const { url } = useRouteMatch();
   const { data: nextOfKin } = usernextkinStore.getHisNextKinById(user.id + '');
 
   return (
@@ -17,7 +19,9 @@ function NextOfKinCard({ user }: { user: UserInfo }) {
         Next of Kin
       </Heading>
       <div className="flex flex-col items-end -mt-16 mb-6">
-        <Button>Add Next of Kin</Button>
+        <Link to={`${url}/edit-next-kin`}>
+          <Button>Add Next of Kin</Button>
+        </Link>
       </div>
       {nextOfKin?.data.data.length === 0 ? (
         <Badge
@@ -54,7 +58,9 @@ function NextOfKinCard({ user }: { user: UserInfo }) {
               </p>
             </div>
             <div className="flex flex-col items-end mt-2">
-              <Button styleType="outline">Edit</Button>
+              <Link to={`${url}/edit-kin/${kin.id}`}>
+                <Button styleType="outline">Edit</Button>
+              </Link>
             </div>
           </div>
         ))

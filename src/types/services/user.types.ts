@@ -246,6 +246,7 @@ export interface UserTypes extends AcademyUserType {
 export interface BasicPersonInfo
   extends Pick<
     PersonInfo,
+    | 'id'
     | 'first_name'
     | 'last_name'
     | 'phone_number'

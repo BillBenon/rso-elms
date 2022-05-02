@@ -3,6 +3,7 @@ import { UserInfo, UserTypes } from '../types/services/user.types';
 export function formatUserTable(data: UserInfo[]): UserTypes[] {
   return data.map((d) => ({
     id: d.id.toString(),
+    rank: d.person.current_rank?.name,
     username: d.username,
     'full name': d.first_name + ' ' + d.last_name,
     email: d.email,

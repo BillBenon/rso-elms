@@ -12,6 +12,12 @@ class UserNextKinService {
     return await adminstrationAxios.post('/users/addHisNextOfKins', NextKeenInfo);
   }
 
+  public async updateUserNextKin(
+    NextKeenInfo: CreateNextOfKin,
+  ): Promise<AxiosResponse<Response<NextKinInfo>>> {
+    return await adminstrationAxios.put('/users/removeHisNextOfKins', NextKeenInfo);
+  }
+
   public async getHisNextById(
     userId: string,
   ): Promise<AxiosResponse<Response<NextKinInfo[]>>> {
