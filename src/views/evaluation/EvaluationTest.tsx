@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
 import toast from 'react-hot-toast';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
+
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -165,8 +166,7 @@ export default function EvaluationTest() {
             id={question.id}
             key={question.id}
             isLast={questions.data.data.length - 1 === index}
-            question={question.question}
-            marks={question.mark}
+            question={question}
             choices={question.multiple_choice_answers}
             isMultipleChoice={
               question.multiple_choice_answers &&

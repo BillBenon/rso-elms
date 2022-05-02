@@ -138,9 +138,14 @@ const RouterProtection = () => {
             <Route path={`${path}/student`} component={StudentModule} />
           )}
 
-          {(hasPrivilege(Privileges.CAN_ACCESS_EVALUATIONS) ||
-            hasPrivilege(Privileges.CAN_ANSWER_EVALUATION)) && (
+          {(hasPrivilege(Privileges.CAN_CREATE_EVALUATIONS) ||
+            hasPrivilege(Privileges.CAN_MANAGE_EVALUATIONS) ||
+            hasPrivilege(Privileges.CAN_ACCESS_EVALUATIONS)) && (
             <Route path={`${path}/evaluations`} component={InstructorViewEvaluations} />
+          )}
+
+          {hasPrivilege(Privileges.CAN_ANSWER_EVALUATION) && (
+            <Route path={`${path}/evaluation`} component={InstructorViewEvaluations} />
           )}
 
           <Route
