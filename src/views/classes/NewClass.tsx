@@ -86,10 +86,34 @@ function NewClass() {
       (inst) => inst.intake_program_instructor.instructor,
     ) || [];
 
+  const rankedInstructors =
+    instructors.filter((stud) => stud.user.person.current_rank) || [];
+  const unrankedInstructors =
+    instructors.filter(
+      (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+    ) || [];
+
+  rankedInstructors.sort(function (a, b) {
+    return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+  });
+  const finalInstructors = rankedInstructors.concat(unrankedInstructors);
+
   const students =
     intakeProgramStore.getStudentsByIntakeProgramLevel(levelId).data?.data.data || [];
 
   const studentsInProgram = students.map((stu) => stu.intake_program_student.student);
+
+  const rankedStudents =
+    studentsInProgram.filter((stud) => stud.user.person.current_rank) || [];
+  const unrankedStudents =
+    studentsInProgram.filter(
+      (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
+    ) || [];
+
+  rankedStudents.sort(function (a, b) {
+    return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+  });
+  const finalStudents = rankedStudents.concat(unrankedStudents);
 
   function handleChange(e: ValueType) {
     setForm({ ...form, [e.name]: e.value });
@@ -176,11 +200,12 @@ function NewClass() {
           name="instructor_class_in_charge_id"
           handleChange={handleChange}
           options={getDropDownOptions({
-            inputs: instructors,
+            inputs: finalInstructors,
             labelName: ['first_name', 'last_name'],
             //@ts-ignore
             getOptionLabel: (inst: Instructor) =>
-              inst.user.first_name + ' ' + inst.user.last_name,
+              inst.user.person?.current_rank?.name ||
+              '' + ' ' + inst.user.first_name + ' ' + inst.user.last_name,
           })}
           placeholder={
             instLoading
@@ -195,13 +220,14 @@ function NewClass() {
           name="instructor_class_in_charge_two_id"
           handleChange={handleChange}
           options={getDropDownOptions({
-            inputs: instructors.filter(
+            inputs: finalInstructors.filter(
               (inst) => inst.id !== form.instructor_class_in_charge_id,
             ),
             labelName: ['first_name', 'last_name'],
             //@ts-ignore
             getOptionLabel: (inst: Instructor) =>
-              inst.user.first_name + ' ' + inst.user.last_name,
+              inst.user.person?.current_rank?.name ||
+              '' + ' ' + inst.user.first_name + ' ' + inst.user.last_name,
           })}
           placeholder={
             instLoading
@@ -214,7 +240,7 @@ function NewClass() {
           name="instructor_class_in_charge_three_id"
           handleChange={handleChange}
           options={getDropDownOptions({
-            inputs: instructors.filter(
+            inputs: finalInstructors.filter(
               (inst) =>
                 inst.id !== form.instructor_class_in_charge_id &&
                 inst.id !== form.instructor_class_in_charge_two_id,
@@ -222,7 +248,8 @@ function NewClass() {
             labelName: ['first_name', 'last_name'],
             //@ts-ignore
             getOptionLabel: (inst: Instructor) =>
-              inst.user.first_name + ' ' + inst.user.last_name,
+              inst.user.person?.current_rank?.name ||
+              '' + ' ' + inst.user.first_name + ' ' + inst.user.last_name,
           })}
           placeholder={
             instLoading
@@ -237,11 +264,12 @@ function NewClass() {
           name="class_representative_one_id"
           handleChange={handleChange}
           options={getDropDownOptions({
-            inputs: studentsInProgram,
+            inputs: finalStudents,
             labelName: ['first_name', 'last_name'],
             //@ts-ignore
             getOptionLabel: (stu: Student) =>
-              stu.user.first_name + ' ' + stu.user.last_name,
+              stu.user.person?.current_rank?.name ||
+              '' + ' ' + stu.user.first_name + ' ' + stu.user.last_name,
           })}
           placeholder={t('Class_representative')}>
           {t('Class_representative')}

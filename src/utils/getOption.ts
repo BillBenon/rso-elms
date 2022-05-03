@@ -134,7 +134,11 @@ export const getInstructorIncharge = (
 
   instr?.map((ins) => {
     options.push({
-      label: `${ins.intake_program_instructor.instructor.user.first_name} ${ins.intake_program_instructor.instructor.user.last_name}`,
+      label: `${
+        ins.intake_program_instructor.instructor.user.person?.current_rank?.name || ''
+      } ${ins.intake_program_instructor.instructor.user.first_name} ${
+        ins.intake_program_instructor.instructor.user.last_name
+      }`,
       value: ins.intake_program_instructor.instructor.id.toString(),
     });
   });

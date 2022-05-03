@@ -69,9 +69,9 @@ export default function StudentAcademicReport() {
     content: () => report.current,
     bodyClass: 'bg-white',
     documentTitle: studentInfo?.data
-      ? `${studentInfo?.data.data.user.first_name || '...'}-${
-          studentInfo?.data.data.user.last_name || '...'
-        }-report`
+      ? `${studentInfo?.data.data.user.person?.current_rank?.name || '...'} ${
+          studentInfo?.data.data.user.first_name || '...'
+        }-${studentInfo?.data.data.user.last_name || '...'}-report`
       : 'student report',
     onBeforeGetContent: () => setisPrinting(true),
     onAfterPrint: () => setisPrinting(false),

@@ -19,7 +19,7 @@ function NextOfKinCard({ user }: { user: UserInfo }) {
         Next of Kin
       </Heading>
       <div className="flex flex-col items-end -mt-16 mb-6">
-        <Link to={`${url}/edit-next-kin`}>
+        <Link to={`${url}/add-next-kin`}>
           <Button>Add Next of Kin</Button>
         </Link>
       </div>
@@ -58,7 +58,7 @@ function NextOfKinCard({ user }: { user: UserInfo }) {
               </p>
             </div>
             <div className="flex flex-col items-end mt-2">
-              <Link to={`${url}/edit-kin/${kin.id}`}>
+              <Link to={`${url}/edit-next-kin/${kin.id}`}>
                 <Button styleType="outline">Edit</Button>
               </Link>
             </div>
