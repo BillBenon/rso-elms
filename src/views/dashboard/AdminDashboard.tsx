@@ -16,9 +16,11 @@ import { divisionStore } from '../../store/administration/divisions.store';
 import { getIntakesByAcademy } from '../../store/administration/intake.store';
 // import { getDepartmentStatsByAcademy } from '../../store/administration/stats.store';
 import usersStore from '../../store/administration/users.store';
+import { scheduleStore } from '../../store/timetable/calendar.store';
 import { CommonCardDataType, Link } from '../../types';
 import { IntakeStatus } from '../../types/services/intake.types';
 import { UserType } from '../../types/services/user.types';
+import { formatDateLikeGoogle } from '../../utils/date-helper';
 import { advancedTypeChecker } from '../../utils/getOption';
 
 const list: Link[] = [
@@ -52,12 +54,8 @@ export default function AdminDashboard() {
       ?.data.data || [];
 
   const loadesIntakes =
-    getIntakesByAcademy(
-      picked_role?.academy_id + '',
-      false,
-      !!picked_role?.academy_id,
-    ).data?.data.data.filter((intake) => intake.intake_status === IntakeStatus.ONGOING) ||
-    [];
+    getIntakesByAcademy(picked_role?.academy_id + '', false, !!picked_role?.academy_id)
+      .data?.data.data || [];
 
   const intakes: CommonCardDataType[] = loadesIntakes.map((intake) => ({
     code: intake.title.toUpperCase(),
@@ -76,6 +74,8 @@ export default function AdminDashboard() {
   const handleScheduleDate = (date: Date) => {
     setscheduleDate(date);
   };
+
+  const schedules = scheduleStore.getAllSchedules().data?.data.data || [];
 
   return (
     <div className="py-2">
@@ -152,6 +152,7 @@ export default function AdminDashboard() {
             </Heading>
             {intakes.map((intake) => (
               <CommonCardMolecule
+                className="mb-3"
                 key={intake.id}
                 data={intake}
                 handleClick={() =>
@@ -180,24 +181,26 @@ export default function AdminDashboard() {
             <Heading fontSize="lg" fontWeight="semibold">
               Schedule
             </Heading>
-            <div className="flex flex-col gap-2 pt-2">
-              <div className="flex w-full">
+            {schedules.map((schedule) => (
+              <div className="my-2 w-full flex" key={schedule.id}>
                 <div className="bg-primary-500 rounded-l-lg text-white p-6">
-                  <p className="text-sm font-medium">{new Date().getDate()}</p>
                   <p className="text-sm font-medium">
-                    {new Date().toDateString().split(' ')[1]}
+                    {formatDateLikeGoogle(new Date().toLocaleDateString()).split(' ')[1]}
+                  </p>
+                  <p className="text-sm font-medium">
+                    {formatDateLikeGoogle(new Date().toLocaleDateString()).split(' ')[0]}
                   </p>
                 </div>
                 <div className="bg-gray-50 w-full py-5">
                   <p className="text-gray-400 text-sm font-medium px-4">
-                    10:00 AM - 12:00 PM
+                    {`${schedule.start_hour} - ${schedule.end_hour}`}
                   </p>
                   <div className="pt-2 text-sm font-medium px-4">
-                    Conference with the academy principals
+                    {schedule.event.name}
                   </div>
                 </div>
               </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>
