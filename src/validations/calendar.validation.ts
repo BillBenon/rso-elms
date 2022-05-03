@@ -47,15 +47,14 @@ export const secondScheduleSchema = yup.object().shape({
 
 export const thirdScheduleSchema = yup.object().shape({
   appliesTo: yup.string().required('event concerns is required'),
-  intake: yup.string().when('applies_to_level_or_class', {
-    is: (applies_to_level_or_class: any) => applies_to_level_or_class === true,
-    then: yup.string().required('intake is required'),
-    otherwise: yup.string(),
-  }),
-  program: yup.string().when('applies_to_level_or_class', {
-    is: (applies_to_level_or_class: any) => applies_to_level_or_class === true,
-    then: yup.string().required('program is required'),
-    otherwise: yup.string(),
-  }),
-  beneficiaries: yup.string().required('beneficiaries are required'),
+  // intake: yup.string().when('applies_to_level_or_class', {
+  //   is: (applies_to_level_or_class: any) => applies_to_level_or_class === true,
+  //   then: yup.string().required('intake is required'),
+  //   otherwise: yup.string(),
+  // }),
+  // program: yup.string().when('applies_to_level_or_class', {
+  //   is: (applies_to_level_or_class: any) => applies_to_level_or_class === true,
+  //   then: yup.string().required('program is required'),
+  //   otherwise: yup.string(),
+  // }),
 });
