@@ -67,3 +67,21 @@ export function groupTimeTableByDay(arr: ITimeTableActivityInfo[]): IDayTimeTabl
 
   return grouped;
 }
+
+export function calculateNumPeriods(
+  startHour: string,
+  endHour: string,
+  periodDurationInMins = 45,
+): number {
+  let startDate = new Date();
+  startDate.setHours(Number(startHour.split(':')[0]));
+  startDate.setMinutes(Number(startHour.split(':')[1]));
+
+  let endDate = new Date();
+  endDate.setHours(Number(endHour.split(':')[0]));
+  endDate.setMinutes(Number(endHour.split(':')[1]));
+
+  //calculate difference between startDate and endDate in milliseconds
+  let diff = endDate.getTime() - startDate.getTime();
+  return Math.ceil(diff / 60000 / periodDurationInMins);
+}

@@ -7,7 +7,7 @@ import { getStudentShipByUserId } from '../../store/administration/intake-progra
 import { scheduleStore } from '../../store/timetable/calendar.store';
 import { BigCalendarEvent, DateRange } from '../../types/services/schedule.types';
 import { formatCalendarEvents } from '../../utils/calendar';
-import { getWeekBorderDays } from '../../utils/date-helper';
+import { formatDateLikeGoogle, getWeekBorderDays } from '../../utils/date-helper';
 
 export default function StudentCalendar() {
   const [dateRange, setdateRange] = useState<DateRange>({
@@ -38,9 +38,9 @@ export default function StudentCalendar() {
         defaultDateRange={dateRange}
         onDateChange={handleApplyDateRange}>
         <Heading fontSize="lg" fontWeight="semibold">
-          {`${new Date(dateRange.start_date).toLocaleDateString()} - ${new Date(
+          {`${formatDateLikeGoogle(dateRange.start_date)} - ${formatDateLikeGoogle(
             dateRange.end_date,
-          ).toLocaleDateString()}`}
+          )}`}
         </Heading>
       </CalendarComponent>
     </div>

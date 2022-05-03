@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
+
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import { ValueType } from '../../../types';
 import {
@@ -37,6 +38,9 @@ export function EvaluationChangeMarker({
         options={getDropDownOptions({
           inputs: markers,
           labelName: ['first_name', 'last_name'],
+          //@ts-ignore
+          getOptionLabel: (mark: UserInfo) =>
+            mark.person.current_rank?.name || '' + mark.first_name + ' ' + mark.last_name,
         })}
         placeholder="marker"
       />

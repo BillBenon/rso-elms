@@ -172,7 +172,9 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
                       <p>{activity.method_of_instruction}</p>
                       <p>{activity.venue.name}</p>
                       <p className=" col-span-2">
-                        {`${instructor?.user.first_name} ${instructor?.user.last_name}`}
+                        {`${instructor?.user.person?.current_rank?.name || ''} ${
+                          instructor?.user.first_name
+                        } ${instructor?.user.last_name}`}
                       </p>
                       <Permission privilege={Privileges.CAN_MODIFY_TIMETABLE}>
                         <div className="actions hidden absolute top-0 right-0">
