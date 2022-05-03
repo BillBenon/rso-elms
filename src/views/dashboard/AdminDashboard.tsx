@@ -4,18 +4,22 @@ import '../../styles/components/Molecules/timetable/calendar.css';
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import { useTranslation } from 'react-i18next';
-import { Link as BrowserLink } from 'react-router-dom';
+import { Link as BrowserLink, useHistory } from 'react-router-dom';
 
 import Heading from '../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
+import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 // import Barchart from '../../components/Organisms/chart/Barchart';
 import usePickedRole from '../../hooks/usePickedRole';
 import { divisionStore } from '../../store/administration/divisions.store';
+import { getIntakesByAcademy } from '../../store/administration/intake.store';
 // import { getDepartmentStatsByAcademy } from '../../store/administration/stats.store';
 import usersStore from '../../store/administration/users.store';
-import { Link } from '../../types';
+import { CommonCardDataType, Link } from '../../types';
+import { IntakeStatus } from '../../types/services/intake.types';
 import { UserType } from '../../types/services/user.types';
+import { advancedTypeChecker } from '../../utils/getOption';
 
 const list: Link[] = [
   { to: 'home', title: 'home' },
@@ -26,8 +30,10 @@ const list: Link[] = [
 export default function AdminDashboard() {
   const [scheduleDate, setscheduleDate] = useState(new Date());
   const { t } = useTranslation();
+  const history = useHistory();
 
   const picked_role = usePickedRole();
+
   const users =
     usersStore.getUsersByAcademy(picked_role?.academy_id + '', {
       page: 0,
@@ -44,6 +50,28 @@ export default function AdminDashboard() {
   const faculties =
     divisionStore.getDivisionsByAcademy('FACULTY', picked_role?.academy_id + '').data
       ?.data.data || [];
+
+  const loadesIntakes =
+    getIntakesByAcademy(
+      picked_role?.academy_id + '',
+      false,
+      !!picked_role?.academy_id,
+    ).data?.data.data.filter((intake) => intake.intake_status === IntakeStatus.ONGOING) ||
+    [];
+
+  const intakes: CommonCardDataType[] = loadesIntakes.map((intake) => ({
+    code: intake.title.toUpperCase(),
+    description: `${intake.expected_start_date.toString().split(' ')[0]} - ${
+      intake.expected_end_date.toString().split(' ')[0]
+    }`,
+    title: intake.description || ``,
+    status: {
+      type: advancedTypeChecker(intake.intake_status),
+      text: intake.intake_status.toString(),
+    },
+    date: intake.expected_start_date,
+    id: intake.id,
+  }));
 
   const handleScheduleDate = (date: Date) => {
     setscheduleDate(date);
@@ -118,6 +146,20 @@ export default function AdminDashboard() {
               </div>
             </BrowserLink>
           </div>
+          <div className="p-3 my-6">
+            <Heading fontSize="lg" fontWeight="semibold" className="pb-3">
+              Ongoing intakes
+            </Heading>
+            {intakes.map((intake) => (
+              <CommonCardMolecule
+                key={intake.id}
+                data={intake}
+                handleClick={() =>
+                  history.push(`/dashboard/intakes/programs/${intake.id}`)
+                }
+              />
+            ))}
+          </div>
           {/* <div className="p-3 my-6 bg-white shadow-sm rounded-lg">
             <Heading className="px-6" fontWeight="semibold">
               Students in departments
@@ -130,12 +172,12 @@ export default function AdminDashboard() {
           </div> */}
         </div>
         <div className="col-span-2 p-3">
-          <Heading fontSize="lg" className="pb-3" fontWeight="medium">
+          <Heading fontSize="lg" className="pb-3" fontWeight="semibold">
             Calendar
           </Heading>
           <Calendar onChange={handleScheduleDate} value={scheduleDate} />
           <div className="py-3">
-            <Heading fontSize="lg" fontWeight="medium">
+            <Heading fontSize="lg" fontWeight="semibold">
               Schedule
             </Heading>
             <div className="flex flex-col gap-2 pt-2">
@@ -155,22 +197,6 @@ export default function AdminDashboard() {
                   </div>
                 </div>
               </div>
-              {/* <div className="flex w-full">
-                <div className="bg-gray-300 rounded-l-lg p-6">
-                  <p className="text-sm font-medium">{new Date().getDate()}</p>
-                  <p className="text-sm font-medium">
-                    {new Date().toDateString().split(' ')[1]}
-                  </p>
-                </div>
-                <div className="bg-gray-50 w-full py-5">
-                  <p className="text-gray-400 text-sm font-medium px-4">
-                    10:00 AM - 12:00 PM
-                  </p>
-                  <div className="pt-2 text-sm font-medium px-4">
-                    Conference with the academy principals
-                  </div>
-                </div>
-              </div> */}
             </div>
           </div>
         </div>
