@@ -25,7 +25,7 @@ import enrollmentStore from '../../store/administration/enrollment.store';
 import usersStore from '../../store/administration/users.store';
 import { ParamType } from '../../types';
 import { ApproveStudents, StudentApproval } from '../../types/services/enrollment.types';
-import UpdateCompleteProfile from '../auth/UpdateCompleteProfile';
+import CompleteProfile from '../auth/CompleteProfile';
 import PersonalDocuments from './profile/PersonalDocuments';
 import ProfileOverview from './profile/ProfileOverview';
 import UpdatePhotoProfile from './profile/UpdatePhotoProfile';
@@ -162,7 +162,10 @@ export default function UserDetails() {
                 );
               }}
             />
-            <Route path={`${path}/edit-compl-prof`} component={UpdateCompleteProfile} />
+            <Route
+              path={`${path}/edit-compl-prof`}
+              render={() => <CompleteProfile showHeader={false} />}
+            />
             <Route
               exact
               path={`${path}/new-experience`}

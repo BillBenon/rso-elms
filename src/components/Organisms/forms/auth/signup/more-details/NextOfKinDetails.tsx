@@ -308,12 +308,6 @@ function NextOfKinDetails<E>({
               )}
 
               <InputMolecule
-                error={errors.first_name}
-                readOnly={
-                  nextKinToUpdate?.nextOfKin.first_name
-                    ? details.first_name !== ''
-                    : false
-                }
                 required={false}
                 name="first_name"
                 placeholder="Next of Kin's First name"
@@ -323,9 +317,6 @@ function NextOfKinDetails<E>({
               </InputMolecule>
               <InputMolecule
                 error={errors.last_name}
-                readOnly={
-                  nextKinToUpdate?.nextOfKin.last_name ? details.last_name !== '' : false
-                }
                 required={false}
                 name="last_name"
                 placeholder="Next of Kin's Last name"
