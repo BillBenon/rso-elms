@@ -28,8 +28,8 @@ export default function CalendarComponent({
 }: Props) {
   const [isChangeRangeOpen, setisChangeRangeOpen] = useState(false);
 
-  const handleApply = (r: DateRange) => {
-    onDateChange(r);
+  const handleApply = (range: DateRange) => {
+    onDateChange(range);
     setisChangeRangeOpen(false);
   };
 

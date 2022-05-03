@@ -22,7 +22,7 @@ import { scheduleStore } from '../../store/timetable/calendar.store';
 import { ParamType, Privileges } from '../../types';
 import { DateRange } from '../../types/services/schedule.types';
 import { formatCalendarEvents } from '../../utils/calendar';
-import { getWeekBorderDays } from '../../utils/date-helper';
+import { formatDateLikeGoogle, getWeekBorderDays } from '../../utils/date-helper';
 
 export default function CalendarView() {
   const history = useHistory();
@@ -78,9 +78,9 @@ export default function CalendarView() {
         onDateChange={handleApplyDateRange}>
         <>
           <Heading fontSize="lg" fontWeight="semibold">
-            {`${new Date(dateRange.start_date).toLocaleDateString()} - ${new Date(
+            {`${formatDateLikeGoogle(dateRange.start_date)} - ${formatDateLikeGoogle(
               dateRange.end_date,
-            ).toLocaleDateString()}`}
+            )}`}
           </Heading>
 
           <Permission privilege={Privileges.CAN_CREATE_SCHEDULE}>
