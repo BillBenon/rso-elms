@@ -54,8 +54,12 @@ export default function AdminDashboard() {
       ?.data.data || [];
 
   const loadesIntakes =
-    getIntakesByAcademy(picked_role?.academy_id + '', false, !!picked_role?.academy_id)
-      .data?.data.data || [];
+    getIntakesByAcademy(
+      picked_role?.academy_id + '',
+      false,
+      !!picked_role?.academy_id,
+    ).data?.data.data.filter((intake) => intake.intake_status === IntakeStatus.ONGOING) ||
+    [];
 
   const intakes: CommonCardDataType[] = loadesIntakes.map((intake) => ({
     code: intake.title.toUpperCase(),
@@ -150,16 +154,17 @@ export default function AdminDashboard() {
             <Heading fontSize="lg" fontWeight="semibold" className="pb-3">
               Ongoing intakes
             </Heading>
-            {intakes.map((intake) => (
-              <CommonCardMolecule
-                className="mb-3"
-                key={intake.id}
-                data={intake}
-                handleClick={() =>
-                  history.push(`/dashboard/intakes/programs/${intake.id}`)
-                }
-              />
-            ))}
+            <div className="flex flex-wrap gap-2">
+              {intakes.map((intake) => (
+                <CommonCardMolecule
+                  key={intake.id}
+                  data={intake}
+                  handleClick={() =>
+                    history.push(`/dashboard/intakes/programs/${intake.id}`)
+                  }
+                />
+              ))}
+            </div>
           </div>
           {/* <div className="p-3 my-6 bg-white shadow-sm rounded-lg">
             <Heading className="px-6" fontWeight="semibold">
