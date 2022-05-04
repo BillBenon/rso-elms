@@ -54,9 +54,9 @@ interface SecondScheduleErrors
   plannedScheduleStartDate: string;
   plannedScheduleEndDate: string;
 }
-interface ThirdScheduleErrors extends Pick<CreateEventSchedule, 'intake' | 'program'> {
+interface ThirdScheduleErrors {
   appliesTo: string;
-  beneficiaries: string;
+  // beneficiaries: string[];
 }
 
 export default function NewSchedule() {
@@ -386,27 +386,25 @@ function ThirdStep({ values, handleChange, handleSubmit, setCurrentStep }: IStep
 
   const initialErrorState: ThirdScheduleErrors = {
     appliesTo: '',
-    intake: '',
-    program: '',
-    beneficiaries: '',
   };
 
   const [errors, setErrors] = useState(initialErrorState);
 
-  const handleFinish = (e: FormEvent) => {
+  const handleFinish = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const validatedForm = thirdScheduleSchema.validate(values, {
       abortEarly: false,
     });
 
     validatedForm
-      .then(() => handleSubmit)
+      .then(() => handleSubmit && handleSubmit(e))
       .catch((err) => {
         const validatedErr: ThirdScheduleErrors = initialErrorState;
         err.inner.map((el: { path: string | number; message: string }) => {
           validatedErr[el.path as keyof ThirdScheduleErrors] = el.message;
         });
         setErrors(validatedErr);
+        console.error(err, validatedErr);
       });
   };
 
@@ -426,8 +424,6 @@ function ThirdStep({ values, handleChange, handleSubmit, setCurrentStep }: IStep
         values.appliesTo == scheduleAppliesTo.APPLIES_TO_CLASS) && (
         <>
           <DropdownMolecule
-            error={errors.intake}
-            hasError={errors.intake !== ''}
             name="intake"
             handleChange={handleChange}
             options={intakes}
@@ -435,8 +431,6 @@ function ThirdStep({ values, handleChange, handleSubmit, setCurrentStep }: IStep
             Intake
           </DropdownMolecule>
           <DropdownMolecule
-            error={errors.program}
-            hasError={errors.program !== ''}
             name="program"
             handleChange={handleChange}
             options={programIntakes}
@@ -448,7 +442,6 @@ function ThirdStep({ values, handleChange, handleSubmit, setCurrentStep }: IStep
 
       <DropdownMolecule
         name="beneficiaries"
-        error={errors.beneficiaries}
         isMulti
         handleChange={handleChange}
         options={

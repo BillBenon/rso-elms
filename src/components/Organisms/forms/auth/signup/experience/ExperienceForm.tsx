@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
 import { AxiosResponse } from 'axios';
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
@@ -6,7 +7,6 @@ import { UseMutateAsyncFunction } from 'react-query';
 import useAuthenticator from '../../../../../../hooks/useAuthenticator';
 import { queryClient } from '../../../../../../plugins/react-query';
 import { experienceStore } from '../../../../../../store/administration/experience.store';
-import { moduleMaterialStore } from '../../../../../../store/administration/module-material.store';
 import {
   CommonFormProps,
   CommonStepProps,
@@ -17,6 +17,7 @@ import {
   ExperienceInfo,
   ExperienceType,
 } from '../../../../../../types/services/experience.types';
+import { downloadFile } from '../../../../../../utils/file-util';
 import { experienceFormSchema } from '../../../../../../validations/complete-profile/experience-form.validtation';
 import Button from '../../../../../Atoms/custom/Button';
 import Icon from '../../../../../Atoms/custom/Icon';
@@ -61,8 +62,8 @@ function ExperienceForm<E>({
     end_date: '',
     location: '',
     occupation: '',
-    description: '',
     proof: '',
+    description: '',
   };
 
   const [errors, setErrors] = useState<ExperienceInfoErrors>(initialErrorState);
@@ -80,10 +81,18 @@ function ExperienceForm<E>({
     type: type,
   });
 
+  const [url, setUrl] = useState('');
+
+  useEffect(() => {
+    async function getIt() {
+      setUrl(await downloadFile(experience.attachment_id));
+    }
+    getIt();
+  }, [experience.attachment_id]);
+
   const [file, setFile] = useState<File | null>(null);
 
-  const { mutate } = moduleMaterialStore.addFile();
-
+  const { mutate } = experienceStore.addFile();
   useEffect(() => {
     setExperience((exp) => {
       return { ...exp, person_id: user?.person.id.toString() || '' };
@@ -115,12 +124,13 @@ function ExperienceForm<E>({
           mutateAsync(
             {
               ...experience,
-              attachment_id: data.data.data.id + '',
+              attachment_id: data.data.data.attachment_id + '',
             },
             {
               onSuccess(data) {
+                console.log('fdagdfaddddddddddd');
                 toast.success(data.data.message);
-                queryClient.invalidateQueries(['experience/id', user?.person.id]);
+                setErrors(initialErrorState);
                 setExperience({
                   attachment_id: '',
                   description: '',
@@ -134,6 +144,7 @@ function ExperienceForm<E>({
                   type: experience.type,
                 });
                 setTotalExperience([]);
+                queryClient.invalidateQueries(['experience/id', user?.person.id]);
                 nextStep(true);
               },
               onError(error: any) {
@@ -150,6 +161,7 @@ function ExperienceForm<E>({
       mutateAsync(experience, {
         onSuccess(data) {
           toast.success(data.data.message);
+          setErrors(initialErrorState);
           queryClient.invalidateQueries(['experience/id', user?.person.id]);
           setExperience({
             attachment_id: '',
@@ -163,6 +175,7 @@ function ExperienceForm<E>({
             start_date: '',
             type: experience.type,
           });
+          // setFile()
           setTotalExperience([]);
           nextStep(true);
         },
@@ -209,7 +222,7 @@ function ExperienceForm<E>({
     const validatedForm = experienceFormSchema.validate(experience, {
       abortEarly: false,
     });
-
+    console.log(experience);
     validatedForm
       .then(() => {
         if (experience) {
@@ -333,19 +346,10 @@ function ExperienceForm<E>({
                 End Date
               </DateMolecule>
             </div>
-            <div className="flex flex-col gap-4">
-              <div>
-                <InputMolecule
-                  required={false}
-                  error={errors.proof}
-                  placeholder={`Enter document title (eg: proof, certificate)`}
-                  name="proof"
-                  value={experience.proof}
-                  handleChange={handleChange}>
-                  Document title
-                </InputMolecule>
-              </div>
+            <div>
+              <label>Attach a file (ex: Proof, Certificate) </label>
             </div>
+
             <div className="py-2">
               <FileUploader
                 allowPreview={false}
@@ -358,6 +362,19 @@ function ExperienceForm<E>({
                   </span>
                 </Button>
               </FileUploader>
+            </div>
+            <div className="flex flex-col gap-4 pt-2">
+              <div>
+                <InputMolecule
+                  required={false}
+                  error={errors.proof}
+                  placeholder={`Enter name of the document you attached(eg: proof, certificate)`}
+                  name="proof"
+                  value={experience.proof}
+                  handleChange={handleChange}>
+                  Document title
+                </InputMolecule>
+              </div>
             </div>
           </div>
           <div className="py-3">
@@ -401,16 +418,25 @@ function ExperienceForm<E>({
                 key={exp.type}
                 title={exp.type.replaceAll('_', ' ')}
                 subtitle={exp.description}>
-                <div>Occupation: {exp.occupation}</div>
-                <div>Name: {exp.level}</div>
-                <div>Start Date: {exp.start_date}</div>
-                <div>End Date: {exp.end_date}</div>
-                <div className="flex items-center">
-                  <Icon name="attach" fill="primary" />
-                  <span className="border-txt-primary border-b font-small">
-                    {exp.proof}
-                  </span>
-                </div>
+                <div className="p-2">Institution Name: {exp.occupation}</div>
+                <div className="p-2">Name: {exp.level}</div>
+                <div className="p-2">Location: {exp.location}</div>
+                <div className="p-2">Description: {exp.description}</div>
+                <div className="p-2">Start Date: {exp.start_date}</div>
+                <div className="p-2">End Date: {exp.end_date}</div>
+                {exp.proof !== '' ? (
+                  <div className="flex items-center">
+                    <Icon name="attach" fill="primary" />
+                    <span className="border-txt-primary border-b font-small">
+                      {exp.proof}
+                    </span>
+                    <a href={url} download={true}>
+                      <Icon name="download" fill="primary" />
+                    </a>
+                  </div>
+                ) : (
+                  <div></div>
+                )}
               </Panel>
             );
           })}

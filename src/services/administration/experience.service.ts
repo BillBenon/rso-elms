@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+import { Blob } from 'buffer';
 
 import { adminstrationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
@@ -9,6 +10,13 @@ class ExperienceService {
     experience: ExperienceInfo,
   ): Promise<AxiosResponse<Response<ExperienceInfo>>> {
     return await adminstrationAxios.post('/experiences/addExperience', experience);
+  }
+
+  public async addFile(file: FormData): Promise<AxiosResponse<Response<Experiences>>> {
+    return await adminstrationAxios.post('/attachments/addFile', file);
+  }
+  public async downloadFile(attachmentId: string): Promise<AxiosResponse<Blob>> {
+    return await adminstrationAxios.get(`/attachments/download/${attachmentId}`);
   }
 
   public async fetchAll(): Promise<AxiosResponse<Response<Experiences[]>>> {

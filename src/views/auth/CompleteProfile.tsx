@@ -26,7 +26,7 @@ import {
 } from '../../utils/getLocalStorageItem';
 import SupAdminProfile from './SupAdminProfile';
 
-function CompleteProfile() {
+function CompleteProfile({ showHeader = true }: { showHeader?: boolean }) {
   const [personalInfo, setPersonalInfo] = useState<UpdateUserInfo>({
     place_of_residence: '',
     send_communication_msg: SendCommunicationMsg.EMAIL,
@@ -229,12 +229,12 @@ function CompleteProfile() {
 
   return (
     <div className="bg-main ">
-      <CompleteProfileHeader />
+      {showHeader && <CompleteProfileHeader />}
       {foundUser.first_name &&
       foundUser.email &&
       foundUser.last_name &&
       foundUser.person.nid == null ? (
-        <div className="md:px-24 md:py-5">
+        <div className={`p-10 md:px-24 md:py-3 ${!showHeader ? 'md:pt-12' : ''}`}>
           <Stepper
             isDisabled={false}
             isVertical
