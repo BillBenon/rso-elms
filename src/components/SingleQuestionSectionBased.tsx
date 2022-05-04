@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
-
 import { queryClient } from '../plugins/react-query';
 import { markingStore } from '../store/administration/marking.store';
 import { evaluationStore } from '../store/evaluation/evaluation.store';
@@ -10,13 +9,14 @@ import {
   IEvaluationInfo,
   IEvaluationQuestionsInfo,
   IStudentAnswer,
-  ISubmissionTypeEnum,
+  ISubmissionTypeEnum
 } from '../types/services/evaluation.types';
 import ContentSpan from '../views/evaluation/ContentSpan';
 import Button from './Atoms/custom/Button';
 import FileUploader from './Atoms/Input/FileUploader';
 import Heading from './Atoms/Text/Heading';
 import TextAreaMolecule from './Molecules/input/TextAreaMolecule';
+
 
 export function SingleQuestionSectionBased({
   question,
@@ -173,11 +173,9 @@ export function SingleQuestionSectionBased({
           {question.attachments &&
             question.attachments?.map((attachment, index) => (
               <a
-                href={`${
-                  import.meta.env.VITE_API_URL
-                }/evaluation-service/api/evaluationQuestions/${
-                  attachment.id
-                }/loadAttachment`}
+                href={`${import.meta.env.VITE_API_URL
+                  }/evaluation-service/api/evaluationQuestions/${attachment.id
+                  }/loadAttachment`}
                 key={attachment.id}
                 target="_blank"
                 download
@@ -188,10 +186,9 @@ export function SingleQuestionSectionBased({
         </div>
       )}
 
-      {evaluation.submision_type == ISubmissionTypeEnum.FILE && (
+      {evaluation.submision_type === ISubmissionTypeEnum.FILE && (
         <div className="flex items-center py-5">
           <FileUploader
-            multiple
             allowPreview={false}
             handleUpload={(filelist) => {
               handleUpload(filelist);
@@ -204,18 +201,16 @@ export function SingleQuestionSectionBased({
           </FileUploader>
           {previoustudentAnswers
             .find((item) => item.evaluation_question.id == question.id)
-            ?.student_answer_attachments.map((ans) => (
+            ?.student_answer_attachments.map((attachment) => (
               <a
-                href={`${
-                  import.meta.env.VITE_API_URL
-                }/evaluation-service/api/evaluationQuestions/${
-                  ans.attachment.id
-                }/loadAttachment`}
-                key={ans.attachment.id}
+                href={`${import.meta.env.VITE_API_URL
+                  }/evaluation-service/api/evaluationQuestions/${attachment.id
+                  }/loadAttachment`}
+                key={attachment.id}
                 target="_blank"
                 download
                 rel="noreferrer">
-                {index + 1}. {ans.attachment.name}
+                {index + 1}. {attachment.name}
               </a>
             ))}
         </div>
