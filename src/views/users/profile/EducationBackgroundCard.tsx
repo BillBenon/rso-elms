@@ -1,5 +1,6 @@
 import moment from 'moment';
 import React from 'react';
+import { Link, useRouteMatch } from 'react-router-dom';
 
 import Badge from '../../../components/Atoms/custom/Badge';
 import Button from '../../../components/Atoms/custom/Button';
@@ -10,6 +11,7 @@ import { PersonInfo } from '../../../types/services/user.types';
 import { titleCase } from '../../../utils/getOption';
 
 function EducationBackgroundCard({ person }: { person: PersonInfo }) {
+  const { url } = useRouteMatch();
   const experience =
     experienceStore.getPersonExperiences(person.id + '').data?.data.data || [];
   return (
@@ -18,7 +20,9 @@ function EducationBackgroundCard({ person }: { person: PersonInfo }) {
         Experiences
       </Heading>
       <div className="flex flex-col items-end -mt-16 mb-6">
-        <Button>Add Experience</Button>
+        <Link to={`${url}/new-experience`}>
+          <Button>Add Experience</Button>
+        </Link>
       </div>
       {experience.length === 0 ? (
         <Badge
@@ -58,7 +62,9 @@ function EducationBackgroundCard({ person }: { person: PersonInfo }) {
               </p>
             </div>
             <div className="flex flex-col items-end mt-2">
-              <Button styleType="outline">Edit</Button>
+              <Link to={`${url}/edit-experience/${exp.id}`}>
+                <Button styleType="outline">Edit</Button>
+              </Link>
             </div>
           </div>
         ))

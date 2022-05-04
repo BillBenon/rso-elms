@@ -68,7 +68,8 @@ function UpdatePhotoProfile({ user }: { user: UserInfo }) {
   return (
     <div className="flex flex-col items-center">
       <Heading className="py-4">
-        {user.first_name + ' ' + user.last_name}&apos;s profile
+        {user.person?.current_rank?.name || '' + user.first_name + ' ' + user.last_name}
+        &apos;s profile
       </Heading>
       <div className="flex flex-col items-center w-32">
         <Avatar

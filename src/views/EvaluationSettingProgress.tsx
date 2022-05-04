@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+
 import Loader from '../components/Atoms/custom/Loader';
 import NoDataAvailable from '../components/Molecules/cards/NoDataAvailable';
 import Table from '../components/Molecules/table/Table';
@@ -54,7 +55,9 @@ export default function EvaluationSettingProgress() {
 
           //request two
           const user = await userService.getUserByid(subj.instructor_subject_assignment);
-          temp.instructor = `${user.data?.data.first_name} ${user.data?.data.last_name}`;
+          temp.instructor = `${user.data?.data.person?.current_rank?.name || ''} ${
+            user.data?.data.first_name
+          } ${user.data?.data.last_name}`;
           filteredInfo.push(temp);
         }
 

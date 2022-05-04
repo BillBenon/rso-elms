@@ -28,7 +28,8 @@ function UserRoleCard({ user }: { user: UserInfo }) {
   return (
     <div className="max-w-sm py-4 px-6 bg-main rounded-md overflow-auto">
       <Heading fontWeight="semibold" fontSize="base" className="pt-6 pb-7">
-        {user.first_name + ' ' + user.last_name}&apos;s roles
+        {user.person?.current_rank?.name || ''} {user.first_name + ' ' + user.last_name}
+        &apos;s roles
       </Heading>
       <div className="bg-secondary py-5">
         {data?.data.data.length === 0 ? (

@@ -179,7 +179,7 @@ export default function Navigation({
                     </button>
                     <div className="pl-2">
                       <p className="capitalize">{user?.username}</p>
-                      <p className="text-xs pt-1 text-gray-300">
+                      <p className="text-xs pt-1 text-main">
                         {picked_role?.name
                           ? picked_role.name
                           : user?.user_type.replaceAll('_', ' ')}

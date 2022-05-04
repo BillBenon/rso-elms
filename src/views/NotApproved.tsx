@@ -51,9 +51,7 @@ function NotApproved() {
               alt="academy logo"
               bgColor="none">
               <span className="font-semibold text-lg text-primary-500">
-                {display_name ||
-                  user?.institution_name ||
-                  'National Intelligence and Security Service'}
+                {display_name || user?.institution_name || ''}
               </span>
             </AcademyProfileCard>
           </div>
@@ -63,9 +61,7 @@ function NotApproved() {
               src="/images/rdf-logo.png"
               alt="academy logo"
               bgColor="none">
-              <span className="font-semibold text-lg text-primary-500">
-                National Intelligence and Security Service
-              </span>
+              <span className="font-semibold text-lg text-primary-500"></span>
             </AcademyProfileCard>
           </div>
         )}

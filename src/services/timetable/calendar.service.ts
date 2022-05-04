@@ -6,7 +6,6 @@ import {
   CreateEventSchedule,
   DateRange,
   ScheduleInfo,
-  ScheduleStatus,
 } from '../../types/services/schedule.types';
 
 class ScheduleService {

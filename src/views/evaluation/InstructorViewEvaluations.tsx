@@ -211,7 +211,7 @@ export default function InstructorViewEvaluations() {
                   />
 
                   <div className="flex gap-4">
-                    <Permission privilege={Privileges.CAN_CREATE_EVALUATION_TEMPLATE}>
+                    <Permission privilege={Privileges.CAN_MANAGE_EVALUATIONS}>
                       <Button
                         className="self-start"
                         styleType="outline"

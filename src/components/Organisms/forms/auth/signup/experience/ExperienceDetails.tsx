@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
+import { queryClient } from '../../../../../../plugins/react-query';
+import { ParamType } from '../../../../../../types';
 import { ExperienceType } from '../../../../../../types/services/experience.types';
 import CompleteProfileHeader from '../../../../../Molecules/CompleteProfileHeader';
 import Stepper from '../../../../../Molecules/Stepper/Stepper';
 import OtherDetails from '../personal/OtherDetails';
 import ExperienceStep from './ExperienceStep';
 
-function ExperienceDetails() {
+function ExperienceDetails({ showHeader = true }: { showHeader?: boolean }) {
+  const { id } = useParams<ParamType>();
   const [currentStep, setCurrentStep] = useState(0);
   const [completeStep, setCompleteStep] = useState(0);
   const history = useHistory();
@@ -33,16 +36,22 @@ function ExperienceDetails() {
 
   async function finishSteps(isComplete: boolean) {
     if (isComplete) setCompleteStep((completeStep) => completeStep + 1);
-    history.goBack();
-    // history.push('/complete-more');
+    if (showHeader) {
+      history.goBack();
+    } else {
+      queryClient.invalidateQueries(['user/id', id]);
+      history.push(`/dashboard/user/${id}/profile?me=true`);
+    }
   }
   return (
     <div className="bg-main">
-      <CompleteProfileHeader
-        title={'Add your experiences'}
-        details={'Fill in the form with all your experiences'}
-      />
-      <div className="p-10 md:px-24 md:py-3">
+      {showHeader && (
+        <CompleteProfileHeader
+          title={'Add your experiences'}
+          details={'Fill in the form with all your experiences'}
+        />
+      )}
+      <div className={`p-10 md:px-24 md:py-3 ${!showHeader ? 'md:pt-12' : ''}`}>
         <Stepper
           isVertical
           currentStep={currentStep}

@@ -22,7 +22,7 @@ import {
   ProgramType,
   UpdateProgramInfo,
 } from '../../types/services/program.types';
-import { UserType } from '../../types/services/user.types';
+import { UserInfo, UserType } from '../../types/services/user.types';
 import { getDropDownOptions, getDropDownStatusOptions } from '../../utils/getOption';
 import { programSchema } from '../../validations/program.validation';
 
@@ -41,7 +41,18 @@ export default function UpdateAcademicProgram<E>({
     { page: 0, pageSize: 1000, sortyBy: 'username' },
   );
 
-  const instructors = users?.data.data.content;
+  const instructors = users?.data.data.content || [];
+
+  const rankedInstructors = instructors.filter((inst) => inst.person.current_rank) || [];
+  const unrankedInstructors =
+    instructors.filter(
+      (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+    ) || [];
+
+  rankedInstructors.sort(function (a, b) {
+    return a.person.current_rank?.priority - b.person.current_rank?.priority;
+  });
+  const finalInstructors = rankedInstructors.concat(unrankedInstructors);
 
   const { data } = programStore.getProgramById(id);
 
@@ -177,14 +188,18 @@ export default function UpdateAcademicProgram<E>({
             error={errors.in_charge_id}
             hasError={errors.in_charge_id !== ''}
             defaultValue={getDropDownOptions({
-              inputs: instructors || [],
+              inputs: finalInstructors || [],
               labelName: ['username'],
             }).find((incharge) => incharge.value === data?.data.data.current_admin_names)}
             width="64"
             placeholder="Select incharge"
             options={getDropDownOptions({
-              inputs: instructors || [],
+              inputs: finalInstructors || [],
               labelName: ['first_name', 'last_name'],
+              //@ts-ignore
+              getOptionLabel: (stud: UserInfo) =>
+                stud.person.current_rank.name ||
+                '' + ' ' + stud.first_name + ' ' + stud.last_name,
             })}
             name="in_charge_id"
             handleChange={(e: ValueType) => handleChange(e)}>

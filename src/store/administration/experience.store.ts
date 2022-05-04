@@ -6,6 +6,17 @@ class ExperienceStore {
   create() {
     return useMutation(experienceService.create);
   }
+  addFile() {
+    return useMutation(experienceService.addFile);
+  }
+
+  downloadFile(materialId: string, enabled = true) {
+    return useQuery(
+      ['download/experience', materialId],
+      () => experienceService.downloadFile(materialId),
+      { enabled },
+    );
+  }
   getAll() {
     return useQuery('experiences', experienceService.fetchAll);
   }

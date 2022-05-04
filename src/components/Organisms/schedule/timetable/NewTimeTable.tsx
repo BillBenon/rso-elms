@@ -21,6 +21,7 @@ import {
   ICreateTimeTableActivity,
   methodOfInstruction,
 } from '../../../../types/services/schedule.types';
+import { calculateNumPeriods } from '../../../../utils/calendar';
 import { formatDateToYyMmDd } from '../../../../utils/date-helper';
 import { getDropDownStatusOptions } from '../../../../utils/getOption';
 import { randomString } from '../../../../utils/random';
@@ -112,6 +113,7 @@ export default function NewTimeTable({ activityId, isUpdating = false }: IProps)
 
   async function handleSubmit<T>(e: FormEvent<T>) {
     e.preventDefault();
+
     // let timetable = values.repeatingDays.map((d) => ({
     //   dayOfWeek: d,
     //   endHour: values.endHour,
@@ -120,6 +122,7 @@ export default function NewTimeTable({ activityId, isUpdating = false }: IProps)
 
     let data: ICreateTimeTableActivity = {
       ...values,
+      periods: calculateNumPeriods(values.startHour, values.endHour),
       activityDate: formatDateToYyMmDd(values.activityDate),
     };
 
@@ -311,7 +314,9 @@ function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) 
           handleChange={handleChange}
           options={
             users?.map((user) => ({
-              label: `${user.user.first_name} ${user.user.last_name}`,
+              label: `${user.user.person?.current_rank?.name || ''} ${
+                user.user.first_name
+              } ${user.user.last_name}`,
               value: user.user.id,
             })) as SelectData[]
           }
@@ -382,14 +387,14 @@ function SecondStep({ values, handleChange, handleSubmit, setCurrentStep }: ISte
         handleChange={handleChange}>
         End hour
       </InputMolecule>
-      <InputMolecule
+      {/* <InputMolecule
         name="periods"
         placeholder="Periods"
         type="number"
         value={values.periods}
         handleChange={handleChange}>
         Number of periods
-      </InputMolecule>
+      </InputMolecule> */}
       <InputMolecule
         error={errors.dressCode}
         required={false}

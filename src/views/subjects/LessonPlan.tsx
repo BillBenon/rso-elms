@@ -132,6 +132,7 @@ function LessonPlan() {
                         <div className="flex gap-2 items-center">
                           <Avatar src="/images/default-pic.png" alt="profile" size="34" />
                           <Heading fontSize="base">
+                            {lp.instructor.user.person?.current_rank?.name || ''}{' '}
                             {lp.instructor.user.first_name +
                               ' ' +
                               lp.instructor.user.last_name}

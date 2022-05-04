@@ -1,10 +1,22 @@
+import { AxiosResponse } from 'axios';
 import React from 'react';
+import { UseMutateFunction } from 'react-query';
 
-import { CommonFormProps, CommonStepProps } from '../../../../../../types';
+import { CommonFormProps, CommonStepProps, Response } from '../../../../../../types';
+import {
+  CreateNextOfKin,
+  NextKinInfo,
+} from '../../../../../../types/services/usernextkin.types';
 import NextOfKinDetails from './NextOfKinDetails';
 
 interface INextOfKinStep<E> extends CommonStepProps, CommonFormProps<E> {
   skip?: () => void;
+  mutate: UseMutateFunction<
+    AxiosResponse<Response<NextKinInfo>, any>,
+    unknown,
+    CreateNextOfKin,
+    unknown
+  >;
 }
 
 function NextOfKinStep<E>({
@@ -13,6 +25,7 @@ function NextOfKinStep<E>({
   prevStep,
   display_label,
   type,
+  mutate,
 }: INextOfKinStep<E>) {
   return (
     <NextOfKinDetails
@@ -22,6 +35,7 @@ function NextOfKinStep<E>({
       nextStep={nextStep}
       prevStep={prevStep}
       fetched_id={''}
+      mutate={mutate}
     />
   );
 }
