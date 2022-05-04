@@ -3,6 +3,7 @@ import React, { FormEvent, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Route, Switch, useHistory, useParams, useRouteMatch } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -159,15 +160,15 @@ export default function AllDSAssessment() {
                   <Icon name="chevron-left" fill="primary" size={16} />
                   Back
                 </Button>
-                {/* <Permission privilege={Privileges.CAN_WRITE_DS_CRITIQUE}> */}
-                <Button
-                  styleType="outline"
-                  onClick={() => {
-                    setOpen(!open);
-                  }}>
-                  Write DS Critics
-                </Button>
-                {/* </Permission> */}
+                <Permission privilege={Privileges.CAN_WRITE_WEEKLY_CRITICS}>
+                  <Button
+                    styleType="outline"
+                    onClick={() => {
+                      setOpen(!open);
+                    }}>
+                    Write DS Critics
+                  </Button>
+                </Permission>
               </div>
               {isIdle || isLoading ? (
                 <Loader />
@@ -176,7 +177,7 @@ export default function AllDSAssessment() {
                   icon="academy"
                   fill={false}
                   showButton={false}
-                  title={'Report has not been processed'}
+                  title={'DS Critics report has not been processed'}
                   description="This report has not been processed yet or you are currently not allowed to see it"
                   privilege={Privileges.CAN_ACCESS_REPORTS}
                 />

@@ -10,9 +10,10 @@ import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import TabNavigation, { TabType } from '../../components/Molecules/tabs/TabNavigation';
 import useAuthenticator from '../../hooks/useAuthenticator';
+import usePickedRole from '../../hooks/usePickedRole';
 import { classStore, getStudentsByClass } from '../../store/administration/class.store';
 import { getClassTermlyOverallReport } from '../../store/evaluation/school-report.store';
-import { ValueType } from '../../types';
+import { Privileges, ValueType } from '../../types';
 import { IPerformanceTable } from '../../types/services/report.types';
 import { UserType } from '../../types/services/user.types';
 import { calculateGrade } from '../../utils/school-report';
@@ -159,9 +160,9 @@ function OveralClassPerformance() {
 export default function ClassPeriodPerformance() {
   const { url, path } = useRouteMatch();
 
-  // const user_role = usePickedRole();
-  // const user_privileges = user_role?.role_privileges?.map((role) => role.name);
-  // const hasPrivilege = (privilege: Privileges) => user_privileges?.includes(privilege);
+  const user_role = usePickedRole();
+  const user_privileges = user_role?.role_privileges?.map((role) => role.name);
+  const hasPrivilege = (privilege: Privileges) => user_privileges?.includes(privilege);
 
   const tabs: TabType[] = [
     { label: 'Performance per subject', href: url },
@@ -171,7 +172,7 @@ export default function ClassPeriodPerformance() {
     {
       label: 'DS Weekly Critics',
       href: `${url}/all-critics`,
-      // privilege: Privileges.CAN_RECEIVE_WEEKLY_CRITICS,
+      privilege: Privileges.CAN_RECEIVE_WEEKLY_CRITICS,
     },
   ];
 
@@ -179,12 +180,10 @@ export default function ClassPeriodPerformance() {
     <TabNavigation tabs={tabs}>
       <Switch>
         <Route path={`${path}`} exact component={OveralClassPerformance} />
-        {/* {hasPrivilege(Privileges.CAN_RECEIVE_WEEKLY_CRITICS) && ( */}
-        <Route path={`${path}/all-critics`} component={AllDSAssessment} />
-        {/* )} */}
-        {/* {hasPrivilege(Privileges.CAN_RECEIVE_WEEKLY_CRITICS) && ( */}
+        {hasPrivilege(Privileges.CAN_RECEIVE_WEEKLY_CRITICS) && (
+          <Route path={`${path}/all-critics`} component={AllDSAssessment} />
+        )}
         <Route path={`${path}/deliberation`} component={ClassFullYearDeliberation} />
-        {/* )} */}
         <Route path={`${path}/by-module`} component={TermModulePerfomance} />
         <Route
           path={`${path}/by-evaluation`}

@@ -13,6 +13,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import Tiptap from '../../components/Molecules/editor/Tiptap';
 import PopupMolecule from '../../components/Molecules/Popup';
 import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
+import useAuthenticator from '../../hooks/useAuthenticator';
 import usePickedRole from '../../hooks/usePickedRole';
 import { queryClient } from '../../plugins/react-query';
 import academyStore from '../../store/administration/academy.store';
@@ -114,6 +115,7 @@ export default function EndTermForm() {
     return null;
   };
 
+  const { user: currentUser } = useAuthenticator();
   const { data: classInfo } = classStore.getClassById(classId);
   const { data: studentInfo } = intakeProgramStore.getStudentById(studentId);
 
@@ -185,6 +187,10 @@ export default function EndTermForm() {
   let elements = document.getElementsByClassName('reportHide');
   let bluebackgrounds = document.getElementsByClassName('blueBackground');
   let redbackgrounds = document.getElementsByClassName('redBackground');
+
+  const allowedToChangeInfo = currentUser
+    ? studentInfo?.data.data.user.id !== currentUser.id
+    : false;
 
   return (
     <div className="max-w-4xl">
@@ -322,38 +328,47 @@ export default function EndTermForm() {
                               viewMenu={false}
                               handleChange={() => {}}
                             />
-
-                            <Button
-                              styleType="outline"
-                              className="mt-5 reportHide"
-                              onClick={() => {
-                                setSubjective({
-                                  id: subjective?.id + '',
-                                  content: subjective?.subjective_value + '',
-                                });
-                                setSection(TermFormSection[section]);
-                                setEditOpen(!editOpen);
-                              }}>
-                              <Heading fontSize="sm">Edit</Heading>
-                            </Button>
+                            {allowedToChangeInfo && (
+                              <Permission
+                                privilege={Privileges.CAN_WRITE_INFORMATIVE_REPORT}>
+                                <Button
+                                  styleType="outline"
+                                  className="mt-5 reportHide"
+                                  onClick={() => {
+                                    setSubjective({
+                                      id: subjective?.id + '',
+                                      content: subjective?.subjective_value + '',
+                                    });
+                                    setSection(TermFormSection[section]);
+                                    setEditOpen(!editOpen);
+                                  }}>
+                                  <Heading fontSize="sm">Edit</Heading>
+                                </Button>
+                              </Permission>
+                            )}
                           </div>
                         ) : (
                           <div className="h-48 max-h-48 flex items-center py-10 gap-2 reportHide">
                             <Heading fontSize="sm">No subjective added</Heading>
-                            <span>-</span>
-                            <Button
-                              styleType="text"
-                              onClick={() => {
-                                setOpen(!open);
-                                setSection(TermFormSection[section]);
-                              }}>
-                              <Heading
-                                fontSize="sm"
-                                color="primary"
-                                fontWeight="semibold">
-                                add one here
-                              </Heading>
-                            </Button>
+                            {allowedToChangeInfo && (
+                              <Permission
+                                privilege={Privileges.CAN_WRITE_INFORMATIVE_REPORT}>
+                                <span>-</span>
+                                <Button
+                                  styleType="text"
+                                  onClick={() => {
+                                    setOpen(!open);
+                                    setSection(TermFormSection[section]);
+                                  }}>
+                                  <Heading
+                                    fontSize="sm"
+                                    color="primary"
+                                    fontWeight="semibold">
+                                    add one here
+                                  </Heading>
+                                </Button>
+                              </Permission>
+                            )}
                           </div>
                         )}
                       </div>
@@ -399,7 +414,7 @@ export default function EndTermForm() {
           </div>
         </Tab>
 
-        <Tab label="Management View">
+        <Tab label={allowedToChangeInfo ? 'Management View' : ''}>
           {reportData?.data.data ? (
             <div className="text-right mb-5">
               <Permission privilege={Privileges.CAN_DOWNLOAD_REPORTS}>
