@@ -259,187 +259,191 @@ function NextOfKinDetails<E>({
     [],
   );
   return (
-    <div className="flex flex-col gap-2 ">
-      <form onSubmit={moveForward}>
-        <div className="grid grid-cols-1 md:grid-cols-2">
-          {!isVertical && (
-            <Heading fontSize="base" fontWeight="semibold">
-              {display_label}
-            </Heading>
-          )}
-          <DropdownMolecule
-            placeholder={'Select your reference'}
-            handleChange={handleChange}
-            name="doc_type"
-            defaultValue={getDropDownStatusOptions(DocType).find(
-              (doc) => doc.value === details.doc_type,
-            )}
-            options={getDropDownStatusOptions(DocType)}>
-            Reference Number
-          </DropdownMolecule>
+    <div className={`flex flex-col gap-4 ${!isVertical && 'pt-8'}`}>
+      <div className="">
+        {!isVertical && (
+          <Heading fontSize="base" fontWeight="semibold">
+            {display_label}
+          </Heading>
+        )}
+        <form onSubmit={moveForward}>
+          <div className="grid grid-cols-1 md:grid-cols-2">
+            <div>
+              <DropdownMolecule
+                placeholder={'Select your reference'}
+                handleChange={handleChange}
+                name="doc_type"
+                defaultValue={getDropDownStatusOptions(DocType).find(
+                  (doc) => doc.value === details.doc_type,
+                )}
+                options={getDropDownStatusOptions(DocType)}>
+                Reference Number
+              </DropdownMolecule>
 
-          <InputMolecule
-            // ref={inputRef}
-            required={false}
-            error={errors.nid}
-            name="nid"
-            // onBlur={(e) => console.log('called', e.target.value || '')}
-            // @ts-ignore
-            onBlur={(e) => setDetails({ ...details, nid: e.target.value || '' })}
-            type="text"
-            value={details.nid}
-            placeholder={`Enter ${details.doc_type.replaceAll('_', ' ')} number`}
-            handleChange={() => {}}>
-            {details.doc_type.replaceAll('_', ' ')}
-          </InputMolecule>
-          {details.doc_type == DocType.PASSPORT && (
-            <DateMolecule
-              error={errors.document_expire_on}
-              handleChange={handleChange}
-              name="document_expire_on"
-              defaultValue={details.document_expire_on}
-              endYear={moment().year() + 50}
-              startYear={moment().year()}
-              width="60 md:w-80">
-              Passport expiry date
-            </DateMolecule>
-          )}
+              <InputMolecule
+                // ref={inputRef}
+                required={false}
+                error={errors.nid}
+                name="nid"
+                // onBlur={(e) => console.log('called', e.target.value || '')}
+                // @ts-ignore
+                onBlur={(e) => setDetails({ ...details, nid: e.target.value || '' })}
+                type="text"
+                value={details.nid}
+                placeholder={`Enter ${details.doc_type.replaceAll('_', ' ')} number`}
+                handleChange={() => {}}>
+                {details.doc_type.replaceAll('_', ' ')}
+              </InputMolecule>
+              {details.doc_type == DocType.PASSPORT && (
+                <DateMolecule
+                  error={errors.document_expire_on}
+                  handleChange={handleChange}
+                  name="document_expire_on"
+                  defaultValue={details.document_expire_on}
+                  endYear={moment().year() + 50}
+                  startYear={moment().year()}
+                  width="60 md:w-80">
+                  Passport expiry date
+                </DateMolecule>
+              )}
 
-          <InputMolecule
-            error={errors.first_name}
-            required={false}
-            name="first_name"
-            placeholder="Next of Kin's First name"
-            value={details.first_name}
-            handleChange={handleChange}>
-            First Name
-          </InputMolecule>
-          <InputMolecule
-            error={errors.last_name}
-            required={false}
-            name="last_name"
-            placeholder="Next of Kin's Last name"
-            value={details.last_name}
-            handleChange={handleChange}>
-            Last Name
-          </InputMolecule>
-          {/* </div>
+              <InputMolecule
+                required={false}
+                name="first_name"
+                placeholder="Next of Kin's First name"
+                value={details.first_name}
+                handleChange={handleChange}>
+                First Name
+              </InputMolecule>
+              <InputMolecule
+                error={errors.last_name}
+                required={false}
+                name="last_name"
+                placeholder="Next of Kin's Last name"
+                value={details.last_name}
+                handleChange={handleChange}>
+                Last Name
+              </InputMolecule>
+              {/* </div>
         <div className="grid grid-cols-1 md:grid-cols-2 "> */}
-          <InputMolecule
-            error={errors.email}
-            readOnly={nextKinToUpdate?.nextOfKin.email ? details.email !== '' : false}
-            required={false}
-            name="email"
-            value={details.email}
-            type="email"
-            placeholder="username@example.com"
-            handleChange={handleChange}>
-            Email
-          </InputMolecule>
-          <InputMolecule
-            error={errors.phone_number}
-            required={false}
-            readOnly={
-              nextKinToUpdate?.nextOfKin.phone_number
-                ? details.phone_number !== ''
-                : false
-            }
-            name="phone_number"
-            value={details.phone_number}
-            placeholder="07---------"
-            handleChange={handleChange}>
-            Phone number
-          </InputMolecule>
-          <DropdownMolecule
-            defaultValue={getDropDownStatusOptions(MaritalStatus).find(
-              (marital_status) => marital_status.value === details.marital_status,
-            )}
-            options={getDropDownStatusOptions(MaritalStatus)}
-            name="marital_status"
-            placeholder={'Select your marital status'}
-            handleChange={handleChange}>
-            Marital Status
-          </DropdownMolecule>
-          {(details.marital_status === MaritalStatus.MARRIED ||
-            details.marital_status === MaritalStatus.WIDOWED) && (
-            <InputMolecule
-              error={errors.spouse_name}
-              required={false}
-              name="spouse_name"
-              value={details.spouse_name}
-              handleChange={handleChange}>
-              Spouse Name
-            </InputMolecule>
-          )}
-          {/* </div>
+              <InputMolecule
+                error={errors.email}
+                readOnly={nextKinToUpdate?.nextOfKin.email ? details.email !== '' : false}
+                required={false}
+                name="email"
+                value={details.email}
+                type="email"
+                placeholder="username@example.com"
+                handleChange={handleChange}>
+                Email
+              </InputMolecule>
+              <InputMolecule
+                error={errors.phone_number}
+                required={false}
+                readOnly={
+                  nextKinToUpdate?.nextOfKin.phone_number
+                    ? details.phone_number !== ''
+                    : false
+                }
+                name="phone_number"
+                value={details.phone_number}
+                placeholder="07---------"
+                handleChange={handleChange}>
+                Phone number
+              </InputMolecule>
+            </div>
+            <div>
+              <DropdownMolecule
+                defaultValue={getDropDownStatusOptions(MaritalStatus).find(
+                  (marital_status) => marital_status.value === details.marital_status,
+                )}
+                options={getDropDownStatusOptions(MaritalStatus)}
+                name="marital_status"
+                placeholder={'Select your marital status'}
+                handleChange={handleChange}>
+                Marital Status
+              </DropdownMolecule>
+              {(details.marital_status === MaritalStatus.MARRIED ||
+                details.marital_status === MaritalStatus.WIDOWED) && (
+                <InputMolecule
+                  error={errors.spouse_name}
+                  required={false}
+                  name="spouse_name"
+                  value={details.spouse_name}
+                  handleChange={handleChange}>
+                  Next of Kin Spouse Name
+                </InputMolecule>
+              )}
+              <RadioMolecule
+                className="pb-2"
+                defaultValue={details.sex}
+                options={getDropDownStatusOptions(GenderStatus)}
+                value={details.sex}
+                handleChange={handleChange}
+                name="sex">
+                Gender
+              </RadioMolecule>
+              <InputMolecule
+                error={errors.relationship}
+                required={false}
+                name="relationship"
+                placeholder="Relationship between you and next of kin"
+                value={details.relationship}
+                handleChange={handleChange}>
+                Relationship
+              </InputMolecule>
+              {/* </div>
         <div className="grid grid-cols-1 md:grid-cols-2"> */}
-          <RadioMolecule
-            className="pb-2"
-            defaultValue={details.sex}
-            options={getDropDownStatusOptions(GenderStatus)}
-            value={details.sex}
-            handleChange={handleChange}
-            name="sex">
-            Gender
-          </RadioMolecule>
-          <InputMolecule
-            error={errors.relationship}
-            required={false}
-            name="relationship"
-            placeholder="Relationship between you and next of kin"
-            value={details.relationship}
-            handleChange={handleChange}>
-            Relationship
-          </InputMolecule>
-          {/* </div>
-        <div className="grid grid-cols-1 md:grid-cols-2"> */}
-          <DropdownMolecule
-            width="60 md:w-80"
-            name="residence"
-            placeholder="Select the Nation"
-            defaultValue={options.find(
-              (national) => national.value === nationality.residence,
-            )}
-            handleChange={nationhandleChange}
-            options={options}>
-            Place of residence
-          </DropdownMolecule>
-          {nationality.residence == 'Rwanda' && (
-            <LocationMolecule
-              error={errors.residence_location_id}
-              placeholder="Select place of residence"
-              name="residence_location_id"
-              handleChange={handleChange}
-            />
-          )}
-          <InputMolecule
-            readOnly={
-              nextKinToUpdate?.nextOfKin.place_of_residence
-                ? details.place_of_residence !== ''
-                : false
-            }
-            required={false}
-            name="place_of_residence"
-            placeholder="Location of next of kin"
-            value={details.place_of_residence}
-            handleChange={handleChange}>
-            Other Location
-            <span className="text-txt-secondary"> (State / Region)</span>
-          </InputMolecule>
-        </div>
-        <div className="flex justify-between w-80">
-          {prevStep && (
-            <Button
-              styleType="text"
-              hoverStyle="no-underline"
-              color="txt-secondary"
-              onClick={() => moveBack()}>
-              Back
-            </Button>
-          )}
-          <Button type="submit">Save</Button>
-        </div>
-      </form>
+              <DropdownMolecule
+                width="60 md:w-80"
+                name="residence"
+                placeholder="Select the Nation"
+                defaultValue={options.find(
+                  (national) => national.value === nationality.residence,
+                )}
+                handleChange={nationhandleChange}
+                options={options}>
+                Place of residence
+              </DropdownMolecule>
+              {nationality.residence == 'Rwanda' && (
+                <LocationMolecule
+                  error={errors.residence_location_id}
+                  placeholder="Select place of residence"
+                  name="residence_location_id"
+                  handleChange={handleChange}
+                />
+              )}
+              <InputMolecule
+                readOnly={
+                  nextKinToUpdate?.nextOfKin.place_of_residence
+                    ? details.place_of_residence !== ''
+                    : false
+                }
+                required={false}
+                name="place_of_residence"
+                placeholder="Location of next of kin"
+                value={details.place_of_residence}
+                handleChange={handleChange}>
+                Other Location
+                <span className="text-txt-secondary"> (State / Region)</span>
+              </InputMolecule>
+            </div>
+
+            <div className="flex justify-between w-80">
+              {prevStep && (
+                <Button
+                  styleType="text"
+                  hoverStyle="no-underline"
+                  color="txt-secondary"
+                  onClick={() => moveBack()}>
+                  Back
+                </Button>
+              )}
+              <Button type="submit">Save</Button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

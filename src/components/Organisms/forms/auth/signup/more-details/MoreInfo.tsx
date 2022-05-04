@@ -31,7 +31,7 @@ function MoreInfo({
   const { mutate } = usernextkinStore.createUserNextKin();
 
   return (
-    <div className="bg-main p-8 md:px-40 md:py-16 ">
+    <div className="bg-main ">
       {showHeader && (
         <CompleteProfileHeader
           title={'Add your Next of Kin'}
