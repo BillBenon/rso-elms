@@ -101,10 +101,28 @@ export default function FieldMarking({ evaluationId }: PropsType) {
     for (let index = 0; index < markedStudents.length; index++) {
       markedIds.push(markedStudents[index].student.admin_id);
     }
-    studentsData?.data.data.forEach((std) => {
+
+    const rankedStudents =
+      studentsData?.data.data.filter((stud) => stud.student.user.person.current_rank) ||
+      [];
+    const unrankedStudents =
+      studentsData?.data.data.filter(
+        (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedStudents.sort(function (a, b) {
+      return (
+        a.student.user.person.current_rank?.priority -
+        b.student.user.person.current_rank?.priority
+      );
+    });
+    const finalStudents = rankedStudents.concat(unrankedStudents);
+
+    finalStudents.forEach((std) => {
       if (!markedIds.includes(std.student.id + '')) {
         newState.push({
           id: std.student.id.toString(),
+          rank: std.student.user.person?.current_rank?.name || '',
           first_name: std.student.user.first_name,
           last_name: std.student.user.last_name,
           out_of: evaluationInfo?.total_mark + '',

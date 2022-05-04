@@ -88,6 +88,18 @@ function AddSubjectToPeriod() {
   const { data: instructors, isLoading: instLoading } =
     enrollmentStore.getInstructorsByModule(pickedModule?.module.id + '');
 
+  const rankedInstructors =
+    instructors?.data.data.filter((inst) => inst.user.person.current_rank) || [];
+  const unrankedInstructors =
+    instructors?.data.data.filter(
+      (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+    ) || [];
+
+  rankedInstructors.sort(function (a, b) {
+    return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+  });
+  const finalInstructors = rankedInstructors.concat(unrankedInstructors);
+
   function submitForm<T>(e: FormEvent<T>) {
     e.preventDefault(); // prevent page to reload:
     const validatedForm = subjectPrdSchema.validate(subjectPrd, {
@@ -167,10 +179,11 @@ function AddSubjectToPeriod() {
         name="inchargeId"
         placeholder={instLoading ? 'Loading ' + t('Instructor') : 'select incharge'}
         options={getDropDownOptions({
-          inputs: instructors?.data.data || [],
+          inputs: finalInstructors || [],
           //@ts-ignore
           getOptionLabel: (inst: ModuleInstructors) =>
-            inst.user.first_name + ' ' + inst.user.last_name,
+            inst.user.person.current_rank.name ||
+            '' + ' ' + inst.user.first_name + ' ' + inst.user.last_name,
         })}>
         {t('Instructor')} Incharge
       </DropdownMolecule>

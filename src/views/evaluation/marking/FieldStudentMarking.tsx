@@ -98,9 +98,12 @@ export default function FieldStudentMarking() {
         <div className={`flex flex-col gap-4`}>
           <TableHeader
             title={
-              studentInfo?.data.data.user.last_name +
-              ' ' +
-              studentInfo?.data.data.user.first_name
+              studentInfo?.data.data.user.person?.current_rank?.name ||
+              '' +
+                ' ' +
+                studentInfo?.data.data.user.last_name +
+                ' ' +
+                studentInfo?.data.data.user.first_name
             }
             showBadge={false}
             showSearch={false}>

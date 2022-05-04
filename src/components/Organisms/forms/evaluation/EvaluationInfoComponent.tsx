@@ -32,6 +32,7 @@ import {
   IQuestionaireTypeEnum,
   ISubmissionTypeEnum
 } from '../../../../types/services/evaluation.types';
+import { UserInfo } from '../../../../types/services/user.types';
 import {
   getDropDownOptions,
   getDropDownStatusOptions
@@ -154,10 +155,32 @@ export default function EvaluationInfoComponent() {
 
   useEffect(() => {
     let studentsView: SelectData[] = [];
-    studentsProgram?.data.data.forEach((stud) => {
+
+    const rankedStudents =
+      studentsProgram?.data.data.filter(
+        (stud) => stud.intake_program_student.student.user.person.current_rank,
+      ) || [];
+    const unrankedStudents =
+      studentsProgram?.data.data.filter(
+        (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedStudents.sort(function (a, b) {
+      return (
+        a.intake_program_student.student.user.person.current_rank?.priority -
+        b.intake_program_student.student.user.person.current_rank?.priority
+      );
+    });
+    const finalStudents = rankedStudents.concat(unrankedStudents);
+
+    finalStudents.forEach((stud) => {
       let studentView: SelectData = {
         value: stud.intake_program_student.student.id + '',
-        label: `${stud.intake_program_student.student.user.first_name} ${stud.intake_program_student.student.user.last_name}`,
+        label: `${
+          stud.intake_program_student.student.user.person?.current_rank?.name || ''
+        }  ${stud.intake_program_student.student.user.first_name} ${
+          stud.intake_program_student.student.user.last_name
+        }`,
       };
       studentsView.push(studentView);
     });
@@ -532,7 +555,9 @@ export default function EvaluationInfoComponent() {
                       instructorData[evalMod.subject_academic_year_period.toString()] ||
                       []
                     ).map((instr) => ({
-                      label: `${instr.user.first_name} ${instr.user.last_name}`,
+                      label: `${instr.user.person?.current_rank?.name || ''}  ${
+                        instr.user.first_name
+                      } ${instr.user.last_name}`,
                       value: instr.user.id,
                     })) as SelectData[]
                   }>
@@ -550,6 +575,10 @@ export default function EvaluationInfoComponent() {
                     options={getDropDownOptions({
                       inputs: markers,
                       labelName: ['first_name', 'last_name'],
+                      //@ts-ignore
+                      getOptionLabel: (inst: UserInfo) =>
+                        inst.person?.current_rank?.name ||
+                        '' + ' ' + inst.first_name + ' ' + inst.last_name,
                     })}>
                     Select marker
                   </SelectMolecule>

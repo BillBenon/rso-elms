@@ -138,9 +138,9 @@ export default function EndOfLevelReport() {
             <h2 className="text-sm font-bold ">
               Name:
               <span className="capitalize">
-                {` ${studentInfo?.data.data.user.first_name || '...'} ${
-                  studentInfo?.data.data.user.last_name || '...'
-                }`}
+                {`${studentInfo?.data.data.user.person?.current_rank?.name || '...'} ${
+                  studentInfo?.data.data.user.first_name || '...'
+                } ${studentInfo?.data.data.user.last_name || '...'}`}
               </span>
             </h2>
             <h2 className="text-sm py-2">

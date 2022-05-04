@@ -34,6 +34,7 @@ export interface IManualMarking {
 
 export interface UnMarkedStudent {
   id: string;
+  rank: string;
   first_name: string;
   last_name: string;
   obtained: string;
@@ -79,7 +80,9 @@ export interface StudentMarkingAnswer extends Table {
   marked: boolean;
   evaluation_question: IEvaluationQuestionsInfo;
   multiple_choice_answer: IMultipleChoice;
-  student_answer_attachments: AttachementInfo[];
+  student_answer_attachments: {
+    attachment: AttachementInfo;
+  }[];
   open_answer: string;
 }
 

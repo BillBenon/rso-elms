@@ -295,7 +295,7 @@ export default function EndTermForm() {
                   {studentInfo?.data.data.user.academy.institution.short_name}
                 </div>
                 <div className="border border-black py-1 px-2">
-                  {studentInfo?.data.data.user.person.current_rank?.name}
+                  {studentInfo?.data.data.user.person.current_rank?.name || ''}
                 </div>
                 <div className="border border-black py-1 px-2 capitalize">
                   {studentInfo?.data.data.user.last_name}

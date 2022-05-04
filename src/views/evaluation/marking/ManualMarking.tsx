@@ -30,6 +30,21 @@ export default function ManualMarking({ evaluationId }: PropsType) {
 
   const { data: studentsData, isLoading } = getStudentsByClass(currentClassId) || [];
 
+  const rankedStudents =
+    studentsData?.data.data.filter((stud) => stud.student.user.person.current_rank) || [];
+  const unrankedStudents =
+    studentsData?.data.data.filter(
+      (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
+    ) || [];
+
+  rankedStudents.sort(function (a, b) {
+    return (
+      a.student.user.person.current_rank?.priority -
+      b.student.user.person.current_rank?.priority
+    );
+  });
+  const finalStudents = rankedStudents.concat(unrankedStudents);
+
   const { data: manualMarkingData } = markingStore.getManualMarkingMarks(
     evaluationId,
     currentClassId,
@@ -89,7 +104,7 @@ export default function ManualMarking({ evaluationId }: PropsType) {
         })) || [];
     } else {
       newState =
-        studentsData?.data.data.map((std) => ({
+        finalStudents.map((std) => ({
           student_id: std.student.id.toString(),
           evaluation_id: evaluationInfo?.id || '',
           marking_status: IEvaluationStatus.UNMARKED,
@@ -97,7 +112,7 @@ export default function ManualMarking({ evaluationId }: PropsType) {
         })) || [];
     }
     setStudents(newState);
-  }, [evaluationInfo?.id, manualMarkingData, studentsData?.data]);
+  }, [evaluationInfo?.id, finalStudents, manualMarkingData]);
 
   //   console.log(students);
 
@@ -146,9 +161,9 @@ export default function ManualMarking({ evaluationId }: PropsType) {
           description={'Select ' + t('Class') + ' to view '}
         />
       )}
-      {studentsData?.data.data && (
+      {finalStudents && (
         <div>
-          {studentsData?.data.data.length <= 0 ? (
+          {finalStudents.length <= 0 ? (
             <NoDataAvailable
               showButton={false}
               icon="user"
@@ -167,6 +182,7 @@ export default function ManualMarking({ evaluationId }: PropsType) {
             <table className="table-auto border-collapse font-medium bg-main w-2/3">
               <thead>
                 <tr className="text-left text-txt-secondary border-b border-silver">
+                  <th className="px-4 py-5 text-sm font-semibold">Rank</th>
                   <th className="px-4 py-5 text-sm font-semibold">First name</th>
                   <th className="px-4 py-5 text-sm font-semibold">Last name</th>
                   <th className="px-4 py-5 text-sm font-semibold">Obtained</th>
@@ -176,8 +192,11 @@ export default function ManualMarking({ evaluationId }: PropsType) {
               </thead>
 
               <tbody>
-                {studentsData?.data.data.map((stud, i) => (
+                {finalStudents.map((stud, i) => (
                   <tr key={stud.id}>
+                    <td className="px-4 py-5 text-sm font-semibold">
+                      {stud.student.user.person?.current_rank?.name || ''}
+                    </td>
                     <td className="px-4 py-5 text-sm font-semibold">
                       {stud.student.user.first_name}
                     </td>
