@@ -84,3 +84,7 @@ export function formatDateLikeGoogle(date: string) {
 
   return formatedDate.join(' ');
 }
+
+export function removeSeconds(time: string) {
+  return time.split(':').slice(0, 2).join(':');
+}

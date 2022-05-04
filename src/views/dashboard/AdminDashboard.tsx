@@ -20,7 +20,8 @@ import { scheduleStore } from '../../store/timetable/calendar.store';
 import { CommonCardDataType, Link } from '../../types';
 import { IntakeStatus } from '../../types/services/intake.types';
 import { UserType } from '../../types/services/user.types';
-import { formatDateLikeGoogle } from '../../utils/date-helper';
+import { formatCalendarEvents } from '../../utils/calendar';
+import { formatDateLikeGoogle, removeSeconds } from '../../utils/date-helper';
 import { advancedTypeChecker } from '../../utils/getOption';
 
 const list: Link[] = [
@@ -79,7 +80,11 @@ export default function AdminDashboard() {
     setscheduleDate(date);
   };
 
-  const schedules = scheduleStore.getAllSchedules().data?.data.data || [];
+  const schedules = formatCalendarEvents(
+    scheduleStore.getAllSchedules().data?.data.data || [],
+  )
+    .sort((a, b) => b.start.getTime() - a.start.getTime())
+    .slice(0, 3); //.filter((schedule) => schedule.start.getTime() >= scheduleDate.getTime());
 
   return (
     <div className="py-2">
@@ -190,7 +195,7 @@ export default function AdminDashboard() {
               <div className="my-2 w-full flex" key={schedule.id}>
                 <div className="bg-primary-500 rounded-l-lg text-white p-6">
                   <p className="text-sm font-medium">
-                    {formatDateLikeGoogle(new Date().toLocaleDateString()).split(' ')[1]}
+                    {formatDateLikeGoogle(schedule.start.toString()).split(' ')[1]}
                   </p>
                   <p className="text-sm font-medium">
                     {formatDateLikeGoogle(new Date().toLocaleDateString()).split(' ')[0]}
@@ -198,10 +203,12 @@ export default function AdminDashboard() {
                 </div>
                 <div className="bg-gray-50 w-full py-5">
                   <p className="text-gray-400 text-sm font-medium px-4">
-                    {`${schedule.start_hour} - ${schedule.end_hour}`}
+                    {`${removeSeconds(
+                      new Date(schedule.start).toLocaleTimeString(),
+                    )} -${removeSeconds(new Date(schedule.end).toLocaleTimeString())}`}
                   </p>
-                  <div className="pt-2 text-sm font-medium px-4">
-                    {schedule.event.name}
+                  <div className="pt-2 text-sm font-medium px-4 capitalize">
+                    {schedule.title}
                   </div>
                 </div>
               </div>
