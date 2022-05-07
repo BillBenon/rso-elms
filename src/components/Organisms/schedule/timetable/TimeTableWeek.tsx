@@ -87,14 +87,16 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
         </Heading>
         <div className="tt-actions py-4 flex gap-4 justify-end">
           {week.status === TimetableStatus.PROVISIONAL && (
-            <Button
-              type="button"
-              styleType="outline"
-              onClick={handleConfirm}
-              isLoading={isLoading}
-              disabled={isLoading}>
-              Confirm
-            </Button>
+            <Permission privilege={Privileges.CAN_CREATE_TIMETABLE}>
+              <Button
+                type="button"
+                styleType="outline"
+                onClick={handleConfirm}
+                isLoading={isLoading}
+                disabled={isLoading}>
+                Confirm
+              </Button>
+            </Permission>
           )}
           <Button
             type="button"
