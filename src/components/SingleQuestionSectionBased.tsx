@@ -151,24 +151,26 @@ export function SingleQuestionSectionBased({
         </Heading>
       </div>
 
-      <TextAreaMolecule
-        onPaste={(e: any) => disableCopyPaste(e)}
-        onCopy={(e: any) => disableCopyPaste(e)}
-        autoComplete="off"
-        style={{
-          height: '7rem',
-        }}
-        value={
-          previoustudentAnswers.find(
-            (answer) => answer.evaluation_question.id == question.id,
-          )?.open_answer || localAnswer.open_answer
-        }
-        placeholder="Type your answer here"
-        onBlur={() => submitForm()}
-        name="open_answer"
-        onFocus={() => submitAfter()}
-        handleChange={handleChange}
-      />
+      {evaluation.submision_type == ISubmissionTypeEnum.ONLINE_TEXT && (
+        <TextAreaMolecule
+          onPaste={(e: any) => disableCopyPaste(e)}
+          onCopy={(e: any) => disableCopyPaste(e)}
+          autoComplete="off"
+          style={{
+            height: '7rem',
+          }}
+          value={
+            previoustudentAnswers.find(
+              (answer) => answer.evaluation_question.id == question.id,
+            )?.open_answer || localAnswer.open_answer
+          }
+          placeholder="Type your answer here"
+          onBlur={() => submitForm()}
+          name="open_answer"
+          onFocus={() => submitAfter()}
+          handleChange={handleChange}
+        />
+      )}
 
       {question.attachments?.length > 0 && (
         <div className="flex flex-col py-5">
