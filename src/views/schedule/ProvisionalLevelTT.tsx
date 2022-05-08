@@ -8,6 +8,7 @@ import {
   useRouteMatch,
 } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import Loader from '../../components/Atoms/custom/Loader';
@@ -76,9 +77,11 @@ export default function ProvisionalLevelTT() {
             styleType="outline">
             <Icon name="filter" />
           </Button>
-          <Link to={`${url}/new-week`}>
-            <Button type="button">New week</Button>
-          </Link>
+          <Permission privilege={Privileges.CAN_CREATE_TIMETABLE}>
+            <Link to={`${url}/new-week`}>
+              <Button type="button">New week</Button>
+            </Link>
+          </Permission>
         </div>
       </TableHeader>
       {isLoading ? (
@@ -91,7 +94,7 @@ export default function ProvisionalLevelTT() {
           }
           buttonLabel="New week"
           handleClick={() => history.push(`${url}/new-week`)}
-          privilege={Privileges.CAN_CREATE_VENUE}
+          privilege={Privileges.CAN_CREATE_TIMETABLE}
         />
       ) : (
         // @ts-ignore

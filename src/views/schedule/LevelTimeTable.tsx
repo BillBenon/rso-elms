@@ -3,13 +3,14 @@ import '../../styles/components/Molecules/timetable/timetable.scss';
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import TableHeader from '../../components/Molecules/table/TableHeader';
 import TimeTableWeek from '../../components/Organisms/schedule/timetable/TimeTableWeek';
 import intakeProgramStore from '../../store/administration/intake-program.store';
 import { timetableStore } from '../../store/timetable/timetable.store';
-import { ParamType } from '../../types';
+import { ParamType, Privileges } from '../../types';
 import { formatDateToYyMmDd } from '../../utils/date-helper';
 
 export default function ClassTimeTable() {
@@ -28,9 +29,11 @@ export default function ClassTimeTable() {
         showSearch={false}
         title={`${levelInfo?.academic_program_level.program.name} - ${levelInfo?.academic_program_level.level.name} (current)`}>
         <div className="flex gap-3">
-          <Link to={`/dashboard/schedule/timetable/${id}/provisional`}>
-            <Button type="button">View provisional</Button>
-          </Link>
+          <Permission privilege={Privileges.CAN_ACCESS_TIMETABLE}>
+            <Link to={`/dashboard/schedule/timetable/${id}/provisional`}>
+              <Button type="button">View provisional</Button>
+            </Link>
+          </Permission>
         </div>
       </TableHeader>
       {isLoading ? (
