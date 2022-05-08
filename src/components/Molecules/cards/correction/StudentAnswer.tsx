@@ -108,9 +108,25 @@ export default function StudentAnswer({
               </div>
             ) : (
               <>
+                {data.student_answer_attachments.length > 0 &&
+                  data.student_answer_attachments.map((ans, file_question_index) => (
+                    <a
+                      href={`${
+                        import.meta.env.VITE_API_URL
+                      }/evaluation-service/api/evaluationQuestions/${
+                        ans.attachment.id
+                      }/loadAttachment`}
+                      key={ans.attachment.id}
+                      target="_blank"
+                      className="block py-2 text-blue-500 hover:underline"
+                      download
+                      rel="noreferrer">
+                      {file_question_index + 1}. {ans.attachment.name}
+                    </a>
+                  ))}
                 <div
                   className="min-h-8 rounded-md border-2 border-primary-500 px-2 py-3 mt-4 answer-box text-primary-500"
-                  dangerouslySetInnerHTML={{ __html: data?.open_answer }}>
+                  dangerouslySetInnerHTML={{ __html: data?.open_answer || 'No answer' }}>
                   {/* {parse(data?.open_answer)} */}
                 </div>
                 <div className="min-h-4 rounded-md border-2 border-black px-2 py-3 mt-4 answer-box text-black">
@@ -119,7 +135,6 @@ export default function StudentAnswer({
                     dangerouslySetInnerHTML={{
                       __html: data?.evaluation_question.answer,
                     }}></div>
-                  {/* {} */}
                 </div>
               </>
             )}
