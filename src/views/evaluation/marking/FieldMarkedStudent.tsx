@@ -91,9 +91,12 @@ export default function FieldStudentMarking() {
           <TableHeader
             title={
               'Student Names: ' +
-              studentInfo?.data.data.user.last_name +
-              ' ' +
-              studentInfo?.data.data.user.first_name
+                studentInfo?.data.data.user.person?.current_rank?.name ||
+              '' +
+                ' ' +
+                studentInfo?.data.data.user.last_name +
+                ' ' +
+                studentInfo?.data.data.user.first_name
             }
             showBadge={false}
             showSearch={false}>

@@ -222,7 +222,10 @@ function StudentInClass({ classObject }: IStudentClass) {
                       {t('Instructor_representative')} :
                     </Heading>
                     <Heading fontSize="sm">
-                      {`${leaders.instructor_in_charge_one?.first_name || '---'} ${
+                      {`${
+                        leaders.instructor_in_charge_one?.person?.current_rank?.name ||
+                        '---'
+                      } ${leaders.instructor_in_charge_one?.first_name || '---'} ${
                         leaders.instructor_in_charge_one?.last_name || '---'
                       }`}
                     </Heading>
@@ -233,7 +236,10 @@ function StudentInClass({ classObject }: IStudentClass) {
                         {t('Instructor_representative')} backup 1 :
                       </Heading>
                       <Heading fontSize="sm">
-                        {`${leaders.instructor_in_charge_two.first_name || '---'} ${
+                        {`${
+                          leaders.instructor_in_charge_one?.person?.current_rank?.name ||
+                          '---'
+                        } ${leaders.instructor_in_charge_two.first_name || '---'} ${
                           leaders.instructor_in_charge_two.last_name || '---'
                         }`}
                       </Heading>
@@ -246,7 +252,10 @@ function StudentInClass({ classObject }: IStudentClass) {
                       {t('Class_representative')} :
                     </Heading>
                     <Heading fontSize="sm">
-                      {`${leaders.class_representative_one?.first_name || '---'} ${
+                      {`${
+                        leaders.instructor_in_charge_one?.person?.current_rank?.name ||
+                        '---'
+                      }  ${leaders.class_representative_one?.first_name || '---'} ${
                         leaders.class_representative_one?.last_name || '---'
                       }`}
                     </Heading>
@@ -257,7 +266,10 @@ function StudentInClass({ classObject }: IStudentClass) {
                         {t('Instructor_representative')} backup 2 :
                       </Heading>
                       <Heading fontSize="sm">
-                        {`${leaders.instructor_in_charge_three.first_name || '---'} ${
+                        {`${
+                          leaders.instructor_in_charge_one?.person?.current_rank?.name ||
+                          '---'
+                        }  ${leaders.instructor_in_charge_three.first_name || '---'} ${
                           leaders.instructor_in_charge_three.last_name || '---'
                         }`}
                       </Heading>

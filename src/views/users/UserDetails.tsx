@@ -18,13 +18,14 @@ import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
 import ExperienceDetails from '../../components/Organisms/forms/auth/signup/experience/ExperienceDetails';
 import UpdateExperience from '../../components/Organisms/forms/auth/signup/experience/UpdateExperience';
 import MoreInfo from '../../components/Organisms/forms/auth/signup/more-details/MoreInfo';
+import UpdateNextKin from '../../components/Organisms/forms/auth/signup/more-details/UpdateNextKin';
 import NewPersonalDocument from '../../components/Organisms/forms/user/NewPersonalDocument';
 import { queryClient } from '../../plugins/react-query';
 import enrollmentStore from '../../store/administration/enrollment.store';
 import usersStore from '../../store/administration/users.store';
 import { ParamType } from '../../types';
 import { ApproveStudents, StudentApproval } from '../../types/services/enrollment.types';
-import UpdateCompleteProfile from '../auth/UpdateCompleteProfile';
+import CompleteProfile from '../auth/CompleteProfile';
 import PersonalDocuments from './profile/PersonalDocuments';
 import ProfileOverview from './profile/ProfileOverview';
 import UpdatePhotoProfile from './profile/UpdatePhotoProfile';
@@ -90,6 +91,7 @@ export default function UserDetails() {
         <>
           <div className="flex justify-between">
             <Heading className="py-3" fontWeight="bold" fontSize="2xl">
+              {user?.data.data.person?.current_rank?.name || ''}{' '}
               {user?.data.data.first_name + ' ' + user?.data.data.last_name} Profile
             </Heading>
             {intkStud && stat && (
@@ -160,7 +162,10 @@ export default function UserDetails() {
                 );
               }}
             />
-            <Route path={`${path}/edit-compl-prof`} component={UpdateCompleteProfile} />
+            <Route
+              path={`${path}/edit-compl-prof`}
+              render={() => <CompleteProfile showHeader={false} />}
+            />
             <Route
               exact
               path={`${path}/new-experience`}
@@ -173,8 +178,13 @@ export default function UserDetails() {
             />
             <Route
               exact
-              path={`${path}/edit-next-kin`}
+              path={`${path}/add-next-kin`}
               render={() => <MoreInfo showHeader={false} />}
+            />
+            <Route
+              exact
+              path={`${path}/edit-next-kin/:kinid`}
+              render={() => <UpdateNextKin />}
             />
             <Route
               exact
