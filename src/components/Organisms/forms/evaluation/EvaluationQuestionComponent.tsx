@@ -66,6 +66,12 @@ export default function EvaluationQuestionComponent() {
 
   useEffect(() => {
     const handleSubmittingFile = (id: string) => {
+
+      if (file && !currentId) {
+        submitForm();
+        return;
+      }
+
       const data = new FormData();
 
       if (file) data.append('file', file);
@@ -246,8 +252,8 @@ export default function EvaluationQuestionComponent() {
     evaluationStore.createEvaluationQuestions();
   const { mutate: deleteQuestion } = evaluationStore.deleteEvaluationQuestionById();
 
-  function submitForm(e: FormEvent) {
-    e.preventDefault();
+  function submitForm(e?: FormEvent) {
+    if (e) e.preventDefault();
 
     mutate(questions, {
       onSuccess: () => {
@@ -258,6 +264,7 @@ export default function EvaluationQuestionComponent() {
         toast.error(error.response.data.message);
       },
     });
+
   }
 
   function currentTotalMarks() {
@@ -272,8 +279,8 @@ export default function EvaluationQuestionComponent() {
     <Fragment>
       <div
         className={`${evaluationInfo?.total_mark !== currentTotalMarks()
-            ? 'bg-error-500'
-            : 'bg-primary-400'
+          ? 'bg-error-500'
+          : 'bg-primary-400'
           }  sticky top-0 z-50 py-4 px-5 text-main rounded-sm flex justify-evenly`}>
         <span>{evaluationInfo?.name}</span>
         <span className="">
@@ -501,7 +508,7 @@ export default function EvaluationQuestionComponent() {
             </div>
 
             <div>
-              <Button onSubmit={submitForm} disabled={createQuestionLoader}>
+              <Button onSubmit={(e: FormEvent) => submitForm(e)} disabled={createQuestionLoader}>
                 save
               </Button>
             </div>
