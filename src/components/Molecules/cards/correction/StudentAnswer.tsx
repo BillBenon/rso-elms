@@ -66,6 +66,25 @@ export default function StudentAnswer({
             dangerouslySetInnerHTML={{
               __html: data.evaluation_question?.question,
             }}></div>
+          {data.evaluation_question?.attachments?.length > 0 && (
+            <>
+              <p className="font-semibold text-xl mt-8">Question attachments</p>
+
+              {data.evaluation_question.attachments.map((ans, file_question_index) => (
+                <a
+                  href={`${
+                    import.meta.env.VITE_API_URL
+                  }/evaluation-service/api/evaluationQuestions/${ans.id}/loadAttachment`}
+                  key={ans.id}
+                  target="_blank"
+                  className="block py-2 text-blue-500 hover:underline"
+                  download
+                  rel="noreferrer">
+                  {file_question_index + 1}. {ans.name}
+                </a>
+              ))}
+            </>
+          )}
         </ContentSpan>
 
         <Heading fontWeight="semibold" fontSize="sm">
@@ -107,36 +126,48 @@ export default function StudentAnswer({
                 )}
               </div>
             ) : (
-              <>
-                {data.student_answer_attachments.length > 0 &&
-                  data.student_answer_attachments.map((ans, file_question_index) => (
-                    <a
-                      href={`${
-                        import.meta.env.VITE_API_URL
-                      }/evaluation-service/api/evaluationQuestions/${
-                        ans.attachment.id
-                      }/loadAttachment`}
-                      key={ans.attachment.id}
-                      target="_blank"
-                      className="block py-2 text-blue-500 hover:underline"
-                      download
-                      rel="noreferrer">
-                      {file_question_index + 1}. {ans.attachment.name}
-                    </a>
+              <div className="pt-16 ">
+                {data?.open_answer ||
+                  (data.student_answer_attachments.length == 0 && (
+                    <div
+                      className="min-h-8 rounded-md border-2 border-primary-500 px-2 py-3 mt-4 answer-box text-primary-500"
+                      dangerouslySetInnerHTML={{ __html: data?.open_answer }}>
+                      {/* {parse(data?.open_answer)} */}
+                    </div>
                   ))}
-                <div
-                  className="min-h-8 rounded-md border-2 border-primary-500 px-2 py-3 mt-4 answer-box text-primary-500"
-                  dangerouslySetInnerHTML={{ __html: data?.open_answer || 'No answer' }}>
-                  {/* {parse(data?.open_answer)} */}
+                <div>
+                  {data.student_answer_attachments.length > 0 && (
+                    <>
+                      <p className="font-semibold text-xl mt-3">Answer attachments</p>
+
+                      {data.student_answer_attachments.map((ans, file_question_index) => (
+                        <a
+                          href={`${
+                            import.meta.env.VITE_API_URL
+                          }/evaluation-service/api/evaluationQuestions/${
+                            ans.attachment.id
+                          }/loadAttachment`}
+                          key={ans.attachment.id}
+                          target="_blank"
+                          className="block py-2 text-blue-500 hover:underline"
+                          download
+                          rel="noreferrer">
+                          {file_question_index + 1}. {ans.attachment.name}
+                        </a>
+                      ))}
+                    </>
+                  )}
                 </div>
-                <div className="min-h-4 rounded-md border-2 border-black px-2 py-3 mt-4 answer-box text-black">
-                  <p className="font-bold text-lg text-primary-600">Referral answer:</p>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: data?.evaluation_question.answer,
-                    }}></div>
-                </div>
-              </>
+                {data.evaluation_question?.answer?.length > 7 && (
+                  <div className="min-h-4 rounded-md border-2 border-black px-2 py-3 mt-4 answer-box text-black">
+                    <p className="font-bold text-lg text-primary-600">Correct answer:</p>
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: data?.evaluation_question.answer,
+                      }}></div>
+                  </div>
+                )}
+              </div>
             )}
           </div>
           <div className="flex gap-2 h-12 items-center mt-4 self-start">
