@@ -126,6 +126,11 @@ export default function NewTimeTable({ activityId, isUpdating = false }: IProps)
       activityDate: formatDateToYyMmDd(values.activityDate),
     };
 
+    if (data.periods < 0) {
+      toast.error('Start hour must be less than end hour');
+      return;
+    }
+
     if (activityId && isUpdating) {
       updateMutation(
         { ...data, id: activityId },
