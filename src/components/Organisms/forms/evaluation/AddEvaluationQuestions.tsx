@@ -69,6 +69,12 @@ export default function AdddEvaluationQuestions({
 
   useEffect(() => {
     const handleSubmittingFile = (id: string) => {
+
+
+      if (file && !currentId) {
+        saveQuestions(false);
+      }
+
       const data = new FormData();
 
       if (file) data.append('file', file);
@@ -91,6 +97,8 @@ export default function AdddEvaluationQuestions({
     if (file) {
       handleSubmittingFile(currentId);
     }
+
+
   }, [currentId, file]);
 
   useEffect(() => {
