@@ -12,7 +12,7 @@ import cookie from '../utils/cookie';
 let created = false;
 
 export default function useAuthenticator() {
-  const { user, setUser } = useContext(UserContext);
+  const { user, picked_role, setUser, setPickedRole } = useContext(UserContext);
   const [isUserLoading, setIsUserLoading] = useState(false);
   const [_isError, setIsError] = useState(false);
   const [_error, setError] = useState<AxiosError<Response>>();
@@ -20,7 +20,12 @@ export default function useAuthenticator() {
   const { refetch } = authenticatorStore.authUser(false);
   const { mutateAsync } = authenticatorStore.login();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
+  const [picked_role_cookie] = useState(cookie.getCookie('user_role') || '');
   const history = useHistory();
+
+  // const setpickedRoleCached = useCallback(() => {
+  //   setPickedRole(user?.user_roles?.find((role) => role.id + '' === picked_role_cookie));
+  // }, [picked_role_cookie,  user?.user_roles]);
 
   const fetchData = async () => {
     setIsUserLoading(true);
@@ -47,7 +52,14 @@ export default function useAuthenticator() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // useEffect(() => {}, [user]);
+  useEffect(() => {
+    if (picked_role?.id !== picked_role_cookie) {
+      setPickedRole((_old) => {
+        return user?.user_roles?.find((role) => role.id + '' === picked_role_cookie);
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [picked_role?.id, picked_role_cookie, user?.user_roles]);
 
   async function login<T>(e: FormEvent<T>, details: LoginInfo) {
     e.preventDefault();
@@ -83,6 +95,7 @@ export default function useAuthenticator() {
 
   return {
     user,
+    picked_role,
     userLoading: isUserLoading,
     userAvailabe,
     isLoggingIn,

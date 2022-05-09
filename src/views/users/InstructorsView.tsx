@@ -7,6 +7,7 @@ import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
+import SelectMolecule from '../../components/Molecules/input/SelectMolecule';
 import PopupMolecule from '../../components/Molecules/Popup';
 import Table from '../../components/Molecules/table/Table';
 import TableHeader from '../../components/Molecules/table/TableHeader';
@@ -15,11 +16,13 @@ import ImportUsers from '../../components/Organisms/user/ImportUsers';
 import useAuthenticator from '../../hooks/useAuthenticator';
 import usePickedRole from '../../hooks/usePickedRole';
 import { authenticatorStore } from '../../store/administration';
-import usersStore from '../../store/administration/users.store';
+import academyStore from '../../store/administration/academy.store';
+import enrollmentStore from '../../store/administration/enrollment.store';
 import { Privileges, ValueType } from '../../types';
 import { ActionsType } from '../../types/services/table.types';
-import { AcademyUserType, UserType, UserTypes } from '../../types/services/user.types';
+import { UserType, UserTypes } from '../../types/services/user.types';
 import { formatUserTable } from '../../utils/array';
+import { getDropDownOptions } from '../../utils/getOption';
 import DeployInstructors from '../DeployInstructors';
 import EnrollStudents from '../EnrollStudents';
 import ViewUserRole from '../roles/ViewUserRole';
@@ -30,28 +33,32 @@ export default function InstructorsView() {
   const history = useHistory();
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
+  const [selectedAcademy, setSelectedAcademy] = useState('');
   const picked_role = usePickedRole();
   const { t } = useTranslation();
 
   const { mutateAsync } = authenticatorStore.resetPassword();
 
+  const academies = academyStore.getAcademiesByInstitution(
+    user?.institution.id.toString() || '',
+  );
   const { data, isLoading, refetch } =
     user?.user_type === UserType.SUPER_ADMIN
-      ? usersStore.fetchUsers({
-          userType: UserType.INSTRUCTOR,
+      ? enrollmentStore.getInstructorByAcademyOrderedByRank(selectedAcademy, {
           page: currentPage,
           pageSize,
-          sortyBy: 'username',
         })
-      : usersStore.getUsersByAcademyAndUserType(
-          picked_role?.academy_id.toString() || '',
-          UserType.INSTRUCTOR,
-          { page: currentPage, pageSize, sortyBy: 'username' },
+      : enrollmentStore.getInstructorByAcademyOrderedByRank(
+          picked_role?.academy_id + '',
+          {
+            page: currentPage,
+            pageSize,
+          },
         );
 
-  const users = formatUserTable(data?.data.data.content || []);
+  const users = formatUserTable(data?.data.data.content.map((inst) => inst.user) || []);
 
-  let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
+  let actions: ActionsType<UserTypes>[] = [];
 
   actions?.push({
     name: 'View ' + t('Instructor'),
@@ -124,6 +131,22 @@ export default function InstructorsView() {
 
   return (
     <div>
+      {user?.user_type === UserType.SUPER_ADMIN && (
+        <div className="flex items-center gap-4">
+          <SelectMolecule
+            width="80"
+            className=""
+            loading={academies.isLoading}
+            value={selectedAcademy}
+            handleChange={(e) => {
+              setSelectedAcademy(e.value.toString());
+            }}
+            name={'academy'}
+            options={getDropDownOptions({ inputs: academies.data?.data.data || [] })}>
+            Select Academy
+          </SelectMolecule>
+        </div>
+      )}
       <TableHeader
         title={t('Instructor')}
         totalItems={data?.data.data.totalElements || 0}
@@ -151,7 +174,7 @@ export default function InstructorsView() {
           privilege={Privileges.CAN_CREATE_USER}
         />
       ) : (
-        <Table<UserTypes | AcademyUserType>
+        <Table<UserTypes>
           statusColumn="status"
           data={users}
           actions={actions}

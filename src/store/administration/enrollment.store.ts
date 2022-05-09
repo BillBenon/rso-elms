@@ -96,11 +96,7 @@ class EnrolmmentStore {
       enrollmentService.getInstructorsOrderedByRank(queryParams),
     );
   }
-  getStudentsByAcademyOrderedByRank(academyId: string, queryParams?: FilterOptions) {
-    return useQuery(['students/academy', formatQueryParameters(queryParams)], () =>
-      enrollmentService.getStudentsByAcademyOrderedByRank(academyId, queryParams),
-    );
-  }
+
   getInstructorByAcademyOrderedByRank(academyId: string, queryParams?: FilterOptions) {
     return useQuery(['instructors/academy', formatQueryParameters(queryParams)], () =>
       enrollmentService.getInstructorByAcademyOrderedByRank(academyId, queryParams),
@@ -172,6 +168,17 @@ class EnrolmmentStore {
   approveStudent() {
     return useMutation(enrollmentService.approveStudent);
   }
+}
+
+export function getStudentsByAcademyOrderedByRank(
+  academyId: string,
+  queryParams?: FilterOptions,
+) {
+  return useQuery(
+    ['students/academy', formatQueryParameters(queryParams)],
+    () => enrollmentService.getStudentsByAcademyOrderedByRank(academyId, queryParams),
+    // { enabled: !!academyId },
+  );
 }
 
 export default new EnrolmmentStore();
