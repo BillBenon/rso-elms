@@ -27,6 +27,23 @@ export default function EvaluationSettings() {
     picked_role?.academy_id + '',
   ).data?.data.data;
 
+  const rankedInstructors =
+    instructors?.filter((inst) => inst.user.person?.current_rank) || [];
+  const unrankedInstructors =
+    instructors?.filter(
+      (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+    ) || [];
+
+  rankedInstructors.sort(function (a, b) {
+    if (a.user.person && b.user.person) {
+      return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    } else {
+      return 0;
+    }
+  });
+
+  const finalInstructors = rankedInstructors.concat(unrankedInstructors);
+
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId + '').data?.data || {};
 
@@ -140,7 +157,7 @@ export default function EvaluationSettings() {
             width="60"
             placeholder="Reviewer"
             options={
-              instructors?.map((instr) => ({
+              finalInstructors?.map((instr) => ({
                 label: `${instr.user.person?.current_rank?.name || ''} ${
                   instr.user.first_name
                 } ${instr.user.last_name}`,

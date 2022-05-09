@@ -184,10 +184,27 @@ function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) 
   const picked_role = usePickedRole();
 
   const { t } = useTranslation();
-  const users =
+  const instructors =
     instructordeploymentStore.getInstructorsDeployedInAcademy(
       picked_role?.academy_id + '',
     ).data?.data.data || [];
+
+  const rankedInstructors =
+    instructors?.filter((inst) => inst.user.person?.current_rank) || [];
+  const unrankedInstructors =
+    instructors?.filter(
+      (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+    ) || [];
+
+  rankedInstructors.sort(function (a, b) {
+    if (a.user.person && b.user.person) {
+      return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    } else {
+      return 0;
+    }
+  });
+
+  const finalInstructors = rankedInstructors.concat(unrankedInstructors);
 
   const modules =
     moduleStore.getModulesByProgram(level?.intake_program.program.id + '').data?.data
@@ -313,7 +330,7 @@ function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) 
           value={values.inChargeId}
           handleChange={handleChange}
           options={
-            users?.map((user) => ({
+            finalInstructors?.map((user) => ({
               label: `${user.user.person?.current_rank?.name || ''} ${
                 user.user.first_name
               } ${user.user.last_name}`,
