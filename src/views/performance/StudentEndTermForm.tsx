@@ -233,7 +233,7 @@ export default function StudentEndTermForm() {
                   {studentInfo?.data.data.user.academy.institution.short_name}
                 </div>
                 <div className="border border-black py-1 px-2">
-                  {studentInfo?.data.data.user.person.current_rank?.name}
+                  {studentInfo?.data.data.user.person?.current_rank?.name || ''}
                 </div>
                 <div className="border border-black py-1 px-2 capitalize">
                   {studentInfo?.data.data.user.last_name}
@@ -320,7 +320,7 @@ export default function StudentEndTermForm() {
                 </p>
                 <p className="text-sm">
                   <span className="font-semibold">Rank and Names:</span>{' '}
-                  {studentInfo?.data.data.user.person.current_rank?.name}{' '}
+                  {studentInfo?.data.data.user.person?.current_rank?.name}{' '}
                   {studentInfo?.data.data.user.first_name}{' '}
                   {studentInfo?.data.data.user.last_name}
                 </p>

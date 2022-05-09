@@ -62,14 +62,18 @@ export default function NewIntakeProgramLevel() {
   const instructors = instructorsProgram?.data.data.map((inst) => inst.instructor) || [];
 
   const rankedInstructors =
-    instructors.filter((inst) => inst.user.person.current_rank) || [];
+    instructors.filter((inst) => inst.user.person?.current_rank) || [];
   const unrankedInstructors =
     instructors.filter(
       (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
     ) || [];
 
   rankedInstructors.sort(function (a, b) {
-    return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    if (a.user.person && b.user.person) {
+      return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    } else {
+      return 0;
+    }
   });
   const finalInstructors = rankedInstructors.concat(unrankedInstructors);
 

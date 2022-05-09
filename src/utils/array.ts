@@ -1,9 +1,10 @@
-import { UserInfo, UserTypes } from '../types/services/user.types';
+import { StudentTypes, UserInfo, UserTypes } from '../types/services/user.types';
+import { Student } from './../types/services/user.types';
 
 export function formatUserTable(data: UserInfo[]): UserTypes[] {
   return data.map((d) => ({
     id: d.id.toString(),
-    rank: d.person.current_rank?.name,
+    rank: d.person?.current_rank?.name,
     username: d.username,
     'full name': d.first_name + ' ' + d.last_name,
     email: d.email,
@@ -12,6 +13,21 @@ export function formatUserTable(data: UserInfo[]): UserTypes[] {
     status: d.generic_status,
     user_type: d.user_type,
   })) as UserTypes[];
+}
+
+export function formatStudentTable(data: Student[]): StudentTypes[] {
+  return data.map((d) => ({
+    id: d.user.id.toString(),
+    rank: d.user.person?.current_rank?.name,
+    username: d.user.username,
+    reg_number: d.reg_number,
+    'full name': d.user.first_name + ' ' + d.user.last_name,
+    email: d.user.email,
+    'ID Card': d.user.person && d.user.person.nid,
+    academy: d.user.academy && d.user.academy.name,
+    status: d.generic_status,
+    user_type: d.user.user_type,
+  })) as StudentTypes[];
 }
 
 export function arrayEquals(arr1: any[], arr2: any[]) {

@@ -39,26 +39,34 @@ export default function AddProgramLeader({
   const studentsToShow = students?.data.data.map((inst) => inst.student);
 
   const rankedInstructors =
-    instructorsToShow?.filter((inst) => inst.user.person.current_rank) || [];
+    instructorsToShow?.filter((inst) => inst.user.person?.current_rank) || [];
   const unrankedInstructors =
     instructorsToShow?.filter(
       (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
     ) || [];
 
   rankedInstructors.sort(function (a, b) {
-    return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    if (a.user.person && b.user.person) {
+      return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    } else {
+      return 0;
+    }
   });
   const finalInstructors = rankedInstructors.concat(unrankedInstructors);
 
   const rankedStudents =
-    studentsToShow?.filter((stud) => stud.user.person.current_rank) || [];
+    studentsToShow?.filter((stud) => stud.user.person?.current_rank) || [];
   const unrankedStudents =
     studentsToShow?.filter(
       (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
     ) || [];
 
   rankedStudents.sort(function (a, b) {
-    return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    if (a.user.person && b.user.person) {
+      return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    } else {
+      return 0;
+    }
   });
   const finalStudents = rankedStudents.concat(unrankedStudents);
 

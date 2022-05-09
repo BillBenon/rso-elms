@@ -85,6 +85,28 @@ class EnrolmmentStore {
       ),
     );
   }
+
+  getStudentsOrderedByRank(queryParams?: FilterOptions) {
+    return useQuery(['students', formatQueryParameters(queryParams)], () =>
+      enrollmentService.getStudentsOrderedByRank(queryParams),
+    );
+  }
+  getInstructorsOrderedByRank(queryParams?: FilterOptions) {
+    return useQuery(['instructors', formatQueryParameters(queryParams)], () =>
+      enrollmentService.getInstructorsOrderedByRank(queryParams),
+    );
+  }
+  getStudentsByAcademyOrderedByRank(academyId: string, queryParams?: FilterOptions) {
+    return useQuery(['students/academy', formatQueryParameters(queryParams)], () =>
+      enrollmentService.getStudentsByAcademyOrderedByRank(academyId, queryParams),
+    );
+  }
+  getInstructorByAcademyOrderedByRank(academyId: string, queryParams?: FilterOptions) {
+    return useQuery(['instructors/academy', formatQueryParameters(queryParams)], () =>
+      enrollmentService.getInstructorByAcademyOrderedByRank(academyId, queryParams),
+    );
+  }
+
   getStudentAcademyAndEnrollmentStatus(
     academyId: string,
     enrolmentStatus: StudentApproval,

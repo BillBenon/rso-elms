@@ -43,7 +43,7 @@ export default function ClassFullYearDeliberation() {
     performance?.data.data.forEach((record) => {
       if (record.student.admin_id === student.student.id) {
         let processed: IPerformanceTable = {
-          rank: student.student.user.person.current_rank?.name || '',
+          rank: student.student.user.person?.current_rank?.name || '',
           first_name: student.student.user.first_name,
           last_name: student.student.user.last_name,
           // reg_number: record.student.reg_number,

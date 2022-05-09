@@ -31,7 +31,7 @@ function ApproveStudent() {
     let pushedStud: AcademyUser[] = [];
 
     const rankedStudents =
-      studentProg?.data.data.filter((stud) => stud.student.user.person.current_rank) ||
+      studentProg?.data.data.filter((stud) => stud.student.user.person?.current_rank) ||
       [];
     const unrankedStudents =
       studentProg?.data.data.filter(
@@ -39,10 +39,14 @@ function ApproveStudent() {
       ) || [];
 
     rankedStudents.sort(function (a, b) {
-      return (
-        a.student.user.person.current_rank?.priority -
-        b.student.user.person.current_rank?.priority
-      );
+      if (a.student.user.person && b.student.user.person) {
+        return (
+          a.student.user.person.current_rank?.priority -
+          b.student.user.person.current_rank?.priority
+        );
+      } else {
+        return 0;
+      }
     });
 
     const finalStudents = rankedStudents.concat(unrankedStudents);
@@ -57,7 +61,7 @@ function ApproveStudent() {
         username: username,
         'full name': first_name + ' ' + last_name,
         email: email,
-        'ID Card': person && person.nid,
+        'ID Card': person?.nid || '',
         user_type: user_type,
         status: stud.enrolment_status,
       };

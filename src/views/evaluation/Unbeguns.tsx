@@ -72,7 +72,7 @@ export default function UnBeguns() {
     }
 
     const rankedStudents =
-      studentsData?.data.data.filter((stud) => stud.student.user.person.current_rank) ||
+      studentsData?.data.data.filter((stud) => stud.student.user.person?.current_rank) ||
       [];
     const unrankedStudents =
       studentsData?.data.data.filter(
@@ -80,10 +80,14 @@ export default function UnBeguns() {
       ) || [];
 
     rankedStudents.sort(function (a, b) {
-      return (
-        a.student.user.person.current_rank?.priority -
-        b.student.user.person.current_rank?.priority
-      );
+      if (a.student.user.person && b.student.user.person) {
+        return (
+          a.student.user.person.current_rank?.priority -
+          b.student.user.person.current_rank?.priority
+        );
+      } else {
+        return 0;
+      }
     });
     const finalStudents = rankedStudents.concat(unrankedStudents);
 
