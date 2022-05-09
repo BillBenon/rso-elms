@@ -96,7 +96,7 @@ export default function EvaluationInfoComponent() {
     marking_type: IMarkingType.NOT_SET,
     is_consider_on_report: true,
     marking_reminder_date: '',
-    maximum_file_size: 0,
+    maximum_file_size: 128,
     subject_academic_year_period_id: '',
     questionaire_type: IQuestionaireTypeEnum.DEFAULT,
     exam_instruction: '',
@@ -700,34 +700,6 @@ export default function EvaluationInfoComponent() {
               ]}>
               Submission type
             </DropdownMolecule>
-            {details?.submision_type === ISubmissionTypeEnum.FILE && (
-              <>
-                <SelectMolecule
-                  /*@ts-ignore */
-                  value={details?.content_format}
-                  width="64"
-                  name="submision_type"
-                  placeholder="Select submission type"
-                  handleChange={handleChange}
-                  options={[
-                    { label: 'DOC', value: IContentFormatEnum.DOC },
-                    { label: 'MP4', value: IContentFormatEnum.MP4 },
-                    { label: 'PDF', value: IContentFormatEnum.PDF },
-                    { label: 'PNG', value: IContentFormatEnum.PNG },
-                  ]}>
-                  Content format
-                </SelectMolecule>
-
-                <InputMolecule
-                  width="24"
-                  type="number"
-                  name="maximum_file_size"
-                  value={details?.maximum_file_size}
-                  handleChange={handleChange}>
-                  Maximum file size (Mbs)
-                </InputMolecule>
-              </>
-            )}
           </>
         ) : null}
 

@@ -127,6 +127,12 @@ export default function QuestionContainer({
         {
           onSuccess(attachmeInfo) {
             setFile(null);
+
+            queryClient.invalidateQueries([
+              'studentEvaluation/answers',
+              studentEvaluationId,
+            ]);
+
             setAnswer((ans) => ({
               ...ans,
               answer_attachment: attachmeInfo.data.data.id.toString(),
@@ -307,6 +313,7 @@ export default function QuestionContainer({
                   key={attachment.id}
                   target="_blank"
                   download
+                  className="text-blue-500 hover:underline py-2"
                   rel="noreferrer">
                   {index + 1}. {attachment.name}
                 </a>
@@ -323,7 +330,7 @@ export default function QuestionContainer({
                 handleUpload={(filelist) => {
                   handleUpload(filelist);
                 }}
-                accept={evaluationInfo?.content_format}
+                accept="*"
                 error={''}>
                 <Button styleType="outline" type="button">
                   upload answer file

@@ -66,6 +66,12 @@ export function SingleQuestionSectionBased({
         {
           onSuccess(attachmeInfo) {
             setFile(null);
+
+            queryClient.invalidateQueries([
+              'studentEvaluation/answers',
+              studentEvaluationId,
+            ]);
+
             setLocalAnswer((localAnswer) => ({
               ...localAnswer,
               answer_attachment: attachmeInfo.data.data.id.toString(),
@@ -74,7 +80,6 @@ export function SingleQuestionSectionBased({
             let data: IStudentAnswer;
 
             if (evaluation.submision_type === ISubmissionTypeEnum.FILE) {
-              console.log('submission type is file here');
               //remove empty attributes
               data = {
                 ...localAnswer,
@@ -146,24 +151,26 @@ export function SingleQuestionSectionBased({
         </Heading>
       </div>
 
-      <TextAreaMolecule
-        onPaste={(e: any) => disableCopyPaste(e)}
-        onCopy={(e: any) => disableCopyPaste(e)}
-        autoComplete="off"
-        style={{
-          height: '7rem',
-        }}
-        value={
-          previoustudentAnswers.find(
-            (answer) => answer.evaluation_question.id == question.id,
-          )?.open_answer || localAnswer.open_answer
-        }
-        placeholder="Type your answer here"
-        onBlur={() => submitForm()}
-        name="open_answer"
-        onFocus={() => submitAfter()}
-        handleChange={handleChange}
-      />
+      {evaluation.submision_type == ISubmissionTypeEnum.ONLINE_TEXT && (
+        <TextAreaMolecule
+          onPaste={(e: any) => disableCopyPaste(e)}
+          onCopy={(e: any) => disableCopyPaste(e)}
+          autoComplete="off"
+          style={{
+            height: '7rem',
+          }}
+          value={
+            previoustudentAnswers.find(
+              (answer) => answer.evaluation_question.id == question.id,
+            )?.open_answer || localAnswer.open_answer
+          }
+          placeholder="Type your answer here"
+          onBlur={() => submitForm()}
+          name="open_answer"
+          onFocus={() => submitAfter()}
+          handleChange={handleChange}
+        />
+      )}
 
       {question.attachments?.length > 0 && (
         <div className="flex flex-col py-5">
@@ -180,44 +187,47 @@ export function SingleQuestionSectionBased({
                 }/loadAttachment`}
                 key={attachment.id}
                 target="_blank"
-                download
-                rel="noreferrer">
+                className="text-blue-500 hover:underline py-2"
+                rel="noreferrer"
+                download={true}>
                 {index + 1}. {attachment.name}
               </a>
             ))}
         </div>
       )}
 
-      {evaluation.submision_type == ISubmissionTypeEnum.FILE && (
-        <div className="flex items-center py-5">
+      {evaluation.submision_type === ISubmissionTypeEnum.FILE && (
+        <div className="flex py-5 flex-col">
           <FileUploader
-            multiple
             allowPreview={false}
             handleUpload={(filelist) => {
               handleUpload(filelist);
             }}
-            accept={'*'}
+            accept="*"
             error={''}>
             <Button styleType="outline" type="button">
               upload answer file
             </Button>
           </FileUploader>
-          {previoustudentAnswers
-            .find((item) => item.evaluation_question.id == question.id)
-            ?.student_answer_attachments.map((ans) => (
-              <a
-                href={`${
-                  import.meta.env.VITE_API_URL
-                }/evaluation-service/api/evaluationQuestions/${
-                  ans.attachment.id
-                }/loadAttachment`}
-                key={ans.attachment.id}
-                target="_blank"
-                download
-                rel="noreferrer">
-                {index + 1}. {ans.attachment.name}
-              </a>
-            ))}
+          <div className="py-4">
+            {previoustudentAnswers
+              .find((item) => item.evaluation_question.id == question.id)
+              ?.student_answer_attachments.map((ans, file_question_index) => (
+                <a
+                  href={`${
+                    import.meta.env.VITE_API_URL
+                  }/evaluation-service/api/evaluationQuestions/${
+                    ans.attachment.id
+                  }/loadAttachment`}
+                  key={ans.attachment.id}
+                  target="_blank"
+                  className="block py-2 text-blue-500 hover:underline"
+                  download
+                  rel="noreferrer">
+                  {file_question_index + 1}. {ans.attachment.name}
+                </a>
+              ))}
+          </div>
         </div>
       )}
 
