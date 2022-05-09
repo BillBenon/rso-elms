@@ -203,7 +203,7 @@ export function SingleQuestionSectionBased({
             handleUpload={(filelist) => {
               handleUpload(filelist);
             }}
-            accept={'*'}
+            accept="*"
             error={''}>
             <Button styleType="outline" type="button">
               upload answer file
