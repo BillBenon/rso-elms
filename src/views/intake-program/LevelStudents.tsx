@@ -29,7 +29,7 @@ function LevelStudents({ showSidebar, handleShowSidebar }: ILevelStudent) {
 
     const rankedStudents =
       studentsProgram?.data.data.filter(
-        (inst) => inst.intake_program_student.student.user.person.current_rank,
+        (inst) => inst.intake_program_student.student.user.person?.current_rank,
       ) || [];
     const unrankedStudents =
       studentsProgram?.data.data.filter(
@@ -37,10 +37,17 @@ function LevelStudents({ showSidebar, handleShowSidebar }: ILevelStudent) {
       ) || [];
 
     rankedStudents.sort(function (a, b) {
-      return (
-        a.intake_program_student.student.user.person.current_rank?.priority -
-        b.intake_program_student.student.user.person.current_rank?.priority
-      );
+      if (
+        a.intake_program_student.student.user.person &&
+        b.intake_program_student.student.user.person
+      ) {
+        return (
+          a.intake_program_student.student.user.person.current_rank?.priority -
+          b.intake_program_student.student.user.person.current_rank?.priority
+        );
+      } else {
+        return 0;
+      }
     });
 
     const finalStudents = rankedStudents.concat(unrankedStudents);
@@ -48,7 +55,7 @@ function LevelStudents({ showSidebar, handleShowSidebar }: ILevelStudent) {
     finalStudents.forEach((stud) => {
       let studentView: UserView = {
         id: stud.id,
-        rank: stud.intake_program_student.student.user.person.current_rank?.name,
+        rank: stud.intake_program_student.student.user.person?.current_rank?.name,
         first_name: stud.intake_program_student.student.user.first_name,
         last_name: stud.intake_program_student.student.user.last_name,
         image_url: stud.intake_program_student.student.user.image_url,

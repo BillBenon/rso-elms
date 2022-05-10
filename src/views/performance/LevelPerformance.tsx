@@ -3,12 +3,15 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
+import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
 import Icon from '../../components/Atoms/custom/Icon';
 import BreadCrumb from '../../components/Molecules/BreadCrumb';
 import { Tab, Tabs } from '../../components/Molecules/tabs/tabs';
+import usePickedRole from '../../hooks/usePickedRole';
 import academicperiodStore from '../../store/administration/academicperiod.store';
 import { getLevelTermlyOverallReport } from '../../store/evaluation/school-report.store';
+import { Privileges } from '../../types';
 import { IPerformanceTable } from '../../types/services/report.types';
 import ClassPeriodPerformance from './ClassPeriodPerformance';
 import DSReportOnStudent from './DSReportOnStudent';
@@ -38,6 +41,10 @@ export default function LevelPerformance() {
   const prdIds = prds?.data.data.map((prd) => prd.id).join(',');
 
   const { data } = getLevelTermlyOverallReport(prdIds || '');
+
+  const user_role = usePickedRole();
+  const user_privileges = user_role?.role_privileges?.map((role) => role.name);
+  const hasPrivilege = (privilege: Privileges) => user_privileges?.includes(privilege);
 
   let performance: IPerformanceTable[] = [];
 
@@ -128,16 +135,23 @@ export default function LevelPerformance() {
                 </Button>
                 <StudentEndTermForm />
               </Tab>
-              <Tab label="(Manage) Informative report">
-                <Button
-                  styleType={'text'}
-                  onClick={() => history.goBack()}
-                  icon
-                  className="flex items-center p-2 hover:underline">
-                  <Icon name="chevron-left" fill="primary" size={16} />
-                  Back
-                </Button>
-                <EndTermForm />
+              <Tab
+                label={
+                  hasPrivilege(Privileges.CAN_WRITE_INFORMATIVE_REPORT)
+                    ? '(Manage) Informative report'
+                    : ''
+                }>
+                <Permission privilege={Privileges.CAN_WRITE_INFORMATIVE_REPORT}>
+                  <Button
+                    styleType={'text'}
+                    onClick={() => history.goBack()}
+                    icon
+                    className="flex items-center p-2 hover:underline">
+                    <Icon name="chevron-left" fill="primary" size={16} />
+                    Back
+                  </Button>
+                  <EndTermForm />
+                </Permission>
               </Tab>
               <Tab label="TEWT report">
                 <Button

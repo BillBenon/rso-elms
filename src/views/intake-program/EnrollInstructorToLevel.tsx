@@ -45,7 +45,7 @@ function EnrollInstructorToLevel<T>({
 
     const rankedInstructors =
       instructorsInProgram?.data.data.filter(
-        (inst) => inst.instructor.user.person.current_rank,
+        (inst) => inst.instructor.user.person?.current_rank,
       ) || [];
     const unrankedInstructors =
       instructorsInProgram?.data.data.filter(
@@ -53,10 +53,14 @@ function EnrollInstructorToLevel<T>({
       ) || [];
 
     rankedInstructors.sort(function (a, b) {
-      return (
-        a.instructor.user.person.current_rank?.priority -
-        b.instructor.user.person.current_rank?.priority
-      );
+      if (a.instructor.user.person && b.instructor.user.person) {
+        return (
+          a.instructor.user.person.current_rank?.priority -
+          b.instructor.user.person.current_rank?.priority
+        );
+      } else {
+        return 0;
+      }
     });
 
     const finalInstructors = rankedInstructors.concat(unrankedInstructors);
@@ -65,7 +69,7 @@ function EnrollInstructorToLevel<T>({
       if (!instructor_ids.includes(inst.id)) {
         let instructorView: UserView = {
           id: inst.id,
-          rank: inst.instructor.user.person.current_rank?.name,
+          rank: inst.instructor.user.person?.current_rank?.name,
           first_name: inst.instructor.user.first_name,
           last_name: inst.instructor.user.last_name,
           image_url: inst.instructor.user.image_url,

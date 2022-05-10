@@ -84,9 +84,8 @@ function TabHeadings({ tabs, onTabChange }: TabsImportantProps) {
     <div className="flex flex-wrap justify-start">
       {tabs.map((tab, i) => {
         return tab.privilege ? (
-          <Permission privilege={tab.privilege}>
+          <Permission privilege={tab.privilege} key={i}>
             <button
-              key={i}
               className={`pr-5 pl-3 py-4 ${
                 activeTabIndex === i ? 'border-b-3' : 'border-b-2'
               } m-0 rounded-none

@@ -106,6 +106,46 @@ class EnrollmentService {
     );
   }
 
+  public async getStudentsOrderedByRank(
+    queryParams?: FilterOptions,
+  ): Promise<AxiosResponse<Response<SortedContent<Student[]>>>> {
+    return await adminstrationAxios.get(
+      `students/getStudentsOrderedByRank?${formatQueryParameters(queryParams)}`,
+    );
+  }
+
+  public async getInstructorsOrderedByRank(
+    queryParams?: FilterOptions,
+  ): Promise<AxiosResponse<Response<SortedContent<Instructor[]>>>> {
+    return await adminstrationAxios.get(
+      `instructorDeployments/getInstructorsOrderedByRank?${formatQueryParameters(
+        queryParams,
+      )}`,
+    );
+  }
+
+  public async getStudentsByAcademyOrderedByRank(
+    academyId: string,
+    queryParams?: FilterOptions,
+  ): Promise<AxiosResponse<Response<SortedContent<Student[]>>>> {
+    return await adminstrationAxios.get(
+      `students/getStudentsByAcademyOrderedByRank/${academyId}?${formatQueryParameters(
+        queryParams,
+      )}`,
+    );
+  }
+
+  public async getInstructorByAcademyOrderedByRank(
+    academyId: string,
+    queryParams?: FilterOptions,
+  ): Promise<AxiosResponse<Response<SortedContent<Instructor[]>>>> {
+    return await adminstrationAxios.get(
+      `instructorDeployments/getInstructorByAcademyOrderedByRank/${academyId}?${formatQueryParameters(
+        queryParams,
+      )}`,
+    );
+  }
+
   public async getAllStudentEnrollments(
     queryParams?: FilterOptions,
   ): Promise<AxiosResponse<Response<SortedContent<StudentEnrollmentLevel[]>>>> {

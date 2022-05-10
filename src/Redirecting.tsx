@@ -19,7 +19,7 @@ export default function Redirecting() {
 
   const { data: nextOfKin, isFetching: nextOfKinLoading } = getHisNextKinById(user?.id);
   const { data: experiences, isFetching: experiencesLoading } = getPersonExperiences(
-    user?.person.id,
+    user?.person?.id,
   );
 
   const history = useHistory();
