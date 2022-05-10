@@ -41,6 +41,23 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
   const { mutateAsync, isLoading } = timetableStore.changeWeekStatus();
   const instructors = instructordeploymentStore.getInstructors().data?.data.data;
 
+  const rankedInstructors =
+    instructors?.filter((inst) => inst.user.person?.current_rank) || [];
+  const unrankedInstructors =
+    instructors?.filter(
+      (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+    ) || [];
+
+  rankedInstructors.sort(function (a, b) {
+    if (a.user.person && b.user.person) {
+      return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    } else {
+      return 0;
+    }
+  });
+
+  const finalInstructors = rankedInstructors.concat(unrankedInstructors);
+
   const monday = new Date(getWeekBorderDays(new Date(week.start_date)).monday);
   const timetableRef = useRef(null);
 
@@ -79,8 +96,7 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
         <Heading fontSize="lg" fontWeight="semibold">
           {week.week_name}
           <span className="text-txt-secondary px-1 text-base capitalize">
-            (
-            {`${formatDateLikeGoogle(week.start_date)} - ${formatDateLikeGoogle(
+            {`(${formatDateLikeGoogle(week.start_date)} - ${formatDateLikeGoogle(
               week.end_date,
             )})`}
           </span>
@@ -116,22 +132,23 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
         </div>
       </div>
       <div className="tt print:px-10 print:py-8 print:bg-main" ref={timetableRef}>
-        <div className="bg-primary-500 py-4 uppercase px-8 text-sm text- print:text-xs text-white grid grid-cols-11 gap-2">
+        <div className="bg-primary-500 py-4 uppercase px-8 text-sm text- print:text-xs text-white grid grid-cols-10 gap-2 min-w-max overflow-x-auto">
           <p>days</p>
           <p>time</p>
-          <p className="col-span-3">subject detail</p>
+          <p className="col-span-2">subject detail</p>
           <p>code</p>
           <p>pds</p>
           <p>moi</p>
           <p>location</p>
-          <p className="col-span-2">ds/lecturer</p>
+          <p>ds/lecturer</p>
+          <p>dress code</p>
         </div>
         {Object.keys(groupedActivities).map((day, i) => {
           monday.setDate(monday.getDate() + i);
           return (
             <div
               key={day}
-              className={`py-6 px-8 text-sm print:text-xs rounded grid grid-cols-11 border-2 ${
+              className={`py-6 px-8 text-sm print:text-xs rounded grid grid-cols-10 border-2 ${
                 week.status == TimetableStatus.PROVISIONAL
                   ? 'bg-yellow-50'
                   : 'bg-blue-100 border-blue-200'
@@ -142,20 +159,20 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
                   {formatDateToYyMmDd(monday.toDateString())}
                 </p>
               </div>
-              <div className="col-span-10">
+              <div className="col-span-9">
                 {groupedActivities[day].map((activity) => {
-                  let instructor = instructors?.find(
+                  let instructor = finalInstructors?.find(
                     (inst) => inst.user.id == activity.in_charge.adminId,
                   );
                   return (
                     <div
                       key={activity.id}
-                      className="timetable-item relative col-span-4 grid grid-cols-10 gap-2 py-2 rounded cursor-pointer hover:bg-white px-2 hover:text-primary-600">
-                      <p className=" uppercase">
+                      className="timetable-item relative col-span-4 grid grid-cols-9 gap-2 py-2 rounded cursor-pointer hover:bg-white px-2 hover:text-primary-600">
+                      <p className="uppercase">
                         {activity.start_hour.substring(0, 5)} -
                         {' ' + activity.end_hour.substring(0, 5)}
                       </p>
-                      <p className="col-span-3">
+                      <p className="col-span-2">
                         {activity.course_module?.name || activity.event.name}
                         {activity.activity_foot_notes.length > 0 && (
                           <span className="px-1 text-xs">
@@ -173,14 +190,15 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
                       <p>{activity.periods}</p>
                       <p>{activity.method_of_instruction}</p>
                       <p>{activity.venue.name}</p>
-                      <p className=" col-span-2">
+                      <p>
                         {`${instructor?.user.person?.current_rank?.name || ''} ${
                           instructor?.user.first_name
                         } ${instructor?.user.last_name}`}
                       </p>
+                      <p>{activity.dress_code}</p>
                       <Permission privilege={Privileges.CAN_MODIFY_TIMETABLE}>
-                        <div className="actions hidden absolute top-0 right-0">
-                          <div className="flex gap-0">
+                        <div className="actions hidden absolute top-0 right-0 h-full">
+                          <div className="flex gap-0 bg-white px-6 h-full">
                             <Link to={`${url}/item/${activity.id}/add-footnote`}>
                               <Icon name={'add'} size={14} stroke="primary" />
                             </Link>

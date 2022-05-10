@@ -4,6 +4,7 @@ import React, { FormEvent, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useLocation } from 'react-router-dom';
+
 import useAuthenticator from '../../../../hooks/useAuthenticator';
 import usePickedRole from '../../../../hooks/usePickedRole';
 import { enrollmentService } from '../../../../services/administration/enrollments.service';
@@ -30,12 +31,12 @@ import {
   IEvaluationTypeEnum,
   IMarkingType,
   IQuestionaireTypeEnum,
-  ISubmissionTypeEnum
+  ISubmissionTypeEnum,
 } from '../../../../types/services/evaluation.types';
 import { UserInfo } from '../../../../types/services/user.types';
 import {
   getDropDownOptions,
-  getDropDownStatusOptions
+  getDropDownStatusOptions,
 } from '../../../../utils/getOption';
 import Button from '../../../Atoms/custom/Button';
 import Heading from '../../../Atoms/Text/Heading';
@@ -47,7 +48,6 @@ import InputMolecule from '../../../Molecules/input/InputMolecule';
 import MultiselectMolecule from '../../../Molecules/input/MultiselectMolecule';
 import RadioMolecule from '../../../Molecules/input/RadioMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
-
 
 const initialState: IEvaluationSectionBased = {
   evaluation_id: '',
@@ -96,7 +96,7 @@ export default function EvaluationInfoComponent() {
     marking_type: IMarkingType.NOT_SET,
     is_consider_on_report: true,
     marking_reminder_date: '',
-    maximum_file_size: 0,
+    maximum_file_size: 128,
     subject_academic_year_period_id: '',
     questionaire_type: IQuestionaireTypeEnum.DEFAULT,
     exam_instruction: '',
@@ -158,7 +158,7 @@ export default function EvaluationInfoComponent() {
 
     const rankedStudents =
       studentsProgram?.data.data.filter(
-        (stud) => stud.intake_program_student.student.user.person.current_rank,
+        (stud) => stud.intake_program_student.student.user.person?.current_rank,
       ) || [];
     const unrankedStudents =
       studentsProgram?.data.data.filter(
@@ -166,10 +166,17 @@ export default function EvaluationInfoComponent() {
       ) || [];
 
     rankedStudents.sort(function (a, b) {
-      return (
-        a.intake_program_student.student.user.person.current_rank?.priority -
-        b.intake_program_student.student.user.person.current_rank?.priority
-      );
+      if (
+        a.intake_program_student.student.user.person &&
+        b.intake_program_student.student.user.person
+      ) {
+        return (
+          a.intake_program_student.student.user.person.current_rank?.priority -
+          b.intake_program_student.student.user.person.current_rank?.priority
+        );
+      } else {
+        return 0;
+      }
     });
     const finalStudents = rankedStudents.concat(unrankedStudents);
 
@@ -693,34 +700,6 @@ export default function EvaluationInfoComponent() {
               ]}>
               Submission type
             </DropdownMolecule>
-            {details?.submision_type === ISubmissionTypeEnum.FILE && (
-              <>
-                <SelectMolecule
-                  /*@ts-ignore */
-                  value={details?.content_format}
-                  width="64"
-                  name="content_formats"
-                  placeholder="Select submission type"
-                  handleChange={handleChange}
-                  options={[
-                    { label: 'DOC', value: IContentFormatEnum.DOC },
-                    { label: 'MP4', value: IContentFormatEnum.MP4 },
-                    { label: 'PDF', value: IContentFormatEnum.PDF },
-                    { label: 'PNG', value: IContentFormatEnum.PNG },
-                  ]}>
-                  Content format
-                </SelectMolecule>
-
-                <InputMolecule
-                  width="24"
-                  type="number"
-                  name="maximum_file_size"
-                  value={details?.maximum_file_size}
-                  handleChange={handleChange}>
-                  Maximum file size (Mbs)
-                </InputMolecule>
-              </>
-            )}
           </>
         ) : null}
 

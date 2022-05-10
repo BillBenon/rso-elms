@@ -60,7 +60,7 @@ export default function LevelUsers() {
         username: username,
         'full name': first_name + ' ' + last_name,
         email: email,
-        'ID Card': person && person.nid,
+        'ID Card': (person && person.nid) || '',
         academy: academy && academy.name,
         status: generic_status,
         user_type: user_type,

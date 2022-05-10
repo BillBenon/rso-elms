@@ -1,12 +1,13 @@
 import { Editor } from '@tiptap/react';
 import React, { Fragment } from 'react';
 import toast from 'react-hot-toast';
+
 import { evaluationService } from '../../../services/evaluation/evaluation.service';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import { ValueType } from '../../../types';
 import {
   IEvaluationQuestionsInfo,
-  IEvaluationStatus
+  IEvaluationStatus,
 } from '../../../types/services/evaluation.types';
 import Button from '../../Atoms/custom/Button';
 import Icon from '../../Atoms/custom/Icon';
@@ -23,7 +24,7 @@ export default function ModuleSubjectQuestionForm({
   question: IEvaluationQuestionsInfo;
   index: number;
   showActions?: boolean;
-  setrefetchQuestions: (val: boolean) => void;
+  setrefetchQuestions: (_val: boolean) => void;
 }) {
   const { mutate: updateEvaluationQuestion } = evaluationStore.updateEvaluationQuestion();
 
@@ -127,27 +128,29 @@ export default function ModuleSubjectQuestionForm({
             />
           )}
 
-{question.attachments?.length > 0 && (
-
-             <div className="flex flex-col py-3">
-               <Heading fontSize='sm' color='primary' className='py-2'>Question attachments</Heading>
-                    {question.attachments &&
-                      question.attachments?.map((attachment, index) => (
-                        <a
-                        className='text-blue-800 hover:underline'
-                          href={`${
-                            import.meta.env.VITE_API_URL
-                          }/evaluation-service/api/evaluationQuestions/${
-                            attachment.id
-                          }/loadAttachment`}
-                          key={attachment.id}
-                          target="_blank"
-                          download>
-                          {index + 1}. {attachment.name}
-                        </a>
-                      ))}
-                  </div>
-)}
+          {question.attachments?.length > 0 && (
+            <div className="flex flex-col py-3">
+              <Heading fontSize="sm" color="primary" className="py-2">
+                Question attachments
+              </Heading>
+              {question.attachments &&
+                question.attachments?.map((attachment, index) => (
+                  <a
+                    className="text-blue-800 hover:underline"
+                    href={`${
+                      import.meta.env.VITE_API_URL
+                    }/evaluation-service/api/evaluationQuestions/${
+                      attachment.id
+                    }/loadAttachment`}
+                    key={attachment.id}
+                    target="_blank"
+                    download
+                    rel="noreferrer">
+                    {index + 1}. {attachment.name}
+                  </a>
+                ))}
+            </div>
+          )}
         </div>
         <div className="flex justify-center gap-5">
           {showActions ? (
@@ -207,7 +210,6 @@ export default function ModuleSubjectQuestionForm({
               }
             />
           </button>
-          
 
           <Button onClick={() => saveUpdate()}>update question</Button>
         </div>

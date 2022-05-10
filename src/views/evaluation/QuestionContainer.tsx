@@ -4,10 +4,11 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
-  useState
+  useState,
 } from 'react';
 import toast from 'react-hot-toast';
 import { useHistory, useParams } from 'react-router-dom';
+
 import Button from '../../components/Atoms/custom/Button';
 import FileUploader from '../../components/Atoms/Input/FileUploader';
 import Input from '../../components/Atoms/Input/Input';
@@ -24,12 +25,11 @@ import {
   IEvaluationSettingType,
   IMultipleChoiceAnswers,
   IStudentAnswer,
-  ISubmissionTypeEnum
+  ISubmissionTypeEnum,
 } from '../../types/services/evaluation.types';
 import { StudentMarkingAnswer } from '../../types/services/marking.types';
 import ContentSpan from './ContentSpan';
 import MultipleChoiceAnswer from './MultipleChoiceAnswer';
-
 
 interface IQuestionContainerProps {
   question: IEvaluationQuestionsInfo;
@@ -141,7 +141,6 @@ export default function QuestionContainer({
             let data: IStudentAnswer;
 
             if (evaluationInfo.submision_type === ISubmissionTypeEnum.FILE) {
-              console.log('submission type is file here');
               //remove empty attributes
               data = {
                 ...answer,
@@ -157,15 +156,15 @@ export default function QuestionContainer({
               data = answer;
             }
 
-            console.log({ data });
-
-            mutate(data);
-            toast.success('File uploaded successfully');
-            //TODO: invalidate student answers store
-            queryClient.invalidateQueries([
-              'studentEvaluation/answers',
-              studentEvaluationId,
-            ]);
+            mutate(data, {
+              onSuccess() {
+                //TODO: invalidate student answers store
+                queryClient.invalidateQueries([
+                  'studentEvaluation/answers',
+                  studentEvaluationId,
+                ]);
+              },
+            });
           },
         },
       );
@@ -241,8 +240,9 @@ export default function QuestionContainer({
   return (
     <form onSubmit={submitEvaluation}>
       <div
-        className={`bg-main px-16 flex flex-col gap-4 mt-8 w-12/12 border border-primary-400  unselectable ${evaluationInfo?.setting_type === IEvaluationSettingType.SUBJECT_BASED
-          } ? 'pt - 5 pb - 5' : ''`}>
+        className={`bg-main px-16 flex flex-col gap-4 mt-8 w-12/12 border border-primary-400  unselectable ${
+          evaluationInfo?.setting_type === IEvaluationSettingType.SUBJECT_BASED
+        } ? 'pt - 5 pb - 5' : ''`}>
         {evaluationInfo?.setting_type === IEvaluationSettingType.SUBJECT_BASED && (
           <div className="mt-7 flex justify-between">
             <ContentSpan title={`Question ${index + 1}`} className="gap-3">
@@ -263,16 +263,16 @@ export default function QuestionContainer({
           <div className="flex flex-col gap-4">
             {questionChoices && questionChoices?.length > 0
               ? questionChoices?.map((choiceAnswer, choiceIndex) => (
-                <MultipleChoiceAnswer
-                  key={choiceAnswer.id}
-                  choiceId={choiceAnswer.id}
-                  handleChoiceSelect={() =>
-                    handleChoiceSelect(choiceAnswer.id, choiceIndex)
-                  }
-                  answer_content={choiceAnswer.answer_content}
-                  highlight={answer.multiple_choice_answer === choiceAnswer.id}
-                />
-              ))
+                  <MultipleChoiceAnswer
+                    key={choiceAnswer.id}
+                    choiceId={choiceAnswer.id}
+                    handleChoiceSelect={() =>
+                      handleChoiceSelect(choiceAnswer.id, choiceIndex)
+                    }
+                    answer_content={choiceAnswer.answer_content}
+                    highlight={answer.multiple_choice_answer === choiceAnswer.id}
+                  />
+                ))
               : null}
           </div>
         ) : evaluationInfo?.setting_type === IEvaluationSettingType.SECTION_BASED ? (
@@ -304,9 +304,11 @@ export default function QuestionContainer({
             {question.attachments &&
               question.attachments?.map((attachment, index) => (
                 <a
-                  href={`${import.meta.env.VITE_API_URL
-                    }/evaluation-service/api/evaluationQuestions/${attachment.id
-                    }/loadAttachment`}
+                  href={`${
+                    import.meta.env.VITE_API_URL
+                  }/evaluation-service/api/evaluationQuestions/${
+                    attachment.id
+                  }/loadAttachment`}
                   key={attachment.id}
                   target="_blank"
                   download
@@ -327,7 +329,7 @@ export default function QuestionContainer({
                 handleUpload={(filelist) => {
                   handleUpload(filelist);
                 }}
-                accept={evaluationInfo?.content_format}
+                accept="*"
                 error={''}>
                 <Button styleType="outline" type="button">
                   upload answer file
@@ -337,9 +339,11 @@ export default function QuestionContainer({
 
             {previousAnswers[index]?.student_answer_attachments.map((ans) => (
               <a
-                href={`${import.meta.env.VITE_API_URL
-                  }/evaluation-service/api/evaluationQuestions/${ans.attachment.id
-                  }/loadAttachment`}
+                href={`${
+                  import.meta.env.VITE_API_URL
+                }/evaluation-service/api/evaluationQuestions/${
+                  ans.attachment.id
+                }/loadAttachment`}
                 key={ans.attachment.id}
                 target="_blank"
                 download

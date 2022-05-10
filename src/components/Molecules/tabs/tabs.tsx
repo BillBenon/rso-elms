@@ -60,9 +60,8 @@ export function Tabs({
           {children.map((tab, i) => {
             const tProps: any = tab.props;
             return tProps.label && tProps.label.length > 0 ? (
-              <div className="flex-none">
+              <div className="flex-none" key={i}>
                 <button
-                  key={i}
                   className={`pr-5 pl-3 py-4 ${
                     activeTabIndex === i ? 'border-b-3' : 'border-b-2'
                   } m-0 rounded-none

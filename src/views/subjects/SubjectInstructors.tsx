@@ -28,14 +28,18 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
   let instrs: UserTypes[] = [];
 
   const rankedInstructors =
-    instructorInfos?.data.data.filter((inst) => inst.user.person.current_rank) || [];
+    instructorInfos?.data.data.filter((inst) => inst.user.person?.current_rank) || [];
   const unrankedInstructors =
     instructorInfos?.data.data.filter(
       (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
     ) || [];
 
   rankedInstructors.sort(function (a, b) {
-    return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    if (a.user.person && b.user.person) {
+      return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    } else {
+      return 0;
+    }
   });
 
   const finalInstructors = rankedInstructors.concat(unrankedInstructors);
@@ -59,7 +63,7 @@ function SubjectInstructors({ subjectId }: SubjectViewerProps) {
       username: username,
       'full name': first_name + ' ' + last_name,
       email: email,
-      'ID Card': person && person.nid,
+      'ID Card': person?.nid || '',
       academy: academy && academy.name,
       status: generic_status,
       user_type: user_type,

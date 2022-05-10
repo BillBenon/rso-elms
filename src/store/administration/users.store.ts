@@ -48,6 +48,12 @@ class UserStore {
     );
   }
 
+  getUsersOrderedByRank(queryParams?: FilterOptions) {
+    return useQuery(['users/ranked', formatQueryParameters(queryParams)], () =>
+      userService.getUsersOrderedByRank(queryParams),
+    );
+  }
+
   getUserById(id: string) {
     return useQuery(['user/id', id], () => userService.getUserByid(id));
   }
