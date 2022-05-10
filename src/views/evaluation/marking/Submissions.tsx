@@ -106,7 +106,7 @@ export default function Submissions() {
     },
     {
       name: 'Publish',
-      handleAction: () => {
+      handleAction: (id: string | number | undefined) => {
         resultPublisher.mutate(
           { studentEvaluationId: id + '' },
           {
@@ -115,9 +115,9 @@ export default function Submissions() {
               history.push('/dashboard/evaluations');
               // history.push({ pathname: `${url}` });
             },
-            onError: (error) => {
+            onError: (error: any) => {
               console.error(error);
-              toast.error(error + '');
+              toast.error(error.response.data.message);
             },
           },
         );
