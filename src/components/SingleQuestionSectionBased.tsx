@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
-
 import { queryClient } from '../plugins/react-query';
 import { markingStore } from '../store/administration/marking.store';
 import { evaluationStore } from '../store/evaluation/evaluation.store';
@@ -10,13 +9,14 @@ import {
   IEvaluationInfo,
   IEvaluationQuestionsInfo,
   IStudentAnswer,
-  ISubmissionTypeEnum,
+  ISubmissionTypeEnum
 } from '../types/services/evaluation.types';
 import ContentSpan from '../views/evaluation/ContentSpan';
 import Button from './Atoms/custom/Button';
 import FileUploader from './Atoms/Input/FileUploader';
 import Heading from './Atoms/Text/Heading';
 import TextAreaMolecule from './Molecules/input/TextAreaMolecule';
+
 
 export function SingleQuestionSectionBased({
   question,
@@ -191,11 +191,9 @@ export function SingleQuestionSectionBased({
           {question.attachments &&
             question.attachments?.map((attachment, index) => (
               <a
-                href={`${
-                  import.meta.env.VITE_API_URL
-                }/evaluation-service/api/evaluationQuestions/${
-                  attachment.id
-                }/loadAttachment`}
+                href={`${import.meta.env.VITE_API_URL
+                  }/evaluation-service/api/evaluationQuestions/${attachment.id
+                  }/loadAttachment`}
                 key={attachment.id}
                 target="_blank"
                 className="text-blue-500 hover:underline py-2"
@@ -225,11 +223,9 @@ export function SingleQuestionSectionBased({
               .find((item) => item.evaluation_question.id == question.id)
               ?.student_answer_attachments.map((ans, file_question_index) => (
                 <a
-                  href={`${
-                    import.meta.env.VITE_API_URL
-                  }/evaluation-service/api/evaluationQuestions/${
-                    ans.attachment.id
-                  }/loadAttachment`}
+                  href={`${import.meta.env.VITE_API_URL
+                    }/evaluation-service/api/evaluationQuestions/${ans.attachment.id
+                    }/loadAttachment`}
                   key={ans.attachment.id}
                   target="_blank"
                   className="block py-2 text-blue-500 hover:underline"
