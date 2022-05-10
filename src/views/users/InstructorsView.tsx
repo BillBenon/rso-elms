@@ -14,14 +14,14 @@ import TableHeader from '../../components/Molecules/table/TableHeader';
 import AssignRole from '../../components/Organisms/forms/roles/AssignRole';
 import ImportUsers from '../../components/Organisms/user/ImportUsers';
 import useAuthenticator from '../../hooks/useAuthenticator';
-import usePickedRole from '../../hooks/usePickedRole';
+import { enrollmentService } from '../../services/administration/enrollments.service';
 import { authenticatorStore } from '../../store/administration';
 import academyStore from '../../store/administration/academy.store';
-import enrollmentStore from '../../store/administration/enrollment.store';
-import { Privileges, ValueType } from '../../types';
+import { Privileges, SortedContent, ValueType } from '../../types';
+import { Instructor } from '../../types/services/instructor.types';
 import { ActionsType } from '../../types/services/table.types';
 import { UserType, UserTypes } from '../../types/services/user.types';
-import { formatUserTable } from '../../utils/array';
+import { formatInstructorTable } from '../../utils/array';
 import { getDropDownOptions } from '../../utils/getOption';
 import DeployInstructors from '../DeployInstructors';
 import EnrollStudents from '../EnrollStudents';
@@ -29,34 +29,65 @@ import ViewUserRole from '../roles/ViewUserRole';
 
 export default function InstructorsView() {
   const { url, path } = useRouteMatch();
-  const { user } = useAuthenticator();
+  const { user, picked_role } = useAuthenticator();
   const history = useHistory();
+  const { t } = useTranslation();
   const [currentPage, setcurrentPage] = useState(0);
   const [pageSize, setPageSize] = useState(25);
   const [selectedAcademy, setSelectedAcademy] = useState('');
-  const picked_role = usePickedRole();
-  const { t } = useTranslation();
+  const [academyUsers, setAcademyUsers] = useState<SortedContent<Instructor[]>>();
+  const [institutionUsers, setInstitutionUsers] = useState<SortedContent<Instructor[]>>();
+  const [isLoading, setIsLoading] = useState(true);
 
   const { mutateAsync } = authenticatorStore.resetPassword();
 
   const academies = academyStore.getAcademiesByInstitution(
     user?.institution.id.toString() || '',
   );
-  const { data, isLoading, refetch } =
-    user?.user_type === UserType.SUPER_ADMIN
-      ? enrollmentStore.getInstructorByAcademyOrderedByRank(selectedAcademy, {
+
+  useEffect(() => {
+    let users = enrollmentService.getInstructorByAcademyOrderedByRank(selectedAcademy, {
+      page: currentPage,
+      pageSize,
+    });
+
+    users.then((res) => {
+      setInstitutionUsers(res.data.data), setIsLoading(false);
+    });
+  }, [currentPage, pageSize, selectedAcademy]);
+
+  useEffect(() => {
+    if (picked_role?.academy_id) {
+      let users = enrollmentService.getInstructorByAcademyOrderedByRank(
+        picked_role?.academy_id.toString() || '',
+        {
           page: currentPage,
           pageSize,
-        })
-      : enrollmentStore.getInstructorByAcademyOrderedByRank(
-          picked_role?.academy_id + '',
-          {
-            page: currentPage,
-            pageSize,
-          },
-        );
+        },
+      );
 
-  const users = formatUserTable(data?.data.data.content.map((inst) => inst.user) || []);
+      users.then((res) => {
+        setAcademyUsers(res.data.data), setIsLoading(false);
+      });
+    }
+  }, [currentPage, pageSize, picked_role?.academy_id]);
+
+  const [users, setUsers] = useState<UserTypes[]>([]);
+  const [totalElements, setTotalElements] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
+
+  useEffect(() => {
+    setUsers(
+      formatInstructorTable(academyUsers?.content || institutionUsers?.content || []),
+    );
+    setTotalElements(academyUsers?.totalElements || 0);
+    setTotalPages(academyUsers?.totalPages || 0);
+  }, [
+    academyUsers?.content,
+    academyUsers?.totalElements,
+    academyUsers?.totalPages,
+    institutionUsers?.content,
+  ]);
 
   let actions: ActionsType<UserTypes>[] = [];
 
@@ -125,10 +156,6 @@ export default function InstructorsView() {
 
   function handleSearch(_e: ValueType) {}
 
-  useEffect(() => {
-    refetch();
-  }, [currentPage, pageSize, refetch]);
-
   return (
     <div>
       {user?.user_type === UserType.SUPER_ADMIN && (
@@ -149,7 +176,7 @@ export default function InstructorsView() {
       )}
       <TableHeader
         title={t('Instructor')}
-        totalItems={data?.data.data.totalElements || 0}
+        totalItems={totalElements}
         handleSearch={handleSearch}>
         <Permission privilege={Privileges.CAN_CREATE_USER}>
           <div className="flex gap-3">
@@ -162,7 +189,21 @@ export default function InstructorsView() {
           </div>
         </Permission>
       </TableHeader>
-      {isLoading ? (
+      {!selectedAcademy && user?.user_type === UserType.SUPER_ADMIN ? (
+        <NoDataAvailable
+          showButton={false}
+          icon="user"
+          buttonLabel={'Add new ' + t('Instructor')}
+          title={'No ' + t('Instructor') + ' available'}
+          handleClick={() => history.push(`/dashboard/users/add/${UserType.INSTRUCTOR}`)}
+          description={
+            'There are no ' +
+            t('Instructor') +
+            '! Make sure you select a specific academy'
+          }
+          privilege={Privileges.CAN_CREATE_USER}
+        />
+      ) : isLoading ? (
         <Loader />
       ) : users.length <= 0 ? (
         <NoDataAvailable
@@ -183,11 +224,11 @@ export default function InstructorsView() {
           selectorActions={[]}
           uniqueCol="id"
           rowsPerPage={pageSize}
-          totalPages={data?.data.data.totalPages || 1}
+          totalPages={totalPages}
           currentPage={currentPage}
           onPaginate={(page) => setcurrentPage(page)}
           onChangePageSize={(size) => {
-            setcurrentPage(0);
+            setcurrentPage(currentPage);
             setPageSize(size);
           }}
         />
