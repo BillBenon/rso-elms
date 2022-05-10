@@ -17,7 +17,6 @@ import FileUploader from './Atoms/Input/FileUploader';
 import Heading from './Atoms/Text/Heading';
 import TextAreaMolecule from './Molecules/input/TextAreaMolecule';
 
-
 export function SingleQuestionSectionBased({
   question,
   index,
@@ -65,7 +64,6 @@ export function SingleQuestionSectionBased({
         },
         {
           onSuccess(attachmeInfo) {
-
             setFile(null);
 
             queryClient.invalidateQueries([
@@ -106,7 +104,6 @@ export function SingleQuestionSectionBased({
               'studentEvaluation/answers',
               studentEvaluationId,
             ]);
-
           },
         },
       );
@@ -187,8 +184,7 @@ export function SingleQuestionSectionBased({
                 target="_blank"
                 className="text-blue-500 hover:underline py-2"
                 rel="noreferrer"
-                download={true}
-              >
+                download={true}>
                 {index + 1}. {attachment.name}
               </a>
             ))}
@@ -199,7 +195,6 @@ export function SingleQuestionSectionBased({
         <div className="flex py-5 flex-col">
           <FileUploader
             allowPreview={false}
-
             handleUpload={(filelist) => {
               handleUpload(filelist);
             }}
