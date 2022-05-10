@@ -1,5 +1,3 @@
-import '../../../styles/components/Molecules/correction/marking.scss';
-
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
@@ -237,6 +235,14 @@ export default function StudentAnswersMarking() {
                 <div className="w-full flex justify-end">
                   <Button onClick={submitMarking}>Complete Marking</Button>
                 </div>
+              )}
+
+              {!currentModule && (
+                <NoDataAvailable
+                  title={'Select a module to mark'}
+                  showButton={false}
+                  description={"You haven't selected an module to mark"}
+                />
               )}
               {answersLength == 0 && (
                 <div className="w-full flex justify-end">
