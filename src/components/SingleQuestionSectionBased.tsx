@@ -65,15 +65,15 @@ export function SingleQuestionSectionBased({
         },
         {
           onSuccess(attachmeInfo) {
-            setFile(null);
-
             queryClient.invalidateQueries([
               'studentEvaluation/answers',
               studentEvaluationId,
             ]);
 
-            setLocalAnswer((localAnswer) => ({
-              ...localAnswer,
+            setFile(null);
+
+            setLocalAnswer((old) => ({
+              ...old,
               answer_attachment: attachmeInfo.data.data.id.toString(),
             }));
 
@@ -95,25 +95,36 @@ export function SingleQuestionSectionBased({
               data = localAnswer;
             }
 
-            mutate({
-              ...localAnswer,
-              answer_attachment: attachmeInfo.data.data.id.toString(),
-            });
-            toast.success('File uploaded successfully');
-            //TODO: invalidate student answers store
-            queryClient.invalidateQueries([
-              'studentEvaluation/answers',
-              studentEvaluationId,
-            ]);
+            mutate(
+              {
+                ...localAnswer,
+                answer_attachment: attachmeInfo.data.data.id.toString(),
+              },
+              {
+                onSuccess() {
+                  queryClient.invalidateQueries([
+                    'studentEvaluation/answers',
+                    studentEvaluationId,
+                  ]);
+                },
+              },
+            );
           },
         },
       );
     };
-    if (file) {
+    if (file && evaluation?.submision_type === ISubmissionTypeEnum.FILE) {
       handleSubmittingFile();
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [studentEvaluationId, file, addQuestionDocAnswer, mutate]);
+  }, [
+    studentEvaluationId,
+    file,
+    addQuestionDocAnswer,
+    mutate,
+    evaluation.submision_type,
+  ]);
 
   const submitForm = () => {
     mutate(localAnswer, {

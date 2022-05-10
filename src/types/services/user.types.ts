@@ -24,7 +24,7 @@ export interface UserInfo extends Table {
   send_communication_msg: SendCommunicationMsg;
   email: string;
   token: string;
-  person: PersonInfo;
+  person?: PersonInfo;
   academy: AcademyInfo;
   institution_id: string;
   profile_attachment_id: string;
@@ -243,6 +243,11 @@ export interface AcademyUserType {
 export interface UserTypes extends AcademyUserType {
   academy: string;
 }
+
+export interface StudentTypes extends UserTypes {
+  reg_number?: string;
+}
+
 export interface BasicPersonInfo
   extends Pick<
     PersonInfo,

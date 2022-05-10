@@ -15,11 +15,9 @@ import Checkbox from '../../Atoms/Input/CheckBox';
 import Select from '../../Atoms/Input/Select';
 import Pagination from '../Pagination';
 import Tooltip from '../Tooltip';
-
 interface Selected {
   selected?: boolean;
 }
-
 interface TableProps<T> {
   data: (T & Selected)[];
   uniqueCol?: keyof T;
@@ -163,7 +161,8 @@ export default function Table2<T>({
 
   const getKeys = () => {
     const keys = Object.keys(currentRows[0]) as (keyof (T & Selected))[];
-    return keys.filter((item) => !colsToHide.includes(item));
+    // return keys.filter((item) => !colsToHide.includes(item));
+    return keys;
   };
 
   const getHeader = () => {
@@ -171,33 +170,38 @@ export default function Table2<T>({
     // eslint-disable-next-line no-undef
     let header: JSX.Element[] = [];
 
-    header.push(
-      <th className="pl-4">
-        {uniqueCol && (
-          <Checkbox
-            checked={selected.size === currentRows.length}
-            handleChange={() => _handleSelectAll()}
-            name={uniqueCol + ''}
-            value={'all'}
-          />
-        )}
-      </th>,
-    );
+    {
+      uniqueCol &&
+        header.push(
+          <th className="pl-4" key={uniqueCol.toString()}>
+            <Checkbox
+              checked={selected.size === currentRows.length}
+              handleChange={() => _handleSelectAll()}
+              name={uniqueCol + ''}
+              value={'all'}
+            />
+          </th>,
+        );
+    }
 
-    showNumbering && header.push(<th className="pl-4"> №</th>);
+    showNumbering &&
+      header.push(
+        <th className="pl-4" key={Math.random()}>
+          {' '}
+          №
+        </th>,
+      );
 
     /**
      * show dynamic headers, but exclude keys that are marked as to be hidden, in @link row
      */
-    const dynamicHeaders = keys.map((key) =>
-      !colsToHide.includes(key) ? (
-        <th className="px-4 py-5 capitalize" key={key as string}>
-          {key.toString().replaceAll('_', ' ')}
-        </th>
-      ) : (
-        <></>
-      ),
-    );
+    const dynamicHeaders = keys.map((key, i) => (
+      <th
+        className={`px-4 py-5 capitalize ${colsToHide.includes(key) ? 'hidden' : ''}`}
+        key={i}>
+        {key.toString().replaceAll('_', ' ')}
+      </th>
+    ));
 
     header.push(...dynamicHeaders);
 
@@ -222,15 +226,28 @@ export default function Table2<T>({
           <td className="pl-4"> {rowsPerPage * currentPage + index + 1}</td>
         )}
 
-        <Row
-          key={index + Math.random() * 16}
-          data={row}
-          uniqueCol={uniqueCol}
-          keys={keys as string[]}
-          statusColumn={statusColumn}
-          anotherStatusColumn={anotherStatusColumn}
-          statusActions={statusActions}
-        />
+        {keys.map((key) => {
+          let val = row[key];
+          let uniqueColumn: T[keyof T] | Selected['selected'] | undefined = uniqueCol
+            ? row[uniqueCol]
+            : undefined;
+
+          let hasStatus =
+            key.toString().toLowerCase() === statusColumn ||
+            key.toString().toLowerCase() === anotherStatusColumn;
+
+          return (
+            <Row
+              key={key.toString()}
+              identifier={key}
+              data={val}
+              uniqueCol={uniqueColumn}
+              colsToHide={colsToHide}
+              hasStatus={hasStatus}
+              statusActions={statusActions}
+            />
+          );
+        })}
         {actions && actions.length > 0 ? (
           <td className="flex space-x-6 cursor-pointer">
             <Tooltip
@@ -257,7 +274,7 @@ export default function Table2<T>({
                       </li>
                     </Permission>
                   ) : (
-                    <li className="hover:bg-secondary">
+                    <li className="hover:bg-secondary" key={name}>
                       <Button
                         styleType="text"
                         hoverStyle="no-underline"
@@ -290,7 +307,6 @@ export default function Table2<T>({
               action.privilege ? (
                 <Permission privilege={action.privilege}>
                   <Button
-                    key={action.name + Math.random()}
                     styleType="outline"
                     onClick={() => action.handleAction(Array.from(selected))}>
                     {action.name}
@@ -298,7 +314,6 @@ export default function Table2<T>({
                 </Permission>
               ) : (
                 <Button
-                  key={action.name + Math.random()}
                   styleType="outline"
                   onClick={() => action.handleAction(Array.from(selected))}>
                   {action.name}

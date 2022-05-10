@@ -87,14 +87,18 @@ function NewClass() {
     ) || [];
 
   const rankedInstructors =
-    instructors.filter((stud) => stud.user.person.current_rank) || [];
+    instructors.filter((stud) => stud.user.person?.current_rank) || [];
   const unrankedInstructors =
     instructors.filter(
       (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
     ) || [];
 
   rankedInstructors.sort(function (a, b) {
-    return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    if (a.user.person && b.user.person) {
+      return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    } else {
+      return 0;
+    }
   });
   const finalInstructors = rankedInstructors.concat(unrankedInstructors);
 
@@ -104,14 +108,18 @@ function NewClass() {
   const studentsInProgram = students.map((stu) => stu.intake_program_student.student);
 
   const rankedStudents =
-    studentsInProgram.filter((stud) => stud.user.person.current_rank) || [];
+    studentsInProgram.filter((stud) => stud.user.person?.current_rank) || [];
   const unrankedStudents =
     studentsInProgram.filter(
       (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
     ) || [];
 
   rankedStudents.sort(function (a, b) {
-    return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    if (a.user.person && b.user.person) {
+      return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    } else {
+      return 0;
+    }
   });
   const finalStudents = rankedStudents.concat(unrankedStudents);
 

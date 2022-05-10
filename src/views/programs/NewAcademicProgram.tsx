@@ -46,14 +46,18 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
   );
 
   const instructors = inCharge?.data.data.content || [];
-  const rankedInstructors = instructors.filter((inst) => inst.person.current_rank) || [];
+  const rankedInstructors = instructors.filter((inst) => inst.person?.current_rank) || [];
   const unrankedInstructors =
     instructors.filter(
       (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
     ) || [];
 
   rankedInstructors.sort(function (a, b) {
-    return a.person.current_rank?.priority - b.person.current_rank?.priority;
+    if (a.person && b.person) {
+      return a.person.current_rank?.priority - b.person.current_rank?.priority;
+    } else {
+      return 0;
+    }
   });
   const finalInstructors = rankedInstructors.concat(unrankedInstructors);
 
@@ -183,7 +187,7 @@ export default function NewAcademicProgram<E>({ onSubmit }: INewAcademyProgram<E
               labelName: ['first_name', 'last_name'],
               //@ts-ignore
               getOptionLabel: (inst: UserInfo) =>
-                inst.person.current_rank.name ||
+                inst.person?.current_rank?.name ||
                 '' + ' ' + inst.first_name + ' ' + inst.last_name,
             })}
             name="in_charge_id"

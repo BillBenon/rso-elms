@@ -99,7 +99,7 @@ function CompleteProfile({ showHeader = true }: { showHeader?: boolean }) {
         id: userInfo.id.toString(),
         intake_program_id: '',
         password_reset_period_in_days: userInfo.password_reset_period_in_days,
-        person_id: userInfo.person.id.toString(),
+        person_id: userInfo.person?.id + '',
         reset_date: userInfo.reset_date,
         profile_status:
           userInfo.profile_status == null
@@ -118,15 +118,15 @@ function CompleteProfile({ showHeader = true }: { showHeader?: boolean }) {
             : userInfo.send_communication_msg,
         person: userInfo.person,
         // academy_name: userInfo.academy ? userInfo.academy.name : '',
-        birth_date: userInfo.person.birth_date,
+        birth_date: userInfo.person?.birth_date || '',
         education_level:
-          userInfo.person.education_level == null
+          userInfo.person?.education_level == null
             ? EducationLevel.BACHELOR
             : userInfo.person.education_level,
         first_name: userInfo.first_name,
         last_name: userInfo.last_name,
         marital_status:
-          userInfo.person.marital_status == null
+          userInfo.person?.marital_status == null
             ? MaritalStatus.SINGLE
             : userInfo.person.marital_status,
         // password: userInfo.password,
@@ -233,7 +233,7 @@ function CompleteProfile({ showHeader = true }: { showHeader?: boolean }) {
       {foundUser.first_name &&
       foundUser.email &&
       foundUser.last_name &&
-      foundUser.person.nid == null ? (
+      foundUser.person?.nid == null ? (
         <div className={`p-10 md:px-24 md:py-3 ${!showHeader ? 'md:pt-12' : ''}`}>
           <Stepper
             isDisabled={false}

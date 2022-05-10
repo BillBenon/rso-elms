@@ -64,7 +64,7 @@ export default function UpdateExperience() {
     level: '',
     location: '',
     occupation: '',
-    person_id: user?.person.id.toString() || '',
+    person_id: user?.person?.id + '',
     proof: '',
     start_date: '',
     type: experienceData?.type || ExperienceType.EMPLOYMENT,

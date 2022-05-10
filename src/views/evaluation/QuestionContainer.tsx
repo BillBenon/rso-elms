@@ -141,7 +141,6 @@ export default function QuestionContainer({
             let data: IStudentAnswer;
 
             if (evaluationInfo.submision_type === ISubmissionTypeEnum.FILE) {
-              console.log('submission type is file here');
               //remove empty attributes
               data = {
                 ...answer,
@@ -157,15 +156,15 @@ export default function QuestionContainer({
               data = answer;
             }
 
-            console.log({ data });
-
-            mutate(data);
-            toast.success('File uploaded successfully');
-            //TODO: invalidate student answers store
-            queryClient.invalidateQueries([
-              'studentEvaluation/answers',
-              studentEvaluationId,
-            ]);
+            mutate(data, {
+              onSuccess() {
+                //TODO: invalidate student answers store
+                queryClient.invalidateQueries([
+                  'studentEvaluation/answers',
+                  studentEvaluationId,
+                ]);
+              },
+            });
           },
         },
       );

@@ -85,6 +85,24 @@ class EnrolmmentStore {
       ),
     );
   }
+
+  getStudentsOrderedByRank(queryParams?: FilterOptions) {
+    return useQuery(['students', formatQueryParameters(queryParams)], () =>
+      enrollmentService.getStudentsOrderedByRank(queryParams),
+    );
+  }
+  getInstructorsOrderedByRank(queryParams?: FilterOptions) {
+    return useQuery(['instructors', formatQueryParameters(queryParams)], () =>
+      enrollmentService.getInstructorsOrderedByRank(queryParams),
+    );
+  }
+
+  getInstructorByAcademyOrderedByRank(academyId: string, queryParams?: FilterOptions) {
+    return useQuery(['instructors/academy', formatQueryParameters(queryParams)], () =>
+      enrollmentService.getInstructorByAcademyOrderedByRank(academyId, queryParams),
+    );
+  }
+
   getStudentAcademyAndEnrollmentStatus(
     academyId: string,
     enrolmentStatus: StudentApproval,
@@ -150,6 +168,17 @@ class EnrolmmentStore {
   approveStudent() {
     return useMutation(enrollmentService.approveStudent);
   }
+}
+
+export function getStudentsByAcademyOrderedByRank(
+  academyId: string,
+  queryParams?: FilterOptions,
+) {
+  return useQuery(
+    ['students/academy', formatQueryParameters(queryParams)],
+    () => enrollmentService.getStudentsByAcademyOrderedByRank(academyId, queryParams),
+    // { enabled: !!academyId },
+  );
 }
 
 export default new EnrolmmentStore();

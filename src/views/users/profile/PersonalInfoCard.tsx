@@ -102,14 +102,14 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
               <p className="py-2">Gender</p>
               <p className="py-2">Origin</p>
               <p className="py-2">Marital Status</p>
-              {user.person.marital_status === MaritalStatus.WIDOWED ||
+              {user.person?.marital_status === MaritalStatus.WIDOWED ||
               MaritalStatus.MARRIED ? (
                 <p className="py-2">Spouse Name</p>
               ) : (
                 ' '
               )}
-              <p className="py-2">{user.person.doc_type}</p>
-              {user.person.doc_type === DocType.PASSPORT ? (
+              <p className="py-2">{user.person?.doc_type || '-----'}</p>
+              {user.person?.doc_type === DocType.PASSPORT ? (
                 <p className="py-2">Passport Expiry Date</p>
               ) : (
                 ' '
@@ -124,21 +124,23 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
             </div>
             <div className="font-medium text-sm">
               <p className="py-3">{moment(user.created_on).format('ddd, YYYY-MM-DD')}</p>
-              <p className="py-2">{user.person.birth_date || '----'}</p>
-              <p className="py-2">{user.person.place_of_birth || '----'}</p>
-              <p className="py-2">{user.person.place_of_birth_description || '----'}</p>
-              <p className="py-2">{user.person.sex || '----'}</p>
-              <p className="py-3">{user.person.nationality || '------'}</p>
-              <p className="py-2">{titleCase(user.person.marital_status) || '----'}</p>
-              {user.person.marital_status === MaritalStatus.WIDOWED ||
+              <p className="py-2">{user.person?.birth_date || '----'}</p>
+              <p className="py-2">{user.person?.place_of_birth || '----'}</p>
+              <p className="py-2">{user.person?.place_of_birth_description || '----'}</p>
+              <p className="py-2">{user.person?.sex || '----'}</p>
+              <p className="py-3">{user.person?.nationality || '------'}</p>
+              <p className="py-2">
+                {user.person ? titleCase(user.person.marital_status) || '----' : '----'}
+              </p>
+              {user.person?.marital_status === MaritalStatus.WIDOWED ||
               MaritalStatus.MARRIED ? (
-                <p className="py-2">{user.person.spouse_name || '----'}</p>
+                <p className="py-2">{user.person?.spouse_name || '----'}</p>
               ) : (
                 ' '
               )}
-              <p className="py-2">{user.person.nid}</p>
-              {user.person.doc_type === DocType.PASSPORT ? (
-                <p className="py-2">{user.person.document_expire_on || '-----'}</p>
+              <p className="py-2">{user.person?.nid}</p>
+              {user.person?.doc_type === DocType.PASSPORT ? (
+                <p className="py-2">{user.person?.document_expire_on || '-----'}</p>
               ) : (
                 ''
               )}
@@ -146,16 +148,16 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
                 {place_of_birth?.name || '----'} <br />
               </p>
               <p className="py-2">
-                {user.person.religion || '----'} <br />
+                {user.person?.religion || '----'} <br />
               </p>
               <p className="py-2">
-                {user.person.blood_group || '----'} <br />
+                {user.person?.blood_group || '----'} <br />
               </p>
-              <p className="py-2">{user.person.father_names || '----'}</p>
-              <p className="py-2">{user.person.mother_names || '----'}</p>
+              <p className="py-2">{user.person?.father_names || '----'}</p>
+              <p className="py-2">{user.person?.mother_names || '----'}</p>
               <p className="py-3">{residence?.name || '----'}</p>
               <p className="py-2">
-                {user.person.place_of_residence || '----'} <br />
+                {user.person?.place_of_residence || '----'} <br />
               </p>
             </div>
           </div>

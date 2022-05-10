@@ -49,6 +49,10 @@ export default function Navigation({
   const institution = institutionStore.getAll().data?.data.data;
   const academy_info = academyStore.fetchAcademies().data?.data.data;
 
+  const user_role = usePickedRole();
+  const user_privileges = user_role?.role_privileges?.map((role) => role.name);
+  const hasPrivilege = (privilege: Privileges) => user_privileges?.includes(privilege);
+
   const hasSomeUnreadNotifications = notifications.some(
     (notification) =>
       notification.notifaction_status === NotificationStatus.UNREAD.toString(),
@@ -101,7 +105,7 @@ export default function Navigation({
                     </Link>
                   </div>
                 </Permission>
-                <div className="p-1 rounded-full flex text-gray-400 text-current">
+                <div className="p-1 rounded-full flex text-main text-current">
                   {other_user_roles.length > 0 && (
                     <Tooltip
                       on="click"
@@ -109,7 +113,7 @@ export default function Navigation({
                       open={showSwitchMenu}
                       trigger={
                         <button
-                          className="rounded-full flex text-gray-400"
+                          className="rounded-full flex text-main"
                           onClick={() => setSwitchMenu(!showSwitchMenu)}>
                           <div className="relative">
                             <Icon fill="main" name="switch" />
@@ -203,13 +207,18 @@ export default function Navigation({
                             Change password
                           </Link>
                         )}
-                        {hasProfile && (
-                          <Link
-                            to={`/dashboard/user/${user?.id}/profile?me=true`}
-                            className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100">
-                            Your Profile
-                          </Link>
-                        )}
+                        {hasProfile &&
+                          (hasPrivilege(Privileges.CAN_ACCESS_USERS_ROLES) ||
+                            hasPrivilege(Privileges.CAN_ACCESS_USERS_RANKS) ||
+                            hasPrivilege(Privileges.CAN_ACCESS_USERS_NEXTOFKIN) ||
+                            hasPrivilege(Privileges.CAN_ACCESS_USERS_PERSONAL_INFO) ||
+                            hasPrivilege(Privileges.CAN_ACCESS_PROFILE)) && (
+                            <Link
+                              to={`/dashboard/user/${user?.id}/profile?me=true`}
+                              className="block px-4 py-2 text-sm text-txt-primary hover:bg-gray-100">
+                              Your Profile
+                            </Link>
+                          )}
                         {hasSetting && (
                           <a
                             href="#"
@@ -235,7 +244,7 @@ export default function Navigation({
               {/* Mobile menu button */}
               <button
                 onClick={() => setShowMenu(!showMenu)}
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white">
+                className="inline-flex items-center justify-center p-2 rounded-md text-main hover:text-white hover:bg-gray-700 focus:outline-none focus:bg-gray-700 focus:text-white">
                 {/* Menu open: "hidden", Menu closed: "block" */}
                 <svg
                   className="block h-6 w-6"
@@ -294,30 +303,35 @@ export default function Navigation({
                 <div className="text-base font-medium leading-none text-white">
                   {user?.username}
                 </div>
-                <div className="text-sm font-medium leading-none text-gray-400">
+                <div className="text-sm font-medium leading-none text-main">
                   {user?.email}
                 </div>
               </div>
             </div>
             <div className="mt-3 px-2 space-y-1">
-              {hasProfile && (
-                <Link
-                  to={`/dashboard/user/${user?.id}/profile`}
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">
-                  Your Profile
-                </Link>
-              )}
+              {hasProfile &&
+                (hasPrivilege(Privileges.CAN_ACCESS_USERS_ROLES) ||
+                  hasPrivilege(Privileges.CAN_ACCESS_USERS_RANKS) ||
+                  hasPrivilege(Privileges.CAN_ACCESS_USERS_NEXTOFKIN) ||
+                  hasPrivilege(Privileges.CAN_ACCESS_USERS_PERSONAL_INFO) ||
+                  hasPrivilege(Privileges.CAN_ACCESS_PROFILE)) && (
+                  <Link
+                    to={`/dashboard/user/${user?.id}/profile`}
+                    className="block px-3 py-2 rounded-md text-base font-medium text-main hover:text-white hover:bg-gray-700">
+                    Your Profile
+                  </Link>
+                )}
               {hasSetting && (
                 <a
                   href="#"
-                  className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700">
+                  className="block px-3 py-2 rounded-md text-base font-medium text-main hover:text-white hover:bg-gray-700">
                   Settings
                 </a>
               )}
               <button
                 disabled={logoutFn.isLoading}
                 onClick={() => logout()}
-                className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
+                className="block px-3 py-2 rounded-md text-base font-medium text-main hover:text-white hover:bg-gray-700"
                 role="menuitem">
                 {logoutFn.isLoading ? 'Signing out ....' : 'Sign out'}
               </button>

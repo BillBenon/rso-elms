@@ -40,7 +40,8 @@ export function EvaluationChangeMarker({
           labelName: ['first_name', 'last_name'],
           //@ts-ignore
           getOptionLabel: (mark: UserInfo) =>
-            mark.person.current_rank?.name || '' + mark.first_name + ' ' + mark.last_name,
+            mark.person?.current_rank?.name ||
+            '' + mark.first_name + ' ' + mark.last_name,
         })}
         placeholder="marker"
       />
