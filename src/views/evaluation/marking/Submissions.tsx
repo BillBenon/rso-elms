@@ -99,16 +99,18 @@ export default function Submissions() {
     {
       name: 'Mark Answers',
       handleAction: (
-        _data?: string | number | EvaluationStudent | IEvaluationInfo | undefined,
+        _data: string | number | IEvaluationInfo | EvaluationStudent | undefined,
       ) => {
         history.push({ pathname: `${url}/${_data}` });
       },
     },
     {
       name: 'Publish',
-      handleAction: (id: string | number | undefined) => {
+      handleAction: (
+        _data: string | number | IEvaluationInfo | EvaluationStudent | undefined,
+      ) => {
         resultPublisher.mutate(
-          { studentEvaluationId: id + '' },
+          { studentEvaluationId: _data + '' },
           {
             onSuccess: () => {
               toast.success('Result published', { duration: 3000 });
