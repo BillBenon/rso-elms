@@ -127,7 +127,7 @@ export default function AnswerReview({ data, index }: PropTypes) {
           )}
         </div>
 
-        <div className="flex gap-2 h-12 items-center mt-4 self-start">
+        <div className="flex gap-2 h-12 items-center mt-4 self-start w-full justify-end">
           {data.mark_scored != 0 ? (
             <button
               className={
