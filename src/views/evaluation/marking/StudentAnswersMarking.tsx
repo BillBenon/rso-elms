@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
+
 import Button from '../../../components/Atoms/custom/Button';
 import Loader from '../../../components/Atoms/custom/Loader';
 import Heading from '../../../components/Atoms/Text/Heading';
@@ -12,14 +13,13 @@ import SelectMolecule from '../../../components/Molecules/input/SelectMolecule';
 import TableHeader from '../../../components/Molecules/table/TableHeader';
 import FinishMarking from '../../../components/Organisms/forms/evaluation/FinishMarking';
 import { markingStore } from '../../../store/administration/marking.store';
-import '../../../styles/components/Molecules/correction/marking.scss';
-import { Link as LinkList, ParamType, SelectData, ValueType } from '../../../types';
+import { Link as LinkList, SelectData, ValueType } from '../../../types';
+import { ParamType } from '../../../types';
+import { IMarkingType } from '../../../types/services/evaluation.types';
 import {
   MarkingCorrection,
-  StudentMarkingAnswer
+  StudentMarkingAnswer,
 } from '../../../types/services/marking.types';
-
-
 
 export default function StudentAnswersMarking() {
   const { id } = useParams<ParamType>();
@@ -170,7 +170,10 @@ export default function StudentAnswersMarking() {
   }
   if (step == 0)
     if (!isLoading && !markingModulesLoader)
-      if (markingModules?.length || 0 > 0)
+      if (
+        markingModules?.length > 0 &&
+        studentEvaluation?.data.data.evaluation.marking_type === IMarkingType.PER_SECTION
+      )
         return (
           <div className={`flex flex-col gap-4`}>
             <section>
@@ -234,14 +237,76 @@ export default function StudentAnswersMarking() {
                 </div>
               )}
 
-              {!currentModule &&
+              {!currentModule && (
                 <NoDataAvailable
                   title={'Select a module to mark'}
                   showButton={false}
                   description={"You haven't selected an module to mark"}
                 />
+              )}
+              {answersLength == 0 && (
+                <div className="w-full flex justify-end">
+                  <Button
+                    onClick={() => {
+                      history.goBack();
+                    }}>
+                    Go back
+                  </Button>
+                </div>
+              )}
+            </section>
+          </div>
+        );
+      else if (
+        studentEvaluation?.data.data.evaluation.marking_type !== IMarkingType.PER_SECTION
+      )
+        return (
+          <div className={`flex flex-col gap-4`}>
+            <section>
+              <BreadCrumb list={list}></BreadCrumb>
+            </section>
 
-              }
+            {answersLength > 0 && (
+              <TableHeader
+                title={studentEvaluation?.data.data.code + ' submission'}
+                showBadge={false}
+                showSearch={false}>
+                <p className="text-gray-400">
+                  Marks obtained:{' '}
+                  <span className="text-green-300 font-semibold">{totalMarks}</span>
+                </p>
+              </TableHeader>
+            )}
+
+            <section className="flex flex-wrap justify-start gap-4 mt-2">
+              {studentAnswers?.map((studentAnswer, index: number) => {
+                return (
+                  <StudentAnswer
+                    key={index}
+                    index={index}
+                    correction={correction}
+                    updateQuestionPoints={updateQuestionPoints}
+                    data={studentAnswer}
+                    totalMarks={totalMarks}
+                    setTotalMarks={setTotalMarks}
+                    createCreateNewCorrection={createCreateNewCorrection}
+                  />
+                );
+              })}
+              {/* <div className="flex item-center mx-auto">
+            <Pagination
+              rowsPerPage={rowsOnPage}
+              totalElements={studentAnswers?.length || 5}
+              paginate={paginate}
+              currentPage={currentPage}
+              totalPages={1}
+            />
+          </div> */}
+              {answersLength > 0 && (
+                <div className="w-full flex justify-end">
+                  <Button onClick={submitMarking}>Complete Marking</Button>
+                </div>
+              )}
               {answersLength == 0 && (
                 <div className="w-full flex justify-end">
                   <Button

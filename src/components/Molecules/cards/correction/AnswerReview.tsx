@@ -24,8 +24,8 @@ export default function AnswerReview({ data, index }: PropTypes) {
               __html: data.evaluation_question?.question,
             }}></div>
           {data.evaluation_question?.attachments?.length > 0 && (
-            <>
-              <p className="font-semibold text-xl mt-8">Question attachments</p>
+            <div className="pt-6">
+              <ContentSpan title={`Question Attachments`} className="gap-3" />
 
               {data.evaluation_question.attachments.map((ans, file_question_index) => (
                 <a
@@ -40,7 +40,7 @@ export default function AnswerReview({ data, index }: PropTypes) {
                   {file_question_index + 1}. {ans.name}
                 </a>
               ))}
-            </>
+            </div>
           )}
         </ContentSpan>
 
@@ -86,15 +86,15 @@ export default function AnswerReview({ data, index }: PropTypes) {
               {data?.open_answer ||
                 (data.student_answer_attachments.length == 0 && (
                   <div
-                    className="min-h-8 rounded-md border-2 border-primary-500 px-2 py-3 mt-4 answer-box text-primary-500"
+                    className="rounded-md px-2 py-3 mt-4 answer-box text-primary-500"
                     dangerouslySetInnerHTML={{ __html: data?.open_answer }}>
                     {/* {parse(data?.open_answer)} */}
                   </div>
                 ))}
               <div>
                 {data.student_answer_attachments.length > 0 && (
-                  <>
-                    <p className="font-semibold text-xl mt-3">Answer attachments</p>
+                  <div className="pt-6">
+                    <ContentSpan title={`Answer Attachments`} className="gap-3" />
 
                     {data.student_answer_attachments.map((ans, file_question_index) => (
                       <a
@@ -111,12 +111,12 @@ export default function AnswerReview({ data, index }: PropTypes) {
                         {file_question_index + 1}. {ans.attachment.name}
                       </a>
                     ))}
-                  </>
+                  </div>
                 )}
               </div>
               {data.evaluation_question?.answer?.length > 7 && (
-                <div className="min-h-4 rounded-md border-2 border-black px-2 py-3 mt-4 answer-box text-black">
-                  <p className="font-bold text-lg text-primary-600">Correct answer:</p>
+                <div className="px-2 py-3 mt-4 answer-box">
+                  <ContentSpan title={`Correct answer`} className="gap-3" />
                   <div
                     dangerouslySetInnerHTML={{
                       __html: data?.evaluation_question.answer,
@@ -127,7 +127,7 @@ export default function AnswerReview({ data, index }: PropTypes) {
           )}
         </div>
 
-        <div className="flex gap-2 h-12 items-center mt-4 self-start">
+        <div className="flex gap-2 h-12 items-center mt-4 self-start w-full justify-end">
           {data.mark_scored != 0 ? (
             <button
               className={
