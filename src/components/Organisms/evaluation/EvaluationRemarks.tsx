@@ -30,7 +30,7 @@ export default function EvaluationRemarks({
             return feedback.remarks ? (
               <div className="flex flex-col gap-2 pb-4" key={feedback.id}>
                 <Heading fontSize="base" fontWeight="semibold">
-                  {`${instructorInfo?.person.current_rank?.name || ''} ${
+                  {`${instructorInfo?.person?.current_rank?.name || ''} ${
                     instructorInfo?.first_name
                   } ${instructorInfo?.last_name}` || ''}
                 </Heading>

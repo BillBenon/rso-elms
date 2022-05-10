@@ -45,14 +45,20 @@ export default function EnrollInstructorToSubjectComponent({
     let instructorsView: UserView[] = [];
 
     const rankedInstructors =
-      instructorInfos?.data.data.filter((inst) => inst.user.person.current_rank) || [];
+      instructorInfos?.data.data.filter((inst) => inst.user.person?.current_rank) || [];
     const unrankedInstructors =
       instructorInfos?.data.data.filter(
         (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
       ) || [];
 
     rankedInstructors.sort(function (a, b) {
-      return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+      if (a.user.person && b.user.person) {
+        return (
+          a.user.person.current_rank?.priority - b.user.person.current_rank?.priority
+        );
+      } else {
+        return 0;
+      }
     });
 
     const finalInstructors = rankedInstructors.concat(unrankedInstructors);
@@ -61,7 +67,7 @@ export default function EnrollInstructorToSubjectComponent({
       if (!ids.includes(inst.id + '')) {
         let instructorView: UserView = {
           id: inst.id,
-          rank: inst.user.person.current_rank?.name,
+          rank: inst.user.person?.current_rank?.name,
           first_name: inst.user.first_name,
           last_name: inst.user.last_name,
           image_url: inst.user.image_url,

@@ -157,7 +157,7 @@ export default function UserDetails() {
                     title="New Personal Document"
                     open
                     onClose={history.goBack}>
-                    <NewPersonalDocument personId={user.data.data.person.id + ''} />
+                    <NewPersonalDocument personId={user.data.data.person?.id + ''} />
                   </PopupMolecule>
                 );
               }}

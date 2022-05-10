@@ -111,6 +111,14 @@ class UserService {
     );
   }
 
+  public async getUsersOrderedByRank(
+    queryParams?: FilterOptions,
+  ): Promise<AxiosResponse<Response<SortedContent<UserInfo[]>>>> {
+    return await adminstrationAxios.get(
+      `/users/getUsersOrderedByRank?${formatQueryParameters(queryParams)}`,
+    );
+  }
+
   public async getUserAccountByNid(
     nid: string,
   ): Promise<AxiosResponse<Response<UserInfo[]>>> {

@@ -89,14 +89,18 @@ function AddSubjectToPeriod() {
     enrollmentStore.getInstructorsByModule(pickedModule?.module.id + '');
 
   const rankedInstructors =
-    instructors?.data.data.filter((inst) => inst.user.person.current_rank) || [];
+    instructors?.data.data.filter((inst) => inst.user.person?.current_rank) || [];
   const unrankedInstructors =
     instructors?.data.data.filter(
       (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
     ) || [];
 
   rankedInstructors.sort(function (a, b) {
-    return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    if (a.user.person && b.user.person) {
+      return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    } else {
+      return 0;
+    }
   });
   const finalInstructors = rankedInstructors.concat(unrankedInstructors);
 
@@ -182,7 +186,7 @@ function AddSubjectToPeriod() {
           inputs: finalInstructors || [],
           //@ts-ignore
           getOptionLabel: (inst: ModuleInstructors) =>
-            inst.user.person.current_rank.name ||
+            inst.user.person?.current_rank?.name ||
             '' + ' ' + inst.user.first_name + ' ' + inst.user.last_name,
         })}>
         {t('Instructor')} Incharge

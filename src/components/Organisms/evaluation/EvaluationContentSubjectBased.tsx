@@ -103,7 +103,7 @@ export default function SubjectBasedEvaluationContent({ evaluation }: IProps) {
                     <Heading fontSize="sm" color="primary" className="py-2">
                       Question attachments
                     </Heading>
-                    {question.attachments &&
+                    {question.attachments.length > 0 &&
                       question.attachments?.map((attachment, index) => (
                         <a
                           className="text-blue-800 hover:underline"

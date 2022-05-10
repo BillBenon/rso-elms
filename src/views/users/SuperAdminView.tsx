@@ -44,7 +44,24 @@ export default function SuperAdminView() {
   const [users, setUsers] = useState<UserTypes[]>([]);
 
   useEffect(() => {
-    setUsers(formatUserTable(data?.data.data.content || []));
+    const rankedStudents =
+      data?.data.data.content.filter((inst) => inst.person?.current_rank) || [];
+    const unrankedStudents =
+      data?.data.data.content.filter(
+        (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedStudents.sort(function (a, b) {
+      if (a.person && b.person) {
+        return a.person.current_rank?.priority - b.person.current_rank?.priority;
+      } else {
+        return 0;
+      }
+    });
+
+    const finalStudents = rankedStudents.concat(unrankedStudents);
+
+    setUsers(formatUserTable(finalStudents || []));
     setTotalElements(data?.data.data.totalElements || 0);
     setTotalPages(data?.data.data.totalPages || 0);
   }, [data]);
