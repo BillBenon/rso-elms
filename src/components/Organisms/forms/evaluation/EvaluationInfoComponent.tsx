@@ -158,7 +158,7 @@ export default function EvaluationInfoComponent() {
 
     const rankedStudents =
       studentsProgram?.data.data.filter(
-        (stud) => stud.intake_program_student.student.user.person.current_rank,
+        (stud) => stud.intake_program_student.student.user.person?.current_rank,
       ) || [];
     const unrankedStudents =
       studentsProgram?.data.data.filter(
@@ -166,10 +166,17 @@ export default function EvaluationInfoComponent() {
       ) || [];
 
     rankedStudents.sort(function (a, b) {
-      return (
-        a.intake_program_student.student.user.person.current_rank?.priority -
-        b.intake_program_student.student.user.person.current_rank?.priority
-      );
+      if (
+        a.intake_program_student.student.user.person &&
+        b.intake_program_student.student.user.person
+      ) {
+        return (
+          a.intake_program_student.student.user.person.current_rank?.priority -
+          b.intake_program_student.student.user.person.current_rank?.priority
+        );
+      } else {
+        return 0;
+      }
     });
     const finalStudents = rankedStudents.concat(unrankedStudents);
 

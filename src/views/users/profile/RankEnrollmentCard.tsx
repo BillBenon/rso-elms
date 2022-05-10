@@ -10,7 +10,7 @@ function RankEnrollmentCard({ user }: { user: UserInfo }) {
       <Heading fontWeight="semibold" fontSize="base" className="pt-6 pb-7">
         Rank Enrollment
       </Heading>
-      {user.person.current_rank ? (
+      {user.person?.current_rank ? (
         <div className="flex flex-col gap-3 w-full pb-9">
           <div className="flex text-sm">
             <p className="text-txt-secondary">Current rank</p>

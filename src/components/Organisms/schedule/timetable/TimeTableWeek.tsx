@@ -41,6 +41,23 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
   const { mutateAsync, isLoading } = timetableStore.changeWeekStatus();
   const instructors = instructordeploymentStore.getInstructors().data?.data.data;
 
+  const rankedInstructors =
+    instructors?.filter((inst) => inst.user.person?.current_rank) || [];
+  const unrankedInstructors =
+    instructors?.filter(
+      (inst) => inst !== rankedInstructors.find((ranked) => ranked.id === inst.id),
+    ) || [];
+
+  rankedInstructors.sort(function (a, b) {
+    if (a.user.person && b.user.person) {
+      return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+    } else {
+      return 0;
+    }
+  });
+
+  const finalInstructors = rankedInstructors.concat(unrankedInstructors);
+
   const monday = new Date(getWeekBorderDays(new Date(week.start_date)).monday);
   const timetableRef = useRef(null);
 
@@ -144,7 +161,7 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
               </div>
               <div className="col-span-9">
                 {groupedActivities[day].map((activity) => {
-                  let instructor = instructors?.find(
+                  let instructor = finalInstructors?.find(
                     (inst) => inst.user.id == activity.in_charge.adminId,
                   );
                   return (

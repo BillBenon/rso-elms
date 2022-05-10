@@ -36,7 +36,7 @@ export default function EvaluationPerformance() {
         );
 
         let processed: IPerformanceTable = {
-          rank: student.data.data.user.person.current_rank?.name || '',
+          rank: student.data.data.user.person?.current_rank?.name || '',
           first_name: student.data.data.user.first_name,
           last_name: student.data.data.user.last_name,
           // reg_number: record.data.data.reg_number,

@@ -3,7 +3,12 @@ import { AcademyInfo } from './academy.types';
 import { IStudent } from './class.types';
 import { Status } from './division.types';
 import { EnrollmentStatus } from './enrollment.types';
-import { IclassWorkGroupInfo } from './evaluation.types';
+import {
+  AttachementInfo,
+  IEvaluationInfo,
+  IEvaluationQuestionsInfo,
+} from './evaluation.types';
+import { IclassWorkGroupInfo, IEvaluationStatus } from './evaluation.types';
 import { InstitutionInfo } from './institution.types';
 import { UserType } from './user.types';
 
@@ -245,8 +250,52 @@ export interface TwetForm {
   term: string;
 }
 
-export interface TwetReport extends TwetForm {
+interface Twet {
+  code: string;
+  created_by: string;
+  created_on: string;
+  due_on: string;
+  evaluation: IEvaluationInfo;
+  id: string;
+  last_modification_on: string;
+  marking_status: IEvaluationStatus;
+  obtained_mark: number;
+  remark: string;
+  start_on: string;
   student: EvStudent;
+  submission_status: IEvaluationStatus;
+  submitted_on: string;
+  total_mark: number;
+  updated_by: string;
+  updated_on: string;
+  work_time: number;
+}
+
+interface TwetAnswers {
+  created_by: string;
+  created_on: string;
+  evaluation: IEvaluationInfo;
+  evaluation_question: IEvaluationQuestionsInfo;
+  id: string;
+  last_modification_on: string;
+  mark_scored: number;
+  marked: boolean;
+  multiple_choice_answer: string;
+  open_answer: string;
+  student_answer_attachments: {
+    attachment: AttachementInfo;
+  }[];
+  student_evaluation: Twet;
+  updated_by: string;
+}
+export interface TwetReport {
+  answers: TwetAnswers[];
+  id: string;
+  pen_picture: string;
+  student: EvStudent;
+  term: string;
+  tewt: Twet;
+  tewt_id: string;
 }
 
 export interface DSAssessReport {

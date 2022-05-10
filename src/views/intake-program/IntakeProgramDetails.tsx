@@ -78,16 +78,20 @@ function IntakeProgramDetails() {
     let studentsView: UserView[] = [];
 
     studentsProgram?.data.data.sort(function (a, b) {
-      return (
-        a.student.user.person.current_rank?.priority -
-        b.student.user.person.current_rank?.priority
-      );
+      if (a.student.user.person && b.student.user.person) {
+        return (
+          a.student.user.person.current_rank?.priority -
+          b.student.user.person.current_rank?.priority
+        );
+      } else {
+        return 0;
+      }
     });
 
     studentsProgram?.data.data.forEach((stud) => {
       let studentView: UserView = {
         id: stud.id,
-        rank: stud.student.user.person.current_rank?.name,
+        rank: stud.student.user.person?.current_rank?.name,
         first_name: stud.student.user.first_name,
         last_name: stud.student.user.last_name,
         image_url: stud.student.user.image_url,
@@ -101,7 +105,7 @@ function IntakeProgramDetails() {
     let demoInstructors: UserView[] = [];
     const rankedInstructors =
       instructorsProgram?.data.data.filter(
-        (inst) => inst.instructor.user.person.current_rank,
+        (inst) => inst.instructor.user.person?.current_rank,
       ) || [];
     const unrankedInstructors =
       instructorsProgram?.data.data.filter(
@@ -109,10 +113,14 @@ function IntakeProgramDetails() {
       ) || [];
 
     rankedInstructors.sort(function (a, b) {
-      return (
-        a.instructor.user.person.current_rank?.priority -
-        b.instructor.user.person.current_rank?.priority
-      );
+      if (a.instructor.user.person && b.instructor.user.person) {
+        return (
+          a.instructor.user.person.current_rank?.priority -
+          b.instructor.user.person.current_rank?.priority
+        );
+      } else {
+        return 0;
+      }
     });
 
     const finalInstructors = rankedInstructors.concat(unrankedInstructors);
@@ -120,7 +128,7 @@ function IntakeProgramDetails() {
     finalInstructors.map((inst) => {
       demoInstructors.push({
         id: inst.id,
-        rank: inst.instructor.user.person.current_rank?.name,
+        rank: inst.instructor.user.person?.current_rank?.name,
         first_name: inst.instructor.user.first_name,
         last_name: inst.instructor.user.last_name,
         image_url: inst.instructor.user.image_url,
@@ -462,13 +470,13 @@ function IntakeProgramDetails() {
                                 {intakeProgram?.data.data.incharge_instructor ? (
                                   <Heading color="txt-primary" fontSize="sm">
                                     {`${
-                                      incharge_inst?.instructor.user.person.current_rank
+                                      incharge_inst?.instructor.user.person?.current_rank
                                         ?.name || ''
                                     } ${
-                                      incharge_inst?.instructor.user.person.first_name ||
+                                      incharge_inst?.instructor.user.person?.first_name ||
                                       ''
                                     }  ${
-                                      incharge_inst?.instructor.user.person.last_name ||
+                                      incharge_inst?.instructor.user.person?.last_name ||
                                       ''
                                     }`}
                                   </Heading>
@@ -496,12 +504,12 @@ function IntakeProgramDetails() {
                                 {intakeProgram?.data.data.student_in_lead ? (
                                   <Heading color="txt-primary" fontSize="sm">
                                     {`${
-                                      incharge_stud?.student.user.person.current_rank
+                                      incharge_stud?.student.user.person?.current_rank
                                         ?.name || ''
                                     } ${
-                                      incharge_stud?.student.user.person.first_name || ''
+                                      incharge_stud?.student.user.person?.first_name || ''
                                     }  ${
-                                      incharge_stud?.student.user.person.last_name || ''
+                                      incharge_stud?.student.user.person?.last_name || ''
                                     }`}
                                   </Heading>
                                 ) : (
