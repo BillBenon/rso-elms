@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
 import toast from 'react-hot-toast';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
-
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -16,9 +15,10 @@ import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
 import {
   IEvaluationSettingType,
-  StudentEvalParamType,
+  StudentEvalParamType
 } from '../../types/services/evaluation.types';
 import QuestionContainer from './QuestionContainer';
+
 
 export default function EvaluationTest() {
   const { evaluationId } = useParams<StudentEvalParamType>();
@@ -49,7 +49,7 @@ export default function EvaluationTest() {
     mutate(studentEvaluationId, {
       onSuccess: () => {
         toast.success('Evaluation submitted', { duration: 5000 });
-        history.push({ pathname: '/dashboard/student', search: '?forceReload=true' });
+        window.location.href = '/dashboard/student?forceReload=true';
       },
       onError: (error) => {
         toast.error(error + '');
@@ -70,7 +70,7 @@ export default function EvaluationTest() {
     SetTime(
       ((evaluationData?.data?.data?.time_limit || 0) * 60 -
         studentWorkTimer?.data?.data.data) *
-        1000,
+      1000,
     );
   }, [
     evaluationData?.data?.data?.time_limit,
@@ -148,7 +148,7 @@ export default function EvaluationTest() {
                 date={Date.now() + time}
                 onComplete={() => autoSubmit()}
                 renderer={Renderer}
-                onTick={(value) => updateWorkTime(value)}
+              // onTick={(value) => updateWorkTime(value)}
               />
             ) : null}
           </Heading>
