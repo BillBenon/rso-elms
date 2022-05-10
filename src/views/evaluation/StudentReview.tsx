@@ -76,7 +76,9 @@ export default function StudentReview() {
               <Heading fontWeight="semibold" fontSize="base">
                 {t('Instructor')}&apos;s remarks
               </Heading>
-              <p className="text-md">-&gt;{' ' + studentEvaluation.data.data.remark}</p>
+              <p className="text-md">
+                -&gt;{' ' + studentEvaluation.data.data.remark || 'Nothing at all'}
+              </p>
             </div>
             {/* <div className="flex item-center mx-auto">
               <Pagination
