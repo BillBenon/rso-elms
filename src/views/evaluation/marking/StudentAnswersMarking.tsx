@@ -1,10 +1,7 @@
-import '../../../styles/components/Molecules/correction/marking.scss';
-
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useTranslation } from 'react-i18next';
 import { useHistory, useParams } from 'react-router-dom';
-
 import Button from '../../../components/Atoms/custom/Button';
 import Loader from '../../../components/Atoms/custom/Loader';
 import Heading from '../../../components/Atoms/Text/Heading';
@@ -15,12 +12,14 @@ import SelectMolecule from '../../../components/Molecules/input/SelectMolecule';
 import TableHeader from '../../../components/Molecules/table/TableHeader';
 import FinishMarking from '../../../components/Organisms/forms/evaluation/FinishMarking';
 import { markingStore } from '../../../store/administration/marking.store';
-import { Link as LinkList, SelectData, ValueType } from '../../../types';
-import { ParamType } from '../../../types';
+import '../../../styles/components/Molecules/correction/marking.scss';
+import { Link as LinkList, ParamType, SelectData, ValueType } from '../../../types';
 import {
   MarkingCorrection,
-  StudentMarkingAnswer,
+  StudentMarkingAnswer
 } from '../../../types/services/marking.types';
+
+
 
 export default function StudentAnswersMarking() {
   const { id } = useParams<ParamType>();
@@ -234,6 +233,15 @@ export default function StudentAnswersMarking() {
                   <Button onClick={submitMarking}>Complete Marking</Button>
                 </div>
               )}
+
+              {!currentModule &&
+                <NoDataAvailable
+                  title={'Select a module to mark'}
+                  showButton={false}
+                  description={"You haven't selected an module to mark"}
+                />
+
+              }
               {answersLength == 0 && (
                 <div className="w-full flex justify-end">
                   <Button
