@@ -17,7 +17,7 @@ import { authenticatorStore } from '../../store/administration';
 import usersStore from '../../store/administration/users.store';
 import { Privileges, ValueType } from '../../types';
 import { ActionsType } from '../../types/services/table.types';
-import { AcademyUserType, UserType, UserTypes } from '../../types/services/user.types';
+import { UserType, UserTypes } from '../../types/services/user.types';
 import { formatUserTable } from '../../utils/array';
 import DeployInstructors from '../DeployInstructors';
 import EnrollStudents from '../EnrollStudents';
@@ -53,12 +53,29 @@ export default function AdminsView() {
   const [users, setUsers] = useState<UserTypes[]>([]);
 
   useEffect(() => {
-    setUsers(formatUserTable(data?.data.data.content || []));
+    const rankedStudents =
+      data?.data.data.content.filter((inst) => inst.person?.current_rank) || [];
+    const unrankedStudents =
+      data?.data.data.content.filter(
+        (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
+      ) || [];
+
+    rankedStudents.sort(function (a, b) {
+      if (a.person && b.person) {
+        return a.person.current_rank?.priority - b.person.current_rank?.priority;
+      } else {
+        return 0;
+      }
+    });
+
+    const finalStudents = rankedStudents.concat(unrankedStudents);
+
+    setUsers(formatUserTable(finalStudents));
     setTotalElements(data?.data.data.totalElements || 0);
     setTotalPages(data?.data.data.totalPages || 0);
   }, [data]);
 
-  let actions: ActionsType<UserTypes | AcademyUserType>[] = [];
+  let actions: ActionsType<UserTypes>[] = [];
 
   actions?.push({
     name: 'View ' + t('Admins'),
@@ -187,7 +204,7 @@ export default function AdminsView() {
         />
       ) : (
         <>
-          <Table<UserTypes | AcademyUserType>
+          <Table<UserTypes>
             statusColumn="status"
             data={users}
             actions={actions}

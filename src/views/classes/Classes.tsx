@@ -61,7 +61,7 @@ function Classes() {
                     buttonLabel={'Add new ' + t('Class')}
                     icon="academy"
                     fill={false}
-                    title={'No ' + t('Class') + 'available in this period'}
+                    title={'No ' + t('Class') + ' available in this period'}
                     handleClick={() =>
                       path.includes('learn')
                         ? history.push(

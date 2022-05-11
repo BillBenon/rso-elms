@@ -15,49 +15,12 @@ import intakeProgramStore from '../../store/administration/intake-program.store'
 import { getTewtReport, reportStore } from '../../store/evaluation/school-report.store';
 import { Privileges } from '../../types';
 import { TwetForm } from '../../types/services/report.types';
+import { isFailure } from '../../utils/school-report';
 
 interface DSRParamType {
   studentId: string;
   periodId: string;
 }
-
-const areaAssess = [
-  {
-    area: 'Preparation and Organization',
-    hpm: 2.5,
-    ob: 1.5,
-  },
-  {
-    area: 'Foresight and Planning Ability',
-    hpm: 2.5,
-    ob: 1.5,
-  },
-  {
-    area: 'Participation and Contribution',
-    hpm: 5,
-    ob: 4,
-  },
-  {
-    area: 'Understanding of the Concepts',
-    hpm: 10,
-    ob: 7,
-  },
-  {
-    area: 'Expression and Confidence',
-    hpm: 5,
-    ob: 3,
-  },
-  {
-    area: 'Application of theory to prac situation',
-    hpm: 10,
-    ob: 8,
-  },
-  {
-    area: 'Will/Determination/Zeal/Eagerness to learn (Is the student willing to learn, did he/she put in as much effort as possible, is the student eager to acquire as much as he/she can or is just passing time etc……)',
-    hpm: 5,
-    ob: 5,
-  },
-];
 
 export default function DSReportOnStudent() {
   const [isPrinting, setisPrinting] = useState(false);
@@ -120,6 +83,15 @@ export default function DSReportOnStudent() {
     setDetails((details) => ({ ...details, student_id: studentId, term: periodId }));
   }, [studentId, periodId]);
 
+  const total_hpm =
+    reportData?.data.data.answers.reduce(
+      (acc, curr) => acc + curr.evaluation_question.mark,
+      0,
+    ) || 0;
+
+  const total_obt =
+    reportData?.data.data.answers.reduce((acc, curr) => acc + curr.mark_scored, 0) || 0;
+
   return (
     <div className="max-w-4xl">
       <div className="text-right mb-5">
@@ -147,20 +119,20 @@ export default function DSReportOnStudent() {
         <div className="provider">
           <Heading
             fontWeight="semibold"
-            fontSize="lg"
+            fontSize="2xl"
             className="text-center underline uppercase">
             {role_academy?.data.data.name}
           </Heading>
           <Heading
             fontWeight="semibold"
-            fontSize="lg"
+            fontSize="base"
             className="text-center underline uppercase pt-2">
             EX KAZA IBIRINDIRO
           </Heading>
         </div>
         <Heading
           fontWeight="semibold"
-          fontSize="base"
+          fontSize="sm"
           className="text-center underline my-8">
           REPORT ON STUDENT OFFICERS
         </Heading>
@@ -177,7 +149,7 @@ export default function DSReportOnStudent() {
               {studentInfo?.data.data.reg_number || ''}
             </div>
             <div className="border border-black py-1 px-2">
-              {studentInfo?.data.data.user.person.current_rank?.name || ''}
+              {studentInfo?.data.data.user.person?.current_rank?.name || ''}
             </div>
             <div className="border border-black py-1 px-2 capitalize">
               {studentInfo?.data.data.user.last_name || ''}{' '}
@@ -203,27 +175,40 @@ export default function DSReportOnStudent() {
             <div className="border border-black py-1 px-2 uppercase font-semibold">
               Awarded marks
             </div>
-            {areaAssess.map((item, i) => (
+            {reportData?.data.data.answers.map((item, i) => (
               <>
                 <div className="border border-black py-1 px-2">
                   {(i + 1 + 9).toString(36).toLowerCase()}
                 </div>
-                <div className="border border-black py-1 px-2 col-span-5">
-                  {item.area}
+                <div
+                  className="border border-black py-1 px-2 col-span-5"
+                  dangerouslySetInnerHTML={{
+                    __html: item.evaluation_question.question,
+                  }}
+                />
+                <div className="border border-black py-1 px-2">
+                  {item.evaluation_question.mark}
                 </div>
-                <div className="border border-black py-1 px-2">{item.hpm}</div>
-                <div className="border border-black py-1 px-2">{item.ob}</div>
+                <div
+                  className={`border border-black py-1 px-2 ${
+                    isFailure(item.mark_scored, item.evaluation_question.mark)
+                      ? 'text-error-500'
+                      : ''
+                  } `}>
+                  {item.mark_scored}
+                </div>
               </>
             ))}
             {/* total */}
             <div className="px-4 py-2 text-sm border border-black uppercase col-span-6 font-bold">
               Total
             </div>
-            <div className="px-4 py-2 text-sm border border-black">
-              {areaAssess.reduce((acc, curr) => acc + curr.hpm, 0)}
-            </div>
-            <div className="px-4 py-2 text-sm border border-black">
-              {areaAssess.reduce((acc, curr) => acc + curr.ob, 0)}
+            <div className="px-4 py-2 text-sm border border-black">{total_hpm}</div>
+            <div
+              className={`px-4 py-2 text-sm border border-black ${
+                isFailure(total_obt, total_hpm) ? 'text-error-500' : ''
+              }`}>
+              {total_obt}
             </div>
           </div>
         </div>
@@ -280,7 +265,7 @@ export default function DSReportOnStudent() {
         <div className="grid grid-cols-3">
           <p className="text-sm">
             <span className="font-semibold">Rank and Names:</span>{' '}
-            {studentInfo?.data.data.user.person.current_rank?.name}{' '}
+            {studentInfo?.data.data.user.person?.current_rank?.name || ''}{' '}
             {studentInfo?.data.data.user.first_name}{' '}
             {studentInfo?.data.data.user.last_name}
           </p>

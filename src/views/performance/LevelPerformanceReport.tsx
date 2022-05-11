@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
-import { useReactToPrint } from 'react-to-print';
 
 /* A function that takes in a tableID and a filename and exports the table to excel. */
 import Permission from '../../components/Atoms/auth/Permission';
@@ -38,6 +37,7 @@ export default function LevelPerformanceReport() {
       yearPeriod: string;
       name: string;
       subject: { title: string; total_marks: number }[];
+      total_marks: number;
     }[]
   >([]);
 
@@ -48,15 +48,15 @@ export default function LevelPerformanceReport() {
   const performance = dt?.data.data;
 
   const report = useRef(null);
-  const [isPrinting, setisPrinting] = useState(false);
+  // const [isPrinting, setisPrinting] = useState(false);
 
-  const handlePrint = useReactToPrint({
-    content: () => report.current,
-    bodyClass: 'bg-white',
-    documentTitle: `end of level report`,
-    onBeforeGetContent: () => setisPrinting(true),
-    onAfterPrint: () => setisPrinting(false),
-  });
+  // const handlePrint = useReactToPrint({
+  //   content: () => report.current,
+  //   bodyClass: 'bg-white',
+  //   documentTitle: `end of level report`,
+  //   onBeforeGetContent: () => setisPrinting(true),
+  //   onAfterPrint: () => setisPrinting(false),
+  // });
 
   const studentReports = (studentId: string) => {
     setUsedStudents([...usedStudents, studentId]);
@@ -86,6 +86,7 @@ export default function LevelPerformanceReport() {
               colSpan: prd.subject_marks?.length || 0,
               yearPeriod: prd.intake_academic_year_period.adminId || '',
               name: term?.academic_period.name || '',
+              total_marks: prd.total_marks || 0,
               subject: subjects,
             },
           ]);
@@ -110,16 +111,6 @@ export default function LevelPerformanceReport() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [performance, prds?.data.data]);
 
-  const gtotalHpm =
-    performance
-      ?.map((ev) => ev.subject_marks.reduce((a, b) => a + b.total_marks, 0))
-      .reduce((a, b) => a + b, 0) || 0;
-
-  const gtotalObt =
-    performance
-      ?.map((ev) => ev.subject_marks.reduce((a, b) => a + b.obtained_marks, 0))
-      .reduce((a, b) => a + b, 0) || 0;
-
   return (
     <div className="max-w-full">
       <Button
@@ -141,7 +132,7 @@ export default function LevelPerformanceReport() {
             buttonText="Download as XLS"
           /> */}
           <Button
-            disabled={isPrinting}
+            // disabled={isPrinting}
             onClick={() => exportTableToExcel('download-report', 'level-report')}>
             Download report
           </Button>
@@ -206,7 +197,7 @@ export default function LevelPerformanceReport() {
                 )),
               )}
               <th className={`d-vertical w-10 border border-gray-700 bg-zinc-300`}>
-                General Total / {gtotalHpm}
+                General Total / {labels.reduce((a, b) => a + b.total_marks, 0)}
               </th>
               <th className={`d-vertical w-10 border border-gray-700 bg-zinc-300`}>
                 Percentage %
@@ -219,69 +210,75 @@ export default function LevelPerformanceReport() {
             </tr>
           </thead>
           <tbody className="border border-gray-700 p-3">
-            {studentRpt?.map((stud, i) => (
-              <React.Fragment key={i}>
-                <tr className="border border-gray-700 p-3">
-                  <td className="border-r border-gray-700 p-3">{i + 1}</td>
-                  <td className="border-r-2 border-gray-700 p-3">
-                    {stud.student.reg_number}
-                  </td>
-                  {stud.reports?.map((rpt) =>
-                    rpt.subject_marks.map((subj, i) => (
-                      <>
-                        <td
-                          className={`p-3 text-sm border border-gray-700 ${
-                            isFailure(subj.obtained_marks, subj.total_marks)
-                              ? 'text-error-500'
-                              : ''
-                          }`}>
-                          {subj.obtained_marks}
-                        </td>
-                        {rpt.subject_marks.length - 1 === i ? (
-                          <>
-                            <td
-                              className={`w-10 border border-gray-700 bg-zinc-300 ${
-                                isFailure(subj.obtained_marks, subj.total_marks)
-                                  ? 'text-error-500'
-                                  : ''
-                              }`}>
-                              {rpt.obtained_marks}
-                            </td>
-                            <td
-                              className={`w-10 border border-gray-700 border-r-2 bg-zinc-300 ${
-                                isFailure(subj.obtained_marks, subj.total_marks)
-                                  ? 'text-error-500'
-                                  : ''
-                              }`}>
-                              {formatPercentage(rpt.obtained_marks, rpt.total_marks)}
-                            </td>
-                          </>
-                        ) : null}
-                      </>
-                    )),
-                  )}
-                  {/* )),s */}
-                  <td
-                    className={`w-10 border-r border-gray-700 bg-zinc-300 ${
-                      isFailure(gtotalObt, gtotalHpm) ? 'text-error-500' : ''
-                    }`}>
-                    {gtotalObt}
-                  </td>
-                  <td
-                    className={`w-10 border-r border-gray-700 bg-zinc-300 ${
-                      isFailure(gtotalObt, gtotalHpm) ? 'text-error-500' : ''
-                    }`}>
-                    {formatPercentage(gtotalObt, gtotalHpm)}
-                  </td>
-                  <td className={`w-10 border border-gray-700`}>
-                    {calculateGrade(gtotalObt, gtotalHpm)}
-                  </td>
-                  <td className={`w-10 border border-gray-700 border-r-2 bg-zinc-300`}>
-                    {stud.position}
-                  </td>
-                </tr>
-              </React.Fragment>
-            ))}
+            {studentRpt?.map((stud, i) => {
+              const gtotalObt =
+                stud.reports?.reduce((x, y) => x + y.obtained_marks, 0) || 0;
+              const gtotalHpm = stud.reports?.reduce((x, y) => x + y.total_marks, 0) || 0;
+              const gpercentage = formatPercentage(gtotalObt, gtotalHpm);
+              const gGrade = calculateGrade(gtotalObt, gtotalHpm);
+              const ghasFailed = isFailure(gtotalObt, gtotalHpm);
+
+              return (
+                <React.Fragment key={i}>
+                  <tr className="border border-gray-700 p-3">
+                    <td className="border-r border-gray-700 p-3">{i + 1}</td>
+                    <td className="border-r-2 border-gray-700 p-3">
+                      {stud.student.reg_number}
+                    </td>
+                    {stud.reports?.map((rpt) =>
+                      rpt.subject_marks.map((subj, i) => (
+                        <>
+                          <td
+                            className={`p-3 text-sm border border-gray-700 ${
+                              isFailure(subj.obtained_marks, subj.total_marks)
+                                ? 'text-error-500'
+                                : ''
+                            }`}>
+                            {subj.obtained_marks}
+                          </td>
+                          {rpt.subject_marks.length - 1 === i ? (
+                            <>
+                              <td
+                                className={`w-10 border border-gray-700 bg-zinc-300 ${
+                                  isFailure(subj.obtained_marks, subj.total_marks)
+                                    ? 'text-error-500'
+                                    : ''
+                                }`}>
+                                {rpt.obtained_marks}
+                              </td>
+                              <td
+                                className={`w-10 border border-gray-700 border-r-2 bg-zinc-300 ${
+                                  isFailure(subj.obtained_marks, subj.total_marks)
+                                    ? 'text-error-500'
+                                    : ''
+                                }`}>
+                                {formatPercentage(rpt.obtained_marks, rpt.total_marks)}
+                              </td>
+                            </>
+                          ) : null}
+                        </>
+                      )),
+                    )}
+                    <td
+                      className={`w-10 border-r border-gray-700 bg-zinc-300 ${
+                        ghasFailed ? 'text-error-500' : ''
+                      }`}>
+                      {gtotalObt}
+                    </td>
+                    <td
+                      className={`w-10 border-r border-gray-700 bg-zinc-300 ${
+                        ghasFailed ? 'text-error-500' : ''
+                      }`}>
+                      {gpercentage}
+                    </td>
+                    <td className={`w-10 border border-gray-700`}>{gGrade}</td>
+                    <td className={`w-10 border border-gray-700 border-r-2 bg-zinc-300`}>
+                      {stud.position}
+                    </td>
+                  </tr>
+                </React.Fragment>
+              );
+            })}
           </tbody>
         </table>
       </div>

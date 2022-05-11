@@ -47,7 +47,7 @@ function EnrollInstructorIntakeProgram({
     let instructorsView: UserView[] = [];
 
     const rankedInstructors =
-      instructorsInAcademy?.data.data.filter((inst) => inst.user.person.current_rank) ||
+      instructorsInAcademy?.data.data.filter((inst) => inst.user.person?.current_rank) ||
       [];
     const unrankedInstructors =
       instructorsInAcademy?.data.data.filter(
@@ -55,7 +55,13 @@ function EnrollInstructorIntakeProgram({
       ) || [];
 
     rankedInstructors.sort(function (a, b) {
-      return a.user.person.current_rank?.priority - b.user.person.current_rank?.priority;
+      if (a.user.person && b.user.person) {
+        return (
+          a.user.person.current_rank?.priority - b.user.person.current_rank?.priority
+        );
+      } else {
+        return 0;
+      }
     });
 
     const finalInstructors = rankedInstructors.concat(unrankedInstructors);
@@ -66,7 +72,7 @@ function EnrollInstructorIntakeProgram({
         if (!existing_ids.includes(inst.id + '')) {
           let instructorView: UserView = {
             id: inst.id,
-            rank: inst.user.person.current_rank?.name,
+            rank: inst.user.person?.current_rank?.name,
             first_name: inst.user.first_name,
             last_name: inst.user.last_name,
             image_url: inst.user.image_url,

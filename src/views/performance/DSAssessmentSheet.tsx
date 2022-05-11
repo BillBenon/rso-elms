@@ -277,17 +277,19 @@ export default function DSAssessmentSheet() {
                 ))}
               </div>
               {rpt.author.adminId === user?.id && (
-                <div className="reportHide flex justify-center py-2">
-                  <Button
-                    icon
-                    onClick={() => {
-                      setOpen(!open);
-                      // setCreating(false);
-                    }}
-                    className="rounded-sm">
-                    <Icon name="add" fill="main" size={12} />
-                  </Button>
-                </div>
+                <Permission privilege={Privileges.CAN_WRITE_WEEKLY_CRITICS}>
+                  <div className="reportHide flex justify-center py-2">
+                    <Button
+                      icon
+                      onClick={() => {
+                        setOpen(!open);
+                        // setCreating(false);
+                      }}
+                      className="rounded-sm">
+                      <Icon name="add" fill="main" size={12} />
+                    </Button>
+                  </div>
+                </Permission>
               )}
             </>
           ) : (

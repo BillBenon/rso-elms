@@ -67,7 +67,7 @@ function EnrollStudentIntakeProgram<T>({
 
     const rankedStudents =
       studentsInAcademy?.data.data.filter(
-        (inst) => inst.student.user.person.current_rank,
+        (inst) => inst.student.user.person?.current_rank,
       ) || [];
     const unrankedStudents =
       studentsInAcademy?.data.data.filter(
@@ -75,10 +75,14 @@ function EnrollStudentIntakeProgram<T>({
       ) || [];
 
     rankedStudents.sort(function (a, b) {
-      return (
-        a.student.user.person.current_rank?.priority -
-        b.student.user.person.current_rank?.priority
-      );
+      if (a.student.user.person && b.student.user.person) {
+        return (
+          a.student.user.person.current_rank?.priority -
+          b.student.user.person.current_rank?.priority
+        );
+      } else {
+        return 0;
+      }
     });
 
     const finalInstructors = rankedStudents.concat(unrankedStudents);
@@ -87,7 +91,7 @@ function EnrollStudentIntakeProgram<T>({
       if (!existing_ids.includes(stud.student.id + '')) {
         let studentView: UserView = {
           id: stud.student.id,
-          rank: stud.student.user.person.current_rank?.name,
+          rank: stud.student.user.person?.current_rank?.name,
           first_name: stud.student.user.first_name,
           last_name: stud.student.user.last_name,
           image_url: stud.student.user.image_url,
@@ -110,17 +114,17 @@ function EnrollStudentIntakeProgram<T>({
 
       let newStudent: EnrollStudentToProgram = {
         completed_on: '',
-        employee_number: studentInfo?.person.empNo || '',
+        employee_number: studentInfo?.person?.empNo || '',
         enroled_on: studentInfo?.created_on || '',
         enrolment_mode: EnrollmentMode.NEW,
         enrolment_status: StudentApproval.APPROVED,
         intake_program_id: intakeProgram?.id.toString() || '',
         other_rank:
-          studentInfo?.person.other_rank ||
-          studentInfo?.person.current_rank.id + '' ||
+          studentInfo?.person?.other_rank ||
+          studentInfo?.person?.current_rank.id + '' ||
           '',
-        rank_id: studentInfo?.person.current_rank.id.toString() || '',
-        rank_institution: studentInfo?.person.rank_depart || '',
+        rank_id: studentInfo?.person?.current_rank.id.toString() || '',
+        rank_institution: studentInfo?.person?.rank_depart || '',
         student_id: stud_id,
         third_party_reg_number: reg_no || '',
       };

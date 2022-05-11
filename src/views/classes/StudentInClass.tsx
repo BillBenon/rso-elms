@@ -62,7 +62,7 @@ function StudentInClass({ classObject }: IStudentClass) {
     let tempStuds: UserTypes[] = [];
 
     const rankedStudents =
-      studentsData?.data.data.filter((inst) => inst.student.user.person.current_rank) ||
+      studentsData?.data.data.filter((inst) => inst.student.user.person?.current_rank) ||
       [];
     const unrankedStudents =
       studentsData?.data.data.filter(
@@ -70,10 +70,14 @@ function StudentInClass({ classObject }: IStudentClass) {
       ) || [];
 
     rankedStudents.sort(function (a, b) {
-      return (
-        a.student.user.person.current_rank?.priority -
-        b.student.user.person.current_rank?.priority
-      );
+      if (a.student.user.person && b.student.user.person) {
+        return (
+          a.student.user.person.current_rank?.priority -
+          b.student.user.person.current_rank?.priority
+        );
+      } else {
+        return 0;
+      }
     });
 
     const finalStudents = rankedStudents.concat(unrankedStudents);
@@ -81,11 +85,11 @@ function StudentInClass({ classObject }: IStudentClass) {
     finalStudents.forEach((stud) => {
       tempStuds.push({
         id: stud.id.toString(),
-        rank: stud.student.user.person.current_rank?.name,
+        rank: stud.student.user.person?.current_rank?.name,
         username: stud.student.user.username,
         'full name': stud.student.user.first_name + ' ' + stud.student.user.last_name,
         email: stud.student.user.email,
-        'ID Card': stud.student.user.person.nid,
+        'ID Card': stud.student.user.person?.nid || '',
         academy: stud.student.user.academy.name,
         status: stud.student.user.generic_status,
         user_type: stud.student.user.user_type,

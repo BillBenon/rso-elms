@@ -24,7 +24,7 @@ export default function PersonalDocuments({ user }: { user: UserInfo }) {
   const { url } = useRouteMatch();
   const history = useHistory();
   const { data, isSuccess, isLoading, isError } = usersStore.getPersonalFiles(
-    user.person.id + '',
+    user.person?.id + '',
   );
   const { mutateAsync } = usersStore.deletePersonalDoc();
   const [fileUrl, setUrl] = useState('');
@@ -67,7 +67,7 @@ export default function PersonalDocuments({ user }: { user: UserInfo }) {
         await mutateAsync(_data + '', {
           onSuccess() {
             toast.success('Document deleted successfully');
-            queryClient.invalidateQueries(['user/personal_docs', user?.person.id + '']);
+            queryClient.invalidateQueries(['user/personal_docs', user?.person?.id + '']);
             history.goBack();
           },
           onError(error: any) {

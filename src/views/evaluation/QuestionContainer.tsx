@@ -30,7 +30,6 @@ import { StudentMarkingAnswer } from '../../types/services/marking.types';
 import ContentSpan from './ContentSpan';
 import MultipleChoiceAnswer from './MultipleChoiceAnswer';
 
-
 interface IQuestionContainerProps {
   question: IEvaluationQuestionsInfo;
   id: string;
@@ -89,7 +88,7 @@ export default function QuestionContainer({
       onSuccess: () => {
         toast.success('Evaluation submitted', { duration: 5000 });
         localStorage.removeItem('studentEvaluationId');
-        history.push('/dashboard/student');
+        window.location.href = '/dashboard/student';
       },
       onError: (error) => {
         toast.error(error + '');
@@ -141,7 +140,6 @@ export default function QuestionContainer({
             let data: IStudentAnswer;
 
             if (evaluationInfo.submision_type === ISubmissionTypeEnum.FILE) {
-              console.log('submission type is file here');
               //remove empty attributes
               data = {
                 ...answer,
@@ -157,15 +155,14 @@ export default function QuestionContainer({
               data = answer;
             }
 
-            console.log({ data });
-
-            mutate(data);
-            toast.success('File uploaded successfully');
-            //TODO: invalidate student answers store
-            queryClient.invalidateQueries([
-              'studentEvaluation/answers',
-              studentEvaluationId,
-            ]);
+            mutate(data, {
+              onSuccess() {
+                queryClient.invalidateQueries([
+                  'studentEvaluation/answers',
+                  studentEvaluationId,
+                ]);
+              },
+            });
           },
         },
       );
@@ -286,9 +283,19 @@ export default function QuestionContainer({
               onCopy={(e: any) => disableCopyPaste(e)}
               autoComplete="off"
               style={{ height: '7rem' }}
-              value={previousAnswers[index]?.open_answer || answer?.open_answer}
+              value={
+                previousAnswers.find(
+                  (prevAnsw) => prevAnsw.evaluation_question.id == question.id,
+                )?.open_answer || answer?.open_answer
+              }
               placeholder="Type your answer here"
-              onBlur={() => submitForm(previousAnswers[index]?.open_answer)}
+              onBlur={() =>
+                submitForm(
+                  previousAnswers.find(
+                    (prevAnsw) => prevAnsw.evaluation_question.id == question.id,
+                  )?.open_answer,
+                )
+              }
               name="open_answer"
               onFocus={() => setQuestionToSubmit(id)}
               handleChange={handleChange}
@@ -327,7 +334,7 @@ export default function QuestionContainer({
                 handleUpload={(filelist) => {
                   handleUpload(filelist);
                 }}
-                accept={evaluationInfo?.content_format}
+                accept="*"
                 error={''}>
                 <Button styleType="outline" type="button">
                   upload answer file
@@ -335,19 +342,21 @@ export default function QuestionContainer({
               </FileUploader>
             </div>
 
-            {previousAnswers[index]?.student_answer_attachments.map((ans) => (
-              <a
-                href={`${import.meta.env.VITE_API_URL
-                  }/evaluation-service/api/evaluationQuestions/${ans.attachment.id
-                  }/loadAttachment`}
-                key={ans.attachment.id}
-                target="_blank"
-                download
-                className="pb-5"
-                rel="noreferrer">
-                {index + 1}. {ans.attachment.name}
-              </a>
-            ))}
+            {previousAnswers
+              .find((prevAnsw) => prevAnsw.evaluation_question.id == question.id)
+              ?.student_answer_attachments.map((ans) => (
+                <a
+                  href={`${import.meta.env.VITE_API_URL
+                    }/evaluation-service/api/evaluationQuestions/${ans.attachment.id
+                    }/loadAttachment`}
+                  key={ans.attachment.id}
+                  target="_blank"
+                  download
+                  className="pb-5"
+                  rel="noreferrer">
+                  {index + 1}. {ans.attachment.name}
+                </a>
+              ))}
           </Fragment>
         )}
 

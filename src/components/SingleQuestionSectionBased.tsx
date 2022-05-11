@@ -65,16 +65,15 @@ export function SingleQuestionSectionBased({
         },
         {
           onSuccess(attachmeInfo) {
-
-            setFile(null);
-
             queryClient.invalidateQueries([
               'studentEvaluation/answers',
               studentEvaluationId,
             ]);
 
-            setLocalAnswer((localAnswer) => ({
-              ...localAnswer,
+            setFile(null);
+
+            setLocalAnswer((old) => ({
+              ...old,
               answer_attachment: attachmeInfo.data.data.id.toString(),
             }));
 
@@ -96,26 +95,36 @@ export function SingleQuestionSectionBased({
               data = localAnswer;
             }
 
-            mutate({
-              ...localAnswer,
-              answer_attachment: attachmeInfo.data.data.id.toString(),
-            });
-            toast.success('File uploaded successfully');
-            //TODO: invalidate student answers store
-            queryClient.invalidateQueries([
-              'studentEvaluation/answers',
-              studentEvaluationId,
-            ]);
-
+            mutate(
+              {
+                ...localAnswer,
+                answer_attachment: attachmeInfo.data.data.id.toString(),
+              },
+              {
+                onSuccess() {
+                  queryClient.invalidateQueries([
+                    'studentEvaluation/answers',
+                    studentEvaluationId,
+                  ]);
+                },
+              },
+            );
           },
         },
       );
     };
-    if (file) {
+    if (file && evaluation?.submision_type === ISubmissionTypeEnum.FILE) {
       handleSubmittingFile();
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [studentEvaluationId, file, addQuestionDocAnswer, mutate]);
+  }, [
+    studentEvaluationId,
+    file,
+    addQuestionDocAnswer,
+    mutate,
+    evaluation.submision_type,
+  ]);
 
   const submitForm = () => {
     mutate(localAnswer, {
@@ -153,24 +162,26 @@ export function SingleQuestionSectionBased({
         </Heading>
       </div>
 
-      <TextAreaMolecule
-        onPaste={(e: any) => disableCopyPaste(e)}
-        onCopy={(e: any) => disableCopyPaste(e)}
-        autoComplete="off"
-        style={{
-          height: '7rem',
-        }}
-        value={
-          previoustudentAnswers.find(
-            (answer) => answer.evaluation_question.id == question.id,
-          )?.open_answer || localAnswer.open_answer
-        }
-        placeholder="Type your answer here"
-        onBlur={() => submitForm()}
-        name="open_answer"
-        onFocus={() => submitAfter()}
-        handleChange={handleChange}
-      />
+      {evaluation.submision_type == ISubmissionTypeEnum.ONLINE_TEXT && (
+        <TextAreaMolecule
+          onPaste={(e: any) => disableCopyPaste(e)}
+          onCopy={(e: any) => disableCopyPaste(e)}
+          autoComplete="off"
+          style={{
+            height: '7rem',
+          }}
+          value={
+            previoustudentAnswers.find(
+              (answer) => answer.evaluation_question.id == question.id,
+            )?.open_answer || localAnswer.open_answer
+          }
+          placeholder="Type your answer here"
+          onBlur={() => submitForm()}
+          name="open_answer"
+          onFocus={() => submitAfter()}
+          handleChange={handleChange}
+        />
+      )}
 
       {question.attachments?.length > 0 && (
         <div className="flex flex-col py-5">
@@ -187,8 +198,7 @@ export function SingleQuestionSectionBased({
                 target="_blank"
                 className="text-blue-500 hover:underline py-2"
                 rel="noreferrer"
-                download={true}
-              >
+                download={true}>
                 {index + 1}. {attachment.name}
               </a>
             ))}
@@ -199,11 +209,10 @@ export function SingleQuestionSectionBased({
         <div className="flex py-5 flex-col">
           <FileUploader
             allowPreview={false}
-
             handleUpload={(filelist) => {
               handleUpload(filelist);
             }}
-            accept={'*'}
+            accept="*"
             error={''}>
             <Button styleType="outline" type="button">
               upload answer file

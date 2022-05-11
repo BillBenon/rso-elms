@@ -45,17 +45,22 @@ export default function ClassEvaluationPerformance() {
   );
 
   const rankedStudents =
-    studentsData?.data.data.filter((stud) => stud.student.user.person.current_rank) || [];
+    studentsData?.data.data.filter((stud) => stud.student.user.person?.current_rank) ||
+    [];
   const unrankedStudents =
     studentsData?.data.data.filter(
       (stud) => stud !== rankedStudents.find((ranked) => ranked.id === stud.id),
     ) || [];
 
   rankedStudents.sort(function (a, b) {
-    return (
-      a.student.user.person.current_rank?.priority -
-      b.student.user.person.current_rank?.priority
-    );
+    if (a.student.user.person && b.student.user.person) {
+      return (
+        a.student.user.person.current_rank?.priority -
+        b.student.user.person.current_rank?.priority
+      );
+    } else {
+      return 0;
+    }
   });
   const finalStudents = rankedStudents.concat(unrankedStudents);
 
@@ -64,7 +69,7 @@ export default function ClassEvaluationPerformance() {
     performance?.data.data.forEach((record) => {
       if (record.student.admin_id === student.student.id) {
         let processed: IPerformanceTable = {
-          rank: student.student.user.person.current_rank?.name || '',
+          rank: student.student.user.person?.current_rank?.name || '',
           first_name: student.student.user.first_name,
           last_name: student.student.user.last_name,
           // reg_number: record.student.reg_number,

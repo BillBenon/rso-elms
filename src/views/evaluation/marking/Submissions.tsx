@@ -99,25 +99,27 @@ export default function Submissions() {
     {
       name: 'Mark Answers',
       handleAction: (
-        _data?: string | number | EvaluationStudent | IEvaluationInfo | undefined,
+        _data: string | number | IEvaluationInfo | EvaluationStudent | undefined,
       ) => {
         history.push({ pathname: `${url}/${_data}` });
       },
     },
     {
       name: 'Publish',
-      handleAction: () => {
+      handleAction: (
+        _data: string | number | IEvaluationInfo | EvaluationStudent | undefined,
+      ) => {
         resultPublisher.mutate(
-          { studentEvaluationId: id + '' },
+          { studentEvaluationId: _data + '' },
           {
             onSuccess: () => {
               toast.success('Result published', { duration: 3000 });
               history.push('/dashboard/evaluations');
               // history.push({ pathname: `${url}` });
             },
-            onError: (error) => {
+            onError: (error: any) => {
               console.error(error);
-              toast.error(error + '');
+              toast.error(error.response.data.message);
             },
           },
         );

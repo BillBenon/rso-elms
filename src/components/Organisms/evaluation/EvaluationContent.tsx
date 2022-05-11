@@ -1,12 +1,13 @@
 import moment from 'moment';
 import React, { Fragment, ReactNode, useEffect, useState } from 'react';
+
 import useAuthenticator from '../../../hooks/useAuthenticator';
 import usersStore from '../../../store/administration/users.store';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import {
   IEvaluationAction,
   IEvaluationSettingType,
-  IMarkingType
+  IMarkingType,
 } from '../../../types/services/evaluation.types';
 import DisplayClasses from '../../../views/classes/DisplayClasses';
 import ContentSpan from '../../../views/evaluation/ContentSpan';
@@ -17,7 +18,6 @@ import { EvaluationChangeMarker } from './EvaluationChangeMarker';
 import EvaluationContentSectionBased from './EvaluationContentSectionBased';
 import EvaluationContentSubjectBased from './EvaluationContentSubjectBased';
 import EvaluationRemarks from './EvaluationRemarks';
-
 
 interface IProps {
   evaluationId: string;

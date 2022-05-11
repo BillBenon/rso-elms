@@ -71,7 +71,7 @@ export default function SubjectEvaluationInfoComponent() {
     marking_type: IMarkingType.NOT_SET,
     is_consider_on_report: true,
     marking_reminder_date: '',
-    maximum_file_size: 0,
+    maximum_file_size: 128,
     subject_academic_year_period_id: subject_id,
     questionaire_type: IQuestionaireTypeEnum.DEFAULT,
     exam_instruction: '',
@@ -112,7 +112,7 @@ export default function SubjectEvaluationInfoComponent() {
 
     const rankedStudents =
       studentsProgram?.data.data.filter(
-        (stud) => stud.intake_program_student.student.user.person.current_rank,
+        (stud) => stud.intake_program_student.student.user.person?.current_rank,
       ) || [];
     const unrankedStudents =
       studentsProgram?.data.data.filter(
@@ -120,10 +120,17 @@ export default function SubjectEvaluationInfoComponent() {
       ) || [];
 
     rankedStudents.sort(function (a, b) {
-      return (
-        a.intake_program_student.student.user.person.current_rank?.priority -
-        b.intake_program_student.student.user.person.current_rank?.priority
-      );
+      if (
+        a.intake_program_student.student.user.person &&
+        b.intake_program_student.student.user.person
+      ) {
+        return (
+          a.intake_program_student.student.user.person.current_rank?.priority -
+          b.intake_program_student.student.user.person.current_rank?.priority
+        );
+      } else {
+        return 0;
+      }
     });
     const finalStudents = rankedStudents.concat(unrankedStudents);
 
@@ -313,37 +320,6 @@ export default function SubjectEvaluationInfoComponent() {
                 ]}>
                 Submission type
               </DropdownMolecule>
-              {details?.submision_type === ISubmissionTypeEnum.FILE && (
-                <>
-                  <SelectMolecule
-                    /*@ts-ignore */
-                    value={details?.content_format}
-                    width="64"
-                    name="content_format"
-                    placeholder="Select submission type"
-                    handleChange={handleChange}
-                    options={[
-                      { label: 'DOC', value: IContentFormatEnum.DOC },
-                      { label: 'MP4', value: IContentFormatEnum.MP4 },
-                      { label: 'PDF', value: IContentFormatEnum.PDF },
-                      { label: 'PNG', value: IContentFormatEnum.PNG },
-                    ]}>
-                    Content format
-                  </SelectMolecule>
-
-                  {/* <div className="w-[8rem]"> */}
-                  <InputMolecule
-                    style={{ width: '8rem' }}
-                    // width="24"
-                    type="number"
-                    name="maximum_file_size"
-                    value={details?.maximum_file_size}
-                    handleChange={handleChange}>
-                    Maximum file size (Mbs)
-                  </InputMolecule>
-                  {/* </div> */}
-                </>
-              )}
             </>
           ) : null}
           <div className="my-2">

@@ -75,7 +75,7 @@ function ExperienceForm<E>({
     level: '',
     location: '',
     occupation: '',
-    person_id: user?.person.id.toString() || '',
+    person_id: user?.person?.id + '',
     proof: '',
     start_date: '',
     type: type,
@@ -95,9 +95,9 @@ function ExperienceForm<E>({
   const { mutate } = experienceStore.addFile();
   useEffect(() => {
     setExperience((exp) => {
-      return { ...exp, person_id: user?.person.id.toString() || '' };
+      return { ...exp, person_id: user?.person?.id + '' };
     });
-  }, [user?.person.id]);
+  }, [user?.person?.id]);
 
   useEffect(() => {
     setExperience((exp) => {
@@ -138,13 +138,13 @@ function ExperienceForm<E>({
                   level: '',
                   location: '',
                   occupation: '',
-                  person_id: user?.person.id.toString() || '',
+                  person_id: user?.person?.id + '',
                   proof: '',
                   start_date: '',
                   type: experience.type,
                 });
                 setTotalExperience([]);
-                queryClient.invalidateQueries(['experience/id', user?.person.id]);
+                queryClient.invalidateQueries(['experience/id', user?.person?.id]);
                 nextStep(true);
               },
               onError(error: any) {
@@ -162,7 +162,7 @@ function ExperienceForm<E>({
         onSuccess(data) {
           toast.success(data.data.message);
           setErrors(initialErrorState);
-          queryClient.invalidateQueries(['experience/id', user?.person.id]);
+          queryClient.invalidateQueries(['experience/id', user?.person?.id]);
           setExperience({
             attachment_id: '',
             description: '',
@@ -170,7 +170,7 @@ function ExperienceForm<E>({
             level: '',
             location: '',
             occupation: '',
-            person_id: user?.person.id.toString() || '',
+            person_id: user?.person?.id + '',
             proof: '',
             start_date: '',
             type: experience.type,
@@ -252,7 +252,7 @@ function ExperienceForm<E>({
           level: '',
           location: '',
           occupation: '',
-          person_id: user?.person.id.toString() || '',
+          person_id: user?.person?.id + '',
           proof: '',
           start_date: '',
           type: experience.type,
