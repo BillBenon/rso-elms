@@ -5,7 +5,6 @@ import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
-import NewEvaluation from '../../components/Organisms/forms/evaluation/NewEvaluation';
 import { usePrivilege } from '../../hooks/usePrivilege';
 import { CommonCardDataType, Privileges } from '../../types';
 import {
@@ -115,8 +114,6 @@ export default function StudentViewEvaluations({
   return (
     <div>
       <Switch>
-        <Route exact path={`${path}/new`} component={NewEvaluation} />
-
         <Route path={`${path}/details/:id`} component={EvaluationDetails} />
         <Route
           path={path}
