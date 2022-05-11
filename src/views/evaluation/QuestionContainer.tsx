@@ -367,7 +367,6 @@ export default function QuestionContainer({
         <Input value={id} name="evaluation_question" handleChange={handleChange} hidden />
         <div className="py-7">
           <Button
-            type="submit"
             onClick={() => {
               submitForm(id);
             }}>
