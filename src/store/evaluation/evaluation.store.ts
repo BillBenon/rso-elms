@@ -56,8 +56,14 @@ class EvaluationStore {
   }
 
   getModuleEvaluations(module: string) {
-    return useQuery(['evaluationsByAcademyInstructor'], () =>
+    return useQuery(['evaluationByModule'], () =>
       evaluationService.fetchEvaluationsByModule(module),
+    );
+  }
+
+  getModuleEvaluationsForStudent(module: string) {
+    return useQuery(['evaluationByModuleForStudent'], () =>
+      evaluationService.fetchEvaluationsByModuleForStudent(module),
     );
   }
 

@@ -91,6 +91,12 @@ class EvaluationService {
   ): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
     return await evaluationAxios.get(`/evaluations/getEvaluationsByModule/${module}`);
   }
+
+  public async fetchEvaluationsByModuleForStudent(
+    module: string,
+  ): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
+    return await evaluationAxios.get(`/evaluations/module/${module}/all`);
+  }
   public async fetchEvaluationsBySubject(
     subject: string,
   ): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
@@ -106,7 +112,7 @@ class EvaluationService {
 
   public async fetchEvaluationsByStudent(
     subject: string,
-  ): Promise<AxiosResponse<Response<IStudentEvaluationStart[]>>> {
+  ): Promise<AxiosResponse<Response<IEvaluationInfoCollected>>> {
     return await evaluationAxios.get(
       `/evaluations/getEvaluationsBySubject/${subject}/studentNarrower`,
     );
