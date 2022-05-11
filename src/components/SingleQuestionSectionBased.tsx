@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useParams } from 'react-router-dom';
+
 import { queryClient } from '../plugins/react-query';
 import { markingStore } from '../store/administration/marking.store';
 import { evaluationStore } from '../store/evaluation/evaluation.store';
@@ -9,14 +10,13 @@ import {
   IEvaluationInfo,
   IEvaluationQuestionsInfo,
   IStudentAnswer,
-  ISubmissionTypeEnum
+  ISubmissionTypeEnum,
 } from '../types/services/evaluation.types';
 import ContentSpan from '../views/evaluation/ContentSpan';
 import Button from './Atoms/custom/Button';
 import FileUploader from './Atoms/Input/FileUploader';
 import Heading from './Atoms/Text/Heading';
 import TextAreaMolecule from './Molecules/input/TextAreaMolecule';
-
 
 export function SingleQuestionSectionBased({
   question,
@@ -118,13 +118,7 @@ export function SingleQuestionSectionBased({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    studentEvaluationId,
-    file,
-    addQuestionDocAnswer,
-    mutate,
-    evaluation.submision_type,
-  ]);
+  }, [studentEvaluationId, file, addQuestionDocAnswer, evaluation.submision_type]);
 
   const submitForm = () => {
     mutate(localAnswer, {
@@ -132,12 +126,6 @@ export function SingleQuestionSectionBased({
         toast.error(error.response.data.message);
       },
     });
-  };
-
-  const submitAfter = () => {
-    setInterval(() => {
-      submitForm();
-    }, 30000);
   };
 
   function disableCopyPaste(e: any) {
@@ -176,9 +164,7 @@ export function SingleQuestionSectionBased({
             )?.open_answer || localAnswer.open_answer
           }
           placeholder="Type your answer here"
-          onBlur={() => submitForm()}
           name="open_answer"
-          onFocus={() => submitAfter()}
           handleChange={handleChange}
         />
       )}
@@ -191,9 +177,11 @@ export function SingleQuestionSectionBased({
           {question.attachments &&
             question.attachments?.map((attachment, index) => (
               <a
-                href={`${import.meta.env.VITE_API_URL
-                  }/evaluation-service/api/evaluationQuestions/${attachment.id
-                  }/loadAttachment`}
+                href={`${
+                  import.meta.env.VITE_API_URL
+                }/evaluation-service/api/evaluationQuestions/${
+                  attachment.id
+                }/loadAttachment`}
                 key={attachment.id}
                 target="_blank"
                 className="text-blue-500 hover:underline py-2"
@@ -223,9 +211,11 @@ export function SingleQuestionSectionBased({
               .find((item) => item.evaluation_question.id == question.id)
               ?.student_answer_attachments.map((ans, file_question_index) => (
                 <a
-                  href={`${import.meta.env.VITE_API_URL
-                    }/evaluation-service/api/evaluationQuestions/${ans.attachment.id
-                    }/loadAttachment`}
+                  href={`${
+                    import.meta.env.VITE_API_URL
+                  }/evaluation-service/api/evaluationQuestions/${
+                    ans.attachment.id
+                  }/loadAttachment`}
                   key={ans.attachment.id}
                   target="_blank"
                   className="block py-2 text-blue-500 hover:underline"
@@ -238,6 +228,14 @@ export function SingleQuestionSectionBased({
         </div>
       )}
 
+      <div className="py-7">
+        <Button
+          onClick={() => {
+            submitForm();
+          }}>
+          save answer
+        </Button>
+      </div>
       {/*
         FIXME: We should have used a titap component for text editor but we couldn't get it working with the time we had.
       <Tiptap
