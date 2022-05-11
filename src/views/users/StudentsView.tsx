@@ -174,7 +174,6 @@ export default function StudentsView() {
     setFilter(!filter);
   };
 
-  // useEffect(() => {
   const { data: search } = usersStore.getAllBySearch(value, filter);
 
   useEffect(() => {
@@ -229,7 +228,9 @@ export default function StudentsView() {
           buttonLabel={'Add new student'}
           title={'No ' + t('Students') + ' available'}
           handleClick={() => history.push(`/dashboard/users/add/STUDENT`)}
-          description={`There are no ${t('Students')} added into the system yet`}
+          description={`There are no ${t(
+            'Students',
+          )}! Make sure you select a specific academy`}
           privilege={Privileges.CAN_CREATE_USER}
         />
       ) : isLoading ? (

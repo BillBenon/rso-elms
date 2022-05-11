@@ -118,13 +118,7 @@ export function SingleQuestionSectionBased({
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    studentEvaluationId,
-    file,
-    addQuestionDocAnswer,
-    mutate,
-    evaluation.submision_type,
-  ]);
+  }, [studentEvaluationId, file, addQuestionDocAnswer, evaluation.submision_type]);
 
   const submitForm = () => {
     mutate(localAnswer, {
@@ -132,12 +126,6 @@ export function SingleQuestionSectionBased({
         toast.error(error.response.data.message);
       },
     });
-  };
-
-  const submitAfter = () => {
-    setInterval(() => {
-      submitForm();
-    }, 30000);
   };
 
   function disableCopyPaste(e: any) {
@@ -151,7 +139,15 @@ export function SingleQuestionSectionBased({
         <ContentSpan title={`Question ${index + 1}`} className="gap-3">
           <div
             dangerouslySetInnerHTML={{
-              __html: question.question,
+              __html:
+                question.question +
+                ` (${
+                  previoustudentAnswers.find(
+                    (prevAnsw) => prevAnsw.evaluation_question.id == question.id,
+                  )?.id
+                    ? '<span className="text-primary-400 text-sm px-2">Submitted</span>'
+                    : '<span className="text-error-500 text-sm px-2">Not submitted</span>'
+                }) `,
             }}
             className="py-5"
           />
@@ -176,9 +172,7 @@ export function SingleQuestionSectionBased({
             )?.open_answer || localAnswer.open_answer
           }
           placeholder="Type your answer here"
-          onBlur={() => submitForm()}
           name="open_answer"
-          onFocus={() => submitAfter()}
           handleChange={handleChange}
         />
       )}
@@ -242,6 +236,14 @@ export function SingleQuestionSectionBased({
         </div>
       )}
 
+      <div className="py-7">
+        <Button
+          onClick={() => {
+            submitForm();
+          }}>
+          save answer
+        </Button>
+      </div>
       {/*
         FIXME: We should have used a titap component for text editor but we couldn't get it working with the time we had.
       <Tiptap

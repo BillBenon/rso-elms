@@ -7,7 +7,7 @@ import React, {
   useState,
 } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import Button from '../../components/Atoms/custom/Button';
 import FileUploader from '../../components/Atoms/Input/FileUploader';
@@ -51,8 +51,6 @@ export default function QuestionContainer({
   isMultipleChoice,
   evaluationInfo,
 }: IQuestionContainerProps) {
-  const history = useHistory();
-
   const { id: studentEvaluationId } = useParams<ParamType>();
   const [previousAnswers, setPreviousAnswers] = useState<StudentMarkingAnswer[]>([]);
   let previoustudentAnswers =
@@ -89,7 +87,7 @@ export default function QuestionContainer({
       onSuccess: () => {
         toast.success('Evaluation submitted', { duration: 5000 });
         localStorage.removeItem('studentEvaluationId');
-        history.push('/dashboard/student');
+        window.location.href = '/dashboard/student';
       },
       onError: (error) => {
         toast.error(error + '');
@@ -158,7 +156,6 @@ export default function QuestionContainer({
 
             mutate(data, {
               onSuccess() {
-                //TODO: invalidate student answers store
                 queryClient.invalidateQueries([
                   'studentEvaluation/answers',
                   studentEvaluationId,
@@ -248,7 +245,15 @@ export default function QuestionContainer({
             <ContentSpan title={`Question ${index + 1}`} className="gap-3">
               <div
                 dangerouslySetInnerHTML={{
-                  __html: question.question,
+                  __html:
+                    question.question +
+                    ` (${
+                      previousAnswers.find(
+                        (prevAnsw) => prevAnsw.evaluation_question.id == question.id,
+                      )?.id
+                        ? '<span className="text-primary-400 text-sm px-2">Submitted</span>'
+                        : '<span className="text-error-500 text-sm px-2">Not submitted</span>'
+                    }) `,
                 }}
                 className="py-5"
               />
@@ -286,9 +291,12 @@ export default function QuestionContainer({
               onCopy={(e: any) => disableCopyPaste(e)}
               autoComplete="off"
               style={{ height: '7rem' }}
-              value={previousAnswers[index]?.open_answer || answer?.open_answer}
+              value={
+                previousAnswers.find(
+                  (prevAnsw) => prevAnsw.evaluation_question.id == question.id,
+                )?.open_answer || answer?.open_answer
+              }
               placeholder="Type your answer here"
-              onBlur={() => submitForm(previousAnswers[index]?.open_answer)}
               name="open_answer"
               onFocus={() => setQuestionToSubmit(id)}
               handleChange={handleChange}
@@ -337,34 +345,39 @@ export default function QuestionContainer({
               </FileUploader>
             </div>
 
-            {previousAnswers[index]?.student_answer_attachments.map((ans) => (
-              <a
-                href={`${
-                  import.meta.env.VITE_API_URL
-                }/evaluation-service/api/evaluationQuestions/${
-                  ans.attachment.id
-                }/loadAttachment`}
-                key={ans.attachment.id}
-                target="_blank"
-                download
-                className="pb-5"
-                rel="noreferrer">
-                {index + 1}. {ans.attachment.name}
-              </a>
-            ))}
+            {previousAnswers
+              .find((prevAnsw) => prevAnsw.evaluation_question.id == question.id)
+              ?.student_answer_attachments.map((ans) => (
+                <a
+                  href={`${
+                    import.meta.env.VITE_API_URL
+                  }/evaluation-service/api/evaluationQuestions/${
+                    ans.attachment.id
+                  }/loadAttachment`}
+                  key={ans.attachment.id}
+                  target="_blank"
+                  download
+                  className="pb-5"
+                  rel="noreferrer">
+                  {index + 1}. {ans.attachment.name}
+                </a>
+              ))}
           </Fragment>
         )}
 
         <Input value={id} name="evaluation_question" handleChange={handleChange} hidden />
-        {/* <div className="py-7">
-          <Button type="submit" onSubmit={(e: FormEvent) => submitForm(id, e)}>
-            submit answer
+        <div className="py-7 flex gap-2">
+          <Button
+            onClick={() => {
+              submitForm(id);
+            }}>
+            save answer
           </Button>
-        </div> */}
+        </div>
       </div>
       {isLast ? (
         <div className="py-7">
-          <Button type="submit">End evaluation</Button>
+          <Button>End evaluation</Button>
         </div>
       ) : null}
     </form>

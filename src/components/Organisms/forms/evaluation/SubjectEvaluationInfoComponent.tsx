@@ -157,6 +157,18 @@ export default function SubjectEvaluationInfoComponent() {
         ...details,
         [name]: parseFloat(value.toString()) || 0,
       }));
+    } else if (name === 'submision_type' && value === ISubmissionTypeEnum.FILE) {
+      setDetails((details) => ({
+        ...details,
+        [name]: value,
+      }));
+
+      setDetails((details) => ({
+        ...details,
+        strict: false,
+      }));
+
+      return;
     } else {
       setDetails((details) => ({
         ...details,
@@ -312,6 +324,7 @@ export default function SubjectEvaluationInfoComponent() {
               <DropdownMolecule
                 width="64"
                 name="submision_type"
+                value={details.submision_type}
                 placeholder="Select submission type"
                 handleChange={handleChange}
                 options={[

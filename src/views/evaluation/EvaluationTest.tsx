@@ -49,13 +49,13 @@ export default function EvaluationTest() {
     mutate(studentEvaluationId, {
       onSuccess: () => {
         toast.success('Evaluation submitted', { duration: 5000 });
-        history.push({ pathname: '/dashboard/student', search: '?forceReload=true' });
+        window.location.href = '/dashboard/student?forceReload=true';
       },
       onError: (error) => {
         toast.error(error + '');
       },
     });
-  }, [history, mutate, studentEvaluationId]);
+  }, [mutate, studentEvaluationId]);
 
   async function updateWorkTime(value: any) {
     let workTime = timeLimit * 60 * 1000 - time + (time - value.total);
@@ -80,10 +80,11 @@ export default function EvaluationTest() {
   ]);
 
   useEffect(() => {
+    console.log({ open, isCheating, path });
     if (
       !open &&
       isCheating &&
-      path === '/dashboard/evaluations/student-evaluation/:id' &&
+      path === '/dashboard/evaluations/student-evaluation/:id/:evaluationId' &&
       evaluationInfo?.strict
     ) {
       setIsCheating(true);
@@ -92,7 +93,7 @@ export default function EvaluationTest() {
     const handleTabChange = () => {
       if (
         document['hidden'] &&
-        path === '/dashboard/evaluations/student-evaluation/:id' &&
+        path === '/dashboard/evaluations/student-evaluation/:id/:evaluationId' &&
         evaluationInfo?.strict
       ) {
         setIsCheating(true);
@@ -101,7 +102,7 @@ export default function EvaluationTest() {
     };
 
     if (
-      path === '/dashboard/evaluations/student-evaluation/:id' &&
+      path === '/dashboard/evaluations/student-evaluation/:id/:evaluationId' &&
       evaluationInfo?.strict
     ) {
       // Handle page visibility change

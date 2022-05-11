@@ -1,3 +1,4 @@
+import { Instructor } from '../types/services/instructor.types';
 import { StudentTypes, UserInfo, UserTypes } from '../types/services/user.types';
 import { Student } from './../types/services/user.types';
 
@@ -12,6 +13,20 @@ export function formatUserTable(data: UserInfo[]): UserTypes[] {
     academy: d.academy && d.academy.name,
     status: d.generic_status,
     user_type: d.user_type,
+  })) as UserTypes[];
+}
+
+export function formatInstructorTable(data: Instructor[]): UserTypes[] {
+  return data.map((d) => ({
+    id: d.user.id.toString(),
+    rank: d.user.person?.current_rank?.name,
+    username: d.user.username,
+    'full name': d.user.first_name + ' ' + d.user.last_name,
+    email: d.user.email,
+    'ID Card': d.user.person && d.user.person.nid,
+    academy: d.academy && d.academy.name,
+    status: d.generic_status,
+    user_type: d.user.user_type,
   })) as UserTypes[];
 }
 
