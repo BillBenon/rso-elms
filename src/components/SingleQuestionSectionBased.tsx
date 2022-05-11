@@ -122,6 +122,9 @@ export function SingleQuestionSectionBased({
 
   const submitForm = () => {
     mutate(localAnswer, {
+      onSuccess() {
+        queryClient.invalidateQueries(['studentEvaluation/answers', studentEvaluationId]);
+      },
       onError: (error: any) => {
         toast.error(error.response.data.message);
       },

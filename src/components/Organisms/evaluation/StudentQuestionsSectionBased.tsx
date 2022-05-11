@@ -21,7 +21,7 @@ export default function StudentQuestionsSectionBased({
   const history = useHistory();
   const { id: studentEvaluationId } = useParams<ParamType>();
   const [isLoadingSubjects, setIsLoadingSubjects] = useState(true);
-  const { mutateAsync } = evaluationStore.submitEvaluation();
+  const { mutateAsync, isLoading: submitLoader } = evaluationStore.submitEvaluation();
 
   useEffect(() => {
     let filteredSubjects: ISubjects[] = [];
@@ -88,7 +88,9 @@ export default function StudentQuestionsSectionBased({
         ))}
       </Accordion>
       <div className="py-7">
-        <Button onClick={submitEvaluation}>End evaluation</Button>
+        <Button onClick={submitEvaluation} isLoading={submitLoader}>
+          End evaluation
+        </Button>
       </div>
     </div>
   );
