@@ -139,7 +139,15 @@ export function SingleQuestionSectionBased({
         <ContentSpan title={`Question ${index + 1}`} className="gap-3">
           <div
             dangerouslySetInnerHTML={{
-              __html: question.question,
+              __html:
+                question.question +
+                ` (${
+                  previoustudentAnswers.find(
+                    (prevAnsw) => prevAnsw.evaluation_question.id == question.id,
+                  )?.id
+                    ? '<span className="text-primary-400 text-sm px-2">Submitted</span>'
+                    : '<span className="text-error-500 text-sm px-2">Not submitted</span>'
+                }) `,
             }}
             className="py-5"
           />

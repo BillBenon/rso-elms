@@ -83,10 +83,10 @@ export default function FinishMarking({
             Add remarks
           </TextAreaMolecule>
           <div className="flex gap-4">
-            <Button>Publish results</Button>
-            <Button styleType={'text'} color={'tertiary'}>
+            <Button>Add remark</Button>
+            {/* <Button styleType={'text'} color={'tertiary'}>
               Publish later
-            </Button>
+            </Button> */}
           </div>
         </form>
 

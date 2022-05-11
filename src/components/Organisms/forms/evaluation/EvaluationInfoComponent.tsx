@@ -225,6 +225,14 @@ export default function EvaluationInfoComponent() {
       }));
       return;
     }
+
+    if (name === 'submision_type' && value === ISubmissionTypeEnum.FILE) {
+      setDetails((details) => ({
+        ...details,
+        strict: false,
+      }));
+    }
+
     setDetails((details) => ({
       ...details,
       [name]: value.toString(),
@@ -694,6 +702,7 @@ export default function EvaluationInfoComponent() {
               name="submision_type"
               placeholder="Select submission type"
               handleChange={handleChange}
+              value={details.submision_type}
               options={[
                 { label: 'File', value: ISubmissionTypeEnum.FILE },
                 { label: 'Online text', value: ISubmissionTypeEnum.ONLINE_TEXT },
