@@ -340,7 +340,7 @@ export default function Navigation({
         </div>
       </nav>
       <div className="bg-success-600 min-h-10 text-gray-200">
-        <p className="uppercase text-sm py-3 w-72 text-center">
+        <p className="uppercase text-sm py-3 w-60 text-center">
           RWANDA DEFENCE FORCE COMMAND AND STAFF COLLEGE
         </p>
       </div>
