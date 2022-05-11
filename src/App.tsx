@@ -20,6 +20,7 @@ import ChooseRole from './views/roles/ChooseRole';
 const App = () => {
   const [user, setUser] = useState<AuthUser>();
   const [picked_role, setPickedRole] = useState<RoleResWithPrevilages>();
+
   return (
     <UserContext.Provider value={{ user, setUser, picked_role, setPickedRole }}>
       <MainLayout>
