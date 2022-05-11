@@ -138,6 +138,7 @@ export default function NewTimeTable({ activityId, isUpdating = false }: IProps)
           async onSuccess(_data) {
             toast.success('Activity was updated successfully');
             queryClient.invalidateQueries(['timetable/weeks', id]);
+            queryClient.invalidateQueries(['timetable/week/current/:id', id]);
             history.goBack();
           },
           onError(error: any) {
@@ -150,6 +151,7 @@ export default function NewTimeTable({ activityId, isUpdating = false }: IProps)
         async onSuccess(_data) {
           toast.success('Timetable was created successfully');
           queryClient.invalidateQueries(['timetable/weeks', id]);
+          queryClient.invalidateQueries(['timetable/week/current/:id', id]);
           history.goBack();
         },
         onError(error: any) {
