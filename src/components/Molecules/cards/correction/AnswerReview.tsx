@@ -1,12 +1,13 @@
 import React from 'react';
 
 import { TextDecoration } from '../../../../types';
+import { StudentMarkingAnswer } from '../../../../types/services/marking.types';
 import ContentSpan from '../../../../views/evaluation/ContentSpan';
 import Icon from '../../../Atoms/custom/Icon';
 import Heading from '../../../Atoms/Text/Heading';
 
 interface PropTypes {
-  data: any;
+  data: StudentMarkingAnswer;
   index: number;
   full?: boolean;
   icon?: boolean;
@@ -22,6 +23,25 @@ export default function AnswerReview({ data, index }: PropTypes) {
             dangerouslySetInnerHTML={{
               __html: data.evaluation_question?.question,
             }}></div>
+          {data.evaluation_question?.attachments?.length > 0 && (
+            <div className="pt-6">
+              <ContentSpan title={`Question Attachments`} className="gap-3" />
+
+              {data.evaluation_question.attachments.map((ans, file_question_index) => (
+                <a
+                  href={`${
+                    import.meta.env.VITE_API_URL
+                  }/evaluation-service/api/evaluationQuestions/${ans.id}/loadAttachment`}
+                  key={ans.id}
+                  target="_blank"
+                  className="block py-2 text-blue-500 hover:underline"
+                  download
+                  rel="noreferrer">
+                  {file_question_index + 1}. {ans.name}
+                </a>
+              ))}
+            </div>
+          )}
         </ContentSpan>
 
         <Heading fontWeight="semibold" fontSize="sm">
@@ -62,15 +82,52 @@ export default function AnswerReview({ data, index }: PropTypes) {
               )}
             </div>
           ) : (
-            <div
-              className="min-h-8 rounded-md border-2 border-primary-500 px-2 py-3 mt-4 answer-box text-primary-500"
-              dangerouslySetInnerHTML={{
-                __html: data?.open_answer,
-              }}></div>
+            <div className="pt-16 ">
+              {data?.open_answer ||
+                (data.student_answer_attachments.length == 0 && (
+                  <div
+                    className="rounded-md px-2 py-3 mt-4 answer-box text-primary-500"
+                    dangerouslySetInnerHTML={{ __html: data?.open_answer }}>
+                    {/* {parse(data?.open_answer)} */}
+                  </div>
+                ))}
+              <div>
+                {data.student_answer_attachments.length > 0 && (
+                  <div className="pt-6">
+                    <ContentSpan title={`Answer Attachments`} className="gap-3" />
+
+                    {data.student_answer_attachments.map((ans, file_question_index) => (
+                      <a
+                        href={`${
+                          import.meta.env.VITE_API_URL
+                        }/evaluation-service/api/evaluationQuestions/${
+                          ans.attachment.id
+                        }/loadAttachment`}
+                        key={ans.attachment.id}
+                        target="_blank"
+                        className="block py-2 text-blue-500 hover:underline"
+                        download
+                        rel="noreferrer">
+                        {file_question_index + 1}. {ans.attachment.name}
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+              {data.evaluation_question?.answer?.length > 7 && (
+                <div className="px-2 py-3 mt-4 answer-box">
+                  <ContentSpan title={`Correct answer`} className="gap-3" />
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: data?.evaluation_question.answer,
+                    }}></div>
+                </div>
+              )}
+            </div>
           )}
         </div>
 
-        <div className="flex gap-2 h-12 items-center mt-4 self-start">
+        <div className="flex gap-2 h-12 items-center mt-4 self-start w-full justify-end">
           {data.mark_scored != 0 ? (
             <button
               className={
