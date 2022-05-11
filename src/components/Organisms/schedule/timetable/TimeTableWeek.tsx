@@ -148,12 +148,12 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
           return (
             <div
               key={day}
-              className={`py-6 px-8 text-sm print:text-xs rounded grid grid-cols-10 border-2 ${
+              className={`py-6 px-6 text-sm print:text-xs rounded grid grid-cols-10 border-2 ${
                 week.status == TimetableStatus.PROVISIONAL
                   ? 'bg-yellow-50'
                   : 'bg-blue-100 border-blue-200'
-              }   my-4 gap-3`}>
-              <div>
+              }   my-4 gap-`}>
+              <div className="border pl-2 border-black">
                 <h2 className="font-semibold text-sm print:text-xs"> {day}</h2>
                 <p className=" print:hidden">
                   {formatDateToYyMmDd(monday.toDateString())}
@@ -167,7 +167,7 @@ export default function TimeTableWeek({ week, levelId }: IProps) {
                   return (
                     <div
                       key={activity.id}
-                      className="timetable-item relative col-span-4 grid grid-cols-9 gap-2 py-2 rounded cursor-pointer hover:bg-white px-2 hover:text-primary-600">
+                      className="timetable-item border-r border-t last:border-b border-black relative col-span-4 grid grid-cols-9 gap-2 py-2 cursor-pointer hover:bg-white px-2 hover:text-primary-600">
                       <p className="uppercase">
                         {activity.start_hour.substring(0, 5)} -
                         {' ' + activity.end_hour.substring(0, 5)}
