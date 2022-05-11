@@ -13,6 +13,7 @@
 .editor-no-border {
   border: none;
 }
+
 body,
 html {
   @apply bg-secondary;
@@ -58,9 +59,6 @@ html {
   fill: red !important;
 }
 
-
-
-
 // scrollbar
 
 ::-webkit-scrollbar {
@@ -81,6 +79,6 @@ html {
   max-height: 20px;
 }
 
-.bg-left-2{
+.bg-left-2 {
   background-position: 40px;
 }

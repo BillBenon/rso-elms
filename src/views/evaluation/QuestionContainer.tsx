@@ -79,8 +79,9 @@ export default function QuestionContainer({
   const [answer, setAnswer] = useState(initialState);
 
   const { mutate } = evaluationStore.addQuestionAnswer();
-  const { mutateAsync } = evaluationStore.submitEvaluation();
+  const { mutateAsync, isLoading: submitLoader } = evaluationStore.submitEvaluation();
   const { mutate: addQuestionDocAnswer } = evaluationStore.addQuestionDocAnswer();
+
   function submitEvaluation(e: FormEvent) {
     e?.preventDefault();
     mutateAsync(answer.student_evaluation, {
@@ -189,8 +190,10 @@ export default function QuestionContainer({
       ) {
         mutate(answer, {
           onSuccess: () => {
-            // toast.success('submitted');
-            setQuestionToSubmit('');
+            queryClient.invalidateQueries([
+              'studentEvaluation/answers',
+              studentEvaluationId,
+            ]);
           },
           onError: (error: any) => {
             toast.error(error.response.data.message);
@@ -198,7 +201,7 @@ export default function QuestionContainer({
         });
       }
     },
-    [answer, mutate],
+    [answer, mutate, studentEvaluationId],
   );
 
   function handleChoiceSelect(choiceId: string, index: number) {
@@ -250,9 +253,9 @@ export default function QuestionContainer({
                     ` (${
                       previousAnswers.find(
                         (prevAnsw) => prevAnsw.evaluation_question.id == question.id,
-                      )?.id
-                        ? '<span className="text-primary-400 text-sm px-2">Submitted</span>'
-                        : '<span className="text-error-500 text-sm px-2">Not submitted</span>'
+                      )?.id.length || 0 > 0
+                        ? '<span class="text-primary-400 text-sm px-2">Submitted</span>'
+                        : '<span class="text-error-500 text-sm px-2">Not submitted</span>'
                     }) `,
                 }}
                 className="py-5"
@@ -377,7 +380,9 @@ export default function QuestionContainer({
       </div>
       {isLast ? (
         <div className="py-7">
-          <Button>End evaluation</Button>
+          <Button type="submit" isLoading={submitLoader}>
+            End evaluation
+          </Button>
         </div>
       ) : null}
     </form>

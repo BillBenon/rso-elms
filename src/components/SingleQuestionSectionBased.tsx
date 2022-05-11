@@ -122,6 +122,9 @@ export function SingleQuestionSectionBased({
 
   const submitForm = () => {
     mutate(localAnswer, {
+      onSuccess() {
+        queryClient.invalidateQueries(['studentEvaluation/answers', studentEvaluationId]);
+      },
       onError: (error: any) => {
         toast.error(error.response.data.message);
       },
@@ -144,9 +147,9 @@ export function SingleQuestionSectionBased({
                 ` (${
                   previoustudentAnswers.find(
                     (prevAnsw) => prevAnsw.evaluation_question.id == question.id,
-                  )?.id
-                    ? '<span className="text-primary-400 text-sm px-2">Submitted</span>'
-                    : '<span className="text-error-500 text-sm px-2">Not submitted</span>'
+                  )?.id.length || 0 > 0
+                    ? '<span class="text-primary-400 text-sm px-2">Submitted</span>'
+                    : '<span class="text-error-500 text-sm px-2">Not submitted</span>'
                 }) `,
             }}
             className="py-5"

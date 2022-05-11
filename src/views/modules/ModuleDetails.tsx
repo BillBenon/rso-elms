@@ -21,6 +21,7 @@ import NewSubjectForm from '../../components/Organisms/forms/subjects/NewSubject
 import { moduleStore } from '../../store/administration/modules.store';
 import { Link, ParamType, Privileges } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
+import ModuleEvaluationAttempt from '../evaluation/ModuleEvaluationAttempt';
 import ModuleEvaluations from '../evaluation/ModuleEvaluations';
 import ModuleMaterials from '../module-material/ModuleMaterials';
 import { IProgramData } from '../programs/AcademicPrograms';
@@ -76,20 +77,17 @@ export default function ModuleDetails() {
       privilege: Privileges.CAN_ACCESS_MODULE_MATERIALS,
     });
 
-    // {
-    //   label: 'Syllabus',
-    //   href: `${url}/syllabus?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-    // },
-    tabs.push(
-      {
-        label: 'Evaluation',
-        href: `${url}/evaluations?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-      },
-      // {
-      //   label: 'Performance',
-      //   href: `${url}/performances?showMenus=${showMenu}&intkPrg=${intakeProg}`,
-      // },
-    );
+    tabs.push({
+      label: 'Manage Evaluation',
+      href: `${url}/evaluations/manage?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+      privilege: Privileges.CAN_MANAGE_EVALUATIONS,
+    });
+
+    tabs.push({
+      label: 'Evaluation',
+      href: `${url}/evaluations/attempt?showMenus=${showMenu}&intkPrg=${intakeProg}`,
+      privilege: Privileges.CAN_ANSWER_EVALUATION,
+    });
   }
 
   if (module) {
@@ -221,7 +219,16 @@ export default function ModuleDetails() {
           <Switch>
             <Route exact path={`${path}/subjects`} render={() => <Subjects />} />
 
-            <Route path={`${path}/evaluations`} render={() => <ModuleEvaluations />} />
+            <Route
+              exact
+              path={`${path}/evaluations/manage`}
+              render={() => <ModuleEvaluations />}
+            />
+            <Route
+              exact
+              path={`${path}/evaluations/attempt`}
+              render={() => <ModuleEvaluationAttempt />}
+            />
             {/* add subject popup */}
             <Route
               exact

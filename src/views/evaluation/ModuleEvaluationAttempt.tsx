@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import Loader from '../../components/Atoms/custom/Loader';
-import CommonCardMolecule from '../../components/Molecules/cards/CommonCardMolecule';
 import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { CommonCardDataType, ParamType } from '../../types';
 import { advancedTypeChecker } from '../../utils/getOption';
 
-export default function ModuleEvaluations() {
+export default function ModuleEvaluationAttempt() {
   const [evaluations, setEvaluations] = useState<any>([]);
   // const history = useHistory();
   const { id } = useParams<ParamType>();
@@ -47,18 +46,7 @@ export default function ModuleEvaluations() {
             description="There seems to be no evaluations added to this module yet."
           />
         ) : isSuccess && evaluations.length > 0 ? (
-          // <EvaluationCategories loading={isLoading} subjecEvaluations={data?.data.data} />
-          evaluations?.map((info: CommonCardDataType, index: number) => (
-            <div key={index}>
-              <CommonCardMolecule
-                className="cursor-pointer"
-                data={info}
-                // handleClick={() =>
-                //   history.push(`/dashboard/evaluations/details/${info.id}`)
-                // }
-              />
-            </div>
-          ))
+          <div>evaluations should come here</div>
         ) : isError ? (
           <NoDataAvailable
             icon="evaluation"
