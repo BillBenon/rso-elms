@@ -45,7 +45,9 @@ export default function StudentAnswersMarking() {
   }, [studentEvaluation]);
 
   useEffect(() => {
-    setAnswersLength(studentAnswers?.filter(answersFilter).length || 0);
+    if (currentModule != '' || markingModules.length >= 0)
+      setAnswersLength(studentAnswers?.filter(answersFilter).length || 0);
+    else setAnswersLength(studentAnswers?.length || 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentModule, studentAnswers]);
 
