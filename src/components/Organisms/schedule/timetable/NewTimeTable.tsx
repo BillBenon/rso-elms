@@ -275,7 +275,7 @@ function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) 
           Program - Level
         </InputMolecule> */}
         <SelectMolecule
-          options={getDropDownStatusOptions(daysOfWeek).slice(0, 5)}
+          options={getDropDownStatusOptions(daysOfWeek)}
           name="dayOfWeek"
           placeholder="Day of week"
           handleChange={handleChange}
