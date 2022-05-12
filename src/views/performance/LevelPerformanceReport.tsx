@@ -175,12 +175,6 @@ export default function LevelPerformanceReport() {
               <th className="d-vertical border border-gray-700  p-3 border-r-2">
                 Reg No
               </th>
-              //  <th className="d-vertical border border-gray-700  p-3 border-r-2">
-              //    First name
-              // </th>
-              //  <th className="d-vertical border border-gray-700  p-3 border-r-2">
-              //    Last name
-              // </th>
               {labels.map((subj) =>
                 subj.subject.map((evaluation, i) => (
                   <>
@@ -231,12 +225,7 @@ export default function LevelPerformanceReport() {
                     <td className="border-r-2 border-gray-700 p-3">
                       {stud.student.reg_number}
                     </td>
-                    // <td className="border-r-2 border-gray-700 p-3">
-                       
-                    // </td>
-                    // <td className="border-r-2 border-gray-700 p-3">
-                     
-                    // </td>
+                  
                     {stud.reports?.map((rpt) =>
                       rpt.subject_marks.map((subj, i) => (
                         <>
