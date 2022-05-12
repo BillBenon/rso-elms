@@ -82,6 +82,7 @@ function CompleteProfile({ showHeader = true }: { showHeader?: boolean }) {
   const history = useHistory();
 
   let foundUser: UserInfo = getLocalStorageData('user');
+
   if (!foundUser.id) {
     history.push('/login/search');
     return <></>;
@@ -189,7 +190,7 @@ function CompleteProfile({ showHeader = true }: { showHeader?: boolean }) {
           ...userFromLocalStorage,
           profile_status: ProfileStatus.COMPLETD,
           doc_type: userFromLocalStorage.doc_type,
-          nid: userFromLocalStorage.person.id,
+          nid: userFromLocalStorage.person.nid,
           birth_date: personalInfo.birth_date,
         },
         {
