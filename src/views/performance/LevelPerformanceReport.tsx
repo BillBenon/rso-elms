@@ -232,7 +232,7 @@ export default function LevelPerformanceReport() {
                       {stud.student.reg_number}
                     </td>
                     <td className="border-r-2 border-gray-700 p-3">
-                      {stud.student.first_name}
+                       
                     </td>
                     <td className="border-r-2 border-gray-700 p-3">
                      
