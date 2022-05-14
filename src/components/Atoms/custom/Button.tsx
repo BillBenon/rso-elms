@@ -77,7 +77,7 @@ export default function Button<T>({
             </svg>
           </span>
         )}
-        <span className="grow items-center text-center justify-center">{children}</span>
+        <span className="flex items-center text-center justify-center">{children}</span>
       </span>
     </button>
   );
