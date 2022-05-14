@@ -50,7 +50,9 @@ export default function LevelPerformance() {
 
   data?.data.data?.forEach((record) => {
     let processed: IPerformanceTable = {
-      term: 'term one',
+      term:
+        prds?.data.data.find((prd) => prd.id === record.intakeAcademicYearPeriod.adminId)
+          ?.academic_period.name || '',
       reg_number: record.student.reg_number,
       id: record.student.admin_id,
       first_name: '',
@@ -58,14 +60,11 @@ export default function LevelPerformance() {
       rank: '',
     };
 
-    record.subject_marks?.forEach((mark) => {
-      processed[`${mark.subject.title} /${mark.total_marks}`] =
-        mark.obtained_marks.toString();
+    record.attemptedEvaluations?.forEach((mark) => {
+      processed[`${mark.evaluation} /${mark.totalMarks}`] = mark.obtainedMarks.toString();
     });
 
-    processed[`total /${record.total_marks}`] = `${
-      record.quiz_obtained_marks + record.exam_obtained_marks
-    }`;
+    processed[`total /${record.totalMarks}`] = `${record.obtainedMarks}`;
 
     // processed['Grade'] = calculateGrade(
     //   record.quiz_obtained_marks + record.exam_obtained_marks,
