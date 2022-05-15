@@ -2,14 +2,14 @@ import { Editor } from '@tiptap/react';
 import React, { FormEvent, Fragment, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useLocation, useParams } from 'react-router-dom';
+
 import { queryClient } from '../../../../plugins/react-query';
 import { evaluationStore } from '../../../../store/evaluation/evaluation.store';
-import { ParamType, SelectData, ValueType } from '../../../../types';
+import { ParamType, ValueType } from '../../../../types';
 import {
   ICreateEvaluationQuestions,
   IEvaluationProps,
-  IMultipleChoice,
-  IQuestionType
+  IQuestionType,
 } from '../../../../types/services/evaluation.types';
 import Button from '../../../Atoms/custom/Button';
 import Icon from '../../../Atoms/custom/Icon';
@@ -19,13 +19,6 @@ import ILabel from '../../../Atoms/Text/ILabel';
 import Tiptap from '../../../Molecules/editor/Tiptap';
 import InputMolecule from '../../../Molecules/input/InputMolecule';
 import SelectMolecule from '../../../Molecules/input/SelectMolecule';
-import TextAreaMolecule from '../../../Molecules/input/TextAreaMolecule';
-
-const multipleChoiceContent: IMultipleChoice = {
-  answer_content: '',
-  correct: false,
-  id: '',
-};
 
 export default function AdddEvaluationQuestions({
   handleGoBack,
@@ -69,8 +62,6 @@ export default function AdddEvaluationQuestions({
 
   useEffect(() => {
     const handleSubmittingFile = (id: string) => {
-
-
       if (file && !currentId) {
         saveQuestions(false);
         return;
@@ -98,9 +89,7 @@ export default function AdddEvaluationQuestions({
     if (file) {
       handleSubmittingFile(currentId);
     }
-
-
-  }, [currentId, file]);
+  }, [currentId, file, subjectId]);
 
   useEffect(() => {
     let allQuestions: any[] = [];
@@ -171,30 +160,6 @@ export default function AdddEvaluationQuestions({
     }
   }
 
-  function handleRemoveChoice(questionIndex: number, choiceIndex: number) {
-    let questionsClone = [...questions];
-    let question = questionsClone[questionIndex];
-
-    if (question.choices.length === 2) {
-      toast.error('Multiple choice must have at least two choices');
-    }
-
-    if (choiceIndex > -1 && question.choices.length > 2) {
-      question.choices.splice(choiceIndex, 1);
-
-      questionsClone[questionIndex] = question;
-
-      setQuestions(questionsClone);
-    }
-  }
-
-  function handleAddMultipleMultipleChoiceAnswer(index: number) {
-    let questionsClone = [...questions];
-    let questionChoices = questionsClone[index];
-    questionChoices.choices.push(multipleChoiceContent);
-    setQuestions(questionsClone);
-  }
-
   function handleChange(index: number, { name, value }: ValueType) {
     let questionInfo = [...questions];
     if (
@@ -226,31 +191,6 @@ export default function AdddEvaluationQuestions({
     questionInfo[index] = { ...questionInfo[index], [name]: value };
 
     setQuestions(questionInfo);
-  }
-
-  function handleCorrectAnswerCahnge(index: number, e: ValueType) {
-    let questionsClone = [...questions];
-    const question = questionsClone[index];
-    let choiceIndex = question.choices.findIndex(
-      (choice) => choice.answer_content === e.value,
-    );
-    question.choices.forEach((choice) => (choice.correct = false));
-    question.choices[choiceIndex].correct = true;
-
-    setQuestions(questionsClone);
-  }
-
-  function handleChoiceChange(questionIndex: number, choiceIndex: number, e: ValueType) {
-    let questionsClone = [...questions];
-    let question = questionsClone[questionIndex];
-
-    let choiceToUpdate = question.choices[choiceIndex];
-    choiceToUpdate = { ...choiceToUpdate, [e.name]: e.value };
-    question.choices[choiceIndex] = choiceToUpdate;
-
-    questionsClone[questionIndex] = question;
-
-    setQuestions(questionsClone);
   }
 
   const { mutate, isLoading: createQuestionsLoader } =
@@ -303,12 +243,13 @@ export default function AdddEvaluationQuestions({
   return (
     <Fragment>
       <div
-        className={`${evaluationInfo?.evaluation_module_subjects.find(
-          (subject) => subject.id === moduleSubject,
-        )?.section_total_marks === currentTotalMarks()
-          ? 'bg-primary-400'
-          : 'bg-red-500'
-          } + sticky top-0  z-50 py-4 px-5 text-main rounded-sm flex justify-evenly`}>
+        className={`${
+          evaluationInfo?.evaluation_module_subjects.find(
+            (subject) => subject.id === moduleSubject,
+          )?.section_total_marks === currentTotalMarks()
+            ? 'bg-primary-400'
+            : 'bg-red-500'
+        } + sticky top-0  z-50 py-4 px-5 text-main rounded-sm flex justify-evenly`}>
         <span>{evaluationInfo?.name}</span>
         <span className="">
           {questions.length} {questions.length > 1 ? 'questions' : 'question'}
@@ -334,7 +275,7 @@ export default function AdddEvaluationQuestions({
                 <div className="flex flex-col">
                   <SelectMolecule
                     value={question.question_type}
-                    disabled={question.submitted}
+                    disabled
                     width="64"
                     name="question_type"
                     placeholder="Question type"
@@ -381,68 +322,6 @@ export default function AdddEvaluationQuestions({
                       />
                     </div>
                   )}
-                  {/* multiple choice answers here */}
-                  {question.question_type === IQuestionType.MULTIPLE_CHOICE &&
-                    question.choices.map((multipleQuestion, choiceIndex) => (
-                      <>
-                        <TextAreaMolecule
-                          key={`${choiceIndex}`}
-                          readOnly={question.submitted}
-                          name={'answer_content'}
-                          value={multipleQuestion.answer_content}
-                          placeholder="Enter answer"
-                          handleChange={(e: ValueType) =>
-                            handleChoiceChange(index, choiceIndex, e)
-                          }>
-                          <div className="flex items-center justify-between">
-                            Answer choice {choiceIndex + 1}
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveChoice(index, choiceIndex)}>
-                              <Icon name="close" size={12} />
-                            </button>
-                          </div>
-                        </TextAreaMolecule>
-                      </>
-                    ))}
-
-                  {question.question_type === IQuestionType.MULTIPLE_CHOICE ? (
-                    <div className="-mt-4 mb-1">
-                      <Button
-                        type="button"
-                        className="flex items-center pl-0"
-                        styleType="text"
-                        onClick={() => handleAddMultipleMultipleChoiceAnswer(index)}>
-                        <Icon
-                          name="add"
-                          size={17}
-                          useheightandpadding={false}
-                          stroke="primary"
-                        />
-                        <ILabel size="sm" className="cursor-pointer">
-                          Add choice
-                        </ILabel>
-                      </Button>
-                    </div>
-                  ) : null}
-
-                  {question.choices.length > 0 &&
-                    question.question_type === IQuestionType.MULTIPLE_CHOICE ? (
-                    <SelectMolecule
-                      value={question.choices.find((ch) => ch.correct)?.answer_content}
-                      width="64"
-                      name="correct_answer"
-                      placeholder="Choose correct answer"
-                      handleChange={(e: ValueType) => handleCorrectAnswerCahnge(index, e)}
-                      options={
-                        question.choices.map((ch) => ({
-                          label: ch.answer_content,
-                          value: ch.answer_content,
-                        })) as SelectData[]
-                      }>
-                      Correct answer
-                    </SelectMolecule>
-                  ) : null}
 
                   <div className="flex items-center py-5">
                     <FileUploader
@@ -463,13 +342,16 @@ export default function AdddEvaluationQuestions({
                       question.attachments?.length > 0 &&
                       question.attachments?.map((attachment, index) => (
                         <a
-                          className='text-blue-800 hover:underline'
-                          href={`${import.meta.env.VITE_API_URL
-                            }/evaluation-service/api/evaluationQuestions/${attachment.id
-                            }/loadAttachment`}
+                          className="text-blue-800 hover:underline"
+                          href={`${
+                            import.meta.env.VITE_API_URL
+                          }/evaluation-service/api/evaluationQuestions/${
+                            attachment.id
+                          }/loadAttachment`}
                           key={attachment.id}
                           target="_blank"
-                          download>
+                          download
+                          rel="noreferrer">
                           {index + 1}. {attachment.name}
                         </a>
                       ))}
