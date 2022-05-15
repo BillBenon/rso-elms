@@ -38,7 +38,9 @@ class SchoolReportService {
   public async getLevelTermlyOverallReport(
     yearPeriods: string,
   ): Promise<AxiosResponse<Response<IOverallLevelPerformance[]>>> {
-    return await evaluationAxios.get(`/reports/level/${yearPeriods}/get-all`);
+    return await evaluationAxios.get(
+      `/reports/overall-evaluations-report/level/${yearPeriods}/get-all`,
+    );
   }
 
   public async getStudentReportInTerm(
