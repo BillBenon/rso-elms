@@ -213,15 +213,15 @@ export default function Table2<T>({
 
     return currentRows.map((row, index) => (
       <tr key={index} className="hover:bg-[#e7edec] cursor-pointer">
-        <td className="pl-4">
-          {uniqueCol && (
+        {uniqueCol && (
+          <td className="pl-4">
             <Checkbox
               checked={row.selected}
               handleChange={_handleSelect}
               name={uniqueCol + ''}
               value={row[uniqueCol] + ''}></Checkbox>
-          )}
-        </td>
+          </td>
+        )}
         {showNumbering && (
           <td className="pl-4"> {rowsPerPage * currentPage + index + 1}</td>
         )}
