@@ -89,6 +89,7 @@ export default function AdddEvaluationQuestions({
     if (file) {
       handleSubmittingFile(currentId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentId, file, subjectId]);
 
   useEffect(() => {
