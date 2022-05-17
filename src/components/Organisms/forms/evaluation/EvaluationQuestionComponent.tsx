@@ -9,7 +9,6 @@ import { ValueType } from '../../../../types';
 import {
   ICreateEvaluationQuestions,
   IEvaluationQuestionsInfo,
-  IMultipleChoice,
   IQuestionaireTypeEnum,
   IQuestionType,
 } from '../../../../types/services/evaluation.types';
@@ -87,6 +86,7 @@ export default function EvaluationQuestionComponent() {
     if (file) {
       handleSubmittingFile(currentId);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentId, file, evaluationId]);
 
   const [questions, setQuestions] = useState([initialState]);
