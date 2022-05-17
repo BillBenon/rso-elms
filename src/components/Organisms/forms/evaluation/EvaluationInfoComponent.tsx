@@ -570,7 +570,7 @@ export default function EvaluationInfoComponent() {
                       instructorData[evalMod.subject_academic_year_period.toString()] ||
                       []
                     ).map((instr) => ({
-                      label: `${instr.user.person?.current_rank?.name || ''}  ${
+                      label: `${instr.user.person?.current_rank?.abbreviation || ''}  ${
                         instr.user.first_name
                       } ${instr.user.last_name}`,
                       value: instr.user.id,
@@ -592,8 +592,9 @@ export default function EvaluationInfoComponent() {
                       labelName: ['first_name', 'last_name'],
                       //@ts-ignore
                       getOptionLabel: (inst: UserInfo) =>
-                        inst.person?.current_rank?.name ||
-                        '' + ' ' + inst.first_name + ' ' + inst.last_name,
+                        inst.first_name + ' ' + inst.last_name,
+                        // inst.person?.current_rank?.name ||
+                        // '' + ' ' + inst.first_name + ' ' + inst.last_name,
                     })}>
                     Select marker
                   </SelectMolecule>

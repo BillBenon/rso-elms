@@ -241,7 +241,7 @@ export default function EvaluationQuestionComponent() {
 
       <form className="flex flex-col" onSubmit={submitForm}>
         {questions.length ? (
-          questions.map((question, index: number) => (
+          questions.map((question, index) => (
             <Fragment key={index}>
               <div className="flex justify-between w-2/3 bg-main px-6 py-10 mt-8">
                 <div className="flex flex-col">
@@ -251,7 +251,7 @@ export default function EvaluationQuestionComponent() {
                     width="64"
                     name="question_type"
                     placeholder="Question type"
-                    handleChange={(e: ValueType) => handleChange(index, e)}
+                    handleChange={(e) => handleChange(index, e)}
                     options={[
                       { label: 'OPEN', value: IQuestionType.OPEN },
                       { label: 'MULTIPLE CHOICE', value: IQuestionType.MULTIPLE_CHOICE },

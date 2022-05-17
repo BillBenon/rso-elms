@@ -209,7 +209,7 @@ export default function AdminsView() {
             data={users}
             actions={actions}
             statusActions={[]}
-            hide={['id', 'user_type']}
+            hide={['id', 'user_type', 'ID Card']}
             selectorActions={[]}
             uniqueCol="id"
             rowsPerPage={pageSize}
