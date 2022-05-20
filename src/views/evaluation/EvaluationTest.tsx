@@ -72,6 +72,7 @@ export default function EvaluationTest() {
   ]);
 
   useEffect(() => {
+    console.log({ open, isCheating, path });
     if (
       !open &&
       isCheating &&
