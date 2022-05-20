@@ -90,8 +90,11 @@ export default function QuestionContainer({
         localStorage.removeItem('studentEvaluationId');
         window.location.href = '/dashboard/student';
       },
-      onError: (error) => {
+      onError: (error: any) => {
         toast.error(error + '');
+        if (error.response.status == 403) {
+          window.location.href = '/dashboard/student?forceReload=true';
+        }
       },
     });
   }
