@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Route, Switch, useHistory, useLocation, useRouteMatch } from 'react-router-dom';
+import { Route, Switch, useHistory, useRouteMatch } from 'react-router-dom';
 
 import Permission from '../../components/Atoms/auth/Permission';
 import Button from '../../components/Atoms/custom/Button';
@@ -11,7 +11,6 @@ import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { CommonCardDataType, Privileges } from '../../types';
 import { IEvaluationOwnership } from '../../types/services/evaluation.types';
 import cookie from '../../utils/cookie';
-import { setLocalStorageData } from '../../utils/getLocalStorageItem';
 import { advancedTypeChecker } from '../../utils/getOption';
 
 interface InstructorSubjectViewerProps {
@@ -23,15 +22,9 @@ export default function SubjectInstructorView({
 }: InstructorSubjectViewerProps) {
   const [evaluations, setEvaluations] = useState<any>([]);
   const history = useHistory();
-  const { search } = useLocation();
   const { path } = useRouteMatch();
 
   const { user } = useAuthenticator();
-
-  const intakeProg = new URLSearchParams(search).get('intkPrg') || '';
-  const progId = new URLSearchParams(search).get('prog') || '';
-  const level = new URLSearchParams(search).get('lvl') || '';
-  const period = new URLSearchParams(search).get('prd') || '';
 
   const user_role_cookie = cookie.getCookie('user_role') || '';
   const user_role = user?.user_roles?.find((role) => role.id + '' === user_role_cookie);
@@ -46,14 +39,6 @@ export default function SubjectInstructorView({
         user?.id.toString() || '',
       )
     : evaluationStore.getEvaluationsBySubject(subjectId);
-
-  function goToEditEvaluation(info: CommonCardDataType) {
-    setLocalStorageData('currentStep', 0);
-    history.push({
-      pathname: `/dashboard/evaluations/new`,
-      search: `?subj=${subjectId}&evaluation=${info.id}&intkPrg=${intakeProg}&prog=${progId}&lvl=${level}&prd=${period}`,
-    });
-  }
 
   useEffect(() => {
     let formattedEvals: CommonCardDataType[] = [];
@@ -98,13 +83,6 @@ export default function SubjectInstructorView({
                     <div key={index}>
                       <CommonCardMolecule className="cursor-pointer" data={info}>
                         <div className="flex justify-between">
-                          <Permission privilege={Privileges.CAN_CREATE_EVALUATIONS}>
-                            <Button
-                              styleType="text"
-                              onClick={() => goToEditEvaluation(info)}>
-                              Edit
-                            </Button>
-                          </Permission>
                           <Permission privilege={Privileges.CAN_ACCESS_EVALUATIONS}>
                             <Button
                               styleType="text"
