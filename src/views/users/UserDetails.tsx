@@ -25,7 +25,7 @@ import enrollmentStore from '../../store/administration/enrollment.store';
 import usersStore from '../../store/administration/users.store';
 import { ParamType } from '../../types';
 import { ApproveStudents, StudentApproval } from '../../types/services/enrollment.types';
-import CompleteProfile from '../auth/CompleteProfile';
+import UpdateCompleteProfile from '../auth/UpdateCompleteProfile';
 import PersonalDocuments from './profile/PersonalDocuments';
 import ProfileOverview from './profile/ProfileOverview';
 import UpdatePhotoProfile from './profile/UpdatePhotoProfile';
@@ -163,8 +163,8 @@ export default function UserDetails() {
               }}
             />
             <Route
-              path={`${path}/edit-compl-prof`}
-              render={() => <CompleteProfile showHeader={false} />}
+              path={`${path}/edit-compl-prof/:userid`}
+              render={() => <UpdateCompleteProfile />}
             />
             <Route
               exact

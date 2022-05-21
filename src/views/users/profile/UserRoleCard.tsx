@@ -1,11 +1,14 @@
 import React from 'react';
 import toast from 'react-hot-toast';
 
+import Permission from '../../../components/Atoms/auth/Permission';
 import Badge from '../../../components/Atoms/custom/Badge';
+import Button from '../../../components/Atoms/custom/Button';
 import Icon from '../../../components/Atoms/custom/Icon';
 import Heading from '../../../components/Atoms/Text/Heading';
 import { queryClient } from '../../../plugins/react-query';
 import usersStore from '../../../store/administration/users.store';
+import { Privileges } from '../../../types';
 import { UserInfo } from '../../../types/services/user.types';
 import { advancedTypeChecker } from '../../../utils/getOption';
 
@@ -52,9 +55,14 @@ function UserRoleCard({ user }: { user: UserInfo }) {
               className="m-2">
               <div className="flex items-center justify-between w-24">
                 <p>{role.role.name}</p>
-                <button type="button" onClick={() => revokeUserRole(+role.id)}>
-                  <Icon size={12} name={'close'} />
-                </button>
+                <Permission privilege={Privileges.CAN_ASSIGN_ROLE}>
+                  <Button
+                    styleType="text"
+                    type="button"
+                    onClick={() => revokeUserRole(+role.id)}>
+                    <Icon size={12} name={'close'} />
+                  </Button>
+                </Permission>
               </div>
             </Badge>
           ))

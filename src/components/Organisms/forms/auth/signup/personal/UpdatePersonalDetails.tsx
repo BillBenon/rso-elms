@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { FormEvent, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import countryList from 'react-select-country-list';
@@ -25,6 +26,7 @@ import { getDropDownStatusOptions } from '../../../../../../utils/getOption';
 import { personalDetailsSchema } from '../../../../../../validations/complete-profile/complete-profile.validation';
 import Button from '../../../../../Atoms/custom/Button';
 import Heading from '../../../../../Atoms/Text/Heading';
+import DateMolecule from '../../../../../Molecules/input/DateMolecule';
 import DropdownMolecule from '../../../../../Molecules/input/DropdownMolecule';
 import InputMolecule from '../../../../../Molecules/input/InputMolecule';
 import LocationMolecule from '../../../../../Molecules/input/LocationMolecule';
@@ -45,6 +47,7 @@ interface PersonalDetailErrors
     | 'place_of_residence'
     | 'nationality'
     | 'spouse_name'
+    | 'phone_number'
   > {
   blood_group: string;
   residence_location_id: string;
@@ -60,8 +63,8 @@ export default function UpdatePersonalDetails<E>({
     first_name: '',
     last_name: '',
     phone_number: '',
+    // email: '',
     sex: GenderStatus.MALE,
-    phone: '',
     place_of_birth: '',
     place_of_birth_description: '',
     birth_date: '',
@@ -85,6 +88,7 @@ export default function UpdatePersonalDetails<E>({
     place_of_birth_description: '',
     religion: '',
     blood_group: '',
+    phone_number: '',
     father_names: '',
     mother_names: '',
     residence_location_id: '',
@@ -104,8 +108,8 @@ export default function UpdatePersonalDetails<E>({
       setPersonalDetails({
         first_name: selectedUser.first_name,
         last_name: selectedUser.last_name,
+        // email: selectedUser.email,
         phone_number: selectedUser.phone,
-        phone: selectedUser.phone,
         sex: selectedUser.person?.sex || GenderStatus.MALE,
         place_of_birth: selectedUser.person?.place_of_birth || '',
         place_of_birth_description: selectedUser.person?.place_of_birth_description || '',
@@ -245,6 +249,23 @@ export default function UpdatePersonalDetails<E>({
               handleChange={handleChange}>
               Mother&apos;s names
             </InputMolecule>
+            {/* <InputMolecule
+              required={false}
+              name="email"
+              placeholder="your email"
+              value={personalDetails.email}
+              handleChange={handleChange}>
+              Email
+            </InputMolecule> */}
+            <InputMolecule
+              required={false}
+              error={errors.phone_number}
+              name="phone_number"
+              placeholder="Enter phone number"
+              value={personalDetails.phone_number}
+              handleChange={handleChange}>
+              Phone number
+            </InputMolecule>
             <DropdownMolecule
               error={errors.blood_group}
               hasError={errors.blood_group !== ''}
@@ -255,7 +276,18 @@ export default function UpdatePersonalDetails<E>({
               )}
               handleChange={handleChange}
               options={getDropDownStatusOptions(BloodGroup)}>
-              Blood type
+              Blood group
+            </DropdownMolecule>
+            <DropdownMolecule
+              defaultValue={getDropDownStatusOptions(MaritalStatus).find(
+                (marital_status) =>
+                  marital_status.value === personalDetails.marital_status,
+              )}
+              options={getDropDownStatusOptions(MaritalStatus)}
+              name="marital_status"
+              placeholder={'Select your marital status'}
+              handleChange={handleChange}>
+              Marital Status
             </DropdownMolecule>
             {(personalDetails.marital_status === MaritalStatus.MARRIED ||
               personalDetails.marital_status === MaritalStatus.WIDOWED) && (
@@ -267,6 +299,8 @@ export default function UpdatePersonalDetails<E>({
                 Spouse Name
               </InputMolecule>
             )}
+          </div>
+          <div>
             <InputMolecule
               required={false}
               error={errors.religion}
@@ -276,20 +310,28 @@ export default function UpdatePersonalDetails<E>({
               handleChange={handleChange}>
               Religion
             </InputMolecule>
-          </div>
-          <div>
+            <DateMolecule
+              startYear={moment().year() - 100}
+              defaultValue={(moment().year() - 16).toString()}
+              endYear={moment().year() - 16}
+              handleChange={handleChange}
+              name="birth_date"
+              width="60 md:w-80"
+              date_time_type={false}>
+              Date of Birth
+            </DateMolecule>
             <DropdownMolecule
               error={errors.place_of_birth}
               hasError={errors.place_of_birth !== ''}
               width="60 md:w-80"
-              name="birth"
+              name="place_of_birth"
               placeholder="Select the Nation"
               defaultValue={options.find(
                 (national) => national.value === nationality.birth,
               )}
               handleChange={nationhandleChange}
               options={options}>
-              Place of birth
+              Origin
             </DropdownMolecule>
             {nationality.birth == 'Rwanda' && (
               <LocationMolecule
@@ -312,18 +354,18 @@ export default function UpdatePersonalDetails<E>({
               error={errors.nationality}
               hasError={errors.nationality !== ''}
               width="60 md:w-80"
-              name="residence"
+              name="residence_location_id"
               placeholder="Select the Nation"
               defaultValue={options.find(
                 (national) => national.value === nationality.residence,
               )}
               handleChange={nationhandleChange}
               options={options}>
-              Place of residence
+              Family Address
             </DropdownMolecule>
             {nationality.residence == 'Rwanda' && (
               <LocationMolecule
-                placeholder="Select place of residence"
+                placeholder="Select family address"
                 name="residence_location_id"
                 handleChange={handleChange}
                 isRequired={errors.residence_location_id !== ''}
@@ -336,7 +378,7 @@ export default function UpdatePersonalDetails<E>({
               name="place_of_residence"
               value={personalDetails.place_of_residence}
               handleChange={handleChange}>
-              Place of residence description (optional)
+              Family Address description (optional)
             </TextAreaMolecule>
           </div>
         </div>

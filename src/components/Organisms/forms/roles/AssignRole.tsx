@@ -116,7 +116,7 @@ export default function AssignRole() {
             onSuccess(data) {
               toast.success(data.data.message);
               queryClient.invalidateQueries('roles');
-              history.goBack();
+              history.push(`/dashboard/users`);
             },
             onError(error: any) {
               toast.error(error.response.data.message);
