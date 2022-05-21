@@ -38,13 +38,13 @@ interface PersonalDetailErrors
     | 'religion'
     | 'father_names'
     | 'mother_names'
+    | 'phone_number'
     | 'place_of_residence'
     | 'nationality'
     | 'spouse_name'
   > {
   blood_group: string;
   residence_location_id: string;
-  phone: string;
 }
 
 function PersonalDetails<E>({
@@ -70,8 +70,8 @@ function PersonalDetails<E>({
     residence_location_id: null,
     place_of_residence: '',
     doc_type: DocType.NID,
-    phone: '',
     nationality: '',
+    // email: '',
   });
 
   const initialErrorState: PersonalDetailErrors = {
@@ -86,8 +86,8 @@ function PersonalDetails<E>({
     residence_location_id: '',
     place_of_residence: '',
     nationality: '',
-    phone: '',
     spouse_name: '',
+    phone_number: '',
   };
 
   const [errors, setErrors] = useState<PersonalDetailErrors>(initialErrorState);
@@ -216,10 +216,10 @@ function PersonalDetails<E>({
             </InputMolecule>
             <InputMolecule
               required={false}
-              error={errors.phone}
-              name="phone"
+              error={errors.phone_number}
+              name="phone_number"
               placeholder="Enter phone number"
-              value={personalDetails.phone}
+              value={personalDetails.phone_number}
               handleChange={handleChange}>
               Phone number
             </InputMolecule>
@@ -293,8 +293,8 @@ function PersonalDetails<E>({
               error={errors.place_of_birth}
               hasError={errors.place_of_birth !== ''}
               width="60 md:w-80"
-              name="birth"
-              placeholder="Select the Nation"
+              name="place_of_birth"
+              placeholder="Select the Nation you are born from"
               defaultValue={options.find(
                 (national) => national.value === nationality.birth,
               )}
@@ -323,7 +323,7 @@ function PersonalDetails<E>({
               error={errors.nationality}
               hasError={errors.nationality !== ''}
               width="60 md:w-80"
-              name="residence"
+              name="place_of_residence"
               placeholder="Select the Nation"
               defaultValue={options.find(
                 (national) => national.value === nationality.residence,

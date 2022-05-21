@@ -121,14 +121,14 @@ function ExperienceForm<E>({
       mutate(formData, {
         onSuccess(data) {
           toast.success(data.data.message);
+
           mutateAsync(
             {
               ...experience,
-              attachment_id: data.data.data.attachment_id + '',
+              attachment_id: data.data.data.id + '',
             },
             {
               onSuccess(data) {
-                console.log('fdagdfaddddddddddd');
                 toast.success(data.data.message);
                 setErrors(initialErrorState);
                 setExperience({
