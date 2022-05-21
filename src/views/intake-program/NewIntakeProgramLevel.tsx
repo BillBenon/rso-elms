@@ -199,8 +199,11 @@ export default function NewIntakeProgramLevel() {
                       labelName: ['first_name', 'last_name'],
                       //@ts-ignore
                       getOptionLabel: (instr: Instructor) =>
-                        instr.user.person?.current_rank?.name ||
-                        '' + ' ' + instr.user.first_name + ' ' + instr.user.last_name,
+                        (instr.user.person?.current_rank?.name || '') +
+                        ' ' +
+                        instr.user.first_name +
+                        ' ' +
+                        instr.user.last_name,
                     })}
                     name="incharge_id"
                     handleChange={handleChange}>
