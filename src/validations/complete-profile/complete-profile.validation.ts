@@ -9,7 +9,7 @@ import { BloodGroup, SendCommunicationMsg } from '../../types/services/user.type
 export const personalDetailsSchema = yup.object().shape({
   first_name: yup.string().required('first name is required').min(3),
   last_name: yup.string().required('last name is required').min(3),
-  phone: yup.string().required('Phone number is required').min(10),
+  phone_number: yup.string().required('Phone number is required').min(10),
   // phone_number: yup.string().matches(phoneRegExp, 'Invalid phone number'),
   // sex: yup.string().required('gender is required').oneOf(Object.values(GenderStatus)),
   place_of_birth: yup.string(),

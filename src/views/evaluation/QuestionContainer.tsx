@@ -86,12 +86,14 @@ export default function QuestionContainer({
     e?.preventDefault();
     mutateAsync(answer.student_evaluation, {
       onSuccess: () => {
-        toast.success('Evaluation submitted', { duration: 5000 });
         localStorage.removeItem('studentEvaluationId');
         window.location.href = '/dashboard/student';
       },
-      onError: (error) => {
+      onError: (error: any) => {
         toast.error(error + '');
+        if (error.response.status == 403) {
+          window.location.href = '/dashboard/student?forceReload=true';
+        }
       },
     });
   }

@@ -51,7 +51,7 @@ export default function Notification({ notifications }: NotificationProps) {
     if (url) history.push(url, beneficiaryId);
   }
   return (
-    <div className="flex flex-col pb-6 pr-4 w-72 overflow-y-auto h-96">
+    <div className="flex flex-col pb-6 pr-4 overflow-y-auto h-96">
       <Heading fontWeight="semibold" color="txt-primary">
         Notifications
       </Heading>

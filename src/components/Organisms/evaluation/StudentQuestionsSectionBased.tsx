@@ -55,7 +55,7 @@ export default function StudentQuestionsSectionBased({
   function submitEvaluation() {
     mutateAsync(studentEvaluationId, {
       onSuccess: () => {
-        toast.success('Evaluation submitted', { duration: 5000 });
+        toast.success('Evaluation submitted', { duration: 3000 });
         localStorage.removeItem('studentEvaluationId');
         history.push('/dashboard/student');
       },
@@ -88,8 +88,11 @@ export default function StudentQuestionsSectionBased({
         ))}
       </Accordion>
       <div className="py-7">
-        <Button onClick={submitEvaluation} isLoading={submitLoader}>
-          End evaluation
+        <Button
+          onClick={submitEvaluation}
+          isLoading={submitLoader}
+          disabled={submitLoader}>
+          {submitLoader ? 'Ending evaluation' : 'End evaluation'}
         </Button>
       </div>
     </div>

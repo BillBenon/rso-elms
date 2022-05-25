@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 
 import Stepper from '../../components/Molecules/Stepper/Stepper';
+import UpdateAccountDetails from '../../components/Organisms/forms/auth/signup/personal/UpdateAccountDetails';
 import UpdateEmploymentDetails from '../../components/Organisms/forms/auth/signup/personal/UpdateEmploymentDetails';
 import UpdatePersonalDetails from '../../components/Organisms/forms/auth/signup/personal/UpdatePersonalDetails';
 // import useAuthenticator from '../../hooks/useAuthenticator';
@@ -16,7 +17,6 @@ import {
   ProfileStatus,
   SendCommunicationMsg,
   UpdateUserInfo,
-  UserInfo,
   UserType,
 } from '../../types/services/user.types';
 import {
@@ -24,11 +24,16 @@ import {
   setLocalStorageData,
 } from '../../utils/getLocalStorageItem';
 
+interface ProfileParams {
+  userid: string;
+}
+
 export default function UpdateCompleteProfile() {
   const history = useHistory();
-  // const { user } = useAuthenticator();
   const [currentStep, setCurrentStep] = useState(0);
   const [completeStep, setCompleteStep] = useState(0);
+
+  const { userid } = useParams<ProfileParams>();
 
   const [personalInfo, setPersonalInfo] = useState<UpdateUserInfo>({
     place_of_residence: '',
@@ -80,11 +85,8 @@ export default function UpdateCompleteProfile() {
     spouse_name: '',
   });
 
-  const storedUser = getLocalStorageData('user');
-
-  let foundUser: UserInfo | undefined =
-    Object.keys(storedUser).length === 0 ? undefined : storedUser;
-  const user = usersStore.getUserById(foundUser?.id + '');
+  const user = usersStore.getUserById(userid);
+  const foundUser = user.data?.data.data;
   // const { id } = useParams<ParamType>();
   // const { data } = usersStore.getUserById(id);
   useEffect(() => {
@@ -196,7 +198,7 @@ export default function UpdateCompleteProfile() {
             );
             setTimeout(() => {
               localStorage.clear();
-              history.push('/login');
+              history.goBack();
             }, 900);
           },
           onError(error: any) {
@@ -241,16 +243,15 @@ export default function UpdateCompleteProfile() {
               display_label="Employment details"
               isVertical
               prevStep={prevStep}
+              nextStep={nextStep}
+            />
+            <UpdateAccountDetails
+              fetched_id={foundUser.id.toString()}
+              display_label="Account details"
+              isVertical
+              prevStep={prevStep}
               nextStep={saveInfo}
             />
-            {/* <AccountDetails
-      }
-            fetched_id={user?.id.toString}
-            display_label="Account details"
-            isVertical
-            prevStep={prevStep}
-            nextStep={saveInfo}
-          /> */}
           </Stepper>
         </div>
       )}

@@ -341,7 +341,7 @@ export default function Navigation({
       </nav>
       <div className="bg-success-600 min-h-10 text-gray-200">
         <p className="uppercase text-sm py-3 w-60 text-center">
-          RWANDA DEFENCE FORCE COMMAND AND STAFF COLLEGE
+          {user?.academy?.name || user?.institution_name}
         </p>
       </div>
     </div>

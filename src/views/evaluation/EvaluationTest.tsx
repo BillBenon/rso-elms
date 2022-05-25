@@ -10,7 +10,7 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import StudentQuestionsSectionBased from '../../components/Organisms/evaluation/StudentQuestionsSectionBased';
 import useFullscreenStatus from '../../hooks/useFullscreenStatus';
-import { evaluationService } from '../../services/evaluation/evaluation.service';
+// import { evaluationService } from '../../services/evaluation/evaluation.service';
 import { markingStore } from '../../store/administration/marking.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
@@ -56,14 +56,6 @@ export default function EvaluationTest() {
       },
     });
   }, [mutate, studentEvaluationId]);
-
-  async function updateWorkTime(value: any) {
-    let workTime = timeLimit * 60 * 1000 - time + (time - value.total);
-    await evaluationService.updateEvaluationWorkTime({
-      studentEvaluationId: studentEvaluationId,
-      currentTime: (workTime / 1000).toString(),
-    });
-  }
 
   useEffect(() => {
     SetTimeLimit(evaluationData?.data?.data?.time_limit || 0);
@@ -149,9 +141,12 @@ export default function EvaluationTest() {
                 date={Date.now() + time}
                 onComplete={() => autoSubmit()}
                 renderer={Renderer}
-                onTick={(value) => updateWorkTime(value)}
               />
-            ) : null}
+            ) : (
+              <Heading>
+                Something wrong happened while getting your timer, try refreshing!
+              </Heading>
+            )}
           </Heading>
         </div>
       </div>

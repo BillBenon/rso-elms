@@ -61,7 +61,7 @@ export default function Button<T>({
       ${full && 'w-full'}
       ${padding} ${className}
       disabled:opacity-50`}>
-      <span className="flex w-full space-x-2 transition ease-in-out">
+      <span className="flex w-full space-x-2 transition justify-center ease-in-out">
         {isLoading && (
           <span className="animate-spin ">
             <svg

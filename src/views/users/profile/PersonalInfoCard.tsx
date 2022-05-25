@@ -27,8 +27,8 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
     user.person?.residence_location_id + '',
   ).data?.data.data;
 
-  const place_of_birth = locationStore.getLocationsById(user.person?.place_of_birth + '')
-    .data?.data.data;
+  // const place_of_birth = locationStore.getLocationsById(user.person?.place_of_birth + '')
+  //   .data?.data.data;
 
   return (
     <>
@@ -36,7 +36,7 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
         {user.generic_status && (
           <div className="grid grid-cols-1 md:grid-cols-2 items-end mb-20">
             <div>
-              <Link to={`${url}/edit-compl-prof`}>
+              <Link to={`${url}/edit-compl-prof/${authUser?.id}`}>
                 <Button styleType="outline">Edit</Button>
               </Link>
             </div>
@@ -114,7 +114,7 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
               ) : (
                 ' '
               )}
-              <p className="py-2">Place of birth</p>
+              {/* <p className="py-2">Place of birth</p> */}
               <p className="py-2">Religion</p>
               <p className="py-2">Blood group</p>
               <p className="py-2">Father&apos;s names</p>
@@ -144,9 +144,9 @@ function PersonalInfoCard({ user }: { user: UserInfo }) {
               ) : (
                 ''
               )}
-              <p className="py-2">
+              {/* <p className="py-2">
                 {place_of_birth?.name || '----'} <br />
-              </p>
+              </p> */}
               <p className="py-2">
                 {user.person?.religion || '----'} <br />
               </p>
