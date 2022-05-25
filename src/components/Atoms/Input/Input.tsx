@@ -53,12 +53,11 @@ export default function Input<T>({
       autoComplete="off"
       className={`${
         readonly ? 'bg-gray-100' : 'bg-transparent'
-      } h-12 ${padding} placeholder-${pcolor} rounded-md ${
+      } h-12 ${padding} placeholder:text-sm placeholder-${pcolor} rounded-md ${
         full ? 'w-full' : `w-full md:w-${width}`
       } focus:outline-none border-${colorStyle[bcolor]} focus:border-${
         colorStyle[fcolor]
       } border-2 ${className}`}
-      /* @ts-ignore */
       onChange={handleOnChange}
     />
   );

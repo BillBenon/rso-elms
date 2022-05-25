@@ -593,8 +593,6 @@ export default function EvaluationInfoComponent() {
                       //@ts-ignore
                       getOptionLabel: (inst: UserInfo) =>
                         inst.first_name + ' ' + inst.last_name,
-                        // inst.person?.current_rank?.name ||
-                        // '' + ' ' + inst.first_name + ' ' + inst.last_name,
                     })}>
                     Select marker
                   </SelectMolecule>
