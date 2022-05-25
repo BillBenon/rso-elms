@@ -7,7 +7,7 @@ type IDashboard = { children: React.ReactNode };
 
 export default function Dashboard({ children }: IDashboard) {
   return (
-    <>
+    <div>
       <Navigation hasProfile={true} hasChangePassword={true} hasSetting={true} />
       <div className="flex bg-secondary">
         <div className="hidden md:block w-80 h-screen top-0 lg:sticky ">
@@ -18,6 +18,6 @@ export default function Dashboard({ children }: IDashboard) {
           <div className="block relative w-full h-auto py-5 px-8">{children}</div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
