@@ -41,7 +41,7 @@ export function SingleQuestionSectionBased({
     setLocalAnswer((localAnswer) => ({ ...localAnswer, [name]: value }));
   }
 
-  const { mutate } = evaluationStore.addQuestionAnswer();
+  const { mutate, isLoading: isSavingAnswer } = evaluationStore.addQuestionAnswer();
   let previoustudentAnswers =
     markingStore.getStudentEvaluationAnswers(studentEvaluationId).data?.data.data || [];
   const { mutate: addQuestionDocAnswer } = evaluationStore.addQuestionDocAnswer();
@@ -244,7 +244,7 @@ export function SingleQuestionSectionBased({
           onClick={() => {
             submitForm();
           }}>
-          save answer
+          {isSavingAnswer ? 'saving answer' : 'save answer'}
         </Button>
       </div>
       {/*

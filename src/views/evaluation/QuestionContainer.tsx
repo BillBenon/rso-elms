@@ -86,7 +86,6 @@ export default function QuestionContainer({
     e?.preventDefault();
     mutateAsync(answer.student_evaluation, {
       onSuccess: () => {
-        toast.success('Evaluation submitted', { duration: 5000 });
         localStorage.removeItem('studentEvaluationId');
         window.location.href = '/dashboard/student';
       },
