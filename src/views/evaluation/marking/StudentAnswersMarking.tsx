@@ -8,14 +8,19 @@ import Loader from '../../../components/Atoms/custom/Loader';
 import Heading from '../../../components/Atoms/Text/Heading';
 import BreadCrumb from '../../../components/Molecules/BreadCrumb';
 import StudentAnswer from '../../../components/Molecules/cards/correction/StudentAnswer';
+import UnansweredQuestion from '../../../components/Molecules/cards/correction/UnansweredQuestion';
 import NoDataAvailable from '../../../components/Molecules/cards/NoDataAvailable';
 import SelectMolecule from '../../../components/Molecules/input/SelectMolecule';
 import TableHeader from '../../../components/Molecules/table/TableHeader';
 import FinishMarking from '../../../components/Organisms/forms/evaluation/FinishMarking';
 import { markingStore } from '../../../store/administration/marking.store';
+import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import { Link as LinkList, SelectData, ValueType } from '../../../types';
 import { ParamType } from '../../../types';
-import { IMarkingType } from '../../../types/services/evaluation.types';
+import {
+  IEvaluationQuestionsInfo,
+  IMarkingType,
+} from '../../../types/services/evaluation.types';
 import {
   MarkingCorrection,
   StudentMarkingAnswer,
@@ -33,11 +38,16 @@ export default function StudentAnswersMarking() {
     markingStore.getStudentEvaluationById(id);
   const { data, isLoading: markingModulesLoader } =
     markingStore.getEvaluationMarkingModules(evaluationId, evaluationId.length == 36);
+  const { data: questions } = evaluationStore.getEvaluationQuestions(evaluationId);
   const [totalMarks, setTotalMarks] = useState(0);
   const [correction, setCorrection] = useState<Array<MarkingCorrection>>([]);
   const [markingModules, setMarkingModules] = useState<SelectData[]>([]);
   const [currentModule, setCurrentModule] = useState<string>('');
   const [step, setStep] = useState<number>(0);
+  const [answered, setAnswered] = useState<string[]>([]);
+  const [unansweredQuestions, setUnansweredQuestions] = useState<
+    IEvaluationQuestionsInfo[]
+  >([]);
   const [answersLength, setAnswersLength] = useState<number>(0);
 
   useEffect(() => {
@@ -45,12 +55,26 @@ export default function StudentAnswersMarking() {
   }, [studentEvaluation]);
 
   useEffect(() => {
-    if (currentModule != '' || markingModules.length >= 0)
-      setAnswersLength(studentAnswers?.filter(answersFilter).length || 0);
-    else setAnswersLength(studentAnswers?.length || 0);
+    if (currentModule != '' || markingModules.length >= 0) {
+      const newAnswers = studentAnswers?.filter(answersFilter) || [];
+      for (let i = 0; i < newAnswers.length; i++) {
+        setAnswered((answered) => [...answered, newAnswers[i].evaluation_question.id]);
+      }
+      setAnswersLength(newAnswers.length);
+    } else {
+      const newAnswers = studentAnswers || [];
+      for (let i = 0; i < newAnswers.length; i++) {
+        setAnswered((answered) => [...answered, newAnswers[i].evaluation_question.id]);
+      }
+      setAnswersLength(newAnswers.length);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentModule, studentAnswers]);
 
+  useEffect(() => {
+    setUnansweredQuestions(questions?.data.data.filter(answeredFilter) || []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [questions, currentModule, studentAnswers]);
   useEffect(() => {
     let selectedModules: SelectData[] = [];
     data?.data.data.forEach((element) => {
@@ -148,6 +172,15 @@ export default function StudentAnswersMarking() {
     else return true;
   };
 
+  const answeredFilter = (question: IEvaluationQuestionsInfo) => {
+    if (question.evaluation_module_subject != null)
+      return (
+        currentModule === question.evaluation_module_subject.id + '' &&
+        !answered.includes(question.id + '')
+      );
+    else return !answered.includes(question.id + '');
+  };
+
   function submitMarking() {
     if (correction.length == (studentAnswers?.length || 0)) {
       mutate(
@@ -204,7 +237,14 @@ export default function StudentAnswersMarking() {
               </TableHeader>
             )}
 
-            <section className="flex flex-wrap justify-start gap-4 mt-2">
+            <section className="flex flex-col justify-start gap-4 mt-2">
+              <div className="py-6">
+                <Heading className="font-semibold text-xl">
+                  {studentAnswers?.filter(answersFilter).length || 0 > 0
+                    ? 'Answers'
+                    : 'No answers'}
+                </Heading>
+              </div>
               {studentAnswers
                 ?.filter(answersFilter)
                 .map((studentAnswer, index: number) => {
@@ -221,6 +261,16 @@ export default function StudentAnswersMarking() {
                     />
                   );
                 })}
+              <div className="py-6">
+                <Heading className="font-semibold text-xl">
+                  {unansweredQuestions ? 'Unanswered Questions' : ''}
+                </Heading>
+              </div>
+              {unansweredQuestions.map((question, index: number) => {
+                return (
+                  <UnansweredQuestion key={index} index={index} question={question} />
+                );
+              })}
               {/* <div className="flex item-center mx-auto">
               <Pagination
                 rowsPerPage={rowsOnPage}
