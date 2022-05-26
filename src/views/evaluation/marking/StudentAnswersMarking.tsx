@@ -38,7 +38,7 @@ export default function StudentAnswersMarking() {
     markingStore.getStudentEvaluationById(id);
   const { data, isLoading: markingModulesLoader } =
     markingStore.getEvaluationMarkingModules(evaluationId, evaluationId.length == 36);
-  const { data: questions } = evaluationStore.getEvaluationQuestions(evaluationId, evaluationId.length == 36);
+  const { data: questions } = evaluationStore.getEvaluationQuestions(evaluationId);
   const [totalMarks, setTotalMarks] = useState(0);
   const [correction, setCorrection] = useState<Array<MarkingCorrection>>([]);
   const [markingModules, setMarkingModules] = useState<SelectData[]>([]);
