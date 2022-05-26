@@ -313,6 +313,13 @@ class EvaluationService {
     return await evaluationAxios.put(`evaluationApprovals/reviews`, updateEvaluation);
   }
 
+  public async extendStudentEvaluation(studentEvaluationId: string): Promise<void> {
+    return await evaluationAxios.put(
+      `studentEvaluations/studentEvaluation/${studentEvaluationId}/extend`,
+      studentEvaluationId,
+    );
+  }
+
   public async approveEvaluation(
     updateEvaluation: IUpdateEvaluationApprovalStatus,
   ): Promise<void> {

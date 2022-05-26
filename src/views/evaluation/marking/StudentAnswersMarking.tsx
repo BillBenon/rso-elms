@@ -52,8 +52,6 @@ export default function StudentAnswersMarking() {
   }, [currentModule, studentAnswers]);
 
   useEffect(() => {
-    console.log(data);
-
     let selectedModules: SelectData[] = [];
     data?.data.data.forEach((element) => {
       selectedModules.push({
@@ -61,7 +59,6 @@ export default function StudentAnswersMarking() {
         label: element.module_subject.title,
       });
     });
-    console.log(selectedModules);
 
     setMarkingModules(selectedModules);
   }, [data]);
