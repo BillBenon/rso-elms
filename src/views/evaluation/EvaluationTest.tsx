@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import Countdown from 'react-countdown';
 import toast from 'react-hot-toast';
 import { useHistory, useParams, useRouteMatch } from 'react-router-dom';
+
 import Button from '../../components/Atoms/custom/Button';
 import Loader from '../../components/Atoms/custom/Loader';
 import Heading from '../../components/Atoms/Text/Heading';
@@ -9,16 +10,15 @@ import NoDataAvailable from '../../components/Molecules/cards/NoDataAvailable';
 import PopupMolecule from '../../components/Molecules/Popup';
 import StudentQuestionsSectionBased from '../../components/Organisms/evaluation/StudentQuestionsSectionBased';
 import useFullscreenStatus from '../../hooks/useFullscreenStatus';
-import { evaluationService } from '../../services/evaluation/evaluation.service';
+// import { evaluationService } from '../../services/evaluation/evaluation.service';
 import { markingStore } from '../../store/administration/marking.store';
 import { evaluationStore } from '../../store/evaluation/evaluation.store';
 import { ParamType } from '../../types';
 import {
   IEvaluationSettingType,
-  StudentEvalParamType
+  StudentEvalParamType,
 } from '../../types/services/evaluation.types';
 import QuestionContainer from './QuestionContainer';
-
 
 export default function EvaluationTest() {
   const { evaluationId } = useParams<StudentEvalParamType>();
@@ -55,22 +55,14 @@ export default function EvaluationTest() {
         toast.error(error + '');
       },
     });
-  }, [history, mutate, studentEvaluationId]);
-
-  async function updateWorkTime(value: any) {
-    let workTime = timeLimit * 60 * 1000 - time + (time - value.total);
-    await evaluationService.updateEvaluationWorkTime({
-      studentEvaluationId: studentEvaluationId,
-      currentTime: (workTime / 1000).toString(),
-    });
-  }
+  }, [mutate, studentEvaluationId]);
 
   useEffect(() => {
     SetTimeLimit(evaluationData?.data?.data?.time_limit || 0);
     SetTime(
       ((evaluationData?.data?.data?.time_limit || 0) * 60 -
         studentWorkTimer?.data?.data.data) *
-      1000,
+        1000,
     );
   }, [
     evaluationData?.data?.data?.time_limit,
@@ -80,10 +72,11 @@ export default function EvaluationTest() {
   ]);
 
   useEffect(() => {
+    console.log({ open, isCheating, path });
     if (
       !open &&
       isCheating &&
-      path === '/dashboard/evaluations/student-evaluation/:id' &&
+      path === '/dashboard/evaluations/student-evaluation/:id/:evaluationId' &&
       evaluationInfo?.strict
     ) {
       setIsCheating(true);
@@ -92,7 +85,7 @@ export default function EvaluationTest() {
     const handleTabChange = () => {
       if (
         document['hidden'] &&
-        path === '/dashboard/evaluations/student-evaluation/:id' &&
+        path === '/dashboard/evaluations/student-evaluation/:id/:evaluationId' &&
         evaluationInfo?.strict
       ) {
         setIsCheating(true);
@@ -101,7 +94,7 @@ export default function EvaluationTest() {
     };
 
     if (
-      path === '/dashboard/evaluations/student-evaluation/:id' &&
+      path === '/dashboard/evaluations/student-evaluation/:id/:evaluationId' &&
       evaluationInfo?.strict
     ) {
       // Handle page visibility change
@@ -148,9 +141,12 @@ export default function EvaluationTest() {
                 date={Date.now() + time}
                 onComplete={() => autoSubmit()}
                 renderer={Renderer}
-              // onTick={(value) => updateWorkTime(value)}
               />
-            ) : null}
+            ) : (
+              <Heading>
+                Something wrong happened while getting your timer, try refreshing!
+              </Heading>
+            )}
           </Heading>
         </div>
       </div>

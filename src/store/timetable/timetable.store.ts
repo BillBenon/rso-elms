@@ -38,7 +38,7 @@ class TimetableStore {
   }
 
   getCurrentWeek(currentDate: string, intakeLevelId: string) {
-    return useQuery(['timetable/week/current/:id', currentDate, intakeLevelId], () =>
+    return useQuery(['timetable/week/current/:id', intakeLevelId], () =>
       timetableService.getCurrentWeek(currentDate, intakeLevelId),
     );
   }

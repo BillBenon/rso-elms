@@ -100,22 +100,16 @@ interface EvPeriod {
   adminId: string;
 }
 export interface IOverallLevelPerformance {
-  created_at: string;
-  exam_marks: number;
-  exam_obtained_marks: number;
+  attemptedEvaluations: AttemptedEvaluation[];
+  createdAt: string;
   id: string;
-  intake_academic_year_period: EvPeriod;
-  intake_level_class: EvClass;
-  last_updated_at: string;
-  obtained_marks: number;
+  intakeAcademicYearPeriod: EvPeriod;
+  intakeLevelClass: EvClass;
+  lastUpdatedAt: string;
+  obtainedMarks: number;
   position: number;
-  promotion_status: PromotionStatus | null;
-  quiz_marks: number;
-  quiz_obtained_marks: number;
   student: EvStudent;
-  subject_marks: ISubjectMarks[];
-  total_marks: number;
-  total_students: number;
+  totalMarks: number;
 }
 
 interface ISubjectMarks {

@@ -13,6 +13,7 @@
 .editor-no-border {
   border: none;
 }
+
 body,
 html {
   @apply bg-secondary;
@@ -55,14 +56,8 @@ html {
 }
 
 .css-xb97g8 svg {
-  fill: #ffffff !important;
+  fill: red !important;
 }
-.css-xb97g8:hover svg {
-  fill: #ffffff !important;
-}
-
-
-
 
 // scrollbar
 
@@ -84,6 +79,6 @@ html {
   max-height: 20px;
 }
 
-.bg-left-2{
+.bg-left-2 {
   background-position: 40px;
 }

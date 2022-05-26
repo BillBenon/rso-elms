@@ -58,18 +58,6 @@ export default function SubjectDetails() {
 
   const lessons = data?.data.data || [];
 
-  // const list: Link[] = [
-  //   { to: 'home', title: 'home' },
-  //   { to: 'programs', title: 'Programs' },
-  //   { to: 'modules', title: 'Modules' },
-  //   { to: id, title: 'Modules details' },
-  //   { to: '/', title: 'Subjects' },
-  //   {
-  //     to: subjectData.data?.data.data.id + '',
-  //     title: subjectData.data?.data.data.title + '',
-  //   },
-  // ];
-
   const goBack = () => {
     history.goBack();
   };

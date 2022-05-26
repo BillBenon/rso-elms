@@ -292,7 +292,7 @@ export interface PersonDetail
     | 'doc_type'
     | 'nationality'
   > {
-  phone: string;
+    // email: string;
 }
 export interface EmploymentDetail
   extends Pick<

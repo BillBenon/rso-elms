@@ -138,6 +138,7 @@ export default function NewTimeTable({ activityId, isUpdating = false }: IProps)
           async onSuccess(_data) {
             toast.success('Activity was updated successfully');
             queryClient.invalidateQueries(['timetable/weeks', id]);
+            queryClient.invalidateQueries(['timetable/week/current/:id', id]);
             history.goBack();
           },
           onError(error: any) {
@@ -150,6 +151,7 @@ export default function NewTimeTable({ activityId, isUpdating = false }: IProps)
         async onSuccess(_data) {
           toast.success('Timetable was created successfully');
           queryClient.invalidateQueries(['timetable/weeks', id]);
+          queryClient.invalidateQueries(['timetable/week/current/:id', id]);
           history.goBack();
         },
         onError(error: any) {
@@ -273,7 +275,7 @@ function FirstStep({ values, handleChange, setCurrentStep, level }: IStepProps) 
           Program - Level
         </InputMolecule> */}
         <SelectMolecule
-          options={getDropDownStatusOptions(daysOfWeek).slice(0, 5)}
+          options={getDropDownStatusOptions(daysOfWeek).slice(0, 7)}
           name="dayOfWeek"
           placeholder="Day of week"
           handleChange={handleChange}

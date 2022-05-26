@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+
 import { evaluationAxios } from '../../plugins/axios';
 import { Response } from '../../types';
 import {
@@ -20,7 +21,7 @@ import {
   IStudentAnswer,
   IStudentEvaluationStart,
   IStudentEvaluationStartInfo,
-  IUpdateEvaluationApprovalStatus
+  IUpdateEvaluationApprovalStatus,
 } from '../../types/services/evaluation.types';
 import { FileAttachment } from '../../types/services/user.types';
 
@@ -90,6 +91,12 @@ class EvaluationService {
   ): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
     return await evaluationAxios.get(`/evaluations/getEvaluationsByModule/${module}`);
   }
+
+  public async fetchEvaluationsByModuleForStudent(
+    module: string,
+  ): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
+    return await evaluationAxios.get(`/evaluations/module/${module}/all`);
+  }
   public async fetchEvaluationsBySubject(
     subject: string,
   ): Promise<AxiosResponse<Response<IEvaluationInfo[]>>> {
@@ -105,7 +112,7 @@ class EvaluationService {
 
   public async fetchEvaluationsByStudent(
     subject: string,
-  ): Promise<AxiosResponse<Response<IStudentEvaluationStart[]>>> {
+  ): Promise<AxiosResponse<Response<IEvaluationInfoCollected>>> {
     return await evaluationAxios.get(
       `/evaluations/getEvaluationsBySubject/${subject}/studentNarrower`,
     );
@@ -304,6 +311,13 @@ class EvaluationService {
     updateEvaluation: IUpdateEvaluationApprovalStatus,
   ): Promise<void> {
     return await evaluationAxios.put(`evaluationApprovals/reviews`, updateEvaluation);
+  }
+
+  public async extendStudentEvaluation(studentEvaluationId: string): Promise<void> {
+    return await evaluationAxios.put(
+      `studentEvaluations/studentEvaluation/${studentEvaluationId}/extend`,
+      studentEvaluationId,
+    );
   }
 
   public async approveEvaluation(

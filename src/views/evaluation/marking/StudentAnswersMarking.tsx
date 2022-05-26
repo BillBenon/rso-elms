@@ -45,13 +45,13 @@ export default function StudentAnswersMarking() {
   }, [studentEvaluation]);
 
   useEffect(() => {
-    setAnswersLength(studentAnswers?.filter(answersFilter).length || 0);
+    if (currentModule != '' || markingModules.length >= 0)
+      setAnswersLength(studentAnswers?.filter(answersFilter).length || 0);
+    else setAnswersLength(studentAnswers?.length || 0);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentModule, studentAnswers]);
 
   useEffect(() => {
-    console.log(data);
-
     let selectedModules: SelectData[] = [];
     data?.data.data.forEach((element) => {
       selectedModules.push({
@@ -59,7 +59,6 @@ export default function StudentAnswersMarking() {
         label: element.module_subject.title,
       });
     });
-    console.log(selectedModules);
 
     setMarkingModules(selectedModules);
   }, [data]);

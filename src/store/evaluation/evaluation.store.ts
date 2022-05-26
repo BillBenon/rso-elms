@@ -1,4 +1,5 @@
 import { useMutation, useQuery } from 'react-query';
+
 import { evaluationService } from '../../services/evaluation/evaluation.service';
 import {
   IEvaluationAction,
@@ -55,8 +56,14 @@ class EvaluationStore {
   }
 
   getModuleEvaluations(module: string) {
-    return useQuery(['evaluationsByAcademyInstructor'], () =>
+    return useQuery(['evaluationByModule'], () =>
       evaluationService.fetchEvaluationsByModule(module),
+    );
+  }
+
+  getModuleEvaluationsForStudent(module: string) {
+    return useQuery(['evaluationByModuleForStudent'], () =>
+      evaluationService.fetchEvaluationsByModuleForStudent(module),
     );
   }
 
@@ -185,6 +192,10 @@ class EvaluationStore {
 
   reviewEvaluation() {
     return useMutation(evaluationService.reviewEvaluation);
+  }
+
+  extendStudentEvaluation() {
+    return useMutation(evaluationService.extendStudentEvaluation);
   }
 
   approveEvaluation() {

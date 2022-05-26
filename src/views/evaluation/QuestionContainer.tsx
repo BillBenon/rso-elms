@@ -79,18 +79,21 @@ export default function QuestionContainer({
   const [answer, setAnswer] = useState(initialState);
 
   const { mutate } = evaluationStore.addQuestionAnswer();
-  const { mutateAsync } = evaluationStore.submitEvaluation();
+  const { mutateAsync, isLoading: submitLoader } = evaluationStore.submitEvaluation();
   const { mutate: addQuestionDocAnswer } = evaluationStore.addQuestionDocAnswer();
+
   function submitEvaluation(e: FormEvent) {
     e?.preventDefault();
     mutateAsync(answer.student_evaluation, {
       onSuccess: () => {
-        toast.success('Evaluation submitted', { duration: 5000 });
         localStorage.removeItem('studentEvaluationId');
         window.location.href = '/dashboard/student';
       },
-      onError: (error) => {
+      onError: (error: any) => {
         toast.error(error + '');
+        if (error.response.status == 403) {
+          window.location.href = '/dashboard/student?forceReload=true';
+        }
       },
     });
   }
@@ -189,8 +192,10 @@ export default function QuestionContainer({
       ) {
         mutate(answer, {
           onSuccess: () => {
-            // toast.success('submitted');
-            setQuestionToSubmit('');
+            queryClient.invalidateQueries([
+              'studentEvaluation/answers',
+              studentEvaluationId,
+            ]);
           },
           onError: (error: any) => {
             toast.error(error.response.data.message);
@@ -198,7 +203,7 @@ export default function QuestionContainer({
         });
       }
     },
-    [answer, mutate],
+    [answer, mutate, studentEvaluationId],
   );
 
   function handleChoiceSelect(choiceId: string, index: number) {
@@ -245,7 +250,15 @@ export default function QuestionContainer({
             <ContentSpan title={`Question ${index + 1}`} className="gap-3">
               <div
                 dangerouslySetInnerHTML={{
-                  __html: question.question,
+                  __html:
+                    question.question +
+                    ` (${
+                      previousAnswers.find(
+                        (prevAnsw) => prevAnsw.evaluation_question.id == question.id,
+                      )?.id.length || 0 > 0
+                        ? '<span class="text-primary-400 text-sm px-2">Submitted</span>'
+                        : '<span class="text-error-500 text-sm px-2">Not submitted</span>'
+                    }) `,
                 }}
                 className="py-5"
               />
@@ -289,13 +302,6 @@ export default function QuestionContainer({
                 )?.open_answer || answer?.open_answer
               }
               placeholder="Type your answer here"
-              onBlur={() =>
-                submitForm(
-                  previousAnswers.find(
-                    (prevAnsw) => prevAnsw.evaluation_question.id == question.id,
-                  )?.open_answer,
-                )
-              }
               name="open_answer"
               onFocus={() => setQuestionToSubmit(id)}
               handleChange={handleChange}
@@ -365,15 +371,20 @@ export default function QuestionContainer({
         )}
 
         <Input value={id} name="evaluation_question" handleChange={handleChange} hidden />
-        {/* <div className="py-7">
-          <Button type="submit" onSubmit={(e: FormEvent) => submitForm(id, e)}>
-            submit answer
+        <div className="py-7 flex gap-2">
+          <Button
+            onClick={() => {
+              submitForm(id);
+            }}>
+            save answer
           </Button>
-        </div> */}
+        </div>
       </div>
       {isLast ? (
         <div className="py-7">
-          <Button type="submit">End evaluation</Button>
+          <Button type="submit" isLoading={submitLoader}>
+            End evaluation
+          </Button>
         </div>
       ) : null}
     </form>

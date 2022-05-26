@@ -7,6 +7,7 @@ import ILabel from '../../Atoms/Text/ILabel';
 interface Props extends SelectProps {
   children?: ReactNode | string;
   error?: string;
+  disabled?: boolean;
 }
 
 export default function SelectMolecule(props: Props) {
