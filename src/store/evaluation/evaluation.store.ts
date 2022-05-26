@@ -158,7 +158,7 @@ class EvaluationStore {
     return useQuery(
       ['evaluation/questions', id],
       () => evaluationService.getEvaluationQuestions(id),
-      { enabled: !!id },
+      { enabled: !!id || id.length == 36 },
     );
   }
 
