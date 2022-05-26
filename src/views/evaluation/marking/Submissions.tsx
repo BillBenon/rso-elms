@@ -34,6 +34,7 @@ export default function Submissions() {
   const { url, path } = useRouteMatch();
 
   const { mutate } = markingStore.publishResults();
+  const { mutate: extendEvaluation } = evaluationStore.extendStudentEvaluation();
   const { data: evaluation } = evaluationStore.getEvaluationById(id).data?.data || {};
   const { data, isSuccess, isLoading, isError } =
     markingStore.getEvaluationStudentEvaluations(evaluation?.id + '');
@@ -50,6 +51,17 @@ export default function Submissions() {
         },
       },
     );
+  }
+
+  function extendStudentEvaluation(id: string) {
+    extendEvaluation(id, {
+      onSuccess: () => {
+        toast.success('Evaluation extended', { duration: 3000 });
+      },
+      onError: (error: any) => {
+        toast.error(error.response.data.message);
+      },
+    });
   }
 
   function secondsToHms(d: number) {
@@ -115,7 +127,6 @@ export default function Submissions() {
             onSuccess: () => {
               toast.success('Result published', { duration: 3000 });
               history.push('/dashboard/evaluations');
-              // history.push({ pathname: `${url}` });
             },
             onError: (error: any) => {
               console.error(error);
@@ -123,6 +134,15 @@ export default function Submissions() {
             },
           },
         );
+      },
+    },
+
+    {
+      name: 'Extend',
+      handleAction: (
+        _data: string | number | IEvaluationInfo | EvaluationStudent | undefined,
+      ) => {
+        extendStudentEvaluation(_data + '');
       },
     },
   ];

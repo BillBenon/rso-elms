@@ -194,6 +194,10 @@ class EvaluationStore {
     return useMutation(evaluationService.reviewEvaluation);
   }
 
+  extendStudentEvaluation() {
+    return useMutation(evaluationService.extendStudentEvaluation);
+  }
+
   approveEvaluation() {
     return useMutation(evaluationService.approveEvaluation);
   }

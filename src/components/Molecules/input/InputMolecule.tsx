@@ -48,7 +48,6 @@ export default function InputMolecule<T>({
         type={type}
         width={width}
         value={value}
-        /* @ts-ignore */
         handleChange={handleChange}
         className={className}
       />
