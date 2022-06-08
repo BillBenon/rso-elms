@@ -65,13 +65,15 @@ export default function ManualMarking({ evaluationId }: PropsType) {
     setCurrentClassId(e.value.toString());
   }
 
-  function handleMarksChange(e: ValueType, index: number) {
+  function handleMarksChange(e: ValueType, id: string) {
     if (students.length > 0) {
       let studentsClone = [...students];
-      let studentMark = studentsClone[index];
+      let studentMark = studentsClone.find((student) => student.student_id === id);
 
-      studentMark.marks = parseFloat(e.value.toString()) || 0;
-      setStudents(studentsClone);
+      if (studentMark) {
+        studentMark.marks = parseFloat(e.value.toString()) || 0;
+        setStudents(studentsClone);
+      }
     }
   }
 
@@ -93,8 +95,6 @@ export default function ManualMarking({ evaluationId }: PropsType) {
   useEffect(() => {
     classes && setCurrentClassId(classes[0]);
   }, [classes]);
-
-  useEffect(() => {}, [students]);
 
   useEffect(() => {
     let newState: IManualMarking[] = [];
@@ -213,7 +213,7 @@ export default function ManualMarking({ evaluationId }: PropsType) {
                         name="marks"
                         style={{ width: '4rem', height: '2.5rem' }}
                         value={students[i]?.marks}
-                        handleChange={(e) => handleMarksChange(e, i)}
+                        handleChange={(e) => handleMarksChange(e, stud.id.toString())}
                         onBlur={handleSubmit}
                       />
                     </td>
