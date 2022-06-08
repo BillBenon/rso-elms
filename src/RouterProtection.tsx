@@ -20,6 +20,7 @@ import UpdateInstitution from './views/insitution/UpdateInstitution';
 import IntakesView from './views/intakes/Intakes';
 import Levels from './views/levels/Levels';
 import Modules from './views/modules';
+import Assignment from './views/assignment';
 import InstrLevelModule from './views/modules/InstrLevelModule';
 import StudentModule from './views/modules/StudentModule';
 import NotFound from './views/NotFound';
@@ -124,7 +125,7 @@ const RouterProtection = () => {
           )}
           {hasPrivilege(Privileges.CAN_ACCESS_MODULES) && (
             <Route path={`${path}/modules`} component={Modules} />
-          )}
+          )}         
           {/* end of academic admin routes */}
 
           {/* instructor routes */}
@@ -147,7 +148,9 @@ const RouterProtection = () => {
           {hasPrivilege(Privileges.CAN_ANSWER_EVALUATION) && (
             <Route path={`${path}/evaluation`} component={InstructorViewEvaluations} />
           )}
-
+          {hasPrivilege(Privileges.CAN_ANSWER_EVALUATION) && (
+            <Route path={`${path}/assignment`} component={Assignment} />
+          )}
           <Route
             exact
             path={`${path}/account/update-password`}
