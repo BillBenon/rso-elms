@@ -3,20 +3,15 @@ import toast from 'react-hot-toast';
 
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import { ValueType } from '../../../types';
-import {
-  IEvaluationInfo,
-  IEvaluationSectionBased,
-} from '../../../types/services/evaluation.types';
+import { IEvaluationSectionBased } from '../../../types/services/evaluation.types';
 import { UserInfo } from '../../../types/services/user.types';
 import { getDropDownOptions } from '../../../utils/getOption';
 import Button from '../../Atoms/custom/Button';
 import SelectMolecule from '../../Molecules/input/SelectMolecule';
 export function EvaluationChangeMarker({
-  evaluation,
   module,
   markers,
 }: {
-  evaluation: IEvaluationInfo;
   module: IEvaluationSectionBased;
   markers: UserInfo[];
 }) {
@@ -40,8 +35,11 @@ export function EvaluationChangeMarker({
           labelName: ['first_name', 'last_name'],
           //@ts-ignore
           getOptionLabel: (mark: UserInfo) =>
-            mark.person?.current_rank?.name ||
-            '' + mark.first_name + ' ' + mark.last_name,
+            mark.person?.current_rank.abbreviation +
+            ' ' +
+            mark.first_name +
+            ' ' +
+            mark.last_name,
         })}
         placeholder="marker"
       />

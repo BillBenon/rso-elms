@@ -14,6 +14,7 @@ import { getStudentsByClass } from '../../../store/administration/class.store';
 import { markingStore } from '../../../store/administration/marking.store';
 import { evaluationStore } from '../../../store/evaluation/evaluation.store';
 import { Color, Status, ValueType } from '../../../types';
+import { StudentsInClass } from '../../../types/services/class.types';
 import { IEvaluationStatus } from '../../../types/services/evaluation.types';
 import { IManualMarking } from '../../../types/services/marking.types';
 
@@ -24,19 +25,29 @@ type PropsType = {
 export default function ManualMarking({ evaluationId }: PropsType) {
   const [currentClassId, setCurrentClassId] = useState<string>('');
   const [students, setStudents] = useState<IManualMarking[]>([]);
+  const [finalStudents, setFinalStudents] = useState<StudentsInClass[]>([]);
+  const [rankedStudents, setRankedStudents] = useState<StudentsInClass[]>([]);
+  const [unrankedStudents, setUnrankedStudents] = useState<StudentsInClass[]>([]);
 
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId).data?.data || {};
 
   const { data: studentsData, isLoading } = getStudentsByClass(currentClassId) || [];
 
-  const rankedStudents =
-    studentsData?.data.data.filter((stud) => stud.student.user.person?.current_rank) ||
-    [];
-  const unrankedStudents =
-    studentsData?.data.data.filter(
-      (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
-    ) || [];
+  useEffect(() => {
+    setRankedStudents(
+      studentsData?.data.data.filter((stud) => stud.student.user.person?.current_rank) ||
+        [],
+    );
+  }, [studentsData?.data.data]);
+
+  useEffect(() => {
+    setUnrankedStudents(
+      studentsData?.data.data.filter(
+        (inst) => inst !== rankedStudents.find((ranked) => ranked.id === inst.id),
+      ) || [],
+    );
+  }, [rankedStudents, studentsData?.data.data]);
 
   rankedStudents.sort(function (a, b) {
     if (a.student.user.person && b.student.user.person) {
@@ -48,7 +59,6 @@ export default function ManualMarking({ evaluationId }: PropsType) {
       return 0;
     }
   });
-  const finalStudents = rankedStudents.concat(unrankedStudents);
 
   const { data: manualMarkingData } = markingStore.getManualMarkingMarks(
     evaluationId,
@@ -65,13 +75,15 @@ export default function ManualMarking({ evaluationId }: PropsType) {
     setCurrentClassId(e.value.toString());
   }
 
-  function handleMarksChange(e: ValueType, index: number) {
+  function handleMarksChange(e: ValueType, id: string) {
     if (students.length > 0) {
       let studentsClone = [...students];
-      let studentMark = studentsClone[index];
+      let studentMark = studentsClone.find((student) => student.student_id === id);
 
-      studentMark.marks = parseFloat(e.value.toString()) || 0;
-      setStudents(studentsClone);
+      if (studentMark) {
+        studentMark.marks = parseFloat(e.value.toString()) || 0;
+        setStudents(studentsClone);
+      }
     }
   }
 
@@ -87,14 +99,19 @@ export default function ManualMarking({ evaluationId }: PropsType) {
   }
 
   useEffect(() => {
+    setFinalStudents(rankedStudents.concat(unrankedStudents));
+  }, [rankedStudents, unrankedStudents]);
+  useEffect(() => {
+    setFinalStudents(rankedStudents.concat(unrankedStudents));
+  }, [rankedStudents, unrankedStudents]);
+
+  useEffect(() => {
     setclasses(evaluationInfo?.intake_level_class_ids.split(',') || ['']);
   }, [evaluationInfo?.intake_level_class_ids]);
 
   useEffect(() => {
     classes && setCurrentClassId(classes[0]);
   }, [classes]);
-
-  useEffect(() => {}, [students]);
 
   useEffect(() => {
     let newState: IManualMarking[] = [];
@@ -166,7 +183,7 @@ export default function ManualMarking({ evaluationId }: PropsType) {
           description={'Select ' + t('Class') + ' to view '}
         />
       )}
-      {finalStudents && (
+      {finalStudents && currentClassId && !isLoading && (
         <div>
           {finalStudents.length <= 0 ? (
             <NoDataAvailable
@@ -177,13 +194,6 @@ export default function ManualMarking({ evaluationId }: PropsType) {
               description="It looks like there aren't any students who are not marked for this evaluation"
             />
           ) : (
-            // <Table2<UserTypes>
-            //   statusColumn="status"
-            //   data={students}
-            //   hide={['id', 'user_type']}
-            //   uniqueCol="id"
-            // />
-
             <table className="table-auto border-collapse font-medium bg-main w-2/3">
               <thead>
                 <tr className="text-left text-txt-secondary border-b border-silver">
@@ -191,7 +201,7 @@ export default function ManualMarking({ evaluationId }: PropsType) {
                   <th className="px-4 py-5 text-sm font-semibold">First name</th>
                   <th className="px-4 py-5 text-sm font-semibold">Last name</th>
                   <th className="px-4 py-5 text-sm font-semibold">Obtained</th>
-                  <th className="px-4 py-5 text-sm font-semibold">Out of</th>
+                  <th className="px-4 py-5 text-sm font-semibold">Out&nbsp;of</th>
                   <th className="px-4 py-5 text-sm font-semibold">Status</th>
                 </tr>
               </thead>
@@ -213,7 +223,7 @@ export default function ManualMarking({ evaluationId }: PropsType) {
                         name="marks"
                         style={{ width: '4rem', height: '2.5rem' }}
                         value={students[i]?.marks}
-                        handleChange={(e) => handleMarksChange(e, i)}
+                        handleChange={(e) => handleMarksChange(e, stud.id.toString())}
                         onBlur={handleSubmit}
                       />
                     </td>

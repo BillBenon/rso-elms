@@ -171,7 +171,6 @@ export default function EvaluationContent({
                         <EvaluationChangeMarker
                           key={index}
                           module={module}
-                          evaluation={evaluationInfo}
                           markers={markers}
                         />
                       ))}

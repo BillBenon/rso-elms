@@ -112,6 +112,12 @@ export default function Sidebar() {
         icon: 'module',
         privilege: Privileges.CAN_ACCESS_MODULES,
       },
+      {
+        title: 'Assignments',
+        to: '/dashboard/assignment',
+        icon: 'evaluation',
+        privilege: Privileges.CAN_ANSWER_EVALUATION,
+      },
       // for the students access subject
       {
         title: 'Evaluations',
