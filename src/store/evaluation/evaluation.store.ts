@@ -158,7 +158,7 @@ class EvaluationStore {
     return useQuery(
       ['evaluation/questions', id],
       () => evaluationService.getEvaluationQuestions(id),
-      { enabled: !!id },
+      { enabled: !!id || id.length === 36 },
     );
   }
 
@@ -192,6 +192,10 @@ class EvaluationStore {
 
   reviewEvaluation() {
     return useMutation(evaluationService.reviewEvaluation);
+  }
+
+  extendStudentEvaluation() {
+    return useMutation(evaluationService.extendStudentEvaluation);
   }
 
   approveEvaluation() {
