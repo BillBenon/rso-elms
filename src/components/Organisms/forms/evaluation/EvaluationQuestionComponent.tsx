@@ -50,7 +50,7 @@ export default function EvaluationQuestionComponent() {
   const [file, setFile] = useState<File | null>(null);
   const [currentId, setCurrentId] = useState('');
 
-  const { mutate: addQuestionDoc } = evaluationStore.addQuestionDoc();
+  const { mutate: addQuestionDoc, isLoading: uploadLoader } = evaluationStore.addQuestionDoc();
 
   const handleUpload = (file: FileList | null, id: string) => {
     setFile(file ? file[0] : null);
@@ -296,8 +296,8 @@ export default function EvaluationQuestionComponent() {
                       }}
                       accept={'*'}
                       error={''}>
-                      <Button styleType="outline" type="button">
-                        upload file
+                      <Button styleType="outline" type="button" isLoading={uploadLoader}>
+                        {uploadLoader ? 'uploading...' : 'upload file'}
                       </Button>
                     </FileUploader>
                   </div>

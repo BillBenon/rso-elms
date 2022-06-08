@@ -52,7 +52,7 @@ export function Tabs({
 
   const TabHeadings = () => {
     return (
-      <div className="tab-headings overflow-auto">
+      <div className="overflow-auto">
         <div
           className={`flex ${
             horizontalScroll ? 'flex-nowrap' : 'flex-wrap'

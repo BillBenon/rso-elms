@@ -48,7 +48,7 @@ export default function AdddEvaluationQuestions({
   const { data: evaluationInfo } =
     evaluationStore.getEvaluationById(evaluationId + '').data?.data || {};
 
-  const { mutate: addQuestionDoc } = evaluationStore.addQuestionDoc();
+  const { mutate: addQuestionDoc, isLoading: uploadLoader } = evaluationStore.addQuestionDoc();
 
   const [questions, setQuestions] = useState([initialState]);
 
@@ -332,8 +332,8 @@ export default function AdddEvaluationQuestions({
                       }}
                       accept={`${evaluationInfo?.content_format}`}
                       error={''}>
-                      <Button styleType="outline" type="button">
-                        upload file
+                      <Button styleType="outline" type="button" isLoading={uploadLoader}>
+                        {uploadLoader ? 'uploading...' : 'upload file'}
                       </Button>
                     </FileUploader>
                   </div>
