@@ -412,7 +412,7 @@ export default function AdddEvaluationQuestions({
             </div>
 
             <div className="flex gap-2">
-              <Button onSubmit={submitForm} disabled={createQuestionsLoader}>
+              <Button onSubmit={submitForm} disabled={createQuestionsLoader || uploadLoader}>
                 save
               </Button>
               <Button onClick={handleGoBack}>Finish</Button>

@@ -80,7 +80,7 @@ export default function QuestionContainer({
 
   const { mutate } = evaluationStore.addQuestionAnswer();
   const { mutateAsync, isLoading: submitLoader } = evaluationStore.submitEvaluation();
-  const { mutate: addQuestionDocAnswer } = evaluationStore.addQuestionDocAnswer();
+  const { mutate: addQuestionDocAnswer, isLoading: uploadLoader } = evaluationStore.addQuestionDocAnswer();
 
   function submitEvaluation(e: FormEvent) {
     e?.preventDefault();
@@ -344,8 +344,8 @@ export default function QuestionContainer({
                 }}
                 accept="*"
                 error={''}>
-                <Button styleType="outline" type="button">
-                  upload answer file
+                <Button styleType="outline" type="button" isLoading={uploadLoader}>
+                  {uploadLoader ? 'uploading...' : 'upload answer file'}
                 </Button>
               </FileUploader>
             </div>
@@ -375,14 +375,15 @@ export default function QuestionContainer({
           <Button
             onClick={() => {
               submitForm(id);
-            }}>
+            }}
+            disabled={uploadLoader}>
             save answer
           </Button>
         </div>
       </div>
       {isLast ? (
         <div className="py-7">
-          <Button type="submit" isLoading={submitLoader}>
+          <Button type="submit" isLoading={submitLoader} disabled={uploadLoader}>
             End evaluation
           </Button>
         </div>

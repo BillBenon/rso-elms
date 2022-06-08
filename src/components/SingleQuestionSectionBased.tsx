@@ -44,7 +44,7 @@ export function SingleQuestionSectionBased({
   const { mutate, isLoading: isSavingAnswer } = evaluationStore.addQuestionAnswer();
   let previoustudentAnswers =
     markingStore.getStudentEvaluationAnswers(studentEvaluationId).data?.data.data || [];
-  const { mutate: addQuestionDocAnswer } = evaluationStore.addQuestionDocAnswer();
+  const { mutate: addQuestionDocAnswer, isLoading: uploadLoader } = evaluationStore.addQuestionDocAnswer();
 
   const [file, setFile] = useState<File | null>(null);
 
@@ -213,8 +213,8 @@ export function SingleQuestionSectionBased({
             }}
             accept="*"
             error={''}>
-            <Button styleType="outline" type="button">
-              upload answer file
+            <Button styleType="outline" type="button" isLoading={uploadLoader}>
+              {uploadLoader ? 'uploading...' : 'upload answer file'}
             </Button>
           </FileUploader>
           <div className="py-4">
@@ -243,7 +243,8 @@ export function SingleQuestionSectionBased({
         <Button
           onClick={() => {
             submitForm();
-          }}>
+          }}
+          disabled={uploadLoader}>
           {isSavingAnswer ? 'saving answer' : 'save answer'}
         </Button>
       </div>

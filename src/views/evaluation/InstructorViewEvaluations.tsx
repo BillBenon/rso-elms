@@ -66,6 +66,7 @@ export default function InstructorViewEvaluations() {
     let formattedEvals: CommonCardDataType[] = [];
     data?.data.data.forEach((evaluation) => {
       let formattedEvaluations = {
+        created_on: evaluation.created_on,
         questionaireType: evaluation.questionaire_type,
         settingType: evaluation.setting_type,
         id: evaluation.id,
@@ -273,6 +274,19 @@ export default function InstructorViewEvaluations() {
                               {
                                 //@ts-ignore
                                 (info.settingType || '').replaceAll('_', ' ')
+                              }
+                            </Heading>
+                          </div>
+
+                          <div className="flex gap-4 pt-4">
+                            <Heading fontSize="sm" fontWeight="semibold">
+                              Created on:{' '}
+                            </Heading>
+
+                            <Heading fontSize="sm" color="primary">
+                              {
+                                //@ts-ignore
+                                (info.created_on || '').replaceAll('_', ' ')
                               }
                             </Heading>
                           </div>

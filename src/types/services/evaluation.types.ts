@@ -233,7 +233,7 @@ interface ISubjectAcademicYearPeriod {
   id: string;
 }
 
-export interface IEvaluationInfo {
+export interface IEvaluationInfo extends Table {
   id: string;
   name: string;
   academy_id: string;

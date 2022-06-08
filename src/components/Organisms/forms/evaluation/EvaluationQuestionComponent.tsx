@@ -398,7 +398,7 @@ export default function EvaluationQuestionComponent() {
             <div>
               <Button
                 onSubmit={(e: FormEvent) => submitForm(e)}
-                disabled={createQuestionLoader}>
+                disabled={createQuestionLoader || uploadLoader}>
                 save
               </Button>
             </div>
